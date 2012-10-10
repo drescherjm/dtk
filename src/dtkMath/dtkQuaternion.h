@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:00:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 30 16:59:07 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:15:18 2012 (+0200)
  *           By: tkloczko
- *     Update #: 49
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -23,6 +23,10 @@
 #include "dtkVector.h"
 #include "dtkVector3D.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkQuaternion interface
+// /////////////////////////////////////////////////////////////////
+
 template <class T = double> class dtkQuaternion : public dtkVector<T>
 {
 public:	
@@ -38,6 +42,10 @@ public:
      dtkQuaternion(const T& r, const dtkVector3D<T>& vec, const T& angle);
     ~dtkQuaternion(void) {};
 
+public:
+    QString identifier(void) const;
+
+public:
     void allocate(void) { dtkVector<T>::allocate(4); };
 
     void mapInto(const dtkMatrix<T>& mat,
@@ -45,6 +53,9 @@ public:
 		 unsigned icolStart);
     void mapInto(const dtkVector<T>& vec, unsigned irowStart);
 
+    unsigned size(void) { return 4; };
+
+public:
     dtkQuaternion operator +(const dtkQuaternion&) const;
     dtkQuaternion operator -(const dtkQuaternion&) const;
     dtkQuaternion operator -(void) const;
@@ -74,6 +85,10 @@ public:
     dtkQuaternion unit(void) const { return (*this)/(this->norm()); }
 };
 
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
 template <class T> class dtkUnity< dtkQuaternion<T> >: public dtkQuaternion<T>
 {
 public:
@@ -82,6 +97,10 @@ public:
         (*this)[3] = dtkUnity<T>();
     }
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 template <class T> class dtkZero< dtkQuaternion<T> >: public dtkQuaternion<T>
 {

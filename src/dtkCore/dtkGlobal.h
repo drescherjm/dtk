@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 15:01:50 2012 (+0200)
+ * Last-Updated: Wed Sep 19 09:46:48 2012 (+0200)
  *           By: tkloczko
- *     Update #: 150
+ *     Update #: 165
  */
 
 /* Commentary: 
@@ -150,6 +150,55 @@
 
 #define DTK_D(Class) Class##Private *const d = d_func()
 #define DTK_Q(Class) Class *const q = q_func()
+
+// /////////////////////////////////////////////////////////////////
+// dtkTypeInfo
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkTypeInfo
+{ 
+public:
+    enum { 
+        dtkAbstractObjectPointer = false,
+        dtkMatrixRealPointer = false
+    };
+};	
+
+// Specialize to avoid sizeof(void) warning
+
+template<> class dtkTypeInfo<void*>
+{
+    enum { 
+        dtkAbstractObjectPointer = false,
+        dtkMatrixRealPointer = false
+    };
+};
+
+// Partial Specialization for pointer type
+
+class dtkAbstractObject;
+template <typename T> class dtkMatrix;
+
+template <typename T> class dtkTypeInfo<T*>
+{
+public:
+    typedef int  yes_type;
+    typedef char  no_type;
+
+public:
+    static yes_type checkObject(dtkAbstractObject*);
+    static no_type  checkObject(...);
+
+public:
+    static yes_type checkMatrix(dtkMatrix<qreal>*);
+    static no_type  checkMatrix(...);
+
+public:
+    enum { 
+        dtkAbstractObjectPointer = (sizeof(checkObject(static_cast<T*>(0))) == sizeof(yes_type)),
+        dtkMatrixRealPointer     = (sizeof(checkMatrix(static_cast<T*>(0))) == sizeof(yes_type))
+    };
+};
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

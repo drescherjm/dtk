@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:14:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 10:29:41 2012 (+0200)
+ * Last-Updated: Fri Aug  3 10:45:37 2012 (+0200)
  *           By: tkloczko
- *     Update #: 61
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -100,28 +100,28 @@ QString dtkComposerNodeContainerData::outputLabelHint(int port)
 
 void dtkComposerNodeContainerData::run(void)
 {
-    QString type;
-    qlonglong size = 0;
+    // QString type;
+    // qlonglong size = 0;
 
-    if (!d->receiver_str.isEmpty())
-        type = d->receiver_str.data();
+    // if (!d->receiver_str.isEmpty())
+    //     type = d->receiver_str.data();
 
-    if (!d->receiver_int.isEmpty())
-        size = d->receiver_int.data();
+    // if (!d->receiver_int.isEmpty())
+    //     size = d->receiver_int.data();
 
-    // if (type == "list")
-    //     d->container = new dtkContainerListWrapper<dtkAbstractData *>(); // Not implemented yet
-    // else
-    d->container = new dtkContainerVectorWrapper<dtkAbstractData *>();
+    // // if (type == "list")
+    // //     d->container = new dtkContainerListWrapper<dtkAbstractData *>(); // Not implemented yet
+    // // else
+    // d->container = new dtkContainerVectorWrapper<dtkAbstractData *>();
 
-    d->container->resize(size);
+    // d->container->resize(size);
 
-    dtkAbstractData *data = NULL;
-    for(int i = 0; i < size; ++i) {
-        data = new dtkAbstractData;
-        data->setObjectName(QString("data #%1").arg(i));
-        d->container->append(qVariantFromValue(data));
-    }
+    // dtkAbstractData *data = NULL;
+    // for(int i = 0; i < size; ++i) {
+    //     data = new dtkAbstractData;
+    //     data->setObjectName(QString("data #%1").arg(i));
+    //     d->container->append(qVariantFromValue(data));
+    // }
 
-    d->emitter.setData(*(d->container));
+    // d->emitter.setData(*(d->container));
 }

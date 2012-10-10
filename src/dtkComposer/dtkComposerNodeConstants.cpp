@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 15:00:37 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 23
+ * Last-Updated: Thu Sep 20 08:35:38 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -18,7 +18,6 @@
  */
 
 #include "dtkComposerNodeConstants.h"
-
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
@@ -36,10 +35,15 @@ class dtkComposerNodePiPrivate
 {
 public:    
     dtkComposerTransmitterEmitter<qreal> emitter;
+
+public:
+    qreal value;
 };
 
 dtkComposerNodePi::dtkComposerNodePi(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodePiPrivate)
 {
+    d->value = M_PI;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -52,7 +56,7 @@ dtkComposerNodePi::~dtkComposerNodePi(void)
 
 void dtkComposerNodePi::run(void)
 {
-    d->emitter.setData(M_PI);
+
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -63,10 +67,15 @@ class dtkComposerNodeEPrivate
 {
 public:    
     dtkComposerTransmitterEmitter<qreal> emitter;
+
+public:
+    qreal value;
 };
 
 dtkComposerNodeE::dtkComposerNodeE(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeEPrivate)
 {
+    d->value = M_E;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -79,5 +88,5 @@ dtkComposerNodeE::~dtkComposerNodeE(void)
 
 void dtkComposerNodeE::run(void)
 {
-    d->emitter.setData(M_E);
+
 }

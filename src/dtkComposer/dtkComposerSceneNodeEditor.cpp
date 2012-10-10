@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 16:03:32 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 1178
+ * Last-Updated: lun. oct.  8 17:18:48 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1182
  */
 
 /* Commentary: 
@@ -42,6 +42,7 @@
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
+
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
 #endif
@@ -1063,9 +1064,10 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
         command->setScene(d->scene);
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Input);
+
 #if defined(DTK_BUILD_DISTRIBUTED)
         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-            command->setKind(dtkComposerTransmitter::Variant);
+             command->setKind(dtkComposerTransmitter::Variant);
 #endif
     }
 

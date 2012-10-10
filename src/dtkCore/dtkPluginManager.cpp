@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Jeu sep 20 15:18:59 2012 (+0200)
- *           By: Régis Duvigneau
- *     Update #: 255
+ * Last-Updated: Mon Sep 24 11:44:08 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 271
  */
 
 /* Commentary:
@@ -78,11 +78,16 @@ dtkPluginManager *dtkPluginManager::instance(void)
     if(!s_instance) {
         s_instance = new dtkPluginManager;
 
+        qRegisterMetaType<dtkAbstractObject>("dtkAbstractObject");
+        qRegisterMetaType<dtkAbstractObject*>("dtkAbstractObject*");
         qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
         qRegisterMetaType<dtkAbstractData*>("dtkAbstractData*");
         qRegisterMetaType<dtkVectorReal>("dtkVectorReal");
+        qRegisterMetaType<dtkVectorReal*>("dtkVectorReal*");
         qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
+        qRegisterMetaType<dtkVector3DReal*>("dtkVector3DReal*");
         qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
+        qRegisterMetaType<dtkQuaternionReal*>("dtkQuaternionReal*");
     }
 
     return s_instance;

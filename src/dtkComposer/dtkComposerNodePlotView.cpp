@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. sept. 21 15:37:39 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 71
+ * Last-Updated: Tue Sep 25 10:16:04 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@
 class dtkComposerNodePlotViewPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkPlotCurve *> receiver_curve;
+    dtkComposerTransmitterReceiver<dtkPlotCurve> receiver_curve;
     dtkComposerTransmitterReceiver<QString> receiver_x_axis_label;
     dtkComposerTransmitterReceiver<QString> receiver_y_axis_label;
 
@@ -50,6 +50,10 @@ dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerN
 
 dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
 {
+    if (d->view)
+        delete d->view;
+    d->view = NULL;
+
     delete d;
 
     d = NULL;
@@ -57,20 +61,22 @@ dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
 
 void dtkComposerNodePlotView::run(void)
 {
-    if(d->receiver_curve.isEmpty())
+    if (d->receiver_curve.isEmpty()) {
+        dtkWarn() << "no curve speficied!";
         return;
+    }
 
-    if(!d->view)
-        d->view = dynamic_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+    if (!d->view)
+        d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
 
     if(!d->view)
         return;
 
     if(!d->receiver_x_axis_label.isEmpty())
-        d->view->setAxisTitleX(d->receiver_x_axis_label.data());
+        d->view->setAxisTitleX(*d->receiver_x_axis_label.data());
 
     if(!d->receiver_y_axis_label.isEmpty())
-        d->view->setAxisTitleY(d->receiver_y_axis_label.data());
+        d->view->setAxisTitleY(*d->receiver_y_axis_label.data());
 
     foreach(dtkPlotCurve *curve, d->receiver_curve.allData())
         (*(d->view)) << curve;

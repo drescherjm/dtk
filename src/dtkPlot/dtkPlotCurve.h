@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:11:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 30
+ * Last-Updated: Tue Sep 25 10:19:04 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -34,6 +34,9 @@ public:
      dtkPlotCurve(const QString& title = QString());
      dtkPlotCurve(const dtkPlotCurve& other);
     ~dtkPlotCurve(void);
+
+public:
+    dtkPlotCurve& operator=(const dtkPlotCurve& other);
 
 public:
     void append(const QPointF& data);

@@ -1,12 +1,7 @@
 /* dtkComposerTransmitter.cpp --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:37:29 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Jun 27 16:44:02 2012 (+0200)
- *           By: tkloczko
- *     Update #: 241
  */
 
 /* Commentary: 
@@ -23,6 +18,7 @@
 #include "dtkComposerNode.h"
 
 #include <dtkContainer/dtkAbstractContainerWrapper.h>
+#include <dtkCore/dtkAbstractObject>
 #include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
@@ -39,6 +35,11 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->active = true;
     d->required = true;
     d->parent = parent;
+
+    d->object = NULL;
+    d->container = NULL;
+    d->matrix = NULL;
+    d->data_transmission = AutoCopy;
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -51,6 +52,16 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
 
     d = NULL;
 }
+
+//! 
+/*!  
+ *  
+ */
+void dtkComposerTransmitter::clearData(void)
+{
+
+}
+
 
 //! Several cases can occur when calling this method.
 /*!  
@@ -79,31 +90,22 @@ QVariant& dtkComposerTransmitter::variant(void)
     return d->variant;
 }
 
-//! Several cases can occur when calling this method.
+//! 
 /*!  
- *  A transmitter can be either an emitter, a receiver or a
- *  variant. The case of the proxy is forgotten since this method must
- *  not be called in this case.
- *
- *  - Emitter case: the returned variant contains the data that has
- *    been passed to the emitter.
- *
- *  - Receiver case: a receiver is connected to only one active
- *    transmitter which can be either an emitter or a variant playing
- *    the role of an emitter. The returned variant comes from this
- *    active transmitter.
- *
- *  - Variant case: the variant transmitter can play the role of the
- *    emitter or the receiver. When acting as an emitter, the returned
- *    variant is the one that has been passed to this variant
- *    transmitter. Conversely, when acting as a receiver, the varaint
- *    transmitter is connected to only one active transmitter that is
- *    either an emitter or a variant. The returned variant then comes
- *    from this active transmitter.
+ *  
  */
-const QVariant& dtkComposerTransmitter::variant(void) const
+dtkAbstractObject *dtkComposerTransmitter::object(void)
 {
-    return d->variant;
+    return d->object;
+}
+
+//! 
+/*!  
+ *  
+ */
+dtkMatrix<double> *dtkComposerTransmitter::matrix(void)
+{
+    return d->matrix;
 }
 
 //! A transmitter can contain a container. In this case, the
@@ -112,37 +114,45 @@ const QVariant& dtkComposerTransmitter::variant(void) const
 /*!  
  *  
  */
-dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void)
+dtkAbstractContainerWrapper *dtkComposerTransmitter::container(void)
 {
     return d->container;
 }
 
-//! 
+//! Returns the identifier index of the data transmitted by the
+//! transmitter.
+/*!  
+ *  This index results from the registering to the QMetaType system of
+ *  Qt.
+ */
+// int dtkComposerTransmitter::dataType(void)
+// {
+//     return d->data_type;
+// }
+
+//! Returns the type name of the data transmitted by the transmitter.
 /*!  
  *  
  */
-const dtkAbstractContainerWrapper& dtkComposerTransmitter::container(void) const
-{
-    return d->container;
-}
+// QString dtkComposerTransmitter::dataIdentifier(void)
+// {
+//     return QString(QMetaType::typeName(this->dataType()));
+// }
 
-//! Returns the type of the data contained by the transmitter.
+//! Returns a description of the data.
 /*!  
- *  This data is always stored as a variant.
+ *  For atomic types, such as boolean, integer, double and QString,
+ *  the data value is returned.
+ *
+ *  For objects deriving from dtkAbstractObject, this method wraps the
+ *  description() method.
+ *
+ *  Otherwise, the address of the data is returned.
  */
-QVariant::Type dtkComposerTransmitter::type(void) const
-{
-    return d->variant.type();
-}
-
-//! Returns the type name of the data contained by the transmitter.
-/*!  
- *  This data is always stored as a variant.
- */
-QString dtkComposerTransmitter::typeName(void) const
-{
-    return d->variant.typeName();
-}
+// QString dtkComposerTransmitter::dataDescription(void)
+// {
+//     return QString();
+// }
 
 //! Sets the node to which the current transmitter is parented.
 /*!  
@@ -171,11 +181,11 @@ void dtkComposerTransmitter::setActive(bool active)
 {
     d->active = active;
 
-    if(!active)
+    if (!active)
         return;
 
     foreach(dtkComposerTransmitter *receiver, d->receivers)
-        receiver->setActiveEmitter(this);
+        receiver->activateEmitter(this);
 }
 
 //! Returns true if transmitter is active.
@@ -193,9 +203,61 @@ bool dtkComposerTransmitter::active(void)
  *  Active flags is typically used to select an emitter among a list
  *  owned by a control node.
  */
-void dtkComposerTransmitter::setActiveEmitter(dtkComposerTransmitter *emitter)
+void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitter *emitter)
 {
     DTK_UNUSED(emitter);
+}
+
+//! Returns true if transmitter is active.
+/*! 
+ *  Active flags is typically used to select an emitter among a list
+ *  owned by a control node.
+ */
+void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitterVariant *emitter)
+{
+    DTK_UNUSED(emitter);
+}
+
+//! Sets the type of data transmission.
+/*! 
+ *  The transmission type can be either AutoCopy, Copy, or
+ *  Reference. By default, the transmission type is AutoCopy.
+ *
+ *  When AutoCopy is on, the receiver checks if it is the only one
+ *  that receives the data. For that, it calls enableCopy() method. If
+ *  false is returned, it means that it is the only receiver for this
+ *  data and no copy is performed. Otherwise, in order to ensure that
+ *  the received data has not be modified, a copy is carried out.
+ *
+ *  When Copy is on, the copy is enforced whatever the number of
+ *  receivers for the same data.
+ *
+ *  When reference is on, no copy is carried out, the data is likely
+ *  not the same that the one expected if another node has modified it
+ *  before.
+ */
+void dtkComposerTransmitter::setDataTransmission(DataTransmission value)
+{
+    d->data_transmission = value;
+}
+
+//! Returns the type of the data transmission.
+/*! 
+ *  
+ */
+dtkComposerTransmitter::DataTransmission dtkComposerTransmitter::dataTransmission(void) const
+{
+    return d->data_transmission;
+}
+
+//! Returns true if more than one receiver is connected to one
+//! emitter. Returns false otherwise.
+/*! 
+ *  Returns trgue by default.
+ */
+bool dtkComposerTransmitter::enableCopy(void)
+{
+    return true;
 }
 
 //! Sets required flag to \a required.
@@ -459,7 +521,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << transmitter.typeName();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << const_cast<dtkComposerTransmitter&>(transmitter).dataIdentifier();
     
     return debug.space();
 }
@@ -470,7 +532,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->typeName();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->dataIdentifier();
     
     return debug.space();
 }

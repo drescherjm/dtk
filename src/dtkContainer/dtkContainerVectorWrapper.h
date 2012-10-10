@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:33:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 13
+ * Last-Updated: Wed Sep 19 15:01:25 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -35,8 +35,8 @@
 template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
-     dtkContainerVectorWrapper(dtkAbstractData *parent = 0);
-     dtkContainerVectorWrapper(const dtkContainerVector<T>& vector, dtkAbstractData *parent = 0);
+     dtkContainerVectorWrapper(void);
+     dtkContainerVectorWrapper(dtkContainerVector<T> *vector);
      dtkContainerVectorWrapper(const dtkContainerVectorWrapper<T>& other);
     ~dtkContainerVectorWrapper(void);
 
@@ -49,14 +49,14 @@ public:
     dtkContainerVectorWrapper<T> *voidClone(void) const;
 
 public:
-    QString identifier(void) const;
+    QString  identifier(void) const;
+    QString description(void) const;
 
 public:
-    void setVector(const dtkContainerVector<T>& vector);
+    void setVector(dtkContainerVector<T> *vector);
 
 public:
-          dtkContainerVector<T>& vector(void);
-    const dtkContainerVector<T>& vector(void) const;
+    dtkContainerVector<T> *vector(void);
 
 public:
     Type type(void) const;
@@ -90,7 +90,7 @@ public:
     bool isEqual(const dtkAbstractContainerWrapper& other) const;    
 
 private:
-    dtkContainerVector<T> m_vector;
+    dtkContainerVector<T> *m_vector;
 };
 
 // /////////////////////////////////////////////////////////////////

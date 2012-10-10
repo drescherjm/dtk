@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 10:27:53 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr 26 15:23:13 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 51
+ * Last-Updated: Tue Sep 25 10:29:34 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -48,9 +48,12 @@ dtkComposerNodeTrackerKinect::dtkComposerNodeTrackerKinect(void) : dtkComposerNo
 
 dtkComposerNodeTrackerKinect::~dtkComposerNodeTrackerKinect(void)
 {
-    d->tracker->uninitialize();
+    if (d->tracker) {
+        d->tracker->uninitialize();
+        delete d->tracker;
+    }
+    d->tracker = NULL;
 
-    delete d->tracker;
     delete d;
 
     d = NULL;
@@ -63,6 +66,6 @@ void dtkComposerNodeTrackerKinect::run(void)
         d->tracker->initialize();
     }
 
-    d->head_position.setData(d->tracker->headPosition());
-    d->head_orientation.setData(d->tracker->headOrientation());
+    d->head_position.setData(*d->tracker->headPosition());
+    d->head_orientation.setData(*d->tracker->headOrientation());
 }

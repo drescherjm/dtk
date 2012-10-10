@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterReceiver.h --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Sep 26 16:38:08 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 114
  */
 
 /* Commentary: 
@@ -44,10 +39,35 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-          T& data(void);
-    const T& data(void) const;
+    void clearData(void);
 
-    QVector<T> allData(void);
+public:
+    T *dataFromEmitter(void);
+
+public:
+    T *data(void);
+
+public:
+    dtkAbstractObject *object(void);
+
+    dtkMatrix<double> *matrix(void);
+
+    QVariant& variant(void);
+          
+    QVector<T*> allData(void);
+
+public:
+    virtual int dataType(void);
+
+    virtual QString  dataIdentifier(void);
+    virtual QString dataDescription(void);
+
+public:
+    void activateEmitter(dtkComposerTransmitter        *emitter);
+    void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    bool enableCopy(void);
 
 public:
     bool isEmpty(void) const;
@@ -62,9 +82,6 @@ public:
     bool disconnect(dtkComposerTransmitter *transmitter);
 
 public:
-    void setActiveEmitter(dtkComposerTransmitter *emitter);
-
-public: 
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
@@ -76,7 +93,7 @@ private:
     dtkComposerTransmitterVariant    *active_variant;
 
 private:
-    T m_data;
+    T *m_data;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -85,8 +102,6 @@ private:
 
 template <typename T> class dtkComposerTransmitterEmitterVector;
 
-class dtkComposerTransmitterVariantContainer;
-
 template <typename T> class dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
 {
 public:
@@ -94,21 +109,40 @@ public:
     ~dtkComposerTransmitterReceiverVector(void);
 
 public:
-          dtkAbstractContainerWrapper& container(void);
-    const dtkAbstractContainerWrapper& container(void) const;
-
-          dtkContainerVector<T>& data(void);
-    const dtkContainerVector<T>& data(void) const;
+    void clearData(void);
 
 public:
-    bool    connect(dtkComposerTransmitter *transmitter);
-    bool disconnect(dtkComposerTransmitter *transmitter);
+    dtkContainerVector<T> *dataFromEmitter(void);
+
+public:
+    dtkContainerVector<T> *data(void);
+
+public:
+    dtkAbstractObject *object(void);
+
+    dtkAbstractContainerWrapper *container(void);
+
+    QVariant& variant(void);
+
+public:
+    int dataType(void);
+
+    QString  dataIdentifier(void);
+    QString dataDescription(void);
+
+public:
+    void activateEmitter(dtkComposerTransmitter        *emitter);
+    void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    bool enableCopy(void);
 
 public:
     bool isEmpty(void) const;
 
 public:
-    void setActiveEmitter(dtkComposerTransmitter *emitter);
+    bool    connect(dtkComposerTransmitter *transmitter);
+    bool disconnect(dtkComposerTransmitter *transmitter);
 
 private:
     QList<dtkComposerTransmitterEmitterVector<T> *> emitters;
@@ -119,7 +153,7 @@ private:
     dtkComposerTransmitterVariant          *active_variant;
 
 private:
-    dtkContainerVector<T> m_vector;
+    dtkContainerVector<T> *m_vector;
 
     using dtkComposerTransmitterReceiver<T>::d;
 };

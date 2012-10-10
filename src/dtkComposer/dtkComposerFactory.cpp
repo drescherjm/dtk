@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 13:15:34 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 743
+ * Last-Updated: Tue Sep 25 10:27:37 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 800
  */
 
 /* Commentary:
@@ -30,7 +30,6 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeConstants.h"
-#include "dtkComposerNodeContainerData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlDoWhile.h"
@@ -41,7 +40,6 @@
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeData.h"
 #include "dtkComposerNodeFile.h"
-#include "dtkComposerNodeFileOperator.h"
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeMatrixSquareReal.h"
@@ -59,6 +57,7 @@
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeVector3DOperatorUnary.h"
 #include "dtkComposerNodeVector3DOperatorBinary.h"
+#include "dtkComposerNodeVector3DOperatorTernary.h"
 #include "dtkComposerNodeVectorReal.h"
 #include "dtkComposerNodeVectorRealExtractor.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
@@ -147,686 +146,46 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["File"] = QStringList() << "primitive" << "file";
     d->types["File"] = "file";
 
-    // container nodes
+    // Number operators
 
-    d->nodes << "Data Container";
-    d->descriptions["Data Container"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Container"] = QStringList() << "container" << "data";
-    d->types["Data Container"] = "data_container";
+    this->initNodeNumberOperatorUnary();
+    this->initNodeNumberOperatorBinary();
 
-    d->nodes << "Data Array";
-    d->descriptions["Data Array"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array"] = QStringList() << "container" << "array" << "data" ;
-    d->types["Data Array"] = "array_data";
-
-    d->nodes << "Data Array Extractor";
-    d->descriptions["Data Array Extractor"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Extractor"] = QStringList() << "container" << "array" << "data" << "extractor";
-    d->types["Data Array Extractor"] = "array_data_extractor";
-
-    d->nodes << "Data Array SubArray";
-    d->descriptions["Data Array SubArray"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array SubArray"] = QStringList() << "container" << "data" << "array" << "subarray"<< "extractor";
-    d->types["Data Array SubArray"] = "array_data_extractor_subarray";
-
-    d->nodes << "Data Array Part";
-    d->descriptions["Data Array Part"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Part"] = QStringList() << "container" << "data" << "array" << "part" << "subarray" << "extractor";
-    d->types["Data Array Part"] = "array_data_extractor_array_part";
-
-    d->nodes << "Data Array Insert";
-    d->descriptions["Data Array Insert"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Insert"] = QStringList() << "container" << "array" << "data"  << "insert" ;
-    d->types["Data Array Insert"] = "array_data_insert";
-
-    d->nodes << "Data Array Set";
-    d->descriptions["Data Array Set"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Set"] = QStringList() << "container" << "array" << "data"  << "set";
-    d->types["Data Array Set"] = "array_data_set";
-
-    d->nodes << "Data Array Append";
-    d->descriptions["Data Array Append"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Append"] = QStringList() << "container" << "array" << "data"  << "append";
-    d->types["Data Array Append"] = "array_data_append";
-
-    d->nodes << "Data Array Prepend";
-    d->descriptions["Data Array Prepend"] = "<p>Description not yet filled!</p>";
-    d->tags["Data Array Prepend"] = QStringList() << "container" << "array" << "data"  << "prepend";
-    d->types["Data Array Prepend"] = "array_data_prepend";
-
-    // Matrix Square
-
-    d->nodes << "Matrix Square Real";
-    d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
-    d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
-    d->types["Matrix Square Real"] = "matrix_square_real";
-
-    d->nodes << "MatrixSquare Real Extractor";
-    d->descriptions["MatrixSquare Real Extractor "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Extractor"] = QStringList() << "matrix" << "square" << "real"<< "extractor";
-    d->types["MatrixSquare Real Extractor"] = "matrixSquare_real_extractor";
-
-    d->nodes << "MatrixSquare Real Transpose";
-    d->descriptions["MatrixSquare Real Transpose "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Transpose"] = QStringList() << "matrix" << "square" << "real"<< "transpose";
-    d->types["MatrixSquare Real Transpose"] = "matrixSquare_real_transpose";
-
-    d->nodes << "MatrixSquare Real Inverse";
-    d->descriptions["MatrixSquare Real Inverse "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Inverse"] = QStringList() << "matrix" << "square" << "real"<< "inverse";
-    d->types["MatrixSquare Real Inverse"] = "matrixSquare_real_inverse";
-
-    d->nodes << "MatrixSquare Real Determinant";
-    d->descriptions["MatrixSquare Real Determinant "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Determinant"] = QStringList() << "matrix" << "square" << "real"<< "determinant";
-    d->types["MatrixSquare Real Determinant"] = "matrixSquare_real_determinant";
-
-    d->nodes << "MatrixSquare Real Trace";
-    d->descriptions["MatrixSquare Real Trace "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Trace"] = QStringList() << "matrix" << "square" << "real"<< "trace";
-    d->types["MatrixSquare Real Trace"] = "matrixSquare_real_trace";
-
-    d->nodes << "MatrixSquare Real Sum";
-    d->descriptions["MatrixSquare Real Sum "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Sum"] = QStringList() << "matrix" << "square" << "real"<< "sum";
-    d->types["MatrixSquare Real Sum"] = "matrixSquare_real_sum";
-
-    d->nodes << "MatrixSquare Real Substract";
-    d->descriptions["MatrixSquare Real Substract "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Substract"] = QStringList() << "matrix" << "square" << "real"<< "substract";
-    d->types["MatrixSquare Real Substract"] = "matrixSquare_real_substract";
-
-    d->nodes << "MatrixSquare Real Mult";
-    d->descriptions["MatrixSquare Real Mult "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real Mult"] = QStringList() << "matrix" << "square" << "real"<< "mult";
-    d->types["MatrixSquare Real Mult"] = "matrixSquare_real_mult";
-
-    d->nodes << "MatrixSquare Real ProductMatrixVector";
-    d->descriptions["MatrixSquare Real ProductMatrixVector "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real ProductMatrixVector"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
-    d->types["MatrixSquare Real ProductMatrixVector"] = "matrixSquare_real_ProductMatrixVector";
-
-    d->nodes << "MatrixSquare Real ProductVectorMatrix";
-    d->descriptions["MatrixSquare Real ProductVectorMatrix "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real ProductVectorMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
-    d->types["MatrixSquare Real ProductVectorMatrix"] = "matrixSquare_real_ProductVectorMatrix";
-
-    d->nodes << "MatrixSquare Real ReplaceRowMatrixByVector";
-    d->descriptions["MatrixSquare Real ReplaceRowMatrixByVector "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real ReplaceRowMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Row"<< "Matrix" << "Vector";
-    d->types["MatrixSquare Real ReplaceRowMatrixByVector"] = "matrixSquare_real_ReplaceRowMatrixByVector";
-
-    d->nodes << "MatrixSquare Real ReplaceColMatrixByVector";
-    d->descriptions["MatrixSquare Real ReplaceColMatrixByVector "] = "<p>Description not yet filled!</p>";
-    d->tags["MatrixSquare Real ReplaceColMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Col"<< "Matrix" << "Vector";
-    d->types["MatrixSquare Real ReplaceColMatrixByVector"] = "matrixSquare_real_ReplaceColMatrixByVector";
-
-    // Vector Real
-
-    d->nodes << "Vector Real";
-    d->descriptions["Vector Real"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real"] = QStringList() << "vector" << "real" << "algebraic";
-    d->types["Vector Real"] = "vector_real";
-
-    d->nodes << "Vector Real Extractor";
-    d->descriptions["Vector Real Extractor"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Extractor"] = QStringList() << "vector" << "real" << "extractor";
-    d->types["Vector Real Extractor"] = "vector_real_extractor";
-
-    d->nodes << "Vector Real Set";
-    d->descriptions["Vector Real Set"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Set"] = QStringList() << "vector" << "real" << "set";
-    d->types["Vector Real Set"] = "vector_real_set";
-
-    d->nodes << "Vector Real Sum";
-    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Sum"] = QStringList() << "vector" << "real" << "sum";
-    d->types["Vector Real Sum"] = "vector_real_sum";
-
-    d->nodes << "Vector Real Substract";
-    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Substract"] = QStringList() << "vector" << "real" << "substract";
-    d->types["Vector Real Substract"] = "vector_real_substract";
-
-    d->nodes << "Vector Real Mult";
-    d->descriptions["Vector Real Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Mult"] = QStringList() << "vector" << "real" << "mult";
-    d->types["Vector Real Mult"] = "vector_real_mult";
-
-    d->nodes << "Vector Real Divide";
-    d->descriptions["Vector Real Divide"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Divide"] = QStringList() << "vector" << "real" << "divide";
-    d->types["Vector Real Divide"] = "vector_real_divide";
-
-    d->nodes << "Vector Real Add All";
-    d->descriptions["Vector Real Add All"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Add All"] = QStringList() << "vector" << "real" << "add"<< "all";
-    d->types["Vector Real Add All"] = "vector_real_add_all";
-
-    d->nodes << "Vector Real Substract All";
-    d->descriptions["Vector Real Substract All"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Substract All"] = QStringList() << "vector" << "real" << "substract"<< "all";
-    d->types["Vector Real Substract All"] = "vector_real_substract_all";
-
-    d->nodes << "Vector Real Mult All";
-    d->descriptions["Vector Real Mult All"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Mult All"] = QStringList() << "vector" << "real" << "mult"<< "all";
-    d->types["Vector Real Mult All"] = "vector_real_mult_all";
-
-    d->nodes << "Vector Real Divide All";
-    d->descriptions["Vector Real Divide All"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Divide All"] = QStringList() << "vector" << "real" << "divide"<< "all";
-    d->types["Vector Real Divide All"] = "vector_real_divide_all";
-
-    d->nodes << "Vector Real Unit";
-    d->descriptions["Vector Real Unit"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Unit"] = QStringList() << "vector"<<"real" << "algebraic" << "unit";
-    d->types["Vector Real Unit"] = "vectorReal_unit";
-
-    d->nodes << "Vector Real Norm";
-    d->descriptions["Vector Real Norm"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Norm"] = QStringList() << "vector"<<"real" << "algebraic" << "norm";
-    d->types["Vector Real Norm"] = "vectorReal_norm";
-
-    d->nodes << "Vector Real Sum";
-    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Sum"] = QStringList() << "vector"<< "real" << "algebraic" << "sum";
-    d->types["Vector Real Sum"] = "vectorReal_sum";
-
-    d->nodes << "Vector Real Substract";
-    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Substract"] = QStringList() << "vector"<<"real" << "algebraic" << "substraction";
-    d->types["Vector Real Substract"] = "vectorReal_substract";
-
-    d->nodes << "Vector Real Dot Prod";
-    d->descriptions["Vector Real Dot Prod"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Dot Prod"] = QStringList() << "vector"<<"real" << "algebraic" << "dot product";
-    d->types["Vector Real Dot Prod"] = "vectorReal_dot_prod";
-
-    d->nodes << "Vector Real Scal Mult";
-    d->descriptions["Vector Real Scal Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Scal Mult"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar multiplication";
-    d->types["Vector Real Scal Mult"] = "vectorReal_scal_mult";
-
-    d->nodes << "Vector Real Scal Division";
-    d->descriptions["Vector Real Scal Division"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Scal Division"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar division";
-    d->types["Vector Real Scal Division"] = "vectorReal_scal_divide";
-
-    // Array
-
-    d->nodes << "Scalar Array";
-    d->descriptions["Scalar Array"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
-    d->types["Scalar Array"] = "array_scalar";
-
-    d->nodes << "Scalar Array Extractor";
-    d->descriptions["Scalar Array Extractor"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar" << "extractor" ;
-    d->types["Scalar Array Extractor"] = "array_scalar_extractor";
-
-    d->nodes << "Scalar Array SubArray";
-    d->descriptions["Scalar Array SubArray"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array SubArray"] = QStringList() << "container" << "scalar" << "array" << "subarray"<< "extractor" ;
-    d->types["Scalar Array SubArray"] = "array_scalar_extractor_subarray";
-
-    d->nodes << "Scalar Array Part";
-    d->descriptions["Scalar Array Part"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Part"] = QStringList() << "container" << "scalar" << "array" << "part" << "subarray" << "extractor" ;
-    d->types["Scalar Array Part"] = "array_scalar_extractor_array_part";
-
-    d->nodes << "Scalar Array Insert";
-    d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
-    d->types["Scalar Array Insert"] = "array_scalar_insert";
-
-    d->nodes << "Scalar Array Set";
-    d->descriptions["Scalar Array Set"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Set"] = QStringList() << "container" << "array" << "scalar"  << "set" ;
-    d->types["Scalar Array Set"] = "array_scalar_set";
-
-    d->nodes << "Scalar Array Append";
-    d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Append"] = QStringList() << "container" << "array" << "scalar"  << "append" ;
-    d->types["Scalar Array Append"] = "array_scalar_append";
-
-    d->nodes << "Scalar Array Prepend";
-    d->descriptions["Scalar Array Prepend"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
-    d->types["Scalar Array Prepend"] = "array_scalar_prepend";
-
-    d->nodes << "Scalar Array All Add";
-    d->descriptions["Scalar Array All Add"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array All Add"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "add" ;
-    d->types["Scalar Array All Add"] = "array_scalar_all_add";
-
-    d->nodes << "Scalar Array All Substract";
-    d->descriptions["Scalar Array All Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array All Substract"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "substract" ;
-    d->types["Scalar Array All Substract"] = "array_scalar_all_substract";
-
-    d->nodes << "Scalar Array All Mult";
-    d->descriptions["Scalar Array All Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array All Mult"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "mult" ;
-    d->types["Scalar Array All Mult"] = "array_scalar_all_mult";
-
-    d->nodes << "Scalar Array All Divide";
-    d->descriptions["Scalar Array All Divide"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array All Divide"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "divide" ;
-    d->types["Scalar Array All Divide"] = "array_scalar_all_divide";
-
-    d->nodes << "Scalar Array Sum";
-    d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
-    d->types["Scalar Array Sum"] = "array_scalar_sum";
-
-    d->nodes << "Scalar Array Substract";
-    d->descriptions["Scalar Array Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Substract"] = QStringList() << "container" << "array" << "scalar"  << "substract" ;
-    d->types["Scalar Array Substract"] = "array_scalar_substract";
-
-    d->nodes << "Scalar Array Mult";
-    d->descriptions["Scalar Array Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Mult"] = QStringList() << "container" << "array" << "scalar"  << "mult" ;
-    d->types["Scalar Array Mult"] = "array_scalar_mult" ;
-
-    d->nodes << "Scalar Array Divide";
-    d->descriptions["Scalar Array Divide"] = "<p>Description not yet filled!</p>";
-    d->tags["Scalar Array Divide"] = QStringList() << "container" << "array" << "scalar"  << "divide" ;
-    d->types["Scalar Array Divide"] = "array_scalar_divide" ;
-
-    // Algebraic nodes
-
-    d->nodes << "Vector3D";
-    d->descriptions["Vector3D"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D"] = QStringList() << "vector3D" << "algebraic";
-    d->types["Vector3D"] = "vector3D";
-
-    d->nodes << "Vector3D Unit";
-    d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
-    d->types["Vector3D Unit"] = "vector3D_unit";
-
-    d->nodes << "Vector3D Norm";
-    d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Norm"] = QStringList() << "vector3D" << "algebraic" << "norm";
-    d->types["Vector3D Norm"] = "vector3D_norm";
-
-    d->nodes << "Vector3D Sum";
-    d->descriptions["Vector3D Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Sum"] = QStringList() << "vector3D" << "algebraic" << "sum";
-    d->types["Vector3D Sum"] = "vector3D_sum";
-
-    d->nodes << "Vector3D Substract";
-    d->descriptions["Vector3D Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Substract"] = QStringList() << "vector3D" << "algebraic" << "substraction";
-    d->types["Vector3D Substract"] = "vector3D_substract";
-
-    d->nodes << "Vector3D Cross Prod";
-    d->descriptions["Vector3D Cross Prod"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Cross Prod"] = QStringList() << "vector3D" << "algebraic" << "cross product";
-    d->types["Vector3D Cross Prod"] = "vector3D_cross_prod";
-
-    d->nodes << "Vector3D Dot Prod";
-    d->descriptions["Vector3D Dot Prod"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Dot Prod"] = QStringList() << "vector3D" << "algebraic" << "dot product";
-    d->types["Vector3D Dot Prod"] = "vector3D_dot_prod";
-
-    d->nodes << "Vector3D Scal Mult";
-    d->descriptions["Vector3D Scal Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Scal Mult"] = QStringList() << "vector3D" << "algebraic" << "scalar multiplication";
-    d->types["Vector3D Scal Mult"] = "vector3D_scal_mult";
-
-    d->nodes << "Vector3D Scal Division";
-    d->descriptions["Vector3D Scal Division"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector3D Scal Division"] = QStringList() << "vector3D" << "algebraic" << "scalar division";
-    d->types["Vector3D Scal Division"] = "vector3D_scal_divide";
-
-    d->nodes << "Quaternion";
-    d->descriptions["Quaternion"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
-    d->types["Quaternion"] = "quaternion";
-
-    d->nodes << "Quaternion Unit";
-    d->descriptions["Quaternion Unit"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Unit"] = QStringList() << "quaternion" << "algebraic" << "unit";
-    d->types["Quaternion Unit"] = "quat_unit";
-
-    d->nodes << "Quaternion Norm";
-    d->descriptions["Quaternion Norm"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Norm"] = QStringList() << "quaternion" << "algebraic" << "norm";
-    d->types["Quaternion Norm"] = "quat_norm";
-
-    d->nodes << "Quaternion Sum";
-    d->descriptions["Quaternion Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Sum"] = QStringList() << "quaternion" << "algebraic" << "sum";
-    d->types["Quaternion Sum"] = "quat_sum";
-
-    d->nodes << "Quaternion Substract";
-    d->descriptions["Quaternion Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Substract"] = QStringList() << "quaternion" << "algebraic" << "substract";
-    d->types["Quaternion Substract"] = "quat_substract";
-
-    d->nodes << "Quaternion Mult";
-    d->descriptions["Quaternion Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Mult"] = QStringList() << "quaternion" << "algebraic" << "multiplication";
-    d->types["Quaternion Mult"] = "quat_mult";
-
-    d->nodes << "Quaternion Division";
-    d->descriptions["Quaternion Division"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Division"] = QStringList() << "quaternion" << "algebraic" << "division";
-    d->types["Quaternion Division"] = "quat_divide";
-
-    d->nodes << "Quaternion Scal Mult";
-    d->descriptions["Quaternion Scal Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Scal Mult"] = QStringList() << "quaternion" << "algebraic" << "scalar multiplication";
-    d->types["Quaternion Scal Mult"] = "quat_scal_mult";
-
-    d->nodes << "Quaternion Scal Division";
-    d->descriptions["Quaternion Scal Division"] = "<p>Description not yet filled!</p>";
-    d->tags["Quaternion Scal Division"] = QStringList() << "quaternion" << "algebraic" << "scalar division";
-    d->types["Quaternion Scal Division"] = "quat_scal_divide";
-
-    // operators
-
-    d->nodes << "Abs";
-    d->descriptions["Abs"] = "<p>Compute the absolute value of a number</p>";
-    d->tags["Abs"] = QStringList() << "number" << "operator" << "unary" << "abs";
-    d->types["Abs"] = "abs";
-
-    d->nodes << "Acos";
-    d->descriptions["Acos"] = "<p>Compute Acos</p>";
-    d->tags["Acos"] = QStringList() << "number" << "operator" << "unary" << "acos";
-    d->types["Acos"] = "acos";
-
-    d->nodes << "Append";
-    d->descriptions["Append"] = "<p>Concatenation of two strings</p>";
-    d->tags["Append"] = QStringList() << "concatenate" << "operator" << "append" << "string";
-    d->types["Append"] = "append";
+    // String operators
 
     d->nodes << "String Equality";
     d->descriptions["String Equality"] = "<p>Test the equality of two strings</p>";
     d->tags["String Equality"] = QStringList() << "string" << "comparison" << "equality";
     d->types["String Equality"] = "string_equality";
 
-    d->nodes << "Asin";
-    d->descriptions["Asin"] = "<p>Compute Asin</p>";
-    d->tags["Asin"] = QStringList() << "number" << "operator" << "unary" << "asin";
-    d->types["Asin"] = "asin";
+    d->nodes << "Append";
+    d->descriptions["Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Append"] = QStringList() << "concatenate" << "operator" << "append" << "string";
+    d->types["Append"] = "append";
 
-    d->nodes << "Atan";
-    d->descriptions["Atan"] = "<p>Compute Atan</p>";
-    d->tags["Atan"] = QStringList() << "number" << "operator" << "unary" << "atan";
-    d->types["Atan"] = "atan";
+    // Boolean operators
+    
+    this->initNodeBooleanOperators();
 
-    d->nodes << "Ceil";
-    d->descriptions["Ceil"] = "<p>Ceiling function  (smallest following integer)</p>";
-    d->tags["Ceil"] = QStringList() << "number" << "operator" << "unary" << "ceil";
-    d->types["Ceil"] = "ceil";
+    // Scalar Array
 
-    d->nodes << "Cos";
-    d->descriptions["Cos"] = "<p>Compute cosine</p>";
-    d->tags["Cos"] = QStringList() << "number" << "operator" << "unary" << "cos";
-    d->types["Cos"] = "cos";
+    this->initNodeArrayScalar();
 
-    d->nodes << "Decr";
-    d->descriptions["Decr"] = "<p>Decrement a number by one (equivalent to the '--' operator )</p>";
-    d->tags["Decr"] = QStringList() << "number" << "operator" << "unary" << "decr";
-    d->types["Decr"] = "decr";
+    // Algebraic nodes
 
-    d->nodes << "Deg2rad";
-    d->descriptions["Deg2rad"] = "<p>Description not yet filled!</p>";
-    d->tags["Deg2rad"] = QStringList() << "number" << "operator" << "unary" << "deg2rad";
-    d->types["Deg2rad"] = "deg2rad";
+    this->initNodeVectorReal();
+    this->initNodeMatrixSquareReal();
 
-    d->nodes << "Exp";
-    d->descriptions["Exp"] = "<p>Compute the exponential function</p>";
-    d->tags["Exp"] = QStringList() << "number" << "operator" << "unary" << "exp";
-    d->types["Exp"] = "exp";
+    this->initNodeVector3D();
+    this->initNodeQuaternion();
 
-    d->nodes << "Floor";
-    d->descriptions["Floor"] = "<p>Compute the largest previous integer</p>";
-    d->tags["Floor"] = QStringList() << "number" << "operator" << "unary" << "floor";
-    d->types["Floor"] = "floor";
+    // Data Container nodes
 
-    d->nodes << "Incr";
-    d->descriptions["Incr"] = "<p>Increment a number by one (equivalent to the '++' operator )</p>";
-    d->tags["Incr"] = QStringList() << "number" << "operator" << "unary" << "incr";
-    d->types["Incr"] = "incr";
+    this->initNodeContainerData();
 
-    d->nodes << "Inv";
-    d->descriptions["Inv"] = "<p>Inverse a number</p>";
-    d->tags["Inv"] = QStringList() << "number" << "operator" << "unary" << "inv";
-    d->types["Inv"] = "inv";
+    // // control nodes
 
-    d->nodes << "Ln";
-    d->descriptions["Ln"] = "<p>Compute the natural logarithm</p>";
-    d->tags["Ln"] = QStringList() << "number" << "operator" << "unary" << "ln";
-    d->types["Ln"] = "ln";
-
-    d->nodes << "Log10";
-    d->descriptions["Log10"] = "<p>Compute the common logarithm</p>";
-    d->tags["Log10"] = QStringList() << "number" << "operator" << "unary" << "log10";
-    d->types["Log10"] = "log10";
-
-    d->nodes << "Opp";
-    d->descriptions["Opp"] = "<p>Description not yet filled!</p>";
-    d->tags["Opp"] = QStringList() << "number" << "operator" << "unary" << "opp";
-    d->types["Opp"] = "opp";
-
-    d->nodes << "Round";
-    d->descriptions["Round"] = "<p>Round the number</p>";
-    d->tags["Round"] = QStringList() << "number" << "operator" << "unary" << "round";
-    d->types["Round"] = "round";
-
-    d->nodes << "Rad2deg";
-    d->descriptions["Rad2deg"] = "<p>Description not yet filled!</p>";
-    d->tags["Rad2deg"] = QStringList() << "number" << "operator" << "unary" << "rad2deg";
-    d->types["Rad2deg"] = "rad2deg";
-
-    d->nodes << "Sin";
-    d->descriptions["Sin"] = "<p>Compute the sine function</p>";
-    d->tags["Sin"] = QStringList() << "number" << "operator" << "unary" << "sin";
-    d->types["Sin"] = "sin";
-
-    d->nodes << "Square";
-    d->descriptions["Square"] = "<p>Compute the Square of a number</p>";
-    d->tags["Square"] = QStringList() << "number" << "operator" << "unary" << "square";
-    d->types["Square"] = "square";
-
-    d->nodes << "Sqrt";
-    d->descriptions["Sqrt"] = "<p>Compute the Square root</p>";
-    d->tags["Sqrt"] = QStringList() << "number" << "operator" << "unary" << "sqrt";
-    d->types["Sqrt"] = "sqrt";
-
-    d->nodes << "Tan";
-    d->descriptions["Tan"] = "<p>Compute the tan</p>";
-    d->tags["Tan"] = QStringList() << "number" << "operator" << "unary" << "tan";
-    d->types["Tan"] = "tan";
-
-    d->nodes << "Eucldiv";
-    d->descriptions["Eucldiv"] = "<p>Description not yet filled!</p>";
-    d->tags["Eucldiv"] = QStringList() << "number" << "operator" << "binary" << "eucldiv";
-    d->types["Eucldiv"] = "eucldiv";
-
-    d->nodes << "Expn";
-    d->descriptions["Expn"] = "<p>Description not yet filled!</p>";
-    d->tags["Expn"] = QStringList() << "number" << "operator" << "binary" << "expn";
-    d->types["Expn"] = "expn";
-
-    d->nodes << "Logn";
-    d->descriptions["Logn"] = "<p>Description not yet filled!</p>";
-    d->tags["Logn"] = QStringList() << "number" << "operator" << "binary" << "logn";
-    d->types["Logn"] = "logn";
-
-    d->nodes << "Max";
-    d->descriptions["Max"] = "<p>Compute the maximum of two numbers</p>";
-    d->tags["Max"] = QStringList() << "number" << "operator" << "binary" << "max";
-    d->types["Max"] = "max";
-
-    d->nodes << "Minus";
-    d->descriptions["Minus"] = "<p>Subtract rhs from lhs</p>";
-    d->tags["Minus"] = QStringList() << "number" << "operator" << "binary" << "minus";
-    d->types["Minus"] = "minus";
-
-    d->nodes << "Min";
-    d->descriptions["Min"] = "<p>Compute the minimum of two numbers</p>";
-    d->tags["Min"] = QStringList() << "number" << "operator" << "binary" << "min";
-    d->types["Min"] = "min";
-
-    d->nodes << "Modulo";
-    d->descriptions["Modulo"] = "<p>Description not yet filled!</p>";
-    d->tags["Modulo"] = QStringList() << "number" << "operator" << "binary" << "modulo";
-    d->types["Modulo"] = "modulo";
-
-    d->nodes << "Mult";
-    d->descriptions["Mult"] = "<p>Multiply two numbers</p>";
-    d->tags["Mult"] = QStringList() << "number" << "operator" << "binary" << "mult";
-    d->types["Mult"] = "mult";
-
-    d->nodes << "Plus";
-    d->descriptions["Plus"] = "<p>Compute the sum of two numbers</p>";
-    d->tags["Plus"] = QStringList() << "number" << "operator" << "binary" << "plus";
-    d->types["Plus"] = "plus";
-
-    d->nodes << "Posnthroot";
-    d->descriptions["Posnthroot"] = "<p>Description not yet filled!</p>";
-    d->tags["Posnthroot"] = QStringList() << "number" << "operator" << "binary" << "posnthroot";
-    d->types["Posnthroot"] = "posnthroot";
-
-    d->nodes << "Power";
-    d->descriptions["Power"] = "<p>Compute lhs at the power of rhs</p>";
-    d->tags["Power"] = QStringList() << "number" << "operator" << "binary" << "power";
-    d->types["Power"] = "power";
-
-    d->nodes << "Ratio";
-    d->descriptions["Ratio"] = "<p>Description not yet filled!</p>";
-    d->tags["Ratio"] = QStringList() << "number" << "operator" << "binary" << "ratio";
-    d->types["Ratio"] = "ratio";
-
-    d->nodes << "Equal";
-    d->descriptions["Equal"] = "<p>Returns true if lhs is equal to rhs</p>";
-    d->tags["Equal"] = QStringList() << "number" << "operator" << "binary" << "equal";
-    d->types["Equal"] = "equal";
-
-    d->nodes << "Notequal";
-    d->descriptions["Notequal"] = "<p>Description not yet filled!</p>";
-    d->tags["Notequal"] = QStringList() << "number" << "operator" << "binary" << "notequal";
-    d->types["Notequal"] = "notequal";
-
-    d->nodes << "Gt";
-    d->descriptions["Gt"] = "<p>Returns true if lhs is greater than rhs</p>";
-    d->tags["Gt"] = QStringList() << "number" << "operator" << "binary" << "gt";
-    d->types["Gt"] = "gt";
-
-    d->nodes << "Lt";
-    d->descriptions["Lt"] = "<p>Returns true if lhs is less than rhs</p>";
-    d->tags["Lt"] = QStringList() << "number" << "operator" << "binary" << "lt";
-    d->types["Lt"] = "lt";
-
-    d->nodes << "Gte";
-    d->descriptions["Gte"] = "<p>Returns true if lhs is greater or equal than rhs</p>";
-    d->tags["Gte"] = QStringList() << "number" << "operator" << "binary" << "gte";
-    d->types["Gte"] = "gte";
-
-    d->nodes << "Lte";
-    d->descriptions["Lte"] = "<p>Returns true if lhs is less or equal than rhs</p>";
-    d->tags["Lte"] = QStringList() << "number" << "operator" << "binary" << "lte";
-    d->types["Lte"] = "lte";
-
-    d->nodes << "Almosteq";
-    d->descriptions["Almosteq"] = "<p>Description not yet filled!</p>";
-    d->tags["Almosteq"] = QStringList() << "number" << "operator" << "binary" << "almosteq";
-    d->types["Almosteq"] = "almosteq";
-
-    d->nodes << "Notalmosteq";
-    d->descriptions["Notalmosteq"] = "<p>Description not yet filled!</p>";
-    d->tags["Notalmosteq"] = QStringList() << "number" << "operator" << "binary" << "notalmosteq";
-    d->types["Notalmosteq"] = "notalmosteq";
-
-    // /////////////////////////////////////////////////////////////////
-
-    d->nodes << "Not";
-    d->descriptions["Not"] = "<p>Description not yet filled!</p>";
-    d->tags["Not"] = QStringList() << "boolean" << "operator" << "unary" << "not";
-    d->types["Not"] = "not";
-
-    d->nodes << "And";
-    d->descriptions["And"] = "<p>Description not yet filled!</p>";
-    d->tags["And"] = QStringList() << "boolean" << "operator" << "binary" << "and";
-    d->types["And"] = "and";
-
-    d->nodes << "Or";
-    d->descriptions["Or"] = "<p>Description not yet filled!</p>";
-    d->tags["Or"] = QStringList() << "boolean" << "operator" << "binary" << "or";
-    d->types["Or"] = "or";
-
-    d->nodes << "Xor";
-    d->descriptions["Xor"] = "<p>Description not yet filled!</p>";
-    d->tags["Xor"] = QStringList() << "boolean" << "operator" << "binary" << "xor";
-    d->types["Xor"] = "xor";
-
-    d->nodes << "Nand";
-    d->descriptions["Nand"] = "<p>Description not yet filled!</p>";
-    d->tags["Nand"] = QStringList() << "boolean" << "operator" << "binary" << "nand";
-    d->types["Nand"] = "nand";
-
-    d->nodes << "Nor";
-    d->descriptions["Nor"] = "<p>Description not yet filled!</p>";
-    d->tags["Nor"] = QStringList() << "boolean" << "operator" << "binary" << "nor";
-    d->types["Nor"] = "nor";
-
-    d->nodes << "Xnor";
-    d->descriptions["Xnor"] = "<p>Description not yet filled!</p>";
-    d->tags["Xnor"] = QStringList() << "boolean" << "operator" << "binary" << "xnor";
-    d->types["Xnor"] = "xnor";
-
-    d->nodes << "Imp";
-    d->descriptions["Imp"] = "<p>Description not yet filled!</p>";
-    d->tags["Imp"] = QStringList() << "boolean" << "operator" << "binary" << "imp";
-    d->types["Imp"] = "imp";
-
-    d->nodes << "Nimp";
-    d->descriptions["Nimp"] = "<p>Description not yet filled!</p>";
-    d->tags["Nimp"] = QStringList() << "boolean" << "operator" << "binary" << "nimp";
-    d->types["Nimp"] = "nimp";
-
-    // control nodes
-
-    d->nodes << "Case";
-    d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
-    d->tags["Case"] = QStringList() << "control" << "case";
-    d->types["Case"] = "case";
-
-    d->nodes << "Do While";
-    d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
-    d->tags["Do While"] = QStringList() << "control" << "do" << "while";
-    d->types["Do While"] = "do while";
-
-    d->nodes << "If";
-    d->descriptions["If"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlIf.html");
-    d->tags["If"] = QStringList() << "control" << "if";
-    d->types["If"] = "if";
-
-    d->nodes << "For";
-    d->descriptions["For"] = "<p>Description not yet filled!</p>";
-    d->tags["For"] = QStringList() << "control" << "for";
-    d->types["For"] = "for";
-
-    d->nodes << "Foreach";
-    d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
-    d->tags["Foreach"] = QStringList() << "control" << "foreach";
-    d->types["Foreach"] = "foreach";
-
-    d->nodes << "Map";
-    d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
-    d->tags["Map"] = QStringList() << "control" << "map" << "container";
-    d->types["Map"] = "map";
-
-    d->nodes << "While";
-    d->descriptions["While"] = "<p>Description not yet filled!</p>";
-    d->tags["While"] = QStringList() << "control" << "while";
-    d->types["While"] = "while";
+    this->initNodeControl();
 
     // log nodes
 
@@ -956,6 +315,698 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 #endif
 }
 
+void dtkComposerFactory::initNodeNumberOperatorUnary()
+{
+    d->nodes << "Abs";
+    d->descriptions["Abs"] = "<p>Returns absolute value of the input number.</p>";
+    d->tags["Abs"] = QStringList() << "number" << "operator" << "unary" << "abs";
+    d->types["Abs"] = "abs";
+
+    d->nodes << "Incr";
+    d->descriptions["Incr"] = "<p>Increments the input number of one (equivalent to the '++' operator).</p>";
+    d->tags["Incr"] = QStringList() << "number" << "operator" << "unary" << "incr";
+    d->types["Incr"] = "incr";
+
+    d->nodes << "Decr";
+    d->descriptions["Decr"] = "<p>Decrements the input number of one (equivalent to the '--' operator ).</p>";
+    d->tags["Decr"] = QStringList() << "number" << "operator" << "unary" << "decr";
+    d->types["Decr"] = "decr";
+
+    d->nodes << "Opp";
+    d->descriptions["Opp"] = "<p>Returns opposite of the input number.</p>";
+    d->tags["Opp"] = QStringList() << "number" << "operator" << "unary" << "opp";
+    d->types["Opp"] = "opp";
+
+    d->nodes << "Inv";
+    d->descriptions["Inv"] = "<p>Returns inverse of the input number.</p>";
+    d->tags["Inv"] = QStringList() << "number" << "operator" << "unary" << "inv";
+    d->types["Inv"] = "inv";
+
+    d->nodes << "Square";
+    d->descriptions["Square"] = "<p>Returns square of the input number.</p>";
+    d->tags["Square"] = QStringList() << "number" << "operator" << "unary" << "square";
+    d->types["Square"] = "square";
+
+    d->nodes << "Sqrt";
+    d->descriptions["Sqrt"] = "<p>Returns square root of the input number.</p>";
+    d->tags["Sqrt"] = QStringList() << "number" << "operator" << "unary" << "sqrt";
+    d->types["Sqrt"] = "sqrt";
+
+    d->nodes << "Ln";
+    d->descriptions["Ln"] = "<p>Returns the natural logarithm of the input number.</p>";
+    d->tags["Ln"] = QStringList() << "number" << "operator" << "unary" << "ln";
+    d->types["Ln"] = "ln";
+
+    d->nodes << "Log10";
+    d->descriptions["Log10"] = "<p>Returns the binary logarithm in base 10 of the input number.</p>";
+    d->tags["Log10"] = QStringList() << "number" << "operator" << "unary" << "log10";
+    d->types["Log10"] = "log10";
+
+    d->nodes << "Exp";
+    d->descriptions["Exp"] = "<p>Returns the exponential value of the input number.</p>";
+    d->tags["Exp"] = QStringList() << "number" << "operator" << "unary" << "exp";
+    d->types["Exp"] = "exp";
+
+    d->nodes << "Cos";
+    d->descriptions["Cos"] = "<p>Returns the cosine of the input number.</p>";
+    d->tags["Cos"] = QStringList() << "number" << "operator" << "unary" << "cos";
+    d->types["Cos"] = "cos";
+
+    d->nodes << "Sin";
+    d->descriptions["Sin"] = "<p>Returns the sine of the input number.</p>";
+    d->tags["Sin"] = QStringList() << "number" << "operator" << "unary" << "sin";
+    d->types["Sin"] = "sin";
+
+    d->nodes << "Tan";
+    d->descriptions["Tan"] = "<p>Returns the tangent of the input number.</p>";
+    d->tags["Tan"] = QStringList() << "number" << "operator" << "unary" << "tan";
+    d->types["Tan"] = "tan";
+
+    d->nodes << "Acos";
+    d->descriptions["Acos"] = "<p>Description not yet filled!</p>";
+    d->tags["Acos"] = QStringList() << "number" << "operator" << "unary" << "acos";
+    d->types["Acos"] = "acos";
+
+    d->nodes << "Asin";
+    d->descriptions["Asin"] = "<p>Description not yet filled!</p>";
+    d->tags["Asin"] = QStringList() << "number" << "operator" << "unary" << "asin";
+    d->types["Asin"] = "asin";
+
+    d->nodes << "Atan";
+    d->descriptions["Atan"] = "<p>Description not yet filled!</p>";
+    d->tags["Atan"] = QStringList() << "number" << "operator" << "unary" << "atan";
+    d->types["Atan"] = "atan";
+
+    d->nodes << "Deg2rad";
+    d->descriptions["Deg2rad"] = "<p>Description not yet filled!</p>";
+    d->tags["Deg2rad"] = QStringList() << "number" << "operator" << "unary" << "deg2rad";
+    d->types["Deg2rad"] = "deg2rad";
+
+    d->nodes << "Rad2deg";
+    d->descriptions["Rad2deg"] = "<p>Description not yet filled!</p>";
+    d->tags["Rad2deg"] = QStringList() << "number" << "operator" << "unary" << "rad2deg";
+    d->types["Rad2deg"] = "rad2deg";
+
+    d->nodes << "Ceil";
+    d->descriptions["Ceil"] = "<p>Ceiling function  (smallest following integer)</p>";
+    d->tags["Ceil"] = QStringList() << "number" << "operator" << "unary" << "ceil";
+    d->types["Ceil"] = "ceil";
+
+    d->nodes << "Floor";
+    d->descriptions["Floor"] = "<p>Compute the largest previous integer</p>";
+    d->tags["Floor"] = QStringList() << "number" << "operator" << "unary" << "floor";
+    d->types["Floor"] = "floor";
+
+    d->nodes << "Round";
+    d->descriptions["Round"] = "<p>Round the number</p>";
+    d->tags["Round"] = QStringList() << "number" << "operator" << "unary" << "round";
+    d->types["Round"] = "round";
+}
+
+void dtkComposerFactory::initNodeNumberOperatorBinary(void)
+{
+
+    d->nodes << "Eucldiv";
+    d->descriptions["Eucldiv"] = "<p>Description not yet filled!</p>";
+    d->tags["Eucldiv"] = QStringList() << "number" << "operator" << "binary" << "eucldiv";
+    d->types["Eucldiv"] = "eucldiv";
+
+    d->nodes << "Expn";
+    d->descriptions["Expn"] = "<p>Description not yet filled!</p>";
+    d->tags["Expn"] = QStringList() << "number" << "operator" << "binary" << "expn";
+    d->types["Expn"] = "expn";
+
+    d->nodes << "Logn";
+    d->descriptions["Logn"] = "<p>Description not yet filled!</p>";
+    d->tags["Logn"] = QStringList() << "number" << "operator" << "binary" << "logn";
+    d->types["Logn"] = "logn";
+
+    d->nodes << "Max";
+    d->descriptions["Max"] = "<p>Compute the maximum of two numbers.</p>";
+    d->tags["Max"] = QStringList() << "number" << "operator" << "binary" << "max";
+    d->types["Max"] = "max";
+
+    d->nodes << "Minus";
+    d->descriptions["Minus"] = "<p>Subtract rhs from lhs</p>";
+    d->tags["Minus"] = QStringList() << "number" << "operator" << "binary" << "minus";
+    d->types["Minus"] = "minus";
+
+    d->nodes << "Min";
+    d->descriptions["Min"] = "<p>Compute the minimum of two numbers</p>";
+    d->tags["Min"] = QStringList() << "number" << "operator" << "binary" << "min";
+    d->types["Min"] = "min";
+
+    d->nodes << "Modulo";
+    d->descriptions["Modulo"] = "<p>Description not yet filled!</p>";
+    d->tags["Modulo"] = QStringList() << "number" << "operator" << "binary" << "modulo";
+    d->types["Modulo"] = "modulo";
+
+    d->nodes << "Mult";
+    d->descriptions["Mult"] = "<p>Multiply two numbers</p>";
+    d->tags["Mult"] = QStringList() << "number" << "operator" << "binary" << "mult";
+    d->types["Mult"] = "mult";
+
+    d->nodes << "Plus";
+    d->descriptions["Plus"] = "<p>Compute the sum of two numbers</p>";
+    d->tags["Plus"] = QStringList() << "number" << "operator" << "binary" << "plus";
+    d->types["Plus"] = "plus";
+
+    d->nodes << "Posnthroot";
+    d->descriptions["Posnthroot"] = "<p>Description not yet filled!</p>";
+    d->tags["Posnthroot"] = QStringList() << "number" << "operator" << "binary" << "posnthroot";
+    d->types["Posnthroot"] = "posnthroot";
+
+    d->nodes << "Power";
+    d->descriptions["Power"] = "<p>Compute lhs at the power of rhs</p>";
+    d->tags["Power"] = QStringList() << "number" << "operator" << "binary" << "power";
+    d->types["Power"] = "power";
+
+    d->nodes << "Ratio";
+    d->descriptions["Ratio"] = "<p>Description not yet filled!</p>";
+    d->tags["Ratio"] = QStringList() << "number" << "operator" << "binary" << "ratio";
+    d->types["Ratio"] = "ratio";
+
+    d->nodes << "Equal";
+    d->descriptions["Equal"] = "<p>Returns true if lhs is equal to rhs</p>";
+    d->tags["Equal"] = QStringList() << "number" << "operator" << "binary" << "equal";
+    d->types["Equal"] = "equal";
+
+    d->nodes << "Notequal";
+    d->descriptions["Notequal"] = "<p>Description not yet filled!</p>";
+    d->tags["Notequal"] = QStringList() << "number" << "operator" << "binary" << "notequal";
+    d->types["Notequal"] = "notequal";
+
+    d->nodes << "Gt";
+    d->descriptions["Gt"] = "<p>Returns true if lhs is greater than rhs</p>";
+    d->tags["Gt"] = QStringList() << "number" << "operator" << "binary" << "gt";
+    d->types["Gt"] = "gt";
+
+    d->nodes << "Lt";
+    d->descriptions["Lt"] = "<p>Returns true if lhs is less than rhs</p>";
+    d->tags["Lt"] = QStringList() << "number" << "operator" << "binary" << "lt";
+    d->types["Lt"] = "lt";
+
+    d->nodes << "Gte";
+    d->descriptions["Gte"] = "<p>Returns true if lhs is greater or equal than rhs</p>";
+    d->tags["Gte"] = QStringList() << "number" << "operator" << "binary" << "gte";
+    d->types["Gte"] = "gte";
+
+    d->nodes << "Lte";
+    d->descriptions["Lte"] = "<p>Returns true if lhs is less or equal than rhs</p>";
+    d->tags["Lte"] = QStringList() << "number" << "operator" << "binary" << "lte";
+    d->types["Lte"] = "lte";
+
+    d->nodes << "Almosteq";
+    d->descriptions["Almosteq"] = "<p>Description not yet filled!</p>";
+    d->tags["Almosteq"] = QStringList() << "number" << "operator" << "binary" << "almosteq";
+    d->types["Almosteq"] = "almosteq";
+
+    d->nodes << "Notalmosteq";
+    d->descriptions["Notalmosteq"] = "<p>Description not yet filled!</p>";
+    d->tags["Notalmosteq"] = QStringList() << "number" << "operator" << "binary" << "notalmosteq";
+    d->types["Notalmosteq"] = "notalmosteq";
+
+}
+
+void dtkComposerFactory::initNodeBooleanOperators(void)
+{
+    d->nodes << "Not";
+    d->descriptions["Not"] = "<p>Description not yet filled!</p>";
+    d->tags["Not"] = QStringList() << "boolean" << "operator" << "unary" << "not";
+    d->types["Not"] = "not";
+
+    d->nodes << "And";
+    d->descriptions["And"] = "<p>Description not yet filled!</p>";
+    d->tags["And"] = QStringList() << "boolean" << "operator" << "binary" << "and";
+    d->types["And"] = "and";
+
+    d->nodes << "Or";
+    d->descriptions["Or"] = "<p>Description not yet filled!</p>";
+    d->tags["Or"] = QStringList() << "boolean" << "operator" << "binary" << "or";
+    d->types["Or"] = "or";
+
+    d->nodes << "Xor";
+    d->descriptions["Xor"] = "<p>Description not yet filled!</p>";
+    d->tags["Xor"] = QStringList() << "boolean" << "operator" << "binary" << "xor";
+    d->types["Xor"] = "xor";
+
+    d->nodes << "Nand";
+    d->descriptions["Nand"] = "<p>Description not yet filled!</p>";
+    d->tags["Nand"] = QStringList() << "boolean" << "operator" << "binary" << "nand";
+    d->types["Nand"] = "nand";
+
+    d->nodes << "Nor";
+    d->descriptions["Nor"] = "<p>Description not yet filled!</p>";
+    d->tags["Nor"] = QStringList() << "boolean" << "operator" << "binary" << "nor";
+    d->types["Nor"] = "nor";
+
+    d->nodes << "Xnor";
+    d->descriptions["Xnor"] = "<p>Description not yet filled!</p>";
+    d->tags["Xnor"] = QStringList() << "boolean" << "operator" << "binary" << "xnor";
+    d->types["Xnor"] = "xnor";
+
+    d->nodes << "Imp";
+    d->descriptions["Imp"] = "<p>Description not yet filled!</p>";
+    d->tags["Imp"] = QStringList() << "boolean" << "operator" << "binary" << "imp";
+    d->types["Imp"] = "imp";
+
+    d->nodes << "Nimp";
+    d->descriptions["Nimp"] = "<p>Description not yet filled!</p>";
+    d->tags["Nimp"] = QStringList() << "boolean" << "operator" << "binary" << "nimp";
+    d->types["Nimp"] = "nimp";
+}
+
+void dtkComposerFactory::initNodeVectorReal(void)
+{
+    d->nodes << "Vector Real";
+    d->descriptions["Vector Real"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real"] = QStringList() << "vector" << "real" << "algebraic";
+    d->types["Vector Real"] = "vector_real";
+
+    d->nodes << "Vector Real Extractor";
+    d->descriptions["Vector Real Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Extractor"] = QStringList() << "vector" << "real" << "extractor";
+    d->types["Vector Real Extractor"] = "vector_real_extractor";
+
+    d->nodes << "Vector Real Set";
+    d->descriptions["Vector Real Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Set"] = QStringList() << "vector" << "real" << "set";
+    d->types["Vector Real Set"] = "vector_real_set";
+
+    d->nodes << "Vector Real Sum";
+    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Sum"] = QStringList() << "vector" << "real" << "sum";
+    d->types["Vector Real Sum"] = "vector_real_sum";
+
+    d->nodes << "Vector Real Substract";
+    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract"] = QStringList() << "vector" << "real" << "substract";
+    d->types["Vector Real Substract"] = "vector_real_substract";
+
+    d->nodes << "Vector Real Mult";
+    d->descriptions["Vector Real Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Mult"] = QStringList() << "vector" << "real" << "mult";
+    d->types["Vector Real Mult"] = "vector_real_mult";
+
+    d->nodes << "Vector Real Divide";
+    d->descriptions["Vector Real Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Divide"] = QStringList() << "vector" << "real" << "divide";
+    d->types["Vector Real Divide"] = "vector_real_divide";
+
+    d->nodes << "Vector Real Add All";
+    d->descriptions["Vector Real Add All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Add All"] = QStringList() << "vector" << "real" << "add"<< "all";
+    d->types["Vector Real Add All"] = "vector_real_add_all";
+
+    d->nodes << "Vector Real Substract All";
+    d->descriptions["Vector Real Substract All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract All"] = QStringList() << "vector" << "real" << "substract"<< "all";
+    d->types["Vector Real Substract All"] = "vector_real_substract_all";
+
+    d->nodes << "Vector Real Mult All";
+    d->descriptions["Vector Real Mult All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Mult All"] = QStringList() << "vector" << "real" << "mult"<< "all";
+    d->types["Vector Real Mult All"] = "vector_real_mult_all";
+
+    d->nodes << "Vector Real Divide All";
+    d->descriptions["Vector Real Divide All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Divide All"] = QStringList() << "vector" << "real" << "divide"<< "all";
+    d->types["Vector Real Divide All"] = "vector_real_divide_all";
+
+    d->nodes << "Vector Real Unit";
+    d->descriptions["Vector Real Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Unit"] = QStringList() << "vector"<<"real" << "algebraic" << "unit";
+    d->types["Vector Real Unit"] = "vectorReal_unit";
+
+    d->nodes << "Vector Real Norm";
+    d->descriptions["Vector Real Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Norm"] = QStringList() << "vector"<<"real" << "algebraic" << "norm";
+    d->types["Vector Real Norm"] = "vectorReal_norm";
+
+    d->nodes << "Vector Real Sum";
+    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Sum"] = QStringList() << "vector"<< "real" << "algebraic" << "sum";
+    d->types["Vector Real Sum"] = "vectorReal_sum";
+
+    d->nodes << "Vector Real Substract";
+    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract"] = QStringList() << "vector"<<"real" << "algebraic" << "substraction";
+    d->types["Vector Real Substract"] = "vectorReal_substract";
+
+    d->nodes << "Vector Real Dot Prod";
+    d->descriptions["Vector Real Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Dot Prod"] = QStringList() << "vector"<<"real" << "algebraic" << "dot product";
+    d->types["Vector Real Dot Prod"] = "vectorReal_dot_prod";
+
+    d->nodes << "Vector Real Scal Mult";
+    d->descriptions["Vector Real Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Scal Mult"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar multiplication";
+    d->types["Vector Real Scal Mult"] = "vectorReal_scal_mult";
+
+    d->nodes << "Vector Real Scal Division";
+    d->descriptions["Vector Real Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Scal Division"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar division";
+    d->types["Vector Real Scal Division"] = "vectorReal_scal_divide";
+}
+
+void dtkComposerFactory::initNodeMatrixSquareReal(void)
+{
+    d->nodes << "Matrix Square Real";
+    d->descriptions["Matrix Square Real "] = "<p>Description not yet filled!</p>";
+    d->tags["Matrix Square Real"] = QStringList() << "matrix" << "square" << "real"<< "algebraic";
+    d->types["Matrix Square Real"] = "matrix_square_real";
+
+    d->nodes << "MatrixSquare Real Extractor";
+    d->descriptions["MatrixSquare Real Extractor "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Extractor"] = QStringList() << "matrix" << "square" << "real"<< "extractor";
+    d->types["MatrixSquare Real Extractor"] = "matrixSquare_real_extractor";
+
+    d->nodes << "MatrixSquare Real Transpose";
+    d->descriptions["MatrixSquare Real Transpose "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Transpose"] = QStringList() << "matrix" << "square" << "real"<< "transpose";
+    d->types["MatrixSquare Real Transpose"] = "matrixSquare_real_transpose";
+
+    d->nodes << "MatrixSquare Real Inverse";
+    d->descriptions["MatrixSquare Real Inverse "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Inverse"] = QStringList() << "matrix" << "square" << "real"<< "inverse";
+    d->types["MatrixSquare Real Inverse"] = "matrixSquare_real_inverse";
+
+    d->nodes << "MatrixSquare Real Determinant";
+    d->descriptions["MatrixSquare Real Determinant "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Determinant"] = QStringList() << "matrix" << "square" << "real"<< "determinant";
+    d->types["MatrixSquare Real Determinant"] = "matrixSquare_real_determinant";
+
+    d->nodes << "MatrixSquare Real Trace";
+    d->descriptions["MatrixSquare Real Trace "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Trace"] = QStringList() << "matrix" << "square" << "real"<< "trace";
+    d->types["MatrixSquare Real Trace"] = "matrixSquare_real_trace";
+
+    d->nodes << "MatrixSquare Real Sum";
+    d->descriptions["MatrixSquare Real Sum "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Sum"] = QStringList() << "matrix" << "square" << "real"<< "sum";
+    d->types["MatrixSquare Real Sum"] = "matrixSquare_real_sum";
+
+    d->nodes << "MatrixSquare Real Substract";
+    d->descriptions["MatrixSquare Real Substract "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Substract"] = QStringList() << "matrix" << "square" << "real"<< "substract";
+    d->types["MatrixSquare Real Substract"] = "matrixSquare_real_substract";
+
+    d->nodes << "MatrixSquare Real Mult";
+    d->descriptions["MatrixSquare Real Mult "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real Mult"] = QStringList() << "matrix" << "square" << "real"<< "mult";
+    d->types["MatrixSquare Real Mult"] = "matrixSquare_real_mult";
+
+    d->nodes << "MatrixSquare Real ProductMatrixVector";
+    d->descriptions["MatrixSquare Real ProductMatrixVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ProductMatrixVector"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ProductMatrixVector"] = "matrixSquare_real_ProductMatrixVector";
+
+    d->nodes << "MatrixSquare Real ProductVectorMatrix";
+    d->descriptions["MatrixSquare Real ProductVectorMatrix "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ProductVectorMatrix"] = QStringList() << "matrix" << "square" << "real"<< "Product"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ProductVectorMatrix"] = "matrixSquare_real_ProductVectorMatrix";
+
+    d->nodes << "MatrixSquare Real ReplaceRowMatrixByVector";
+    d->descriptions["MatrixSquare Real ReplaceRowMatrixByVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ReplaceRowMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Row"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ReplaceRowMatrixByVector"] = "matrixSquare_real_ReplaceRowMatrixByVector";
+
+    d->nodes << "MatrixSquare Real ReplaceColMatrixByVector";
+    d->descriptions["MatrixSquare Real ReplaceColMatrixByVector "] = "<p>Description not yet filled!</p>";
+    d->tags["MatrixSquare Real ReplaceColMatrixByVector"] = QStringList() << "matrix" << "square" << "real"<< "Replace"<< "Col"<< "Matrix" << "Vector";
+    d->types["MatrixSquare Real ReplaceColMatrixByVector"] = "matrixSquare_real_ReplaceColMatrixByVector";
+}
+
+void dtkComposerFactory::initNodeVector3D(void)
+{
+    d->nodes << "Vector3D";
+    d->descriptions["Vector3D"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D"] = QStringList() << "vector3D" << "algebraic";
+    d->types["Vector3D"] = "vector3D";
+
+    d->nodes << "Vector3D Unit";
+    d->descriptions["Vector3D Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Unit"] = QStringList() << "vector3D" << "algebraic" << "unit";
+    d->types["Vector3D Unit"] = "vector3D_unit";
+
+    d->nodes << "Vector3D Norm";
+    d->descriptions["Vector3D Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Norm"] = QStringList() << "vector3D" << "algebraic" << "norm";
+    d->types["Vector3D Norm"] = "vector3D_norm";
+
+    d->nodes << "Vector3D Sum";
+    d->descriptions["Vector3D Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Sum"] = QStringList() << "vector3D" << "algebraic" << "sum";
+    d->types["Vector3D Sum"] = "vector3D_sum";
+
+    d->nodes << "Vector3D Substract";
+    d->descriptions["Vector3D Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Substract"] = QStringList() << "vector3D" << "algebraic" << "substraction";
+    d->types["Vector3D Substract"] = "vector3D_substract";
+
+    d->nodes << "Vector3D Cross Prod";
+    d->descriptions["Vector3D Cross Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Cross Prod"] = QStringList() << "vector3D" << "algebraic" << "cross product";
+    d->types["Vector3D Cross Prod"] = "vector3D_cross_prod";
+
+    d->nodes << "Vector3D Dot Prod";
+    d->descriptions["Vector3D Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Dot Prod"] = QStringList() << "vector3D" << "algebraic" << "dot product";
+    d->types["Vector3D Dot Prod"] = "vector3D_dot_prod";
+
+    d->nodes << "Vector3D Scal Mult";
+    d->descriptions["Vector3D Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Scal Mult"] = QStringList() << "vector3D" << "algebraic" << "scalar multiplication";
+    d->types["Vector3D Scal Mult"] = "vector3D_scal_mult";
+
+    d->nodes << "Vector3D Scal Division";
+    d->descriptions["Vector3D Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Scal Division"] = QStringList() << "vector3D" << "algebraic" << "scalar division";
+    d->types["Vector3D Scal Division"] = "vector3D_scal_divide";
+
+    d->nodes << "Vector3D Triple Prod";
+    d->descriptions["Vector3D Triple Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Triple Prod"] = QStringList() << "vector3D" << "algebraic" << "triple product";
+    d->types["Vector3D Triple Prod"] = "vector3D_triple_prod";
+
+    d->nodes << "Vector3D Mixed Prod";
+    d->descriptions["Vector3D Mixed Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector3D Mixed Prod"] = QStringList() << "vector3D" << "algebraic" << "mixed product";
+    d->types["Vector3D Mixed Prod"] = "vector3D_mixed_prod";
+}
+
+void dtkComposerFactory::initNodeQuaternion(void)
+{
+    d->nodes << "Quaternion";
+    d->descriptions["Quaternion"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion"] = QStringList() << "quaternion" << "algebraic";
+    d->types["Quaternion"] = "quaternion";
+
+    d->nodes << "Quaternion Unit";
+    d->descriptions["Quaternion Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Unit"] = QStringList() << "quaternion" << "algebraic" << "unit";
+    d->types["Quaternion Unit"] = "quat_unit";
+
+    d->nodes << "Quaternion Norm";
+    d->descriptions["Quaternion Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Norm"] = QStringList() << "quaternion" << "algebraic" << "norm";
+    d->types["Quaternion Norm"] = "quat_norm";
+
+    d->nodes << "Quaternion Sum";
+    d->descriptions["Quaternion Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Sum"] = QStringList() << "quaternion" << "algebraic" << "sum";
+    d->types["Quaternion Sum"] = "quat_sum";
+
+    d->nodes << "Quaternion Substract";
+    d->descriptions["Quaternion Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Substract"] = QStringList() << "quaternion" << "algebraic" << "substract";
+    d->types["Quaternion Substract"] = "quat_substract";
+
+    d->nodes << "Quaternion Mult";
+    d->descriptions["Quaternion Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Mult"] = QStringList() << "quaternion" << "algebraic" << "multiplication";
+    d->types["Quaternion Mult"] = "quat_mult";
+
+    d->nodes << "Quaternion Division";
+    d->descriptions["Quaternion Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Division"] = QStringList() << "quaternion" << "algebraic" << "division";
+    d->types["Quaternion Division"] = "quat_divide";
+
+    d->nodes << "Quaternion Scal Mult";
+    d->descriptions["Quaternion Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Scal Mult"] = QStringList() << "quaternion" << "algebraic" << "scalar multiplication";
+    d->types["Quaternion Scal Mult"] = "quat_scal_mult";
+
+    d->nodes << "Quaternion Scal Division";
+    d->descriptions["Quaternion Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Quaternion Scal Division"] = QStringList() << "quaternion" << "algebraic" << "scalar division";
+    d->types["Quaternion Scal Division"] = "quat_scal_divide";
+}
+
+void dtkComposerFactory::initNodeArrayScalar(void)
+{
+    d->nodes << "Scalar Array";
+    d->descriptions["Scalar Array"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array"] = QStringList() << "container" << "array" << "scalar" ;
+    d->types["Scalar Array"] = "array_scalar";
+
+    d->nodes << "Scalar Array Extractor";
+    d->descriptions["Scalar Array Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Extractor"] = QStringList() << "container" << "array" << "scalar" << "extractor" ;
+    d->types["Scalar Array Extractor"] = "array_scalar_extractor";
+
+    d->nodes << "Scalar Array SubArray";
+    d->descriptions["Scalar Array SubArray"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array SubArray"] = QStringList() << "container" << "scalar" << "array" << "subarray"<< "extractor" ;
+    d->types["Scalar Array SubArray"] = "array_scalar_extractor_subarray";
+
+    d->nodes << "Scalar Array Part";
+    d->descriptions["Scalar Array Part"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Part"] = QStringList() << "container" << "scalar" << "array" << "part" << "subarray" << "extractor" ;
+    d->types["Scalar Array Part"] = "array_scalar_extractor_array_part";
+
+    d->nodes << "Scalar Array Insert";
+    d->descriptions["Scalar Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Insert"] = QStringList() << "container" << "array" << "scalar"  << "insert" ;
+    d->types["Scalar Array Insert"] = "array_scalar_insert";
+
+    d->nodes << "Scalar Array Set";
+    d->descriptions["Scalar Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Set"] = QStringList() << "container" << "array" << "scalar"  << "set" ;
+    d->types["Scalar Array Set"] = "array_scalar_set";
+
+    d->nodes << "Scalar Array Append";
+    d->descriptions["Scalar Array Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Append"] = QStringList() << "container" << "array" << "scalar"  << "append" ;
+    d->types["Scalar Array Append"] = "array_scalar_append";
+
+    d->nodes << "Scalar Array Prepend";
+    d->descriptions["Scalar Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Prepend"] = QStringList() << "container" << "array" << "scalar"  << "prepend" ;
+    d->types["Scalar Array Prepend"] = "array_scalar_prepend";
+
+    d->nodes << "Scalar Array All Add";
+    d->descriptions["Scalar Array All Add"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Add"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "add" ;
+    d->types["Scalar Array All Add"] = "array_scalar_all_add";
+
+    d->nodes << "Scalar Array All Substract";
+    d->descriptions["Scalar Array All Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Substract"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "substract" ;
+    d->types["Scalar Array All Substract"] = "array_scalar_all_substract";
+
+    d->nodes << "Scalar Array All Mult";
+    d->descriptions["Scalar Array All Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Mult"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "mult" ;
+    d->types["Scalar Array All Mult"] = "array_scalar_all_mult";
+
+    d->nodes << "Scalar Array All Divide";
+    d->descriptions["Scalar Array All Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array All Divide"] = QStringList() << "container" << "array" << "scalar"  << "all"<< "divide" ;
+    d->types["Scalar Array All Divide"] = "array_scalar_all_divide";
+
+    d->nodes << "Scalar Array Sum";
+    d->descriptions["Scalar Array Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Sum"] = QStringList() << "container" << "array" << "scalar"  << "sum" ;
+    d->types["Scalar Array Sum"] = "array_scalar_sum";
+
+    d->nodes << "Scalar Array Substract";
+    d->descriptions["Scalar Array Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Substract"] = QStringList() << "container" << "array" << "scalar"  << "substract" ;
+    d->types["Scalar Array Substract"] = "array_scalar_substract";
+
+    d->nodes << "Scalar Array Mult";
+    d->descriptions["Scalar Array Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Mult"] = QStringList() << "container" << "array" << "scalar"  << "mult" ;
+    d->types["Scalar Array Mult"] = "array_scalar_mult" ;
+
+    d->nodes << "Scalar Array Divide";
+    d->descriptions["Scalar Array Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Scalar Array Divide"] = QStringList() << "container" << "array" << "scalar"  << "divide" ;
+    d->types["Scalar Array Divide"] = "array_scalar_divide" ;
+}
+
+void dtkComposerFactory::initNodeContainerData(void)
+{
+    d->nodes << "Data Array";
+    d->descriptions["Data Array"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array"] = QStringList() << "container" << "array" << "data" ;
+    d->types["Data Array"] = "array_data";
+
+    d->nodes << "Data Array Extractor";
+    d->descriptions["Data Array Extractor"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Extractor"] = QStringList() << "container" << "array" << "data" << "extractor";
+    d->types["Data Array Extractor"] = "array_data_extractor";
+
+    d->nodes << "Data Array SubArray";
+    d->descriptions["Data Array SubArray"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array SubArray"] = QStringList() << "container" << "data" << "array" << "subarray"<< "extractor";
+    d->types["Data Array SubArray"] = "array_data_extractor_subarray";
+
+    d->nodes << "Data Array Part";
+    d->descriptions["Data Array Part"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Part"] = QStringList() << "container" << "data" << "array" << "part" << "subarray" << "extractor";
+    d->types["Data Array Part"] = "array_data_extractor_array_part";
+
+    d->nodes << "Data Array Insert";
+    d->descriptions["Data Array Insert"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Insert"] = QStringList() << "container" << "array" << "data"  << "insert" ;
+    d->types["Data Array Insert"] = "array_data_insert";
+
+    d->nodes << "Data Array Set";
+    d->descriptions["Data Array Set"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Set"] = QStringList() << "container" << "array" << "data"  << "set";
+    d->types["Data Array Set"] = "array_data_set";
+
+    d->nodes << "Data Array Append";
+    d->descriptions["Data Array Append"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Append"] = QStringList() << "container" << "array" << "data"  << "append";
+    d->types["Data Array Append"] = "array_data_append";
+
+    d->nodes << "Data Array Prepend";
+    d->descriptions["Data Array Prepend"] = "<p>Description not yet filled!</p>";
+    d->tags["Data Array Prepend"] = QStringList() << "container" << "array" << "data"  << "prepend";
+    d->types["Data Array Prepend"] = "array_data_prepend";
+}
+
+void dtkComposerFactory::initNodeControl(void)
+{
+    d->nodes << "Case";
+    d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
+    d->tags["Case"] = QStringList() << "control" << "case";
+    d->types["Case"] = "case";
+
+    d->nodes << "Do While";
+    d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
+    d->tags["Do While"] = QStringList() << "control" << "do" << "while";
+    d->types["Do While"] = "do while";
+
+    d->nodes << "If";
+    d->descriptions["If"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlIf.html");
+    d->tags["If"] = QStringList() << "control" << "if";
+    d->types["If"] = "if";
+
+    d->nodes << "For";
+    d->descriptions["For"] = "<p>Description not yet filled!</p>";
+    d->tags["For"] = QStringList() << "control" << "for";
+    d->types["For"] = "for";
+
+    d->nodes << "Foreach";
+    d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
+    d->tags["Foreach"] = QStringList() << "control" << "foreach";
+    d->types["Foreach"] = "foreach";
+
+    d->nodes << "Map";
+    d->descriptions["Map"] = "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>";
+    d->tags["Map"] = QStringList() << "control" << "map" << "container";
+    d->types["Map"] = "map";
+
+    d->nodes << "While";
+    d->descriptions["While"] = "<p>Description not yet filled!</p>";
+    d->tags["While"] = QStringList() << "control" << "while";
+    d->types["While"] = "while";
+}
+
 dtkComposerFactory::~dtkComposerFactory(void)
 {
     delete d;
@@ -995,9 +1046,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     // container nodes
 
-    if(type == "data_container")
-        return new dtkComposerNodeContainerData;
-
     if(type == "array_data")
         return new dtkComposerNodeArrayData;
 
@@ -1035,6 +1083,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "matrixSquare_real_inverse")
         return new dtkComposerNodeMatrixSquareRealOperatorUnaryInverse;
+
+    if(type == "matrixSquare_real_determinant")
+        return new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant;
 
     if(type == "matrixSquare_real_trace")
         return new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace;
@@ -1194,6 +1245,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vector3D_scal_divide")
         return new dtkComposerNodeVector3DOperatorHomotheticDivision;
+
+    if(type == "vector3D_triple_prod")
+        return new dtkComposerNodeVector3DOperatorTernaryTripleProd;
+
+    if(type == "vector3D_mixed_prod")
+        return new dtkComposerNodeVector3DOperatorTernaryScalarMixedProd;
 
     if(type == "quaternion")
         return new dtkComposerNodeQuaternion;
@@ -1405,7 +1462,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     // generic nodes
 
     if(type == "data")
-        return new dtkComposerNodeData;
+         return new dtkComposerNodeData;
 
     if(type == "process")
         return new dtkComposerNodeProcess;
@@ -1425,27 +1482,27 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeRemoteSubmit;
 #endif
 
-    // /////////////////////////////////////////////////////////////////
-    // NITE nodes
-    // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// NITE nodes
+// /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
     if(type == "kinectTracker")
         return new dtkComposerNodeTrackerKinect;
 #endif
 
-    // /////////////////////////////////////////////////////////////////
-    // VRPN nodes
-    // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// VRPN nodes
+// /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_VR) && defined(DTK_HAVE_VRPN)
     if(type == "vrpnTracker")
         return new dtkComposerNodeTrackerVrpn;
 #endif
 
-    // /////////////////////////////////////////////////////////////////
-    // Plot nodes
-    // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// Plot nodes
+// /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(type == "dtkPlotCurve")
@@ -1455,9 +1512,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodePlotView;
 #endif
 
-    // /////////////////////////////////////////////////////////////////
-    // MPI nodes
-    // /////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////
+// MPI nodes
+// /////////////////////////////////////////////////////////////////
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
     if(type == "world")

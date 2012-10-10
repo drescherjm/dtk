@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. avril 19 13:06:46 2012 (+0200)
+ * Last-Updated: jeu. oct.  4 15:06:53 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 230
+ *     Update #: 236
  */
 
 /* Commentary: 
@@ -53,6 +53,16 @@ dtkDistributedCommunicatorTcp::~dtkDistributedCommunicatorTcp(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(const dtkDistributedCommunicatorTcp& other)
+{
+
+}
+
+dtkDistributedCommunicatorTcp& dtkDistributedCommunicatorTcp::operator = (const dtkDistributedCommunicatorTcp& other)
+{
+    return *this;
 }
 
 void dtkDistributedCommunicatorTcp::connectToHost(const QString &host , qint16 port)
@@ -168,7 +178,7 @@ void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int ta
     d->socket->write(s.toUtf8());
 }
 
-void dtkDistributedCommunicatorTcp::send(const QVariant &v, qint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 }
@@ -193,7 +203,7 @@ void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int ta
     d->socket->blockSignals(false);
 }
 
-void dtkDistributedCommunicatorTcp::receive(QVariant &data, qint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(QByteArray &array, qint16 source, int tag)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 }

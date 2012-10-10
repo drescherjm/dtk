@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:15:10 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:15:47 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 1
+ * Last-Updated: Thu Sep 20 10:16:19 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 #include "dtkMatrixSquared.h"
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkVector3D's methods
+// dtkVector3D implementation
 // /////////////////////////////////////////////////////////////////
 
 template <class T> inline dtkVector3D<T>::dtkVector3D(const dtkMatrix<T>& mat,
@@ -40,6 +40,11 @@ template <class T> inline dtkVector3D<T>::dtkVector3D(const T& elem1,
     (*this)[0] = elem1;
     (*this)[1] = elem2;
     (*this)[2] = elem3;
+}
+
+template <typename T> QString dtkVector3D<T>::identifier(void) const
+{
+    return QString("dtkVector3D<%1>").arg(typeid(T).name());
 }
 
 template <class T> inline void dtkVector3D<T>::mapInto(const dtkMatrix<T>& mat,

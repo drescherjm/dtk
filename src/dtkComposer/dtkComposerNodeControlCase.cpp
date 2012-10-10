@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. mai 21 11:24:58 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 283
+ * Last-Updated: Wed Sep 19 15:25:47 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 298
  */
 
 /* Commentary:
@@ -98,7 +98,7 @@ dtkComposerNodeLeaf *dtkComposerNodeControlCase::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlCase::block(int id)
 {
-    if(id < d->blocks.count() && id >= 0)
+    if (id < d->blocks.count() && id >= 0)
         return d->blocks[id];
 
     return NULL;
@@ -131,7 +131,7 @@ void dtkComposerNodeControlCase::removeBlock(int id)
     d->blocks.removeAt(id);
     d->blocks_input.removeAt(id-1);
 
-    for (int i=1; i< d->blocks.count(); i++)
+    for (int i=1; i< d->blocks.count(); ++i)
         d->blocks.at(i)->setTitleHint("Case#"+QString::number(i));
 }
 
@@ -160,27 +160,51 @@ int dtkComposerNodeControlCase::selectBranch(void)
     int value = 0;
     bool is_case = false;
 
-    for (int i = 1; i < d->blocks.count(); i++) {
-        dtkComposerTransmitterVariant *v =  dynamic_cast < dtkComposerTransmitterVariant * > ( d->blocks_input[i-1]) ;
+    for (int i = 1; i < d->blocks.count(); ++i) {
+        dtkComposerTransmitterVariant *v =  d->blocks_input[i-1] ;
         if (value > 0) //already found the good block, no need to check again.
             is_case = false;
-        else
-            is_case = d->cond.data() ==  v->data();
+        else {
 
-        foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
-            if (is_case) {
+            QString *s_cond = d->cond.data<QString>();
+            QString *s_v    = v->data<QString>();
+
+            if (s_cond && s_v) {
+                is_case = (*s_cond == *s_v);
+
+            } else {
+
+                dtkAbstractObject *o_cond = d->cond.object();
+                dtkAbstractObject *o_v    = v->object();
+
+                if (o_cond && o_v)
+                    is_case = (*o_cond == *o_v);
+                else
+                    is_case = false;
+            }
+        }
+
+        if (is_case) {
+
+            value = i;
+            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(true);
-                value = i;
-            } else
+            }
+
+        } else {
+
+            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters())
                 t->setActive(false);
         }
     }
 
-    foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
-        if (value == 0)
+    if (value == 0) {
+        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
             t->setActive(true);
-        else
+    } else {
+        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
             t->setActive(false);
+    }
 
     return value;
 }

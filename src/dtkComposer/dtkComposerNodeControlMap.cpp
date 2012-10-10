@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: lun. juin 18 16:08:06 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:20:56 2012 (+0200)
+ * Last-Updated: Tue Sep 11 14:44:53 2012 (+0200)
  *           By: tkloczko
- *     Update #: 81
+ *     Update #: 96
  */
 
 /* Commentary:
@@ -17,8 +17,8 @@
  *
  */
 
+#include "dtkComposerMetatype.h"
 #include "dtkComposerNodeControlMap.h"
-
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -58,7 +58,7 @@ public:
     qlonglong counter;
     qlonglong size;
 
-    dtkAbstractContainerWrapper container;
+    dtkAbstractContainerWrapper *container;
     dtkAbstractContainerWrapper *out_container;
 };
 
@@ -98,10 +98,14 @@ dtkComposerNodeControlMap::dtkComposerNodeControlMap(void) : dtkComposerNodeCont
 
     d->footer.emitters().first()->appendNext(&(d->footer_emit));
 
-    d->out_container = NULL;
-
     d->counter = 0;
+    d->block_index.setData(&d->counter);
+
     d->size = -1;
+    d->block_size.setData(&d->size);
+
+    d->container = NULL;
+    d->out_container = NULL;
 }
 
 dtkComposerNodeControlMap::~dtkComposerNodeControlMap(void)
@@ -139,23 +143,19 @@ dtkComposerNodeComposite *dtkComposerNodeControlMap::block(int id)
 
 void dtkComposerNodeControlMap::setInputs(void)
 {
-    d->container     = d->header_rcv.container();
-    d->out_container = d->container.clone();
+    d->container = d->header_rcv.container();
+
+    if (d->out_container)
+        delete d->out_container;
+    d->out_container = d->container->voidClone();    
+    d->footer_emit.setData(d->out_container);
 
     d->counter = 0;
-    d->size = d->container.count();
-
-    d->out_container->clear();
-
-    d->block_size.setData(d->size);
+    d->size = d->container->count();
 
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        if (v->container().isReset()) {
-            v->setData(v->data());
-        } else {
-            v->setData(v->container());
-        }
+        v->setDataFrom(v);
         v->setTwinned(true);
     }
 }
@@ -164,31 +164,22 @@ void dtkComposerNodeControlMap::setInputs(void)
 void dtkComposerNodeControlMap::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        if (v->container().isReset()) {
-            v->twin()->setData(v->data());
-        } else {
-            v->twin()->setData(v->container());
-        }
+        v->twin()->setDataFrom(v);
     }
 
-    d->out_container->append(d->block_newitem.data());
+    d->out_container->append(d->block_newitem.variant());
 
-    d->counter++;
-
-    if (d->counter == d->size) { // last step
-        d->footer_emit.setData(*(d->out_container));
-    }
+    ++(d->counter);
 }
 
 void dtkComposerNodeControlMap::setVariables(void)
 {
-    d->block_index.setData(d->counter);
-    d->block_item.setData(d->container.at(d->counter));
+    d->block_item.setData(d->container->at(d->counter));
 }
 
 int dtkComposerNodeControlMap::selectBranch(void)
 {
-    return (int)(!((d->counter) < d->size));
+    return static_cast<int>(!((d->counter) < d->size));
 }
 
 void dtkComposerNodeControlMap::begin(void)

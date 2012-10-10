@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterVariant.h --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Tue Sep 18 10:29:43 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 106
  */
 
 /* Commentary: 
@@ -27,12 +22,13 @@
 
 #include <dtkCore/dtkGlobal>
 
+template <typename T> class dtkContainerVector;
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerTransmitterVariantPrivate;
-class dtkDistributedMessage;
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
@@ -41,19 +37,63 @@ public:
     ~dtkComposerTransmitterVariant(void);
 
 public:
+    void clearData(void);
+
+public:
+    template <typename T> inline void setData(T *data);
+    template <typename T> inline void setData(dtkContainerVector<T> *data);
+
+public:
     void setData(const QVariant& data);
-    void setData(const dtkAbstractContainerWrapper& data);
-#if defined(DTK_BUILD_DISTRIBUTED)
-    void setDataFromMsg(dtkDistributedMessage *msg);
-#endif
 
-          QVariant& data(void);
-    const QVariant& data(void) const;
+    void setData(dtkAbstractContainerWrapper *data);
 
-          dtkAbstractContainerWrapper& container(void);
-    const dtkAbstractContainerWrapper& container(void) const;
+public:
+    void setDataFrom(dtkComposerTransmitterVariant *source);
 
-    QVariantList allData(void);
+    void setDataFrom(QByteArray& array);
+
+public:
+    template <typename T> T *data(void);
+
+public:
+    QByteArray dataToByteArray(void);
+
+public:
+    QVariant& variant(void);
+
+    dtkAbstractContainerWrapper *containerFromEmitter(void);
+    dtkAbstractContainerWrapper *container(void);
+
+public:
+    dtkAbstractObject *object(void);
+
+public:
+    dtkMatrix<double> *matrix(void);
+
+public:
+    int dataType(void);
+
+    QString  dataIdentifier(void);
+    QString dataDescription(void);
+
+public:
+    QList<int> allDataType(void);
+
+    QStringList  allDataIdentifier(void);
+    QStringList allDataDescription(void);
+
+public:
+    void setActive(bool active);
+
+public:
+    void activateEmitter(dtkComposerTransmitter        *emitter);
+    void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    bool enableCopy(void);
+
+    void reset(void);
 
 public:
     bool isEmpty(void) const;
@@ -66,24 +106,18 @@ public:
     void setTwinned(bool twinned);
 
 public:
-    virtual Kind kind(void) const;
+    Kind kind(void) const;
 
-    virtual QString kindName(void) const;
-
-public:
-    QVariant::Type type(void) const;
+    QString kindName(void) const;
 
 public:
-    void setTypes(QList<QVariant::Type> types);
+    void setDataTypes(const QList<int>& data_types);
 
-    QList<QVariant::Type> types(void);
+    QList<int> dataTypes(void);
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
     bool disconnect(dtkComposerTransmitter *transmitter);
-
-public:
-    void setActiveEmitter(dtkComposerTransmitter *emitter);
 
 public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
@@ -92,5 +126,7 @@ public:
 protected:
     dtkComposerTransmitterVariantPrivate *e;
 };
+
+#include "dtkComposerTransmitterVariant.tpp"
 
 #endif

@@ -2,11 +2,6 @@
  * 
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
- * Created: Mon Jul 12 15:42:21 2010 (+0200)
- * Version: $Id$
- * Last-Updated: Fri May 25 10:13:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 10
  */
 
 /* Commentary: 
@@ -21,8 +16,11 @@
 #ifndef DTKMATRIX_TPP
 #define DTKMATRIX_TPP
 
+#include "dtkMathExport.h"
+
 #include <iostream>
 #include <iomanip>
+#include <typeinfo>
 
 #include <QtCore/QDebug>
 #include <QtCore/QString>
@@ -30,24 +28,31 @@
 enum { N_NOTALLOCATED, N_ALLOCATED, N_MAPPED };
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkMatrix's methods
+// Template specializations forward declarations
+// /////////////////////////////////////////////////////////////////
+
+template <> DTKMATH_EXPORT QByteArray *dtkMatrix<double>::serialize(void);
+template <> DTKMATH_EXPORT void dtkMatrix<double>::deserialize(const QByteArray& array);
+
+// /////////////////////////////////////////////////////////////////
+// dtkMatrix implementation
 // /////////////////////////////////////////////////////////////////
 
 //! Default constructor.
-template <class T> inline dtkMatrix<T>::dtkMatrix(void)
+template <typename T> inline dtkMatrix<T>::dtkMatrix(void)
 {
     initialize();
 };
 
 //! Creates a matrix, allocates rows and columns
-template <class T> inline dtkMatrix<T>::dtkMatrix(unsigned crow, unsigned ccol)
+template <typename T> inline dtkMatrix<T>::dtkMatrix(unsigned crow, unsigned ccol)
 {
     initialize();
     allocate(crow, ccol);
 }
 
 //! Copy constructor.
-template <class T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat)
+template <typename T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat)
 {
     initialize();
 
@@ -58,7 +63,7 @@ template <class T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat)
 }
 
 //! Mapped matrix constructor.
-template <class T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat,
+template <typename T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat,
                                                   unsigned irowStart,
                                                   unsigned icolStart,
                                                   unsigned irowEnd,
@@ -68,8 +73,14 @@ template <class T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat,
     mapInto(mat, irowStart, icolStart, irowEnd, icolEnd);
 }
 
+template <typename T> inline dtkMatrix<T>::~dtkMatrix(void) 
+{ 
+    if (m_crow) 
+        deallocate(); 
+}
+
 //! Private method giving initial values for matrix attributes.
-template <class T> inline void dtkMatrix<T>::initialize(void)
+template <typename T> inline void dtkMatrix<T>::initialize(void)
 {
     m_crow       = 0;
     m_ccol       = 0;
@@ -77,8 +88,41 @@ template <class T> inline void dtkMatrix<T>::initialize(void)
     m_nMatStatus = N_NOTALLOCATED;
 }
 
+//! Returns identifier of the matrix.
+template <typename T> QString dtkMatrix<T>::identifier(void) const
+{
+    return QString("dtkMatrix<%1>").arg(typeid(T).name());
+}
+
+//! Returns description of the contain of the matrix.
+template <typename T> QString dtkMatrix<T>::description(void) const
+{
+    QString string;
+
+    string = "[ " ;
+
+    for (unsigned i = 0; i < numberOfRows(); i++)
+    {
+	if (i > 0)
+	    string.append("; ");
+
+        QString string2 = QString("%1").arg(m_rgrow[i][0]);
+        string += string2;
+
+	for (unsigned j = 1; j < numberOfColumns(); j++) {
+	    string.append(", ");
+            QString string3 = QString("%1").arg(m_rgrow[i][j]);
+            string += string3;
+        }
+    }
+
+    string.append(" ]");
+
+    return string;
+}
+
 //! 
-template <class T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolInit)
+template <typename T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolInit)
 {
     if (m_nMatStatus != N_NOTALLOCATED)
 	deallocate();
@@ -104,32 +148,7 @@ template <class T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolI
 }
 
 //! 
-/*! 
- * Maps a matrix into another matrix, deallocates first if neccesary
- * allocates space on the free store for a matrix, deallocates first
- * if neccesary.
- */
-template <class T> void dtkMatrix<T>::mapInto(const dtkMatrix<T> &mat,
-                                              unsigned irowStart,
-                                              unsigned icolStart,
-                                              unsigned irowEnd,
-                                              unsigned icolEnd )
-{
-    if (m_nMatStatus != N_NOTALLOCATED)
-	deallocate();
-
-    m_crow = irowEnd - irowStart + 1;
-    m_ccol = icolEnd - icolStart + 1;
-    m_rgrow = new T*[m_crow];
-
-    for (unsigned irow = 0; irow < m_crow; ++irow)
-	m_rgrow[irow] = &mat.m_rgrow[irow + irowStart][icolStart];
-
-    m_nMatStatus = N_MAPPED;
-}
-
-//! 
-template <class T> void dtkMatrix<T>::deallocate(void)
+template <typename T> void dtkMatrix<T>::deallocate(void)
 {
     switch (m_nMatStatus)
     {
@@ -150,19 +169,59 @@ template <class T> void dtkMatrix<T>::deallocate(void)
 }
 
 //! 
-template <class T> dtkMatrix<T> dtkMatrix<T>::operator +(const dtkMatrix<T> &mat) const
+/*! 
+ * Maps a matrix into another matrix, deallocates first if neccesary
+ * allocates space on the free store for a matrix, deallocates first
+ * if neccesary.
+ */
+template <typename T> void dtkMatrix<T>::mapInto(const dtkMatrix<T> &mat,
+                                              unsigned irowStart,
+                                              unsigned icolStart,
+                                              unsigned irowEnd,
+                                              unsigned icolEnd )
+{
+    if (m_nMatStatus != N_NOTALLOCATED)
+	deallocate();
+
+    m_crow = irowEnd - irowStart + 1;
+    m_ccol = icolEnd - icolStart + 1;
+    m_rgrow = new T*[m_crow];
+
+    for (unsigned irow = 0; irow < m_crow; ++irow)
+	m_rgrow[irow] = &mat.m_rgrow[irow + irowStart][icolStart];
+
+    m_nMatStatus = N_MAPPED;
+}
+
+template <typename T> inline int dtkMatrix<T>::getStatus(void) const
+{ 
+    return m_nMatStatus; 
+}
+    
+template <typename T> inline unsigned dtkMatrix<T>::getRows(void) const 
+{ 
+    return m_crow; 
+}
+
+template <typename T> inline unsigned dtkMatrix<T>::getCols(void) const 
+{ 
+    return m_ccol; 
+}
+
+//! 
+template <typename T> dtkMatrix<T> dtkMatrix<T>::operator +(const dtkMatrix<T> &mat) const
 {
     return dtkMatrix<T>( *this ) += mat;
 }
 
 //! 
-template <class T> dtkMatrix<T> dtkMatrix<T>::operator -(const dtkMatrix<T> &mat) const
+template <typename T> dtkMatrix<T> dtkMatrix<T>::operator -(const dtkMatrix<T> &mat) const
 {
     return dtkMatrix<T>( *this ) -= mat;
 }
 
 //! 
-template <class T> dtkMatrix<T> dtkMatrix<T>::operator -(void) const
+template <typename T> dtkMatrix<T> dtkMatrix<T>::operator -(void) const
 {
     T tTmp  = dtkZero<T>();
     tTmp -= dtkUnity<T>();
@@ -170,13 +229,13 @@ template <class T> dtkMatrix<T> dtkMatrix<T>::operator -(void) const
 }
 
 //! 
-template <class T> dtkMatrix<T> dtkMatrix<T>::operator *(const T &value) const
+template <typename T> dtkMatrix<T> dtkMatrix<T>::operator *(const T &value) const
 {
     return dtkMatrix<T>( *this ) *= value;
 }
 
 //! 
-template <class T> dtkMatrix<T> dtkMatrix<T>::operator *(const dtkMatrix<T> &mat) const
+template <typename T> dtkMatrix<T> dtkMatrix<T>::operator *(const dtkMatrix<T> &mat) const
 {
     dtkMatrix matResult( m_crow , mat.m_ccol );
     matResult.storeProduct( *this , mat );
@@ -184,7 +243,7 @@ template <class T> dtkMatrix<T> dtkMatrix<T>::operator *(const dtkMatrix<T> &mat
 }
 
 //! Assignment operator.
-template <class T> dtkMatrix<T> & dtkMatrix<T>::operator =(const dtkMatrix<T> &mat)
+template <typename T> dtkMatrix<T> & dtkMatrix<T>::operator =(const dtkMatrix<T> &mat)
 {
     if (m_nMatStatus == N_NOTALLOCATED)
 	allocate(mat.m_crow, mat.m_ccol);
@@ -197,7 +256,7 @@ template <class T> dtkMatrix<T> & dtkMatrix<T>::operator =(const dtkMatrix<T> &m
 }
 
 //! 
-template <class T> dtkMatrix<T> & dtkMatrix<T>::operator +=(const dtkMatrix<T> &mat)
+template <typename T> dtkMatrix<T> & dtkMatrix<T>::operator +=(const dtkMatrix<T> &mat)
 {
     for (unsigned irow = 0; irow < m_crow; ++irow)
 	for (unsigned icol = 0; icol < m_ccol; ++icol)
@@ -207,7 +266,7 @@ template <class T> dtkMatrix<T> & dtkMatrix<T>::operator +=(const dtkMatrix<T> &
 }
 
 //! 
-template <class T> dtkMatrix<T> & dtkMatrix<T>::operator -=(const dtkMatrix<T> &mat)
+template <typename T> dtkMatrix<T> & dtkMatrix<T>::operator -=(const dtkMatrix<T> &mat)
 {
     for (unsigned irow = 0; irow < m_crow; ++irow)
 	for (unsigned icol = 0; icol < m_ccol; ++icol)
@@ -217,7 +276,7 @@ template <class T> dtkMatrix<T> & dtkMatrix<T>::operator -=(const dtkMatrix<T> &
 }
 
 //! 
-template <class T> dtkMatrix<T> & dtkMatrix<T>::operator *=(const T &value)
+template <typename T> dtkMatrix<T> & dtkMatrix<T>::operator *=(const T &value)
 {
     for (unsigned irow = 0; irow < m_crow; ++irow)
 	for (unsigned icol = 0; icol < m_ccol; ++icol)
@@ -227,7 +286,7 @@ template <class T> dtkMatrix<T> & dtkMatrix<T>::operator *=(const T &value)
 }
 
 //! 
-template <class T> int dtkMatrix<T>::operator ==(const dtkMatrix<T> &mat) const
+template <typename T> int dtkMatrix<T>::operator ==(const dtkMatrix<T> &mat) const
 {
     if ((m_crow == mat.m_crow) && (m_ccol == mat.m_ccol)) {
 	for (unsigned irow = 0; irow < m_crow; ++irow) {
@@ -241,7 +300,7 @@ template <class T> int dtkMatrix<T>::operator ==(const dtkMatrix<T> &mat) const
 }
 
 //! Stores mat1 + mat2 in this.
-template <class T> void dtkMatrix<T>::storeSum(const dtkMatrix<T> &mat1,
+template <typename T> void dtkMatrix<T>::storeSum(const dtkMatrix<T> &mat1,
                                                const dtkMatrix<T> &mat2)
 {
     for (unsigned irow = 0; irow < m_crow; ++irow)
@@ -250,7 +309,7 @@ template <class T> void dtkMatrix<T>::storeSum(const dtkMatrix<T> &mat1,
 }
 
 //! Stores mat1*mat2 in this.
-template <class T> void dtkMatrix<T>::storeProduct(const dtkMatrix<T> &mat1,
+template <typename T> void dtkMatrix<T>::storeProduct(const dtkMatrix<T> &mat1,
                                                    const dtkMatrix<T> &mat2)
 {
     for (unsigned irow = 0; irow < m_crow; ++irow) {
@@ -263,7 +322,7 @@ template <class T> void dtkMatrix<T>::storeProduct(const dtkMatrix<T> &mat1,
 }
 
 //! Stores a matrix mat at position (irowStart,icolStart). Matrix mat should fit in this.
-template <class T> void dtkMatrix<T>::storeAtPosition(unsigned irowStart,
+template <typename T> void dtkMatrix<T>::storeAtPosition(unsigned irowStart,
                                                       unsigned icolStart,
                                                       const dtkMatrix<T> &mat)
 {
@@ -273,7 +332,7 @@ template <class T> void dtkMatrix<T>::storeAtPosition(unsigned irowStart,
 }
 
 //! Stores transpose of mat in this.
-template <class T> void dtkMatrix<T>::storeTranspose(const dtkMatrix<T> &mat)
+template <typename T> void dtkMatrix<T>::storeTranspose(const dtkMatrix<T> &mat)
 {
     for (unsigned irow = 0; irow < m_crow; ++irow)
 	for (unsigned icol = 0; icol < m_ccol; ++icol)
@@ -281,7 +340,7 @@ template <class T> void dtkMatrix<T>::storeTranspose(const dtkMatrix<T> &mat)
 }
 
 //! 
-template <class T> inline void dtkMatrix<T>::fill(const T &elemFill)
+template <typename T> inline void dtkMatrix<T>::fill(const T &elemFill)
 {
     unsigned iEnd = m_crow*m_ccol;
 
@@ -290,7 +349,21 @@ template <class T> inline void dtkMatrix<T>::fill(const T &elemFill)
 }
 
 //! 
-template <class T> void dtkMatrix<T>::interchangeRows(unsigned irow1, unsigned irow2)
+template <typename T> inline void dtkMatrix<T>::makeTranspose(void)
+{
+    T temp;
+
+    for (unsigned irow = 0; irow < m_crow; ++irow) {
+	for (unsigned icol = 0; icol < m_ccol; ++icol) {
+            temp = m_rgrow[irow][icol];
+	    m_rgrow[irow][icol] = m_rgrow[icol][irow];
+            m_rgrow[icol][irow] = temp;
+        }
+    }            
+}
+
+//! 
+template <typename T> void dtkMatrix<T>::interchangeRows(unsigned irow1, unsigned irow2)
 {
     T* rowSav = m_rgrow[irow1];
 
@@ -299,14 +372,14 @@ template <class T> void dtkMatrix<T>::interchangeRows(unsigned irow1, unsigned i
 }
 
 //! 
-template <class T> void dtkMatrix<T>::multiplyRow(unsigned irow, const T &value)
+template <typename T> void dtkMatrix<T>::multiplyRow(unsigned irow, const T &value)
 {
     for (unsigned icol = 0; icol < m_ccol; ++icol)
 	m_rgrow[irow][icol] *= value;
 }
 
 //! 
-template <class T> void dtkMatrix<T>::addRowToRow(unsigned irowSrc,
+template <typename T> void dtkMatrix<T>::addRowToRow(unsigned irowSrc,
                                                   unsigned irowDest,
                                                   const T &value)
 {
@@ -314,61 +387,34 @@ template <class T> void dtkMatrix<T>::addRowToRow(unsigned irowSrc,
 	m_rgrow[irowDest][icol] += m_rgrow[irowSrc][icol]*value;
 }
 
-//!
-template <class T> QString dtkMatrix<T>::description(void)
-{
-    QString string;
-
-    string = "[ " ;
-
-    for (unsigned i = 0; i < getRows(); i++)
-    {
-	if (i > 0)
-	    string.append("; ");
-
-        QString string2 = QString("%1").arg(m_rgrow[i][0]);
-        string += string2;
-
-	for (unsigned j = 1; j < getCols(); j++) {
-	    string.append(", ");
-            QString string3 = QString("%1").arg(m_rgrow[i][j]);
-            string += string3;
-        }
-    }
-
-    string.append(" ]");
-
-    return string;
-}
-
 //! Returns product mat*value.
-template <class T> inline dtkMatrix<T> operator *(const T &value,
+template <typename T> inline dtkMatrix<T> operator *(const T &value,
                                                   const dtkMatrix<T> &mat)
 {
     return mat*value;
 }
 
 //! Returns transpose of mat.
-template <class T> dtkMatrix<T> transpose(const dtkMatrix<T> &mat)
+template <typename T> dtkMatrix<T> dtkTranspose(const dtkMatrix<T> &mat)
 {
-    dtkMatrix<T> matTranspose( mat.getCols(), mat.getRows() );
+    dtkMatrix<T> matTranspose( mat.numberOfColumns(), mat.numberOfRows() );
     matTranspose.storeTranspose(mat);
     return matTranspose;
 }
 
 //! 
-template <class T> std::ostream& operator <<(std::ostream& os, const dtkMatrix<T>& mat)
+template <typename T> std::ostream& operator <<(std::ostream& os, const dtkMatrix<T>& mat)
 {
     os << "[" ;
 
-    for (unsigned i = 0; i < mat.getRows(); i++)
+    for (unsigned i = 0; i < mat.numberOfRows(); i++)
     {
         if (i > 0)
             os << "; ";
 
         os  << mat[i][0];
 
-        for (unsigned j = 1; j < mat.getCols(); j++)
+        for (unsigned j = 1; j < mat.numberOfColumns(); j++)
             os  << ", " << mat[i][j];
     }
 
@@ -378,18 +424,18 @@ template <class T> std::ostream& operator <<(std::ostream& os, const dtkMatrix<T
 }
 
 //!
-template <class T> QDebug operator<<(QDebug dbg, const dtkMatrix<T>& mat)
+template <typename T> QDebug operator<<(QDebug dbg, const dtkMatrix<T>& mat)
 {
     dbg.nospace() << "[" ;
 
-    for (unsigned i = 0; i < mat.getRows(); i++)
+    for (unsigned i = 0; i < mat.numberOfRows(); i++)
     {
 	if (i > 0)
 	    dbg.nospace() << ";";
 
         dbg.nospace() << mat[i][0];
 
-	for (unsigned j = 1; j < mat.getCols(); j++)
+	for (unsigned j = 1; j < mat.numberOfColumns(); j++)
 	    dbg.nospace() << "," << mat[i][j];
     }
 
@@ -399,18 +445,18 @@ template <class T> QDebug operator<<(QDebug dbg, const dtkMatrix<T>& mat)
 }
 
 //!
-template <class T> QDebug operator<<(QDebug dbg, const dtkMatrix<T> *mat)
+template <typename T> QDebug operator<<(QDebug dbg, const dtkMatrix<T> *mat)
 {
     dbg.nospace() << "[" ;
 
-    for (unsigned i = 0; i < mat->getRows(); i++)
+    for (unsigned i = 0; i < mat->numberOfRows(); i++)
     {
 	if (i > 0)
 	    dbg.nospace() << ";";
 
         dbg.nospace() << mat[i][0];
 
-	for (unsigned j = 1; j < mat->getCols(); j++)
+	for (unsigned j = 1; j < mat->numberOfColumns(); j++)
 	    dbg.nospace() << "," << mat[i][j];
     }
 
@@ -418,5 +464,16 @@ template <class T> QDebug operator<<(QDebug dbg, const dtkMatrix<T> *mat)
 
     return dbg.space();
 }
+
+template <typename T> QByteArray *dtkMatrix<T>::serialize(void)
+{
+    return NULL;
+};
+
+
+template <typename T>  void dtkMatrix<T>::deserialize(const QByteArray& array)
+{
+    
+};
 
 #endif

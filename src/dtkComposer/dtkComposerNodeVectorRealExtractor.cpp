@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 16:38:38 2012 (+0200)
+ * Last-Updated: Thu Sep 20 14:56:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 72
+ *     Update #: 83
  */
 
 /* Commentary:
@@ -33,10 +33,13 @@ class dtkComposerNodeVectorRealExtractorPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
-    dtkComposerTransmitterVariant receiver_index;
+    dtkComposerTransmitterReceiver<qlonglong>     receiver_index;
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_value;
+
+public:
+    qreal value;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -46,13 +49,10 @@ public:
 dtkComposerNodeVectorRealExtractor::dtkComposerNodeVectorRealExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealExtractorPrivate)
 {
     this->appendReceiver(&d->receiver_vector);
-
-    QList<QVariant::Type> variant_list;
-
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
-    d->receiver_index.setTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
 
+    d->value = 0.;
+    d->emitter_value.setData(&d->value);
     this->appendEmitter(&d->emitter_value);
 }
 
@@ -94,18 +94,27 @@ QString dtkComposerNodeVectorRealExtractor::outputLabelHint(int port)
 
 void dtkComposerNodeVectorRealExtractor::run(void)
 {
-    if(d->receiver_vector.isEmpty())
-        return;
+    if (!d->receiver_vector.isEmpty() && !d->receiver_index.isEmpty()) {
 
-    if(d->receiver_index.isEmpty())
-        return;
+        dtkVectorReal *vector = d->receiver_vector.data();
+        qlonglong index = *d->receiver_index.data();
 
-    const dtkVectorReal& vector(d->receiver_vector.data());
-    qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
+        if (!vector) {
+            dtkError() << "Input vector is not defined.";
+            return;
+        }
 
-    if (index < vector.getRows())
-        d->emitter_value.setData(vector[index]);
-    else
-        dtkWarn() << "index is larger than size of the vector:" << index << ">=" << vector.getRows();
-        
+        if (index >= vector->size()) {
+            dtkWarn() << "index > size of the input vector. Zero is returned.";
+            d->value = 0;
+
+        } else {
+            d->value = (*vector)[index];
+
+        }
+
+    } else {
+        dtkWarn() << "Inputs not specified. Zero is returned.";
+        d->value = 0;
+    }        
 }

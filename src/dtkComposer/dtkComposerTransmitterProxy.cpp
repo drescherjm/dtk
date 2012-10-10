@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon May  7 11:31:48 2012 (+0200)
+ * Last-Updated: Tue Sep 18 16:20:45 2012 (+0200)
  *           By: tkloczko
- *     Update #: 58
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -43,6 +43,21 @@ dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
     delete e;
 
     e = NULL;
+}
+
+int dtkComposerTransmitterProxy::dataType(void)
+{
+    return 0;
+}
+
+QString dtkComposerTransmitterProxy::dataIdentifier(void)
+{
+    return QString();
+}
+
+QString dtkComposerTransmitterProxy::dataDescription(void)
+{
+    return QString();
 }
 
 //! Returns.

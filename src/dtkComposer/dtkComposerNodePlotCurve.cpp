@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. sept. 21 15:37:12 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 53
+ * Last-Updated: Tue Sep 25 10:10:57 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -30,28 +30,28 @@ public:
     dtkComposerTransmitterReceiver<qreal> receiver_y;
 
 public:
-    dtkComposerTransmitterEmitter<dtkPlotCurve *> emitter_curve;
+    dtkComposerTransmitterEmitter<dtkPlotCurve> emitter_curve;
 
 public:
     dtkPlotCurve *curve;
-
-public:
-  bool dirty;
 };
 
 dtkComposerNodePlotCurve::dtkComposerNodePlotCurve(void) : QObject(), dtkComposerNodeLeaf(), d(new dtkComposerNodePlotCurvePrivate)
 {
-    d->curve = new dtkPlotCurve;
-
     this->appendReceiver(&(d->receiver_x));
     this->appendReceiver(&(d->receiver_y));
 
+    d->curve = new dtkPlotCurve;
+    d->emitter_curve.setData(d->curve);
     this->appendEmitter(&(d->emitter_curve));
-
 }
 
 dtkComposerNodePlotCurve::~dtkComposerNodePlotCurve(void)
 {
+    if (d->curve)
+        delete d->curve;
+    d->curve = NULL;
+
     delete d;
 
     d = NULL;
@@ -64,15 +64,11 @@ dtkPlotCurve *dtkComposerNodePlotCurve::curve(void)
 
 void dtkComposerNodePlotCurve::run(void)
 {
-    if(d->receiver_x.isEmpty())
+    if (d->receiver_x.isEmpty())
         return;
 
-    if(d->receiver_y.isEmpty())
+    if (d->receiver_y.isEmpty())
         return;
 
-    d->curve->append(QPointF(d->receiver_x.data(), d->receiver_y.data()));
-
-    d->emitter_curve.setData(d->curve);
-
-    d->dirty = false;
+    d->curve->append(QPointF(*d->receiver_x.data(), *d->receiver_y.data()));
 }

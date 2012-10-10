@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mai 30 12:41:13 2012 (+0200)
+ * Last-Updated: lun. oct.  8 15:49:10 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 587
+ *     Update #: 629
  */
 
 /* Commentary:
@@ -88,9 +88,14 @@ dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
     d = NULL;
 }
 
-dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& c)
+dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(const dtkDistributedCommunicatorMpi& other)
 {
 
+}
+
+dtkDistributedCommunicatorMpi& dtkDistributedCommunicatorMpi::operator=(const dtkDistributedCommunicatorMpi& other)
+{
+    return *this;
 }
 
 //! Mpi communicator initializer.
@@ -322,66 +327,12 @@ void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int ta
     dtkDistributedCommunicator::send(char_array,length,target,tag);
 }
 
-/*!
- *  send a QVariant
- */
-
-void dtkDistributedCommunicatorMpi::send(const QVariant &v, qint16 target, int tag)
+void dtkDistributedCommunicatorMpi::send(QByteArray &array, qint16 target, int tag)
 {
-    int     type = (int)v.type();
-    qint64  size = 1;
-    dtkDistributedCommunicator::send(&type,1,target,tag);
+    qint64   arrayLength = array.length();
+    dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
+    dtkDistributedCommunicator::send(array.data(), arrayLength, target, tag);
 
-    switch (v.type()) {
-    case QVariant::Double: {
-        double data = v.toDouble();
-        dtkDistributedCommunicator::send(&data,size,target,tag);
-        break;
-    }
-    case QVariant::LongLong: {
-        qint64 data = v.toLongLong();
-        dtkDistributedCommunicator::send(&data,size,target,tag);
-        break;
-    }
-    case QVariant::String: {
-        QString data = v.toString();
-        this->send(data,target,tag);
-        break;
-    }
-    case QVariant::UserType: {
-        int typeId = QMetaType::type(v.typeName());
-        dtkDistributedCommunicator::send(&typeId,size,target,tag);
-        if (QString(v.typeName()) == "dtkAbstractData*") {
-            dtkAbstractData *data = v.value<dtkAbstractData *>();
-            this->send(data,target,tag);
-        } else if (QString(v.typeName()) == "dtkVector3DReal") {
-            dtkVector3DReal vector = v.value<dtkVector3DReal>();
-            double array[3];
-            for (int i=0; i<3; i++)
-                array[i]= vector[i];
-            dtkDistributedCommunicator::send(array,3,target,tag);
-        } else if (QString(v.typeName()) == "dtkVectorReal") {
-            dtkVectorReal vector = v.value<dtkVectorReal>();
-            int vsize = vector.getRows();
-            dtkDistributedCommunicator::send(&vsize,1,target,tag);
-            double array[vsize];
-            for (int i=0; i<vsize; i++)
-                array[i]= vector[i];
-            dtkDistributedCommunicator::send(array,vsize,target,tag);
-        } else if (QString(v.typeName()) == "dtkQuaternionReal") {
-            dtkQuaternionReal q = v .value<dtkQuaternionReal>();
-            double array[4];
-            for (int i=0; i<4; i++)
-                array[i]= q[i];
-            dtkDistributedCommunicator::send(array,4,target,tag);
-        } else {
-            dtkError() << "unimplemendted type in send" << v.typeName();
-        }
-        return;
-    }
-    default:
-        break;
-    }
 }
 
 void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
@@ -394,69 +345,13 @@ void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
     s = QString(s_c);
 }
 
-void dtkDistributedCommunicatorMpi::receive(QVariant &v, qint16 source, int tag)
+void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag)
 {
-    int   type;
-    dtkDistributedCommunicator::receive(&type,1,source,tag);
+    qint64   arrayLength;
+    dtkDistributedCommunicator::receive(&arrayLength,1,source,tag);
 
-    switch (type) {
-    case QVariant::Double: {
-        double data;
-        dtkDistributedCommunicator::receive(&data,1,source,tag);
-        v=QVariant(data);
-        break;
-    }
-    case QVariant::LongLong: {
-        qint64 data;
-        dtkDistributedCommunicator::receive(&data,1,source,tag);
-        v=QVariant(data);
-        break;
-    }
-    case QVariant::String: {
-        QString data ;
-        this->receive(data,source,tag);
-        v=QVariant(data);
-        break;
-    }
-    case QVariant::UserType: {
-        int   typeId;
-        dtkDistributedCommunicator::receive(&typeId,1,source,tag);
-        if ( QString(QMetaType::typeName(typeId)) == "dtkVector3DReal") {
-            double   values[3];
-            dtkDistributedCommunicator::receive(values,3,source,tag);
-            dtkVector3DReal vector;
-            for (int i=0; i<3; i++)
-                vector[i]= values[i];
-            v = qVariantFromValue(vector);
-        } else if ( QString(QMetaType::typeName(typeId)) == "dtkVectorReal") {
-            int size;
-            dtkDistributedCommunicator::receive(&size,1,source,tag);
-
-            double   values[size];
-            dtkDistributedCommunicator::receive(values,size,source,tag);
-            dtkVectorReal vector(size);
-            for (int i=0; i<size; i++)
-                vector[i]= values[i];
-            v = qVariantFromValue(vector);
-        } else if (QString(QMetaType::typeName(typeId)) == "dtkQuaternionReal") {
-            double   values[4];
-            dtkDistributedCommunicator::receive(values,4,source,tag);
-            dtkQuaternionReal quaternion;
-            for (int i=0; i<4; i++)
-                quaternion[i]= values[i];
-            v = qVariantFromValue(quaternion);
-        } else if (QString(QMetaType::typeName(typeId)) == "dtkAbstractData*") {
-            dtkAbstractData *data = NULL;
-            this->receive(data,source,tag);
-            v = qVariantFromValue(data);
-        } else {
-            dtkError() << "unimplemendted type in receive" <<QMetaType::typeName(typeId);
-        }
-        return;
-    }
-    default:
-        break;
-    }
+    array.resize(arrayLength);
+    dtkDistributedCommunicator::receive(array.data(), arrayLength, source, tag);
 
 }
 

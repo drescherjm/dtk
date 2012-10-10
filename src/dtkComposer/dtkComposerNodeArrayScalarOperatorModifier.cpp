@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jul  1 17:04:46 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 57
+ * Last-Updated: Fri Sep 21 16:25:51 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 116
  */
 
 /* Commentary:
@@ -44,14 +44,14 @@ dtkComposerNodeArrayScalarOperatorModifier::dtkComposerNodeArrayScalarOperatorMo
 {
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
-    d->receiver_index.setTypes(variant_list);
+    variant_list << QMetaType::LongLong;
+    d->receiver_index.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
 
-    variant_list << QVariant::Double;
-    d->receiver_value.setTypes(variant_list);
+    variant_list << QMetaType::Double;
+    d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_array);
@@ -83,10 +83,10 @@ dtkComposerNodeArrayScalarOperatorModifierAll::dtkComposerNodeArrayScalarOperato
 {
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
-    d->receiver_value.setTypes(variant_list);
+    variant_list << QMetaType::LongLong << QMetaType::Double;
+    d->receiver_value.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_array);
@@ -107,24 +107,30 @@ void dtkComposerNodeArrayScalarOperatorInsert::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        if (index < array.count()) {
-            array.insert(index,value);
-            d->emitter_array.setData(array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+        qreal value = *d->receiver_value.data<qreal>();
+
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkContainerVectorReal vec;
-            d->emitter_array.setData(vec);
+            array->insert(index, value);
+
         }
+
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -137,24 +143,29 @@ void dtkComposerNodeArrayScalarOperatorSet::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        if (index < array.count()) {
-            array.replace(index, value);
-            d->emitter_array.setData(array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+        qreal value = *d->receiver_value.data<qreal>();
+
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkContainerVectorReal vec;
-            d->emitter_array.setData(vec);
+            array->replace(index, value);
+
         }
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -166,16 +177,22 @@ void dtkComposerNodeArrayScalarOperatorAppend::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        array.append(value);
-        d->emitter_array.setData( array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qreal value = *d->receiver_value.data<qreal>();
+
+        array->append(value);
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -184,19 +201,25 @@ void dtkComposerNodeArrayScalarOperatorAppend::run(void)
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
-{
+{ 
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        array.prepend(value) ;
-        d->emitter_array.setData( array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qreal value = *d->receiver_value.data<qreal>();
+
+        array->prepend(value);
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -206,22 +229,26 @@ void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
 
 void dtkComposerNodeArrayScalarOperatorModifierAllAdd::run(void)
 {
-    if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty()) {
+    if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        for (qlonglong i = 0 ; i < array.count(); ++i)
-            array[i] += value ;
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qreal value = *d->receiver_value.data<qreal>();
+
+        for(qlonglong i = 0 ; i < array->count(); ++i)
+            (*array)[i] += value ;
 
         d->emitter_array.setData(array);
 
     } else {
-
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
-
+        d->emitter_array.clearData();
     }
 }
 
@@ -233,20 +260,24 @@ void dtkComposerNodeArrayScalarOperatorModifierAllSubstract::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        for (qlonglong i = 0 ; i< array.count(); ++i)
-            array[i] -= value ;
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
 
-        d->emitter_array.setData( array);
+        qreal value = *d->receiver_value.data<qreal>();
+
+        for(qlonglong i = 0 ; i < array->count(); ++i)
+            (*array)[i] -= value ;
+
+        d->emitter_array.setData(array);
 
     } else {
-
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
-
+        d->emitter_array.clearData();
     }
 }
 
@@ -258,20 +289,24 @@ void dtkComposerNodeArrayScalarOperatorModifierAllMult::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        for (qlonglong i = 0 ; i< array.count(); ++i)
-            array[i] *= value ;
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
 
-        d->emitter_array.setData( array);
+        qreal value = *d->receiver_value.data<qreal>();
+
+        for(qlonglong i = 0 ; i < array->count(); ++i)
+            (*array)[i] *= value ;
+
+        d->emitter_array.setData(array);
 
     } else {
-
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
-
+        d->emitter_array.clearData();
     }
 }
 
@@ -283,29 +318,30 @@ void dtkComposerNodeArrayScalarOperatorModifierAllDivide::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qreal value = *d->receiver_value.data<qreal>();
 
         if (value == 0) {
-
             dtkWarn() << "Value is zero. Same array is returned." ;
-            d->emitter_array.setData(array);
 
         } else {
-
-            for (qlonglong i = 0 ; i< array.count(); ++i)
-                array[i] /= value ;
-
-            d->emitter_array.setData(array);
+            for(qlonglong i = 0 ; i < array->count(); ++i)
+                (*array)[i] /= value ;
 
         }
 
+        d->emitter_array.setData(array);
+
     } else {
-
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
-
+        d->emitter_array.clearData();
     }
 }
 
@@ -317,24 +353,30 @@ void dtkComposerNodeArrayScalarOperatorSum::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        if (index < array.count()) {
-            array[index] += value ;
-            d->emitter_array.setData(array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+        qreal value = *d->receiver_value.data<qreal>();
+
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkContainerVectorReal vec;
-            d->emitter_array.setData(vec);
+            (*array)[index] += value;
+
         }
+
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -346,24 +388,30 @@ void dtkComposerNodeArrayScalarOperatorSubstract::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        if (index < array.count()) {
-            array[index] -=  value ;
-            d->emitter_array.setData(array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+        qreal value = *d->receiver_value.data<qreal>();
+
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkContainerVectorReal vec;
-            d->emitter_array.setData(vec);
+            (*array)[index] -= value;
+
         }
+
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -375,24 +423,30 @@ void dtkComposerNodeArrayScalarOperatorMult::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        if (index < array.count()) {
-            array[index] *= value ;
-            d->emitter_array.setData(array);
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
+
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+        qreal value = *d->receiver_value.data<qreal>();
+
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkContainerVectorReal vec;
-            d->emitter_array.setData(vec);
+            (*array)[index] *= value;
+
         }
+
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
 }
 
@@ -404,28 +458,33 @@ void dtkComposerNodeArrayScalarOperatorDivide::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty() ) {
 
-        dtkContainerVectorReal array(d->receiver_array.data());
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
-        qreal value = qvariant_cast<qreal>(d->receiver_value.data());
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-        if (index < array.count()) {
-            if (value == 0)
-                dtkWarn() << "Value is zero. Nothing is done" ;
-            else
-                array[index]/= value ;
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
 
-            d->emitter_array.setData(array);
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+        qreal value = *d->receiver_value.data<qreal>();
+
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkContainerVectorReal vec;
-            d->emitter_array.setData(vec);
+            if (value == 0)
+                dtkWarn() << "Value is zero. Same array is returned." ;
+
+            else
+                (*array)[index] /= value;
+
         }
+
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkContainerVectorReal vec;
-        d->emitter_array.setData(vec);
+        d->emitter_array.clearData();
     }
-
 }

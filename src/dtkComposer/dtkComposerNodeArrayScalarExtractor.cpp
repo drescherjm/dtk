@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 16:56:28 2012 (+0200)
+ * Last-Updated: Fri Sep 21 16:24:36 2012 (+0200)
  *           By: tkloczko
- *     Update #: 153
+ *     Update #: 223
  */
 
 /* Commentary:
@@ -33,10 +33,13 @@ class dtkComposerNodeArrayScalarExtractorPrivate
 {
 public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
-    dtkComposerTransmitterVariant               receiver_index;
+    dtkComposerTransmitterReceiver<qlonglong>   receiver_index;
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_value;
+
+public:
+    qreal value;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -46,13 +49,10 @@ public:
 dtkComposerNodeArrayScalarExtractor::dtkComposerNodeArrayScalarExtractor(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarExtractorPrivate)
 {
     this->appendReceiver(&d->receiver_array);
-
-    QList<QVariant::Type> variant_list;
-
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
-    d->receiver_index.setTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
 
+    d->value = 0.;
+    d->emitter_value.setData(&d->value);
     this->appendEmitter(&d->emitter_value);
 }
 
@@ -94,21 +94,29 @@ QString dtkComposerNodeArrayScalarExtractor::outputLabelHint(int port)
 
 void dtkComposerNodeArrayScalarExtractor::run(void)
 {
-    if (d->receiver_array.isEmpty())
-        return;
+    if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty()) {
 
-    if (d->receiver_index.isEmpty())
-        return;
+        dtkContainerVectorReal *array = d->receiver_array.data();
+        qlonglong index = *d->receiver_index.data();
 
-    const dtkContainerVectorReal& array(d->receiver_array.data());
-    qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            return;
+        }
 
-    if (index < array.count())
-        d->emitter_value.setData(array.at(index));
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the input array. Zero is returned.";
+            d->value = 0;
 
-    else
-        dtkWarn() << "index is larger than size of the array:" << index << ">=" << array.count();
+        } else {
+            d->value = array->at(index);
 
+        }
+
+    } else {
+        dtkWarn() << "Inputs not specified. Zero is returned.";
+        d->value = 0;
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -123,6 +131,9 @@ public:
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_subarray;
+
+public:
+    dtkContainerVectorReal *subarray;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -133,16 +144,22 @@ dtkComposerNodeArrayScalarExtractorSubArray::dtkComposerNodeArrayScalarExtractor
 {
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
-    d->receiver_indices.setTypes(variant_list);
+    QList<int> variant_list;
+    variant_list << QMetaType::Int << QMetaType::UInt << QMetaType::LongLong << QMetaType::ULongLong;
+    d->receiver_indices.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_indices);
 
+    d->subarray = new dtkContainerVectorReal();
+    d->emitter_subarray.setData(d->subarray);
     this->appendEmitter(&d->emitter_subarray);
 }
 
 dtkComposerNodeArrayScalarExtractorSubArray::~dtkComposerNodeArrayScalarExtractorSubArray(void)
 {
+    if (d->subarray)
+        delete d->subarray;
+    d->subarray = NULL;
+
     delete d;
 
     d = NULL;
@@ -179,23 +196,35 @@ QString dtkComposerNodeArrayScalarExtractorSubArray::outputLabelHint(int port)
 
 void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
 {
-    if (d->receiver_array.isEmpty())
-        return;
+    if (!d->receiver_array.isEmpty() && !d->receiver_indices.isEmpty()) {
 
-    if (d->receiver_indices.isEmpty())
-        return;
+        dtkContainerVectorReal *array = d->receiver_array.data();
+        dtkAbstractContainerWrapper *indices = d->receiver_indices.container();
 
-    const dtkContainerVectorReal& array(d->receiver_array.data());
-    const dtkAbstractContainerWrapper& indices(d->receiver_indices.container());
+        if (!array || !indices) {
+            dtkError() << "Inputs are not defined.";
+            d->emitter_subarray.clearData();
+            return;
+        }
 
-    dtkContainerVectorReal subarray;
-    subarray.reserve(indices.count());
+        d->subarray->clear();
+        d->subarray->reserve(indices->count());
 
-    for(qlonglong i = 0; i < indices.count(); ++i) {
-        subarray.append(array.at(qvariant_cast<qlonglong>(indices.at(i))));
+        qlonglong index;
+        for(qlonglong i = 0; i < indices->count(); ++i) {
+            index = indices->at(i).value<qlonglong>();
+            if (index >= array->count()) {
+                dtkWarn() << "index " << i << " of indices array is greater than the size of the array. Zero is inserted.";
+                d->subarray->append(0);
+            } else {
+                d->subarray->append(array->at(index));
+            }
+        }
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_subarray.clearData();
     }
-
-    d->emitter_subarray.setData(subarray);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -206,11 +235,14 @@ class dtkComposerNodeArrayScalarExtractorArrayPartPrivate
 {
 public:
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
-    dtkComposerTransmitterVariant               receiver_from;
-    dtkComposerTransmitterVariant               receiver_length;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_from;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_length;
 
 public:
     dtkComposerTransmitterEmitterVector<qreal> emitter_subarray;
+
+public:
+    dtkContainerVectorReal *subarray;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -220,20 +252,20 @@ public:
 dtkComposerNodeArrayScalarExtractorArrayPart::dtkComposerNodeArrayScalarExtractorArrayPart(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeArrayScalarExtractorArrayPartPrivate)
 {
     this->appendReceiver(&d->receiver_array);
-
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
-
-    d->receiver_from.setTypes(variant_list);
     this->appendReceiver(&d->receiver_from);
-    d->receiver_length.setTypes(variant_list);
     this->appendReceiver(&d->receiver_length);
 
+    d->subarray = new dtkContainerVectorReal();
+    d->emitter_subarray.setData(d->subarray);
     this->appendEmitter(&d->emitter_subarray);
 }
 
 dtkComposerNodeArrayScalarExtractorArrayPart::~dtkComposerNodeArrayScalarExtractorArrayPart(void)
 {
+    if (d->subarray)
+        delete d->subarray;
+    d->subarray = NULL;
+
     delete d;
 
     d = NULL;
@@ -273,32 +305,43 @@ QString dtkComposerNodeArrayScalarExtractorArrayPart::outputLabelHint(int port)
 
 void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 {
-    if (d->receiver_array.isEmpty())
-        return;
+    if (!d->receiver_array.isEmpty() && !d->receiver_from.isEmpty()) {
 
-    if (d->receiver_from.isEmpty())
-        return;
+        dtkContainerVectorReal *array = d->receiver_array.data();
 
-    const dtkContainerVectorReal& array(d->receiver_array.data());
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_subarray.clearData();
+            return;
+        }
 
-    qlonglong from = qvariant_cast<qlonglong>(d->receiver_from.data());
-    if (from >= array.count()) {
-        dtkWarn() << "Starting value from is greater than array size:" << from << ">=" << array.count();
-        return;
+        qlonglong from = *d->receiver_from.data();
+        if (from >= array->count()) {
+            dtkWarn() << "Starting value from is greater than array size:" << from << ">=" << array->count();
+            d->emitter_subarray.clearData();
+            return;
+        }
+
+        qlonglong length = array->count();
+        if (!d->receiver_length.isEmpty())
+            length = *d->receiver_length.data();
+
+        if (length < 0) {
+            dtkWarn() << "Length value is negative:" << length << "<" << 0;
+            d->emitter_subarray.clearData();
+            return;
+        }
+
+        qlonglong to = qMin((from + length), array->count());
+
+        d->subarray->clear();
+        d->subarray->reserve(to - from);
+
+        for(qlonglong i = from; i < to; ++i)
+            d->subarray->append(array->at(i));
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_subarray.clearData();
     }
-
-    qlonglong length;
-    if (!d->receiver_length.isEmpty())
-        length = qvariant_cast<qlonglong>(d->receiver_length.data());
-
-    if (length < 0) {
-        dtkWarn() << "Length value is negative:" << length << "<" << 0;
-        return;
-    }
-
-    qlonglong to = qMin((from + length), array.count());
-    
-    dtkContainerVectorReal *subarray = array.subContainer(from, to);
-    d->emitter_subarray.setData(*subarray);
-    delete subarray;
 }

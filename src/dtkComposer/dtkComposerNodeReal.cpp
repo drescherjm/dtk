@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:16:31 2012 (+0200)
+ * Last-Updated: Tue Sep 18 13:17:59 2012 (+0200)
  *           By: tkloczko
- *     Update #: 52
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -16,6 +16,8 @@
 /* Change log:
  * 
  */
+
+#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerTransmitterEmitter.h"
@@ -34,6 +36,9 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter;
+
+public:
+    qreal value;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -42,13 +47,14 @@ public:
 
 dtkComposerNodeReal::dtkComposerNodeReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeRealPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double ;
+    QList<int> variant_list;
+    variant_list << QMetaType::Int << QMetaType::UInt << QMetaType::LongLong << QMetaType::ULongLong << QMetaType::Double << QMetaType::QString << QMetaType::Bool;
 
-    d->receiver.setTypes(variant_list);
+    d->receiver.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
-    d->emitter.setData(0);
+    d->value = 0.0;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -62,15 +68,15 @@ dtkComposerNodeReal::~dtkComposerNodeReal(void)
 void dtkComposerNodeReal::run(void)
 {
     if (!d->receiver.isEmpty())
-        d->emitter.setData(qvariant_cast<qreal>(d->receiver.data()));
+        d->value = *(d->receiver.data<qreal>());
 }
 
 qreal dtkComposerNodeReal::value(void)
 {
-    return d->emitter.data();
+    return d->value;
 }
 
 void dtkComposerNodeReal::setValue(qreal value)
 {
-    d->emitter.setData(value);
+    d->value = value;
 }

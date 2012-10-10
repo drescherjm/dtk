@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:23:04 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:26:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 29
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -18,12 +18,13 @@
  */
 
 #include "dtkAbstractContainerWrapper.h"
+#include "dtkContainerVectorWrapper.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainerWrapper implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(dtkAbstractData *parent) : dtkAbstractData(parent)
+dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(void) : dtkAbstractData()
 {
     m_container = NULL;
 }
@@ -48,10 +49,10 @@ void dtkAbstractContainerWrapper::init(dtkAbstractContainerWrapper *wrapper)
 
 void dtkAbstractContainerWrapper::reset(void)
 {
-    if (m_container && (this != m_container))
-        delete m_container;
+    // if (m_container && (this != m_container))
+    //     delete m_container;
 
-    m_container = NULL;
+    // m_container = NULL;
 }
 
 bool dtkAbstractContainerWrapper::isReset(void) const
@@ -100,7 +101,18 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
 
 QString dtkAbstractContainerWrapper::identifier(void) const
 {
+    if (m_container)
+        return m_container->identifier();
+
     return "dtkAbstractContainerWrapper";
+}
+
+QString dtkAbstractContainerWrapper::description(void) const
+{
+    if (m_container)
+        return m_container->description();
+
+    return "dtkAbstractContainerWrapper is void! It might not be what you expect.";
 }
 
 void dtkAbstractContainerWrapper::setName(const QString& name)

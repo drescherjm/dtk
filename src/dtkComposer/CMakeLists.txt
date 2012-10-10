@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Fri Sep 21 16:17:20 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 597
+## Last-Updated: Mon Sep 24 14:07:56 2012 (+0200)
+##           By: tkloczko
+##     Update #: 620
 ######################################################################
 ##
 ### Commentary:
@@ -54,7 +54,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h
-  dtkComposerNodeContainerData.h
   dtkComposerNodeControl.h
   dtkComposerNodeControlCase.h
   dtkComposerNodeControlDoWhile.h
@@ -65,14 +64,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlWhile.h
   dtkComposerNodeData.h
   dtkComposerNodeFile.h
-  dtkComposerNodeFileOperator.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   dtkComposerNodeLeafData.h
   dtkComposerNodeLeafProcess.h
   dtkComposerNodeLeafView.h
-  dtkComposerNodeList.h
-  dtkComposerNodeListOperator.h
   dtkComposerNodeLogger.h
   dtkComposerNodeMatrixSquareReal.h
   dtkComposerNodeMatrixSquareRealExtractor.h
@@ -87,8 +83,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
-  dtkComposerNodeVector.h
-  dtkComposerNodeVectorOperator.h
   dtkComposerNodeVector3D.h
   dtkComposerNodeVector3DOperatorUnary.h
   dtkComposerNodeVector3DOperatorBinary.h
@@ -180,7 +174,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
   dtkComposerNodeConstants.cpp
-  dtkComposerNodeContainerData.cpp
   dtkComposerNodeControl.cpp
   dtkComposerNodeControlCase.cpp
   dtkComposerNodeControlDoWhile.cpp
@@ -191,14 +184,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlWhile.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFile.cpp
-  dtkComposerNodeFileOperator.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
   dtkComposerNodeLeafData.cpp
   dtkComposerNodeLeafProcess.cpp
   dtkComposerNodeLeafView.cpp
-  dtkComposerNodeList.cpp
-  dtkComposerNodeListOperator.cpp
   dtkComposerNodeLogger.cpp
   dtkComposerNodeMatrixSquareReal.cpp
   dtkComposerNodeMatrixSquareRealExtractor.cpp
@@ -213,8 +203,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
-  dtkComposerNodeVector.cpp
-  dtkComposerNodeVectorOperator.cpp
   dtkComposerNodeVector3D.cpp
   dtkComposerNodeVector3DOperatorUnary.cpp
   dtkComposerNodeVector3DOperatorBinary.cpp
@@ -242,6 +230,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
+  dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterVariant.cpp
   dtkComposerView.cpp

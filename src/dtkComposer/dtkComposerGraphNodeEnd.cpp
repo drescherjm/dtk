@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:40:51 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 188
+ * Last-Updated: jeu. sept. 27 20:47:29 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 189
  */
 
 /* Commentary:
@@ -88,12 +88,10 @@ void dtkComposerGraphNodeEnd::eval(void)
     if (!d->control_node) { // composite node end
         if (d->composite)// may be NULL for root node
             d->composite->end();
-        this->setStatus(dtkComposerGraphNode::Done);
-
-    } else {
+    } else
         d->control_node->end();
-        this->setStatus(dtkComposerGraphNode::Done);
-    }
+
+    this->setStatus(dtkComposerGraphNode::Done);
 }
 
 void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNode *begin)

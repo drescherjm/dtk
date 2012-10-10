@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 09:03:42
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:27:53 2012 (+0200)
+ * Last-Updated: Tue Sep 25 10:02:03 2012 (+0200)
  *           By: tkloczko
- *     Update #: 226
+ *     Update #: 297
  */
 
 /* Commentary:
@@ -34,19 +34,25 @@
 class dtkComposerNodeCommunicatorInitPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicatorMpi *> emitter;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicatorMpi> emitter;
 
 public:
-    dtkDistributedCommunicator *communicator;
+    dtkDistributedCommunicatorMpi *communicator;
 };
 
 dtkComposerNodeCommunicatorInit::dtkComposerNodeCommunicatorInit(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorInitPrivate)
 {
+    d->communicator = NULL;
+
     this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeCommunicatorInit::~dtkComposerNodeCommunicatorInit(void)
 {
+    if (d->communicator)
+        delete d->communicator;
+    d->communicator = NULL;
+
     delete d;
 
     d = NULL;
@@ -54,8 +60,13 @@ dtkComposerNodeCommunicatorInit::~dtkComposerNodeCommunicatorInit(void)
 
 void dtkComposerNodeCommunicatorInit::run(void)
 {
-    d->emitter.setData(new dtkDistributedCommunicatorMpi);
-    d->emitter.data()->initialize();
+    if (!d->communicator) {
+        d->communicator = new dtkDistributedCommunicatorMpi;
+        d->emitter.setData(d->communicator);
+    }
+
+    if (!d->communicator->initialized())
+        d->communicator->initialize();
 }
 
 
@@ -67,14 +78,16 @@ void dtkComposerNodeCommunicatorInit::run(void)
 class dtkComposerNodeCommunicatorUninitializePrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver;
     dtkComposerTransmitterVariant receiver_fake;
 
 };
 
 dtkComposerNodeCommunicatorUninitialize::dtkComposerNodeCommunicatorUninitialize(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorUninitializePrivate)
 {
+    d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
+
     this->appendReceiver(&(d->receiver_fake));
 }
 
@@ -87,12 +100,21 @@ dtkComposerNodeCommunicatorUninitialize::~dtkComposerNodeCommunicatorUninitializ
 
 void dtkComposerNodeCommunicatorUninitialize::run(void)
 {
-    if (!d->receiver.data())
-        return;
+    if (!d->receiver.isEmpty()) {
+        dtkDistributedCommunicatorMpi *communicator = d->receiver.data();
+        
+        if (communicator) {
+            communicator->uninitialize();
+        } else {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
 
-    d->receiver.data()->uninitialize();
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        
+    }
 }
-
 
 // /////////////////////////////////////////////////////////////////
 // Communicator Rank
@@ -101,14 +123,20 @@ void dtkComposerNodeCommunicatorUninitialize::run(void)
 class dtkComposerNodeCommunicatorRankPrivate
 {
 public:
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver;
     dtkComposerTransmitterEmitter<qlonglong> emitter;
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver;
+
+public:
+    qlonglong rank;
 };
 
 dtkComposerNodeCommunicatorRank::dtkComposerNodeCommunicatorRank(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorRankPrivate)
 {
+    d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
 
+    d->rank = -1;
+    d->emitter.setData(&d->rank);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -121,7 +149,23 @@ dtkComposerNodeCommunicatorRank::~dtkComposerNodeCommunicatorRank(void)
 
 void dtkComposerNodeCommunicatorRank::run(void)
 {
-    d->emitter.setData(d->receiver.data()->rank());
+    if (!d->receiver.isEmpty()) {
+
+        dtkDistributedCommunicatorMpi *communicator = d->receiver.data();
+        
+        if (!communicator) {
+            d->rank = -1;
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+        
+        d->rank = communicator->rank();
+    
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->rank = 0;
+
+    }
 }
 
 
@@ -134,14 +178,20 @@ class dtkComposerNodeCommunicatorSizePrivate
 {
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter;
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver;
+
+public:
+    qlonglong size;
 
 };
 
 dtkComposerNodeCommunicatorSize::dtkComposerNodeCommunicatorSize(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSizePrivate)
 {
+    d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
 
+    d->size = 0;
+    d->emitter.setData(&d->size);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -154,7 +204,23 @@ dtkComposerNodeCommunicatorSize::~dtkComposerNodeCommunicatorSize(void)
 
 void dtkComposerNodeCommunicatorSize::run(void)
 {
-    d->emitter.setData(d->receiver.data()->size());
+    if (!d->receiver.isEmpty()) {
+
+        dtkDistributedCommunicatorMpi *communicator = d->receiver.data();
+        
+        if (!communicator) {
+            d->size = 0;
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+        
+        d->size = communicator->size();
+    
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->size = 0;
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -165,7 +231,7 @@ class dtkComposerNodeCommunicatorSendIntegerPrivate
 {
 public:
     // dtkComposerTransmitterEmitter<qlonglong> emitter;
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver_comm;
     dtkComposerTransmitterReceiver<qlonglong> receiver_data;
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
 
@@ -173,6 +239,7 @@ public:
 
 dtkComposerNodeCommunicatorSendInteger::dtkComposerNodeCommunicatorSendInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendIntegerPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
     this->appendReceiver(&(d->receiver_target));
@@ -190,8 +257,21 @@ dtkComposerNodeCommunicatorSendInteger::~dtkComposerNodeCommunicatorSendInteger(
 
 void dtkComposerNodeCommunicatorSendInteger::run(void)
 {
-    qlonglong i = d->receiver_data.data();
-    d->receiver_comm.data()->send(&i, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64,d->receiver_target.data(),0 );
+    if (!d->receiver_data.isEmpty() && !d->receiver_comm.isEmpty() && !d->receiver_target.isEmpty() ) {
+
+        qlonglong i = *d->receiver_data.data();
+        dtkDistributedCommunicatorMpi *communicator = d->receiver_comm.data();
+        
+        if (!communicator) {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+
+        communicator->send(&i, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64, *d->receiver_target.data(), 0);
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -201,7 +281,7 @@ void dtkComposerNodeCommunicatorSendInteger::run(void)
 class dtkComposerNodeCommunicatorSendRealPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver_comm;
     dtkComposerTransmitterReceiver<double> receiver_data;
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
 
@@ -209,6 +289,7 @@ public:
 
 dtkComposerNodeCommunicatorSendReal::dtkComposerNodeCommunicatorSendReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendRealPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
 
@@ -225,10 +306,22 @@ dtkComposerNodeCommunicatorSendReal::~dtkComposerNodeCommunicatorSendReal(void)
 
 void dtkComposerNodeCommunicatorSendReal::run(void)
 {
-    double data = d->receiver_data.data();
-    d->receiver_comm.data()->send(&data, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble,d->receiver_target.data(),0 );
-}
+    if (!d->receiver_data.isEmpty() && !d->receiver_comm.isEmpty() && !d->receiver_target.isEmpty() ) {
 
+        double data = *d->receiver_data.data();
+        dtkDistributedCommunicatorMpi *communicator = d->receiver_comm.data();
+        
+        if (!communicator) {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+        
+        communicator->send(&data, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64, *d->receiver_target.data(), 0);
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+    }
+}
 
 // /////////////////////////////////////////////////////////////////
 // Send dtkAbstractData
@@ -237,14 +330,15 @@ void dtkComposerNodeCommunicatorSendReal::run(void)
 class dtkComposerNodeCommunicatorSendPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
-    dtkComposerTransmitterReceiver<dtkAbstractData *> receiver_data;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver_comm;
+    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
 
 };
 
 dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
 
@@ -261,7 +355,21 @@ dtkComposerNodeCommunicatorSend::~dtkComposerNodeCommunicatorSend(void)
 
 void dtkComposerNodeCommunicatorSend::run(void)
 {
-    d->receiver_comm.data()->send(d->receiver_data.data(), d->receiver_target.data(), 0);
+    if (!d->receiver_data.isEmpty() && !d->receiver_comm.isEmpty() && !d->receiver_target.isEmpty() ) {
+
+        dtkAbstractData *data = d->receiver_data.data();
+        dtkDistributedCommunicatorMpi *communicator = d->receiver_comm.data();
+        
+        if (!communicator) {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+
+        communicator->send(data, *d->receiver_target.data(), 0);
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -273,16 +381,21 @@ class dtkComposerNodeCommunicatorReceiveIntegerPrivate
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter;
 
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver_comm;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
 
+public:
+    qlonglong value;
 };
 
 dtkComposerNodeCommunicatorReceiveInteger::dtkComposerNodeCommunicatorReceiveInteger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceiveIntegerPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
 
+    d->value = 0;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -295,9 +408,22 @@ dtkComposerNodeCommunicatorReceiveInteger::~dtkComposerNodeCommunicatorReceiveIn
 
 void dtkComposerNodeCommunicatorReceiveInteger::run(void)
 {
-    qlonglong i;
-    d->receiver_comm.data()->receive(&i, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64,d->receiver_source.data(),0 );
-    d->emitter.setData(i);
+    if (!d->receiver_source.isEmpty() && !d->receiver_comm.isEmpty()) {
+
+        qlonglong source = *d->receiver_source.data();
+        dtkDistributedCommunicatorMpi *communicator = d->receiver_comm.data();
+
+        if (!communicator) {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+
+        communicator->receive(&(d->value), 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64, source, 0);
+
+    } else {
+        d->value = 0;
+        dtkWarn() << "Inputs not specified. Nothing is done";
+    }
 }
 
 
@@ -310,16 +436,21 @@ class dtkComposerNodeCommunicatorReceiveRealPrivate
 public:
     dtkComposerTransmitterEmitter<double> emitter;
 
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver_comm;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
 
+public:
+    double value;
 };
 
 dtkComposerNodeCommunicatorReceiveReal::dtkComposerNodeCommunicatorReceiveReal(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceiveRealPrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
 
+    d->value = 0.;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -332,9 +463,22 @@ dtkComposerNodeCommunicatorReceiveReal::~dtkComposerNodeCommunicatorReceiveReal(
 
 void dtkComposerNodeCommunicatorReceiveReal::run(void)
 {
-    double data;
-    d->receiver_comm.data()->receive(&data, 1, dtkDistributedCommunicator::dtkDistributedCommunicatorDouble,d->receiver_source.data(),0 );
-    d->emitter.setData(data);
+    if (!d->receiver_source.isEmpty() && !d->receiver_comm.isEmpty()) {
+
+        qlonglong source = *d->receiver_source.data();
+        dtkDistributedCommunicatorMpi *communicator = d->receiver_comm.data();
+
+        if (!communicator) {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+
+        communicator->receive(&(d->value), 1, dtkDistributedCommunicator::dtkDistributedCommunicatorInt64, source, 0);
+
+    } else {
+        d->value = 0.;
+        dtkWarn() << "Inputs not specified. Nothing is done";
+    }
 }
 
 
@@ -345,15 +489,15 @@ void dtkComposerNodeCommunicatorReceiveReal::run(void)
 class dtkComposerNodeCommunicatorReceivePrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData *> emitter;
+    dtkComposerTransmitterEmitter<dtkAbstractData> emitter;
 
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi *> receiver_comm;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver_comm;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
-
 };
 
 dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceivePrivate)
 {
+    d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
 
@@ -369,8 +513,26 @@ dtkComposerNodeCommunicatorReceive::~dtkComposerNodeCommunicatorReceive(void)
 
 void dtkComposerNodeCommunicatorReceive::run(void)
 {
-    dtkAbstractData *data = NULL;
-    d->receiver_comm.data()->receive(data, d->receiver_source.data(), 0);
-    d->emitter.setData(data);
+    if (!d->receiver_source.isEmpty() && !d->receiver_comm.isEmpty()) {
+
+        qlonglong source = *d->receiver_source.data();
+        dtkDistributedCommunicatorMpi *communicator = d->receiver_comm.data();
+
+        if (!communicator) {
+            dtkError() << "Input communicator not valid.";
+            return;
+        }
+
+        dtkAbstractData *data = NULL;
+        communicator->receive(data, source, 0); 
+        if (data)
+            d->emitter.setData(data);
+        else
+            d->emitter.clearData();
+
+    } else {
+        d->emitter.clearData();
+        dtkWarn() << "Inputs not specified. Nothing is done";
+    }
 }
 

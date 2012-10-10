@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:09:27 2012 (+0200)
- *           By: tkloczko
- *     Update #: 38
+ * Last-Updated: Wed Oct 10 12:05:46 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -31,13 +31,13 @@
 template <class T = double> class dtkVector : public dtkMatrix<T>
 {
 public:
-     dtkVector(void): dtkMatrix<T>() {};
-     dtkVector(unsigned crowInit): dtkMatrix<T>(crowInit, 1) {};
-     dtkVector(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
-     dtkVector(const dtkVector& vec): dtkMatrix<T>(vec) {};
-     dtkVector(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
-     dtkVector(const dtkVector&, unsigned, unsigned);
-    ~dtkVector(void) {};
+             dtkVector(void): dtkMatrix<T>() {};
+             dtkVector(unsigned crowInit): dtkMatrix<T>(crowInit, 1) {};
+             dtkVector(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
+             dtkVector(const dtkVector& vec): dtkMatrix<T>(vec) {};
+             dtkVector(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
+             dtkVector(const dtkVector&, unsigned, unsigned);
+    virtual ~dtkVector(void) {};
 
 public:
     QString identifier(void) const;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct  4 12:56:55 2012 (+0200)
- *           By: tkloczko
- *     Update #: 193
+ * Last-Updated: Wed Oct 10 12:05:00 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 194
  */
 
 /* Commentary: 
@@ -61,11 +61,11 @@ public:
     typedef T element;
     
 public:
-     dtkMatrix(void);
-     dtkMatrix(unsigned, unsigned);
-     dtkMatrix(const dtkMatrix &);
-     dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
-    ~dtkMatrix(void);
+             dtkMatrix(void);
+             dtkMatrix(unsigned, unsigned);
+             dtkMatrix(const dtkMatrix &);
+             dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
+    virtual ~dtkMatrix(void);
 
 private:
     void initialize(void);

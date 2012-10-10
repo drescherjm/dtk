@@ -76,6 +76,8 @@ public:
     
 public:
     virtual void setBackgroundColor(const QColor& color);
+    virtual QColor BackgroundColor() const;
+
     
 public:
     dtkPlotView& operator<<(dtkPlotCurve *curve);

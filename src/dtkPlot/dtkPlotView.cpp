@@ -169,6 +169,11 @@ void dtkPlotView::setBackgroundColor(const QColor& color)
     d->setCanvasBackground(color);
 }
 
+QColor dtkPlotView::BackgroundColor() const
+{
+    return d->canvasBackground().color();
+}
+
 void dtkPlotView::setStyleSheet(const QString& sheet)
 {
     d->setStyleSheet(sheet);

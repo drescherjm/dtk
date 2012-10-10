@@ -1,12 +1,7 @@
 /* dtkComposerNodeVectorRealExtractor.cpp ---
  *
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Sep 20 14:56:11 2012 (+0200)
- *           By: tkloczko
- *     Update #: 83
  */
 
 /* Commentary:
@@ -118,3 +113,126 @@ void dtkComposerNodeVectorRealExtractor::run(void)
         d->value = 0;
     }        
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealExtractorSubVectorPrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeVectorRealExtractorSubVectorPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<dtkVector<qreal> > receiver_vector;
+    dtkComposerTransmitterReceiver<qlonglong>         receiver_from;
+    dtkComposerTransmitterReceiver<qlonglong>         receiver_length;
+
+public:
+    dtkComposerTransmitterEmitter<dtkVector<qreal> > emitter_subvector;
+
+public:
+    dtkVector<qreal> *subvector;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealExtractorSubVector implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeVectorRealExtractorSubVector::dtkComposerNodeVectorRealExtractorSubVector(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealExtractorSubVectorPrivate)
+{
+    this->appendReceiver(&d->receiver_vector);
+    this->appendReceiver(&d->receiver_from);
+    this->appendReceiver(&d->receiver_length);
+
+    d->subvector = new dtkVectorReal();
+    d->emitter_subvector.setData(d->subvector);
+    this->appendEmitter(&d->emitter_subvector);
+
+}
+
+dtkComposerNodeVectorRealExtractorSubVector::~dtkComposerNodeVectorRealExtractorSubVector(void)
+{
+    if (d->subvector)
+        delete d->subvector;
+    d->subvector = NULL;
+
+    delete d;
+    
+    d = NULL;
+}
+
+QString dtkComposerNodeVectorRealExtractorSubVector::inputLabelHint(int port)
+{
+    switch(port) {
+    case 0:
+        return "vector";
+        break;
+    case 1:
+        return "from";
+        break;
+        break;
+    case 2:
+        return "length";
+        break;
+    default:
+        break;
+    }
+
+    return "input";
+}
+
+QString dtkComposerNodeVectorRealExtractorSubVector::outputLabelHint(int port)
+{
+    switch(port) {
+    case 0:
+        return "subvector";
+        break;
+    default:
+        break;
+    }
+
+    return "output";
+}
+
+void dtkComposerNodeVectorRealExtractorSubVector::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_from.isEmpty()) {
+
+        dtkVectorReal *vector = d->receiver_vector.data();
+
+        if (!vector) {
+            dtkError() << DTK_PRETTY_FUNCTION << "Input vector is not defined.";
+            d->emitter_subvector.clearData();
+            return;
+        }
+
+        qlonglong from = *d->receiver_from.data();
+        if (from >= vector->size()) {
+            dtkWarn() << DTK_PRETTY_FUNCTION << "Starting value from is greater than vector size:" << from << ">=" << vector->size();
+            d->emitter_subvector.clearData();
+            return;
+        }
+
+        qlonglong length = vector->size();
+        if (!d->receiver_length.isEmpty())
+            length = *d->receiver_length.data();
+
+        if (length < 0) {
+            dtkWarn() << DTK_PRETTY_FUNCTION << "Length value is negative:" << length << "<" << 0;
+            d->emitter_subvector.clearData();
+            return;
+        }
+
+        qlonglong to = qMin((from + length), static_cast<qlonglong>(vector->size()));
+        qlonglong size = to - from;
+        
+        if (d->subvector->size() != size)
+            d->subvector->allocate(size);
+        
+        for(qlonglong i = from, count = 0; i < to; ++i, ++count)
+            (*d->subvector)[count] = (*vector)[i];
+
+    } else {
+        dtkWarn() << DTK_PRETTY_FUNCTION << "Inputs not specified. Nothing is done";
+        d->emitter_subvector.clearData();
+    }
+}
+

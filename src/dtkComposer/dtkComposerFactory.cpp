@@ -585,6 +585,11 @@ void dtkComposerFactory::initNodeVectorReal(void)
     d->tags["Vector Real Extractor"] = QStringList() << "vector" << "real" << "extractor";
     d->types["Vector Real Extractor"] = "vector_real_extractor";
 
+    d->nodes << "Vector Real Extractor Subvector";
+    d->descriptions["Vector Real Extractor Subvector"] = "<p>Extract an item  at <i>position</i> index from the vector.</p>";
+    d->tags["Vector Real Extractor Subvector"] = QStringList() << "vector" << "real" << "extractor" << "subvector";
+    d->types["Vector Real Extractor Subvector"] = "vectorRealExtractorSubVector";
+
     d->nodes << "Vector Real Set";
     d->descriptions["Vector Real Set"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
     d->tags["Vector Real Set"] = QStringList() << "vector" << "real" << "set";
@@ -632,38 +637,48 @@ void dtkComposerFactory::initNodeVectorReal(void)
 
     d->nodes << "Vector Real Unit";
     d->descriptions["Vector Real Unit"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Unit"] = QStringList() << "vector"<<"real" << "algebraic" << "unit";
+    d->tags["Vector Real Unit"] = QStringList() << "vector" << "real" << "algebraic" << "unit";
     d->types["Vector Real Unit"] = "vectorReal_unit";
 
     d->nodes << "Vector Real Norm";
     d->descriptions["Vector Real Norm"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Norm"] = QStringList() << "vector"<<"real" << "algebraic" << "norm";
+    d->tags["Vector Real Norm"] = QStringList() << "vector" << "real" << "algebraic" << "norm";
     d->types["Vector Real Norm"] = "vectorReal_norm";
 
     d->nodes << "Vector Real Sum";
     d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Sum"] = QStringList() << "vector"<< "real" << "algebraic" << "sum";
+    d->tags["Vector Real Sum"] = QStringList() << "vector" << "real" << "algebraic" << "sum";
     d->types["Vector Real Sum"] = "vectorReal_sum";
 
     d->nodes << "Vector Real Substract";
     d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Substract"] = QStringList() << "vector"<<"real" << "algebraic" << "substraction";
+    d->tags["Vector Real Substract"] = QStringList() << "vector" << "real" << "algebraic" << "substraction";
     d->types["Vector Real Substract"] = "vectorReal_substract";
 
     d->nodes << "Vector Real Dot Prod";
     d->descriptions["Vector Real Dot Prod"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Dot Prod"] = QStringList() << "vector"<<"real" << "algebraic" << "dot product";
+    d->tags["Vector Real Dot Prod"] = QStringList() << "vector" << "real" << "algebraic" << "dot product";
     d->types["Vector Real Dot Prod"] = "vectorReal_dot_prod";
 
     d->nodes << "Vector Real Scal Mult";
     d->descriptions["Vector Real Scal Mult"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Scal Mult"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar multiplication";
+    d->tags["Vector Real Scal Mult"] = QStringList() << "vector" << "real" << "algebraic" << "scalar multiplication";
     d->types["Vector Real Scal Mult"] = "vectorReal_scal_mult";
 
     d->nodes << "Vector Real Scal Division";
     d->descriptions["Vector Real Scal Division"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Scal Division"] = QStringList() << "vector"<<"real" << "algebraic" << "scalar division";
+    d->tags["Vector Real Scal Division"] = QStringList() << "vector" << "real" << "algebraic" << "scalar division";
     d->types["Vector Real Scal Division"] = "vectorReal_scal_divide";
+
+    d->nodes << "Vector Real Sum Subvector";
+    d->descriptions["Vector Real Sum Subvector"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Sum Subvector"] = QStringList() << "vector" << "real" << "algebraic" << "sum" << "subvector";
+    d->types["Vector Real Sum Subvector"] = "vectorRealOperatorModifierPartSum";
+
+    d->nodes << "Vector Real Substract Subvector";
+    d->descriptions["Vector Real Substract Subvector"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Real Substract Subvector"] = QStringList() << "vector" << "real" << "algebraic" << "substract" << "subvector";
+    d->types["Vector Real Substract Subvector"] = "vectorRealOperatorModifierPartSubstract";
 }
 
 void dtkComposerFactory::initNodeMatrixSquareReal(void)
@@ -1116,6 +1131,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "vector_real_extractor")
         return new dtkComposerNodeVectorRealExtractor;
 
+    if(type == "vectorRealExtractorSubVector")
+        return new dtkComposerNodeVectorRealExtractorSubVector;
+
     if(type == "vector_real_set")
         return new dtkComposerNodeVectorRealOperatorModifierSet;
 
@@ -1163,6 +1181,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "vectorReal_scal_divide")
         return new dtkComposerNodeVectorRealOperatorHomotheticDivision;
+
+    if(type == "vectorRealOperatorModifierPartSum")
+        return new dtkComposerNodeVectorRealOperatorModifierPartSum;
+
+    if(type == "vectorRealOperatorModifierPartSubstract")
+        return new dtkComposerNodeVectorRealOperatorModifierPartSubstract;
 
     // Array nodes
 

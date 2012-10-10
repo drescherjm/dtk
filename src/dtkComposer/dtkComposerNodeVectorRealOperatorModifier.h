@@ -22,7 +22,7 @@ class dtkComposerNodeVectorRealOperatorModifierPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifier : public dtkComposerNodeLeaf
 {
 public:
-    dtkComposerNodeVectorRealOperatorModifier(void);
+     dtkComposerNodeVectorRealOperatorModifier(void);
     ~dtkComposerNodeVectorRealOperatorModifier(void);
 
 public:
@@ -49,11 +49,11 @@ protected:
 
 class dtkComposerNodeVectorRealOperatorModifierAllPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAll  : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierAll : public dtkComposerNodeLeaf
 {
 public:
-    dtkComposerNodeVectorRealOperatorModifierAll(void);
-    ~dtkComposerNodeVectorRealOperatorModifierAll (void);
+     dtkComposerNodeVectorRealOperatorModifierAll(void);
+    ~dtkComposerNodeVectorRealOperatorModifierAll(void);
 
     inline QString inputLabelHint(int port) {
         if (port == 0)
@@ -68,6 +68,35 @@ public:
 
 protected:
     dtkComposerNodeVectorRealOperatorModifierAllPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierPart interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeVectorRealOperatorModifierPartPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierPart : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeVectorRealOperatorModifierPart(void);
+    ~dtkComposerNodeVectorRealOperatorModifierPart(void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "vector";
+        else if (port == 1)
+            return "subvector";
+        else
+            return "index";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "vector";
+    }
+
+protected:
+    dtkComposerNodeVectorRealOperatorModifierPartPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -238,6 +267,44 @@ public:
 
     inline QString titleHint(void) {
         return "Vector Real Divide All";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierPart - Sum
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierPartSum: public dtkComposerNodeVectorRealOperatorModifierPart
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vectorRealOperatorModifierPartSum";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector Real : Sum SubVector";
+    }
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierPart - Substract
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorModifierPartSubstract: public dtkComposerNodeVectorRealOperatorModifierPart
+{
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vectorRealOperatorModifierPartSubstract";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector Real : Substract SubVector";
     }
 };
 

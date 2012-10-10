@@ -30,6 +30,7 @@ set(QT_USE_QTTEST        TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTTEST        TRUE)
 set(QT_USE_QTDECLARATIVE TRUE)
+set(QT_USE_GUI           TRUE)
 
 if(WIN32)
   set(QT_USE_QTMAIN TRUE)

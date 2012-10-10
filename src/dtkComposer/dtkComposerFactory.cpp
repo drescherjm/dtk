@@ -4,9 +4,6 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:32
  * Version: $Id$
- * Last-Updated: Tue Sep 25 10:27:37 2012 (+0200)
- *           By: tkloczko
- *     Update #: 800
  */
 
 /* Commentary:
@@ -584,24 +581,24 @@ void dtkComposerFactory::initNodeVectorReal(void)
     d->types["Vector Real"] = "vector_real";
 
     d->nodes << "Vector Real Extractor";
-    d->descriptions["Vector Real Extractor"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Vector Real Extractor"] = "<p>Extract an item  at <i>position</i> index from the vector.</p>";
     d->tags["Vector Real Extractor"] = QStringList() << "vector" << "real" << "extractor";
     d->types["Vector Real Extractor"] = "vector_real_extractor";
 
     d->nodes << "Vector Real Set";
-    d->descriptions["Vector Real Set"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Vector Real Set"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
     d->tags["Vector Real Set"] = QStringList() << "vector" << "real" << "set";
-    d->types["Vector Real Set"] = "vector_real_set";
+    d->types["Vector Real Set Item"] = "vector_real_set";
 
-    d->nodes << "Vector Real Sum";
-    d->descriptions["Vector Real Sum"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Sum"] = QStringList() << "vector" << "real" << "sum";
-    d->types["Vector Real Sum"] = "vector_real_sum";
+    d->nodes << "Vector Real Sum Item";
+    d->descriptions["Vector Real Sum Item"] = "<p>Add <i>value</i> to the item at the given <i>index</i> in vector</p>";
+    d->tags["Vector Real Sum Item"] = QStringList() << "vector" << "real" << "sum";
+    d->types["Vector Real Sum Item"] = "vector_real_sum";
 
-    d->nodes << "Vector Real Substract";
-    d->descriptions["Vector Real Substract"] = "<p>Description not yet filled!</p>";
-    d->tags["Vector Real Substract"] = QStringList() << "vector" << "real" << "substract";
-    d->types["Vector Real Substract"] = "vector_real_substract";
+    d->nodes << "Vector Real Substract Item";
+    d->descriptions["Vector Real Substract Item"] = "<p>Substract <i>value</i> to the item at the given <i>index</i> in vector</p>";
+    d->tags["Vector Real Substract Item"] = QStringList() << "vector" << "real" << "substract";
+    d->types["Vector Real Substract Item"] = "vector_real_substract";
 
     d->nodes << "Vector Real Mult";
     d->descriptions["Vector Real Mult"] = "<p>Description not yet filled!</p>";

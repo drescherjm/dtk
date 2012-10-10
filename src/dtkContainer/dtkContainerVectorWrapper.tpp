@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:51:14 2012 (+0200)
- *           By: tkloczko
- *     Update #: 56
+ * Last-Updated: Wed Oct 10 12:16:07 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -54,12 +54,12 @@ template <typename T> dtkContainerVectorWrapper<T>& dtkContainerVectorWrapper<T>
     return *this;
 };
 
-template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::clone(void) const
+template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::clone(void)
 {
     return new dtkContainerVectorWrapper<T>(*this);
 };
 
-template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::voidClone(void) const
+template <typename T> dtkContainerVectorWrapper<T> *dtkContainerVectorWrapper<T>::voidClone(void)
 {
     // hack
     dtkContainerVector<T> *vec = new dtkContainerVector<T>();
@@ -164,10 +164,18 @@ template <typename T> inline bool dtkContainerVectorWrapper<T>::operator == (con
     return (*m_vector == *other.m_vector);
 };
 
-template <typename T> inline bool dtkContainerVectorWrapper<T>::isEqual(const dtkAbstractContainerWrapper& other) const
+template <typename T> inline bool dtkContainerVectorWrapper<T>::isEqual(const dtkAbstractObject& other) const
 {
-    if (other.type() == Vector) {
-        if (const dtkContainerVectorWrapper<T> *other_v = dynamic_cast<const dtkContainerVectorWrapper<T> *>(&other)) {
+    if (this == &other)
+        return true;
+
+    if (this->identifier() != other.identifier())
+        return false;
+
+    const dtkAbstractContainerWrapper& wrapper = reinterpret_cast<const dtkAbstractContainerWrapper&>(other);
+
+    if (wrapper.type() == Vector) {
+        if (const dtkContainerVectorWrapper<T> *other_v = dynamic_cast<const dtkContainerVectorWrapper<T> *>(&wrapper)) {
             return (*m_vector == *other_v->m_vector);
         }
     }

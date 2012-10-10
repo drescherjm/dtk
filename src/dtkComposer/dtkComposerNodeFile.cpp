@@ -1,7 +1,6 @@
 /* dtkComposerNodeFile.cpp --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Author: Julien Wintz, INRIA
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  */
 

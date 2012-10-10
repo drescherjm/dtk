@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:15:57 2012 (+0200)
- *           By: tkloczko
- *     Update #: 40
+ * Last-Updated: Wed Oct 10 12:10:56 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -59,9 +59,9 @@ public:
     dtkAbstractContainerWrapper& operator = (const dtkAbstractContainerWrapper& other);
 
 public:
-    virtual dtkAbstractContainerWrapper *clone(void) const;
+    virtual dtkAbstractContainerWrapper *clone(void);
 
-    virtual dtkAbstractContainerWrapper *voidClone(void) const;
+    virtual dtkAbstractContainerWrapper *voidClone(void);
 
 public:
     dtkAbstractContainerWrapper *container(void);
@@ -110,7 +110,7 @@ public:
     bool operator == (const dtkAbstractContainerWrapper& other) const;
 
 public:
-    virtual bool isEqual(const dtkAbstractContainerWrapper& other) const;
+    virtual bool isEqual(const dtkAbstractObject& other) const;
 
 private:
     dtkAbstractContainerWrapper *m_container;

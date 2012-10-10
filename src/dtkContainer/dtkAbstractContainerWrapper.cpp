@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 10:26:11 2012 (+0200)
- *           By: tkloczko
- *     Update #: 47
+ * Last-Updated: Wed Oct 10 12:19:01 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@ dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(void) : dtkAbstractData
 
 dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(const dtkAbstractContainerWrapper& other) : dtkAbstractData(other)
 {
-    m_container = other.clone();
+    m_container = const_cast<dtkAbstractContainerWrapper&>(other).clone();
 }
 
 dtkAbstractContainerWrapper::~dtkAbstractContainerWrapper(void)
@@ -73,12 +73,12 @@ dtkAbstractContainerWrapper& dtkAbstractContainerWrapper::operator=(const dtkAbs
     if (m_container && (m_container != this))
         delete m_container;
 
-    m_container = other.clone();
+    m_container = const_cast<dtkAbstractContainerWrapper&>(other).clone();
 
     return *this;
 }
 
-dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void) const
+dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void)
 {
     if (m_container)
         return m_container->clone();
@@ -86,7 +86,7 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void) const
     return NULL;
 }
 
-dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void) const
+dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void)
 {
     if (m_container)
         return m_container->voidClone();
@@ -231,7 +231,7 @@ bool dtkAbstractContainerWrapper::operator == (const dtkAbstractContainerWrapper
     return false;
 }
 
-bool dtkAbstractContainerWrapper::isEqual(const dtkAbstractContainerWrapper& other) const
+bool dtkAbstractContainerWrapper::isEqual(const dtkAbstractObject& other) const
 {
     if (m_container)
         return m_container->isEqual(other);

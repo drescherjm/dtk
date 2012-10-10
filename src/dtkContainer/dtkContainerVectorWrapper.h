@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 15:01:25 2012 (+0200)
- *           By: tkloczko
- *     Update #: 20
+ * Last-Updated: Wed Oct 10 12:11:45 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -44,9 +44,9 @@ public:
     dtkContainerVectorWrapper<T>& operator = (const dtkContainerVectorWrapper<T>& other);
 
 public:
-    dtkContainerVectorWrapper<T> *clone(void) const;
+    dtkContainerVectorWrapper<T> *clone(void);
 
-    dtkContainerVectorWrapper<T> *voidClone(void) const;
+    dtkContainerVectorWrapper<T> *voidClone(void);
 
 public:
     QString  identifier(void) const;
@@ -87,7 +87,7 @@ public:
     bool operator == (const dtkContainerVectorWrapper<T>& other) const;
 
 public:
-    bool isEqual(const dtkAbstractContainerWrapper& other) const;    
+    bool isEqual(const dtkAbstractObject& other) const;    
 
 private:
     dtkContainerVector<T> *m_vector;

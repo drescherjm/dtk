@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Mon Sep 24 14:07:56 2012 (+0200)
-##           By: tkloczko
-##     Update #: 620
+## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
+##           By: Thibaud Kloczko, Inria.
+##     Update #: 623
 ######################################################################
 ##
 ### Commentary:
@@ -111,6 +111,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerStackView.h
   dtkComposerTransmitter.h
   dtkComposerTransmitter_p.h
+  dtkComposerTransmitterAbstractEmitter.h
+  dtkComposerTransmitterAbstractReceiver.h
   dtkComposerTransmitterEmitter.h
   dtkComposerTransmitterEmitter.tpp
   dtkComposerTransmitterProxy.h
@@ -230,6 +232,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
+  dtkComposerTransmitterAbstractEmitter.cpp
+  dtkComposerTransmitterAbstractReceiver.cpp
   dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterVariant.cpp

@@ -16,11 +16,7 @@
 #define DTKCOMPOSERTRANSMITTERRECEIVER_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerTransmitter.h"
-
-#include <dtkCore/dtkGlobal>
-
-#include <dtkContainer/dtkContainerVector.h>
+#include "dtkComposerTransmitterAbstractReceiver.h"
 
 #include <QtCore>
 
@@ -32,7 +28,7 @@ class dtkComposerTransmitterVariant;
 // dtkComposerTransmitterReceiver interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterReceiver : public dtkComposerTransmitter
+template <typename T> class dtkComposerTransmitterReceiver : public dtkComposerTransmitterAbstractReceiver
 {
 public:
      dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
@@ -57,12 +53,6 @@ public:
     QVector<T*> allData(void);
 
 public:
-    virtual int dataType(void);
-
-    virtual QString  dataIdentifier(void);
-    virtual QString dataDescription(void);
-
-public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
@@ -81,9 +71,6 @@ public:
     bool    connect(dtkComposerTransmitter *transmitter);
     bool disconnect(dtkComposerTransmitter *transmitter);
 
-public:
-    LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
-
 private:
     QList<dtkComposerTransmitterEmitter<T> *> emitters;
     QList<dtkComposerTransmitterVariant *>    variants;
@@ -94,15 +81,21 @@ private:
 
 private:
     T *m_data;
+
+    using dtkComposerTransmitterAbstractReceiver::d;
 };
+
+// /////////////////////////////////////////////////////////////////
+
+#include <dtkContainer/dtkContainerVector.h>
+
+template <typename T> class dtkComposerTransmitterEmitterVector;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitterVector;
-
-template <typename T> class dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterReceiver<T>
+template <typename T> class dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterAbstractReceiver
 {
 public:
      dtkComposerTransmitterReceiverVector(dtkComposerNode *parent = 0);
@@ -125,12 +118,6 @@ public:
     QVariant& variant(void);
 
 public:
-    int dataType(void);
-
-    QString  dataIdentifier(void);
-    QString dataDescription(void);
-
-public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
@@ -139,6 +126,11 @@ public:
 
 public:
     bool isEmpty(void) const;
+
+public:
+    Kind kind(void) const;
+
+    QString kindName(void) const;
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
@@ -155,7 +147,7 @@ private:
 private:
     dtkContainerVector<T> *m_vector;
 
-    using dtkComposerTransmitterReceiver<T>::d;
+    using dtkComposerTransmitterAbstractReceiver::d;
 };
 
 // /////////////////////////////////////////////////////////////////

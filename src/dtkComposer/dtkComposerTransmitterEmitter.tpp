@@ -41,7 +41,7 @@ template <> DTKCOMPOSER_EXPORT QString      dtkComposerTransmitterEmitter<bool>:
 /*! 
  *  
  */
-template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
+template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterAbstractEmitter(parent)
 {
     m_data = NULL;
     d->data_type = qMetaTypeId<T>(m_data);
@@ -132,15 +132,6 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(
     return address;
 };
 
-//! Returns the data as a modifiable reference.
-/*! 
- *  
- */
-template <typename T> inline bool dtkComposerTransmitterEmitter<T>::enableCopy(void)
-{
-    return (d->receivers.count() > 1);
-};
-
 //! Returns.
 /*! 
  *  
@@ -155,25 +146,14 @@ template <typename T> inline QString dtkComposerTransmitterEmitter<T>::kindName(
     return "Emitter";
 };
 
-template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitter<T>::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
-{
-    DTK_UNUSED(transmitter);
-
-    LinkMap link_map;
-    foreach(dtkComposerTransmitterLink *l, list)
-        link_map.insert(this, l);
-
-    return link_map;
-};
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitterVector implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> inline dtkComposerTransmitterEmitterVector<T>::dtkComposerTransmitterEmitterVector(dtkComposerNode *parent) : dtkComposerTransmitterEmitter<T>(parent)
+template <typename T> inline dtkComposerTransmitterEmitterVector<T>::dtkComposerTransmitterEmitterVector(dtkComposerNode *parent) : dtkComposerTransmitterAbstractEmitter(parent)
 {
+    m_vector = NULL;
     d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
-
     d->variant.setValue(d->container);
 };
 
@@ -238,23 +218,6 @@ template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataIdenti
 template <typename T> QString dtkComposerTransmitterEmitterVector<T>::dataDescription(void)
 {
     return m_vector->description();
-};
-
-//! Returns true when the emitter is connected to more than one
-//! receiver.
-/*! 
- *  When several receivers are connected to the emitter, some nodes
- *  receiving the data can modify it while others only read
- *  it. According to the order of such operations, the data can be
- *  modified before it is read leading to unexpected behaviors.
- *
- *  To circumvent this issue, the emitter informs the receivers that
- *  they must copy the data if they modify it ensuring that the
- *  original data is not corrupted for the other nodes.
- */
-template <typename T> inline bool dtkComposerTransmitterEmitterVector<T>::enableCopy(void)
-{
-    return (d->receivers.count() > 1);
 };
 
 #endif

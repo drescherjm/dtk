@@ -16,17 +16,16 @@
 #define DTKCOMPOSERTRANSMITTEREMITTER_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterAbstractEmitter.h"
 
 #include <dtkCore/dtkGlobal>
-
 #include <dtkContainer/dtkContainerVector.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitter
+template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitterAbstractEmitter
 {
 public:
      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
@@ -53,25 +52,21 @@ public:
     virtual QString dataDescription(void);
 
 public:
-    virtual bool enableCopy(void);
-
-public:
     virtual Kind kind(void) const;
 
     virtual QString kindName(void) const;
 
-public:
-    LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
-
 private:
     T *m_data;
+
+    using dtkComposerTransmitterAbstractEmitter::d;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitterVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
+template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterAbstractEmitter
 {
 public:
      dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
@@ -95,9 +90,6 @@ public:
     QString dataDescription(void);
 
 public:
-    bool enableCopy(void);
-
-public:
     dtkComposerTransmitter::Kind kind(void) const;
 
     QString kindName(void) const;
@@ -105,7 +97,7 @@ public:
 private:
     dtkContainerVector<T> *m_vector;
 
-    using dtkComposerTransmitterEmitter<T>::d;
+    using dtkComposerTransmitterAbstractEmitter::d;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -77,10 +77,10 @@ public:
     virtual dtkAbstractContainerWrapper *container(void);
 
 public:
-    virtual int dataType(void) = 0;
+    virtual int dataType(void);
 
-    virtual QString  dataIdentifier(void) = 0;
-    virtual QString dataDescription(void) = 0;
+    virtual QString  dataIdentifier(void);
+    virtual QString dataDescription(void);
 
 public:
     void setParentNode(dtkComposerNode *parent);

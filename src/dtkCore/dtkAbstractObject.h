@@ -23,6 +23,8 @@
 #include "dtkCoreExport.h"
 #include "dtkGlobal.h"
 
+#include <typeinfo>
+
 class dtkAbstractObjectPrivate;
 
 class DTKCORE_EXPORT dtkAbstractObject : public QObject

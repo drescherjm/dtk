@@ -108,11 +108,20 @@ void %ClassName%::copy(const dtkAbstractView& other)
 
     if (this->identifier() == other.identifier()) {
 
-        const %ClassName%& data = reinterpret_cast<const %ClassName%&>(other);
+        const %ClassName%& view = reinterpret_cast<const %ClassName%&>(other);
 
         DTK_D(%ClassName%);
 
     } else {
         dtkWarn() << "Other is not of same type than this, slicing is occuring.";
     }
+}
+
+//! Returns Class name.
+/*!
+ *
+ */
+QString %ClassName%::identifier(void) const
+{
+    return "%ClassName%";
 }

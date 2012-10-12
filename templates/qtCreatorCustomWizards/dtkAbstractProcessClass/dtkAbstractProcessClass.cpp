@@ -14,15 +14,15 @@
 #include "%ClassName%.h"
 #include "%ClassName%_p.h"
 
+#include <dtkLog/dtkLog.h>
+
 // /////////////////////////////////////////////////////////////////
 // %ClassName% implementation
 // /////////////////////////////////////////////////////////////////
 
 %ClassName%::%ClassName%(void) : dtkAbstractProcess(*new %ClassName%Private(this), 0)
 {
-    DTK_D(%ClassName%);
-
-    d->numberOfChannels = 0;
+    // DTK_D(%ClassName%);
 }
 
 %ClassName%::%ClassName%(const %ClassName%& other) : dtkAbstractProcess(*new %ClassName%Private(*other.d_func()), other)
@@ -108,11 +108,20 @@ void %ClassName%::copy(const dtkAbstractProcess& other)
 
     if (this->identifier() == other.identifier()) {
 
-        const %ClassName%& data = reinterpret_cast<const %ClassName%&>(other);
+        const %ClassName%& process = reinterpret_cast<const %ClassName%&>(other);
 
         DTK_D(%ClassName%);
 
     } else {
         dtkWarn() << "Other is not of same type than this, slicing is occuring.";
     }
+}
+
+//! Returns Class name.
+/*!
+ *
+ */
+QString %ClassName%::identifier(void) const
+{
+    return "%ClassName%";
 }

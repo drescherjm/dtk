@@ -14,15 +14,15 @@
 #include "%ClassName%.h"
 #include "%ClassName%_p.h"
 
+#include <dtkLog/dtkLog>
+
 // /////////////////////////////////////////////////////////////////
 // %ClassName% implementation
 // /////////////////////////////////////////////////////////////////
 
 %ClassName%::%ClassName%(void) : dtkAbstractData(*new %ClassName%Private(this), 0)
 {
-    DTK_D(%ClassName%);
-
-    d->numberOfChannels = 0;
+    // DTK_D(%ClassName%);
 }
 
 %ClassName%::%ClassName%(const %ClassName%& other) : dtkAbstractData(*new %ClassName%Private(*other.d_func()), other)
@@ -112,20 +112,18 @@ void %ClassName%::copy(const dtkAbstractData& other)
 
         DTK_D(%ClassName%);
 
-        d->readers       = data.d_func()->readers;
-        d->writers       = data.d_func()->writers;
-        d->converters    = data.d_func()->converters;
-        d->serializers   = data.d_func()->serializers;
-        d->deserializers = data.d_func()->deserializers;
-
-        d->path  = data.d_func()->path;
-        d->paths = data.d_func()->paths;
-
-        d->numberOfChannels = data.d_func()->numberOfChannels;
-
-        d->thumbnails = data.d_func()->thumbnails;
+        // Do the copy !!!
 
     } else {
         dtkWarn() << "Other is not of same type than this, slicing is occuring.";
     }
+}
+
+//! Returns Class name.
+/*!
+ *
+ */
+QString %ClassName%::identifier(void) const
+{
+    return "%ClassName%";
 }

@@ -34,7 +34,7 @@ public:
     virtual ~%ClassName%(void);
 
 public:
-    virtual %ClassName% *clone(void);
+    virtual %ClassName% *clone(void); // If your class is pure virtual you need to set this method to pure virtual too! 
 
 public:
     %ClassName%& operator = (const %ClassName%& other);
@@ -75,8 +75,8 @@ private:
     DTK_DECLARE_PRIVATE(%ClassName%);
 };
 
-Q_DECLARE_METATYPE(%ClassName%)
-Q_DECLARE_METATYPE(%ClassName%*)
+Q_DECLARE_METATYPE(%ClassName%)  // If your class is pure virtual, you cannot register to QMetatype.
+Q_DECLARE_METATYPE(%ClassName%*) // Hence, you need to comment theses lines.
 
 #endif
 

@@ -102,7 +102,7 @@
  *  }
  *  \endcode
  */
-void %ClassName%::copy(const dtkAbstractProcess& other)
+void %ClassName%::copy(const dtkAbstractObject& other)
 {
     dtkAbstractProcess::copy(other);
 

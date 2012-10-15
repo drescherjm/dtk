@@ -104,7 +104,7 @@
  *  }
  *  \endcode
  */
-void %ClassName%::copy(const dtkAbstractView& other)
+void %ClassName%::copy(const dtkAbstractObject& other)
 {
     dtkAbstractView::copy(other);
 

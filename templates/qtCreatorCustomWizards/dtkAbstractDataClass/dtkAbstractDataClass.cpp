@@ -102,7 +102,7 @@
  *  }
  *  \endcode
  */
-void %ClassName%::copy(const dtkAbstractData& other)
+void %ClassName%::copy(const dtkAbstractObject& other)
 {
     dtkAbstractData::copy(other);
 

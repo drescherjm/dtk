@@ -68,6 +68,86 @@
     return (*this);
 }
 
+//! Comparison operator.
+/*!
+ *  
+ */
+bool %ClassName%::operator == (const %ClassName%& other) const
+{
+    return this->isEqual(other);
+}
+
+//! Enables to make a deep comparison between all the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the comparator operator == which
+ *  delegates the comparison. When re-implementing this method into a
+ *  derived class of %ClassName%, one must called the isEqual
+ *  method of the parent to ensure the comparison through all the
+ *  attributes.
+ *
+ *  Example:
+ *  \code
+ *  class xyzData : public %ClassName%
+ *  {
+ *    ...
+ *    bool isEqual(const dtkAbstractObject& other);
+ *    ...
+ *  };
+ *
+ *  bool xyzData::isEqual(const dtkAbstractObject& other)
+ *  {
+ *     // comparison of the parent attributes
+ *     if (!%ClassName%::isEqual(other))
+ *        return false;
+ *
+ *     // comparison of the types.
+ *     if (this->identifier() != other.identifier())
+ *        return false;
+ *
+ *     // comparison of the xyzData attributes after casting of other.
+ *     ...
+ *
+ *     // comparison of parent attributes
+ *    if (!%ClassName%::isEqual(other))
+ *       return false;
+ *
+ *    return true;
+ *  }
+ *  \endcode
+ */
+bool %ClassName%::isEqual(const dtkAbstractObject& other) const
+{
+    if (this == &other)
+        return true;
+
+    if (this->identifier() != other.identifier())
+        return false;
+
+    const %ClassName%& data = reinterpret_cast<const %ClassName%&>(other);
+
+    DTK_D(const %ClassName%);
+
+    // Do the Test !!!
+
+    // if (d->readers          != data.d_func()->readers          ||
+    //     d->writers          != data.d_func()->writers          ||
+    //     d->converters       != data.d_func()->converters       ||
+    //     d->serializers      != data.d_func()->serializers      ||
+    //     d->deserializers    != data.d_func()->deserializers    ||
+    //     d->path             != data.d_func()->path             ||
+    //     d->paths            != data.d_func()->paths            ||
+    //     d->numberOfChannels != data.d_func()->numberOfChannels ||
+    //     d->thumbnails       != data.d_func()->thumbnails)
+    //    return false;
+
+    if (!dtkAbstractObject::isEqual(other))
+        return false;
+
+    return true;  
+}
+
+
 //! Enables to make a deep copy of the attributes through the class
 //! hierarchy.
 /*!

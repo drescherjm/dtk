@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Mon Sep 24 14:07:56 2012 (+0200)
-##           By: tkloczko
-##     Update #: 620
+## Last-Updated: Wed Oct 17 11:34:55 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 622
 ######################################################################
 ##
 ### Commentary:
@@ -74,6 +74,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeMatrixSquareRealExtractor.h
   dtkComposerNodeMatrixSquareRealOperatorUnary.h
   dtkComposerNodeMatrixSquareRealOperatorBinary.h
+  dtkComposerNodeMetaScalarArray.h
+  dtkComposerNodeMetaScalarArrayAppend.h
+  dtkComposerNodeMetaScalarArrayExtractor.h
+  dtkComposerNodeMetaScalarArrayReplace.h
+  dtkComposerNodeMetaVector3DArray.h
+  dtkComposerNodeMetaVector3DArrayAppend.h
+  dtkComposerNodeMetaVector3DArrayExtractor.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
@@ -194,6 +201,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeMatrixSquareRealExtractor.cpp
   dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
+  dtkComposerNodeMetaScalarArray.cpp
+  dtkComposerNodeMetaScalarArrayAppend.cpp
+  dtkComposerNodeMetaScalarArrayExtractor.cpp
+  dtkComposerNodeMetaScalarArrayReplace.cpp
+  dtkComposerNodeMetaVector3DArray.cpp
+  dtkComposerNodeMetaVector3DArrayAppend.cpp
+  dtkComposerNodeMetaVector3DArrayExtractor.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp

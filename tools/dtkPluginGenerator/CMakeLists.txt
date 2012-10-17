@@ -59,8 +59,7 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE
   ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
-  dtkGui)
+  ${QT_LIBRARIES})
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

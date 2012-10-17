@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. oct.  4 15:06:53 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 236
  */
 
 /* Commentary: 
@@ -20,6 +16,7 @@
 #include "dtkDistributedCommunicatorTcp.h"
 #include "dtkDistributedSocket.h"
 
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
@@ -146,7 +143,17 @@ void dtkDistributedCommunicatorTcp::flush(void)
 
 void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, int tag)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    QByteArray *array = data->serialize();
+    if (array) {
+        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, "unknown", target, array->size(), data->identifier(), *array);
+        d->socket->sendRequest(msg);
+        d->socket->waitForBytesWritten();
+
+        delete msg;
+    } else {
+        dtkError() << "Empty array serialized, can't send anything";
+    }
+
 }
 
 
@@ -162,6 +169,9 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
         dtkDistributedMessage *msg = d->socket->parseRequest();
         if (msg->size() > 0) {
             QByteArray array = msg->content();
+            if(!data) {
+                data = dtkAbstractDataFactory::instance()->create(msg->type());
+            }
             if (!data->deserialize(array)) {
                 dtkError() << "Deserialization failed";
             }

@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
- * Version: $Id$
- * Last-Updated: Tue Sep 25 16:08:34 2012 (+0200)
- *           By: tkloczko
- *     Update #: 105
  */
 
 /* Commentary: 
@@ -46,6 +42,102 @@ dtkDistributedCommunicator::dtkDistributedCommunicator(const dtkDistributedCommu
 dtkDistributedCommunicator& dtkDistributedCommunicator::operator = (const dtkDistributedCommunicator& other)
 {
     return *this;
+
+}
+
+void dtkDistributedCommunicator::initialize(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+bool dtkDistributedCommunicator::initialized(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+
+   return false;
+}
+
+void dtkDistributedCommunicator::uninitialize(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+int dtkDistributedCommunicator::rank(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+   return -1;
+}
+
+int dtkDistributedCommunicator::size(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+   return 0;
+}
+
+void dtkDistributedCommunicator::send(void   *data, qint64 size, DataType dataType, qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+
+void dtkDistributedCommunicator::send(dtkAbstractData *data,     qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::send(const QString& s,   qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::send(QByteArray& array,  qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(dtkAbstractData *&data, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(QString &s, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::barrier(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::broadcast(void   *data, qint64 size, DataType dataType, qint16 source)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::gather(void   *send, void   *recv, qint64 size, DataType dataType, qint16 target, bool all)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::scatter(void   *send, void   *recv, qint64 size, DataType dataType, qint16 source)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkDistributedCommunicator::send(bool *data, qint64 size, qint16 target, int tag)

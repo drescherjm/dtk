@@ -44,6 +44,9 @@ public:
     dtkComposerTransmitterReceiver<QString> jobid_receiver;
 
 public:
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator > communicator_emitter;
+
+public:
     QDomDocument composition;
     QByteArray current_hash;
     QByteArray last_sent_hash;
@@ -76,6 +79,12 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeC
 
     this->appendReceiver(&(d->jobid_receiver));
     this->setInputLabelHint("jobid", 0);
+
+    this->appendReceiver(&(d->communicator_emitter));
+    this->setInputLabelHint("communicator", 1);
+
+    this->appendEmitter(&(d->communicator_emitter));
+    this->setOutputLabelHint("communicator", 0);
 
     d->controller = NULL;
     d->slave      = NULL;
@@ -170,6 +179,7 @@ void dtkComposerNodeRemote::begin(void)
     if (d->controller) {
         if (!d->server) {
             d->server = new dtkDistributedCommunicatorTcp;
+            d->communicator_emitter.setData(d->server);
             d->server->connectToHost(d->controller->socket(d->jobid)->peerAddress().toString(),d->controller->socket(d->jobid)->peerPort());
             if (d->server->socket()->waitForConnected()) {
                 dtkDebug() << "Connected to server";
@@ -202,7 +212,7 @@ void dtkComposerNodeRemote::begin(void)
         dtkDebug() << "composition sent";
         // then send transmitters data
         int max  = dtkComposerNodeComposite::receivers().count();
-        for (int i = 1; i < max; i++) {
+        for (int i = 2; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
             QByteArray array = t->dataToByteArray();
@@ -216,9 +226,11 @@ void dtkComposerNodeRemote::begin(void)
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
         int size = d->communicator->size();
-        for (int i = 1; i < max; i++) {
+        for (int i = 2; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             if (d->communicator->rank() == 0) {
+
+                d->communicator_emitter.setData(d->slave->communicator());
 
                 if (d->slave->communicator()->socket()->bytesAvailable()) {
                     dtkDebug() << "data already available, parse" ;
@@ -260,7 +272,7 @@ void dtkComposerNodeRemote::end(void)
     if (d->controller) {
         dtkDebug() << "running node remote end statement on controller";
         int max  = this->emitters().count();
-        for (int i = 0; i < max; i++) {
+        for (int i = 1; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
 
             if (d->server->socket()->bytesAvailable()) {
@@ -287,7 +299,7 @@ void dtkComposerNodeRemote::end(void)
         int size = d->communicator->size();
         Q_UNUSED(size);
 
-        for (int i = 0; i < max; i++) {
+        for (int i = 1; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
             if (d->communicator->rank() == 0) {

@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. oct.  4 15:04:43 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 75
  */
 
 /* Commentary: 
@@ -20,6 +16,7 @@
 #ifndef DTKDISTRIBUTEDCOMMUNICATORTCP_H
 #define DTKDISTRIBUTEDCOMMUNICATORTCP_H
 
+#include "dtkDistributedExport.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedSocket.h"
 
@@ -76,5 +73,9 @@ public:
 private:
     dtkDistributedCommunicatorTcpPrivate *d;
 };
+
+
+Q_DECLARE_METATYPE(dtkDistributedCommunicatorTcp);
+Q_DECLARE_METATYPE(dtkDistributedCommunicatorTcp *);
 
 #endif

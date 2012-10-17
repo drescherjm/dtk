@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 10 16:32:09 2012 (+0200)
+ * Last-Updated: mer. oct. 17 15:19:25 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 802
+ *     Update #: 812
  */
 
 /* Commentary: 
@@ -696,17 +696,33 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     QString destin_type = destin.attribute("type");
     
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
-    if(source_type == "input")
-        edge->setSource(d->node_map.value(source_node)->inputPorts().at(source_id));
+    if (source_type == "input")
+        if (source_id >= d->node_map.value(source_node)->inputPorts().count()) {
+            delete edge;
+            return NULL;
+        } else
+            edge->setSource(d->node_map.value(source_node)->inputPorts().at(source_id));
     else
-        edge->setSource(d->node_map.value(source_node)->outputPorts().at(source_id));
-    if(destin_type == "input")
-        edge->setDestination(d->node_map.value(destin_node)->inputPorts().at(destin_id));
+        if (source_id >= d->node_map.value(source_node)->outputPorts().count()) {
+            delete edge;
+            return NULL;
+        } else
+            edge->setSource(d->node_map.value(source_node)->outputPorts().at(source_id));
+    if (destin_type == "input")
+        if (destin_id >= d->node_map.value(destin_node)->inputPorts().count()) {
+            delete edge;
+            return NULL;
+        } else
+            edge->setDestination(d->node_map.value(destin_node)->inputPorts().at(destin_id));
     else
-        edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
+        if (destin_id >= d->node_map.value(destin_node)->outputPorts().count()) {
+            delete edge;
+            return NULL;
+        } else
+            edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
-    
+
     d->node->addEdge(edge);
 
     edge->setParent(d->node);

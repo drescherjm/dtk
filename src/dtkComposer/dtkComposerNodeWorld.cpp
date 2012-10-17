@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 13:04:23
  * Version: $Id$
- * Last-Updated: Mon Sep 24 14:58:08 2012 (+0200)
- *           By: tkloczko
- *     Update #: 110
+ * Last-Updated: mer. oct. 17 15:00:20 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 111
  */
 
 /* Commentary:
@@ -36,7 +36,7 @@ class dtkComposerNodeWorldPrivate
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_rank;
     dtkComposerTransmitterEmitter<qlonglong> emitter_size;
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicatorMpi> emitter_communicator;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator> emitter_communicator;
 
 public:
     dtkDistributedCommunicatorMpi *communicator;

@@ -1553,18 +1553,6 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "communicatorInit")
         return new dtkComposerNodeCommunicatorInit;
 
-    if(type == "communicatorSendInteger")
-        return new dtkComposerNodeCommunicatorSendInteger;
-
-    if(type == "communicatorReceiveInteger")
-        return new dtkComposerNodeCommunicatorReceiveInteger;
-
-    if(type == "communicatorSendReal")
-        return new dtkComposerNodeCommunicatorSendReal;
-
-    if(type == "communicatorReceiveReal")
-        return new dtkComposerNodeCommunicatorReceiveReal;
-
     if(type == "communicatorSend")
         return new dtkComposerNodeCommunicatorSend;
 

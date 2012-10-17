@@ -141,6 +141,7 @@ void dtkDistributedCommunicatorTcp::flush(void)
     }
 }
 
+// FIXME: unused now ?
 void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, int tag)
 {
     QByteArray *array = data->serialize();
@@ -156,7 +157,7 @@ void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, i
 
 }
 
-
+// FIXME: unused now ?
 void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
     DTK_UNUSED(tag);
@@ -190,7 +191,11 @@ void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int ta
 
 void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+   dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, "unknown", target, a.size(), "qvariant", a);
+    d->socket->sendRequest(msg);
+    d->socket->waitForBytesWritten();
+
+    delete msg;
 }
 
 void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int tag)

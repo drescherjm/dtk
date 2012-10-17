@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 16:14:05 2012 (+0200)
- *           By: tkloczko
- *     Update #: 60
+ * Last-Updated: 2012 Wed Oct 10 18:13:50 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 82
  */
 
 /* Commentary:
@@ -64,7 +64,6 @@ dtkComposerNodeVectorRealOperatorModifier::~dtkComposerNodeVectorRealOperatorMod
     d = NULL;
 }
 
-
 // /////////////////////////////////////////////////////////////////
 //  dtkComposerNodeVectorRealOperatorModifierAll
 // /////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ class dtkComposerNodeVectorRealOperatorModifierAllPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
-    dtkComposerTransmitterVariant               receiver_value;
+    dtkComposerTransmitterVariant                 receiver_value;
 
 public:
     dtkComposerTransmitterEmitter<dtkVectorReal> emitter_vector;
@@ -94,6 +93,38 @@ dtkComposerNodeVectorRealOperatorModifierAll::dtkComposerNodeVectorRealOperatorM
 }
 
 dtkComposerNodeVectorRealOperatorModifierAll::~dtkComposerNodeVectorRealOperatorModifierAll(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+// /////////////////////////////////////////////////////////////////
+//  dtkComposerNodeVectorRealOperatorModifierPart
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeVectorRealOperatorModifierPartPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
+    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_subvector;
+    dtkComposerTransmitterReceiver<qlonglong>     receiver_index;
+
+public:
+    dtkComposerTransmitterEmitter<dtkVectorReal> emitter_vector;
+};
+
+
+dtkComposerNodeVectorRealOperatorModifierPart::dtkComposerNodeVectorRealOperatorModifierPart(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorModifierPartPrivate)
+{
+    this->appendReceiver(&d->receiver_vector);
+    this->appendReceiver(&d->receiver_subvector);
+    this->appendReceiver(&d->receiver_index);
+
+    this->appendEmitter(&d->emitter_vector);
+}
+
+dtkComposerNodeVectorRealOperatorModifierPart::~dtkComposerNodeVectorRealOperatorModifierPart(void)
 {
     delete d;
 
@@ -303,6 +334,7 @@ void dtkComposerNodeVectorRealOperatorModifierAllSubstract::run(void)
 
         if (!vector) {
             dtkError() << "Vector is not defined.";
+            d->emitter_vector.clearData();
             return;
         }
 
@@ -328,6 +360,12 @@ void dtkComposerNodeVectorRealOperatorModifierAllMult::run(void)
         dtkVectorReal *vector = d->receiver_vector.data();
         qreal value = *d->receiver_value.data<qreal>();
 
+        if (!vector) {
+            dtkError() << "Vector is not defined.";
+            d->emitter_vector.clearData();
+            return;
+        }
+
         for (qlonglong i = 0 ; i < vector->size(); ++i)
             (*vector)[i] *= value ;
 
@@ -352,6 +390,7 @@ void dtkComposerNodeVectorRealOperatorModifierAllDivide::run(void)
 
         if (!vector) {
             dtkError() << "Vector is not defined.";
+            d->emitter_vector.clearData();
             return;
         }
 
@@ -361,9 +400,87 @@ void dtkComposerNodeVectorRealOperatorModifierAllDivide::run(void)
         } else {
             
             for (qlonglong i = 0 ; i < vector->size(); ++i)
-                (*vector)[i] *= value ;
+                (*vector)[i] /= value ;
 
         }
+
+        d->emitter_vector.setData(vector);
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vector.clearData();
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierPart - Sum
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeVectorRealOperatorModifierPartSum::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_subvector.isEmpty()) {
+
+        dtkVectorReal *vector = d->receiver_vector.data();
+        dtkVectorReal *subvector = d->receiver_subvector.data();
+
+        if (!vector) {
+            dtkError() << DTK_PRETTY_FUNCTION << "Vector is not defined.";
+            d->emitter_vector.clearData();
+            return;
+        }
+
+        if (!subvector) {
+            dtkError() << DTK_PRETTY_FUNCTION << "Subvector is not defined.";
+            d->emitter_vector.clearData();
+            return;
+        }
+
+        qlonglong index = 0;
+
+        if (!d->receiver_index.isEmpty())
+            index = *d->receiver_index.data();
+            
+        for (qlonglong i = 0; i < subvector->size(); ++i, ++index)
+            (*vector)[index] += (*subvector)[i] ;
+
+        d->emitter_vector.setData(vector);
+
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter_vector.clearData();
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealOperatorModifierPart - Substract
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeVectorRealOperatorModifierPartSubstract::run(void)
+{
+    if (!d->receiver_vector.isEmpty() && !d->receiver_subvector.isEmpty()) {
+
+        dtkVectorReal *vector = d->receiver_vector.data();
+        dtkVectorReal *subvector = d->receiver_subvector.data();
+
+        if (!vector) {
+            dtkError() << DTK_PRETTY_FUNCTION << "Vector is not defined.";
+            d->emitter_vector.clearData();
+            return;
+        }
+
+        if (!subvector) {
+            dtkError() << DTK_PRETTY_FUNCTION << "Subvector is not defined.";
+            d->emitter_vector.clearData();
+            return;
+        }
+
+        qlonglong index = 0;
+
+        if (!d->receiver_index.isEmpty())
+            index = *d->receiver_index.data();
+            
+        for (qlonglong i = 0; i < subvector->size(); ++i, ++index)
+            (*vector)[index] -= (*subvector)[i] ;
 
         d->emitter_vector.setData(vector);
 

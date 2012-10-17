@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:17:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 16:20:54 2012 (+0200)
- *           By: tkloczko
- *     Update #: 31
+ * Last-Updated: 2012 Thu Oct 11 12:27:14 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 32
  */
 
 /* Commentary: 
@@ -34,12 +34,6 @@ class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxy : public dtkComposerTransmi
 public:
      dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterProxy(void);
-
-public:
-    int dataType(void);
-
-    QString  dataIdentifier(void);
-    QString dataDescription(void);
 
 public:
     Kind kind(void) const;

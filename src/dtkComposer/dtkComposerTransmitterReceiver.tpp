@@ -20,8 +20,6 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#include <QtCore>
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver implementation
 // /////////////////////////////////////////////////////////////////
@@ -30,7 +28,7 @@
 /*! 
  *  
  */
-template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
+template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterAbstractReceiver(parent)
 {
     m_data = NULL;
     d->data_type = qMetaTypeId<T>(m_data);
@@ -198,33 +196,6 @@ template <typename T> QVector<T*> dtkComposerTransmitterReceiver<T>::allData(voi
     }
 
     return list;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> int dtkComposerTransmitterReceiver<T>::dataType(void)
-{
-    return d->data_type;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> QString dtkComposerTransmitterReceiver<T>::dataIdentifier(void)
-{
-    return QString(QMetaType::typeName(this->dataType()));
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> QString dtkComposerTransmitterReceiver<T>::dataDescription(void)
-{
-    return QString(QMetaType::typeName(this->dataType()));
 };
 
 //! 
@@ -412,31 +383,13 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
     return ok;
 };
 
-//! 
-/*! 
- *  All links from every receiver found to \a transmitter are stored
- *  in a multi-hash table.
- *
- *  By default, an empty multi-hash is returned.
- */
-template <typename T> dtkComposerTransmitter::LinkMap dtkComposerTransmitterReceiver<T>::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
-{
-    DTK_UNUSED(transmitter);
-
-    LinkMap link_map;
-    foreach(dtkComposerTransmitterLink *l, list)
-        link_map.insert(this, l);
-
-    return link_map;
-};
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverVector implementation
 // /////////////////////////////////////////////////////////////////
 
 #include <dtkContainer/dtkContainerVectorWrapper.h>
 
-template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterReceiver<T>(parent)
+template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterAbstractReceiver(parent)
 {
     m_vector= NULL;
     d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
@@ -558,33 +511,6 @@ template <typename T> QVariant& dtkComposerTransmitterReceiverVector<T>::variant
 /*! 
  *  
  */
-template <typename T> int dtkComposerTransmitterReceiverVector<T>::dataType(void)
-{
-    return d->data_type;
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> QString dtkComposerTransmitterReceiverVector<T>::dataIdentifier(void)
-{
-    return QString(QMetaType::typeName(this->dataType()));
-};
-
-//! 
-/*! 
- *  
- */
-template <typename T> QString dtkComposerTransmitterReceiverVector<T>::dataDescription(void)
-{
-    return QString(QMetaType::typeName(this->dataType()));
-};
-
-//! 
-/*! 
- *  
- */
 template <typename T> void dtkComposerTransmitterReceiverVector<T>::activateEmitter(dtkComposerTransmitter *emitter)
 {
     active_emitter = NULL;
@@ -640,6 +566,20 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::isEmpty(void
         return true;
 
     return false;
+};
+
+//! Returns the kind of the transmitter.
+/*! 
+ *  
+ */
+template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterReceiverVector<T>::kind(void) const
+{
+    return dtkComposerTransmitter::ReceiverVector;
+};
+
+template <typename T> QString dtkComposerTransmitterReceiverVector<T>::kindName(void) const
+{
+    return "ReceiverContainer";
 };
 
 //! 

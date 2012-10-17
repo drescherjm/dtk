@@ -212,7 +212,7 @@ void dtkComposerNodeRemote::begin(void)
             delete msg;
         }
         d->server->socket()->waitForBytesWritten();
-    } else {
+    } else if (d->communicator) {
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
         int size = d->communicator->size();
@@ -250,6 +250,8 @@ void dtkComposerNodeRemote::begin(void)
                 t->setTwinned(true);
             }
         }
+    } else {
+        dtkError() << "No communicator and no controller on remote node: can't run begin node";
     }
 }
 
@@ -277,7 +279,7 @@ void dtkComposerNodeRemote::end(void)
             delete msg;
 
         }
-    } else {
+    } else if (d->communicator) {
         // running on the slave, send data and set transmitters
         dtkDebug() << "running node remote end statement on slave" << d->communicator->rank() ;
 
@@ -305,7 +307,10 @@ void dtkComposerNodeRemote::end(void)
         }
         if (d->communicator->rank() == 0)
             d->slave->communicator()->socket()->waitForBytesWritten();
+    } else {
+        dtkError() << "No communicator and no controller on remote node: can't run end node";
     }
+
 }
 
 

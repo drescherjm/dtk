@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Tue Oct  9 12:21:31 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 68
+ * Last-Updated: ven. oct. 12 11:31:29 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -19,6 +19,10 @@
 
 #ifndef DTKCOMPOSERTRANSMITTERVARIANT_P_H
 #define DTKCOMPOSERTRANSMITTERVARIANT_P_H
+
+#if defined(DTK_BUILD_PLOT)
+#include <dtkPlot/dtkPlotCurve.h>
+#endif
 
 #include <QtCore>
 
@@ -46,6 +50,7 @@ public:
   static const qlonglong dtkMatrixReal_Id       = 515;
   static const qlonglong dtkMatrixSquareReal_Id = 516;
   static const qlonglong dtkAbstractData_Id     = 517;
+  static const qlonglong dtkPlotCurve_Id        = 518;
 
 public:
     dtkComposerTransmitterVariantPrivate(void) {
@@ -72,7 +77,7 @@ public:
     bool twinned;
 
     bool already_ask;
-    
+
 public:
     bool      value_b;
     qlonglong value_i;
@@ -81,12 +86,18 @@ public:
 
 public:
     int metatypes[4];
-    
+
 public:
     QVariant m_variant;
 
 public:
     bool data_owner;
+
+#if defined(DTK_BUILD_PLOT)
+public:
+    dtkPlotCurve curve;
+#endif
+
 };
 
 #endif

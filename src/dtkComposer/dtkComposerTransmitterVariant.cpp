@@ -32,8 +32,6 @@
 
 #include <dtkMath/dtkMath.h>
 
-
-
 // /////////////////////////////////////////////////////////////////
 // Template specializations for atomic types
 // /////////////////////////////////////////////////////////////////
@@ -265,7 +263,7 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
     d->variant = source->variant();
 
     if (this != source)
-        e->data_owner = false;        
+        e->data_owner = false;
 
     dtkAbstractContainerWrapper *container = source->container();
     if (d->container != container) {
@@ -341,6 +339,19 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkMatrixSquareReal>(reinterpret_cast<dtkMatrixSquareReal*>(d->matrix));
 
+#if defined(DTK_BUILD_PLOT)
+        } else if (data_type == e->dtkPlotCurve_Id) {
+
+            qlonglong size_curve;
+            stream >> size_curve;
+            QPointF p;
+            e->curve.clear();
+            for (int i = 0; i < size_curve; ++i) {
+                stream >> p;
+                e->curve.append(p);
+            }
+            this->setData<dtkPlotCurve>(&e->curve);
+#endif
         } else if (data_type == e->dtkAbstractData_Id) {
 
             QString typeName ;
@@ -356,15 +367,15 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 
                 if (!d->object)
                     d->object = dtkAbstractDataFactory::instance()->create(typeName);
-                
+
                 if (!d->object) {
                     dtkError() << "Unable to creat data of type" << typeName;
                     return;
-                }                
-                
+                }
+
                 if (!(reinterpret_cast<dtkAbstractData*>(d->object))->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
                     dtkError() << "Deserialization failed for type" << typeName;
-                    
+
                 } else {
                     dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
                     this->setData<dtkAbstractData>(reinterpret_cast<dtkAbstractData*>(d->object));
@@ -372,9 +383,9 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;
             }
-            
+
         } else {
-            
+
             e->data_owner = false;
             dtkError() << "Deserialization not handled for type" << data_type;
         }
@@ -446,6 +457,14 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
             stream << e->dtkMatrixSquareReal_Id;
             tmp_array =  this->data<dtkMatrixSquareReal>()->serialize();
 
+#if defined(DTK_BUILD_PLOT)
+        } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
+            stream << e->dtkPlotCurve_Id;
+            QVector<QPointF> curve = this->data<dtkPlotCurve>()->data();
+            stream << (qlonglong)curve.size();
+            foreach(QPointF p, curve)
+                stream << p;
+#endif
         } else {
             dtkWarn() << "Unable to serialize the data into QByteArray.";
             data_type = 0;
@@ -573,6 +592,7 @@ QString dtkComposerTransmitterVariant::dataIdentifier(void)
 
 QString dtkComposerTransmitterVariant::dataDescription(void)
 {
+
     if (dtkAbstractObject *o = this->object())
         return o->description();
 
@@ -592,21 +612,25 @@ QString dtkComposerTransmitterVariant::dataDescription(void)
     } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) {
 
         return this->data<dtkQuaternionReal>()->description();
-        
+
     } else if (data_type == qMetaTypeId<dtkMatrixReal>(0)) {
 
         return this->data<dtkMatrixReal>()->description();
-        
+
     } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>(0)) {
 
         return this->data<dtkMatrixSquareReal>()->description();
-        
-    } else {
 
+#if defined(DTK_BUILD_PLOT)
+    } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
+
+        return this->data<dtkPlotCurve>()->description();
+#endif
+    } else {
         QString address;
         QTextStream addressStream (&address);
         addressStream << (d->variant.value<void*>());
-        
+
         return address;
 
     }

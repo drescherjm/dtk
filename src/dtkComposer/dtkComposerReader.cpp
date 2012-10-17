@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 16:32:17 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 754
+ * Last-Updated: mer. oct. 10 16:32:09 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 802
  */
 
 /* Commentary: 
@@ -168,15 +168,20 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
 
-        QMessageBox msgBox;
-        msgBox.setText("Node implementations are missing. Load anyway?");
-        msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
-        msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing.join("")));
-        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Cancel);
+        if (qApp->type() != QApplication::Tty) {
+            QMessageBox msgBox;
+            msgBox.setText("Node implementations are missing. Load anyway?");
+            msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
+            msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing.join("")));
+            msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+            msgBox.setDefaultButton(QMessageBox::Cancel);
 
-        if(msgBox.exec() == QMessageBox::Cancel)
+            if(msgBox.exec() == QMessageBox::Cancel)
+                return false;
+        } else {
+            dtkError() << "Can't load composition, mission implementation(s):" << d->missing.join("");
             return false;
+        }
     }
 
     // Clear scene if applicable
@@ -219,7 +224,11 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
-            this->readNode(nodes.at(i),paste);
+            if (!(this->readNode(nodes.at(i),paste))) {
+                d->scene->clear();
+                d->graph->clear();
+                return false;
+            }
 
     // Feeding scene with edges
 
@@ -334,7 +343,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             n = d->control->blocks().last();
         } else {
             n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
-            
+ 
             qreal x = node.toElement().attribute("x").toFloat();
             qreal y = node.toElement().attribute("y").toFloat();
             qreal w = node.toElement().attribute("w").toFloat()-4;
@@ -364,7 +373,27 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
     } else {
 
         n = new dtkComposerSceneNodeLeaf;
-        n->wrap(d->factory->create(node.toElement().attribute("type")));
+        dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
+        if (!new_node) {
+
+            if (qApp->type() != QApplication::Tty) {
+                QMessageBox msgBox;
+                msgBox.setText("Can't create core node.");
+                msgBox.setInformativeText("You are not be able to load the composition.");
+                msgBox.setDetailedText(QString("The following node is unknown:\n%1").arg(node.toElement().attribute("type")));
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+
+                msgBox.exec();
+
+            } else {
+                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+            }
+            delete n;
+            return NULL;
+        }
+
+        n->wrap(new_node);
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);
@@ -405,7 +434,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         for(int i = 0; i < blocks.count(); i++) {
             d->control = control;
-            this->readNode(blocks.at(i));
+            if (!this->readNode(blocks.at(i)))
+                return NULL;
         }
 
         d->control = control;
@@ -551,10 +581,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         for(int i = 0; i < notes.count(); i++)
             this->readNote(notes.at(i));
-        
+
         for(int i = 0; i < nodes.count(); i++)
-            this->readNode(nodes.at(i));
-        
+            if (!this->readNode(nodes.at(i)))
+                return NULL;
+
         for(int i = 0; i < edges.count(); i++)
             this->readEdge(edges.at(i));
     }

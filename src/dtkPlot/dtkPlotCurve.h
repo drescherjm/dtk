@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 10:19:04 2012 (+0200)
- *           By: tkloczko
- *     Update #: 32
+ * Last-Updated: ven. oct. 12 11:57:48 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 47
  */
 
 /* Commentary: 
@@ -44,9 +44,16 @@ public:
 public:
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
+    void clear();
+
     QColor color(void);
 
+public:
     void setData(const QVector<QPointF>& data);
+    QVector<QPointF>&  data(void);
+
+public:
+    QString description(void);
 
 signals:
     void updated(void);

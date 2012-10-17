@@ -286,6 +286,11 @@ const dtkAbstractDataFactory::dtkAbstractDataFactoryConverterPriorityMap& dtkAbs
     return d->converter_priorities;
 }
 
+QStringList dtkAbstractDataFactory::implementations(void)
+{
+    return d->interfaces.values();
+}
+
 QStringList dtkAbstractDataFactory::implementations(const QString& interface)
 {
     QStringList implementations;

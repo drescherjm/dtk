@@ -46,7 +46,9 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -83,7 +85,10 @@ bool dtkComposerReaderPrivate::check(const QDomDocument& document)
 {
     missing.clear();
 
-    QStringList implementations = dtkAbstractProcessFactory::instance()->implementations();
+    QStringList implementations;
+    implementations << dtkAbstractDataFactory::instance()->implementations();
+    implementations << dtkAbstractProcessFactory::instance()->implementations();
+    implementations << dtkAbstractViewFactory::instance()->implementations();
 
     QDomNodeList nodes = document.elementsByTagName("implementation");
 

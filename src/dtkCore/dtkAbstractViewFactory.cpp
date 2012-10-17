@@ -82,6 +82,11 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
     return view;
 }
 
+QStringList dtkAbstractViewFactory::implementations(void)
+{
+    return d->interfaces.values();
+}
+
 QStringList dtkAbstractViewFactory::implementations(const QString& interface)
 {
     QStringList implementations;

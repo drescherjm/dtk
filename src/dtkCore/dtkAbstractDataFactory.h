@@ -90,6 +90,7 @@ public:
     const dtkAbstractDataFactoryConverterPriorityMap& converterPriorities(void) const;
 
 public:
+    QStringList implementations(void);
     QStringList implementations(const QString& interface);
     QStringList interfaces(void);
 

@@ -69,6 +69,7 @@ public:
     dtkSmartPointer<dtkAbstractViewInteractor> interactorSmartPointer(const QString& type);
 
 public:
+    QStringList implementations(void);
     QStringList implementations(const QString& interface);
     QStringList interfaces(void);
 

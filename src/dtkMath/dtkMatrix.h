@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 10 12:05:00 2012 (+0200)
+ * Last-Updated: Wed Oct 17 12:37:32 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 194
+ *     Update #: 195
  */
 
 /* Commentary: 
@@ -84,9 +84,9 @@ public:
     Q_DECL_DEPRECATED unsigned getRows(void) const;
     Q_DECL_DEPRECATED unsigned getCols(void) const;
 
-    int status(void) const { return m_nMatStatus; };
-    unsigned numberOfRows(void) const { return m_crow; };
-    unsigned numberOfColumns(void) const { return m_ccol; };
+    inline int status(void) const { return m_nMatStatus; };
+    inline unsigned numberOfRows(void) const { return m_crow; };
+    inline unsigned numberOfColumns(void) const { return m_ccol; };
 
 public:
     T* operator [](unsigned irow) { return m_rgrow[irow]; };

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:18:41 2012 (+0200)
+ * Last-Updated: Mon Oct 15 12:16:33 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -74,6 +74,8 @@ public:
     void setStyleSheet(const QString& sheet);
     
 public:
+    virtual void setBackgroundColor(int red, int green, int blue);
+    virtual void setBackgroundColor(double red, double green, double blue);
     virtual void setBackgroundColor(const QColor& color);
     virtual QColor BackgroundColor() const;
 

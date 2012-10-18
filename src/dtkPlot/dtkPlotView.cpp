@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:20:50 2012 (+0200)
+ * Last-Updated: Mon Oct 15 12:17:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 128
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -162,6 +162,16 @@ void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
     
     if(scale == dtkPlotView::Logarithmic)
         d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLog10ScaleEngine);
+}
+
+void dtkPlotView::setBackgroundColor(int red, int green, int blue)
+{
+    this->setBackgroundColor(QColor(red, green, blue));
+}
+
+void dtkPlotView::setBackgroundColor(double red, double green, double blue)
+{
+    this->setBackgroundColor(QColor(red, green, blue));
 }
 
 void dtkPlotView::setBackgroundColor(const QColor& color)

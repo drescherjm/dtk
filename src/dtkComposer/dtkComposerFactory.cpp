@@ -43,6 +43,13 @@
 #include "dtkComposerNodeMatrixSquareRealExtractor.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorUnary.h"
 #include "dtkComposerNodeMatrixSquareRealOperatorBinary.h"
+#include "dtkComposerNodeMetaScalarArray.h"
+#include "dtkComposerNodeMetaScalarArrayAppend.h"
+#include "dtkComposerNodeMetaScalarArrayExtractor.h"
+#include "dtkComposerNodeMetaScalarArrayReplace.h"
+#include "dtkComposerNodeMetaVector3DArray.h"
+#include "dtkComposerNodeMetaVector3DArrayAppend.h"
+#include "dtkComposerNodeMetaVector3DArrayExtractor.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
@@ -979,6 +986,41 @@ void dtkComposerFactory::initNodeContainerData(void)
     d->descriptions["Data Array Prepend"] = "<p>Description not yet filled!</p>";
     d->tags["Data Array Prepend"] = QStringList() << "container" << "array" << "data"  << "prepend";
     d->types["Data Array Prepend"] = "array_data_prepend";
+
+    d->nodes << "Meta Scalar Array";
+    d->descriptions["Meta Scalar Array"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Scalar Array"] = QStringList() << "meta" << "scalar" << "array";
+    d->types["Meta Scalar Array"] = "meta_scalar_array";
+
+    d->nodes << "Meta Scalar Array Append";
+    d->descriptions["Meta Scalar Array Append"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Scalar Array Append"] = QStringList() << "meta" << "scalar" << "array" << "append";
+    d->types["Meta Scalar Array Append"] = "meta_scalar_array_append";
+
+    d->nodes << "Meta Scalar Array Extractor";
+    d->descriptions["Meta Scalar Array Extractor"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Scalar Array Extractor"] = QStringList() << "meta" << "scalar" << "array" << "extractor";
+    d->types["Meta Scalar Array Extractor"] = "meta_scalar_array_extractor";
+
+    d->nodes << "Meta Scalar Array Replace";
+    d->descriptions["Meta Scalar Array Replace"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Scalar Array Replace"] = QStringList() << "meta" << "scalar" << "array" << "replace";
+    d->types["Meta Scalar Array Replace"] = "meta_scalar_array_replace";
+
+    d->nodes << "Meta Vector3D Array";
+    d->descriptions["Meta Vector3D Array"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Vector3D Array"] = QStringList() << "meta" << "vector3D" << "array";
+    d->types["Meta Vector3D Array"] = "meta_vector3D_array";
+
+    d->nodes << "Meta Vector3D Array Append";
+    d->descriptions["Meta Vector3D Array Append"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Vector3D Array Append"] = QStringList() << "meta" << "vector3D" << "array" << "append";
+    d->types["Meta Vector3D Array Append"] = "meta_vector3D_array_append";
+
+    d->nodes << "Meta Vector3D Array Extractor";
+    d->descriptions["Meta Vector3D Array Extractor"] = "<p>.</p>"; // dtkReadFile(":numComposer/XXX.html");
+    d->tags["Meta Vector3D Array Extractor"] = QStringList() << "meta" << "vector3D" << "array" << "extractor";
+    d->types["Meta Vector3D Array Extractor"] = "meta_vector3D_array_extractor";
 }
 
 void dtkComposerFactory::initNodeControl(void)
@@ -1237,6 +1279,29 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "array_scalar_divide")
         return new dtkComposerNodeArrayScalarOperatorDivide;
+
+    // meta nodes
+
+    if(type == "meta_scalar_array")
+        return new dtkComposerNodeMetaScalarArray;
+
+    if(type == "meta_scalar_array_append")
+        return new dtkComposerNodeMetaScalarArrayAppend;
+
+    if(type == "meta_scalar_array_replace")
+        return new dtkComposerNodeMetaScalarArrayReplace;
+
+    if(type == "meta_scalar_array_extractor")
+        return new dtkComposerNodeMetaScalarArrayExtractor;
+
+    if(type == "meta_vector3D_array")
+        return new dtkComposerNodeMetaVector3DArray;
+
+    if(type == "meta_vector3D_array_append")
+        return new dtkComposerNodeMetaVector3DArrayAppend;
+
+    if(type == "meta_vector3D_array_extractor")
+        return new dtkComposerNodeMetaVector3DArrayExtractor;
 
     // algebraic nodes
 

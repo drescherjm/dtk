@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 17 15:19:25 2012 (+0200)
+ * Last-Updated: jeu. oct. 18 09:10:09 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 812
+ *     Update #: 820
  */
 
 /* Commentary: 
@@ -697,28 +697,24 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
     if (source_type == "input")
-        if (source_id >= d->node_map.value(source_node)->inputPorts().count()) {
-            delete edge;
-            return NULL;
-        } else
+        if (source_id >= d->node_map.value(source_node)->inputPorts().count())
+            goto handle_failure;
+        else
             edge->setSource(d->node_map.value(source_node)->inputPorts().at(source_id));
     else
-        if (source_id >= d->node_map.value(source_node)->outputPorts().count()) {
-            delete edge;
-            return NULL;
-        } else
+        if (source_id >= d->node_map.value(source_node)->outputPorts().count())
+            goto handle_failure;
+        else
             edge->setSource(d->node_map.value(source_node)->outputPorts().at(source_id));
     if (destin_type == "input")
-        if (destin_id >= d->node_map.value(destin_node)->inputPorts().count()) {
-            delete edge;
-            return NULL;
-        } else
+        if (destin_id >= d->node_map.value(destin_node)->inputPorts().count())
+            goto handle_failure;
+        else
             edge->setDestination(d->node_map.value(destin_node)->inputPorts().at(destin_id));
     else
-        if (destin_id >= d->node_map.value(destin_node)->outputPorts().count()) {
-            delete edge;
-            return NULL;
-        } else
+        if (destin_id >= d->node_map.value(destin_node)->outputPorts().count())
+            goto handle_failure;
+        else
             edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
@@ -732,4 +728,10 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     d->graph->addEdge(edge);
 
     return edge;
+
+handle_failure:
+    dtkWarn() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
+    delete edge;
+    return NULL;
+
 }

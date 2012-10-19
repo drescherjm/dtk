@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Oct 19 13:55:17 2012 (+0200)
+## Last-Updated: Fri Oct 19 15:53:39 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 332
+##     Update #: 343
 ######################################################################
 ## 
 ### Commentary: 
@@ -233,16 +233,14 @@ set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
 endif(PYTHONLIBS_FOUND)
 
-file(GLOB CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
+file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
 
-message(${CSHARP_SOURCES})
-
-foreach(CSHARP_SOURCE ${CSHARP_SOURCES})
+foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
-    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
-    COMMENT "-- Moving csharp ${CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
-endforeach(CSHARP_SOURCE ${CSHARP_SOURCES})
+    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
+    COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
+endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
 
 endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 

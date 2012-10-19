@@ -24,7 +24,7 @@
 
 #include <dtkContainer/dtkContainerVectorWrapper.h>
 
-#if defined(DTK_BUILD_PLOT)
+#if defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotCurve.h>
 #endif
 

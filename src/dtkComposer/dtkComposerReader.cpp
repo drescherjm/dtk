@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 15:32:08 2012 (+0200)
+ * Last-Updated: Thu Sep 27 16:32:17 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 710
+ *     Update #: 754
  */
 
 /* Commentary: 
@@ -46,6 +46,7 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkAbstractProcessFactory.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -73,13 +74,24 @@ public:
 
 public:
     dtkComposerSceneNodeControl *control;
+
+public:
+    QStringList missing;
 };
 
 bool dtkComposerReaderPrivate::check(const QDomDocument& document)
 {
-    Q_UNUSED(document);
+    missing.clear();
 
-    return true;
+    QStringList implementations = dtkAbstractProcessFactory::instance()->implementations();
+
+    QDomNodeList nodes = document.elementsByTagName("implementation");
+
+    for(int i = 0; i < nodes.count(); i++)
+        if(!implementations.contains(nodes.at(i).toElement().text()))
+            missing << QString("- %1\n").arg(nodes.at(i).toElement().text());
+
+    return !missing.count();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -154,8 +166,18 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
         return false;
     }
 
-    if(!d->check(document))
-        return false;
+    if(!d->check(document)) {
+
+        QMessageBox msgBox;
+        msgBox.setText("Node implementations are missing. Load anyway?");
+        msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
+        msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing.join("")));
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+
+        if(msgBox.exec() == QMessageBox::Cancel)
+            return false;
+    }
 
     // Clear scene if applicable
 

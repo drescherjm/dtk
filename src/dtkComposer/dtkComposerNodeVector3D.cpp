@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:19:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:57:58 2012 (+0200)
- *           By: tkloczko
- *     Update #: 82
+ * Last-Updated: Wed Oct 17 16:08:50 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 91
  */
 
 /* Commentary: 
@@ -76,10 +76,11 @@ dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), 
     this->appendEmitter(&d->emitter_vec);
 
     d->emitter_x.setData(&d->x);
-    this->appendEmitter(&d->emitter_x);
     d->emitter_y.setData(&d->y);
-    this->appendEmitter(&d->emitter_y);
     d->emitter_z.setData(&d->z);
+
+    this->appendEmitter(&d->emitter_x);
+    this->appendEmitter(&d->emitter_y);
     this->appendEmitter(&d->emitter_z);
 }
 
@@ -87,6 +88,7 @@ dtkComposerNodeVector3D::~dtkComposerNodeVector3D(void)
 {
     if (d->vector)
         delete d->vector;
+
     d->vector = NULL;
 
     delete d;
@@ -152,20 +154,20 @@ void dtkComposerNodeVector3D::run(void)
 
     } else {
 
-        if (!d->vector)
+        if(!d->vector)
             d->vector = new dtkVector3DReal();
 
-        if (!d->receiver_x.isEmpty())
+        if(!d->receiver_x.isEmpty())
             d->x = *d->receiver_x.data<qreal>();
         else
             d->x = 0.;
 
-        if (!d->receiver_y.isEmpty())
+        if(!d->receiver_y.isEmpty())
             d->y = *d->receiver_y.data<qreal>();
         else
             d->y = 0.;
 
-        if (!d->receiver_z.isEmpty())
+        if(!d->receiver_z.isEmpty())
             d->z = *d->receiver_z.data<qreal>();
         else
             d->z = 0.;
@@ -176,6 +178,4 @@ void dtkComposerNodeVector3D::run(void)
 
         d->emitter_vec.setData(d->vector);
     }
-
-    
 }

@@ -339,7 +339,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             this->setData<dtkMatrixSquareReal>(reinterpret_cast<dtkMatrixSquareReal*>(d->matrix));
 
-#if defined(DTK_BUILD_PLOT)
+#if defined(DTK_HAVE_PLOT)
         } else if (data_type == e->dtkPlotCurve_Id) {
 
             qlonglong size_curve;
@@ -455,7 +455,7 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
             stream << e->dtkMatrixSquareReal_Id;
             tmp_array =  this->data<dtkMatrixSquareReal>()->serialize();
 
-#if defined(DTK_BUILD_PLOT)
+#if defined(DTK_HAVE_PLOT)
         } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
             stream << e->dtkPlotCurve_Id;
             QVector<QPointF> curve = this->data<dtkPlotCurve>()->data();
@@ -619,7 +619,7 @@ QString dtkComposerTransmitterVariant::dataDescription(void)
 
         return this->data<dtkMatrixSquareReal>()->description();
 
-#if defined(DTK_BUILD_PLOT)
+#if defined(DTK_HAVE_PLOT)
     } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
 
         return this->data<dtkPlotCurve>()->description();

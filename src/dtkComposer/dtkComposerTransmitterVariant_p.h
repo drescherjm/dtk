@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 12 11:31:29 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 87
+ * Last-Updated: Fri Oct 19 16:07:22 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -20,7 +20,9 @@
 #ifndef DTKCOMPOSERTRANSMITTERVARIANT_P_H
 #define DTKCOMPOSERTRANSMITTERVARIANT_P_H
 
-#if defined(DTK_BUILD_PLOT)
+#include <dtkConfig.h>
+
+#if defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotCurve.h>
 #endif
 
@@ -93,7 +95,7 @@ public:
 public:
     bool data_owner;
 
-#if defined(DTK_BUILD_PLOT)
+#if defined(DTK_HAVE_PLOT)
 public:
     dtkPlotCurve curve;
 #endif

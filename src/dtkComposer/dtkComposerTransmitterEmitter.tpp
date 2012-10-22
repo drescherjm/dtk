@@ -24,7 +24,7 @@
 
 #include <dtkContainer/dtkContainerVectorWrapper.h>
 
-#if defined(DTK_BUILD_PLOT)
+#if defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotCurve.h>
 #endif
 
@@ -129,10 +129,10 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(
     if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
         return reinterpret_cast<dtkMatrix<qreal>*>(m_data)->description();
 
-#if defined(DTK_BUILD_PLOT)
-    if (dtkPlotCurve *curve = dynamic_cast<dtkPlotCurve*>(m_data))
-        return curve->description();
-#endif
+// #if defined(DTK_BUILD_PLOT)
+//     if (dtkPlotCurve *curve = dynamic_cast<dtkPlotCurve*>(m_data))
+//         return curve->description();
+// #endif
 
     QString address;
     QTextStream addressStream (&address);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. oct.  8 17:18:48 2012 (+0200)
+ * Last-Updated: lun. oct. 22 10:32:49 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1182
+ *     Update #: 1185
  */
 
 /* Commentary: 
@@ -1237,7 +1237,7 @@ void dtkComposerSceneNodeEditor::onBrowse(void)
     QString path = settings.value("last_open_file_node", QDir::homePath()).toString();
     settings.endGroup();
 
-    QFileDialog *dialog = new QFileDialog(this, tr("Open file"), path);
+    QFileDialog *dialog = new QFileDialog(0, tr("Open file"), path);
     dialog->setStyleSheet("background-color: none ; color: none;");
     dialog->setAcceptMode(QFileDialog::AcceptOpen);
     dialog->setFileMode(QFileDialog::AnyFile);

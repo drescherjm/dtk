@@ -67,7 +67,12 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkCont
 
 template <typename T> T *dtkComposerTransmitterVariant::data(void)
 {
-    T *data = this->variant().value<T*>();
+    T *data = NULL;
+
+    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+        data = reinterpret_cast<T*>(this->object());
+    else
+        data = this->variant().value<T*>();
 
     if (e->twinned)
         return data;

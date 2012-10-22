@@ -355,13 +355,10 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
         } else if (data_type == e->dtkAbstractData_Id) {
 
             QString typeName ;
-            dtkDebug() << "got dtkabstract data, read type name";
             stream >> typeName;
-            dtkDebug() << "type name is " << typeName;
+            dtkTrace() << "type name and size:" << typeName << array.size() ;
 
-            //qdatastream is sending the qstring length, that's why
-            //it's not 2 but 3 times a qlonglong sizeof
-            header_length=3*sizeof(data_type)+typeName.size();
+            header_length=sizeof(data_type)+sizeof(int)+2*typeName.size();
 
             if (array.size() >  header_length) {
 
@@ -379,6 +376,7 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
                 } else {
                     dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
                     this->setData<dtkAbstractData>(reinterpret_cast<dtkAbstractData*>(d->object));
+
                 }
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;
@@ -756,6 +754,7 @@ bool dtkComposerTransmitterVariant::enableCopy(void)
             e->already_ask = true;
             if (d->receivers.count() > 1)
                 return true;
+            return false;
         }
     }
 

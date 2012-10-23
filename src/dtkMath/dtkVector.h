@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 10 12:05:46 2012 (+0200)
+ * Last-Updated: Tue Oct 23 11:20:47 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -120,6 +120,11 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 #include <QtCore>
+
+typedef dtkVector<qlonglong> dtkVectorInteger;
+
+Q_DECLARE_METATYPE(dtkVectorInteger);
+Q_DECLARE_METATYPE(dtkVectorInteger *);
 
 typedef dtkVector<qreal> dtkVectorReal;
 

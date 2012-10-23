@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:37:17
  * Version: $Id$
- * Last-Updated: Thu Sep 13 14:06:14 2012 (+0200)
- *           By: tkloczko
- *     Update #: 63
+ * Last-Updated: Tue Oct 23 11:38:24 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 65
  */
 
 /* Commentary:
@@ -40,6 +40,7 @@ public:
     void initNodeNumberOperatorBinary(void);
     void initNodeBooleanOperators(void);
 
+    void initNodeVectorInteger(void);
     void initNodeVectorReal(void);
     void initNodeMatrixSquareReal(void);
 

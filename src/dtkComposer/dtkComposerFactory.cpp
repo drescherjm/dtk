@@ -62,6 +62,11 @@
 #include "dtkComposerNodeVector3DOperatorUnary.h"
 #include "dtkComposerNodeVector3DOperatorBinary.h"
 #include "dtkComposerNodeVector3DOperatorTernary.h"
+#include "dtkComposerNodeVectorInteger.h"
+#include "dtkComposerNodeVectorIntegerExtractor.h"
+#include "dtkComposerNodeVectorIntegerOperatorModifier.h"
+#include "dtkComposerNodeVectorIntegerOperatorUnary.h"
+#include "dtkComposerNodeVectorIntegerOperatorBinary.h"
 #include "dtkComposerNodeVectorReal.h"
 #include "dtkComposerNodeVectorRealExtractor.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
@@ -177,6 +182,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
     // Algebraic nodes
 
+    this->initNodeVectorInteger();
     this->initNodeVectorReal();
     this->initNodeMatrixSquareReal();
 
@@ -578,6 +584,114 @@ void dtkComposerFactory::initNodeBooleanOperators(void)
     d->descriptions["Nimp"] = "<p>Description not yet filled!</p>";
     d->tags["Nimp"] = QStringList() << "boolean" << "operator" << "binary" << "nimp";
     d->types["Nimp"] = "nimp";
+}
+
+void dtkComposerFactory::initNodeVectorInteger(void)
+{
+    d->nodes << "Vector Integer";
+    d->descriptions["Vector Integer"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer"] = QStringList() << "vector" << "integer" << "algebraic";
+    d->types["Vector Integer"] = "vector_integer";
+
+    d->nodes << "Vector Integer Extractor";
+    d->descriptions["Vector Integer Extractor"] = "<p>Extract an item  at <i>position</i> index from the vector.</p>";
+    d->tags["Vector Integer Extractor"] = QStringList() << "vector" << "integer" << "extractor";
+    d->types["Vector Integer Extractor"] = "vector_integer_extractor";
+
+    d->nodes << "Vector Integer Extractor Subvector";
+    d->descriptions["Vector Integer Extractor Subvector"] = "<p>Extract an item  at <i>position</i> index from the vector.</p>";
+    d->tags["Vector Integer Extractor Subvector"] = QStringList() << "vector" << "integer" << "extractor" << "subvector";
+    d->types["Vector Integer Extractor Subvector"] = "vectorIntegerExtractorSubVector";
+
+    d->nodes << "Vector Integer Set";
+    d->descriptions["Vector Integer Set"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
+    d->tags["Vector Integer Set"] = QStringList() << "vector" << "integer" << "set";
+    d->types["Vector Integer Set Item"] = "vector_integer_set";
+
+    d->nodes << "Vector Integer Sum Item";
+    d->descriptions["Vector Integer Sum Item"] = "<p>Add <i>value</i> to the item at the given <i>index</i> in vector</p>";
+    d->tags["Vector Integer Sum Item"] = QStringList() << "vector" << "integer" << "sum";
+    d->types["Vector Integer Sum Item"] = "vector_integer_sum";
+
+    d->nodes << "Vector Integer Substract Item";
+    d->descriptions["Vector Integer Substract Item"] = "<p>Substract <i>value</i> to the item at the given <i>index</i> in vector</p>";
+    d->tags["Vector Integer Substract Item"] = QStringList() << "vector" << "integer" << "substract";
+    d->types["Vector Integer Substract Item"] = "vector_integer_substract";
+
+    d->nodes << "Vector Integer Mult";
+    d->descriptions["Vector Integer Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Mult"] = QStringList() << "vector" << "integer" << "mult";
+    d->types["Vector Integer Mult"] = "vector_integer_mult";
+
+    d->nodes << "Vector Integer Divide";
+    d->descriptions["Vector Integer Divide"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Divide"] = QStringList() << "vector" << "integer" << "divide";
+    d->types["Vector Integer Divide"] = "vector_integer_divide";
+
+    d->nodes << "Vector Integer Add All";
+    d->descriptions["Vector Integer Add All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Add All"] = QStringList() << "vector" << "integer" << "add"<< "all";
+    d->types["Vector Integer Add All"] = "vector_integer_add_all";
+
+    d->nodes << "Vector Integer Substract All";
+    d->descriptions["Vector Integer Substract All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Substract All"] = QStringList() << "vector" << "integer" << "substract"<< "all";
+    d->types["Vector Integer Substract All"] = "vector_integer_substract_all";
+
+    d->nodes << "Vector Integer Mult All";
+    d->descriptions["Vector Integer Mult All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Mult All"] = QStringList() << "vector" << "integer" << "mult"<< "all";
+    d->types["Vector Integer Mult All"] = "vector_integer_mult_all";
+
+    d->nodes << "Vector Integer Divide All";
+    d->descriptions["Vector Integer Divide All"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Divide All"] = QStringList() << "vector" << "integer" << "divide"<< "all";
+    d->types["Vector Integer Divide All"] = "vector_integer_divide_all";
+
+    d->nodes << "Vector Integer Unit";
+    d->descriptions["Vector Integer Unit"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Unit"] = QStringList() << "vector" << "integer" << "algebraic" << "unit";
+    d->types["Vector Integer Unit"] = "vectorInteger_unit";
+
+    d->nodes << "Vector Integer Norm";
+    d->descriptions["Vector Integer Norm"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Norm"] = QStringList() << "vector" << "integer" << "algebraic" << "norm";
+    d->types["Vector Integer Norm"] = "vectorInteger_norm";
+
+    d->nodes << "Vector Integer Sum";
+    d->descriptions["Vector Integer Sum"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Sum"] = QStringList() << "vector" << "integer" << "algebraic" << "sum";
+    d->types["Vector Integer Sum"] = "vectorInteger_sum";
+
+    d->nodes << "Vector Integer Substract";
+    d->descriptions["Vector Integer Substract"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Substract"] = QStringList() << "vector" << "integer" << "algebraic" << "substraction";
+    d->types["Vector Integer Substract"] = "vectorInteger_substract";
+
+    d->nodes << "Vector Integer Dot Prod";
+    d->descriptions["Vector Integer Dot Prod"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Dot Prod"] = QStringList() << "vector" << "integer" << "algebraic" << "dot product";
+    d->types["Vector Integer Dot Prod"] = "vectorInteger_dot_prod";
+
+    d->nodes << "Vector Integer Scal Mult";
+    d->descriptions["Vector Integer Scal Mult"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Scal Mult"] = QStringList() << "vector" << "integer" << "algebraic" << "scalar multiplication";
+    d->types["Vector Integer Scal Mult"] = "vectorInteger_scal_mult";
+
+    d->nodes << "Vector Integer Scal Division";
+    d->descriptions["Vector Integer Scal Division"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Scal Division"] = QStringList() << "vector" << "integer" << "algebraic" << "scalar division";
+    d->types["Vector Integer Scal Division"] = "vectorInteger_scal_divide";
+
+    d->nodes << "Vector Integer Sum Subvector";
+    d->descriptions["Vector Integer Sum Subvector"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Sum Subvector"] = QStringList() << "vector" << "integer" << "algebraic" << "sum" << "subvector";
+    d->types["Vector Integer Sum Subvector"] = "vectorIntegerOperatorModifierPartSum";
+
+    d->nodes << "Vector Integer Substract Subvector";
+    d->descriptions["Vector Integer Substract Subvector"] = "<p>Description not yet filled!</p>";
+    d->tags["Vector Integer Substract Subvector"] = QStringList() << "vector" << "integer" << "algebraic" << "substract" << "subvector";
+    d->types["Vector Integer Substract Subvector"] = "vectorIntegerOperatorModifierPartSubstract";
 }
 
 void dtkComposerFactory::initNodeVectorReal(void)
@@ -1165,7 +1279,72 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "matrixSquare_real_ReplaceColMatrixByVector")
         return new dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector;
 
-    // Vector Real nodes
+    // Vector Integer nodes
+
+    if(type == "vector_integer" || type == "vectorInteger")
+        return new dtkComposerNodeVectorInteger;
+
+    if(type == "vector_integer_extractor")
+        return new dtkComposerNodeVectorIntegerExtractor;
+
+    if(type == "vectorIntegerExtractorSubVector")
+        return new dtkComposerNodeVectorIntegerExtractorSubVector;
+
+    if(type == "vector_integer_set")
+        return new dtkComposerNodeVectorIntegerOperatorModifierSet;
+
+    if(type == "vector_integer_sum")
+        return new dtkComposerNodeVectorIntegerOperatorModifierSum;
+
+    if(type == "vector_integer_substract")
+        return new dtkComposerNodeVectorIntegerOperatorModifierSubstract;
+
+    if(type == "vector_integer_mult")
+        return new dtkComposerNodeVectorIntegerOperatorModifierMult;
+
+    if(type == "vector_integer_divide")
+        return new dtkComposerNodeVectorIntegerOperatorModifierDivide;
+
+    if(type == "vector_integer_add_all")
+        return new dtkComposerNodeVectorIntegerOperatorModifierAllAdd;
+
+    if(type == "vector_integer_substract_all")
+        return new dtkComposerNodeVectorIntegerOperatorModifierAllSubstract;
+
+    if(type == "vector_integer_mult_all")
+        return new dtkComposerNodeVectorIntegerOperatorModifierAllMult;
+
+    if(type == "vector_integer_divide_all")
+        return new dtkComposerNodeVectorIntegerOperatorModifierAllDivide;
+
+    if(type == "vectorInteger_unit")
+        return new dtkComposerNodeVectorIntegerOperatorUnaryUnitary;
+
+    if(type == "vectorInteger_norm")
+        return new dtkComposerNodeVectorIntegerOperatorUnaryScalarNorm;
+
+    if(type == "vectorInteger_sum")
+        return new dtkComposerNodeVectorIntegerOperatorBinarySum;
+
+    if(type == "vectorInteger_substract")
+        return new dtkComposerNodeVectorIntegerOperatorBinarySubstract;
+
+    if(type == "vectorInteger_dot_prod")
+        return new dtkComposerNodeVectorIntegerOperatorBinaryScalarDotProd;
+
+    if(type == "vectorInteger_scal_mult")
+        return new dtkComposerNodeVectorIntegerOperatorHomotheticMult;
+
+    if(type == "vectorInteger_scal_divide")
+        return new dtkComposerNodeVectorIntegerOperatorHomotheticDivision;
+
+    if(type == "vectorIntegerOperatorModifierPartSum")
+        return new dtkComposerNodeVectorIntegerOperatorModifierPartSum;
+
+    if(type == "vectorIntegerOperatorModifierPartSubstract")
+        return new dtkComposerNodeVectorIntegerOperatorModifierPartSubstract;
+
+    // Vector Integer nodes
 
     if(type == "vector_real" || type == "vectorReal")
         return new dtkComposerNodeVectorReal;

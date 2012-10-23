@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Wed Oct 17 12:28:21 2012 (+0200)
+## Last-Updated: Tue Oct 23 11:36:23 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 623
+##     Update #: 627
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -97,6 +97,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVector3DOperatorUnary.h
   dtkComposerNodeVector3DOperatorBinary.h
   dtkComposerNodeVector3DOperatorTernary.h
+  dtkComposerNodeVectorInteger.h
+  dtkComposerNodeVectorIntegerExtractor.h
+  dtkComposerNodeVectorIntegerOperatorModifier.h
+  dtkComposerNodeVectorIntegerOperatorUnary.h
+  dtkComposerNodeVectorIntegerOperatorBinary.h
   dtkComposerNodeVectorReal.h
   dtkComposerNodeVectorRealExtractor.h
   dtkComposerNodeVectorRealOperatorModifier.h
@@ -226,6 +231,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVector3DOperatorUnary.cpp
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
+  dtkComposerNodeVectorInteger.cpp
+  dtkComposerNodeVectorIntegerExtractor.cpp
+  dtkComposerNodeVectorIntegerOperatorModifier.cpp
+  dtkComposerNodeVectorIntegerOperatorUnary.cpp
+  dtkComposerNodeVectorIntegerOperatorBinary.cpp
   dtkComposerNodeVectorReal.cpp
   dtkComposerNodeVectorRealExtractor.cpp
   dtkComposerNodeVectorRealOperatorModifier.cpp

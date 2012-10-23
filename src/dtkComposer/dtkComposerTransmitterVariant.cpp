@@ -440,6 +440,11 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
             stream << e->dtkVectorReal_Id;
             tmp_array =  this->data<dtkVectorReal>()->serialize();
 
+        } else if (data_type == qMetaTypeId<dtkVectorInteger>(0)) {
+
+            stream << e->dtkVectorInteger_Id;
+            tmp_array =  this->data<dtkVectorInteger>()->serialize();
+
         } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) {
 
             stream << e->dtkQuaternionReal_Id;

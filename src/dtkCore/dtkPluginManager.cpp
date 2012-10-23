@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 11:44:08 2012 (+0200)
- *           By: tkloczko
- *     Update #: 271
+ * Last-Updated: Tue Oct 23 12:42:47 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 280
  */
 
 /* Commentary:
@@ -22,7 +22,7 @@
 
 #include <dtkLog/dtkLog.h>
 
-#define DTK_VERBOSE_LOAD false
+#define DTK_VERBOSE_LOAD true
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -97,6 +97,14 @@ dtkPluginManager *dtkPluginManager::instance(void)
 // dtkPluginManager
 // /////////////////////////////////////////////////////////////////
 
+void dtkPluginManager::initializeApplication(void)
+{
+    int   argc = 1;
+    char *argv[] = {"dtk-embedded"};
+    
+    (void) new QCoreApplication(argc, argv);
+}
+
 void dtkPluginManager::initialize(void)
 {
     if(d->path.isNull())
@@ -127,6 +135,11 @@ void dtkPluginManager::uninitialize(void)
 
     foreach(QString path, d->loaders.keys())
         unloadPlugin(path);
+}
+
+void dtkPluginManager::uninitializeApplication(void)
+{
+    delete qApp;
 }
 
 //! Load a specific plugin designated by its name.
@@ -232,7 +245,7 @@ void dtkPluginManager::writeSettings(void)
 void dtkPluginManager::printPlugins(void)
 {
     foreach(QString path, d->loaders.keys())
-        dtkTrace() << path;
+        qDebug() << path;
 }
 
 dtkPlugin *dtkPluginManager::plugin(const QString& name)

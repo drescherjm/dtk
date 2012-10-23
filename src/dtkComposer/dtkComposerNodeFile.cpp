@@ -100,25 +100,27 @@ void dtkComposerNodeFile::run(void)
 {
     QString path;
 
-    if (!d->receiver.isEmpty()) {
-
+    if (!d->receiver.isEmpty())
         path = *d->receiver.data();
+    else
+        path = d->fileName;
 
-        if (path.startsWith("http")) {
-
-            d->download(QUrl(path));
-            
-            if (!d->tempName.isEmpty())
-                d->fileName = d->tempName;
-            else
-                d->fileName = path;
-
-        } else {
-            
+    if (path.startsWith("http")) {
+        
+        d->download(QUrl(path));
+        
+        if (!d->tempName.isEmpty())
+            d->fileName = d->tempName;
+        else
             d->fileName = path;
-
-        }
+        
+    } else {
+        
+        d->fileName = path;
+        
     }
+
+    qDebug() << Q_FUNC_INFO << d->fileName;
 }
 
 QString dtkComposerNodeFile::type(void)

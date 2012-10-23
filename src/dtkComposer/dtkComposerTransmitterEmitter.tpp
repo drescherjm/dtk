@@ -2,6 +2,10 @@
  * 
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
+ * Version: $Id$
+ * Last-Updated: Tue Oct 23 12:39:44 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 211
  */
 
 /* Commentary: 

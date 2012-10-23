@@ -2,6 +2,10 @@
  * 
  * Author: Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
+ * Version: $Id$
+ * Last-Updated: Tue Oct 23 12:41:27 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 492
  */
 
 /* Commentary: 
@@ -376,7 +380,6 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
                 } else {
                     dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
                     this->setData<dtkAbstractData>(reinterpret_cast<dtkAbstractData*>(d->object));
-
                 }
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;

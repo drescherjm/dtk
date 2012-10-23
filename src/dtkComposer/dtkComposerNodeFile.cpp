@@ -119,8 +119,6 @@ void dtkComposerNodeFile::run(void)
         d->fileName = path;
         
     }
-
-    qDebug() << Q_FUNC_INFO << d->fileName;
 }
 
 QString dtkComposerNodeFile::type(void)

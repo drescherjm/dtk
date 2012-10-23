@@ -603,9 +603,9 @@ void dtkComposerFactory::initNodeVectorInteger(void)
     d->tags["Vector Integer Extractor Subvector"] = QStringList() << "vector" << "integer" << "extractor" << "subvector";
     d->types["Vector Integer Extractor Subvector"] = "vectorIntegerExtractorSubVector";
 
-    d->nodes << "Vector Integer Set";
-    d->descriptions["Vector Integer Set"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
-    d->tags["Vector Integer Set"] = QStringList() << "vector" << "integer" << "set";
+    d->nodes << "Vector Integer Set Item";
+    d->descriptions["Vector Integer Set Item"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
+    d->tags["Vector Integer Set Item"] = QStringList() << "vector" << "integer" << "set";
     d->types["Vector Integer Set Item"] = "vector_integer_set";
 
     d->nodes << "Vector Integer Sum Item";
@@ -711,9 +711,9 @@ void dtkComposerFactory::initNodeVectorReal(void)
     d->tags["Vector Real Extractor Subvector"] = QStringList() << "vector" << "real" << "extractor" << "subvector";
     d->types["Vector Real Extractor Subvector"] = "vectorRealExtractorSubVector";
 
-    d->nodes << "Vector Real Set";
-    d->descriptions["Vector Real Set"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
-    d->tags["Vector Real Set"] = QStringList() << "vector" << "real" << "set";
+    d->nodes << "Vector Real Set Item";
+    d->descriptions["Vector Real Set Item"] = "<p>Set an item in the vector at <i>position</i> index to <i>value</i>.</p>";
+    d->tags["Vector Real Set Item"] = QStringList() << "vector" << "real" << "set";
     d->types["Vector Real Set Item"] = "vector_real_set";
 
     d->nodes << "Vector Real Sum Item";

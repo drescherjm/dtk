@@ -110,7 +110,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_set";
+        return "vector_integer_set";
     }
 
     inline QString titleHint(void) {
@@ -129,7 +129,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_sum";
+        return "vector_integer_sum";
     }
 
     inline QString titleHint(void) {
@@ -148,7 +148,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_substract";
+        return "vector_integer_substract";
     }
 
     inline QString titleHint(void) {
@@ -167,7 +167,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_mult";
+        return "vector_integer_mult";
     }
 
     inline QString titleHint(void) {
@@ -186,7 +186,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_divide";
+        return "vector_integer_divide";
     }
 
     inline QString titleHint(void) {
@@ -205,7 +205,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_add_all";
+        return "vector_integer_add_all";
     }
 
     inline QString titleHint(void) {
@@ -224,7 +224,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_substract_all";
+        return "vector_integer_substract_all";
     }
 
     inline QString titleHint(void) {
@@ -243,7 +243,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_mult_all";
+        return "vector_integer_mult_all";
     }
 
     inline QString titleHint(void) {
@@ -262,7 +262,7 @@ public:
 
 public:
     inline QString type(void) {
-        return "vector_real_divide_all";
+        return "vector_integer_divide_all";
     }
 
     inline QString titleHint(void) {

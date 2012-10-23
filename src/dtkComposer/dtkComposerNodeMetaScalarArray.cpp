@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:06:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 17 11:36:54 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: Tue Oct 23 20:52:18 2012 (+0200)
+ *           By: Régis Duvigneau
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -34,6 +34,8 @@ class dtkComposerNodeMetaScalarArrayPrivate
 {
 public:
     dtkComposerTransmitterEmitterVector<dtkContainerVector<qreal> > emitter_arrays;
+
+    dtkContainerVector< dtkContainerVector<qreal> > *arrays;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -42,6 +44,10 @@ public:
 
 dtkComposerNodeMetaScalarArray::dtkComposerNodeMetaScalarArray(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaScalarArrayPrivate)
 {
+
+    d->arrays = new dtkContainerVector< dtkContainerVector<qreal> >();
+    d->emitter_arrays.setData(d->arrays);
+
     this->appendEmitter(&d->emitter_arrays);
 }
 
@@ -67,6 +73,5 @@ QString dtkComposerNodeMetaScalarArray::outputLabelHint(int port)
 
 void dtkComposerNodeMetaScalarArray::run(void)
 {
-    dtkContainerVector<dtkContainerVector<qreal> > arrays;
-    d->emitter_arrays.setData(&arrays);
+
 }

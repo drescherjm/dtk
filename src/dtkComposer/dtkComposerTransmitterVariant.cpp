@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 23 12:41:27 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 492
+ * Last-Updated: 2012 Wed Oct 24 09:45:08 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 498
  */
 
 /* Commentary: 
@@ -544,6 +544,19 @@ dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::container(void)
     };
 
     return NULL;
+}
+
+const dtkAbstractContainerWrapper *dtkComposerTransmitterVariant::constContainer(void)
+{
+    if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
+        return this->containerFromEmitter();
+
+    } else {
+        dtkAbstractContainerWrapper *container = this->containerFromEmitter();
+        if (!container)
+            return NULL;
+        return container->clone();
+    }
 }
 
 dtkAbstractObject *dtkComposerTransmitterVariant::object(void)

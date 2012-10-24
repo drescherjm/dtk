@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Wed Oct 24 09:14:14 (+0200)
+ * Last-Updated: 2012 Wed Oct 24 09:38:16 (+0200)
  *           By: Thibaud Kloczko, Inria.
- *     Update #: 224
+ *     Update #: 225
  */
 
 /* Commentary:
@@ -198,7 +198,7 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_indices.isEmpty()) {
 
-        dtkContainerVectorReal *array = d->receiver_array.data();
+        const dtkContainerVectorReal *array = d->receiver_array.constData();
         dtkAbstractContainerWrapper *indices = d->receiver_indices.container();
 
         if (!array || !indices) {
@@ -307,7 +307,7 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_from.isEmpty()) {
 
-        dtkContainerVectorReal *array = d->receiver_array.data();
+        const dtkContainerVectorReal *array = d->receiver_array.constData();
 
         if (!array) {
             dtkError() << "Input array is not defined.";

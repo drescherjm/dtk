@@ -68,6 +68,8 @@ public:
     dtkAbstractContainerWrapper *containerFromEmitter(void);
     dtkAbstractContainerWrapper *container(void);
 
+    const dtkAbstractContainerWrapper *constContainer(void);
+
 public:
     dtkAbstractObject *object(void);
 

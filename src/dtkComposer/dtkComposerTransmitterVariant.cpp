@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Oct 24 09:45:08 (+0200)
+ * Last-Updated: 2012 Wed Oct 24 17:35:20 (+0200)
  *           By: Thibaud Kloczko, Inria.
- *     Update #: 498
+ *     Update #: 520
  */
 
 /* Commentary: 
@@ -270,10 +270,13 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
         e->data_owner = false;
 
     dtkAbstractContainerWrapper *container = source->container();
-    if (d->container != container) {
-        delete d->container;
-        d->container = container;
+    if (e->data_owner) {
+        if (d->container && (d->container != container)) {
+            delete d->container;
+            d->container = NULL;
+        }        
     }
+    d->container = container;
 
     d->object = source->object();
     d->matrix = source->matrix();

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:06:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 17 11:55:41 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 34
+ * Last-Updated: 2012 Wed Oct 24 15:15:37 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -34,12 +34,12 @@
 class dtkComposerNodeMetaScalarArrayAppendPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVector<dtkContainerVector<qreal> > receiver_arrays;
+    dtkComposerTransmitterReceiverVector<dtkContainerVector<qreal> *> receiver_arrays;
     dtkComposerTransmitterReceiverVector<qreal> receiver_array;
 
-    dtkComposerTransmitterEmitterVector<dtkContainerVector<qreal> > emitter_arrays;
+    dtkComposerTransmitterEmitterVector<dtkContainerVector<qreal> *> emitter_arrays;
 
-    dtkContainerVector<dtkContainerVector<qreal> > *arrays;
+    dtkContainerVector<dtkContainerVector<qreal> *> *arrays;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ void dtkComposerNodeMetaScalarArrayAppend::run(void)
 
     d->arrays = d->receiver_arrays.data();
 
-    d->arrays->append((*(d->receiver_array.data())));
+    d->arrays->append(d->receiver_array.data());
 
     d->emitter_arrays.setData(d->arrays);
 }

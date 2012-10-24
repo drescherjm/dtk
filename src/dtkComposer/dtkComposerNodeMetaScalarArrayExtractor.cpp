@@ -4,9 +4,9 @@
 // Copyright (C) 2008 - Regis Duvigneau, Inria.
 // Created: Thu Jul 19 11:27:24 2012 (+0200)
 // Version: $Id$
-// Last-Updated: Wed Oct 17 11:57:51 2012 (+0200)
-//           By: Julien Wintz
-//     Update #: 18
+// Last-Updated: 2012 Wed Oct 24 15:13:37 (+0200)
+//           By: Thibaud Kloczko, Inria.
+//     Update #: 23
 // 
 
 // Commentary: 
@@ -36,12 +36,12 @@
 class dtkComposerNodeMetaScalarArrayExtractorPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVector< dtkContainerVector<qreal> > receiver_arrays;
-    dtkComposerTransmitterReceiver<dtkxarch_int> receiver_index;
+    dtkComposerTransmitterReceiverVector< dtkContainerVector<qreal> *> receiver_arrays;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
 
     dtkComposerTransmitterEmitterVector<qreal> emitter_array;
 
-    dtkContainerVector<qreal> array;
+    dtkContainerVector<qreal> *array;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -71,9 +71,9 @@ void dtkComposerNodeMetaScalarArrayExtractor::run(void)
     if (d->receiver_index.isEmpty())
         return;
 
-    long long index = (long long)(d->receiver_index.data());
+    qlonglong index = *d->receiver_index.data();
 
     d->array = (*(d->receiver_arrays.data()))[index];
 
-    d->emitter_array.setData(&(d->array));
+    d->emitter_array.setData(d->array);
 }

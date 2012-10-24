@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 23 12:39:44 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 211
+ * Last-Updated: 2012 Wed Oct 24 08:28:42 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 215
  */
 
 /* Commentary: 
@@ -82,6 +82,15 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T *d
 {
     m_data = data;
     d->variant.setValue(m_data);
+};
+
+//! Sets the data with \a data.
+/*! 
+ *  
+ */
+template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(const T *data)
+{
+    this->setData(const_cast<T*>(data));
 };
 
 //! Returns the data as a modifiable reference.
@@ -206,6 +215,11 @@ template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setDat
     d->variant.setValue(d->container);
 
     d->object = d->container;
+};
+
+template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(const dtkContainerVector<T> *vector)
+{
+    this->setData(const_cast<dtkContainerVector<T>*>(vector));
 };
 
 template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitterVector<T>::data(void)

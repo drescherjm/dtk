@@ -26,7 +26,7 @@
 // /////////////////////////////////////////////////////////////////
 
 
-template <typename T> inline void dtkComposerTransmitterVariant::setData(T *data)
+template <typename T> void dtkComposerTransmitterVariant::setData(T *data)
 {
     d->data_type = qMetaTypeId<T>(reinterpret_cast<T*>(0));
 
@@ -50,7 +50,12 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(T *data
     }
 }
 
-template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkContainerVector<T> *data)
+template <typename T> inline void dtkComposerTransmitterVariant::setData(const T *data)
+{
+    this->setData(const_cast<T*>(data));
+}
+
+template <typename T> void dtkComposerTransmitterVariant::setData(dtkContainerVector<T> *data)
 {
     e->data_owner = true;
     d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
@@ -63,6 +68,11 @@ template <typename T> inline void dtkComposerTransmitterVariant::setData(dtkCont
     d->variant.setValue(d->container);
     
     d->object = d->container;
+}
+
+template <typename T> inline void dtkComposerTransmitterVariant::setData(const dtkContainerVector<T> *data)
+{
+    this->setData(const_cast<dtkContainerVector<T>*>(data));
 }
 
 template <typename T> T *dtkComposerTransmitterVariant::data(void)
@@ -122,6 +132,45 @@ template <typename T> T *dtkComposerTransmitterVariant::data(void)
         break;
     };
 
+    return NULL;
+}
+
+template <typename T> const T *dtkComposerTransmitterVariant::constData(void)
+{
+    if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
+        if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+            return reinterpret_cast<T*>(this->object());
+        else
+            return this->variant().value<T*>();
+
+    } else {
+        T *data = NULL;
+
+        if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+            data = reinterpret_cast<T*>(this->object());
+        else
+            data = this->variant().value<T*>();
+        
+        if (e->twinned)
+            return data;
+
+        T *m_data;
+        if (!e->m_variant.isValid())
+            m_data = NULL;
+        else
+            m_data = e->m_variant.value<T*>();
+
+        if (!m_data) {
+            if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+                m_data = reinterpret_cast<T*>(reinterpret_cast<dtkAbstractObject*>(data)->clone());
+            else
+                m_data = new T(*data);
+            e->m_variant.setValue(m_data);
+        } else {
+            *m_data = *data;
+        }
+        return m_data;
+    }
     return NULL;
 }
 

@@ -127,7 +127,33 @@ template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
         break;
     };
 
-    return NULL;;
+    return NULL;
+};
+
+//! Returns the data as a modifiable reference.
+/*! 
+ *  
+ */
+template <typename T> const T *dtkComposerTransmitterReceiver<T>::constData(void)
+{
+    if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
+        return this->dataFromEmitter();
+
+    } else {
+        T *data = this->dataFromEmitter();
+        if (!data)
+            return NULL;
+        if (!m_data) {
+            if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
+                m_data = reinterpret_cast<T*>(reinterpret_cast<dtkAbstractObject*>(data)->clone());
+            else
+                m_data = new T(*data);
+        } else {
+            *m_data = *data;
+        }
+        return m_data;
+    }
+    return NULL;
 };
 
 //! Returns the data as a modifiable reference.
@@ -465,6 +491,25 @@ template <typename T> dtkContainerVector<T> *dtkComposerTransmitterReceiverVecto
     default:
         break;
     };
+    
+    return NULL;
+};
+
+template <typename T> const dtkContainerVector<T> *dtkComposerTransmitterReceiverVector<T>::constData(void)
+{
+    if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
+        return this->dataFromEmitter();
+
+    } else {
+        dtkContainerVector<T> *vector = this->dataFromEmitter();
+        if (!vector)
+            return NULL;
+        if (!m_vector)
+            m_vector = vector->clone();
+        else 
+            *(m_vector) = *vector;
+        return m_vector;
+    }
     
     return NULL;
 };

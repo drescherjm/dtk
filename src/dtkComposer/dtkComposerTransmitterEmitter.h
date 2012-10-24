@@ -37,6 +37,9 @@ public:
 public:
     inline void setData(T *data);
 
+    inline void setData(const T *data);
+
+public:
     inline T *data(void);
 
 public:
@@ -77,7 +80,10 @@ public:
 
 public:
     inline void setData(dtkContainerVector<T> *vector);
+    
+    inline void setData(const dtkContainerVector<T> *vector);
 
+public:
     inline dtkContainerVector<T> *data(void);
 
 public:

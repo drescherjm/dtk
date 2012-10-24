@@ -41,7 +41,9 @@ public:
 
 public:
     template <typename T> inline void setData(T *data);
+    template <typename T> inline void setData(const T *data);
     template <typename T> inline void setData(dtkContainerVector<T> *data);
+    template <typename T> inline void setData(const dtkContainerVector<T> *data);
 
 public:
     void setData(const QVariant& data);
@@ -54,7 +56,8 @@ public:
     void setDataFrom(QByteArray& array);
 
 public:
-    template <typename T> T *data(void);
+    template <typename T>       T      *data(void);
+    template <typename T> const T *constData(void);
 
 public:
     QByteArray dataToByteArray(void);

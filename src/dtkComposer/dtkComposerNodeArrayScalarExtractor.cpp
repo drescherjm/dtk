@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:24:36 2012 (+0200)
- *           By: tkloczko
- *     Update #: 223
+ * Last-Updated: 2012 Wed Oct 24 09:14:14 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 224
  */
 
 /* Commentary:
@@ -96,7 +96,7 @@ void dtkComposerNodeArrayScalarExtractor::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty()) {
 
-        dtkContainerVectorReal *array = d->receiver_array.data();
+        const dtkContainerVectorReal *array = d->receiver_array.constData();
         qlonglong index = *d->receiver_index.data();
 
         if (!array) {

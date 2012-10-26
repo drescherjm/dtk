@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 09:46:48 2012 (+0200)
- *           By: tkloczko
- *     Update #: 165
+ * Last-Updated: 2012 Fri Oct 26 11:40:34 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -159,6 +159,7 @@ template <typename T> class dtkTypeInfo
 { 
 public:
     enum { 
+        dtkObjectPointer = false,
         dtkAbstractObjectPointer = false,
         dtkMatrixRealPointer = false
     };
@@ -168,7 +169,9 @@ public:
 
 template<> class dtkTypeInfo<void*>
 {
+public:
     enum { 
+        dtkObjectPointer = false,
         dtkAbstractObjectPointer = false,
         dtkMatrixRealPointer = false
     };
@@ -187,16 +190,22 @@ public:
 
 public:
     static yes_type checkObject(dtkAbstractObject*);
+    static yes_type checkObject(dtkMatrix<qreal>*);
     static no_type  checkObject(...);
 
 public:
-    static yes_type checkMatrix(dtkMatrix<qreal>*);
-    static no_type  checkMatrix(...);
+    static yes_type checkAbstractObject(dtkAbstractObject*);
+    static no_type  checkAbstractObject(...);
+
+public:
+    static yes_type checkAbstractMatrix(dtkMatrix<qreal>*);
+    static no_type  checkAbstractMatrix(...);
 
 public:
     enum { 
-        dtkAbstractObjectPointer = (sizeof(checkObject(static_cast<T*>(0))) == sizeof(yes_type)),
-        dtkMatrixRealPointer     = (sizeof(checkMatrix(static_cast<T*>(0))) == sizeof(yes_type))
+        dtkObjectPointer         = (sizeof(checkObject(static_cast<T*>(0))) == sizeof(yes_type)),
+        dtkAbstractObjectPointer = (sizeof(checkAbstractObject(static_cast<T*>(0))) == sizeof(yes_type)),
+        dtkMatrixRealPointer     = (sizeof(checkAbstractMatrix(static_cast<T*>(0))) == sizeof(yes_type))
     };
 };
 

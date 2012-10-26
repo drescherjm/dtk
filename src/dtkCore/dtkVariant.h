@@ -31,8 +31,6 @@ template <typename T> class dtkVector;
 template <typename T> class dtkVector3D;
 template <typename T> class dtkQuaternion;
 
-
-
 // /////////////////////////////////////////////////////////////////
 // dtkVariant interface
 // /////////////////////////////////////////////////////////////////
@@ -70,9 +68,9 @@ public:
 /*     bool operator == (const dtkVariant& other); */
 /*     bool operator != (const dtkVariant& other); */
 
-/* public: */
-/*     QString  identifier(void) const; */
-/*     QString description(void) const; */
+public:
+    QString  identifier(void) const;
+    QString description(void) const;
 
 /* public: */
 /*     void clear(void); */

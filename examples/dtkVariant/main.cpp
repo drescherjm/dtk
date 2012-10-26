@@ -43,8 +43,28 @@ public:
     bool operator == (const dummyData& other) const { return false;}
         
 public:
-    QString identifier(void) const {return QString("dummyData");}
+    QString  identifier(void) const {return QString("dummyData");}
+    QString description(void) const {return QString("I am a derived class from dtkAbstractData.");}
 };
+
+// /////////////////////////////////////////////////////////////////
+// Other data
+// /////////////////////////////////////////////////////////////////
+
+class otherData
+{
+public:
+     otherData(void) {;}
+    ~otherData(void) {;}
+        
+public:
+    double value(void) const {return m_value;}
+    void setValue(double value) {m_value = value;};
+
+private:
+    double m_value;
+};
+Q_DECLARE_METATYPE(otherData *);
 
 // /////////////////////////////////////////////////////////////////
 // 
@@ -95,7 +115,6 @@ void run(void)
     qDebug() << "Container first value: " << var.value<dtkAbstractContainerWrapper*>()->at(0).value<double>();
     qDebug() << "";
 
-
     // dummyData into dtkVariant
 
     dummyData *data = new dummyData();
@@ -108,6 +127,56 @@ void run(void)
     qDebug() << "Extraction as dtkAbstractObject: " << var.value<dtkAbstractObject*>()->identifier();
     qDebug() << "Extraction as dtkAbstractData:   " << var.value<dtkAbstractData*>()->identifier();
     qDebug() << "Extraction as dummyData:         " << var.value<dummyData*>()->identifier();
+    qDebug() << "";
+
+    // Non AbstractObject data into dtkVariant
+
+    otherData *other = new otherData();
+    other->setValue(qSqrt(2));
+    var.setValue(other);
+
+    qDebug() << "---------------";
+    qDebug() << "CASE 5: Non Abstract Object derived data into dtkVariant";
+    qDebug() << var;
+    qDebug() << "Stored double is: " << QString::number(var.value<otherData*>()->value(), 'G', 14);
+    qDebug() << "";
+
+    // Atomic type into dtkVariant
+
+    qlonglong fibo = 1123581321;
+    var.setValue(fibo);
+
+    qDebug() << "---------------";
+    qDebug() << "CASE 6: Atomic type into dtkVariant";
+    qDebug() << var;
+    qDebug() << "Atomic type value: " << var.value<qlonglong>();
+    qDebug() << "";
+
+    // Identification of any data
+
+    qDebug() << "---------------";
+    qDebug() << "CASE 7: Identifier of any data";
+    qDebug() << "Atomic type, type name:      " << var.identifier();
+    var.setValue(other);
+    qDebug() << "Non derived data, type name: " << var.identifier();
+    var.setValue(data);
+    qDebug() << "Derived data, type name:     " << var.identifier();
+    var.setValue(mat);
+    qDebug() << "Matrix data, type name:      " << var.identifier();
+    qDebug() << "";
+
+    // Description of any data
+
+    qDebug() << "---------------";
+    qDebug() << "CASE 8: Description of any data";
+    var.setValue(fibo);
+    qDebug() << "Atomic type, description:      " << var.description();
+    var.setValue(other);
+    qDebug() << "Non derived data, description: " << var.description();
+    var.setValue(data);
+    qDebug() << "Derived data, description:     " << var.description();
+    var.setValue(mat);
+    qDebug() << "Matrix data, description:      " << var.description();
     qDebug() << "";
 }
 

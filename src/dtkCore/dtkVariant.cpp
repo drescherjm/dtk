@@ -35,3 +35,25 @@ dtkVariant::~dtkVariant(void)
 {
     
 }
+
+QString dtkVariant::identifier(void) const
+{
+    if (m_object)
+        return m_object->identifier();
+
+    if (m_matrix)
+        return m_matrix->identifier();
+
+    return this->typeName();
+}
+
+QString dtkVariant::description(void) const
+{
+    if (m_object)
+        return m_object->description();
+
+    if (m_matrix)
+        return m_matrix->description();
+
+    return this->value<QString>();
+}

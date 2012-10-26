@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:57:46 2012 (+0200)
- *           By: tkloczko
- *     Update #: 73
+ * Last-Updated: Ven oct 26 21:38:07 2012 (+0200)
+ *           By: Régis Duvigneau
+ *     Update #: 82
  */
 
 /* Commentary:
@@ -122,10 +122,15 @@ void dtkComposerNodeVectorReal::run(void)
 {
     if (!d->receiver_vector.isEmpty()) {
 
-        dtkVectorReal *vector = d->receiver_vector.data();
-        d->size = vector->size();
+        d->vector = d->receiver_vector.data();
+        d->size = d->vector->size();
 
-        d->emitter_vector.setData(vector);
+        if (!d->receiver_value.isEmpty()){
+            qreal value = *d->receiver_value.data<qreal>();   
+            d->vector->fill(value);
+        }
+
+        d->emitter_vector.setData(d->vector);
 
     } else {
 

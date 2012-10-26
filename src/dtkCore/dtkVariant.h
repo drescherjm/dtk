@@ -17,6 +17,7 @@
 
 #include "dtkCoreExport.h"
 #include "dtkGlobal.h"
+#include <dtkContainer/dtkAbstractContainerWrapper.h>
 
 #include <QVariant>
 
@@ -30,7 +31,6 @@ template <typename T> class dtkVector;
 template <typename T> class dtkVector3D;
 template <typename T> class dtkQuaternion;
 
-class dtkAbstractContainerWrapper;
 
 
 // /////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:02:48 2012 (+0200)
- *           By: tkloczko
- *     Update #: 110
+ * Last-Updated: Mon Oct 22 14:54:56 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -425,4 +425,9 @@ void *dtkAbstractProcess::data(int channel, int frame)
     DTK_UNUSED(frame);
 
     return NULL;
+}
+
+int dtkAbstractProcess::channelCount(void)
+{
+    return 0;
 }

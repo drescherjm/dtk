@@ -1,4 +1,4 @@
-/* dtkPlotCurve.h --- 
+/* dtkPlotCurve.h ---
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
@@ -41,6 +41,8 @@ public:
 public:
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
+    QColor color(void);
+
     void setData(const QVector<QPointF>& data);
 
 signals:

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jun 19 16:32:12 2012 (+0200)
+## Last-Updated: Fri Oct 19 15:53:39 2012 (+0200)
 ##           By: Julien Wintz
-##     Update #: 303
+##     Update #: 343
 ######################################################################
 ## 
 ### Commentary: 
@@ -122,9 +122,12 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
   endif()
   
   if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl    ${PROJECT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core tcl ${PROJECT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif()
   
+  if(TRUE)
+    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP core csharp ${PROJECT_SOURCE_DIR}/dtkCore.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  endif()
 endif()
 
 ## #################################################################
@@ -216,7 +219,9 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_MODULES)
 
-if(DTK_BUILD_WRAPPERS AND SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
+
+if(PYTHONLIBS_FOUND)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
@@ -226,7 +231,18 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
 
-endif()
+endif(PYTHONLIBS_FOUND)
+
+file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
+
+foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
+    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
+    COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
+endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+
+endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

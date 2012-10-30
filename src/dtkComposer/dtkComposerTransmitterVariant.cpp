@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:17:06 2012 (+0200)
+ * Last-Updated: Mon Oct 22 10:49:20 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 483
+ *     Update #: 489
  */
 
 /* Commentary: 
@@ -162,8 +162,9 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
 
             dtkDebug() << "received dtkVector3DReal, set data in transmitter" << v[0] << v[1] << v[2];
 
-        } else
+        } else {
             dtkWarn() << "warning: no content in dtkVector3DReal transmitter";
+        }
 
     } else if (msg->type() == "dtkQuaternionReal") {
 
@@ -182,8 +183,9 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
 
             dtkDebug() << "received dtkQuaternionReal, set data in transmitter" << q[0] << q[1] << q[2] << q[3];
 
-        } else
+        } else {
             dtkWarn() << "warning: no content in dtkQuaternionReal transmitter";
+        }
 
     } else { // assume a dtkAbstractData
 
@@ -213,8 +215,9 @@ void dtkComposerTransmitterVariant::setDataFromMsg(dtkDistributedMessage *msg)
                     this->setData(data->toVariant(data));
                 }
             }
-        } else
+        } else {
             dtkWarn() << "warning: no content in dtkAbstractData transmitter";
+        }
     }
 }
 #endif

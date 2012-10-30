@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 18:29:50 2012 (+0200)
+ * Last-Updated: mar. oct. 30 16:47:56 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 729
+ *     Update #: 738
  */
 
 /* Commentary: 
@@ -149,8 +149,11 @@ void dtkDistributedServerDaemon::read(void)
         r = d->manager->status();
         socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"json",r));
         // GET status is from the controller, store the socket in sockets using rank=-1
-        if (!d->sockets.contains(dtkDistributedMessage::CONTROLLER_RANK))
-            d->sockets.insert(dtkDistributedMessage::CONTROLLER_RANK, socket);
+        d->sockets.insert(dtkDistributedMessage::CONTROLLER_RANK, socket);
+        break;
+
+    case dtkDistributedMessage::STOP:
+        qApp->quit();
         break;
 
     case dtkDistributedMessage::NEWJOB:

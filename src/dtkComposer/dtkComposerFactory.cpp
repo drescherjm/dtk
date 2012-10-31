@@ -128,6 +128,28 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["E"] = QStringList() << "constant" << "e";
     d->types["E"] = "e";
 
+#if defined(DTK_BUILD_DISTRIBUTED)
+
+    d->nodes << "CONTROLLER_RUN_RANK";
+    d->descriptions["CONTROLLER_RUN_RANK"] = "<p>Controller rank value when communicating with remote slaves.</p>";
+    d->tags["CONTROLLER_RUN_RANK"] = QStringList() << "constant" << "rank" << "distributed";
+    d->types["CONTROLLER_RUN_RANK"] = "ControllerRunRank";
+
+#endif
+
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+
+    d->nodes << "MPI_ANY_TAG";
+    d->descriptions["MPI_ANY_TAG"] = "<p>In a receive, accept a message with any tag value.</p>";
+    d->tags["MPI_ANY_TAG"] = QStringList() << "constant" << "MPI_ANY_TAG" << "mpi" << "distributed";
+    d->types["MPI_ANY_TAG"] = "MpiAnyTag";
+
+    d->nodes << "MPI_ANY_SOURCE";
+    d->descriptions["MPI_ANY_SOURCE"] = "<p>In a receive, accept a message from anyone.</p>";
+    d->tags["MPI_ANY_SOURCE"] = QStringList() << "constant" << "MPI_ANY_SOURCE" << "mpi" << "distributed";
+    d->types["MPI_ANY_SOURCE"] = "MpiAnySource";
+
+#endif
     // primitive nodes
 
     d->nodes << "Boolean";
@@ -298,22 +320,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "CommunicatorUninitialize";
     d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
     d->types["CommunicatorUninitialize"] = "communicatorUninitialize";
-
-    d->nodes << "CommunicatorSendInteger";
-    d->tags["CommunicatorSendInteger"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "integer";
-    d->types["CommunicatorSendInteger"] = "communicatorSendInteger";
-
-    d->nodes << "CommunicatorReceiveInteger";
-    d->tags["CommunicatorReceiveInteger"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "integer";;
-    d->types["CommunicatorReceiveInteger"] = "communicatorReceiveInteger";
-
-    d->nodes << "CommunicatorSendReal";
-    d->tags["CommunicatorSendReal"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator" << "real";
-    d->types["CommunicatorSendReal"] = "communicatorSendReal";
-
-    d->nodes << "CommunicatorReceiveReal";
-    d->tags["CommunicatorReceiveReal"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator" << "real";;
-    d->types["CommunicatorReceiveReal"] = "communicatorReceiveReal";
 
     d->nodes << "CommunicatorReceive";
     d->tags["CommunicatorReceive"] = QStringList() <<  "receive" << "distributed" << "mpi" << "communicator";;
@@ -1195,6 +1201,20 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "e")
         return new dtkComposerNodeE;
 
+#if defined(DTK_BUILD_DISTRIBUTED)
+    if(type == "ControllerRunRank")
+        return new dtkComposerNodeControllerRunRank;
+#endif
+
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+
+    if(type == "MpiAnyTag")
+        return new dtkComposerNodeMpiAnyTag;
+
+    if(type == "MpiAnySource")
+        return new dtkComposerNodeMpiAnySource;
+
+#endif
     // primitive nodes
 
     if(type == "boolean")

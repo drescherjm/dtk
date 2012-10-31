@@ -342,7 +342,8 @@ public:
     dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;
 
-    QMutex mutex;
+public:
+    QString slaveName;
 
 public:
     QString job_id;
@@ -356,13 +357,11 @@ dtkComposerNodeRemoteSubmit::dtkComposerNodeRemoteSubmit(void) : dtkComposerNode
     this->appendReceiver(&(d->walltime));
     this->appendReceiver(&(d->queuename));
 
+    d->slaveName = "dtkComposerEvaluatorSlave";
     d->job_id = QString();
     d->id.setData(&d->job_id);
     this->appendEmitter(&(d->id));
 
-    d->mutex.lock();
-
-    
 }
 
 dtkComposerNodeRemoteSubmit::~dtkComposerNodeRemoteSubmit(void)
@@ -370,6 +369,11 @@ dtkComposerNodeRemoteSubmit::~dtkComposerNodeRemoteSubmit(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNodeRemoteSubmit::setSlaveName(QString name)
+{
+    d->slaveName = name;
 }
 
 void dtkComposerNodeRemoteSubmit::run(void)
@@ -404,14 +408,21 @@ void dtkComposerNodeRemoteSubmit::run(void)
         job.insert("queue", *d->queuename.data());
 
     job.insert("properties", QVariantMap());
-    job.insert("application", "dtkComposerEvaluatorSlave "+*d->cluster.data());
+    job.insert("application", d->slaveName+" "+*d->cluster.data());
 
     QByteArray job_data = dtkJson::serialize(job);
 
     dtkTrace() << " submit job with parameters: "<< job_data;
 
+
+    QUrl cluster = QUrl(*(d->cluster.data()));
     dtkDistributedController *controller = dtkDistributedController::instance();
-    if (controller->submit(QUrl(*d->cluster.data()), job_data)) {
+    if (!controller->isConnected(cluster)) {
+        dtkInfo() <<  "Not yet connected to " << cluster << ",try to connect";
+        controller->deploy(cluster);
+        controller->connect(cluster);
+    }
+    if (controller->submit(cluster, job_data)) {
         QEventLoop loop;
         this->connect(controller, SIGNAL(jobQueued(QString)), this, SLOT(onJobQueued(QString)),Qt::DirectConnection);
         loop.connect(controller, SIGNAL(jobQueued(QString)), &loop, SLOT(quit()));

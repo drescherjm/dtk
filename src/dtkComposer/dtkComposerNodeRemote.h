@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: Fri Sep 21 09:59:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 35
+ * Last-Updated: mer. oct. 31 15:55:55 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 36
  */
 
 /* Commentary:
@@ -124,6 +124,9 @@ public:
     inline QString outputLabelHint(int) {
         return "jobid";
     }
+
+public:
+    void setSlaveName(QString);
 
 protected:
     dtkComposerNodeRemoteSubmitPrivate *d;

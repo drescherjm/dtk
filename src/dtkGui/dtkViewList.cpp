@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:39:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 22 00:20:33 2012 (+0200)
+ * Last-Updated: Wed Oct 31 12:19:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@ dtkViewList::dtkViewList(QWidget *parent) : QListWidget(parent), d(new dtkViewLi
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setDragEnabled(true);
     this->setFrameStyle(QFrame::NoFrame);
-    this->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, const QString&)), this, SLOT(update()));
 

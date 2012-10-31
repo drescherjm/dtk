@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 31 09:40:25 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 130
+ * Last-Updated: mer. oct. 31 17:27:09 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -49,18 +49,21 @@ public:
 dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistributorPrivate)
 {
     d->host_address = new QComboBox(this);
+
+    d->controller = dtkDistributedController::instance();
+    QString port = QString::number(d->controller->defaultPort());
+
     d->host_address->addItem("dtk://<host>[:port]");
-    d->host_address->addItem("dtk://nef-devel.inria.fr:9999");
-    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:9999");
-    d->host_address->addItem("dtk://is-master.inria.fr:9999");
-    d->host_address->addItem("dtk://localhost:9998");
+    d->host_address->addItem("dtk://nef-devel.inria.fr:"+port);
+    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:"+port);
+    d->host_address->addItem("dtk://is-master.inria.fr:"+port);
+    d->host_address->addItem("dtk://localhost:"+port);
     d->host_address->setEditable(true);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     d->host_button = new QPushButton("Connect", this);
     d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    d->controller = dtkDistributedController::instance();
 
     d->status_model = new dtkDistributedControllerStatusModel(this);
     d->status_model->setController(d->controller);
@@ -78,7 +81,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
 
     d->header_view = new dtkDistributedControllerHeaderView(this);
     d->header_view->setController(d->controller);
-    
+
     d->target_view = new dtkDistributedControllerTargetView(this);
     d->target_view->setController(d->controller);
 

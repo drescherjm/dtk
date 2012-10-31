@@ -387,6 +387,15 @@ void dtkComposerNodeRemoteSubmit::run(void)
 
     QVariantMap job;
 
+    QUrl cluster = QUrl(*(d->cluster.data()));
+
+    if (cluster.port() < 0) {
+        dtkDebug() << "setting port" ;
+        cluster.setPort(dtkDistributedController::defaultPort());
+        dtkDebug() << "new cluster url" << cluster.toString() ;
+    }
+
+
     if (d->cores.isEmpty())
         resources.insert("cores", 1);
     else
@@ -408,14 +417,13 @@ void dtkComposerNodeRemoteSubmit::run(void)
         job.insert("queue", *d->queuename.data());
 
     job.insert("properties", QVariantMap());
-    job.insert("application", d->slaveName+" "+*d->cluster.data());
+    job.insert("application", d->slaveName+" "+cluster.toString());
 
     QByteArray job_data = dtkJson::serialize(job);
 
     dtkTrace() << " submit job with parameters: "<< job_data;
 
 
-    QUrl cluster = QUrl(*(d->cluster.data()));
     dtkDistributedController *controller = dtkDistributedController::instance();
     if (!controller->isConnected(cluster)) {
         dtkInfo() <<  "Not yet connected to " << cluster << ",try to connect";

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 13 09:45:39 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 116
+ * Last-Updated: Tue Oct 30 14:27:38 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -105,6 +105,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->filter_view);
     layout->addWidget(d->submit_view);
 
+    connect(d->host_address, SIGNAL(activated(int)), this, SLOT(onConnect()));
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
     connect(d->filter_view, SIGNAL(updated()), this, SLOT(onFilterUpdated()));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));

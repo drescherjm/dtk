@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 30 17:18:28 2012 (+0100)
+ * Last-Updated: mer. oct. 31 12:39:04 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1707
+ *     Update #: 1709
  */
 
 /* Commentary: 
@@ -579,7 +579,7 @@ void dtkDistributedController::read(void)
         break;
     case dtkDistributedMessage::DATA:
         result = msg->content();
-        dtkDebug() << "Result: " << result;
+        dtkDebug() << "Result size: " << result.size();
         emit dataPosted(result);
         break;
     default:

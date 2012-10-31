@@ -314,7 +314,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         }
 
         if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
-            dtkError() << "TCP communicator. Parse message from socket";
+            dtDebug() << "TCP communicator. Parse message from socket";
             tcp->socket()->blockSignals(true); // needed ?
 
             if (!tcp->socket()->waitForReadyRead(300000)) {

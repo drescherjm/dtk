@@ -24,6 +24,8 @@
 
 #include <dtkLog/dtkLog.h>
 
+#include <mpi.h>
+
 // /////////////////////////////////////////////////////////////////
 // Communicator Init
 // /////////////////////////////////////////////////////////////////
@@ -292,6 +294,7 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
 
+    QMap<qlonglong, dtkDistributedMessage *> msg_map;
 };
 
 dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorReceivePrivate)
@@ -329,16 +332,35 @@ void dtkComposerNodeCommunicatorReceive::run(void)
 
         if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
             dtkDebug() << "TCP communicator. Parse message from socket";
+            if (d->msg_map.contains(tag)) {
+                dtkDebug() << "msg already received for tag" << tag;
+                d->emitter.setTwinned(false);
+                dtkDistributedMessage *msg = d->msg_map.take(tag);
+                d->emitter.setDataFrom(msg->content());
+                d->emitter.setTwinned(true);
+                delete msg;
+                return;
+            }
+
             tcp->socket()->blockSignals(true); // needed ?
 
             if (!tcp->socket()->waitForReadyRead(300000)) {
                 dtkWarn() << "Data not ready in receive for rank " << source;
             } else {
                 dtkDistributedMessage *msg = tcp->socket()->parseRequest();
-                d->emitter.setTwinned(false);
-                d->emitter.setDataFrom(msg->content());
-                d->emitter.setTwinned(true);
-                delete msg;
+                int msg_tag = msg->header("Tag").toInt();
+                if (msg_tag ==  tag || msg_tag == MPI_ANY_TAG) {
+                    dtkTrace() << "OK, this is the expected tag " << tag;
+                    d->emitter.setTwinned(false);
+                    d->emitter.setDataFrom(msg->content());
+                    d->emitter.setTwinned(true);
+                    delete msg;
+                } else {
+                    //store msg for another call with the right tag
+                    dtkInfo() << "Msg received, but wrong tag, store the msg" << tag << msg_tag;
+                    d->msg_map.insert(msg_tag,msg);
+                    this->run(); // do it again
+                }
             }
             tcp->socket()->blockSignals(false); // needed ?
         } else {

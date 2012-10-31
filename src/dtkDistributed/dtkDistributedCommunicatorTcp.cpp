@@ -192,6 +192,7 @@ void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int ta
 void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
 {
     dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, QString::number(tag), target, a.size(), "qvariant", a);
+    msg->addHeader("Tag",QString::number(tag));
     d->socket->sendRequest(msg);
     d->socket->waitForBytesWritten();
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mai 30 15:39:05 2012 (+0200)
+ * Last-Updated: mar. oct. 30 16:41:11 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 163
+ *     Update #: 164
  */
 
 /* Commentary:
@@ -46,7 +46,8 @@ public:
         STARTJOB,
         ENDJOB  ,
         DATA    ,
-        SETRANK
+        SETRANK ,
+        STOP
     };
 
              dtkDistributedMessage(void);

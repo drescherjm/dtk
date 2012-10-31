@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 30 14:27:38 2012 (+0100)
+ * Last-Updated: Wed Oct 31 09:40:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 123
+ *     Update #: 130
  */
 
 /* Commentary: 
@@ -127,8 +127,15 @@ void dtkDistributor::setApplication(const QString& application)
 }
 void dtkDistributor::onConnect(void)
 {
-    d->controller->deploy(QUrl(d->host_address->currentText()));
-    d->controller->connect(QUrl(d->host_address->currentText()));
+    QUrl url = QUrl(d->host_address->currentText());
+    if (!d->controller->connect(url)) {
+        // can't connect, try to deploy:
+        if (!d->controller->deploy(url))
+            return;
+        else
+            if (!d->controller->connect(url))
+                return;
+    }
 
     d->header_view->setCluster(d->host_address->currentText());
     d->status_model->setCluster(d->host_address->currentText());

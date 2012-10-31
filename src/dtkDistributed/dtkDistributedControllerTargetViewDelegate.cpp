@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 10:10:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 10:55:19 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 77
+ * Last-Updated: mar. oct. 30 16:46:59 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 84
  */
 
 /* Commentary: 
@@ -94,6 +94,7 @@ class dtkDistributedControllerTargetViewEditorPrivate
 public:
     QPushButton *refresh;
     QPushButton *disconnect;
+    QPushButton *stop;
 
 public:
     QUrl cluster;
@@ -104,8 +105,9 @@ public:
 
 dtkDistributedControllerTargetViewEditor::dtkDistributedControllerTargetViewEditor(QWidget *parent) : QWidget(parent), d(new dtkDistributedControllerTargetViewEditorPrivate)
 {
-    d->refresh = new QPushButton("Refresh", this);
+    d->refresh    = new QPushButton("Refresh", this);
     d->disconnect = new QPushButton("Disconnect", this);
+    d->stop       = new QPushButton("Stop", this);
 
     d->controller = NULL;
 
@@ -115,9 +117,11 @@ dtkDistributedControllerTargetViewEditor::dtkDistributedControllerTargetViewEdit
     layout->addStretch(1);
     layout->addWidget(d->refresh);
     layout->addWidget(d->disconnect);
+    layout->addWidget(d->stop);
 
     connect(d->refresh, SIGNAL(clicked()), this, SLOT(onRefresh()));
     connect(d->disconnect, SIGNAL(clicked()), this, SLOT(onDisconnect()));
+    connect(d->stop, SIGNAL(clicked()), this, SLOT(onStop()));
 }
 
 dtkDistributedControllerTargetViewEditor::~dtkDistributedControllerTargetViewEditor(void)
@@ -151,4 +155,12 @@ void dtkDistributedControllerTargetViewEditor::onDisconnect(void)
         return;
 
     d->controller->disconnect(d->cluster);
+}
+
+void dtkDistributedControllerTargetViewEditor::onStop(void)
+{
+    if(!d->controller)
+        return;
+
+    d->controller->stop(d->cluster);
 }

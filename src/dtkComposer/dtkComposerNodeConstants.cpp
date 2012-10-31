@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 31 12:16:33 2012 (+0100)
+ * Last-Updated: mer. oct. 31 12:40:38 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 52
+ *     Update #: 55
  */
 
 /* Commentary:
@@ -27,6 +27,10 @@
 
 #if defined(Q_OS_WIN) && (defined(Q_CC_MSVC) || defined(__MINGW32__))
 #define M_E 2.718281
+#endif
+
+#if defined(DTK_BUILD_DISTRIBUTED)
+#include <dtkDistributed/dtkDistributedMessage>
 #endif
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
@@ -114,7 +118,7 @@ public:
 
 dtkComposerNodeControllerRunRank::dtkComposerNodeControllerRunRank(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeControllerRunRankPrivate)
 {
-    d->value = MPI_ANY_TAG;
+    d->value = dtkDistributedMessage::CONTROLLER_RUN_RANK;
     d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }

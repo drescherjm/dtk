@@ -204,15 +204,15 @@ void dtkComposerNodeCommunicatorSize::run(void)
     if (!d->receiver.isEmpty()) {
 
         dtkDistributedCommunicatorMpi *communicator = d->receiver.data();
-        
+
         if (!communicator) {
             d->size = 0;
             dtkError() << "Input communicator not valid.";
             return;
         }
-        
+
         d->size = communicator->size();
-    
+
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
         d->size = 0;
@@ -314,7 +314,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         }
 
         if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
-            dtDebug() << "TCP communicator. Parse message from socket";
+            dtkDebug() << "TCP communicator. Parse message from socket";
             tcp->socket()->blockSignals(true); // needed ?
 
             if (!tcp->socket()->waitForReadyRead(300000)) {
@@ -328,12 +328,16 @@ void dtkComposerNodeCommunicatorReceive::run(void)
             }
             tcp->socket()->blockSignals(false); // needed ?
         } else {
-            dtkAbstractData *data = NULL;
-            communicator->receive(data, source, 0);
-            if (data)
-                d->emitter.setData(data);
-            else
+            QByteArray array;
+            communicator->receive(array, source, 0);
+            if (!array.isEmpty()) {
+                d->emitter.setTwinned(false);
+                d->emitter.setDataFrom(array);
+                d->emitter.setTwinned(true);
+            } else {
+                dtkWarn() << "Empty data in receive";
                 d->emitter.clearData();
+            }
         }
     } else {
         d->emitter.clearData();

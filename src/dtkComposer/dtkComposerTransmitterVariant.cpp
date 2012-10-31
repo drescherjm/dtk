@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Oct 24 17:35:20 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 520
+ * Last-Updated: mer. oct. 31 14:25:37 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 536
  */
 
 /* Commentary: 
@@ -353,6 +353,9 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             stream >> size_curve;
             QPointF p;
             e->curve.clear();
+            QColor c;
+            stream >> c;
+            e->curve.setColor(c);
             for (int i = 0; i < size_curve; ++i) {
                 stream >> p;
                 e->curve.append(p);
@@ -469,9 +472,11 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
 #if defined(DTK_HAVE_PLOT)
         } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
             stream << e->dtkPlotCurve_Id;
-            QVector<QPointF> curve = this->data<dtkPlotCurve>()->data();
-            stream << (qlonglong)curve.size();
-            foreach(QPointF p, curve)
+            dtkPlotCurve *curve = this->data<dtkPlotCurve>();
+            QVector<QPointF> curve_data = curve->data();
+            stream << (qlonglong)curve_data.size();
+            stream << curve->color();
+            foreach(QPointF p, curve_data)
                 stream << p;
 #endif
         } else {

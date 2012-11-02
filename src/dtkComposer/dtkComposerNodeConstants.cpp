@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. oct. 31 12:40:38 2012 (+0100)
+ * Last-Updated: ven. nov.  2 15:44:46 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 55
+ *     Update #: 62
  */
 
 /* Commentary:
@@ -30,11 +30,8 @@
 #endif
 
 #if defined(DTK_BUILD_DISTRIBUTED)
+#include <dtkDistributed/dtkDistributedCommunicator>
 #include <dtkDistributed/dtkDistributedMessage>
-#endif
-
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
-#include <mpi.h>
 #endif
 
 // /////////////////////////////////////////////////////////////////
@@ -136,13 +133,13 @@ void dtkComposerNodeControllerRunRank::run(void)
 }
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED)
 
 // /////////////////////////////////////////////////////////////////
 // MPI_ANY_TAG
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMpiAnyTagPrivate
+class dtkComposerNodeAnyTagPrivate
 {
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter;
@@ -151,21 +148,21 @@ public:
     qlonglong value;
 };
 
-dtkComposerNodeMpiAnyTag::dtkComposerNodeMpiAnyTag(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMpiAnyTagPrivate)
+dtkComposerNodeAnyTag::dtkComposerNodeAnyTag(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeAnyTagPrivate)
 {
-    d->value = MPI_ANY_TAG;
+    d->value = dtkDistributedCommunicator::ANY_TAG;
     d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
-dtkComposerNodeMpiAnyTag::~dtkComposerNodeMpiAnyTag(void)
+dtkComposerNodeAnyTag::~dtkComposerNodeAnyTag(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkComposerNodeMpiAnyTag::run(void)
+void dtkComposerNodeAnyTag::run(void)
 {
 
 }
@@ -174,7 +171,7 @@ void dtkComposerNodeMpiAnyTag::run(void)
 // MPI_ANY_SOURCE
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMpiAnySourcePrivate
+class dtkComposerNodeAnySourcePrivate
 {
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter;
@@ -183,21 +180,21 @@ public:
     qlonglong value;
 };
 
-dtkComposerNodeMpiAnySource::dtkComposerNodeMpiAnySource(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMpiAnySourcePrivate)
+dtkComposerNodeAnySource::dtkComposerNodeAnySource(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeAnySourcePrivate)
 {
-    d->value = MPI_ANY_SOURCE;
+    d->value = dtkDistributedCommunicator::ANY_SOURCE;
     d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
-dtkComposerNodeMpiAnySource::~dtkComposerNodeMpiAnySource(void)
+dtkComposerNodeAnySource::~dtkComposerNodeAnySource(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkComposerNodeMpiAnySource::run(void)
+void dtkComposerNodeAnySource::run(void)
 {
 
 }

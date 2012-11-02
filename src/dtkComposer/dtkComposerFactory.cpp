@@ -139,15 +139,15 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
 
-    d->nodes << "MPI_ANY_TAG";
-    d->descriptions["MPI_ANY_TAG"] = "<p>In a receive, accept a message with any tag value.</p>";
-    d->tags["MPI_ANY_TAG"] = QStringList() << "constant" << "MPI_ANY_TAG" << "mpi" << "distributed";
-    d->types["MPI_ANY_TAG"] = "MpiAnyTag";
+    d->nodes << "ANY_TAG";
+    d->descriptions["ANY_TAG"] = "<p>In a receive, accept a message with any tag value.</p>";
+    d->tags["ANY_TAG"] = QStringList() << "constant" << "ANY_TAG" << "mpi" << "distributed" << "communicator";
+    d->types["ANY_TAG"] = "AnyTag";
 
-    d->nodes << "MPI_ANY_SOURCE";
-    d->descriptions["MPI_ANY_SOURCE"] = "<p>In a receive, accept a message from anyone.</p>";
-    d->tags["MPI_ANY_SOURCE"] = QStringList() << "constant" << "MPI_ANY_SOURCE" << "mpi" << "distributed";
-    d->types["MPI_ANY_SOURCE"] = "MpiAnySource";
+    d->nodes << "ANY_SOURCE";
+    d->descriptions["ANY_SOURCE"] = "<p>In a receive, accept a message from anyone.</p>";
+    d->tags["ANY_SOURCE"] = QStringList() << "constant" << "ANY_SOURCE" << "mpi" << "distributed" << "communicator";
+    d->types["ANY_SOURCE"] = "AnySource";
 
 #endif
     // primitive nodes
@@ -1208,11 +1208,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
 
-    if(type == "MpiAnyTag")
-        return new dtkComposerNodeMpiAnyTag;
+    if(type == "AnyTag")
+        return new dtkComposerNodeAnyTag;
 
-    if(type == "MpiAnySource")
-        return new dtkComposerNodeMpiAnySource;
+    if(type == "AnySource")
+        return new dtkComposerNodeAnySource;
 
 #endif
     // primitive nodes

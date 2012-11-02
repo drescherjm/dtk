@@ -122,30 +122,30 @@ private:
 
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED)
 
 // /////////////////////////////////////////////////////////////////
 // MPI_ANY_TAG
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMpiAnyTagPrivate;
+class dtkComposerNodeAnyTagPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMpiAnyTag : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeAnyTag : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMpiAnyTag(void);
-    ~dtkComposerNodeMpiAnyTag(void);
+     dtkComposerNodeAnyTag(void);
+    ~dtkComposerNodeAnyTag(void);
 
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "MpiAnyTag";
+        return "AnyTag";
     }
 
     inline QString titleHint(void) {
-        return "MPI_ANY_TAG";
+        return "ANY_TAG";
     }
 
     inline QString outputLabelHint(int) {
@@ -153,31 +153,31 @@ public:
     }
 
 private:
-    dtkComposerNodeMpiAnyTagPrivate *d;
+    dtkComposerNodeAnyTagPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
 // MPI_ANY_SOURCE
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeMpiAnySourcePrivate;
+class dtkComposerNodeAnySourcePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMpiAnySource : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeAnySource : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMpiAnySource(void);
-    ~dtkComposerNodeMpiAnySource(void);
+     dtkComposerNodeAnySource(void);
+    ~dtkComposerNodeAnySource(void);
 
 public:
     void run(void);
 
 public:
     inline QString type(void) {
-        return "MpiAnySource";
+        return "AnySource";
     }
 
     inline QString titleHint(void) {
-        return "MPI_ANY_SOURCE";
+        return "ANY_SOURCE";
     }
 
     inline QString outputLabelHint(int) {
@@ -185,7 +185,7 @@ public:
     }
 
 private:
-    dtkComposerNodeMpiAnySourcePrivate *d;
+    dtkComposerNodeAnySourcePrivate *d;
 };
 
 

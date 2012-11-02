@@ -115,6 +115,11 @@ void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag)
    DTK_DEFAULT_IMPLEMENTATION;
 }
 
+void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag, dtkDistributedCommunicatorStatus &status)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
 void dtkDistributedCommunicator::barrier(void)
 {
    DTK_DEFAULT_IMPLEMENTATION;
@@ -319,3 +324,89 @@ void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size,
 {
     return this->reduce(send, recv, size, dtkDistributedCommunicatorDouble, operationType, target, all);
 }
+
+/*
+ * Class dtkComposerCommunicatorStatus
+ */
+
+class dtkDistributedCommunicatorStatusPrivate
+{
+
+public:
+    int       tag;
+    qint64  count;
+    qint16 source;
+    int     error;
+
+};
+
+dtkDistributedCommunicatorStatus::dtkDistributedCommunicatorStatus(void) : d(new dtkDistributedCommunicatorStatusPrivate)
+{
+    d->tag    = 0;
+    d->count  = -1;
+    d->source = -1;
+    d->error  = 0;
+
+}
+
+dtkDistributedCommunicatorStatus::~dtkDistributedCommunicatorStatus(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+dtkDistributedCommunicatorStatus::dtkDistributedCommunicatorStatus(const dtkDistributedCommunicatorStatus& other)
+{
+    d->tag    = other.tag();
+    d->count  = other.count();
+    d->source = other.source();
+    d->error  = other.error();
+}
+
+dtkDistributedCommunicatorStatus& dtkDistributedCommunicatorStatus::operator = (const dtkDistributedCommunicatorStatus& other)
+{
+    return *this;
+}
+
+
+qint64 dtkDistributedCommunicatorStatus::count(void) const
+{
+    return d->count;
+}
+
+qint16 dtkDistributedCommunicatorStatus::source(void) const
+{
+    return d->source;
+}
+
+int dtkDistributedCommunicatorStatus::error(void) const
+{
+    return d->error;
+}
+
+int dtkDistributedCommunicatorStatus::tag(void) const
+{
+    return d->tag;
+}
+
+void dtkDistributedCommunicatorStatus::setTag(int tag)
+{
+    d->tag = tag;
+}
+
+void dtkDistributedCommunicatorStatus::setCount(qint64 count)
+{
+    d->count = count;
+}
+
+void dtkDistributedCommunicatorStatus::setSource(qint16 source)
+{
+    d->source = source;
+}
+
+void dtkDistributedCommunicatorStatus::setError(int error)
+{
+    d->error = error;
+}
+

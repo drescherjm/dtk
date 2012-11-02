@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 15:04:34 2012 (+0200)
+ * Last-Updated: ven. nov.  2 16:00:27 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 107
+ *     Update #: 110
  */
 
 /* Commentary: 
@@ -53,7 +53,7 @@ public:
     void   barrier(void);
     void      send(void *data,             qint64 size, DataType dataType, qint16 target, int tag);
     void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag);
-    void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag, int& from);
+    void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorStatus& status);
     void broadcast(void *data,             qint64 size, DataType dataType, qint16 source);
     void    gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all = false);
     void   scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source);
@@ -67,6 +67,7 @@ public:
 
     void   receive(QString &s, qint16 source, int tag) ;
     void   receive(QByteArray &a, qint16 source, int tag) ;
+    void   receive(QByteArray &a, qint16 source, int tag, dtkDistributedCommunicatorStatus& status) ;
 
 private:
     dtkDistributedCommunicatorMpiPrivate *d;

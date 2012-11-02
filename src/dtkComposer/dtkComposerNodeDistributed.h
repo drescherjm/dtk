@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 08:51:28
  * Version: $Id$
- * Last-Updated: mer. oct. 31 12:18:43 2012 (+0100)
+ * Last-Updated: ven. nov.  2 15:56:00 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 55
+ *     Update #: 57
  */
 
 /* Commentary:
@@ -247,8 +247,15 @@ public:
     }
 
 public:
-    inline QString outputLabelHint(int) {
-        return "value";
+    inline QString outputLabelHint(int port) {
+        if (port == 0)
+            return "data";
+        else if (port == 1)
+            return "source";
+        else if (port == 2)
+            return "tag";
+        else
+            return "value";
     }
 
 protected:

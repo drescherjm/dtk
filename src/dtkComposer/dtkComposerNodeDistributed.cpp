@@ -301,7 +301,6 @@ public:
 public:
     qlonglong source;
     qlonglong tag;
-    qlonglong size;
 
 };
 

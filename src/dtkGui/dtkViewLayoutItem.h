@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 19:51:34 2012 (+0200)
+ * Last-Updated: Mon Nov  5 13:07:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -75,6 +75,18 @@ public:
 
 public:
     dtkViewLayoutItem *parent(void);
+    dtkViewLayoutItem *first(void);
+    dtkViewLayoutItem *second(void);
+
+public:
+    void setOrientation(Qt::Orientation orientation);
+    void setSizes(QList<int> sizes);
+
+public:
+    int canvasHeight(void);
+    int footerHeight(void);
+    int handleHeight(void);
+    int handleWidth(void);
 
 public:
     dtkViewLayout *layout(void);

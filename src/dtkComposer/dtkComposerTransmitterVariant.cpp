@@ -2,10 +2,6 @@
  * 
  * Author: Thibaud Kloczko, Inria.
  * Created: Sat Mar  3 17:51:22 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mer. oct. 31 14:25:37 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 536
  */
 
 /* Commentary: 
@@ -274,7 +270,7 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
         if (d->container && (d->container != container)) {
             delete d->container;
             d->container = NULL;
-        }        
+        }
     }
     d->container = container;
 
@@ -284,6 +280,12 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
 
 void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 {
+    this->setVariantFrom(array, true);
+}
+
+QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool self)
+{
+
     qint64 data_type;
     QDataStream stream(&array, QIODevice::ReadOnly);
     qlonglong header_length=sizeof(data_type);
@@ -293,58 +295,106 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 
     switch(data_type) {
     case QMetaType::Double: {
-        stream >> e->value_r;
-        this->setData<double>(&e->value_r);
+        if (self) {
+            stream >> e->value_r;
+            this->setData<double>(&e->value_r);
+        } else {
+            double r;
+            stream >> r;
+            return QVariant::fromValue(&r);
+        }
         break;
     }
     case QMetaType::LongLong: {
-        stream >> e->value_i;
-        this->setData<qlonglong>(&e->value_i);
+        if (self) {
+            stream >> e->value_i;
+            this->setData<qlonglong>(&e->value_i);
+        } else {
+            qlonglong i;
+            stream >> i;
+            QVariant::fromValue(&i);
+        }
         break;
     }
     case QMetaType::QString: {
-        e->value_s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-        this->setData<QString>(&e->value_s);
+        if (self) {
+            e->value_s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<QString>(&e->value_s);
+        } else {
+            QString s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            QVariant::fromValue(&s);
+        }
         break;
     }
     default:
 
-        e->data_owner = true;
+        if (self)
+            e->data_owner = true;
 
         if (data_type == e->dtkVector3DReal_Id) {
 
-            if (!d->matrix)
-                d->matrix = new dtkVector3D<double>();
-            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkVector3DReal>(reinterpret_cast<dtkVector3DReal*>(d->matrix));
+            if (self) {
+                if (!d->matrix)
+                    d->matrix = new dtkVector3D<double>();
+                d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                this->setData<dtkVector3DReal>(reinterpret_cast<dtkVector3DReal*>(d->matrix));
+            } else {
+                dtkVector3D<double> *v = new dtkVector3D<double>();
+                v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                return QVariant::fromValue(v);
+            }
 
         } else if (data_type == e->dtkVectorReal_Id) {
 
-            if (!d->matrix)
-                d->matrix = new dtkVector<double>();
-            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkVectorReal>(reinterpret_cast<dtkVectorReal*>(d->matrix));
+            if (self) {
+                if (!d->matrix)
+                    d->matrix = new dtkVector<double>();
+                d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                this->setData<dtkVectorReal>(reinterpret_cast<dtkVectorReal*>(d->matrix));
+            } else {
+                dtkVector<double> *v = new dtkVector<double>();
+                v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                return QVariant::fromValue(v);
+            }
 
         } else if (data_type == e->dtkQuaternionReal_Id) {
 
-            if (!d->matrix)
-                d->matrix = new dtkQuaternion<double>();
-            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkQuaternionReal>(reinterpret_cast<dtkQuaternionReal*>(d->matrix));
+            if (self) {
+                if (!d->matrix)
+                    d->matrix = new dtkQuaternion<double>();
+                d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                this->setData<dtkQuaternionReal>(reinterpret_cast<dtkQuaternionReal*>(d->matrix));
+            } else {
+                dtkQuaternion<double> *v = new dtkQuaternion<double>();
+                v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                return QVariant::fromValue(v);
+            }
 
         } else if (data_type == e->dtkMatrixReal_Id) {
 
-            if (!d->matrix)
-                d->matrix = new dtkMatrix<double>();
-            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkMatrixReal>(d->matrix);
+            if (self) {
+                if (!d->matrix)
+                    d->matrix = new dtkMatrix<double>();
+                d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                this->setData<dtkMatrixReal>(d->matrix);
+            } else {
+                dtkMatrixReal *m = new dtkMatrixReal();
+                m->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                return QVariant::fromValue(m);
+            }
 
         } else if (data_type == e->dtkMatrixSquareReal_Id) {
 
-            if (!d->matrix)
+            if (self) {
+                if (!d->matrix)
                 d->matrix = new dtkMatrixSquareReal();
-            d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<dtkMatrixSquareReal>(reinterpret_cast<dtkMatrixSquareReal*>(d->matrix));
+                d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                this->setData<dtkMatrixSquareReal>(reinterpret_cast<dtkMatrixSquareReal*>(d->matrix));
+            } else {
+                dtkMatrixSquareReal *m = new dtkMatrixSquareReal();
+                m->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+                return QVariant::fromValue(m);
+            }
 
 #if defined(DTK_HAVE_PLOT)
         } else if (data_type == e->dtkPlotCurve_Id) {
@@ -352,15 +402,27 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             qlonglong size_curve;
             stream >> size_curve;
             QPointF p;
-            e->curve.clear();
             QColor c;
+            dtkPlotCurve * curve;
             stream >> c;
-            e->curve.setColor(c);
+            if (self) {
+                e->curve.clear();
+                e->curve.setColor(c);
+            } else {
+                curve = new dtkPlotCurve;
+                curve->setColor(c);
+            }
             for (int i = 0; i < size_curve; ++i) {
                 stream >> p;
-                e->curve.append(p);
+                if (self)
+                    e->curve.append(p);
+                else
+                    curve->append(p);
             }
-            this->setData<dtkPlotCurve>(&e->curve);
+            if (self)
+                this->setData<dtkPlotCurve>(&e->curve);
+            else
+                return QVariant::fromValue(curve);
 #endif
         } else if (data_type == e->dtkAbstractData_Id) {
 
@@ -376,8 +438,8 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
                     d->object = dtkAbstractDataFactory::instance()->create(typeName);
 
                 if (!d->object) {
-                    dtkError() << "Unable to creat data of type" << typeName;
-                    return;
+                    dtkError() << "Unable to create data of type" << typeName;
+                    return QVariant();
                 }
 
                 if (!(reinterpret_cast<dtkAbstractData*>(d->object))->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
@@ -390,6 +452,33 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;
             }
+        } else if (data_type == e->dtkAbstractContainer_Id) {
+            qlonglong count;
+            stream >> count;
+            dtkDebug() << "need to deserialize container of size " << count;
+            qlonglong position = sizeof(qlonglong) *2;
+            dtkDebug() << "position is  " << position;
+
+            dtkContainerVector<QVariant> *c_vector = new dtkContainerVector<QVariant>();
+            dtkAbstractContainerWrapper *c = new dtkContainerVectorWrapper<QVariant>(c_vector);
+            for (qlonglong i = 0; i < count; ++i) {
+                qlonglong size;
+                stream >> size;
+                position += sizeof(size);
+                dtkDebug() << "item size is " << size << "position is"<< position;
+                QByteArray b = array.mid(position, size);
+                dtkDebug() << "setting variant from byte array";
+                QVariant variant = this->setVariantFrom(b, false);
+                position += size;
+                dtkDebug() << "append data";
+                c->append(variant);
+                dtkDebug() << "skip";
+                stream.skipRawData(size);
+
+            }
+            dtkDebug() << "set container";
+            this->setData(c);
+            return QVariant();
 
         } else {
 
@@ -401,7 +490,12 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
 
 QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
 {
-    qint64 data_type = this->dataType();
+    return variantToByteArray( QVariant(), true);
+}
+
+QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool self)
+{
+    qint64 data_type = (self) ? this->dataType() : v.userType();
 
     QByteArray array = QByteArray();
     QByteArray *tmp_array  = NULL;
@@ -410,69 +504,84 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
 
     switch(data_type) {
     case QMetaType::Double: {
-        double data = *this->data<double>();
+        double data = (self) ? *this->data<double>() : v.value<double>();
         stream << data_type;
         stream << data;
         break;
     }
     case QMetaType::LongLong: {
-        qlonglong data = *this->data<qlonglong>();
+        qlonglong data = (self) ? *this->data<qlonglong>() : v.value<qlonglong>();
         stream << data_type;
         stream << data;
         break;
     }
     case QMetaType::QString: {
         stream << data_type;
-        array.append(this->data<QString>()->toAscii());
+        array.append((self) ? this->data<QString>()->toAscii() : v.value<QString>().toAscii());
         break;
     }
     default:
-        if (dtkAbstractObject *o = this->object()) {
+        dtkAbstractObject *o = this->object();
+        if (self && o != NULL) {
             if (dtkAbstractData *data = qobject_cast<dtkAbstractData*>(o)) {
-                if (QByteArray *data_array = data->serialize()) {
+                if (dtkAbstractContainerWrapper *container= qobject_cast<dtkAbstractContainerWrapper*>(o)) {
+                    dtkDebug() <<"need to serialize container";
+                    stream << e->dtkAbstractContainer_Id;
+                    qlonglong count = container->count();
+                    stream << count;
+                    for(qlonglong i = 0; i < count; ++i) {
+                        QVariant q = container->at(i);
+                        QByteArray b = this->variantToByteArray(q, false);
+                        qlonglong  b_size = b.size();
+                        dtkDebug() <<" add item of size " << b_size << "for container";
+                        stream << b_size;
+                        array.append(b);
+                        stream.skipRawData(b_size);
+                    }
+                } else if (QByteArray *data_array = data->serialize()) {
                     stream << e->dtkAbstractData_Id;
                     stream << this->dataIdentifier();
                     array.append(*data_array);
                 } else {
-                    dtkError() <<"serialization failed";
+                    dtkError() <<"serialization failed for type" << this->dataIdentifier();
                 }
             }
-        }
-
-        else if (data_type == qMetaTypeId<dtkVector3DReal>(0)) {
+        } else if (!self && data_type == qMetaTypeId<dtkAbstractData *>()) {
+            dtkWarn() <<"dtkAbstractData in QVariant ... TODO" ;
+        } else if (data_type == qMetaTypeId<dtkVector3DReal>() || data_type == qMetaTypeId<dtkVector3DReal*>() ) {
 
             stream << e->dtkVector3DReal_Id;
-            tmp_array =  this->data<dtkVector3DReal>()->serialize();
+            tmp_array =  (self) ? this->data<dtkVector3DReal>()->serialize() : v.value<dtkVector3DReal*>()->serialize();
 
-        } else if (data_type == qMetaTypeId<dtkVectorReal>(0)) {
+        } else if (data_type == qMetaTypeId<dtkVectorReal>() || data_type == qMetaTypeId<dtkVectorReal*>()) {
 
             stream << e->dtkVectorReal_Id;
-            tmp_array =  this->data<dtkVectorReal>()->serialize();
+            tmp_array =  (self) ? this->data<dtkVectorReal>()->serialize()  : v.value<dtkVectorReal*>()->serialize();;
 
-        } else if (data_type == qMetaTypeId<dtkVectorInteger>(0)) {
+        } else if (data_type == qMetaTypeId<dtkVectorInteger>() || data_type == qMetaTypeId<dtkVectorInteger*>()) {
 
             stream << e->dtkVectorInteger_Id;
-            tmp_array =  this->data<dtkVectorInteger>()->serialize();
+            tmp_array =  (self) ? this->data<dtkVectorInteger>()->serialize() : v.value<dtkVectorInteger*>()->serialize();
 
-        } else if (data_type == qMetaTypeId<dtkQuaternionReal>(0)) {
+        } else if (data_type == qMetaTypeId<dtkQuaternionReal>() || data_type == qMetaTypeId<dtkQuaternionReal*>()) {
 
             stream << e->dtkQuaternionReal_Id;
-            tmp_array =  this->data<dtkQuaternionReal>()->serialize();
+            tmp_array =  (self) ? this->data<dtkQuaternionReal>()->serialize() : v.value<dtkQuaternionReal*>()->serialize();
 
-        } else if (data_type == qMetaTypeId<dtkMatrixReal>(0)) {
+        } else if (data_type == qMetaTypeId<dtkMatrixReal>() || data_type == qMetaTypeId<dtkMatrixReal*>()) {
 
             stream << e->dtkMatrixReal_Id;
-            tmp_array =  this->data<dtkMatrixReal>()->serialize();
+            tmp_array =  (self) ? this->data<dtkMatrixReal>()->serialize() : v.value<dtkMatrixReal*>()->serialize();
 
-        } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>(0)) {
+        } else if (data_type == qMetaTypeId<dtkMatrixSquareReal>() || data_type == qMetaTypeId<dtkMatrixSquareReal*>()) {
 
             stream << e->dtkMatrixSquareReal_Id;
-            tmp_array =  this->data<dtkMatrixSquareReal>()->serialize();
+            tmp_array =  (self) ? this->data<dtkMatrixSquareReal>()->serialize() : v.value<dtkMatrixSquareReal*>()->serialize();
 
 #if defined(DTK_HAVE_PLOT)
-        } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
+        } else if (data_type == qMetaTypeId<dtkPlotCurve>() || data_type == qMetaTypeId<dtkPlotCurve*>() ) {
             stream << e->dtkPlotCurve_Id;
-            dtkPlotCurve *curve = this->data<dtkPlotCurve>();
+            dtkPlotCurve *curve = (self) ? this->data<dtkPlotCurve>() : v.value<dtkPlotCurve *>() ;
             QVector<QPointF> curve_data = curve->data();
             stream << (qlonglong)curve_data.size();
             stream << curve->color();
@@ -480,7 +589,7 @@ QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
                 stream << p;
 #endif
         } else {
-            dtkWarn() << "Unable to serialize the data into QByteArray.";
+            dtkWarn() << "Unable to serialize the data into QByteArray." << data_type ;
             data_type = 0;
             stream << data_type;
         }

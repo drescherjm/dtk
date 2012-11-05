@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 30 17:18:28 2012 (+0100)
+ * Last-Updated: mer. oct. 31 17:32:23 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1707
+ *     Update #: 1774
  */
 
 /* Commentary: 
@@ -252,6 +252,27 @@ DTKDISTRIBUTED_EXPORT dtkDistributedController *dtkDistributedController::instan
         s_instance = new dtkDistributedController;
 
     return s_instance;
+}
+
+//! define a default port that should be uniq among users: compute a CRC-16 hash using the username
+quint16 dtkDistributedController::defaultPort(void)
+{
+    QProcessEnvironment pe = QProcessEnvironment::systemEnvironment();
+    QString username = pe.value("USERNAME");
+
+    if (username.isEmpty())
+        username = pe.value("USER");
+
+    if (username.isEmpty()) {
+        return 9999;
+    }
+
+    QByteArray bin = username.toAscii();
+    quint16 p =  qChecksum(bin.data(), bin.length());
+    if (p < 1024) // listen port should be higher than 1024
+        p += 1024;
+    dtkInfo() << "default port is" << p;
+    return p;
 }
 
 bool dtkDistributedController::isConnected(const QUrl& server)
@@ -579,7 +600,7 @@ void dtkDistributedController::read(void)
         break;
     case dtkDistributedMessage::DATA:
         result = msg->content();
-        dtkDebug() << "Result: " << result;
+        dtkDebug() << "Result size: " << result.size();
         emit dataPosted(result);
         break;
     default:

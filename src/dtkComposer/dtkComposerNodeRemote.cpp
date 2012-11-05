@@ -342,7 +342,8 @@ public:
     dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;
 
-    QMutex mutex;
+public:
+    QString slaveName;
 
 public:
     QString job_id;
@@ -356,13 +357,11 @@ dtkComposerNodeRemoteSubmit::dtkComposerNodeRemoteSubmit(void) : dtkComposerNode
     this->appendReceiver(&(d->walltime));
     this->appendReceiver(&(d->queuename));
 
+    d->slaveName = "dtkComposerEvaluatorSlave";
     d->job_id = QString();
     d->id.setData(&d->job_id);
     this->appendEmitter(&(d->id));
 
-    d->mutex.lock();
-
-    
 }
 
 dtkComposerNodeRemoteSubmit::~dtkComposerNodeRemoteSubmit(void)
@@ -370,6 +369,11 @@ dtkComposerNodeRemoteSubmit::~dtkComposerNodeRemoteSubmit(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNodeRemoteSubmit::setSlaveName(QString name)
+{
+    d->slaveName = name;
 }
 
 void dtkComposerNodeRemoteSubmit::run(void)
@@ -382,6 +386,15 @@ void dtkComposerNodeRemoteSubmit::run(void)
     }
 
     QVariantMap job;
+
+    QUrl cluster = QUrl(*(d->cluster.data()));
+
+    if (cluster.port() < 0) {
+        dtkDebug() << "setting port" ;
+        cluster.setPort(dtkDistributedController::defaultPort());
+        dtkDebug() << "new cluster url" << cluster.toString() ;
+    }
+
 
     if (d->cores.isEmpty())
         resources.insert("cores", 1);
@@ -404,14 +417,20 @@ void dtkComposerNodeRemoteSubmit::run(void)
         job.insert("queue", *d->queuename.data());
 
     job.insert("properties", QVariantMap());
-    job.insert("application", "dtkComposerEvaluatorSlave "+*d->cluster.data());
+    job.insert("application", d->slaveName+" "+cluster.toString());
 
     QByteArray job_data = dtkJson::serialize(job);
 
     dtkTrace() << " submit job with parameters: "<< job_data;
 
+
     dtkDistributedController *controller = dtkDistributedController::instance();
-    if (controller->submit(QUrl(*d->cluster.data()), job_data)) {
+    if (!controller->isConnected(cluster)) {
+        dtkInfo() <<  "Not yet connected to " << cluster << ",try to connect";
+        controller->deploy(cluster);
+        controller->connect(cluster);
+    }
+    if (controller->submit(cluster, job_data)) {
         QEventLoop loop;
         this->connect(controller, SIGNAL(jobQueued(QString)), this, SLOT(onJobQueued(QString)),Qt::DirectConnection);
         loop.connect(controller, SIGNAL(jobQueued(QString)), &loop, SLOT(quit()));

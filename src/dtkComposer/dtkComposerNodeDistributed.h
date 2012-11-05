@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 08:51:28
  * Version: $Id$
- * Last-Updated: mer. oct. 17 14:44:03 2012 (+0200)
+ * Last-Updated: ven. nov.  2 15:56:00 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 53
+ *     Update #: 57
  */
 
 /* Commentary:
@@ -191,6 +191,8 @@ public:
             return "data";
         else if (port == 2)
             return "target rank";
+        else if (port == 3)
+            return "tag";
         else
             return "value";
     }
@@ -238,13 +240,22 @@ public:
             return "communicator";
         else if (port == 1)
             return "source rank";
+        else if (port == 2)
+            return "tag";
         else
             return "value";
     }
 
 public:
-    inline QString outputLabelHint(int) {
-        return "value";
+    inline QString outputLabelHint(int port) {
+        if (port == 0)
+            return "data";
+        else if (port == 1)
+            return "source";
+        else if (port == 2)
+            return "tag";
+        else
+            return "value";
     }
 
 protected:

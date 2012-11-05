@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
- * Version: $Id$
- * Last-Updated: lun. oct.  8 15:49:10 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 629
  */
 
 /* Commentary:
@@ -241,11 +237,14 @@ void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType da
     MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag);
 }
 
-void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag, int& from)
+void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorStatus& status)
 {
-    MPI::Status status;
-    MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag, status);
-    from = status.Get_source();
+    MPI::Status mpi_status;
+    MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag, mpi_status);
+    status.setCount( mpi_status.Get_count(data_type(dataType)));
+    status.setTag(mpi_status.Get_tag());
+    status.setSource(mpi_status.Get_source());
+    status.setError(mpi_status.Get_error());
 }
 
 
@@ -330,7 +329,6 @@ void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int ta
 void dtkDistributedCommunicatorMpi::send(QByteArray &array, qint16 target, int tag)
 {
     qint64   arrayLength = array.length();
-    dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
     dtkDistributedCommunicator::send(array.data(), arrayLength, target, tag);
 
 }
@@ -347,11 +345,22 @@ void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
 
 void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag)
 {
-    qint64   arrayLength;
-    dtkDistributedCommunicator::receive(&arrayLength,1,source,tag);
+    dtkDistributedCommunicatorStatus status;
+    this->receive(array, source, tag, status);
+}
 
-    array.resize(arrayLength);
-    dtkDistributedCommunicator::receive(array.data(), arrayLength, source, tag);
+void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag, dtkDistributedCommunicatorStatus& status )
+{
+    MPI::Status mpi_status;
+    MPI::COMM_WORLD.Probe(source, tag, mpi_status);
+    qint64   count = mpi_status.Get_count(MPI::CHAR);
+    status.setCount(count);
+    status.setTag(mpi_status.Get_tag());
+    status.setSource(mpi_status.Get_source());
+    status.setError(mpi_status.Get_error());
+    dtkTrace() << "probe mpi: count/source/tag : " << status.count() << status.source() << status.tag();
+    array.resize(count);
+    dtkDistributedCommunicator::receive(array.data(), count, source, tag);
 
 }
 

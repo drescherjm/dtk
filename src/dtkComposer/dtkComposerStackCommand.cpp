@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 19 17:11:27 2012 (+0200)
+ * Last-Updated: ven. nov.  2 17:30:27 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 4516
+ *     Update #: 4542
  */
 
 /* Commentary: 
@@ -1981,7 +1981,10 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         while(source != root) {
 
-            source = dynamic_cast<dtkComposerSceneNodeComposite *>(source_parent);
+            if (source->embedded())
+                source = dynamic_cast<dtkComposerSceneNodeComposite *>(source->parent()->parent());
+            else
+                source = dynamic_cast<dtkComposerSceneNodeComposite *>(source->parent());
 
             dtkComposerStackCommandReparentNode *command = new dtkComposerStackCommandReparentNode;
             command->e->direction = dtkComposerStackCommandReparentNodePrivate::Up;

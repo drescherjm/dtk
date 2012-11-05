@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 30 16:46:33 2012 (+0100)
+ * Last-Updated: mer. oct. 31 17:07:34 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 111
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -60,6 +60,9 @@ signals:
     void jobQueued(QString jobid);
 
     void status(const QUrl& server);
+
+public:
+    static quint16 defaultPort(void);
 
 public:
     dtkDistributedSocket *socket(const QString& jobid);

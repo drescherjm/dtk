@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2008-2011 -Nicolas Niclausse , Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. sept. 27 15:18:05 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 56
  */
 
 /* Commentary:
@@ -19,6 +15,7 @@
 #include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeLogger.h"
+#include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkLog/dtkLog.h>
@@ -27,12 +24,16 @@ class dtkComposerNodeLoggerPrivate
 {
 public:
     dtkComposerTransmitterVariant receiver;
+    dtkComposerTransmitterReceiver<QString> receiver_header;
+    dtkComposerTransmitterReceiver<QString> receiver_level;
 
 };
 
 dtkComposerNodeLogger::dtkComposerNodeLogger(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLoggerPrivate)
 {
     this->appendReceiver(&(d->receiver));
+    this->appendReceiver(&(d->receiver_header));
+    this->appendReceiver(&(d->receiver_level));
 }
 
 dtkComposerNodeLogger::~dtkComposerNodeLogger(void)
@@ -47,7 +48,31 @@ void dtkComposerNodeLogger::run(void)
     QStringList descriptions = d->receiver.allDataDescription();
     QStringList identifiers  = d->receiver.allDataIdentifier();
 
+    QString output;
+    if (!d->receiver_header.isEmpty())
+        output = *(d->receiver_header.data()) +" ";
+
     for(int i = 0; i < descriptions.count(); ++i)
-        dtkInfo() << identifiers.at(i) << ": " << descriptions.at(i);
+        output += identifiers.at(i) + ": " + descriptions.at(i);
+
+    if (!d->receiver_level.isEmpty()) {
+        QString level = *(d->receiver_level.data());
+        if (level == "trace")
+            dtkTrace() <<  output;
+        else if  (level == "debug")
+            dtkDebug() <<  output;
+        else if  (level == "info")
+            dtkInfo() <<  output;
+        else if  (level == "warn")
+            dtkWarn() <<  output;
+        else if  (level == "error")
+            dtkError() <<  output;
+        else if  (level == "fatal")
+            dtkFatal() <<  output;
+        else
+            dtkInfo() <<  output;
+    } else {
+        dtkInfo() <<  output;
+    }
 }
 

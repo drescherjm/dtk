@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Mon Mar 26 12:40:45 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Tue Apr  3 16:06:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 20
  */
 
 /* Commentary:
@@ -44,7 +40,14 @@ public:
     }
 
     inline QString inputLabelHint(int port) {
-        return "value";
+        if (port == 0)
+            return "value";
+        else if (port == 1)
+            return "header";
+        else if (port == 2)
+            return "level";
+        else
+            return "value";
     }
 
 private:

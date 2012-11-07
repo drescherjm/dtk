@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 23 12:42:01 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 93
+ * Last-Updated: 2012 Wed Nov  7 16:44:57 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -83,7 +83,7 @@ public:
 
 public:
     bool      value_b;
-    qlonglong value_i;
+    qlonglong *value_i;
     qreal     value_r;
     QString   value_s;
 

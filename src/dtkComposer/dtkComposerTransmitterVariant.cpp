@@ -426,19 +426,14 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
         break;
     }
     case QMetaType::LongLong: {
-<<<<<<< HEAD
-        stream >> *e->value_i;
-        this->setData<qlonglong>(e->value_i);
-=======
         if (self) {
-            stream >> e->value_i;
-            this->setData<qlonglong>(&e->value_i);
+            stream >> *e->value_i;
+            this->setData<qlonglong>(e->value_i);
         } else {
             qlonglong i;
             stream >> i;
             QVariant::fromValue(&i);
         }
->>>>>>> f8f8236c12d50af24967e6ce34c2d3e54ae04e50
         break;
     }
     case QMetaType::QString: {

@@ -101,7 +101,7 @@ void dtkComposerNodeCommunicatorUninitialize::run(void)
 {
     if (!d->receiver.isEmpty()) {
         dtkDistributedCommunicator *communicator = d->receiver.data();
-        
+
         if (communicator) {
             communicator->uninitialize();
         } else {
@@ -110,8 +110,7 @@ void dtkComposerNodeCommunicatorUninitialize::run(void)
         }
 
     } else {
-        dtkWarn() << "Inputs not specified. Nothing is done";
-        
+        dtkWarn() << "Communicator not connected. Nothing is done";
     }
 }
 
@@ -161,7 +160,7 @@ void dtkComposerNodeCommunicatorRank::run(void)
         d->rank = communicator->rank();
 
     } else {
-        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkWarn() << "Communicator not connected. Nothing is done";
         d->rank = 0;
 
     }
@@ -216,7 +215,7 @@ void dtkComposerNodeCommunicatorSize::run(void)
         d->size = communicator->size();
 
     } else {
-        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkWarn() << "Communicator not connected. Nothing is done";
         d->size = 0;
 
     }
@@ -267,7 +266,7 @@ void dtkComposerNodeCommunicatorSend::run(void)
     if (!d->receiver_data.isEmpty() && !d->receiver_comm.isEmpty() && !d->receiver_target.isEmpty() ) {
 
         QByteArray array = d->receiver_data.dataToByteArray();
-        dtkTrace() << "Got data as byte array to be sent" << array.size();
+        dtkTrace() << "Got data as byte array to be sent size:" << array.size()  ;
 
         d->communicator = d->receiver_comm.data();
 
@@ -282,7 +281,9 @@ void dtkComposerNodeCommunicatorSend::run(void)
         if (!d->receiver_tag.isEmpty())
             tag = *(d->receiver_tag.data());
 
-        d->communicator->send(array, *d->receiver_target.data(), tag);
+        qlonglong target = *d->receiver_target.data();
+        dtkTrace() << "send to target: " << target ;
+        d->communicator->send(array, target , tag);
 
     } else {
         dtkWarn() << "Inputs not specified in Send node. Nothing is done"  ;
@@ -410,7 +411,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         }
     } else {
         d->emitter.clearData();
-        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkWarn() << "Inputs not specified in receive. Nothing is done";
     }
 }
 

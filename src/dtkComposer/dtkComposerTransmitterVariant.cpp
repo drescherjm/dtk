@@ -434,20 +434,33 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
 
             if (array.size() >  header_length) {
 
-                if (!d->object)
-                    d->object = dtkAbstractDataFactory::instance()->create(typeName);
+                if (self) {
+                    if (!d->object)
+                        d->object = dtkAbstractDataFactory::instance()->create(typeName);
 
-                if (!d->object) {
-                    dtkError() << "Unable to create data of type" << typeName;
-                    return QVariant();
-                }
+                    if (!d->object) {
+                        dtkError() << "Unable to create data of type" << typeName;
+                        return QVariant();
+                    }
 
-                if (!(reinterpret_cast<dtkAbstractData*>(d->object))->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
-                    dtkError() << "Deserialization failed for type" << typeName;
+                    if (!(reinterpret_cast<dtkAbstractData*>(d->object))->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
+                        dtkError() << "Deserialization failed for type" << typeName;
 
-                } else {
-                    dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
-                    this->setData<dtkAbstractData>(reinterpret_cast<dtkAbstractData*>(d->object));
+                    } else {
+                        dtkDebug() << "set dtkAbstractData in transmitter, size is" << array.size() << typeName;;
+                        this->setData<dtkAbstractData>(reinterpret_cast<dtkAbstractData*>(d->object));
+                    }
+                } else  {
+                    dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(typeName);
+                    if (!data) {
+                        dtkError() << "Unable to create data of type" << typeName;
+                        return QVariant();
+                    }
+                    if (!data->deserialize((QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))))
+                        dtkError() << "Deserialization failed for type" << typeName;
+                    else
+                        return data->toVariant(data);
+
                 }
             } else {
                 dtkWarn() << "No data in byte array, can't create " << typeName;
@@ -478,7 +491,6 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
             }
             dtkDebug() << "set container";
             this->setData(c);
-            return QVariant();
 
         } else {
 
@@ -486,6 +498,7 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
             dtkError() << "Deserialization not handled for type" << data_type;
         }
     }
+    return QVariant();
 }
 
 QByteArray dtkComposerTransmitterVariant::dataToByteArray(void)
@@ -546,8 +559,6 @@ QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool se
                     dtkError() <<"serialization failed for type" << this->dataIdentifier();
                 }
             }
-        } else if (!self && data_type == qMetaTypeId<dtkAbstractData *>()) {
-            dtkWarn() <<"dtkAbstractData in QVariant ... TODO" ;
         } else if (data_type == qMetaTypeId<dtkVector3DReal>() || data_type == qMetaTypeId<dtkVector3DReal*>() ) {
 
             stream << e->dtkVector3DReal_Id;
@@ -588,8 +599,34 @@ QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool se
             foreach(QPointF p, curve_data)
                 stream << p;
 #endif
+        } else if (!self) {
+            if (data_type != qMetaTypeId<dtkAbstractData *>()) {
+
+                // OK, i want to know if this type is a dtkAbstractData
+                // let do it the ugly way:
+                QString type = v.typeName();
+                type = type.remove(QChar('*'));
+                if  (dtkAbstractDataFactory::instance()->count(type) > 0) {
+                    dtkDebug() << "I can convert the variant to dtkAbstractdata !!!" ;
+
+                    dtkAbstractData * data = v.value<dtkAbstractData*>();
+                    dtkDebug() << "serialize..."  ;
+                    dtkDebug() <<  data->identifier() <<  data->description();
+                    if (QByteArray *data_array = data->serialize()) {
+                        stream << e->dtkAbstractData_Id;
+                        dtkDebug() <<"dtkAbstractData in QVariant ... identifier is" << data->identifier();
+                        stream << data->identifier();
+                        array.append(*data_array);
+                    }
+
+                } else {
+                    dtkDebug() << "I can NOT convert the variant to dtkAbstractdata !!!" << type ;
+                }
+
+            }
+
         } else {
-            dtkWarn() << "Unable to serialize the data into QByteArray." << data_type ;
+            dtkWarn() << "Unable to serialize the data into QByteArray." << data_type;
             data_type = 0;
             stream << data_type;
         }

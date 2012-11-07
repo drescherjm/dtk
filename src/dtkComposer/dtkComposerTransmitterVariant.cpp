@@ -113,42 +113,45 @@ template <> qlonglong *dtkComposerTransmitterVariant::data(void)
     int emitter_type = emitter_variant.userType();
 
     if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::LongLongStar]) {
-        *e->value_i = *(emitter_variant.value<qlonglong*>());
+        *(e->value_i) = *(emitter_variant.value<qlonglong*>());
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::RealStar]) {
-        *e->value_i = static_cast<qlonglong>(*(emitter_variant.value<qreal*>()));
+        *(e->value_i) = static_cast<qlonglong>(*(emitter_variant.value<qreal*>()));
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::StringStar]) {
-        *e->value_i = (emitter_variant.value<QString*>())->toLongLong();
+        *(e->value_i) = (emitter_variant.value<QString*>())->toLongLong();
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::BoolStar]) {
-        *e->value_i = static_cast<qlonglong>(*(emitter_variant.value<bool*>()));
+        *(e->value_i) = static_cast<qlonglong>(*(emitter_variant.value<bool*>()));
 
     } else if (emitter_type <= QMetaType::Double && emitter_type != 0) {
-        *e->value_i = emitter_variant.value<qlonglong>();
+        *(e->value_i) = emitter_variant.value<qlonglong>();
 
     } else if (emitter_type == QMetaType::QString) {
-        *e->value_i = emitter_variant.value<qlonglong>();
+        *(e->value_i) = emitter_variant.value<qlonglong>();
 
     } else {
         if (emitter_variant.canConvert<qlonglong>()) {
-            *e->value_i = emitter_variant.value<qlonglong>();
+            *(e->value_i) = emitter_variant.value<qlonglong>();
         } else {
-            *e->value_i = 0.;
+            *(e->value_i) = 0.;
             return NULL;
         }
     }
+
+    if (e->twinned)
+        return e->value_i;
 
     if (!e->m_variant.isValid()) {
         qlonglong *m_init = new qlonglong(*e->value_i);
         e->m_variant.setValue(m_init);
     }
- 
+
     qlonglong *m_value = e->m_variant.value<qlonglong*>();
-    *m_value = *e->value_i;
+    *m_value = *(e->value_i);
     e->m_variant.setValue(e->value_i);
     e->value_i = m_value;
- 
+
     return e->value_i;
 }
 
@@ -319,6 +322,7 @@ dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *pa
 
 dtkComposerTransmitterVariant::~dtkComposerTransmitterVariant(void)
 {
+    delete e->value_i;
     delete e;
 
     e = NULL;

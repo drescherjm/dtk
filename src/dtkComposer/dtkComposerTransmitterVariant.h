@@ -54,6 +54,7 @@ public:
     void setDataFrom(dtkComposerTransmitterVariant *source);
 
     void setDataFrom(QByteArray& array);
+    QVariant setVariantFrom(QByteArray& array, bool self = true);
 
 public:
     template <typename T>       T      *data(void);
@@ -61,6 +62,7 @@ public:
 
 public:
     QByteArray dataToByteArray(void);
+    QByteArray variantToByteArray(QVariant data, bool self);
 
 public:
     QVariant& variant(void);

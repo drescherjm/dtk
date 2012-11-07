@@ -86,10 +86,11 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeC
     this->appendEmitter(&(d->communicator_emitter));
     this->setOutputLabelHint("communicator", 0);
 
-    d->controller = NULL;
-    d->slave      = NULL;
-    d->server     = NULL;
-    d->title      = "Remote";
+    d->communicator = NULL;
+    d->controller   = NULL;
+    d->slave        = NULL;
+    d->server       = NULL;
+    d->title        = "Remote";
 }
 
 dtkComposerNodeRemote::~dtkComposerNodeRemote(void)

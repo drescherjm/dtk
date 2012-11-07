@@ -235,10 +235,16 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
 
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator> emitter;
+
+public:
+    dtkDistributedCommunicator *communicator;
+
 };
 
 dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendPrivate)
 {
+    d->communicator = NULL;
     d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_data));
@@ -246,6 +252,7 @@ dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComp
     this->appendReceiver(&(d->receiver_target));
     this->appendReceiver(&(d->receiver_tag));
 
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeCommunicatorSend::~dtkComposerNodeCommunicatorSend(void)
@@ -262,21 +269,23 @@ void dtkComposerNodeCommunicatorSend::run(void)
         QByteArray array = d->receiver_data.dataToByteArray();
         dtkTrace() << "Got data as byte array to be sent" << array.size();
 
-        dtkDistributedCommunicator *communicator = d->receiver_comm.data();
+        d->communicator = d->receiver_comm.data();
 
-        if (!communicator) {
+        if (!d->communicator) {
             dtkError() << "Input communicator not valid.";
             return;
         }
+
+        d->emitter.setData(d->communicator);
 
         int tag = 0;
         if (!d->receiver_tag.isEmpty())
             tag = *(d->receiver_tag.data());
 
-        communicator->send(array, *d->receiver_target.data(), tag);
+        d->communicator->send(array, *d->receiver_target.data(), tag);
 
     } else {
-        dtkWarn() << "Inputs not specified. Nothing is done";
+        dtkWarn() << "Inputs not specified in Send node. Nothing is done"  ;
     }
 }
 

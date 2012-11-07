@@ -68,7 +68,43 @@ template <> bool *dtkComposerTransmitterVariant::data(void)
         }
     }
 
-    return &(e->value_b);
+    bool *m_value;
+    if (!e->m_variant.isValid())
+        m_value = NULL;
+    else
+        m_value = e->m_variant.value<bool*>();
+
+    switch(this->dataTransmission()) {
+    case dtkComposerTransmitter::AutoCopy:
+        if (this->enableCopy()) {
+            if (!m_value) {
+                m_value = new bool(e->value_b);
+                e->m_variant.setValue(m_value);
+            } else {
+                *m_value = e->value_b;
+            }
+            return m_value;
+        } else {
+            return &(e->value_b);
+        }
+        break;
+    case dtkComposerTransmitter::Copy:
+        if (!m_value) {
+            m_value = new bool(e->value_b);
+            e->m_variant.setValue(m_value);
+        } else {
+            *m_value = e->value_b;
+        }
+        return m_value;
+        break;
+    case dtkComposerTransmitter::Reference:
+        return &(e->value_b);
+        break;
+    default:
+        break;
+    };
+
+    return NULL;
 }
 
 template <> qlonglong *dtkComposerTransmitterVariant::data(void)
@@ -103,7 +139,43 @@ template <> qlonglong *dtkComposerTransmitterVariant::data(void)
         }
     }
 
-    return &(e->value_i);
+    qlonglong *m_value;
+    if (!e->m_variant.isValid())
+        m_value = NULL;
+    else
+        m_value = e->m_variant.value<qlonglong*>();
+
+    switch(this->dataTransmission()) {
+    case dtkComposerTransmitter::AutoCopy:
+        if (this->enableCopy()) {
+            if (!m_value) {
+                m_value = new qlonglong(e->value_i);
+                e->m_variant.setValue(m_value);
+            } else {
+                *m_value = e->value_i;
+            }
+            return m_value;
+        } else {
+            return &(e->value_i);
+        }
+        break;
+    case dtkComposerTransmitter::Copy:
+        if (!m_value) {
+            m_value = new qlonglong(e->value_i);
+            e->m_variant.setValue(m_value);
+        } else {
+            *m_value = e->value_i;
+        }
+        return m_value;
+        break;
+    case dtkComposerTransmitter::Reference:
+        return &(e->value_i);
+        break;
+    default:
+        break;
+    };
+
+    return NULL;
 }
 
 template <> qreal *dtkComposerTransmitterVariant::data(void)
@@ -138,7 +210,43 @@ template <> qreal *dtkComposerTransmitterVariant::data(void)
         }
     }
 
-    return &(e->value_r);
+    qreal *m_value;
+    if (!e->m_variant.isValid())
+        m_value = NULL;
+    else
+        m_value = e->m_variant.value<qreal*>();
+
+    switch(this->dataTransmission()) {
+    case dtkComposerTransmitter::AutoCopy:
+        if (this->enableCopy()) {
+            if (!m_value) {
+                m_value = new qreal(e->value_r);
+                e->m_variant.setValue(m_value);
+            } else {
+                *m_value = e->value_r;
+            }
+            return m_value;
+        } else {
+            return &(e->value_r);
+        }
+        break;
+    case dtkComposerTransmitter::Copy:
+        if (!m_value) {
+            m_value = new qreal(e->value_r);
+            e->m_variant.setValue(m_value);
+        } else {
+            *m_value = e->value_r;
+        }
+        return m_value;
+        break;
+    case dtkComposerTransmitter::Reference:
+        return &(e->value_r);
+        break;
+    default:
+        break;
+    };
+
+    return NULL;
 }
 
 template <> QString *dtkComposerTransmitterVariant::data(void)
@@ -176,7 +284,43 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
         }
     }
 
-    return &(e->value_s);
+    QString *m_value;
+    if (!e->m_variant.isValid())
+        m_value = NULL;
+    else
+        m_value = e->m_variant.value<QString*>();
+
+    switch(this->dataTransmission()) {
+    case dtkComposerTransmitter::AutoCopy:
+        if (this->enableCopy()) {
+            if (!m_value) {
+                m_value = new QString(e->value_s);
+                e->m_variant.setValue(m_value);
+            } else {
+                *m_value = e->value_s;
+            }
+            return m_value;
+        } else {
+            return &(e->value_s);
+        }
+        break;
+    case dtkComposerTransmitter::Copy:
+        if (!m_value) {
+            m_value = new QString(e->value_s);
+            e->m_variant.setValue(m_value);
+        } else {
+            *m_value = e->value_s;
+        }
+        return m_value;
+        break;
+    case dtkComposerTransmitter::Reference:
+        return &(e->value_s);
+        break;
+    default:
+        break;
+    };
+
+    return NULL;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -922,16 +1066,8 @@ void dtkComposerTransmitterVariant::activateEmitter(dtkComposerTransmitterVarian
  */
 bool dtkComposerTransmitterVariant::enableCopy(void)
 {
-    if (e->twinned) {
-        if (e->already_ask)
-            return false;
-        else {
-            e->already_ask = true;
-            if (d->receivers.count() > 1)
-                return true;
-            return false;
-        }
-    }
+    if (e->twinned)
+        return (d->receivers.count() > 1);
 
     if (e->active_variant)
         return e->active_variant->enableCopy();

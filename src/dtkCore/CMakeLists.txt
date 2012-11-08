@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: 2012 Fri Oct 26 09:56:43 (+0200)
-##           By: Thibaud Kloczko, Inria.
-##     Update #: 344
+## Last-Updated: jeu. nov.  8 18:23:30 2012 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 350
 ######################################################################
 ## 
 ### Commentary: 
@@ -57,8 +57,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkSingletonDeclare.h
   dtkSmartPointer.h
   dtkTest.h
-  dtkVariant.h
-  dtkVariant.tpp)
+# dtkVariant.h
+# dtkVariant.tpp
+  )
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractData.h
@@ -108,7 +109,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkSingletonDeclare.cpp
   dtkSmartPointer.cpp
   dtkUpdater.cpp
-  dtkVariant.cpp)
+# dtkVariant.cpp
+  )
 
 ## #################################################################
 ## Wrapping

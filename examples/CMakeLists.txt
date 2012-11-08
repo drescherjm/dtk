@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: 2012 Fri Oct 26 11:22:24 (+0200)
-##           By: Thibaud Kloczko, Inria.
-##     Update #: 97
+## Last-Updated: jeu. nov.  8 18:22:40 2012 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 98
 ######################################################################
 ## 
 ### Commentary: 
@@ -21,7 +21,7 @@
 ## dtkVariant examples
 ## #################################################################
 
-add_subdirectory(dtkVariant)
+#add_subdirectory(dtkVariant)
 
 ## #################################################################
 ## dtkLog examples

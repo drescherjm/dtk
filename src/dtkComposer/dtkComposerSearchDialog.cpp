@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov  5 16:41:00 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov  8 16:06:24 2012 (+0100)
+ * Last-Updated: Thu Nov  8 16:34:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 247
+ *     Update #: 263
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSearchDialog.h"
 #include "dtkComposerView.h"
 
@@ -77,13 +78,13 @@ void dtkComposerSearchDialogPrivate::populate(dtkComposerSceneNode *node)
         this->types["*"] << node;
     }
     
-    dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node);
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        foreach(dtkComposerSceneNode *child, composite->nodes())
+            this->populate(child);
 
-    if(!composite)
-        return;
-
-    foreach(dtkComposerSceneNode *child, composite->nodes())
-        this->populate(child);
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+            this->populate(block);
 }
 
 void dtkComposerSearchDialogPrivate::update(void)
@@ -107,8 +108,18 @@ void dtkComposerSearchDialogPrivate::update(void)
     if (this->scene)
         this->scene->clearSelection();
 
-    if (this->result.count())
-        this->result.at(this->index)->setSelected(true);
+    if(!this->result.count())
+        return;
+    
+    dtkComposerSceneNode *node = this->result.at(this->index);
+
+    if(!node)
+        return;
+
+    if(node->parent() != this->scene->current())
+        return;
+
+    node->setSelected(true);
 
     // view display
 

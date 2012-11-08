@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:00:30
  * Version: $Id$
- * Last-Updated: jeu. sept. 13 17:51:49 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 26
+ * Last-Updated: Thu Nov  8 13:43:14 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 29
  */
 
 /* Commentary:
@@ -35,7 +35,13 @@ public:
     virtual ~dtkComposerView(void);
 
 public:
+    QAction *searchAction(void);
+
+public:
     void scroll(int dx, int dy);
+
+public slots:
+    void search(void);
 
 signals:
     void scrolled(void);

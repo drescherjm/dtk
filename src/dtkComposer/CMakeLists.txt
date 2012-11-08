@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Tue Oct 23 11:36:23 2012 (+0200)
+## Last-Updated: Mon Nov  5 16:43:08 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 627
+##     Update #: 630
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -120,6 +120,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerSceneNote.h
   dtkComposerScenePort.h
   dtkComposerSceneView.h
+  dtkComposerSearchDialog.h
   dtkComposerStack.h
   dtkComposerStackCommand.h
   dtkComposerStackUtils.h
@@ -157,6 +158,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerSceneNodeEditor.h
   dtkComposerSceneNodeEditor_p.h
   dtkComposerSceneView.h
+  dtkComposerSearchDialog.h
   dtkComposerStackView.h
   dtkComposerView.h)
 
@@ -254,6 +256,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerSceneNote.cpp
   dtkComposerScenePort.cpp
   dtkComposerSceneView.cpp
+  dtkComposerSearchDialog.cpp
   dtkComposerStack.cpp
   dtkComposerStackUtils.cpp
   dtkComposerStackView.cpp

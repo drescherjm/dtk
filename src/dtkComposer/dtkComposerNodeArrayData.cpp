@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 11:47:12 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 17:51:53 2012 (+0200)
- *           By: tkloczko
- *     Update #: 56
+ * Last-Updated: 2012 Wed Nov  7 17:44:59 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 60
  */
 
 /* Commentary: 
@@ -150,11 +150,14 @@ void dtkComposerNodeArrayData::run(void)
             dtkInfo() << "A dtkContainerVector of QVariant has been created.";
 
             d->container->clear();
+            d->container->resize(d->size);
             if (!d->receiver_value.isEmpty()) {
                 for(qlonglong i = 0 ; i < d->size; ++i) {
-                    d->container->append(d->receiver_value.variant());
+                    d->container->replace(d->receiver_value.variant(), i);
                 }
             }
+
+            qDebug() << d->container->count();
 
         }
 

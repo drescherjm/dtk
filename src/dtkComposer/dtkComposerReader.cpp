@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. oct. 18 09:10:09 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 820
+ * Last-Updated: 2012 Thu Nov  8 09:48:16 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 823
  */
 
 /* Commentary: 
@@ -46,7 +46,9 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCore/dtkGlobal.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -84,6 +86,8 @@ bool dtkComposerReaderPrivate::check(const QDomDocument& document)
     missing.clear();
 
     QStringList implementations = dtkAbstractProcessFactory::instance()->implementations();
+    implementations << dtkAbstractDataFactory::instance()->implementations();
+    implementations << dtkAbstractViewFactory::instance()->implementations();
 
     QDomNodeList nodes = document.elementsByTagName("implementation");
 

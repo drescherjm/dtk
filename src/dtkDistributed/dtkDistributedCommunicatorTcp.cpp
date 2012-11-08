@@ -138,6 +138,7 @@ void dtkDistributedCommunicatorTcp::flush(void)
 {
     while (this->socket()->bytesToWrite() > 0) {
         this->socket()->flush();
+        this->socket()->waitForBytesWritten();
     }
 }
 
@@ -194,7 +195,7 @@ void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
     dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, QString::number(tag), target, a.size(), "qvariant", a);
     msg->addHeader("Tag",QString::number(tag));
     d->socket->sendRequest(msg);
-    d->socket->waitForBytesWritten();
+    this->flush();
 
     delete msg;
 }

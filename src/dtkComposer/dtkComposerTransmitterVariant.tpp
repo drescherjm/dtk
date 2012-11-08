@@ -150,7 +150,7 @@ template <typename T> T *dtkComposerTransmitterVariant::data(void)
     return NULL;
 }
 
-template <typename T> const T *dtkComposerTransmitterVariant::constData(void)
+template <typename T> T *dtkComposerTransmitterVariant::constData(void)
 {
     if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
         if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)

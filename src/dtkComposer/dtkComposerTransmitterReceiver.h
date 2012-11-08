@@ -41,8 +41,8 @@ public:
     T *dataFromEmitter(void);
 
 public:
-          T      *data(void);
-    const T *constData(void);
+    T      *data(void);
+    T *constData(void);
 
 public:
     dtkAbstractObject *object(void);
@@ -109,8 +109,8 @@ public:
     dtkContainerVector<T> *dataFromEmitter(void);
 
 public:
-          dtkContainerVector<T>      *data(void);
-    const dtkContainerVector<T> *constData(void);
+    dtkContainerVector<T>      *data(void);
+    dtkContainerVector<T> *constData(void);
 
 public:
     dtkAbstractObject *object(void);

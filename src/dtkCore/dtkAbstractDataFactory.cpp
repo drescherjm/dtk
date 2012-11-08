@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 13 16:52:24 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 290
+ * Last-Updated: 2012 Thu Nov  8 09:50:05 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 291
  */
 
 /* Commentary:
@@ -284,6 +284,11 @@ const dtkAbstractDataFactory::dtkAbstractDataFactoryWriterPriorityMap& dtkAbstra
 const dtkAbstractDataFactory::dtkAbstractDataFactoryConverterPriorityMap& dtkAbstractDataFactory::converterPriorities(void) const
 {
     return d->converter_priorities;
+}
+
+QStringList dtkAbstractDataFactory::implementations(void)
+{
+    return d->interfaces.values();
 }
 
 QStringList dtkAbstractDataFactory::implementations(const QString& interface)

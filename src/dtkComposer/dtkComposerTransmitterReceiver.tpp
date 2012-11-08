@@ -134,7 +134,7 @@ template <typename T> T *dtkComposerTransmitterReceiver<T>::data(void)
 /*! 
  *  
  */
-template <typename T> const T *dtkComposerTransmitterReceiver<T>::constData(void)
+template <typename T> T *dtkComposerTransmitterReceiver<T>::constData(void)
 {
     if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
         return this->dataFromEmitter();
@@ -495,7 +495,7 @@ template <typename T> dtkContainerVector<T> *dtkComposerTransmitterReceiverVecto
     return NULL;
 };
 
-template <typename T> const dtkContainerVector<T> *dtkComposerTransmitterReceiverVector<T>::constData(void)
+template <typename T> dtkContainerVector<T> *dtkComposerTransmitterReceiverVector<T>::constData(void)
 {
     if (this->dataTransmission() != dtkComposerTransmitter::Copy) {
         return this->dataFromEmitter();

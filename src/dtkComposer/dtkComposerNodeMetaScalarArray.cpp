@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:06:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Wed Oct 24 15:14:27 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 22
+ * Last-Updated: mer. nov.  7 15:03:50 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -71,5 +71,5 @@ QString dtkComposerNodeMetaScalarArray::outputLabelHint(int port)
 
 void dtkComposerNodeMetaScalarArray::run(void)
 {
-
+    d->arrays.clear();
 }

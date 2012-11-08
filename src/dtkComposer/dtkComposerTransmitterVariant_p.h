@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterVariant_p.h --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Fri Aug  3 14:36:46 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Tue Oct 23 12:42:01 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 93
  */
 
 /* Commentary: 
@@ -54,6 +49,7 @@ public:
   static const qlonglong dtkAbstractData_Id     = 517;
   static const qlonglong dtkPlotCurve_Id        = 518;
   static const qlonglong dtkVectorInteger_Id    = 519;
+  static const qlonglong dtkAbstractContainer_Id= 520;
 
 public:
     dtkComposerTransmitterVariantPrivate(void) {
@@ -83,7 +79,7 @@ public:
 
 public:
     bool      value_b;
-    qlonglong value_i;
+    qlonglong *value_i;
     qreal     value_r;
     QString   value_s;
 

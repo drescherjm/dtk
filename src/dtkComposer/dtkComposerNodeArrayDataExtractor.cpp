@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 12:07:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 16:11:19 2012 (+0200)
- *           By: tkloczko
- *     Update #: 60
+ * Last-Updated: 2012 Wed Nov  7 17:40:35 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -101,7 +101,7 @@ void dtkComposerNodeArrayDataExtractor::run(void)
         }
 
         if (index >= array->count()) {
-            dtkWarn() << "index > size of the input array. Invalid QVariant is returned.";
+            dtkWarn() << "index " << index << " > size of the input array " << array->count() << ". Invalid QVariant is returned.";
             d->emitter_item.setData(QVariant());
 
         } else {

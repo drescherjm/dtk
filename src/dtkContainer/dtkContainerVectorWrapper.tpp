@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 10 12:16:07 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 58
+ * Last-Updated: 2012 Wed Nov  7 17:46:46 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -126,7 +126,7 @@ template <typename T> inline void dtkContainerVectorWrapper<T>::replace(const QV
 
 template <typename T> inline void dtkContainerVectorWrapper<T>::resize(qlonglong size)
 {
-    m_vector->reserve(size);
+    m_vector->resize(size);
 };
 
 template <typename T> inline bool dtkContainerVectorWrapper<T>::isEmpty(void) const

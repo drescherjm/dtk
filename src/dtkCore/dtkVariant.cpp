@@ -57,3 +57,17 @@ QString dtkVariant::description(void) const
 
     return this->value<QString>();
 }
+
+
+void dtkVariant::clear(void)
+{
+    this->QVariant::clear();
+    m_object = NULL;
+    m_matrix = NULL;
+    m_container = NULL;
+}
+
+template<> qlonglong *dtkVariant::value(void) const
+{
+    
+}

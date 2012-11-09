@@ -72,8 +72,8 @@ public:
     QString  identifier(void) const;
     QString description(void) const;
 
-/* public: */
-/*     void clear(void); */
+public:
+    void clear(void);
 
 /* public: */
 /*     bool isValid(void) const; */
@@ -111,33 +111,29 @@ public:
 
     template<typename T> T value(void) const;
 
-private:
-    //template<typename T, bool> void convertValue(const T& value);
-    //template<typename T, typename B = bool> void convertValueObject(const T& value);
-
 public:
     dtkAbstractObject *m_object;
     dtkMatrix<double> *m_matrix;
     dtkAbstractContainerWrapper *m_container;
 
 private:
-    bool      m_value_b;
-    qlonglong m_value_i;
-    qreal     m_value_r;
-    QString   m_value_s;
+    mutable bool      m_value_b;
+    mutable qlonglong m_value_i;
+    mutable qreal     m_value_r;
+    mutable QString   m_value_s;
 
 public:
-    template<typename T, bool> friend class dtkVariantConverter;
+    template<typename T, bool> friend class dtkVariantPrivate;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkVariantConverter interface
+// dtkVariantPrivate interface
 // /////////////////////////////////////////////////////////////////
 
-template<typename T, bool> class dtkVariantConverter
+template<typename T, bool> class dtkVariantPrivate
 {
 public:
-    static void fromObject(dtkVariant& variant, const T& value)
+    static void setValue(dtkVariant& variant, const T& value)
     {
         variant.QVariant::setValue(value);
 
@@ -146,42 +142,42 @@ public:
         variant.m_container = NULL;
     }
 
-    static void fromAbstractObject(dtkVariant& variant, const T& value)
+    static void setObject(dtkVariant& variant, const T& value)
     {
         variant.m_object = NULL;
         variant.m_container = NULL;
     }
 
-    static void fromMatrixReal(dtkVariant& variant, const T& value)
+    static void setMatrixReal(dtkVariant& variant, const T& value)
     {
         variant.m_matrix = NULL;
     }
 
 public:
-    static T toObject(const dtkVariant& variant)
+    static T value(const dtkVariant& variant)
     {
         return variant.QVariant::value<T>();
     }
 
-    static T toAbstractObject(const dtkVariant& variant)
+    static T objectValue(const dtkVariant& variant)
     {
         return NULL;
     }
 
-    static T toMatrixReal(const dtkVariant& variant)
+    static T matrixRealValue(const dtkVariant& variant)
     {
         return NULL;
     }
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkVariantConverter interface
+// dtkVariantPrivate specific interface
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> class dtkVariantConverter<T, true>
+template<typename T> class dtkVariantPrivate<T, true>
 {
 public:
-    static void fromAbstractObject(dtkVariant& variant, const T& value)
+    static void setObject(dtkVariant& variant, const T& value)
     {
         variant.m_object = value;
         variant.m_container = dynamic_cast<dtkAbstractContainerWrapper*>(variant.m_object);
@@ -189,36 +185,36 @@ public:
         variant.QVariant::setValue(variant.m_object);
     }
 
-    static void fromMatrixReal(dtkVariant& variant, const T& value)
+    static void setMatrixReal(dtkVariant& variant, const T& value)
     {
         variant.m_matrix = value;
 
         variant.QVariant::setValue(variant.m_matrix);
     }
 
-    static void fromObject(dtkVariant& variant, const T& value)
+    static void setValue(dtkVariant& variant, const T& value)
     {
-        dtkVariantConverter<T, dtkTypeInfo<T>::dtkAbstractObjectPointer>::fromAbstractObject(variant, value);
-        dtkVariantConverter<T, dtkTypeInfo<T>::dtkMatrixRealPointer>::fromMatrixReal(variant, value);
+        dtkVariantPrivate<T, dtkTypeInfo<T>::dtkAbstractObjectPointer>::setObject(variant, value);
+        dtkVariantPrivate<T, dtkTypeInfo<T>::dtkMatrixRealPointer>::setMatrixReal(variant, value);
     }
 
 public:
-    static T toAbstractObject(const dtkVariant& variant)
+    static T objectValue(const dtkVariant& variant)
     {
         return dynamic_cast<T>(variant.m_object);
     }
 
-    static T toMatrixReal(const dtkVariant& variant)
+    static T matrixRealValue(const dtkVariant& variant)
     {
         return dynamic_cast<T>(variant.m_matrix);
     }
 
-    static T toObject(const dtkVariant& variant)
+    static T value(const dtkVariant& variant)
     {
         if (dtkTypeInfo<T>::dtkAbstractObjectPointer)
-            return dtkVariantConverter<T, dtkTypeInfo<T>::dtkAbstractObjectPointer>::toAbstractObject(variant);
+            return dtkVariantPrivate<T, dtkTypeInfo<T>::dtkAbstractObjectPointer>::objectValue(variant);
         
-        return dtkVariantConverter<T, dtkTypeInfo<T>::dtkMatrixRealPointer>::toMatrixReal(variant);
+        return dtkVariantPrivate<T, dtkTypeInfo<T>::dtkMatrixRealPointer>::matrixRealValue(variant);
     }
 };
 

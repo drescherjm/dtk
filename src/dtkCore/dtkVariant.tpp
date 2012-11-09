@@ -16,6 +16,12 @@
 #define DTKVARIANT_TPP
 
 // /////////////////////////////////////////////////////////////////
+// dtkVariant specific implementation declarations
+// /////////////////////////////////////////////////////////////////
+
+template<> DTKCORE_EXPORT qlonglong *dtkVariant::value(void) const;
+
+// /////////////////////////////////////////////////////////////////
 // dtkVariant implementation
 // /////////////////////////////////////////////////////////////////
 
@@ -26,12 +32,12 @@ inline dtkVariant::dtkVariant(void) : QVariant(), m_object(0), m_matrix(0), m_co
 
 template<typename T> void dtkVariant::setValue(const T& value)
 {
-    dtkVariantConverter<T, dtkTypeInfo<T>::dtkObjectPointer>::fromObject(*this, value);
+    dtkVariantPrivate<T, dtkTypeInfo<T>::dtkObjectPointer>::setValue(*this, value);
 };
 
 template<typename T> T dtkVariant::value(void) const
 {
-    return dtkVariantConverter<T, dtkTypeInfo<T>::dtkObjectPointer>::toObject(*this);
+    return dtkVariantPrivate<T, dtkTypeInfo<T>::dtkObjectPointer>::value(*this);
 };
 
 #endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 15:08:50 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 2328
+ * Last-Updated: Thu Nov  8 13:38:43 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2355
  */
 
 /* Commentary:
@@ -551,8 +551,6 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
         d->stack->push(command);
 
-
-
     } else if ((event->key() == Qt::Key_U) && (event->modifiers() & Qt::ControlModifier) && (this->selectedItems().count() == 1)) {
 
         if(dtkComposerSceneNodeComposite *group = dynamic_cast<dtkComposerSceneNodeComposite *>(this->selectedItems().first())) {
@@ -567,8 +565,11 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
                 d->stack->push(command);
             }
         }
+
     } else {
+
         QGraphicsScene::keyPressEvent(event);
+
     }
 }
 

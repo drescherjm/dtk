@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:23:04 2012 (+0200)
- *           By: tkloczko
- *     Update #: 29
+ * Last-Updated: Wed Oct 10 12:19:01 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -18,19 +18,20 @@
  */
 
 #include "dtkAbstractContainerWrapper.h"
+#include "dtkContainerVectorWrapper.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainerWrapper implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(dtkAbstractData *parent) : dtkAbstractData(parent)
+dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(void) : dtkAbstractData()
 {
     m_container = NULL;
 }
 
 dtkAbstractContainerWrapper::dtkAbstractContainerWrapper(const dtkAbstractContainerWrapper& other) : dtkAbstractData(other)
 {
-    m_container = other.clone();
+    m_container = const_cast<dtkAbstractContainerWrapper&>(other).clone();
 }
 
 dtkAbstractContainerWrapper::~dtkAbstractContainerWrapper(void)
@@ -48,10 +49,10 @@ void dtkAbstractContainerWrapper::init(dtkAbstractContainerWrapper *wrapper)
 
 void dtkAbstractContainerWrapper::reset(void)
 {
-    if (m_container && (this != m_container))
-        delete m_container;
+    // if (m_container && (this != m_container))
+    //     delete m_container;
 
-    m_container = NULL;
+    // m_container = NULL;
 }
 
 bool dtkAbstractContainerWrapper::isReset(void) const
@@ -72,12 +73,12 @@ dtkAbstractContainerWrapper& dtkAbstractContainerWrapper::operator=(const dtkAbs
     if (m_container && (m_container != this))
         delete m_container;
 
-    m_container = other.clone();
+    m_container = const_cast<dtkAbstractContainerWrapper&>(other).clone();
 
     return *this;
 }
 
-dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void) const
+dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void)
 {
     if (m_container)
         return m_container->clone();
@@ -85,7 +86,7 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::clone(void) const
     return NULL;
 }
 
-dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void) const
+dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::voidClone(void)
 {
     if (m_container)
         return m_container->voidClone();
@@ -100,7 +101,18 @@ dtkAbstractContainerWrapper *dtkAbstractContainerWrapper::container(void)
 
 QString dtkAbstractContainerWrapper::identifier(void) const
 {
+    if (m_container)
+        return m_container->identifier();
+
     return "dtkAbstractContainerWrapper";
+}
+
+QString dtkAbstractContainerWrapper::description(void) const
+{
+    if (m_container)
+        return m_container->description();
+
+    return "dtkAbstractContainerWrapper is void! It might not be what you expect.";
 }
 
 void dtkAbstractContainerWrapper::setName(const QString& name)
@@ -219,7 +231,7 @@ bool dtkAbstractContainerWrapper::operator == (const dtkAbstractContainerWrapper
     return false;
 }
 
-bool dtkAbstractContainerWrapper::isEqual(const dtkAbstractContainerWrapper& other) const
+bool dtkAbstractContainerWrapper::isEqual(const dtkAbstractObject& other) const
 {
     if (m_container)
         return m_container->isEqual(other);

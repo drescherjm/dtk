@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 15:08:56 2012 (+0200)
- *           By: tkloczko
- *     Update #: 175
+ * Last-Updated: 2012 Wed Oct 24 09:43:17 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -56,7 +56,7 @@ public:
     qlonglong counter;
     qlonglong size;
 
-    dtkAbstractContainerWrapper container;
+    const dtkAbstractContainerWrapper *container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -89,7 +89,12 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->header_rcv.appendNext(&d->block_container);
 
     d->counter = 0;
+    d->block_index.setData(&d->counter);
+
     d->size = -1;
+    d->block_size.setData(&d->size);
+
+    d->container = NULL;
 }
 
 dtkComposerNodeControlForEach::~dtkComposerNodeControlForEach(void)
@@ -124,45 +129,34 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 
 void dtkComposerNodeControlForEach::setInputs(void)
 {
-    d->container = d->header_rcv.container();
+    d->container = d->header_rcv.constContainer();
     d->counter = 0;
-    d->size = d->container.count();
-
-    d->block_size.setData(d->size);
+    d->size = d->container->count();
 
     foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
-        if (v->container().isReset()) {
-            v->setData(v->data());
-        } else {
-            v->setData(v->container());
-        }
-        v->setTwinned(true);        
+        v->setDataFrom(v);
+        v->setTwinned(true);
     }
 }
 
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        if (v->container().isReset()) {
-            v->twin()->setData(v->data());
-        } else {
-            v->twin()->setData(v->container());
-        }
+        v->twin()->setDataFrom(v);
     }
 
-    d->counter++;
+    ++(d->counter);
 }
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    d->block_index.setData(d->counter);
-    d->block_item.setData(d->container.at(d->counter));
+    d->block_item.setData(d->container->at(d->counter));
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)
 {
-    return (int)(!((d->counter) < d->size));
+    return static_cast<int>(!((d->counter) < d->size));
 }
 
 void dtkComposerNodeControlForEach::begin(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 13 17:08:25 2012 (+0200)
+ * Last-Updated: mer. oct. 31 17:07:34 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 108
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -62,12 +62,16 @@ signals:
     void status(const QUrl& server);
 
 public:
+    static quint16 defaultPort(void);
+
+public:
     dtkDistributedSocket *socket(const QString& jobid);
 
 public slots:
-    void    connect(const QUrl& server);
+    bool    connect(const QUrl& server);
     void disconnect(const QUrl& server);
-    void     deploy(const QUrl& server);
+    bool     deploy(const QUrl& server);
+    void       stop(const QUrl& server);
     void    refresh(const QUrl& server);
     void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);

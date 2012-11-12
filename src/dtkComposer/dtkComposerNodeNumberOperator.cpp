@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:03:58 2012 (+0200)
- *           By: tkloczko
- *     Update #: 246
+ * Last-Updated: 2012 Wed Nov  7 12:15:44 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 464
  */
 
 /* Commentary:
@@ -16,6 +16,8 @@
 /* Change log:
  *
  */
+
+#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
@@ -39,17 +41,22 @@ public:
 
 public:
     dtkComposerTransmitterVariant emitter;
+
+public:
+    qlonglong value_i;
+    double    value_r;
 };
 
 dtkComposerNodeNumberOperatorUnary::dtkComposerNodeNumberOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorUnaryPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver.setTypes(variant_list);
+    d->receiver.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
-    d->emitter.setTypes(variant_list);
+    d->emitter.setData<double>(&d->value_r);
+    d->emitter.setDataTypes(variant_list);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -72,20 +79,25 @@ public:
 
 public:
     dtkComposerTransmitterVariant emitter;
+
+public:
+    qlonglong value_i;
+    double    value_r;
 };
 
 dtkComposerNodeNumberOperatorBinary::dtkComposerNodeNumberOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorBinaryPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->emitter.setTypes(variant_list);
+    d->emitter.setData<double>(&d->value_r);
+    d->emitter.setDataTypes(variant_list);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -108,19 +120,24 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool value;
 };
 
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberComparatorPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
+    d->value = false;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -144,22 +161,27 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool value;
 };
 
 dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberAlmosteqPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->receiver_eps.setTypes(variant_list);
+    d->receiver_eps.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_eps));
 
+    d->value = false;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -172,11 +194,18 @@ dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
 
 void dtkComposerNodeNumberAlmosteq::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    qreal eps = d->receiver_eps.data().toReal();
+    if (d->receiver_lhs.dataType() == QMetaType::LongLong && d->receiver_rhs.dataType() == QMetaType::LongLong) {
 
-    d->emitter.setData(dtkAlmostEqualUlpsSimple(a,b,eps));
+        d->value = (*(d->receiver_lhs.data<qlonglong>()) == *(d->receiver_rhs.data<qlonglong>()));
+        
+    } else {
+
+            double lhs = *(d->receiver_lhs.data<double>());
+            double rhs = *(d->receiver_rhs.data<double>());
+            double eps = *(d->receiver_eps.data<double>());
+
+            d->value = dtkAlmostEqualUlpsSimple(lhs, rhs, eps);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -192,22 +221,27 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool value;
 };
 
 dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberNotalmosteqPrivate)
 {
-    QList<QVariant::Type> variant_list;
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
+    QList<int> variant_list;
+    variant_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setTypes(variant_list);
+    d->receiver_lhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setTypes(variant_list);
+    d->receiver_rhs.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->receiver_eps.setTypes(variant_list);
+    d->receiver_eps.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver_eps));
 
+    d->value = false;
+    d->emitter.setData(&d->value);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -220,11 +254,18 @@ dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
 
 void dtkComposerNodeNumberNotalmosteq::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    qreal eps = d->receiver_eps.data().toReal();
+    if (d->receiver_lhs.dataType() == QMetaType::LongLong && d->receiver_rhs.dataType() == QMetaType::LongLong) {
 
-    d->emitter.setData(!dtkAlmostEqualUlpsSimple(a,b,eps));
+        d->value = (*(d->receiver_lhs.data<qlonglong>()) != *(d->receiver_rhs.data<qlonglong>()));
+        
+    } else {
+
+            double lhs = *(d->receiver_lhs.data<double>());
+            double rhs = *(d->receiver_rhs.data<double>());
+            double eps = *(d->receiver_eps.data<double>());
+
+            d->value = !dtkAlmostEqualUlpsSimple(lhs, rhs, eps);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -233,18 +274,21 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 {
-    switch(d->receiver.type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-    case QVariant::LongLong:
-    case QVariant::ULongLong:
-        d->emitter.setData(qVariantValue<qlonglong>(d->receiver.data()) + 1);
+    switch(d->receiver.dataType()) {
+    case QMetaType::LongLong: {
+        qlonglong *value = d->receiver.data<qlonglong>();
+        ++(*value);
+        d->emitter.setData<qlonglong>(value);
         break;
-    case QVariant::Double:
-        d->emitter.setData(qVariantValue<double>(d->receiver.data()) + 1);
+    }
+    case QMetaType::Double: {
+        double *value = d->receiver.data<double>();
+        ++(*value);
+        d->emitter.setData<double>(value);
         break;
+    }
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -255,18 +299,21 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 {
-    switch(d->receiver.type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-    case QVariant::LongLong:
-    case QVariant::ULongLong:
-        d->emitter.setData(qVariantValue<qlonglong>(d->receiver.data()) - 1);
+    switch(d->receiver.dataType()) {
+    case QMetaType::LongLong: {
+        qlonglong *value = d->receiver.data<qlonglong>();
+        --(*value);
+        d->emitter.setData<qlonglong>(value);
         break;
-    case QVariant::Double:
-        d->emitter.setData(qVariantValue<double>(d->receiver.data()) - 1);
+    }
+    case QMetaType::Double: {
+        double *value = d->receiver.data<double>();
+        --(*value);
+        d->emitter.setData<double>(value);
         break;
+    }
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -277,18 +324,21 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 {
-    switch(d->receiver.type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-    case QVariant::LongLong:
-    case QVariant::ULongLong:
-        d->emitter.setData(qSqrt(qVariantValue<qlonglong>(d->receiver.data())));
+    switch(d->receiver.dataType()) {
+    case QMetaType::LongLong: {
+        qlonglong *value = d->receiver.data<qlonglong>();
+        *value = qSqrt(*value);
+        d->emitter.setData<qlonglong>(value);
         break;
-    case QVariant::Double:
-        d->emitter.setData(qSqrt(qVariantValue<double>(d->receiver.data())));
+    }
+    case QMetaType::Double: {
+        double *value = d->receiver.data<double>();
+        *value = qSqrt(*value);
+        d->emitter.setData<double>(value);
         break;
+    }
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -299,23 +349,21 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 {
-    qlonglong ll;
-    double dd;
-
-    switch(d->receiver.type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-    case QVariant::LongLong:
-    case QVariant::ULongLong:
-        ll = qVariantValue<qlonglong>(d->receiver.data());
-        d->emitter.setData(ll*ll);
+    switch(d->receiver.dataType()) {
+    case QMetaType::LongLong: {
+        qlonglong *value = d->receiver.data<qlonglong>();
+        *value *= (*value);
+        d->emitter.setData<qlonglong>(value);
         break;
-    case QVariant::Double:
-        dd = qVariantValue<double>(d->receiver.data());
-        d->emitter.setData(dd*dd);
+    }
+    case QMetaType::Double: {
+        double *value = d->receiver.data<double>();
+        *value *= (*value);
+        d->emitter.setData<double>(value);
         break;
+    }
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -326,7 +374,9 @@ void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryLn::run(void)
 {
-    d->emitter.setData(log(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qLn(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -335,7 +385,9 @@ void dtkComposerNodeNumberOperatorUnaryLn::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryLog10::run(void)
 {
-    d->emitter.setData(log10(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qLn(*value) / qLn(10.);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -344,7 +396,9 @@ void dtkComposerNodeNumberOperatorUnaryLog10::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryExp::run(void)
 {
-    d->emitter.setData(exp(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qExp(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -353,7 +407,9 @@ void dtkComposerNodeNumberOperatorUnaryExp::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryCos::run(void)
 {
-    d->emitter.setData(cos(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qCos(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -362,7 +418,9 @@ void dtkComposerNodeNumberOperatorUnaryCos::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySin::run(void)
 {
-    d->emitter.setData(sin(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qSin(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -371,7 +429,9 @@ void dtkComposerNodeNumberOperatorUnarySin::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryTan::run(void)
 {
-    d->emitter.setData(tan(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qTan(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -380,7 +440,9 @@ void dtkComposerNodeNumberOperatorUnaryTan::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAcos::run(void)
 {
-    d->emitter.setData(acos(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qAcos(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -389,7 +451,9 @@ void dtkComposerNodeNumberOperatorUnaryAcos::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAsin::run(void)
 {
-    d->emitter.setData(asin(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qAsin(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -398,7 +462,9 @@ void dtkComposerNodeNumberOperatorUnaryAsin::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAtan::run(void)
 {
-    d->emitter.setData(atan(qVariantValue<double>(d->receiver.data())));
+    double *value = d->receiver.data<double>();
+    *value = qAtan(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -407,8 +473,9 @@ void dtkComposerNodeNumberOperatorUnaryAtan::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDeg2Rad::run(void)
 {
-    qreal a = qVariantValue<double>(d->receiver.data());
-    d->emitter.setData(M_PI * a / 180.0);
+    double *value = d->receiver.data<double>();
+    *value = dtkDeg2Rad(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -417,8 +484,9 @@ void dtkComposerNodeNumberOperatorUnaryDeg2Rad::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRad2Deg::run(void)
 {
-    qreal a = qVariantValue<double>(d->receiver.data());
-    d->emitter.setData(180.0 * a / M_PI);
+    double *value = d->receiver.data<double>();
+    *value = dtkRad2Deg(*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -427,7 +495,9 @@ void dtkComposerNodeNumberOperatorUnaryRad2Deg::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryInv::run(void)
 {
-    d->emitter.setData(1.0 / qVariantValue<double>(d->receiver.data()));
+    double *value = d->receiver.data<double>();
+    *value = 1. / (*value);
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -436,7 +506,9 @@ void dtkComposerNodeNumberOperatorUnaryInv::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryOpp::run(void)
 {
-    d->emitter.setData(-qVariantValue<double>(d->receiver.data()));
+    double *value = d->receiver.data<double>();
+    *value *= -1.;
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -445,7 +517,13 @@ void dtkComposerNodeNumberOperatorUnaryOpp::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 {
-    d->emitter.setData(ceil(qVariantValue<double>(d->receiver.data())));
+    if (d->receiver.dataType() == QMetaType::Double) {
+        d->value_i = qCeil(*(d->receiver.data<double>()));
+        d->emitter.setData<qlonglong>(&d->value_i);
+
+    } else {
+        d->emitter.setData<qlonglong>(d->receiver.data<qlonglong>());
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -454,7 +532,13 @@ void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 {
-    d->emitter.setData(floor(qVariantValue<double>(d->receiver.data())));
+    if (d->receiver.dataType() == QMetaType::Double) {
+        d->value_i = qFloor(*(d->receiver.data<double>()));
+        d->emitter.setData<qlonglong>(&d->value_i);
+
+    } else {
+        d->emitter.setData<qlonglong>(d->receiver.data<qlonglong>());
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -463,7 +547,13 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    d->emitter.setData(qRound(qVariantValue<double>(d->receiver.data())));
+    if (d->receiver.dataType() == QMetaType::Double) {
+        d->value_i = qRound(*(d->receiver.data<double>()));
+        d->emitter.setData<qlonglong>(&d->value_i);
+
+    } else {
+        d->emitter.setData<qlonglong>(d->receiver.data<qlonglong>());
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -472,18 +562,21 @@ void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 {
-    switch(d->receiver.type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-    case QVariant::LongLong:
-    case QVariant::ULongLong:
-        d->emitter.setData(abs(qVariantValue<qlonglong>(d->receiver.data())));
+    switch(d->receiver.dataType()) {
+    case QMetaType::LongLong: {
+        qlonglong *value = d->receiver.data<qlonglong>();
+        *value = qAbs(*value);
+        d->emitter.setData<qlonglong>(value);
         break;
-    case QVariant::Double:
-        d->emitter.setData(qAbs(qVariantValue<double>(d->receiver.data())));
+    }
+    case QMetaType::Double: {
+        double *value = d->receiver.data<double>();
+        *value = qAbs(*value);
+        d->emitter.setData<double>(value);
         break;
+    }
     default:
-        dtkWarn() << "Type" << d->receiver.type() << "is not handled by the node.";
+        dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
     }
 }
@@ -494,9 +587,9 @@ void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
 {
-    qlonglong a = d->receiver_lhs.data().toLongLong();
-    qlonglong b = d->receiver_rhs.data().toLongLong();
-    d->emitter.setData(a / b);
+    qlonglong *value = d->receiver_lhs.data<qlonglong>();
+    *value /= *(d->receiver_rhs.data<qlonglong>());
+    d->emitter.setData<qlonglong>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -505,20 +598,9 @@ void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryLogn::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(log(a) / log(b));
-}
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberOperatorBinary - MINUS
-// /////////////////////////////////////////////////////////////////
-
-void dtkComposerNodeNumberOperatorBinaryMinus::run(void)
-{
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a-b);
+    double *value = d->receiver_lhs.data<double>();
+    *value = qLn(*value) / qLn(*(d->receiver_rhs.data<double>()));
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -527,9 +609,20 @@ void dtkComposerNodeNumberOperatorBinaryMinus::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryMin::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(qMin(a,b));
+    double *value = d->receiver_lhs.data<double>();
+    *value = qMin(*value, *(d->receiver_rhs.data<double>()));
+    d->emitter.setData<double>(value);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeNumberOperatorBinary - MINUS
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerNodeNumberOperatorBinaryMinus::run(void)
+{
+    double *value = d->receiver_lhs.data<double>();
+    *value -= *(d->receiver_rhs.data<double>());
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -538,9 +631,9 @@ void dtkComposerNodeNumberOperatorBinaryMin::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryMax::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(qMax(a,b));
+    double *value = d->receiver_lhs.data<double>();
+    *value = qMax(*value, *(d->receiver_rhs.data<double>()));
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -549,9 +642,9 @@ void dtkComposerNodeNumberOperatorBinaryMax::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryModulo::run(void)
 {
-    qlonglong a = d->receiver_lhs.data().toLongLong();
-    qlonglong b = d->receiver_rhs.data().toLongLong();
-    d->emitter.setData(a % b);
+    qlonglong *value = d->receiver_lhs.data<qlonglong>();
+    *value = (*value) % *(d->receiver_rhs.data<qlonglong>());
+    d->emitter.setData<qlonglong>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -560,9 +653,9 @@ void dtkComposerNodeNumberOperatorBinaryModulo::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryMult::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a*b);
+    double *value = d->receiver_lhs.data<double>();
+    *value *= *(d->receiver_rhs.data<double>());
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -571,9 +664,9 @@ void dtkComposerNodeNumberOperatorBinaryMult::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryPlus::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a+b);
+    double *value = d->receiver_lhs.data<double>();
+    *value += *(d->receiver_rhs.data<double>());
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -582,9 +675,9 @@ void dtkComposerNodeNumberOperatorBinaryPlus::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryPosnthroot::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(pow(a,1/b));
+    double *value = d->receiver_lhs.data<double>();
+    *value = qPow((*value), 1./(*(d->receiver_rhs.data<double>())));
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -593,9 +686,9 @@ void dtkComposerNodeNumberOperatorBinaryPosnthroot::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryPower::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(pow(a,b));
+    double *value = d->receiver_lhs.data<double>();
+    *value = qPow((*value), (*(d->receiver_rhs.data<double>())));
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -604,10 +697,9 @@ void dtkComposerNodeNumberOperatorBinaryPower::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-
-    d->emitter.setData(a/b);
+    double *value = d->receiver_lhs.data<double>();
+    *value /= *(d->receiver_rhs.data<double>());
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -616,9 +708,9 @@ void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
 
 void dtkComposerNodeNumberOperatorBinaryExpn::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(exp(a*log(b)));
+    double *value = d->receiver_lhs.data<double>();
+    *value = qExp((*value) * qLn(*(d->receiver_rhs.data<double>())));
+    d->emitter.setData<double>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -627,9 +719,10 @@ void dtkComposerNodeNumberOperatorBinaryExpn::run(void)
 
 void dtkComposerNodeNumberComparatorEqual::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a==b);
+    double a = *(d->receiver_lhs.data<double>());
+    double b = *(d->receiver_rhs.data<double>());
+
+    d->value = (a == b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -638,9 +731,10 @@ void dtkComposerNodeNumberComparatorEqual::run(void)
 
 void dtkComposerNodeNumberComparatorNotequal::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a!=b);
+    double a = *(d->receiver_lhs.data<double>());
+    double b = *(d->receiver_rhs.data<double>());
+
+    d->value = (a != b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -649,9 +743,10 @@ void dtkComposerNodeNumberComparatorNotequal::run(void)
 
 void dtkComposerNodeNumberComparatorGt::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a>b);
+    double a = *(d->receiver_lhs.data<double>());
+    double b = *(d->receiver_rhs.data<double>());
+
+    d->value = (a > b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -660,9 +755,10 @@ void dtkComposerNodeNumberComparatorGt::run(void)
 
 void dtkComposerNodeNumberComparatorLt::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a<b);
+    double a = *(d->receiver_lhs.data<double>());
+    double b = *(d->receiver_rhs.data<double>());
+
+    d->value = (a < b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -671,9 +767,10 @@ void dtkComposerNodeNumberComparatorLt::run(void)
 
 void dtkComposerNodeNumberComparatorGte::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a>=b);
+    double a = *(d->receiver_lhs.data<double>());
+    double b = *(d->receiver_rhs.data<double>());
+
+    d->value = (a >= b);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -682,7 +779,8 @@ void dtkComposerNodeNumberComparatorGte::run(void)
 
 void dtkComposerNodeNumberComparatorLte::run(void)
 {
-    qreal a = d->receiver_lhs.data().toReal();
-    qreal b = d->receiver_rhs.data().toReal();
-    d->emitter.setData(a<=b);
+    double a = *(d->receiver_lhs.data<double>());
+    double b = *(d->receiver_rhs.data<double>());
+
+    d->value = (a <= b);
 }

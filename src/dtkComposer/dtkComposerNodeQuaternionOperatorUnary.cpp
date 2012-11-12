@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:22:58 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:56:52 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 2
+ * Last-Updated: Thu Sep 13 16:32:35 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -63,11 +63,17 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_val;
+
+public:
+    qreal value;
 };
 
 dtkComposerNodeQuaternionOperatorUnaryScalar::dtkComposerNodeQuaternionOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeQuaternionOperatorUnaryScalarPrivate)
 {
     this->appendReceiver(&d->receiver_quat);
+
+    d->value = 0.;
+    d->emitter_val.setData(&d->value);
     this->appendEmitter(&d->emitter_val);
 }
 
@@ -84,7 +90,17 @@ dtkComposerNodeQuaternionOperatorUnaryScalar::~dtkComposerNodeQuaternionOperator
 
 void dtkComposerNodeQuaternionOperatorUnaryUnitary::run(void)
 {
-    d->emitter_quat.setData(d->receiver_quat.data().unit());
+    if (d->receiver_quat.isEmpty()) {
+        
+        dtkWarn() << "Input not specified. Nothing is done";
+
+    }  else {
+
+        dtkQuaternionReal *quat = d->receiver_quat.data();
+        quat->makeUnit();
+
+        d->emitter_quat.setData(quat);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -93,5 +109,13 @@ void dtkComposerNodeQuaternionOperatorUnaryUnitary::run(void)
 
 void dtkComposerNodeQuaternionOperatorUnaryScalarNorm::run(void)
 {
-    d->emitter_val.setData(d->receiver_quat.data().norm());
+    if (d->receiver_quat.isEmpty()) {
+
+        dtkWarn() << "Input not specified. Nothing is done";
+
+    }  else {
+        
+        d->value = d->receiver_quat.data()->norm();
+
+    }
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 24 09:59:07 2012 (+0200)
+ * Last-Updated: jeu. sept. 27 22:03:09 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 227
+ *     Update #: 229
  */
 
 /* Commentary:
@@ -28,9 +28,9 @@ public:
     QString title;
 
 public:
-    QList<dtkComposerGraphNode *> successors;
-    QList<dtkComposerGraphNode *> predecessors;
-    QList<dtkComposerGraphNode *> childs;
+    dtkComposerGraphNodeList successors;
+    dtkComposerGraphNodeList predecessors;
+    dtkComposerGraphNodeList childs;
 
 public:
     dtkComposerGraphNode::Status status;

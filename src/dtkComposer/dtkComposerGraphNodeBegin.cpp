@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: Tue Sep 18 10:41:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 333
+ * Last-Updated: jeu. sept. 27 17:31:39 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 345
  */
 
 /* Commentary:
@@ -90,18 +90,17 @@ void dtkComposerGraphNodeBegin::eval(void)
     if (!d->control_node  ) {
         if (d->composite)// may be NULL for root node
             d->composite->begin();
-        this->setStatus(dtkComposerGraphNode::Done);
-    } else {
+    } else
         d->control_node->begin();
-        this->setStatus(dtkComposerGraphNode::Done);
-    }
+
+    this->setStatus(dtkComposerGraphNode::Done);
 
     dtkComposerGraphNodeList childs = this->childs();
-    int count = childs.count();
+    dtkComposerGraphNodeList::const_iterator it;
 
-    for (int i = 0; i < count; i++) {
-        childs.at(i)->clean();
-    }
+    for (it = childs.constBegin(); it != childs.constEnd(); ++it)
+        (*it)->clean();
+
 }
 
 void dtkComposerGraphNodeBegin::setEnd(dtkComposerGraphNode *end)

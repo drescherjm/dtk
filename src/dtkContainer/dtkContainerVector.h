@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 14:42:07 2012 (+0200)
- *           By: tkloczko
- *     Update #: 71
+ * Last-Updated: Wed Oct 17 12:09:08 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -39,7 +39,8 @@ public:
     virtual ~dtkContainerVector(void);
 
 public:
-    QString identifier(void) const;
+    QString  identifier(void) const;
+    QString description(void) const;
 
 public:
     void clear(void);
@@ -170,5 +171,16 @@ typedef dtkContainerVector<qlonglong> dtkContainerVectorInteger;
 
 Q_DECLARE_METATYPE(dtkContainerVectorInteger  );
 Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+#include <dtkMath/dtkVector3D.h>
+
+typedef dtkContainerVector<dtkVector3DReal> dtkContainerVectorVector3DReal;
+
+Q_DECLARE_METATYPE(dtkContainerVectorVector3DReal  );
+Q_DECLARE_METATYPE(dtkContainerVectorVector3DReal *);
 
 #endif

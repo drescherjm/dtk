@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:54:55 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 57
+## Last-Updated: Thu Oct  4 12:56:07 2012 (+0200)
+##           By: tkloczko
+##     Update #: 58
 ######################################################################
 ## 
 ### Commentary: 
@@ -40,7 +40,8 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_HEADERS_MOC)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkMath.cpp)
+  dtkMath.cpp
+  dtkMatrix.cpp)
 
 ## #################################################################
 ## Build rules

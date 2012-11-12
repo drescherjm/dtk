@@ -40,7 +40,6 @@ public:
         Logarithmic
     };
 
-
 public:
      dtkPlotView(void);
     ~dtkPlotView(void);

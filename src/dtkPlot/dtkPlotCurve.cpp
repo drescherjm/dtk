@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:14:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: ven. oct. 12 13:53:42 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -62,6 +62,22 @@ dtkPlotCurve::~dtkPlotCurve(void)
     d = NULL;
 }
 
+dtkPlotCurve& dtkPlotCurve::operator=(const dtkPlotCurve& other)
+{
+    d->setTitle(other.d->title().text()); 
+
+    d->data = other.d->data;
+
+    d->setSamples(d->data);
+
+    return *this;
+}
+
+void dtkPlotCurve::clear(void)
+{
+    d->data.clear();
+}
+
 void dtkPlotCurve::append(const QPointF& data)
 {
     d->data << data;
@@ -93,4 +109,28 @@ void dtkPlotCurve::setData(const QVector<QPointF>& data)
     d->setSamples(d->data);
 
     emit updated();
+}
+
+QVector<QPointF>&  dtkPlotCurve::data(void)
+{
+    return d->data;
+}
+
+QString  dtkPlotCurve::description(void)
+{
+    QString string;
+
+    string = "[ " ;
+    for (unsigned i = 0; i < d->data.count(); i++) {
+        if (i > 0)
+            string.append("; ");
+
+        QString stringx = QString("%1").arg(d->data.at(i).x());
+        QString stringy = QString("%1").arg(d->data.at(i).y());
+
+        string += "(" +stringx + ", "+ stringy +")";
+    }
+    string.append(" ]");
+
+    return string;
 }

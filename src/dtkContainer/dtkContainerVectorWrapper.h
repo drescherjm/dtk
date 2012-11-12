@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:33:30 2012 (+0200)
+ * Last-Updated: Wed Oct 10 12:11:45 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -35,8 +35,8 @@
 template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
-     dtkContainerVectorWrapper(dtkAbstractData *parent = 0);
-     dtkContainerVectorWrapper(const dtkContainerVector<T>& vector, dtkAbstractData *parent = 0);
+     dtkContainerVectorWrapper(void);
+     dtkContainerVectorWrapper(dtkContainerVector<T> *vector);
      dtkContainerVectorWrapper(const dtkContainerVectorWrapper<T>& other);
     ~dtkContainerVectorWrapper(void);
 
@@ -44,19 +44,19 @@ public:
     dtkContainerVectorWrapper<T>& operator = (const dtkContainerVectorWrapper<T>& other);
 
 public:
-    dtkContainerVectorWrapper<T> *clone(void) const;
+    dtkContainerVectorWrapper<T> *clone(void);
 
-    dtkContainerVectorWrapper<T> *voidClone(void) const;
-
-public:
-    QString identifier(void) const;
+    dtkContainerVectorWrapper<T> *voidClone(void);
 
 public:
-    void setVector(const dtkContainerVector<T>& vector);
+    QString  identifier(void) const;
+    QString description(void) const;
 
 public:
-          dtkContainerVector<T>& vector(void);
-    const dtkContainerVector<T>& vector(void) const;
+    void setVector(dtkContainerVector<T> *vector);
+
+public:
+    dtkContainerVector<T> *vector(void);
 
 public:
     Type type(void) const;
@@ -87,10 +87,10 @@ public:
     bool operator == (const dtkContainerVectorWrapper<T>& other) const;
 
 public:
-    bool isEqual(const dtkAbstractContainerWrapper& other) const;    
+    bool isEqual(const dtkAbstractObject& other) const;    
 
 private:
-    dtkContainerVector<T> m_vector;
+    dtkContainerVector<T> *m_vector;
 };
 
 // /////////////////////////////////////////////////////////////////

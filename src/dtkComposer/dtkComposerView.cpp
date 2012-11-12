@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: ven. sept. 14 14:35:32 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 115
+ * Last-Updated: Thu Nov  8 16:04:15 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 149
  */
 
 /* Commentary:
@@ -17,16 +17,26 @@
  *
  */
 
+#include "dtkComposerScene.h"
+#include "dtkComposerSearchDialog.h"
 #include "dtkComposerView.h"
 
 class dtkComposerViewPrivate
 {
 public:
+    dtkComposerSearchDialog *dialog;
 
+public:
+    QAction *search_action;
 };
 
 dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new dtkComposerViewPrivate)
 {
+    d->search_action = new QAction("Find node", this);
+    d->search_action->setShortcut(QKeySequence::Find);
+
+    d->dialog = NULL;
+
     this->setAcceptDrops(true);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setBackgroundBrush(QColor(0x55, 0x55, 0x55));
@@ -34,11 +44,29 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new
     this->setFrameStyle(QFrame::NoFrame);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     this->setRubberBandSelectionMode(Qt::IntersectsItemShape);
+
+    connect(d->search_action, SIGNAL(triggered()), this, SLOT(search()));
 }
 
 dtkComposerView::~dtkComposerView(void)
 {
+    delete d;
 
+    d = NULL;
+}
+
+QAction *dtkComposerView::searchAction(void)
+{
+    return d->search_action;
+}
+
+void dtkComposerView::search(void)
+{
+    if(!d->dialog)
+        d->dialog = new dtkComposerSearchDialog(this);
+
+    d->dialog->setScene(dynamic_cast<dtkComposerScene *>(this->scene()));
+    d->dialog->show();
 }
 
 void dtkComposerView::wheelEvent( QWheelEvent * event )

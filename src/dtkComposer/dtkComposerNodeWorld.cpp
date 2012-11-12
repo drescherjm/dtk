@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 13:04:23
  * Version: $Id$
- * Last-Updated: Tue Jun 26 16:09:45 2012 (+0200)
- *           By: tkloczko
- *     Update #: 99
+ * Last-Updated: mer. oct. 17 15:00:20 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 111
  */
 
 /* Commentary:
@@ -36,8 +36,12 @@ class dtkComposerNodeWorldPrivate
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_rank;
     dtkComposerTransmitterEmitter<qlonglong> emitter_size;
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicatorMpi *> emitter_communicator;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator> emitter_communicator;
 
+public:
+    dtkDistributedCommunicatorMpi *communicator;
+    qlonglong rank;
+    qlonglong size;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -46,14 +50,19 @@ public:
 
 dtkComposerNodeWorld::dtkComposerNodeWorld(void) : dtkComposerNodeComposite(), d(new dtkComposerNodeWorldPrivate)
 {
+    d->communicator = NULL;
 
     //FIXME: handle tcp/mpi
     this->appendReceiver(&(d->emitter_communicator));
     this->setInputLabelHint("communicator", 0);
 
+    d->rank = 0;
+    d->emitter_rank.setData(&d->rank);
     this->appendReceiver(&(d->emitter_rank));
     this->setInputLabelHint("rank", 1);
 
+    d->size = 0;
+    d->emitter_size.setData(&d->size);
     this->appendReceiver(&(d->emitter_size));
     this->setInputLabelHint("size", 2);
 
@@ -62,6 +71,10 @@ dtkComposerNodeWorld::dtkComposerNodeWorld(void) : dtkComposerNodeComposite(), d
 
 dtkComposerNodeWorld::~dtkComposerNodeWorld(void)
 {
+    if (d->communicator)
+        delete d->communicator;
+    d->communicator = NULL;
+
     delete d;
 
     d = NULL;
@@ -80,12 +93,17 @@ QString dtkComposerNodeWorld::titleHint(void)
 void dtkComposerNodeWorld::begin(void)
 {
     //FIXME: use a config parameter to choose between tcp and mpi communicator
-    d->emitter_communicator.setData(new dtkDistributedCommunicatorMpi);
-    if (!d->emitter_communicator.data()->initialized())
-        d->emitter_communicator.data()->initialize();
 
-    d->emitter_rank.setData(d->emitter_communicator.data()->rank());
-    d->emitter_size.setData(d->emitter_communicator.data()->size());
+    if (!d->communicator) {
+        d->communicator = new dtkDistributedCommunicatorMpi;
+        d->emitter_communicator.setData(d->communicator);
+    }
+
+    if (!d->communicator->initialized())
+        d->communicator->initialize();
+    
+    d->rank = d->communicator->rank();
+    d->size = d->communicator->size();
 }
 
 void dtkComposerNodeWorld::end(void)

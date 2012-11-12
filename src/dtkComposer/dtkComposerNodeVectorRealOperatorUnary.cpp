@@ -63,11 +63,17 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_val;
+
+public:
+    qreal value;
 };
 
 dtkComposerNodeVectorRealOperatorUnaryScalar::dtkComposerNodeVectorRealOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorUnaryScalarPrivate)
 {
-    this->appendReceiver(&d->receiver_vec);
+    this->appendReceiver(&d->receiver_vec);  
+
+    d->value = 0.;
+    d->emitter_val.setData(&d->value);
     this->appendEmitter(&d->emitter_val);
 }
 
@@ -86,11 +92,12 @@ void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
 {
     if (d->receiver_vec.isEmpty()){
         dtkWarn() << "Input not specified. Nothing is done";
-        d->emitter_vec.setData(dtkVectorReal());
+        d->emitter_vec.clearData();
 
     } else {
-        const dtkVectorReal& vector = d->receiver_vec.data() ;
-        d->emitter_vec.setData(vector.unit());
+        dtkVectorReal *vector = d->receiver_vec.data();
+        vector->makeUnit();
+        d->emitter_vec.setData(vector);
     }
 }
 // /////////////////////////////////////////////////////////////////
@@ -101,11 +108,10 @@ void dtkComposerNodeVectorRealOperatorUnaryScalarNorm::run(void)
 {
     if (d->receiver_vec.isEmpty()){
         dtkWarn() << "Input not specified. Nothing is done";
-        d->emitter_val.setData(qreal());
+        d->value = -1.;
 
     } else {
-        const dtkVectorReal& vector = d->receiver_vec.data() ;
-        d->emitter_val.setData(vector.norm());
+        d->value = d->receiver_vec.data()->norm();
     }
 
 }

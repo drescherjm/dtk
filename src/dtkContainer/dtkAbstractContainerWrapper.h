@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jul  4 12:22:57 2012 (+0200)
- *           By: tkloczko
- *     Update #: 25
+ * Last-Updated: Wed Oct 10 12:10:56 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -22,7 +22,11 @@
 
 #include "dtkAbstractContainer.h"
 #include "dtkContainerExport.h"
+#include "dtkContainerVector.h"
+
 #include <dtkCore/dtkAbstractData>
+
+#include <QSharedPointer>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainerWrapper interface
@@ -39,7 +43,7 @@ public:
     };
 
 public:
-             dtkAbstractContainerWrapper(dtkAbstractData *parent = 0);
+             dtkAbstractContainerWrapper(void);
              dtkAbstractContainerWrapper(const dtkAbstractContainerWrapper& other);
     virtual ~dtkAbstractContainerWrapper(void);
 
@@ -55,15 +59,20 @@ public:
     dtkAbstractContainerWrapper& operator = (const dtkAbstractContainerWrapper& other);
 
 public:
-    virtual dtkAbstractContainerWrapper *clone(void) const;
+    virtual dtkAbstractContainerWrapper *clone(void);
 
-    virtual dtkAbstractContainerWrapper *voidClone(void) const;
+    virtual dtkAbstractContainerWrapper *voidClone(void);
 
 public:
     dtkAbstractContainerWrapper *container(void);
 
 public:
-    QString identifier(void) const;
+    template <typename T> void setVector(dtkContainerVector<T> *vector);
+    template <typename T> dtkContainerVector<T> *vector(void);
+
+public:
+    virtual QString  identifier(void) const;
+    virtual QString description(void) const;
 
 public:
     void setName(const QString& name);
@@ -101,11 +110,21 @@ public:
     bool operator == (const dtkAbstractContainerWrapper& other) const;
 
 public:
-    virtual bool isEqual(const dtkAbstractContainerWrapper& other) const;
+    virtual bool isEqual(const dtkAbstractObject& other) const;
 
 private:
     dtkAbstractContainerWrapper *m_container;
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+#include "dtkAbstractContainerWrapper.tpp"
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 Q_DECLARE_METATYPE(dtkAbstractContainerWrapper);
 Q_DECLARE_METATYPE(dtkAbstractContainerWrapper *);

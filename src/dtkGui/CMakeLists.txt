@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Sep 18 11:10:29 2012 (+0200)
+## Last-Updated: Wed Oct 31 12:53:11 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 265
+##     Update #: 268
 ######################################################################
 ## 
 ### Commentary: 
@@ -46,7 +46,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkViewManager.h
   dtkViewLayout.h
   dtkViewLayoutItem.h
-  dtkViewList.h)
+  dtkViewList.h
+  dtkViewListControl.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
@@ -70,7 +71,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkViewManager.h
   dtkViewLayout.h
   dtkViewLayoutItem.h
-  dtkViewList.h)
+  dtkViewList.h
+  dtkViewListControl.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
@@ -94,7 +96,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkViewManager.cpp
   dtkViewLayout.cpp
   dtkViewLayoutItem.cpp
-  dtkViewList.cpp)
+  dtkViewList.cpp
+  dtkViewListControl.cpp)
 
 if(DTK_BUILD_SCRIPT)
 set(${PROJECT_NAME}_HEADERS     ${${PROJECT_NAME}_HEADERS}     dtkInterpreter.h)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 16:32:17 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 754
+ * Last-Updated: 2012 Thu Nov  8 09:48:16 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 823
  */
 
 /* Commentary: 
@@ -185,16 +185,21 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
         if(d->missing_implementation.count() > 0) {
-            QMessageBox msgBox;
+            if (qApp->type() != QApplication::Tty) {
+                QMessageBox msgBox;
 
-            msgBox.setText("Node implementations are missing. Load anyway?");
-            msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
-            msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing_implementation.join("")));
-            msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-            msgBox.setDefaultButton(QMessageBox::Cancel);
+                msgBox.setText("Node implementations are missing. Load anyway?");
+                msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
+                msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing_implementation.join("")));
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Cancel);
 
-            if(msgBox.exec() == QMessageBox::Cancel)
+                if(msgBox.exec() == QMessageBox::Cancel)
+                    return false;
+            } else {
+                dtkError() << "Can't load composition, mission implementation(s):" << d->missing_implementation.join("");
                 return false;
+            }
         }
 
         if(d->default_implementation.count() > 0) {
@@ -251,7 +256,11 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
-            this->readNode(nodes.at(i),paste);
+            if (!(this->readNode(nodes.at(i),paste))) {
+                d->scene->clear();
+                d->graph->clear();
+                return false;
+            }
 
     // Feeding scene with edges
 
@@ -366,7 +375,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             n = d->control->blocks().last();
         } else {
             n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
-            
+ 
             qreal x = node.toElement().attribute("x").toFloat();
             qreal y = node.toElement().attribute("y").toFloat();
             qreal w = node.toElement().attribute("w").toFloat()-4;
@@ -396,7 +405,27 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
     } else {
 
         n = new dtkComposerSceneNodeLeaf;
-        n->wrap(d->factory->create(node.toElement().attribute("type")));
+        dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
+        if (!new_node) {
+
+            if (qApp->type() != QApplication::Tty) {
+                QMessageBox msgBox;
+                msgBox.setText("Can't create core node.");
+                msgBox.setInformativeText("You are not be able to load the composition.");
+                msgBox.setDetailedText(QString("The following node is unknown:\n%1").arg(node.toElement().attribute("type")));
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+
+                msgBox.exec();
+
+            } else {
+                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+            }
+            delete n;
+            return NULL;
+        }
+
+        n->wrap(new_node);
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);
@@ -437,7 +466,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         for(int i = 0; i < blocks.count(); i++) {
             d->control = control;
-            this->readNode(blocks.at(i));
+            if (!this->readNode(blocks.at(i)))
+                return NULL;
         }
 
         d->control = control;
@@ -583,10 +613,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         for(int i = 0; i < notes.count(); i++)
             this->readNote(notes.at(i));
-        
+
         for(int i = 0; i < nodes.count(); i++)
-            this->readNode(nodes.at(i));
-        
+            if (!this->readNode(nodes.at(i)))
+                return NULL;
+
         for(int i = 0; i < edges.count(); i++)
             this->readEdge(edges.at(i));
     }
@@ -697,17 +728,29 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     QString destin_type = destin.attribute("type");
     
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
-    if(source_type == "input")
-        edge->setSource(d->node_map.value(source_node)->inputPorts().at(source_id));
+    if (source_type == "input")
+        if (source_id >= d->node_map.value(source_node)->inputPorts().count())
+            goto handle_failure;
+        else
+            edge->setSource(d->node_map.value(source_node)->inputPorts().at(source_id));
     else
-        edge->setSource(d->node_map.value(source_node)->outputPorts().at(source_id));
-    if(destin_type == "input")
-        edge->setDestination(d->node_map.value(destin_node)->inputPorts().at(destin_id));
+        if (source_id >= d->node_map.value(source_node)->outputPorts().count())
+            goto handle_failure;
+        else
+            edge->setSource(d->node_map.value(source_node)->outputPorts().at(source_id));
+    if (destin_type == "input")
+        if (destin_id >= d->node_map.value(destin_node)->inputPorts().count())
+            goto handle_failure;
+        else
+            edge->setDestination(d->node_map.value(destin_node)->inputPorts().at(destin_id));
     else
-        edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
+        if (destin_id >= d->node_map.value(destin_node)->outputPorts().count())
+            goto handle_failure;
+        else
+            edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
-    
+
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
@@ -717,4 +760,10 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     d->graph->addEdge(edge);
 
     return edge;
+
+handle_failure:
+    dtkWarn() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
+    delete edge;
+    return NULL;
+
 }

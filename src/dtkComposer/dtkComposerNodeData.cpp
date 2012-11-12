@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue Jul  3 12:41:41 2012 (+0200)
+ * Last-Updated: Fri Sep 21 10:15:34 2012 (+0200)
  *           By: tkloczko
- *     Update #: 281
+ *     Update #: 296
  */
 
 /* Commentary:
@@ -34,12 +34,12 @@
 class dtkComposerNodeDataPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData *> receiver_data;
+    dtkComposerTransmitterEmitter<dtkAbstractData> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
 
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData *> emitter_data;
+    dtkComposerTransmitterEmitter<dtkAbstractData> emitter_data;
 
 public:
     dtkAbstractData *data;
@@ -82,20 +82,19 @@ QString dtkComposerNodeData::abstractDataType(void) const
 
 void dtkComposerNodeData::run(void)
 {
-
-    if (this->data())
+    if (this->implementationHasChanged())
         d->data = this->data();
 
     if (!d->data) {
-        dtkWarn() << "no data, abort "<<  this->currentImplementation();
+        dtkWarn() << "no data, abort "<< this->currentImplementation();
         return;
     }
 
     if (!d->receiver_string.isEmpty())
-        d->data->setParameter(d->receiver_string.data());
+        d->data->setParameter(*d->receiver_string.data());
 
     if(!d->receiver_vector.isEmpty())
-        d->data->setParameter(d->receiver_vector.data());
+        d->data->setParameter(*d->receiver_vector.data());
 
     d->data->update();
 

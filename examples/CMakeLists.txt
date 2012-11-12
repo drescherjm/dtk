@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Sep 18 11:03:45 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 94
+## Last-Updated: jeu. nov.  8 18:22:40 2012 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 98
 ######################################################################
 ## 
 ### Commentary: 
@@ -16,6 +16,12 @@
 ### Change log:
 ## 
 ######################################################################
+
+## #################################################################
+## dtkVariant examples
+## #################################################################
+
+#add_subdirectory(dtkVariant)
 
 ## #################################################################
 ## dtkLog examples
@@ -49,7 +55,7 @@ add_subdirectory(dtkUpdater)
 ## #################################################################
 
 if(DTK_BUILD_COMPOSER)
-  add_subdirectory(dtkContainerExample)
+  ##add_subdirectory(dtkContainerExample)
 endif(DTK_BUILD_COMPOSER)
 
 ## #################################################################
@@ -57,7 +63,7 @@ endif(DTK_BUILD_COMPOSER)
 ## #################################################################
 
 if(DTK_BUILD_SCRIPT)
-add_subdirectory(dtkInterpreter)
+  add_subdirectory(dtkInterpreter)
 endif(DTK_BUILD_SCRIPT)
 
 add_subdirectory(dtkTagCloud)
@@ -89,5 +95,5 @@ endif(DTK_BUILD_PLOT)
 ## #################################################################
 
 if(DTK_BUILD_COMPOSER)
-  add_subdirectory(dtkComposerTransmitter)
+  ##add_subdirectory(dtkComposerTransmitter)
 endif(DTK_BUILD_COMPOSER)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:58:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 14:39:11 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 14
+ * Last-Updated: Thu Sep 20 10:12:42 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -23,11 +23,10 @@
 #include "dtkMatrix.h"
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkMatrixSquared's  methods
+// dtkMatrixSquared implementation
 // /////////////////////////////////////////////////////////////////
 
-
-template <class T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrix<T> &mat,
+template <typename T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrix<T> &mat,
                                                                 unsigned irowStart,
                                                                 unsigned icolStart,
                                                                 unsigned irowEnd) : dtkMatrix<T>(mat,
@@ -38,7 +37,7 @@ template <class T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrix<
 {
 }
 
-template <class T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrixSquared<T> &matSquared,
+template <typename T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrixSquared<T> &matSquared,
                                                                 unsigned irowStart,
                                                                 unsigned icolStart,
                                                                 unsigned irowEnd) : dtkMatrix<T>(matSquared,
@@ -49,7 +48,12 @@ template <class T> inline dtkMatrixSquared<T>::dtkMatrixSquared(const dtkMatrixS
 {
 }
 
-template <class T> inline void dtkMatrixSquared<T>::mapInto(const dtkMatrixSquared<T> &matSquared,
+template <typename T> QString dtkMatrixSquared<T>::identifier(void) const
+{
+    return QString("dtkMatrixSquared<%1>").arg(typeid(T).name());
+}
+
+template <typename T> inline void dtkMatrixSquared<T>::mapInto(const dtkMatrixSquared<T> &matSquared,
                                                             unsigned irowStart,
                                                             unsigned icolStart,
                                                             unsigned irowEnd)
@@ -61,86 +65,86 @@ template <class T> inline void dtkMatrixSquared<T>::mapInto(const dtkMatrixSquar
 			  icolStart + irowEnd - irowStart);
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator =(const dtkMatrixSquared<T> &matSquared)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator =(const dtkMatrixSquared<T> &matSquared)
 {
     return static_cast<dtkMatrixSquared<T> &>(dtkMatrix<T>::operator=(matSquared));
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator +=(const dtkMatrixSquared<T> &matSquared)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator +=(const dtkMatrixSquared<T> &matSquared)
 {
     return static_cast<dtkMatrixSquared<T> &>(dtkMatrix<T>::operator+=(matSquared));
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator -=(const dtkMatrixSquared &matSquared)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator -=(const dtkMatrixSquared &matSquared)
 {
     return static_cast<dtkMatrixSquared<T> &>(dtkMatrix<T>::operator-=(matSquared));
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator *=(const T &value)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator *=(const T &value)
 {
     return static_cast<dtkMatrixSquared<T> &>(dtkMatrix<T>::operator*=(value));
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator *=(const dtkMatrixSquared<T> &matSquared)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator *=(const dtkMatrixSquared<T> &matSquared)
 {
     return (*this) = (*this)*matSquared;
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator /=(const T &value)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator /=(const T &value)
 {
     T tTmp = dtkUnity<T>();
     tTmp /= value;
     return (*this) *= tTmp;
 }
 
-template <class T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator /=(const dtkMatrixSquared<T> &matSquared)
+template <typename T> inline dtkMatrixSquared<T> & dtkMatrixSquared<T>::operator /=(const dtkMatrixSquared<T> &matSquared)
 {
     return (*this) = (*this)/matSquared;
 }
 
-template <class T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator +(const dtkMatrixSquared<T> &matSquared) const
+template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator +(const dtkMatrixSquared<T> &matSquared) const
 {
     return dtkMatrixSquared<T>(*this) += matSquared;
 }
 
-template <class T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator -(const dtkMatrixSquared<T> &matSquared) const
+template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator -(const dtkMatrixSquared<T> &matSquared) const
 {
     return dtkMatrixSquared<T>(*this) -= matSquared;
 }
 
-template <class T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator -(void) const 
+template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator -(void) const 
 {
     T tTmp = dtkZero<T>();
     tTmp -= dtkUnity<T>();
     return (*this)*tTmp;
 }
 
-template <class T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator *(const T &value) const
+template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator *(const T &value) const
 {
     return dtkMatrixSquared<T>(*this) *= value;
 }
 
-template <class T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator *(const dtkMatrixSquared<T> &matSquared) const
+template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator *(const dtkMatrixSquared<T> &matSquared) const
 {
-    dtkMatrixSquared matSquaredResult(this->getRows());
+    dtkMatrixSquared matSquaredResult(this->size());
     matSquaredResult.storeProduct(*this, matSquared);
     return matSquaredResult;
 }
 
-template <class T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator /(const dtkMatrixSquared<T> &matSquared) const
+template <typename T> dtkMatrixSquared<T> dtkMatrixSquared<T>::operator /(const dtkMatrixSquared<T> &matSquared) const
 {
     return (*this)*inv(matSquared);
 }
 
-template <class T> void dtkMatrixSquared<T>::storeInverse(const dtkMatrixSquared<T> &matSquared)
+template <typename T> void dtkMatrixSquared<T>::storeInverse(const dtkMatrixSquared<T> &matSquared)
 {
     (*this) = matSquared;
     makeInverse();
 }
 
-template <class T> void dtkMatrixSquared<T>::makeUnity(void)
+template <typename T> void dtkMatrixSquared<T>::makeUnity(void)
 {
-    unsigned crow(this->getRows()), ccol(this->getCols());
+    unsigned crow(this->numberOfRows()), ccol(this->numberOfColumns());
 
     for (unsigned irow = 0; irow < crow; ++irow) {
 	for (unsigned icol = 0; icol < ccol; ++icol) {
@@ -152,12 +156,12 @@ template <class T> void dtkMatrixSquared<T>::makeUnity(void)
     }
 }
 
-template <class T> void dtkMatrixSquared<T>::makeAdjoint(void)
+template <typename T> void dtkMatrixSquared<T>::makeAdjoint(void)
 {
     // we need a copy of this
     dtkMatrixSquared matSquaredCopy(*this);
     // for easier access to crows
-    unsigned crowCopy = matSquaredCopy.getRows();
+    unsigned crowCopy = matSquaredCopy.numberOfRows();
     T elemTmp;
     // will eventually contain det(matSquaredCopy)
     T elemDet = dtkUnity<T>();
@@ -203,18 +207,18 @@ template <class T> void dtkMatrixSquared<T>::makeAdjoint(void)
     (*this) *= elemDet;
 }
 
-template <class T> void dtkMatrixSquared<T>::storeAdjoint(const dtkMatrixSquared<T> &matSquared)
+template <typename T> void dtkMatrixSquared<T>::storeAdjoint(const dtkMatrixSquared<T> &matSquared)
 {
     (*this) = matSquared;
     makeAdjoint();
 }
 
-template <class T> void dtkMatrixSquared<T>::makeInverse(void)
+template <typename T> void dtkMatrixSquared<T>::makeInverse(void)
 {
     // we need a copy of this
     dtkMatrixSquared matSquaredCopy(*this);
     // for easier access to crows
-    unsigned crowCopy = matSquaredCopy.getRows();
+    unsigned crowCopy = matSquaredCopy.numberOfRows();
     T elemTmp;
 
     // make this a unity matrix
@@ -260,38 +264,38 @@ template <class T> void dtkMatrixSquared<T>::makeInverse(void)
     // this now contains its inverse
 }
 
-template <class T> inline dtkMatrixSquared<T> operator *(const T &value,
+template <typename T> inline dtkMatrixSquared<T> operator *(const T &value,
                                                          const dtkMatrixSquared<T> &matSquared)
 {
     return matSquared*value;
 }
 
-template <class T> dtkMatrixSquared<T> dtkTranspose(const dtkMatrixSquared<T> &matSquared)
+template <typename T> dtkMatrixSquared<T> dtkTranspose(const dtkMatrixSquared<T> &matSquared)
 {
-    dtkMatrixSquared<T> matSquaredResult(matSquared.getRows());
+    dtkMatrixSquared<T> matSquaredResult(matSquared.size());
     matSquaredResult.storeTranspose(matSquared);
     return matSquaredResult;
 }
 
-template <class T> dtkMatrixSquared<T> dtkAdjoint(const dtkMatrixSquared<T> &matSquared)
+template <typename T> dtkMatrixSquared<T> dtkAdjoint(const dtkMatrixSquared<T> &matSquared)
 {
     dtkMatrixSquared<T> matSquaredResult(matSquared);      
     matSquaredResult.makeAdjoint();
     return matSquaredResult;
 }
 
-template <class T> dtkMatrixSquared<T> dtkInverse(const dtkMatrixSquared<T> &matSquared)
+template <typename T> dtkMatrixSquared<T> dtkInverse(const dtkMatrixSquared<T> &matSquared)
 {
     dtkMatrixSquared<T> matSquaredResult(matSquared);
     matSquaredResult.makeInverse();
     return matSquaredResult;
 }
 
-template <class T> T dtkDeterminant(const dtkMatrixSquared<T> &matSquared)
+template <typename T> T dtkDeterminant(const dtkMatrixSquared<T> &matSquared)
 {
     // a copy of the input matrix
     dtkMatrixSquared<T> matSquaredCopy(matSquared);
-    unsigned crowCopy = matSquaredCopy.getRows();
+    unsigned crowCopy = matSquaredCopy.numberOfRows();
 
     // start row reduction
     T elemTmp;
@@ -333,11 +337,11 @@ template <class T> T dtkDeterminant(const dtkMatrixSquared<T> &matSquared)
     return elemDet;
 }
 
-template <class T> T dtkMatrixSquaredTrace(const dtkMatrixSquared<T>& matSquared)
+template <typename T> T dtkMatrixSquaredTrace(const dtkMatrixSquared<T>& matSquared)
 {
     T elemTmp = dtkZero<T>();
 
-    for (uint i = 0; i < matSquared.getCols(); i++)
+    for (uint i = 0; i < matSquared.size(); i++)
 	elemTmp += matSquared[i][i];
 
     return elemTmp;

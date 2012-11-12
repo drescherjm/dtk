@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jul  5 09:37:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  5 10:19:05 2012 (+0200)
+ * Last-Updated: Fri Sep 21 16:27:01 2012 (+0200)
  *           By: tkloczko
- *     Update #: 35
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -43,10 +43,10 @@ dtkComposerNodeArrayDataOperatorModifier::dtkComposerNodeArrayDataOperatorModifi
 {
     this->appendReceiver(&d->receiver_array);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong;
-    d->receiver_index.setTypes(variant_list);
+    variant_list << QMetaType::LongLong;
+    d->receiver_index.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_index);
 
     this->appendReceiver(&d->receiver_item);
@@ -98,28 +98,33 @@ void dtkComposerNodeArrayDataOperatorInsert::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_item.isEmpty() ) {
 
-        dtkAbstractContainerWrapper array = d->receiver_array.container();
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
+        dtkAbstractContainerWrapper *array = d->receiver_array.container();
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
     
-        if (array.isReset()) {
+        if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
+            d->emitter_array.clearData();
             return;
         }
 
-        if (index < array.count()) {
-            array.insert(d->receiver_item.data(), index);
-            d->emitter_array.setData(array);
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkAbstractContainerWrapper array;
-            d->emitter_array.setData(array);
+            array->insert(d->receiver_item.variant(), index);
+
         }
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkAbstractContainerWrapper array;
-        d->emitter_array.setData(array);
+        d->emitter_array.clearData();
     }
 }
 
@@ -131,28 +136,33 @@ void dtkComposerNodeArrayDataOperatorSet::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_item.isEmpty() ) {
 
-        dtkAbstractContainerWrapper array = d->receiver_array.container();
-        qlonglong index = qvariant_cast<qlonglong>(d->receiver_index.data());
+        dtkAbstractContainerWrapper *array = d->receiver_array.container();
+        qlonglong index = *d->receiver_index.data<qlonglong>();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
     
-        if (array.isReset()) {
+        if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
+            d->emitter_array.clearData();
             return;
         }
 
-        if (index < array.count()) {
-            array.replace(d->receiver_item.data(), index);
-            d->emitter_array.setData(array);
+        if (index >= array->count()) {
+            dtkWarn() << "index > size of the vector. Same array is returned.";
 
         } else {
-            dtkWarn() << "index > size of the vector. Nothing is done" ;
-            dtkAbstractContainerWrapper array;
-            d->emitter_array.setData(array);
+            array->replace(d->receiver_item.variant(), index);
+
         }
+        d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkAbstractContainerWrapper array;
-        d->emitter_array.setData(array);
+        d->emitter_array.clearData();
     }
 }
 
@@ -164,20 +174,26 @@ void dtkComposerNodeArrayDataOperatorAppend::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_item.isEmpty() ) {
 
-        dtkAbstractContainerWrapper array = d->receiver_array.container();
+        dtkAbstractContainerWrapper *array = d->receiver_array.container();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
     
-        if (array.isReset()) {
+        if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
+            d->emitter_array.clearData();
             return;
         }
 
-        array.append(d->receiver_item.data());
+        array->append(d->receiver_item.variant());
         d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkAbstractContainerWrapper array;
-        d->emitter_array.setData(array);
+        d->emitter_array.clearData();
     }
 }
 
@@ -189,19 +205,25 @@ void dtkComposerNodeArrayDataOperatorPrepend::run(void)
 {
     if (!d->receiver_array.isEmpty() && !d->receiver_item.isEmpty() ) {
 
-        dtkAbstractContainerWrapper array = d->receiver_array.container();
+        dtkAbstractContainerWrapper *array = d->receiver_array.container();
+
+        if (!array) {
+            dtkError() << "Input array is not defined.";
+            d->emitter_array.clearData();
+            return;
+        }
     
-        if (array.isReset()) {
+        if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
+            d->emitter_array.clearData();
             return;
         }
 
-        array.prepend(d->receiver_item.data());
+        array->prepend(d->receiver_item.variant());
         d->emitter_array.setData(array);
 
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
-        dtkAbstractContainerWrapper array;
-        d->emitter_array.setData(array);
+        d->emitter_array.clearData();
     }
 }

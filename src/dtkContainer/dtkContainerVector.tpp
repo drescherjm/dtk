@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 12:30:17 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 26 10:45:50 2012 (+0200)
+ * Last-Updated: Fri Sep 21 14:07:39 2012 (+0200)
  *           By: tkloczko
- *     Update #: 255
+ *     Update #: 260
  */
 
 /* Commentary: 
@@ -51,9 +51,26 @@ template <typename T> inline dtkContainerVector<T>::~dtkContainerVector(void)
 
 template <typename T> inline QString dtkContainerVector<T>::identifier(void) const
 {
-    return QString("%1< %2 >")
-        .arg("dtkContainerVector")
-        .arg(typeid(T).name());
+    return QString("dtkContainerVector<%1>").arg(typeid(T).name());
+};
+
+template <typename T> inline QString dtkContainerVector<T>::description(void) const
+{
+    QString string;
+
+    string = "[ " ;
+
+    // for (qlonglong i = 0; i < m_vector.count(); ++i)
+    // {
+    //     if (i > 0)
+    //         string.append("; ");
+    //     QString string2 = QString("%1").arg(m_vector.at(i));
+    //     string += string2;
+    // }
+
+    string.append(" ]");
+
+    return string;
 };
 
 template <typename T> inline void dtkContainerVector<T>::clear(void)

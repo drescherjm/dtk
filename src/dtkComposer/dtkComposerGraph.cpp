@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. juin 18 17:29:11 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 2088
+ * Last-Updated: Tue Sep 25 16:10:49 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 2090
  */
 
 /* Commentary:
@@ -427,8 +427,8 @@ void dtkComposerGraph::addBlock(dtkComposerSceneNode *node)
         QList<dtkComposerSceneNodeComposite *> blocks  = dynamic_cast<dtkComposerSceneNodeControl *>(node)->blocks();
         d->addNode(blocks.last(), inputs_block, d->begin(node));
         this->addNode(blocks.last());
-        dtkComposerGraphNode *select;
-        dtkComposerGraphNode *outputs;
+        dtkComposerGraphNode *select = NULL;
+        dtkComposerGraphNode *outputs = NULL;
         foreach(dtkComposerGraphNode *n, d->nodes.values(node)) {
             if (dynamic_cast<dtkComposerGraphNodeSelectBranch *>(n) )
                 select = n;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 13 09:45:39 2012 (+0200)
+ * Last-Updated: mer. oct. 31 17:27:09 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 116
+ *     Update #: 138
  */
 
 /* Commentary: 
@@ -49,18 +49,21 @@ public:
 dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistributorPrivate)
 {
     d->host_address = new QComboBox(this);
+
+    d->controller = dtkDistributedController::instance();
+    QString port = QString::number(d->controller->defaultPort());
+
     d->host_address->addItem("dtk://<host>[:port]");
-    d->host_address->addItem("dtk://nef-devel.inria.fr:9999");
-    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:9999");
-    d->host_address->addItem("dtk://is-master.inria.fr:9999");
-    d->host_address->addItem("dtk://localhost:9998");
+    d->host_address->addItem("dtk://nef-devel.inria.fr:"+port);
+    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:"+port);
+    d->host_address->addItem("dtk://is-master.inria.fr:"+port);
+    d->host_address->addItem("dtk://localhost:"+port);
     d->host_address->setEditable(true);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     d->host_button = new QPushButton("Connect", this);
     d->host_button->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    d->controller = dtkDistributedController::instance();
 
     d->status_model = new dtkDistributedControllerStatusModel(this);
     d->status_model->setController(d->controller);
@@ -78,7 +81,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
 
     d->header_view = new dtkDistributedControllerHeaderView(this);
     d->header_view->setController(d->controller);
-    
+
     d->target_view = new dtkDistributedControllerTargetView(this);
     d->target_view->setController(d->controller);
 
@@ -105,6 +108,7 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(d->filter_view);
     layout->addWidget(d->submit_view);
 
+    connect(d->host_address, SIGNAL(activated(int)), this, SLOT(onConnect()));
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));
     connect(d->filter_view, SIGNAL(updated()), this, SLOT(onFilterUpdated()));
     connect(d->target_view, SIGNAL(selected(const QString&)), d->status_model, SLOT(setCluster(const QString&)));
@@ -126,8 +130,15 @@ void dtkDistributor::setApplication(const QString& application)
 }
 void dtkDistributor::onConnect(void)
 {
-    d->controller->deploy(QUrl(d->host_address->currentText()));
-    d->controller->connect(QUrl(d->host_address->currentText()));
+    QUrl url = QUrl(d->host_address->currentText());
+    if (!d->controller->connect(url)) {
+        // can't connect, try to deploy:
+        if (!d->controller->deploy(url))
+            return;
+        else
+            if (!d->controller->connect(url))
+                return;
+    }
 
     d->header_view->setCluster(d->host_address->currentText());
     d->status_model->setCluster(d->host_address->currentText());

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 10 17:12:51 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 150
+ * Last-Updated: 2012 Thu Nov  8 09:50:53 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 152
  */
 
 /* Commentary:

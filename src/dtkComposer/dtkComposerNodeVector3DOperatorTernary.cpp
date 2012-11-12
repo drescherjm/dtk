@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:58:34 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:03:36 2012 (+0200)
+ * Last-Updated: Thu Sep 13 15:58:56 2012 (+0200)
  *           By: tkloczko
- *     Update #: 12
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -39,10 +39,15 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<dtkVector3DReal> emitter_vec;
+
+public:
+    dtkVector3DReal *vector;
 };
 
 dtkComposerNodeVector3DOperatorTernary::dtkComposerNodeVector3DOperatorTernary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorTernaryPrivate)
 {
+    d->vector = NULL;
+
     this->appendReceiver(&d->receiver_0);
     this->appendReceiver(&d->receiver_1);
     this->appendReceiver(&d->receiver_2);
@@ -51,6 +56,11 @@ dtkComposerNodeVector3DOperatorTernary::dtkComposerNodeVector3DOperatorTernary(v
 
 dtkComposerNodeVector3DOperatorTernary::~dtkComposerNodeVector3DOperatorTernary(void)
 {
+    if (d->vector)
+        delete d->vector;
+
+    d->vector = NULL;
+
     delete d;
     
     d = NULL;
@@ -69,6 +79,9 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_val;
+
+public:
+    qreal value;
 };
 
 dtkComposerNodeVector3DOperatorTernaryScalar::dtkComposerNodeVector3DOperatorTernaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorTernaryScalarPrivate)
@@ -76,6 +89,9 @@ dtkComposerNodeVector3DOperatorTernaryScalar::dtkComposerNodeVector3DOperatorTer
     this->appendReceiver(&d->receiver_0);
     this->appendReceiver(&d->receiver_1);
     this->appendReceiver(&d->receiver_2);
+
+    d->value = 0.;
+    d->emitter_val.setData(&d->value);
     this->appendEmitter(&d->emitter_val);
 }
 
@@ -94,15 +110,18 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 {
     if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_vec.setData(dtkVector3DReal());
-
 
     } else {
-        const dtkVector3DReal& vector1 = d->receiver_0.data();
-        const dtkVector3DReal& vector2 = d->receiver_1.data();
-        const dtkVector3DReal& vector3 = d->receiver_2.data();
+        dtkVector3DReal *vector1 = d->receiver_0.data();
+        dtkVector3DReal *vector2 = d->receiver_1.data();
+        dtkVector3DReal *vector3 = d->receiver_2.data();
 
-        d->emitter_vec.setData(vector1 % (vector2 % vector3));
+        if (!d->vector) {
+            d->vector = new dtkVector3DReal();
+            d->emitter_vec.setData(d->vector);
+        }
+
+        *d->vector = (*vector1) % ((*vector2) % (*vector3));
     }
 }
 // /////////////////////////////////////////////////////////////////
@@ -113,13 +132,12 @@ void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
 {
     if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_val.setData(qreal());
 
     }   else {
-        const dtkVector3DReal& vector1 = d->receiver_0.data();
-        const dtkVector3DReal& vector2 = d->receiver_1.data();
-        const dtkVector3DReal& vector3 = d->receiver_2.data();
+        dtkVector3DReal *vector1 = d->receiver_0.data();
+        dtkVector3DReal *vector2 = d->receiver_1.data();
+        dtkVector3DReal *vector3 = d->receiver_2.data();
 
-        d->emitter_val.setData(dtkMixedProduct(vector1, vector2, vector3));
+        d->value = dtkMixedProduct(*vector1, *vector2, *vector3);
     }
 }

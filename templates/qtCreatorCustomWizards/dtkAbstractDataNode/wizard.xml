@@ -12,8 +12,8 @@
     <displayname xml:lang="fr">Classe dtkComposerNodeData.</displayname>;
     <displaycategory>dtk Composer Nodes</displaycategory>
     <files>
-        <file source="dtkAbstractDataNode.cpp" target="%NodeName%.h"   openeditor="true"/>
-        <file source="dtkAbstractDataNode.h"   target="%NodeName%.cpp" openeditor="true"/>
+        <file source="dtkAbstractDataNode.h" target="%NodeName%.h"   openeditor="true"/>
+        <file source="dtkAbstractDataNode.cpp"   target="%NodeName%.cpp" openeditor="true"/>
     </files>
     <!-- Create parameter wizard page -->
     <fieldpagetitle>dtkComposerNode Data Class</fieldpagetitle>

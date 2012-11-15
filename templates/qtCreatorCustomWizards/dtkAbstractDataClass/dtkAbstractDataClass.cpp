@@ -61,11 +61,68 @@
     return new %ClassName%(*this);
 }
 
+// Assignement operator
 %ClassName%& %ClassName%::operator = (const %ClassName%& other)
 {
     this->copy(other);
 
     return (*this);
+}
+
+//! Enables to make a deep copy of the attributes through the class
+//! hierarchy.
+/*!
+ *  This method is called by the assignement operator which delegates
+ *  the copy process. When re-implementing this method into a derived
+ *  class of %ClassName%, one must called first the copy method
+ *  of the parent to ensure that all the attributes are really copied.
+ *
+ *  Nevertheless, some caution must be taken to avoid slicing problem
+ *  as shown in the following example.
+ *
+ *  Example:
+ *  \code
+ *  class xyzData : public %ClassName%
+ *  {
+ *    ...
+ *    void copy(const dtkAbstractData& other);
+ *    ...
+ *  };
+ *
+ *  void xyzData::copy(const dtkAbstractData& other)
+ *  {
+ *     // copy of the parent attributes
+ *     %ClassName%::copy(other);
+ *
+ *     // copy of the xyzData attributes
+ *     if (other.identifier() == this->identifier()) {
+ *        // cast other into xyzData and do the copy
+ *     } else {
+ *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
+ *     }
+ *  }
+ *  \endcode
+ */
+void %ClassName%::copy(const dtkAbstractObject& other)
+{
+    dtkAbstractData::copy(other); // This call ensures that the
+                                  // attributes of the parent class
+                                  // are copied too.
+
+    // The following code can be uncommented if the current class
+    // contains some attributes. If not, it can be deleted.
+    
+    // if (this->identifier() == other.identifier()) {
+
+    //     const %ClassName%& data = reinterpret_cast<const %ClassName%&>(other);
+
+    //     DTK_D(%ClassName%);
+
+    //     // Do the copy !!!
+
+    // } else {
+    //     dtkWarn() << "Other is not of same type than this, slicing is occuring.";
+    // }
 }
 
 //! Comparison operator.
@@ -145,58 +202,6 @@ bool %ClassName%::isEqual(const dtkAbstractObject& other) const
         return false;
 
     return true;  
-}
-
-
-//! Enables to make a deep copy of the attributes through the class
-//! hierarchy.
-/*!
- *  This method is called by the assignement operator which delegates
- *  the copy process. When re-implementing this method into a derived
- *  class of %ClassName%, one must called first the copy method
- *  of the parent to ensure that all the attributes are really copied.
- *
- *  Nevertheless, some caution must be taken to avoid slicing problem
- *  as shown in the following example.
- *
- *  Example:
- *  \code
- *  class xyzData : public %ClassName%
- *  {
- *    ...
- *    void copy(const dtkAbstractData& other);
- *    ...
- *  };
- *
- *  void xyzData::copy(const dtkAbstractData& other)
- *  {
- *     // copy of the parent attributes
- *     %ClassName%::copy(other);
- *
- *     // copy of the xyzData attributes
- *     if (other.identifier() == this->identifier()) {
- *        // cast other into xyzData and do the copy
- *     } else {
- *        dtkWarn() << "other is not of same type than this, slicing is occuring.";
- *     }
- *  }
- *  \endcode
- */
-void %ClassName%::copy(const dtkAbstractObject& other)
-{
-    dtkAbstractData::copy(other);
-
-    if (this->identifier() == other.identifier()) {
-
-        const %ClassName%& data = reinterpret_cast<const %ClassName%&>(other);
-
-        DTK_D(%ClassName%);
-
-        // Do the copy !!!
-
-    } else {
-        dtkWarn() << "Other is not of same type than this, slicing is occuring.";
-    }
 }
 
 //! Returns Class name.

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 19 15:25:47 2012 (+0200)
- *           By: tkloczko
- *     Update #: 298
+ * Last-Updated: 2012 Thu Nov 15 15:04:11 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 299
  */
 
 /* Commentary:
@@ -157,6 +157,9 @@ void dtkComposerNodeControlCase::setVariables(void)
 
 int dtkComposerNodeControlCase::selectBranch(void)
 {
+    if (d->cond.isEmpty())
+        return static_cast<int>(false);
+
     int value = 0;
     bool is_case = false;
 

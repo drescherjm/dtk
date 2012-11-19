@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 10:13:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 13:58:45 2012 (+0200)
- *           By: tkloczko
- *     Update #: 61
+ * Last-Updated: 2012 Fri Nov 16 16:10:04 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 69
  */
 
 /* Commentary: 
@@ -56,6 +56,11 @@ dtkComposerNodeLeafData::~dtkComposerNodeLeafData(void)
     d = NULL;
 }
 
+bool dtkComposerNodeLeafData::enableDefaultImplementation(void) const
+{
+    return false;
+}
+
 bool dtkComposerNodeLeafData::implementationHasChanged(void) const
 {
     return d->implementation_has_changed;
@@ -72,6 +77,8 @@ QString dtkComposerNodeLeafData::currentImplementation(void)
 QStringList dtkComposerNodeLeafData::implementations(void)
 {
     QStringList implementations;
+    if (this->enableDefaultImplementation())
+        implementations << "default";
     QStringList all_implementations = dtkAbstractDataFactory::instance()->implementations(this->abstractDataType());
 
     for (int i = 0; i < all_implementations.count(); ++i)
@@ -86,6 +93,9 @@ dtkAbstractData *dtkComposerNodeLeafData::createData(const QString& implementati
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
+    
+    if (implementation == "default")
+        const_cast<QString&>(implementation) = this->abstractDataType();
     
     if (!d->data) {
 

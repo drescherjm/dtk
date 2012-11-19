@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 14:01:57 2012 (+0200)
- *           By: tkloczko
- *     Update #: 4
+ * Last-Updated: 2012 Fri Nov 16 16:19:37 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -56,6 +56,11 @@ dtkComposerNodeLeafView::~dtkComposerNodeLeafView(void)
     d = NULL;
 }
 
+bool dtkComposerNodeLeafView::enableDefaultImplementation(void) const
+{
+    return false;
+}
+
 bool dtkComposerNodeLeafView::implementationHasChanged(void) const
 {
     return d->implementation_has_changed;
@@ -72,6 +77,8 @@ QString dtkComposerNodeLeafView::currentImplementation(void)
 QStringList dtkComposerNodeLeafView::implementations(void)
 {
     QStringList implementations;
+    if (this->enableDefaultImplementation())
+        implementations << "default";
     QStringList all_implementations = dtkAbstractViewFactory::instance()->implementations(this->abstractViewType());
 
    for (int i = 0; i < all_implementations.count(); ++i)
@@ -86,6 +93,9 @@ dtkAbstractView *dtkComposerNodeLeafView::createView(const QString& implementati
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
+    
+    if (implementation == "default")
+        const_cast<QString&>(implementation) = this->abstractViewType();
     
     if (!d->view) {
 

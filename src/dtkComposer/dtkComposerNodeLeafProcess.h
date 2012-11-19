@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 13:55:00 2012 (+0200)
- *           By: tkloczko
- *     Update #: 5
+ * Last-Updated: 2012 Fri Nov 16 16:17:30 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ public:
     virtual ~dtkComposerNodeLeafProcess(void);
 
 public:
+    virtual bool enableDefaultImplementation(void) const;
+    
     virtual bool isAbstractProcess(void) const = 0;
 
     virtual QString abstractProcessType(void) const = 0;

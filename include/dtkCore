@@ -39,3 +39,4 @@
 #include "../src/dtkCore/dtkTest.h"
 #include "../src/dtkCore/dtkUpdater.h"
 #include "../src/dtkCore/dtkUpdater_p.h"
+#include "../src/dtkCore/dtkVariant.h"

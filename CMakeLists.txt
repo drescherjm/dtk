@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Sep 18 09:13:11 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 391
+## Last-Updated: 2012 Mon Nov 19 15:55:55 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 392
 ######################################################################
 ## 
 ### Commentary: 
@@ -45,6 +45,7 @@ option(DTK_BUILD_MPI           "Build mpi related code"  false)
 
 option(DTK_BUILD_DISTRIBUTED   "Build distributed layer" true)
 option(DTK_BUILD_COMPOSER      "Build composer layer"    true)
+option(DTK_BUILD_ZIP           "Build zip layer"         true)
 option(DTK_BUILD_VR            "Build vr layer"          true)
 option(DTK_BUILD_PLOT          "Build plotting layer"    true)
 option(DTK_BUILD_SCRIPT        "Build scripting layer"   true)

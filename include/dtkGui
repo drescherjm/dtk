@@ -21,4 +21,5 @@
 #include "../src/dtkGui/dtkViewLayout.h"
 #include "../src/dtkGui/dtkViewLayoutItem.h"
 #include "../src/dtkGui/dtkViewList.h"
+#include "../src/dtkGui/dtkViewListControl.h"
 #include "../src/dtkGui/dtkViewManager.h"

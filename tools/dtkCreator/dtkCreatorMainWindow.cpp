@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May  4 16:13:25 2012 (+0200)
+ * Last-Updated: Mon Nov 19 15:03:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1671
+ *     Update #: 1676
  */
 
 /* Commentary:
@@ -262,6 +262,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_menu->addAction(d->composition_quit_action);
 
     d->edit_menu = menu_bar->addMenu("Edit");
+    d->edit_menu->addAction(d->composer->view()->searchAction());
+    d->edit_menu->addSeparator();
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
 

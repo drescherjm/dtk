@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Mon Nov  5 17:37:51 2012 (+0100)
+ * Last-Updated: Mon Nov 19 16:51:01 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 197
+ *     Update #: 198
  */
 
 /* Commentary:
@@ -81,6 +81,7 @@ public slots:
     void modify(bool modified);
 
 signals:
+    void changed(void);
     void modified(bool);
 
 signals:

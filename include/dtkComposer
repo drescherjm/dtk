@@ -92,6 +92,7 @@
 #include "../src/dtkComposer/dtkComposerNodeVectorRealOperatorUnary.h"
 #include "../src/dtkComposer/dtkComposerNodeView.h"
 #include "../src/dtkComposer/dtkComposerNodeWorld.h"
+#include "../src/dtkComposer/dtkComposerPath.h"
 #include "../src/dtkComposer/dtkComposerReader.h"
 #include "../src/dtkComposer/dtkComposerScene.h"
 #include "../src/dtkComposer/dtkComposerScene_p.h"

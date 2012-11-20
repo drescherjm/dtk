@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun 20 13:12:23 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jun 30 01:32:03 2012 (+0200)
+ * Last-Updated: Tue Nov 20 17:43:05 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 115
  */
 
 /* Commentary: 
@@ -27,9 +27,9 @@
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(double A, double B, int64_t maxUlps = 10);
-bool TestCompareFinal(double A, double B, int64_t maxUlps = 10);
-bool TestCompareAll(double A, double B, int64_t maxUlps = 10);
+bool TestCompare2sComplement(double A, double B, int64_t maxUlps = 8 * 1024 *1024);
+bool TestCompareFinal(double A, double B, int64_t maxUlps = 8 * 1024 * 1024);
+bool TestCompareAll(double A, double B, int64_t maxUlps = 8 * 1024 * 1024);
 
 // /////////////////////////////////////////////////////////////////
 // dtkCompareDoubleTestObjectPrivate

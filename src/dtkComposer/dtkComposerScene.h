@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Tue Nov 20 15:11:24 2012 (+0100)
+ * Last-Updated: Tue Nov 20 16:12:54 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 220
+ *     Update #: 223
  */
 
 /* Commentary:
@@ -30,6 +30,7 @@ class dtkComposerGraph;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkComposerSceneNodeComposite;
+class dtkComposerSceneNodeLeaf;
 class dtkComposerSceneNote;
 class dtkComposerScenePort;
 class dtkComposerScenePrivate;
@@ -82,6 +83,9 @@ public:
     QAction *flagAsPinkAction(void);
     QAction *flagAsRedAction(void);
     QAction *flagAsYellowAction(void);
+
+public:
+    QList<dtkComposerSceneNodeLeaf *> flagged(Qt::GlobalColor);
 
 public slots:
     void clear(void);

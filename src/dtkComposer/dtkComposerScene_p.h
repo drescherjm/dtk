@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 14:32:06 2012 (+0100)
+ * Last-Updated: Tue Nov 20 16:07:50 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 256
+ *     Update #: 267
  */
 
 /* Commentary: 
@@ -71,6 +71,9 @@ public:
     QAction *flag_as_pink_action;
     QAction *flag_as_red_action;
     QAction *flag_as_yellow_action;
+
+public:
+    QHash<Qt::GlobalColor, QList<dtkComposerSceneNodeLeaf *> > flagged_nodes;
 };
 
 #endif

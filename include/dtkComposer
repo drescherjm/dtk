@@ -1,6 +1,7 @@
 #include "../src/dtkComposer/dtkComposer.h"
 #include "../src/dtkComposer/dtkComposer_p.h"
 #include "../src/dtkComposer/dtkComposerCompass.h"
+#include "../src/dtkComposer/dtkComposerControls.h"
 #include "../src/dtkComposer/dtkComposerEvaluator.h"
 #include "../src/dtkComposer/dtkComposerEvaluator_p.h"
 #include "../src/dtkComposer/dtkComposerFactory.h"

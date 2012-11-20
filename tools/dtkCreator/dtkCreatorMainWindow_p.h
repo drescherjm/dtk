@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 12:30:36 2012 (+0200)
+ * Last-Updated: Tue Nov 20 16:35:31 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 133
+ *     Update #: 139
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 #include <QtGui>
 
 class dtkComposer;
+class dtkComposerControls;
 class dtkComposerFactoryView;
 class dtkComposerGraphView;
 class dtkComposerSceneModel;
@@ -61,6 +62,7 @@ public slots:
 
 public:
     dtkComposer *composer;
+    dtkComposerControls *controls;
     dtkComposerFactoryView *nodes;
     dtkComposerGraphView *graph;
     dtkComposerSceneModel *model;

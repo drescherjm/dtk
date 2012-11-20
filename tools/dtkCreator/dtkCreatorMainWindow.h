@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:41:52 2012 (+0200)
+ * Last-Updated: Tue Nov 20 16:33:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -50,6 +50,9 @@ protected slots:
     void switchToCompo(void);
     void switchToDstrb(void);
     void switchToDebug(void);
+
+protected slots:
+    void showControls(void);
 
 protected:
     void closeEvent(QCloseEvent *event);

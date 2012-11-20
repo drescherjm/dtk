@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Nov 20 15:15:09 2012 (+0100)
+ * Last-Updated: Tue Nov 20 16:12:13 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2454
+ *     Update #: 2464
  */
 
 /* Commentary:
@@ -385,6 +385,11 @@ QAction *dtkComposerScene::flagAsYellowAction(void)
     return d->flag_as_yellow_action;
 }
 
+QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor color)
+{
+    return d->flagged_nodes[color];
+}
+
 // /////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark - Sig Events
@@ -441,8 +446,13 @@ void dtkComposerScene::onFlagAs(Qt::GlobalColor color)
 
         if (dtkComposerSceneNodeLeaf *node = dynamic_cast<dtkComposerSceneNodeLeaf *>(item)) {
 
+            if(node->flagged(color))
+                d->flagged_nodes[color].removeAll(node);
+
             node->flag(color, !node->flagged(color));
 
+            if(node->flagged(color))
+                d->flagged_nodes[color] << node;
         }
     }
 }

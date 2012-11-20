@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 14:53:50 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 248
+ * Last-Updated: Tue Nov 20 14:32:06 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 256
  */
 
 /* Commentary: 
@@ -62,6 +62,15 @@ public:
 
     dtkComposerSceneNode *reparent_origin;
     dtkComposerSceneNode *reparent_target;
+
+public:
+    QAction *flag_as_blue_action;
+    QAction *flag_as_gray_action;
+    QAction *flag_as_green_action;
+    QAction *flag_as_orange_action;
+    QAction *flag_as_pink_action;
+    QAction *flag_as_red_action;
+    QAction *flag_as_yellow_action;
 };
 
 #endif

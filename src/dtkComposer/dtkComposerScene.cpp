@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Mon Nov 19 16:51:04 2012 (+0100)
+ * Last-Updated: Tue Nov 20 15:15:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2368
+ *     Update #: 2454
  */
 
 /* Commentary:
@@ -54,7 +54,43 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->reparent_origin = NULL;
     d->reparent_target = NULL;
 
+    d->flag_as_blue_action = new QAction("Flag as blue", this);
+    d->flag_as_blue_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_B));
+    d->flag_as_blue_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-blue.png"));
+
+    d->flag_as_gray_action = new QAction("Flag as gray", this);
+    d->flag_as_gray_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_W));
+    d->flag_as_gray_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-gray.png"));
+
+    d->flag_as_green_action = new QAction("Flag as green", this);
+    d->flag_as_green_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_G));
+    d->flag_as_green_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-green.png"));
+
+    d->flag_as_orange_action = new QAction("Flag as orange", this);
+    d->flag_as_orange_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_O));
+    d->flag_as_orange_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-orange.png"));
+
+    d->flag_as_pink_action = new QAction("Flag as pink", this);
+    d->flag_as_pink_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_P));
+    d->flag_as_pink_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-pink.png"));
+
+    d->flag_as_red_action = new QAction("Flag as red", this);
+    d->flag_as_red_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_R));
+    d->flag_as_red_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-red.png"));
+
+    d->flag_as_yellow_action = new QAction("Flag as yellow", this);
+    d->flag_as_yellow_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_Y));
+    d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-yellow.png"));
+
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
+
+    connect(d->flag_as_blue_action, SIGNAL(triggered()), this, SLOT(onFlagAsBlue()));
+    connect(d->flag_as_gray_action, SIGNAL(triggered()), this, SLOT(onFlagAsGray()));
+    connect(d->flag_as_green_action, SIGNAL(triggered()), this, SLOT(onFlagAsGreen()));
+    connect(d->flag_as_orange_action, SIGNAL(triggered()), this, SLOT(onFlagAsOrange()));
+    connect(d->flag_as_pink_action, SIGNAL(triggered()), this, SLOT(onFlagAsPink()));
+    connect(d->flag_as_red_action, SIGNAL(triggered()), this, SLOT(onFlagAsRed()));
+    connect(d->flag_as_yellow_action, SIGNAL(triggered()), this, SLOT(onFlagAsYellow()));
 }
 
 dtkComposerScene::~dtkComposerScene(void)
@@ -311,12 +347,104 @@ void dtkComposerScene::removeItem(QGraphicsItem *item)
 
 // /////////////////////////////////////////////////////////////////
 #pragma mark -
+#pragma mark - Actions
+// /////////////////////////////////////////////////////////////////
+
+QAction *dtkComposerScene::flagAsBlueAction(void)
+{
+    return d->flag_as_blue_action;
+}
+
+QAction *dtkComposerScene::flagAsGrayAction(void)
+{
+    return d->flag_as_gray_action;
+}
+
+QAction *dtkComposerScene::flagAsGreenAction(void)
+{
+    return d->flag_as_green_action;
+}
+
+QAction *dtkComposerScene::flagAsOrangeAction(void)
+{
+    return d->flag_as_orange_action;
+}
+
+QAction *dtkComposerScene::flagAsPinkAction(void)
+{
+    return d->flag_as_pink_action;
+}
+
+QAction *dtkComposerScene::flagAsRedAction(void)
+{
+    return d->flag_as_red_action;
+}
+
+QAction *dtkComposerScene::flagAsYellowAction(void)
+{
+    return d->flag_as_yellow_action;
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
 #pragma mark - Sig Events
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerScene::modify(bool b)
 {
     emit modified(b);
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Flag Events
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerScene::onFlagAsBlue(void)
+{
+    this->onFlagAs(Qt::blue);
+}
+
+void dtkComposerScene::onFlagAsGray(void)
+{
+    this->onFlagAs(Qt::gray);
+}
+
+void dtkComposerScene::onFlagAsGreen(void)
+{
+    this->onFlagAs(Qt::green);
+}
+
+void dtkComposerScene::onFlagAsOrange(void)
+{
+    this->onFlagAs(Qt::darkYellow);
+}
+
+void dtkComposerScene::onFlagAsRed(void)
+{
+    this->onFlagAs(Qt::red);
+}
+
+void dtkComposerScene::onFlagAsPink(void)
+{
+    this->onFlagAs(Qt::magenta);
+}
+
+void dtkComposerScene::onFlagAsYellow(void)
+{
+    this->onFlagAs(Qt::yellow);
+}
+
+void dtkComposerScene::onFlagAs(Qt::GlobalColor color)
+{
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+
+        if (dtkComposerSceneNodeLeaf *node = dynamic_cast<dtkComposerSceneNodeLeaf *>(item)) {
+
+            node->flag(color, !node->flagged(color));
+
+        }
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

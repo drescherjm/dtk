@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Mon Nov 19 16:51:01 2012 (+0100)
+ * Last-Updated: Tue Nov 20 15:11:24 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 198
+ *     Update #: 220
  */
 
 /* Commentary:
@@ -71,6 +71,18 @@ public:
     void    addItem(QGraphicsItem *item);
     void removeItem(QGraphicsItem *item);
 
+// #pragma mark -
+// #pragma mark - Actions
+
+public:
+    QAction *flagAsBlueAction(void);
+    QAction *flagAsGrayAction(void);
+    QAction *flagAsGreenAction(void);
+    QAction *flagAsOrangeAction(void);
+    QAction *flagAsPinkAction(void);
+    QAction *flagAsRedAction(void);
+    QAction *flagAsYellowAction(void);
+
 public slots:
     void clear(void);
 
@@ -88,6 +100,19 @@ signals:
     void selectedNode(dtkComposerSceneNode *node);
     void selectionCleared(void);
     // void selected(QGraphicsItem *item);
+
+// #pragma mark -
+// #pragma mark - Flag events
+
+protected slots:
+    void onFlagAsBlue(void);
+    void onFlagAsGray(void);
+    void onFlagAsGreen(void);
+    void onFlagAsOrange(void);
+    void onFlagAsRed(void);
+    void onFlagAsPink(void);
+    void onFlagAsYellow(void);
+    void onFlagAs(Qt::GlobalColor);
 
 // #pragma mark -
 // #pragma mark - Drag Drop Events

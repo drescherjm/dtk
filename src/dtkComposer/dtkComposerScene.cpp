@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Nov 20 16:12:13 2012 (+0100)
+ * Last-Updated: Tue Nov 20 17:00:18 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2464
+ *     Update #: 2466
  */
 
 /* Commentary:
@@ -453,6 +453,8 @@ void dtkComposerScene::onFlagAs(Qt::GlobalColor color)
 
             if(node->flagged(color))
                 d->flagged_nodes[color] << node;
+
+            emit flagged();
         }
     }
 }

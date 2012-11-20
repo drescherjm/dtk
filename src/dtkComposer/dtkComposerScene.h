@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Tue Nov 20 16:12:54 2012 (+0100)
+ * Last-Updated: Tue Nov 20 16:59:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 223
+ *     Update #: 224
  */
 
 /* Commentary:
@@ -99,6 +99,7 @@ public slots:
 signals:
     void changed(void);
     void modified(bool);
+    void flagged(void);
 
 signals:
     void selectedNode(dtkComposerSceneNode *node);

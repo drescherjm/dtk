@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov 19 11:42:27 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 19 17:29:21 2012 (+0100)
+ * Last-Updated: Tue Nov 20 12:24:21 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 173
+ *     Update #: 174
  */
 
 /* Commentary: 
@@ -82,6 +82,8 @@ void dtkComposerPath::setScene(dtkComposerScene *scene)
 
     if(d->scene)
         connect(d->scene, SIGNAL(changed()), this, SLOT(update()));
+
+    this->update();
 }
 
 void dtkComposerPath::update(void)

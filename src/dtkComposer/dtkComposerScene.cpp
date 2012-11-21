@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Tue Nov 20 17:00:18 2012 (+0100)
+ * Last-Updated: Wed Nov 21 18:26:42 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 2466
+ *     Update #: 2475
  */
 
 /* Commentary:
@@ -177,16 +177,23 @@ void dtkComposerScene::setRoot(dtkComposerSceneNodeComposite *root)
         this->addItem(note);
 
     dtkComposerSceneNode *first = NULL;
+
     dtkComposerSceneNode *node;
+
     for(int i = 0; i < root->nodes().count(); ++i) {
+
         node = root->nodes()[i];
+
         if (i == 0) 
             first = node;
+
         this->addItem(node);
     }
 
     foreach(dtkComposerSceneEdge *edge, root->edges()) {
+
         this->addItem(edge);
+
         if (first)
             edge->stackBefore(first);
     }
@@ -286,6 +293,17 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
         emit modified(true);
 
         return;
+    }
+
+    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(item)) {
+
+        if(leaf->flagged()) {
+
+            Qt::GlobalColor color = leaf->flagColor();
+
+            if(!d->flagged_nodes[color].contains(leaf))
+                d->flagged_nodes[color] << leaf;
+        }
     }
 
     QGraphicsScene::addItem(item);

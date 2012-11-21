@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 18:04:39 2012 (+0100)
+ * Last-Updated: Wed Nov 21 18:23:47 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 539
+ *     Update #: 540
  */
 
 /* Commentary: 
@@ -288,7 +288,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.setTagName("footer");
 
         if (leaf->flagged()) {
-            QDomText color = document.createTextNode(leaf->flagColor());
+            QDomText color = document.createTextNode(leaf->flagColorName());
 
             QDomElement flag = document.createElement("flag");
             flag.appendChild(color);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 18:12:29 2012 (+0100)
+ * Last-Updated: Wed Nov 21 18:24:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 430
+ *     Update #: 436
  */
 
 /* Commentary: 
@@ -168,7 +168,7 @@ bool dtkComposerSceneNodeLeaf::flagged(void)
     return d->flag->isVisible();
 }
 
-QString dtkComposerSceneNodeLeaf::flagColor(void)
+QString dtkComposerSceneNodeLeaf::flagColorName(void)
 {
     if(!d->flag->isVisible())
         return QString();
@@ -176,6 +176,11 @@ QString dtkComposerSceneNodeLeaf::flagColor(void)
     QColor color(d->flag_color);
         
     return color.name();
+}
+
+Qt::GlobalColor dtkComposerSceneNodeLeaf::flagColor(void)
+{
+    return d->flag_color;
 }
 
 #include "dtkComposerSceneNodeComposite.h"

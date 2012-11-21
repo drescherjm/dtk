@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 14:00:22 2012 (+0100)
+ * Last-Updated: Wed Nov 21 17:46:43 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 83
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerControls.h"
 #include "dtkComposerScene.h"
+#include "dtkComposerSceneNodeLeaf.h"
 
 class dtkComposerControlsPrivate
 {
@@ -86,34 +87,44 @@ void dtkComposerControls::setScene(dtkComposerScene *scene)
 
 void dtkComposerControls::setup(void)
 {
-    qDebug() << Q_FUNC_INFO;
+    this->setup(d->selector->currentIndex());
 }
 
 void dtkComposerControls::setup(int index)
 {
+    if(!d->scene)
+        return;
+
+    QList<dtkComposerSceneNodeLeaf *> nodes;
+
     switch(index) {
     case 0:
-        qDebug() << "Listing blue flag controls";
+        nodes = d->scene->flagged(Qt::blue);
         break;
     case 1:
-        qDebug() << "Listing gray flag controls";
+        nodes = d->scene->flagged(Qt::gray);
         break;
     case 2:
-        qDebug() << "Listing green flag controls";
+        nodes = d->scene->flagged(Qt::green);
         break;
     case 3:
-        qDebug() << "Listing orange flag controls";
+        nodes = d->scene->flagged(Qt::darkYellow);
         break;
     case 4:
-        qDebug() << "Listing pink flag controls";
+        nodes = d->scene->flagged(Qt::magenta);
         break;
     case 5:
-        qDebug() << "Listing red flag controls";
+        nodes = d->scene->flagged(Qt::red);
         break;
     case 6:
-        qDebug() << "Listing yellow flag controls";
+        nodes = d->scene->flagged(Qt::yellow);
         break;
     default:
         break;
     };
+
+    d->list->clear();
+
+    foreach(dtkComposerSceneNodeLeaf *node, nodes)
+        d->list->addItem(new QListWidgetItem(node->title(), d->list));
 }

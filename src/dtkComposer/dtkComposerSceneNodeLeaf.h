@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:34:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 15:14:20 2012 (+0100)
+ * Last-Updated: Wed Nov 21 18:09:51 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -38,7 +38,10 @@ public:
 
 public:
     void flag(Qt::GlobalColor color, bool on);
+    void flag(QColor color);
     bool flagged(Qt::GlobalColor color);
+    bool flagged(void);
+    QString flagColor(void);
 
 public:
     void layout(void);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 15:34:41 2012 (+0100)
+ * Last-Updated: Wed Nov 21 18:12:29 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 404
+ *     Update #: 430
  */
 
 /* Commentary: 
@@ -90,6 +90,8 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
     d->gradiant_defined = false;
 
     d->flag = new QGraphicsPixmapItem(this);
+    d->flag->setVisible(false);
+
     d->flag_color = Qt::transparent;
 }
 
@@ -135,12 +137,45 @@ void dtkComposerSceneNodeLeaf::flag(Qt::GlobalColor color, bool on)
     d->flag->setVisible(on);
 }
 
+void dtkComposerSceneNodeLeaf::flag(QColor color)
+{
+    if(color == Qt::blue)
+        this->flag(Qt::blue, true);
+    else if(color == Qt::gray)
+        this->flag(Qt::gray, true);
+    else if(color == Qt::green)
+        this->flag(Qt::green, true);
+    else if(color == Qt::darkYellow)
+        this->flag(Qt::darkYellow, true);
+    else if(color == Qt::red)
+        this->flag(Qt::red, true);
+    else if(color == Qt::magenta)
+        this->flag(Qt::magenta, true);
+    else if(color == Qt::yellow)
+        this->flag(Qt::yellow, true);
+}
+
 bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
 {
     if(!d->flag->isVisible())
         return false;
     else
         return d->flag_color == color;
+}
+
+bool dtkComposerSceneNodeLeaf::flagged(void)
+{
+    return d->flag->isVisible();
+}
+
+QString dtkComposerSceneNodeLeaf::flagColor(void)
+{
+    if(!d->flag->isVisible())
+        return QString();
+
+    QColor color(d->flag_color);
+        
+    return color.name();
 }
 
 #include "dtkComposerSceneNodeComposite.h"

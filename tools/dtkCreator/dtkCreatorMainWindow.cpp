@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 16:52:06 2012 (+0100)
+ * Last-Updated: Wed Nov 21 14:01:30 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1710
+ *     Update #: 1712
  */
 
 /* Commentary:
@@ -640,7 +640,9 @@ void dtkCreatorMainWindow::showControls(void)
 {
     if(!d->controls) {
         d->controls = new dtkComposerControls(this);
+        d->controls->setScene(d->composer->scene());
         d->controls->setWindowFlags(Qt::Dialog);
+        d->controls->setWindowTitle("Composer Controls");
     }
 
     d->controls->show();

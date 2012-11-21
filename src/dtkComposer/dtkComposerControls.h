@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:16:42 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 17:03:51 2012 (+0100)
+ * Last-Updated: Wed Nov 21 14:00:38 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -39,7 +39,8 @@ public:
     void setScene(dtkComposerScene *scene);
 
 protected slots:
-    void update(void);
+    void setup(void);
+    void setup(int index);
 
 private:
     dtkComposerControlsPrivate *d;

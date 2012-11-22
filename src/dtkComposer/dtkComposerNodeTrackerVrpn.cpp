@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 16:51:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 10:29:15 2012 (+0200)
- *           By: tkloczko
- *     Update #: 15
+ * Last-Updated: Thu Nov 22 10:18:39 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -37,6 +37,10 @@ public:
     dtkComposerTransmitterEmitter<dtkQuaternionReal> head_orientation;
 
 public:
+    dtkVector3DReal *position;
+    dtkQuaternionReal *orientation;
+
+public:
     dtkVrTrackerVrpn *tracker;
 };
 
@@ -45,6 +49,9 @@ dtkComposerNodeTrackerVrpn::dtkComposerNodeTrackerVrpn(void) : dtkComposerNodeLe
     this->appendReceiver(&(d->url));
     this->appendEmitter(&(d->head_position));
     this->appendEmitter(&(d->head_orientation));
+
+    d->position = new dtkVector3DReal;
+    d->orientation = new dtkQuaternionReal;
 
     d->tracker = NULL;
 }
@@ -55,8 +62,11 @@ dtkComposerNodeTrackerVrpn::~dtkComposerNodeTrackerVrpn(void)
         d->tracker->uninitialize();
         delete d->tracker;
     }
+
     d->tracker = NULL;
-    
+
+    delete d->position;
+    delete d->orientation;
     delete d;
 
     d = NULL;
@@ -73,6 +83,9 @@ void dtkComposerNodeTrackerVrpn::run(void)
     if(!d->tracker)
         return;
 
-    d->head_position.setData(*d->tracker->headPosition());
-    d->head_orientation.setData(*d->tracker->headOrientation());
+    *(d->position) = d->tracker->headPosition();
+    *(d->orientation) = d->tracker->headOrientation();
+
+    d->head_position.setData(d->position);
+    d->head_orientation.setData(d->orientation);
 }

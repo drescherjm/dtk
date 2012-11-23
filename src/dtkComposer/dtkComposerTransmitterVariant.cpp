@@ -42,69 +42,50 @@ template <> bool *dtkComposerTransmitterVariant::data(void)
     int emitter_type = emitter_variant.userType();
 
     if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::BoolStar]) {
-        e->value_b = *(emitter_variant.value<bool*>());
+        *(e->value_b) = *(emitter_variant.value<bool*>());
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::LongLongStar]) {
-    e->value_b = static_cast<bool>(*(emitter_variant.value<qlonglong*>()));
+        *(e->value_b) = static_cast<bool>(*(emitter_variant.value<qlonglong*>()));
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::RealStar]) {
-        e->value_b = static_cast<bool>(*(emitter_variant.value<qreal*>()));
+        *(e->value_b) = static_cast<bool>(*(emitter_variant.value<qreal*>()));
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::StringStar]) {
-        e->value_b = (emitter_variant.value<QString*>())->toLongLong();
+        *(e->value_b) = (emitter_variant.value<QString*>())->toLongLong();
 
     } else if (emitter_type <= QMetaType::Double && emitter_type != 0) {
-        e->value_b = emitter_variant.value<bool>();
+        *(e->value_b) = emitter_variant.value<bool>();
 
     } else if (emitter_type == QMetaType::QString) {
-        e->value_b = emitter_variant.value<bool>();
+        *(e->value_b) = emitter_variant.value<bool>();
 
     } else {
         if (emitter_variant.canConvert<bool>()) {
-            e->value_b = emitter_variant.value<bool>();
+            *(e->value_b) = emitter_variant.value<bool>();
         } else {
-            e->value_b = 0.;
+            *(e->value_b) = 0.;
             return NULL;
         }
     }
 
-    bool *m_value;
-    if (!e->m_variant.isValid())
-        m_value = NULL;
-    else
-        m_value = e->m_variant.value<bool*>();
 
-    switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::AutoCopy:
-        if (this->enableCopy()) {
-            if (!m_value) {
-                m_value = new bool(e->value_b);
-                e->m_variant.setValue(m_value);
-            } else {
-                *m_value = e->value_b;
-            }
-            return m_value;
-        } else {
-            return &(e->value_b);
-        }
-        break;
-    case dtkComposerTransmitter::Copy:
-        if (!m_value) {
-            m_value = new bool(e->value_b);
-            e->m_variant.setValue(m_value);
-        } else {
-            *m_value = e->value_b;
-        }
-        return m_value;
-        break;
-    case dtkComposerTransmitter::Reference:
-        return &(e->value_b);
-        break;
-    default:
-        break;
-    };
 
-    return NULL;
+
+
+    if (e->twinned)
+        return e->value_b;
+
+    if (!e->m_variant.isValid()) {
+        bool *m_init = new bool(*e->value_b);
+        e->m_variant.setValue(m_init);
+    }
+
+    bool *m_value = e->m_variant.value<bool *>();
+    *m_value = *(e->value_b);
+    e->m_variant.setValue(e->value_b);
+    e->value_b = m_value;
+
+    return e->value_b;
 }
 
 template <> qlonglong *dtkComposerTransmitterVariant::data(void)
@@ -161,69 +142,47 @@ template <> qreal *dtkComposerTransmitterVariant::data(void)
     int emitter_type = emitter_variant.userType();
 
     if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::RealStar]) {
-        e->value_r = *(emitter_variant.value<qreal*>());
+        *(e->value_r) = *(emitter_variant.value<qreal*>());
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::LongLongStar]) {
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<qlonglong*>()));
+        *(e->value_r) = static_cast<qreal>(*(emitter_variant.value<qlonglong*>()));
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::StringStar]) {
-        e->value_r = (emitter_variant.value<QString*>())->toDouble();
+        *(e->value_r) = (emitter_variant.value<QString*>())->toDouble();
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::BoolStar]) {
-        e->value_r = static_cast<qreal>(*(emitter_variant.value<bool*>()));
+        *(e->value_r) = static_cast<qreal>(*(emitter_variant.value<bool*>()));
 
     } else if (emitter_type <= QMetaType::Double && emitter_type != 0) {
-        e->value_r = emitter_variant.value<qreal>();
+        *(e->value_r) = emitter_variant.value<qreal>();
 
     } else if (emitter_type == QMetaType::QString) {
-        e->value_r = emitter_variant.value<qreal>();
+        *(e->value_r) = emitter_variant.value<qreal>();
 
     } else {
         if (emitter_variant.canConvert<qreal>()) {
-            e->value_r = emitter_variant.value<qreal>();
+            *(e->value_r) = emitter_variant.value<qreal>();
         } else {
-            e->value_r = 0.;
+            *(e->value_r) = 0.;
             return NULL;
         }
     }
 
-    qreal *m_value;
-    if (!e->m_variant.isValid())
-        m_value = NULL;
-    else
-        m_value = e->m_variant.value<qreal*>();
 
-    switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::AutoCopy:
-        if (this->enableCopy()) {
-            if (!m_value) {
-                m_value = new qreal(e->value_r);
-                e->m_variant.setValue(m_value);
-            } else {
-                *m_value = e->value_r;
-            }
-            return m_value;
-        } else {
-            return &(e->value_r);
-        }
-        break;
-    case dtkComposerTransmitter::Copy:
-        if (!m_value) {
-            m_value = new qreal(e->value_r);
-            e->m_variant.setValue(m_value);
-        } else {
-            *m_value = e->value_r;
-        }
-        return m_value;
-        break;
-    case dtkComposerTransmitter::Reference:
-        return &(e->value_r);
-        break;
-    default:
-        break;
-    };
+    if (e->twinned)
+        return e->value_r;
 
-    return NULL;
+    if (!e->m_variant.isValid()) {
+        qreal *m_init = new qreal(*e->value_r);
+        e->m_variant.setValue(m_init);
+    }
+
+    qreal *m_value = e->m_variant.value<qreal*>();
+    *m_value = *(e->value_r);
+    e->m_variant.setValue(e->value_r);
+    e->value_r = m_value;
+
+    return e->value_r;
 }
 
 template <> QString *dtkComposerTransmitterVariant::data(void)
@@ -232,72 +191,50 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
     int emitter_type = emitter_variant.userType();
 
     if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::StringStar]) {
-        e->value_s = *(emitter_variant.value<QString*>());
+        *(e->value_s) = *(emitter_variant.value<QString*>());
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::RealStar]) {
-        e->value_s.setNum(*(emitter_variant.value<qreal*>()), 'G', 16);
+        e->value_s->setNum(*(emitter_variant.value<qreal*>()), 'G', 16);
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::LongLongStar]) {
-        e->value_s.setNum(*(emitter_variant.value<qlonglong*>()));
+        e->value_s->setNum(*(emitter_variant.value<qlonglong*>()));
 
     } else if (emitter_type == e->metatypes[dtkComposerTransmitterVariantPrivate::BoolStar]) {
-        e->value_s = QString::number(static_cast<int>(*(emitter_variant.value<bool*>())));
+        *(e->value_s) = QString::number(static_cast<int>(*(emitter_variant.value<bool*>())));
 
     } else if (emitter_type == QMetaType::Double) {
-        e->value_s.setNum(emitter_variant.value<qreal>(), 'G', 16);
+        e->value_s->setNum(emitter_variant.value<qreal>(), 'G', 16);
 
     } else if (emitter_type < QMetaType::Double && emitter_type != 0) {
-        e->value_s = emitter_variant.value<QString>();
+        *(e->value_s) = emitter_variant.value<QString>();
 
     } else if (emitter_type == QMetaType::QString) {
-        e->value_s = emitter_variant.value<QString>();
+        *(e->value_s) = emitter_variant.value<QString>();
 
     } else {
         if (emitter_variant.canConvert<QString>()) {
-            e->value_s = emitter_variant.value<QString>();
+            *(e->value_s) = emitter_variant.value<QString>();
         } else {
-            e->value_s = 0.;
+            *(e->value_s) = 0.;
             return NULL;
         }
     }
 
-    QString *m_value;
-    if (!e->m_variant.isValid())
-        m_value = NULL;
-    else
-        m_value = e->m_variant.value<QString*>();
 
-    switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::AutoCopy:
-        if (this->enableCopy()) {
-            if (!m_value) {
-                m_value = new QString(e->value_s);
-                e->m_variant.setValue(m_value);
-            } else {
-                *m_value = e->value_s;
-            }
-            return m_value;
-        } else {
-            return &(e->value_s);
-        }
-        break;
-    case dtkComposerTransmitter::Copy:
-        if (!m_value) {
-            m_value = new QString(e->value_s);
-            e->m_variant.setValue(m_value);
-        } else {
-            *m_value = e->value_s;
-        }
-        return m_value;
-        break;
-    case dtkComposerTransmitter::Reference:
-        return &(e->value_s);
-        break;
-    default:
-        break;
-    };
+    if (e->twinned)
+        return e->value_s;
 
-    return NULL;
+    if (!e->m_variant.isValid()) {
+        QString *m_init = new QString(*e->value_s);
+        e->m_variant.setValue(m_init);
+    }
+
+    QString *m_value = e->m_variant.value<QString*>();
+    *m_value = *(e->value_s);
+    e->m_variant.setValue(e->value_s);
+    e->value_s = m_value;
+
+    return e->value_s;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -307,6 +244,9 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
 dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterVariantPrivate)
 {
     e->value_i = new qlonglong;
+    e->value_r = new double;
+    e->value_s = new QString;
+    e->value_b = new bool;
 
     e->active_emitter = NULL;
     e->active_variant = NULL;
@@ -420,8 +360,8 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
     switch(data_type) {
     case QMetaType::Double: {
         if (self) {
-            stream >> e->value_r;
-            this->setData<double>(&e->value_r);
+            stream >> *e->value_r;
+            this->setData<double>(e->value_r);
         } else {
             double r;
             stream >> r;
@@ -442,8 +382,8 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
     }
     case QMetaType::QString: {
         if (self) {
-            e->value_s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            this->setData<QString>(&e->value_s);
+            *(e->value_s) = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
+            this->setData<QString>(e->value_s);
         } else {
             QString s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
             QVariant::fromValue(&s);

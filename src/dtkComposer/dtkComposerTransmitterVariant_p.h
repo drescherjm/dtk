@@ -78,10 +78,10 @@ public:
     bool already_ask;
 
 public:
-    bool      value_b;
+    bool      *value_b;
     qlonglong *value_i;
-    qreal     value_r;
-    QString   value_s;
+    qreal     *value_r;
+    QString   *value_s;
 
 public:
     int metatypes[4];

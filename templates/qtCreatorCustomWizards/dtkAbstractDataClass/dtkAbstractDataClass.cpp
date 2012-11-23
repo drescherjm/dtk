@@ -14,7 +14,7 @@
 #include "%ClassName%.h"
 #include "%ClassName%_p.h"
 
-#include <dtkLog/dtkLog>
+#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // %ClassName% implementation

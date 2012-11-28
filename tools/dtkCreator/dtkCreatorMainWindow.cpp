@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 14:01:30 2012 (+0100)
+ * Last-Updated: Wed Nov 28 14:52:44 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1712
+ *     Update #: 1713
  */
 
 /* Commentary:
@@ -284,6 +284,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     view_menu->addAction(switchToDebugAction);
 
     QAction *showControlsAction = new QAction("Show controls", this);
+    showControlsAction->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::ControlModifier + Qt::AltModifier + Qt::Key_C));
 
     QMenu *window_menu = menu_bar->addMenu("Window");
     window_menu->addAction(showControlsAction);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 17:46:43 2012 (+0100)
+ * Last-Updated: Wed Nov 28 15:51:22 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 163
  */
 
 /* Commentary: 
@@ -18,8 +18,20 @@
  */
 
 #include "dtkComposerControls.h"
+#include "dtkComposerControlsDelegate.h"
+#include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeLeaf.h"
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+int type(dtkComposerSceneNodeLeaf *node);
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerControlsPrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerControlsPrivate
 {
@@ -30,6 +42,10 @@ public:
     QComboBox *selector;
     QListWidget *list;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerControls
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(new dtkComposerControlsPrivate)
 {
@@ -49,6 +65,8 @@ dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(ne
 // /////////////////////////////////////////////////////////////////
 
     d->list = new QListWidget(this);
+    d->list->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
 
 // /////////////////////////////////////////////////////////////////
 
@@ -125,6 +143,21 @@ void dtkComposerControls::setup(int index)
 
     d->list->clear();
 
-    foreach(dtkComposerSceneNodeLeaf *node, nodes)
-        d->list->addItem(new QListWidgetItem(node->title(), d->list));
+    foreach(dtkComposerSceneNodeLeaf *node, nodes) {
+        QListWidgetItem *item = new QListWidgetItem(node->title(), d->list, type(node));
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
+        d->list->addItem(item);
+    }
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+int type(dtkComposerSceneNodeLeaf *node)
+{
+    if(node->wrapee()->type() == "integer")
+        return dtkComposerControls::Integer;
+
+    return dtkComposerControls::None;
 }

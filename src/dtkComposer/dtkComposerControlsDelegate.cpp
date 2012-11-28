@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:12:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 15:53:40 2012 (+0100)
+ * Last-Updated: Wed Nov 28 16:06:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 84
+ *     Update #: 92
  */
 
 /* Commentary: 
@@ -59,6 +59,8 @@ QWidget *dtkComposerControlsDelegate::createEditor(QWidget *parent, const QStyle
 
 void dtkComposerControlsDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    painter->fillRect(option.rect, Qt::lightGray);
+
     QStyledItemDelegate::paint(painter, option, index);
 }
 
@@ -74,7 +76,10 @@ void dtkComposerControlsDelegate::setModelData(QWidget *editor, QAbstractItemMod
 
 QSize dtkComposerControlsDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index);
+    QSize size = QStyledItemDelegate::sizeHint(option, index);
+    size.setHeight(60);
+
+    return size;
 }
 
 void dtkComposerControlsDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem& option, const QModelIndex& index) const

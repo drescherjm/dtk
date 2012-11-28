@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 15:51:22 2012 (+0100)
+ * Last-Updated: Wed Nov 28 16:10:54 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 163
+ *     Update #: 166
  */
 
 /* Commentary: 
@@ -65,7 +65,8 @@ dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(ne
 // /////////////////////////////////////////////////////////////////
 
     d->list = new QListWidget(this);
-    d->list->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->list->setEditTriggers(QAbstractItemView::DoubleClicked);
     d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
 
 // /////////////////////////////////////////////////////////////////

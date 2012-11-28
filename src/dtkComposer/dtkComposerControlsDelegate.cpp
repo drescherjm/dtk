@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:12:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 16:06:09 2012 (+0100)
+ * Last-Updated: Wed Nov 28 17:16:25 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 135
  */
 
 /* Commentary: 
@@ -59,7 +59,19 @@ QWidget *dtkComposerControlsDelegate::createEditor(QWidget *parent, const QStyle
 
 void dtkComposerControlsDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    painter->fillRect(option.rect, Qt::lightGray);
+    QLinearGradient gradient;
+    gradient.setStart(option.rect.topLeft());
+    gradient.setFinalStop(option.rect.bottomLeft());
+    gradient.setColorAt(0, Qt::lightGray);
+    gradient.setColorAt(1, Qt::gray);
+
+    painter->save();
+    painter->fillRect(option.rect, gradient);
+    painter->setPen(QColor("#eeeeee"));
+    painter->drawLine(option.rect.topLeft(), option.rect.topRight());
+    painter->setPen(Qt::darkGray);
+    painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
+    painter->restore();
 
     QStyledItemDelegate::paint(painter, option, index);
 }

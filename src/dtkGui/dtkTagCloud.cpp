@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 10:54:00 2012 (+0200)
+ * Last-Updated: Thu Nov 29 14:11:15 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1577
+ *     Update #: 1579
  */
 
 /* Commentary: 
@@ -227,6 +227,8 @@ dtkTagCloud::dtkTagCloud(QWidget *parent) : QTextBrowser(parent)
 dtkTagCloud::~dtkTagCloud(void)
 {
     delete d;
+
+    d = NULL;
 }
 
 void dtkTagCloud::addTag(QString text, int count)
@@ -347,6 +349,7 @@ void dtkTagCloud::render(void)
                      .arg(fontSize)
                      .arg(color));
     }
+
     cloud.append("</div>\n");
 
     this->setHtml(cloud);

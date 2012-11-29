@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:07:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:09:00 2012 (+0200)
- *           By: tkloczko
- *     Update #: 45
+ * Last-Updated: Thu Nov 29 14:12:18 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -59,8 +59,11 @@ dtkColorGrid::dtkColorGrid(QWidget *parent) : QWidget(parent), d(new dtkColorGri
     setMouseTracking(true);
 }
 
-dtkColorGrid::~dtkColorGrid()
+dtkColorGrid::~dtkColorGrid(void)
 {
+    delete d;
+
+    d = NULL;
 }
 
 QSize dtkColorGrid::minimumSizeHint() const

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov 29 14:11:15 2012 (+0100)
+ * Last-Updated: Thu Nov 29 14:37:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1579
+ *     Update #: 1590
  */
 
 /* Commentary: 
@@ -91,19 +91,17 @@ public:
 
 dtkTag::dtkTag(void) : d(new dtkTagPrivate)
 {
-    d = new dtkTagPrivate;
+
 }
 
 dtkTag::dtkTag(QString text, int count) : d(new dtkTagPrivate)
 {
-    d = new dtkTagPrivate;
     d->text = text;
     d->count = count;
 }
 
 dtkTag::dtkTag(QString text, int count, QStringList items) : d(new dtkTagPrivate)
 {
-    d = new dtkTagPrivate;
     d->text = text;
     d->count = count;
     d->items = items;
@@ -111,16 +109,14 @@ dtkTag::dtkTag(QString text, int count, QStringList items) : d(new dtkTagPrivate
 
 dtkTag::dtkTag(QString text, int count, QStringList items, QString color) : d(new dtkTagPrivate)
 {
-    d = new dtkTagPrivate;
     d->text = text;
     d->count = count;
     d->items = items;
     d->color = color;
 }
 
-dtkTag::dtkTag(const dtkTag& other)
+dtkTag::dtkTag(const dtkTag& other) : d(new dtkTagPrivate)
 {
-    d = new dtkTagPrivate;
     d->text = other.d->text;
     d->count = other.d->count;
     d->items = other.d->items;

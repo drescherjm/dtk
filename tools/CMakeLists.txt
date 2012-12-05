@@ -18,6 +18,7 @@
 ######################################################################
 
 add_subdirectory(dtkDeploy)
+add_subdirectory(dtkGenerator)
 add_subdirectory(dtkTestGenerator)
 add_subdirectory(dtkPluginGenerator)
 add_subdirectory(dtkHeadersBuilder)

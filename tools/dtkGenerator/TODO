@@ -1,0 +1,23 @@
+# ####################### #
+# Things remaining to do: #
+# ####################### #
+
+On the Wizard:
+- Add a license selection for plugins
+- Complete Help. Ju
+- Add images. Ju
+- Conclusion subTitle: Place the whole todo stuff with colors. Ju
+
+On the Generator:
+- Handle the license.
+- Being able to modify the templates relatively to the Abstract level needs.
+
+On the main:
+- Anyoption should be replaced:
+    * No way to have mandatory option for instance.
+    * No way to have more than one Synopsis line.
+    * Bugging many times.
+
+Global stuff:
+- Add Doxygen comments.
+

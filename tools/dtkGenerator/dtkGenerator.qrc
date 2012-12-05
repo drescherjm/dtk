@@ -1,0 +1,34 @@
+<RCC>
+    <qresource>
+        <file>images/logo.png</file>
+        <file>images/watermark.png</file>
+        <file>images/background.png</file>
+    </qresource>
+    <qresource>
+        <file>templates/core/interface.cpp</file>
+        <file>templates/core/interface_p.h</file>
+        <file>templates/core/interface.h</file>
+    </qresource>
+    <qresource>
+        <file>templates/plugin/cmake</file>
+        <file>templates/plugin/doxyfile</file>
+        <file>templates/plugin/export.h</file>
+        <file>templates/plugin/config.h</file>
+        <file>templates/plugin/plugin.cpp</file>
+        <file>templates/plugin/plugin.h</file>
+        <file>templates/plugin/qhcp</file>
+        <file>templates/plugin/type.cpp</file>
+        <file>templates/plugin/type.h</file>
+    </qresource>
+    <qresource>
+        <file>templates/composer/node.cpp</file>
+        <file>templates/composer/node.h</file>
+    </qresource>
+    <qresource>
+        <file>templates/licenses/Apache</file>
+        <file>templates/licenses/Artistic</file>
+        <file>templates/licenses/Cecill</file>
+        <file>templates/licenses/GPL</file>
+        <file>templates/licenses/LGPL</file>
+    </qresource>
+</RCC>

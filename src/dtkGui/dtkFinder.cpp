@@ -287,13 +287,15 @@ void dtkFinderSideView::populate(void)
 
         QFileInfo info(path);
 
-        QTreeWidgetItem *item = new QTreeWidgetItem(item3, QStringList() << info.baseName());
-        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        // item->setData(0, Qt::FontRole, itemFont);
-        item->setData(0, Qt::UserRole, info.absoluteFilePath());
-        item->setIcon(0, provider.icon(info));
+        if (info.exists()) {
+            QTreeWidgetItem *item = new QTreeWidgetItem(item3, QStringList() << info.baseName());
+            item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+            // item->setData(0, Qt::FontRole, itemFont);
+            item->setData(0, Qt::UserRole, info.absoluteFilePath());
+            item->setIcon(0, provider.icon(info));
 
-        d->items << item;
+            d->items << item;
+        }
     }
 
     this->expandItem(item1);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 13:55:04 2012 (+0200)
- *           By: tkloczko
- *     Update #: 7
+ * Last-Updated: 2012 Fri Nov 16 16:18:14 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 9
  */
 
 /* Commentary: 
@@ -56,6 +56,11 @@ dtkComposerNodeLeafProcess::~dtkComposerNodeLeafProcess(void)
     d = NULL;
 }
 
+bool dtkComposerNodeLeafProcess::enableDefaultImplementation(void) const
+{
+    return false;
+}
+
 bool dtkComposerNodeLeafProcess::implementationHasChanged(void) const
 {
     return d->implementation_has_changed;
@@ -72,6 +77,8 @@ QString dtkComposerNodeLeafProcess::currentImplementation(void) const
 QStringList dtkComposerNodeLeafProcess::implementations(void)
 {
     QStringList implementations;
+    if (this->enableDefaultImplementation())
+        implementations << "default";
     QStringList all_implementations = dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType());
 
     for (int i = 0; i < all_implementations.count(); ++i)
@@ -86,6 +93,9 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
+    
+    if (implementation == "default")
+        const_cast<QString&>(implementation) = this->abstractProcessType();
     
     if (!d->process) {
 

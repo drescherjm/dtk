@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jul 12 10:43:54 2012 (+0200)
+ * Last-Updated: Wed Nov 21 18:24:52 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 318
+ *     Update #: 436
  */
 
 /* Commentary: 
@@ -34,13 +34,50 @@
 class dtkComposerSceneNodeLeafPrivate
 {
 public:
+    void flagAs(Qt::GlobalColor color);
+
+public:
     QRectF rect;
 
 public:
+    QGraphicsPixmapItem *flag;
+         Qt::GlobalColor flag_color;
+
+public:
     QLinearGradient gradiant;
-    
-    bool gradiant_defined;
+               bool gradiant_defined;
 };
+
+void dtkComposerSceneNodeLeafPrivate::flagAs(Qt::GlobalColor color)
+{
+    switch(color) {
+    case Qt::blue:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-blue.png"));
+        break;
+    case Qt::gray:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-gray.png"));
+        break;
+    case Qt::green:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-green.png"));
+        break;
+    case Qt::darkYellow:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-orange.png"));
+        break;
+    case Qt::red:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-red.png"));
+        break;
+    case Qt::magenta:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-pink.png"));
+        break;
+    case Qt::yellow:
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-yellow.png"));
+        break;
+    default:
+        break;
+    };
+
+    this->flag_color = color;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeLeaf implementation
@@ -51,10 +88,16 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
     d->rect = QRectF(0, 0, 150, 50);
 
     d->gradiant_defined = false;
+
+    d->flag = new QGraphicsPixmapItem(this);
+    d->flag->setVisible(false);
+
+    d->flag_color = Qt::transparent;
 }
 
 dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
 {
+    delete d->flag;
     delete d;
 
     d = NULL;
@@ -86,6 +129,58 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
     }
 
     this->layout();
+}
+
+void dtkComposerSceneNodeLeaf::flag(Qt::GlobalColor color, bool on)
+{
+    d->flagAs(color);
+    d->flag->setVisible(on);
+}
+
+void dtkComposerSceneNodeLeaf::flag(QColor color)
+{
+    if(color == Qt::blue)
+        this->flag(Qt::blue, true);
+    else if(color == Qt::gray)
+        this->flag(Qt::gray, true);
+    else if(color == Qt::green)
+        this->flag(Qt::green, true);
+    else if(color == Qt::darkYellow)
+        this->flag(Qt::darkYellow, true);
+    else if(color == Qt::red)
+        this->flag(Qt::red, true);
+    else if(color == Qt::magenta)
+        this->flag(Qt::magenta, true);
+    else if(color == Qt::yellow)
+        this->flag(Qt::yellow, true);
+}
+
+bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
+{
+    if(!d->flag->isVisible())
+        return false;
+    else
+        return d->flag_color == color;
+}
+
+bool dtkComposerSceneNodeLeaf::flagged(void)
+{
+    return d->flag->isVisible();
+}
+
+QString dtkComposerSceneNodeLeaf::flagColorName(void)
+{
+    if(!d->flag->isVisible())
+        return QString();
+
+    QColor color(d->flag_color);
+        
+    return color.name();
+}
+
+Qt::GlobalColor dtkComposerSceneNodeLeaf::flagColor(void)
+{
+    return d->flag_color;
 }
 
 #include "dtkComposerSceneNodeComposite.h"
@@ -184,6 +279,12 @@ void dtkComposerSceneNodeLeaf::layout(void)
         d->gradiant_defined = true;
 
     }
+
+// /////////////////////////////////////////////////////////////////
+// Placing flag
+// /////////////////////////////////////////////////////////////////
+
+    d->flag->setPos(d->rect.right() - 20, d->rect.top() - 20);
 }
 
 void dtkComposerSceneNodeLeaf::resize(qreal width, qreal height)

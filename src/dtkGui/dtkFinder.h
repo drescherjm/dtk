@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 15 15:14:42 2011 (+0200)
+ * Last-Updated: Thu Dec  6 12:23:36 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -87,12 +87,16 @@ signals:
 
 public slots:
     void setPath(const QString& path);
-    void addBookmark(const QString& path);
-    void clearBookmarks(void);    
     void setHeaderFontSize(int value);
+
+public slots:
+    void    addBookmark(const QString& path);
+    void removeBookmark(const QString& path);
+    void  clearBookmarks(void);
 
 private slots:
     void onItemCicked(QTreeWidgetItem *, int);
+    void onContextMenu(const QPoint&);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

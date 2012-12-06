@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr  3 16:07:24 2012 (+0200)
- *           By: tkloczko
- *     Update #: 77
+ * Last-Updated: Thu Dec  6 12:30:58 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -178,6 +178,9 @@ dtkFinderSideView::dtkFinderSideView(QWidget *parent) : QTreeWidget(parent), d(n
     this->setFocusPolicy(Qt::NoFocus);
     this->populate();    
 
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenu(const QPoint&)));
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(onItemCicked(QTreeWidgetItem *, int)));
 }
 
@@ -321,6 +324,21 @@ void dtkFinderSideView::addBookmark(const QString& path)
     this->populate();
 }
 
+void dtkFinderSideView::removeBookmark(const QString& path)
+{
+    QFileInfo info(path);
+
+    if(!info.isDir())
+        return;
+
+    QSettings settings;
+    QStringList bookmarks = settings.value("dtkFinderBookmarks").toStringList();
+    bookmarks.removeAll(path);
+    settings.setValue("dtkFinderBookmarks", bookmarks);
+
+    this->populate();
+}
+
 void dtkFinderSideView::clearBookmarks(void)
 {
     QSettings settings;
@@ -332,6 +350,26 @@ void dtkFinderSideView::clearBookmarks(void)
 void dtkFinderSideView::onItemCicked(QTreeWidgetItem *item, int)
 {
     emit changed(item->data(0, Qt::UserRole).toString());
+}
+
+void dtkFinderSideView::onContextMenu(const QPoint& position)
+{
+    QTreeWidgetItem *item = this->itemAt(position);
+
+    if(!item)
+        return;
+
+    QSettings   settings;
+    QStringList bookmarks = settings.value("dtkFinderBookmarks").toStringList();
+    QString     bookmark  = item->data(0, Qt::UserRole).toString();
+
+    if(!bookmarks.contains(bookmark))
+        return;
+
+    QMenu menu; menu.addAction("Remove bookmark");
+
+    if (menu.exec(this->mapToGlobal(position)))
+        this->removeBookmark(bookmark);
 }
 
 void dtkFinderSideView::dragEnterEvent(QDragEnterEvent *event)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 15:22:54 2012 (+0200)
- *           By: tkloczko
- *     Update #: 51
+ * Last-Updated: 2012 Thu Nov 15 15:03:35 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -128,6 +128,9 @@ void dtkComposerNodeControlIf::setVariables(void)
 
 int dtkComposerNodeControlIf::selectBranch(void)
 {
+    if (d->cond.isEmpty())
+        return static_cast<int>(false);
+
     bool value = *d->cond.data<bool>();
     
     foreach(dtkComposerTransmitter *t, d->then_block.emitters())

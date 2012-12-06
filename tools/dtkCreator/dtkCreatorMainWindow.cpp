@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May  4 16:13:25 2012 (+0200)
+ * Last-Updated: Wed Nov 28 16:21:58 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 1671
+ *     Update #: 1717
  */
 
 /* Commentary:
@@ -24,6 +24,7 @@
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerCompass.h>
+#include <dtkComposer/dtkComposerControls.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
 #include <dtkComposer/dtkComposerFactoryView.h>
 #include <dtkComposer/dtkComposerGraph.h>
@@ -122,6 +123,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composer = new dtkComposer;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
     d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
+
+    d->controls = NULL;
 
     d->editor = new dtkComposerSceneNodeEditor(this);
     d->editor->setScene(d->composer->scene());
@@ -262,13 +265,29 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_menu->addAction(d->composition_quit_action);
 
     d->edit_menu = menu_bar->addMenu("Edit");
+    d->edit_menu->addAction(d->composer->view()->searchAction());
+    d->edit_menu->addSeparator();
     d->edit_menu->addAction(d->undo_action);
     d->edit_menu->addAction(d->redo_action);
+    d->edit_menu->addSeparator();
+    d->edit_menu->addAction(d->composer->scene()->flagAsBlueAction());
+    d->edit_menu->addAction(d->composer->scene()->flagAsGrayAction());
+    d->edit_menu->addAction(d->composer->scene()->flagAsGreenAction());
+    d->edit_menu->addAction(d->composer->scene()->flagAsOrangeAction());
+    d->edit_menu->addAction(d->composer->scene()->flagAsPinkAction());
+    d->edit_menu->addAction(d->composer->scene()->flagAsRedAction());
+    d->edit_menu->addAction(d->composer->scene()->flagAsYellowAction());
 
     QMenu *view_menu = menu_bar->addMenu("View");
     view_menu->addAction(switchToCompoAction);
     view_menu->addAction(switchToDstrbAction);
     view_menu->addAction(switchToDebugAction);
+
+    QAction *showControlsAction = new QAction("Show controls", this);
+    showControlsAction->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::ControlModifier + Qt::AltModifier + Qt::Key_C));
+
+    QMenu *window_menu = menu_bar->addMenu("Window");
+    window_menu->addAction(showControlsAction);
 
     QMenu *debug_menu = menu_bar->addMenu("Debug");
     debug_menu->addAction(run_action);
@@ -288,6 +307,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
+
+    connect(showControlsAction, SIGNAL(triggered()), this, SLOT(showControls()));
 
     connect(d->compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
     connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
@@ -614,6 +635,23 @@ void dtkCreatorMainWindow::switchToDebug(void)
     int w = this->size().width() - d->wl - d->wr;
 
     d->inner->setSizes(QList<int>() << d->wl << w/2 << w/2 << d->wr);
+}
+
+void dtkCreatorMainWindow::showControls(void)
+{
+    if(!d->controls) {
+        d->controls = new dtkComposerControls(this);
+        d->controls->setScene(d->composer->scene());
+        d->controls->setWindowFlags(Qt::Dialog);
+        d->controls->setWindowTitle("Composer Controls");
+
+        if(!this->isFullScreen()) {
+            d->controls->resize(d->controls->size().width(), this->size().height());
+            d->controls->move(this->rect().topRight() + QPoint(10, 0));
+        }
+    }
+
+    d->controls->show();
 }
 
 void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)

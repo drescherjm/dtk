@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 15:55:56 2012 (+0200)
+ * Last-Updated: Mon Nov 19 11:55:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 62
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -28,6 +28,7 @@ class dtkComposerEvaluator;
 class dtkComposerFactory;
 class dtkComposerGraph;
 class dtkComposerMachine;
+class dtkComposerPath;
 class dtkComposerScene;
 class dtkComposerStack;
 class dtkComposerView;
@@ -51,6 +52,7 @@ public:
     dtkComposerScene *scene;
     dtkComposerStack *stack;
     dtkComposerView *view;
+    dtkComposerPath *path;
 
 public:
     QString fileName;

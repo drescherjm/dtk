@@ -14,7 +14,7 @@
 #include <dtkComposer/dtkComposerTransmitterEmitter.h>
 #include <dtkComposer/dtkComposerTransmitterReceiver.h>
 
-#include <dtkLog>
+#include <dtkLog/dtkLog.h>
 
 #include "%NodeName%.h"
 

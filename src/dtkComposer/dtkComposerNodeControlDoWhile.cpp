@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 11 14:43:53 2012 (+0200)
- *           By: tkloczko
- *     Update #: 57
+ * Last-Updated: 2012 Thu Nov 15 15:01:48 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -124,6 +124,9 @@ void dtkComposerNodeControlDoWhile::setVariables(void)
 
 int dtkComposerNodeControlDoWhile::selectBranch(void)
 {
+    if (d->cond.isEmpty())
+        return static_cast<int>(true);
+
     return static_cast<int>(!(*d->cond.data()));
 }
 

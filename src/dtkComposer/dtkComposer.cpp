@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 21 15:11:12 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 403
+ * Last-Updated: Mon Nov 19 15:22:43 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 412
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@
 #include "dtkComposerGraph.h"
 #include "dtkComposerMachine.h"
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerPath.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeComposite.h"
@@ -114,15 +115,19 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->view = new dtkComposerView(this);
     d->view->setScene(d->scene);
 
+    d->path = new dtkComposerPath(this);
+    d->path->setScene(d->scene);
+    
     d->compass = new dtkComposerCompass;
     d->compass->setScene(d->scene);
     d->compass->setView(d->view);
 
     d->evaluator->setGraph(d->graph);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+    layout->addWidget(d->path);
     layout->addWidget(d->view);
 
     connect(d->scene, SIGNAL(modified(bool)), this, SIGNAL(modified(bool)));
@@ -323,6 +328,11 @@ dtkComposerStack *dtkComposer::stack(void)
 dtkComposerView *dtkComposer::view(void)
 {
     return d->view;
+}
+
+dtkComposerPath *dtkComposer::path(void)
+{
+    return d->path;
 }
 
 dtkComposerCompass *dtkComposer::compass(void)

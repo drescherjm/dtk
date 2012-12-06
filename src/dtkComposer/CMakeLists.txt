@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Mon Nov  5 16:43:08 2012 (+0100)
+## Last-Updated: Wed Nov 28 15:24:13 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 630
+##     Update #: 649
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -28,6 +28,8 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerCompass.h
+  dtkComposerControls.h
+  dtkComposerControlsDelegate.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -108,6 +110,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeVectorRealOperatorBinary.h
   dtkComposerNodeView.h
+  dtkComposerPath.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
   dtkComposerSceneModel.h
@@ -143,6 +146,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposer_p.h
   dtkComposerCompass.h
+  dtkComposerControls.h
+  dtkComposerControlsDelegate.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -153,6 +158,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerMachineState.h
   dtkComposerNodeFile_p.h
   dtkComposerNodeView.h
+  dtkComposerPath.h
   dtkComposerSceneModel.h
   dtkComposerScene.h
   dtkComposerSceneNodeEditor.h
@@ -165,6 +171,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerCompass.cpp
+  dtkComposerControls.cpp
+  dtkComposerControlsDelegate.cpp
   dtkComposerEvaluator.cpp
   dtkComposerFactory.cpp
   dtkComposerFactoryView.cpp
@@ -244,6 +252,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeVectorRealOperatorBinary.cpp
   dtkComposerNodeView.cpp
+  dtkComposerPath.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp
   dtkComposerSceneModel.cpp

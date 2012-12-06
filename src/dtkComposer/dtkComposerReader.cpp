@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov  8 09:48:16 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 823
+ * Last-Updated: Thu Dec  6 12:39:23 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 835
  */
 
 /* Commentary: 
@@ -623,6 +623,12 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
     }
 
     if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(n)) {
+
+        for(int i = 0; i < childNodes.count(); i++) {
+            if(childNodes.at(i).toElement().tagName() == "flag") {
+                leaf->flag(QColor(childNodes.at(i).childNodes().at(0).toText().data()));
+            }
+        }
 
         for(int i = 0; i < ports.count(); i++) {
             if (ports.at(i).toElement().hasAttribute("label")) {

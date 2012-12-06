@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Oct 24 09:43:17 (+0200)
+ * Last-Updated: 2012 Thu Nov 15 15:00:57 (+0100)
  *           By: Thibaud Kloczko, Inria.
- *     Update #: 193
+ *     Update #: 194
  */
 
 /* Commentary: 
@@ -129,6 +129,9 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 
 void dtkComposerNodeControlForEach::setInputs(void)
 {
+    if (d->header_rcv.isEmpty())
+        return;
+
     d->container = d->header_rcv.constContainer();
     d->counter = 0;
     d->size = d->container->count();

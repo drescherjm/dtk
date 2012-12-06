@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 12 11:57:48 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 47
+ * Last-Updated: Wed Dec  5 15:52:03 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -50,13 +50,12 @@ public:
 
 public:
     void setData(const QVector<QPointF>& data);
-    QVector<QPointF>&  data(void);
+
+public:
+    const QVector<QPointF> data(void) const;
 
 public:
     QString description(void);
-
-signals:
-    void updated(void);
 
 private:
     friend class dtkPlotView;

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 13:59:27 2012 (+0200)
- *           By: tkloczko
- *     Update #: 2
+ * Last-Updated: 2012 Fri Nov 16 16:18:58 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ public:
     virtual ~dtkComposerNodeLeafView(void);
 
 public:
+    virtual bool enableDefaultImplementation(void) const;
+
     virtual bool isAbstractView(void) const = 0;
 
     virtual QString abstractViewType(void) const = 0;

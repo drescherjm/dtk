@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 18:13:28 2012 (+0100)
+ * Last-Updated: Thu Dec  6 12:39:23 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 833
+ *     Update #: 835
  */
 
 /* Commentary: 
@@ -85,8 +85,9 @@ bool dtkComposerReaderPrivate::check(const QDomDocument& document)
 {
     missing.clear();
 
-    QStringList implementations = dtkAbstractProcessFactory::instance()->implementations();
+    QStringList implementations;
     implementations << dtkAbstractDataFactory::instance()->implementations();
+    implementations << dtkAbstractProcessFactory::instance()->implementations();
     implementations << dtkAbstractViewFactory::instance()->implementations();
 
     QDomNodeList nodes = document.elementsByTagName("implementation");

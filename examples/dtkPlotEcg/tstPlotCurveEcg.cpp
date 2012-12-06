@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  6 11:51:24 2012 (+0100)
+ * Last-Updated: Thu Dec  6 11:54:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 43
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -22,14 +22,10 @@
 #include <dtkCore/dtkGlobal.h>
 
 #ifdef _WIN32
-
 #define SLEEP(x) Sleep(x)
-
 #else
-
 #include <unistd.h>
 #define SLEEP(x) usleep(x*1000)
-
 #endif
 
 tstPlotCurveEcg::tstPlotCurveEcg(const QString& title) : dtkPlotCurve(title)

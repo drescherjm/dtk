@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jul 10 12:23:24 2012 (+0200)
+## Last-Updated: Thu Dec  6 14:25:57 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 110
+##     Update #: 114
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,18 +29,14 @@ set(QT_USE_QTNETWORK     TRUE)
 set(QT_USE_QTTEST        TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTTEST        TRUE)
-set(QT_USE_QTDECLARATIVE TRUE)
 set(QT_USE_GUI           TRUE)
+set(QT_USE_QTDECLARATIVE TRUE)
 
 if(WIN32)
   set(QT_USE_QTMAIN TRUE)
 endif(WIN32)
 
 find_package(Qt4 4.6.0 REQUIRED)
-
-if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
-  set(QT_USE_QTDECLARATIVE TRUE)
-endif(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
 
 include(${QT_USE_FILE})
 

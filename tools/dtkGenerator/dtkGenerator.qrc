@@ -22,11 +22,4 @@
         <file>templates/composer/node.cpp</file>
         <file>templates/composer/node.h</file>
     </qresource>
-    <qresource>
-        <file>templates/licenses/Apache</file>
-        <file>templates/licenses/Artistic</file>
-        <file>templates/licenses/Cecill</file>
-        <file>templates/licenses/GPL</file>
-        <file>templates/licenses/LGPL</file>
-    </qresource>
 </RCC>

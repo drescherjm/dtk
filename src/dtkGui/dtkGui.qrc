@@ -3,9 +3,8 @@
 
     <file>dtkFinder.qss</file>
     <file>dtkAnchoredBar.qss</file>
-
-    <file>dtkSwitch.qml</file>
-
+    <file>pixmaps/star.svg</file>
+	<file>pixmaps/hidden-folder.png</file>
     <file>pixmaps/dtk-anchored-bar-action.png</file>
     <file>pixmaps/dtk-anchored-bar-add.png</file>
     <file>pixmaps/dtk-anchored-bar-handle.png</file>

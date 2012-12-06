@@ -47,6 +47,9 @@ public:
 
     void printPlugins(void);
 
+    void setVerboseLoading (bool value);
+    bool verboseLoading (void) const;
+
           dtkPlugin *  plugin(const QString& name);
     QList<dtkPlugin *> plugins(void);
 

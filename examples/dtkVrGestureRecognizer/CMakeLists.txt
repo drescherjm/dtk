@@ -23,7 +23,7 @@ project(dtkVrGestureRecognizer)
 ## Build rules
 ## #################################################################
 
-if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+if(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   tstMainWindow.h
@@ -48,4 +48,4 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkVr)
 
-endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND MPI_FOUND)
+endif(QUAT_LIBRARIES AND VRPN_LIBRARIES AND USE_MPI AND MPI_FOUND)

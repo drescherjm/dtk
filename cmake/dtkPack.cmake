@@ -24,14 +24,18 @@ include (InstallRequiredSystemLibraries)
 ## #################################################################
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-  execute_process(COMMAND uname -r
-    COMMAND sed "s/\\.PAE//" # Getting of any PAE keyword
-    COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
-    OUTPUT_VARIABLE PACKAGE_EXTENSION
+  #GET distribution id
+  execute_process(COMMAND lsb_release -irs
+    COMMAND sed "s/ //"
+    COMMAND sed "s/Fedora/fc/"
+    COMMAND tr -d '\n' # In Ubuntu the string is Ubuntu\n10.04\n
+    OUTPUT_VARIABLE DISTRIB
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")
+  execute_process(COMMAND arch 
+    OUTPUT_VARIABLE ARCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-${DISTRIB}-${ARCH}")
 else("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")
 endif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
@@ -71,7 +75,7 @@ if(WIN32)
 endif(WIN32)
 
 if(UNIX AND NOT APPLE)
-  set(CPACK_GENERATOR "RPM")
+  set(CPACK_GENERATOR "DEB;RPM")
 endif(UNIX AND NOT APPLE)
 
 ## #################################################################

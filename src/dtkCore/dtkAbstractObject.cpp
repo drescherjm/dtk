@@ -449,6 +449,16 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
     return d_ptr->metadatas.value(key);
 }
 
+void dtkAbstractObject::copyMetaDataFrom(const dtkAbstractObject *obj)
+{
+    if (!obj)
+        return;
+
+    foreach(QString key, obj->metaDataList()) {
+        this->setMetaData(key, obj->metadatas(key));
+    }
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractObject documentation
 // /////////////////////////////////////////////////////////////////

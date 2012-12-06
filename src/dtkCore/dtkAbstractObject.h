@@ -80,6 +80,7 @@ public:
    QStringList metaDataValues(const QString& key) const;
    QString metadata(const QString& key) const;
    QStringList metadatas(const QString& key) const;
+   void copyMetaDataFrom(const dtkAbstractObject *obj);
 
 signals:
    void propertySet(const QString& key, const QString& value);

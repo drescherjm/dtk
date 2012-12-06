@@ -21,9 +21,9 @@ cmake_minimum_required(VERSION 2.8.6)
 
 project(dtk)
 
-set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number.")
-set(${PROJECT_NAME}_VERSION_MINOR 6 CACHE STRING "dtk minor version number.")
-set(${PROJECT_NAME}_VERSION_BUILD 0 CACHE STRING "dtk build version number.")
+set(${PROJECT_NAME}_VERSION_MAJOR 0 CACHE STRING "dtk major version number." FORCE)
+set(${PROJECT_NAME}_VERSION_MINOR 6 CACHE STRING "dtk minor version number." FORCE)
+set(${PROJECT_NAME}_VERSION_BUILD 1 CACHE STRING "dtk build version number." FORCE)
 set(${PROJECT_NAME}_VERSION
   "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD}")
 
@@ -76,6 +76,9 @@ endif(DTK_BUILD_REPORTING)
 
 if(DTK_BUILD_TESTING)
   add_subdirectory(tests)
+  #Set PATH environment in tests
+  configure_file(cmake/dtkSetTestEnvironment.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
+  set_directory_properties(PROPERTIES TEST_INCLUDE_FILE dtkSetTestEnvironment.cmake)
 endif(DTK_BUILD_TESTING)
 
 if(DTK_BUILD_DOCUMENTATION)

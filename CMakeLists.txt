@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: 2012 Mon Nov 19 15:55:55 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 392
+## Last-Updated: Thu Dec  6 12:55:21 2012 (+0100)
+##           By: Julien Wintz
+##     Update #: 394
 ######################################################################
 ## 
 ### Commentary: 
@@ -76,9 +76,6 @@ endif(DTK_BUILD_REPORTING)
 
 if(DTK_BUILD_TESTING)
   add_subdirectory(tests)
-  #Set PATH environment in tests
-  configure_file(cmake/dtkSetTestEnvironment.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
-  set_directory_properties(PROPERTIES TEST_INCLUDE_FILE dtkSetTestEnvironment.cmake)
 endif(DTK_BUILD_TESTING)
 
 if(DTK_BUILD_DOCUMENTATION)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 10:25:31 2012 (+0200)
+## Last-Updated: Thu Dec  6 12:57:36 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 49
+##     Update #: 55
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,12 +24,12 @@ include (InstallRequiredSystemLibraries)
 ## #################################################################
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-  #GET distribution id
   execute_process(COMMAND lsb_release -irs
     COMMAND sed "s/ //"
     COMMAND sed "s/Fedora/fc/"
-    COMMAND tr -d '\n' # In Ubuntu the string is Ubuntu\n10.04\n
+    COMMAND tr -d '\n'
     OUTPUT_VARIABLE DISTRIB
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND arch 

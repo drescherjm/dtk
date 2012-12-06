@@ -1,3 +1,22 @@
+### dtkSetTestEnvironment.cmake.in --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008-2011 - Julien Wintz, Inria.
+## Created: Thu Dec  6 12:55:00 2012 (+0100)
+## Version: $Id$
+## Last-Updated: Thu Dec  6 12:55:04 2012 (+0100)
+##           By: Julien Wintz
+##     Update #: 2
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change log:
+## 
+######################################################################
+
 #
 # TEST_INCLUDE_FILE for use with tests.
 # Sets the PATH environment so that dlls are found.
@@ -19,7 +38,3 @@ else()
 endif()
 
 set(ENV{PATH} "${PATHS_FOR_TESTS}")
-
-message("@CMAKE_CURRENT_BINARY_DIR@/SetTestEnvironment.cmake : Environment for tests is")
-message("    PATH=$ENV{PATH}")
-

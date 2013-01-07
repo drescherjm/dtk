@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:28:12 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 11 14:09:07 2010 (+0100)
+ * Last-Updated: Mon Jan  7 12:11:50 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -46,8 +46,8 @@ public:
 
     virtual void unregisterVariable(QString name);
 
-    void allowThreads(void);
-    void blockThreads(void);
+    // void allowThreads(void);
+    // void blockThreads(void);
 
 public slots:
     virtual QString interpret(const QString& command, int *stat);
@@ -79,12 +79,12 @@ public:
     void initialize(dtkScriptInterpreterPython *interpreter) {
 	int stat;
 
-        interpreter->blockThreads();
+        // interpreter->blockThreads();
 
 	foreach(dtkScriptInterpreterModuleInitializer initializer, initializers)
 	    initializer();
 
-        interpreter->allowThreads();
+        // interpreter->allowThreads();
 
 	foreach(QString command, commands) 
 	    interpreter->interpret(command, &stat);

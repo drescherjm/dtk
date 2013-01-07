@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:29:02 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 13:43:17 2012 (+0200)
- *           By: tkloczko
- *     Update #: 278
+ * Last-Updated: Mon Jan  7 12:11:02 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 284
  */
 
 /* Commentary: 
@@ -107,9 +107,9 @@ void init_redirector(void)
 class dtkScriptInterpreterPythonPrivate
 {
 public:
-    unsigned int thread_level;
+    // unsigned int thread_level;
 
-    PyThreadState* thread_state;
+    // PyThreadState* thread_state;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -118,8 +118,8 @@ public:
 
 dtkScriptInterpreterPython::dtkScriptInterpreterPython(QObject *parent) : dtkScriptInterpreter(parent), d(new dtkScriptInterpreterPythonPrivate)
 {
-    d->thread_level = 0;
-    d->thread_state = 0;
+    // d->thread_level = 0;
+    // d->thread_state = 0;
 
     int stat;
 
@@ -184,27 +184,27 @@ void dtkScriptInterpreterPython::unregisterVariable(QString name)
     DTK_UNUSED(name);
 }
 
-void dtkScriptInterpreterPython::allowThreads(void)
-{
-    d->thread_level--;
+// void dtkScriptInterpreterPython::allowThreads(void)
+// {
+//     d->thread_level--;
 
-    if (d->thread_level == 0)
-        d->thread_state = PyEval_SaveThread();
-}
+//     if (d->thread_level == 0)
+//         d->thread_state = PyEval_SaveThread();
+// }
 
-void dtkScriptInterpreterPython::blockThreads(void)
-{    
-    if((d->thread_level == 0) && (d->thread_state))
-        PyEval_RestoreThread(d->thread_state);
+// void dtkScriptInterpreterPython::blockThreads(void)
+// {    
+//     if((d->thread_level == 0) && (d->thread_state))
+//         PyEval_RestoreThread(d->thread_state);
 
-    d->thread_level++;
-}
+//     d->thread_level++;
+// }
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
     redirection_occured = false;
 
-    blockThreads();
+    // blockThreads();
 
     switch(PyRun_SimpleString(command.toAscii().constData())) {
     case  0: *stat = Status_Ok;    break;
@@ -216,7 +216,7 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 
     dtkScriptInterpreterSynchronizer::instance()->wake();
 
-    allowThreads();
+    // allowThreads();
 
     return "";
 }
@@ -228,7 +228,7 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, const QStr
 
     QString result = "";
 
-    blockThreads();
+    // blockThreads();
 
     PyObject *modname = PyString_FromString("__main__");
     PyObject *mod = PyImport_Import(modname);
@@ -250,7 +250,7 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, const QStr
     }
     Py_XDECREF(modname);
 
-    allowThreads();
+    // allowThreads();
 
     return result;
 }

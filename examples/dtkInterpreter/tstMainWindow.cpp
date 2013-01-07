@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 09:19:56 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 30 14:34:10 2012 (+0100)
+ * Last-Updated: Mon Jan  7 11:43:53 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -21,6 +21,11 @@
 
 #include "tstMainWindow.h"
 
+#include <dtkConfig.h>
+
+#include <dtkScript/dtkScriptInterpreterPool.h>
+#include <dtkScript/dtkScriptInterpreterPython.h>
+
 #include <dtkGui/dtkInterpreter.h>
 
 class tstMainWindowPrivate
@@ -31,6 +36,10 @@ public:
 public:
     tstMainWindow *q;
 };
+
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+extern "C" int init_core(void);
+#endif
 
 tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -43,6 +52,27 @@ tstMainWindow::tstMainWindow(QWidget *parent) : QMainWindow(parent)
 
     this->setWindowTitle("dtk Gui Interpreter");
     this->setCentralWidget(d->interpreter);
+
+#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+    dtkScriptInterpreterPythonModuleManager::instance()->registerInitializer(&init_core);
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "import core"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "dataFactory    = core.dtkAbstractDataFactory.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "processFactory = core.dtkAbstractProcessFactory.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "viewFactory    = core.dtkAbstractViewFactory.instance()"
+    );
+    dtkScriptInterpreterPythonModuleManager::instance()->registerCommand(
+        "pluginManager  = core.dtkPluginManager.instance()"
+    );
+
+    d->interpreter->registerInterpreter(dtkScriptInterpreterPool::instance()->python());
+#endif
 }
 
 tstMainWindow::~tstMainWindow(void)

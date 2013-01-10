@@ -14,9 +14,7 @@
 #ifndef %2_P_H
 #define %2_P_H
 
-#include "%3CoreExport.h"
-
-#include <dtkCore/dtkAbstract%4_p.h>
+#include %4
 
 class %1;
 
@@ -24,11 +22,11 @@ class %1;
 // %1Private interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT %1Private : public dtkAbstract%4Private
+class DTKCORE_EXPORT %1Private : public %3Private
 {
 public:
-    %1Private(%1 *q = 0) : dtkAbstract%4Private(q) {}
-    %1Private(const %1Private& other) : dtkAbstract%4Private(other) {}
+    %1Private(%1 *q = 0) : %3Private(q) {}
+    %1Private(const %1Private& other) : %3Private(other) {}
 
 public:
     virtual ~%1Private(void) {}
@@ -42,6 +40,6 @@ public:
 // %1 protected constructors
 ////////////////////////////////////////////////////
 
-DTK_IMPLEMENT_PRIVATE(%1, dtkAbstract%4);
+DTK_IMPLEMENT_PRIVATE(%1, %3);
 
 #endif

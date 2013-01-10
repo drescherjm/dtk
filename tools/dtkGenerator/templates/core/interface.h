@@ -14,9 +14,9 @@
 #ifndef %2_H
 #define %2_H
 
-#include <dtkCore/dtkAbstract%5.h>
+#include %6
 
-#include "%3Export.h"
+#include "%3CoreExport.h"
 
 class %1Private;
 
@@ -24,7 +24,7 @@ class %1Private;
 // %1 interface
 // /////////////////////////////////////////////////////////////////
 
-class %4CORE_EXPORT %1 : public dtkAbstract%5
+class %4CORE_EXPORT %1 : public %5
 {
     Q_OBJECT
 

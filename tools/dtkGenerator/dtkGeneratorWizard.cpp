@@ -160,7 +160,7 @@ InheritOrWrappInterfacePage::InheritOrWrappInterfacePage(QWidget *parent)
     applicationInterfaceLabel = new QLabel(tr("Interface:"));
     applicationInterfaceLineEdit = new QLineEdit;
     applicationInterfacePushButton = new QPushButton("...");
-    applicationInterfaceLineEdit->setValidator(new QRegExpValidator(QRegExp("^(?:.*/)?([a-z]+)(?:Abstract)?(Data|Process|View)[^/]*$"), this));
+    applicationInterfaceLineEdit->setValidator(new QRegExpValidator(QRegExp("^(?:.*/)?([a-z]+)([A-Z]\\w+)?(?:Abstract)?(Data|Process|View)([A-Z]\\w+)?\\.(h|hpp)$"), this));
     applicationInterfaceLabel->setBuddy(applicationInterfaceLineEdit);
 
 
@@ -557,7 +557,7 @@ bool ConclusionPage::validatePage()
         generator.setApplicationPrefix(field("CommonDetailsPage.applicationPrefixText").toString());
     }
     else
-        generator.setInterface(QFileInfo(field("InheritOrWrappInterfacePage.applicationInterfaceText").toString()).baseName() + ".h");
+        generator.setInterface(QFileInfo(field("InheritOrWrappInterfacePage.applicationInterfaceText").toString()).fileName());
 
     generator.setOutputDirectory(field("ConclusionPage.outputDirText").toString());
 

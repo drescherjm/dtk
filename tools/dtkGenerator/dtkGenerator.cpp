@@ -26,6 +26,7 @@ void dtkGenerator::setType(const QString& type)
 void dtkGenerator::setInterface(const QString& interface)
 {
     d->interface = interface;
+    d->interfaceBaseName = QFileInfo(interface).baseName();
 }
 
 void dtkGenerator::setApplicationPrefix(const QString& applicationPrefix)
@@ -69,20 +70,39 @@ bool dtkGenerator::checkParameters(void)
         return false;
     }
 
-    QRegExp interfaceRegExp = QRegExp("^([a-z]+)(?:Abstract)?(Data|Process|View)(([A-Z]\\w+)?)\\.(h|hpp)$");
+    QRegExp interfaceRegExp = QRegExp("^([a-z]+)([A-Z][a-z]+)?(?:Abstract)?(Data|Process|View)([A-Z]\\w+)?\\.(h|hpp)$");
     int pos = 0;
 
     if (interfaceRegExp.indexIn(d->interface, pos) != -1) {
-        if (interfaceRegExp.cap(1) != "dtk")
+        d->dtkInterface = true;
+
+        if (interfaceRegExp.cap(1) != "dtk") {
             d->applicationPrefix = interfaceRegExp.cap(1);
-        d->dtkType = interfaceRegExp.cap(2);
-        d->applicationSpecificationType = interfaceRegExp.cap(3);
+            d->dtkInterface = false;
+        }
+
+        if (interfaceRegExp.cap(2) == "Abstract")
+            d->applicationLayer = "";
+        else
+            d->applicationLayer = interfaceRegExp.cap(2);
+
+        d->dtkType = interfaceRegExp.cap(3);
+
+        d->applicationSpecificationType = interfaceRegExp.cap(4);
+
+        d->headerExtension = interfaceRegExp.cap(5);
     }
     else {
         qDebug() << "Your interface doesn't follow the naming convention.";
         return false;
     }
-
+#if 0
+    qDebug() << "applicationPrefix : " << d->applicationPrefix;
+    qDebug() << "applicationLayer : " << d->applicationLayer;
+    qDebug() << "dtkType : " << d->dtkType;
+    qDebug() << "applicationSpecificationType : " << d->applicationSpecificationType;
+    qDebug() << "headerExtension : " << d->headerExtension;
+#endif
     //! Check output directory
     //! default value = "."
     if (d->outputDirectory.isEmpty())
@@ -120,16 +140,6 @@ bool dtkGenerator::checkParameters(void)
     }
 
     return true;
-}
-
-void dtkGenerator::displayParameters(void)
-{
-    qDebug() << "type: " << d->type;
-    qDebug() << "interface: " << d->interface;
-    qDebug() << "applicationPrefix: " << d->applicationPrefix;
-    qDebug() << "outputDirectory: " << d->outputDirectory;
-    qDebug() << "abstractionLevel: " << d->abstractionLevel;
-    qDebug() << "name: " << d->name;
 }
 
 bool dtkGenerator::run(void)
@@ -217,8 +227,20 @@ bool dtkGenerator::generateCoreSourceFile(void) {
 
     QTextStream stream(&targetFile);
 
+    QString includeFile;
+
+    if (d->dtkInterface)
+        includeFile = "<dtkCore/" + d->interface + ">";
+    else
+        includeFile = "\"" + d->interface + "\"";
+
     stream << QString(templateFile.readAll()).arg(d->coreName)                    //! %1
-                                             .arg(d->dtkType);                    //! %2
+                                             .arg(d->dtkType)                     //! %2
+                                             .arg(d->interfaceBaseName);          //! %3
+                                             // .arg(includeFile);                   //! %4
+
+
+
     targetFile.close();
 
     templateFile.close();
@@ -243,10 +265,17 @@ bool dtkGenerator::generateCorePrivateFile(void) {
 
     QTextStream stream(&targetFile);
 
+    QString includePrivateFile;
+
+    if (d->dtkInterface)
+        includePrivateFile = "<dtkCore/" + d->interfaceBaseName + "_p.h>";
+    else
+        includePrivateFile = "\"" + d->interfaceBaseName + "_p.h\"";
+
     stream << QString(templateFile.readAll()).arg(d->coreName)                    //! %1
                                              .arg(d->coreName.toUpper())          //! %2
-                                             .arg(d->applicationPrefix)           //! %3
-                                             .arg(d->dtkType);                    //! %4
+                                             .arg(d->interfaceBaseName)           //! %3
+                                             .arg(includePrivateFile);            //! %4
     targetFile.close();
 
     templateFile.close();
@@ -271,11 +300,19 @@ bool dtkGenerator::generateCoreHeaderFile(void) {
 
     QTextStream stream(&targetFile);
 
-    stream << QString(templateFile.readAll()).arg(d->coreName)                //! %1
-                                             .arg(d->coreName.toUpper())      //! %2
+    QString includeFile;
+
+    if (d->dtkInterface)
+        includeFile = "<dtkCore/" + d->interface + ">";
+    else
+        includeFile = "\"" + d->interface + "\"";
+
+    stream << QString(templateFile.readAll()).arg(d->coreName)                    //! %1
+                                             .arg(d->coreName.toUpper())          //! %2
                                              .arg(d->applicationPrefix)           //! %3
                                              .arg(d->applicationPrefix.toUpper()) //! %4
-                                             .arg(d->dtkType);                    //! %5
+                                             .arg(d->interfaceBaseName)           //! %5
+                                             .arg(includeFile);                   //! %6
 
     targetFile.close();
 

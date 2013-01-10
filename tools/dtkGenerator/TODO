@@ -2,22 +2,20 @@
 # Things remaining to do: #
 # ####################### #
 
-On the Wizard:
-- Add a license selection for plugins
-- Complete Help. Ju
-- Add images. Ju
-- Conclusion subTitle: Place the whole todo stuff with colors. Ju
+Global stuff:
+- Handle layer. It's related to the naming convention. **
+- Handle the license for plugins.
+- Add Doxygen comments.
 
 On the Generator:
-- Handle the license.
-- Being able to modify the templates relatively to the Abstract level needs.
+- Being able to modify the templates relatively to the Abstract level needs. **
 
 On the main:
 - Anyoption should be replaced:
-    * No way to have mandatory option for instance.
-    * No way to have more than one Synopsis line.
-    * Bugging many times.
+    + No way to have mandatory option for instance.
+    + No way to have more than one Synopsis line.
+    + Bugging many times.
 
-Global stuff:
-- Add Doxygen comments.
+
+** : higher priority
 

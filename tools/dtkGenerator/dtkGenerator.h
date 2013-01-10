@@ -6,22 +6,29 @@
 class dtkGeneratorPrivate
 {
 public:
-    //! Parameters coming from the command line or the wizard
+    //! Parameters coming from the command line or the wizard:
     QString type;
     QString interface;
-    QString applicationPrefix;
     QString outputDirectory;
     QString abstractionLevel;
     QString name;
+
+    /*! Parameters that can be guessed from the interface naming convention:
+        interface = applicationPrefix + applicationLayer + (Abstract)? + dtkType + applicationSpecificationType
+      */
+    QString interfaceBaseName;
+    bool dtkInterface;
+
+    QString applicationPrefix;
+    QString applicationLayer;
+    QString dtkType;
+    QString applicationSpecificationType;
+    QString headerExtension;
 
     //! Computed names following naming conventions
     QString coreName;
     QString pluginName;
     QString composerName;
-
-    //! Interface parts
-    QString dtkType;
-    QString applicationSpecificationType;
 
     //! Output directory
     QDir target;
@@ -41,7 +48,6 @@ public:
     void setName(const QString& name);
 
    bool checkParameters(void);
-   void displayParameters(void);
    bool run(void);
 
 protected:

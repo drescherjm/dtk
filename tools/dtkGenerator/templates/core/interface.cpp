@@ -20,12 +20,12 @@
 // %1 implementation
 // /////////////////////////////////////////////////////////////////
 
-%1::%1(void) : dtkAbstract%2(*new %1Private(this), 0)
+%1::%1(void) : %3(*new %1Private(this), 0)
 {
     // DTK_D(%1);
 }
 
-%1::%1(const %1& other) : dtkAbstract%2(*new %1Private(*other.d_func()), other)
+%1::%1(const %1& other) : %3(*new %1Private(*other.d_func()), other)
 {
 
 }

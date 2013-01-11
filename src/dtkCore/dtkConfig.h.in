@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 15 17:04:44 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Jan  7 11:38:28 2013 (+0100)
+ * Last-Updated: Thu Jan 10 14:39:05 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 18
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -39,6 +39,7 @@
 #cmakedefine DTK_BUILD_COMPOSER
 #cmakedefine DTK_BUILD_SCRIPT
 #cmakedefine DTK_BUILD_VR
+#cmakedefine DTK_BUILD_WRAPPERS
 
 #define DTK_SOURCE_PATH "@CMAKE_SOURCE_DIR@"
 

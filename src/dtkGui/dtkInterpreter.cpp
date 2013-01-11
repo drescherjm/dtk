@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:06:26 2012 (+0200)
+ * Last-Updated: Thu Jan 10 14:47:04 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 420
+ *     Update #: 521
  */
 
 /* Commentary: 
@@ -23,14 +23,16 @@
 #include <QtCore>
 #include <QtGui>
 
+#include <dtkConfig.h>
+
 #include <dtkLog/dtkLog.h>
 #include <dtkLog/dtkLogger.h>
 
 #include <dtkScript/dtkScriptInterpreter.h>
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+#if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
 #endif
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
+#if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_TCL)
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 #endif
 
@@ -44,31 +46,33 @@ class dtkInterpreterPrivate
 {
 public:
     dtkScriptInterpreter *interpreter;
-    
+
+public:    
     QTextCursor cursor;
 
+public:
     QStringList  history;
     unsigned int history_index;
     bool         history_dirty;
+
+public:
+    QString prompt;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkInterpreter
 // /////////////////////////////////////////////////////////////////
 
-dtkInterpreter::dtkInterpreter(QWidget *parent) : dtkTextEditor(parent)
+dtkInterpreter::dtkInterpreter(QWidget *parent) : QPlainTextEdit(parent), d(new dtkInterpreterPrivate)
 {
-    d = new dtkInterpreterPrivate;
     d->interpreter = NULL;
-
     d->history_index = 0;
     d->history_dirty = false;
-
-    this->setShowLineNumbers(false);
-    this->setShowCurrentLine(false);
-    this->setShowRevisions(false);
+    d->prompt = "$ ";
 
     dtkLogger::instance().attachText(this);
+
+    this->setReadOnly(true);
 }
 
 dtkInterpreter::~dtkInterpreter(void)
@@ -78,10 +82,24 @@ dtkInterpreter::~dtkInterpreter(void)
     delete d;
 }
 
+#pragma mark -
+#pragma mark - Interpretation interface
+
 dtkScriptInterpreter *dtkInterpreter::interpreter(void)
 {
     return d->interpreter;
 }
+
+void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
+{
+    d->interpreter = interpreter;
+
+    this->appendPlainText(d->prompt);
+    this->setReadOnly(false);
+}
+
+#pragma mark -
+#pragma mark - Graphical interface
 
 void dtkInterpreter::keyPressEvent(QKeyEvent *event)
 {
@@ -92,90 +110,50 @@ void dtkInterpreter::keyPressEvent(QKeyEvent *event)
         this->onKeyEnterPressed();
 
     } else if(event->key() == Qt::Key_Backspace) {
-
-        if(cursor.columnNumber() > filter(d->interpreter->prompt()).size())
-            dtkTextEditor::keyPressEvent(event);
         
-        this->onKeyBackspacePressed();
+        if(cursor.columnNumber() > d->prompt.size())
+            QPlainTextEdit::keyPressEvent(event);
 
     } else if(event->key() == Qt::Key_Up) {
+
         this->onKeyUpPressed();
 
     } else if(event->key() == Qt::Key_Down) {
+
         this->onKeyDownPressed();
 
     } else if(event->key() == Qt::Key_Left) {
 
-        if(event->modifiers() & Qt::ControlModifier) {
-            cursor.movePosition(QTextCursor::StartOfLine);
-            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, filter(d->interpreter->prompt()).size());
-
-            this->setTextCursor(cursor);
-        }
-        
-        else if(cursor.columnNumber() > filter(d->interpreter->prompt()).size())
-            dtkTextEditor::keyPressEvent(event);
+        if(cursor.columnNumber() > d->prompt.size())
+            QPlainTextEdit::keyPressEvent(event);
         
         this->onKeyLeftPressed();
 
     } else if(event->key() == Qt::Key_Right) {
 
         if(cursor.columnNumber() < currentLine().size())
-            dtkTextEditor::keyPressEvent(event);
+            QPlainTextEdit::keyPressEvent(event);
 
         this->onKeyRightPressed();
 
-    } else
-        dtkTextEditor::keyPressEvent(event);
+    } else {
+        QPlainTextEdit::keyPressEvent(event);
+    }
 }
 
 void dtkInterpreter::mousePressEvent(QMouseEvent *event)
 {
     d->cursor = this->textCursor();
 
-    dtkTextEditor::mousePressEvent(event);
+    QPlainTextEdit::mousePressEvent(event);
 }
 
 void dtkInterpreter::mouseReleaseEvent(QMouseEvent *event)
 {
-    dtkTextEditor::mouseReleaseEvent(event);
+    QPlainTextEdit::mouseReleaseEvent(event);
 
-    if(d->cursor.blockNumber() +1 != currentLineNumber() && d->cursor.columnNumber() <= filter(d->interpreter->prompt()).size())
+    if(d->cursor.blockNumber() +1 != currentLineNumber() && d->cursor.columnNumber() <= d->prompt.size())
         this->setTextCursor(d->cursor);
-}
-
-void dtkInterpreter::readSettings(void)
-{
-    QSettings settings("inria", "dtk");
-    settings.beginGroup("interpreter");
-    this->setFont(settings.value("font").value<QFont>());    
-    this->setBackgroundColor(settings.value("backgroundcolor", Qt::darkGray).value<QColor>());
-    this->setForegroundColor(settings.value("foregroundcolor", Qt::white).value<QColor>());
-    settings.endGroup();
-}
-
-void dtkInterpreter::writeSettings(void)
-{
-    QSettings settings("inria", "dtk");
-    settings.beginGroup("interpreter");
-    settings.setValue("font", this->font());    
-    settings.setValue("backgroundcolor", this->backgroundColor());
-    settings.setValue("foregroundcolor", this->foregroundColor());
-    settings.endGroup();
-}
-
-void dtkInterpreter::registerInterpreter(dtkScriptInterpreter *interpreter)
-{
-    d->interpreter = interpreter;
-    d->interpreter->setVerbose(false);
-
-    connect(interpreter, SIGNAL(interpreted(const QString&, int *)), this, SLOT(output(const QString&, int *)));
-    connect(this, SIGNAL(input(const QString&, int *)), interpreter,    SLOT(interpret(const QString&, int *)));
-    connect(this, SIGNAL( load(const QString&)),        interpreter,    SLOT(     load(const QString&)));
-    connect(this, SIGNAL( save(const QString&)),        interpreter,    SLOT(     save(const QString&)));
-    connect(this, SIGNAL(stopped(void)),                interpreter,  SIGNAL(  stopped(void)));
-
-    this->appendPlainText(filter(d->interpreter->prompt()));
 }
 
 void dtkInterpreter::onKeyUpPressed(void)
@@ -189,7 +167,7 @@ void dtkInterpreter::onKeyUpPressed(void)
     if(d->history_index == 0 && !d->history_dirty) {
         QString line = currentLine();
         if(d->interpreter)
-            line.remove(filter(d->interpreter->prompt()));
+            line.remove(d->prompt);
  
         d->history.push_front(line);
         d->history_dirty = true;
@@ -199,7 +177,7 @@ void dtkInterpreter::onKeyUpPressed(void)
 
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfLine);
-    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, filter(d->interpreter->prompt()).size());
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, d->prompt.size());
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
     cursor.insertText(d->history.at(d->history_index));
@@ -216,7 +194,7 @@ void dtkInterpreter::onKeyDownPressed(void)
 
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfLine);
-    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, filter(d->interpreter->prompt()).size());
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, d->prompt.size());
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
     cursor.insertText(d->history.at(d->history_index));
@@ -246,10 +224,7 @@ void dtkInterpreter::onKeyEnterPressed(void)
     QString line = currentLine();
 
     if(d->interpreter)
-        line.remove(filter(d->interpreter->prompt()));
-
-    if (line == "bye" || line == "exit" || line == "quit")
-        emit stopped();
+        line.remove(d->prompt);
     
     if(!line.isEmpty()) {
         if(d->history_index > 0 && d->history_dirty)
@@ -258,99 +233,41 @@ void dtkInterpreter::onKeyEnterPressed(void)
         d->history.push_front(line);
         d->history_index = 0;
         d->history_dirty = false;
-    }
-    
-    if (line.startsWith(":load ")) {
-        emit load(line.remove(":load "));
-        
-    } else if (line.startsWith(":save ")) {
-        emit save(line.remove(":save "));
-        
-    } else if (line.startsWith(":emacs")) {
-        std::cerr << "emacs bindings not supported in gui mode" << std::endl;
-        
-        emit input("", &stat);
-        
-    } else if (line.startsWith(":vi")) {
-        std::cerr << "vi bindings not supported in gui mode" << std::endl;
-        
-        emit input("", &stat);
-        
-    } else if (line.startsWith(":help")) {
-        std::cerr << "File manipulation:";
-        std::cerr << " :load [file]        loads file and interprets its content" << std::endl;
-        std::cerr << " :save [file]        saves interpreter history to file" << std::endl;
-        std::cerr << "" << std::endl;
-        
-        emit input("", &stat);
-        
-    } else if (line.startsWith(":man ")) {
-        
-        emit input("", &stat);
 
-    } else if(line.isEmpty()) {
+        int stat;
 
-        this->appendPlainText(filter(d->interpreter->prompt()));
+        this->output(d->interpreter->interpret(line, &stat));
 
     } else {
 
-        emit input(line, &stat);
+        this->appendPlainText(d->prompt);
 
     }
 }
 
-void dtkInterpreter::onKeyBackspacePressed(void)
+void dtkInterpreter::output(const QString& result)
 {
-
-}
-
-void dtkInterpreter::output(const QString& result,  int *stat)
-{
-    Q_UNUSED(stat);
-
     QString text(result);
 
     if(!text.simplified().isEmpty())
-        this->appendPlainText(filter(text));
+        this->appendPlainText(text);
 
-    this->appendPlainText(filter(d->interpreter->prompt()));
+    this->appendPlainText(d->prompt);
     
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::End);
     this->setTextCursor(cursor);
 }
 
-QString dtkInterpreter::filter(QString text)
+int dtkInterpreter::currentLineNumber(void) const
 {
-    return text
-        .remove(DTK_COLOR_FG_BLACK)
-        .remove(DTK_COLOR_FG_RED)
-        .remove(DTK_COLOR_FG_GREEN)
-        .remove(DTK_COLOR_FG_YELLOW)
-        .remove(DTK_COLOR_FG_BLUE)
-        .remove(DTK_COLOR_FG_MAGENTA)
-        .remove(DTK_COLOR_FG_CYAN)
-        .remove(DTK_COLOR_FG_WHITE)
-        
-        .remove(DTK_COLOR_FG_LTBLACK)
-        .remove(DTK_COLOR_FG_LTRED)
-        .remove(DTK_COLOR_FG_LTGREEN)
-        .remove(DTK_COLOR_FG_LTYELLOW)
-        .remove(DTK_COLOR_FG_LTBLUE)
-        .remove(DTK_COLOR_FG_LTMAGENTA)
-        .remove(DTK_COLOR_FG_LTCYAN)
-        .remove(DTK_COLOR_FG_LTWHITE)
-        
-        .remove(DTK_COLOR_BG_BLACK)
-        .remove(DTK_COLOR_BG_RED)
-        .remove(DTK_COLOR_BG_GREEN)
-        .remove(DTK_COLOR_BG_YELLOW)
-        .remove(DTK_COLOR_BG_BLUE)
-        .remove(DTK_COLOR_BG_MAGENTA)
-        .remove(DTK_COLOR_BG_CYAN)
-        .remove(DTK_COLOR_BG_WHITE)
+    return this->textCursor().blockNumber() + 1;
+}
 
-        .remove(DTK_COLOR_FG_BD)
-        .remove(DTK_COLOR_FG_UL)
-        .remove(DTK_NO_COLOR);
+QString dtkInterpreter::currentLine(void) const
+{
+    QTextCursor tc = textCursor();
+    tc.select(QTextCursor::LineUnderCursor);
+    
+    return tc.selectedText();
 }

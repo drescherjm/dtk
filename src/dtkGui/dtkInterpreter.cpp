@@ -233,16 +233,9 @@ void dtkInterpreter::onKeyEnterPressed(void)
         d->history.push_front(line);
         d->history_index = 0;
         d->history_dirty = false;
-
-        int stat;
-
-        this->output(d->interpreter->interpret(line, &stat));
-
-    } else {
-
-        this->appendPlainText(d->prompt);
-
     }
+
+    this->output(d->interpreter->interpret(line, &stat));
 }
 
 void dtkInterpreter::output(const QString& result)

@@ -77,6 +77,10 @@ if(SWIG_FOUND)
       "-c++"
       "-module" ${name}
       "-I${PROJECT_SOURCE_DIR}/.."
+      "-I${PROJECT_SOURCE_DIR}/"
+      "-I${dtk_SOURCE_DIR}/"
+      "-I${dtk_SOURCE_DIR}/src"
+      "-I${dtk_SOURCE_DIR}/src/dtkCore"
       "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
       "-o" ${wrap_output}
       ${input}

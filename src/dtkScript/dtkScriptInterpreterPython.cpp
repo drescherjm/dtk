@@ -51,6 +51,7 @@ static const QString dtkScriptInterpreterPythonRedirector_define =
 class dtkScriptInterpreterPythonPrivate
 {
 public:
+    QString buffer;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -74,11 +75,40 @@ dtkScriptInterpreterPython::~dtkScriptInterpreterPython(void)
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
+    QString statement = command;
+
+    if(command.endsWith(":")) {
+        if(!d->buffer.isEmpty())
+            d->buffer.append("\n");
+        d->buffer.append(command);
+        qDebug() << command << d->buffer;
+        return "";
+    }
+
+    if(!command.isEmpty() && command.startsWith(" ")) {
+        if(!d->buffer.isEmpty())
+            d->buffer.append("\n");
+        d->buffer.append(command);
+        qDebug() << command << d->buffer;
+        return "";
+    }
+
+    if(command.isEmpty() && !d->buffer.isEmpty()) {
+        if(!d->buffer.isEmpty())
+            d->buffer.append("\n");
+        statement = d->buffer;
+        d->buffer.clear();
+        qDebug() << command << d->buffer << statement;
+    }
+
+    if(statement.isEmpty())
+        return "";
+
     PyObject *module = PyImport_AddModule("__main__");
 
     PyRun_SimpleString(dtkScriptInterpreterPythonRedirector_define.toAscii().constData());
     
-    switch(PyRun_SimpleString(command.toAscii().constData())) {
+    switch(PyRun_SimpleString(statement.toAscii().constData())) {
     case  0: *stat = Status_Ok;    break;
     case -1: *stat = Status_Error; break;
     default: break;

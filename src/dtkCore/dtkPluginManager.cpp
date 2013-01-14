@@ -102,7 +102,7 @@ void dtkPluginManager::initializeApplication(void)
     int   argc = 1;
     char *argv[] = {"dtk-embedded"};
     
-    (void) new QCoreApplication(argc, argv);
+    (void) new QApplication(argc, argv);
 }
 
 void dtkPluginManager::initialize(void)

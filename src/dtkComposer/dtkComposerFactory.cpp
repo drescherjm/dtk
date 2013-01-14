@@ -77,10 +77,10 @@
 
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeDistributed.h"
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
-#include "dtkComposerNodeDistributed.h"
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
 #include "dtkComposerNodeWorld.h"
 #endif
 
@@ -134,10 +134,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["CONTROLLER_RUN_RANK"] = "<p>Controller rank value when communicating with remote slaves.</p>";
     d->tags["CONTROLLER_RUN_RANK"] = QStringList() << "constant" << "rank" << "distributed";
     d->types["CONTROLLER_RUN_RANK"] = "ControllerRunRank";
-
-#endif
-
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
 
     d->nodes << "ANY_TAG";
     d->descriptions["ANY_TAG"] = "<p>In a receive, accept a message with any tag value.</p>";
@@ -299,11 +295,19 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // MPI nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+
     d->nodes << "World";
     d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
     d->types["World"] = "world";
+
+    d->nodes << "CommunicatorInit";
+    d->descriptions["CommunicatorInit"] = "<p>Initialize an MPI context.</p>";
+    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
+    d->types["CommunicatorInit"] = "communicatorInit";
+
+#endif
 
     d->nodes << "CommunicatorRank";
     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
@@ -312,10 +316,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "CommunicatorSize";
     d->tags["CommunicatorSize"] = QStringList() <<  "size" << "distributed" << "mpi" << "communicator";
     d->types["CommunicatorSize"] = "communicatorSize";
-
-    d->nodes << "CommunicatorInit";
-    d->tags["CommunicatorInit"] = QStringList() <<  "initialization" << "distributed" << "mpi" << "communicator";
-    d->types["CommunicatorInit"] = "communicatorInit";
 
     d->nodes << "CommunicatorUninitialize";
     d->tags["CommunicatorUninitialize"] = QStringList() <<  "finalize" << "distributed" << "mpi" << "communicator";
@@ -328,7 +328,6 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "CommunicatorSend";
     d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
     d->types["CommunicatorSend"] = "communicatorSend";
-#endif
 }
 
 void dtkComposerFactory::initNodeNumberOperatorUnary()
@@ -1206,7 +1205,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeControllerRunRank;
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED)
 
     if(type == "AnyTag")
         return new dtkComposerNodeAnyTag;
@@ -1801,9 +1800,13 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 // MPI nodes
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
+
+    if(type == "communicatorInit")
+        return new dtkComposerNodeCommunicatorInit;
+#endif
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;
@@ -1814,15 +1817,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "communicatorUninitialize")
         return new dtkComposerNodeCommunicatorUninitialize;
 
-    if(type == "communicatorInit")
-        return new dtkComposerNodeCommunicatorInit;
-
     if(type == "communicatorSend")
         return new dtkComposerNodeCommunicatorSend;
 
     if(type == "communicatorReceive")
         return new dtkComposerNodeCommunicatorReceive;
-#endif
 
     return NULL;
 }

@@ -19,12 +19,15 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi>
 #include <dtkDistributed/dtkDistributedCommunicatorTcp>
 
 #include <dtkLog/dtkLog.h>
 
+#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+
+#include <dtkDistributed/dtkDistributedCommunicatorMpi>
 #include <mpi.h>
+
 
 // /////////////////////////////////////////////////////////////////
 // Communicator Init
@@ -68,6 +71,7 @@ void dtkComposerNodeCommunicatorInit::run(void)
         d->communicator->initialize();
 }
 
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // Communicator Uninitialize
@@ -176,7 +180,7 @@ class dtkComposerNodeCommunicatorSizePrivate
 {
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter;
-    dtkComposerTransmitterReceiver<dtkDistributedCommunicatorMpi> receiver;
+    dtkComposerTransmitterReceiver<dtkDistributedCommunicator> receiver;
 
 public:
     qlonglong size;
@@ -204,7 +208,7 @@ void dtkComposerNodeCommunicatorSize::run(void)
 {
     if (!d->receiver.isEmpty()) {
 
-        dtkDistributedCommunicatorMpi *communicator = d->receiver.data();
+        dtkDistributedCommunicator *communicator = d->receiver.data();
 
         if (!communicator) {
             d->size = 0;

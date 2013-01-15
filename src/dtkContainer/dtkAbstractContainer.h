@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 10:00:38 2012 (+0200)
+ * Last-Updated: Wed Sep 19 10:11:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 77
+ *     Update #: 79
  */
 
 /* Commentary: 
@@ -45,7 +45,8 @@ public:
     ~dtkAbstractContainer(void);
 
 public:
-    virtual QString identifier(void) const = 0;
+    virtual QString  identifier(void) const = 0;
+    virtual QString description(void) const = 0;
 
     virtual dtkContainerType type(void) const = 0;
 
@@ -70,7 +71,7 @@ public:
     virtual const T *toArray(qlonglong& count) const = 0;
 
 public:
-    dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other);
+    dtkAbstractContainer& operator = (const dtkAbstractContainer<T>& other); // TO RE-IMPLEMENT !!!! SOURCE OF MEMORY LEAK !!!
 
     virtual dtkAbstractContainer<T> *clone(void) const = 0;
 

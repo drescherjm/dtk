@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:18:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 12 16:19:09 2010 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 1
+ * Last-Updated: Thu Sep 20 10:15:29 2012 (+0200)
+ *           By: tkloczko
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@ using std::exp;
 using std::log;
 
 // /////////////////////////////////////////////////////////////////
-// Implementation of the template class dtkQuaternion's methods
+// dtkQuaternion implementation
 // /////////////////////////////////////////////////////////////////
 
 template <class T> inline dtkQuaternion<T>::dtkQuaternion(const T& elemIm0,
@@ -80,6 +80,11 @@ template <class T> dtkQuaternion<T>::dtkQuaternion(const T& r,
     (*this)[1] = vec[1]*rsina;
     (*this)[2] = vec[2]*rsina;
     (*this)[3] = r*cos(angle);
+}
+
+template <typename T> QString dtkQuaternion<T>::identifier(void) const
+{
+    return QString("dtkQuaternion<%1>").arg(typeid(T).name());
 }
 
 template <class T> inline void dtkQuaternion<T>::mapInto(const dtkMatrix<T>& mat,

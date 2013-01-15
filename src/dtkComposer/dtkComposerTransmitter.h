@@ -1,12 +1,7 @@
 /* dtkComposerTransmitter.h --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Jun 27 16:38:27 2012 (+0200)
- *           By: tkloczko
- *     Update #: 172
  */
 
 /* Commentary: 
@@ -21,19 +16,22 @@
 #define DTKCOMPOSERTRANSMITTER_H
 
 #include "dtkComposerExport.h"
+#include "dtkComposerMetatype.h"
 
 #include <QtCore>
 
+class dtkAbstractObject;
 class dtkAbstractContainerWrapper;
 class dtkComposerNode;
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitter declaration
-// /////////////////////////////////////////////////////////////////
-
 class dtkComposerTransmitterPrivate;
 class dtkComposerTransmitterLink;
 class dtkComposerTransmitterLinkList;
+class dtkComposerTransmitterVariant;
+template <typename T> class dtkMatrix;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitter interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
@@ -48,8 +46,18 @@ public:
     };
 
 public:
+    enum DataTransmission { 
+        AutoCopy,
+        Copy,
+        Reference
+    };
+
+public:
              dtkComposerTransmitter(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitter(void);
+
+public:
+    virtual void clearData(void);
 
 public:
     virtual Kind kind(void) const = 0;
@@ -57,18 +65,22 @@ public:
     virtual QString kindName(void) const = 0;
 
 public:
-          QVariant& variant(void);
-    const QVariant& variant(void) const;
+    virtual QVariant& variant(void);
 
 public:
-    virtual       dtkAbstractContainerWrapper& container(void);
-    virtual const dtkAbstractContainerWrapper& container(void) const;
+    virtual dtkAbstractObject *object(void);
 
 public:
-    virtual QVariant::Type type(void) const;
+    virtual dtkMatrix<double> *matrix(void);
 
 public:
-    QString typeName(void) const;
+    virtual dtkAbstractContainerWrapper *container(void);
+
+public:
+    virtual int dataType(void);
+
+    virtual QString  dataIdentifier(void);
+    virtual QString dataDescription(void);
 
 public:
     void setParentNode(dtkComposerNode *parent);
@@ -81,7 +93,15 @@ public:
     bool active(void);
 
 public:
-    virtual void setActiveEmitter(dtkComposerTransmitter *emitter);
+    virtual void activateEmitter(dtkComposerTransmitter        *emitter);
+    virtual void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    void setDataTransmission(DataTransmission value);
+    
+    DataTransmission dataTransmission(void) const;
+
+    virtual bool enableCopy(void);
 
 public:
     void setRequired(bool required);
@@ -119,10 +139,6 @@ public:
 public:
     static bool onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links);
     static bool onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links);
-
-public:
-    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
-    friend DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
 
 protected:
     dtkComposerTransmitterPrivate *d;

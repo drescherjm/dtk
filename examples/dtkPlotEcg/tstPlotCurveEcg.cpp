@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul  4 21:49:39 2011 (+0200)
+ * Last-Updated: Thu Dec  6 11:54:39 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 36
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -21,6 +21,13 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#ifdef _WIN32
+#define SLEEP(x) Sleep(x)
+#else
+#include <unistd.h>
+#define SLEEP(x) usleep(x*1000)
+#endif
+
 tstPlotCurveEcg::tstPlotCurveEcg(const QString& title) : dtkPlotCurve(title)
 {
 
@@ -34,7 +41,7 @@ tstPlotCurveEcg::~tstPlotCurveEcg(void)
 void tstPlotCurveEcg::read(const QString& file)
 {
     QStringList contents = dtkReadFile(file).split("\n");
-    
+
     QVector<QPointF> values;
 
     qreal start = 0.0;
@@ -46,10 +53,8 @@ void tstPlotCurveEcg::read(const QString& file)
 
         this->setData(values);
 
-        // The following mimics a real world computation
+        qApp->processEvents();
 
-        emit updated(); qApp->processEvents();
-
-        usleep(9999);
+        SLEEP(10);
     }
 }

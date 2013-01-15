@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. juin 13 17:09:05 2012 (+0200)
+ * Last-Updated: mer. oct. 31 17:32:23 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1661
+ *     Update #: 1774
  */
 
 /* Commentary: 
@@ -254,6 +254,27 @@ DTKDISTRIBUTED_EXPORT dtkDistributedController *dtkDistributedController::instan
     return s_instance;
 }
 
+//! define a default port that should be uniq among users: compute a CRC-16 hash using the username
+quint16 dtkDistributedController::defaultPort(void)
+{
+    QProcessEnvironment pe = QProcessEnvironment::systemEnvironment();
+    QString username = pe.value("USERNAME");
+
+    if (username.isEmpty())
+        username = pe.value("USER");
+
+    if (username.isEmpty()) {
+        return 9999;
+    }
+
+    QByteArray bin = username.toAscii();
+    quint16 p =  qChecksum(bin.data(), bin.length());
+    if (p < 1024) // listen port should be higher than 1024
+        p += 1024;
+    dtkInfo() << "default port is" << p;
+    return p;
+}
+
 bool dtkDistributedController::isConnected(const QUrl& server)
 {
     if(d->sockets.keys().contains(server.toString())) {
@@ -298,6 +319,16 @@ void dtkDistributedController::killjob(const QUrl& server, QString jobid)
     d->sockets[server.toString()]->sendRequest(msg);
 }
 
+void dtkDistributedController::stop(const QUrl& server)
+{
+    dtkDebug() << "Want to stop server on " << server;
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::STOP,"",dtkDistributedMessage::SERVER_RANK);
+    d->sockets[server.toString()]->sendRequest(msg);
+    this->disconnect(server);
+    d->servers.remove(server.toString());
+
+}
+
 void dtkDistributedController::refresh(const QUrl& server)
 {
     dtkDebug() << DTK_PRETTY_FUNCTION << server;
@@ -314,7 +345,7 @@ void dtkDistributedController::refresh(const QUrl& server)
 }
 
 // deploy a server instance on remote host (to be executed before connect)
-void dtkDistributedController::deploy(const QUrl& server)
+bool dtkDistributedController::deploy(const QUrl& server)
 {
     if(!d->servers.keys().contains(server.toString())) {
         QProcess *serverProc = new QProcess (this);
@@ -367,11 +398,15 @@ void dtkDistributedController::deploy(const QUrl& server)
         dtkDebug() << DTK_PRETTY_FUNCTION << "ssh" << args;
 
         if (!serverProc->waitForStarted(5000)) {
-            dtkDebug() << "server not yet started  " << args;
+            dtkError() << "server not started after 5 seconds, abort  " << args;
+            serverProc->close();
+            return false;
         }
-        
+
         if (!serverProc->waitForReadyRead(5000)) {
-            dtkDebug() << "no output from server yet" << args;
+            dtkError() << "no output from server after 5 seconds, abort  " << args;
+            serverProc->close();
+            return false;
         }
 
         QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
@@ -379,8 +414,11 @@ void dtkDistributedController::deploy(const QUrl& server)
         QObject::connect (qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
 
         d->servers[server.toString()] << serverProc;
+        return true;
+
     } else {
         dtkDebug() << "dtkDistributedServer already started on " << server.host();
+        return true;
     }
 }
 
@@ -424,7 +462,7 @@ dtkDistributedSocket *dtkDistributedController::socket(const QString& jobid)
     return NULL;
 }
 
-void dtkDistributedController::connect(const QUrl& server)
+bool dtkDistributedController::connect(const QUrl& server)
 {
     if(!d->sockets.keys().contains(server.toString())) {
 
@@ -459,24 +497,32 @@ void dtkDistributedController::connect(const QUrl& server)
 
             socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STATUS));
 
+            return true;
+
         } else {
 
             dtkError() << "Unable to connect to" << server.toString();
             d->sockets.remove(server.toString());
-
+            return false;
         }
+    } else {
+        dtkInfo() << "Already connected to server" << server.toString();
+        return true;
     }
 }
 
 void dtkDistributedController::disconnect(const QUrl& server)
 {
-    if(!d->sockets.keys().contains(server.toString()))
+    if(!d->sockets.keys().contains(server.toString())) {
+        dtkDebug() << "disconnect: unknown server" << server;
         return;
+    }
 
     dtkDistributedSocket *socket = d->sockets.value(server.toString());
     socket->disconnectFromHost();
 
-    d->sockets.remove(server.toString());
+    int val = d->sockets.remove(server.toString());
+    d->clear();
 
     emit disconnected(server);
 }
@@ -554,7 +600,7 @@ void dtkDistributedController::read(void)
         break;
     case dtkDistributedMessage::DATA:
         result = msg->content();
-        dtkDebug() << "Result: " << result;
+        dtkDebug() << "Result size: " << result.size();
         emit dataPosted(result);
         break;
     default:

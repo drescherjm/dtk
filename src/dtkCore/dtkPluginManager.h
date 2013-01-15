@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:21:09 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 10:51:16 2012 (+0200)
+ * Last-Updated: Mon Oct 22 10:55:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 44
+ *     Update #: 46
  */
 
 /* Commentary:
@@ -34,8 +34,10 @@ class DTKCORE_EXPORT dtkPluginManager : public QObject
 public:
     static dtkPluginManager *instance(void);
 
+    void   initializeApplication(void);
     void   initialize(void);
     void uninitialize(void);
+    void uninitializeApplication(void);
 
     virtual void   load(const QString& name);
     virtual void unload(const QString& name);
@@ -44,6 +46,9 @@ public:
     virtual void writeSettings(void);
 
     void printPlugins(void);
+
+    void setVerboseLoading (bool value);
+    bool verboseLoading (void) const;
 
           dtkPlugin *  plugin(const QString& name);
     QList<dtkPlugin *> plugins(void);

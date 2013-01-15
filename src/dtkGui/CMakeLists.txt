@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Sep 18 11:10:29 2012 (+0200)
+## Last-Updated: Thu Jan 10 11:57:30 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 265
+##     Update #: 275
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,11 +42,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkSplitter.h
   dtkSwitch.h
   dtkTagCloud.h
-  dtkTextEditor.h
   dtkViewManager.h
   dtkViewLayout.h
   dtkViewLayoutItem.h
-  dtkViewList.h)
+  dtkViewList.h
+  dtkViewListControl.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkAboutBox.h
@@ -66,11 +66,11 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSplitter.h
   dtkTagCloud.h
   dtkSwitch.h
-  dtkTextEditor.h
   dtkViewManager.h
   dtkViewLayout.h
   dtkViewLayoutItem.h
-  dtkViewList.h)
+  dtkViewList.h
+  dtkViewListControl.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
@@ -90,11 +90,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkSplitter.cpp
   dtkSwitch.cpp
   dtkTagCloud.cpp
-  dtkTextEditor.cpp
   dtkViewManager.cpp
   dtkViewLayout.cpp
   dtkViewLayoutItem.cpp
-  dtkViewList.cpp)
+  dtkViewList.cpp
+  dtkViewListControl.cpp)
 
 if(DTK_BUILD_SCRIPT)
 set(${PROJECT_NAME}_HEADERS     ${${PROJECT_NAME}_HEADERS}     dtkInterpreter.h)

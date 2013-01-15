@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Aug 18 19:42:04 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sat Jun 30 01:31:02 2012 (+0200)
+ * Last-Updated: Wed Nov 21 17:26:22 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 15
  */
 
 /* Commentary:
@@ -27,9 +27,7 @@
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(float A, float B, int32_t maxUlps = 10);
-bool TestCompareFinal(float A, float B, int32_t maxUlps = 10);
-bool TestCompareAll(float A, float B, int32_t maxUlps = 10);
+bool TestAlmostEqual(float A, float B, int32_t maxUlps = 10);
 
 // /////////////////////////////////////////////////////////////////
 // dtkCompareFloatTestObjectPrivate
@@ -99,31 +97,22 @@ void dtkCompareFloatTestObject::cleanupTestCase()
 {
 }
 
-void dtkCompareFloatTestObject::testCompareAll(void)
+void dtkCompareFloatTestObject::testAlmostEqual1(void)
 {
-    QVERIFY(TestCompareAll(d->zero1, d->negativeZero) == true);
-    QVERIFY(TestCompareAll(2.0, 1.99999999) == true);
-    QVERIFY(TestCompareAll(2.0, 1.99999995) == true);
-    QVERIFY(TestCompareAll(1.99999995, 2.0) == true);
-    QVERIFY(TestCompareAll(2.0, 1.99999995) == true);
+    QVERIFY(TestAlmostEqual(d->zero1, d->negativeZero) == true);
+    QVERIFY(TestAlmostEqual(2.0, 1.99999999) == true);
+    QVERIFY(TestAlmostEqual(2.0, 1.99999995) == true);
+    QVERIFY(TestAlmostEqual(1.99999995, 2.0) == true);
+    QVERIFY(TestAlmostEqual(2.0, 1.99999995) == true);
 }
 
-void dtkCompareFloatTestObject::testCompare2sComplement(void)
+void dtkCompareFloatTestObject::testAlmostEqual2(void)
 {
-    QVERIFY(TestCompare2sComplement(d->inf0, -d->inf0, 16 * 1024 * 1024) == false);
-    QVERIFY(TestCompare2sComplement(FLT_MAX, d->inf0) == true);
-    QVERIFY(TestCompare2sComplement(d->nan2, d->nan2) == true);
-    QVERIFY(TestCompare2sComplement(d->nan2, d->nan3) == true);
-    QVERIFY(TestCompare2sComplement(d->smallestDenormal, -d->smallestDenormal) == true);
-}
-
-void dtkCompareFloatTestObject::testCompareFinal(void)
-{
-    QVERIFY(TestCompareFinal(d->inf0, -d->inf0, 16 * 1024 * 1024) == false);
-    QVERIFY(TestCompareFinal(FLT_MAX, d->inf0) == false);
-    QVERIFY(TestCompareFinal(d->nan2, d->nan2) == false);
-    QVERIFY(TestCompareFinal(d->nan2, d->nan3) == false);
-    QVERIFY(TestCompareFinal(d->smallestDenormal, -d->smallestDenormal) ==  false);
+    QVERIFY(TestAlmostEqual(d->inf0, -d->inf0, 16 * 1024 * 1024) == false);
+    QVERIFY(TestAlmostEqual(FLT_MAX, d->inf0) == false);
+    QVERIFY(TestAlmostEqual(d->nan2, d->nan2) == false);
+    QVERIFY(TestAlmostEqual(d->nan2, d->nan3) == false);
+    QVERIFY(TestAlmostEqual(d->smallestDenormal, -d->smallestDenormal) ==  false);
 }
 
 DTKTEST_NOGUI_MAIN(dtkCompareFloatTest, dtkCompareFloatTestObject)
@@ -132,18 +121,7 @@ DTKTEST_NOGUI_MAIN(dtkCompareFloatTest, dtkCompareFloatTestObject)
 //
 // /////////////////////////////////////////////////////////////////
 
-bool TestCompare2sComplement(float A, float B, int32_t maxUlps)
-{
-    return dtkAlmostEqual2sComplement(A, B, maxUlps);
-}
-
-bool TestCompareFinal(float A, float B, int32_t maxUlps)
+bool TestAlmostEqual(float A, float B, int32_t maxUlps)
 {
     return dtkAlmostEqualUlps(A, B, maxUlps);
 }
-
-bool TestCompareAll(float A, float B, int32_t maxUlps)
-{
-    return (TestCompare2sComplement(A, B, maxUlps) || TestCompareFinal(A, B, maxUlps));
-}
-

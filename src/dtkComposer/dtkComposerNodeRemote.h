@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: mar. juin 19 14:39:46 2012 (+0200)
+ * Last-Updated: mer. oct. 31 15:55:55 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 33
+ *     Update #: 36
  */
 
 /* Commentary:
@@ -92,7 +92,7 @@ public:
     void run(void);
 
 public slots:
-    void onJobQueued(QString id);
+    void onJobQueued(const QString& job_id);
 
 public:
     inline QString type(void) {
@@ -124,6 +124,9 @@ public:
     inline QString outputLabelHint(int) {
         return "jobid";
     }
+
+public:
+    void setSlaveName(QString);
 
 protected:
     dtkComposerNodeRemoteSubmitPrivate *d;

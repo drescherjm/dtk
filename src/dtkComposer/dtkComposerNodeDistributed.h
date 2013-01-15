@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 08:51:28
  * Version: $Id$
- * Last-Updated: jeu. mars 29 23:02:08 2012 (+0200)
+ * Last-Updated: mar. nov.  6 15:59:53 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 50
+ *     Update #: 59
  */
 
 /* Commentary:
@@ -160,98 +160,7 @@ protected:
 
 
 // /////////////////////////////////////////////////////////////////
-// Distributed communicator send Integer
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeCommunicatorSendIntegerPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorSendInteger : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeCommunicatorSendInteger(void);
-    ~dtkComposerNodeCommunicatorSendInteger(void);
-
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorSendInteger";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator SendInteger";
-    }
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "communicator";
-        else if (port == 1)
-            return "data";
-        else if (port == 2)
-            return "target rank";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-protected:
-    dtkComposerNodeCommunicatorSendIntegerPrivate *d;
-};
-
-
-// /////////////////////////////////////////////////////////////////
-// Distributed communicator send Real
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeCommunicatorSendRealPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorSendReal : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeCommunicatorSendReal(void);
-    ~dtkComposerNodeCommunicatorSendReal(void);
-
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorSendReal";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator SendReal";
-    }
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "communicator";
-        else if (port == 1)
-            return "data";
-        else if (port == 2)
-            return "target rank";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-protected:
-    dtkComposerNodeCommunicatorSendRealPrivate *d;
-};
-
-// /////////////////////////////////////////////////////////////////
-// Distributed communicator send dtkAbstractData
+// Distributed communicator send Variant
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeCommunicatorSendPrivate;
@@ -282,13 +191,15 @@ public:
             return "data";
         else if (port == 2)
             return "target rank";
+        else if (port == 3)
+            return "tag";
         else
             return "value";
     }
 
 public:
     inline QString outputLabelHint(int) {
-        return "value";
+        return "communicator";
     }
 
 protected:
@@ -296,99 +207,10 @@ protected:
 };
 
 
-// /////////////////////////////////////////////////////////////////
-// Distributed communicator receive Integer
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeCommunicatorReceiveIntegerPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorReceiveInteger : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeCommunicatorReceiveInteger(void);
-    ~dtkComposerNodeCommunicatorReceiveInteger(void);
-
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorReceiveInteger";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator ReceiveInteger";
-    }
-
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "communicator";
-        else if (port == 1)
-            return "source rank";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-protected:
-    dtkComposerNodeCommunicatorReceiveIntegerPrivate *d;
-};
 
 
 // /////////////////////////////////////////////////////////////////
-// Distributed communicator receive Real
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeCommunicatorReceiveRealPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorReceiveReal : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeCommunicatorReceiveReal(void);
-    ~dtkComposerNodeCommunicatorReceiveReal(void);
-
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorReceiveReal";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator ReceiveReal";
-    }
-
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "communicator";
-        else if (port == 1)
-            return "source rank";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-protected:
-    dtkComposerNodeCommunicatorReceiveRealPrivate *d;
-};
-
-
-
-// /////////////////////////////////////////////////////////////////
-// Distributed communicator receive 
+// Distributed communicator receive
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeCommunicatorReceivePrivate;
@@ -418,13 +240,22 @@ public:
             return "communicator";
         else if (port == 1)
             return "source rank";
+        else if (port == 2)
+            return "tag";
         else
             return "value";
     }
 
 public:
-    inline QString outputLabelHint(int) {
-        return "value";
+    inline QString outputLabelHint(int port) {
+        if (port == 0)
+            return "data";
+        else if (port == 1)
+            return "source";
+        else if (port == 2)
+            return "tag";
+        else
+            return "value";
     }
 
 protected:

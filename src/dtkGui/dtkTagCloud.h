@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 16 10:46:26 2012 (+0200)
+ * Last-Updated: Wed Nov 28 14:41:09 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 223
+ *     Update #: 226
  */
 
 /* Commentary: 
@@ -50,7 +50,7 @@ public:
     void setColor(QString color);
     void setItems(QStringList items);
 
-private:
+protected:
     dtkTagPrivate *d;
 };
 
@@ -98,10 +98,10 @@ public slots:
     void clear(void);
     void render(void);
 
-private slots:
+protected slots:
     void onLinkClicked(const QUrl& item);
 
-private:
+protected:
     dtkTagCloudPrivate *d;
 };
 
@@ -142,7 +142,7 @@ protected:
 protected:
     void mouseReleaseEvent(QMouseEvent *);
 
-private:
+protected:
     dtkTagScopeTagPrivate *d;
 };
 
@@ -184,11 +184,11 @@ public slots:
 public slots:
     void toggle(void);
 
-private slots:
+protected slots:
     void onTagAdded(void);
     void onTagRemoved(void);
 
-private:
+protected:
     dtkTagScopePrivate *d;
 };
 
@@ -214,7 +214,7 @@ public:
     QString kind(void) const;
     QString type(void) const;
 
-private:
+protected:
     dtkItemPrivate *d;
 };
 
@@ -246,17 +246,17 @@ public:
 signals:
     void itemClicked(const QString& description);
 
-private slots:
+protected slots:
     void onItemClicked(QListWidgetItem *item);
 
 protected:
      QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
     QStringList mimeTypes(void) const;
 
-private:
+protected:
     dtkItemListPrivate *d;
 
-private:
+protected:
     friend class dtkItemListDelegate;
     friend class dtkItemDarkDelegate;
 };
@@ -284,7 +284,7 @@ public slots:
 public slots:
     void setDescription(const QString& description);
 
-private:
+protected:
     dtkItemDescPrivate *d;
 };
 
@@ -412,13 +412,13 @@ public:
 public slots:
     void onUnionMode(bool mode);
 
-private slots:
+protected slots:
     void addFilter(QString tag);
     void setFilter(QString tag);
     void remFilter(QString tag);
     void clear(void);
 
-private:
+protected:
     dtkTagControllerPrivate *d;
 };
 

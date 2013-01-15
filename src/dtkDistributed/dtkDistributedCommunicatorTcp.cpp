@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. avril 19 13:06:46 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 230
  */
 
 /* Commentary: 
@@ -20,6 +16,7 @@
 #include "dtkDistributedCommunicatorTcp.h"
 #include "dtkDistributedSocket.h"
 
+#include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
@@ -53,6 +50,16 @@ dtkDistributedCommunicatorTcp::~dtkDistributedCommunicatorTcp(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedCommunicatorTcp::dtkDistributedCommunicatorTcp(const dtkDistributedCommunicatorTcp& other)
+{
+
+}
+
+dtkDistributedCommunicatorTcp& dtkDistributedCommunicatorTcp::operator = (const dtkDistributedCommunicatorTcp& other)
+{
+    return *this;
 }
 
 void dtkDistributedCommunicatorTcp::connectToHost(const QString &host , qint16 port)
@@ -131,15 +138,27 @@ void dtkDistributedCommunicatorTcp::flush(void)
 {
     while (this->socket()->bytesToWrite() > 0) {
         this->socket()->flush();
+        this->socket()->waitForBytesWritten();
     }
 }
 
+// FIXME: unused now ?
 void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, int tag)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    QByteArray *array = data->serialize();
+    if (array) {
+        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, "unknown", target, array->size(), data->identifier(), *array);
+        d->socket->sendRequest(msg);
+        d->socket->waitForBytesWritten();
+
+        delete msg;
+    } else {
+        dtkError() << "Empty array serialized, can't send anything";
+    }
+
 }
 
-
+// FIXME: unused now ?
 void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
     DTK_UNUSED(tag);
@@ -152,6 +171,9 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
         dtkDistributedMessage *msg = d->socket->parseRequest();
         if (msg->size() > 0) {
             QByteArray array = msg->content();
+            if(!data) {
+                data = dtkAbstractDataFactory::instance()->create(msg->type());
+            }
             if (!data->deserialize(array)) {
                 dtkError() << "Deserialization failed";
             }
@@ -168,9 +190,14 @@ void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int ta
     d->socket->write(s.toUtf8());
 }
 
-void dtkDistributedCommunicatorTcp::send(const QVariant &v, qint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, QString::number(tag), target, a.size(), "qvariant", a);
+    msg->addHeader("Tag",QString::number(tag));
+    d->socket->sendRequest(msg);
+    this->flush();
+
+    delete msg;
 }
 
 void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int tag)
@@ -193,7 +220,7 @@ void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int ta
     d->socket->blockSignals(false);
 }
 
-void dtkDistributedCommunicatorTcp::receive(QVariant &data, qint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(QByteArray &array, qint16 source, int tag)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 }

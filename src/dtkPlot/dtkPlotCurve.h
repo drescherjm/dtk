@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:11:30 2012 (+0200)
+ * Last-Updated: Wed Dec  5 15:52:03 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -36,17 +36,26 @@ public:
     ~dtkPlotCurve(void);
 
 public:
+    dtkPlotCurve& operator=(const dtkPlotCurve& other);
+
+public:
     void append(const QPointF& data);
 
 public:
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
+    void clear();
+
     QColor color(void);
 
+public:
     void setData(const QVector<QPointF>& data);
 
-signals:
-    void updated(void);
+public:
+    const QVector<QPointF> data(void) const;
+
+public:
+    QString description(void);
 
 private:
     friend class dtkPlotView;

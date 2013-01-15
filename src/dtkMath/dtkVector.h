@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:20:31 2012 (+0200)
- *           By: tkloczko
- *     Update #: 30
+ * Last-Updated: Tue Oct 23 11:20:47 2012 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -24,32 +24,37 @@
 
 #include "dtkMatrix.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkVector interface
+// /////////////////////////////////////////////////////////////////
+
 template <class T = double> class dtkVector : public dtkMatrix<T>
 {
 public:
-     dtkVector(void): dtkMatrix<T>() {};
-     dtkVector(unsigned crowInit): dtkMatrix<T>(crowInit, 1) {};
-     dtkVector(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
-     dtkVector(const dtkVector& vec): dtkMatrix<T>(vec) {};
-     dtkVector(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
-     dtkVector(const dtkVector&, unsigned, unsigned);
-    ~dtkVector(void) {};
+             dtkVector(void): dtkMatrix<T>() {};
+             dtkVector(unsigned crowInit): dtkMatrix<T>(crowInit, 1) {};
+             dtkVector(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
+             dtkVector(const dtkVector& vec): dtkMatrix<T>(vec) {};
+             dtkVector(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
+             dtkVector(const dtkVector&, unsigned, unsigned);
+    virtual ~dtkVector(void) {};
+
+public:
+    QString identifier(void) const;
+
+public:
+    void allocate(unsigned crowInit) { dtkMatrix<T>::allocate(crowInit, 1); }
 
     void mapInto(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
     void mapInto(const dtkVector&, unsigned, unsigned);
 
-    void allocate(unsigned crowInit) { 
-        dtkMatrix<T>::allocate(crowInit, 1);
-    }
+    unsigned size(void) const { return this->numberOfRows(); };
 
-    T& operator [](unsigned irow) {
-        return this->dtkMatrix<T>::operator[](irow)[0];
-    }
+public:
+          T& operator [](unsigned irow)       { return this->dtkMatrix<T>::operator[](irow)[0]; }
+    const T& operator [](unsigned irow) const { return this->dtkMatrix<T>::operator[](irow)[0]; }
 
-    const T& operator [](unsigned irow) const {
-        return this->dtkMatrix<T>::operator[](irow)[0];
-    }
-
+public:
     dtkVector operator +(const dtkVector&) const;
     dtkVector operator -(const dtkVector&) const;
     dtkVector operator -(void) const;
@@ -63,6 +68,7 @@ public:
         return (*this)*tTmp;
     }
 
+public:
     dtkVector& operator  =(const dtkVector& vec);
     dtkVector& operator +=(const dtkVector& vec);
     dtkVector& operator -=(const dtkVector& vec);
@@ -71,6 +77,7 @@ public:
 
     T operator !(void) const { return (*this).norm(); };
 
+public:
     void storeAtRow(unsigned, const dtkVector&);
 
     T norm(void) const;
@@ -80,6 +87,10 @@ public:
     void makeUnit(void) { (*this) /= this->norm(); }
 };
 
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
 template <class T, unsigned crow> class dtkVec: public T
 {
 public:
@@ -87,6 +98,10 @@ public:
 
     T& operator =(const T& mtx) { return T::operator=(mtx); }
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 template <class T, unsigned crow> class dtkZero< dtkVec<dtkVector<T>, crow> >: public dtkVec<dtkVector<T>, crow>
 {
@@ -105,6 +120,11 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 #include <QtCore>
+
+typedef dtkVector<qlonglong> dtkVectorInteger;
+
+Q_DECLARE_METATYPE(dtkVectorInteger);
+Q_DECLARE_METATYPE(dtkVectorInteger *);
 
 typedef dtkVector<qreal> dtkVectorReal;
 

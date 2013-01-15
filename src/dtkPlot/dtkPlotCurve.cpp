@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue May 29 15:14:04 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 47
+ * Last-Updated: 2012 Thu Dec 13 15:13:47 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -20,6 +20,52 @@
 #include "dtkPlotCurve.h"
 
 #include <qwt_plot_curve.h>
+#include <qwt_series_data.h>
+
+#include <float.h>
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QRectF qMakeRect(qreal xmin, qreal xmax, qreal ymin, qreal ymax);
+
+// /////////////////////////////////////////////////////////////////
+// dtkPlotCurvePrivateData
+// /////////////////////////////////////////////////////////////////
+
+class dtkPlotCurvePrivateData : public QwtPointSeriesData
+{
+public:
+    void append(const QPointF& point);
+    
+public:
+    void clear(void);
+
+public:
+    QRectF boundingRect(void) const {
+        return qMakeRect(xmin, xmax, ymin, ymax);
+    }
+
+public:
+    qreal xmin, xmax;
+    qreal ymin, ymax;
+};
+
+void dtkPlotCurvePrivateData::append(const QPointF& data)
+{
+    this->d_samples << data;
+
+    xmin = qMin(xmin, data.x());
+    xmax = qMax(xmax, data.x());
+    ymin = qMin(ymin, data.y());
+    ymax = qMax(ymax, data.y());
+}
+
+void dtkPlotCurvePrivateData::clear(void)
+{
+    this->d_samples.clear();
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkPlotCurvePrivate
@@ -31,12 +77,16 @@ public:
     dtkPlotCurvePrivate(const QString& title = QString());
 
 public:
-    QVector<QPointF> data;
+    dtkPlotCurvePrivateData data;
 };
 
 dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(title)
 {
-
+    this->setData(&(this->data));
+    data.xmin = DBL_MAX;
+    data.xmax = DBL_MIN;
+    data.ymin = DBL_MAX;
+    data.ymax = DBL_MIN;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -45,14 +95,11 @@ dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(ti
 
 dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurvePrivate(title))
 {
-
 }
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))
 {
-    d->data = other.d->data;
-    
-    d->setSamples(d->data);
+    d->data.setSamples(other.d->data.samples());
 }
 
 dtkPlotCurve::~dtkPlotCurve(void)
@@ -62,13 +109,24 @@ dtkPlotCurve::~dtkPlotCurve(void)
     d = NULL;
 }
 
+dtkPlotCurve& dtkPlotCurve::operator=(const dtkPlotCurve& other)
+{
+    d->setTitle(other.d->title().text()); 
+
+    d->data.setSamples(other.d->data.samples());
+
+    return *this;
+}
+
+void dtkPlotCurve::clear(void)
+{
+    d->data.clear();
+}
+
 void dtkPlotCurve::append(const QPointF& data)
 {
-    d->data << data;
-
-    d->setSamples(d->data);
-
-    emit updated();
+    d->data.append(data);
+    d->itemChanged();
 }
 
 void dtkPlotCurve::setAntialiased(bool antiliased)
@@ -83,14 +141,45 @@ void dtkPlotCurve::setColor(const QColor& color)
 
 QColor dtkPlotCurve::color(void)
 {
-   return  d->pen().color();
+   return d->pen().color();
 }
 
 void dtkPlotCurve::setData(const QVector<QPointF>& data)
 {
-    d->data = data;
+    d->data.setSamples(data);
 
-    d->setSamples(d->data);
+    // emit updated();
+}
 
-    emit updated();
+const QVector<QPointF> dtkPlotCurve::data(void) const
+{
+    return d->data.samples();
+}
+
+QString  dtkPlotCurve::description(void)
+{
+    QString string;
+
+    string = "[ " ;
+    for (unsigned i = 0; i < d->data.samples().count(); i++) {
+        if (i > 0)
+            string.append("; ");
+
+        QString stringx = QString("%1").arg(d->data.samples().at(i).x());
+        QString stringy = QString("%1").arg(d->data.samples().at(i).y());
+
+        string += "(" +stringx + ", "+ stringy +")";
+    }
+    string.append(" ]");
+
+    return string;
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QRectF qMakeRect(qreal xmin, qreal xmax, qreal ymin, qreal ymax)
+{
+    return QRectF(xmin, ymin, xmax-xmin, ymax-ymin);
 }

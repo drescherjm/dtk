@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: Tue Sep 18 11:34:30 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 800
+ * Last-Updated: jeu. oct.  4 16:05:05 2012 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 805
  */
 
 /* Commentary:
@@ -41,75 +41,6 @@ dtkDistributedSocket::~dtkDistributedSocket(void)
     d = NULL;
 }
 
-void dtkDistributedSocket::send(dtkAbstractData *data, QString jobid, qint16 target)
-{
-    QByteArray *array;
-    QString type = "dtkAbstractData/"+data->identifier();
-
-    array = data->serialize();
-    if (!array->isNull()) {
-        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
-        this->sendRequest(&msg);
-        this->write(*array);
-    } else {
-        dtkError() << "serialization failed";
-    }
-}
-
-void dtkDistributedSocket::send(QVariant variant, QString jobid, qint16 target)
-{
-    QByteArray *array;
-
-    QString type = variant.typeName();
-
-    if(type == "dtkVector3DReal") {
-        dtkVector3DReal v = variant.value<dtkVector3DReal>();
-        array = new QByteArray;
-        QDataStream stream(array, QIODevice::WriteOnly);
-        stream << v[0] << v[1] << v[2];
-
-    } else if(type == "dtkVectorReal") {
-        dtkVectorReal v = variant.value<dtkVectorReal>();
-        int size = v.getRows();
-        array = new QByteArray;
-        QDataStream stream(array, QIODevice::WriteOnly);
-        stream << size ;
-        for  (int i =0; i < size ; i++)
-            stream << v[i] ;
-
-    } else if(type == "dtkQuaternionReal") {
-        dtkQuaternionReal v = variant.value<dtkQuaternionReal>();
-        array = new QByteArray;
-        QDataStream stream(array, QIODevice::WriteOnly);
-        stream << v[0] << v[1] << v[2] << v[3];
-
-    } else {
-        bool is_pointer =false;
-
-        if (type != "dtkAbstractData") {
-            dtkInfo() << "type is unknown ("<< type<<  "), assume it inherit from dtkAbstractData";
-        }
-
-        if (type.endsWith("*")) { // pointer, remove the * character
-            type.chop(1);
-            is_pointer = true;
-            dtkDebug() << "pointer type, remove *"<< type;
-        }
-        dtkAbstractData *data = dtkAbstractDataFactory::instance()->create(type)->fromVariant(variant);
-        dtkDebug() << DTK_PRETTY_FUNCTION << data->identifier();
-        array = data->serialize();
-    }
-
-    if (!array->isNull()) {
-        dtkTrace() << "Array size is"<< array->size();
-        dtkDistributedMessage msg = dtkDistributedMessage(dtkDistributedMessage::DATA,jobid, target, array->size(), type);
-        this->sendRequest(&msg);
-        this->write(*array);
-        this->flush();
-    } else {
-        dtkError() << "serialization failed";
-    }
-}
 
 qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
 {

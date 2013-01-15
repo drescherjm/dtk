@@ -3,9 +3,12 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Fri Sep 21 16:17:20 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 597
+## Last-Updated: lun. janv. 14 14:13:47 2013 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 651
+## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
+##           By: Thibaud Kloczko, Inria.
+##     Update #: 623
 ######################################################################
 ##
 ### Commentary:
@@ -25,6 +28,8 @@ project(dtkComposer)
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
   dtkComposerCompass.h
+  dtkComposerControls.h
+  dtkComposerControlsDelegate.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -54,7 +59,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h
-  dtkComposerNodeContainerData.h
   dtkComposerNodeControl.h
   dtkComposerNodeControlCase.h
   dtkComposerNodeControlDoWhile.h
@@ -65,19 +69,23 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlWhile.h
   dtkComposerNodeData.h
   dtkComposerNodeFile.h
-  dtkComposerNodeFileOperator.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   dtkComposerNodeLeafData.h
   dtkComposerNodeLeafProcess.h
   dtkComposerNodeLeafView.h
-  dtkComposerNodeList.h
-  dtkComposerNodeListOperator.h
   dtkComposerNodeLogger.h
   dtkComposerNodeMatrixSquareReal.h
   dtkComposerNodeMatrixSquareRealExtractor.h
   dtkComposerNodeMatrixSquareRealOperatorUnary.h
   dtkComposerNodeMatrixSquareRealOperatorBinary.h
+  dtkComposerNodeMetaScalarArray.h
+  dtkComposerNodeMetaScalarArrayAppend.h
+  dtkComposerNodeMetaScalarArrayExtractor.h
+  dtkComposerNodeMetaScalarArrayReplace.h
+  dtkComposerNodeMetaVector3DArray.h
+  dtkComposerNodeMetaVector3DArrayAppend.h
+  dtkComposerNodeMetaVector3DArrayExtractor.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
@@ -87,18 +95,22 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
-  dtkComposerNodeVector.h
-  dtkComposerNodeVectorOperator.h
   dtkComposerNodeVector3D.h
   dtkComposerNodeVector3DOperatorUnary.h
   dtkComposerNodeVector3DOperatorBinary.h
   dtkComposerNodeVector3DOperatorTernary.h
+  dtkComposerNodeVectorInteger.h
+  dtkComposerNodeVectorIntegerExtractor.h
+  dtkComposerNodeVectorIntegerOperatorModifier.h
+  dtkComposerNodeVectorIntegerOperatorUnary.h
+  dtkComposerNodeVectorIntegerOperatorBinary.h
   dtkComposerNodeVectorReal.h
   dtkComposerNodeVectorRealExtractor.h
   dtkComposerNodeVectorRealOperatorModifier.h
   dtkComposerNodeVectorRealOperatorUnary.h
   dtkComposerNodeVectorRealOperatorBinary.h
   dtkComposerNodeView.h
+  dtkComposerPath.h
   dtkComposerScene.h
   dtkComposerSceneEdge.h
   dtkComposerSceneModel.h
@@ -111,12 +123,15 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerSceneNote.h
   dtkComposerScenePort.h
   dtkComposerSceneView.h
+  dtkComposerSearchDialog.h
   dtkComposerStack.h
   dtkComposerStackCommand.h
   dtkComposerStackUtils.h
   dtkComposerStackView.h
   dtkComposerTransmitter.h
   dtkComposerTransmitter_p.h
+  dtkComposerTransmitterAbstractEmitter.h
+  dtkComposerTransmitterAbstractReceiver.h
   dtkComposerTransmitterEmitter.h
   dtkComposerTransmitterEmitter.tpp
   dtkComposerTransmitterProxy.h
@@ -131,6 +146,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposer.h
   dtkComposer_p.h
   dtkComposerCompass.h
+  dtkComposerControls.h
+  dtkComposerControlsDelegate.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -141,17 +158,21 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerMachineState.h
   dtkComposerNodeFile_p.h
   dtkComposerNodeView.h
+  dtkComposerPath.h
   dtkComposerSceneModel.h
   dtkComposerScene.h
   dtkComposerSceneNodeEditor.h
   dtkComposerSceneNodeEditor_p.h
   dtkComposerSceneView.h
+  dtkComposerSearchDialog.h
   dtkComposerStackView.h
   dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerCompass.cpp
+  dtkComposerControls.cpp
+  dtkComposerControlsDelegate.cpp
   dtkComposerEvaluator.cpp
   dtkComposerFactory.cpp
   dtkComposerFactoryView.cpp
@@ -180,7 +201,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
   dtkComposerNodeConstants.cpp
-  dtkComposerNodeContainerData.cpp
   dtkComposerNodeControl.cpp
   dtkComposerNodeControlCase.cpp
   dtkComposerNodeControlDoWhile.cpp
@@ -191,19 +211,23 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlWhile.cpp
   dtkComposerNodeData.cpp
   dtkComposerNodeFile.cpp
-  dtkComposerNodeFileOperator.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
   dtkComposerNodeLeafData.cpp
   dtkComposerNodeLeafProcess.cpp
   dtkComposerNodeLeafView.cpp
-  dtkComposerNodeList.cpp
-  dtkComposerNodeListOperator.cpp
   dtkComposerNodeLogger.cpp
   dtkComposerNodeMatrixSquareReal.cpp
   dtkComposerNodeMatrixSquareRealExtractor.cpp
   dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
+  dtkComposerNodeMetaScalarArray.cpp
+  dtkComposerNodeMetaScalarArrayAppend.cpp
+  dtkComposerNodeMetaScalarArrayExtractor.cpp
+  dtkComposerNodeMetaScalarArrayReplace.cpp
+  dtkComposerNodeMetaVector3DArray.cpp
+  dtkComposerNodeMetaVector3DArrayAppend.cpp
+  dtkComposerNodeMetaVector3DArrayExtractor.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
@@ -213,18 +237,22 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
-  dtkComposerNodeVector.cpp
-  dtkComposerNodeVectorOperator.cpp
   dtkComposerNodeVector3D.cpp
   dtkComposerNodeVector3DOperatorUnary.cpp
   dtkComposerNodeVector3DOperatorBinary.cpp
   dtkComposerNodeVector3DOperatorTernary.cpp
+  dtkComposerNodeVectorInteger.cpp
+  dtkComposerNodeVectorIntegerExtractor.cpp
+  dtkComposerNodeVectorIntegerOperatorModifier.cpp
+  dtkComposerNodeVectorIntegerOperatorUnary.cpp
+  dtkComposerNodeVectorIntegerOperatorBinary.cpp
   dtkComposerNodeVectorReal.cpp
   dtkComposerNodeVectorRealExtractor.cpp
   dtkComposerNodeVectorRealOperatorModifier.cpp
   dtkComposerNodeVectorRealOperatorUnary.cpp
   dtkComposerNodeVectorRealOperatorBinary.cpp
   dtkComposerNodeView.cpp
+  dtkComposerPath.cpp
   dtkComposerScene.cpp
   dtkComposerSceneEdge.cpp
   dtkComposerSceneModel.cpp
@@ -237,11 +265,15 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerSceneNote.cpp
   dtkComposerScenePort.cpp
   dtkComposerSceneView.cpp
+  dtkComposerSearchDialog.cpp
   dtkComposerStack.cpp
   dtkComposerStackUtils.cpp
   dtkComposerStackView.cpp
   dtkComposerStackCommand.cpp
   dtkComposerTransmitter.cpp
+  dtkComposerTransmitterAbstractEmitter.cpp
+  dtkComposerTransmitterAbstractReceiver.cpp
+  dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterVariant.cpp
   dtkComposerView.cpp
@@ -256,9 +288,15 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 ## #################################################################
 
 if(DTK_BUILD_DISTRIBUTED)
-  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS} dtkComposerNodeRemote.h)
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+   dtkComposerNodeRemote.h
+   dtkComposerNodeDistributed.h
+   )
   set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC} dtkComposerNodeRemote.h)
-  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES} dtkComposerNodeRemote.cpp)
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerNodeDistributed.cpp
+  dtkComposerNodeRemote.cpp
+   )
 endif(DTK_BUILD_DISTRIBUTED)
 
 ## #################################################################
@@ -267,11 +305,9 @@ endif(DTK_BUILD_DISTRIBUTED)
 
 if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkComposerNodeDistributed.h
   dtkComposerNodeWorld.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkComposerNodeDistributed.cpp
   dtkComposerNodeWorld.cpp)
 endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 

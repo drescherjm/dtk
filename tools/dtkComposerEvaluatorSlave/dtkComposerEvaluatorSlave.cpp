@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: lun. mai 21 09:08:22 2012 (+0200)
+ * Last-Updated: mar. oct.  9 16:56:09 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 223
+ *     Update #: 239
  */
 
 /* Commentary:
@@ -73,6 +73,7 @@ dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave
     d->scene->setGraph(d->graph);
 
     d->evaluator->setGraph(d->graph);
+    d->evaluator->setNotify(false);
 
     d->reader->setFactory(d->factory);
     d->reader->setScene(d->scene);
@@ -154,8 +155,10 @@ int dtkComposerEvaluatorSlave::exec(void)
             new_composition = false;
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
+            delete msg;
             return 1;
         }
+        delete msg;
 
         if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;

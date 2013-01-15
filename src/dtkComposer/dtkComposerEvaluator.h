@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:30:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 23:29:39 2012 (+0200)
+ * Last-Updated: mar. oct.  9 16:54:49 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 25
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -43,7 +43,8 @@ signals:
     void runMainThread(void);
 
 public:
-    void setGraph(dtkComposerGraph *graph);
+    void  setGraph(dtkComposerGraph *graph);
+    void setNotify(bool notify);
 
 public:
     void  run(bool run_concurrent = false);
@@ -52,6 +53,7 @@ public:
     void next(bool run_concurrent = false);
     void stop();
     void reset();
+
 
 public:
     void  logStack(void);

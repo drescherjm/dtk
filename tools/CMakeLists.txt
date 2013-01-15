@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Sep 18 10:47:22 2012 (+0200)
+## Last-Updated: Thu Jan 10 11:37:05 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 29
+##     Update #: 31
 ######################################################################
 ## 
 ### Commentary: 
@@ -22,10 +22,6 @@ add_subdirectory(dtkTestGenerator)
 add_subdirectory(dtkPluginGenerator)
 add_subdirectory(dtkHeadersBuilder)
 add_subdirectory(dtkHeadersMover)
-
-if(DTK_BUILD_SCRIPT)
-  add_subdirectory(dtksh)
-endif(DTK_BUILD_SCRIPT)
 
 if(DTK_BUILD_COMPOSER)
   add_subdirectory(dtkComposerEvaluator)

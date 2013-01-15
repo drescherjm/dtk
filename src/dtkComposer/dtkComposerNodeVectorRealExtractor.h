@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:33:29 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 11:55:25 2012 (+0200)
- *           By: tkloczko
- *     Update #: 5
+ * Last-Updated: 2012 Wed Oct 10 18:08:59 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 9
  */
 
 /* Commentary:
@@ -49,6 +49,38 @@ public:
 
 private:
     dtkComposerNodeVectorRealExtractorPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeVectorRealExtractorSubVector interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeVectorRealExtractorSubVectorPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealExtractorSubVector : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeVectorRealExtractorSubVector(void);
+    ~dtkComposerNodeVectorRealExtractorSubVector(void);
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "vectorRealExtractorSubVector";
+    }
+
+    inline QString titleHint(void) {
+        return "Vector real : extract subvector";
+    }
+
+public:
+    QString  inputLabelHint(int port);
+    QString outputLabelHint(int port);
+
+private:
+    dtkComposerNodeVectorRealExtractorSubVectorPrivate *d;
 };
 
 #endif

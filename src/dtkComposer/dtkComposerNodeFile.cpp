@@ -1,12 +1,7 @@
 /* dtkComposerNodeFile.cpp --- 
  * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
+ * Author: Julien Wintz, INRIA
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Oct  8 12:28:15 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 111
  */
 
 /* Commentary: 
@@ -88,6 +83,9 @@ void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
 dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFilePrivate)
 {
     this->appendReceiver(&(d->receiver));
+
+    d->fileName = QString();
+    d->emitter.setData(&d->fileName);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -102,22 +100,24 @@ void dtkComposerNodeFile::run(void)
 {
     QString path;
 
-    if(!d->receiver.isEmpty())
-        path = d->receiver.data();
+    if (!d->receiver.isEmpty())
+        path = *d->receiver.data();
     else
-        path = d->emitter.data();
+        path = d->fileName;
 
-    if(path.startsWith("http")) {
-
+    if (path.startsWith("http")) {
+        
         d->download(QUrl(path));
-
-        if(!d->tempName.isEmpty())
-            d->emitter.setData(d->tempName);
+        
+        if (!d->tempName.isEmpty())
+            d->fileName = d->tempName;
         else
-            d->emitter.setData(path);
-
+            d->fileName = path;
+        
     } else {
-        d->emitter.setData(path);
+        
+        d->fileName = path;
+        
     }
 }
 
@@ -149,10 +149,10 @@ QString dtkComposerNodeFile::outputLabelHint(int port)
 
 QString dtkComposerNodeFile::value(void)
 {
-    return d->emitter.data();
+    return d->fileName;
 }
 
 void dtkComposerNodeFile::setValue(QString value)
 {
-    d->emitter.setData(value);
+    d->fileName = value;
 }

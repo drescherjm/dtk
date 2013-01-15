@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Jeu sep 20 15:18:59 2012 (+0200)
- *           By: Régis Duvigneau
- *     Update #: 255
+ * Last-Updated: Thu Dec  6 12:49:57 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 282
  */
 
 /* Commentary:
@@ -28,8 +28,6 @@
 #include "dtkPluginManager.h"
 
 #include <dtkLog/dtkLog.h>
-
-#define DTK_VERBOSE_LOAD false
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -72,6 +70,8 @@ public:
     QString path;
 
     QHash<QString, QPluginLoader *> loaders;
+
+    bool verboseLoading;
 };
 
 #include "dtkAbstractData.h"
@@ -85,11 +85,16 @@ dtkPluginManager *dtkPluginManager::instance(void)
     if(!s_instance) {
         s_instance = new dtkPluginManager;
 
+        qRegisterMetaType<dtkAbstractObject>("dtkAbstractObject");
+        qRegisterMetaType<dtkAbstractObject*>("dtkAbstractObject*");
         qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
         qRegisterMetaType<dtkAbstractData*>("dtkAbstractData*");
         qRegisterMetaType<dtkVectorReal>("dtkVectorReal");
+        qRegisterMetaType<dtkVectorReal*>("dtkVectorReal*");
         qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
+        qRegisterMetaType<dtkVector3DReal*>("dtkVector3DReal*");
         qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
+        qRegisterMetaType<dtkQuaternionReal*>("dtkQuaternionReal*");
     }
 
     return s_instance;
@@ -98,6 +103,14 @@ dtkPluginManager *dtkPluginManager::instance(void)
 // /////////////////////////////////////////////////////////////////
 // dtkPluginManager
 // /////////////////////////////////////////////////////////////////
+
+void dtkPluginManager::initializeApplication(void)
+{
+    int   argc = 1;
+    char *argv[] = {"dtk-embedded"};
+    
+    (void) new QApplication(argc, argv);
+}
 
 void dtkPluginManager::initialize(void)
 {
@@ -128,6 +141,11 @@ void dtkPluginManager::uninitialize(void)
 
     foreach(QString path, d->loaders.keys())
         unloadPlugin(path);
+}
+
+void dtkPluginManager::uninitializeApplication(void)
+{
+    delete qApp;
 }
 
 //! Load a specific plugin designated by its name.
@@ -233,7 +251,17 @@ void dtkPluginManager::writeSettings(void)
 void dtkPluginManager::printPlugins(void)
 {
     foreach(QString path, d->loaders.keys())
-        dtkTrace() << path;
+        qDebug() << path;
+}
+
+void dtkPluginManager::setVerboseLoading(bool value)
+{
+    d->verboseLoading = true;
+}
+
+bool dtkPluginManager::verboseLoading(void) const
+{
+    return d->verboseLoading;
 }
 
 dtkPlugin *dtkPluginManager::plugin(const QString& name)
@@ -270,7 +298,7 @@ QString dtkPluginManager::path(void) const
 
 dtkPluginManager::dtkPluginManager(void) : d(new dtkPluginManagerPrivate)
 {
-
+    d->verboseLoading = false;
 }
 
 dtkPluginManager::~dtkPluginManager(void)
@@ -299,9 +327,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
         error += path;
         error += " - ";
         error += loader->errorString();
-        if (DTK_VERBOSE_LOAD) {
-            dtkDebug() << error;
-        }
+        if(d->verboseLoading) dtkDebug() << error;
         emit loadError(error);
         delete loader;
         return;
@@ -316,9 +342,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
     if(!plugin) {
         QString error = "Unable to retrieve ";
         error += path;
-        if (DTK_VERBOSE_LOAD) {
-            dtkDebug() << error;
-        }
+        if(d->verboseLoading) dtkDebug() << error;
         emit loadError(error);
         return;
     }
@@ -327,18 +351,14 @@ void dtkPluginManager::loadPlugin(const QString& path)
         QString error = "Unable to initialize ";
         error += plugin->name();
         error += " plugin";
-        if (DTK_VERBOSE_LOAD) {
-            dtkTrace() << error;
-        }
+        if(d->verboseLoading) dtkTrace() << error;
         emit loadError(error);
         return;
     }
 
     d->loaders.insert(path, loader);
 
-    if (DTK_VERBOSE_LOAD) {
-        dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path;
-    }
+    if(d->verboseLoading) dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path;
 
     emit loaded(plugin->name());
 }
@@ -356,25 +376,19 @@ void dtkPluginManager::unloadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
 
     if(!plugin) {
-        if (DTK_VERBOSE_LOAD) {
-            dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin";
-        }
+        if(d->verboseLoading) dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin";
         return;
     }
 
     if(!plugin->uninitialize()) {
-        if (DTK_VERBOSE_LOAD) {
-            dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin";
-        }
+        if(d->verboseLoading) dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin";
         return;
     }
 
     QPluginLoader *loader = d->loaders.value(path);
 
     if(!loader->unload()) {
-        if (DTK_VERBOSE_LOAD) {
-            dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString();
-        }
+        if(d->verboseLoading) dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString();
         return;
     }
 

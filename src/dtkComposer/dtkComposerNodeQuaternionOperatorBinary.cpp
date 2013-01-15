@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:36:04 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:22:28 2012 (+0200)
+ * Last-Updated: Thu Sep 13 16:40:11 2012 (+0200)
  *           By: tkloczko
- *     Update #: 14
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -39,10 +39,15 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<dtkQuaternionReal> emitter_quat;
+
+public:
+    dtkQuaternionReal *quat;
 };
 
 dtkComposerNodeQuaternionOperatorBinary::dtkComposerNodeQuaternionOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeQuaternionOperatorBinaryPrivate)
 {
+    d->quat = NULL;
+
     this->appendReceiver(&d->receiver_lhs);
     this->appendReceiver(&d->receiver_rhs);
     this->appendEmitter(&d->emitter_quat);
@@ -50,6 +55,11 @@ dtkComposerNodeQuaternionOperatorBinary::dtkComposerNodeQuaternionOperatorBinary
 
 dtkComposerNodeQuaternionOperatorBinary::~dtkComposerNodeQuaternionOperatorBinary(void)
 {
+    if (d->quat)
+        delete d->quat;
+
+    d->quat = NULL;
+
     delete d;
     
     d = NULL;
@@ -63,7 +73,7 @@ class dtkComposerNodeQuaternionOperatorHomotheticPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkQuaternionReal> receiver_quat;
-    dtkComposerTransmitterVariant                   receiver_val;
+    dtkComposerTransmitterReceiver<qreal>             receiver_val;
 
 public:
     dtkComposerTransmitterEmitter<dtkQuaternionReal> emitter_quat;
@@ -91,11 +101,15 @@ void dtkComposerNodeQuaternionOperatorBinarySum::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_quat.setData(dtkQuaternionReal());
 
     } else {
-        d->emitter_quat.setData(d->receiver_lhs.data() + d->receiver_rhs.data());
+        
+        if (!d->quat) {
+            d->quat = new dtkQuaternionReal(0., 0., 0., 0.);
+            d->emitter_quat.setData(d->quat);
+        }
 
+        *(d->quat) = (*(d->receiver_lhs.data())) + (*(d->receiver_rhs.data()));
     }
 }
 
@@ -107,11 +121,15 @@ void dtkComposerNodeQuaternionOperatorBinarySubstract::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_quat.setData(dtkQuaternionReal());
 
     } else {
-        d->emitter_quat.setData(d->receiver_lhs.data() - d->receiver_rhs.data());
 
+        if (!d->quat) {
+            d->quat = new dtkQuaternionReal(0., 0., 0., 0.);
+            d->emitter_quat.setData(d->quat);
+        }
+
+        *(d->quat) = (*(d->receiver_lhs.data())) - (*(d->receiver_rhs.data()));
     }
 }
 
@@ -123,11 +141,15 @@ void dtkComposerNodeQuaternionOperatorBinaryMult::run(void)
 {
     if (d->receiver_lhs.isEmpty() || d->receiver_rhs.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_quat.setData(dtkQuaternionReal());
 
     } else {
-        d->emitter_quat.setData(d->receiver_lhs.data() * d->receiver_rhs.data());
 
+        if (!d->quat) {
+            d->quat = new dtkQuaternionReal(0., 0., 0., 0.);
+            d->emitter_quat.setData(d->quat);
+        }
+
+        *(d->quat) = (*(d->receiver_lhs.data())) * (*(d->receiver_rhs.data()));
     }
 }
 
@@ -139,11 +161,15 @@ void dtkComposerNodeQuaternionOperatorHomotheticMult::run(void)
 {
     if (d->receiver_quat.isEmpty() || d->receiver_val.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_quat.setData(dtkQuaternionReal());
 
     } else {
-        d->emitter_quat.setData(d->receiver_quat.data() * d->receiver_val.data().toReal());
 
+        dtkQuaternionReal *quat = d->receiver_quat.data();
+        qreal value = *d->receiver_val.data();
+
+        *quat *= value;
+
+        d->emitter_quat.setData(quat);
     }
 }
 
@@ -155,18 +181,19 @@ void dtkComposerNodeQuaternionOperatorHomotheticDivision::run(void)
 {
     if (d->receiver_quat.isEmpty() || d->receiver_val.isEmpty()){
         dtkWarn() << "Inputs not specified. Nothing is done";
-        d->emitter_quat.setData(dtkQuaternionReal());
 
     } else {
+        qreal value = *d->receiver_val.data();
 
-        qreal value = d->receiver_val.data().toReal();
+        if (value != 0 ) {
+            dtkQuaternionReal *quat = d->receiver_quat.data();
 
-        if ( value != 0) {
-            d->emitter_quat.setData(d->receiver_quat.data() / value);
+            *quat /= value;
+
+            d->emitter_quat.setData(quat);
 
         } else {
             dtkWarn() << "You divide by zero. Nothing is done" ;
-            d->emitter_quat.setData(d->receiver_quat.data());
 
         }
     }

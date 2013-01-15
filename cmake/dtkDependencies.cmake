@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Jul 10 12:23:24 2012 (+0200)
+## Last-Updated: Thu Jan 10 11:33:27 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 110
+##     Update #: 129
 ######################################################################
 ## 
 ### Commentary: 
@@ -33,6 +33,7 @@ set(QT_USE_QTNETWORK     TRUE)
 set(QT_USE_QTTEST        TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
 set(QT_USE_QTTEST        TRUE)
+set(QT_USE_GUI           TRUE)
 set(QT_USE_QTDECLARATIVE TRUE)
 
 if(WIN32)
@@ -42,10 +43,6 @@ endif(WIN32)
 if(NOT QT_FOUND)
   find_package(Qt4 4.6.0 REQUIRED)
 endif(NOT QT_FOUND)
-
-if(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
-  set(QT_USE_QTDECLARATIVE TRUE)
-endif(${QT_VERSION_MAJOR} EQUAL 4 AND ${QT_VERSION_MINOR} GREATER 6)
 
 include(${QT_USE_FILE})
 
@@ -68,7 +65,7 @@ mark_as_advanced(SWIG_DIR)
 mark_as_advanced(SWIG_EXECUTABLE)
 mark_as_advanced(SWIG_VERSION)
 
-find_package(SWIG QUIET)
+find_package(SWIG REQUIRED)
 
 if(SWIG_FOUND)
   include(${SWIG_USE_FILE})
@@ -86,6 +83,10 @@ if(SWIG_FOUND)
       "-c++"
       "-module" ${name}
       "-I${PROJECT_SOURCE_DIR}/.."
+      "-I${PROJECT_SOURCE_DIR}/"
+      "-I${dtk_SOURCE_DIR}/"
+      "-I${dtk_SOURCE_DIR}/src"
+      "-I${dtk_SOURCE_DIR}/src/dtkCore"
       "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
       "-o" ${wrap_output}
       ${input}
@@ -95,6 +96,11 @@ if(SWIG_FOUND)
     set(${target} ${${target}} ${wrap_output})
     
   endmacro(dtk_wrap)
+
+else(SWIG_FOUND)
+  
+  message("DTK_BUILD_WRAPPERS options requires SWIG.")
+
 endif(SWIG_FOUND)
 
 if(SWIG_FOUND)
@@ -112,7 +118,10 @@ if(TCL_FOUND)
 endif(TCL_FOUND)
 
 if(TCL_FOUND)
-  add_definitions(-DHAVE_TCL)
+  add_definitions(-DHAVE_TCL) # Towards deprecation
+  set(DTK_HAVE_TCL 1)
+else(TCL_FOUND)
+  set(DTK_HAVE_TCL 0)
 endif(TCL_FOUND)
 
 ## #################################################################
@@ -125,31 +134,11 @@ if(PYTHONLIBS_FOUND)
   include_directories(${PYTHON_INCLUDE_DIRS})
   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
   link_directories(${PYTHON_PATH})
+  add_definitions(-DHAVE_PYTHON) # Towards deprecation
+  set(DTK_HAVE_PYTHON 1)
+else(PYTHONLIBS_FOUND)
+  set(DTK_HAVE_PYTHON 0)
 endif(PYTHONLIBS_FOUND)
-
-if(PYTHONLIBS_FOUND)
-  add_definitions(-DHAVE_PYTHON)
-endif(PYTHONLIBS_FOUND)
-
-## #################################################################
-## Editline
-## #################################################################
-
-mark_as_advanced(EDITLINE_INCLUDE_DIR)
-mark_as_advanced(EDITLINE_LIBRARY)
-
-find_path(EDITLINE_INCLUDE_DIR histedit.h
-  /usr/include
-  /usr/local/include)
-
-find_library(EDITLINE_LIBRARY edit
-  /usr/lib
-  /usr/local/lib)
-
-if(EDITLINE_LIBRARY)
-  set(EDITLINE_FOUND "YES")
-  set(DTK_HAVE_EDIT "YES")
-endif(EDITLINE_LIBRARY)
 
 ## #################################################################
 ## Build wrappers (end)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mai 30 15:38:51 2012 (+0200)
+ * Last-Updated: mar. oct. 30 16:43:39 2012 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 364
+ *     Update #: 367
  */
 
 /* Commentary:
@@ -85,6 +85,8 @@ void dtkDistributedMessage::setMethod(QString method)
     } else if (method.startsWith("ENDED /job")) {
         d->method = ENDJOB;
         d->jobid  = tokens[2].trimmed();
+    } else if (method.startsWith("DELETE /")) {
+        d->method = STOP;
     } else if (method.startsWith("POST /data")) {
         d->method = DATA;
         d->jobid  = tokens[2];
@@ -177,6 +179,9 @@ QString dtkDistributedMessage::req(void)
             break;
         case SETRANK:
             req = "PUT /rank/"+d->jobid +"/"+QString::number(d->rank) ;
+            break;
+        case STOP:
+            req = "DELETE /";
             break;
         default:
             dtkWarn() << "Unsupported method";

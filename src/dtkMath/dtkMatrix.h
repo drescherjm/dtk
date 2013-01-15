@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri May 25 22:39:48 2012 (+0200)
+ * Last-Updated: Wed Oct 17 12:37:32 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 161
+ *     Update #: 195
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKMATRIX_H
 #define DTKMATRIX_H
 
-#include <QtCore/QString>
+#include <QtCore>
 
 //! Template class dtkZero 
 /*! 
@@ -28,7 +28,7 @@
  * represent zero for structured types provided the notion of zero
  *  exists for that type.
  */
-template <class T> class dtkZero
+template <typename T> class dtkZero
 {
 public:
     operator T() { return 0; }
@@ -40,7 +40,7 @@ public:
  * represent unity for structured types provided the notion of unity
  * exists for that type.
  */
-template <class T> class dtkUnity
+template <typename T> class dtkUnity
 {
 public:
     operator T() { return 1; }
@@ -55,26 +55,40 @@ public:
  * Template argument T represents the type of elements that are in the matrix.
  * The default element type for this template is double.
  */
-template <class T = double> class dtkMatrix
+template <typename T = double> class dtkMatrix
 {
 public:
     typedef T element;
     
-    dtkMatrix(void);
-    dtkMatrix(unsigned, unsigned);
-    dtkMatrix(const dtkMatrix &);
-    dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
-   ~dtkMatrix(void) { if(m_crow) deallocate(); }
+public:
+             dtkMatrix(void);
+             dtkMatrix(unsigned, unsigned);
+             dtkMatrix(const dtkMatrix &);
+             dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
+    virtual ~dtkMatrix(void);
 
+private:
+    void initialize(void);
+
+public:
+    virtual QString  identifier(void) const;
+            QString description(void) const;
+
+public:
     void   allocate(unsigned, unsigned);
     void deallocate(void);
 
     void mapInto(const dtkMatrix&, unsigned, unsigned, unsigned, unsigned);
 
-    int getStatus(void) const { return m_nMatStatus; };
-    unsigned getRows(void) const { return m_crow; };
-    unsigned getCols(void) const { return m_ccol; };
+    Q_DECL_DEPRECATED int getStatus(void) const;
+    Q_DECL_DEPRECATED unsigned getRows(void) const;
+    Q_DECL_DEPRECATED unsigned getCols(void) const;
 
+    inline int status(void) const { return m_nMatStatus; };
+    inline unsigned numberOfRows(void) const { return m_crow; };
+    inline unsigned numberOfColumns(void) const { return m_ccol; };
+
+public:
     T* operator [](unsigned irow) { return m_rgrow[irow]; };
 
     const T* operator [](unsigned irow) const { return m_rgrow[irow]; };
@@ -90,6 +104,7 @@ public:
         return (*this)*tTmp;
     }
 
+public:
     dtkMatrix& operator =(const dtkMatrix &);
     dtkMatrix& operator +=(const dtkMatrix &);
     dtkMatrix& operator -=(const dtkMatrix &);
@@ -100,9 +115,11 @@ public:
         return (*this) *= tTmp;
     }
 
+public:
     int operator ==(const dtkMatrix &) const;
     int operator !=(const dtkMatrix &mat) const { return !( (*this) == mat ); }
 
+public:
     void storeSum(const dtkMatrix &, const dtkMatrix &);
     void storeProduct(const dtkMatrix &, const dtkMatrix &);
     void storeTranspose(const dtkMatrix &);
@@ -110,15 +127,17 @@ public:
 
     void fill(const T &);
 
+    void makeTranspose(void);
+
     void interchangeRows(unsigned, unsigned);
     void addRowToRow(unsigned, unsigned, const T & = dtkUnity<T>());
     void multiplyRow(unsigned, const T &);
 
-    QString description(void);
+public:
+    QByteArray *serialize(void);
+    void deserialize(const QByteArray& array);
 
 private:
-    void initialize(void);
-
     unsigned m_crow;
     unsigned m_ccol;
     T **m_rgrow;
@@ -134,7 +153,7 @@ private:
  * elements of matrices since these will always be created by a call
  * to the default constructor.
  */
-template <class T, unsigned crow, unsigned ccol> class dtkMat: public T
+template <typename T, unsigned crow, unsigned ccol> class dtkMat: public T
 {
 public:
     dtkMat(void): T(crow, ccol) {}
@@ -147,7 +166,7 @@ public:
  * A zero matrix can only be constructed for a
  * matrix of known dimensions. Hence the use of dtkMat<T,n,m>.
  */
-template <class T, unsigned crow, unsigned ccol> class dtkZero< dtkMat<dtkMatrix<T>, crow, ccol> >: public dtkMat<dtkMatrix<T>, crow, ccol>
+template <typename T, unsigned crow, unsigned ccol> class dtkZero< dtkMat<dtkMatrix<T>, crow, ccol> >: public dtkMat<dtkMatrix<T>, crow, ccol>
 {
 public:
     dtkZero(void) { fill(dtkZero<T>()); }

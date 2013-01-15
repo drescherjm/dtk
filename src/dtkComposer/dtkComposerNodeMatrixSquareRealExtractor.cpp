@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 17:04:58 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:57:21 2012 (+0200)
  *           By: tkloczko
- *     Update #: 77
+ *     Update #: 86
  */
 
 /* Commentary:
@@ -38,6 +38,9 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<qreal> emitter_value;
+
+public:
+    qreal value;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -48,15 +51,17 @@ dtkComposerNodeMatrixSquareRealExtractor::dtkComposerNodeMatrixSquareRealExtract
 {
     this->appendReceiver(&d->receiver_matrix);
 
-    QList<QVariant::Type> variant_list;
+    QList<int> variant_list;
 
-    variant_list << QVariant::Int << QVariant::UInt << QVariant::LongLong << QVariant::ULongLong << QVariant::Double;
-    d->receiver_row.setTypes(variant_list);
+    variant_list << QMetaType::LongLong;
+    d->receiver_row.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_row);
 
-    d->receiver_col.setTypes(variant_list);
+    d->receiver_col.setDataTypes(variant_list);
     this->appendReceiver(&d->receiver_col);
 
+    d->value = 0.;
+    d->emitter_value.setData(&d->value);
     this->appendEmitter(&d->emitter_value);
 }
 
@@ -101,21 +106,16 @@ QString dtkComposerNodeMatrixSquareRealExtractor::outputLabelHint(int port)
 
 void dtkComposerNodeMatrixSquareRealExtractor::run(void)
 {
-    if(d->receiver_matrix.isEmpty())
-        return;
+    if (!d->receiver_matrix.isEmpty() && !d->receiver_row.isEmpty() && !d->receiver_col.isEmpty()) {
 
-    if(d->receiver_row.isEmpty())
-        return;
+        dtkMatrixSquareReal *matrix = d->receiver_matrix.data();
+        qlonglong row = *d->receiver_row.data<qlonglong>();
+        qlonglong col = *d->receiver_col.data<qlonglong>();
 
-    if(d->receiver_col.isEmpty())
-        return;
+        if (row < matrix->size() && col < matrix->size())
+            d->value = (*matrix)[row][col];
 
-    const dtkMatrixSquareReal& matrix(d->receiver_matrix.data());
-    qlonglong row = qvariant_cast<qlonglong>(d->receiver_row.data());
-    qlonglong col = qvariant_cast<qlonglong>(d->receiver_col.data());
-
-    if (row < matrix.getRows() && col < matrix.getCols())
-        d->emitter_value.setData(matrix[row][col]);
-    else
-        dtkWarn() << "Row or col index is larger than matrix rank:" << row << "or" << col << ">=" << matrix.size();
+        else
+            dtkWarn() << "Row or col index is larger than matrix rank:" << row << "or" << col << ">=" << matrix->size();
+    }
 }

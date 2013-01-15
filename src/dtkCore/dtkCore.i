@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Oct 19 13:51:37 2012 (+0200)
+ * Last-Updated: Tue Oct 23 12:42:28 2012 (+0200)
  *           By: Julien Wintz
- *     Update #: 364
+ *     Update #: 487
  */
 
 /* Commentary:
@@ -28,31 +28,32 @@
 #include <QtDebug>
 #include <QtCore>
 
-#include "dtkAbstractData.h"
-#include "dtkAbstractDataFactory.h"
-#include "dtkAbstractDataReader.h"
-#include "dtkAbstractDataWriter.h"
-#include "dtkAbstractDataConverter.h"
-#include "dtkAbstractDataSerializer.h"
-#include "dtkAbstractDataDeserializer.h"
-#include "dtkAbstractObject.h"
-#include "dtkAbstractProcess.h"
-#include "dtkAbstractProcessFactory.h"
-#include "dtkAbstractView.h"
-#include "dtkAbstractViewAnimator.h"
-#include "dtkAbstractViewFactory.h"
-#include "dtkAbstractViewInteractor.h"
-#include "dtkAbstractViewNavigator.h"
-#include "dtkPlugin.h"
-#include "dtkPluginManager.h"
-#include "dtkSmartPointer.h"
+#include <dtkCore/dtkAbstractData.h>
+#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractDataReader.h>
+#include <dtkCore/dtkAbstractDataWriter.h>
+#include <dtkCore/dtkAbstractDataConverter.h>
+#include <dtkCore/dtkAbstractDataSerializer.h>
+#include <dtkCore/dtkAbstractObject.h>
+#include <dtkCore/dtkAbstractProcess.h>
+#include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCore/dtkAbstractView.h>
+#include <dtkCore/dtkAbstractViewAnimator.h>
+#include <dtkCore/dtkAbstractViewFactory.h>
+#include <dtkCore/dtkAbstractViewInteractor.h>
+#include <dtkCore/dtkAbstractViewNavigator.h>
+#include <dtkCore/dtkPlugin.h>
+#include <dtkCore/dtkPluginManager.h>
+#include <dtkCore/dtkSmartPointer.h>
+
+#include <string>
 %}
 
 // /////////////////////////////////////////////////////////////////
 // Preprocessing setup
 // /////////////////////////////////////////////////////////////////
 
-#pragma SWIG nowarn=389, 401, 509, 801, 472, 362, 503, 516
+#pragma SWIG nowarn=389, 401, 509, 801, 472, 362, 503, 516, 842, 845
 
 // /////////////////////////////////////////////////////////////////
 // Macro undefinition
@@ -212,6 +213,7 @@
     }
 }
 
+
 // C++ -> Python
 
 %typemap(out) QString {
@@ -326,6 +328,139 @@ public:
     Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
 }
 
+#elif SWIGCSHARP
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
+
+// %typemap(typecheck)       QString  = char *;
+// %typemap(typecheck) const QString& = char *;
+
+// // C# -> C++
+
+// %typemap(in) QString {
+//     QString $1_str((char *)$input);
+//     $1 = &$1_str;
+// }
+
+// %typemap(in) const QString& {
+//     QString $1_str((char *)$input);
+//     $1 = &$1_str;
+// }
+
+// // C++ -> C#
+
+// %typemap(out) QString {
+//     $result = SWIG_csharp_string_callback($1.toAscii().constData());
+// }
+
+// %typemap(out) const QString & {
+//     $result = SWIG_csharp_string_callback($1.toAscii().constData());
+// }
+
+%typemap(ctype) QString "char *"
+%typemap(imtype) QString "string"
+%typemap(cstype) QString "string"
+%typemap(csdirectorin) QString "$iminput"
+%typemap(csdirectorout) QString "$cscall"
+
+%typemap(in, canthrow=1) QString 
+%{
+    if (!$input) {
+        SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+        return $null;
+    }
+    $1 = QString($input);
+%}
+
+%typemap(out) QString
+%{ 
+    $result = SWIG_csharp_string_callback($1.toAscii().constData());
+%}
+
+%typemap(directorout, canthrow=1) QString 
+%{ if (!$input) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return $null;
+   }
+   $result = string($input); %}
+
+%typemap(directorin) QString %{ $input = SWIG_csharp_string_callback($1.toAscii().constData()); %}
+
+%typemap(csin) QString "$csinput"
+%typemap(csout, excode=SWIGEXCODE) QString {
+    string ret = $imcall;$excode
+    return ret;
+  }
+
+%typemap(csvarin, excode=SWIGEXCODE2) QString %{
+    set {
+      $imcall;$excode
+    } %}
+%typemap(csvarout, excode=SWIGEXCODE2) QString %{
+    get {
+      string ret = $imcall;$excode
+      return ret;
+    } %}
+
+%typemap(typecheck) QString = char *;
+
+%typemap(throws, canthrow=1) QString
+%{ SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, $1.c_str());
+   return $null; %}
+
+
+%typemap(ctype) const QString & "char *"
+%typemap(imtype) const QString & "string"
+%typemap(cstype) const QString & "string"
+%typemap(csdirectorin) const QString & "$iminput"
+%typemap(csdirectorout) const QString & "$cscall"
+
+%typemap(in, canthrow=1) const QString &
+%{ if (!$input) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return $null;
+   }
+   QString $1_str($input);
+   $1 = &$1_str; %}
+%typemap(out) const QString & %{ $result = SWIG_csharp_string_callback($1->toAscii().constData()); %}
+
+%typemap(csin) const QString & "$csinput"
+%typemap(csout, excode=SWIGEXCODE) const QString & {
+    string ret = $imcall;$excode
+    return ret;
+  }
+
+%typemap(directorout, canthrow=1, warning=SWIGWARN_TYPEMAP_THREAD_UNSAFE_MSG) const QString &
+%{ if (!$input) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return $null;
+   }
+   /* possible thread/reentrant code problem */
+   static string $1_str;
+   $1_str = $input;
+   $result = &$1_str; %}
+
+%typemap(directorin) const QString & %{ $input = SWIG_csharp_string_callback($1.toAscii().constData()); %}
+
+%typemap(csvarin, excode=SWIGEXCODE2) const QString & %{
+    set {
+      $imcall;$excode
+    } %}
+%typemap(csvarout, excode=SWIGEXCODE2) const QString & %{
+    get {
+      string ret = $imcall;$excode
+      return ret;
+    } %}
+
+%typemap(typecheck) const QString & = char *;
+
+%typemap(throws, canthrow=1) const QString &
+%{ SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, $1.c_str());
+   return $null; %}
+
 #endif
 
 // /////////////////////////////////////////////////////////////////
@@ -333,7 +468,6 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 %include "dtkAbstractObject.h"
-
 %include "dtkAbstractData.h"
 %include "dtkAbstractDataFactory.h"
 %include "dtkAbstractDataReader.h"

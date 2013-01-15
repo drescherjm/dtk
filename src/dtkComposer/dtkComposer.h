@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 14 15:57:24 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 70
+ * Last-Updated: Mon Nov 19 11:56:27 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -36,6 +36,7 @@ class dtkComposerSceneNodeComposite;
 class dtkComposerStack;
 class dtkComposerView;
 class dtkComposerCompass;
+class dtkComposerPath;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -75,6 +76,7 @@ public:
     dtkComposerScene *scene(void);
     dtkComposerStack *stack(void);
     dtkComposerView *view(void);
+    dtkComposerPath *path(void);
 
 public:
     void updateRemotes(dtkComposerSceneNodeComposite * composite);

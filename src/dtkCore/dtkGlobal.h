@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 15:01:50 2012 (+0200)
- *           By: tkloczko
- *     Update #: 150
+ * Last-Updated: 2012 Fri Oct 26 11:40:34 (+0200)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 193
  */
 
 /* Commentary: 
@@ -150,6 +150,64 @@
 
 #define DTK_D(Class) Class##Private *const d = d_func()
 #define DTK_Q(Class) Class *const q = q_func()
+
+// /////////////////////////////////////////////////////////////////
+// dtkTypeInfo
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkTypeInfo
+{ 
+public:
+    enum { 
+        dtkObjectPointer = false,
+        dtkAbstractObjectPointer = false,
+        dtkMatrixRealPointer = false
+    };
+};	
+
+// Specialize to avoid sizeof(void) warning
+
+template<> class dtkTypeInfo<void*>
+{
+public:
+    enum { 
+        dtkObjectPointer = false,
+        dtkAbstractObjectPointer = false,
+        dtkMatrixRealPointer = false
+    };
+};
+
+// Partial Specialization for pointer type
+
+class dtkAbstractObject;
+template <typename T> class dtkMatrix;
+
+template <typename T> class dtkTypeInfo<T*>
+{
+public:
+    typedef int  yes_type;
+    typedef char  no_type;
+
+public:
+    static yes_type checkObject(dtkAbstractObject*);
+    static yes_type checkObject(dtkMatrix<qreal>*);
+    static no_type  checkObject(...);
+
+public:
+    static yes_type checkAbstractObject(dtkAbstractObject*);
+    static no_type  checkAbstractObject(...);
+
+public:
+    static yes_type checkAbstractMatrix(dtkMatrix<qreal>*);
+    static no_type  checkAbstractMatrix(...);
+
+public:
+    enum { 
+        dtkObjectPointer         = (sizeof(checkObject(static_cast<T*>(0))) == sizeof(yes_type)),
+        dtkAbstractObjectPointer = (sizeof(checkAbstractObject(static_cast<T*>(0))) == sizeof(yes_type)),
+        dtkMatrixRealPointer     = (sizeof(checkAbstractMatrix(static_cast<T*>(0))) == sizeof(yes_type))
+    };
+};
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

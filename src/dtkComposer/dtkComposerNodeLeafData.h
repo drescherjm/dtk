@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 09:56:37 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul  3 13:58:54 2012 (+0200)
- *           By: tkloczko
- *     Update #: 40
+ * Last-Updated: 2012 Fri Nov 16 15:49:52 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -39,6 +39,8 @@ public:
     virtual ~dtkComposerNodeLeafData(void);
 
 public:
+    virtual bool enableDefaultImplementation(void) const;
+
     virtual bool isAbstractData(void) const = 0;
 
     virtual QString abstractDataType(void) const = 0;

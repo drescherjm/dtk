@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 10:04:27 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr  6 10:55:34 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 30
+ * Last-Updated: mar. oct. 30 16:46:58 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 31
  */
 
 /* Commentary: 
@@ -81,6 +81,7 @@ public:
 protected slots:
     void onRefresh(void);
     void onDisconnect(void);
+    void onStop(void);
 
 private:
     dtkDistributedControllerTargetViewEditorPrivate *d;

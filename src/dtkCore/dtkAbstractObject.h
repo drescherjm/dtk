@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 08:36:36 2012 (+0200)
+ * Last-Updated: Tue Sep 25 09:08:42 2012 (+0200)
  *           By: tkloczko
- *     Update #: 128
+ *     Update #: 127
  */
 
 /* Commentary:
@@ -22,6 +22,8 @@
 
 #include "dtkCoreExport.h"
 #include "dtkGlobal.h"
+
+#include <typeinfo>
 
 class dtkAbstractObjectPrivate;
 
@@ -78,6 +80,7 @@ public:
    QStringList metaDataValues(const QString& key) const;
    QString metadata(const QString& key) const;
    QStringList metadatas(const QString& key) const;
+   void copyMetaDataFrom(const dtkAbstractObject *obj);
 
 signals:
    void propertySet(const QString& key, const QString& value);
@@ -101,5 +104,8 @@ private:
 private:
    friend class dtkAbstractObjectPrivate;
 };
+
+Q_DECLARE_METATYPE(dtkAbstractObject);
+Q_DECLARE_METATYPE(dtkAbstractObject*);
 
 #endif

@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
- * Version: $Id$
- * Last-Updated: lun. déc.  5 14:24:38 2011 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 102
  */
 
 /* Commentary: 
@@ -36,6 +32,117 @@ dtkDistributedCommunicator::~dtkDistributedCommunicator(void)
     delete d;
 
     d = NULL;
+}
+
+dtkDistributedCommunicator::dtkDistributedCommunicator(const dtkDistributedCommunicator& other)
+{
+
+}
+
+dtkDistributedCommunicator& dtkDistributedCommunicator::operator = (const dtkDistributedCommunicator& other)
+{
+    return *this;
+
+}
+
+void dtkDistributedCommunicator::initialize(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+bool dtkDistributedCommunicator::initialized(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+
+   return false;
+}
+
+void dtkDistributedCommunicator::uninitialize(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+int dtkDistributedCommunicator::rank(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+   return -1;
+}
+
+int dtkDistributedCommunicator::size(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+   return 0;
+}
+
+void dtkDistributedCommunicator::send(void   *data, qint64 size, DataType dataType, qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+
+void dtkDistributedCommunicator::send(dtkAbstractData *data,     qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::send(const QString& s,   qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::send(QByteArray& array,  qint16 target, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(dtkAbstractData *&data, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(QString &s, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag, dtkDistributedCommunicatorStatus &status)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::barrier(void)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::broadcast(void   *data, qint64 size, DataType dataType, qint16 source)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::gather(void   *send, void   *recv, qint64 size, DataType dataType, qint16 target, bool all)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::scatter(void   *send, void   *recv, qint64 size, DataType dataType, qint16 source)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkDistributedCommunicator::send(bool *data, qint64 size, qint16 target, int tag)
@@ -217,3 +324,89 @@ void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size,
 {
     return this->reduce(send, recv, size, dtkDistributedCommunicatorDouble, operationType, target, all);
 }
+
+/*
+ * Class dtkComposerCommunicatorStatus
+ */
+
+class dtkDistributedCommunicatorStatusPrivate
+{
+
+public:
+    int       tag;
+    qint64  count;
+    qint16 source;
+    int     error;
+
+};
+
+dtkDistributedCommunicatorStatus::dtkDistributedCommunicatorStatus(void) : d(new dtkDistributedCommunicatorStatusPrivate)
+{
+    d->tag    = 0;
+    d->count  = -1;
+    d->source = -1;
+    d->error  = 0;
+
+}
+
+dtkDistributedCommunicatorStatus::~dtkDistributedCommunicatorStatus(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+dtkDistributedCommunicatorStatus::dtkDistributedCommunicatorStatus(const dtkDistributedCommunicatorStatus& other)
+{
+    d->tag    = other.tag();
+    d->count  = other.count();
+    d->source = other.source();
+    d->error  = other.error();
+}
+
+dtkDistributedCommunicatorStatus& dtkDistributedCommunicatorStatus::operator = (const dtkDistributedCommunicatorStatus& other)
+{
+    return *this;
+}
+
+
+qint64 dtkDistributedCommunicatorStatus::count(void) const
+{
+    return d->count;
+}
+
+qint16 dtkDistributedCommunicatorStatus::source(void) const
+{
+    return d->source;
+}
+
+int dtkDistributedCommunicatorStatus::error(void) const
+{
+    return d->error;
+}
+
+int dtkDistributedCommunicatorStatus::tag(void) const
+{
+    return d->tag;
+}
+
+void dtkDistributedCommunicatorStatus::setTag(int tag)
+{
+    d->tag = tag;
+}
+
+void dtkDistributedCommunicatorStatus::setCount(qint64 count)
+{
+    d->count = count;
+}
+
+void dtkDistributedCommunicatorStatus::setSource(qint16 source)
+{
+    d->source = source;
+}
+
+void dtkDistributedCommunicatorStatus::setError(int error)
+{
+    d->error = error;
+}
+

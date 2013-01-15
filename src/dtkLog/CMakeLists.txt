@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Mar  1 14:34:49 2012 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:53:38 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 34
+## Last-Updated: mar. nov.  6 14:35:47 2012 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 35
 ######################################################################
 ## 
 ### Commentary: 
@@ -79,6 +79,10 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES})
+
+if(DTK_HAVE_MPI)
+target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})
+endif(DTK_HAVE_MPI)
 
 ## #################################################################
 ## Export header file

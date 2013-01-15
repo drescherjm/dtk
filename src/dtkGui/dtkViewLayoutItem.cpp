@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 24 13:54:00 2012 (+0200)
+ * Last-Updated: Mon Nov  5 13:08:49 2012 (+0100)
  *           By: Julien Wintz
- *     Update #: 789
+ *     Update #: 907
  */
 
 /* Commentary: 
@@ -288,6 +288,46 @@ dtkViewLayoutItem *dtkViewLayoutItem::parent(void)
     return d->parent;
 }
 
+dtkViewLayoutItem *dtkViewLayoutItem::first(void)
+{
+    return d->a;
+}
+
+dtkViewLayoutItem *dtkViewLayoutItem::second(void)
+{
+    return d->b;
+}
+
+void dtkViewLayoutItem::setOrientation(Qt::Orientation orientation)
+{
+    d->splitter->setOrientation(orientation);
+}
+
+void dtkViewLayoutItem::setSizes(QList<int> sizes)
+{
+    d->splitter->setSizes(sizes);
+}
+
+int dtkViewLayoutItem::canvasHeight(void)
+{
+    return d->splitter->sizes().first();
+}
+
+int dtkViewLayoutItem::footerHeight(void)
+{
+    return d->footer->height();
+}
+
+int dtkViewLayoutItem::handleHeight(void)
+{
+    return 7;
+}
+
+int dtkViewLayoutItem::handleWidth(void)
+{
+    return 7;
+}
+
 dtkViewLayout *dtkViewLayoutItem::layout(void)
 {
     return d->layout;
@@ -307,7 +347,7 @@ void dtkViewLayoutItem::clear(void)
 {
     if (d->proxy && d->proxy->view())
         d->proxy->view()->widget()->hide();
-    
+
     delete d->proxy;
     
     d->proxy = new dtkViewLayoutItemProxy(d->root);
@@ -337,7 +377,9 @@ void dtkViewLayoutItem::split(void)
 {
     if(!d->proxy->view())
         return;
-    
+
+    QSize size = this->size();
+
     d->a = new dtkViewLayoutItem(this);
     d->b = new dtkViewLayoutItem(this);
 
@@ -350,10 +392,13 @@ void dtkViewLayoutItem::split(void)
     disconnect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     disconnect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
     
-    d->proxy->deleteLater();
+    delete d->proxy;
+
     d->proxy = NULL;
 
     d->footer->hide();
+
+    d->splitter->resize(size);
 }
 
 void dtkViewLayoutItem::unsplit(void)

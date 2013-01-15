@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 25 12:15:12 2012 (+0200)
+ * Last-Updated: Thu Sep 20 10:16:02 2012 (+0200)
  *           By: tkloczko
- *     Update #: 62
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -23,6 +23,10 @@
 #include "dtkVector.h"
 #include "dtkMatrixSquared.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkVector3D interface
+// /////////////////////////////////////////////////////////////////
+
 template <class T = double> class dtkVector3D: public dtkVector<T>
 {
 public:
@@ -35,10 +39,16 @@ public:
      dtkVector3D(const dtkVector<T>& vec, unsigned irowStart): dtkVector<T>(vec, irowStart, irowStart + 2) {};
     ~dtkVector3D(void) {};
 
+public:
+    QString identifier(void) const;
+
+public:
     void allocate(void) { dtkVector<T>::allocate(3); };
 
     void mapInto(const dtkMatrix<T>& mat, unsigned irowStart, unsigned icolStart);
     void mapInto(const dtkVector<T>& vec, unsigned irowStart = 0);
+
+    unsigned size(void) { return 3; };
 
     dtkVector3D operator +(const dtkVector3D&) const;
     dtkVector3D operator -(const dtkVector3D&) const;
@@ -64,11 +74,19 @@ public:
     dtkVector3D unit(void) const { return (*this)/(this->norm()); }
 };
 
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
+
 template <class T> class dtkZero< dtkVector3D<T> >: public dtkVector3D<T>
 {
 public:
     dtkZero(void) { dtkMatrix<T>::fill(dtkZero<T>()); }
 };
+
+// /////////////////////////////////////////////////////////////////
+// 
+// /////////////////////////////////////////////////////////////////
 
 template <class T = double> class dtkReferential : dtkVector3D<dtkVector3D<T> >
 {

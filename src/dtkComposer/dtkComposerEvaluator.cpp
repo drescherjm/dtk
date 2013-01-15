@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 26 12:19:58 2012 (+0200)
+ * Last-Updated: mar. oct.  9 16:53:48 2012 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 734
+ *     Update #: 818
  */
 
 /* Commentary:
@@ -50,6 +50,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->should_stop = false;
     d->stack.setCapacity(1024);
     d->max_stack_size = 0;
+    d->notify = true;
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)
@@ -65,6 +66,11 @@ void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
     d->graph = graph;
 }
 
+void dtkComposerEvaluator::setNotify(bool notify)
+{
+    d->notify = notify;
+}
+
 void dtkComposerEvaluator::run(bool run_concurrent)
 {
     QTime time; time.start();
@@ -72,24 +78,29 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     d->stack.clear();
     d->stack.append(d->graph->root());
 
-    emit evaluationStarted();
+    if (d->notify)
+        emit evaluationStarted();
 
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
         QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
         d->max_stack_size = 0;
     } else {
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
     }
 
     d->should_stop = false;
 
-    emit evaluationStopped();
+    if (d->notify)
+        emit evaluationStopped();
 }
+
 
 void dtkComposerEvaluator::stop(void)
 {
@@ -166,28 +177,28 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
+    // dtkTrace() << "handle " << d->current->title();
     bool runnable = true;
 
-    dtkComposerGraphNodeList preds = d->current->predecessors();
-    int   i = 0;
-    int max = preds.count();
-
+    dtkComposerGraphNodeList::const_iterator it;
+    dtkComposerGraphNodeList::const_iterator ite;
     dtkComposerGraphNode *node ;
 
-//    dtkTrace() << "handle " << d->current->title();
-    while (i < max && runnable) {
-        node = preds.at(i);
+    dtkComposerGraphNodeList preds = d->current->predecessors();
+    it = preds.constBegin();
+    ite = preds.constEnd();
+    while(it != ite) {
+        node = *it++;
         if (node->status() != dtkComposerGraphNode::Done) {
-            if (node->endloop()) {
-                // predecessor is an end loop, we can continue, but we must unset the endloop flag.
-//                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
-                node->setEndLoop(false);
-            } else
+            if (!node->endloop()) {
                 runnable = false;
+                break;
+            } else {
+                // predecessor is an end loop, we can continue, but we must unset the endloop flag.
+                // dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
+                node->setEndLoop(false);
+            }
         }
-//        dtkTrace() << "check pred" << preds.at(i)->title() << preds.at(i)->status();
-
-        i++;
     }
 
     if (runnable) {
@@ -206,27 +217,42 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             emit runMainThread();
             disconnect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()));
         } else {
-//            dtkTrace() << "evaluating leaf node"<< d->current->title();
+            // dtkTrace() << "evaluating leaf node"<< d->current->title();
             d->current->eval();
         }
 
         dtkComposerGraphNodeList s = d->current->successors();
-        max = s.count();
-
-        for (int i = 0; i < max; i++) {
-            node = s.at(i);
-            bool is_stacked = false;
-            if (!d->stack.isEmpty()) {
-                for (int j = d->stack.firstIndex(); j <=  d->stack.lastIndex() ; j++)
-                    if (d->stack[j] == node) {
-                        is_stacked = true;
-                        break;
-                    }
+        it = s.constBegin();
+        ite = s.constEnd();
+        if (!d->stack.isEmpty()) {
+            while(it != ite) {
+                node = *it++;
+                bool stacked = false;
+                int j = d->stack.firstIndex();
+                while(j <= d->stack.lastIndex() && !stacked)
+                    stacked = (d->stack.at(j++) == node);
+                // dtkTrace() << "add successor to stack " << node->title();
+                if (!stacked)
+                    d->stack.append(node);
             }
-//                dtkTrace() << "add successor to stack " << node->title();
-            if (is_stacked == false)
-                d->stack.append(node);
+        } else {
+            while(it != ite)
+                d->stack.append(*it++);            
         }
+        
+
+        // while(it != ite) {
+        //     node = *it++;
+        //     bool stacked = false;
+        //     if (!d->stack.isEmpty()) {
+        //         int j = d->stack.firstIndex();
+        //         while(j <= d->stack.lastIndex() && !stacked)
+        //             stacked = (d->stack.at(j++) == node);
+        //     }
+        //     // dtkTrace() << "add successor to stack " << node->title();
+        //     if (!stacked)
+        //         d->stack.append(node);
+        // }
     } else if (run_concurrent) {
         dtkTrace() << "add back current node to stack: "<< d->current->title();
         d->stack.append(d->current);

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 26 13:48:41 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 139
+ * Last-Updated: 2012 Thu Nov 15 15:02:10 (+0100)
+ *           By: Thibaud Kloczko, Inria.
+ *     Update #: 192
  */
 
 /* Commentary: 
@@ -16,6 +16,8 @@
 /* Change log:
  * 
  */
+
+#include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeControlFor.h"
 
@@ -142,44 +144,43 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    QList<dtkComposerTransmitterVariant*> list = this->inputTwins();
+    QList<dtkComposerTransmitterVariant*>::const_iterator it  = list.constBegin();
+    QList<dtkComposerTransmitterVariant*>::const_iterator ite = list.constEnd();
+
+    while(it != ite) {
+        dtkComposerTransmitterVariant *v = *it++;
         v->setTwinned(false);
-        if (v->container().isReset()) {
-            v->setData(v->data());
-        } else {
-            v->setData(v->container());
-        }
+        v->setDataFrom(v);
         v->setTwinned(true);
     }
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
-    // start from 1 on purpose; the first port is the loop port.
-    for (int i = 1; i < this->outputTwins().count(); i++) {
-        dtkComposerTransmitterVariant * v = this->outputTwins().at(i);
-        if (v->container().isReset()) {
-            v->twin()->setData(v->data());
-        } else {
-            v->twin()->setData(v->container());
-        }
+    QList<dtkComposerTransmitterVariant*> list = this->outputTwins();
+    // start from the second element of the list on purpose; the first port is the loop port.
+    QList<dtkComposerTransmitterVariant*>::const_iterator it  = list.constBegin() + 1;
+    QList<dtkComposerTransmitterVariant*>::const_iterator ite = list.constEnd();
+
+    while(it != ite) {
+        dtkComposerTransmitterVariant *v = *it++;
+        v->twin()->setDataFrom(v);
     }
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    dtkComposerTransmitterVariant * first = this->outputTwins().first();
-
-    if (first->container().isReset()) {
-        first->twin()->setData(first->data());
-    } else {
-        first->twin()->setData(first->container());
-    }
+    dtkComposerTransmitterVariant *twin = this->outputTwins().first();
+    twin->twin()->setDataFrom(twin);
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)
 {
-    return (int)(!d->cond.data());
+    if (d->cond.isEmpty())
+        return static_cast<int>(false);
+
+    return static_cast<int>(!(*d->cond.data()));
 }
 
 void dtkComposerNodeControlFor::begin(void)

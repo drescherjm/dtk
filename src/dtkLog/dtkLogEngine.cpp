@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 16:18:42 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 21:55:25 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 52
+ * Last-Updated: mar. nov.  6 14:39:41 2012 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -17,10 +17,16 @@
  * 
  */
 
+#include <dtkConfig.h>
+
 #include "dtkLog.h"
 #include "dtkLogger.h"
 #include "dtkLogger_p.h"
 #include "dtkLogEngine.h"
+
+#if defined(DTK_HAVE_MPI)
+#include <mpi.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -65,14 +71,39 @@ public:
 
 void dtkLogEnginePrivate::write(void)
 {
-    const QString message = QString("%1 - %2 - %3")
-        .arg(qPrintable(dtkLogLevel2String(this->level)))
-        .arg(QDateTime::currentDateTime().toString())
-        .arg(this->buffer);
 
-    QMutexLocker lock(&(dtkLogger::instance().d->mutex));
+    QString rank ;
 
-    dtkLogger::instance().write(message);
+#if defined(DTK_HAVE_MPI)
+
+    if (MPI::Is_initialized())
+        rank = "rank " + QString::number(MPI::COMM_WORLD.Get_rank());
+
+#endif
+
+    if (!rank.isEmpty()) {
+        const QString message = QString("%1 - %2 - %3 - %4")
+            .arg(qPrintable(dtkLogLevel2String(this->level)))
+            .arg(QDateTime::currentDateTime().toString())
+            .arg(rank)
+            .arg(this->buffer);
+
+        QMutexLocker lock(&(dtkLogger::instance().d->mutex));
+
+        dtkLogger::instance().write(message);
+
+    } else {
+
+        const QString message = QString("%1 - %2 - %3")
+            .arg(qPrintable(dtkLogLevel2String(this->level)))
+            .arg(QDateTime::currentDateTime().toString())
+            .arg(this->buffer);
+
+        QMutexLocker lock(&(dtkLogger::instance().d->mutex));
+
+        dtkLogger::instance().write(message);
+
+    }
 }
 
 // /////////////////////////////////////////////////////////////////

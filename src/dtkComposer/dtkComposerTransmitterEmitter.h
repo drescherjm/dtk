@@ -1,12 +1,7 @@
 /* dtkComposerTransmitterEmitter.h --- 
  * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
+ * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Jun 27 15:57:31 2012 (+0200)
- *           By: tkloczko
- *     Update #: 107
  */
 
 /* Commentary: 
@@ -21,65 +16,94 @@
 #define DTKCOMPOSERTRANSMITTEREMITTER_H
 
 #include "dtkComposerExport.h"
-#include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterAbstractEmitter.h"
 
 #include <dtkCore/dtkGlobal>
-
 #include <dtkContainer/dtkContainerVector.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitter
+template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitterAbstractEmitter
 {
 public:
      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitter(void);
 
 public:
-    inline void setData(const T& data);
+    void clearData(void);
 
-    inline       T& data(void);
-    inline const T& data(void) const;
+public:
+    inline void setData(T *data);
+
+    inline void setData(const T *data);
+
+public:
+    inline T *data(void);
+
+public:
+    dtkAbstractObject *object(void);
+
+public:
+    dtkMatrix<double> *matrix(void);
+
+public:
+    virtual int dataType(void);
+
+    virtual QString  dataIdentifier(void);
+    virtual QString dataDescription(void);
 
 public:
     virtual Kind kind(void) const;
 
     virtual QString kindName(void) const;
 
-public:
-    LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
-
 private:
-    T m_data;
+    T *m_data;
+
+    using dtkComposerTransmitterAbstractEmitter::d;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitterVector interface
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterEmitter<T>
+template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterAbstractEmitter
 {
 public:
      dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitterVector(void);
 
 public:
+    void clearData(void);
+
+public:
+    inline void setData(dtkContainerVector<T> *vector);
+    
+    inline void setData(const dtkContainerVector<T> *vector);
+
+public:
+    inline dtkContainerVector<T> *data(void);
+
+public:
+    dtkAbstractObject *object(void);
+
+public:
+    int dataType(void);
+
+    QString  dataIdentifier(void);
+    QString dataDescription(void);
+
+public:
     dtkComposerTransmitter::Kind kind(void) const;
 
     QString kindName(void) const;
 
-public:
-    inline void setData(const dtkContainerVector<T>& vector);
-
-    inline       dtkContainerVector<T>& data(void);
-    inline const dtkContainerVector<T>& data(void) const;
-
 private:
-    dtkContainerVector<T> m_vector;
+    dtkContainerVector<T> *m_vector;
 
-    using dtkComposerTransmitterEmitter<T>::d;
+    using dtkComposerTransmitterAbstractEmitter::d;
 };
 
 // /////////////////////////////////////////////////////////////////

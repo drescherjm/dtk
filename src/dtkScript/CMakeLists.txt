@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2009 - Julien Wintz, Inria.
 ## Created: Tue Mar 10 15:12:38 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Fri Apr 27 20:59:23 2012 (+0200)
+## Last-Updated: Thu Jan 10 11:33:06 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 64
+##     Update #: 102
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,33 +24,39 @@ project(dtkScript)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkScriptInterpreter.h
-  dtkScriptInterpreterPool.h
-  dtkScriptManager.h)
+  dtkScriptInterpreter.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkScriptInterpreter.h
-  dtkScriptInterpreterPool.h
-  dtkScriptManager.h)
+  dtkScriptInterpreter.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkScriptInterpreter.cpp
-  dtkScriptInterpreterPool.cpp
-  dtkScriptManager.cpp)
+  dtkScriptInterpreter.cpp)
 
-if(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
+
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkScriptInterpreterPython.h
+  dtkScriptInterpreterPython.h)
+
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkScriptInterpreterPython.h)
+
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkScriptInterpreterPython.cpp)
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
+
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
+
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkScriptInterpreterTcl.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkScriptInterpreterPython.h
   dtkScriptInterpreterTcl.h)
 
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkScriptInterpreterPython.cpp
   dtkScriptInterpreterTcl.cpp)
-endif(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
 
 ## #################################################################
 ## Build rules
@@ -84,15 +90,17 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkLog)
 
-if(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
-target_link_libraries(${PROJECT_NAME}
-  ${TCL_LIBRARY}
-  ${PYTHON_LIBRARIES})
-endif(DTK_BUILD_WRAPPERS AND TCL_FOUND AND PYTHONLIBS_FOUND)
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
 
-if(EDITLINE_FOUND)
-  target_link_libraries(${PROJECT_NAME} ${EDITLINE_LIBRARY})
-endif(EDITLINE_FOUND)
+target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
+
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
+
+target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
 
 ## #################################################################
 ## Export header file

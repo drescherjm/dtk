@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Apr 11 13:49:30 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 13:04:10 2012 (+0200)
- *           By: tkloczko
- *     Update #: 50
+ * Last-Updated: Thu Jan 10 14:39:48 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 117
  */
 
 /* Commentary: 
@@ -17,84 +17,41 @@
  * 
  */
 
-#include <QtGui/QApplication>
-
-#include "anyoption.h"
-
-#include "tstMainWindow.h"
-
+#include <dtkConfig.h>
+#include <dtkLog/dtkLog.h>
 #include <dtkScript/dtkScriptInterpreter.h>
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
+#if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_TCL)
 #include <dtkScript/dtkScriptInterpreterTcl.h>
 #endif
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
+#if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
 #endif
-
 #include <dtkGui/dtkInterpreter.h>
 
-#include <dtkLog/dtkLog.h>
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
+#include <QtGui>
 
 int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
+    application.setOrganizationDomain("fr");
+    application.setOrganizationName("inria");
     application.setApplicationName("dtkInterpreter");
 
     dtkLogger::instance().setLevel(dtkLog::Trace);
 
-    AnyOption options;
-    options.addUsage("Usage: ./dtkInterpreter [FLAG] ... [OPTION=VALUE] ...");
-    options.addUsage("");
-    options.addUsage("Mode:");
-    options.addUsage(" -c  --console");
-    options.addUsage("");
-    options.addUsage("Script:");
-    options.addUsage(" -i  --interpreter");
-    options.addUsage("     --interpreter=tcl    Run tcl     gui interpreter");
-    options.addUsage("     --interpreter=python Run python  gui interpreter");
-    options.setFlag("console", 'c');
-    options.setOption("interpreter", 'i');
-    options.processCommandArgs(argc, argv);
+    dtkInterpreter interpreter;
+    interpreter.show();
+    interpreter.raise();
 
-    tstMainWindow window;
-
-    if (options.getValue("interpreter") != NULL || options.getValue('i') != NULL) {
-
-        dtkScriptInterpreter *interpreter = NULL;
-
-#if defined(HAVE_SWIG) && defined(HAVE_PYTHON)
-        if(QString(options.getValue('i')) == "python")
-            interpreter = new dtkScriptInterpreterPython;
+#if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_PYTHON)
+    if(application.arguments().contains("-python"))
+        interpreter.registerInterpreter(new dtkScriptInterpreterPython(&interpreter));
 #endif
 
-#if defined(HAVE_SWIG) && defined(HAVE_TCL)
-        if(QString(options.getValue('i')) == "tcl")
-            interpreter = new dtkScriptInterpreterTcl;
+#if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_TCL)
+    if(application.arguments().contains("-tcl"))
+        interpreter.registerInterpreter(new dtkScriptInterpreterTcl(&interpreter));
 #endif
-
-        if(!interpreter) {
-            qDebug() << "No interpreter available. Is BUILD_WRAPPERS enabled ?";
-            return 0;
-        }
-
-        if(!options.getFlag("console") || !options.getFlag('c')) {
-
-            window.interpreter()->registerInterpreter(interpreter);
-            window.show();
-        } else {
-            interpreter->start();
-        }
-
-        QObject::connect(interpreter, SIGNAL(stopped()), &application, SLOT(quit()));
-	QObject::connect(&application, SIGNAL(aboutToQuit()), interpreter, SLOT(stop()));
-    } else {
-        options.printUsage();
-        return 0;
-    }
-
+    
     return application.exec();
 }

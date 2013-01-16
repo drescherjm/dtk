@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:19:44 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 21 14:03:42 2009 (+0200)
+ * Last-Updated: Thu Jan 10 14:26:21 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 300
+ *     Update #: 316
  */
 
 /* Commentary: 
@@ -43,24 +43,7 @@ dtkScriptInterpreterTcl::dtkScriptInterpreterTcl(QObject *parent) : dtkScriptInt
 
     InitInterpreterChannels(d->interpreter);
     
-    Tcl_Init(d->interpreter); // -- Initialize built-in tcl functions
-    
-    this->setVerbose(false);
-
-    int stat;
-
-    // -- Setting up utilities
-#ifdef __APPLE__
-    interpret("lappend auto_path " + QCoreApplication::applicationDirPath() + "/../../../libraries", &stat);
-#else
-    interpret("lappend auto_path " + QCoreApplication::applicationDirPath() + "/libraries", &stat);
-#endif
-
-    dtkScriptInterpreterTclModuleManager::instance()->initialize(this);
-
-    this->setVerbose(true);
-    
-    registerPrompt(&prompt);
+    Tcl_Init(d->interpreter);    
 }
 
 dtkScriptInterpreterTcl::~dtkScriptInterpreterTcl(void)
@@ -70,46 +53,6 @@ dtkScriptInterpreterTcl::~dtkScriptInterpreterTcl(void)
     delete d;
 
     d = NULL;
-}
-
-Tcl_Interp *dtkScriptInterpreterTcl::interpreter(void)
-{
-    return d->interpreter;
-}
-
-void dtkScriptInterpreterTcl::registerVariable(bool &var, QString name, QString description)
-{
-    Tcl_LinkVar(d->interpreter, name.toAscii().constData(), (char *)&var, TCL_LINK_BOOLEAN);
-    
-    registerVariableDescription(name, description);
-}
-
-void dtkScriptInterpreterTcl::registerVariable(int &var, QString name, QString description)
-{
-    Tcl_LinkVar(d->interpreter, name.toAscii().constData(), (char *)&var, TCL_LINK_INT);
-
-    registerVariableDescription(name, description);
-}
-
-void dtkScriptInterpreterTcl::registerVariable(double &var, QString name, QString description)
-{
-    Tcl_LinkVar(d->interpreter, name.toAscii().constData(), (char *)&var, TCL_LINK_DOUBLE);
-
-    registerVariableDescription(name, description);
-}
-
-void dtkScriptInterpreterTcl::registerVariable(char *&var, QString name, QString description)
-{
-    Tcl_LinkVar(d->interpreter, name.toAscii().constData(), (char *)&var, TCL_LINK_STRING);
-
-    registerVariableDescription(name, description);
-}
-
-void dtkScriptInterpreterTcl::unregisterVariable(QString name)
-{
-    Tcl_UnlinkVar(d->interpreter, name.toAscii().constData());
-
-    unregisterVariableDescription(name);
 }
 
 QString dtkScriptInterpreterTcl::interpret(const QString& command, int *stat)
@@ -125,32 +68,8 @@ QString dtkScriptInterpreterTcl::interpret(const QString& command, int *stat)
     default: break;
     }
 
-    QString result = QString(Tcl_GetString(Tcl_GetObjResult(d->interpreter)));
-
-    emit interpreted(result, stat);
-
-    dtkScriptInterpreterSynchronizer::instance()->wake();
-    
-    return "";
+    return QString(Tcl_GetString(Tcl_GetObjResult(d->interpreter)));
 }
-
-QString dtkScriptInterpreterTcl::interpret(const QString& command, const QStringList& args, int *stat)
-{
-    Tcl_Eval(d->interpreter, QString(command + " " + args.join(" ")).toAscii().constData());
-
-    return "";
-}
-
-char *dtkScriptInterpreterTcl::prompt(void)
-{
-    return QString("\033[01;32mtcl\033[00m:\033[01;34m~\033[00m$ ").toAscii().data();
-}
-
-// /////////////////////////////////////////////////////////////////
-// dtkScriptInterpreterTclModuleManager
-// /////////////////////////////////////////////////////////////////
-
-DTKSCRIPT_EXPORT dtkScriptInterpreterTclModuleManager *dtkScriptInterpreterTclModuleManager::m_instance = NULL;
 
 // /////////////////////////////////////////////////////////////////
 // Tcl output channel redirection

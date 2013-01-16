@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Apr 16 10:25:31 2012 (+0200)
+## Last-Updated: Thu Dec  6 12:57:36 2012 (+0100)
 ##           By: Julien Wintz
-##     Update #: 49
+##     Update #: 55
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,12 +26,16 @@ include (InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-  execute_process(COMMAND uname -r
-    COMMAND sed "s/\\.PAE//" # Getting of any PAE keyword
-    COMMAND sed "s/.*\\.\\(\\w*\\.\\w*\\)$/\\1/"
-    OUTPUT_VARIABLE PACKAGE_EXTENSION
+  execute_process(COMMAND lsb_release -irs
+    COMMAND sed "s/ //"
+    COMMAND sed "s/Fedora/fc/"
+    COMMAND tr -d '\n'
+    OUTPUT_VARIABLE DISTRIB
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${PACKAGE_EXTENSION}")
+  execute_process(COMMAND arch 
+    OUTPUT_VARIABLE ARCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-${DISTRIB}-${ARCH}")
 else("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")
 endif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
@@ -71,7 +75,7 @@ if(WIN32)
 endif(WIN32)
 
 if(UNIX AND NOT APPLE)
-  set(CPACK_GENERATOR "RPM")
+  set(CPACK_GENERATOR "DEB;RPM")
 endif(UNIX AND NOT APPLE)
 
 ## #################################################################

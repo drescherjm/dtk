@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  5 15:53:49 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 132
+ * Last-Updated: 2012 Thu Dec 13 15:13:47 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 164
  */
 
 /* Commentary: 
@@ -22,6 +22,14 @@
 #include <qwt_plot_curve.h>
 #include <qwt_series_data.h>
 
+#include <float.h>
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QRectF qMakeRect(qreal xmin, qreal xmax, qreal ymin, qreal ymax);
+
 // /////////////////////////////////////////////////////////////////
 // dtkPlotCurvePrivateData
 // /////////////////////////////////////////////////////////////////
@@ -33,11 +41,25 @@ public:
     
 public:
     void clear(void);
+
+public:
+    QRectF boundingRect(void) const {
+        return qMakeRect(xmin, xmax, ymin, ymax);
+    }
+
+public:
+    qreal xmin, xmax;
+    qreal ymin, ymax;
 };
 
 void dtkPlotCurvePrivateData::append(const QPointF& data)
 {
     this->d_samples << data;
+
+    xmin = qMin(xmin, data.x());
+    xmax = qMax(xmax, data.x());
+    ymin = qMin(ymin, data.y());
+    ymax = qMax(ymax, data.y());
 }
 
 void dtkPlotCurvePrivateData::clear(void)
@@ -61,6 +83,10 @@ public:
 dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(title)
 {
     this->setData(&(this->data));
+    data.xmin = DBL_MAX;
+    data.xmax = DBL_MIN;
+    data.ymin = DBL_MAX;
+    data.ymax = DBL_MIN;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -69,7 +95,6 @@ dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(ti
 
 dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurvePrivate(title))
 {
-
 }
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))
@@ -101,6 +126,7 @@ void dtkPlotCurve::clear(void)
 void dtkPlotCurve::append(const QPointF& data)
 {
     d->data.append(data);
+    d->itemChanged();
 }
 
 void dtkPlotCurve::setAntialiased(bool antiliased)
@@ -147,4 +173,13 @@ QString  dtkPlotCurve::description(void)
     string.append(" ]");
 
     return string;
+}
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QRectF qMakeRect(qreal xmin, qreal xmax, qreal ymin, qreal ymax)
+{
+    return QRectF(xmin, ymin, xmax-xmin, ymax-ymin);
 }

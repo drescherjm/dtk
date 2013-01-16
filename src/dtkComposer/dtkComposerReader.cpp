@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Dec  6 12:39:23 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 835
+ * Last-Updated: lun. janv. 14 17:32:30 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 844
  */
 
 /* Commentary: 
@@ -394,13 +394,35 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
     } else if( type_n == "composite" || type_n == "world" || type_n == "remote") {
 
-        n = new dtkComposerSceneNodeComposite;
-        n->wrap(d->factory->create(type_n));
-        n->setParent(d->node);
-        d->node->addNode(n);
-        d->graph->addNode(n);
-        if (paste)
-            d->scene->addItem(n);
+        dtkComposerNode *c = d->factory->create(type_n);
+        if (c) {
+            n = new dtkComposerSceneNodeComposite;
+            n->wrap(c);
+            n->setParent(d->node);
+            d->node->addNode(n);
+            d->graph->addNode(n);
+            if (paste)
+                d->scene->addItem(n);
+        } else {
+
+            if (qApp->type() != QApplication::Tty) {
+                QMessageBox msgBox;
+                msgBox.setText("Can't create node " + type_n);
+                msgBox.setInformativeText("You are not be able to load the composition.");
+                if  (type_n == "remote")
+                    msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_DISTRIBUTED");
+                else
+                    msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_MPI");
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+
+                msgBox.exec();
+
+            } else {
+                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+            }
+            return NULL;
+        }
 
     } else {
 

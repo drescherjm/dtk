@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr 10 09:15:55 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Apr  4 12:45:34 2012 (+0200)
-##           By: tkloczko
-##     Update #: 12
+## Last-Updated: Thu Jan 10 11:45:38 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 15
 ######################################################################
 ## 
 ### Commentary: 
@@ -20,26 +20,13 @@
 project(dtkInterpreter)
 
 ## #################################################################
-## Sources
-## #################################################################
-
-set(${PROJECT_NAME}_HEADERS_MOC
-  tstMainWindow.h)
-
-set(${PROJECT_NAME}_SOURCES
-  anyoption.cpp
-  tstMainWindow.cpp
-  main.cpp)
-
-## #################################################################
 ## Build rules
 ## #################################################################
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES})
+  main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}

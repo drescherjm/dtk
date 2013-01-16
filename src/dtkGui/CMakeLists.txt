@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Oct 31 12:53:11 2012 (+0100)
+## Last-Updated: Thu Jan 10 11:57:30 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 268
+##     Update #: 275
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,7 +42,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkSplitter.h
   dtkSwitch.h
   dtkTagCloud.h
-  dtkTextEditor.h
   dtkViewManager.h
   dtkViewLayout.h
   dtkViewLayoutItem.h
@@ -67,7 +66,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSplitter.h
   dtkTagCloud.h
   dtkSwitch.h
-  dtkTextEditor.h
   dtkViewManager.h
   dtkViewLayout.h
   dtkViewLayoutItem.h
@@ -92,7 +90,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkSplitter.cpp
   dtkSwitch.cpp
   dtkTagCloud.cpp
-  dtkTextEditor.cpp
   dtkViewManager.cpp
   dtkViewLayout.cpp
   dtkViewLayoutItem.cpp

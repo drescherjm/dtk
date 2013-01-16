@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:08:56 2012 (+0200)
- *           By: tkloczko
- *     Update #: 269
+ * Last-Updated: Thu Dec  6 12:52:29 2012 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 272
  */
 
 /* Commentary:
@@ -447,6 +447,15 @@ QStringList dtkAbstractObject::metadatas(const QString& key) const
     }
 
     return d_ptr->metadatas.value(key);
+}
+
+void dtkAbstractObject::copyMetaDataFrom(const dtkAbstractObject *obj)
+{
+    if (!obj)
+        return;
+
+    foreach(QString key, obj->metaDataList())
+        this->setMetaData(key, obj->metadatas(key));
 }
 
 // /////////////////////////////////////////////////////////////////

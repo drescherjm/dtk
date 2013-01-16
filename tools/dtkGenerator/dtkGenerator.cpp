@@ -227,19 +227,9 @@ bool dtkGenerator::generateCoreSourceFile(void) {
 
     QTextStream stream(&targetFile);
 
-    QString includeFile;
-
-    if (d->dtkInterface)
-        includeFile = "<dtkCore/" + d->interface + ">";
-    else
-        includeFile = "\"" + d->interface + "\"";
-
     stream << QString(templateFile.readAll()).arg(d->coreName)                    //! %1
                                              .arg(d->dtkType)                     //! %2
                                              .arg(d->interfaceBaseName);          //! %3
-                                             // .arg(includeFile);                   //! %4
-
-
 
     targetFile.close();
 
@@ -374,15 +364,25 @@ bool dtkGenerator::generateTypeHeaderFile(void)
     }
 
     QTextStream stream(&targetFile);
-    
+    QString includeFile;
+
+    if (d->dtkInterface)
+        includeFile = "<dtkCore/" + d->interfaceBaseName + ".h>";
+    else
+        includeFile = "<supCore/" + d->interfaceBaseName + ".h>";
+
     QString PluginName = d->pluginName;
     PluginName[0] = PluginName[0].toUpper();
 
     stream << QString(templateFile.readAll())
                         .arg(d->pluginName)
-                        .arg(d->pluginName).toUpper()
+                        .arg(d->pluginName.toUpper())
                         .arg(d->dtkType)
-                        .arg(PluginName);
+                        .arg(PluginName)
+                        .arg(d->interfaceBaseName)
+                        .arg(includeFile);
+
+
     
     targetFile.close();
     
@@ -414,9 +414,18 @@ bool dtkGenerator::generateTypeSourceFile(void)
     
     QString PluginName = d->pluginName;
     PluginName[0] = PluginName[0].toUpper();
+    QString includeFile;
+
+    if (d->dtkInterface)
+        includeFile = "<dtkCore/" + d->interfaceBaseName + "_p.h>";
+    else
+        includeFile = "<supCore/" + d->interfaceBaseName + "_p.h>";
+
 
     stream << QString(templateFile.readAll())
                         .arg(d->pluginName)
+                        .arg(includeFile)
+                        .arg(d->interfaceBaseName)
                         .arg(d->dtkType)
                         .arg(PluginName);
     

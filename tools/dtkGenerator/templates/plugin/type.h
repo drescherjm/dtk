@@ -5,7 +5,7 @@
 #ifndef %2_H
 #define %2_H
 
-#include <dtkCore/dtkAbstract%3.h>
+#include %6
 
 #include "%1PluginExport.h"
 
@@ -14,8 +14,14 @@ class %1Private;
 // /////////////////////////////////////////////////////////////////
 // %1 interface
 // /////////////////////////////////////////////////////////////////
+// 1- %1
+// 2- %2
+// 3- %3
+// 4- %4
+// 5- %5
+// 6- %6
 
-class %2PLUGIN_EXPORT %1 : public dtkAbstract%3
+class %2PLUGIN_EXPORT %1 : public %5
 {
     Q_OBJECT
 
@@ -27,8 +33,10 @@ public:
 public:
     %1& operator = (const %1& other);
 
+protected:
+    virtual void copy(const dtkAbstract%3& other);
+
 public:
-    virtual QString description(void) const;
     virtual QString identifier(void) const;
 
     static bool registered(void);
@@ -37,6 +45,6 @@ private:
     DTK_DECLARE_PRIVATE(%1);
 };
 
-dtkAbstract%3 *create%4(void);
+%5 *create%4(void);
 
 #endif

@@ -4,18 +4,25 @@
 
 #include "%1.h"
 
-#include <dtkCore/dtkAbstract%2Factory.h>
-#include <dtkCore/dtkAbstract%2_p.h>
+#include <dtkCore/dtkAbstract%4Factory.h>
+#include %2
+
 
 // /////////////////////////////////////////////////////////////////
 // %1Private interface
 // /////////////////////////////////////////////////////////////////
 
-class %1Private : public dtkAbstract%2Private
+// 1-%1
+// 2-%2
+// 3-%3
+// 4-%4
+// 5-%5
+
+class %1Private : public %3Private
 {
 public:
-    %1Private(%1 *q = 0) : dtkAbstract%2Private(q) {}
-    %1Private(const %1Private& other) : dtkAbstract%2Private(other) {} // Complete copy ctror with your local members.
+    %1Private(%1 *q = 0) : %3Private(q) {}
+    %1Private(const %1Private& other) : %3Private(other) {} // Complete copy ctror with your local members.
 
 public:
     ~%1Private(void) {}
@@ -29,18 +36,18 @@ public:
 // %1 protected constructors
 ////////////////////////////////////////////////////
 
-DTK_IMPLEMENT_PRIVATE(%1, dtkAbstract%2);
+DTK_IMPLEMENT_PRIVATE(%1, %3);
 
 // /////////////////////////////////////////////////////////////////
 // %1 implementation
 // /////////////////////////////////////////////////////////////////
 
-%1::%1(void) : dtkAbstract%2(*new %1Private(this), 0)
+%1::%1(void) : %3(*new %1Private(this), 0)
 {
 
 }
 
-%1::%1(const %1& other) : dtkAbstract%2(*new %1Private(*other.d_func()), other)
+%1::%1(const %1& other) : %3(*new %1Private(*other.d_func()), other)
 {
 
 }
@@ -52,26 +59,29 @@ DTK_IMPLEMENT_PRIVATE(%1, dtkAbstract%2);
 
 %1& %1::operator = (const %1& other)
 {
-    dtkAbstract%2::operator=(other);
-
-    // Complete here with respect to your local d-pointer as follows:
-    //
-    // DTK_D(%1);
-    //
-    // d->index = other.d_func()->index;
-
+    this->copy(other);
     return *this;
 }
 
-bool %1::registered(void)
+void %1::copy(const dtkAbstract%4& other)
 {
-    return dtkAbstract%2Factory::instance()->register%2Type("%1", create%3, "dtkAbstract%2");
+    if (this== &other)
+        return;
+    %1::copy(other);
+    if (other.identifier() == this->identifier() )
+       {}
+       else
+       {
+           dtkWarn() << "Copy can't be done at the supAbstractProcessAcquisitor level.";
+       }
 }
 
-QString %1::description(void) const
+
+bool %1::registered(void)
 {
-    return "%1";
+    return dtkAbstract%4Factory::instance()->register%4Type("%1", create%5, "%3");
 }
+
 
 QString %1::identifier(void) const
 {
@@ -82,7 +92,7 @@ QString %1::identifier(void) const
 // Type instantiation
 // /////////////////////////////////////////////////////////////////
 
-dtkAbstract%2 *create%3(void)
+dtkAbstract%4 *create%5(void)
 {
     return new %1;
 }

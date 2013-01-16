@@ -3,7 +3,7 @@
 # ####################### #
 
 Global stuff:
-- Handle layer. It's related to the naming convention. **
+- Handle layer. The regex from the interface still needs to be corrected. ** See BUG keyword in dtkGeneratorWizard.cpp file.
 - Handle the license for plugins.
 - Add Doxygen comments.
 

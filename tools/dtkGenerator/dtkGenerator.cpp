@@ -70,6 +70,7 @@ bool dtkGenerator::checkParameters(void)
         return false;
     }
 
+    //! BUG : The capture number changes whith ()? regex. We can't still use : cap(3) for Abstract keyword for instance.
     QRegExp interfaceRegExp = QRegExp("^([a-z]+)([A-Z][a-z]+)?(?:Abstract)?(Data|Process|View)([A-Z]\\w+)?\\.(h|hpp)$");
     int pos = 0;
 

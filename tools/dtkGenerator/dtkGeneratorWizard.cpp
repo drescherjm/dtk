@@ -363,7 +363,7 @@ CommonDetailsPage::CommonDetailsPage(QWidget *parent)
     //! Widgets to set the name.
     nameLabel    = new QLabel;
     nameLineEdit = new QLineEdit;
-    nameLineEdit->setValidator(new QRegExpValidator(QRegExp("^[A-Z][a-zA-Z]+$"), this));
+    nameLineEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z]+$"), this));
 
 
     /*! Layouts */

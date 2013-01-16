@@ -34,10 +34,10 @@ public:
     %1& operator = (const %1& other);
 
 protected:
-    virtual void copy(const dtkAbstract%3& other);
+    void copy(const dtkAbstract%3& other);
 
 public:
-    virtual QString identifier(void) const;
+    QString identifier(void) const;
 
     static bool registered(void);
 

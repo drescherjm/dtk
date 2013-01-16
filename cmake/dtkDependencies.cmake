@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jan 10 11:33:27 2013 (+0100)
+## Last-Updated: Wed Jan 16 16:58:07 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 129
+##     Update #: 130
 ######################################################################
 ## 
 ### Commentary: 
@@ -242,9 +242,9 @@ endif(QWT_FOUND)
 # link_directories(/usr/lib)
 # endif(OPENNI_LIBRARY AND NITE_LIBRARY)
 
-# if(OPENNI_INCLUDES AND NITE_INCLUDES)
+# if(OPENNI_INCLUDES AND NITE_INCLUDES AND NOT DEFINED DTK_HAVE_NITE)
 # set(DTK_HAVE_NITE "YES")
-# endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+# endif(OPENNI_INCLUDES AND NITE_INCLUDES AND NOT DEFINED DTK_HAVE_NITE)
 
 # mark_as_advanced(OPENNI_INCLUDES)
 # mark_as_advanced(NITE_INCLUDES)

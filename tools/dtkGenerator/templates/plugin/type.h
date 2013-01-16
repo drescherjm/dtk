@@ -45,6 +45,6 @@ private:
     DTK_DECLARE_PRIVATE(%1);
 };
 
-%5 *create%4(void);
+dtkAbstract%3 *create%4(void);
 
 #endif

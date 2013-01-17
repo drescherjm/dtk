@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. oct. 31 17:32:23 2012 (+0100)
+ * Last-Updated: mer. janv. 16 11:15:12 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1774
+ *     Update #: 1776
  */
 
 /* Commentary: 
@@ -501,7 +501,7 @@ bool dtkDistributedController::connect(const QUrl& server)
 
         } else {
 
-            dtkError() << "Unable to connect to" << server.toString();
+            dtkWarn() << "Unable to connect to" << server.toString();
             d->sockets.remove(server.toString());
             return false;
         }

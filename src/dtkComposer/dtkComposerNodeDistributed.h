@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/26 08:51:28
  * Version: $Id$
- * Last-Updated: mar. nov.  6 15:59:53 2012 (+0100)
+ * Last-Updated: jeu. janv. 17 15:54:56 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 59
+ *     Update #: 62
  */
 
 /* Commentary:
@@ -242,6 +242,8 @@ public:
             return "source rank";
         else if (port == 2)
             return "tag";
+        else if (port == 3)
+            return "data";
         else
             return "value";
     }

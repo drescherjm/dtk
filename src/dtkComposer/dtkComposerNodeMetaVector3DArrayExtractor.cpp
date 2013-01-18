@@ -39,12 +39,12 @@
 class dtkComposerNodeMetaVector3DArrayExtractorPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVector< dtkContainerVector<dtkVector3DReal> *> receiver_arrays;
+    dtkComposerTransmitterReceiverVector< dtkContainerVector<dtkVector3DReal*> *> receiver_arrays;
     dtkComposerTransmitterReceiver<qlonglong> receiver_index;
 
-    dtkComposerTransmitterEmitterVector<dtkVector3DReal> emitter_array;
+    dtkComposerTransmitterEmitterVector<dtkVector3DReal*> emitter_array;
 
-    dtkContainerVector<dtkVector3DReal> *array;
+    dtkContainerVector<dtkVector3DReal*> *array;
 };
 
 // /////////////////////////////////////////////////////////////////

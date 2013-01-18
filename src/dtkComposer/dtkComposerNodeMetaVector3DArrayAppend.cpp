@@ -37,12 +37,12 @@
 class dtkComposerNodeMetaVector3DArrayAppendPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVector<dtkContainerVector<dtkVector3DReal> *> receiver_arrays;
-    dtkComposerTransmitterReceiverVector<dtkVector3DReal> receiver_array;
+    dtkComposerTransmitterReceiverVector<dtkContainerVector<dtkVector3DReal*> *> receiver_arrays;
+    dtkComposerTransmitterReceiverVector<dtkVector3DReal*> receiver_array;
 
-    dtkComposerTransmitterEmitterVector<dtkContainerVector<dtkVector3DReal> *> emitter_arrays;
+    dtkComposerTransmitterEmitterVector<dtkContainerVector<dtkVector3DReal*> *> emitter_arrays;
 
-    dtkContainerVector<dtkContainerVector<dtkVector3DReal> *> *arrays;
+    dtkContainerVector<dtkContainerVector<dtkVector3DReal*> *> *arrays;
 };
 
 // /////////////////////////////////////////////////////////////////

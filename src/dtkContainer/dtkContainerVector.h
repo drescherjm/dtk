@@ -178,7 +178,7 @@ Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
 
 #include <dtkMath/dtkVector3D.h>
 
-typedef dtkContainerVector<dtkVector3DReal> dtkContainerVectorVector3DReal;
+typedef dtkContainerVector<dtkVector3DReal*> dtkContainerVectorVector3DReal;
 
 Q_DECLARE_METATYPE(dtkContainerVectorVector3DReal  );
 Q_DECLARE_METATYPE(dtkContainerVectorVector3DReal *);

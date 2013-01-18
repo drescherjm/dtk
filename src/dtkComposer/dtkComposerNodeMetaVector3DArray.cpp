@@ -35,9 +35,9 @@
 class dtkComposerNodeMetaVector3DArrayPrivate
 {
 public:
-    dtkComposerTransmitterEmitterVector< dtkContainerVector<dtkVector3DReal> *> emitter_arrays;
+    dtkComposerTransmitterEmitterVector< dtkContainerVector<dtkVector3DReal*> *> emitter_arrays;
 
-    dtkContainerVector< dtkContainerVector<dtkVector3DReal> *> arrays;
+    dtkContainerVector< dtkContainerVector<dtkVector3DReal*> *> arrays;
 };
 
 // /////////////////////////////////////////////////////////////////

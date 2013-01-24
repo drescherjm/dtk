@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Sat Feb  6 14:33:47 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. mai 11 17:22:31 2012 (+0200)
+ * Last-Updated: jeu. janv. 24 14:57:54 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 202
+ *     Update #: 203
  */
 
 /* Commentary:
@@ -60,8 +60,8 @@ parameters in the [distributed] group:
 
 @code
 [distributed]
-nef-devel.inria.fr_mpirun_path==/opt/openmpi-gcc/current/bin/mpirun
-nef-devel.inria.fr_mpirun_args=" -x DISPLAY=:0.0 "
+nef-devel.inria.fr_server_mpirun_path==/opt/openmpi-gcc/current/bin/mpirun
+nef-devel.inria.fr_server_mpirun_args=" -x DISPLAY=:0.0 "
 @endcode
 
 

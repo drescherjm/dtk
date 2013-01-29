@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 16:10:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 2090
+ * Last-Updated: mar. janv. 29 16:49:17 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2091
  */
 
 /* Commentary:
@@ -227,6 +227,9 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
     if (dynamic_cast<dtkComposerNodeControl *>(wrapee)) {
         begin     = new dtkComposerGraphNodeBegin(wrapee, "Begin Control");
         end       = new dtkComposerGraphNodeEnd(wrapee,"End Control");
+        begin->setEnd(end);
+        end->setBegin(begin);
+
         dtkComposerGraphNode *outputs   = new dtkComposerGraphNodeSetOutputs(wrapee);
         dtkComposerGraphNode *select    = new dtkComposerGraphNodeSelectBranch(wrapee);
 

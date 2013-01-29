@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: Wed Nov 21 18:26:42 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 2475
+ * Last-Updated: mar. janv. 29 17:47:55 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2487
  */
 
 /* Commentary:
@@ -209,11 +209,13 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
         d->current_node = composite;
     else
         qDebug() << DTK_PRETTY_FUNCTION << "Node should be a composite one";
+    emit changed();
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
 {
     d->current_node = current;
+    emit changed();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1054,7 +1056,6 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         }        
     }
 
-    emit changed();
 }
 
 // /////////////////////////////////////////////////////////////////

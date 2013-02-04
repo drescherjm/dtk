@@ -14,27 +14,29 @@
 
 #include "dtkDistributedContainerTest.h"
 
-void dtkDistributedContainerTest::initTestCase(void)
+void dtkDistributedContainerTestCase::initTestCase(void)
 {
 
 }
 
-void dtkDistributedContainerTest::init(void)
+void dtkDistributedContainerTestCase::init(void)
 {
 
 }
 
-void dtkDistributedContainerTest::test(void)
+void dtkDistributedContainerTestCase::test(void)
 {
     QVERIFY(1 == 1);
 }
 
-void dtkDistributedContainerTest::cleanupTestCase(void)
+void dtkDistributedContainerTestCase::cleanupTestCase(void)
 {
 
 }
 
-void dtkDistributedContainerTest::cleanup(void)
+void dtkDistributedContainerTestCase::cleanup(void)
 {
 
 }
+
+DTKTEST_MAIN_NOGUI(dtkDistributedContainerTest, dtkDistributedContainerTestCase)

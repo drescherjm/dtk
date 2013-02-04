@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include <QtTest>
+#include <dtkTest>
 
-class dtkDistributedContainerTest : public QObject
+class dtkDistributedContainerTestCase : public QObject
 {
     Q_OBJECT
 

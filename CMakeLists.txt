@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 12:12:07 2013 (+0100)
+## Last-Updated: Mon Feb  4 12:30:48 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 40
+##     Update #: 42
 ######################################################################
 ## 
 ### Change Log:
@@ -53,6 +53,7 @@ find_package(Qt5Gui        REQUIRED)
 find_package(Qt5Network    REQUIRED)
 find_package(Qt5Qml        REQUIRED)
 find_package(Qt5Quick      REQUIRED)
+find_package(Qt5Test       REQUIRED)
 find_package(Qt5Widgets    REQUIRED)
 
 ## #################################################################
@@ -84,6 +85,7 @@ mark_as_advanced(Qt5Gui_DIR)
 mark_as_advanced(Qt5Network_DIR)
 mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
+mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
 
 mark_as_advanced(CMAKE_AR)

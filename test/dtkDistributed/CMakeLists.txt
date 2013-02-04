@@ -3,9 +3,12 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:20:18 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 15:47:30 2013 (+0100)
+## Last-Updated: Mon Feb  4 16:01:09 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 39
+##     Update #: 40
+## Last-Updated: 2013 Mon Feb  4 15:39:14 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 17
 ######################################################################
 ## 
 ### Change Log:
@@ -19,10 +22,12 @@ project(dtkDistributedTest)
 ## ###################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkDistributedCommunicatorTest.h)
+  dtkDistributedCommunicatorTest.h
+  dtkDistributedContainerTest.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkDistributedCommunicatorTest.cpp)
+  dtkDistributedCommunicatorTest.cpp
+  dtkDistributedContainerTest.cpp)
 
 ## ###################################################################
 ## 

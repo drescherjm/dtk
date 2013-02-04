@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:20:18 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 14:16:02 2013 (+0100)
+## Last-Updated: Mon Feb  4 15:47:30 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 14
+##     Update #: 39
 ######################################################################
 ## 
 ### Change Log:
@@ -25,11 +25,23 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorTest.cpp)
 
 ## ###################################################################
+## 
+## ###################################################################
+
+create_test_sourcelist(
+    ${PROJECT_NAME}_SOURCES_TST
+    ${PROJECT_NAME}.cpp
+  ${${PROJECT_NAME}_SOURCES})
+
+message(${${PROJECT_NAME}_SOURCES_TST})
+message(${${PROJECT_NAME}_SOURCES})
+
+## ###################################################################
 ## Build rules
 ## ###################################################################
 
 add_executable(${PROJECT_NAME}
-  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_TST}
   ${${PROJECT_NAME}_SOURCES})
 
 ## ###################################################################
@@ -42,7 +54,7 @@ qt5_use_modules(${PROJECT_NAME} Test)
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
 
 ## ###################################################################
-## CTest rules
+## Test rules
 ## ###################################################################
 
-add_test(NAME dtkDistributedCommunicatorTest COMMAND dtkDistributedTest dtkDistributedCommunicatorTest)
+add_test(dtkDistributedCommunicatorTest dtkDistributedTest dtkDistributedCommunicatorTest)

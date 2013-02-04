@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 14:15:10 2013 (+0100)
+## Last-Updated: Mon Feb  4 15:15:15 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 44
+##     Update #: 48
 ######################################################################
 ## 
 ### Change Log:
@@ -60,10 +60,10 @@ find_package(Qt5Widgets    REQUIRED)
 ## Dependencies - internal
 ## #################################################################
 
-# include_directories(${CMAKE_SOURCE_DIR}/src)
-# include_directories(${CMAKE_SOURCE_DIR}/src/1)
-# include_directories(${CMAKE_SOURCE_DIR}/src/2)
-# ...
+include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtk)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkDistributed)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkTest)
 
 ## ###################################################################
 ## Input

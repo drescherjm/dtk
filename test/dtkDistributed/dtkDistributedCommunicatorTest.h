@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 13:58:16 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb  4 14:12:58 2013 (+0100)
+ * Last-Updated: Mon Feb  4 15:53:57 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 14
  */
 
 /* Change Log:
@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include <QtTest>
+#include <dtkTest>
 
-class dtkDistributedCommunicatorTest : public QObject
+class dtkDistributedCommunicatorTestCase : public QObject
 {
     Q_OBJECT
 

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:16:39 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 12:22:49 2013 (+0100)
+## Last-Updated: Mon Feb  4 12:53:05 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 12
+##     Update #: 14
 ######################################################################
 ## 
 ### Change Log:
@@ -18,9 +18,12 @@ project(dtkDistributed)
 ## Input
 ## #################################################################
 
-set(${PROJECT_NAME}_HEADERS)
+set(${PROJECT_NAME}_HEADERS
+  dtkDistributedCommunicatorPlugin.h
+  dtkDistributedCommunicatorPluginManager.h)
 
-set(${PROJECT_NAME}_SOURCES)
+set(${PROJECT_NAME}_SOURCES
+  dtkDistributedCommunicatorPluginManager.cpp)
 
 ## #################################################################
 ## Build rules

@@ -3,16 +3,16 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 12:30:48 2013 (+0100)
+## Last-Updated: Mon Feb  4 14:03:24 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 42
+##     Update #: 43
 ######################################################################
 ## 
 ### Change Log:
 ## 
 ######################################################################
 
-cmake_minimum_required(VERSION 2.8.10)
+cmake_minimum_required(VERSION 2.8.9)
 
 ######################################################################
 

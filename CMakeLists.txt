@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 14:03:24 2013 (+0100)
+## Last-Updated: Mon Feb  4 14:15:10 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 43
+##     Update #: 44
 ######################################################################
 ## 
 ### Change Log:
@@ -70,6 +70,7 @@ find_package(Qt5Widgets    REQUIRED)
 ## ###################################################################
 
 add_subdirectory(src)
+add_subdirectory(test)
 
 ## ###################################################################
 ## Beautifying

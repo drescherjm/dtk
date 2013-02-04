@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:20:18 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 12:29:14 2013 (+0100)
+## Last-Updated: Mon Feb  4 14:16:02 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 5
+##     Update #: 14
 ######################################################################
 ## 
 ### Change Log:
@@ -18,18 +18,19 @@ project(dtkDistributedTest)
 ## Input
 ## ###################################################################
 
-set(${PROJECT_NAME}_HEADERS)
+set(${PROJECT_NAME}_HEADERS
+  dtkDistributedCommunicatorTest.h)
 
-set(${PROJECT_NAME}_SOURCES)
-# e.g. dtkDistributedCommunicatorTest
+set(${PROJECT_NAME}_SOURCES
+  dtkDistributedCommunicatorTest.cpp)
 
 ## ###################################################################
 ## Build rules
 ## ###################################################################
 
 add_executable(${PROJECT_NAME}
-  ${PROJECT_NAME}_HEADERS
-  ${PROJECT_NAME}_SROUCES)
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES})
 
 ## ###################################################################
 ## Link rules
@@ -44,4 +45,4 @@ target_link_libraries(${PROJECT_NAME} dtkDistributed)
 ## CTest rules
 ## ###################################################################
 
-# e.g. add_test(NAME dtkDistributedCommunicatorTest COMMAND dtkDistributedTest dtkDistributedCommunicatorTest)
+add_test(NAME dtkDistributedCommunicatorTest COMMAND dtkDistributedTest dtkDistributedCommunicatorTest)

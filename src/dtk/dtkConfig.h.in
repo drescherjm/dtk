@@ -1,0 +1,17 @@
+/* dtkConfig.h.in --- 
+ * 
+ * Author: Julien Wintz
+ * Created: Mon Feb  4 10:27:52 2013 (+0100)
+ * Version: 
+ * Last-Updated: Mon Feb  4 10:28:46 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 6
+ */
+
+/* Change Log:
+ * 
+ */
+
+#define dtk_VERSION_MAJOR @dtk_VERSION_MAJOR@
+#define dtk_VERSION_MINOR @dtk_VERSION_MINOR@
+#define dtk_VERSION_PATCH @dtk_VERSION_PATCH@

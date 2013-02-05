@@ -19,7 +19,7 @@
 // dtkDistributedLocalIterator implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedLocalIterator<T>::dtkDistributedLocalIterator(dtkDistributedContainer<T> *container) : c(container), i(c->m_array.constBegin())
+template<typename T> dtkDistributedLocalIterator<T>::dtkDistributedLocalIterator(dtkDistributedContainer<T> *container) : c(container), i(c->m_array.constBegin()), m_index(0)
 {
 
 };
@@ -32,11 +32,13 @@ template<typename T> dtkDistributedLocalIterator<T>::~dtkDistributedLocalIterato
 template <typename T> void dtkDistributedLocalIterator<T>::toBack(void)
 {
     i = c->m_array.constEnd();
+    m_index = c->m_array.size()-1;
 };
 
 template <typename T> void dtkDistributedLocalIterator<T>::toFront(void)
 {
     i = c->m_array.constBegin();
+    m_index = 0;
 };
 
 template <typename T> bool dtkDistributedLocalIterator<T>::hasNext(void)
@@ -51,11 +53,13 @@ template <typename T> bool dtkDistributedLocalIterator<T>::hasPrevious(void)
 
 template <typename T> const T& dtkDistributedLocalIterator<T>::next(void)
 {
+    ++m_index;
     return (*i++);
 };
 
 template <typename T> const T& dtkDistributedLocalIterator<T>::previous(void)
 {
+    --m_index;
     return *(--i);
 };
 
@@ -73,12 +77,12 @@ template <typename T> const T& dtkDistributedLocalIterator<T>::peekPrevious(void
 
 template <typename T> qlonglong dtkDistributedLocalIterator<T>::localIndex(void) const
 {
-    return 0;
+    return m_index;
 };
 
 template <typename T> qlonglong dtkDistributedLocalIterator<T>::globalIndex(void) const
 {
-    return 0;
+    return m_index;
 };
 
 

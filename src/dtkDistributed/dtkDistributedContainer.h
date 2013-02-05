@@ -51,6 +51,7 @@ private:
     dtkDistributedContainer<T> *c;
     typedef typename QVector<T>::const_iterator const_iterator;
     const_iterator i;
+    qlonglong m_index;
 };
 
 // /////////////////////////////////////////////////////////////////

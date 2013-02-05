@@ -27,7 +27,7 @@ void dtkDistributedContainerTestCase::init(void)
 
 void dtkDistributedContainerTestCase::test(void)
 {
-    qlonglong N = 1000;
+    qlonglong N = 10;
 
     dtkDistributedContainer<qlonglong> c;
     c.resize(N);
@@ -37,8 +37,8 @@ void dtkDistributedContainerTestCase::test(void)
     dtkDistributedLocalIterator<qlonglong> *it  = c.localIterator();
 
     while(it->hasNext()) {
-        c.set(it->globalIndex(), it->localIndex());
-        it->next();
+        c.set(it->localIndex(), it->globalIndex());
+        qDebug() << it->next();
     }
 }
 

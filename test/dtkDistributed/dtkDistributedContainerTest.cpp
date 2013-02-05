@@ -13,6 +13,7 @@
  */
 
 #include "dtkDistributedContainerTest.h"
+#include <dtkDistributed/dtkDistributedContainer.h>
 
 void dtkDistributedContainerTestCase::initTestCase(void)
 {
@@ -26,7 +27,19 @@ void dtkDistributedContainerTestCase::init(void)
 
 void dtkDistributedContainerTestCase::test(void)
 {
-    QVERIFY(1 == 1);
+    qlonglong N = 10;
+
+    dtkDistributedContainer<qlonglong> c;
+    c.resize(N);
+
+    QVERIFY(N == c.size());
+
+    dtkDistributedLocalIterator<qlonglong> *it  = c.localIterator();
+
+    while(it->hasNext()) {
+        c.set(it->localIndex(), it->globalIndex());
+        qDebug() << it->next();
+    }
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

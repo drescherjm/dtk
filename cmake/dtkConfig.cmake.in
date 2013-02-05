@@ -1,0 +1,29 @@
+### dtkConfig.cmake.in --- 
+## 
+## Author: Julien Wintz
+## Created: Tue Feb  5 10:26:22 2013 (+0100)
+## Version: 
+## Last-Updated: Tue Feb  5 13:14:14 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 16
+######################################################################
+## 
+### Change Log:
+## 
+######################################################################
+
+## ###################################################################
+## Defines:
+## - dtk_INCLUDE_DIRS
+## - dtk_LIBRARIES
+## ###################################################################
+
+set(dtk_INCLUDE_DIRS
+  "@CMAKE_SOURCE_DIR@"
+  "@CMAKE_SOURCE_DIR@/src/dtk"
+  "@CMAKE_SOURCE_DIR@/src/dtkDistributed"
+  "@CMAKE_SOURCE_DIR@/src/dtkTest")
+
+include("${dtk_BUILD_DIR}/dtkDepends.cmake")
+
+set(dtk_LIBRARIES dtkDistributed)

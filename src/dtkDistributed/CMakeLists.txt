@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:16:39 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 16:45:46 2013 (+0100)
+## Last-Updated: Tue Feb  5 13:23:12 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 20
+##     Update #: 30
 ######################################################################
 ## 
 ### Change Log:
@@ -43,8 +43,18 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Network)
 
 ## ###################################################################
-## Install rules
+## Install rules - files
 ## ###################################################################
 
-install(  FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/dtkDistributed)
-install(TARGETS   ${PROJECT_NAME}          DESTINATION lib)
+install(FILES ${${PROJECT_NAME}_HEADERS}
+  DESTINATION include/${PROJECT_NAME}
+    COMPONENT distributed)
+
+## ###################################################################
+## Install rules - targets
+## ###################################################################
+
+install(TARGETS ${PROJECT_NAME}
+    DESTINATION lib
+      COMPONENT distributed
+         EXPORT dtkDepends)

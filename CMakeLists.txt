@@ -3,16 +3,16 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 15:15:15 2013 (+0100)
+## Last-Updated: Mon Feb  4 16:53:26 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 48
+##     Update #: 59
 ######################################################################
 ## 
 ### Change Log:
 ## 
 ######################################################################
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.10)
 
 ######################################################################
 
@@ -42,6 +42,8 @@ if(NOT APPLE)
 else(NOT APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif(NOT APPLE)
+
+enable_testing()
 
 ## #################################################################
 ## Dependencies - Qt
@@ -95,3 +97,15 @@ mark_as_advanced(CMAKE_INSTALL_PREFIX)
 mark_as_advanced(CMAKE_OSX_ARCHITECTURES)
 mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
 mark_as_advanced(CMAKE_OSX_SYSROOT)
+
+## ###################################################################
+## Packaging
+## ###################################################################
+
+include(InstallRequiredSystemLibraries)
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${${PROJECT_NAME}_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${${PROJECT_NAME}_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${${PROJECT_NAME}_VERSION_PATCH}")
+
+include(CPack)

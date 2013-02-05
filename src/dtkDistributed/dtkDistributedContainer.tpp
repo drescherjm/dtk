@@ -1,19 +1,18 @@
 /* dtkDistributedContainer.tpp --- 
  * 
  * Author: Thibaud Kloczko
- * Created: 2013 Mon Feb  4 16:02:53 (+0100)
+ * Created: Tue Feb  5 14:12:49 2013 (+0100)
+ * Version: 
+ * Last-Updated: Tue Feb  5 14:13:21 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 5
  */
 
-/* Commentary: 
+/* Change Log:
  * 
  */
 
-/* Change log:
- * 
- */
-
-#ifndef DTKDISTRIBUTEDCONTAINER_TPP
-#define DTKDISTRIBUTEDCONTAINER_TPP
+#pragma once
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedLocalIterator implementation
@@ -130,5 +129,3 @@ template <typename T> dtkDistributedLocalIterator<T> *dtkDistributedContainer<T>
 
     return m_iterator;    
 };
-
-#endif

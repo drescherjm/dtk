@@ -20,7 +20,6 @@
 
 // class dtkDistributedCommunicatorPrivate;
 
-
 class dtkDistributedCommunicator : public QObject
 {
     Q_OBJECT
@@ -45,7 +44,10 @@ public:
 
 public:
     virtual qlonglong allocate(qlonglong count, qlonglong size, void *buffer);
-    virtual QByteArray get(qint32 from, qlonglong position ,  qlonglong size, qlonglong buffer_id);
+
+    virtual void       get(qint32 from, qlonglong position, void *array, qlonglong buffer_id);
+    virtual QByteArray get(qint32 from, qlonglong position,    qlonglong size, qlonglong buffer_id);
+
     virtual void put(qint32 dest, qlonglong position, qlonglong size, const QByteArray &data, qlonglong buffer_id);
 
 // public:

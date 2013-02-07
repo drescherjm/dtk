@@ -60,13 +60,13 @@ void dtkDistributedCommunicator::uninitialize(void)
 int dtkDistributedCommunicator::rank(void)
 {
    // DTK_DEFAULT_IMPLEMENTATION;
-   return -1;
+   return 0;
 }
 
 int dtkDistributedCommunicator::size(void)
 {
    // DTK_DEFAULT_IMPLEMENTATION;
-   return 0;
+   return 1;
 }
 
 qlonglong dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, void *buffer)
@@ -74,7 +74,12 @@ qlonglong dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, 
     return -1;
 }
 
-QByteArray dtkDistributedCommunicator::get(qint32 from, qlonglong position ,  qlonglong size, qlonglong buffer_id)
+void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *array, qlonglong buffer_id)
+{
+    
+}
+
+QByteArray dtkDistributedCommunicator::get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id)
 {
     return QByteArray();
 }

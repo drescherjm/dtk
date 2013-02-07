@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 16:53:26 2013 (+0100)
+## Last-Updated: Tue Feb  5 14:02:53 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 59
+##     Update #: 102
 ######################################################################
 ## 
 ### Change Log:
@@ -22,9 +22,19 @@ project(dtk)
 ## Version setup
 ## ###################################################################
 
-set(${PROJECT_NAME}_VERSION_MAJOR 1)
-set(${PROJECT_NAME}_VERSION_MINOR 0)
-set(${PROJECT_NAME}_VERSION_PATCH 0)
+set(dtk_VERSION_MAJOR 1)
+set(dtk_VERSION_MINOR 0)
+set(dtk_VERSION_PATCH 0)
+set(dtk_VERSION
+  ${dtk_VERSION_MAJOR}.${dtk_VERSION_PATCH}.${dtk_VERSION_PATCH})
+
+## ###################################################################
+## Path setup
+## ###################################################################
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 ## ###################################################################
 ## Build setup
@@ -33,15 +43,15 @@ set(${PROJECT_NAME}_VERSION_PATCH 0)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 if(NOT APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
 else(NOT APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif(NOT APPLE)
+
+## ###################################################################
+## Test setup
+## ###################################################################
 
 enable_testing()
 
@@ -62,10 +72,10 @@ find_package(Qt5Widgets    REQUIRED)
 ## Dependencies - internal
 ## #################################################################
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtk)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkDistributed)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkTest)
+include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtk)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
 
 ## ###################################################################
 ## Input
@@ -75,12 +85,32 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 ## ###################################################################
+## Exporting
+## ###################################################################
+
+export(TARGETS dtkDistributed FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")
+export(PACKAGE dtk)
+
+configure_file(${PROJECT_SOURCE_DIR}/cmake/dtkConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/dtkConfig.cmake" @ONLY)
+configure_file(${PROJECT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/dtkConfig.cmake"
+  "${PROJECT_BINARY_DIR}/dtkConfigVersion.cmake"
+  DESTINATION lib/cmake/dtk)
+
+install(EXPORT dtkDepends
+  DESTINATION lib/cmake/dtk)
+
+## ###################################################################
 ## Beautifying
 ## ###################################################################
 
-mark_as_advanced(${PROJECT_NAME}_VERSION_MAJOR)
-mark_as_advanced(${PROJECT_NAME}_VERSION_MINOR)
-mark_as_advanced(${PROJECT_NAME}_VERSION_BUILD)
+mark_as_advanced(dtk_VERSION_MAJOR)
+mark_as_advanced(dtk_VERSION_MINOR)
+mark_as_advanced(dtk_VERSION_BUILD)
 
 mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
@@ -104,8 +134,8 @@ mark_as_advanced(CMAKE_OSX_SYSROOT)
 
 include(InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGE_VERSION_MAJOR "${${PROJECT_NAME}_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${${PROJECT_NAME}_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${${PROJECT_NAME}_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${dtk_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${dtk_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${dtk_VERSION_PATCH}")
 
 include(CPack)

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:12:49 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Feb  5 14:13:21 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 5
+ * Last-Updated: 2013 Thu Feb  7 15:07:57 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 56
  */
 
 /* Change Log:
@@ -14,11 +14,13 @@
 
 #pragma once
 
+#include "dtkDistributedMapper.h"
+
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedLocalIterator implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedLocalIterator<T>::dtkDistributedLocalIterator(dtkDistributedContainer<T> *container) : c(container), i(c->m_array.constBegin()), m_index(0)
+template<typename T> dtkDistributedLocalIterator<T>::dtkDistributedLocalIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_array.constBegin()), m_index(0)
 {
 
 };
@@ -30,24 +32,24 @@ template<typename T> dtkDistributedLocalIterator<T>::~dtkDistributedLocalIterato
 
 template <typename T> void dtkDistributedLocalIterator<T>::toBack(void)
 {
-    i = c->m_array.constEnd();
-    m_index = c->m_array.size()-1;
+    i = c.m_array.constEnd();
+    m_index = c.m_array.size()-1;
 };
 
 template <typename T> void dtkDistributedLocalIterator<T>::toFront(void)
 {
-    i = c->m_array.constBegin();
+    i = c.m_array.constBegin();
     m_index = 0;
 };
 
 template <typename T> bool dtkDistributedLocalIterator<T>::hasNext(void)
 {
-    return (i != c->m_array.constEnd());
+    return (i != c.m_array.constEnd());
 };
 
 template <typename T> bool dtkDistributedLocalIterator<T>::hasPrevious(void)
 {
-    return (i != c->m_array.constBegin());
+    return (i != c.m_array.constBegin());
 };
 
 template <typename T> const T& dtkDistributedLocalIterator<T>::next(void)
@@ -89,17 +91,22 @@ template <typename T> qlonglong dtkDistributedLocalIterator<T>::globalIndex(void
 // dtkDistributedContainer implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(void)
+template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(void) : m_iterator(0), m_mapper(new dtkDistributedMapper), m_comm(0)
 {
-    m_iterator = NULL;
+    
+};
+
+template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(const qlonglong& size, dtkDistributedCommunicator *communicator) : m_iterator(0), m_mapper(new dtkDistributedMapper), m_comm(communicator)
+{
+    this->resize(size);
+
+    //m_mapper->setMapping(size, m_comm->size());
 };
 
 template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 {
-    if (m_iterator)
-        delete m_iterator;
-
-    m_iterator = NULL;
+    delete m_iterator;
+    delete m_mapper;
 };
 
 template<typename T> void dtkDistributedContainer<T>::resize(const qlonglong& size)
@@ -122,10 +129,10 @@ template <typename T> const T&dtkDistributedContainer<T>:: at(const qlonglong& i
     return m_array.at(index);
 };
 
-template <typename T> dtkDistributedLocalIterator<T> *dtkDistributedContainer<T>::localIterator(void)
+template <typename T> dtkDistributedLocalIterator<T>& dtkDistributedContainer<T>::localIterator(void)
 {
     if (!m_iterator)
-        m_iterator = new dtkDistributedLocalIterator<T>(this);
+        m_iterator = new dtkDistributedLocalIterator<T>(*this);
 
-    return m_iterator;    
+    return *m_iterator;
 };

@@ -25,9 +25,9 @@ void dtkDistributedContainerTestCase::init(void)
 
 }
 
-void dtkDistributedContainerTestCase::test(void)
+void dtkDistributedContainerTestCase::test1(void)
 {
-    qlonglong N = 1000;
+    qlonglong N = 1001;
 
     qlonglong sum = 0;
     for (qlonglong i = 0; i < N; ++i)
@@ -38,19 +38,50 @@ void dtkDistributedContainerTestCase::test(void)
 
     QVERIFY(N == c.size());
 
-    dtkDistributedLocalIterator<qlonglong> *it  = c.localIterator();
+    dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
 
-    while(it->hasNext()) {
-        c.set(it->globalIndex(), it->localIndex());
-        it->next();
+    while(it.hasNext()) {
+        c.set(it.globalIndex(), it.localIndex());
+        it.next();
     }
 
     qlonglong check_sum = 0;
 
-    it->toFront();
-    while(it->hasNext()) {
-        check_sum += c.at(it->localIndex());
-        it->next();
+    it.toFront();
+    while(it.hasNext()) {
+        check_sum += c.at(it.localIndex());
+        it.next();
+    }
+
+    QVERIFY(sum == check_sum);
+}
+
+void dtkDistributedContainerTestCase::test2(void)
+{
+    qlonglong N = 1001;
+    qlonglong W = 9;
+
+    qlonglong sum = 0;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += i;
+
+    dtkDistributedContainer<qlonglong> c;// = dtkDistributedContainer<qlonglong>(N, W);
+
+    QVERIFY(N == c.size());
+
+    dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+
+    while(it.hasNext()) {
+        c.set(it.globalIndex(), it.localIndex());
+        it.next();
+    }
+
+    qlonglong check_sum = 0;
+
+    it.toFront();
+    while(it.hasNext()) {
+        check_sum += c.at(it.localIndex());
+        it.next();
     }
 
     QVERIFY(sum == check_sum);

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:16:39 2013 (+0100)
 ## Version: 
-## Last-Updated: Tue Feb  5 14:06:26 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 31
+## Last-Updated: 2013 Thu Feb  7 12:25:52 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 32
 ######################################################################
 ## 
 ### Change Log:
@@ -24,10 +24,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorPluginManager
   dtkDistributedCommunicatorPluginManager.h
   dtkDistributedContainer.h
-  dtkDistributedContainer.tpp)
+  dtkDistributedContainer.tpp
+  dtkDistributedMapper.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkDistributedCommunicatorPluginManager.cpp)
+  dtkDistributedCommunicatorPluginManager.cpp
+  dtkDistributedMapper.cpp)
 
 ## #################################################################
 ## Build rules

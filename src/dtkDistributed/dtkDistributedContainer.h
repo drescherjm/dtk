@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Feb  5 14:09:34 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 7
+ * Last-Updated: 2013 Thu Feb  7 15:06:29 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 29
  */
 
 /* Change Log:
@@ -13,6 +13,8 @@
  */
 
 #pragma once
+
+#include <QtCore/QVector>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkDistributedContainer
@@ -27,7 +29,7 @@ template<typename T> class dtkDistributedContainer;
 template<typename T> class dtkDistributedLocalIterator
 {
 public:
-     dtkDistributedLocalIterator(dtkDistributedContainer<T> *container);
+     dtkDistributedLocalIterator(dtkDistributedContainer<T>& container);
     ~dtkDistributedLocalIterator(void);
 
 public:    
@@ -51,7 +53,7 @@ public:
     qlonglong globalIndex(void) const;
 
 private:
-    dtkDistributedContainer<T> *c;
+    dtkDistributedContainer<T>& c;
     typedef typename QVector<T>::const_iterator const_iterator;
     const_iterator i;
     qlonglong m_index;
@@ -61,10 +63,16 @@ private:
 // dtkDistributedContainer interface
 // /////////////////////////////////////////////////////////////////
 
+class dtkDistributedCommunicator;
+class dtkDistributedMapper;
+
 template<typename T> class dtkDistributedContainer
 {
 public:
      dtkDistributedContainer(void);
+     dtkDistributedContainer(const qlonglong& size, dtkDistributedCommunicator *communicator);
+
+public:
     ~dtkDistributedContainer(void);
 
 public:
@@ -79,10 +87,14 @@ public:
     const T& at(const qlonglong& index);
 
 public:
-    dtkDistributedLocalIterator<T> *localIterator(void);
+    dtkDistributedLocalIterator<T>& localIterator(void);
 
 private:
-    QVector<T> m_array;    
+    dtkDistributedMapper *m_mapper;
+    dtkDistributedCommunicator *m_comm;
+
+private:
+    QVector<T> m_array;
     dtkDistributedLocalIterator<T> *m_iterator;
 
 public:

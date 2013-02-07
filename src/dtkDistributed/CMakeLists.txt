@@ -1,15 +1,11 @@
-### CMakeLists.txt --- 
-## 
+### CMakeLists.txt ---
+##
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 12:16:39 2013 (+0100)
-## Version: 
-## Last-Updated: 2013 Thu Feb  7 12:25:52 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 32
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
 
 project(dtkDistributed)
@@ -19,6 +15,7 @@ project(dtkDistributed)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkDistributedCommunicator.h
   dtkDistributedCommunicatorPlugin
   dtkDistributedCommunicatorPlugin.h
   dtkDistributedCommunicatorPluginManager
@@ -28,6 +25,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedMapper.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorPluginManager.cpp
   dtkDistributedMapper.cpp)
 

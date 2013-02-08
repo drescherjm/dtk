@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Fri Feb  8 16:10:23 (+0100)
+ * Last-Updated: 2013 Fri Feb  8 16:18:41 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 122
+ *     Update #: 123
  */
 
 /* Change Log:
@@ -74,7 +74,7 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// dtkDistributedLocalIterator
+// dtkDistributedGlobalIterator 
 // ///////////////////////////////////////////////////////////////////
 
 template<typename T> class dtkDistributedGlobalIterator

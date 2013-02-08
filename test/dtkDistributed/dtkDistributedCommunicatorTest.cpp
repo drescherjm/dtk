@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 14:11:27 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb  4 16:01:58 2013 (+0100)
+ * Last-Updated: Fri Feb  8 16:30:17 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 42
  */
 
 /* Change Log:
@@ -13,6 +13,8 @@
  */
 
 #include "dtkDistributedCommunicatorTest.h"
+
+#include <dtkDistributed>
 
 void dtkDistributedCommunicatorTestCase::initTestCase(void)
 {
@@ -26,7 +28,7 @@ void dtkDistributedCommunicatorTestCase::init(void)
 
 void dtkDistributedCommunicatorTestCase::test1(void)
 {
-    QVERIFY(1 == 1);
+    
 }
 
 void dtkDistributedCommunicatorTestCase::test2(void)

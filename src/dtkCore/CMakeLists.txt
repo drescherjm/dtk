@@ -1,36 +1,28 @@
-### CMakeLists.txt ---
-##
+### CMakeLists.txt --- 
+## 
 ## Author: Julien Wintz
-## Created: Mon Feb  4 12:16:39 2013 (+0100)
+## Created: Fri Feb  8 16:49:52 2013 (+0100)
+## Version: 
+## Last-Updated: Fri Feb  8 16:51:01 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 8
 ######################################################################
-##
+## 
 ### Change Log:
-##
+## 
 ######################################################################
 
-project(dtkDistributed)
+project(dtkCore)
 
 ## #################################################################
 ## Input
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkDistributedCommunicator.h
-  dtkDistributedCommunicatorPlugin
-  dtkDistributedCommunicatorPlugin.h
-  dtkDistributedCommunicatorPluginFactory
-  dtkDistributedCommunicatorPluginFactory.h
-  dtkDistributedCommunicatorPluginManager
-  dtkDistributedCommunicatorPluginManager.h
-  dtkDistributedContainer.h
-  dtkDistributedContainer.tpp
-  dtkDistributedMapper.h)
+  dtkCoreSettings.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkDistributedCommunicator.cpp
-  dtkDistributedCommunicatorPluginFactory.cpp
-  dtkDistributedCommunicatorPluginManager.cpp
-  dtkDistributedMapper.cpp)
+  dtkCoreSettings.cpp)
 
 ## #################################################################
 ## Build rules
@@ -45,7 +37,6 @@ add_library(${PROJECT_NAME} SHARED
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Network)
 
 ## ###################################################################
 ## Install rules - files
@@ -53,7 +44,7 @@ qt5_use_modules(${PROJECT_NAME} Network)
 
 install(FILES ${${PROJECT_NAME}_HEADERS}
   DESTINATION include/${PROJECT_NAME}
-    COMPONENT distributed)
+    COMPONENT core)
 
 ## ###################################################################
 ## Install rules - targets
@@ -61,5 +52,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 
 install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
-      COMPONENT distributed
+      COMPONENT core
          EXPORT dtkDepends)

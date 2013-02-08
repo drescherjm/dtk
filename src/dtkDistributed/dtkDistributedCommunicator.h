@@ -15,7 +15,6 @@
 
 #pragma once
 
-
 #include <QtCore>
 
 // class dtkDistributedCommunicatorPrivate;
@@ -29,7 +28,6 @@ public:
     virtual ~dtkDistributedCommunicator(void);
 
 public:
-// use the same value as defined in mpi.h
     static const qint32 ANY_TAG    = -1;
     static const qint32 ANY_SOURCE = -1;
 
@@ -38,16 +36,18 @@ public:
     dtkDistributedCommunicator& operator = (const dtkDistributedCommunicator& other);
 
 public:
-    virtual void   initialize(void);
+    virtual void  initialize(void);
     virtual bool  initialized(void);
     virtual void uninitialize(void);
 
 public:
     virtual qlonglong allocate(qlonglong count, qlonglong size, void *buffer);
 
-    virtual void       get(qint32 from, qlonglong position, void *array, qlonglong buffer_id);
-    virtual QByteArray get(qint32 from, qlonglong position,    qlonglong size, qlonglong buffer_id);
+public:
+    virtual void       get(qint32 from, qlonglong position,    void *array, qlonglong buffer_id);
+    virtual QByteArray get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id);
 
+public:
     virtual void put(qint32 dest, qlonglong position, qlonglong size, const QByteArray &data, qlonglong buffer_id);
 
 // public:

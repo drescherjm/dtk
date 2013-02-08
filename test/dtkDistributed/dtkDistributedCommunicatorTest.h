@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 13:58:16 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb  4 15:53:57 2013 (+0100)
+ * Last-Updated: Fri Feb  8 16:42:55 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 14
+ *     Update #: 21
  */
 
 /* Change Log:
@@ -25,8 +25,8 @@ private slots:
     void init(void);
 
 private slots:
-    void test1(void);
-    void test2(void);
+    void testPluginManager(void);
+    void testPluginFactory(void);
 
 private slots:
     void cleanupTestCase(void);

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 14:11:27 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Feb  8 16:30:17 2013 (+0100)
+ * Last-Updated: Fri Feb  8 16:43:10 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 49
  */
 
 /* Change Log:
@@ -26,14 +26,14 @@ void dtkDistributedCommunicatorTestCase::init(void)
 
 }
 
-void dtkDistributedCommunicatorTestCase::test1(void)
+void dtkDistributedCommunicatorTestCase::testPluginManager(void)
 {
-    
+    QVERIFY(dtkDistributedCommunicatorPluginManager::instance());
 }
 
-void dtkDistributedCommunicatorTestCase::test2(void)
+void dtkDistributedCommunicatorTestCase::testPluginFactory(void)
 {
-    QVERIFY(2 == 2);
+    QVERIFY(dtkDistributedCommunicatorPluginFactory::instance());
 }
 
 void dtkDistributedCommunicatorTestCase::cleanupTestCase(void)

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 12:50:38 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb  4 12:51:21 2013 (+0100)
+ * Last-Updated: Fri Feb  8 16:19:28 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 3
  */
 
 /* Change Log:
@@ -47,7 +47,7 @@ protected:
      dtkDistributedCommunicatorPluginManager(void);
     ~dtkDistributedCommunicatorPluginManager(void);
 
- private:
+private:
     static dtkDistributedCommunicatorPluginManager *s_instance;
 
  private:

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Thu Feb  7 17:13:21 (+0100)
+ * Last-Updated: 2013 Fri Feb  8 16:10:23 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 56
+ *     Update #: 122
  */
 
 /* Change Log:
@@ -14,67 +14,8 @@
 
 #pragma once
 
-#include <QtCore/QVector>
-
-// ///////////////////////////////////////////////////////////////////
-// dtkDistributedContainer
-// ///////////////////////////////////////////////////////////////////
-
-template<typename T> class dtkDistributedContainer;
-
-// ///////////////////////////////////////////////////////////////////
-// dtkDistributedLocalIterator
-// ///////////////////////////////////////////////////////////////////
-
-template<typename T> class dtkDistributedGlobalIterator
-{
-public:
-    qlonglong globalIndex(void) const {return 0;}
-
-public:
-    bool     hasNext(void) {return false;}
-
-public:
-    const T&     next(void) {return *new T();}
-    
-};
-
-// ///////////////////////////////////////////////////////////////////
-// dtkDistributedLocalIterator
-// ///////////////////////////////////////////////////////////////////
-
-template<typename T> class dtkDistributedLocalIterator
-{
-public:
-     dtkDistributedLocalIterator(dtkDistributedContainer<T>& container);
-    ~dtkDistributedLocalIterator(void);
-
-public:    
-    void  toBack(void);
-    void toFront(void);
-
-public:
-    bool     hasNext(void);
-    bool hasPrevious(void);
-
-public:
-    const T&     next(void);
-    const T& previous(void);
-
-public:
-    const T&     peekNext(void);
-    const T& peekPrevious(void);
-
-public:
-    qlonglong  localIndex(void) const;
-    qlonglong globalIndex(void) const;
-
-private:
-    dtkDistributedContainer<T>& c;
-    typedef typename QVector<T>::const_iterator const_iterator;
-    const_iterator i;
-    qlonglong m_index;
-};
+template<typename T> class  dtkDistributedLocalIterator;
+template<typename T> class dtkDistributedGlobalIterator;
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedContainer interface
@@ -86,7 +27,6 @@ class dtkDistributedMapper;
 template<typename T> class dtkDistributedContainer
 {
 public:
-     dtkDistributedContainer(void);
      dtkDistributedContainer(const qlonglong& size, dtkDistributedCommunicator *communicator);
 
 public:
@@ -96,8 +36,6 @@ private:
     void allocate(void);
 
 public:
-    void resize(const qlonglong& size);
-
     qlonglong size(void) const;
 
 public:
@@ -110,8 +48,8 @@ public:
     const T& localAt(const qlonglong& local_id);
 
 public:
-    dtkDistributedLocalIterator<T>& localIterator(void);
-    dtkDistributedGlobalIterator<T>& globalIterator(void) { return *new dtkDistributedGlobalIterator<T>();}
+    dtkDistributedLocalIterator<T>&   localIterator(void);
+    dtkDistributedGlobalIterator<T>& globalIterator(void);
 
 private:
     dtkDistributedMapper *m_mapper;
@@ -119,15 +57,70 @@ private:
 
 private:
     T *m_buffer;
+    qlonglong m_buffer_size;
     qlonglong m_buffer_id;
+
+    qlonglong m_global_size;
 
     T *m_temp;
 
-    QVector<T> m_array;
-    dtkDistributedLocalIterator<T> *m_iterator;
+public:
+    dtkDistributedLocalIterator<T>   *m_loc_it;
+    dtkDistributedGlobalIterator<T> *m_glob_it;
 
 public:
-    friend class dtkDistributedLocalIterator<T>;
+    friend class  dtkDistributedLocalIterator<T>;
+    friend class dtkDistributedGlobalIterator<T>;
+};
+
+// ///////////////////////////////////////////////////////////////////
+// dtkDistributedLocalIterator
+// ///////////////////////////////////////////////////////////////////
+
+template<typename T> class dtkDistributedGlobalIterator
+{
+    dtkDistributedContainer<T>& c;
+    qlonglong gid;
+
+public:
+    dtkDistributedGlobalIterator(dtkDistributedContainer<T>& container) : c(container), gid(0) {;}
+    ~dtkDistributedGlobalIterator(void) {;}
+
+public:
+    void            toBack(void) { gid = c.m_global_size; }
+    void           toFront(void) { gid = 0; }
+    bool           hasNext(void) { return ( gid < c.m_global_size ); }
+    bool       hasPrevious(void) { return ( gid > 0 ); }
+    T                 next(void) { return c.at(gid++); }
+    T             previous(void) { return c.at(--gid); }
+    T             peekNext(void) { return c.at(gid); }
+    T         peekPrevious(void) { return c.at(gid-1); }
+    qlonglong  globalIndex(void) { return gid; }    
+};
+
+// ///////////////////////////////////////////////////////////////////
+// dtkDistributedLocalIterator
+// ///////////////////////////////////////////////////////////////////
+
+template<typename T> class dtkDistributedLocalIterator
+{
+    dtkDistributedContainer<T>& c;
+    const T *i;
+
+public:
+     dtkDistributedLocalIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_buffer) {;}
+    ~dtkDistributedLocalIterator(void) {;}
+
+public:
+    void            toBack(void) { i = c.m_buffer + c.m_buffer_size; }
+    void           toFront(void) { i = c.m_buffer; }
+    bool           hasNext(void) { return ( i != (c.m_buffer + c.m_buffer_size) ); }
+    bool       hasPrevious(void) { return ( i != c.m_buffer ); }
+    const T&          next(void) { return *(i++); }
+    const T&      previous(void) { return *(--i); }
+    const T&      peekNext(void) { return *i; }
+    const T&  peekPrevious(void) { const T *p = i; return *(--p); }
+    qlonglong   localIndex(void) { return ( i - c.m_buffer ); }
 };
 
 // ///////////////////////////////////////////////////////////////////

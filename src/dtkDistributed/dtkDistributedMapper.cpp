@@ -61,6 +61,7 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
 
     if (this->pu_count == 1) {
         this->map << 0;
+        this->step = this->id_count;
         
     } else {
 

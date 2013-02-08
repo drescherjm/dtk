@@ -26,40 +26,45 @@ void dtkDistributedContainerTestCase::init(void)
 
 }
 
-void dtkDistributedContainerTestCase::test1(void)
+void dtkDistributedContainerTestCase::testLocal(void)
 {
-    // qlonglong N = 1001;
+    qlonglong N = 11;
 
-    // qlonglong sum = 0;
-    // for (qlonglong i = 0; i < N; ++i)
-    //     sum += i;
+    dtkDistributedCommunicator comm;
 
-    // dtkDistributedContainer<qlonglong> c;
-    // c.resize(N);
+    qlonglong sum = 0;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += i;
 
-    // QVERIFY(N == c.size());
+    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, &comm);
 
-    // dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+    QVERIFY(N == c.size());
 
-    // while(it.hasNext()) {
-    //     c.set(it.globalIndex(), it.localIndex());
-    //     it.next();
-    // }
+    dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
 
-    // qlonglong check_sum = 0;
+    while(it.hasNext()) {
+        c.setLocal(it.localIndex(), it.localIndex());
+        it.next();
+    }
 
-    // it.toFront();
-    // while(it.hasNext()) {
-    //     check_sum += c.at(it.localIndex());
-    //     it.next();
-    // }
+    qlonglong check_sum = 0;
 
-    // QVERIFY(sum == check_sum);
+    it.toFront();
+    while(it.hasNext()) {
+        check_sum += c.localAt(it.localIndex());
+        it.next();
+    }
+
+    QVERIFY(sum == check_sum);
 }
 
-void dtkDistributedContainerTestCase::test2(void)
+void dtkDistributedContainerTestCase::testGlobal(void)
 {
     qlonglong N = 1001;
+
+    qlonglong sum = 0;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += i;
 
     dtkDistributedCommunicator comm;
 
@@ -74,12 +79,44 @@ void dtkDistributedContainerTestCase::test2(void)
         g_it.next();
     }
 
-    dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+    qlonglong check_sum = 0;
 
-    while(it.hasNext()) {
-        c.setLocal(it.localIndex(), 2 * c.localAt(it.localIndex()));
-        it.next();
+    g_it.toFront();
+    while(g_it.hasNext()) {
+        check_sum += c.at(g_it.globalIndex());
+        g_it.next();
     }
+
+    QVERIFY(sum == check_sum);
+}
+
+void dtkDistributedContainerTestCase::testGlobalLocal(void)
+{
+    qlonglong N = 1001;
+
+    qlonglong sum = 0;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += i;
+
+    dtkDistributedCommunicator comm;
+
+    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, &comm);
+
+    QVERIFY(N == c.size());
+
+    dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
+
+    while(g_it.hasNext()) {
+        c.set(g_it.globalIndex(), g_it.globalIndex());
+        g_it.next();
+    }
+
+    // dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+
+    // while(it.hasNext()) {
+    //     c.setLocal(it.localIndex(), 2 * c.localAt(it.localIndex()));
+    //     it.next();
+    // }
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

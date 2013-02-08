@@ -25,7 +25,8 @@ private slots:
     void init(void);
 
 private slots:
-    void test(void);
+    void test1(void);
+    void test2(void);
 
 private slots:
     void cleanupTestCase(void);

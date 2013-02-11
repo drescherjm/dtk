@@ -76,7 +76,7 @@ qlonglong dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, 
 
 void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *array, qlonglong buffer_id)
 {
-    
+
 }
 
 QByteArray dtkDistributedCommunicator::get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id)
@@ -84,7 +84,7 @@ QByteArray dtkDistributedCommunicator::get(qint32 from, qlonglong position, qlon
     return QByteArray();
 }
 
-void dtkDistributedCommunicator::put(qint32 dest, qlonglong position, qlonglong size, const QByteArray &data, qlonglong buffer_id)
+void dtkDistributedCommunicator::put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id)
 {
 
 }

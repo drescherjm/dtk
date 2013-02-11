@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 12:51:32 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 15:24:55 2013 (+0100)
+ * Last-Updated: Mon Feb 11 17:54:14 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 51
  */
 
 /* Change Log:
@@ -20,8 +20,9 @@
 void dtkDistributedCommunicatorPluginManager::initialize(void)
 {
     dtkDistributedSettings settings;
-    
+    settings.beginGroup("communicator");
     dtkCorePluginManager::initialize(settings.value("plugins").toString());
+    settings.endGroup();
 }
 
 void dtkDistributedCommunicatorPluginManager::load(const QString& path)

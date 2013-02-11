@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:12:49 2013 (+0100)
  * Version: 
- * Last-Updated: lun. févr. 11 13:53:13 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 182
+ * Last-Updated: 2013 Mon Feb 11 15:36:33 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 189
  */
 
 /* Change Log:
@@ -95,6 +95,8 @@ template <typename T> dtkDistributedLocalIterator<T>& dtkDistributedContainer<T>
     if (!m_loc_it)
         m_loc_it = new dtkDistributedLocalIterator<T>(*this);
 
+    m_loc_it->toFront();
+
     return *m_loc_it;
 };
 
@@ -102,6 +104,8 @@ template <typename T> dtkDistributedGlobalIterator<T>& dtkDistributedContainer<T
 {
     if (!m_glob_it)
         m_glob_it = new dtkDistributedGlobalIterator<T>(*this);
+
+    m_glob_it->toFront();
 
     return *m_glob_it;
 };

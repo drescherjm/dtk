@@ -98,6 +98,44 @@ void dtkDistributedContainerTestCase::testGlobal(void)
 
 void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
+    qlonglong N = 11;
+
+    dtkDistributedCommunicator comm;
+
+    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, &comm);
+
+    QVERIFY(N == c.size());
+
+    if (comm.pid() == 0) {
+
+        dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
+        
+        while(g_it.hasNext()) {
+            c.set(g_it.globalIndex(), g_it.globalIndex());
+            g_it.next();
+        }
+    }
+
+    dtkDistributedLocalIterator<qlonglong>& l_it  = c.localIterator();
+    
+    while(l_it.hasNext()) {
+        c.setLocal(l_it.localIndex(), 2 * l_it.peekNext());
+        l_it.next();
+    }
+
+    l_it.toFront();
+    while(l_it.hasNext()) {
+        qDebug() << comm.pid() << l_it.localIndex() << l_it.next();
+    }
+
+    if (comm.pid() == 0) {
+
+        dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
+        
+        while(g_it.hasNext()) {
+            qDebug() << g_it.globalIndex() << g_it.next();
+        }
+    }
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

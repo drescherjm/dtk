@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Feb  8 14:58:02 2013 (+0100)
+## Last-Updated: Mon Feb 11 12:32:18 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 103
+##     Update #: 112
 ######################################################################
 ## 
 ### Change Log:
@@ -88,7 +88,6 @@ add_subdirectory(test)
 ## Exporting
 ## ###################################################################
 
-export(TARGETS dtkDistributed FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")
 export(PACKAGE dtk)
 
 configure_file(${PROJECT_SOURCE_DIR}/cmake/dtkConfig.cmake.in

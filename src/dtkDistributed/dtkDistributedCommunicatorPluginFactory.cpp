@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:20:47 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Feb  8 16:25:11 2013 (+0100)
+ * Last-Updated: Mon Feb 11 15:26:55 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Change Log:
@@ -21,14 +21,6 @@ class dtkDistributedCommunicatorPluginFactoryPrivate
 public:
 };
 
-dtkDistributedCommunicatorPluginFactory *dtkDistributedCommunicatorPluginFactory::instance(void)
-{
-    if(!s_instance)
-	s_instance = new dtkDistributedCommunicatorPluginFactory;
-
-    return s_instance;
-}
-
 dtkDistributedCommunicatorPluginFactory::dtkDistributedCommunicatorPluginFactory(void) : d(new dtkDistributedCommunicatorPluginFactoryPrivate)
 {
 
@@ -40,5 +32,3 @@ dtkDistributedCommunicatorPluginFactory::~dtkDistributedCommunicatorPluginFactor
 
     d = NULL;
 }
-
-dtkDistributedCommunicatorPluginFactory *dtkDistributedCommunicatorPluginFactory::s_instance = NULL;

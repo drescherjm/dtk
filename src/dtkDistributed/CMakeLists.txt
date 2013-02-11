@@ -15,6 +15,8 @@ project(dtkDistributed)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkDistributed
+  dtkDistributed.h
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorPlugin
   dtkDistributedCommunicatorPlugin.h
@@ -24,13 +26,17 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorPluginManager.h
   dtkDistributedContainer.h
   dtkDistributedContainer.tpp
-  dtkDistributedMapper.h)
+  dtkDistributedMapper.h
+  dtkDistributedSettings
+  dtkDistributedSettings.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorPluginFactory.cpp
   dtkDistributedCommunicatorPluginManager.cpp
-  dtkDistributedMapper.cpp)
+  dtkDistributedMapper.cpp
+  dtkDistributedSettings.cpp)
 
 ## #################################################################
 ## Build rules
@@ -46,6 +52,8 @@ add_library(${PROJECT_NAME} SHARED
 
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Network)
+
+target_link_libraries(${PROJECT_NAME} dtkCore)
 
 ## ###################################################################
 ## Install rules - files
@@ -63,3 +71,9 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT distributed
          EXPORT dtkDepends)
+
+## ###################################################################
+## Export rules
+## ###################################################################
+
+export(TARGETS dtkDistributed APPEND FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")

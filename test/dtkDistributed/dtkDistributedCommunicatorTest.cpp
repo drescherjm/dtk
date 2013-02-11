@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 14:11:27 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Feb  8 16:43:10 2013 (+0100)
+ * Last-Updated: Mon Feb 11 15:25:52 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 49
+ *     Update #: 57
  */
 
 /* Change Log:
@@ -28,12 +28,14 @@ void dtkDistributedCommunicatorTestCase::init(void)
 
 void dtkDistributedCommunicatorTestCase::testPluginManager(void)
 {
-    QVERIFY(dtkDistributedCommunicatorPluginManager::instance());
+    dtkDistributed::communicator::pluginManager().initialize();
+
+    qDebug() << dtkDistributed::communicator::pluginManager().plugins();
 }
 
 void dtkDistributedCommunicatorTestCase::testPluginFactory(void)
 {
-    QVERIFY(dtkDistributedCommunicatorPluginFactory::instance());
+    QVERIFY(1 == 1);
 }
 
 void dtkDistributedCommunicatorTestCase::cleanupTestCase(void)

@@ -1,3 +1,4 @@
+#include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedCommunicatorPlugin.h"
 #include "dtkDistributedCommunicatorPluginFactory.h"

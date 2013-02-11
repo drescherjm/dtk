@@ -17,7 +17,7 @@
 
 #include <QtCore>
 
-// class dtkDistributedCommunicatorPrivate;
+class dtkDistributedCommunicatorPrivate;
 
 class dtkDistributedCommunicator : public QObject
 {
@@ -48,14 +48,13 @@ public:
     virtual QByteArray get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id);
 
 public:
-    virtual void put(qint32 dest, qlonglong position, qlonglong size, const QByteArray &data, qlonglong buffer_id);
-
-// public:
-//     template<class T> T * get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id);
-//     template<class T> void put(qint32 dest, qlonglong position, qlonglong size, const T &data, qlonglong buffer_id);
+    virtual void put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id);
 
 public:
     virtual qint32  pid(void);
     virtual qint32 size(void);
+
+public:
+    dtkDistributedCommunicatorPrivate *d;
 
 };

@@ -60,7 +60,7 @@ void dtkDistributedContainerTestCase::testLocal(void)
 
 void dtkDistributedContainerTestCase::testGlobal(void)
 {
-    qlonglong N = 1001;
+    qlonglong N = 11;
 
     qlonglong sum = 0;
     for (qlonglong i = 0; i < N; ++i)
@@ -125,7 +125,8 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
 
     l_it.toFront();
     while(l_it.hasNext()) {
-        qDebug() << comm.pid() << l_it.localIndex() << l_it.next();
+        qDebug() << comm.pid() << l_it.localIndex() << l_it.peekNext();
+        l_it.next();
     }
 
     if (comm.pid() == 0) {
@@ -133,7 +134,8 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
         
         while(g_it.hasNext()) {
-            qDebug() << g_it.globalIndex() << g_it.next();
+            qDebug() << g_it.globalIndex() << g_it.peekNext();
+            g_it.next();
         }
     }
 }

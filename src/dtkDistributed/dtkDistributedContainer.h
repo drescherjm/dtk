@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Fri Feb  8 16:18:41 (+0100)
+ * Last-Updated: 2013 Mon Feb 11 15:53:41 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 123
+ *     Update #: 125
  */
 
 /* Change Log:
@@ -116,7 +116,7 @@ public:
     void           toFront(void) { i = c.m_buffer; }
     bool           hasNext(void) { return ( i != (c.m_buffer + c.m_buffer_size) ); }
     bool       hasPrevious(void) { return ( i != c.m_buffer ); }
-    const T&          next(void) { return *(i++); }
+    const T&          next(void) { const T *n = i; ++i; return *n; }
     const T&      previous(void) { return *(--i); }
     const T&      peekNext(void) { return *i; }
     const T&  peekPrevious(void) { const T *p = i; return *(--p); }

@@ -17,7 +17,7 @@
 
 #include <QtCore>
 
-// class dtkDistributedCommunicatorPrivate;
+class dtkDistributedCommunicatorPrivate;
 
 class dtkDistributedCommunicator : public QObject
 {
@@ -41,6 +41,7 @@ public:
     virtual void uninitialize(void);
 
 public:
+    virtual qlonglong allocate(qlonglong count, qlonglong size, qlonglong *&buffer);
     virtual qlonglong allocate(qlonglong count, qlonglong size, void *buffer);
 
 public:
@@ -53,5 +54,8 @@ public:
 public:
     virtual qint32  pid(void);
     virtual qint32 size(void);
+
+public:
+    dtkDistributedCommunicatorPrivate *d;
 
 };

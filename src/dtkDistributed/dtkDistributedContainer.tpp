@@ -2,10 +2,6 @@
  * 
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:12:49 2013 (+0100)
- * Version: 
- * Last-Updated: 2013 Mon Feb 11 15:36:33 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 189
  */
 
 /* Change Log:
@@ -44,8 +40,8 @@ template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 template<typename T> void dtkDistributedContainer<T>::allocate(void)
 {
     m_buffer_size = m_mapper->count(m_comm->pid());
-    m_buffer = new T[m_buffer_size];
-    // m_buffer_id = m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer);
+    //m_buffer = new T[m_buffer_size];
+    m_buffer_id = m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer);
 };
 
 template <typename T> qlonglong dtkDistributedContainer<T>::size(void) const

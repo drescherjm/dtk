@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:17:21 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Feb  8 16:20:28 2013 (+0100)
+ * Last-Updated: Mon Feb 11 15:26:36 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Change Log:
@@ -19,14 +19,8 @@ class dtkDistributedCommunicatorPluginFactoryPrivate;
 class dtkDistributedCommunicatorPluginFactory
 {
 public:
-    static dtkDistributedCommunicatorPluginFactory *instance(void);
-
-protected:
      dtkDistributedCommunicatorPluginFactory(void);
     ~dtkDistributedCommunicatorPluginFactory(void);
-
-private:
-    static dtkDistributedCommunicatorPluginFactory *s_instance;
 
 private:
     dtkDistributedCommunicatorPluginFactoryPrivate *d;

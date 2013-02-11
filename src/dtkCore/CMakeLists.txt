@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Feb  8 16:49:52 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Feb  8 16:51:01 2013 (+0100)
+## Last-Updated: Mon Feb 11 12:44:11 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 8
+##     Update #: 13
 ######################################################################
 ## 
 ### Change Log:
@@ -19,9 +19,11 @@ project(dtkCore)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkCorePluginManager.h
   dtkCoreSettings.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkCorePluginManager.cpp
   dtkCoreSettings.cpp)
 
 ## #################################################################
@@ -54,3 +56,9 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT core
          EXPORT dtkDepends)
+
+## ###################################################################
+## Export rules
+## ###################################################################
+
+export(TARGETS dtkCore APPEND FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")

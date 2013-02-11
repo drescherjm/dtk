@@ -1,2 +1,1 @@
 #include "dtkCorePluginManager.h"
-#include "dtkCoreSettings.h"

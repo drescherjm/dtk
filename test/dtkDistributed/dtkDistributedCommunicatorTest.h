@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 13:58:16 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Feb  8 16:42:55 2013 (+0100)
+ * Last-Updated: Mon Feb 11 18:48:40 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 31
  */
 
 /* Change Log:
@@ -15,6 +15,8 @@
 #pragma once
 
 #include <dtkTest>
+
+class dtkDistributedCommunicatorTestCasePrivate;
 
 class dtkDistributedCommunicatorTestCase : public QObject
 {
@@ -27,6 +29,7 @@ private slots:
 private slots:
     void testPluginManager(void);
     void testPluginFactory(void);
+    void testPlugin(void);
 
 private slots:
     void cleanupTestCase(void);

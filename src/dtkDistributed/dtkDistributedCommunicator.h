@@ -55,7 +55,7 @@ public:
 //     template<class T> void put(qint32 dest, qlonglong position, qlonglong size, const T &data, qlonglong buffer_id);
 
 public:
-    virtual qint32 rank(void);
+    virtual qint32  pid(void);
     virtual qint32 size(void);
 
 };

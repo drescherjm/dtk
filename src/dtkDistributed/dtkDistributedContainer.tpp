@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:12:49 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Fri Feb  8 15:56:49 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 174
+ * Last-Updated: lun. févr. 11 11:08:38 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 177
  */
 
 /* Change Log:
@@ -43,9 +43,9 @@ template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 
 template<typename T> void dtkDistributedContainer<T>::allocate(void)
 {
-    m_buffer_size = m_mapper->count(m_comm->rank());
+    m_buffer_size = m_mapper->count(m_comm->pid());
     m_buffer = new T[m_buffer_size];
-    // m_buffer_id = m_comm->allocate(m_mapper->count(m_comm->rank()), sizeof(T), m_buffer);
+    // m_buffer_id = m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer);
 };
 
 template <typename T> qlonglong dtkDistributedContainer<T>::size(void) const
@@ -65,7 +65,7 @@ template <typename T> void dtkDistributedContainer<T>::setLocal(const qlonglong&
 
 template <typename T> T dtkDistributedContainer<T>::at(const qlonglong& global_id)
 {
-    qint32 me = m_comm->rank();
+    qint32 me = m_comm->pid();
     qint32 owner = static_cast<qint32>(m_mapper->owner(global_id));
 
     qlonglong pos = m_mapper->globalToLocal(global_id);

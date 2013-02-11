@@ -57,7 +57,7 @@ void dtkDistributedCommunicator::uninitialize(void)
    // DTK_DEFAULT_IMPLEMENTATION;
 }
 
-int dtkDistributedCommunicator::rank(void)
+int dtkDistributedCommunicator::pid(void)
 {
    // DTK_DEFAULT_IMPLEMENTATION;
    return 0;
@@ -89,5 +89,3 @@ void dtkDistributedCommunicator::put(qint32 dest, qlonglong position, qlonglong 
 
 }
 
-// template<class T> T * get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id);
-// template<class T> void put(qint32 dest, qlonglong position, qlonglong size, const T &data, qlonglong buffer_id);

@@ -72,7 +72,7 @@ void dtkDistributedContainerTestCase::testGlobal(void)
 
     QVERIFY(N == c.size());
 
-    if (comm.rank() == 0) {
+    if (comm.pid() == 0) {
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
         

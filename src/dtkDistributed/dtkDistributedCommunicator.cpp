@@ -98,8 +98,8 @@ void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *arra
 {
 
     if (d->buffer_map.contains(buffer_id)) {
-        void *buffer = d->buffer_map[buffer_id];
-        memcpy ( array, bufferg+position*sizeof(qlonglong), sizeof(qlonglong) );
+        qlonglong *buffer = (qlonglong *)(d->buffer_map[buffer_id]);
+        memcpy ( array, buffer+position*sizeof(qlonglong), sizeof(qlonglong) );
     } else {
         qDebug() <<  "unknown buffer" << buffer_id;
     }
@@ -113,7 +113,7 @@ QByteArray dtkDistributedCommunicator::get(qint32 from, qlonglong position, qlon
 void dtkDistributedCommunicator::put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id)
 {
     if (d->buffer_map.contains(buffer_id)) {
-        void *buffer = d->buffer_map[buffer_id];
+        qlonglong *buffer = (qlonglong *)(d->buffer_map[buffer_id]);
         memcpy ( buffer+position*sizeof(qlonglong), data, sizeof(qlonglong) );
     } else {
         qDebug() <<  "unknown buffer" << buffer_id;

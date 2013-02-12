@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 12:49:51 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb  4 12:50:23 2013 (+0100)
+ * Last-Updated: Mon Feb 11 18:24:48 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 13
  */
 
 /* Change Log:
@@ -23,6 +23,10 @@ class dtkDistributedCommunicatorPlugin : public QObject
 public:
              dtkDistributedCommunicatorPlugin(void) {}
     virtual ~dtkDistributedCommunicatorPlugin(void) {}
+
+public:
+    virtual void   initialize(void) = 0;
+    virtual void uninitialize(void) = 0;
 };
 
 Q_DECLARE_INTERFACE(dtkDistributedCommunicatorPlugin, "fr.inria.dtkDistributedCommunicatorPlugin")

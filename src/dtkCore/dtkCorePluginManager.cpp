@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 12:08:44 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 15:24:15 2013 (+0100)
+ * Last-Updated: Mon Feb 11 18:52:16 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 28
+ *     Update #: 29
  */
 
 /* Change Log:
@@ -100,16 +100,6 @@ void dtkCorePluginManager::scan(const QString& path)
     d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
 
     delete loader;
-}
-
-void dtkCorePluginManager::unload(const QString& path)
-{
-    QPluginLoader *loader = d->loaders.value(path);
-
-    if(loader->unload()) {
-        d->loaders.remove(path);
-        delete loader;
-    }
 }
 
 QStringList dtkCorePluginManager::plugins(void)

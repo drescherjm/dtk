@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 12:51:32 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 15:24:55 2013 (+0100)
+ * Last-Updated: Mon Feb 11 18:53:47 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 35
+ *     Update #: 72
  */
 
 /* Change Log:
@@ -20,8 +20,9 @@
 void dtkDistributedCommunicatorPluginManager::initialize(void)
 {
     dtkDistributedSettings settings;
-    
+    settings.beginGroup("communicator");
     dtkCorePluginManager::initialize(settings.value("plugins").toString());
+    settings.endGroup();
 }
 
 void dtkDistributedCommunicatorPluginManager::load(const QString& path)
@@ -34,8 +35,32 @@ void dtkDistributedCommunicatorPluginManager::load(const QString& path)
 
     QPluginLoader *loader = new QPluginLoader(path);
 
-    if(dtkDistributedCommunicatorPlugin *plugin = qobject_cast<dtkDistributedCommunicatorPlugin *>(loader->instance()))
-        d->loaders.insert(path, loader);
-    else
+    if(!loader)
+	return;
+
+    dtkDistributedCommunicatorPlugin *plugin = qobject_cast<dtkDistributedCommunicatorPlugin *>(loader->instance());
+
+    if(!plugin) {
+	delete loader;
+	return;
+    }
+    
+    plugin->initialize();
+
+    d->loaders.insert(path, loader);
+}
+
+void dtkDistributedCommunicatorPluginManager::unload(const QString& path)
+{
+    QPluginLoader *loader = d->loaders.value(path);
+
+    dtkDistributedCommunicatorPlugin *plugin = qobject_cast<dtkDistributedCommunicatorPlugin *>(loader->instance());
+
+    if (plugin)
+	plugin->uninitialize();
+
+    if(loader->unload()) {
+        d->loaders.remove(path);
         delete loader;
+    }
 }

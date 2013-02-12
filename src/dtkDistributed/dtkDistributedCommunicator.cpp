@@ -86,18 +86,12 @@ int dtkDistributedCommunicator::size(void)
    return 1;
 }
 
-qlonglong dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, qlonglong *&buffer)
+void *dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, qlonglong& buffer_id)
 {
-    buffer = new qlonglong[size*count];
-    d->buffer_map.insert(d->id, static_cast<void*>(buffer));
-    return (d->id)++;
-}
-
-qlonglong dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, void *buffer)
-{
-    buffer = malloc(size*count);
+    void *buffer = malloc(size*count);
     d->buffer_map.insert(d->id, buffer);
-    return (d->id)++;
+    buffer_id = (d->id)++;
+    return buffer;
 }
 
 void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *array, qlonglong buffer_id)
@@ -105,7 +99,7 @@ void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *arra
 
     if (d->buffer_map.contains(buffer_id)) {
         void *buffer = d->buffer_map[buffer_id];
-        memcpy ( array, buffer+position*sizeof(qlonglong), sizeof(qlonglong) );
+        memcpy ( array, bufferg+position*sizeof(qlonglong), sizeof(qlonglong) );
     } else {
         qDebug() <<  "unknown buffer" << buffer_id;
     }

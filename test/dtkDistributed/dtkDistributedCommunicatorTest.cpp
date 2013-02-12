@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 14:11:27 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 18:50:44 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 98
+ * Last-Updated: 2013 Tue Feb 12 14:25:17 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 101
  */
 
 /* Change Log:
@@ -38,10 +38,12 @@ void dtkDistributedCommunicatorTestCase::testPluginFactory(void)
 
 void dtkDistributedCommunicatorTestCase::testPlugin(void)
 {
-    dtkDistributedCommunicator communicator = dtkDistributed::communicator::pluginFactory().create("mpi");
-    qDebug() << communicator.metaObject()->className();
-    qDebug() << communicator.pid();
-    qDebug() << communicator.size();
+    dtkDistributedCommunicator *communicator = dtkDistributed::communicator::pluginFactory().create("mpi");
+    qDebug() << communicator->metaObject()->className();
+    qDebug() << communicator->pid();
+    qDebug() << communicator->size();
+
+    delete communicator;
 }
 
 void dtkDistributedCommunicatorTestCase::cleanupTestCase(void)

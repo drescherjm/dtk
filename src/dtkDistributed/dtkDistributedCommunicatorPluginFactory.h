@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:17:21 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 18:37:37 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 36
+ * Last-Updated: 2013 Tue Feb 12 14:23:41 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 39
  */
 
 /* Change Log:
@@ -24,14 +24,14 @@ class dtkDistributedCommunicatorPluginFactory : public QObject
     Q_OBJECT
 
 public:
-    typedef dtkDistributedCommunicator (*creator) (void);
+    typedef dtkDistributedCommunicator *(*creator) (void);
 
 public:
      dtkDistributedCommunicatorPluginFactory(void);
     ~dtkDistributedCommunicatorPluginFactory(void);
 
 public slots:
-    dtkDistributedCommunicator create(const QString& key);
+    dtkDistributedCommunicator *create(const QString& key);
 
 public:
     QStringList keys(void);

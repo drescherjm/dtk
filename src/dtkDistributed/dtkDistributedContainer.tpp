@@ -40,7 +40,6 @@ template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 template<typename T> void dtkDistributedContainer<T>::allocate(void)
 {
     m_buffer_size = m_mapper->count(m_comm->pid());
-    //m_buffer = new T[m_buffer_size];
     m_buffer = static_cast<T*>(m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer_id));
 };
 

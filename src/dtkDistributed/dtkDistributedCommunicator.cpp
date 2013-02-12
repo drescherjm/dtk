@@ -94,6 +94,12 @@ void *dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, qlon
     return buffer;
 }
 
+void dtkDistributedCommunicator::deallocate(const qlonglong& buffer_id)
+{
+    void *buffer = d->buffer_map.take(buffer_id);
+    free (buffer);
+}
+
 void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *array, qlonglong buffer_id)
 {
 

@@ -43,6 +43,8 @@ public:
 public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong& buffer_id);
 
+    virtual void deallocate(const qlonglong& buffer_id);
+
 public:
     virtual void       get(qint32 from, qlonglong position,    void *array, qlonglong buffer_id);
     virtual QByteArray get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id);

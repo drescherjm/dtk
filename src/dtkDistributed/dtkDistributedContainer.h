@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Mon Feb 11 15:53:41 (+0100)
+ * Last-Updated: 2013 Tue Feb 12 16:34:19 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 125
+ *     Update #: 127
  */
 
 /* Change Log:
@@ -33,7 +33,8 @@ public:
     ~dtkDistributedContainer(void);
 
 private:
-    void allocate(void);
+    void   allocate(void);
+    void deallocate(void);
 
 public:
     qlonglong size(void) const;

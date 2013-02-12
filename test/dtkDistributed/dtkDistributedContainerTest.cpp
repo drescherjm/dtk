@@ -13,12 +13,11 @@
  */
 
 #include "dtkDistributedContainerTest.h"
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedContainer.h>
+#include <dtkDistributed>
 
 void dtkDistributedContainerTestCase::initTestCase(void)
 {
-
+    dtkDistributed::communicator::pluginManager().initialize();
 }
 
 void dtkDistributedContainerTestCase::init(void)
@@ -100,13 +99,13 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
     qlonglong N = 11;
 
-    dtkDistributedCommunicator comm;
-
-    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, &comm);
+    dtkDistributedCommunicator *comm = dtkDistributed::communicator::pluginFactory().create("mpi");
+    
+    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, comm);
 
     QVERIFY(N == c.size());
 
-    if (comm.pid() == 0) {
+    if (comm->pid() == 0) {
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
         
@@ -125,11 +124,11 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
 
     l_it.toFront();
     while(l_it.hasNext()) {
-        qDebug() << comm.pid() << l_it.localIndex() << l_it.peekNext();
+        qDebug() << comm->pid() << l_it.localIndex() << l_it.peekNext();
         l_it.next();
     }
 
-    if (comm.pid() == 0) {
+    if (comm->pid() == 0) {
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
         
@@ -138,11 +137,14 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
             g_it.next();
         }
     }
+
+    //comm->uninitialize();
+    //delete comm;
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)
 {
-
+    dtkDistributed::communicator::pluginManager().uninitialize();
 }
 
 void dtkDistributedContainerTestCase::cleanup(void)

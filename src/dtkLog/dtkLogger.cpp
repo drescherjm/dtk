@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 23:38:21 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Feb 13 15:32:49 2013 (+0100)
+ * Last-Updated: Wed Feb 13 16:54:54 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 13
  */
 
 /* Change Log:
@@ -63,7 +63,7 @@
 //  true       | false            | false
 //  true       | true             | true
 
-Q_GLOBAL_STATIC(dtkLoggingPrivate, qLogging)
+Q_GLOBAL_STATIC(dtkLoggingPrivate, dtkLogging)
 
 // This object is returned from an exported API so it lives longer than dtkLoggingPrivate
 static class dtkLoggingCategoryDefault : public dtkLoggingCategory
@@ -116,7 +116,7 @@ dtkLoggingCategory& dtkLoggingCategory::defaultCategory()
 dtkLoggingCategory::~dtkLoggingCategory()
 {
     if (!d_ptr) return;
-    dtkLoggingPrivate *qlp = qLogging();
+    dtkLoggingPrivate *qlp = dtkLogging();
     if (!qlp) return; // logging system is gone
     qlp->releasePrivate(*this);
 }
@@ -146,11 +146,11 @@ dtkLoggingCategory::~dtkLoggingCategory()
 */
 bool dtkLoggingCategory::isEnabled(QtMsgType msgtype)
 {
-    dtkLoggingPrivate *qlp = qLogging();
+    dtkLoggingPrivate *qlp = dtkLogging();
 
     // If the logging system is available, we might need to register our category object.
     if (qlp && qlp->registerCategories())
-        return qLogging()->isEnabled(*this, msgtype);
+        return dtkLogging()->isEnabled(*this, msgtype);
 
     // If we're the default category or we were previously registered, we'll have cached values.
     if (d_ptr)
@@ -178,7 +178,7 @@ bool dtkLoggingCategory::isEnabled(QtMsgType msgtype)
 */
 void dtkSetLoggingRulesFile(const QString &path)
 {
-    dtkLoggingPrivate *qlp = qLogging();
+    dtkLoggingPrivate *qlp = dtkLogging();
     if (!qlp) return; // logging system is gone
     if (qlp->checkEnvironment()) return; // can't override the environment variable
     QString config = dtkLoggingPrivate::resolveConfigFile(path);
@@ -198,7 +198,7 @@ void dtkSetLoggingRulesFile(const QString &path)
 */
 void dtkSetLoggingRules(const QByteArray &rules)
 {
-    dtkLoggingPrivate *qlp = qLogging();
+    dtkLoggingPrivate *qlp = dtkLogging();
     if (!qlp) return; // logging system is gone
     if (qlp->checkEnvironment()) return; // can't override the environment variable
     if (!rules.isEmpty())
@@ -253,8 +253,8 @@ void dtkSetLoggingRules(const QByteArray &rules)
 dtkLoggingPrivate *dtkLogger(void)
 {
     // If we're really unlucky, this will be null (during shutdown of the app)
-    dtkLoggingPrivate *qlp = qLogging();
-    if (!qlp) qFatal("Cannot call dtkLogger() because qLogging() is 0");
+    dtkLoggingPrivate *qlp = dtkLogging();
+    if (!qlp) qFatal("Cannot call dtkLogger() because dtkLogging() is 0");
     return qlp;
 }
 

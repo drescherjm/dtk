@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 12:18:35 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Feb 13 15:32:41 2013 (+0100)
+ * Last-Updated: Wed Feb 13 17:13:21 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 22
+ *     Update #: 28
  */
 
 /* Change Log:
@@ -23,6 +23,17 @@
 
 void dtkSetLoggingRules(const QByteArray &rules);
 void dtkSetLoggingRulesFile(const QString &path);
+
+// ///////////////////////////////////////////////////////////////////
+// Example logging rules file
+// ///////////////////////////////////////////////////////////////////
+
+// default.*=true
+// default.critical=false
+// default.warning=true
+// default.debug=false
+//  *.Category.*=true
+// My.Category.B=false
 
 // ///////////////////////////////////////////////////////////////////
 // qDebug overload

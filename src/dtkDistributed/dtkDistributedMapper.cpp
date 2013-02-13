@@ -62,16 +62,15 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
     if (this->pu_count == 1) {
         this->map << 0;
         this->step = this->id_count;
-        
+
     } else {
 
         this->step = qRound(this->id_count / (1. * this->pu_count));
-        qlonglong remain = this->id_count - this->step * (this->pu_count - 1);
-        
-        for (qlonglong i = 0; i < this->pu_count - 1; ++i)
+        for (qlonglong i = 0; i < this->pu_count - 1; ++i) {
             this->map << i * this->step;
-        
-        this->map << (this->map.at(this->pu_count - 2) + remain);
+        }
+
+        this->map << (this->map.at(this->pu_count - 2) + this->step);
     }
 }
 
@@ -98,7 +97,7 @@ qlonglong dtkDistributedMapperPrivate::count(const qlonglong& pu_id) const
 
 qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id) const
 {
-    return qFloor(global_id / this->step);
+    return qMin((qlonglong)(global_id / this->step), this->pu_count-1);
 }
 
 // /////////////////////////////////////////////////////////////////

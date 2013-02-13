@@ -76,7 +76,7 @@ template <typename T> T dtkDistributedContainer<T>::at(const qlonglong& global_i
 
     if (me == owner) {
         return m_buffer[pos];
-        
+
     } else {
         if (!m_temp)
             m_temp = new T[1];

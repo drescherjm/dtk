@@ -76,6 +76,11 @@ void dtkDistributedCommunicator::uninitialize(void)
     d->initialized = false;
 }
 
+void dtkDistributedCommunicator::barrier(void)
+{
+
+}
+
 int dtkDistributedCommunicator::pid(void)
 {
    return 0;

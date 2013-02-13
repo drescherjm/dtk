@@ -53,6 +53,9 @@ public:
     virtual void put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id);
 
 public:
+    virtual void barrier();
+
+public:
     virtual qint32  pid(void);
     virtual qint32 size(void);
 

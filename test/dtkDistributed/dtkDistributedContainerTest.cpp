@@ -99,6 +99,10 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
     qlonglong N = 11;
 
+    qlonglong sum = 0;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += 2*i;
+
     dtkDistributedCommunicator *comm = dtkDistributed::communicator::pluginFactory().create("mpi");
     
     dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, comm);
@@ -108,15 +112,16 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
     if (comm->pid() == 0) {
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
-        
+
         while(g_it.hasNext()) {
             c.set(g_it.globalIndex(), g_it.globalIndex());
             g_it.next();
         }
     }
+    comm->barrier();
 
     dtkDistributedLocalIterator<qlonglong>& l_it  = c.localIterator();
-    
+
     while(l_it.hasNext()) {
         c.setLocal(l_it.localIndex(), 2 * l_it.peekNext());
         l_it.next();
@@ -128,15 +133,24 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
         l_it.next();
     }
 
+
     if (comm->pid() == 0) {
 
+        qlonglong check_sum = 0;
+
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
-        
+
         while(g_it.hasNext()) {
+            check_sum += c.at(g_it.globalIndex());
             qDebug() << g_it.globalIndex() << g_it.peekNext();
             g_it.next();
         }
+
+        qDebug() << "TOTAL SUM" << check_sum;
+        QVERIFY(sum == check_sum);
     }
+
+    comm->barrier();
 
     //comm->uninitialize();
     //delete comm;

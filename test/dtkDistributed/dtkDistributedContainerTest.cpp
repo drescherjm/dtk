@@ -13,12 +13,11 @@
  */
 
 #include "dtkDistributedContainerTest.h"
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedContainer.h>
+#include <dtkDistributed>
 
 void dtkDistributedContainerTestCase::initTestCase(void)
 {
-
+    dtkDistributed::communicator::pluginManager().initialize();
 }
 
 void dtkDistributedContainerTestCase::init(void)
@@ -98,26 +97,32 @@ void dtkDistributedContainerTestCase::testGlobal(void)
 
 void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
-    qlonglong N = 11;
+    qlonglong N = 1001;
 
-    dtkDistributedCommunicator comm;
+    qlonglong sum = 0;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += 2*i;
 
-    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, &comm);
+    dtkDistributedCommunicator *comm = dtkDistributed::communicator::pluginFactory().create("mpi");
+    
+    dtkDistributedContainer<qlonglong>& c = *(new dtkDistributedContainer<qlonglong>(N, comm));
 
     QVERIFY(N == c.size());
 
-    if (comm.pid() == 0) {
+    comm->barrier();
+    if (comm->pid() == 0) {
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
-        
+
         while(g_it.hasNext()) {
             c.set(g_it.globalIndex(), g_it.globalIndex());
             g_it.next();
         }
     }
+    comm->barrier();
 
     dtkDistributedLocalIterator<qlonglong>& l_it  = c.localIterator();
-    
+
     while(l_it.hasNext()) {
         c.setLocal(l_it.localIndex(), 2 * l_it.peekNext());
         l_it.next();
@@ -125,24 +130,39 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
 
     l_it.toFront();
     while(l_it.hasNext()) {
-        qDebug() << comm.pid() << l_it.localIndex() << l_it.peekNext();
+        qDebug() << comm->pid() << l_it.localIndex() << l_it.peekNext();
         l_it.next();
     }
 
-    if (comm.pid() == 0) {
+
+    comm->barrier();
+    if (comm->pid() == 0) {
+
+        qlonglong check_sum = 0;
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
-        
+
         while(g_it.hasNext()) {
+            check_sum += c.at(g_it.globalIndex());
             qDebug() << g_it.globalIndex() << g_it.peekNext();
             g_it.next();
         }
+
+        qDebug() << "TOTAL SUM" << check_sum;
+        QVERIFY(sum == check_sum);
     }
+
+
+    comm->barrier();
+    delete &c;
+    comm->barrier();
+    comm->uninitialize();
+    delete comm;
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)
 {
-
+    dtkDistributed::communicator::pluginManager().uninitialize();
 }
 
 void dtkDistributedContainerTestCase::cleanup(void)

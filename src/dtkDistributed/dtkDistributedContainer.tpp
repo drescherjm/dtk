@@ -28,6 +28,8 @@ template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(const q
 
 template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 {
+    m_comm->deallocate(m_buffer_id);
+
     if (m_loc_it)
         delete m_loc_it;
 
@@ -40,8 +42,12 @@ template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 template<typename T> void dtkDistributedContainer<T>::allocate(void)
 {
     m_buffer_size = m_mapper->count(m_comm->pid());
-    //m_buffer = new T[m_buffer_size];
-    m_buffer_id = m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer);
+    m_buffer = static_cast<T*>(m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer_id));
+};
+
+template<typename T> void dtkDistributedContainer<T>::deallocate(void)
+{
+    m_comm->deallocate(m_buffer_id);
 };
 
 template <typename T> qlonglong dtkDistributedContainer<T>::size(void) const
@@ -70,7 +76,7 @@ template <typename T> T dtkDistributedContainer<T>::at(const qlonglong& global_i
 
     if (me == owner) {
         return m_buffer[pos];
-        
+
     } else {
         if (!m_temp)
             m_temp = new T[1];

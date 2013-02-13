@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:20:47 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 18:35:40 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 26
+ * Last-Updated: 2013 Tue Feb 12 14:24:43 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 27
  */
 
 /* Change Log:
@@ -33,7 +33,7 @@ dtkDistributedCommunicatorPluginFactory::~dtkDistributedCommunicatorPluginFactor
     d = NULL;
 }
 
-dtkDistributedCommunicator dtkDistributedCommunicatorPluginFactory::create(const QString& key)
+dtkDistributedCommunicator *dtkDistributedCommunicatorPluginFactory::create(const QString& key)
 {
     Q_ASSERT(d->creators.contains(key));
 

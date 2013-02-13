@@ -41,8 +41,9 @@ public:
     virtual void uninitialize(void);
 
 public:
-    virtual qlonglong allocate(qlonglong count, qlonglong size, qlonglong *&buffer);
-    virtual qlonglong allocate(qlonglong count, qlonglong size, void *buffer);
+    virtual void *allocate(qlonglong count, qlonglong size, qlonglong& buffer_id);
+
+    virtual void deallocate(const qlonglong& buffer_id);
 
 public:
     virtual void       get(qint32 from, qlonglong position,    void *array, qlonglong buffer_id);
@@ -50,6 +51,9 @@ public:
 
 public:
     virtual void put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id);
+
+public:
+    virtual void barrier();
 
 public:
     virtual qint32  pid(void);

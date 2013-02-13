@@ -97,7 +97,7 @@ void dtkDistributedContainerTestCase::testGlobal(void)
 
 void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
-    qlonglong N = 11;
+    qlonglong N = 1001;
 
     qlonglong sum = 0;
     for (qlonglong i = 0; i < N; ++i)
@@ -105,10 +105,11 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
 
     dtkDistributedCommunicator *comm = dtkDistributed::communicator::pluginFactory().create("mpi");
     
-    dtkDistributedContainer<qlonglong> c = dtkDistributedContainer<qlonglong>(N, comm);
+    dtkDistributedContainer<qlonglong>& c = *(new dtkDistributedContainer<qlonglong>(N, comm));
 
     QVERIFY(N == c.size());
 
+    comm->barrier();
     if (comm->pid() == 0) {
 
         dtkDistributedGlobalIterator<qlonglong>& g_it  = c.globalIterator();
@@ -134,6 +135,7 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
     }
 
 
+    comm->barrier();
     if (comm->pid() == 0) {
 
         qlonglong check_sum = 0;
@@ -150,10 +152,12 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
         QVERIFY(sum == check_sum);
     }
 
-    comm->barrier();
 
-    //comm->uninitialize();
-    //delete comm;
+    comm->barrier();
+    delete &c;
+    comm->barrier();
+    comm->uninitialize();
+    delete comm;
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

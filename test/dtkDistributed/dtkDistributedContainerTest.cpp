@@ -97,14 +97,17 @@ void dtkDistributedContainerTestCase::testGlobal(void)
 
 void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
-    qlonglong N = 1001;
+    qlonglong N = 11;
 
     qlonglong sum = 0;
     for (qlonglong i = 0; i < N; ++i)
         sum += 2*i;
 
     dtkDistributedCommunicator *comm = dtkDistributed::communicator::pluginFactory().create("mpi");
-    
+
+    QStringList hostnames = (QStringList() << "localhost" << "localhost" );
+    comm->spawn(hostnames,2);
+
     dtkDistributedContainer<qlonglong>& c = *(new dtkDistributedContainer<qlonglong>(N, comm));
 
     QVERIFY(N == c.size());

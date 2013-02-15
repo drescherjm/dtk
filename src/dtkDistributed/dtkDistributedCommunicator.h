@@ -53,6 +53,8 @@ public:
     virtual void put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id);
 
 public:
+    virtual void spawn(QStringList hostnames, qlonglong np);
+
     virtual void barrier();
 
 public:

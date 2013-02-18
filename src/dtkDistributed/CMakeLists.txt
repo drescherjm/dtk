@@ -27,10 +27,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedContainer.h
   dtkDistributedContainer.tpp
   dtkDistributedMapper.h
+  dtkDistributedPolicy.h
   dtkDistributedSettings
   dtkDistributedSettings.h
   dtkDistributedWork.h
-  dtkDistributedWorker.h)
+  dtkDistributedWorker.h
+  dtkDistributedWorkerManager.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
@@ -38,9 +40,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorPluginFactory.cpp
   dtkDistributedCommunicatorPluginManager.cpp
   dtkDistributedMapper.cpp
+  dtkDistributedPolicy.cpp
   dtkDistributedSettings.cpp
   dtkDistributedWork.cpp
-  dtkDistributedWorker.cpp)
+  dtkDistributedWorker.cpp
+  dtkDistributedWorkerManager.cpp)
 
 ## #################################################################
 ## Build rules

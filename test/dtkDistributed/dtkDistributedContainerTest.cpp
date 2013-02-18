@@ -14,8 +14,10 @@
 
 #include "dtkDistributedContainerTest.h"
 #include <dtkDistributed>
+#include <dtkDistributed/dtkDistributedPolicy.h>
 #include <dtkDistributed/dtkDistributedWork.h>
 #include <dtkDistributed/dtkDistributedWorker.h>
+#include <dtkDistributed/dtkDistributedWorkerManager.h>
 
 class myWork : public dtkDistributedWork
 {
@@ -83,7 +85,6 @@ class myWork : public dtkDistributedWork
     comm->barrier();
     delete &c;
     comm->barrier();
-    comm->uninitialize();
 
         }
 };
@@ -170,15 +171,20 @@ void dtkDistributedContainerTestCase::testGlobal(void)
 
 void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
-    dtkDistributedCommunicator *comm = dtkDistributed::communicator::pluginFactory().create("qthread");
 
-    QStringList hostnames = (QStringList() << "localhost" << "localhost" );
-    dtkDistributedWorker worker;
+    dtkDistributedPolicy policy;
+    policy.setType(dtkDistributedPolicy::MT);
+    policy.addHost("localhost");
+    policy.addHost("localhost");
+
+    dtkDistributedWorkerManager manager;
     myWork *work = new myWork();
-    worker.setWork(work);
-    worker.setCommunicator(comm);
-    comm->spawn(hostnames,2, worker);
-    sleep(10);
+
+    qDebug() << "set policy";
+    manager.setPolicy(&policy);
+    qDebug() << "spawn";
+    manager.spawn(work);
+    manager.unspawn();
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Tue Feb 12 16:34:19 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 127
+ * Last-Updated: ven. févr. 15 23:00:58 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 130
  */
 
 /* Change Log:
@@ -23,11 +23,12 @@ template<typename T> class dtkDistributedGlobalIterator;
 
 class dtkDistributedCommunicator;
 class dtkDistributedMapper;
+class dtkDistributedWorker;
 
 template<typename T> class dtkDistributedContainer
 {
 public:
-     dtkDistributedContainer(const qlonglong& size, dtkDistributedCommunicator *communicator);
+     dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker);
 
 public:
     ~dtkDistributedContainer(void);
@@ -55,6 +56,7 @@ public:
 private:
     dtkDistributedMapper *m_mapper;
     dtkDistributedCommunicator *m_comm;
+    dtkDistributedWorker *m_worker;
 
 private:
     T *m_buffer;

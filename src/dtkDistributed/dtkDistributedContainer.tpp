@@ -12,15 +12,18 @@
 
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedCommunicator.h"
+#include "dtkDistributedWorker.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedContainer implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(const qlonglong& size, dtkDistributedCommunicator *communicator) : m_buffer(0), m_temp(0), m_loc_it(0), m_glob_it(0), m_global_size(size), m_mapper(new dtkDistributedMapper), m_comm(communicator)
+template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker) : m_buffer(0), m_temp(0), m_loc_it(0), m_glob_it(0), m_global_size(size), m_mapper(new dtkDistributedMapper), m_comm(worker->communicator()), m_worker(worker)
 {
     m_comm->initialize();
 
+    qDebug() << "start container with size " << m_comm->size()  << "rank" << m_worker->wid();
+    m_buffer_id = m_worker->wid();
     m_mapper->setMapping(m_global_size, m_comm->size());
 
     this->allocate();
@@ -41,8 +44,8 @@ template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 
 template<typename T> void dtkDistributedContainer<T>::allocate(void)
 {
-    m_buffer_size = m_mapper->count(m_comm->pid());
-    m_buffer = static_cast<T*>(m_comm->allocate(m_mapper->count(m_comm->pid()), sizeof(T), m_buffer_id));
+    m_buffer_size = m_mapper->count(m_worker->wid());
+    m_buffer = static_cast<T*>(m_comm->allocate(m_mapper->count(m_worker->wid()), sizeof(T), m_buffer_id));
 };
 
 template<typename T> void dtkDistributedContainer<T>::deallocate(void)
@@ -69,7 +72,7 @@ template <typename T> void dtkDistributedContainer<T>::setLocal(const qlonglong&
 
 template <typename T> T dtkDistributedContainer<T>::at(const qlonglong& global_id)
 {
-    qint32 me = m_comm->pid();
+    qint32 me = m_worker->wid();
     qint32 owner = static_cast<qint32>(m_mapper->owner(global_id));
 
     qlonglong pos = m_mapper->globalToLocal(global_id);

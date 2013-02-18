@@ -14,6 +14,7 @@
  */
 
 #include "dtkDistributedCommunicator.h"
+#include "dtkDistributedWorker.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedCommunicatorPrivate
@@ -76,7 +77,7 @@ void dtkDistributedCommunicator::uninitialize(void)
     d->initialized = false;
 }
 
-void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np)
+void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker worker)
 {
 }
 

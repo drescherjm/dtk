@@ -75,6 +75,8 @@ dtkScriptInterpreterPython::~dtkScriptInterpreterPython(void)
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
+  qDebug() << Q_FUNC_INFO << command;
+
     QString statement = command;
 
     if(command.endsWith(":")) {

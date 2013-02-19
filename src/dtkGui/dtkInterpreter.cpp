@@ -221,7 +221,9 @@ void dtkInterpreter::onKeyEnterPressed(void)
 {
     int stat;
 
-    QString line = currentLine();
+    QString line = currentBlock();
+
+    qDebug() << Q_FUNC_INFO << line;
 
     if(d->interpreter)
         line.remove(d->prompt);
@@ -263,4 +265,24 @@ QString dtkInterpreter::currentLine(void) const
     tc.select(QTextCursor::LineUnderCursor);
     
     return tc.selectedText();
+}
+
+QString dtkInterpreter::currentBlock(void) const
+{
+      QTextCursor tc = textCursor();
+      tc.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    
+      while(!tc.selectedText().contains(d->prompt))
+	tc.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
+      QString block;
+      QString text = tc.selectedText();
+      QStringList lines = text.split(QChar(8233));
+
+      if(lines.count())
+	block = lines.join("\n");
+      else
+	block = block;
+
+      return text;
 }

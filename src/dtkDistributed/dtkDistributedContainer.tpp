@@ -114,3 +114,13 @@ template <typename T> dtkDistributedGlobalIterator<T>& dtkDistributedContainer<T
 
     return *m_glob_it;
 };
+
+template <typename T> dtkDistributedIterator<T>& dtkDistributedContainer<T>::iterator(void)
+{
+    if (!m_glob_it)
+        m_it = new dtkDistributedIterator<T>(*this);
+
+    m_it->toFront();
+
+    return *m_it;
+};

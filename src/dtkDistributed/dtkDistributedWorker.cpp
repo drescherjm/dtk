@@ -80,6 +80,11 @@ void dtkDistributedWorker::setWct(qlonglong wct)
     d->wct = wct;
 }
 
+bool dtkDistributedWorker::master(void)
+{
+    return (d->wid == 0);
+}
+
 qlonglong dtkDistributedWorker::wid(void)
 {
     return d->wid;

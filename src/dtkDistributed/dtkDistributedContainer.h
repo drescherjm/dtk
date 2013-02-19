@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: ven. févr. 15 23:00:58 2013 (+0100)
+ * Last-Updated: mar. févr. 19 11:22:18 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 130
+ *     Update #: 225
  */
 
 /* Change Log:
@@ -14,6 +14,9 @@
 
 #pragma once
 
+#include <dtkDistributed>
+
+template<typename T> class       dtkDistributedIterator;
 template<typename T> class  dtkDistributedLocalIterator;
 template<typename T> class dtkDistributedGlobalIterator;
 
@@ -52,6 +55,7 @@ public:
 public:
     dtkDistributedLocalIterator<T>&   localIterator(void);
     dtkDistributedGlobalIterator<T>& globalIterator(void);
+    dtkDistributedIterator<T>& iterator(void);
 
 private:
     dtkDistributedMapper *m_mapper;
@@ -68,12 +72,16 @@ private:
     T *m_temp;
 
 public:
+    dtkDistributedIterator<T>            *m_it;
     dtkDistributedLocalIterator<T>   *m_loc_it;
     dtkDistributedGlobalIterator<T> *m_glob_it;
 
 public:
+    friend class       dtkDistributedIterator<T>;
     friend class  dtkDistributedLocalIterator<T>;
     friend class dtkDistributedGlobalIterator<T>;
+
+    dtkDistributedWorker *worker(void) { return m_worker; };
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -125,6 +133,151 @@ public:
     const T&  peekPrevious(void) { const T *p = i; return *(--p); }
     qlonglong   localIndex(void) { return ( i - c.m_buffer ); }
 };
+
+// ///////////////////////////////////////////////////////////////////
+// dtkDistributedIterator
+// ///////////////////////////////////////////////////////////////////
+
+template<typename T> class dtkDistributedIterator
+{
+    dtkDistributedContainer<T>& c;
+    const T *i;
+    qlonglong gid;
+
+public:
+     dtkDistributedIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_buffer), gid(0) {;}
+    ~dtkDistributedIterator(void) {;}
+
+public:
+    void            toBack(void) {
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+                i = c.m_buffer + c.m_buffer_size;
+                break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                gid = c.m_global_size;
+            else
+                gid = 0;
+            break;;
+        }
+    }
+
+    void           toFront(void) {
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+                i = c.m_buffer;
+                break;;
+        case dtkDistributed::Global:
+                gid = 0;
+                break;;
+        }
+    }
+
+    bool           hasNext(void) {
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return ( i != (c.m_buffer + c.m_buffer_size) );
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return ( gid < c.m_global_size );
+            else
+                return false;
+            break;;
+        }
+    }
+
+    bool       hasPrevious(void) {
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return ( i != c.m_buffer );
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return ( gid > 0 );
+            else
+                return false;
+            break;;
+        }
+    }
+
+    T          next(void) {
+        const T *n = i;
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            ++i;
+            return *n;
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return c.at(gid++);
+            else
+                return *n; //FIXME
+            break;;
+        }
+    }
+
+    T      previous(void) {
+        T empty;
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return *(--i);
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return c.at(--gid);
+            else
+                return empty;
+            break;;
+        }
+    }
+
+    T      peekNext(void) {
+        T empty;
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return *i;
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return c.at(gid);
+            else
+                return empty;
+            break;;
+        }
+    }
+
+    T  peekPrevious(void) {
+        const T *p = i;
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return *(--p);
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return c.at(gid-1);
+            else
+                return NULL;
+            break;;
+        }
+ }
+
+    qlonglong   index(void) {
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return ( i - c.m_buffer );
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return gid;
+            else
+                return -1;
+            break;;
+        }
+    }
+};
+
 
 // ///////////////////////////////////////////////////////////////////
 

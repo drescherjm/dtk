@@ -46,6 +46,9 @@ public:
     qlonglong wct(void);
 
 public:
+    bool master(void);
+
+public:
     dtkDistributedCommunicator *communicator();
 
 public:

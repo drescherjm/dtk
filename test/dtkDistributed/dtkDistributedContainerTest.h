@@ -25,8 +25,7 @@ private slots:
     void init(void);
 
 private slots:
-    void testGlobalLocalMT(void);
-    void testGlobalLocalMP(void);
+    void testGlobalLocal(void);
 
 private slots:
     void cleanupTestCase(void);

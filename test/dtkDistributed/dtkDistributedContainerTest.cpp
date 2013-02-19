@@ -26,7 +26,7 @@ class myWork : public dtkDistributedWork
     void run(void)
         {
             qDebug()<< "run!!!!";
-            qlonglong N = 11;
+            qlonglong N = 2000000;
 
             qlonglong sum = 0;
             for (qlonglong i = 0; i < N; ++i)
@@ -38,8 +38,15 @@ class myWork : public dtkDistributedWork
 
             QVERIFY(N == c.size());
 
+            QTime time, maintime;
+            maintime.start();
+            time.start();
             dtkDistributed::setMode(dtkDistributed::Global);
             comm->barrier();
+            if (dtkDistributedWork::worker()->master()) {
+                qDebug() << "first barrier " <<  time.elapsed() << "ms";
+                time.restart();
+            }
             dtkDistributedIterator<qlonglong>& it  = c.iterator();
 
             if (dtkDistributedWork::worker()->wid() == 0) {
@@ -51,22 +58,30 @@ class myWork : public dtkDistributedWork
             }
             comm->barrier();
 
+            if (dtkDistributedWork::worker()->master()) {
+                qDebug() << "global section:" <<  time.elapsed() << "ms";
+                time.restart();
+            }
             dtkDistributed::setMode(dtkDistributed::Local);
             it.toFront();
 
             while(it.hasNext()) {
-                c.setLocal(it.index(), 2 * it.peekNext());
+                c.setLocal(it.index(),  2 * it.peekNext() );
                 it.next();
             }
 
             it.toFront();
             while(it.hasNext()) {
-                qDebug() << dtkDistributedWork::worker()->wid() << it.index() << it.peekNext();
+//                qDebug() << dtkDistributedWork::worker()->wid() << it.index() << it.peekNext();
                 it.next();
             }
 
 
             comm->barrier();
+            if (dtkDistributedWork::worker()->master()) {
+                qDebug() << "local section:" <<  time.elapsed() << "ms";
+                time.restart();
+            }
             dtkDistributed::setMode(dtkDistributed::Global);
 
             qlonglong check_sum = 0;
@@ -75,13 +90,14 @@ class myWork : public dtkDistributedWork
 
             while(it.hasNext()) {
                 check_sum += c.at(it.index());
-                qDebug() << it.index() << it.peekNext();
+//                qDebug() << it.index() << it.peekNext();
                 it.next();
             }
 
 
             if (dtkDistributedWork::worker()->master()) {
-                qDebug() << "TOTAL SUM" << check_sum;
+                qDebug() << "global section:" <<  time.elapsed() << "ms";
+                qDebug() << "TOTAL SUM" << check_sum << maintime.elapsed() << "ms";
                 QVERIFY(sum == check_sum);
             }
 
@@ -103,36 +119,37 @@ void dtkDistributedContainerTestCase::init(void)
 
 }
 
-void dtkDistributedContainerTestCase::testGlobalLocalMT(void)
+void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
 
     dtkDistributedPolicy policy;
-    policy.setType(dtkDistributedPolicy::MT);
-    policy.addHost("localhost");
-    policy.addHost("localhost");
+    QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
+    QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
+    int np = 2;
 
-    dtkDistributedWorkerManager manager;
-    myWork *work = new myWork();
-
-    qDebug() << "set policy to MT";
-    manager.setPolicy(&policy);
-    qDebug() << "spawn";
-    manager.spawn(work);
-    manager.unspawn();
-}
-
-void dtkDistributedContainerTestCase::testGlobalLocalMP(void)
-{
-
-    dtkDistributedPolicy policy;
     policy.setType(dtkDistributedPolicy::MP);
-    policy.addHost("localhost");
-    policy.addHost("localhost");
+
+    if (!numprocs.isEmpty()) {
+        np = numprocs.toInt();
+        qDebug() << "got num procs from env" << np;
+    }
+    if (!policyEnv.isEmpty()) {
+        qDebug() << "got policy from env" << policyEnv;
+        if (QString(policyEnv) == "MT"){
+            policy.setType(dtkDistributedPolicy::MT);
+        } else if (QString(policyEnv) == "MP") {
+            policy.setType(dtkDistributedPolicy::MP);
+        } else {
+            qDebug() << "unknown policy" << policyEnv;
+        }
+    }
+
+    for (int i=0; i < np; ++i)
+        policy.addHost("localhost");
 
     dtkDistributedWorkerManager manager;
     myWork *work = new myWork();
 
-    qDebug() << "set policy to MP";
     manager.setPolicy(&policy);
     qDebug() << "spawn";
     manager.spawn(work);

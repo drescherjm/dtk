@@ -49,13 +49,11 @@ class myWork : public dtkDistributedWork
             }
             dtkDistributedIterator<qlonglong>& it  = c.iterator();
 
-            if (dtkDistributedWork::worker()->wid() == 0) {
-
-                while(it.hasNext()) {
-                    c.set(it.index(), it.index());
-                    it.next();
-                }
+            while(it.hasNext()) {
+                c.set(it.index(), it.index());
+                it.next();
             }
+
             comm->barrier();
 
             if (dtkDistributedWork::worker()->master()) {
@@ -98,13 +96,12 @@ class myWork : public dtkDistributedWork
             if (dtkDistributedWork::worker()->master()) {
                 qDebug() << "global section:" <<  time.elapsed() << "ms";
                 qDebug() << "TOTAL SUM" << check_sum << maintime.elapsed() << "ms";
+                comm->barrier();
                 QVERIFY(sum == check_sum);
-            }
+            } else
+                comm->barrier();
 
-
-            comm->barrier();
             delete &c;
-            comm->barrier();
 
         }
 };

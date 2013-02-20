@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
  * Version: 
- * Last-Updated: mar. févr. 19 11:22:18 2013 (+0100)
+ * Last-Updated: mer. févr. 20 10:43:08 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 225
+ *     Update #: 229
  */
 
 /* Change Log:
@@ -276,6 +276,21 @@ public:
             break;;
         }
     }
+
+    qlonglong   globalIndex(void) {
+        switch (dtkDistributed::mode()) {
+        case dtkDistributed::Local:
+            return ( c.m_mapper->localToGlobal(i - c.m_buffer, c.m_worker->wid()));
+            break;;
+        case dtkDistributed::Global:
+            if (c.worker()->master())
+                return gid;
+            else
+                return -1;
+            break;;
+        }
+    }
+
 };
 
 

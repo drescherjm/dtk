@@ -42,13 +42,12 @@ public:
     virtual void uninitialize(void);
 
 public:
-    virtual void *allocate(qlonglong count, qlonglong size, qlonglong& buffer_id);
+    virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);
 
-    virtual void deallocate(const qlonglong& buffer_id);
+    virtual void deallocate(qlonglong wid, const qlonglong& buffer_id);
 
 public:
-    virtual void       get(qint32 from, qlonglong position,    void *array, qlonglong buffer_id);
-    virtual QByteArray get(qint32 from, qlonglong position, qlonglong size, qlonglong buffer_id);
+    virtual void get(qint32 from, qlonglong position, void *array, qlonglong buffer_id);
 
 public:
     virtual void put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id);

@@ -46,11 +46,14 @@ public:
     qlonglong wct(void);
 
 public:
+    qlonglong containerId(void);
+
+public:
     bool master(void);
 
 public:
     dtkDistributedCommunicator *communicator();
 
-public:
+private:
     dtkDistributedWorkerPrivate *d;
 };

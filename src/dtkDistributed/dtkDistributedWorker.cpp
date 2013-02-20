@@ -29,6 +29,7 @@ class dtkDistributedWorkerPrivate
 public:
     qlonglong wid;
     qlonglong wct;
+    qlonglong container_id;
 
 public:
     dtkDistributedCommunicator *comm;
@@ -46,6 +47,7 @@ dtkDistributedWorker::dtkDistributedWorker(void) : QRunnable(), d(new dtkDistrib
     d->work = NULL;
     d->wid  = -1;
     d->wct  = 0;
+    d->container_id  = 0;
 }
 
 dtkDistributedWorker::~dtkDistributedWorker(void)
@@ -62,6 +64,7 @@ dtkDistributedWorker::dtkDistributedWorker(const dtkDistributedWorker& other): Q
     d->comm = other.d->comm;
     d->work = other.d->work->clone();
     d->work->setWorker(this);
+    d->container_id = 0; // do not share containers id
 }
 
 dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWorker& other)
@@ -95,6 +98,11 @@ qlonglong dtkDistributedWorker::wct(void)
     return d->wct;
 }
 
+qlonglong dtkDistributedWorker::containerId(void)
+{
+    return d->container_id++;
+}
+
 void dtkDistributedWorker::setWork(dtkDistributedWork *work)
 {
     d->work = work;
@@ -113,7 +121,7 @@ dtkDistributedCommunicator *dtkDistributedWorker::communicator(void)
 
 void dtkDistributedWorker::run(void)
 {
-    qDebug() << "thread " << d->wid << "barrier";
+    qDebug() << "thread " << d->wid << "barrier" ;
     d->comm->barrier();
     qDebug() << "thread " << d->wid << "barrier released, run";
     d->work->run();

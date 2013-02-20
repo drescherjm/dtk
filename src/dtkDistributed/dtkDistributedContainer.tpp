@@ -22,8 +22,8 @@ template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(const q
 {
     m_comm->initialize();
 
-    qDebug() << "start container with size " << m_comm->size()  << "rank" << m_worker->wid();
-    m_buffer_id = m_worker->wid();
+    qDebug() << "start container with size " <<  size << "and comm size" << m_comm->size()  << "rank" << m_worker->wid();
+    m_buffer_id = m_worker->containerId();
     m_mapper->setMapping(m_global_size, m_comm->size());
 
     this->allocate();
@@ -31,7 +31,7 @@ template<typename T> dtkDistributedContainer<T>::dtkDistributedContainer(const q
 
 template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 {
-    m_comm->deallocate(m_buffer_id);
+    m_comm->deallocate( m_worker->wid(), m_buffer_id);
 
     if (m_loc_it)
         delete m_loc_it;
@@ -45,12 +45,12 @@ template<typename T> dtkDistributedContainer<T>::~dtkDistributedContainer(void)
 template<typename T> void dtkDistributedContainer<T>::allocate(void)
 {
     m_buffer_size = m_mapper->count(m_worker->wid());
-    m_buffer = static_cast<T*>(m_comm->allocate(m_mapper->count(m_worker->wid()), sizeof(T), m_buffer_id));
+    m_buffer = static_cast<T*>(m_comm->allocate(m_mapper->count(m_worker->wid()), sizeof(T), m_worker->wid(), m_buffer_id));
 };
 
 template<typename T> void dtkDistributedContainer<T>::deallocate(void)
 {
-    m_comm->deallocate(m_buffer_id);
+    m_comm->deallocate( m_worker->wid(), m_buffer_id);
 };
 
 template <typename T> qlonglong dtkDistributedContainer<T>::size(void) const

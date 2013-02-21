@@ -34,17 +34,18 @@ class myWork : public dtkDistributedWork
 
             dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
 
-            dtkDistributedContainer<qlonglong>& c = *(new dtkDistributedContainer<qlonglong>(N,dtkDistributedWork::worker() ));
-
-            QVERIFY(N == c.size());
-
             QTime time, maintime;
             maintime.start();
             time.start();
 
+            dtkDistributedContainer<qlonglong>& c = *(new dtkDistributedContainer<qlonglong>(N,dtkDistributedWork::worker() ));
+
+            QVERIFY(N == c.size());
+
+            qDebug()<< "allocation time:" <<time.elapsed() << "ms"; time.restart();
             DTK_DISTRIBUTED_BEGIN_LOCAL
 
-            dtkDistributedIterator<qlonglong>& it  = c.iterator();
+            dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
 
             // Fill the container in parallel
             while(it.hasNext()) {
@@ -68,15 +69,14 @@ class myWork : public dtkDistributedWork
             //     it.next();
             // }
 
-
             comm->barrier();
 
             qlonglong check_sum = 0;
 
             dtkDistributedContainer<qlonglong>& partial_sum = *(new dtkDistributedContainer<qlonglong>(dtkDistributedWork::worker()->wct(), dtkDistributedWork::worker() ));
-            comm->barrier();
 
             dtkDistributedIterator<qlonglong>& it_partial  = partial_sum.iterator();
+            comm->barrier();
             it.toFront();
 
             // Do the partial sum in parallel, and put the result in a parallel container (of size = number of process/threads)
@@ -93,6 +93,7 @@ class myWork : public dtkDistributedWork
             // Sum the partial sums in sequential mode
             check_sum = 0;
             while(it_partial.hasNext()) {
+
                 check_sum += partial_sum.at(it_partial.index());
                 it_partial.next();
             }

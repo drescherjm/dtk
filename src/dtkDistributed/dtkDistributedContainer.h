@@ -1,15 +1,11 @@
-/* dtkDistributedContainer.h --- 
- * 
+/* dtkDistributedContainer.h ---
+ *
  * Author: Thibaud Kloczko
  * Created: Tue Feb  5 14:08:23 2013 (+0100)
- * Version: 
- * Last-Updated: mer. févr. 20 10:43:08 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 229
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -106,7 +102,7 @@ public:
     T             previous(void) { return c.at(--gid); }
     T             peekNext(void) { return c.at(gid); }
     T         peekPrevious(void) { return c.at(gid-1); }
-    qlonglong  globalIndex(void) { return gid; }    
+    qlonglong  globalIndex(void) { return gid; }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -117,9 +113,10 @@ template<typename T> class dtkDistributedLocalIterator
 {
     dtkDistributedContainer<T>& c;
     const T *i;
+    qlonglong wid;
 
 public:
-     dtkDistributedLocalIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_buffer) {;}
+     dtkDistributedLocalIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_buffer) { wid =  c.m_worker->wid();}
     ~dtkDistributedLocalIterator(void) {;}
 
 public:
@@ -127,11 +124,13 @@ public:
     void           toFront(void) { i = c.m_buffer; }
     bool           hasNext(void) { return ( i != (c.m_buffer + c.m_buffer_size) ); }
     bool       hasPrevious(void) { return ( i != c.m_buffer ); }
-    const T&          next(void) { const T *n = i; ++i; return *n; }
+    const T&          next(void) { return *(++i); }
     const T&      previous(void) { return *(--i); }
     const T&      peekNext(void) { return *i; }
     const T&  peekPrevious(void) { const T *p = i; return *(--p); }
     qlonglong   localIndex(void) { return ( i - c.m_buffer ); }
+    qlonglong  globalIndex(void) { return ( c.m_mapper->localToGlobal(i - c.m_buffer, wid)); }
+    qlonglong        index(void) { return ( i - c.m_buffer ); }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -143,9 +142,14 @@ template<typename T> class dtkDistributedIterator
     dtkDistributedContainer<T>& c;
     const T *i;
     qlonglong gid;
+    qlonglong wid;
+    bool master;
 
 public:
-     dtkDistributedIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_buffer), gid(0) {;}
+    dtkDistributedIterator(dtkDistributedContainer<T>& container) : c(container), i(c.m_buffer), gid(0) {
+           wid = c.m_worker->wid();
+        master = c.worker()->master();
+    }
     ~dtkDistributedIterator(void) {;}
 
 public:
@@ -155,7 +159,7 @@ public:
                 i = c.m_buffer + c.m_buffer_size;
                 break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
+            if (master)
                 gid = c.m_global_size;
             else
                 gid = 0;
@@ -180,10 +184,7 @@ public:
             return ( i != (c.m_buffer + c.m_buffer_size) );
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return ( gid < c.m_global_size );
-            else
-                return false;
+            return (master) ?( gid < c.m_global_size ) : false;
             break;;
         }
     }
@@ -194,26 +195,22 @@ public:
             return ( i != c.m_buffer );
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return ( gid > 0 );
-            else
-                return false;
+            return (master) ?( gid > 0 ) : false;
             break;;
         }
     }
 
     T          next(void) {
-        const T *n = i;
         switch (dtkDistributed::mode()) {
         case dtkDistributed::Local:
             ++i;
-            return *n;
+            return *i;
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
+            if (master)
                 return c.at(gid++);
             else
-                return *n; //FIXME
+                return *i; //FIXME
             break;;
         }
     }
@@ -225,10 +222,7 @@ public:
             return *(--i);
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return c.at(--gid);
-            else
-                return empty;
+            return (master) ? c.at(--gid) : empty;
             break;;
         }
     }
@@ -240,25 +234,20 @@ public:
             return *i;
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return c.at(gid);
-            else
-                return empty;
+            return (master) ? c.at(gid) : empty;
             break;;
         }
     }
 
     T  peekPrevious(void) {
         const T *p = i;
+        T empty;
         switch (dtkDistributed::mode()) {
         case dtkDistributed::Local:
             return *(--p);
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return c.at(gid-1);
-            else
-                return NULL;
+            return (master) ? c.at(gid-1) : empty;
             break;;
         }
  }
@@ -269,10 +258,7 @@ public:
             return ( i - c.m_buffer );
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return gid;
-            else
-                return -1;
+            return (master) ? gid : -1;
             break;;
         }
     }
@@ -280,13 +266,10 @@ public:
     qlonglong   globalIndex(void) {
         switch (dtkDistributed::mode()) {
         case dtkDistributed::Local:
-            return ( c.m_mapper->localToGlobal(i - c.m_buffer, c.m_worker->wid()));
+            return ( c.m_mapper->localToGlobal(i - c.m_buffer, wid));
             break;;
         case dtkDistributed::Global:
-            if (c.worker()->master())
-                return gid;
-            else
-                return -1;
+            return (master) ? gid : -1;
             break;;
         }
     }

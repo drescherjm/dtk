@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb 11 23:25:49 2013 (+0100)
+## Last-Updated: Tue Feb 26 14:45:18 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 113
+##     Update #: 118
 ######################################################################
 ## 
 ### Change Log:
@@ -83,7 +83,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
 ## ###################################################################
 
 add_subdirectory(src)
-add_subdirectory(test)
+add_subdirectory(tst)
 
 ## ###################################################################
 ## Exporting

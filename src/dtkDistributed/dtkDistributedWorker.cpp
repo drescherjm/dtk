@@ -15,6 +15,7 @@
 
 
 #include "dtkDistributedWorker.h"
+
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedWork.h>
 

@@ -15,8 +15,11 @@ project(dtkDistributed)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkObject.h
   dtkDistributed
   dtkDistributed.h
+  dtkDistributedArray.h
+  dtkDistributedArray.tpp
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorPlugin
   dtkDistributedCommunicatorPlugin.h
@@ -25,7 +28,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorPluginManager
   dtkDistributedCommunicatorPluginManager.h
   dtkDistributedContainer.h
-  dtkDistributedContainer.tpp
+  dtkDistributedContainerIndexed.h
+  dtkDistributedContainerSequence.h
   dtkDistributedMapper.h
   dtkDistributedPolicy.h
   dtkDistributedSettings
@@ -35,6 +39,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedWorkerManager.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkObject.cpp
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorPluginFactory.cpp

@@ -15,7 +15,6 @@
 #pragma once
 
 #include <dtkDistributed>
-#include "dtkObject.h"
 
 class dtkDistributedMode;
 class dtkDistributedPolicy;
@@ -29,47 +28,27 @@ template<typename T> class dtkDistributedIterator;
 class dtkDistributedCommunicator;
 class dtkDistributedMapper;
 
-template<typename T> class dtkDistributedContainer : public dtkObject
+template<typename T> class dtkDistributedContainer
 {
 public:
-             dtkDistributedContainer(void) : dtkObject() {;}
-             dtkDistributedContainer(const dtkDistributedContainer<T>& other) : dtkObject(other) {;}
+             dtkDistributedContainer(void) {;}
     virtual ~dtkDistributedContainer(void) {;}
 
 public:
-    virtual dtkDistributedContainer<T> *clone(void) = 0;
-
-public:
-/*     dtkDistributedContainer<T>& operator = (const dtkDistributedContainer<T>& other) { this->copy(other); return *this; } */
-
-/* protected: */
-/*    virtual void copy(const dtkDistributedContainer<T>& other) = 0; */
-
-public:
-/*     bool operator == (const dtkDistributedContainer<T>& other) const { return   this->equal(other) ; } */
-/*     bool operator != (const dtkDistributedContainer<T>& other) const { return !(this->equal(other)); } */
-
-/* protected: */
-/*    virtual bool equal(const dtkDistributedContainer<T>& other) const = 0; */
-
     // virtual void   setMode(dtkDistributedMode     *mode) {   Q_UNUSED(mode); }
     // virtual void setPolicy(dtkDistributedPolicy *policy) { Q_UNUSED(policy); }
 
 public:
-    virtual void      clear(void) = 0;
-    // virtual void localClear(void) = 0;
+    virtual void clear(void) = 0;
 
 public:
-    virtual bool      empty(void) const = 0;
-    // virtual bool localEmpty(void) const = 0;
+    virtual bool empty(void) const = 0;
     
 public:
-    virtual qlonglong      count(void) const = 0;
-    // virtual qlonglong localCount(void) const = 0;
+    virtual qlonglong count(void) const = 0;
     
 public:
-    // virtual dtkDistributedIterator<T>&      iterator(void) = 0;
-    // virtual dtkDistributedIterator<T>& localIterator(void) = 0;
+    // virtual dtkDistributedIterator<T>& iterator(void) = 0;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -102,17 +81,7 @@ public:
     virtual T     next(void) = 0;
     virtual T previous(void) = 0;
 
-// public:
-//     virtual dtkFuture<T>  futureCurrent(void) = 0;
-//     virtual dtkFuture<T>     futureNext(void) = 0;
-//     virtual dtkFuture<T> futurePrevious(void) = 0;
-
 public:
     virtual bool findBackward(const T& value) { return false; }  
     virtual bool  findForward(const T& value) { return false; }
 };
-
-
-// ///////////////////////////////////////////////////////////////////
-
-//#include "dtkDistributedContainer.tpp"

@@ -14,18 +14,20 @@
 
 //#prama once
 
+#include "dtkDistributedMapper.h"
+#include "dtkDistributedWorker.h"
+
+class dtkDistributedCommunicator;
+
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count) : dtkDistributedContainerIndexed<T>(), dtkDistributedContainerSequence<T>(), m_count(count), m_buffer_count(count/2)
+template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_mapper(new dtkDistributedMapper), m_worker(worker)
 {
-    handler.setArray(this);
-}
+    m_mapper->setMapping(count, m_worker->communicator()->size());
 
-template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const dtkDistributedArray<T>& other)
-{
-
+    m_handler.initialize(m_worker->communicator(), m_worker->wid(), count, m_mapper->count(m_worker->wid()), m_worker->containerId());
 }
 
 template<typename T> dtkDistributedArray<T>::~dtkDistributedArray(void)
@@ -33,28 +35,18 @@ template<typename T> dtkDistributedArray<T>::~dtkDistributedArray(void)
 
 }
 
-template<typename T> QString dtkDistributedArray<T>::identifier(void) const 
-{ 
-    return "dtkDistributedArray"; 
-}
-
-template<typename T> dtkDistributedArray<T> *dtkDistributedArray<T>::clone(void)
-{
-    return new dtkDistributedArray<T>(*this);
-}
-
 template<typename T> void dtkDistributedArray<T>::clear(void)
 {
-
+    return m_handler.clear();
 }
 
 template<typename T> bool dtkDistributedArray<T>::empty(void) const
 {
-    return false;
+    return m_handler.empty();
 }
 
 template<typename T> qlonglong dtkDistributedArray<T>::count(void) const
 {
-    return handler.count();
+    return m_handler.count();
 }
 

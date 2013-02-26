@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb 11 19:23:24 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Feb 13 15:22:23 2013 (+0100)
+## Last-Updated: Tue Feb 26 14:58:42 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 21
+##     Update #: 22
 ######################################################################
 ## 
 ### Change Log:
@@ -55,9 +55,3 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT log
          EXPORT dtkDepends)
-
-## ###################################################################
-## Export rules
-## ###################################################################
-
-export(TARGETS dtkLog APPEND FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")

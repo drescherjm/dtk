@@ -79,9 +79,3 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT distributed
          EXPORT dtkDepends)
-
-## ###################################################################
-## Export rules
-## ###################################################################
-
-export(TARGETS dtkDistributed APPEND FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")

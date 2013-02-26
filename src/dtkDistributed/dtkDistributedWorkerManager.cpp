@@ -62,14 +62,23 @@ void dtkDistributedWorkerManager::setPolicy(dtkDistributedPolicy *policy)
     d->comm = policy->communicator();
 }
 
-void dtkDistributedWorkerManager::spawn(dtkDistributedWork *work)
+void dtkDistributedWorkerManager::setWork(dtkDistributedWork *work)
 {
     d->worker.setWork(work);
+}
+
+void dtkDistributedWorkerManager::spawn(void)
+{
     d->worker.setCommunicator(d->comm);
 
     QStringList hosts = d->policy->hosts();
 
     d->comm->spawn(hosts, hosts.count(), d->worker);
+}
+
+void dtkDistributedWorkerManager::exec(void)
+{
+    d->comm->exec();
 }
 
 void dtkDistributedWorkerManager::unspawn(void)

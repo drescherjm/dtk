@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:29:13 2013 (+0100)
 ## Version: 
-## Last-Updated: Tue Feb 26 14:58:29 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 10
+## Last-Updated: 2013 Wed Feb 27 16:41:15 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 11
 ######################################################################
 ## 
 ### Change Log:
@@ -18,4 +18,4 @@ add_subdirectory(dtkCore)
 add_subdirectory(dtkDistributed)
 add_subdirectory(dtkTest)
 
-export(TARGETS dtkLog dtkCore dtkDistributed APPEND FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")
+export(TARGETS dtkLog dtkCore dtkDistributed FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")

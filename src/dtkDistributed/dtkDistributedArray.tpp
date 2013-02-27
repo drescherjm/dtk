@@ -14,8 +14,6 @@
 
 //#prama once
 
-#include "dtkDistributedMapper.h"
-#include "dtkDistributedWorker.h"
 
 class dtkDistributedCommunicator;
 
@@ -23,30 +21,59 @@ class dtkDistributedCommunicator;
 // 
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_mapper(new dtkDistributedMapper), m_worker(worker)
+template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(new dtkDistributedArrayHandler<T>(count, worker))
 {
-    m_mapper->setMapping(count, m_worker->communicator()->size());
 
-    m_handler.initialize(m_worker->communicator(), m_worker->wid(), count, m_mapper->count(m_worker->wid()), m_worker->containerId());
 }
 
 template<typename T> dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
-
+    if (m_handler)
+        delete m_handler;
 }
 
 template<typename T> void dtkDistributedArray<T>::clear(void)
 {
-    return m_handler.clear();
+    return m_handler->clear();
 }
 
 template<typename T> bool dtkDistributedArray<T>::empty(void) const
 {
-    return m_handler.empty();
+    return m_handler->empty();
 }
 
 template<typename T> qlonglong dtkDistributedArray<T>::count(void) const
 {
-    return m_handler.count();
+    return m_handler->count();
+}
+
+template<typename T> void dtkDistributedArray<T>::set(const qlonglong& index, const T& value)
+{
+    m_handler->set(index, value);
+}
+
+template<typename T> T dtkDistributedArray<T>::at(const qlonglong& index) const
+{
+    return m_handler->at(index);
+}
+
+template<typename T> T dtkDistributedArray<T>::first(void) const
+{
+    return m_handler->first();
+}
+
+template<typename T> T dtkDistributedArray<T>::last(void) const
+{
+    return m_handler->last();
+}
+
+template<typename T> dtkDistributedMapper *dtkDistributedArray<T>::mapper(void)
+{
+    return m_handler->m_mapper;
+}
+
+template<typename T> dtkDistributedArrayItem<T> dtkDistributedArray<T>::operator [] (const qlonglong& index)
+{
+    return dtkDistributedArrayItem<T>(this, index);
 }
 

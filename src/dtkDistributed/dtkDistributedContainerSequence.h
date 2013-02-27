@@ -35,9 +35,9 @@ public:
 
 /*     virtual bool remove(const T& value) = 0; */
 
-/* public: */
-/*     virtual T first(void) const = 0; */
-/*     virtual T  last(void) const = 0; */
+public:
+    virtual T first(void) const = 0;
+    virtual T  last(void) const = 0;
 
 /*     virtual T takeFirst(void) = 0; */
 /*     virtual T  takeLast(void) = 0; */

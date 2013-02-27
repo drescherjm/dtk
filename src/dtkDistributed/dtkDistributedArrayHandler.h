@@ -17,6 +17,10 @@
 template <typename T> class dtkDistributedArray;
 template <typename T> class dtkDistributedArrayHandler;
 
+class dtkDistributedCommunicator;
+class dtkDistributedMapper;
+class dtkDistributedWorker;
+
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
@@ -24,10 +28,11 @@ template <typename T> class dtkDistributedArrayHandler;
 template <typename T> class dtkDistributedArrayHandler
 {
 public:
-    dtkDistributedArrayHandler(void) : m_wid(-1), m_count(-1), m_buffer_id(-1), m_buffer_count(-1), m_buffer(0), m_comm(0) {;}
+    inline dtkDistributedArrayHandler(const qlonglong& count, dtkDistributedWorker *worker);
+    inline ~dtkDistributedArrayHandler(void);
 
 public:
-    void initialize(dtkDistributedCommunicator *communicator, const qlonglong& wid, const qlonglong& count, const qlonglong& buffer_count, const qlonglong& buffer_id); 
+    void initialize(void);
     
 public:
     inline void  setLocalMode(void);
@@ -40,11 +45,21 @@ public:
 
     inline qlonglong count(void) const;
 
+public:
+    inline void set(const qlonglong& index, const T& value);
+
+public:
+    inline T at(const qlonglong& index) const;
+
+public:
+    inline T first(void) const;
+    inline T  last(void) const;
+
 // /////////////////////////////////////////////////////////////////
 
 protected:
-    typedef void (dtkDistributedArrayHandler<T>::*clearMethodPointer)(void);
-    typedef bool (dtkDistributedArrayHandler<T>::*emptyMethodPointer)(void) const;
+    typedef      void (dtkDistributedArrayHandler<T>::*clearMethodPointer)(void);
+    typedef      bool (dtkDistributedArrayHandler<T>::*emptyMethodPointer)(void) const;
     typedef qlonglong (dtkDistributedArrayHandler<T>::*countMethodPointer)(void) const;
 
 protected:
@@ -64,6 +79,33 @@ protected:
 
 // /////////////////////////////////////////////////////////////////
 
+protected:
+    typedef void (dtkDistributedArrayHandler<T>::*setMethodPointer)(const qlonglong& index, const T& value);
+    typedef T (dtkDistributedArrayHandler<T>::*atMethodPointer)(const qlonglong& index) const;
+    typedef T (dtkDistributedArrayHandler<T>::*atLimitMethodPointer)(void) const;
+
+protected:
+    setMethodPointer setMethod;
+    atMethodPointer   atMethod;
+
+    atLimitMethodPointer firstMethod;
+    atLimitMethodPointer  lastMethod;
+
+protected:
+    void  setLocal(const qlonglong& index, const T& value) { m_buffer[index]= value; }
+    void setGlobal(const qlonglong& index, const T& value);
+
+    T  atLocal(const qlonglong& index) const { return m_buffer[index]; }
+    T atGlobal(const qlonglong& index) const;
+
+    T  firstLocal(void) const { return *(m_buffer); }
+    T firstGlobal(void) const { return this->atGlobal(0); }
+
+    T  lastLocal(void) const { return *(m_buffer + m_buffer_count - 1); }
+    T lastGlobal(void) const { return this->atGlobal(m_count - 1); }
+
+// /////////////////////////////////////////////////////////////////
+
 private:
     qlonglong m_wid;
     qlonglong m_count;
@@ -75,7 +117,12 @@ private:
 // /////////////////////////////////////////////////////////////////
 
 private:
+    dtkDistributedMapper *m_mapper;
+    dtkDistributedWorker *m_worker;
     dtkDistributedCommunicator *m_comm;
+
+private:
+    friend class dtkDistributedArray<T>;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -17,6 +17,7 @@
 #include "dtkDistributedContainerIndexed.h"
 #include "dtkDistributedContainerSequence.h"
 #include "dtkDistributedArrayHandler.h"
+#include "dtkDistributedArrayItem.h"
 
 class dtkDistributedMapper;
 class dtkDistributedWorker;
@@ -28,24 +29,36 @@ class dtkDistributedWorker;
 template<typename T> class dtkDistributedArray : public dtkDistributedContainerIndexed<T>, public dtkDistributedContainerSequence<T>
 {
 public:
-     dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
-    ~dtkDistributedArray(void);
+     inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
+            ~dtkDistributedArray(void);
 
 public:
-    void clear(void);
+    inline void clear(void);
     
 public:
-    bool empty(void) const;
+    inline bool empty(void) const;
 
 public:
-    qlonglong count(void) const;
-
-private:
-    dtkDistributedMapper *m_mapper;
-    dtkDistributedWorker *m_worker;
+    inline qlonglong count(void) const;
 
 public:
-    dtkDistributedArrayHandler<T> m_handler;
+    inline void set(const qlonglong& index, const T& value);
+
+public:
+    inline T at(const qlonglong& index) const;
+
+public:
+    inline T first(void) const;
+    inline T  last(void) const;
+
+public:
+    dtkDistributedArrayItem<T> operator [] (const qlonglong& index);
+
+public:
+    inline dtkDistributedMapper *mapper(void);
+
+public:
+    dtkDistributedArrayHandler<T> *m_handler;
     
     friend class dtkDistributedArrayHandler<T>;
 

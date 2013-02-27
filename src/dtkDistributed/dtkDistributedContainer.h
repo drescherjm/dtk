@@ -43,9 +43,13 @@ public:
 
 public:
     virtual bool empty(void) const = 0;
+
+public:
+    // virtual bool contains(const T& value) const = 0;
     
 public:
     virtual qlonglong count(void) const = 0;
+    // virtual qlonglong count(const T& value) const = 0;
     
 public:
     // virtual dtkDistributedIterator<T>& iterator(void) = 0;

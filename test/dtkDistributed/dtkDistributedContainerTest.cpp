@@ -26,31 +26,56 @@ class myWork : public dtkDistributedWork
     myWork *clone(void) { return new myWork(*this); };
 
     void run(void)
-        {
-            QTime time;
+    {
+        QTime time;
             dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
-            dtkDistributedArray<qlonglong> array(1001, dtkDistributedWork::worker());
+            dtkDistributedArray<qlonglong> array(11, dtkDistributedWork::worker());
             
             DTK_DISTRIBUTED_BEGIN_LOCAL
-            array.m_handler.setLocalMode();
-            array.clear();
-            qDebug() << array.empty() << dtkDistributedWork::worker()->wid();
-            qDebug() << array.count() << dtkDistributedWork::worker()->wid();
+
+            array.m_handler->setLocalMode();
+            // array.clear();
+            // qDebug() << array.empty() << dtkDistributedWork::worker()->wid();
+            // qDebug() << array.count() << dtkDistributedWork::worker()->wid();
+
+            for (qlonglong i = 0; i < array.count(); ++i)
+                array.set(i, array.mapper()->localToGlobal(i, dtkDistributedWork::worker()->wid()));
+
+            qDebug() << array.first() << array.last() << dtkDistributedWork::worker()->wid();
+
             DTK_DISTRIBUTED_END_LOCAL
 
             DTK_DISTRIBUTED_BEGIN_GLOBAL
-            array.m_handler.setGlobalMode();
-            array.clear();
-            qDebug() << array.empty() << dtkDistributedWork::worker()->wid();
-            qDebug() << array.count() << dtkDistributedWork::worker()->wid();
+            array.m_handler->setGlobalMode();
+            // array.clear();
+            // qDebug() << array.empty() << dtkDistributedWork::worker()->wid();
+            // qDebug() << array.count() << dtkDistributedWork::worker()->wid();
+
+            for (qlonglong i = 0; i < array.count(); ++i)
+                qDebug() << i << array.at(i) << dtkDistributedWork::worker()->wid();
+
+            qDebug() << array.first() << array.last() << dtkDistributedWork::worker()->wid();
+
             DTK_DISTRIBUTED_END_GLOBAL
             
             DTK_DISTRIBUTED_BEGIN_LOCAL
-            array.m_handler.setLocalMode();
-            array.clear();
-            qDebug() << array.empty() << dtkDistributedWork::worker()->wid();
-            qDebug() << array.count() << dtkDistributedWork::worker()->wid();
+            array.m_handler->setLocalMode();
+            
+            for (qlonglong i = 0; i < array.count(); ++i)
+                array[i] += array.mapper()->localToGlobal(i, dtkDistributedWork::worker()->wid());
+
             DTK_DISTRIBUTED_END_LOCAL
+
+            DTK_DISTRIBUTED_BEGIN_GLOBAL
+            array.m_handler->setGlobalMode();
+            
+            for (qlonglong i = 0; i < array.count(); ++i)
+                array[i] -= i;
+
+            for (qlonglong i = 0; i < array.count(); ++i)
+                qDebug() << i << array.at(i) << dtkDistributedWork::worker()->wid();
+
+            DTK_DISTRIBUTED_END_GLOBAL
 
             // qDebug()<< "run!!!!";
             // qlonglong N = 10000000;
@@ -147,38 +172,38 @@ void dtkDistributedContainerTestCase::init(void)
 
 void dtkDistributedContainerTestCase::testGlobalLocal(void)
 {
-    dtkDistributedPolicy policy;
-    QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
-    QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
-    int np = 2;
+    // dtkDistributedPolicy policy;
+    // QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
+    // QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
+    // int np = 2;
 
-    policy.setType(dtkDistributedPolicy::MP);
+    // policy.setType(dtkDistributedPolicy::MP);
 
-    if (!numprocs.isEmpty()) {
-        np = numprocs.toInt();
-        qDebug() << "got num procs from env" << np;
-    }
-    if (!policyEnv.isEmpty()) {
-        qDebug() << "got policy from env" << policyEnv;
-        if (QString(policyEnv) == "MT"){
-            policy.setType(dtkDistributedPolicy::MT);
-        } else if (QString(policyEnv) == "MP") {
-            policy.setType(dtkDistributedPolicy::MP);
-        } else {
-            qDebug() << "unknown policy" << policyEnv;
-        }
-    }
+    // if (!numprocs.isEmpty()) {
+    //     np = numprocs.toInt();
+    //     qDebug() << "got num procs from env" << np;
+    // }
+    // if (!policyEnv.isEmpty()) {
+    //     qDebug() << "got policy from env" << policyEnv;
+    //     if (QString(policyEnv) == "MT"){
+    //         policy.setType(dtkDistributedPolicy::MT);
+    //     } else if (QString(policyEnv) == "MP") {
+    //         policy.setType(dtkDistributedPolicy::MP);
+    //     } else {
+    //         qDebug() << "unknown policy" << policyEnv;
+    //     }
+    // }
 
-    for (int i=0; i < np; ++i)
-        policy.addHost("localhost");
+    // for (int i=0; i < np; ++i)
+    //     policy.addHost("localhost");
 
-    dtkDistributedWorkerManager manager;
-    myWork *work = new myWork();
+    // dtkDistributedWorkerManager manager;
+    // myWork *work = new myWork();
 
-    manager.setPolicy(&policy);
-    qDebug() << "spawn";
-    manager.spawn(work);
-    manager.unspawn();
+    // manager.setPolicy(&policy);
+    // qDebug() << "spawn";
+    // manager.spawn(work);
+    // manager.unspawn();
 }
 
 void dtkDistributedContainerTestCase::testFunctor(void)

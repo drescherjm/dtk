@@ -15,11 +15,11 @@ project(dtkDistributed)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkObject.h
   dtkDistributed
   dtkDistributed.h
   dtkDistributedArray.h
   dtkDistributedArray.tpp
+  dtkDistributedArrayItem.h
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorPlugin
   dtkDistributedCommunicatorPlugin.h
@@ -39,7 +39,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedWorkerManager.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkObject.cpp
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorPluginFactory.cpp

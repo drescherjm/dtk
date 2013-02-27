@@ -29,11 +29,11 @@ public:
 public:
     // virtual void resize(const qlonglong& size) = 0;
 
-    // virtual void    set(const qlonglong& index, const T& value) = 0;
+    virtual void    set(const qlonglong& index, const T& value) = 0;
     // virtual void insert(const qlonglong& index, const T& value) = 0;
 
     // virtual void removeAt(const qlonglong& index) = 0;
 
 public:
-    // virtual T at(const qlonglong& index) const = 0;
+    virtual T at(const qlonglong& index) const = 0;
 };

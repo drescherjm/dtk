@@ -14,17 +14,30 @@
 
 #pragma once
 
+#include "dtkDistributedCommunicator.h"
+#include "dtkDistributedMapper.h"
+#include "dtkDistributedWorker.h"
+
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> void dtkDistributedArrayHandler<T>::initialize(dtkDistributedCommunicator *communicator, const qlonglong& wid, const qlonglong& count, const qlonglong& buffer_count, const qlonglong& buffer_id) 
+template <typename T> dtkDistributedArrayHandler<T>::dtkDistributedArrayHandler(const qlonglong& count, dtkDistributedWorker *worker) : m_mapper(new dtkDistributedMapper), m_worker(worker), m_wid(worker->wid()), m_count(count), m_comm(worker->communicator())
 {
-    m_comm = communicator;
-    m_wid = wid;
-    m_count = count;
-    m_buffer_count = buffer_count;
-    m_buffer_id = buffer_id;
+    this->initialize();
+}
+
+template <typename T> dtkDistributedArrayHandler<T>::~dtkDistributedArrayHandler(void)
+{
+    if (m_mapper)
+        delete m_mapper;
+}
+
+template <typename T> void dtkDistributedArrayHandler<T>::initialize(void) 
+{
+    m_mapper->setMapping(m_count, m_comm->size());
+    m_buffer_count = m_mapper->count(m_wid);
+    m_buffer_id = m_worker->containerId();
 
     m_buffer = static_cast<T*>(m_comm->allocate(m_buffer_count, sizeof(T), m_wid, m_buffer_id));
 }
@@ -34,6 +47,12 @@ template <typename T> void dtkDistributedArrayHandler<T>::setLocalMode(void)
     clearMethod = &dtkDistributedArrayHandler<T>::clearLocal;
     emptyMethod = &dtkDistributedArrayHandler<T>::emptyLocal;
     countMethod = &dtkDistributedArrayHandler<T>::countLocal;
+
+    setMethod = &dtkDistributedArrayHandler<T>::setLocal;
+    atMethod  =  &dtkDistributedArrayHandler<T>::atLocal;
+
+    firstMethod = &dtkDistributedArrayHandler<T>::firstLocal;
+    lastMethod  =  &dtkDistributedArrayHandler<T>::lastLocal;
 }
 
 template <typename T> void dtkDistributedArrayHandler<T>::setGlobalMode(void) 
@@ -41,6 +60,12 @@ template <typename T> void dtkDistributedArrayHandler<T>::setGlobalMode(void)
     clearMethod = &dtkDistributedArrayHandler<T>::clearGlobal;
     emptyMethod = &dtkDistributedArrayHandler<T>::emptyGlobal;
     countMethod = &dtkDistributedArrayHandler<T>::countGlobal;
+
+    setMethod = &dtkDistributedArrayHandler<T>::setGlobal;
+    atMethod  =  &dtkDistributedArrayHandler<T>::atGlobal;
+
+    firstMethod = &dtkDistributedArrayHandler<T>::firstGlobal;
+    lastMethod  =  &dtkDistributedArrayHandler<T>::lastGlobal;
 }
     
 template <typename T> void dtkDistributedArrayHandler<T>::clear(void)
@@ -56,4 +81,49 @@ template <typename T> bool dtkDistributedArrayHandler<T>::empty(void) const
 template <typename T> qlonglong dtkDistributedArrayHandler<T>::count(void) const 
 { 
     return (this->*countMethod)(); 
+}
+
+template<typename T> void dtkDistributedArrayHandler<T>::set(const qlonglong& index, const T& value)
+{
+    (this->*setMethod)(index, value);
+}
+
+template<typename T> void dtkDistributedArrayHandler<T>::setGlobal(const qlonglong& index, const T& value)
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    qlonglong pos = m_mapper->globalToLocal(index);
+    m_comm->put(owner, pos, &(const_cast<T&>(value)), m_buffer_id);
+}
+
+template<typename T> T dtkDistributedArrayHandler<T>::at(const qlonglong& index) const
+{
+    return (this->*atMethod)(index);
+}
+
+template<typename T> T dtkDistributedArrayHandler<T>::atGlobal(const qlonglong& index) const
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+
+    qlonglong pos = m_mapper->globalToLocal(index);
+
+    if (m_wid == owner) {
+        return m_buffer[pos];
+
+    } else {
+        T temp;
+
+        m_comm->get(owner, pos, &temp, m_buffer_id);
+
+        return temp;
+    }
+}
+
+template<typename T> T dtkDistributedArrayHandler<T>::first(void) const
+{
+    return (this->*firstMethod)();
+}
+
+template<typename T> T dtkDistributedArrayHandler<T>::last(void) const
+{
+    return (this->*lastMethod)();
 }

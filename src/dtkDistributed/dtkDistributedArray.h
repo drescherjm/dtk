@@ -48,11 +48,18 @@ public:
     inline T at(const qlonglong& index) const;
 
 public:
-    inline T first(void) const;
-    inline T  last(void) const;
+    //inline dtkDistributedItem<T> first(void);
+    inline                         T  first(void) const;
+
+    //inline dtkDistributedItem<T> last(void);
+    inline                         T  last(void) const;
 
 public:
-    dtkDistributedArrayItem<T> operator [] (const qlonglong& index);
+    inline dtkDistributedItem<T> operator [] (const qlonglong& index);
+    //inline                         T  operator [] (const qlonglong& index) const;
+
+public:
+    //dtkDistributedIterator<T>& constIterator(void) const;
 
 public:
     inline dtkDistributedMapper *mapper(void);

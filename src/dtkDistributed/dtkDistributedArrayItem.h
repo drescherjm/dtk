@@ -14,122 +14,33 @@
 
 #pragma once
 
+#include "dtkDistributedItem.h"
+
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
-
-template <typename T> class dtkDistributedArrayItem
+ 
+template <typename T> class dtkDistributedArrayItem : public dtkDistributedContainerItem<T>
 {
 public:
-    inline dtkDistributedArrayItem(void);
-    inline dtkDistributedArrayItem(const dtkDistributedArrayItem<T>& other);
+    inline dtkDistributedArrayItem(dtkDistributedArray<T> *array, const qlonglong& index) : m_index(index), m_array(array) {;}
+
+    inline ~dtkDistributedArrayItem(void) { m_index = -1; m_array = 0; }
 
 public:
-    inline ~dtkDistributedArrayItem(void);
+    inline void assign(const T& value) { m_array->set(m_index, value); }
+
+    inline void increment(const T& value) { m_array->set(m_index, m_array->at(m_index) + value); }
+    inline void decrement(const T& value) { m_array->set(m_index, m_array->at(m_index) - value); }
+
+    inline void multiply(const T& value) { m_array->set(m_index, m_array->at(m_index) * value); }
+    inline void   divide(const T& value) { m_array->set(m_index, m_array->at(m_index) / value); }
 
 public:
-    dtkDistributedArrayItem& operator = (const dtkDistributedArrayItem<T>& other);
+    inline T value(void) const { return m_array->at(m_index); }
 
 public:
-    inline dtkDistributedArrayItem& operator = (const T& value);
-
-public:
-    inline dtkDistributedArrayItem& operator ++ (void);
-    inline dtkDistributedArrayItem& operator -- (void);
-
-    inline dtkDistributedArrayItem& operator += (const T& value);
-    inline dtkDistributedArrayItem& operator -= (const T& value);
-    inline dtkDistributedArrayItem& operator *= (const T& value);
-    inline dtkDistributedArrayItem& operator /= (const T& value);
-
-public:
-    inline T value(void) const;
-
-private:
-    friend class dtkDistributedArray<T>;
-
-    inline dtkDistributedArrayItem(dtkDistributedArray<T> *array, const qlonglong& index);
-
-private:
     qlonglong m_index;
 
-    dtkDistributedArray<T> *m_array;
+    dtkDistributedArray<T> *m_array;    
 };
-
-// /////////////////////////////////////////////////////////////////
-
-template <typename T> dtkDistributedArrayItem<T>::dtkDistributedArrayItem(void) : m_index(-1), m_array(0)
-{
-
-}
-
-template <typename T> dtkDistributedArrayItem<T>::dtkDistributedArrayItem(const dtkDistributedArrayItem& other) : m_index(other.m_index), m_array(other.m_array)
-{
-
-}
-
-template <typename T> dtkDistributedArrayItem<T>::dtkDistributedArrayItem(dtkDistributedArray<T> *array, const qlonglong& index) : m_index(index), m_array(array)
-{
-
-}
-
-template <typename T> dtkDistributedArrayItem<T>::~dtkDistributedArrayItem(void)
-{
-    m_index = -1;
-    m_array = NULL;
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator = (const dtkDistributedArrayItem<T>& other)
-{
-    m_index = other.m_index;
-    m_array = other.m_array;
-
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator = (const T& value)
-{
-    m_array.set(m_index, value);
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator ++ (void)
-{
-    m_array->set(m_index, m_array->at(m_index)++);
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator -- (void)
-{
-    m_array->set(m_index, m_array->at(m_index)--);
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator += (const T& value)
-{
-    m_array->set(m_index, m_array->at(m_index) + value);
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator -= (const T& value)
-{
-    m_array->set(m_index, m_array->at(m_index) - value);
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator *= (const T& value)
-{
-    m_array->set(m_index, m_array->at(m_index) * value);
-    return (*this);
-}
-
-template <typename T> dtkDistributedArrayItem<T>& dtkDistributedArrayItem<T>::operator /= (const T& value)
-{
-    m_array->set(m_index, m_array->at(m_index) / value);
-    return (*this);
-}
-
-template <typename T> T dtkDistributedArrayItem<T>::value(void) const
-{
-    return m_array->at(m_index);
-}

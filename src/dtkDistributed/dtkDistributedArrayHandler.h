@@ -55,6 +55,9 @@ public:
     inline T first(void) const;
     inline T  last(void) const;
 
+public:
+    inline dtkDistributedIterator<T> iterator(void);
+
 // /////////////////////////////////////////////////////////////////
 
 protected:

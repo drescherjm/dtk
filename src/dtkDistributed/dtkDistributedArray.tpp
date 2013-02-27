@@ -67,13 +67,13 @@ template<typename T> T dtkDistributedArray<T>::last(void) const
     return m_handler->last();
 }
 
+template<typename T> dtkDistributedItem<T> dtkDistributedArray<T>::operator [] (const qlonglong& index)
+{
+    return dtkDistributedItem<T>(new dtkDistributedArrayItem<T>(const_cast<dtkDistributedArray<T>*>(this), index));
+}
+
 template<typename T> dtkDistributedMapper *dtkDistributedArray<T>::mapper(void)
 {
     return m_handler->m_mapper;
-}
-
-template<typename T> dtkDistributedArrayItem<T> dtkDistributedArray<T>::operator [] (const qlonglong& index)
-{
-    return dtkDistributedArrayItem<T>(this, index);
 }
 

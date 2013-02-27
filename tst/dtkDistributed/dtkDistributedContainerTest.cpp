@@ -233,6 +233,8 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
     manager.exec(work2);
 
     manager.unspawn();
+
+    qDebug() << "parallel section is over";
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

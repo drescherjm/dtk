@@ -27,12 +27,16 @@ public:
     dtkDistributedPolicy *policy;
     dtkDistributedWorker worker;
 
+public:
+    bool spawned;
+
 };
 
 dtkDistributedWorkerManager::dtkDistributedWorkerManager(void) : QObject(), d(new dtkDistributedWorkerManagerPrivate)
 {
-    d->comm   = NULL;
-    d->policy = NULL;
+    d->comm    = NULL;
+    d->policy  = NULL;
+    d->spawned = false;
 }
 
 dtkDistributedWorkerManager::~dtkDistributedWorkerManager(void)
@@ -64,11 +68,15 @@ void dtkDistributedWorkerManager::setPolicy(dtkDistributedPolicy *policy)
 
 void dtkDistributedWorkerManager::spawn(void)
 {
+    if (d->spawned)
+        return;
+
     d->worker.setCommunicator(d->comm);
 
     QStringList hosts = d->policy->hosts();
 
     d->comm->spawn(hosts, hosts.count(), d->worker);
+    d->spawned = true;
 }
 
 void dtkDistributedWorkerManager::exec(dtkDistributedWork *work)
@@ -78,5 +86,6 @@ void dtkDistributedWorkerManager::exec(dtkDistributedWork *work)
 
 void dtkDistributedWorkerManager::unspawn(void)
 {
-    d->comm->uninitialize();
+    d->comm->unspawn();
+    d->spawned = false;
 }

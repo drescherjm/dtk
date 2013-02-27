@@ -26,7 +26,7 @@ private slots:
 
 private slots:
     void testGlobalLocal(void);
-    void testFunctor(void);
+    void testContainer(void);
 
 private slots:
     void cleanupTestCase(void);

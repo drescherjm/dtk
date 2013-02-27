@@ -25,7 +25,7 @@ private slots:
     void init(void);
 
 private slots:
-    void testGlobalLocal(void);
+    void testSum(void);
     void testContainer(void);
 
 private slots:

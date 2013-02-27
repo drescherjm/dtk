@@ -81,6 +81,11 @@ void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkD
 {
 }
 
+void dtkDistributedCommunicator::exec(void)
+{
+
+}
+
 void dtkDistributedCommunicator::barrier(void)
 {
 

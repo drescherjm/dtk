@@ -15,6 +15,7 @@
 
 
 #include "dtkDistributedWorker.h"
+
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedWork.h>
 
@@ -69,8 +70,13 @@ dtkDistributedWorker::dtkDistributedWorker(const dtkDistributedWorker& other): Q
 
 dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWorker& other)
 {
-    return *this;
-
+    d->wid  = other.d->wid;
+    d->wct  = other.d->wct;
+    d->comm = other.d->comm;
+    d->work = other.d->work->clone();
+    d->work->setWorker(this);
+    d->container_id = 0; // do not share containers id
+    return (*this);
 }
 
 void dtkDistributedWorker::setWid(qlonglong wid)
@@ -121,7 +127,7 @@ dtkDistributedCommunicator *dtkDistributedWorker::communicator(void)
 
 void dtkDistributedWorker::run(void)
 {
-    qDebug() << "thread " << d->wid << "barrier" ;
+    qDebug() << "thread " << d->wid << "barrier";
     d->comm->barrier();
     qDebug() << "thread " << d->wid << "barrier released, run";
     d->work->run();

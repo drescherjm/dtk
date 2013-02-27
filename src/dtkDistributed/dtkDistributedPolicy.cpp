@@ -34,7 +34,8 @@ dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistribut
 dtkDistributedPolicy::~dtkDistributedPolicy(void)
 {
     delete d;
-    d=NULL;
+
+    d = NULL;
 }
 
 dtkDistributedPolicy::dtkDistributedPolicy(const dtkDistributedPolicy& other)
@@ -43,11 +44,13 @@ dtkDistributedPolicy::dtkDistributedPolicy(const dtkDistributedPolicy& other)
 
 dtkDistributedPolicy& dtkDistributedPolicy::operator = (const dtkDistributedPolicy& other)
 {
+    return (*this);
 }
 
 void dtkDistributedPolicy::addHost(QString host)
 {
     qDebug() << "add host " << host;
+
     d->hosts.append(host);
 }
 
@@ -76,5 +79,3 @@ QStringList dtkDistributedPolicy::hosts(void)
 {
     return d->hosts;
 }
-
-

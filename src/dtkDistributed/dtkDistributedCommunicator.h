@@ -55,6 +55,8 @@ public:
 public:
     virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker worker);
 
+    virtual void exec();
+
     virtual void barrier();
 
 public:

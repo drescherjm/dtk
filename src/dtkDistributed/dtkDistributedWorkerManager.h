@@ -37,11 +37,10 @@ public:
 public:
     void setCommunicator(dtkDistributedCommunicator *comm);
     void       setPolicy(dtkDistributedPolicy *policy);
-    void         setWork(dtkDistributedWork *Work);
 
 public:
     void   spawn(void);
-    void    exec(void);
+    void    exec(dtkDistributedWork *work);
     void unspawn(void);
 
 public:

@@ -17,6 +17,7 @@
 
 #include <QtCore>
 
+class dtkDistributedWork;
 class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 
@@ -55,7 +56,7 @@ public:
 public:
     virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker worker);
 
-    virtual void exec();
+    virtual void exec(dtkDistributedWork *work);
 
     virtual void barrier();
 

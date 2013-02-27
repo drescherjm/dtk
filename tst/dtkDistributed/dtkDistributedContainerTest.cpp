@@ -19,11 +19,71 @@
 #include <dtkDistributed/dtkDistributedWorker.h>
 #include <dtkDistributed/dtkDistributedWorkerManager.h>
 
+class randomWork : public dtkDistributedWork
+{
+
+    randomWork *clone(void);
+    void        run(void);
+
+};
+
+int randInt(int max)
+{
+    return double(qrand()) / RAND_MAX * max;
+}
+
+randomWork *randomWork::clone(void)
+{
+    return new randomWork(*this);
+}
+
+void randomWork::run(void)
+{
+    qlonglong N = 20;
+
+    dtkDistributedContainer<qlonglong>& c = *(new dtkDistributedContainer<qlonglong>(N,dtkDistributedWork::worker() ));
+
+    dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
+
+    QTime time, maintime;
+    maintime.start();
+    time.start();
+
+    DTK_DISTRIBUTED_BEGIN_LOCAL
+
+    dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+
+    qsrand(dtkDistributedWork::worker()->wid());
+
+    while(it.hasNext()) {
+        c.setLocal(it.index(), randInt(N));
+        it.next();
+    }
+
+    qlonglong np = dtkDistributedWork::worker()->wct();
+
+    DTK_DISTRIBUTED_END_LOCAL
+
+    DTK_DISTRIBUTED_BEGIN_GLOBAL
+
+    dtkDistributedIterator<qlonglong>& it  = c.iterator();
+
+    it.toFront();
+    while(it.hasNext()) {
+        qDebug() << it.index() << it.peekNext();
+         it.next();
+    }
+
+    DTK_DISTRIBUTED_END_GLOBAL
+
+    delete &c;
+}
+
 class sumWork : public dtkDistributedWork
 {
 
     sumWork *clone(void);
-    void run(void);
+    void       run(void);
 
 };
 
@@ -56,7 +116,7 @@ void sumWork::run(void)
 
     DTK_DISTRIBUTED_BEGIN_LOCAL
 
-        dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+    dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
 
     // Fill the container in parallel
     while(it.hasNext()) {
@@ -99,11 +159,11 @@ void sumWork::run(void)
 
     DTK_DISTRIBUTED_END_LOCAL
 
-        DTK_DISTRIBUTED_BEGIN_GLOBAL
+    DTK_DISTRIBUTED_BEGIN_GLOBAL
 
-        // Sum the partial sums in sequential mode
+    // Sum the partial sums in sequential mode
 
-        check_sum = 0;
+    check_sum = 0;
 
     while(it_partial.hasNext()) {
 
@@ -117,7 +177,7 @@ void sumWork::run(void)
 
     DTK_DISTRIBUTED_END_GLOBAL
 
-        delete &c;
+    delete &c;
     delete &partial_sum;
 }
 
@@ -162,13 +222,16 @@ void dtkDistributedContainerTestCase::testGlobalLocal(void)
         policy.addHost("localhost");
 
     dtkDistributedWorkerManager manager;
-    sumWork *work = new sumWork();
+    sumWork     *work = new    sumWork();
+    randomWork *work2 = new randomWork();
 
     manager.setPolicy(&policy);
-    manager.setWork(work);
     qDebug() << "spawn";
     manager.spawn();
-    manager.exec();
+    manager.exec(work);
+
+    manager.exec(work2);
+
     manager.unspawn();
 }
 

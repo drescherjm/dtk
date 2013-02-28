@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:15:02 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Feb 28 18:34:58 2013 (+0100)
+ * Last-Updated: Thu Feb 28 18:55:08 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 79
+ *     Update #: 88
  */
 
 /* Change Log:
@@ -40,8 +40,7 @@
     public:					\
 	virtual void   initialize(void) = 0;	\
 	virtual void uninitialize(void) = 0;	\
-    };
-						
+    };						\
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_PLUGIN_FACTORY

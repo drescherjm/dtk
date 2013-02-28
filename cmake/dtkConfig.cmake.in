@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Tue Feb  5 10:26:22 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Feb  8 15:13:12 2013 (+0100)
+## Last-Updated: Thu Feb 28 18:56:45 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 18
+##     Update #: 21
 ######################################################################
 ## 
 ### Change Log:
@@ -22,6 +22,8 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_SOURCE_DIR@"
   "@CMAKE_SOURCE_DIR@/src"
   "@CMAKE_SOURCE_DIR@/src/dtk"
+  "@CMAKE_SOURCE_DIR@/src/dtkLog"
+  "@CMAKE_SOURCE_DIR@/src/dtkCore"
   "@CMAKE_SOURCE_DIR@/src/dtkDistributed"
   "@CMAKE_SOURCE_DIR@/src/dtkTest")
 

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Feb  8 16:49:52 2013 (+0100)
 ## Version: 
-## Last-Updated: Thu Feb 28 17:59:10 2013 (+0100)
+## Last-Updated: Thu Feb 28 18:39:32 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 26
+##     Update #: 27
 ######################################################################
 ## 
 ### Change Log:
@@ -31,6 +31,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager
   dtkCorePluginManager.h
   dtkCorePluginManager.tpp
+  dtkCoreSettings
   dtkCoreSettings.h)
 
 set(${PROJECT_NAME}_SOURCES

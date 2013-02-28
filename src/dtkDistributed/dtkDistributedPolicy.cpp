@@ -65,10 +65,12 @@ void dtkDistributedPolicy::setType(dtkDistributedPolicy::Type type)
     case dtkDistributedPolicy::MP :
         qDebug() << "create mpi communicator";
         d->comm = dtkDistributed::communicator::pluginFactory().create("mpi");
+        qDebug() << d->comm->pid();
         break;
     case dtkDistributedPolicy::MT :
         qDebug() << "create qthread communicator";
         d->comm = dtkDistributed::communicator::pluginFactory().create("qthread");
+        qDebug() << d->comm->pid();
         break;
     default:
         qDebug() << "unkwown policy ";

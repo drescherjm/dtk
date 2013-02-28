@@ -21,7 +21,7 @@ class dtkDistributedCommunicator;
 // 
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(new dtkDistributedArrayHandler<T>(count, worker))
+template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(new dtkDistributedArrayHandler<T>(this, count, worker))
 {
 
 }

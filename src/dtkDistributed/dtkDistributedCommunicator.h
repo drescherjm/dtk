@@ -67,7 +67,7 @@ public:
     dtkDistributedCommunicatorPrivate *d;
 };
 
-DTK_DECLARE_OBJECT(dtkDistributedCommunicator)
+DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
 DTK_DECLARE_PLUGIN(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator)

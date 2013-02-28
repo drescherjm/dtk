@@ -30,7 +30,10 @@ class dtkDistributedWorkerPrivate
 public:
     qlonglong wid;
     qlonglong wct;
-    qlonglong container_id;
+    qlonglong container_count;
+
+public:
+    QHash<dtkDistributedContainerBase*, qlonglong> containers;
 
 public:
     dtkDistributedCommunicator *comm;
@@ -48,7 +51,7 @@ dtkDistributedWorker::dtkDistributedWorker(void) : QRunnable(), d(new dtkDistrib
     d->work = NULL;
     d->wid  =   -1;
     d->wct  =    0;
-    d->container_id  = 0;
+    d->container_count  = 0;
 
     this->setAutoDelete(false);
 }
@@ -70,7 +73,7 @@ dtkDistributedWorker::dtkDistributedWorker(const dtkDistributedWorker& other): Q
     d->comm = other.d->comm;
     d->work = NULL;
     this->setAutoDelete(false);
-    d->container_id = 0; // do not share containers id
+    d->container_count = 0; // do not share containers count
 }
 
 dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWorker& other)
@@ -78,7 +81,7 @@ dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWork
     d->wid  = other.d->wid;
     d->wct  = other.d->wct;
     d->comm = other.d->comm;
-    d->container_id = 0; // do not share containers id
+    d->container_count = 0; // do not share containers count
     return (*this);
 }
 
@@ -107,9 +110,19 @@ qlonglong dtkDistributedWorker::wct(void)
     return d->wct;
 }
 
-qlonglong dtkDistributedWorker::containerId(void)
+void dtkDistributedWorker::record(dtkDistributedContainerBase *container)
 {
-    return d->container_id++;
+    d->containers.insert(container, d->container_count++);
+}
+
+void dtkDistributedWorker::unrecord(dtkDistributedContainerBase *container)
+{
+    d->containers.remove(container);
+}
+
+qlonglong dtkDistributedWorker::containerId(dtkDistributedContainerBase *container)
+{
+    return d->containers.value(container);
 }
 
 void dtkDistributedWorker::setWork(dtkDistributedWork *work)

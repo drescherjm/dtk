@@ -28,7 +28,7 @@ class dtkDistributedWorker;
 template <typename T> class dtkDistributedArrayHandler
 {
 public:
-    inline dtkDistributedArrayHandler(const qlonglong& count, dtkDistributedWorker *worker);
+    inline  dtkDistributedArrayHandler(dtkDistributedArray<T> *array, const qlonglong& count, dtkDistributedWorker *worker);
     inline ~dtkDistributedArrayHandler(void);
 
 public:
@@ -129,6 +129,7 @@ private:
 
 private:
     friend class dtkDistributedArray<T>;
+    dtkDistributedArray<T> *m_array;
 };
 
 // ///////////////////////////////////////////////////////////////////

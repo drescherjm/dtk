@@ -14,29 +14,44 @@
 
 #pragma once
 
-#include <dtkDistributed>
+#include "dtkDistributedWorker.h"
 
-class dtkDistributedMode;
-class dtkDistributedPolicy;
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedContainerBase interface
+// /////////////////////////////////////////////////////////////////
 
-template<typename T> class dtkDistributedIterator;
+class dtkDistributedContainerBase
+{
+public:
+    virtual ~dtkDistributedContainerBase(void) { ;}//w->unrecord(this); }
+
+public:
+    //virtual void setMode(const dtkDistributed::Mode& mode) = 0;
+
+public:
+    inline void record(dtkDistributedWorker *worker);
+
+private:
+    dtkDistributedWorker *w;
+};
+
+void dtkDistributedContainerBase::record(dtkDistributedWorker *worker)
+{
+    w = worker;
+    worker->record(this);
+};
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedContainer interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkDistributedCommunicator;
-class dtkDistributedMapper;
+template<typename T> class dtkDistributedIterator;
 
-template<typename T> class dtkDistributedContainer
+template<typename T> class dtkDistributedContainer : public dtkDistributedContainerBase
 {
 public:
              dtkDistributedContainer(void) {;}
     virtual ~dtkDistributedContainer(void) {;}
-
-public:
-    // virtual void   setMode(dtkDistributedMode     *mode) {   Q_UNUSED(mode); }
-    // virtual void setPolicy(dtkDistributedPolicy *policy) { Q_UNUSED(policy); }
 
 public:
     virtual void clear(void) = 0;
@@ -52,7 +67,7 @@ public:
     // virtual qlonglong count(const T& value) const = 0;
     
 public:
-    // virtual dtkDistributedIterator<T>& iterator(void) = 0;
+    virtual dtkDistributedIterator<T> iterator(void) = 0;
 };
 
 // ///////////////////////////////////////////////////////////////////

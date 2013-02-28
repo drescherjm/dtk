@@ -22,7 +22,6 @@ class dtkDistributedCommunicator;
 
 class dtkDistributedPolicy : public QObject
 {
-
     Q_OBJECT
 
 public:

@@ -22,7 +22,7 @@
 // 
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> dtkDistributedArrayHandler<T>::dtkDistributedArrayHandler(const qlonglong& count, dtkDistributedWorker *worker) : m_mapper(new dtkDistributedMapper), m_worker(worker), m_wid(worker->wid()), m_count(count), m_comm(worker->communicator())
+template <typename T> dtkDistributedArrayHandler<T>::dtkDistributedArrayHandler(dtkDistributedArray<T> *array, const qlonglong& count, dtkDistributedWorker *worker) : m_mapper(new dtkDistributedMapper), m_worker(worker), m_wid(worker->wid()), m_count(count), m_comm(worker->communicator()), m_array(array)
 {
     this->initialize();
 }
@@ -31,15 +31,19 @@ template <typename T> dtkDistributedArrayHandler<T>::~dtkDistributedArrayHandler
 {
     m_comm->deallocate( m_wid, m_buffer_id);
 
+    m_worker->unrecord(m_array);
+
     if (m_mapper)
         delete m_mapper;
 }
 
 template <typename T> void dtkDistributedArrayHandler<T>::initialize(void) 
 {
+    m_worker->record(m_array);
+
     m_mapper->setMapping(m_count, m_comm->size());
     m_buffer_count = m_mapper->count(m_wid);
-    m_buffer_id = m_worker->containerId();
+    m_buffer_id = m_worker->containerId(m_array);
 
     m_buffer = static_cast<T*>(m_comm->allocate(m_buffer_count, sizeof(T), m_wid, m_buffer_id));
 }

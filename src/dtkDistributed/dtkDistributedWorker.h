@@ -18,6 +18,7 @@
 #include <QtCore>
 
 class dtkDistributedCommunicator;
+class dtkDistributedContainerBase;
 class dtkDistributedWork;
 class dtkDistributedWorkerPrivate;
 
@@ -48,7 +49,10 @@ public:
     qlonglong wct(void);
 
 public:
-    qlonglong containerId(void);
+    void   record(dtkDistributedContainerBase *container);
+    void unrecord(dtkDistributedContainerBase *container);
+
+    qlonglong containerId(dtkDistributedContainerBase *container);
 
 public:
     bool master(void);

@@ -289,9 +289,9 @@ void dtkDistributedContainerTestCase::testAll(void)
     manager.spawn();
     manager.exec(work);
 
-    manager.exec(work2);
+    //manager.exec(work2);
 
-    manager.exec(work3);
+    //manager.exec(work3);
 
     manager.unspawn();
 

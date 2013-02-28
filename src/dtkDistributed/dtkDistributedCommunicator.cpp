@@ -78,7 +78,9 @@ void dtkDistributedCommunicator::uninitialize(void)
 
 void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
 {
+    qDebug() << "PROUT";
 }
+
 void dtkDistributedCommunicator::unspawn(void)
 {
 }
@@ -95,6 +97,8 @@ void dtkDistributedCommunicator::barrier(void)
 
 int dtkDistributedCommunicator::pid(void)
 {
+    qDebug() << "Default impl.";
+
    return 0;
 }
 

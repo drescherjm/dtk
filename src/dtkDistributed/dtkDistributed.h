@@ -14,11 +14,17 @@ class dtkDistributedCommunicatorPlugin;
 class dtkDistributedCommunicatorPluginFactory;
 class dtkDistributedCommunicatorPluginManager;
 
-#define DTK_DISTRIBUTED_BEGIN_GLOBAL comm->barrier(); dtkDistributed::setMode(dtkDistributed::Global); if (dtkDistributedWork::worker()->master()) { time.restart(); 
-#define DTK_DISTRIBUTED_END_GLOBAL  qDebug() << "global section:" <<  time.elapsed() << "ms"; } ;  comm->barrier();
-#define DTK_DISTRIBUTED_BEGIN_LOCAL comm->barrier(); dtkDistributed::setMode(dtkDistributed::Local);  time.restart();
-#define DTK_DISTRIBUTED_END_LOCAL qDebug() << "local section:" <<  time.elapsed() << "ms";
+#define DTK_DISTRIBUTED_BEGIN_GLOBAL \
+    comm->barrier(); dtkDistributed::setMode(dtkDistributed::Global); if (dtkDistributedWork::worker()->master()) { time.restart(); 
 
+#define DTK_DISTRIBUTED_END_GLOBAL \
+    qDebug() << "global section:" <<  time.elapsed() << "ms"; } ;  comm->barrier();
+
+#define DTK_DISTRIBUTED_BEGIN_LOCAL \
+    comm->barrier(); dtkDistributed::setMode(dtkDistributed::Local);  time.restart();
+
+#define DTK_DISTRIBUTED_END_LOCAL \
+    qDebug() << "local section:" <<  time.elapsed() << "ms";
 
 namespace dtkDistributed
 {

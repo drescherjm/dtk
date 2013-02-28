@@ -15,13 +15,13 @@
 
 #pragma once
 
-#include <QtCore>
+#include <dtkCore>
 
 class dtkDistributedWork;
 class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 
-class dtkDistributedCommunicator : public QObject
+class dtkDistributedCommunicator : public dtkCoreObject
 {
     Q_OBJECT
 
@@ -65,5 +65,9 @@ public:
 
 public:
     dtkDistributedCommunicatorPrivate *d;
-
 };
+
+DTK_DECLARE_OBJECT(dtkDistributedCommunicator)
+DTK_DECLARE_PLUGIN(dtkDistributedCommunicator)
+DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator)
+DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator)

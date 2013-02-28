@@ -1,2 +1,5 @@
+#include "dtkCore.h"
+#include "dtkCoreObject.h"
+#include "dtkCorePlugin.h"
+#include "dtkCorePluginFactory.h"
 #include "dtkCorePluginManager.h"
-#include "dtkCoreSettings.h"

@@ -35,7 +35,7 @@ class containerWork : public dtkDistributedWork
         array.m_handler->setLocalMode();
         
         for (qlonglong i = 0; i < array.count(); ++i)
-            array.set(i, array.mapper()->localToGlobal(i, dtkDistributedWork::worker()->wid()));
+            array.set(i, array.localToGlobal(i));
         
         qDebug() << array.first() << array.last() << dtkDistributedWork::worker()->wid();
         
@@ -56,7 +56,7 @@ class containerWork : public dtkDistributedWork
         array.m_handler->setLocalMode();
             
         for (qlonglong i = 0; i < array.count(); ++i)
-            array[i] += array.mapper()->localToGlobal(i, dtkDistributedWork::worker()->wid());
+            array[i] += array.localToGlobal(i);
         
         DTK_DISTRIBUTED_END_LOCAL
 
@@ -88,88 +88,94 @@ sumWork *sumWork::clone(void)
 
 void sumWork::run(void)
 {
-    // qDebug()<< "run!!!!";
+    qDebug()<< "run!!!!";
 
-    // qlonglong N = 10000000;
-    // qlonglong sum = 0;
+    qlonglong N = 1000001;
+    qlonglong sum = 0;
 
-    // for (qlonglong i = 0; i < N; ++i)
-    //     sum += 2*i;
+    for (qlonglong i = 0; i < N; ++i)
+        sum += 2*i;
 
-    // dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
+    dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
 
-    // QTime time, maintime;
-    // maintime.start();
-    // time.start();
+    QTime time, maintime;
+    maintime.start();
+    time.start();
 
-    // dtkDistributedArray<qlonglong>& c = *(new dtkDistributedArray<qlonglong>(N,dtkDistributedWork::worker() ));
+    qlonglong check_sum = 0;
 
-    // QVERIFY(N == c.count());
+    dtkDistributedArray<qlonglong> c(N, dtkDistributedWork::worker());
+    c.m_handler->setGlobalMode();
 
-    // qDebug()<< "allocation time:" <<time.elapsed() << "ms"; time.restart();
+    dtkDistributedArray<qlonglong> partial_sum(dtkDistributedWork::worker()->wct(), dtkDistributedWork::worker() );
+    partial_sum.m_handler->setGlobalMode();
 
-    // DTK_DISTRIBUTED_BEGIN_LOCAL
+    QVERIFY(N == c.count());
 
-    // dtkDistributedLocalIterator<qlonglong>& it  = c.localIterator();
+    qDebug()<< "allocation time:" <<time.elapsed() << "ms"; time.restart();
 
-    // // Fill the container in parallel
+    DTK_DISTRIBUTED_BEGIN_LOCAL
+    c.m_handler->setLocalMode();
+    partial_sum.m_handler->setLocalMode();
+
+    dtkDistributedIterator<qlonglong> it  = c.iterator();
+
+    // Fill the container in parallel
+    while(it.hasNext()) {
+        c.set(it.index(), c.localToGlobal(it.index()));
+        it.toNext();
+    }
+
+    comm->barrier();
+
+    it.toFirst();
+
+    // Do the computation in parallel
+    while(it.hasNext()) {
+        c.set(it.index(),  2 * it.current() );
+        it.toNext();
+    }
+
+    // it.toFirst();
     // while(it.hasNext()) {
-    //     c.set(it.index(), it.globalIndex());
-    //     it.next();
+    //     qDebug() << dtkDistributedWork::worker()->wid() << it.index() << it.current();
+    //     it.toNext();
     // }
 
-    // comm->barrier();
+    comm->barrier();
 
-    // it.toFront();
+    comm->barrier();
+    it.toFirst();
 
-    // // Do the computation in parallel
-    // while(it.hasNext()) {
-    //     c.setLocal(it.index(),  2 * it.peekNext() );
-    //     it.next();
-    // }
+    // Do the partial sum in parallel, and put the result in a parallel container (of size = number of process/threads)
+    while(it.hasNext()) {
+        check_sum += c.at(it.index());
+        it.toNext();
+    }
+    partial_sum.set(0, check_sum);
 
-    // // it.toFront();
-    // // while(it.hasNext()) {
-    // //     qDebug() << dtkDistributedWork::worker()->wid() << it.index() << it.peekNext();
-    // //     it.next();
-    // // }
+    DTK_DISTRIBUTED_END_LOCAL
 
-    // comm->barrier();
+    DTK_DISTRIBUTED_BEGIN_GLOBAL
+    c.m_handler->setGlobalMode();
+    partial_sum.m_handler->setGlobalMode();
 
-    // qlonglong check_sum = 0;
+    // Sum the partial sums in sequential mode
 
-    // dtkDistributedArray<qlonglong>& partial_sum = *(new dtkDistributedARray<qlonglong>(dtkDistributedWork::worker()->wct(), dtkDistributedWork::worker() ));
+    check_sum = 0;
 
-    // dtkDistributedIterator<qlonglong>& it_partial  = partial_sum.iterator();
-    // comm->barrier();
-    // it.toFront();
+    dtkDistributedIterator<qlonglong> it_partial = partial_sum.iterator();
+    while(it_partial.hasNext()) {
 
-    // // Do the partial sum in parallel, and put the result in a parallel container (of size = number of process/threads)
-    // while(it.hasNext()) {
-    //     check_sum += c.localAt(it.index());
-    //     it.next();
-    // }
-    // partial_sum.setLocal(0,check_sum);
+        check_sum += partial_sum.at(it_partial.index());
+        it_partial.toNext();
+    }
 
-    // DTK_DISTRIBUTED_END_LOCAL
+    qDebug() << "TOTAL SUM" << check_sum << sum << maintime.elapsed() << "ms";
 
-    //     DTK_DISTRIBUTED_BEGIN_GLOBAL
+    QVERIFY(sum == check_sum);
 
-    //     // Sum the partial sums in sequential mode
-
-    //     check_sum = 0;
-
-    // while(it_partial.hasNext()) {
-
-    //     check_sum += partial_sum.at(it_partial.index());
-    //     it_partial.next();
-    // }
-
-    // qDebug() << "TOTAL SUM" << check_sum << sum << maintime.elapsed() << "ms";
-
-    // QVERIFY(sum == check_sum);
-
-    // DTK_DISTRIBUTED_END_GLOBAL
+    DTK_DISTRIBUTED_END_GLOBAL
 
     //     delete &c;
     // delete &partial_sum;
@@ -187,43 +193,43 @@ void dtkDistributedContainerTestCase::init(void)
 
 void dtkDistributedContainerTestCase::testSum(void)
 {
-    // dtkDistributedPolicy policy;
+    dtkDistributedPolicy policy;
 
-    // QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
-    // QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
+    QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
+    QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
 
-    // int np = 2;
+    int np = 2;
 
-    // policy.setType(dtkDistributedPolicy::MP);
+    policy.setType(dtkDistributedPolicy::MP);
 
-    // if (!numprocs.isEmpty()) {
-    //     np = numprocs.toInt();
-    //     qDebug() << "got num procs from env" << np;
-    // }
+    if (!numprocs.isEmpty()) {
+        np = numprocs.toInt();
+        qDebug() << "got num procs from env" << np;
+    }
 
-    // if (!policyEnv.isEmpty()) {
-    //     qDebug() << "got policy from env" << policyEnv;
-    //     if (QString(policyEnv) == "MT"){
-    //         policy.setType(dtkDistributedPolicy::MT);
-    //     } else if (QString(policyEnv) == "MP") {
-    //         policy.setType(dtkDistributedPolicy::MP);
-    //     } else {
-    //         qDebug() << "unknown policy" << policyEnv;
-    //     }
-    // }
+    if (!policyEnv.isEmpty()) {
+        qDebug() << "got policy from env" << policyEnv;
+        if (QString(policyEnv) == "MT"){
+            policy.setType(dtkDistributedPolicy::MT);
+        } else if (QString(policyEnv) == "MP") {
+            policy.setType(dtkDistributedPolicy::MP);
+        } else {
+            qDebug() << "unknown policy" << policyEnv;
+        }
+    }
 
-    // for (int i=0; i < np; ++i)
-    //     policy.addHost("localhost");
+    for (int i=0; i < np; ++i)
+        policy.addHost("localhost");
 
-    // dtkDistributedWorkerManager manager;
-    // sumWork *work = new sumWork();
+    dtkDistributedWorkerManager manager;
+    sumWork *work = new sumWork();
 
-    // manager.setPolicy(&policy);
-    // manager.setWork(work);
-    // qDebug() << "spawn";
-    // manager.spawn();
-    // manager.exec();
-    // manager.unspawn();
+    manager.setPolicy(&policy);
+    manager.setWork(work);
+    qDebug() << "spawn";
+    manager.spawn();
+    manager.exec();
+    manager.unspawn();
 }
 
 void dtkDistributedContainerTestCase::testContainer(void)

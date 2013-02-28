@@ -72,8 +72,13 @@ template<typename T> dtkDistributedItem<T> dtkDistributedArray<T>::operator [] (
     return dtkDistributedItem<T>(new dtkDistributedArrayItem<T>(const_cast<dtkDistributedArray<T>*>(this), index));
 }
 
-template<typename T> dtkDistributedMapper *dtkDistributedArray<T>::mapper(void)
+template<typename T>  dtkDistributedIterator<T> dtkDistributedArray<T>::iterator(void)
 {
-    return m_handler->m_mapper;
+    return m_handler->iterator();
+}
+
+template<typename T>  qlonglong dtkDistributedArray<T>::localToGlobal(const qlonglong& index)
+{
+    return m_handler->localToGlobal(index);
 }
 

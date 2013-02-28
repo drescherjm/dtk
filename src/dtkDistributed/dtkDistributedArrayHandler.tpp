@@ -29,6 +29,8 @@ template <typename T> dtkDistributedArrayHandler<T>::dtkDistributedArrayHandler(
 
 template <typename T> dtkDistributedArrayHandler<T>::~dtkDistributedArrayHandler(void)
 {
+    m_comm->deallocate( m_wid, m_buffer_id);
+
     if (m_mapper)
         delete m_mapper;
 }
@@ -126,4 +128,14 @@ template<typename T> T dtkDistributedArrayHandler<T>::first(void) const
 template<typename T> T dtkDistributedArrayHandler<T>::last(void) const
 {
     return (this->*lastMethod)();
+}
+
+template<typename T> dtkDistributedIterator<T> dtkDistributedArrayHandler<T>::iterator(void)
+{
+    return dtkDistributedIterator<T>(new dtkDistributedIteratorArrayPrivate<T>(*this));
+}
+
+template<typename T>  qlonglong dtkDistributedArrayHandler<T>::localToGlobal(const qlonglong& index)
+{
+    return m_mapper->localToGlobal(index, m_wid);
 }

@@ -58,6 +58,9 @@ public:
 public:
     inline dtkDistributedIterator<T> iterator(void);
 
+public:
+    inline qlonglong localToGlobal(const qlonglong& index);
+
 // /////////////////////////////////////////////////////////////////
 
 protected:
@@ -126,6 +129,43 @@ private:
 
 private:
     friend class dtkDistributedArray<T>;
+};
+
+// ///////////////////////////////////////////////////////////////////
+// dtkDistributedIteratorArrayLocal interface
+// ///////////////////////////////////////////////////////////////////
+
+template<typename T> class dtkDistributedIteratorArrayPrivate : public dtkDistributedIteratorPrivate<T>
+{
+public:
+    dtkDistributedArrayHandler<T>& h;
+    qlonglong id;
+
+public:
+    inline  dtkDistributedIteratorArrayPrivate(dtkDistributedArrayHandler<T>& handler) : h(handler), id(0) {;}
+    inline ~dtkDistributedIteratorArrayPrivate(void) {;}
+
+public:
+    inline void    toFirst(void) { id = 0; }
+    inline void     toLast(void) { id = h.count(); }
+    inline void     toNext(void) { ++id; }
+    inline void toPrevious(void) { --id; }
+    
+public:
+    inline bool     hasNext(void) { return ( id < h.count() ); }
+    inline bool hasPrevious(void) { return ( id > 0); }
+
+public:
+    inline qlonglong index(void) { return id; }
+
+public:
+    inline T  current(void) { return h.at(id); }
+    inline T     next(void) { return h.at(id + 1); }
+    inline T previous(void) { return h.at(id - 1); }
+
+public:
+    inline bool findBackward(const T& value) { while(id > 0) if (value == h.at(id--)) return true; return false; }  
+    inline bool  findForward(const T& value) { qlonglong count = h.count(); while(id < count) if (value == h.at(id++)) return true; return false; }
 };
 
 // /////////////////////////////////////////////////////////////////

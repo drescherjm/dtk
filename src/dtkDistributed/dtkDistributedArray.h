@@ -30,7 +30,7 @@ template<typename T> class dtkDistributedArray : public dtkDistributedContainerI
 {
 public:
      inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
-            ~dtkDistributedArray(void);
+     inline ~dtkDistributedArray(void);
 
 public:
     inline void clear(void);
@@ -48,21 +48,17 @@ public:
     inline T at(const qlonglong& index) const;
 
 public:
-    //inline dtkDistributedItem<T> first(void);
-    inline                         T  first(void) const;
-
-    //inline dtkDistributedItem<T> last(void);
-    inline                         T  last(void) const;
+    inline T first(void) const;
+    inline T  last(void) const;
 
 public:
     inline dtkDistributedItem<T> operator [] (const qlonglong& index);
-    //inline                         T  operator [] (const qlonglong& index) const;
 
 public:
-    //dtkDistributedIterator<T>& constIterator(void) const;
+    inline dtkDistributedIterator<T> iterator(void);
 
 public:
-    inline dtkDistributedMapper *mapper(void);
+    inline qlonglong localToGlobal(const qlonglong& index);
 
 public:
     dtkDistributedArrayHandler<T> *m_handler;

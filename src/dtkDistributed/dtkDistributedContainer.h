@@ -23,22 +23,10 @@
 class dtkDistributedContainerBase
 {
 public:
-    virtual ~dtkDistributedContainerBase(void) { ;}//w->unrecord(this); }
+    virtual ~dtkDistributedContainerBase(void) { ; }
 
 public:
     //virtual void setMode(const dtkDistributed::Mode& mode) = 0;
-
-public:
-    inline void record(dtkDistributedWorker *worker);
-
-private:
-    dtkDistributedWorker *w;
-};
-
-void dtkDistributedContainerBase::record(dtkDistributedWorker *worker)
-{
-    w = worker;
-    worker->record(this);
 };
 
 // /////////////////////////////////////////////////////////////////

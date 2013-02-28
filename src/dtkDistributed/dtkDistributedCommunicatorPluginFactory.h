@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:17:21 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Tue Feb 12 14:23:41 (+0100)
+ * Last-Updated: 2013 Thu Feb 28 14:43:48 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 39
+ *     Update #: 49
  */
 
 /* Change Log:
@@ -13,6 +13,14 @@
  */
 
 #pragma once
+
+#include <dtkCore/dtkCorePluginFactory.h>
+
+#include "dtkDistributedCommunicator.h"
+
+class dtkDistributedCommunicatorPluginFactory : public dtkCorePluginFactory<dtkDistributedCommunicator> {};
+
+#if 0
 
 #include <QtCore>
 
@@ -42,3 +50,5 @@ public:
 private:
     dtkDistributedCommunicatorPluginFactoryPrivate *d;
 };
+
+#endif

@@ -75,15 +75,12 @@ dtkScriptInterpreterPython::~dtkScriptInterpreterPython(void)
 
 QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
-  qDebug() << Q_FUNC_INFO << command;
-
     QString statement = command;
 
     if(command.endsWith(":")) {
         if(!d->buffer.isEmpty())
             d->buffer.append("\n");
         d->buffer.append(command);
-        qDebug() << command << d->buffer;
         return "";
     }
 
@@ -91,7 +88,6 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
         if(!d->buffer.isEmpty())
             d->buffer.append("\n");
         d->buffer.append(command);
-        qDebug() << command << d->buffer;
         return "";
     }
 
@@ -100,7 +96,6 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
             d->buffer.append("\n");
         statement = d->buffer;
         d->buffer.clear();
-        qDebug() << command << d->buffer << statement;
     }
 
     if(statement.isEmpty())

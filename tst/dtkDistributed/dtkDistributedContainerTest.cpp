@@ -73,12 +73,70 @@ class containerWork : public dtkDistributedWork
     }
 };
 
-class sumWork : public dtkDistributedWork
+class randomWork : public dtkDistributedWork
 {
 
-    sumWork *clone(void);
-    void run(void);
+    randomWork *clone(void);
+    void        run(void);
 
+};
+
+int randInt(int max)
+{
+    return double(qrand()) / RAND_MAX * max;
+}
+
+randomWork *randomWork::clone(void)
+{
+    return new randomWork(*this);
+}
+
+void randomWork::run(void)
+{
+    qlonglong N = 20;
+
+    dtkDistributedArray<qlonglong> c(N, dtkDistributedWork::worker());
+    c.m_handler->setGlobalMode();
+
+    dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
+
+    QTime time, maintime;
+    maintime.start();
+    time.start();
+
+    DTK_DISTRIBUTED_BEGIN_LOCAL
+
+    dtkDistributedIterator<qlonglong> it  = c.iterator();
+
+    qsrand(dtkDistributedWork::worker()->wid());
+
+    while(it.hasNext()) {
+        c.set(it.index(), randInt(N));
+        it.toNext();
+    }
+
+    qlonglong np = dtkDistributedWork::worker()->wct();
+
+    DTK_DISTRIBUTED_END_LOCAL
+
+    DTK_DISTRIBUTED_BEGIN_GLOBAL
+
+    dtkDistributedIterator<qlonglong> it  = c.iterator();
+
+    it.toFirst();
+    while(it.hasNext()) {
+        qDebug() << it.index() << it.current();
+         it.toNext();
+    }
+
+    DTK_DISTRIBUTED_END_GLOBAL
+}
+
+class sumWork : public dtkDistributedWork
+{
+public:
+    sumWork *clone(void);
+    void       run(void);
 };
 
 sumWork *sumWork::clone(void)
@@ -176,9 +234,6 @@ void sumWork::run(void)
     QVERIFY(sum == check_sum);
 
     DTK_DISTRIBUTED_END_GLOBAL
-
-    //     delete &c;
-    // delete &partial_sum;
 }
 
 void dtkDistributedContainerTestCase::initTestCase(void)
@@ -191,7 +246,7 @@ void dtkDistributedContainerTestCase::init(void)
 
 }
 
-void dtkDistributedContainerTestCase::testSum(void)
+void dtkDistributedContainerTestCase::testAll(void)
 {
     dtkDistributedPolicy policy;
 
@@ -222,52 +277,22 @@ void dtkDistributedContainerTestCase::testSum(void)
         policy.addHost("localhost");
 
     dtkDistributedWorkerManager manager;
-    sumWork *work = new sumWork();
+    sumWork     *work = new    sumWork();
+    randomWork *work2 = new randomWork();
+    containerWork *work3 = new containerWork();
 
     manager.setPolicy(&policy);
-    manager.setWork(work);
     qDebug() << "spawn";
     manager.spawn();
-    manager.exec();
+    manager.exec(work);
+
+    manager.exec(work2);
+
+    manager.exec(work3);
+
     manager.unspawn();
-}
 
-void dtkDistributedContainerTestCase::testContainer(void)
-{
-    dtkDistributedPolicy policy;
-    QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
-    QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
-    int np = 2;
-
-    policy.setType(dtkDistributedPolicy::MP);
-
-    if (!numprocs.isEmpty()) {
-        np = numprocs.toInt();
-        qDebug() << "got num procs from env" << np;
-    }
-    if (!policyEnv.isEmpty()) {
-        qDebug() << "got policy from env" << policyEnv;
-        if (QString(policyEnv) == "MT"){
-            policy.setType(dtkDistributedPolicy::MT);
-        } else if (QString(policyEnv) == "MP") {
-            policy.setType(dtkDistributedPolicy::MP);
-        } else {
-            qDebug() << "unknown policy" << policyEnv;
-        }
-    }
-
-    for (int i=0; i < np; ++i)
-        policy.addHost("localhost");
-
-    dtkDistributedWorkerManager manager;
-    containerWork *work = new containerWork();
-
-    manager.setPolicy(&policy);
-    manager.setWork(work);
-    qDebug() << "spawn";
-    manager.spawn();
-    manager.exec();
-    manager.unspawn();
+    qDebug() << "parallel section is over";
 }
 
 void dtkDistributedContainerTestCase::cleanupTestCase(void)

@@ -38,8 +38,10 @@ public:
 public:
     void setWid(qlonglong wid);
     void setWct(qlonglong wct);
-    void setCommunicator(dtkDistributedCommunicator *comm);
     void setWork(dtkDistributedWork *work);
+
+public:
+    void setCommunicator(dtkDistributedCommunicator *comm);
 
 public:
     qlonglong wid(void);

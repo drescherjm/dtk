@@ -46,13 +46,18 @@ dtkDistributedWorker::dtkDistributedWorker(void) : QRunnable(), d(new dtkDistrib
 {
     d->comm = NULL;
     d->work = NULL;
-    d->wid  = -1;
-    d->wct  = 0;
+    d->wid  =   -1;
+    d->wct  =    0;
     d->container_id  = 0;
+
+    this->setAutoDelete(false);
 }
 
 dtkDistributedWorker::~dtkDistributedWorker(void)
 {
+    if (d->work)
+        delete d->work;
+
     delete d;
 
     d = NULL;
@@ -63,8 +68,8 @@ dtkDistributedWorker::dtkDistributedWorker(const dtkDistributedWorker& other): Q
     d->wid  = other.d->wid;
     d->wct  = other.d->wct;
     d->comm = other.d->comm;
-    d->work = other.d->work->clone();
-    d->work->setWorker(this);
+    d->work = NULL;
+    this->setAutoDelete(false);
     d->container_id = 0; // do not share containers id
 }
 
@@ -73,8 +78,6 @@ dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWork
     d->wid  = other.d->wid;
     d->wct  = other.d->wct;
     d->comm = other.d->comm;
-    d->work = other.d->work->clone();
-    d->work->setWorker(this);
     d->container_id = 0; // do not share containers id
     return (*this);
 }
@@ -111,7 +114,10 @@ qlonglong dtkDistributedWorker::containerId(void)
 
 void dtkDistributedWorker::setWork(dtkDistributedWork *work)
 {
-    d->work = work;
+    if (!work)
+        return;
+
+    d->work = work->clone();
     d->work->setWorker(this);
 }
 

@@ -17,6 +17,7 @@
 
 #include <QtCore>
 
+class dtkDistributedWork;
 class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 
@@ -48,16 +49,15 @@ public:
 
 public:
     virtual void get(qint32 from, qlonglong position, void *array, qlonglong buffer_id);
+    virtual void put(qint32 dest, qlonglong position, void  *data, qlonglong buffer_id);
 
 public:
-    virtual void put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id);
+    virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker);
+    virtual void  exec(dtkDistributedWork *work);
 
 public:
-    virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker worker);
-
-    virtual void exec();
-
-    virtual void barrier();
+    virtual void unspawn(void);
+    virtual void barrier(void);
 
 public:
     virtual qint32  pid(void);

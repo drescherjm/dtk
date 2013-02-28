@@ -3,14 +3,16 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:20:47 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Tue Feb 12 14:24:43 (+0100)
+ * Last-Updated: 2013 Thu Feb 28 14:30:28 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 27
+ *     Update #: 28
  */
 
 /* Change Log:
  * 
  */
+
+#if 0
 
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedCommunicatorPluginFactory.h"
@@ -49,3 +51,6 @@ void dtkDistributedCommunicatorPluginFactory::record(QString key, creator func)
 {
     d->creators.insert(key, func);
 }
+
+
+#endif

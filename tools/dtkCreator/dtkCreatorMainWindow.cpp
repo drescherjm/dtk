@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 16:21:58 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 1717
+ * Last-Updated: jeu. févr. 28 19:43:24 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1718
  */
 
 /* Commentary:
@@ -277,6 +277,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->edit_menu->addAction(d->composer->scene()->flagAsPinkAction());
     d->edit_menu->addAction(d->composer->scene()->flagAsRedAction());
     d->edit_menu->addAction(d->composer->scene()->flagAsYellowAction());
+    d->edit_menu->addSeparator();
+    d->edit_menu->addAction(d->composer->scene()->maskEdgesAction());
+    d->edit_menu->addAction(d->composer->scene()->unmaskEdgesAction());
 
     QMenu *view_menu = menu_bar->addMenu("View");
     view_menu->addAction(switchToCompoAction);

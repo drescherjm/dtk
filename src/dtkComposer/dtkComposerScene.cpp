@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
  * Version: $Id$
- * Last-Updated: mar. janv. 29 17:47:55 2013 (+0100)
+ * Last-Updated: jeu. févr. 28 19:27:16 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 2487
+ *     Update #: 2586
  */
 
 /* Commentary:
@@ -54,6 +54,14 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->reparent_origin = NULL;
     d->reparent_target = NULL;
 
+    d->masked_edges = false;
+
+    d->mask_edges_action = new QAction("Mask Edges", this);
+    d->mask_edges_action->setShortcut(QKeySequence(Qt::ControlModifier  + Qt::Key_M));
+
+    d->unmask_edges_action = new QAction("Unmask Edges", this);
+    d->unmask_edges_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_M));
+
     d->flag_as_blue_action = new QAction("Flag as blue", this);
     d->flag_as_blue_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_B));
     d->flag_as_blue_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-blue.png"));
@@ -83,6 +91,9 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-yellow.png"));
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
+
+    connect(d->mask_edges_action, SIGNAL(triggered()), this, SLOT(onMaskEdge()));
+    connect(d->unmask_edges_action, SIGNAL(triggered()), this, SLOT(onUnMaskEdge()));
 
     connect(d->flag_as_blue_action, SIGNAL(triggered()), this, SLOT(onFlagAsBlue()));
     connect(d->flag_as_gray_action, SIGNAL(triggered()), this, SLOT(onFlagAsGray()));
@@ -127,6 +138,11 @@ void dtkComposerScene::clear(void)
 
         delete command;
     }
+}
+
+bool dtkComposerScene::maskedEdges(void)
+{
+    return d->masked_edges;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -405,6 +421,16 @@ QAction *dtkComposerScene::flagAsYellowAction(void)
     return d->flag_as_yellow_action;
 }
 
+QAction *dtkComposerScene::maskEdgesAction(void)
+{
+    return d->mask_edges_action;
+}
+
+QAction *dtkComposerScene::unmaskEdgesAction(void)
+{
+    return d->unmask_edges_action;
+}
+
 QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor color)
 {
     return d->flagged_nodes[color];
@@ -418,6 +444,30 @@ QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor colo
 void dtkComposerScene::modify(bool b)
 {
     emit modified(b);
+}
+
+void dtkComposerScene::onMaskEdge(void)
+{
+    // if (d->masked_edges)
+    //     return;
+
+    d->masked_edges = true;
+    populateEdges();
+    foreach (dtkComposerSceneEdge * edge, d->all_edges) {
+        edge->setOpacity(0.05);
+    }
+}
+
+void dtkComposerScene::onUnMaskEdge(void)
+{
+    // if (!d->masked_edges)
+    //     return;
+
+    d->masked_edges = false;
+    populateEdges();
+    foreach (dtkComposerSceneEdge * edge, d->all_edges) {
+        edge->setOpacity(1);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1169,4 +1219,32 @@ void dtkComposerScene::onSelectionChanged(void)
         emit selectionCleared();
 
     }
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Helper functions
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerScene::populateEdges(dtkComposerSceneNode *node)
+{
+    if (!node) {
+        node = d->root_node;
+        d->all_edges.clear();
+    }
+
+    d->all_edges << node->inputEdges();
+    d->all_edges << node->outputEdges();
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        foreach(dtkComposerSceneNode *child, composite->nodes())
+            this->populateEdges(child);
+
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+        d->all_edges << control->header()->inputEdges();
+        d->all_edges << control->footer()->outputEdges();
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+            this->populateEdges(block);
+    }
+
 }

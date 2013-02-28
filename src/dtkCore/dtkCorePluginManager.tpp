@@ -3,26 +3,42 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 12:08:44 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Feb 11 18:52:16 2013 (+0100)
+ * Last-Updated: Thu Feb 28 16:01:42 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 29
+ *     Update #: 57
  */
 
 /* Change Log:
  * 
  */
 
-#include "dtkCorePluginManager.h"
-#include "dtkCorePluginManager_p.h"
+#pragma once
 
-#include <QtCore>
 #include <QtDebug>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkCorePluginManagerPrivate
 // ///////////////////////////////////////////////////////////////////
 
-bool dtkCorePluginManagerPrivate::check(const QString& path)
+template <typename T> class dtkCorePluginManagerPrivate
+{
+public:
+    bool check(const QString& path);
+
+public:
+    QHash<QString, QVariant> names;
+    QHash<QString, QVariant> versions;
+    QHash<QString, QVariantList> dependencies;
+
+public:
+    QHash<QString, QPluginLoader *> loaders;
+};
+
+// ///////////////////////////////////////////////////////////////////
+// dtkCorePluginManagerPrivate
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& path)
 {
     bool status = true;
 
@@ -59,19 +75,22 @@ bool dtkCorePluginManagerPrivate::check(const QString& path)
 // dtkCorePluginManager
 // ///////////////////////////////////////////////////////////////////
 
-dtkCorePluginManager::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate)
+template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate<T>)
 {
 
 }
 
-dtkCorePluginManager::~dtkCorePluginManager(void)
+template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkCorePluginManager::initialize(const QString& path)
+#pragma mark -
+#pragma Manager Management
+
+template <typename T> void dtkCorePluginManager<T>::initialize(const QString& path)
 {
     QDir dir(path);
 
@@ -82,13 +101,16 @@ void dtkCorePluginManager::initialize(const QString& path)
         this->load(info.absoluteFilePath());
 }
 
-void dtkCorePluginManager::uninitialize(void)
+template <typename T> void dtkCorePluginManager<T>::uninitialize(void)
 {
     foreach(const QString &path, d->loaders.keys())
         this->unload(path);
 }
 
-void dtkCorePluginManager::scan(const QString& path)
+#pragma mark -
+#pragma Plugin Management
+
+template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
 {
     if(!QLibrary::isLibrary(path))
         return;
@@ -102,7 +124,52 @@ void dtkCorePluginManager::scan(const QString& path)
     delete loader;
 }
 
-QStringList dtkCorePluginManager::plugins(void)
+template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
+{
+    if(!QLibrary::isLibrary(path))
+        return;
+
+    if(!d->check(path))
+        return;
+
+    QPluginLoader *loader = new QPluginLoader(path);
+
+    if(!loader)
+        return;
+
+    loader->setLoadHints(QLibrary::ExportExternalSymbolsHint);
+
+    T *plugin = qobject_cast<T *>(loader->instance());
+
+    if(!plugin) {
+        delete loader;
+        return;
+    }
+
+    plugin->initialize();
+
+    d->loaders.insert(path, loader);
+}
+
+template <typename T> void dtkCorePluginManager<T>::unload(const QString& path)
+{
+    QPluginLoader *loader = d->loaders.value(path);
+
+    T *plugin = qobject_cast<T *>(loader->instance());
+
+    if (plugin)
+	plugin->uninitialize();
+
+    if(loader->unload()) {
+        d->loaders.remove(path);
+        delete loader;
+    }
+}
+
+#pragma mark -
+#pragma Plugin Queries
+
+template <typename T> QStringList dtkCorePluginManager<T>::plugins(void)
 {
     return d->loaders.keys();
 }

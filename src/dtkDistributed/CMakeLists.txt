@@ -21,12 +21,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArray.tpp
   dtkDistributedArrayItem.h
   dtkDistributedCommunicator.h
-  dtkDistributedCommunicatorPlugin
-  dtkDistributedCommunicatorPlugin.h
-  dtkDistributedCommunicatorPluginFactory
-  dtkDistributedCommunicatorPluginFactory.h
-  dtkDistributedCommunicatorPluginManager
-  dtkDistributedCommunicatorPluginManager.h
   dtkDistributedContainer.h
   dtkDistributedContainerIndexed.h
   dtkDistributedContainerSequence.h
@@ -41,8 +35,6 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
-  dtkDistributedCommunicatorPluginFactory.cpp
-  dtkDistributedCommunicatorPluginManager.cpp
   dtkDistributedMapper.cpp
   dtkDistributedPolicy.cpp
   dtkDistributedSettings.cpp

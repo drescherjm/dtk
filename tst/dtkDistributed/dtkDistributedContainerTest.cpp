@@ -238,7 +238,10 @@ void sumWork::run(void)
 
 void dtkDistributedContainerTestCase::initTestCase(void)
 {
-    dtkDistributed::communicator::pluginManager().initialize();
+    dtkDistributedSettings settings;
+    settings.beginGroup("communicator");
+    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+    settings.endGroup();
 }
 
 void dtkDistributedContainerTestCase::init(void)

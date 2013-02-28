@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Tue Feb 26 14:45:18 2013 (+0100)
+## Last-Updated: Thu Feb 28 18:06:22 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 118
+##     Update #: 119
 ######################################################################
 ## 
 ### Change Log:
@@ -75,6 +75,7 @@ find_package(Qt5Widgets    REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkLog)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkCore)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
 

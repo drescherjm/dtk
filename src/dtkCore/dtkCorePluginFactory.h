@@ -1,14 +1,14 @@
 /* dtkCorePluginFactory.h --- 
  * 
- * Author: Thibaud Kloczko
- * Created: 2013 Thu Feb 28 14:13:28 (+0100)
+ * Author: Julien Wintz
+ * Created: Thu Feb 28 15:43:06 2013 (+0100)
+ * Version: 
+ * Last-Updated: Thu Feb 28 15:45:40 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 7
  */
 
-/* Commentary: 
- * 
- */
-
-/* Change log:
+/* Change Log:
  * 
  */
 
@@ -16,29 +16,34 @@
 
 #include <QtCore>
 
-//template <typename T> class dtkCorePluginFactoryPrivate;
-
 template <typename T> class dtkCorePluginFactory : public QObject
 {
-public:
-    typedef T *(*creator) (void);
-
 public:
      dtkCorePluginFactory(void);
     ~dtkCorePluginFactory(void);
 
-public:
+#pragma mark -
+#pragma Type creator definition
+
+    typedef T *(*creator) (void);
+
+#pragma mark -
+#pragma Type creator registration
+
+    void record(QString key, creator func);
+
+#pragma mark -
+#pragma Type creator invokation
+
     T *create(const QString& key);
 
-public:
-    QStringList keys(void);
+#pragma mark -
+#pragma Type creator inspection
 
-public:
-    void record(QString key, creator func);
+    QStringList keys(void);
 
 private:
     QHash<QString, creator> creators;
-    //dtkCorePluginFactoryPrivate<T> *d;
 };
 
 #include "dtkCorePluginFactory.tpp"

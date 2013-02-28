@@ -10,9 +10,10 @@
 
 #include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
-#include "dtkDistributedCommunicatorPlugin.h"
-#include "dtkDistributedCommunicatorPluginFactory.h"
-#include "dtkDistributedCommunicatorPluginManager.h"
+
+// #include "dtkDistributedCommunicatorPlugin.h"
+// #include "dtkDistributedCommunicatorPluginFactory.h"
+// #include "dtkDistributedCommunicatorPluginManager.h"
 
 namespace dtkDistributed
 {
@@ -34,8 +35,6 @@ namespace dtkDistributed
             dtkDistributedCommunicatorPluginFactory factory;
             dtkDistributedCommunicatorPluginManager manager;
         }
-
-
 
         dtkDistributedCommunicatorPluginFactory& pluginFactory(void) {
             return _private::factory;

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb 11 19:23:24 2013 (+0100)
 ## Version: 
-## Last-Updated: Tue Feb 26 14:58:42 2013 (+0100)
+## Last-Updated: Thu Feb 28 18:41:57 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 23
 ######################################################################
 ## 
 ### Change Log:
@@ -19,6 +19,7 @@ project(dtkLog)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkLog
   dtkLogger.h
   dtkLogger_p.h)
 

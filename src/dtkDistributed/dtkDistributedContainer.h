@@ -26,7 +26,7 @@ public:
     virtual ~dtkDistributedContainerBase(void) { ; }
 
 public:
-    //virtual void setMode(const dtkDistributed::Mode& mode) = 0;
+    virtual void setMode(const dtkDistributed::Mode& mode) = 0;
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -17,6 +17,8 @@
 
 #include <QtCore>
 
+#include "dtkDistributed.h"
+
 class dtkDistributedCommunicator;
 class dtkDistributedContainerBase;
 class dtkDistributedWork;
@@ -35,6 +37,9 @@ public:
 
 public:
     void run(void);
+
+public:
+    void setMode(const dtkDistributed::Mode& mode);
 
 public:
     void setWid(qlonglong wid);

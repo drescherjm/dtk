@@ -17,6 +17,7 @@
 #include "dtkDistributedWorker.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedContainer.h>
 #include <dtkDistributed/dtkDistributedWork.h>
 
 #include <QtCore>
@@ -83,6 +84,16 @@ dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWork
     d->comm = other.d->comm;
     d->container_count = 0; // do not share containers count
     return (*this);
+}
+
+void dtkDistributedWorker::setMode(const dtkDistributed::Mode& mode)
+{	
+    QHashIterator<dtkDistributedContainerBase*, qlonglong> it(d->containers);
+
+    while( it.hasNext()) {
+        it.next();
+        it.key()->setMode(mode);
+    }
 }
 
 void dtkDistributedWorker::setWid(qlonglong wid)

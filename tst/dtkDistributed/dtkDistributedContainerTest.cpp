@@ -32,7 +32,6 @@ class containerWork : public dtkDistributedWork
         
         // ---
         DTK_DISTRIBUTED_BEGIN_LOCAL
-        array.m_handler->setLocalMode();
         
         for (qlonglong i = 0; i < array.count(); ++i)
             array.set(i, array.localToGlobal(i));
@@ -43,7 +42,6 @@ class containerWork : public dtkDistributedWork
 
         // ---
         DTK_DISTRIBUTED_BEGIN_GLOBAL
-        array.m_handler->setGlobalMode();
 
         for (qlonglong i = 0; i < array.count(); ++i)
             qDebug() << i << array.at(i) << dtkDistributedWork::worker()->wid();
@@ -53,7 +51,6 @@ class containerWork : public dtkDistributedWork
         DTK_DISTRIBUTED_END_GLOBAL
             
         DTK_DISTRIBUTED_BEGIN_LOCAL
-        array.m_handler->setLocalMode();
             
         for (qlonglong i = 0; i < array.count(); ++i)
             array[i] += array.localToGlobal(i);
@@ -61,7 +58,6 @@ class containerWork : public dtkDistributedWork
         DTK_DISTRIBUTED_END_LOCAL
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL
-        array.m_handler->setGlobalMode();
         
         for (qlonglong i = 0; i < array.count(); ++i)
             array[i] -= i;
@@ -289,9 +285,9 @@ void dtkDistributedContainerTestCase::testAll(void)
     manager.spawn();
     manager.exec(work);
 
-    //manager.exec(work2);
+    manager.exec(work2);
 
-    //manager.exec(work3);
+    manager.exec(work3);
 
     manager.unspawn();
 

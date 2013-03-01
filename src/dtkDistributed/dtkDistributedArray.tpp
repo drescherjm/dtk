@@ -14,6 +14,7 @@
 
 //#prama once
 
+#include "dtkDistributed.h"
 
 class dtkDistributedCommunicator;
 
@@ -30,6 +31,21 @@ template<typename T> dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
     if (m_handler)
         delete m_handler;
+}
+
+template <typename T> void dtkDistributedArray<T>::setMode(const dtkDistributed::Mode& mode)
+{
+    switch(mode) {
+    case dtkDistributed::Local:
+        m_handler->setLocalMode();
+        break;
+    case dtkDistributed::Global:
+        m_handler->setGlobalMode();
+        break;
+    default:
+        m_handler->setGlobalMode();
+        break;
+    }
 }
 
 template<typename T> void dtkDistributedArray<T>::clear(void)

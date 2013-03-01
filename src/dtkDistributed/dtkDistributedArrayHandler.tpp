@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedWorker.h"
@@ -29,9 +30,10 @@ template <typename T> dtkDistributedArrayHandler<T>::dtkDistributedArrayHandler(
 
 template <typename T> dtkDistributedArrayHandler<T>::~dtkDistributedArrayHandler(void)
 {
-    m_comm->deallocate( m_wid, m_buffer_id);
+    m_comm->deallocate(m_wid, m_buffer_id);
 
     m_worker->unrecord(m_array);
+    m_array->setMode(dtkDistributed::mode());
 
     if (m_mapper)
         delete m_mapper;

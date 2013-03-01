@@ -33,6 +33,9 @@ public:
      inline ~dtkDistributedArray(void);
 
 public:
+     inline void setMode(const dtkDistributed::Mode& mode);
+
+public:
     inline void clear(void);
     
 public:

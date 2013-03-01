@@ -29,7 +29,7 @@
 
 class dtkComposerNodeCommunicatorInitPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorInit : public dtkComposerNodeLeaf
+class dtkComposerNodeCommunicatorInit : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorInit(void);

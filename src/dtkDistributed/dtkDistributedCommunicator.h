@@ -22,7 +22,35 @@
 #include <dtkCore/dtkAbstractData.h>
 
 class dtkDistributedCommunicatorPrivate;
-class dtkDistributedCommunicatorStatus;
+
+class dtkDistributedCommunicatorStatusPrivate;
+
+class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorStatus
+{
+
+public:
+             dtkDistributedCommunicatorStatus(void);
+    virtual ~dtkDistributedCommunicatorStatus(void);
+
+public:
+    dtkDistributedCommunicatorStatus(const dtkDistributedCommunicatorStatus& other);
+    dtkDistributedCommunicatorStatus& operator = (const dtkDistributedCommunicatorStatus& other);
+
+public:
+    int       tag(void) const;
+    qint64  count(void) const;
+    qint16 source(void) const;
+    int     error(void) const;
+
+public:
+    void    setTag(int tag);
+    void  setCount(qint64 count);
+    void setSource(qint16 source);
+    void  setError(int error);
+
+private:
+    dtkDistributedCommunicatorStatusPrivate *d;
+};
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator : public QObject
 {
@@ -151,38 +179,6 @@ public:
 private:
     dtkDistributedCommunicatorPrivate *d;
 };
-
-
-class dtkDistributedCommunicatorStatusPrivate;
-
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorStatus
-{
-
-public:
-             dtkDistributedCommunicatorStatus(void);
-    virtual ~dtkDistributedCommunicatorStatus(void);
-
-public:
-    dtkDistributedCommunicatorStatus(const dtkDistributedCommunicatorStatus& other);
-    dtkDistributedCommunicatorStatus& operator = (const dtkDistributedCommunicatorStatus& other);
-
-public:
-    int       tag(void) const;
-    qint64  count(void) const;
-    qint16 source(void) const;
-    int     error(void) const;
-
-public:
-    void    setTag(int tag);
-    void  setCount(qint64 count);
-    void setSource(qint16 source);
-    void  setError(int error);
-
-private:
-    dtkDistributedCommunicatorStatusPrivate *d;
-};
-
-
 
 Q_DECLARE_METATYPE(dtkDistributedCommunicator);
 Q_DECLARE_METATYPE(dtkDistributedCommunicator *);

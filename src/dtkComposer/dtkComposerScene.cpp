@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
- * Version: $Id$
- * Last-Updated: jeu. févr. 28 19:27:16 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 2586
  */
 
 /* Commentary:
@@ -43,6 +39,10 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->machine = NULL;
     d->stack = NULL;
     d->graph = NULL;
+
+    // BspTreeIndex causes some bugs with (at least) "enter group"
+    setItemIndexMethod( QGraphicsScene::NoIndex);
+
 
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
@@ -258,12 +258,12 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
             dtkComposerSceneNode *node;
             for(int i = 0; i < block->nodes().count(); ++i) {
                 node = block->nodes()[i];
-                if (i == 0) 
+                if (i == 0)
                     first = node;
                 this->addItem(node);
                 control->stackBefore(node);
             }
-            
+
             foreach(dtkComposerSceneEdge *edge, block->edges()) {
                 this->addItem(edge);
                 if (first)

@@ -1,20 +1,16 @@
-/* dtkComposerSceneNodeControl.cpp --- 
- * 
+/* dtkComposerSceneNodeControl.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:53:59 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Tue Sep 18 17:03:37 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 682
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -259,11 +255,8 @@ void dtkComposerSceneNodeControl::layout(void)
 
     if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())) {
 
-        if(!parent->root()){
-
-            if (parent->entered() || (parent->flattened() && !parent->embedded()))
-                parent->layout();
-        }
+        if(parent->visible())
+            parent->layout();
     }
 
 // /////////////////////////////////////////////////////////////////

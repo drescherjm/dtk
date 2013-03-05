@@ -55,7 +55,7 @@ public:
     inline T  last(void) const;
 
 public:
-    inline dtkDistributedItem<T> operator [] (const qlonglong& index);
+    inline dtkDistributedArrayItem<T> operator [] (const qlonglong& index);
 
 public:
     inline dtkDistributedIterator<T> iterator(void);

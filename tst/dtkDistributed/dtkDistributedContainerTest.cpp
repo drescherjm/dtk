@@ -144,7 +144,7 @@ void sumWork::run(void)
 {
     qDebug()<< "run!!!!";
 
-    qlonglong N = 1000001;
+    qlonglong N = 100000001;
     qlonglong sum = 0;
 
     for (qlonglong i = 0; i < N; ++i)
@@ -176,7 +176,7 @@ void sumWork::run(void)
 
     // Fill the container in parallel
     while(it.hasNext()) {
-        c.set(it.index(), c.localToGlobal(it.index()));
+        c[it.index()] = c.localToGlobal(it.index());
         it.toNext();
     }
 
@@ -285,9 +285,9 @@ void dtkDistributedContainerTestCase::testAll(void)
     manager.spawn();
     manager.exec(work);
 
-    manager.exec(work2);
+    //manager.exec(work2);
 
-    manager.exec(work3);
+    //manager.exec(work3);
 
     manager.unspawn();
 

@@ -15,6 +15,7 @@
 //#prama once
 
 #include "dtkDistributed.h"
+#include "dtkDistributedArrayItem.h"
 
 class dtkDistributedCommunicator;
 
@@ -83,9 +84,9 @@ template<typename T> T dtkDistributedArray<T>::last(void) const
     return m_handler->last();
 }
 
-template<typename T> dtkDistributedItem<T> dtkDistributedArray<T>::operator [] (const qlonglong& index)
+template<typename T> dtkDistributedArrayItem<T> dtkDistributedArray<T>::operator [] (const qlonglong& index)
 {
-    return dtkDistributedItem<T>(new dtkDistributedArrayItem<T>(const_cast<dtkDistributedArray<T>*>(this), index));
+    return dtkDistributedArrayItem<T>(this, index);
 }
 
 template<typename T>  dtkDistributedIterator<T> dtkDistributedArray<T>::iterator(void)

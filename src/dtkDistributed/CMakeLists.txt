@@ -19,6 +19,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributed.h
   dtkDistributedArray.h
   dtkDistributedArray.tpp
+  dtkDistributedArrayHandler.h
+  dtkDistributedArrayHandler.tpp
   dtkDistributedArrayItem.h
   dtkDistributedCommunicator.h
   dtkDistributedContainer.h

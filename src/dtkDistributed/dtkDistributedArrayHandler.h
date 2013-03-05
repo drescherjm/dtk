@@ -141,7 +141,7 @@ template<typename T> class dtkDistributedIteratorArrayPrivate : public dtkDistri
 public:
     dtkDistributedArrayHandler<T>& h;
     qlonglong id;
-
+ 
 public:
     inline  dtkDistributedIteratorArrayPrivate(dtkDistributedArrayHandler<T>& handler) : h(handler), id(0) {;}
     inline ~dtkDistributedIteratorArrayPrivate(void) {;}

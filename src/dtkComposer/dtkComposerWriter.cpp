@@ -1,20 +1,16 @@
-/* dtkComposerWriter.cpp --- 
- * 
+/* dtkComposerWriter.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:42:34 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Nov 21 18:23:47 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 540
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -185,6 +181,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             child.setAttribute("blockid", i++);
             child.setAttribute("w", block->boundingRect().width());
             child.setAttribute("h", block->boundingRect().height());
+
+            if (block->entered()) {
+                child.setAttribute("x", block->unrevealPos().x() - node->pos().x() );
+                child.setAttribute("y", block->unrevealPos().y() - node->pos().y() );
+            }
+
             tag.appendChild(child);
         }
 
@@ -376,7 +378,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
             tag.appendChild(value);
         }
-        
+
         if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
             if (data_node->isAbstractData()) {
@@ -389,7 +391,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 tag.appendChild(implementation);
             }
         }
-        
+
         if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
 
             if (process_node->isAbstractProcess()) {
@@ -402,7 +404,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 tag.appendChild(implementation);
             }
         }
-        
+
         if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
 
             if (view_node->isAbstractView()) {

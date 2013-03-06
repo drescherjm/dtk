@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
- * Version: $Id$
- * Last-Updated: lun. oct. 22 10:32:49 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1185
  */
 
 /* Commentary: 
@@ -95,40 +91,40 @@ void dtkComposerSceneNodeEditorList::onItemClicked(QListWidgetItem *item)
 
         if (i->checkState() == Qt::Checked)
             i->port()->show();
-        
+
         if (i->checkState() == Qt::Unchecked)
             i->port()->hide();
-   
+
         if (!(i->port()->node()->parent()))
             return;
-     
+
         int loop = i->port()->loop();
 
         if (!loop)
             return;
 
         dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(i->port()->node()->parent());
-    
+
         foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
-        
+
             foreach(dtkComposerScenePort *port, block->inputPorts()) {
                 if (port->loop() == loop) {
                     if (i->checkState() == Qt::Checked)
-                        port->show();                    
+                        port->show();
                     if (i->checkState() == Qt::Unchecked)
                         port->hide();
                 }
             }
-            
+
             foreach(dtkComposerScenePort *port, block->outputPorts()) {
                 if (port->loop() == loop) {
                     if (i->checkState() == Qt::Checked)
-                        port->show();                    
+                        port->show();
                     if (i->checkState() == Qt::Unchecked)
                         port->hide();
                 }
             }
-        }        
+        }
     }
 }
 
@@ -137,34 +133,34 @@ void dtkComposerSceneNodeEditorList::onItemChanged(QListWidgetItem *item)
     if (item->text().isEmpty())
         return;
 
-    if (dtkComposerSceneNodeEditorListItem *i = dynamic_cast<dtkComposerSceneNodeEditorListItem *>(item)) {        
-   
-     i->port()->setLabel(item->text());
+    if (dtkComposerSceneNodeEditorListItem *i = dynamic_cast<dtkComposerSceneNodeEditorListItem *>(item)) {
+
+        i->port()->setLabel(item->text());
         i->port()->update();
-   
-    
+
+
         if (!(i->port()->node()->parent()))
             return;
-    
+
         int loop = i->port()->loop();
 
         if (!loop)
             return;
 
         dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(i->port()->node()->parent());
-    
+
         foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
-            
+
             foreach(dtkComposerScenePort *port, block->inputPorts()) {
                 if (port->loop() == loop) {
                     port->setLabel(item->text());
                     port->update();
                 }
             }
-            
+
             foreach(dtkComposerScenePort *port, block->outputPorts()) {
                 if (port->loop() == loop) {
-                    port->setLabel(item->text());                    
+                    port->setLabel(item->text());
                     port->update();
                 }
             }
@@ -952,13 +948,16 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     static QHash<dtkComposerSceneNodeControl *, int> loop_ids;
 
     if (!loop_ids.contains(control)) {
-        loop_ids[control] = dynamic_cast<dtkComposerNodeControl *>(control->wrapee())->inputTwins().count();
+        int loop_count = 0;
+        foreach (dtkComposerScenePort *port, control->block("Body")->inputPorts() )
+            loop_count = qMax(port->loop(), loop_count);
+        loop_ids[control] = loop_count;
     }
 
     loop_ids[control] = loop_ids[control] + 1;
 
     if (command_cond_i)
-        command_cond_i->port()->setLoop(loop_ids[control]); 
+        command_cond_i->port()->setLoop(loop_ids[control]);
 
     command_body_i->port()->setLoop(loop_ids[control]);
     command_body_o->port()->setLoop(loop_ids[control]);

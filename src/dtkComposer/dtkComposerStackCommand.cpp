@@ -1511,9 +1511,6 @@ dtkComposerStackCommandCreatePort::dtkComposerStackCommandCreatePort(dtkComposer
 
 dtkComposerStackCommandCreatePort::~dtkComposerStackCommandCreatePort(void)
 {
-    if (e->transmitter)
-        delete e->transmitter;
-
     delete e;
 
     e = NULL;

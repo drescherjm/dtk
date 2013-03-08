@@ -37,6 +37,10 @@ public:
 template<typename T> class dtkDistributedArray : public dtkDistributedContainer
 {
 public:
+    class item;
+    class iterator;
+
+public:
      inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
      inline ~dtkDistributedArray(void);
 

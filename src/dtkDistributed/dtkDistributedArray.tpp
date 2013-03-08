@@ -13,14 +13,9 @@
  */
 
 #include "dtkDistributed.h"
+#include "dtkDistributedCommunicator.h"
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedWorker.h"
-
-class dtkDistributedCommunicator;
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
 
 template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(0), m_local_handler(*this), m_global_handler(*this), m_wid(worker->wid()), m_count(count), m_mapper(new dtkDistributedMapper), m_worker(worker), m_comm(worker->communicator())
 {

@@ -17,7 +17,7 @@
 #include "dtkDistributedWorker.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedContainer.h>
+#include <dtkDistributed/dtkDistributedArray.h>
 #include <dtkDistributed/dtkDistributedWork.h>
 
 #include <QtCore>
@@ -34,7 +34,7 @@ public:
     qlonglong container_count;
 
 public:
-    QHash<dtkDistributedContainerBase*, qlonglong> containers;
+    QHash<dtkDistributedContainer*, qlonglong> containers;
 
 public:
     dtkDistributedCommunicator *comm;
@@ -88,7 +88,7 @@ dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWork
 
 void dtkDistributedWorker::setMode(const dtkDistributed::Mode& mode)
 {	
-    QHashIterator<dtkDistributedContainerBase*, qlonglong> it(d->containers);
+    QHashIterator<dtkDistributedContainer*, qlonglong> it(d->containers);
 
     while( it.hasNext()) {
         it.next();
@@ -121,17 +121,19 @@ qlonglong dtkDistributedWorker::wct(void)
     return d->wct;
 }
 
-void dtkDistributedWorker::record(dtkDistributedContainerBase *container)
+qlonglong dtkDistributedWorker::record(dtkDistributedContainer *container)
 {
-    d->containers.insert(container, d->container_count++);
+    d->containers.insert(container, d->container_count);
+
+    return d->container_count++;
 }
 
-void dtkDistributedWorker::unrecord(dtkDistributedContainerBase *container)
+void dtkDistributedWorker::unrecord(dtkDistributedContainer *container)
 {
     d->containers.remove(container);
 }
 
-qlonglong dtkDistributedWorker::containerId(dtkDistributedContainerBase *container)
+qlonglong dtkDistributedWorker::containerId(dtkDistributedContainer *container)
 {
     return d->containers.value(container);
 }

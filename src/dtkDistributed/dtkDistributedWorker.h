@@ -20,7 +20,7 @@
 #include "dtkDistributed.h"
 
 class dtkDistributedCommunicator;
-class dtkDistributedContainerBase;
+class dtkDistributedContainer;
 class dtkDistributedWork;
 class dtkDistributedWorkerPrivate;
 
@@ -54,10 +54,11 @@ public:
     qlonglong wct(void);
 
 public:
-    void   record(dtkDistributedContainerBase *container);
-    void unrecord(dtkDistributedContainerBase *container);
+    qlonglong record(dtkDistributedContainer *container);
 
-    qlonglong containerId(dtkDistributedContainerBase *container);
+    void unrecord(dtkDistributedContainer *container);
+
+    qlonglong containerId(dtkDistributedContainer *container);
 
 public:
     bool master(void);

@@ -1,5 +1,4 @@
 #include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
-#include "dtkDistributedContainer.h"
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedSettings.h"

@@ -12,10 +12,9 @@
  * 
  */
 
-//#prama once
-
 #include "dtkDistributed.h"
-#include "dtkDistributedArrayItem.h"
+#include "dtkDistributedMapper.h"
+#include "dtkDistributedWorker.h"
 
 class dtkDistributedCommunicator;
 
@@ -23,79 +22,61 @@ class dtkDistributedCommunicator;
 // 
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(new dtkDistributedArrayHandler<T>(this, count, worker))
+template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(0), m_local_handler(*this), m_global_handler(*this), m_wid(worker->wid()), m_count(count), m_mapper(new dtkDistributedMapper), m_worker(worker), m_comm(worker->communicator())
 {
-
+    this->initialize();
 }
 
 template<typename T> dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
-    if (m_handler)
-        delete m_handler;
+    m_comm->deallocate(m_wid, buffer_id);
+
+    m_worker->unrecord(this);
+
+    if (m_mapper)
+        delete m_mapper;
+}
+
+template<typename T> void dtkDistributedArray<T>::initialize(void)
+{
+    m_worker->record(this);
+    this->setMode(dtkDistributed::mode());
+
+    m_mapper->setMapping(m_count, m_comm->size());
+    buffer_count = m_mapper->count(m_wid);
+    buffer_id = m_worker->containerId(this);
+
+    buffer = static_cast<T*>(m_comm->allocate(buffer_count, sizeof(T), m_wid, buffer_id));
+
+    m_local_handler.buffer_count = buffer_count;
+    m_local_handler.buffer = buffer;
+
+    m_global_handler.m_count = m_count;
+    m_global_handler.m_wid = m_wid;
+    m_global_handler.buffer_id = buffer_id;
+    m_global_handler.buffer_count = buffer_count;
+    m_global_handler.buffer = buffer;
+    m_global_handler.m_mapper = m_mapper;
+    m_global_handler.m_comm   = m_comm;
 }
 
 template <typename T> void dtkDistributedArray<T>::setMode(const dtkDistributed::Mode& mode)
 {
     switch(mode) {
     case dtkDistributed::Local:
-        m_handler->setLocalMode();
+        m_handler = &m_local_handler;
         break;
     case dtkDistributed::Global:
-        m_handler->setGlobalMode();
+        m_handler = &m_global_handler;
         break;
     default:
-        m_handler->setGlobalMode();
+        m_handler = &m_global_handler;
         break;
     }
 }
 
-template<typename T> void dtkDistributedArray<T>::clear(void)
+template<typename T> qlonglong dtkDistributedArray<T>::localToGlobal(const qlonglong& index)
 {
-    return m_handler->clear();
-}
-
-template<typename T> bool dtkDistributedArray<T>::empty(void) const
-{
-    return m_handler->empty();
-}
-
-template<typename T> qlonglong dtkDistributedArray<T>::count(void) const
-{
-    return m_handler->count();
-}
-
-template<typename T> void dtkDistributedArray<T>::set(const qlonglong& index, const T& value)
-{
-    m_handler->set(index, value);
-}
-
-template<typename T> T dtkDistributedArray<T>::at(const qlonglong& index) const
-{
-    return m_handler->at(index);
-}
-
-template<typename T> T dtkDistributedArray<T>::first(void) const
-{
-    return m_handler->first();
-}
-
-template<typename T> T dtkDistributedArray<T>::last(void) const
-{
-    return m_handler->last();
-}
-
-template<typename T> dtkDistributedArrayItem<T> dtkDistributedArray<T>::operator [] (const qlonglong& index)
-{
-    return dtkDistributedArrayItem<T>(this, index);
-}
-
-template<typename T>  dtkDistributedIterator<T> dtkDistributedArray<T>::iterator(void)
-{
-    return m_handler->iterator();
-}
-
-template<typename T>  qlonglong dtkDistributedArray<T>::localToGlobal(const qlonglong& index)
-{
-    return m_handler->localToGlobal(index);
+    return m_mapper->localToGlobal(index, m_wid);
 }
 

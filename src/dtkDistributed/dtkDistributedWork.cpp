@@ -76,6 +76,21 @@ dtkDistributedWorker *dtkDistributedWork::worker(void)
     return d->worker ;
 }
 
+void dtkDistributedWork::barrier(void)
+{
+    d->worker->communicator()->barrier() ;
+}
+
+qlonglong dtkDistributedWork::wct(void)
+{
+    return d->worker->wct() ;
+}
+
+qlonglong dtkDistributedWork::wid(void)
+{
+    return d->worker->wid() ;
+}
+
 void dtkDistributedWork::run(void)
 {
     qDebug() << "should be implemented in sub classes";

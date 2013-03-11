@@ -41,6 +41,13 @@ public:
     virtual void run(void);
 
 public:
+    void barrier(void);
+
+public:
+    qlonglong wid(void);
+    qlonglong wct(void);
+
+public:
     void setWorker(dtkDistributedWorker *worker);
 
 public:

@@ -15,11 +15,20 @@
 #include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedMapper.h"
+#include "dtkDistributedWork.h"
 #include "dtkDistributedWorker.h"
 
-template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : m_handler(0), m_local_handler(*this), m_global_handler(*this), m_wid(worker->wid()), m_count(count), m_mapper(new dtkDistributedMapper), m_worker(worker), m_comm(worker->communicator())
+template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWork *work) : m_handler(0), m_local_handler(*this), m_global_handler(*this), m_wid(work->worker()->wid()), m_count(count), m_mapper(new dtkDistributedMapper), m_worker(work->worker()), m_comm(work->worker()->communicator())
 {
     this->initialize();
+}
+
+template<typename T> dtkDistributedArray<T>::dtkDistributedArray(const QVector<T> & qvector , dtkDistributedWork *work) : m_handler(0), m_local_handler(*this), m_global_handler(*this), m_wid(work->worker()->wid()), m_count(qvector.count()), m_mapper(new dtkDistributedMapper), m_worker(work->worker()), m_comm(work->worker()->communicator())
+{
+    this->initialize();
+    for (qlonglong i = 0; i <  m_local_handler.buffer_count ; ++i)
+        m_local_handler.buffer[i] = qvector.at(localToGlobal(i));
+
 }
 
 template<typename T> dtkDistributedArray<T>::~dtkDistributedArray(void)

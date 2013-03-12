@@ -20,6 +20,31 @@
 #include <dtkDistributed/dtkDistributedWorker.h>
 #include <dtkDistributed/dtkDistributedWorkerManager.h>
 
+
+class qvectorWork : public dtkDistributedWork
+{
+    qvectorWork *clone(void) { return new qvectorWork(*this); };
+
+    void run(void)
+    {
+        QTime time;
+        qlonglong N = 101;
+        QVector<qlonglong> myvector(N);
+        for (qlonglong i = 0; i < N; ++i)
+            myvector[i] = i;
+
+        dtkDistributedArray<qlonglong> array(myvector, this);
+
+        DTK_DISTRIBUTED_BEGIN_GLOBAL;
+
+        QVERIFY(myvector.at(1) == array.at(1));
+        QVERIFY(myvector.at(N-1) == array.at(N-1));
+
+        DTK_DISTRIBUTED_END_GLOBAL;
+    }
+};
+
+
 class containerWork : public dtkDistributedWork
 {
     containerWork *clone(void) { return new containerWork(*this); };
@@ -27,7 +52,7 @@ class containerWork : public dtkDistributedWork
     void run(void)
     {
         QTime time;
-        dtkDistributedArray<qlonglong> array(11, dtkDistributedWork::worker());
+        dtkDistributedArray<qlonglong> array(11, this);
 
         // ---
         DTK_DISTRIBUTED_BEGIN_LOCAL;
@@ -90,9 +115,7 @@ void randomWork::run(void)
 {
     qlonglong N = 20;
 
-    dtkDistributedArray<qlonglong> c(N, dtkDistributedWork::worker());
-
-    dtkDistributedCommunicator *comm = dtkDistributedWork::worker()->communicator();
+    dtkDistributedArray<qlonglong> c(N, this);
 
     QTime time, maintime;
     maintime.start();
@@ -112,7 +135,7 @@ void randomWork::run(void)
     dtkDistributedArray<qlonglong>::const_iterator itb = c.cbegin();
     dtkDistributedArray<qlonglong>::const_iterator ite = c.cend();
     while(it != ite)
-        qDebug() << it-itb << *it++;    
+        qDebug() << it-itb << *it++;
     DTK_DISTRIBUTED_END_GLOBAL;
 }
 
@@ -132,7 +155,7 @@ void sumWork::run(void)
 {
     qDebug()<< "run!!!!";
 
-    qlonglong N = 500000001;
+    qlonglong N = 50000001;
     qlonglong sum = 0;
 
     for (qlonglong i = 0; i < N; ++i)
@@ -144,9 +167,9 @@ void sumWork::run(void)
 
     qlonglong check_sum = 0;
 
-    dtkDistributedArray<qlonglong> c(N, dtkDistributedWork::worker());
+    dtkDistributedArray<qlonglong> c(N, this);
 
-    dtkDistributedArray<qlonglong> partial_sum(wct(), dtkDistributedWork::worker() );
+    dtkDistributedArray<qlonglong> partial_sum(wct(), this);
 
     QVERIFY(N == c.count());
 
@@ -229,9 +252,10 @@ void dtkDistributedContainerTestCase::testAll(void)
         policy.addHost("localhost");
 
     dtkDistributedWorkerManager manager;
-    sumWork     *work = new    sumWork();
-    randomWork *work2 = new randomWork();
+    sumWork        *work = new    sumWork();
+    randomWork    *work2 = new randomWork();
     containerWork *work3 = new containerWork();
+    qvectorWork   *work4 = new   qvectorWork();
 
     manager.setPolicy(&policy);
     qDebug() << "spawn";
@@ -241,6 +265,8 @@ void dtkDistributedContainerTestCase::testAll(void)
     manager.exec(work2);
 
     manager.exec(work3);
+
+    manager.exec(work4);
 
     manager.unspawn();
 

@@ -1,21 +1,17 @@
 /* dtkDistributedArray.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Fri Mar  8 15:06:15 2013 (+0100)
- * Version: 
- * Last-Updated: Fri Mar  8 16:08:12 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 25
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
 
 #include "dtkDistributedMapper.h"
-#include "dtkDistributedWorker.h"
+#include "dtkDistributedWork.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedContainer
@@ -41,7 +37,8 @@ public:
     class iterator;
 
 public:
-     inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
+     inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWork *work);
+     inline  dtkDistributedArray(const QVector<T> & vector, dtkDistributedWork *work);
      inline ~dtkDistributedArray(void);
 
 #pragma mark -

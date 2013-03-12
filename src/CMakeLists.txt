@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 19:22:37 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Sep 27 15:25:08 2012 (+0200)
+## Last-Updated: Tue Mar 12 14:57:53 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 59
+##     Update #: 61
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,10 +17,13 @@
 ## 
 ######################################################################
 
+if(DTK_BUILD_ZIP)
+  add_subdirectory(dtkZip)
+endif(DTK_BUILD_ZIP)
+
 add_subdirectory(dtkContainer)
 add_subdirectory(dtkLog)
 add_subdirectory(dtkMath)
-add_subdirectory(dtkZip)
 add_subdirectory(dtkCore)
 add_subdirectory(dtkGui)
 add_subdirectory(dtkCrypto)

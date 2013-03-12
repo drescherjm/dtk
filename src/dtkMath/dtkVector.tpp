@@ -127,13 +127,18 @@ template <class T> T dtkVector<T>::operator *(const dtkVector<T>& vec) const
     return elemResult;
 }
 
-template <class T> T dtkVector<T>::norm(void) const
+template <typename T> inline T norm_func(const dtkVector<T> & val)
 {
-    T elemResult = dtkZero<T>();
+    double elemResult = dtkZero<T>();
 
-    elemResult = (*this)*(*this);
+    elemResult = (val)*(val);
 
     return sqrt( elemResult );
+}
+
+template <typename T> T dtkVector<T>::norm(void) const
+{
+    return norm_func(*this);
 }
 
 template <class T> inline dtkVector<T> operator *(const T& value, const dtkVector<T>& vec)

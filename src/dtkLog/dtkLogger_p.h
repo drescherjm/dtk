@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:26:54 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:03:15 2012 (+0200)
- *           By: tkloczko
- *     Update #: 46
+ * Last-Updated: Mon Mar 18 12:25:46 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -31,7 +31,8 @@ class dtkLogViewList;
 class dtkLoggerPrivate
 {
 public:
-    dtkLog::Level level;
+                                    dtkLog::Level  level;
+    QHash<dtkLogDestinationPointer, dtkLog::Level> levels;
 
 public:
                             dtkLogDestinationPointer  console;

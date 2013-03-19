@@ -38,7 +38,7 @@ public:
 
 public:
      inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWork *work);
-     inline  dtkDistributedArray(const QVector<T> & vector, dtkDistributedWork *work);
+     inline  dtkDistributedArray(const QVector<T>& vector, dtkDistributedWork *work);
      inline ~dtkDistributedArray(void);
 
 #pragma mark -
@@ -91,24 +91,8 @@ private:
      public:
          inline bool      empty(void) const { return !m_count; }
          inline qlonglong count(void) const { return  m_count; }
-         inline void      setAt(const qlonglong& index, const T& value) 
-	 { 
-	     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-	     qlonglong pos = m_mapper->globalToLocal(index);
-	     m_comm->put(owner, pos, &(const_cast<T&>(value)), buffer_id);
-	 }
-         inline T at(const qlonglong& index) const 
-	 { 
-	     qint32 owner  = static_cast<qint32>(m_mapper->owner(index));
-	     qlonglong pos = m_mapper->globalToLocal(index);
-	     if (m_wid == owner) {
-                     return buffer[pos];
-	     } else {
-		 T temp;
-		 m_comm->get(owner, pos, &temp, buffer_id);
-		 return temp;
-	     }
-	 }
+         inline void      setAt(const qlonglong& index, const T& value);
+         inline T    at(const qlonglong& index) const;
          inline T first(void) const { return this->at(0); }
          inline T  last(void) const { return this->at(m_count-1); }
      };

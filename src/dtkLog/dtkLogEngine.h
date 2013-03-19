@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 16:15:38 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 16:58:30 2012 (+0100)
+ * Last-Updated: Mon Mar 18 12:33:03 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -30,7 +30,7 @@ class dtkLogEnginePrivate;
 class DTKLOG_EXPORT dtkLogEngine
 {
 public:
-     dtkLogEngine(dtkLog::Level level);
+     dtkLogEngine(dtkLog::Level level, bool custom = false);
     ~dtkLogEngine(void);
 
 public:

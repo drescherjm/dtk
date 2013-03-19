@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 16:18:42 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. nov.  6 14:39:41 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 73
+ * Last-Updated: Mon Mar 18 12:39:12 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -67,6 +67,9 @@ public:
 
 public:
     QString buffer;
+
+public:
+    bool custom;
 };
 
 void dtkLogEnginePrivate::write(void)
@@ -90,7 +93,10 @@ void dtkLogEnginePrivate::write(void)
 
         QMutexLocker lock(&(dtkLogger::instance().d->mutex));
 
-        dtkLogger::instance().write(message);
+	if(!this->custom)
+	    dtkLogger::instance().write(message);
+	else
+	    dtkLogger::instance().write(message, level);
 
     } else {
 
@@ -101,7 +107,10 @@ void dtkLogEnginePrivate::write(void)
 
         QMutexLocker lock(&(dtkLogger::instance().d->mutex));
 
-        dtkLogger::instance().write(message);
+	if(!this->custom)
+	    dtkLogger::instance().write(message);
+	else
+	    dtkLogger::instance().write(message, level);
 
     }
 }
@@ -110,9 +119,10 @@ void dtkLogEnginePrivate::write(void)
 // dtkLogEngine
 // /////////////////////////////////////////////////////////////////
 
-dtkLogEngine::dtkLogEngine(dtkLog::Level level) : d(new dtkLogEnginePrivate)
+dtkLogEngine::dtkLogEngine(dtkLog::Level level, bool custom) : d(new dtkLogEnginePrivate)
 {
     d->level = level;
+    d->custom = custom;
 }
 
 dtkLogEngine::~dtkLogEngine(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:19:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 15:04:50 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 101
+ * Last-Updated: Mon Mar 18 12:57:12 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 128
  */
 
 /* Commentary: 
@@ -58,6 +58,13 @@ void dtkLogger::setLevel(QString level)
 void dtkLogger::attachConsole(void)
 {
     d->destinations << d->console;
+}
+
+void dtkLogger::attachConsole(dtkLog::Level level)
+{
+    d->destinations << d->console;
+
+    d->levels[d->console] = level;
 }
 
 void dtkLogger::detachConsole(void)
@@ -143,4 +150,20 @@ void dtkLogger::write(const QString& message)
 {
     for(int i = 0; i < d->destinations.count(); i++)
         d->destinations.at(i)->write(message);
+}
+
+void dtkLogger::write(const QString& message, dtkLog::Level level)
+{
+    for(int i = 0; i < d->destinations.count(); i++) {
+
+	if(d->levels.keys().contains(d->destinations.at(i))) {
+
+	    if(level > d->levels[d->destinations.at(i)]) {
+
+		d->destinations.at(i)->write(message);
+	    }
+	} else {
+	    d->destinations.at(i)->write(message);
+	}
+    }
 }

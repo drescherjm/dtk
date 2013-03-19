@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 14:37:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 30 15:08:46 2012 (+0200)
+ * Last-Updated: Mon Mar 18 12:40:01 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 135
+ *     Update #: 140
  */
 
 /* Commentary: See credits at EOF.
@@ -91,7 +91,14 @@ namespace dtkLog
 // /////////////////////////////////////////////////////////////////
 
 #define dtkFatal()                                                      \
-        dtkLogEngine(dtkLog::Fatal).stream()
+    dtkLogEngine(dtkLog::Fatal).stream()
+
+// ///////////////////////////////////////////////////////////////////
+// Custom level stream 
+// ///////////////////////////////////////////////////////////////////
+
+#define dtkLog(level)				                        \
+    dtkLogEngine(level, true).stream()
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

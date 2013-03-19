@@ -3,10 +3,6 @@
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. oct.  9 16:53:48 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 818
  */
 
 /* Commentary:
@@ -141,11 +137,13 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
 
 void dtkComposerEvaluator::logStack(void)
 {
-    // QListIterator<dtkComposerGraphNode *> i(d->stack);
-    // dtkDebug() << "stack content:";
-    // while (i.hasNext())
-    //     dtkDebug() << i.next()->title();
-    // dtkDebug() << "stack end";
+    dtkDebug() << "stack content:";
+
+    int j = d->stack.firstIndex();
+    while(j <= d->stack.lastIndex())
+        dtkDebug() << d->stack.at(j++)->title();
+
+    dtkDebug() << "stack end";
 }
 
 void dtkComposerEvaluator::next(bool run_concurrent)
@@ -237,9 +235,9 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             }
         } else {
             while(it != ite)
-                d->stack.append(*it++);            
+                d->stack.append(*it++);
         }
-        
+
 
         // while(it != ite) {
         //     node = *it++;
@@ -261,6 +259,6 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     //     d->max_stack_size = d->stack.size();
     //     dtkDebug() << "Max stack size raised: "<< d->max_stack_size;
     // }
-
+    d->stack.normalizeIndexes();
     return !d->stack.isEmpty();
 }

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Thu Feb 28 18:06:22 2013 (+0100)
+## Last-Updated: Wed Mar 20 13:10:44 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 119
+##     Update #: 122
 ######################################################################
 ## 
 ### Change Log:
@@ -46,7 +46,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if(NOT APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
 else(NOT APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif(NOT APPLE)
 
 ## ###################################################################

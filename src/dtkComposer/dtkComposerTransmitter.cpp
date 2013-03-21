@@ -31,16 +31,9 @@
  *  The parent node is the node that owns the transmitter in its list
  *  of emitters or receivers.
  */
-dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new dtkComposerTransmitterPrivate)
+dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new dtkComposerTransmitterPrivate(parent))
 {
-    d->active = true;
-    d->required = true;
-    d->parent = parent;
 
-    d->container = NULL;
-    d->data_transmission = AutoCopy;
-
-    d->data_type = NULL;
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -91,66 +84,64 @@ dtkComposerVariant& dtkComposerTransmitter::variant(void)
     return d->variant;
 }
 
-//! A transmitter can contain a container. In this case, the
-//! transmitter is either a vector emitter, a vector receiver or a
-//! variant.
-/*!  
- *  
- */
-dtkAbstractContainerWrapper *dtkComposerTransmitter::container(void)
-{
-    return d->variant.value<dtkAbstractContainerWrapper*>();
-}
-
 //! 
 /*!  
  *  
  */
-const dtkComposerType& dtkComposerTransmitter::dataType(void)
+int dtkComposerTransmitter::type(void)
 {
-    return *d->data_type;
+    return d->type;
 }
 
-//! Returns the type name of the data transmitted by the transmitter.
-/*!  
- *  
- */
-QString dtkComposerTransmitter::dataIdentifier(void)
-{
-    return d->variant.identifier();
-}
+// //! 
+// /*!  
+//  *  
+//  */
+// const dtkComposerType& dtkComposerTransmitter::dataType(void)
+// {
+//     return *d->data_type;
+// }
 
-//! Returns a description of the data.
-/*!  
- *  For atomic types, such as boolean, integer, double and QString,
- *  the data value is returned.
- *
- *  For objects deriving from dtkAbstractObject, this method wraps the
- *  description() method.
- *
- *  Otherwise, the address of the data is returned.
- */
-QString dtkComposerTransmitter::dataDescription(void)
-{
-    return d->variant.description();
-}
+// //! Returns the type name of the data transmitted by the transmitter.
+// /*!  
+//  *  
+//  */
+// QString dtkComposerTransmitter::dataIdentifier(void)
+// {
+//     return d->variant.identifier();
+// }
 
-//! Returns the header of the data under ByteArray format.
-/*!  
- *  This header varies the QMetaType index for 
- */
-QByteArray dtkComposerTransmitter::dataHeader(void)
-{
-    QByteArray header;
-    QDataStream stream(&header, QIODevice::WriteOnly);
+// //! Returns a description of the data.
+// /*!  
+//  *  For atomic types, such as boolean, integer, double and QString,
+//  *  the data value is returned.
+//  *
+//  *  For objects deriving from dtkAbstractObject, this method wraps the
+//  *  description() method.
+//  *
+//  *  Otherwise, the address of the data is returned.
+//  */
+// QString dtkComposerTransmitter::dataDescription(void)
+// {
+//     return d->variant.description();
+// }
 
-    const dtkComposerVariant& v = this->variant();
-    qint64 type = v.userType();
+// //! Returns the header of the data under ByteArray format.
+// /*!  
+//  *  This header varies the QMetaType index for 
+//  */
+// QByteArray dtkComposerTransmitter::dataHeader(void)
+// {
+//     QByteArray header;
+//     QDataStream stream(&header, QIODevice::WriteOnly);
+
+//     const dtkComposerVariant& v = this->variant();
+//     qint64 type = v.userType();
     
-    stream << dtkComposerTypes->value(type, type) << v.identifier();
+//     stream << dtkComposerTypes->value(type, type) << v.identifier();
 
-    return header;
-}
+//     return header;
+// }
 
 //! Sets the node to which the current transmitter is parented.
 /*!  

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 13:00:06 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 71
+ * Last-Updated: Thu Mar 21 09:40:20 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 90
  */
 
 /* Commentary: 
@@ -17,18 +17,13 @@
  * 
  */
 
-#ifndef DTKCOMPOSERTRANSMITTER_P_H
-#define DTKCOMPOSERTRANSMITTER_P_H
+#pragma once
 
 #include "dtkComposerTransmitter.h"
-#include "dtkComposerVariant.h"
 
 #include <QtCore>
 
 class dtkComposerNode;
-class dtkAbstractObject;
-class dtkAbstractContainerWrapper;
-template <typename T> class dtkMatrix;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterPrivate declaration
@@ -36,6 +31,15 @@ template <typename T> class dtkMatrix;
 
 class dtkComposerTransmitterPrivate
 {
+public:
+    dtkComposerTransmitterPrivate(dtkComposerNode *parent) {
+	active = true;
+	required = true;
+	parent = parent;
+	data_transmission = dtkComposerTransmitter::AutoCopy;
+	type = 0;
+	}
+
 public:
     bool active;
     bool required;
@@ -51,16 +55,13 @@ public:
     QList<dtkComposerTransmitter *> receivers;
 
 public:
-    const dtkComposerType *data_type;
+    //const dtkComposerType *data_type;
+    int type;
 
 public:
-    dtkComposerVariant variant;
-
-public:
-    dtkAbstractContainerWrapper *container;
+    QVariant variant;
 
 public:
     dtkComposerTransmitter::DataTransmission data_transmission;
 };
 
-#endif

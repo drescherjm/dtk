@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Dec 12 21:35:35 (+0100)
+ * Last-Updated: Thu Mar 21 16:56:17 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 312
+ *     Update #: 362
  */
 
 /* Commentary: 
@@ -16,21 +16,30 @@
  * 
  */
 
-#ifndef DTKCOMPOSERTRANSMITTEREMITTER_TPP
-#define DTKCOMPOSERTRANSMITTEREMITTER_TPP
+#pragma once
 
 #include "dtkComposerTransmitter_p.h"
-#include "dtkComposerTransmitterVariant.h"
 
+#include <dtkLog>
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterEmitterBase
+// /////////////////////////////////////////////////////////////////
 
-#include <dtkCore/dtkGlobal.h>
+void dtkComposerTransmitterEmitterBase::clearData(void)
+{
+    d->variant.clear();
+}
 
-#include <dtkContainer/dtkContainerVectorWrapper.h>
+bool dtkComposerTransmitterEmitterBase::enableCopy(void)
+{
+    return (d->receivers.count() > 1);
+}
 
-#if defined(DTK_HAVE_PLOT)
-#include <dtkPlot/dtkPlotCurve.h>
-#endif
+void dtkComposerTransmitterEmitterBase::setData(const QVariant& data)
+{ 
+    d->variant = data; 
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation
@@ -38,123 +47,38 @@
 
 //! Constructs an empty emitter.
 /*! 
- *  
+ *  Initialize the type of the emitter and the variant that it contains.
  */
-template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterAbstractEmitter(parent)
+template <typename T> dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterEmitterBase(parent)
 {
-    m_data = T();
-    d->data_type = dtkComposerTypeInfo<T>::type();
+    d->type = qRegisterMetaType<T>(static_cast<T *>(0));
 };
 
 //! Destroys the emitter.
 /*! 
  *  
  */
-template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
+template <typename T> dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
 {
 
 };
 
-template <typename T> void dtkComposerTransmitterEmitter<T>::clearData(void)
-{
-    m_data = T();
-    d->variant.clear();
-};
-
-//! Sets the data with \a data.
-/*! 
- *  
- */
-template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T& data)
-{
-    m_data = data;
-    d->variant.setValue(m_data);
-};
-
-//! Sets the data with \a data.
-/*! 
- *  
- */
-template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(const T& data)
-{
-    this->setData(const_cast<T&>(data));
-};
-
-//! Returns the data as a modifiable reference.
-/*! 
- *  
- */
-template <typename T> inline T& dtkComposerTransmitterEmitter<T>::data(void)
-{
-    return m_data;
-};
-
-//! Returns.
-/*! 
- *  
- */
-template <typename T> inline dtkComposerTransmitter::Kind dtkComposerTransmitterEmitter<T>::kind(void) const
+template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterEmitter<T>::kind(void) const
 {
     return dtkComposerTransmitter::Emitter;
 };
 
-template <typename T> inline QString dtkComposerTransmitterEmitter<T>::kindName(void) const
+template <typename T> QString dtkComposerTransmitterEmitter<T>::kindName(void) const
 {
     return "Emitter";
 };
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterEmitterVector implementation
-// /////////////////////////////////////////////////////////////////
-
-template <typename T> inline dtkComposerTransmitterEmitterVector<T>::dtkComposerTransmitterEmitterVector(dtkComposerNode *parent) : dtkComposerTransmitterAbstractEmitter(parent)
+template <typename T> void dtkComposerTransmitterEmitter<T>::setData(const T& data)
 {
-    m_vector = NULL;
-    d->data_type = dtkComposerTypeInfo<dtkContainerVector<T>*>::type();
-};
+    d->variant.setValue(const_cast<T&>(data)); 
+}
 
-template <typename T> inline dtkComposerTransmitterEmitterVector<T>::~dtkComposerTransmitterEmitterVector(void)
+template <typename T> void dtkComposerTransmitterEmitter<T>::setData(T& data)
 {
-
-};
-
-template <typename T> void dtkComposerTransmitterEmitterVector<T>::clearData(void)
-{
-    m_vector = NULL;
-    d->variant.clear();
-    if (d->container)
-        delete d->container;
-    d->container = NULL;
-};
-
-template <typename T> inline dtkComposerTransmitter::Kind dtkComposerTransmitterEmitterVector<T>::kind(void) const
-{
-    return dtkComposerTransmitter::EmitterVector;
-};
-
-template <typename T> inline QString dtkComposerTransmitterEmitterVector<T>::kindName(void) const
-{
-    return "EmitterContainer";
-};
-
-template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(dtkContainerVector<T> *vector)
-{
-    m_vector = vector;
-    if (!d->container)
-        d->container = new dtkContainerVectorWrapper<T>(m_vector);
-    else
-         d->container->setVector(m_vector);
-    d->variant.setValue(d->container);
-};
-
-template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(const dtkContainerVector<T> *vector)
-{
-    this->setData(const_cast<dtkContainerVector<T>*>(vector));
-};
-
-template <typename T> inline dtkContainerVector<T> *dtkComposerTransmitterEmitterVector<T>::data(void)
-{
-    return m_vector;
-};
-
-#endif
+    d->variant.setValue(data);
+}

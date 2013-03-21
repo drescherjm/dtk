@@ -1,85 +1,65 @@
-/* dtkComposerTransmitterEmitter.h --- 
+/* dtkComposerTransmitterEmitter.h ---
  * 
- * Author: Thibaud Kloczko, Inria.
- * Created: Tue Feb 14 10:33:49 2012 (+0100)
+ * Author: Thibaud Kloczko
+ * Created: Thu Mar 21 09:39:35 2013 (+0100)
+ * Version: 
+ * Last-Updated: Thu Mar 21 16:56:41 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 71
  */
 
-/* Commentary: 
+/* Change Log:
  * 
  */
 
-/* Change log:
- * 
- */
+#pragma once
 
-#ifndef DTKCOMPOSERTRANSMITTEREMITTER_H
-#define DTKCOMPOSERTRANSMITTEREMITTER_H
-
-#include "dtkComposerTransmitterAbstractEmitter.h"
-
-#include <dtkContainer/dtkContainerVector.h>
+#include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterEmitter interface
+// dtkComposerTransmitterEmitterBase
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitterAbstractEmitter
+class  dtkComposerTransmitterEmitterBase : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
-    ~dtkComposerTransmitterEmitter(void);
+            dtkComposerTransmitterEmitterBase(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerTransmitterEmitterBase(void);
 
 public:
-    void clearData(void);
+    inline void clearData(void);
 
 public:
-    inline void setData(      T& data);
-    inline void setData(const T& data);
+    inline bool enableCopy(void);
 
 public:
-    inline T& data(void);
+    inline void setData(const QVariant& data);
 
 public:
-    inline Kind kind(void) const;
-
-    inline QString kindName(void) const;
-
-private:
-    T m_data;
-
-    using dtkComposerTransmitterAbstractEmitter::d;
+    LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterEmitterVector interface
+// dtkComposerTransmitterEmitter
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterAbstractEmitter
+template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitterEmitterBase
 {
 public:
-     dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
-    ~dtkComposerTransmitterEmitterVector(void);
+      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
+     ~dtkComposerTransmitterEmitter(void);
 
 public:
-    void clearData(void);
+    dtkComposerTransmitter::Kind kind(void) const;
+
+    QString kindName(void) const;
 
 public:
-    inline void setData(dtkContainerVector<T> *vector);
-    
-    inline void setData(const dtkContainerVector<T> *vector);
+    inline void setData(const T& data);
+    inline void setData(      T& data);
 
 public:
-    inline dtkContainerVector<T> *data(void);
-
-public:
-    inline dtkComposerTransmitter::Kind kind(void) const;
-
-    inline QString kindName(void) const;
-
-private:
-    dtkContainerVector<T> *m_vector;
-
-    using dtkComposerTransmitterAbstractEmitter::d;
+    using dtkComposerTransmitterEmitterBase::d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -88,4 +68,3 @@ private:
 
 #include "dtkComposerTransmitterEmitter.tpp"
 
-#endif

@@ -1,82 +1,37 @@
-/* dtkComposerTransmitterHandler.h --- 
+/* dtkComposerTransmitterHandler.h ---
  * 
  * Author: Thibaud Kloczko
- * Created: 2012 Tue Dec  4 20:22:24 (+0100)
+ * Created: Thu Mar 21 15:22:41 2013 (+0100)
+ * Version: 
+ * Last-Updated: Thu Mar 21 16:17:29 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 27
  */
 
-/* Commentary: 
+/* Change Log:
  * 
  */
 
-/* Change log:
- * 
- */
+#pragma once
 
-
-#ifndef DTKCOMPOSERTRANSMITTERHANDLER_H
-#define DTKCOMPOSERTRANSMITTERHANDLER_H
-
-
-
-class dtkComposerTransmitterVariant;
-class dtkComposerVariant;
+#include <dtkCore/dtkCore.h>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterHandler interface
+// dtkComposerTransmitterHandler
 // /////////////////////////////////////////////////////////////////
 
-template <typename T, bool U> class dtkComposerTransmitterHandler
+template <typename T, bool U> 
+class dtkComposerTransmitterHandler<T*, U>
 {
 public:
-    static inline T *copyData(T* data, T*& copy, bool enable_copy);
-    static inline T *copyData(T* data, T*& copy, bool enable_copy, dtkComposerVariant& variant);
+    static inline T *copyData(const QVariant& source, QVariant& target, bool enable_copy);
 };
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterHandler specific interface
-// /////////////////////////////////////////////////////////////////
-
-template <typename T> class dtkComposerTransmitterHandler<T, true>
+template <typename T> 
+class dtkComposerTransmitterHandler<T*, true>
 {
 public:
-    static inline T *copyData(T* data, T*& copy, bool enable_copy);
-    static inline T *copyData(T* data, T*& copy, bool enable_copy, dtkComposerVariant& variant);
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterVariantHandler interface
-// /////////////////////////////////////////////////////////////////
-
-template <typename T> class dtkComposerTransmitterVariantHandler
-{
-public:
-    static void setData(T& data, dtkComposerTransmitterVariant& t_variant);
-
-public:
-    static T data(dtkComposerTransmitterVariant& t_variant);
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterVariantHandler interface
-// /////////////////////////////////////////////////////////////////
-
-template <typename T> class dtkComposerTransmitterVariantHandler<T*>
-{
-public:
-    static void setData(T *data, dtkComposerTransmitterVariant& t_variant);
-
-public:
-    static T *data(dtkComposerTransmitterVariant& t_variant);
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterVariantHandler interface
-// /////////////////////////////////////////////////////////////////
-
-template <> class  dtkComposerTransmitterVariantHandler<dtkComposerVariant>
-{
-public:
-    static void setData(dtkComposerVariant& data, dtkComposerTransmitterVariant& t_variant);
+    static inline T *copyData(const QVariant& source, QVariant& target, bool enable_copy);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -84,5 +39,3 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterHandler.tpp"
-
-#endif

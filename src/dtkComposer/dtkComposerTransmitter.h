@@ -12,23 +12,15 @@
  * 
  */
 
-#ifndef DTKCOMPOSERTRANSMITTER_H
-#define DTKCOMPOSERTRANSMITTER_H
+#pragma once
 
 #include <QtCore>
 
-#include "dtkComposerVariant.h"
-#include "dtkComposerType.h"
-
-class dtkAbstractObject;
-class dtkAbstractContainerWrapper;
 class dtkComposerNode;
 class dtkComposerTransmitterPrivate;
 class dtkComposerTransmitterLink;
 class dtkComposerTransmitterLinkList;
 class dtkComposerTransmitterVariant;
-
-template <typename T> class dtkMatrix;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter interface
@@ -58,7 +50,7 @@ public:
     virtual ~dtkComposerTransmitter(void);
 
 public:
-    virtual void clearData(void);
+    // virtual void clearData(void);
 
 public:
     virtual Kind kind(void) const = 0;
@@ -66,18 +58,17 @@ public:
     virtual QString kindName(void) const = 0;
 
 public:
-    virtual dtkComposerVariant& variant(void);
+    virtual QVariant& variant(void);
 
-public:
-    virtual dtkAbstractContainerWrapper *container(void);
+    virtual int type(void);
 
-public:
-    virtual const dtkComposerType& dataType(void);
+/* public: */
+/*     virtual const dtkComposerType& dataType(void); */
 
-    virtual QString  dataIdentifier(void);
-    virtual QString dataDescription(void);
+/*     virtual QString  dataIdentifier(void); */
+/*     virtual QString dataDescription(void); */
 
-    virtual QByteArray dataHeader(void);
+/*     virtual QByteArray dataHeader(void); */
 
 public:
     void setParentNode(dtkComposerNode *parent);
@@ -174,4 +165,3 @@ private:
 
 class  dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
-#endif

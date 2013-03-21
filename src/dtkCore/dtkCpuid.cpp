@@ -27,6 +27,7 @@
 #include <limits.h>
 #if defined(Q_CC_MSVC)
 typedef unsigned __int32  uint32_t;
+#include <intrin.h>
 #endif
 #else
 #include <stdint.h>

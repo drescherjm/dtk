@@ -51,6 +51,13 @@ template <typename T> inline dtkMatrix<T>::dtkMatrix(unsigned crow, unsigned cco
     allocate(crow, ccol);
 }
 
+//! Creates a matrix, allocates rows and columns
+template <typename T> inline dtkMatrix<T>::dtkMatrix(unsigned crow, unsigned ccol, T *buffer)
+{
+    initialize();
+    allocate(crow, ccol, buffer);
+}
+
 //! Copy constructor.
 template <typename T> inline dtkMatrix<T>::dtkMatrix(const dtkMatrix<T> &mat)
 {
@@ -119,6 +126,32 @@ template <typename T> QString dtkMatrix<T>::description(void) const
     string.append(" ]");
 
     return string;
+}
+
+//! 
+template <typename T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolInit, T *buffer)
+{
+    if (m_nMatStatus != N_NOTALLOCATED)
+	deallocate();
+
+    m_crow = crowInit;
+    m_ccol = ccolInit;
+
+    if ((m_crow * m_ccol) == 0) {
+        m_nMatStatus = N_NOTALLOCATED;
+        m_crow = 0;
+        m_ccol = 0;
+        return;
+    }
+        
+
+    m_rgrow = new T*[m_crow];
+    T *ptTmp = buffer;
+
+    for (unsigned irow = 0; irow < m_crow; ++irow)
+	m_rgrow[irow] = &(ptTmp[irow*m_ccol]);
+
+    m_nMatStatus = N_ALLOCATED;
 }
 
 //! 

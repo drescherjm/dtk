@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 13:53:01 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 21 16:49:29 2013 (+0100)
+ * Last-Updated: Thu Mar 21 23:01:13 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 118
+ *     Update #: 123
  */
 
 /* Change Log:
@@ -87,7 +87,8 @@ QVariantList dtkComposerTransmitterReceiverBase::allData(void)
  */
 template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
 {
-    d->type = qRegisterMetaType<T>(reinterpret_cast<T *>(0));
+    d->type = qMetaTypeId<T>(reinterpret_cast<T *>(0));
+    d->variant = QVariant(d->type, 0);
 }
 
 template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitterReceiver(void)
@@ -125,7 +126,8 @@ template <typename T> T dtkComposerTransmitterReceiver<T>::constData(void)
  */
 template <typename T> dtkComposerTransmitterReceiver<T*>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
 {
-    d->type = qRegisterMetaType<T*>(reinterpret_cast<T *>(0));
+    d->type = qMetaTypeId<T*>(reinterpret_cast<T **>(0));
+    d->variant = QVariant(d->type, 0);
 }
 
 template <typename T> dtkComposerTransmitterReceiver<T*>::~dtkComposerTransmitterReceiver(void)

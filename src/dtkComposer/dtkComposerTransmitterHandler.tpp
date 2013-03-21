@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 21 16:17:41 2013 (+0100)
+ * Last-Updated: Thu Mar 21 22:43:47 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 51
+ *     Update #: 53
  */
 
 /* Change Log:
@@ -24,12 +24,11 @@ T *dtkComposerTransmitterHandler<T*, U>::copyData(const QVariant& source, QVaria
     if (!data || !enable_copy)
         return data;
 
-    T *copy;
-    if (!target.isValid()) {
+    T *copy = target.value<T*>();
+    if (!copy) {
 	copy = new T(*data)
 	target.setValue(copy);
     } else {
-	copy  = target.value<T*>();
 	*copy = *data;
     }
 
@@ -44,12 +43,11 @@ T *dtkComposerTransmitterHandler<T*, true>::copyData(const QVariant& source, QVa
     if (!data || !enable_copy)
         return data;
 
-    T *copy;
-    if (!target.isValid()) {
+    T *copy = target.value<T*>();;
+    if (!copy) {
 	copy = data->clone();
 	target.setValue(copy);
     } else {
-	copy  = target.value<T*>();
 	*copy = *data;
     }
 

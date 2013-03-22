@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 09:41:43 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:35:39 2013 (+0100)
+ * Last-Updated: Fri Mar 22 16:23:11 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Change Log:
@@ -55,7 +55,7 @@ void dtk3DView::paintGL(QGLPainter *painter)
     if (d->scene)
 	d->scene->paint(this, painter);
 
-    QGLView::initializeGL(painter);
+    QGLView::paintGL(painter);
 }
 
 void dtk3DView::keyPressEvent(QKeyEvent *event)

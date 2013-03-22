@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:19:49 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:48:25 2013 (+0100)
+ * Last-Updated: Fri Mar 22 16:26:59 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 67
+ *     Update #: 72
  */
 
 /* Change Log:
@@ -30,6 +30,11 @@ class dtk3DItem : public QObject
 public:
      dtk3DItem(QObject *parent = 0);
     ~dtk3DItem(void);
+
+#pragma mark -
+#pragma mark Picking attributes
+    
+    void setId(int id);
 
 #pragma mark -
 #pragma mark Geometric attributes

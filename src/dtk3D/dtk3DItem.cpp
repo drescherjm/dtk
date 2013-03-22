@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:24:34 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:48:35 2013 (+0100)
+ * Last-Updated: Fri Mar 22 16:31:31 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 133
+ *     Update #: 139
  */
 
 /* Change Log:
@@ -56,9 +56,15 @@ dtk3DItem::~dtk3DItem(void)
     d = NULL;
 }
 
+void dtk3DItem::setId(int id)
+{
+    d->id = id;
+}
+
 void dtk3DItem::setNode(QGLSceneNode *node)
 {
     d->node = node;
+    d->node->setParent(this);
 }
 
 void dtk3DItem::setScale(qreal scale)

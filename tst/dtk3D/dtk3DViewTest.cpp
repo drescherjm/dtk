@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 11:35:55 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 11:42:13 2013 (+0100)
+ * Last-Updated: Fri Mar 22 11:49:11 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 12
+ *     Update #: 23
  */
 
 /* Change Log:
@@ -32,6 +32,11 @@ void dtk3DViewTestCase::testInstanciation(void)
     view.resize(800, 600);
     view.show();
     view.raise();
+
+#if 1
+    QEventLoop loop;
+    loop.exec();
+#endif
 }
 
 void dtk3DViewTestCase::cleanupTestCase(void)

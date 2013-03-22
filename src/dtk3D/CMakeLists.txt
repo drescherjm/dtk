@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Mar 22 09:22:26 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Mar 22 10:27:10 2013 (+0100)
+## Last-Updated: Fri Mar 22 12:26:17 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 12
+##     Update #: 17
 ######################################################################
 ## 
 ### Change Log:
@@ -19,9 +19,13 @@ project(dtk3D)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtk3DItem.h
+  dtk3DScene.h
   dtk3DView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtk3DItem.cpp
+  dtk3DScene.cpp
   dtk3DView.cpp)
 
 ## #################################################################

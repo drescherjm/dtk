@@ -1,42 +1,28 @@
 ### CMakeLists.txt ---
-##
+## 
 ## Author: Julien Wintz
-## Created: Mon Feb  4 12:16:39 2013 (+0100)
+## Created: Fri Mar 22 09:22:26 2013 (+0100)
+## Version: 
+## Last-Updated: Fri Mar 22 10:27:10 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 12
 ######################################################################
-##
+## 
 ### Change Log:
-##
+## 
 ######################################################################
 
-project(dtkDistributed)
+project(dtk3D)
 
 ## #################################################################
 ## Input
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkDistributed
-  dtkDistributed.h
-  dtkDistributedArray.h
-  dtkDistributedArray.tpp
-  dtkDistributedCommunicator.h
-  dtkDistributedMapper.h
-  dtkDistributedPolicy.h
-  dtkDistributedSettings
-  dtkDistributedSettings.h
-  dtkDistributedWork.h
-  dtkDistributedWorker.h
-  dtkDistributedWorkerManager.h)
+  dtk3DView.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkDistributed.cpp
-  dtkDistributedCommunicator.cpp
-  dtkDistributedMapper.cpp
-  dtkDistributedPolicy.cpp
-  dtkDistributedSettings.cpp
-  dtkDistributedWork.cpp
-  dtkDistributedWorker.cpp
-  dtkDistributedWorkerManager.cpp)
+  dtk3DView.cpp)
 
 ## #################################################################
 ## Build rules
@@ -50,10 +36,10 @@ add_library(${PROJECT_NAME} SHARED
 ## Link rules
 ## ###################################################################
 
+qt5_use_modules(${PROJECT_NAME} 3D)
 qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Network)
-
-target_link_libraries(${PROJECT_NAME} dtkCore)
+qt5_use_modules(${PROJECT_NAME} Gui)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## ###################################################################
 ## Install rules - files
@@ -61,7 +47,7 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 
 install(FILES ${${PROJECT_NAME}_HEADERS}
   DESTINATION include/${PROJECT_NAME}
-    COMPONENT distributed)
+    COMPONENT 3D)
 
 ## ###################################################################
 ## Install rules - targets
@@ -69,7 +55,7 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 
 install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
-      COMPONENT distributed
+      COMPONENT 3D
          EXPORT dtkDepends)
 
 ## ###################################################################

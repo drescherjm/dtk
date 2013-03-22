@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:19:49 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:31:34 2013 (+0100)
+ * Last-Updated: Fri Mar 22 14:48:25 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 55
+ *     Update #: 67
  */
 
 /* Change Log:
@@ -23,7 +23,7 @@
 
 class dtk3DItemPrivate;
 
-class dtk3DItem : public QGLSceneNode
+class dtk3DItem : public QObject
 {
     Q_OBJECT
 
@@ -32,7 +32,12 @@ public:
     ~dtk3DItem(void);
 
 #pragma mark -
-#pragma mark Geometrics
+#pragma mark Geometric attributes
+
+    void setNode(QGLSceneNode *node);
+
+#pragma mark -
+#pragma mark Frame attributes
 
     void setScale(qreal scale);
     void setPosition(const QVector3D& position);
@@ -40,7 +45,7 @@ public:
     void setOrientation(const QQuaternion& orientation);
 
 #pragma mark -
-#pragma mark Visuals
+#pragma mark Visuals attributes
 
     void setEffect(QGLAbstractEffect *effect);
 
@@ -49,7 +54,6 @@ public:
 
 #pragma mark -
 #pragma mark Management
-    
 
     void initialize(QGLView *view, QGLPainter *painter);
     void      paint(QGLView *view, QGLPainter *painter);

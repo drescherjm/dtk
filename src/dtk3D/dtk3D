@@ -1,1 +1,3 @@
+#include "dtk3DItem.h"
+#include "dtk3DScene.h"
 #include "dtk3DView.h"

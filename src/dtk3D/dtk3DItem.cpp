@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:24:34 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:31:53 2013 (+0100)
+ * Last-Updated: Fri Mar 22 14:48:35 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 130
+ *     Update #: 133
  */
 
 /* Change Log:
@@ -37,7 +37,7 @@ public:
     bool hovering;
 };
 
-dtk3DItem::dtk3DItem(QObject *parent) : QGLSceneNode(parent), d(new dtk3DItemPrivate)
+dtk3DItem::dtk3DItem(QObject *parent) : QObject(parent), d(new dtk3DItemPrivate)
 {
     d->id = -1;
     d->scale = 1.0;
@@ -54,6 +54,11 @@ dtk3DItem::~dtk3DItem(void)
     delete d;
 
     d = NULL;
+}
+
+void dtk3DItem::setNode(QGLSceneNode *node)
+{
+    d->node = node;
 }
 
 void dtk3DItem::setScale(qreal scale)

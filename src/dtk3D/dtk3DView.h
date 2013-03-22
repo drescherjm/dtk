@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 09:41:33 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 13:37:11 2013 (+0100)
+ * Last-Updated: Fri Mar 22 14:34:35 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 27
+ *     Update #: 30
  */
 
 /* Change Log:
@@ -33,6 +33,9 @@ public:
 protected:
     void initializeGL(QGLPainter *painter);
     void      paintGL(QGLPainter *painter);
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     dtk3DViewPrivate *d;

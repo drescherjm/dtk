@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 09:41:43 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:30:27 2013 (+0100)
+ * Last-Updated: Fri Mar 22 14:35:39 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 21
+ *     Update #: 30
  */
 
 /* Change Log:
@@ -14,6 +14,8 @@
 
 #include "dtk3DView.h"
 #include "dtk3DScene.h"
+
+#include <QtGui>
 
 class dtk3DViewPrivate
 {
@@ -54,4 +56,14 @@ void dtk3DView::paintGL(QGLPainter *painter)
 	d->scene->paint(this, painter);
 
     QGLView::initializeGL(painter);
+}
+
+void dtk3DView::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Tab) {
+        this->setOption(QGLView::ShowPicking, ((this->options() & QGLView::ShowPicking) == 0));
+        this->update();
+    }
+
+    QGLView::keyPressEvent(event);
 }

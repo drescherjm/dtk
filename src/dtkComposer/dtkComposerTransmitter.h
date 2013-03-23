@@ -33,9 +33,7 @@ public:
         Emitter,
         Receiver,
         Proxy,
-        Variant,
-        EmitterVector,
-        ReceiverVector
+        Variant
     };
 
 public:
@@ -46,29 +44,22 @@ public:
     };
 
 public:
+    typedef QList<int> TypeList;
+
+public:
              dtkComposerTransmitter(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitter(void);
 
-public:
-    // virtual void clearData(void);
+#pragma mark -
+#pragma mark Mandatory specific properties
 
 public:
     virtual Kind kind(void) const = 0;
 
     virtual QString kindName(void) const = 0;
 
-public:
-    virtual QVariant& variant(void);
-
-    virtual int type(void);
-
-/* public: */
-/*     virtual const dtkComposerType& dataType(void); */
-
-/*     virtual QString  dataIdentifier(void); */
-/*     virtual QString dataDescription(void); */
-
-/*     virtual QByteArray dataHeader(void); */
+#pragma mark -
+#pragma mark Static properties
 
 public:
     void setParentNode(dtkComposerNode *parent);
@@ -76,25 +67,46 @@ public:
     dtkComposerNode *parentNode(void) const;
 
 public:
-    virtual void setActive(bool active);
-
-    bool active(void);
-
-public:
-    virtual void activateEmitter(dtkComposerTransmitter        *emitter);
-    virtual void activateEmitter(dtkComposerTransmitterVariant *emitter);
-
-public:
     void setDataTransmission(DataTransmission value);
     
     DataTransmission dataTransmission(void) const;
-
-    virtual bool enableCopy(void);
 
 public:
     void setRequired(bool required);
 
     bool required(void);
+
+#pragma mark -
+#pragma mark Dynamic behaviour
+
+public:
+    void clearData(void);
+
+public:
+    bool isEmpty(void) const;
+
+public:
+    bool active(void);
+
+    void setActive(bool active);
+
+    void activateEmitter(dtkComposerTransmitter *emitter);
+
+public:
+    virtual bool enableCopy(void);
+
+public:
+    void setTypeList(const TypeList& list);
+    
+    TypeList typeList(void) const;
+
+public:
+    virtual QVariant variant(void);
+
+    virtual QVariantList allData(void);
+
+#pragma mark -
+#pragma mark Connection management
 
 public:
     void appendNext(dtkComposerTransmitter *transmitter);
@@ -128,6 +140,9 @@ public:
     static bool onTransmittersConnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& valid_links, dtkComposerTransmitterLinkList& invalid_links);
     static bool onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links);
 
+public:
+    friend class dtkComposerTransmitterHandler;
+
 protected:
     dtkComposerTransmitterPrivate *d;
 };
@@ -136,8 +151,8 @@ protected:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
-QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
+QDebug operator << (QDebug debug, const dtkComposerTransmitter& transmitter);
+QDebug operator << (QDebug debug,       dtkComposerTransmitter *transmitter);
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterLink declaration

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:22:41 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 21 16:17:29 2013 (+0100)
+ * Last-Updated: Sat Mar 23 22:40:45 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 27
+ *     Update #: 64
  */
 
 /* Change Log:
@@ -20,18 +20,42 @@
 // dtkComposerTransmitterHandler
 // /////////////////////////////////////////////////////////////////
 
-template <typename T, bool U> 
-class dtkComposerTransmitterHandler<T*, U>
+template <typename T> class dtkComposerTransmitterHandler
 {
 public:
-    static inline T *copyData(const QVariant& source, QVariant& target, bool enable_copy);
+    static inline T      data(dtkComposerTransmitter& t);
+    static inline T constData(dtkComposerTransmitter& t);
 };
 
-template <typename T> 
-class dtkComposerTransmitterHandler<T*, true>
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterHandler
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkComposerTransmitterHandler<T *>
 {
 public:
-    static inline T *copyData(const QVariant& source, QVariant& target, bool enable_copy);
+    static inline T      *data(dtkComposerTransmitter& t);
+    static inline T *constData(dtkComposerTransmitter& t);
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterHandler pointer specialization
+// /////////////////////////////////////////////////////////////////
+
+template <typename T, bool U> class dtkComposerTransmitterCopier
+{
+public:
+    static inline T *copy(T *source, QVariant& target);
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterHandler dtkCoreObject specialization
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> class dtkComposerTransmitterHandlerCopier<T, true>
+{
+public:
+    static inline T *copy(T *source, QVariant& target);
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 10:41:02 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 21 14:41:02 2013 (+0100)
+ * Last-Updated: Sat Mar 23 23:03:44 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 51
+ *     Update #: 90
  */
 
 /* Change Log:
@@ -14,10 +14,7 @@
 
 #pragma once
 
-#include <QtCore>
-
-template <typename T> class dtkComposerTransmitterEmitter;
-class dtkComposerTransmitterVariant;
+#include "dtkComposerTransmitter.h" 
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverBase
@@ -26,23 +23,19 @@ class dtkComposerTransmitterVariant;
 class dtkComposerTransmitterReceiverBase : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterReceiverBase(dtkComposerNode *parent = 0);
-    ~dtkComposerTransmitterReceiverBase(void);
+             dtkComposerTransmitterReceiverBase(dtkComposerNode *parent = 0);
+    virtual ~dtkComposerTransmitterReceiverBase(void);
 
 public:
-    inline void activateEmitter(dtkComposerTransmitter *emitter);
+    dtkComposerTransmitter::Kind kind(void) const;
 
-public:
-    inline void clearData(void);
+    QString kindName(void) const;
 
 public:
     inline bool enableCopy(void);
 
 public:
-    inline bool isEmpty(void) const;
-
-public:
-    inline QVariant& variant(void);
+    inline QVariant variant(void);
 
 public:
     inline QVariantList allData(void);
@@ -50,16 +43,25 @@ public:
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
     bool disconnect(dtkComposerTransmitter *transmitter);
-
-protected:
-    QList<dtkComposerTransmitter *> emitters;
-
-protected:
-    dtkComposerTransmitter *active_emitter;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiver interface
+// dtkComposerTransmitterReceiverVariant 
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerTransmitterReceiverVariant : public dtkComposerTransmitterReceiverBase
+{
+public:
+     dtkComposerTransmitterReceiverVariant(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterReceiverVariant(void);
+
+public:
+    template <typename T> inline T      data(void);
+    template <typename T> inline T constData(void);
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterReceiver 
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class dtkComposerTransmitterReceiver : public dtkComposerTransmitterReceiverBase
@@ -69,39 +71,17 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    dtkComposerTransmitter::Kind kind(void) const;
-
-    QString kindName(void) const;
-
-public:
     inline T      data(void);
     inline T constData(void);
 
-private:
-    using dtkComposerTransmitterAbstractReceiver::d;
-};
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiver interface
-// /////////////////////////////////////////////////////////////////
-
-template <typename T> class dtkComposerTransmitterReceiver<T*> : public dtkComposerTransmitterReceiverBase
-{
 public:
-     dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
-    ~dtkComposerTransmitterReceiver(void);
-
-public:
-    dtkComposerTransmitter::Kind kind(void) const;
-
-    QString kindName(void) const;
-
-public:
-    inline T*      data(void);
-    inline T* constData(void);
+    inline int type(void) const;
 
 private:
-    using dtkComposerTransmitterAbstractReceiver::d;
+    void setTypeList(const TypeList& list) {;}
+
+private:
+    using dtkComposerTransmitterReceiverBase::d;
 };
 
 // ///////////////////////////////////////////////////////////////////

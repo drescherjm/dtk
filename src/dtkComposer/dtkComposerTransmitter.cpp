@@ -36,10 +36,6 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
 
 }
 
-//! Destroys dtkComposerTransmitter.
-/*!  
- *  
- */
 dtkComposerTransmitter::~dtkComposerTransmitter(void)
 {
     delete d;
@@ -47,105 +43,10 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
     d = NULL;
 }
 
-//! 
-/*!  
- *  
- */
-void dtkComposerTransmitter::clearData(void)
-{
-
-}
-
-
-//! Several cases can occur when calling this method.
-/*!  
- *  A transmitter can be either an emitter, a receiver or a
- *  variant. The case of the proxy is forgotten since this method must
- *  not be called in this case.
- *
- *  - Emitter case: the returned variant contains the data that has
- *    been passed to the emitter.
- *
- *  - Receiver case: a receiver is connected to only one active
- *    transmitter which can be either an emitter or a variant playing
- *    the role of an emitter. The returned variant comes from this
- *    active transmitter.
- *
- *  - Variant case: the variant transmitter can play the role of the
- *    emitter or the receiver. When acting as an emitter, the returned
- *    variant is the one that has been passed to this variant
- *    transmitter. Conversely, when acting as a receiver, the varaint
- *    transmitter is connected to only one active transmitter that is
- *    either an emitter or a variant. The returned variant then comes
- *    from this active transmitter.
- */
-dtkComposerVariant& dtkComposerTransmitter::variant(void)
-{
-    return d->variant;
-}
-
-//! 
-/*!  
- *  
- */
-int dtkComposerTransmitter::type(void)
-{
-    return d->type;
-}
-
-// //! 
-// /*!  
-//  *  
-//  */
-// const dtkComposerType& dtkComposerTransmitter::dataType(void)
-// {
-//     return *d->data_type;
-// }
-
-// //! Returns the type name of the data transmitted by the transmitter.
-// /*!  
-//  *  
-//  */
-// QString dtkComposerTransmitter::dataIdentifier(void)
-// {
-//     return d->variant.identifier();
-// }
-
-// //! Returns a description of the data.
-// /*!  
-//  *  For atomic types, such as boolean, integer, double and QString,
-//  *  the data value is returned.
-//  *
-//  *  For objects deriving from dtkAbstractObject, this method wraps the
-//  *  description() method.
-//  *
-//  *  Otherwise, the address of the data is returned.
-//  */
-// QString dtkComposerTransmitter::dataDescription(void)
-// {
-//     return d->variant.description();
-// }
-
-// //! Returns the header of the data under ByteArray format.
-// /*!  
-//  *  This header varies the QMetaType index for 
-//  */
-// QByteArray dtkComposerTransmitter::dataHeader(void)
-// {
-//     QByteArray header;
-//     QDataStream stream(&header, QIODevice::WriteOnly);
-
-//     const dtkComposerVariant& v = this->variant();
-//     qint64 type = v.userType();
-    
-//     stream << dtkComposerTypes->value(type, type) << v.identifier();
-
-//     return header;
-// }
-
 //! Sets the node to which the current transmitter is parented.
-/*!  
- *  
+/*! 
+ *  The parent node is the node that owns the transmitter in its list
+ *  of emitters or receivers.
  */
 void dtkComposerTransmitter::setParentNode(dtkComposerNode *parent)
 {
@@ -153,58 +54,13 @@ void dtkComposerTransmitter::setParentNode(dtkComposerNode *parent)
 }
 
 //! Returns pointer to parent node.
-/*!  
- *  
+/*! 
+ *  The parent node is the node that owns the transmitter in its list
+ *  of emitters or receivers.
  */
 dtkComposerNode *dtkComposerTransmitter::parentNode(void) const
 {
     return d->parent;
-}
-
-//! Sets active flag to \a active.
-/*! 
- *  Active flags is typically used to select an emitter among a list
- *  owned by a control node.
- */
-void dtkComposerTransmitter::setActive(bool active)
-{
-    d->active = active;
-
-    if (!active)
-        return;
-
-    foreach(dtkComposerTransmitter *receiver, d->receivers)
-        receiver->activateEmitter(this);
-}
-
-//! Returns true if transmitter is active.
-/*! 
- *  Active flags is typically used to select an emitter among a list
- *  owned by a control node.
- */
-bool dtkComposerTransmitter::active(void)
-{
-    return d->active;
-}
-
-//! Returns true if transmitter is active.
-/*! 
- *  Active flags is typically used to select an emitter among a list
- *  owned by a control node.
- */
-void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitter *emitter)
-{
-    DTK_UNUSED(emitter);
-}
-
-//! Returns true if transmitter is active.
-/*! 
- *  Active flags is typically used to select an emitter among a list
- *  owned by a control node.
- */
-void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitterVariant *emitter)
-{
-    DTK_UNUSED(emitter);
 }
 
 //! Sets the type of data transmission.
@@ -239,16 +95,6 @@ dtkComposerTransmitter::DataTransmission dtkComposerTransmitter::dataTransmissio
     return d->data_transmission;
 }
 
-//! Returns true if more than one receiver is connected to one
-//! emitter. Returns false otherwise.
-/*! 
- *  Returns trgue by default.
- */
-bool dtkComposerTransmitter::enableCopy(void)
-{
-    return true;
-}
-
 //! Sets required flag to \a required.
 /*! 
  *  Required flags is typically used to know whether a transmitter
@@ -267,6 +113,118 @@ void dtkComposerTransmitter::setRequired(bool required)
 bool dtkComposerTransmitter::required(void)
 {
     return d->required;
+}
+
+void dtkComposerTransmitter::clearData(void)
+{
+    d->variant = QVariant(d->type_list.first(), 0);
+}
+
+bool dtkComposerTransmitter::isEmpty(void)
+{
+    return d->emitters.isEmpty();
+}
+
+//! Returns true if transmitter is active.
+/*! 
+ *  Active flags is typically used to select an emitter among a list
+ *  owned by a control node.
+ */
+bool dtkComposerTransmitter::active(void)
+{
+    return d->active;
+}
+
+//! Sets active flag to \a active.
+/*! 
+ *  Active flags is typically used to select an emitter among a list
+ *  owned by a control node.
+ */
+void dtkComposerTransmitter::setActive(bool active)
+{
+    d->active = active;
+
+    if (!active)
+        return;
+
+    foreach(dtkComposerTransmitter *receiver, d->receivers)
+        receiver->activateEmitter(this);
+}
+
+//! Sets \a emitter as the one that provides data.
+/*! 
+ *  
+ */
+void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitter *emitter)
+{
+    d->active_emitter = NULL;
+
+    foreach(dtkComposerTransmitter *e, d->emitters) {
+        if (emitter == e) {
+            d->active_emitter = e;
+            break;
+        }
+    }
+}
+
+//! Returns true if more than one receiver is connected to one
+//! emitter. Returns false otherwise.
+/*! 
+ *  Returns true by default.
+ */
+bool dtkComposerTransmitter::enableCopy(void)
+{
+    return true;
+}
+
+//! Sets the types that can be handled by the transmitter 
+/*!  
+ *  
+ */
+void dtkComposerTransmitter::setTypeList(const TypeList& list)
+{
+    d->type_list = list;
+}
+
+//! List of types of data likely handled by the transmitter 
+/*!  
+ *  
+ */
+dtkComposerTransmitter::TypeList dtkComposerTransmitter::typeList(void)
+{
+    return d->type_list;
+}
+
+//! Several cases can occur when calling this method.
+/*!  
+ *  A transmitter can be either an emitter, a receiver or a
+ *  variant. The case of the proxy is forgotten since this method must
+ *  not be called in this case.
+ *
+ *  - Emitter case: the returned variant contains the data that has
+ *    been passed to the emitter.
+ *
+ *  - Receiver case: a receiver is connected to only one active
+ *    transmitter which can be either an emitter or a variant playing
+ *    the role of an emitter. The returned variant comes from this
+ *    active transmitter.
+ *
+ *  - Variant case: the variant transmitter can play the role of the
+ *    emitter or the receiver. When acting as an emitter, the returned
+ *    variant is the one that has been passed to this variant
+ *    transmitter. Conversely, when acting as a receiver, the varaint
+ *    transmitter is connected to only one active transmitter that is
+ *    either an emitter or a variant. The returned variant then comes
+ *    from this active transmitter.
+ */
+QVariant dtkComposerTransmitter::variant(void)
+{
+    return d->variant;
+}
+
+QVariantList dtkComposerTransmitter::allData(void)
+{
+    return QVariantList();
 }
 
 //! Appends \a transmitter to the list of the transmitters that follow
@@ -510,7 +468,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName() << const_cast<dtkComposerTransmitter&>(transmitter).dataIdentifier();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName();// << const_cast<dtkComposerTransmitter&>(transmitter).dataIdentifier();
     
     return debug.space();
 }
@@ -521,7 +479,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName() << transmitter->dataIdentifier();
+    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName();// << transmitter->dataIdentifier();
     
     return debug.space();
 }

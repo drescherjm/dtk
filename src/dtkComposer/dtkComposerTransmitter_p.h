@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 21 09:40:20 2013 (+0100)
+ * Last-Updated: Sat Mar 23 19:03:34 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 90
+ *     Update #: 103
  */
 
 /* Commentary: 
@@ -32,13 +32,12 @@ class dtkComposerNode;
 class dtkComposerTransmitterPrivate
 {
 public:
-    dtkComposerTransmitterPrivate(dtkComposerNode *parent) {
-	active = true;
-	required = true;
-	parent = parent;
-	data_transmission = dtkComposerTransmitter::AutoCopy;
-	type = 0;
-	}
+    dtkComposerTransmitterPrivate(dtkComposerNode *p) : active(true),
+							required(true), 
+							parent(p), 
+							data_transmission(dtkComposerTransmitter::AutoCopy),
+							type(static_cast<int>(QMetaType::UnknownType)), 
+							active_emitter(0) {}
 
 public:
     bool active;
@@ -53,10 +52,13 @@ public:
 
 public:
     QList<dtkComposerTransmitter *> receivers;
+    QList<dtkComposerTransmitter *>  emitters;
+
+ public:
+    dtkComposerTransmitter *active_emitter;
 
 public:
-    //const dtkComposerType *data_type;
-    int type;
+    dtkTransmitter::TypeList type_list;
 
 public:
     QVariant variant;

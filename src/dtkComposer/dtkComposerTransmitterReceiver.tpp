@@ -3,59 +3,33 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 13:53:01 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 21 23:01:13 2013 (+0100)
+ * Last-Updated: Sat Mar 23 22:55:28 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 123
+ *     Update #: 199
  */
 
 /* Change Log:
  * 
  */
 
-#pragma once
-
 #include "dtkComposerTransmitter_p.h"
 
-#include <dtkLog>
-
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiverBase implementation
+// dtkComposerTransmitterReceiverBase inline implementation
 // /////////////////////////////////////////////////////////////////
-
-void dtkComposerTransmitterReceiverBase::clearData(void)
-{
-    d->variant.clear();
-}
 
 bool dtkComposerTransmitterReceiverBase::enableCopy(void)
 {
-    if (this->active_emitter)
-        return active_emitter->enableCopy();
+    if (d->active_emitter)
+        return d->active_emitter->enableCopy();
 
     return false;
 }
 
-void dtkComposerTransmitterReceiverBase::activateEmitter(dtkComposerTransmitter *emitter)
+QVariant dtkComposerTransmitterReceiverBase::variant(void)
 {
-    this->active_emitter = NULL;
-
-    foreach(dtkComposerTransmitterEmitterBase *e, this->emitters) {
-        if (emitter == static_cast<dtkComposerTransmitter *>(e)) {
-            this->active_emitter = e;
-            break;
-        }
-    }
-}
-
-bool dtkComposerTransmitterReceiverBase::isEmpty(void) const
-{
-    return this->emitters.isEmpty();
-}
-
-QVariant& dtkComposerTransmitterReceiverBase::variant(void)
-{
-    if (this->active_emitter)
-	return this->active_emitter->variant();
+    if (d->active_emitter)
+	return d->active_emitter->variant();
 
     return d->variant;
 }
@@ -64,17 +38,26 @@ QVariantList dtkComposerTransmitterReceiverBase::allData(void)
 {
     QVariantList list;
 
-    int count = this->emitters.count();
-    dtkComposerTransmitter *e = NULL;
-
-    for(int i = 0; i < count; ++i) {
-	e = this->emitters.at(i);
-	if (e->active()) {
+    foreach(dtkComposerTransmitter *e, d->emitters) {
+	if (e->active)
 	    list << e->variant();
-	}
     }
 
     return list;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterReceiverVariant template implementation
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> T dtkComposerTransmitterReceiverVariant::data(void)
+{
+    return dtkComposerTransmitterHandler<T>::data(*this);
+}
+
+template <typename T> T dtkComposerTransmitterReceiverVariant::constData(void)
+{
+    return dtkComposerTransmitterHandler<T>::constData(*this);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -87,8 +70,8 @@ QVariantList dtkComposerTransmitterReceiverBase::allData(void)
  */
 template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
 {
-    d->type = qMetaTypeId<T>(reinterpret_cast<T *>(0));
-    d->variant = QVariant(d->type, 0);
+    d->type_list << qMetaTypeId<T>(reinterpret_cast<T *>(0));
+    d->variant = QVariant(d->type_list.first(), 0);
 }
 
 template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitterReceiver(void)
@@ -96,80 +79,18 @@ template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitter
 
 }
 
-template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterReceiver<T>::kind(void) const
-{
-    return dtkComposerTransmitter::Receiver;
-}
-
-template <typename T> QString dtkComposerTransmitterReceiver<T>::kindName(void) const
-{
-    return "Receiver";
-}
-
 template <typename T> T dtkComposerTransmitterReceiver<T>::data(void)
 {
-    return dtkComposerTransmitterReceiverBase::variant().value<T>();
+    return dtkComposerTransmitterHandler<T>::data(*this);
 }
 
 template <typename T> T dtkComposerTransmitterReceiver<T>::constData(void)
 {
-    return dtkComposerTransmitterReceiverBase::variant().value<T>();
+    return dtkComposerTransmitterHandler<T>::constData(*this);
 }
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiver implementation
-// /////////////////////////////////////////////////////////////////
-
-//! Constructs a receiver.
-/*! 
- *  Initialize the type of the receiver and the variant that it contains.
- */
-template <typename T> dtkComposerTransmitterReceiver<T*>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
+template <typename T> int dtkComposerTransmitterReceiver<T>::type(void) const
 {
-    d->type = qMetaTypeId<T*>(reinterpret_cast<T **>(0));
-    d->variant = QVariant(d->type, 0);
-}
-
-template <typename T> dtkComposerTransmitterReceiver<T*>::~dtkComposerTransmitterReceiver(void)
-{
-
-}
-
-template <typename T> dtkComposerTransmitter::Kind dtkComposerTransmitterReceiver<T*>::kind(void) const
-{
-    return dtkComposerTransmitter::Receiver;
-}
-
-template <typename T> QString dtkComposerTransmitterReceiver<T*>::kindName(void) const
-{
-    return "Receiver";
-}
-
-template <typename T> T* dtkComposerTransmitterReceiver<T*>::data(void)
-{
-    const QVariant& source = dtkComposerTransmitterReceiverBase::variant();
-
-    switch(this->dataTransmission()) {
-    case dtkComposerTransmitter::AutoCopy:
-	return dtkComposerTransmitterHandler<T, IsPointerToTypeDerivedFromCoreObject<T*>::Value>::copyData(source, d->variant, this->enableCopy());
-	break;
-    case dtkComposerTransmitter::Reference:
-	return dtkComposerTransmitterHandler<T, IsPointerToTypeDerivedFromCoreObject<T*>::Value>::copyData(source, d->variant, false);       
-	break;
-    case dtkComposerTransmitter::Copy:
-	return dtkComposerTransmitterHandler<T, IsPointerToTypeDerivedFromCoreObject<T*>::Value>::copyData(source, d->variant, true);
-	break;
-    default:
-        return source.value<T*>();
-    }
-}
-
-template <typename T> T* dtkComposerTransmitterReceiver<T*>::constData(void)
-{
-    const QVariant& source = dtkComposerTransmitterReceiverBase::variant();
-
-    bool enable_copy = (this->dataTransmission() == dtkComposerTransmitter::Copy);
-
-    return dtkComposerTransmitterHandler<T, IsPointerToTypeDerivedFromCoreObject<T*>::Value>::copyData(source, d->variant, enable_copy);
+    return d->type_list.first();
 }
 

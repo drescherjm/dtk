@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb 11 19:23:24 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Mar 22 09:39:53 2013 (+0100)
+## Last-Updated: Sun Mar 24 17:03:46 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 24
+##     Update #: 31
 ######################################################################
 ## 
 ### Change Log:
@@ -56,9 +56,3 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT log
          EXPORT dtkDepends)
-
-## ###################################################################
-## Target export
-## ###################################################################
-
-list(APPEND DTK_TARGETS ${PROJECT_NAME})

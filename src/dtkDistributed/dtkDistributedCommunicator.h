@@ -21,7 +21,7 @@ class dtkDistributedWork;
 class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 
-class dtkDistributedCommunicator : public dtkCoreObject
+class dtkDistributedCommunicator : public QObject
 {
     Q_OBJECT
 

@@ -71,9 +71,3 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT distributed
          EXPORT dtkDepends)
-
-## ###################################################################
-## Target export
-## ###################################################################
-
-list(APPEND DTK_TARGETS ${PROJECT_NAME})

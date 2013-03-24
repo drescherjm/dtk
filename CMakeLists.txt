@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Mar 22 10:18:13 2013 (+0100)
+## Last-Updated: Sun Mar 24 10:35:41 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 133
+##     Update #: 137
 ######################################################################
 ## 
 ### Change Log:
@@ -67,7 +67,7 @@ find_package(Qt5Qml        REQUIRED)
 find_package(Qt5Quick      REQUIRED)
 find_package(Qt5Test       REQUIRED)
 find_package(Qt5Widgets    REQUIRED)
-find_package(Qt53D)
+find_package(Qt53D            QUIET)
 
 ## #################################################################
 ## Dependencies - internal

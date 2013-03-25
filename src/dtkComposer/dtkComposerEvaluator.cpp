@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:42:46 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 837
+ * Last-Updated: Mon Mar 25 08:44:42 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 839
  */
 
 /* Commentary:
@@ -28,6 +28,7 @@
 #include <dtkLog>
 
 #include <QtCore>
+#include <QtConcurrent>
 
 // ///////////////////////////////////////////////////////////////////
 // Log categories

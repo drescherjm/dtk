@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 12:07:43 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 80
+ * Last-Updated: Mon Mar 25 09:06:25 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -17,12 +17,10 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENENODE_H
-#define DTKCOMPOSERSCENENODE_H
-
-
+#pragma once
 
 #include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerNode;
 class dtkComposerSceneEdge;
@@ -126,4 +124,3 @@ protected:
 
 class dtkComposerSceneNodeList : public QList<dtkComposerSceneNode *> {};
 
-#endif

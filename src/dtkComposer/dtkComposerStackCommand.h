@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. juin  8 16:28:38 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 195
+ * Last-Updated: Mon Mar 25 09:17:10 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -17,11 +17,11 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSTACKCOMMAND_H
-#define DTKCOMPOSERSTACKCOMMAND_H
+#pragma once
 
 #include <QtCore>
 #include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerFactory;
 class dtkComposerGraph;
@@ -495,5 +495,3 @@ public:
 private:
     dtkComposerStackCommandCopyNodesPrivate *e;
 };
-
-#endif

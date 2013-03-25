@@ -3,14 +3,16 @@
  * Author: Thibaud Kloczko
  * Created: Fri Mar 22 16:46:45 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 16:52:15 2013 (+0100)
+ * Last-Updated: Mon Mar 25 09:20:13 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 16
+ *     Update #: 20
  */
 
 /* Change Log:
  * 
  */
+
+#include "dtkComposerTransmitter_p.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant template implementation
@@ -28,10 +30,10 @@ template <typename T> void dtkComposerTransmitterVariant::setData(const T& data)
 
 template <typename T> T dtkComposerTransmitterVariant::data(void)
 {
-    return dtkComposerTransmitterReceiverBase::variant().value<T>();
+    return dtkComposerTransmitter::variant().value<T>();
 }
 
-template <typename T> T dtkComposerTransmitterVariant::data(void)
+template <typename T> T dtkComposerTransmitterVariant::constData(void)
 {
-    return dtkComposerTransmitterReceiverBase::variant().value<T>();
+    return dtkComposerTransmitter::variant().value<T>();
 }

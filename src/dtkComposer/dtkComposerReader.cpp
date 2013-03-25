@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. janv. 14 17:32:30 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 844
+ * Last-Updated: Mon Mar 25 10:53:20 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 873
  */
 
 /* Commentary: 
@@ -45,13 +45,20 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
+// #include <dtkCore/dtkAbstractDataFactory.h>
+// #include <dtkCore/dtkAbstractProcessFactory.h>
+// #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtCore>
 #include <QtXml>
+
+#include <dtkLog>
+
+// /////////////////////////////////////////////////////////////////
+// dtkLog categories
+// /////////////////////////////////////////////////////////////////
+
+DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_IO, "fr.inria.dtk.composer.io")
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerReaderPrivate
@@ -84,31 +91,33 @@ public:
 
 bool dtkComposerReaderPrivate::check(const QDomDocument& document)
 {
-    missing_implementation.clear();
-    default_implementation.clear();
+    // missing_implementation.clear();
+    // default_implementation.clear();
 
-    QStringList implementations;
-    implementations << dtkAbstractDataFactory::instance()->implementations();
-    implementations << dtkAbstractProcessFactory::instance()->implementations();
-    implementations << dtkAbstractViewFactory::instance()->implementations();
+    // QStringList implementations;
+    // implementations << dtkAbstractDataFactory::instance()->implementations();
+    // implementations << dtkAbstractProcessFactory::instance()->implementations();
+    // implementations << dtkAbstractViewFactory::instance()->implementations();
 
-    QDomNodeList nodes = document.elementsByTagName("implementation");
+    // QDomNodeList nodes = document.elementsByTagName("implementation");
 
-    for(int i = 0; i < nodes.count(); i++)
-    {
-        QString composition_implementation = nodes.at(i).toElement().text();
+    // for(int i = 0; i < nodes.count(); i++)
+    // {
+    //     QString composition_implementation = nodes.at(i).toElement().text();
 
-        if(composition_implementation.isEmpty())
-        {
-            default_implementation << QString("- %1\n").arg(nodes.at(i).parentNode().toElement().attribute("type"));
-        }
-        else if(!implementations.contains(composition_implementation))
-        {
-            missing_implementation << QString("- %1\n").arg(composition_implementation);
-        }
-    }
+    //     if(composition_implementation.isEmpty())
+    //     {
+    //         default_implementation << QString("- %1\n").arg(nodes.at(i).parentNode().toElement().attribute("type"));
+    //     }
+    //     else if(!implementations.contains(composition_implementation))
+    //     {
+    //         missing_implementation << QString("- %1\n").arg(composition_implementation);
+    //     }
+    // }
 
-    return (missing_implementation.count() + default_implementation.count()) == 0;
+    // return (missing_implementation.count() + default_implementation.count()) == 0;
+
+    return true;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -160,15 +169,15 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
         return false;
 
 
-    if (!dtkIsBinary(fileName)) {
-        c_bytes = file.readAll();
-        content = QString::fromUtf8(c_bytes.data());
+    // if (!dtkIsBinary(fileName)) {
+    //     c_bytes = file.readAll();
+    //     content = QString::fromUtf8(c_bytes.data());
 
-    } else {
+    // } else {
         QDataStream stream(&file); stream >> c_bytes;
         QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
         content = QString::fromUtf8(u_bytes.data(), u_bytes.size());
-    }
+	//}
 
     file.close();
     return this->readString(content,append);
@@ -185,7 +194,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
         if(d->missing_implementation.count() > 0) {
-            if (qApp->type() != QApplication::Tty) {
+            if (dynamic_cast<QApplication *>(qApp)) {
                 QMessageBox msgBox;
 
                 msgBox.setText("Node implementations are missing. Load anyway?");
@@ -197,7 +206,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
                 if(msgBox.exec() == QMessageBox::Cancel)
                     return false;
             } else {
-                dtkError() << "Can't load composition, mission implementation(s):" << d->missing_implementation.join("");
+                dtkError(FR_INRIA_DTK_COMPOSER_IO) << "Can't load composition, mission implementation(s):" << d->missing_implementation.join("");
                 return false;
             }
         }
@@ -405,7 +414,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 d->scene->addItem(n);
         } else {
 
-            if (qApp->type() != QApplication::Tty) {
+            if (dynamic_cast<QApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create node " + type_n);
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -419,8 +428,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 msgBox.exec();
 
             } else {
-                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
-            }
+                dtkError(FR_INRIA_DTK_COMPOSER_IO) <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+	    }
             return NULL;
         }
 
@@ -430,7 +439,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
         if (!new_node) {
 
-            if (qApp->type() != QApplication::Tty) {
+            if (dynamic_cast<QApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create core node.");
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -441,8 +450,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 msgBox.exec();
 
             } else {
-                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
-            }
+                dtkError(FR_INRIA_DTK_COMPOSER_IO) <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+	    }
             delete n;
             return NULL;
         }
@@ -790,7 +799,7 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     return edge;
 
 handle_failure:
-    dtkWarn() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
+    dtkWarning(FR_INRIA_DTK_COMPOSER_IO) << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
     delete edge;
     return NULL;
 

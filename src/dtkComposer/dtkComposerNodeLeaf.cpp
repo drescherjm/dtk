@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 21 11:03:51 2012 (+0100)
- *           By: tkloczko
- *     Update #: 27
+ * Last-Updated: Mon Mar 25 08:45:40 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -18,8 +18,6 @@
  */
 
 #include "dtkComposerNodeLeaf.h"
-
-#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafPrivate definition
@@ -51,12 +49,12 @@ dtkComposerNodeLeaf::~dtkComposerNodeLeaf(void)
 
 void dtkComposerNodeLeaf::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    // DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeLeaf::run(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+    // DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
 }
 
 void dtkComposerNodeLeaf::setAsHeader(bool header)

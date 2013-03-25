@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Dec 12 16:51:40 (+0100)
+ * Last-Updated: Mon Mar 25 09:05:06 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 48
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 class dtkComposerNodeBooleanPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver;
+    dtkComposerTransmitterReceiverVariant receiver;
 
 public:    
     dtkComposerTransmitterEmitter<bool> emitter;
@@ -43,11 +43,11 @@ public:
 
 dtkComposerNodeBoolean::dtkComposerNodeBoolean(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-    variant_list << dtkComposerTypeInfo<bool*>::type() << dtkComposerTypeInfo<int*>::type() << dtkComposerTypeInfo<uint*>::type() 
-                 << dtkComposerTypeInfo<qlonglong*>::type() << dtkComposerTypeInfo<double*>::type() << dtkComposerTypeInfo<QString*>::type();
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << QMetaType::Bool;// << dtkComposerTypeInfo<int*>::type() << dtkComposerTypeInfo<uint*>::type() 
+    //<< dtkComposerTypeInfo<qlonglong*>::type() << dtkComposerTypeInfo<double*>::type() << dtkComposerTypeInfo<QString*>::type();
 
-    d->receiver.setDataTypes(variant_list);
+    d->receiver.setTypeList(type_list);
     this->appendReceiver(&d->receiver);
 
     d->value = false;

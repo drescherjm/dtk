@@ -31,7 +31,8 @@
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"
 #include "dtkComposerWriter.h"
-#include "dtkCore/dtkGlobal.h"
+
+#include <QtWidgets>
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
@@ -1115,7 +1116,7 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
 {
-    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::AscendingOrder);
 
     foreach(QGraphicsItem *item, items)
         if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
@@ -1126,7 +1127,7 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
 
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const
 {
-    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::AscendingOrder);
 
     foreach(QGraphicsItem *item, items) {
         if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
@@ -1147,7 +1148,7 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposer
 
 dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const
 {
-    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect);
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::AscendingOrder);
 
     foreach(QGraphicsItem *item, items)
         if (dtkComposerScenePort *port = dynamic_cast<dtkComposerScenePort *>(item))

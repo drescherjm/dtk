@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:47:17 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 2100
+ * Last-Updated: Mon Mar 25 10:30:03 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 2108
  */
 
 /* Commentary:
@@ -47,6 +47,12 @@
 #include "dtkComposerScenePort.h"
 
 #include <dtkLog>
+
+// /////////////////////////////////////////////////////////////////
+// dtkLog categories
+// /////////////////////////////////////////////////////////////////
+
+DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_EVALUATOR, "fr.inria.dtk.composer.evaluator")
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphPrivate

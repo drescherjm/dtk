@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 10:15:56 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 23:11:59 2013 (+0100)
+ * Last-Updated: Mon Mar 25 09:15:07 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Change Log:
@@ -40,7 +40,7 @@ QString dtkComposerTransmitterEmitterBase::kindName(void) const
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitterBase::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    DTK_UNUSED(transmitter);
+    Q_UNUSED(transmitter);
 
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)

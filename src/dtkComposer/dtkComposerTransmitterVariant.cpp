@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Fri Mar 22 13:22:51 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 21:35:48 2013 (+0100)
+ * Last-Updated: Mon Mar 25 09:20:28 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 265
+ *     Update #: 267
  */
 
 /* Change Log:
@@ -107,7 +107,7 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    DTK_UNUSED(transmitter);
+    Q_UNUSED(transmitter);
 
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
@@ -118,7 +118,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::leftLinks(dtkComp
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterVariant::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    DTK_UNUSED(transmitter);
+    Q_UNUSED(transmitter);
 
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)

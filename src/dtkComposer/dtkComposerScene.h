@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: jeu. févr. 28 19:16:06 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 242
+ * Last-Updated: Mon Mar 25 09:09:46 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 249
  */
 
 /* Commentary:
@@ -17,12 +17,10 @@
  *
  */
 
-#ifndef DTKCOMPOSERSCENE_H
-#define DTKCOMPOSERSCENE_H
-
-
+#pragma once
 
 #include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerMachine;
 class dtkComposerFactory;
@@ -35,6 +33,10 @@ class dtkComposerSceneNote;
 class dtkComposerScenePort;
 class dtkComposerScenePrivate;
 class dtkComposerStack;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerScene
+// /////////////////////////////////////////////////////////////////
 
 class  dtkComposerScene : public QGraphicsScene
 {
@@ -179,4 +181,3 @@ private:
     dtkComposerScenePrivate *d;
 };
 
-#endif

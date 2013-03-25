@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:22:41 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 22:40:45 2013 (+0100)
+ * Last-Updated: Mon Mar 25 09:01:38 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 64
+ *     Update #: 74
  */
 
 /* Change Log:
@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <dtkCore/dtkCore.h>
+class dtkComposerTransmitter;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterHandler
@@ -52,7 +52,7 @@ public:
 // dtkComposerTransmitterHandler dtkCoreObject specialization
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterHandlerCopier<T, true>
+template <typename T> class dtkComposerTransmitterCopier<T, true>
 {
 public:
     static inline T *copy(T *source, QVariant& target);

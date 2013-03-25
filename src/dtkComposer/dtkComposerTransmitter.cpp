@@ -14,13 +14,7 @@
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitter_p.h"
-#include "dtkComposerTransmitterVariant.h"
-#include "dtkComposerMetatype.h"
 #include "dtkComposerNode.h"
-
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkCore/dtkAbstractObject>
-#include <dtkCore/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter implementation
@@ -120,7 +114,7 @@ void dtkComposerTransmitter::clearData(void)
     d->variant = QVariant(d->type_list.first(), 0);
 }
 
-bool dtkComposerTransmitter::isEmpty(void)
+bool dtkComposerTransmitter::isEmpty(void) const
 {
     return d->emitters.isEmpty();
 }
@@ -190,7 +184,7 @@ void dtkComposerTransmitter::setTypeList(const TypeList& list)
 /*!  
  *  
  */
-dtkComposerTransmitter::TypeList dtkComposerTransmitter::typeList(void)
+dtkComposerTransmitter::TypeList dtkComposerTransmitter::typeList(void) const
 {
     return d->type_list;
 }
@@ -283,7 +277,7 @@ void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
  */
 bool dtkComposerTransmitter::connect(dtkComposerTransmitter *transmitter)
 {
-    DTK_UNUSED(transmitter);
+    Q_UNUSED(transmitter);
 
     return false;
 }
@@ -328,7 +322,7 @@ int dtkComposerTransmitter::receiverCount(void)
  */
 bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
 {
-    DTK_UNUSED(transmitter);
+    Q_UNUSED(transmitter);
 
     return false;
 }
@@ -342,8 +336,8 @@ bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
  */
 dtkComposerTransmitter::LinkMap dtkComposerTransmitter::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    DTK_UNUSED(transmitter);
-    DTK_UNUSED(list);
+    Q_UNUSED(transmitter);
+    Q_UNUSED(list);
 
     return LinkMap();
 }
@@ -357,8 +351,8 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::leftLinks(dtkComposerTra
  */
 dtkComposerTransmitter::LinkMap dtkComposerTransmitter::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    DTK_UNUSED(transmitter);
-    DTK_UNUSED(list);
+    Q_UNUSED(transmitter);
+    Q_UNUSED(list);
 
     return LinkMap();
 }

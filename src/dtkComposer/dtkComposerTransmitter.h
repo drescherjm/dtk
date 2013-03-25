@@ -141,7 +141,7 @@ public:
     static bool onTransmittersDisconnected(dtkComposerTransmitter *source, dtkComposerTransmitter *destination, dtkComposerTransmitterLinkList& invalid_links);
 
 public:
-    friend class dtkComposerTransmitterHandler;
+    template <typename T> friend class dtkComposerTransmitterHandler;
 
 protected:
     dtkComposerTransmitterPrivate *d;

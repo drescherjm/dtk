@@ -36,7 +36,7 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerWriter.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog>
 
 #include <QtCore>
 

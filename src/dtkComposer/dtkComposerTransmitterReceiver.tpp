@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 13:53:01 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 22:55:28 2013 (+0100)
+ * Last-Updated: Mon Mar 25 08:48:13 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 199
+ *     Update #: 202
  */
 
 /* Change Log:
@@ -13,6 +13,7 @@
  */
 
 #include "dtkComposerTransmitter_p.h"
+#include "dtkComposerTransmitterHandler.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverBase inline implementation
@@ -39,7 +40,7 @@ QVariantList dtkComposerTransmitterReceiverBase::allData(void)
     QVariantList list;
 
     foreach(dtkComposerTransmitter *e, d->emitters) {
-	if (e->active)
+	if (e->active())
 	    list << e->variant();
     }
 

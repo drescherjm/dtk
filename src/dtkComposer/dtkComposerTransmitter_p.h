@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar 23 19:03:34 2013 (+0100)
+ * Last-Updated: Mon Mar 25 08:47:43 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 103
+ *     Update #: 105
  */
 
 /* Commentary: 
@@ -36,7 +36,6 @@ public:
 							required(true), 
 							parent(p), 
 							data_transmission(dtkComposerTransmitter::AutoCopy),
-							type(static_cast<int>(QMetaType::UnknownType)), 
 							active_emitter(0) {}
 
 public:
@@ -58,7 +57,7 @@ public:
     dtkComposerTransmitter *active_emitter;
 
 public:
-    dtkTransmitter::TypeList type_list;
+    dtkComposerTransmitter::TypeList type_list;
 
 public:
     QVariant variant;

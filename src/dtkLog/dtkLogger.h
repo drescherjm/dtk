@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 12:18:35 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Feb 13 17:13:21 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 28
+ * Last-Updated: Mon Mar 25 10:45:20 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 39
  */
 
 /* Change Log:
@@ -102,6 +102,22 @@ void dtkSetLoggingRulesFile(const QString &path);
 
 #define dtkCritical(category)						             \
     for (bool enabled = category.isEnabled(QtCriticalMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).critical()
+
+// ///////////////////////////////////////////////////////////////////
+// dtkTrace
+// ///////////////////////////////////////////////////////////////////
+
+#define dtkTrace(category)						             \
+    for (bool enabled = category.isEnabled(QtDebugMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).debug()
+
+// ///////////////////////////////////////////////////////////////////
+// dtkError
+// ///////////////////////////////////////////////////////////////////
+
+#define dtkError(category)						             \
+    for (bool enabled = category.isEnabled(QtFatalMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).critical()
 
 /****************************************************************************

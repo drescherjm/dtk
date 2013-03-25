@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:48:45 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Feb  1 11:43:11 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: Mon Mar 25 09:16:53 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -17,10 +17,10 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSTACK_H
-#define DTKCOMPOSERSTACK_H
+#pragma once
 
 #include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerStackCommand;
 
@@ -30,4 +30,4 @@ public:
     void push(dtkComposerStackCommand* command);
 };
 
-#endif
+

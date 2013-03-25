@@ -3,14 +3,16 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 22:54:04 2013 (+0100)
+ * Last-Updated: Mon Mar 25 09:03:25 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 140
+ *     Update #: 147
  */
 
 /* Change Log:
  * 
  */
+
+#include <dtkCore/dtkCore.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterHandler implementation
@@ -32,7 +34,7 @@ template <typename T> T dtkComposerTransmitterHandler<T>::constData(dtkComposerT
 
 template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTransmitter& t)
 {
-    T *source = t.variant.value<T *>();
+    T *source = t.d->variant.value<T *>();
 
     switch(t.dataTransmission()) {
     case dtkComposerTransmitter::AutoCopy:
@@ -69,10 +71,10 @@ template <typename T, bool U> T *dtkComposerTransmitterCopier<T, U>::copy(T *sou
 
     T *copy = target.value<T *>();
     if (!copy) {
-	copy = new T(*source)
+	copy = new T(*source);
 	target.setValue(copy);
     } else {
-	*copy = *data;
+	*copy = *source;
     }
 
     return copy;
@@ -89,10 +91,10 @@ template <typename T> T *dtkComposerTransmitterCopier<T, true>::copy(T *source, 
 
     T *copy = target.value<T*>();;
     if (!copy) {
-	copy = data->clone();
+	copy = source->clone();
 	target.setValue(copy);
     } else {
-	*copy = *data;
+	*copy = *source;
     }
 
     return copy;

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 09:41:43 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 16:23:11 2013 (+0100)
+ * Last-Updated: Mon Mar 25 17:29:47 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 32
  */
 
 /* Change Log:
@@ -52,6 +52,9 @@ void dtk3DView::initializeGL(QGLPainter *painter)
 
 void dtk3DView::paintGL(QGLPainter *painter)
 {
+    painter->setStandardEffect(QGL::LitMaterial);
+    painter->setFaceColor(QGL::AllFaces, QColor(170, 202, 0));
+
     if (d->scene)
 	d->scene->paint(this, painter);
 

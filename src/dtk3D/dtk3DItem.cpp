@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:24:34 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 16:31:31 2013 (+0100)
+ * Last-Updated: Mon Mar 25 17:35:18 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 139
+ *     Update #: 141
  */
 
 /* Change Log:
@@ -54,6 +54,11 @@ dtk3DItem::~dtk3DItem(void)
     delete d;
 
     d = NULL;
+}
+
+QGLSceneNode *dtk3DItem::node(void)
+{
+    return d->node;
 }
 
 void dtk3DItem::setId(int id)

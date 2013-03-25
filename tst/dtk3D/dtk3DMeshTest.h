@@ -1,9 +1,9 @@
-/* dtk3DViewTest.h ---
+/* dtk3DMeshTest.h ---
  * 
  * Author: Julien Wintz
- * Created: Fri Mar 22 11:35:20 2013 (+0100)
+ * Created: Mon Mar 25 12:56:35 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 13:00:53 2013 (+0100)
+ * Last-Updated: Mon Mar 25 13:00:40 2013 (+0100)
  *           By: Julien Wintz
  *     Update #: 6
  */
@@ -16,7 +16,7 @@
 
 #include <dtkTest>
 
-class dtk3DViewTestCase : public QObject
+class dtk3DMeshTestCase : public QObject
 {
     Q_OBJECT
 
@@ -25,8 +25,7 @@ private slots:
     void init(void);
 
 private slots:
-    void testInstanciation(void);
-    void testShapes(void);
+    void testGMSH(void);
 
 private slots:
     void cleanupTestCase(void);

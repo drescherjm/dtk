@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:15:02 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 10:21:13 2013 (+0100)
+ * Last-Updated: Mon Mar 25 11:40:29 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 115
  */
 
 /* Change Log:
@@ -66,3 +66,10 @@
 
 #define DTK_DECLARE_PLUGIN_MANAGER(type)        \
     class type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
+
+// ///////////////////////////////////////////////////////////////////
+// DTK_DEFINE_PLUGIN
+// ///////////////////////////////////////////////////////////////////
+
+#define DTK_DEFINE_PLUGIN(type) \
+    Q_PLUGIN_METADATA(IID DTK_DECLARE_PLUGIN_INTERFACE(type))

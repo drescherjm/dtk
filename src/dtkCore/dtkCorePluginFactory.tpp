@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:20:47 2013 (+0100)
  * Version: 
- * Last-Updated: 2013 Thu Feb 28 20:00:19 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 67
+ * Last-Updated: Mon Mar 25 15:14:51 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 73
  */
 
 /* Change Log:
@@ -25,7 +25,7 @@ template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
 }
 
 #pragma mark -
-#pragma Type creator registration
+#pragma mark Type creator registration
 
 template <typename T> void dtkCorePluginFactory<T>::record(QString key, creator func)
 {
@@ -33,17 +33,21 @@ template <typename T> void dtkCorePluginFactory<T>::record(QString key, creator 
 }
 
 #pragma mark -
-#pragma Type creator invokation
+#pragma mark Type creator invokation
 
 template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
 {
+    if(!this->creators.contains(key))
+	return NULL;
+
     return this->creators.value(key)();
 }
 
 #pragma mark -
-#pragma Type creator inspection
+#pragma mark Type creator inspection
 
 template <typename T> QStringList dtkCorePluginFactory<T>::keys(void)
 {
     return this->creators.keys();
 }
+

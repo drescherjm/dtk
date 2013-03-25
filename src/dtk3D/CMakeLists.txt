@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Mar 22 09:22:26 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Mar 22 12:26:17 2013 (+0100)
+## Last-Updated: Mon Mar 25 09:34:06 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 17
+##     Update #: 24
 ######################################################################
 ## 
 ### Change Log:
@@ -19,12 +19,16 @@ project(dtk3D)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtk3D.h
   dtk3DItem.h
+  dtk3DItemMesh.h
   dtk3DScene.h
   dtk3DView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtk3D.cpp
   dtk3DItem.cpp
+  dtk3DItemMesh.cpp
   dtk3DScene.cpp
   dtk3DView.cpp)
 
@@ -61,9 +65,3 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
       COMPONENT 3D
          EXPORT dtkDepends)
-
-## ###################################################################
-## Target export
-## ###################################################################
-
-list(APPEND DTK_TARGETS ${PROJECT_NAME})

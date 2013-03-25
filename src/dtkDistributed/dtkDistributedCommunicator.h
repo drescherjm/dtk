@@ -71,5 +71,3 @@ DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
 DTK_DECLARE_PLUGIN(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator)
-
-Q_DECLARE_INTERFACE(dtkDistributedCommunicatorPlugin, "fr.inria.dtkDistributedCommunicatorPlugin")

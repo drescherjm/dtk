@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Dec 12 16:46:20 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 54
+ * Last-Updated: Tue Mar 26 14:41:40 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -24,8 +24,6 @@
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlIfPrivate definition
@@ -50,10 +48,6 @@ public:
 
 dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlIfPrivate)
 {
-    QVector<const dtkComposerType*> variants;
-    variants << dtkComposerTypeInfo<bool>::type();
-    d->cond.setDataTypes(variants);
-
     d->header.removeEmitter(0);
     d->header.setInputLabelHint("cond", 0); 
     d->header.setAsHeader(true);

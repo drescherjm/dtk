@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Wed Dec 12 16:55:10 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 302
+ * Last-Updated: Tue Mar 26 14:44:13 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 310
  */
 
 /* Commentary:
@@ -24,9 +24,6 @@
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkGlobal.h>
-#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlCasePrivate definition
@@ -70,7 +67,6 @@ dtkComposerNodeControlCase::dtkComposerNodeControlCase(void) : dtkComposerNodeCo
     dtkComposerNodeComposite *def = new dtkComposerNodeComposite;
     def->setTitleHint("Case#default");
     d->blocks << def;
-
 }
 
 dtkComposerNodeControlCase::~dtkComposerNodeControlCase(void)
@@ -174,17 +170,16 @@ int dtkComposerNodeControlCase::selectBranch(void)
 
             if (!s_cond.isEmpty() && !s_v.isEmpty()) {
                 is_case = (s_cond == s_v);
-
-            } else {
-
-                dtkAbstractObject *o_cond = d->cond.variant().toAbstractObject();
-                dtkAbstractObject *o_v    = v->variant().toAbstractObject();
-
-                if (o_cond && o_v)
-                    is_case = (*o_cond == *o_v);
-                else
-                    is_case = false;
             }
+
+	    // else {
+            //     dtkAbstractObject *o_cond = d->cond.variant().toAbstractObject();
+            //     dtkAbstractObject *o_v    = v->variant().toAbstractObject();
+            //     if (o_cond && o_v)
+            //         is_case = (*o_cond == *o_v);
+            //     else
+            //         is_case = false;
+            // }
         }
 
         if (is_case) {

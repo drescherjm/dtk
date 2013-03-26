@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar 21 10:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May  9 09:57:54 2012 (+0200)
- *           By: tkloczko
- *     Update #: 8
+ * Last-Updated: Tue Mar 26 14:40:56 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #include "dtkComposerNodeProxy.h"
 #include "dtkComposerTransmitterProxy.h"
-
-#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeProxyPrivate definition
@@ -48,5 +46,3 @@ dtkComposerNodeProxy::~dtkComposerNodeProxy(void)
     delete d;
     d = NULL;
 }
-
-

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:05:00 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 18:53:10 2013 (+0100)
+ * Last-Updated: Tue Mar 26 21:33:27 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 48
  */
 
 /* Change Log:
@@ -38,8 +38,8 @@ QBox3D dtk3DScene::boundingBox(void)
 
     foreach (QObject *object, this->children()) {
         dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
-	if(item)
-	    box = box.united(item->node()->boundingBox());
+	if(item && !item->boundingBox().isNull())
+	    box = box.united(item->boundingBox());
     }
 
     return box;

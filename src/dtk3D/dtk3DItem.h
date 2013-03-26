@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:19:49 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 17:35:02 2013 (+0100)
+ * Last-Updated: Tue Mar 26 21:34:07 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 79
+ *     Update #: 87
  */
 
 /* Change Log:
@@ -32,7 +32,12 @@ public:
     virtual ~dtk3DItem(void);
 
 #pragma mark -
-#pragma mark Geometric attribites
+#pragma mark Geometric attributes
+
+    virtual QBox3D boundingBox(void) const;
+
+#pragma mark -
+#pragma mark Scene attributes
     
     QGLSceneNode *node(void);
 

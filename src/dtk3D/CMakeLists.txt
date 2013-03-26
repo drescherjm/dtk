@@ -21,7 +21,7 @@ project(dtk3D)
 set(${PROJECT_NAME}_HEADERS
   dtk3D.h
   dtk3DItem.h
-  dtk3DItemMesh.h
+  dtk3DMesh.h
   dtk3DScene.h
   dtk3DSettings.h
   dtk3DView.h)
@@ -29,7 +29,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtk3D.cpp
   dtk3DItem.cpp
-  dtk3DItemMesh.cpp
+  dtk3DMesh.cpp
   dtk3DScene.cpp
   dtk3DSettings.cpp
   dtk3DView.cpp)

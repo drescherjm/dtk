@@ -13,21 +13,21 @@
  */
 
 #include "dtk3D.h"
-#include "dtk3DItemMesh.h"
+#include "dtk3DMesh.h"
 
 namespace dtk3D
 {
     namespace mesh {
 	namespace _private {
-	    dtk3DItemMeshPluginFactory factory;
-	    dtk3DItemMeshPluginManager manager;
+	    dtk3DMeshPluginFactory factory;
+	    dtk3DMeshPluginManager manager;
 	}
 	
-	dtk3DItemMeshPluginFactory& pluginFactory(void) {
+	dtk3DMeshPluginFactory& pluginFactory(void) {
 	    return _private::factory;
 	}
 	
-	dtk3DItemMeshPluginManager& pluginManager(void) {
+	dtk3DMeshPluginManager& pluginManager(void) {
 	    return _private::manager;
 	}
     }

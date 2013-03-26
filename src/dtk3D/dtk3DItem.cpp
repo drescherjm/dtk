@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:24:34 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 17:35:18 2013 (+0100)
+ * Last-Updated: Tue Mar 26 21:32:47 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 141
+ *     Update #: 145
  */
 
 /* Change Log:
@@ -54,6 +54,14 @@ dtk3DItem::~dtk3DItem(void)
     delete d;
 
     d = NULL;
+}
+
+QBox3D dtk3DItem::boundingBox(void) const
+{
+    if (d->node)
+	return d->node->boundingBox();
+    else
+	return QBox3D();
 }
 
 QGLSceneNode *dtk3DItem::node(void)

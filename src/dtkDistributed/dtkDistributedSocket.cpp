@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: jeu. oct.  4 16:05:05 2012 (+0200)
+ * Last-Updated: ven. mars 22 16:36:43 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 805
+ *     Update #: 814
  */
 
 /* Commentary:
@@ -41,6 +41,15 @@ dtkDistributedSocket::~dtkDistributedSocket(void)
     d = NULL;
 }
 
+
+// force flush
+void dtkDistributedSocket::fflush(void)
+{
+    while (this->bytesToWrite() > 0) {
+        this->flush();
+        this->waitForBytesWritten();
+    }
+}
 
 qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
 {

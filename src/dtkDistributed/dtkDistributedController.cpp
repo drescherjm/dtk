@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. janv. 16 11:15:12 2013 (+0100)
+ * Last-Updated: lun. mars 25 16:23:30 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1776
+ *     Update #: 1802
  */
 
 /* Commentary: 
@@ -302,9 +302,9 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
 bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     dtkDebug() << "Want to submit jobs with resources:" << resources;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",dtkDistributedMessage::SERVER_RANK,resources.size(),"json",resources);
+    QScopedPointer<dtkDistributedMessage> msg (new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",dtkDistributedMessage::SERVER_RANK,resources.size(),"json",resources));
     if (d->sockets.contains(server.toString())) {
-        d->sockets[server.toString()]->sendRequest(msg);
+        d->sockets[server.toString()]->sendRequest(msg.data());
         return true;
     } else
         dtkDebug() << "Can't submit job: unknown server " << server.toString();
@@ -315,8 +315,9 @@ bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
 void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 {
     dtkDebug() << "Want to kill job" << jobid;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,dtkDistributedMessage::SERVER_RANK);
+    dtkDistributedMessage * msg  =new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,dtkDistributedMessage::SERVER_RANK);
     d->sockets[server.toString()]->sendRequest(msg);
+    delete msg;
 }
 
 void dtkDistributedController::stop(const QUrl& server)
@@ -326,7 +327,7 @@ void dtkDistributedController::stop(const QUrl& server)
     d->sockets[server.toString()]->sendRequest(msg);
     this->disconnect(server);
     d->servers.remove(server.toString());
-
+    delete msg;
 }
 
 void dtkDistributedController::refresh(const QUrl& server)
@@ -335,13 +336,14 @@ void dtkDistributedController::refresh(const QUrl& server)
 
     if(!d->sockets.keys().contains(server.toString()))
         return;
-    
+
     d->refreshing = true;
 
     dtkDistributedSocket *socket = d->sockets.value(server.toString());
-    socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STATUS));
-
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::STATUS);
+    socket->sendRequest(msg);
     emit updated(server);
+    delete msg;
 }
 
 // deploy a server instance on remote host (to be executed before connect)
@@ -447,8 +449,10 @@ void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16
 
         QString type = data->identifier();
 
-        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type));
+        dtkDistributedMessage* msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type);
+        socket->sendRequest(msg);
         socket->write(*array);
+        delete msg;
     } else
         dtkWarn() << "unknown job, can't send message" << jobid;
 }
@@ -495,7 +499,9 @@ bool dtkDistributedController::connect(const QUrl& server)
 
             emit connected(server);
 
-            socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::STATUS));
+            dtkDistributedMessage* msg = new dtkDistributedMessage(dtkDistributedMessage::STATUS);
+            socket->sendRequest(msg);
+            delete msg;
 
             return true;
 
@@ -567,7 +573,7 @@ void dtkDistributedController::read(void)
     dtkDistributedSocket *socket = (dtkDistributedSocket *)sender();
 
     QString server = d->sockets.key(socket);
-    dtkDistributedMessage *msg = socket->parseRequest();
+    QScopedPointer< dtkDistributedMessage> msg(socket->parseRequest());
     QByteArray result;
 
     dtkDistributedMessage::Method method = msg->method();

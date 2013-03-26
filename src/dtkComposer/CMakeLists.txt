@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Mar 25 16:58:59 2013 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 70
+## Last-Updated: Tue Mar 26 14:46:02 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 110
 ######################################################################
 ## 
 ### Change Log:
@@ -25,7 +25,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerControlsDelegate.h
   # dtkComposerEvaluator.h
   # dtkComposerFactory.h
-# dtkComposerFactoryView.h
+  # dtkComposerFactoryView.h
   # dtkComposerGraph.h
   # dtkComposerGraphEdge.h
   # dtkComposerGraphLayouter.h
@@ -41,7 +41,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerGraphView.h
   # dtkComposerMachine.h
   # dtkComposerMachineState.h
-  # dtkComposerNode.h
+  dtkComposerNode.h
   # dtkComposerNodeArrayData.h
   # dtkComposerNodeArrayDataExtractor.h
   # dtkComposerNodeArrayDataOperatorModifier.h
@@ -50,9 +50,9 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeArrayScalarOperatorModifier.h
   # dtkComposerNodeBoolean.h
   # dtkComposerNodeBooleanOperator.h
-  # dtkComposerNodeComposite.h
+  dtkComposerNodeComposite.h
   # dtkComposerNodeConstants.h
-  # dtkComposerNodeControl.h
+  dtkComposerNodeControl.h
   # dtkComposerNodeControlCase.h
   # dtkComposerNodeControlDoWhile.h
   # dtkComposerNodeControlIf.h
@@ -63,7 +63,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeData.h
   # dtkComposerNodeFile.h
   # dtkComposerNodeInteger.h
-  # dtkComposerNodeLeaf.h
+  dtkComposerNodeLeaf.h
   # dtkComposerNodeLeafData.h
   # dtkComposerNodeLeafProcess.h
   # dtkComposerNodeLeafView.h
@@ -136,7 +136,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerView.h
   # dtkComposerReader.h
   # dtkComposerWriter.h
-  )
+)
 
 set(${PROJECT_NAME}_SOURCES
   # dtkComposer.cpp
@@ -145,7 +145,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerControlsDelegate.cpp
   # dtkComposerEvaluator.cpp
   # dtkComposerFactory.cpp
-# dtkComposerFactoryView.cpp
+  # dtkComposerFactoryView.cpp
   # dtkComposerGraph.cpp
   # dtkComposerGraphEdge.cpp
   # dtkComposerGraphLayouter.cpp
@@ -160,7 +160,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerGraphView.cpp
   # dtkComposerMachine.cpp
   # dtkComposerMachineState.cpp
-  # dtkComposerNode.cpp
+  dtkComposerNode.cpp
   # dtkComposerNodeArrayData.cpp
   # dtkComposerNodeArrayDataExtractor.cpp
   # dtkComposerNodeArrayDataOperatorModifier.cpp
@@ -169,9 +169,9 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeArrayScalarOperatorModifier.cpp
   # dtkComposerNodeBoolean.cpp
   # dtkComposerNodeBooleanOperator.cpp
-  # dtkComposerNodeComposite.cpp
+  dtkComposerNodeComposite.cpp
   # dtkComposerNodeConstants.cpp
-  # dtkComposerNodeControl.cpp
+  dtkComposerNodeControl.cpp
   # dtkComposerNodeControlCase.cpp
   # dtkComposerNodeControlDoWhile.cpp
   # dtkComposerNodeControlIf.cpp
@@ -182,7 +182,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeData.cpp
   # dtkComposerNodeFile.cpp
   # dtkComposerNodeInteger.cpp
-  # dtkComposerNodeLeaf.cpp
+  dtkComposerNodeLeaf.cpp
   # dtkComposerNodeLeafData.cpp
   # dtkComposerNodeLeafProcess.cpp
   # dtkComposerNodeLeafView.cpp

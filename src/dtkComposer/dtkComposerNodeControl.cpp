@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:58:30 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 31
+ * Last-Updated: Tue Mar 26 14:42:09 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlPrivate definition
@@ -83,17 +81,17 @@ QList<dtkComposerTransmitterVariant *> dtkComposerNodeControl::outputTwins(void)
 
 void dtkComposerNodeControl::setInputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControl::setOutputs(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControl::setVariables(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 int dtkComposerNodeControl::selectBranch(void)
@@ -103,10 +101,10 @@ int dtkComposerNodeControl::selectBranch(void)
 
 void dtkComposerNodeControl::begin(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }
 
 void dtkComposerNodeControl::end(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION_NO_MOC;
+
 }

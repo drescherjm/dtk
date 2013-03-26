@@ -10,8 +10,4 @@
 
 * Proofread use of dtkLog layer
 
-* Remove dtkComposerType
-* Remove dtkComposerVariant
-* Remove dtkComposerVariantHandler
-
-* Finalize dtkComposerFactoryView
+* Proofread dtkComposerNodeCase

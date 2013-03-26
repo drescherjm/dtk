@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2013 Mon Jan 14 12:31:47 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 61
+ * Last-Updated: Tue Mar 26 14:37:37 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -18,15 +18,12 @@
  */
 
 #include "dtkComposerNodeControlDoWhile.h"
-
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlDoWhilePrivate definition

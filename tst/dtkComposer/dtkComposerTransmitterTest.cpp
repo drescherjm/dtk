@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 13:55:32 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 294
+ * Last-Updated: Tue Mar 26 14:23:15 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 298
  */
 
 /* Change Log:
@@ -30,7 +30,7 @@ public:
     ~Data(void) {;}
 
 public:
-    Data& operator = (const Data& o) { m_id = o.m_id; m_name = o.m_name; }
+    Data& operator = (const Data& o) { m_id = o.m_id; m_name = o.m_name; return (*this); }
 
 public:
     void   setId(const int& id)       { m_id   = id; }
@@ -81,7 +81,7 @@ public:
     ~ObjectData(void) {;}
 
 public:
-    ObjectData& operator = (const ObjectData& o) { m_id = o.m_id; m_name = o.m_name; }
+    ObjectData& operator = (const ObjectData& o) { m_id = o.m_id; m_name = o.m_name; return (*this); }
 
 public:
     void   setId(const int& id)       { m_id   = id; }
@@ -129,7 +129,7 @@ public:
     ~CoreData(void) {;}
 
 public:
-    CoreData& operator = (const CoreData& o) { m_id = o.m_id; m_name = o.m_name; }
+    CoreData& operator = (const CoreData& o) { m_id = o.m_id; m_name = o.m_name; return (*this); }
 
 public:
     CoreData *clone(void) const { return new CoreData(*this); }

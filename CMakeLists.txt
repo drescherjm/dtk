@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Mar 25 12:08:19 2013 (+0100)
+## Last-Updated: Tue Mar 26 14:07:18 2013 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 138
+##     Update #: 139
 ######################################################################
 ## 
 ### Change Log:
@@ -118,6 +118,7 @@ mark_as_advanced(dtk_VERSION_MAJOR)
 mark_as_advanced(dtk_VERSION_MINOR)
 mark_as_advanced(dtk_VERSION_BUILD)
 
+mark_as_advanced(Qt53D_DIR)
 mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
 mark_as_advanced(Qt5Gui_DIR)
@@ -126,6 +127,7 @@ mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
 mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
+mark_as_advanced(Qt5Xml_DIR)
 
 mark_as_advanced(CMAKE_AR)
 mark_as_advanced(CMAKE_BUILD_TYPE)

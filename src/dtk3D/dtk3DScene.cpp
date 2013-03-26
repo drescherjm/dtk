@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:05:00 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 16:31:14 2013 (+0100)
+ * Last-Updated: Mon Mar 25 18:53:10 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 26
+ *     Update #: 46
  */
 
 /* Change Log:
@@ -30,6 +30,19 @@ dtk3DScene::~dtk3DScene(void)
     delete d;
 
     d = NULL;
+}
+
+QBox3D dtk3DScene::boundingBox(void)
+{
+    QBox3D box;
+
+    foreach (QObject *object, this->children()) {
+        dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
+	if(item)
+	    box = box.united(item->node()->boundingBox());
+    }
+
+    return box;
 }
 
 void dtk3DScene::initialize(QGLView *view, QGLPainter *painter)

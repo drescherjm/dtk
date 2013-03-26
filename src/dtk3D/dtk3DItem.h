@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:19:49 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 16:26:59 2013 (+0100)
+ * Last-Updated: Mon Mar 25 17:35:02 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 79
  */
 
 /* Change Log:
@@ -28,8 +28,13 @@ class dtk3DItem : public QObject
     Q_OBJECT
 
 public:
-     dtk3DItem(QObject *parent = 0);
-    ~dtk3DItem(void);
+             dtk3DItem(QObject *parent = 0);
+    virtual ~dtk3DItem(void);
+
+#pragma mark -
+#pragma mark Geometric attribites
+    
+    QGLSceneNode *node(void);
 
 #pragma mark -
 #pragma mark Picking attributes
@@ -60,8 +65,8 @@ public:
 #pragma mark -
 #pragma mark Management
 
-    void initialize(QGLView *view, QGLPainter *painter);
-    void      paint(QGLView *view, QGLPainter *painter);
+    virtual void initialize(QGLView *view, QGLPainter *painter);
+    virtual void      paint(QGLView *view, QGLPainter *painter);
 
 #pragma mark -
 #pragma mark Event handling

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:22:41 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 09:01:38 2013 (+0100)
+ * Last-Updated: Tue Mar 26 15:20:26 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 74
+ *     Update #: 81
  */
 
 /* Change Log:
@@ -42,7 +42,9 @@ public:
 // dtkComposerTransmitterHandler pointer specialization
 // /////////////////////////////////////////////////////////////////
 
-template <typename T, bool U> class dtkComposerTransmitterCopier
+template <typename T, bool U> class dtkComposerTransmitterCopier {};
+
+template <typename T, bool U> class dtkComposerTransmitterCopier<T *, U>
 {
 public:
     static inline T *copy(T *source, QVariant& target);
@@ -52,7 +54,7 @@ public:
 // dtkComposerTransmitterHandler dtkCoreObject specialization
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> class dtkComposerTransmitterCopier<T, true>
+template <typename T> class dtkComposerTransmitterCopier<T *, true>
 {
 public:
     static inline T *copy(T *source, QVariant& target);

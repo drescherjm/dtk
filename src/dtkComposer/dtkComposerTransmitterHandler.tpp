@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 17:04:40 2013 (+0100)
+ * Last-Updated: Tue Mar 26 15:20:15 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 154
+ *     Update #: 163
  */
 
 /* Change Log:
@@ -57,14 +57,14 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTra
 
 template <typename T> T *dtkComposerTransmitterHandler<T *>::constData(dtkComposerTransmitter& t)
 {
-    return t.variant().value<T>();
+    return t.variant().value<T *>();
 }
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterCopier implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T, bool U> T *dtkComposerTransmitterCopier<T, U>::copy(T *source, QVariant& target)
+template <typename T, bool U> T *dtkComposerTransmitterCopier<T *, U>::copy(T *source, QVariant& target)
 {
     if (!source)
         return source;
@@ -84,7 +84,7 @@ template <typename T, bool U> T *dtkComposerTransmitterCopier<T, U>::copy(T *sou
 // dtkComposerTransmitterCopier dtkCoreObject implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> T *dtkComposerTransmitterCopier<T, true>::copy(T *source, QVariant& target)
+template <typename T> T *dtkComposerTransmitterCopier<T *, true>::copy(T *source, QVariant& target)
 {
     if (!source)
         return source;

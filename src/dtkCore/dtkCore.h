@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:28:31 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 08:44:14 2013 (+0100)
+ * Last-Updated: Tue Mar 26 15:10:37 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 22
+ *     Update #: 26
  */
 
 /* Change Log:
@@ -22,12 +22,14 @@
 
 template<typename T> class IsPointerToTypeDerivedFromCoreObject
 {
+public:
     enum { Value = false };
 };
 
 // Specialize to avoid sizeof(void) warning
-template<> class IsPointerToTypeDerivedFromCoreObject<void*>
+template<> class IsPointerToTypeDerivedFromCoreObject<void *>
 {
+public:
     enum { Value = false };
 };
 
@@ -38,7 +40,7 @@ template<> class IsPointerToTypeDerivedFromCoreObject<void*>
 
 class dtkCoreObject;
 
-template<typename T> class IsPointerToTypeDerivedFromCoreObject<T*>
+template<typename T> class IsPointerToTypeDerivedFromCoreObject<T *>
 {
     typedef qint8 dtk_yes_type;
     typedef qint64 dtk_no_type;
@@ -46,5 +48,6 @@ template<typename T> class IsPointerToTypeDerivedFromCoreObject<T*>
     static dtk_yes_type checkType(dtkCoreObject *);
     static dtk_no_type  checkType(...);
 
-    enum { Value = sizeof(checkType(static_cast<T*>(0))) == sizeof(dtk_yes_type) };
+public:
+    enum { Value = sizeof(checkType(static_cast<T *>(0))) == sizeof(dtk_yes_type) };
 };

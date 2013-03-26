@@ -1,30 +1,36 @@
-### CMakeLists.txt --- 
+### CMakeLists.txt ---
 ## 
 ## Author: Julien Wintz
-## Created: Mon Feb 11 19:23:24 2013 (+0100)
+## Created: Fri Mar 22 09:22:26 2013 (+0100)
 ## Version: 
-## Last-Updated: Sun Mar 24 17:03:46 2013 (+0100)
+## Last-Updated: Mon Mar 25 09:34:06 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 31
+##     Update #: 24
 ######################################################################
 ## 
 ### Change Log:
 ## 
 ######################################################################
 
-project(dtkLog)
+project(dtk3D)
 
 ## #################################################################
 ## Input
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkLog
-  dtkLogger.h
-  dtkLogger_p.h)
+  dtk3D.h
+  dtk3DItem.h
+  dtk3DItemMesh.h
+  dtk3DScene.h
+  dtk3DView.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkLogger.cpp)
+  dtk3D.cpp
+  dtk3DItem.cpp
+  dtk3DItemMesh.cpp
+  dtk3DScene.cpp
+  dtk3DView.cpp)
 
 ## #################################################################
 ## Build rules
@@ -38,7 +44,10 @@ add_library(${PROJECT_NAME} SHARED
 ## Link rules
 ## ###################################################################
 
+qt5_use_modules(${PROJECT_NAME} 3D)
 qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Gui)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## ###################################################################
 ## Install rules - files
@@ -46,7 +55,7 @@ qt5_use_modules(${PROJECT_NAME} Core)
 
 install(FILES ${${PROJECT_NAME}_HEADERS}
   DESTINATION include/${PROJECT_NAME}
-    COMPONENT log)
+    COMPONENT 3D)
 
 ## ###################################################################
 ## Install rules - targets
@@ -54,5 +63,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 
 install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
-      COMPONENT log
+      COMPONENT 3D
          EXPORT dtkDepends)

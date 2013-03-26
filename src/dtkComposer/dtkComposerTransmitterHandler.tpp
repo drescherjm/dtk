@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 09:03:25 2013 (+0100)
+ * Last-Updated: Mon Mar 25 17:04:40 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 147
+ *     Update #: 154
  */
 
 /* Change Log:
@@ -20,12 +20,12 @@
 
 template <typename T> T dtkComposerTransmitterHandler<T>::data(dtkComposerTransmitter& t)
 {
-    return t.d->variant.value<T>();
+    return t.variant().value<T>();
 }
 
 template <typename T> T dtkComposerTransmitterHandler<T>::constData(dtkComposerTransmitter& t)
 {
-    return t.d->variant.value<T>();
+    return t.variant().value<T>();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ template <typename T> T dtkComposerTransmitterHandler<T>::constData(dtkComposerT
 
 template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTransmitter& t)
 {
-    T *source = t.d->variant.value<T *>();
+    T *source = t.variant().value<T *>();
 
     switch(t.dataTransmission()) {
     case dtkComposerTransmitter::AutoCopy:
@@ -57,7 +57,7 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTra
 
 template <typename T> T *dtkComposerTransmitterHandler<T *>::constData(dtkComposerTransmitter& t)
 {
-    return t.d->variant.value<T>();
+    return t.variant().value<T>();
 }
 
 // /////////////////////////////////////////////////////////////////

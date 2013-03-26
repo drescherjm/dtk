@@ -37,7 +37,7 @@ public:
 // dtkDistributedCommunicator
 // /////////////////////////////////////////////////////////////////
 
-dtkDistributedCommunicator::dtkDistributedCommunicator(void) : dtkCoreObject(), d(new dtkDistributedCommunicatorPrivate)
+dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject(), d(new dtkDistributedCommunicatorPrivate)
 {
     d->id = 0;
     d->initialized = false;

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 17:01:02 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 21:36:37 2013 (+0100)
+ * Last-Updated: Tue Mar 26 13:19:16 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 141
+ *     Update #: 146
  */
 
 /* Change Log:
@@ -42,7 +42,7 @@ bool dtkComposerTransmitterReceiverBase::connect(dtkComposerTransmitter *transmi
 {
     bool enable_connection = false;
 
-    if (!d->emitters.contains(transmitter)) {
+    if (transmitter->kind() == Emitter && !d->emitters.contains(transmitter)) {
 
 	enable_connection = true;
 

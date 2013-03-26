@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Mar 20 13:10:44 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 122
+## Last-Updated: Mon Mar 25 12:08:19 2013 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 138
 ######################################################################
 ## 
 ### Change Log:
@@ -67,6 +67,7 @@ find_package(Qt5Qml        REQUIRED)
 find_package(Qt5Quick      REQUIRED)
 find_package(Qt5Test       REQUIRED)
 find_package(Qt5Widgets    REQUIRED)
+find_package(Qt53D            QUIET)
 
 ## #################################################################
 ## Dependencies - internal
@@ -75,9 +76,13 @@ find_package(Qt5Widgets    REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkLog)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkCore)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkComposer)
+if(Qt53D_FOUND)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtk3D)
+endif(Qt53D_FOUND)
 
 ## ###################################################################
 ## Input

@@ -1,19 +1,19 @@
 /* dtkDistributed.cpp ---
- *
+ * 
  * Author: Julien Wintz
- * Created: Mon Feb 11 15:00:12 2013 (+0100)
+ * Created: Mon Mar 25 09:23:52 2013 (+0100)
+ * Version: 
+ * Last-Updated: Mon Mar 25 09:23:58 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 2
  */
 
 /* Change Log:
- *
+ * 
  */
 
 #include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
-
-// #include "dtkDistributedCommunicatorPlugin.h"
-// #include "dtkDistributedCommunicatorPluginFactory.h"
-// #include "dtkDistributedCommunicatorPluginManager.h"
 
 namespace dtkDistributed
 {

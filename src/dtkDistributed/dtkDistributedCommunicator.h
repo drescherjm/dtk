@@ -21,7 +21,7 @@ class dtkDistributedWork;
 class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 
-class dtkDistributedCommunicator : public dtkCoreObject
+class dtkDistributedCommunicator : public QObject
 {
     Q_OBJECT
 
@@ -71,5 +71,3 @@ DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
 DTK_DECLARE_PLUGIN(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator)
-
-Q_DECLARE_INTERFACE(dtkDistributedCommunicatorPlugin, "fr.inria.dtkDistributedCommunicatorPlugin")

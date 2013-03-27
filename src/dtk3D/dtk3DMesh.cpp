@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:42:30 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 21:35:44 2013 (+0100)
+ * Last-Updated: Wed Mar 27 14:03:29 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 67
+ *     Update #: 101
  */
 
 /* Change Log:
@@ -30,8 +30,6 @@ dtk3DMesh::dtk3DMesh(QObject *parent) : dtk3DItem(parent), d(new dtk3DMeshPrivat
 dtk3DMesh::~dtk3DMesh(void)
 {
     delete d;
-
-    d = NULL;
 }
 
 QBox3D dtk3DMesh::boundingBox(void) const
@@ -54,14 +52,30 @@ void dtk3DMesh::write(const QString& path)
     Q_UNUSED(path);
 }
 
-void dtk3DMesh::initialize(QGLView *view, QGLPainter *painter)
+void dtk3DMesh::draw(QGLView *view, QGLPainter *painter)
 {
-    dtk3DItem::initialize(view, painter);
-}
+    if (d->data.count()) {
+#if 1
+        painter->clearAttributes();
+	if (d->data.colors().count())
+	    painter->setStandardEffect(QGL::FlatPerVertexColor);
+	else
+	    painter->setStandardEffect(QGL::FlatColor);
+        painter->setVertexAttribute(QGL::Position, d->data.vertices());
+	if (d->data.colors().count())
+	    painter->setVertexAttribute(QGL::Color, d->data.colors());
+	else
+	    painter->setColor(Qt::darkGreen);
+        painter->setVertexAttribute(QGL::Normal, d->data.normals());
+        painter->draw(QGL::Triangles, d->data.count());
+#endif
 
-void dtk3DMesh::paint(QGLView *view, QGLPainter *painter)
-{
-    Q_UNUSED(view);
-
-    // Here comes the interesting part -- see PoC
+#if 1
+        painter->clearAttributes();
+        painter->setStandardEffect(QGL::FlatColor);
+        painter->setColor(Qt::yellow);
+        painter->setVertexAttribute(QGL::Position, d->data.vertices());
+        painter->draw(QGL::LineLoop, d->data.count());
+#endif
+    }
 }

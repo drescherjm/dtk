@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:41:03 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 21:34:24 2013 (+0100)
+ * Last-Updated: Wed Mar 27 12:03:38 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 47
  */
 
 /* Change Log:
@@ -44,11 +44,8 @@ public:
     virtual void  read(const QString& path);
     virtual void write(const QString& path);
 
-#pragma mark -
-#pragma mark Management
-
-    virtual void initialize(QGLView *view, QGLPainter *painter);
-    virtual void      paint(QGLView *view, QGLPainter *painter);
+protected:
+    virtual void draw(QGLView *view, QGLPainter *painter);
 
 private:
     dtk3DMeshPrivate *d;

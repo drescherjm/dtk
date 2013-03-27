@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:05:00 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 21:33:27 2013 (+0100)
+ * Last-Updated: Wed Mar 27 16:11:19 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 117
  */
 
 /* Change Log:
@@ -28,8 +28,6 @@ dtk3DScene::dtk3DScene(QObject *parent) : QObject(parent), d(new dtk3DScenePriva
 dtk3DScene::~dtk3DScene(void)
 {
     delete d;
-
-    d = NULL;
 }
 
 QBox3D dtk3DScene::boundingBox(void)
@@ -50,7 +48,7 @@ void dtk3DScene::initialize(QGLView *view, QGLPainter *painter)
     foreach (QObject *object, this->children()) {
         dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
         if (item) {
-            item->initialize(view, painter);
+	    item->initialize(view, painter);
 	    connect(item, SIGNAL(pressed()), view, SLOT(update()));
 	    connect(item, SIGNAL(released()), view, SLOT(update()));
 	    connect(item, SIGNAL(clicked()), view, SLOT(update()));

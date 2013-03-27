@@ -1,11 +1,11 @@
-/* dtk3DViewTest.h ---
+/* dtk3DItemTest.h ---
  * 
  * Author: Julien Wintz
- * Created: Fri Mar 22 11:35:20 2013 (+0100)
+ * Created: Wed Mar 27 14:13:43 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 13:06:08 2013 (+0100)
+ * Last-Updated: Wed Mar 27 14:14:11 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 3
  */
 
 /* Change Log:
@@ -16,7 +16,7 @@
 
 #include <dtkTest>
 
-class dtk3DViewTestCase : public QObject
+class dtk3DItemTestCase : public QObject
 {
     Q_OBJECT
 
@@ -25,8 +25,7 @@ private slots:
     void init(void);
 
 private slots:
-    void testInstanciation(void);
-    void testClick(void);
+    void testHierarchy(void);
 
 private slots:
     void cleanupTestCase(void);

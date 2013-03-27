@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Mar 25 12:57:14 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 21:29:31 2013 (+0100)
+ * Last-Updated: Wed Mar 27 14:41:36 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 123
+ *     Update #: 161
  */
 
 /* Change Log:
@@ -18,10 +18,10 @@
 
 void dtk3DMeshTestCase::initTestCase(void)
 {
-    dtk3DSettings settings;
-    settings.beginGroup("mesh");
-    dtk3D::mesh::pluginManager().initialize(settings.value("plugins").toString());
-    settings.endGroup();
+    // dtk3DSettings settings;
+    // settings.beginGroup("mesh");
+    // dtk3D::mesh::pluginManager().initialize(settings.value("plugins").toString());
+    // settings.endGroup();
 }
 
 void dtk3DMeshTestCase::init(void)
@@ -29,18 +29,15 @@ void dtk3DMeshTestCase::init(void)
 
 }
 
-void dtk3DMeshTestCase::testGMSH(void)
+void dtk3DMeshTestCase::testGeometry(void)
 {
     static int id = 0;
 
     dtk3DScene scene;
 
-    dtk3DMesh *mesh = dtk3D::mesh::pluginFactory().create("gmsh");
-    if(!mesh)
-	return;
-    mesh->read("/Users/jwintz/Desktop/cyclone.geo");
-    mesh->setId(id++);
-    mesh->setParent(&scene);
+    dtk3DMesh mesh(&scene);
+    mesh.data().appendVertex(QVector3D(-1, 0, 0), QVector3D(+1, 0, 0), QVector3D(+0, 1, 0));
+    mesh.data().appendColor(QColor4ub(255, 0, 0), QColor4ub(0, 255, 0), QColor4ub(0, 0, 255));
 
     dtk3DView view;
     view.setScene(&scene);

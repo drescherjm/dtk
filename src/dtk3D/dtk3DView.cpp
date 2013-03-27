@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 09:41:43 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 17:29:47 2013 (+0100)
+ * Last-Updated: Wed Mar 27 15:33:56 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 42
  */
 
 /* Change Log:
@@ -48,13 +48,15 @@ void dtk3DView::initializeGL(QGLPainter *painter)
 	d->scene->initialize(this, painter);
 
     QGLView::initializeGL(painter);
+
+    if (d->scene) {
+	this->camera()->setEye(QVector3D(0, 0, d->scene->boundingBox().size().length()*4));
+	this->camera()->setCenter(d->scene->boundingBox().center());
+    }
 }
 
 void dtk3DView::paintGL(QGLPainter *painter)
 {
-    painter->setStandardEffect(QGL::LitMaterial);
-    painter->setFaceColor(QGL::AllFaces, QColor(170, 202, 0));
-
     if (d->scene)
 	d->scene->paint(this, painter);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mar. oct.  9 16:56:09 2012 (+0200)
+ * Last-Updated: mar. mars 26 18:28:40 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 239
+ *     Update #: 407
  */
 
 /* Commentary:
@@ -121,14 +121,17 @@ int dtkComposerEvaluatorSlave::exec(void)
 
     if ( rank == 0) {
 
+        QScopedPointer<dtkDistributedMessage> msg;
+
         dtkDebug() << "connect to server" << d->server;
         if (!this->isConnected()) {
             this->connect(d->server);
             if (this->isConnected()) {
                 dtkDebug() << "connected, send our jobid to server" << this->jobId();
-                dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),rank);
-                this->communicator()->socket()->sendRequest(msg);
-                delete msg;
+                msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),rank));
+                this->communicator()->socket()->sendRequest(msg.data());
+                this->communicator()->flush();
+                this->communicator()->socket()->setParent(0);
             } else  {
                 dtkFatal() << "Can't connect to server" << d->server;
                 return 1;
@@ -147,7 +150,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         } else
             dtkDebug() << "Ok, data received, parse" ;
 
-        dtkDistributedMessage *msg = this->communicator()->socket()->parseRequest();
+        msg.reset(this->communicator()->socket()->parseRequest());
         if (msg->type() == "xml") {
             new_composition = true;
             composition = QString(msg->content());
@@ -155,10 +158,8 @@ int dtkComposerEvaluatorSlave::exec(void)
             new_composition = false;
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
-            delete msg;
             return 1;
         }
-        delete msg;
 
         if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;
@@ -192,7 +193,21 @@ int dtkComposerEvaluatorSlave::exec(void)
             }
         }
         dtkDebug() << "run composition" ;
-        d->evaluator->run();
+
+        QThread *workerThread = new QThread(this);
+        QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
+        QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
+
+        QEventLoop loop;
+        loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
+        loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+
+        this->communicator()->socket()->moveToThread(workerThread);
+        workerThread->start();
+
+        loop.exec();
+
+        dtkDebug() << "finished" ;
 
     } else {
         QString composition;
@@ -209,7 +224,18 @@ int dtkComposerEvaluatorSlave::exec(void)
             remote->setJob(this->jobId());
             remote->setCommunicator(d->communicator_i);
             dtkDebug() << "run composition" ;
-            d->evaluator->run();
+
+            QThread *workerThread = new QThread(this);
+            QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
+            QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
+            QEventLoop loop;
+            loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
+            loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+
+            workerThread->start();
+            loop.exec();
+
+            dtkDebug() << "finished" ;
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";
             return 1;

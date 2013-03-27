@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:19:49 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 16:01:32 2013 (+0100)
+ * Last-Updated: Wed Mar 27 19:16:36 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 99
+ *     Update #: 102
  */
 
 /* Change Log:
@@ -85,6 +85,7 @@ signals:
     void pressed(void);
     void released(void);
     void clicked(void);
+    void moved(void);
     void doubleClicked(void);
     void hoverChanged(void);
     void hovered(bool on);
@@ -95,8 +96,8 @@ protected:
     virtual void postdraw(QGLView *view, QGLPainter *painter);
 
 protected:
-    // virtual void pan(int deltax, int deltay);
-    // virtual void rot(int deltax, int deltay);
+    virtual void pan(int deltax, int deltay);
+    virtual void rot(int deltax, int deltay);
 
 private:
     dtk3DItemPrivate *d;

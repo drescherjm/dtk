@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Mar 27 14:14:24 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 15:32:24 2013 (+0100)
+ * Last-Updated: Wed Mar 27 17:31:23 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 115
+ *     Update #: 116
  */
 
 /* Change Log:
@@ -47,7 +47,7 @@ void dtk3DItemTestCase::testHierarchy(void)
     root.setNode(node->clone());
     root.setColor(Qt::red);
 
-    dtk3DItem right_sub_item(&scene);
+    dtk3DItem right_sub_item(&root);
     right_sub_item.setObjectName("right_sub_item");
     right_sub_item.setId(id++);
     right_sub_item.setNode(node->clone());

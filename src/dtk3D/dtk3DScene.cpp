@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:05:00 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 16:11:19 2013 (+0100)
+ * Last-Updated: Wed Mar 27 19:18:15 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 117
+ *     Update #: 120
  */
 
 /* Change Log:
@@ -49,11 +49,6 @@ void dtk3DScene::initialize(QGLView *view, QGLPainter *painter)
         dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
         if (item) {
 	    item->initialize(view, painter);
-	    connect(item, SIGNAL(pressed()), view, SLOT(update()));
-	    connect(item, SIGNAL(released()), view, SLOT(update()));
-	    connect(item, SIGNAL(clicked()), view, SLOT(update()));
-	    connect(item, SIGNAL(doubleClicked()), view, SLOT(update()));
-	    connect(item, SIGNAL(hoverChanged()), view, SLOT(update()));
 	}
     }
 }

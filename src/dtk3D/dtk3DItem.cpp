@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:24:34 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 15:33:18 2013 (+0100)
+ * Last-Updated: Wed Mar 27 20:38:51 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 254
+ *     Update #: 547
  */
 
 /* Change Log:
@@ -42,6 +42,14 @@ public:
 
 public:
     bool hovering;
+
+public:
+    QPoint start;
+    bool pan;
+    bool rot;
+
+public:
+    QGLView *view;
 };
 
 QColor dtk3DItemPrivate::hovering_color = qRgb(255, 186, 210);
@@ -56,6 +64,9 @@ dtk3DItem::dtk3DItem(QObject *parent) : QObject(parent), d(new dtk3DItemPrivate)
     d->color = qRgb(170, 202, 0);
     d->material = NULL;
     d->hover_material = NULL;
+    d->pan = false;
+    d->rot = false;
+    d->view = NULL;
 }
 
 dtk3DItem::~dtk3DItem(void)
@@ -138,6 +149,8 @@ void dtk3DItem::initialize(QGLView *view, QGLPainter *painter)
 	    item->initialize(view, painter);
 	}
     }
+
+    d->view = view;
 }
 
 void dtk3DItem::paint(QGLView *view, QGLPainter *painter)
@@ -157,27 +170,62 @@ void dtk3DItem::paint(QGLView *view, QGLPainter *painter)
 
 bool dtk3DItem::event(QEvent *event)
 {
+    if(!d->view)
+	return QObject::event(event);
+
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouse_event = (QMouseEvent *)event;
-        if (mouse_event->button() == Qt::LeftButton)
+        if (mouse_event->button() == Qt::LeftButton) {
+	    d->pan = (mouse_event->button() && (mouse_event->modifiers() & Qt::ShiftModifier));
+	    d->rot = (mouse_event->button() && (mouse_event->modifiers()  ==  Qt::NoModifier));
+	    d->start = d->view->mapFromGlobal(mouse_event->globalPos());
             emit pressed();
-    } else if (event->type() == QEvent::MouseButtonRelease) {
+	    d->view->update();
+	}
+    }
+
+    if (event->type() == QEvent::MouseMove) {
+	QMouseEvent *mouse_event = (QMouseEvent *)event;
+	QPoint delta = d->view->mapFromGlobal(mouse_event->globalPos()) - d->start;
+	if(d->pan)
+	    this->pan(delta.x(), delta.y());
+	if(d->rot)
+	    this->rot(delta.x(), delta.y());
+	d->start = d->view->mapFromGlobal(mouse_event->globalPos());
+	emit moved();
+	d->view->update();
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent *mouse_event = (QMouseEvent *)event;
         if (mouse_event->button() == Qt::LeftButton) {
+	    d->pan = false;
+	    d->rot = false;
+	    d->start = QPoint();
             emit released();
             if (mouse_event->x() >= 0)
                 emit clicked();
+	    d->view->update();
         }
-    } else if (event->type() == QEvent::MouseButtonDblClick) {
+    }
+
+    if (event->type() == QEvent::MouseButtonDblClick) {
         emit doubleClicked();
-    } else if (event->type() == QEvent::Enter) {
+	d->view->update();
+    }
+
+    if (event->type() == QEvent::Enter) {
         d->hovering = true;
         emit hoverChanged();
 	emit hovered(true);
-    } else if (event->type() == QEvent::Leave) {
+	d->view->update();
+    }
+
+    if (event->type() == QEvent::Leave) {
         d->hovering = false;
         emit hoverChanged();
 	emit hovered(false);
+	d->view->update();
     }
 
     return QObject::event(event);
@@ -233,4 +281,18 @@ void dtk3DItem::postdraw(QGLView *view, QGLPainter *painter)
     painter->setObjectPickId(d->pr_id);
 
     painter->modelViewMatrix().pop();
+}
+
+#include "dtk3DView.h"
+
+void dtk3DItem::pan(int deltax, int deltay)
+{
+    if(!d->view)
+	return;
+}
+
+void dtk3DItem::rot(int deltax, int deltay)
+{
+    if(!d->view)
+	return;    
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mer. mars 27 14:06:58 2013 (+0100)
+ * Last-Updated: mer. mars 27 17:08:03 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 452
+ *     Update #: 465
  */
 
 /* Commentary:
@@ -18,7 +18,6 @@
  */
 
 
-#include "dtkComposerEvaluatorSlave.h"
 
 #include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkAbstractData.h>
@@ -27,6 +26,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 #include "dtkComposer/dtkComposerEvaluator.h"
+#include "dtkComposer/dtkComposerEvaluatorSlave.h"
 #include "dtkComposer/dtkComposerFactory.h"
 #include "dtkComposer/dtkComposerGraph.h"
 #include "dtkComposer/dtkComposerReader.h"
@@ -65,22 +65,20 @@ public:
 dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave(), d(new dtkComposerEvaluatorSlavePrivate)
 {
     d->scene     = new dtkComposerScene;
-    d->factory   = new dtkComposerFactory;
     d->stack     = new dtkComposerStack;
     d->evaluator = new dtkComposerEvaluator;
     d->reader    = new dtkComposerReader;
     d->graph     = new dtkComposerGraph;
 
+    d->factory   = NULL;
     d->composition_socket = NULL;
 
-    d->scene->setFactory(d->factory);
     d->scene->setStack(d->stack);
     d->scene->setGraph(d->graph);
 
     d->evaluator->setGraph(d->graph);
     d->evaluator->setNotify(false);
 
-    d->reader->setFactory(d->factory);
     d->reader->setScene(d->scene);
     d->reader->setGraph(d->graph);
     d->count = 0;
@@ -92,7 +90,6 @@ dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
     delete d->scene;
     delete d->stack;
     delete d->graph;
-    delete d->factory;
     delete d->reader;
     delete d->evaluator;
     if (d->composition_socket)
@@ -107,6 +104,13 @@ void dtkComposerEvaluatorSlave::setCount(int count)
     d->count = count;
 }
 
+void dtkComposerEvaluatorSlave::setFactory(dtkComposerFactory *factory)
+{
+    d->factory = factory;
+    d->scene->setFactory(d->factory);
+    d->reader->setFactory(d->factory);
+}
+
 void dtkComposerEvaluatorSlave::setServer(QUrl server)
 {
     d->server = server;
@@ -119,6 +123,11 @@ void dtkComposerEvaluatorSlave::setInternalCommunicator(dtkDistributedCommunicat
 
 int dtkComposerEvaluatorSlave::exec(void)
 {
+
+    if (!d->factory) {
+        dtkFatal() << "No factory set ! abort slave execution";
+        return 1;
+    }
 
     int rank = d->communicator_i->rank();
     int size = d->communicator_i->size();

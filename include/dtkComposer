@@ -6,6 +6,7 @@
 #include "../src/dtkComposer/dtkComposerControlsEditors.h"
 #include "../src/dtkComposer/dtkComposerEvaluator.h"
 #include "../src/dtkComposer/dtkComposerEvaluator_p.h"
+#include "../src/dtkComposer/dtkComposerEvaluatorSlave.h"
 #include "../src/dtkComposer/dtkComposerFactory.h"
 #include "../src/dtkComposer/dtkComposerFactoryView.h"
 #include "../src/dtkComposer/dtkComposerGraph.h"

@@ -1,12 +1,12 @@
-/* @(#)dtkComposerEvaluatorSlave.h ---
+/* dtkComposerEvaluatorSlave.h ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:23:58
  * Version: $Id$
- * Last-Updated: mar. avril 10 18:20:15 2012 (+0200)
+ * Last-Updated: mer. mars 27 17:07:35 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 20
+ *     Update #: 35
  */
 
 /* Commentary:
@@ -17,16 +17,19 @@
  *
  */
 
-#ifndef DTKCOMPOSERREMOVESLAVE_H
-#define DTKCOMPOSERREMOVESLAVE_H
+#ifndef DTKCOMPOSEREVALUATORSLAVE_H
+#define DTKCOMPOSEREVALUATORSLAVE_H
 
+#include "dtkComposerExport.h"
 
 #include <dtkDistributed/dtkDistributedSlave.h>
 
+class dtkComposerFactory;
 class dtkComposerEvaluatorSlavePrivate;
 
-class dtkComposerEvaluatorSlave : public dtkDistributedSlave
+class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave
 {
+
 public:
      dtkComposerEvaluatorSlave(void);
     ~dtkComposerEvaluatorSlave(void);
@@ -34,6 +37,7 @@ public:
 public:
     void setCount(int count);
     void setServer(QUrl server);
+    void setFactory(dtkComposerFactory *factory);
     void setInternalCommunicator(dtkDistributedCommunicator *communicator);
 
 public:
@@ -44,5 +48,5 @@ private:
 };
 
 
-#endif /* DTKCOMPOSERREMOVESLAVE_H */
+#endif /* DTKCOMPOSEREVALUATORLAVE_H */
 

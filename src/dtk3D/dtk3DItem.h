@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:19:49 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 21:34:07 2013 (+0100)
+ * Last-Updated: Wed Mar 27 16:01:32 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 87
+ *     Update #: 99
  */
 
 /* Change Log:
@@ -40,6 +40,7 @@ public:
 #pragma mark Scene attributes
     
     QGLSceneNode *node(void);
+    QGLSceneNode *clone(void);
 
 #pragma mark -
 #pragma mark Picking attributes
@@ -67,6 +68,8 @@ public:
     void      setMaterial(QGLMaterial *material);
     void setHoverMaterial(QGLMaterial *material);
 
+    void setColor(const QColor& color);
+
 #pragma mark -
 #pragma mark Management
 
@@ -85,6 +88,15 @@ signals:
     void doubleClicked(void);
     void hoverChanged(void);
     void hovered(bool on);
+
+protected:
+    virtual void  predraw(QGLView *view, QGLPainter *painter);
+    virtual void     draw(QGLView *view, QGLPainter *painter);
+    virtual void postdraw(QGLView *view, QGLPainter *painter);
+
+protected:
+    // virtual void pan(int deltax, int deltay);
+    // virtual void rot(int deltax, int deltay);
 
 private:
     dtk3DItemPrivate *d;

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:24:34 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 21:32:47 2013 (+0100)
+ * Last-Updated: Wed Mar 27 15:33:18 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 145
+ *     Update #: 254
  */
 
 /* Change Log:
@@ -24,36 +24,44 @@ public:
     qreal     orientation_angle;
     qreal     scale;
     int       id;
+    int    pr_id;
 
 public:
     QGLSceneNode *node;
 
 public:
     QGLAbstractEffect   *effect;
+
+public:
     QGLMaterial       *material;
     QGLMaterial *hover_material;
 
 public:
+           QColor          color;
+    static QColor hovering_color;
+
+public:
     bool hovering;
 };
+
+QColor dtk3DItemPrivate::hovering_color = qRgb(255, 186, 210);
 
 dtk3DItem::dtk3DItem(QObject *parent) : QObject(parent), d(new dtk3DItemPrivate)
 {
     d->id = -1;
     d->scale = 1.0;
     d->node = NULL;
+    d->hovering = false;
     d->effect = NULL;
+    d->color = qRgb(170, 202, 0);
     d->material = NULL;
     d->hover_material = NULL;
-    d->hovering = false;
 }
 
 dtk3DItem::~dtk3DItem(void)
 {
     delete d->node;
     delete d;
-
-    d = NULL;
 }
 
 QBox3D dtk3DItem::boundingBox(void) const
@@ -112,51 +120,39 @@ void dtk3DItem::setHoverMaterial(QGLMaterial *material)
     d->hover_material = material;
 }
 
+void dtk3DItem::setColor(const QColor& color)
+{
+    d->color = color;
+}
+
 void dtk3DItem::initialize(QGLView *view, QGLPainter *painter)
 {
     Q_UNUSED(painter);
 
     if (d->id != -1)
         view->registerObject(d->id, this);
+
+    foreach (QObject *object, this->children()) {
+        dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
+        if (item) {
+	    item->initialize(view, painter);
+	}
+    }
 }
 
 void dtk3DItem::paint(QGLView *view, QGLPainter *painter)
 {
-    Q_UNUSED(view);
-
-    painter->modelViewMatrix().push();
-    painter->modelViewMatrix().translate(d->position);
-
-    if (d->scale != 1.0)
-        painter->modelViewMatrix().scale(d->scale);
-
-    if (d->orientation_angle != 0.0f)
-        painter->modelViewMatrix().rotate(d->orientation_angle, d->orientation);
-
-    if(QGLMaterial *material = d->hovering ? d->hover_material : d->material) {
-	painter->setColor(material->diffuseColor());
-	painter->setFaceMaterial(QGL::AllFaces, material);
-    }
-
-    if (d->effect)
-        painter->setUserEffect(d->effect);
-    else
-        painter->setStandardEffect(QGL::LitMaterial);
-
-    int pr_id = painter->objectPickId();
-
-    if (d->id != -1)
-        painter->setObjectPickId(d->id);
-
-    if (d->node)
-        d->node->draw(painter);
-
-    if (d->effect)
-        painter->setStandardEffect(QGL::LitMaterial);
-
-    painter->setObjectPickId(pr_id);
-
-    painter->modelViewMatrix().pop();
+     this->predraw(view, painter);
+     this->draw(view, painter);
+     
+     foreach (QObject *object, this->children()) {
+     	 dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
+     	 if (item) {
+     	     item->paint(view, painter);
+     	 }
+     }
+	
+    this->postdraw(view, painter);
 }
 
 bool dtk3DItem::event(QEvent *event)
@@ -185,4 +181,56 @@ bool dtk3DItem::event(QEvent *event)
     }
 
     return QObject::event(event);
+}
+
+void dtk3DItem::predraw(QGLView *view, QGLPainter *painter)
+{
+    Q_UNUSED(view);
+
+    painter->modelViewMatrix().push();
+    painter->modelViewMatrix().translate(d->position);
+
+    if (d->scale != 1.0)
+        painter->modelViewMatrix().scale(d->scale);
+
+    if (d->orientation_angle != 0.0f)
+        painter->modelViewMatrix().rotate(d->orientation_angle, d->orientation);
+
+    if (d->effect)
+        painter->setUserEffect(d->effect);
+    else
+        painter->setStandardEffect(QGL::LitMaterial);
+
+    if(QGLMaterial *material = d->hovering ? d->hover_material : d->material) {
+	painter->setColor(material->diffuseColor());
+	painter->setFaceMaterial(QGL::AllFaces, material);
+    } else {
+	QColor color = d->hovering ? d->hovering_color : d->color;
+	painter->setFaceColor(QGL::AllFaces, color);
+    }
+
+    d->pr_id = painter->objectPickId();
+
+    if (d->id != -1)
+        painter->setObjectPickId(d->id);
+}
+
+void dtk3DItem::draw(QGLView *view, QGLPainter *painter)
+{
+    Q_UNUSED(view);
+    
+    if (d->node)
+        d->node->draw(painter);
+}
+
+void dtk3DItem::postdraw(QGLView *view, QGLPainter *painter)
+{
+    Q_UNUSED(view);
+
+    if (d->effect)
+        painter->setStandardEffect(QGL::LitMaterial);
+
+    painter->setObjectPickId(d->pr_id);
+
+    painter->modelViewMatrix().pop();
 }

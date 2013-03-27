@@ -47,6 +47,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->stack.setCapacity(1024);
     d->max_stack_size = 0;
     d->notify = true;
+
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)
@@ -74,8 +75,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     d->stack.clear();
     d->stack.append(d->graph->root());
 
-    if (d->notify)
-        emit evaluationStarted();
+    emit evaluationStarted();
 
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
@@ -93,8 +93,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 
     d->should_stop = false;
 
-    if (d->notify)
-        emit evaluationStopped();
+    emit evaluationStopped();
 }
 
 
@@ -122,11 +121,13 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
     if (!d->should_stop) {
         QString msg = QString("Evaluation resumed and finished");
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
     } else {
         QString msg = QString("Evaluation stopped ");
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
         dtkInfo() << "stack size: " << d->stack.size();
     }
 

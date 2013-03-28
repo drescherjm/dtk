@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  6 11:54:39 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 44
+ * Last-Updated: jeu. mars 28 16:41:16 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -21,7 +21,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 
-#ifdef _WIN32
+#if defined(Q_OS_WIN) && !defined(__MINGW32__)
 #define SLEEP(x) Sleep(x)
 #else
 #include <unistd.h>

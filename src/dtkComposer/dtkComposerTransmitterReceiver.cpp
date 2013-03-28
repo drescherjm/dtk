@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 17:01:02 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 13:19:16 2013 (+0100)
+ * Last-Updated: Thu Mar 28 17:11:15 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 146
+ *     Update #: 150
  */
 
 /* Change Log:
@@ -87,6 +87,15 @@ bool dtkComposerTransmitterReceiverBase::disconnect(dtkComposerTransmitter *tran
 
     return disable_connection;
 };
+
+dtkComposerTransmitter::LinkMap dtkComposerTransmitterReceiverBase::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
+{
+    LinkMap link_map;
+    foreach(dtkComposerTransmitterLink *l, list)
+        link_map.insert(this, l);
+
+    return link_map;  
+}
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverVariant implementation

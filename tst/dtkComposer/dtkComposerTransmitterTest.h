@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:19:44 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 14:17:04 2013 (+0100)
+ * Last-Updated: Thu Mar 28 16:40:06 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Change Log:
@@ -27,6 +27,7 @@ private slots:
 private slots:
     void testTransmitterAtomicType(void);
     void testTransmitterComplexType(void);
+    void testTransmitterLinks(void);
 
 private slots:
     void cleanupTestCase(void);

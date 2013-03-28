@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Tue Mar 26 14:46:02 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 110
+## Last-Updated: Thu Mar 28 16:42:08 2013 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 112
 ######################################################################
 ## 
 ### Change Log:
@@ -127,7 +127,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterEmitter.tpp
   dtkComposerTransmitterHandler.h
   dtkComposerTransmitterHandler.tpp
-  # dtkComposerTransmitterProxy.h
+  dtkComposerTransmitterProxy.h
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
   # dtkComposerTransmitterVariant.h
@@ -243,7 +243,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitter.cpp
   dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterReceiver.cpp
-  # dtkComposerTransmitterProxy.cpp
+  dtkComposerTransmitterProxy.cpp
   # dtkComposerTransmitterVariant.cpp
   # dtkComposerView.cpp
   # dtkComposerView.cpp

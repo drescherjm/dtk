@@ -88,7 +88,7 @@ public:
 public:
     bool active(void);
 
-    void setActive(bool active);
+    virtual void setActive(bool active);
 
     void activateEmitter(dtkComposerTransmitter *emitter);
 

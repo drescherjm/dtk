@@ -462,7 +462,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter.kindName();// << const_cast<dtkComposerTransmitter&>(transmitter).dataIdentifier();
+    debug.nospace() << "dtkComposerTransmitter: " << transmitter.kindName() << " " << const_cast<dtkComposerTransmitter&>(transmitter).variant().typeName();
     
     return debug.space();
 }
@@ -473,7 +473,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter:" << transmitter->kindName();// << transmitter->dataIdentifier();
+    debug.nospace() << "dtkComposerTransmitter: " << transmitter->kindName() << " " << transmitter->variant().typeName();
     
     return debug.space();
 }

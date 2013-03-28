@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 10:41:02 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 12:27:14 2013 (+0100)
+ * Last-Updated: Thu Mar 28 17:10:34 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 91
+ *     Update #: 93
  */
 
 /* Change Log:
@@ -43,6 +43,9 @@ public:
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
     bool disconnect(dtkComposerTransmitter *transmitter);
+
+public:
+    LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 };
 
 // /////////////////////////////////////////////////////////////////

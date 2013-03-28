@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Mar 26 15:55:00 2013 (+0100)
+ * Last-Updated: Thu Mar 28 19:20:27 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 554
+ *     Update #: 647
  */
 
 /* Change Log:
@@ -48,21 +48,21 @@ private:
     QString m_name;
 
 private:
-    friend QDebug operator<<(QDebug dbg, const Data &data);
-    friend QDebug operator<<(QDebug dbg,       Data *data);
+    friend QDebug operator << (QDebug dbg, const Data &data);
+    friend QDebug operator << (QDebug dbg,       Data *data);
 };
 
 Q_DECLARE_METATYPE(Data);
 Q_DECLARE_METATYPE(Data *);
 
-QDebug operator<<(QDebug dbg, const Data &data)
+QDebug operator << (QDebug dbg, const Data &data)
 {
     dbg.nospace() << "Data(" << data.m_id << ", " << data.m_name << ")";
 
     return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, Data *data)
+QDebug operator << (QDebug dbg, Data *data)
 {
     dbg.nospace() << "Data(" << data->m_id << ", " << data->m_name << ")";
 
@@ -107,18 +107,18 @@ private:
     QString m_name;
 
 private:
-    friend QDebug operator<<(QDebug dbg, const ObjectData &data);
-    friend QDebug operator<<(QDebug dbg,       ObjectData *data);
+    friend QDebug operator << (QDebug dbg, const ObjectData &data);
+    friend QDebug operator << (QDebug dbg,       ObjectData *data);
 };
 
-QDebug operator<<(QDebug dbg, const ObjectData &data)
+QDebug operator << (QDebug dbg, const ObjectData &data)
 {
     dbg.nospace() << "ObjectData(" << data.m_id << ", " << data.m_name << ")";
 
     return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, ObjectData *data)
+QDebug operator << (QDebug dbg, ObjectData *data)
 {
     dbg.nospace() << "ObjectData(" << data->m_id << ", " << data->m_name << ")";
 
@@ -165,18 +165,18 @@ private:
     QString m_name;
 
 private:
-    friend QDebug operator<<(QDebug dbg, const CoreData &data);
-    friend QDebug operator<<(QDebug dbg,       CoreData *data);
+    friend QDebug operator << (QDebug dbg, const CoreData &data);
+    friend QDebug operator << (QDebug dbg,       CoreData *data);
 };
 
-QDebug operator<<(QDebug dbg, const CoreData &data)
+QDebug operator << (QDebug dbg, const CoreData &data)
 {
     dbg.nospace() << "CoreData(" << data.m_id << ", " << data.m_name << ")";
 
     return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, CoreData *data)
+QDebug operator << (QDebug dbg, CoreData *data)
 {
     dbg.nospace() << "CoreData(" << data->m_id << ", " << data->m_name << ")";
 
@@ -415,13 +415,20 @@ void dtkComposerTransmitterTestCase::testTransmitterComplexType(void)
 	QCOMPARE(*data_e, *(r_var.constData<CoreData*>()));
 	QCOMPARE(*data_e, *(r_var.data<CoreData*>()));
 	QVERIFY(r_var.disconnect(&e_data));
-
 	
 	QVERIFY(r_data.connect(&e_data));
 	QVERIFY(r_var.connect(&e_data));
 
-	QCOMPARE(static_cast<void *>(data_e), static_cast<void *>(r_var.constData<CoreData*>()));
+	QCOMPARE(static_cast<void *>(data_e),  static_cast<void *>(r_var.constData<CoreData*>()));
+	QCOMPARE(static_cast<void *>(data_e),  static_cast<void *>(r_data.constData()));
+
 	QVERIFY(static_cast<void *>(data_e) != static_cast<void *>(r_var.data<CoreData*>()));
+	QVERIFY(static_cast<void *>(data_e) != static_cast<void *>(r_data.data()));
+
+	CoreData *data_copy0 = r_var.data<CoreData*>();
+	CoreData *data_copy1 = r_data.data();
+	QCOMPARE(*data_e, *data_copy0);
+	QCOMPARE(*data_e, *data_copy1);
 	
 	delete data_e;
 
@@ -446,6 +453,49 @@ void dtkComposerTransmitterTestCase::testTransmitterComplexType(void)
 	
 	delete data_ed;
     }
+}
+
+void dtkComposerTransmitterTestCase::testTransmitterLinks(void)
+{
+    dtkComposerTransmitterEmitter<CoreData *>  e_0;
+    dtkComposerTransmitterProxy p0;
+    dtkComposerTransmitterReceiver<CoreData *> r_0;
+    dtkComposerTransmitterReceiver<CoreData *> r_1;
+
+    dtkComposerTransmitterLinkList   valid_list;
+    dtkComposerTransmitterLinkList invalid_list;
+
+    dtkComposerTransmitter::onTransmittersConnected(&e_0, &p0, valid_list, invalid_list);
+    QVERIFY(valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+    dtkComposerTransmitter::onTransmittersConnected(&p0, &r_0, valid_list, invalid_list);
+    QVERIFY(!valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+    dtkComposerTransmitter::onTransmittersConnected(&p0, &r_1, valid_list, invalid_list);
+    QVERIFY(!valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+
+    QVERIFY(!r_0.isEmpty());
+
+    dtkComposerTransmitterProxy p1, p2;
+    dtkComposerTransmitterReceiverVariant r_var1, r_var2;
+
+    dtkComposerTransmitter::onTransmittersConnected(&p0, &p1, valid_list, invalid_list);
+    QVERIFY(valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+    dtkComposerTransmitter::onTransmittersConnected(&p1, &r_var1, valid_list, invalid_list);
+    QVERIFY(!valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+    dtkComposerTransmitter::onTransmittersConnected(&p2, &r_var2, valid_list, invalid_list);
+    QVERIFY(valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+    dtkComposerTransmitter::onTransmittersConnected(&p1, &p2, valid_list, invalid_list);
+    QVERIFY(!valid_list.isEmpty() && invalid_list.isEmpty()); valid_list.clear();
+
+    QVERIFY(!r_var1.isEmpty());
+    QVERIFY(!r_var2.isEmpty());
+
+    CoreData *data = new CoreData(0, "Hello"); 
+    e_0.setData(data);
+
+    QCOMPARE(*data, *r_0.data());
+    QCOMPARE(*data, *r_1.data());
+    QCOMPARE(*data, *r_var1.data<CoreData *>());
+    QCOMPARE(*data, *r_var2.data<CoreData *>());
 }
 
 void dtkComposerTransmitterTestCase::cleanupTestCase(void)

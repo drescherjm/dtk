@@ -12,4 +12,5 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerTransmitterProxy.h"
 

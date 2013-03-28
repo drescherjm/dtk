@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:17:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Oct 11 12:27:14 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 32
+ * Last-Updated: Thu Mar 28 16:42:19 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -17,17 +17,13 @@
  * 
  */
 
-#ifndef DTKCOMPOSERTRANSMITTERPROXY_H
-#define DTKCOMPOSERTRANSMITTERPROXY_H
-
+#pragma once
 
 #include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterProxy declaration
+// dtkComposerTransmitterProxy 
 // /////////////////////////////////////////////////////////////////
-
-class dtkComposerTransmitterProxyPrivate;
 
 class  dtkComposerTransmitterProxy : public dtkComposerTransmitter
 {
@@ -46,9 +42,5 @@ public:
 public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
-
-private:
-    dtkComposerTransmitterProxyPrivate *e;
 };
 
-#endif

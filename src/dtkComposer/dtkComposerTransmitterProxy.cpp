@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Oct 11 12:27:23 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 60
+ * Last-Updated: Thu Mar 28 10:13:19 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -21,28 +21,17 @@
 #include "dtkComposerTransmitterProxy.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterProxyPrivate declaration
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerTransmitterProxyPrivate
-{
-public:
-};
-
-// /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterProxy implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerTransmitterProxy::dtkComposerTransmitterProxy(dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterProxyPrivate)
+dtkComposerTransmitterProxy::dtkComposerTransmitterProxy(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
 
 }
 
 dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
 {
-    delete e;
 
-    e = NULL;
 }
 
 //! Returns.

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 14:09:29 2013 (+0100)
+ * Last-Updated: Fri Mar 29 14:34:25 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 750
+ *     Update #: 756
  */
 
 /* Change Log:
@@ -434,7 +434,11 @@ void dtkComposerTransmitterTestCase::testTransmitterComplexType(void)
 
 	// -- Derived Core Data pointer
 	dtkComposerTransmitterEmitter<DeriveCoreData *> e_ddata;
-	QVERIFY(r_data.connect(&e_ddata)); // Connection enabled !!
+	QVERIFY(r_data.connect(&e_ddata)); // Connection enabled : Derive into Base
+
+	dtkComposerTransmitterReceiver<DeriveCoreData *> r_ddata;
+	QVERIFY(!r_ddata.connect(&e_data)); // Connection disabled : Base into Derive
+	
 
 	DeriveCoreData *data_ed = new DeriveCoreData;
 	data_ed->setName("Derived Core Data");

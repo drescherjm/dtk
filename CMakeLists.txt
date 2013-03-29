@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Mar 29 14:24:00 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 158
+## Last-Updated: Fri Mar 29 14:36:47 2013 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 161
 ######################################################################
 ## 
 ### Change Log:
@@ -46,7 +46,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if(APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/lib/c++/v1")
 else(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif(APPLE)
 
 if(NOT APPLE)

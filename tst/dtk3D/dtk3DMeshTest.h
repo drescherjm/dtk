@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Mar 25 12:56:35 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 13:00:40 2013 (+0100)
+ * Last-Updated: Wed Mar 27 13:22:47 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 7
  */
 
 /* Change Log:
@@ -25,7 +25,7 @@ private slots:
     void init(void);
 
 private slots:
-    void testGMSH(void);
+    void testGeometry(void);
 
 private slots:
     void cleanupTestCase(void);

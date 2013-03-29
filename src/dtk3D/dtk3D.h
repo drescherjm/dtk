@@ -14,14 +14,14 @@
 
 #pragma once
 
-class dtk3DItemMeshPlugin;
-class dtk3DItemMeshPluginFactory;
-class dtk3DItemMeshPluginManager;
+class dtk3DMeshPlugin;
+class dtk3DMeshPluginFactory;
+class dtk3DMeshPluginManager;
 
 namespace dtk3D
 {
     namespace mesh {
-	dtk3DItemMeshPluginFactory& pluginFactory(void);
-	dtk3DItemMeshPluginManager& pluginManager(void);
+	dtk3DMeshPluginFactory& pluginFactory(void);
+	dtk3DMeshPluginManager& pluginManager(void);
     }
 }

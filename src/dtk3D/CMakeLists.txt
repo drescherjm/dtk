@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Mar 22 09:22:26 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Mar 25 15:05:14 2013 (+0100)
+## Last-Updated: Wed Mar 27 20:10:29 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 33
+##     Update #: 36
 ######################################################################
 ## 
 ### Change Log:
@@ -21,7 +21,7 @@ project(dtk3D)
 set(${PROJECT_NAME}_HEADERS
   dtk3D.h
   dtk3DItem.h
-  dtk3DItemMesh.h
+  dtk3DMesh.h
   dtk3DScene.h
   dtk3DSettings.h
   dtk3DView.h)
@@ -29,7 +29,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtk3D.cpp
   dtk3DItem.cpp
-  dtk3DItemMesh.cpp
+  dtk3DMesh.cpp
   dtk3DScene.cpp
   dtk3DSettings.cpp
   dtk3DView.cpp)

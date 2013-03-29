@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 11:35:55 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 16:34:35 2013 (+0100)
+ * Last-Updated: Wed Mar 27 14:41:48 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 111
+ *     Update #: 124
  */
 
 /* Change Log:
@@ -18,6 +18,7 @@
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLCube>
+#include <Qt3d/QGLSphere>
 #include <Qt3D/QGLTeapot>
 
 void dtk3DViewTestCase::initTestCase(void)
@@ -43,7 +44,7 @@ void dtk3DViewTestCase::testInstanciation(void)
     loop.exec();
 }
 
-void dtk3DViewTestCase::testShapes(void)
+void dtk3DViewTestCase::testClick(void)
 {
     static int id;
 
@@ -69,37 +70,37 @@ void dtk3DViewTestCase::testShapes(void)
 	teapot.setHoverMaterial(materialHighlight);
     }
 
-    dtk3DItem cube1(&scene); {
+    dtk3DItem sphere(&scene); {
 	QGLBuilder builder;
 	builder << QGL::Faceted;
-	builder << QGLCube();
-	cube1.setId(id++);
-	cube1.setNode(builder.finalizedSceneNode());
-        cube1.setPosition(QVector3D(2.5, 0.0, 0.0));
-	cube1.setMaterial(material);
-	cube1.setHoverMaterial(materialHighlight);
+	builder << QGLSphere();
+	sphere.setId(id++);
+	sphere.setNode(builder.finalizedSceneNode());
+        sphere.setPosition(QVector3D(-2.5, 0.0, 0.0));
+	sphere.setMaterial(material);
+	sphere.setHoverMaterial(materialHighlight);
     }
 
-    dtk3DItem cube2(&scene); {
+    dtk3DItem cube(&scene); {
         QGLBuilder builder;
         builder << QGL::Faceted;
         builder << QGLCube();
-	cube2.setId(id++);
-        cube2.setNode(builder.finalizedSceneNode());
-        cube2.setPosition(QVector3D(-2.5, 0.0, 0.0));
-	cube2.setMaterial(material);
-	cube2.setHoverMaterial(materialHighlight);
+	cube.setId(id++);
+        cube.setNode(builder.finalizedSceneNode());
+        cube.setPosition(QVector3D(2.5, 0.0, 0.0));
+	cube.setMaterial(material);
+	cube.setHoverMaterial(materialHighlight);
     }
     
     dtk3DView view;
     view.setScene(&scene);
-    view.setTitle("Click right cube to validate test");
+    view.setTitle("Click the cube item to validate test");
     view.resize(1600, 800);
     view.show();
     view.raise();
 
     QEventLoop loop;
-    connect(&cube1, SIGNAL(clicked()), &loop, SLOT(quit()));
+    connect(&cube, SIGNAL(clicked()), &loop, SLOT(quit()));
     loop.exec();
 }
 

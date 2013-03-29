@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 12:05:00 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 18:53:10 2013 (+0100)
+ * Last-Updated: Wed Mar 27 19:18:15 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 120
  */
 
 /* Change Log:
@@ -28,8 +28,6 @@ dtk3DScene::dtk3DScene(QObject *parent) : QObject(parent), d(new dtk3DScenePriva
 dtk3DScene::~dtk3DScene(void)
 {
     delete d;
-
-    d = NULL;
 }
 
 QBox3D dtk3DScene::boundingBox(void)
@@ -38,8 +36,8 @@ QBox3D dtk3DScene::boundingBox(void)
 
     foreach (QObject *object, this->children()) {
         dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
-	if(item)
-	    box = box.united(item->node()->boundingBox());
+	if(item && !item->boundingBox().isNull())
+	    box = box.united(item->boundingBox());
     }
 
     return box;
@@ -50,12 +48,7 @@ void dtk3DScene::initialize(QGLView *view, QGLPainter *painter)
     foreach (QObject *object, this->children()) {
         dtk3DItem *item = qobject_cast<dtk3DItem *>(object);
         if (item) {
-            item->initialize(view, painter);
-	    connect(item, SIGNAL(pressed()), view, SLOT(update()));
-	    connect(item, SIGNAL(released()), view, SLOT(update()));
-	    connect(item, SIGNAL(clicked()), view, SLOT(update()));
-	    connect(item, SIGNAL(doubleClicked()), view, SLOT(update()));
-	    connect(item, SIGNAL(hoverChanged()), view, SLOT(update()));
+	    item->initialize(view, painter);
 	}
     }
 }

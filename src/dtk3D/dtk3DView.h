@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 09:41:33 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 22 14:34:35 2013 (+0100)
+ * Last-Updated: Wed Mar 27 20:38:44 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 39
  */
 
 /* Change Log:
@@ -21,6 +21,8 @@ class dtk3DViewPrivate;
 
 class dtk3DView : public QGLView
 {
+    Q_OBJECT
+
 public:
      dtk3DView(QWindow *parent = 0);
     ~dtk3DView(void);

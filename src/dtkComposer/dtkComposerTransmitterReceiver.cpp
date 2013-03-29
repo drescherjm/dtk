@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 17:01:02 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 28 17:11:15 2013 (+0100)
+ * Last-Updated: Fri Mar 29 13:48:18 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 150
+ *     Update #: 181
  */
 
 /* Change Log:
@@ -44,21 +44,7 @@ bool dtkComposerTransmitterReceiverBase::connect(dtkComposerTransmitter *transmi
 
     if (transmitter->kind() == Emitter && !d->emitters.contains(transmitter)) {
 
-	enable_connection = true;
-
-	if (!d->type_list.isEmpty()) {
-	    int i = 0; 
-	    int count = d->type_list.count();
-	    while(enable_connection && i < count) {
-		d->variant = QVariant(d->type_list.at(i++), 0);
-		foreach(int t, transmitter->typeList()) {
-		    if (!d->variant.canConvert(t)) {
-			enable_connection = false;
-			break;
-		    }
-		}
-	    }
-	}
+	enable_connection = transmitter->connect(this);
 
 	if (enable_connection) {
 	    d->emitters << transmitter;

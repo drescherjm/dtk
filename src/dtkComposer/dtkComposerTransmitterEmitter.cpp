@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 10:15:56 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 09:15:07 2013 (+0100)
+ * Last-Updated: Fri Mar 29 13:42:16 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 14
+ *     Update #: 29
  */
 
 /* Change Log:
@@ -37,6 +37,29 @@ QString dtkComposerTransmitterEmitterBase::kindName(void) const
 {
     return "Emitter";
 };
+
+bool dtkComposerTransmitterEmitterBase::connect(dtkComposerTransmitter *transmitter)
+{
+    bool enable_connection = true;
+
+    if (!d->type_list.isEmpty()) {
+	QVariant var;
+	dtkComposerTransmitter::TypeList list = transmitter->typeList();
+	int count = d->type_list.count();
+	int i = 0;
+	while(enable_connection && i < count) {
+	    var = QVariant(d->type_list.at(i++), 0);
+	    foreach(int t, list) {
+		if (!var.canConvert(t)) {
+		    enable_connection = false;
+		    break;
+		}
+	    }
+	}
+    }
+
+    return enable_connection;
+}
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterEmitterBase::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {

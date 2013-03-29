@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Mar 23 23:11:28 2013 (+0100)
+ * Last-Updated: Fri Mar 29 14:24:04 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 382
+ *     Update #: 400
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 #pragma once
 
 #include "dtkComposerTransmitter_p.h"
+#include "dtkComposerTransmitterHandler.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitterBase
@@ -58,8 +59,7 @@ template <typename T> void dtkComposerTransmitterEmitterVariant::setData(T& data
  */
 template <typename T> dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterEmitterBase(parent)
 {
-    d->type_list << qRegisterMetaType<T>(static_cast<T *>(0));
-    d->variant = QVariant(d->type_list.first(), 0);
+    dtkComposerTransmitterHandler<T>::init(*this);
 };
 
 //! Destroys the emitter.
@@ -84,4 +84,9 @@ template <typename T> void dtkComposerTransmitterEmitter<T>::setData(T& data)
 template <typename T> int dtkComposerTransmitterEmitter<T>::type(void) const
 {
     return d->type_list.first();
+}
+
+template <typename T> bool dtkComposerTransmitterEmitter<T>::connect(dtkComposerTransmitter *transmitter)
+{
+    return dtkComposerTransmitterHandler<T>::connect(*transmitter);
 }

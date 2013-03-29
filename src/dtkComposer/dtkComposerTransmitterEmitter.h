@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 09:39:35 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 23 23:11:19 2013 (+0100)
+ * Last-Updated: Fri Mar 29 13:48:53 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 86
+ *     Update #: 91
  */
 
 /* Change Log:
@@ -33,6 +33,9 @@ public:
 
 public:
     inline bool enableCopy(void);
+
+public:
+    virtual bool connect(dtkComposerTransmitter *transmitter);
 
 public:
     LinkMap leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
@@ -72,6 +75,9 @@ public:
 
 public:
     inline int type(void) const;
+
+public:
+    bool connect(dtkComposerTransmitter *transmitter);
 
 private:
     void setTypeList(const TypeList& list) {;}

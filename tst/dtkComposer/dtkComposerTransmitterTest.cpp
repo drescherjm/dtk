@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 28 19:20:27 2013 (+0100)
+ * Last-Updated: Fri Mar 29 14:09:29 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 647
+ *     Update #: 750
  */
 
 /* Change Log:
@@ -496,6 +496,10 @@ void dtkComposerTransmitterTestCase::testTransmitterLinks(void)
     QCOMPARE(*data, *r_1.data());
     QCOMPARE(*data, *r_var1.data<CoreData *>());
     QCOMPARE(*data, *r_var2.data<CoreData *>());
+
+    dtkComposerTransmitterReceiver<ObjectData *> r_obj;
+    dtkComposerTransmitter::onTransmittersConnected(&p2, &r_obj, valid_list, invalid_list);
+    QVERIFY(valid_list.isEmpty() && !invalid_list.isEmpty());
 }
 
 void dtkComposerTransmitterTestCase::cleanupTestCase(void)

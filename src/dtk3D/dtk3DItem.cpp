@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:55:00 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:36:20 2013 (+0100)
+ * Last-Updated: Sat Mar 30 16:52:36 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 32
+ *     Update #: 125
  */
 
 /* Change Log:
@@ -29,14 +29,19 @@
 class dtk3DItemPrivate
 {
 public:
-    dtk3DItem *q;
-
-public:
     void dump(void);
     void dump(QGLSceneNode *node, bool detailed, int indent = 0, const QSet<QGLSceneNode *> &loop = QSet<QGLSceneNode *>());
 
 public:
-    int id;
+    dtk3DItem *q;
+
+public:
+    dtk3DItem::Flags flags;
+
+public:
+           int p_id;
+           int i_id;
+    static int g_id;
 
 public:
     bool hovered;
@@ -58,6 +63,8 @@ public:
     QGLView *view;
 };
 
+int dtk3DItemPrivate::g_id = 0;
+
 // ///////////////////////////////////////////////////////////////////
 // dtk3DItem
 // ///////////////////////////////////////////////////////////////////
@@ -65,7 +72,9 @@ public:
 dtk3DItem::dtk3DItem(QObject *parent) : QGLSceneNode(parent), d(new dtk3DItemPrivate)
 {
     d->q = this;
-    d->id = -1;
+    d->p_id = -1;
+    d->i_id = -1;
+    d->flags = 0;
     d->panned = false;
     d->rotated = false;
     d->hovered = false;
@@ -74,11 +83,35 @@ dtk3DItem::dtk3DItem(QObject *parent) : QGLSceneNode(parent), d(new dtk3DItemPri
     d->hoverMaterial = new QGLMaterial(this);
     d->hoverMaterial->setColor(qRgb(255, 186, 210));
     d->view = NULL;
+
+    this->setMaterial(d->material);
 }
 
 dtk3DItem::~dtk3DItem(void)
 {
     delete d;
+}
+
+dtk3DItem::Flags dtk3DItem::flags(void) const
+{
+    return d->flags;
+}
+
+void dtk3DItem::setFlags(dtk3DItem::Flags flags)
+{
+    d->flags = flags;
+}
+
+void dtk3DItem::setFlag(dtk3DItem::Flag flag, bool value)
+{
+    dtk3DItem::Flags flags = d->flags;
+
+    if (value)
+	flags |=  flag;
+    else
+	flags &= ~flag;
+
+    d->flags = flags;
 }
 
 QMatrix4x4 dtk3DItem::localTransform(void)
@@ -146,16 +179,9 @@ const QVector3D dtk3DItem::mapToItem(const QVector3D& point)
     return trsf.mapVector(point);
 }
 
-void dtk3DItem::setId(int id)
-{
-    d->id = id;
-}
-
 void dtk3DItem::setColor(const QColor& color)
 {
-    QGLMaterial *material = new QGLMaterial(this);
-    material->setColor(color);    
-    this->setMaterial(material);
+    d->material->setColor(color);    
 }
 
 void dtk3DItem::initialize(QGLPainter *painter, QGLView *view)
@@ -164,38 +190,39 @@ void dtk3DItem::initialize(QGLPainter *painter, QGLView *view)
 
     this->update();
 
-    if (d->id != -1)
-        view->registerObject(d->id, this);
-
     d->view = view;
 }
 
 void dtk3DItem::draw(QGLPainter *painter)
 {
-    int previous_id;
-    previous_id = painter->objectPickId();
-
-    QGLMaterial *previous_material;
-    previous_material = this->material();
+    if(d->flags & dtk3DItem::Hidden)
+	return;
     
     painter->clearAttributes();
 
-    if (d->id != -1)
-	painter->setObjectPickId(d->id);
+    if(d->flags & dtk3DItem::Interactive) {
 
-    if(d->hovered)
-	this->setMaterial(d->hoverMaterial);
+	if (d->i_id == -1) {
+	    if (d->p_id == -1)
+		d->view->registerObject((d->i_id = d->p_id = d->g_id++), this);
+	    else
+		d->i_id = d->p_id;
+	}
+
+	if(d->hovered)
+	    this->setMaterial(d->hoverMaterial);
+	else
+	    this->setMaterial(d->material);
+
+    } else {
+	d->i_id = -1;
+    }
 
     painter->modelViewMatrix().push();
     painter->modelViewMatrix() *= d->local_transform;
+    painter->setObjectPickId(d->i_id);
     QGLSceneNode::draw(painter);
     painter->modelViewMatrix().pop();
-
-    if(d->hovered)
-	this->setMaterial(previous_material);
-
-    if (d->id != -1)
-	painter->setObjectPickId(previous_id);
 }
 
 void dtk3DItem::update(void)

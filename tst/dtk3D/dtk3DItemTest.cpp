@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Mar 27 14:14:24 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:56:37 2013 (+0100)
+ * Last-Updated: Sat Mar 30 16:55:19 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 127
+ *     Update #: 155
  */
 
 /* Change Log:
@@ -35,8 +35,6 @@ void dtk3DItemTestCase::init(void)
 
 void dtk3DItemTestCase::testHierarchy(void)
 {
-    static int id = 0;
-
     QGLSceneNode *node0; {
 
 	QGLBuilder builder;
@@ -95,8 +93,8 @@ void dtk3DItemTestCase::testHierarchy(void)
 	node->addTransform(transform);
 
 	item1->setObjectName("item1");
-	item1->setId(id++);
 	item1->addNode(node);
+	item1->translate(QVector3D(0.0, 0.0, -2.0));
 	item1->rotate(QVector3D(0.0, 1.0, 0.0), -90.0);
 	item1->setEffect(QGL::LitMaterial);
 	item1->setColor(Qt::red);
@@ -112,26 +110,26 @@ void dtk3DItemTestCase::testHierarchy(void)
 	node->setObjectName("node");
 
 	item2->setObjectName("item2");
-	item2->setId(id++);
 	item2->addNode(node);
+	item2->setFlag(dtk3DItem::Interactive, true);
 	item2->setEffect(QGL::LitMaterial);
 	item2->setColor(Qt::green);
 
 	dtk3DItem *item2_1 = new dtk3DItem(item2); {
 
 	    item2_1->setObjectName("item2_1");
-	    item2_1->setId(id++);
 	    item2_1->addNode(node);
 	    item2_1->translate(QVector3D(0.0, 1.0, 0.0));
+	    item2_1->setFlag(dtk3DItem::Interactive, true);
 	    item2_1->setEffect(QGL::LitMaterial);
 	    item2_1->setColor(Qt::magenta);
 
 	    dtk3DItem *item2_1_1 = new dtk3DItem(item2_1); {
 
 		item2_1_1->setObjectName("item2_1_1");
-		item2_1_1->setId(id++);
 		item2_1_1->addNode(node);
 		item2_1_1->translate(QVector3D(0.0, 1.0, 0.0));
+		item2_1_1->setFlag(dtk3DItem::Interactive, false);
 		item2_1_1->setEffect(QGL::LitMaterial);
 		item2_1_1->setColor(Qt::yellow);
 	    }
@@ -143,6 +141,7 @@ void dtk3DItemTestCase::testHierarchy(void)
     dtk3DScene scene;
     scene.addNode(node0);
     scene.addNode(node1);
+    scene.addItem(item1);
     scene.addItem(item2);
 
     dtk3DView view;

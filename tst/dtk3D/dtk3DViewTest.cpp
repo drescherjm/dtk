@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 11:35:55 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:24:31 2013 (+0100)
+ * Last-Updated: Sat Mar 30 16:32:32 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 158
+ *     Update #: 163
  */
 
 /* Change Log:
@@ -46,13 +46,10 @@ void dtk3DViewTestCase::testInstanciation(void)
 
 void dtk3DViewTestCase::testClick(void)
 {
-    static int id;
-
     dtk3DItem *teapot = new dtk3DItem; {
 	QGLBuilder builder;
 	builder << QGL::Smooth;
 	builder << QGLTeapot();
-	teapot->setId(id++);
 	teapot->addNode(builder.finalizedSceneNode());
 	teapot->setEffect(QGL::LitMaterial);
 	teapot->setColor(Qt::red);
@@ -62,7 +59,6 @@ void dtk3DViewTestCase::testClick(void)
 	QGLBuilder builder;
 	builder << QGL::Faceted;
 	builder << QGLSphere();
-	sphere->setId(id++);
 	sphere->addNode(builder.finalizedSceneNode());
         sphere->translate(QVector3D(-2.5, 0.0, 0.0));
 	sphere->setEffect(QGL::LitMaterial);
@@ -73,7 +69,6 @@ void dtk3DViewTestCase::testClick(void)
         QGLBuilder builder;
         builder << QGL::Faceted;
         builder << QGLCube();
-	cube->setId(id++);
         cube->addNode(builder.finalizedSceneNode());
         cube->translate(QVector3D(2.5, 0.0, 0.0));
 	cube->setEffect(QGL::LitMaterial);

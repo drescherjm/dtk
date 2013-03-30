@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:53:33 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:36:40 2013 (+0100)
+ * Last-Updated: Sat Mar 30 16:24:49 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 13
+ *     Update #: 34
  */
 
 /* Change Log:
@@ -25,10 +25,28 @@ class dtk3DItemPrivate;
 class dtk3DItem : public QGLSceneNode
 {
     Q_OBJECT
+    Q_ENUMS(Flag)
+    Q_FLAGS(Flags)
 
 public:
      dtk3DItem(QObject *parent = 0);
     ~dtk3DItem(void);
+
+#pragma mark -
+#pragma mark Item Flags
+    
+    enum Flag {
+	       None = 0 << 0,
+	     Hidden = 1 << 1,
+	Interactive = 1 << 2
+    };
+
+    Q_DECLARE_FLAGS(Flags, Flag);
+
+    dtk3DItem::Flags flags(void) const;
+
+    void setFlags(dtk3DItem::Flags flags);
+    void setFlag(dtk3DItem::Flag flag, bool value);
 
 #pragma mark -
 #pragma mark Transformations
@@ -55,7 +73,6 @@ public:
 #pragma mark Item attributes
 
 public:
-    void setId(int id);
     void setColor(const QColor& color);
 
 #pragma mark -
@@ -100,6 +117,8 @@ private:
 private:
      dtk3DItemPrivate *d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(dtk3DItem::Flags)
 
 QDebug operator<<(QDebug dbg,       dtk3DItem *item);
 QDebug operator<<(QDebug dbg, const dtk3DItem& item);

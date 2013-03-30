@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Mar 27 14:14:24 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:16:05 2013 (+0100)
+ * Last-Updated: Sat Mar 30 15:56:37 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 124
+ *     Update #: 127
  */
 
 /* Change Log:
@@ -147,6 +147,7 @@ void dtk3DItemTestCase::testHierarchy(void)
 
     dtk3DView view;
     view.setScene(&scene);
+    view.setTitle("Hit 'Q' key to validate test");
     view.resize(1024, 512);
     view.show();
     view.raise();

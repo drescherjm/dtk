@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:41:03 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 12:03:38 2013 (+0100)
+ * Last-Updated: Sat Mar 30 15:53:12 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 48
  */
 
 /* Change Log:
@@ -45,7 +45,7 @@ public:
     virtual void write(const QString& path);
 
 protected:
-    virtual void draw(QGLView *view, QGLPainter *painter);
+    virtual void draw(QGLPainter *painter);
 
 private:
     dtk3DMeshPrivate *d;

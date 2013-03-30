@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Mar 22 09:22:26 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Mar 27 20:10:29 2013 (+0100)
+## Last-Updated: Sat Mar 30 17:32:30 2013 (+0100)
 ##           By: Julien Wintz
-##     Update #: 36
+##     Update #: 40
 ######################################################################
 ## 
 ### Change Log:
@@ -49,7 +49,6 @@ add_library(${PROJECT_NAME} SHARED
 qt5_use_modules(${PROJECT_NAME} 3D)
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## ###################################################################
 ## Install rules - files

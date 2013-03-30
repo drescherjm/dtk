@@ -1,11 +1,11 @@
 /* dtk3DScene.h ---
  * 
  * Author: Julien Wintz
- * Created: Fri Mar 22 11:50:58 2013 (+0100)
+ * Created: Sat Mar 30 13:44:59 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 16:11:35 2013 (+0100)
+ * Last-Updated: Sat Mar 30 13:45:36 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 42
+ *     Update #: 7
  */
 
 /* Change Log:
@@ -14,12 +14,14 @@
 
 #pragma once
 
-#include <Qt3D/QGLPainter>
+#include <Qt3D/QGLAbstractScene>
+#include <Qt3D/QGLSceneNode>
 #include <Qt3D/QGLView>
 
+class dtk3DItem;
 class dtk3DScenePrivate;
 
-class dtk3DScene : public QObject
+class dtk3DScene : public QGLAbstractScene
 {
     Q_OBJECT
 
@@ -27,17 +29,28 @@ public:
      dtk3DScene(QObject *parent = 0);
     ~dtk3DScene(void);
 
-#pragma mark -
-#pragma mark Geometric attributes
-    
-    QBox3D boundingBox(void);
+public:
+    void    addItem(dtk3DItem *item);
+    void removeItem(dtk3DItem *item);
 
-#pragma mark -
-#pragma mark Painting
+public:
+    void    addNode(QGLSceneNode *node);
+    void removeNode(QGLSceneNode *node);
 
-    void initialize(QGLView *view, QGLPainter *painter);
-    void      paint(QGLView *view, QGLPainter *painter);
+public:
+    QGLSceneNode *mainNode(void) const;
+
+public:
+     QList<QObject *> objects(void) const;
+
+public:
+     void dump(void);
+     void dump(QGLSceneNode *node);
+
+public:
+    void initialize(QGLPainter *painter, QGLView *view);
+    void      paint(QGLPainter *painter, QGLView *view);
 
 private:
-    dtk3DScenePrivate *d;
+     dtk3DScenePrivate *d;
 };

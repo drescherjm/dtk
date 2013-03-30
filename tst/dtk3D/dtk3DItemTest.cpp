@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Mar 27 14:14:24 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 17:31:23 2013 (+0100)
+ * Last-Updated: Sat Mar 30 15:16:05 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 116
+ *     Update #: 124
  */
 
 /* Change Log:
@@ -18,6 +18,10 @@
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLSphere>
+#include <Qt3D/QGLTeapot>
+#include <Qt3D/QGraphicsRotation3D>
+#include <Qt3D/QGraphicsScale3D>
+#include <Qt3D/QGraphicsTranslation3D>
 
 void dtk3DItemTestCase::initTestCase(void)
 {
@@ -33,38 +37,117 @@ void dtk3DItemTestCase::testHierarchy(void)
 {
     static int id = 0;
 
-    QGLBuilder builder;
-    builder << QGL::Faceted;
-    builder << QGLSphere();
+    QGLSceneNode *node0; {
 
-    QGLSceneNode *node = builder.finalizedSceneNode();
+	QGLBuilder builder;
+	builder << QGL::Faceted;
+	builder << QGLSphere();
+
+	QGraphicsScale3D *transform = new QGraphicsScale3D;
+	transform->setScale(QVector3D(0.5, 0.5, 0.5));
+
+	QGLMaterial *material = new QGLMaterial;
+	material->setColor(Qt::blue);
+	
+	node0 = builder.finalizedSceneNode();
+	node0->addTransform(transform);
+	node0->setObjectName("node0");
+	node0->setEffect(QGL::LitMaterial);
+	node0->setMaterial(material);
+	node0->setPosition(QVector3D(2.0, 0.0, 0.0));
+    }
+
+    QGLSceneNode *node1; {
+
+	QGLBuilder builder;
+	builder << QGL::Faceted;
+	builder << QGLSphere();
+
+	QGraphicsScale3D *transform = new QGraphicsScale3D;
+	transform->setScale(QVector3D(0.5, 0.5, 0.5));
+
+	QGLMaterial *material = new QGLMaterial;
+	material->setColor(Qt::green);
+	
+	node1 = builder.finalizedSceneNode();
+	node1->addTransform(transform);
+	node1->setObjectName("node1");
+	node1->setEffect(QGL::LitMaterial);
+	node1->setMaterial(material);
+	node1->setPosition(QVector3D(-2.0, 0.0, 0.0));
+    }
+
+// ///////////////////////////////////////////////////////////////////
+// Using item API
+// ///////////////////////////////////////////////////////////////////
+
+    dtk3DItem *item1 = new dtk3DItem; {
+
+	QGLBuilder builder;
+	builder << QGL::Faceted;
+	builder << QGLTeapot();
+
+	QGraphicsScale3D *transform = new QGraphicsScale3D;
+	transform->setScale(QVector3D(0.5, 0.5, 0.5));
+
+	QGLSceneNode *node = builder.finalizedSceneNode();
+	node->setObjectName("node");
+	node->addTransform(transform);
+
+	item1->setObjectName("item1");
+	item1->setId(id++);
+	item1->addNode(node);
+	item1->rotate(QVector3D(0.0, 1.0, 0.0), -90.0);
+	item1->setEffect(QGL::LitMaterial);
+	item1->setColor(Qt::red);
+    }
+
+    dtk3DItem *item2 = new dtk3DItem; {
+
+	QGLBuilder builder;
+	builder << QGL::Faceted;
+	builder << QGLSphere(0.5, 2);
+
+	QGLSceneNode *node = builder.finalizedSceneNode();
+	node->setObjectName("node");
+
+	item2->setObjectName("item2");
+	item2->setId(id++);
+	item2->addNode(node);
+	item2->setEffect(QGL::LitMaterial);
+	item2->setColor(Qt::green);
+
+	dtk3DItem *item2_1 = new dtk3DItem(item2); {
+
+	    item2_1->setObjectName("item2_1");
+	    item2_1->setId(id++);
+	    item2_1->addNode(node);
+	    item2_1->translate(QVector3D(0.0, 1.0, 0.0));
+	    item2_1->setEffect(QGL::LitMaterial);
+	    item2_1->setColor(Qt::magenta);
+
+	    dtk3DItem *item2_1_1 = new dtk3DItem(item2_1); {
+
+		item2_1_1->setObjectName("item2_1_1");
+		item2_1_1->setId(id++);
+		item2_1_1->addNode(node);
+		item2_1_1->translate(QVector3D(0.0, 1.0, 0.0));
+		item2_1_1->setEffect(QGL::LitMaterial);
+		item2_1_1->setColor(Qt::yellow);
+	    }
+	}
+    }
+
+    qDebug() << item2;
 
     dtk3DScene scene;
-    
-    dtk3DItem root(&scene);
-    root.setObjectName("root");
-    root.setId(id++);
-    root.setNode(node->clone());
-    root.setColor(Qt::red);
-
-    dtk3DItem right_sub_item(&root);
-    right_sub_item.setObjectName("right_sub_item");
-    right_sub_item.setId(id++);
-    right_sub_item.setNode(node->clone());
-    right_sub_item.setColor(Qt::green);
-    right_sub_item.setPosition(QVector3D(1.0, 1.0, 0.0));
-    
-    dtk3DItem right_sub_sub_item(&right_sub_item);
-    right_sub_sub_item.setObjectName("right_sub_sub_item");
-    right_sub_sub_item.setId(id++);
-    right_sub_sub_item.setNode(node->clone());
-    right_sub_sub_item.setColor(Qt::blue);
-    right_sub_sub_item.setPosition(QVector3D(1.0, 1.0, 0.0));
+    scene.addNode(node0);
+    scene.addNode(node1);
+    scene.addItem(item2);
 
     dtk3DView view;
     view.setScene(&scene);
-    view.setTitle("Hit 'Q' key to validate test");
-    view.resize(800, 600);
+    view.resize(1024, 512);
     view.show();
     view.raise();
 

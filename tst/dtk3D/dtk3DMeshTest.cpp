@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Mar 25 12:57:14 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 14:41:36 2013 (+0100)
+ * Last-Updated: Sat Mar 30 14:06:53 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 161
+ *     Update #: 163
  */
 
 /* Change Log:
@@ -45,9 +45,6 @@ void dtk3DMeshTestCase::testGeometry(void)
     view.resize(800, 600);
     view.show();
     view.raise();
-
-    view.camera()->setEye(QVector3D(0, 0, scene.boundingBox().size().length()*4));
-    view.camera()->setCenter(scene.boundingBox().center());
 
     QEventLoop loop;
     connect(&view, SIGNAL(quit()), &loop, SLOT(quit()));

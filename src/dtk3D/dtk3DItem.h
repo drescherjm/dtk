@@ -1,11 +1,11 @@
 /* dtk3DItem.h ---
  * 
  * Author: Julien Wintz
- * Created: Fri Mar 22 12:19:49 2013 (+0100)
+ * Created: Sat Mar 30 13:53:33 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 19:16:36 2013 (+0100)
+ * Last-Updated: Sat Mar 30 15:36:40 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 13
  */
 
 /* Change Log:
@@ -14,91 +14,92 @@
 
 #pragma once
 
-#include <QtGui/QVector3D>
-#include <QtGui/QQuaternion>
-
-#include <Qt3D/QGLPainter>
+#include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLSceneNode>
-#include <Qt3D/QGLView.h>
+#include <Qt3D/QGLView>
+
+#include <QtGui>
 
 class dtk3DItemPrivate;
 
-class dtk3DItem : public QObject
+class dtk3DItem : public QGLSceneNode
 {
     Q_OBJECT
 
 public:
-             dtk3DItem(QObject *parent = 0);
-    virtual ~dtk3DItem(void);
+     dtk3DItem(QObject *parent = 0);
+    ~dtk3DItem(void);
 
 #pragma mark -
-#pragma mark Geometric attributes
+#pragma mark Transformations
 
-    virtual QBox3D boundingBox(void) const;
+public:
+    QMatrix4x4  localTransform(void);
+    QMatrix4x4 globalTransform(void);
+
+public:
+    QVector3D  localPosition(void);
+    QVector3D globalPosition(void);
+
+public:
+    void translate(const QVector3D& translation);
+    void    rotate(const QVector3D& axis, qreal angle);
 
 #pragma mark -
-#pragma mark Scene attributes
-    
-    QGLSceneNode *node(void);
-    QGLSceneNode *clone(void);
+#pragma mark Coordinate mapping - to item
+
+    const QVector3D mapToItem(const QPoint& point);
+    const QVector3D mapToItem(const QVector3D& vector);
 
 #pragma mark -
-#pragma mark Picking attributes
-    
+#pragma mark Item attributes
+
+public:
     void setId(int id);
-
-#pragma mark -
-#pragma mark Geometric attributes
-
-    void setNode(QGLSceneNode *node);
-
-#pragma mark -
-#pragma mark Frame attributes
-
-    void setScale(qreal scale);
-    void setPosition(const QVector3D& position);
-    void setOrientation(const QVector3D& orientation, qreal angle);
-    void setOrientation(const QQuaternion& orientation);
-
-#pragma mark -
-#pragma mark Visuals attributes
-
-    void setEffect(QGLAbstractEffect *effect);
-
-    void      setMaterial(QGLMaterial *material);
-    void setHoverMaterial(QGLMaterial *material);
-
     void setColor(const QColor& color);
 
 #pragma mark -
-#pragma mark Management
+#pragma mark Scene management
 
-    virtual void initialize(QGLView *view, QGLPainter *painter);
-    virtual void      paint(QGLView *view, QGLPainter *painter);
+    void initialize(QGLPainter *painter, QGLView *view);
+    void       draw(QGLPainter *painter);
+    void update(void);
 
 #pragma mark -
-#pragma mark Event handling
-    
-    bool event(QEvent *event);
+#pragma mark Event emission
 
 signals:
-    void pressed(void);
-    void released(void);
     void clicked(void);
-    void moved(void);
-    void doubleClicked(void);
-    void hoverChanged(void);
-    void hovered(bool on);
+
+#pragma mark -
+#pragma mark Event handling 
 
 protected:
-    virtual void  predraw(QGLView *view, QGLPainter *painter);
-    virtual void     draw(QGLView *view, QGLPainter *painter);
-    virtual void postdraw(QGLView *view, QGLPainter *painter);
+    bool event(QEvent *event);
 
 protected:
-    virtual void pan(int deltax, int deltay);
-    virtual void rot(int deltax, int deltay);
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+protected:
+    void mouseTranslateEvent(QMouseEvent *event);
+    void mouseRotateEvent(QMouseEvent *event);
+
+#pragma mark -
+#pragma mark Debug operators
 
 private:
-    dtk3DItemPrivate *d;
+    friend QDebug operator<<(QDebug dbg,       dtk3DItem *item);
+    friend QDebug operator<<(QDebug dbg, const dtk3DItem& item);
+
+private:
+     dtk3DItemPrivate *d;
 };
+
+QDebug operator<<(QDebug dbg,       dtk3DItem *item);
+QDebug operator<<(QDebug dbg, const dtk3DItem& item);

@@ -1,11 +1,11 @@
 /* dtk3DView.h ---
  * 
  * Author: Julien Wintz
- * Created: Fri Mar 22 09:41:33 2013 (+0100)
+ * Created: Sat Mar 30 13:40:37 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 20:38:44 2013 (+0100)
+ * Last-Updated: Sat Mar 30 14:03:24 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 7
  */
 
 /* Change Log:
@@ -27,17 +27,31 @@ public:
      dtk3DView(QWindow *parent = 0);
     ~dtk3DView(void);
 
-#pragma mark -
-#pragma mark Scene management
-    
+public:
     void setScene(dtk3DScene *scene);
 
-protected:
+#pragma mark -
+#pragma mark Rendering pipeline
+
+public:
     void initializeGL(QGLPainter *painter);
     void      paintGL(QGLPainter *painter);
 
+#pragma mark -
+#pragma mark Coordinate mapping
+
+    const QPoint mapToScreen(const QVector3D& point);
+
+#pragma mark -
+#pragma mark Event handling
+
 protected:
     void keyPressEvent(QKeyEvent *event);
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     dtk3DViewPrivate *d;

@@ -1,42 +1,36 @@
 ### CMakeLists.txt ---
 ## 
 ## Author: Julien Wintz
-## Created: Fri Mar 22 09:22:26 2013 (+0100)
+## Created: Mon Apr  1 21:44:51 2013 (+0200)
 ## Version: 
-## Last-Updated: Mon Apr  1 21:45:38 2013 (+0200)
+## Last-Updated: Mon Apr  1 21:46:51 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 45
+##     Update #: 10
 ######################################################################
 ## 
 ### Change Log:
 ## 
 ######################################################################
 
-project(dtk3D)
+project(dtk3DQuick)
 
 ## #################################################################
 ## Input
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtk3D.h
-  dtk3DItem.h
-  dtk3DMesh.h
-  dtk3DScene.h
-  dtk3DSettings.h
-  dtk3DView.h)
+  dtk3DQuickPlugin.h
+  dtk3DQuickView.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtk3D.cpp
-  dtk3DItem.cpp
-  dtk3DMesh.cpp
-  dtk3DScene.cpp
-  dtk3DSettings.cpp
-  dtk3DView.cpp)
+  dtk3DQuickPlugin.cpp
+  dtk3DQuickView.cpp)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
+
+add_definitions(-DQT_PLUGIN)
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
@@ -49,6 +43,9 @@ add_library(${PROJECT_NAME} SHARED
 qt5_use_modules(${PROJECT_NAME} 3D)
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
+qt5_use_modules(${PROJECT_NAME} Quick)
+
+target_link_libraries(${PROJECT_NAME} dtk3D)
 
 ## ###################################################################
 ## Install rules - files
@@ -56,7 +53,7 @@ qt5_use_modules(${PROJECT_NAME} Gui)
 
 install(FILES ${${PROJECT_NAME}_HEADERS}
   DESTINATION include/${PROJECT_NAME}
-    COMPONENT 3D)
+    COMPONENT 3DQuick)
 
 ## ###################################################################
 ## Install rules - targets
@@ -64,5 +61,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 
 install(TARGETS ${PROJECT_NAME}
     DESTINATION lib
-      COMPONENT 3D
+      COMPONENT 3DQuick
          EXPORT dtkDepends)

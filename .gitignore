@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 11:31:43 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Feb  4 16:46:39 2013 (+0100)
+## Last-Updated: Tue Apr  2 10:10:47 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 5
+##     Update #: 9
 ######################################################################
 ## 
 ### Change Log:
@@ -19,6 +19,11 @@
 ## ###################################################################
 
 src/dtk/dtkConfig.h
+
+src/dtk3DQuick/dtk3DQuickConfig
+src/dtk3DQuick/dtk3DQuickConfig.h
+
+qml/*/qmldir
 
 ## ###################################################################
 ## Insource build trees

@@ -1,0 +1,3 @@
+#include "dtk3DQuickConfig.h"
+#include "dtk3DQuickPlugin.h"
+#include "dtk3DQuickView.h"

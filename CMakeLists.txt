@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Mar 27 20:10:37 2013 (+0100)
+## Last-Updated: Tue Apr  2 10:39:04 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 157
+##     Update #: 159
 ######################################################################
 ## 
 ### Change Log:
@@ -87,6 +87,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src/dtkCore)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
 if(Qt53D_FOUND)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk3D)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtk3DQuick)
 endif(Qt53D_FOUND)
 
 ## ###################################################################
@@ -94,6 +95,7 @@ endif(Qt53D_FOUND)
 ## ###################################################################
 
 add_subdirectory(src)
+add_subdirectory(qml)
 add_subdirectory(tst)
 
 ## ###################################################################

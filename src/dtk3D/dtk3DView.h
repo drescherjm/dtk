@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:40:37 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Apr  1 22:32:51 2013 (+0200)
+ * Last-Updated: Tue Apr  2 16:48:43 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 28
  */
 
 /* Change Log:
@@ -33,9 +33,12 @@ public:
 #pragma mark -
 #pragma mark Rendering pipeline
 
-public:
+    void initializeGL(void);
     void initializeGL(QGLPainter *painter);
+    void earlyPaintGL(QGLPainter *painter);
+    void      paintGL(void);
     void      paintGL(QGLPainter *painter);
+    void     resizeGL(int width, int height);
 
 #pragma mark -
 #pragma mark Coordinate mapping

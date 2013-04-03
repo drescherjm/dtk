@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr  2 22:53:35 2013 (+0200)
+ * Last-Updated: Wed Apr  3 10:26:13 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 659
+ *     Update #: 815
  */
 
 /* Change Log:
@@ -71,76 +71,40 @@ void dtk3DQuickView::paint(void)
 	d->view->setScene(scene);
     }
 
-    QOpenGLContext *context = QOpenGLContext::currentContext();
-
-    QSurfaceFormat format = context->format();
-
-    if (format.depthBufferSize() != 24) {
-    	qWarning() << Q_FUNC_INFO << "Problem detected with GL format!!";
-    }
-
-    QGLPainter painter;
-    painter.begin();
-
+    auto clearGL = [=]() {
 #if defined(QT_OPENGL_ES)
-    glClearDepthf(1);
+	glClearDepthf(1);
 #else
-    glClearDepth(1);
+	glClearDepth(1);
 #endif
-    glDepthMask(GL_TRUE);
+	glDepthMask(GL_TRUE);
 #if defined(QT_OPENGL_ES)
-    glDepthRangef(0.0f, 1.0f);
+	glDepthRangef(0.0f, 1.0f);
 #else
-    glDepthRange(0.0f, 1.0f);
+	glDepthRange(0.0f, 1.0f);
 #endif
-    glDepthFunc(GL_LESS);
-    glEnable(GL_DEPTH_TEST);
-
-    QColor clearColor(Qt::black);
-    painter.setClearColor(clearColor);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    d->view->resizeGL(this->width(), this->height());
+	glDepthFunc(GL_LESS);
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    };
 
     if(!initialized) {
-	d->view->initializeGL(&painter);
+	QGLPainter painter;
+	painter.begin();
+	clearGL();
+	d->view->resizeGL(this->width(), this->height());
+    	d->view->initializeGL(&painter);
     }
 
-    QGLTexture2D::processPendingResourceDeallocations();
-
-    painter.setEye(QGL::NoEye);
-
-    QRect viewport = mapRectToScene(boundingRect()).toRect();
-    QRect target_rect( (true)? viewport.x():0,
-                       (true)? viewport.y():0,
-                       viewport.width(),
-                       viewport.height() );
-
-    QGLSubsurface surface (painter.currentSurface(), target_rect);
-
-    painter.pushSurface(&surface);
-    d->view->earlyPaintGL(&painter);
-    painter.setCamera(d->view->camera());
-    glDisable(GL_CULL_FACE);
-    d->view->paintGL(&painter);
-    glDisable(GL_CULL_FACE);
-    painter.popSurface();
-    painter.disableEffect();
-}
-
-void dtk3DQuickView::mouseMoveEvent(QMouseEvent *event)
-{
-    d->view->mouseMoveEvent(event);
-}
-
-void dtk3DQuickView::mousePressEvent(QMouseEvent *event)
-{
-    d->view->mousePressEvent(event);
-}
-
-void dtk3DQuickView::mouseReleaseEvent(QMouseEvent *event)
-{
-    d->view->mouseReleaseEvent(event);
+    if(true) {
+	QGLPainter painter;
+	painter.begin();
+	clearGL();
+	d->view->earlyPaintGL(&painter);
+	painter.setCamera(d->view->camera());
+	d->view->paintGL(&painter);
+    }
 }
 
 void dtk3DQuickView::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData& data)
@@ -158,10 +122,4 @@ void dtk3DQuickView::itemChange(QQuickItem::ItemChange change, const QQuickItem:
     }
 
     QQuickItem::itemChange(change, data);
-}
-
-void dtk3DQuickView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
-{
-    if (d->view)
-	d->view->resize(newGeometry.size().toSize());
 }

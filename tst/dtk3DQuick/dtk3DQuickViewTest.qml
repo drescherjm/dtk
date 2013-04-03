@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 23:20:48 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr  2 16:38:44 2013 (+0200)
+ * Last-Updated: Wed Apr  3 10:59:26 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 92
+ *     Update #: 111
  */
 
 /* Change Log:
@@ -16,7 +16,18 @@ import    QtQuick 2.0
 import dtk3DQuick 1.0
 
 
-Quick3DView {    
+Rectangle {
+    
+    id: root;
+
     width: 1024;
     height: 512;
+
+    color: "#ff0000";
+
+    Quick3DView {
+        
+        anchors.fill: parent;
+        anchors.margins: 50;
+    } 
 }

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 21:49:58 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 10:26:20 2013 (+0200)
+ * Last-Updated: Wed Apr  3 11:59:51 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 87
  */
 
 /* Change Log:
@@ -19,7 +19,7 @@
 
 class dtk3DQuickViewPrivate;
 
-class dtk3DQuickView : public QQuickItem, public QOpenGLFunctions
+class dtk3DQuickView : public QQuickPaintedItem
 {
     Q_OBJECT
 
@@ -28,10 +28,7 @@ public:
     ~dtk3DQuickView(void);
     
 protected slots:
-    void paint(void);
-
-protected:
-    void itemChange(ItemChange change, const ItemChangeData &);
+    void paint(QPainter *painter);
 
 private:
     dtk3DQuickViewPrivate *d;

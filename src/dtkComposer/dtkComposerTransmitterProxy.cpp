@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 28 10:13:19 2013 (+0100)
+ * Last-Updated: Fri Mar 29 15:34:40 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 63
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -58,6 +58,8 @@ void dtkComposerTransmitterProxy::setActive(bool active)
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    Q_UNUSED(transmitter);
+
     LinkMap link_map;
 
     foreach(dtkComposerTransmitter *p, d->previous_list) {
@@ -71,6 +73,8 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkCompos
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    Q_UNUSED(transmitter);
+
     LinkMap link_map;
 
     foreach(dtkComposerTransmitter *n, d->next_list) {

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:22:41 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 14:23:10 2013 (+0100)
+ * Last-Updated: Fri Mar 29 15:36:30 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 104
+ *     Update #: 107
  */
 
 /* Change Log:
@@ -26,7 +26,7 @@ public:
     static inline void init(dtkComposerTransmitter& t);
 
 public:
-    static inline bool connect(dtkComposerTransmitter& t);
+    static inline bool enableConnection(dtkComposerTransmitter& t);
 
 public:
     static inline T      data(dtkComposerTransmitter& t);
@@ -43,7 +43,7 @@ public:
     static inline void init(dtkComposerTransmitter& t);
 
 public:
-    static inline bool connect(dtkComposerTransmitter& t);
+    static inline bool enableConnection(dtkComposerTransmitter& t);
 
 public:
     static inline T      *data(dtkComposerTransmitter& t);

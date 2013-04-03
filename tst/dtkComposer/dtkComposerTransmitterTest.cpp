@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 14:34:25 2013 (+0100)
+ * Last-Updated: Wed Apr  3 12:16:27 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 756
+ *     Update #: 804
  */
 
 /* Change Log:
@@ -210,7 +210,7 @@ void dtkComposerTransmitterTestCase::init(void)
 
 }
 
-void dtkComposerTransmitterTestCase::testTransmitterAtomicType(void)
+void dtkComposerTransmitterTestCase::testAtomicType(void)
 {
     // Template transmitters
     dtkComposerTransmitterEmitter<int>     e_int;
@@ -299,7 +299,7 @@ void dtkComposerTransmitterTestCase::testTransmitterAtomicType(void)
     r_var.disconnect(&e_str);    
 }
 
-void dtkComposerTransmitterTestCase::testTransmitterComplexType(void)
+void dtkComposerTransmitterTestCase::testComplexType(void)
 {
     int count = 0;
 
@@ -459,7 +459,7 @@ void dtkComposerTransmitterTestCase::testTransmitterComplexType(void)
     }
 }
 
-void dtkComposerTransmitterTestCase::testTransmitterLinks(void)
+void dtkComposerTransmitterTestCase::testLinks(void)
 {
     dtkComposerTransmitterEmitter<CoreData *>  e_0;
     dtkComposerTransmitterProxy p0;
@@ -504,6 +504,37 @@ void dtkComposerTransmitterTestCase::testTransmitterLinks(void)
     dtkComposerTransmitterReceiver<ObjectData *> r_obj;
     dtkComposerTransmitter::onTransmittersConnected(&p2, &r_obj, valid_list, invalid_list);
     QVERIFY(valid_list.isEmpty() && !invalid_list.isEmpty());
+}
+
+void dtkComposerTransmitterTestCase::testProxyLoop(void)
+{
+    dtkComposerTransmitterEmitter<qlonglong>  e_0;
+    dtkComposerTransmitterProxyLoop           p_0;
+    dtkComposerTransmitterReceiver<qlonglong> r_0;
+    dtkComposerTransmitterProxyLoop           p_1;
+    dtkComposerTransmitterEmitter<qlonglong>  e_1;
+    dtkComposerTransmitterReceiver<qlonglong> r_1;
+
+    QVERIFY(p_0.connect(&e_0));
+    QVERIFY(r_0.connect(&p_0));
+    QVERIFY(p_1.connect(&e_1));
+    QVERIFY(r_1.connect(&p_1));
+
+    p_0.setTwin(&p_1);
+
+    qlonglong i = 0;
+    e_0.setData(i);
+
+    p_0.disableLoopMode();
+    while(i < 10012) {
+	qlonglong value = r_0.data();
+	value += 1;
+	e_1.setData(value);
+	p_0.enableLoopMode();
+	++i;
+    }
+
+    QCOMPARE(i, r_1.data());
 }
 
 void dtkComposerTransmitterTestCase::cleanupTestCase(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/23 09:24:08
  * Version: $Id$
- * Last-Updated: 2013 Mon Jan 14 12:33:39 (+0100)
+ * Last-Updated: Wed Apr  3 10:48:53 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 51
+ *     Update #: 53
  */
 
 /* Commentary:
@@ -20,9 +20,6 @@
 #include "dtkComposerNodeStringOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
-
-#include <dtkLog/dtkLog.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeStringOperatorUnary

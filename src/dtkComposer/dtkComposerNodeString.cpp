@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2013 Mon Jan 14 12:33:32 (+0100)
+ * Last-Updated: Wed Apr  3 10:48:15 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 62
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 class dtkComposerNodeStringPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver;
+    dtkComposerTransmitterReceiver<QString> receiver;
 
 public:
     dtkComposerTransmitterEmitter<QString> emitter;
@@ -43,12 +43,6 @@ public:
 
 dtkComposerNodeString::dtkComposerNodeString(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-
-    variant_list << dtkComposerTypeInfo<int*>::type() << dtkComposerTypeInfo<uint*>::type() << dtkComposerTypeInfo<qlonglong*>::type() << dtkComposerTypeInfo<qulonglong*>::type() 
-                 << dtkComposerTypeInfo<bool*>::type() << dtkComposerTypeInfo<QString*>::type() << dtkComposerTypeInfo<double*>::type();
-
-    d->receiver.setDataTypes(variant_list);
     this->appendReceiver(&(d->receiver));
 
     this->appendEmitter(&(d->emitter));
@@ -64,7 +58,7 @@ dtkComposerNodeString::~dtkComposerNodeString(void)
 void dtkComposerNodeString::run(void)
 {
     if (!d->receiver.isEmpty())
-        d->value = d->receiver.data<QString>();
+        d->value = d->receiver.data();
 
     d->emitter.setData(d->value);
 }

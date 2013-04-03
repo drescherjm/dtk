@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 12:18:35 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 10:45:20 2013 (+0100)
+ * Last-Updated: Wed Apr  3 12:03:53 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 39
+ *     Update #: 41
  */
 
 /* Change Log:
@@ -109,6 +109,14 @@ void dtkSetLoggingRulesFile(const QString &path);
 // ///////////////////////////////////////////////////////////////////
 
 #define dtkTrace(category)						             \
+    for (bool enabled = category.isEnabled(QtDebugMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).debug()
+
+// ///////////////////////////////////////////////////////////////////
+// dtkInfo
+// ///////////////////////////////////////////////////////////////////
+
+#define dtkInfo(category)						             \
     for (bool enabled = category.isEnabled(QtDebugMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).debug()
 

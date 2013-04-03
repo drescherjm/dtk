@@ -15,14 +15,23 @@
 
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog>
+
+// ///////////////////////////////////////////////////////////////////
+// Log categories
+// ///////////////////////////////////////////////////////////////////
+
+DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_LOGGER, "fr.inria.dtk.composer.logger")
+
+// ///////////////////////////////////////////////////////////////////
+// 
+// ///////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeLoggerPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver;
+    dtkComposerTransmitterReceiverVariant   receiver;
     dtkComposerTransmitterReceiver<QString> receiver_header;
     dtkComposerTransmitterReceiver<QString> receiver_level;
 
@@ -44,37 +53,47 @@ dtkComposerNodeLogger::~dtkComposerNodeLogger(void)
 
 void dtkComposerNodeLogger::run(void)
 {
-    QStringList descriptions = d->receiver.allDataDescription();
-    QStringList identifiers  = d->receiver.allDataIdentifier();
+    QVariantList list = d->receiver.allData();
 
+    QStringList identifiers;
+    QStringList descriptions;
+    QString str;
+    foreach (QVariant v, list) {
+	identifiers << v.typeName();
+	QDataStream ds;
+	ds << v;
+	ds >> str;
+	descriptions << str;
+	str.clear();
+    }
 
     for(int i = 0; i < descriptions.count(); ++i) {
 
         QString output;
 
         if (!d->receiver_header.isEmpty())
-            output += (d->receiver_header.data()) +" ";
+            output += (d->receiver_header.data()) + " ";
 
         output += identifiers.at(i) + ": " + descriptions.at(i);
 
         if (!d->receiver_level.isEmpty()) {
             QString level = d->receiver_level.data();
             if (level == "trace")
-                dtkTrace() <<  output;
+                dtkTrace(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
             else if  (level == "debug")
-                dtkDebug() <<  output;
+                dtkDebug(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
             else if  (level == "info")
-                dtkInfo() <<  output;
+                dtkInfo(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
             else if  (level == "warn")
-                dtkWarn() <<  output;
+                dtkWarning(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
             else if  (level == "error")
-                dtkError() <<  output;
+                dtkError(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
             else if  (level == "fatal")
-                dtkFatal() <<  output;
+                dtkCritical(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
             else
-                dtkInfo() <<  output;
+                dtkInfo(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
         } else {
-            dtkInfo() <<  output;
+            dtkInfo(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
         }
     }
 }

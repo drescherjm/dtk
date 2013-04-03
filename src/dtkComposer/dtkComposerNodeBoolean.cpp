@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 25 09:05:06 2013 (+0100)
+ * Last-Updated: Tue Apr  2 12:58:25 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 56
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 class dtkComposerNodeBooleanPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVariant receiver;
+    dtkComposerTransmitterReceiver<bool> receiver;
 
 public:    
     dtkComposerTransmitterEmitter<bool> emitter;
@@ -43,15 +43,10 @@ public:
 
 dtkComposerNodeBoolean::dtkComposerNodeBoolean(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeBooleanPrivate)
 {
-    dtkComposerTransmitter::TypeList type_list;
-    type_list << QMetaType::Bool;// << dtkComposerTypeInfo<int*>::type() << dtkComposerTypeInfo<uint*>::type() 
-    //<< dtkComposerTypeInfo<qlonglong*>::type() << dtkComposerTypeInfo<double*>::type() << dtkComposerTypeInfo<QString*>::type();
-
-    d->receiver.setTypeList(type_list);
     this->appendReceiver(&d->receiver);
+    this->appendEmitter(&d->emitter);
 
     d->value = false;
-    this->appendEmitter(&d->emitter);
 }
 
 dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
@@ -64,7 +59,7 @@ dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
 void dtkComposerNodeBoolean::run(void)
 {
     if (!d->receiver.isEmpty())
-        d->value = (d->receiver.data<bool>());
+        d->value = (d->receiver.data());
 
     d->emitter.setData(d->value);
 }

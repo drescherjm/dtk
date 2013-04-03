@@ -33,7 +33,7 @@ public:
         Emitter,
         Receiver,
         Proxy,
-        Variant
+        ProxyLoop
     };
 
 public:
@@ -119,6 +119,8 @@ public:
     virtual bool    connect(dtkComposerTransmitter *transmitter);
     virtual bool disconnect(dtkComposerTransmitter *transmitter);
 
+    virtual bool enableConnection(dtkComposerTransmitter *transmitter);
+
 public:
     void appendReceiver(dtkComposerTransmitter *receiver);
     void removeReceiver(dtkComposerTransmitter *receiver);
@@ -142,6 +144,10 @@ public:
 
 public:
     template <typename T> friend class dtkComposerTransmitterHandler;
+
+private:
+    friend QDebug operator << (QDebug debug, const dtkComposerTransmitter& transmitter);
+    friend QDebug operator << (QDebug debug,       dtkComposerTransmitter *transmitter);
 
 protected:
     dtkComposerTransmitterPrivate *d;

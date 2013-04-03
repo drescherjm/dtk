@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 14:25:27 2013 (+0100)
+ * Last-Updated: Fri Mar 29 15:36:48 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 270
+ *     Update #: 272
  */
 
 /* Change Log:
@@ -24,7 +24,7 @@ template <typename T> void dtkComposerTransmitterHandler<T>::init(dtkComposerTra
     t.d->variant = QVariant(t.d->type_list.first(), 0);
 }
 
-template <typename T> bool dtkComposerTransmitterHandler<T>::connect(dtkComposerTransmitter& t)
+template <typename T> bool dtkComposerTransmitterHandler<T>::enableConnection(dtkComposerTransmitter& t)
 {
     bool enable_connection = true;
     QVariant var = QVariant(qMetaTypeId<T>(reinterpret_cast<T *>(0)), 0);
@@ -60,7 +60,7 @@ template <typename T> void dtkComposerTransmitterHandler<T *>::init(dtkComposerT
     t.d->variant = QVariant::fromValue(ptr);
 }
 
-template <typename T> bool dtkComposerTransmitterHandler<T *>::connect(dtkComposerTransmitter& t)
+template <typename T> bool dtkComposerTransmitterHandler<T *>::enableConnection(dtkComposerTransmitter& t)
 {
     bool enable_connection = true;
     T *ptr = new T();

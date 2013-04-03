@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Thu Mar 28 16:42:08 2013 (+0100)
+## Last-Updated: Wed Apr  3 11:05:16 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 112
+##     Update #: 131
 ######################################################################
 ## 
 ### Change Log:
@@ -48,8 +48,8 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeArrayScalar.h
   # dtkComposerNodeArrayScalarExtractor.h
   # dtkComposerNodeArrayScalarOperatorModifier.h
-  # dtkComposerNodeBoolean.h
-  # dtkComposerNodeBooleanOperator.h
+  dtkComposerNodeBoolean.h
+  dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   # dtkComposerNodeConstants.h
   dtkComposerNodeControl.h
@@ -62,12 +62,12 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeControlWhile.h
   # dtkComposerNodeData.h
   # dtkComposerNodeFile.h
-  # dtkComposerNodeInteger.h
+  dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   # dtkComposerNodeLeafData.h
   # dtkComposerNodeLeafProcess.h
   # dtkComposerNodeLeafView.h
-  # dtkComposerNodeLogger.h
+  dtkComposerNodeLogger.h
   # dtkComposerNodeMatrixSquareReal.h
   # dtkComposerNodeMatrixSquareRealExtractor.h
   # dtkComposerNodeMatrixSquareRealOperatorUnary.h
@@ -79,15 +79,15 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeMetaVector3DArray.h
   # dtkComposerNodeMetaVector3DArrayAppend.h
   # dtkComposerNodeMetaVector3DArrayExtractor.h
-  # dtkComposerNodeNumberOperator.h
+  dtkComposerNodeNumberOperator.h
   # dtkComposerNodeProcess.h
   # dtkComposerNodeProxy.h
   # dtkComposerNodeQuaternion.h
   # dtkComposerNodeQuaternionOperatorUnary.h
   # dtkComposerNodeQuaternionOperatorBinary.h
-  # dtkComposerNodeReal.h
-  # dtkComposerNodeString.h
-  # dtkComposerNodeStringOperator.h
+  dtkComposerNodeReal.h
+  dtkComposerNodeString.h
+  dtkComposerNodeStringOperator.h
   # dtkComposerNodeVector3D.h
   # dtkComposerNodeVector3DOperatorUnary.h
   # dtkComposerNodeVector3DOperatorBinary.h
@@ -128,11 +128,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterHandler.h
   dtkComposerTransmitterHandler.tpp
   dtkComposerTransmitterProxy.h
+  dtkComposerTransmitterProxyLoop.h
+  dtkComposerTransmitterProxyLoop.tpp
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
-  # dtkComposerTransmitterVariant.h
-  # dtkComposerType.h
-  # dtkComposerVariant.h
   # dtkComposerView.h
   # dtkComposerReader.h
   # dtkComposerWriter.h
@@ -167,8 +166,8 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeArrayScalar.cpp
   # dtkComposerNodeArrayScalarExtractor.cpp
   # dtkComposerNodeArrayScalarOperatorModifier.cpp
-  # dtkComposerNodeBoolean.cpp
-  # dtkComposerNodeBooleanOperator.cpp
+  dtkComposerNodeBoolean.cpp
+  dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
   # dtkComposerNodeConstants.cpp
   dtkComposerNodeControl.cpp
@@ -181,12 +180,12 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeControlWhile.cpp
   # dtkComposerNodeData.cpp
   # dtkComposerNodeFile.cpp
-  # dtkComposerNodeInteger.cpp
+  dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
   # dtkComposerNodeLeafData.cpp
   # dtkComposerNodeLeafProcess.cpp
   # dtkComposerNodeLeafView.cpp
-  # dtkComposerNodeLogger.cpp
+  dtkComposerNodeLogger.cpp
   # dtkComposerNodeMatrixSquareReal.cpp
   # dtkComposerNodeMatrixSquareRealExtractor.cpp
   # dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
@@ -198,15 +197,15 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeMetaVector3DArray.cpp
   # dtkComposerNodeMetaVector3DArrayAppend.cpp
   # dtkComposerNodeMetaVector3DArrayExtractor.cpp
-  # dtkComposerNodeNumberOperator.cpp
+  dtkComposerNodeNumberOperator.cpp
   # dtkComposerNodeProcess.cpp
   # dtkComposerNodeProxy.cpp
   # dtkComposerNodeQuaternion.cpp
   # dtkComposerNodeQuaternionOperatorUnary.cpp
   # dtkComposerNodeQuaternionOperatorBinary.cpp
-  # dtkComposerNodeReal.cpp
-  # dtkComposerNodeString.cpp
-  # dtkComposerNodeStringOperator.cpp
+  dtkComposerNodeReal.cpp
+  dtkComposerNodeString.cpp
+  dtkComposerNodeStringOperator.cpp
   # dtkComposerNodeVector3D.cpp
   # dtkComposerNodeVector3DOperatorUnary.cpp
   # dtkComposerNodeVector3DOperatorBinary.cpp
@@ -244,7 +243,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterReceiver.cpp
   dtkComposerTransmitterProxy.cpp
-  # dtkComposerTransmitterVariant.cpp
+  dtkComposerTransmitterProxyLoop.cpp
   # dtkComposerView.cpp
   # dtkComposerView.cpp
   # dtkComposerReader.cpp

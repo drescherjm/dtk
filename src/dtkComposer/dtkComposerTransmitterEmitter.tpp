@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Mar 29 14:24:04 2013 (+0100)
+ * Last-Updated: Fri Mar 29 15:37:14 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 400
+ *     Update #: 402
  */
 
 /* Commentary: 
@@ -86,7 +86,7 @@ template <typename T> int dtkComposerTransmitterEmitter<T>::type(void) const
     return d->type_list.first();
 }
 
-template <typename T> bool dtkComposerTransmitterEmitter<T>::connect(dtkComposerTransmitter *transmitter)
+template <typename T> bool dtkComposerTransmitterEmitter<T>::enableConnection(dtkComposerTransmitter *transmitter)
 {
-    return dtkComposerTransmitterHandler<T>::connect(*transmitter);
+    return dtkComposerTransmitterHandler<T>::enableConnection(*transmitter);
 }

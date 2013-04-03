@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2013 Wed Jan 16 11:23:44 (+0100)
+ * Last-Updated: Wed Apr  3 10:17:09 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 651
+ *     Update #: 742
  */
 
 /* Commentary:
@@ -20,13 +20,52 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
 
-#include <dtkLog/dtkLog.h>
-
-#include <dtkMath/dtkMath.h>
 #include <QtCore/qmath.h>
 #include <math.h>
+
+// ///////////////////////////////////////////////////////////////////
+// 
+// ///////////////////////////////////////////////////////////////////
+
+#if !defined(Q_WS_WIN)
+#include <inttypes.h>
+#else
+#define int32_t qint32
+#define int64_t qint64
+#endif
+
+bool dtkComposerAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
+{
+    if (A == B)
+        return true;
+
+    int32_t *AA = reinterpret_cast<int32_t*>(&A);
+    int32_t *BB = reinterpret_cast<int32_t*>(&B);
+
+    int32_t intDiff = abs(*AA) - abs(*BB);
+
+    if (intDiff <= maxUlps)
+        return true;
+
+    return false;
+}
+
+bool dtkComposerAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
+{
+    if (A == B)
+        return true; 
+
+    int64_t *AA = reinterpret_cast<int64_t*>(&A);
+    int64_t *BB = reinterpret_cast<int64_t*>(&B);
+
+    int64_t intDiff = labs(*AA - *BB);
+
+    if (intDiff <= maxUlps)
+        return true;
+
+    return false;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeNumberOperatorUnary
@@ -35,10 +74,10 @@
 class dtkComposerNodeNumberOperatorUnaryPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver;
+    dtkComposerTransmitterReceiverVariant receiver;
 
 public:
-    dtkComposerTransmitterVariant emitter;
+    dtkComposerTransmitterEmitterVariant emitter;
 
 public:
     qlonglong value_i;
@@ -47,13 +86,13 @@ public:
 
 dtkComposerNodeNumberOperatorUnary::dtkComposerNodeNumberOperatorUnary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorUnaryPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-    variant_list << dtkComposerTypeInfo<qlonglong>::type() << dtkComposerTypeInfo<double>::type();
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver.setDataTypes(variant_list);
+    d->receiver.setTypeList(type_list);
     this->appendReceiver(&(d->receiver));
 
-    d->emitter.setDataTypes(variant_list);
+    d->emitter.setTypeList(type_list);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -71,11 +110,11 @@ dtkComposerNodeNumberOperatorUnary::~dtkComposerNodeNumberOperatorUnary(void)
 class dtkComposerNodeNumberOperatorBinaryPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_lhs;
-    dtkComposerTransmitterVariant receiver_rhs;
+    dtkComposerTransmitterReceiverVariant receiver_lhs;
+    dtkComposerTransmitterReceiverVariant receiver_rhs;
 
 public:
-    dtkComposerTransmitterVariant emitter;
+    dtkComposerTransmitterEmitterVariant emitter;
 
 public:
     qlonglong value_i;
@@ -84,16 +123,16 @@ public:
 
 dtkComposerNodeNumberOperatorBinary::dtkComposerNodeNumberOperatorBinary(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberOperatorBinaryPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-    variant_list << dtkComposerTypeInfo<qlonglong>::type() << dtkComposerTypeInfo<double>::type();
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setDataTypes(variant_list);
+    d->receiver_lhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setDataTypes(variant_list);
+    d->receiver_rhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->emitter.setDataTypes(variant_list);
+    d->emitter.setTypeList(type_list);
     this->appendEmitter(&(d->emitter));
 }
 
@@ -111,8 +150,8 @@ dtkComposerNodeNumberOperatorBinary::~dtkComposerNodeNumberOperatorBinary(void)
 class dtkComposerNodeNumberComparatorPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_lhs;
-    dtkComposerTransmitterVariant receiver_rhs;
+    dtkComposerTransmitterReceiverVariant receiver_lhs;
+    dtkComposerTransmitterReceiverVariant receiver_rhs;
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
@@ -120,13 +159,13 @@ public:
 
 dtkComposerNodeNumberComparator::dtkComposerNodeNumberComparator(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberComparatorPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-    variant_list << dtkComposerTypeInfo<qlonglong>::type() << dtkComposerTypeInfo<double>::type();
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setDataTypes(variant_list);
+    d->receiver_lhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setDataTypes(variant_list);
+    d->receiver_rhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_rhs));
 
     this->appendEmitter(&(d->emitter));
@@ -146,9 +185,9 @@ dtkComposerNodeNumberComparator::~dtkComposerNodeNumberComparator(void)
 class dtkComposerNodeNumberAlmosteqPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_lhs;
-    dtkComposerTransmitterVariant receiver_rhs;
-    dtkComposerTransmitterVariant receiver_eps;
+    dtkComposerTransmitterReceiverVariant receiver_lhs;
+    dtkComposerTransmitterReceiverVariant receiver_rhs;
+    dtkComposerTransmitterReceiverVariant receiver_eps;
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
@@ -159,16 +198,16 @@ public:
 
 dtkComposerNodeNumberAlmosteq::dtkComposerNodeNumberAlmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberAlmosteqPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-    variant_list << dtkComposerTypeInfo<qlonglong>::type() << dtkComposerTypeInfo<double>::type();
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setDataTypes(variant_list);
+    d->receiver_lhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setDataTypes(variant_list);
+    d->receiver_rhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->receiver_eps.setDataTypes(variant_list);
+    d->receiver_eps.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_eps));
 
     d->value = false;
@@ -184,14 +223,17 @@ dtkComposerNodeNumberAlmosteq::~dtkComposerNodeNumberAlmosteq(void)
 
 void dtkComposerNodeNumberAlmosteq::run(void)
 {
-    dtkComposerVariant lhs_var = d->receiver_lhs.variant();
-    dtkComposerVariant rhs_var = d->receiver_rhs.variant();
+    QVariant lhs_var = d->receiver_lhs.variant();
+    QVariant rhs_var = d->receiver_rhs.variant();
 
-    if (lhs_var.userType() == QMetaType::LongLong && rhs_var.userType() == QMetaType::LongLong) {
-        d->value = ( lhs_var.value<qlonglong>() == rhs_var.value<qlonglong>() );
+    if (lhs_var.userType() == QMetaType::Double || rhs_var.userType() == QMetaType::Double) {
+	d->value = dtkComposerAlmostEqualUlpsSimple(lhs_var.value<double>(), rhs_var.value<double>(), d->receiver_eps.data<double>());
+
+    } else if (lhs_var.userType() == QMetaType::Float || rhs_var.userType() == QMetaType::Float) {
+	d->value = dtkComposerAlmostEqualUlpsSimple(lhs_var.value<float>(), rhs_var.value<float>(), d->receiver_eps.data<float>());
 
     } else {
-        d->value = dtkAlmostEqualUlpsSimple(lhs_var.value<double>(), rhs_var.value<double>(), d->receiver_eps.data<double>());
+        d->value = ( lhs_var.value<qlonglong>() == rhs_var.value<qlonglong>() );
 
     }
     d->emitter.setData(d->value);
@@ -204,9 +246,9 @@ void dtkComposerNodeNumberAlmosteq::run(void)
 class dtkComposerNodeNumberNotalmosteqPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_lhs;
-    dtkComposerTransmitterVariant receiver_rhs;
-    dtkComposerTransmitterVariant receiver_eps;
+    dtkComposerTransmitterReceiverVariant receiver_lhs;
+    dtkComposerTransmitterReceiverVariant receiver_rhs;
+    dtkComposerTransmitterReceiverVariant receiver_eps;
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
@@ -217,16 +259,16 @@ public:
 
 dtkComposerNodeNumberNotalmosteq::dtkComposerNodeNumberNotalmosteq(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeNumberNotalmosteqPrivate)
 {
-    QVector<const dtkComposerType*> variant_list;
-    variant_list << dtkComposerTypeInfo<qlonglong>::type() << dtkComposerTypeInfo<double>::type();
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << QMetaType::LongLong << QMetaType::Double;
 
-    d->receiver_lhs.setDataTypes(variant_list);
+    d->receiver_lhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_lhs));
 
-    d->receiver_rhs.setDataTypes(variant_list);
+    d->receiver_rhs.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_rhs));
 
-    d->receiver_eps.setDataTypes(variant_list);
+    d->receiver_eps.setTypeList(type_list);
     this->appendReceiver(&(d->receiver_eps));
 
     d->value = false;
@@ -242,14 +284,17 @@ dtkComposerNodeNumberNotalmosteq::~dtkComposerNodeNumberNotalmosteq(void)
 
 void dtkComposerNodeNumberNotalmosteq::run(void)
 {
-    dtkComposerVariant lhs_var = d->receiver_lhs.variant();
-    dtkComposerVariant rhs_var = d->receiver_rhs.variant();
+    QVariant lhs_var = d->receiver_lhs.variant();
+    QVariant rhs_var = d->receiver_rhs.variant();
 
-    if (lhs_var.userType() == QMetaType::LongLong && rhs_var.userType() == QMetaType::LongLong) {
-        d->value = ( lhs_var.value<qlonglong>() != rhs_var.value<qlonglong>() );
+    if (lhs_var.userType() == QMetaType::Double || rhs_var.userType() == QMetaType::Double) {
+        d->value = !(dtkComposerAlmostEqualUlpsSimple(lhs_var.value<double>(), rhs_var.value<double>(), d->receiver_eps.data<double>()));
+
+    } else if (lhs_var.userType() == QMetaType::Float || rhs_var.userType() == QMetaType::Float) {
+        d->value = !(dtkComposerAlmostEqualUlpsSimple(lhs_var.value<float>(), rhs_var.value<float>(), d->receiver_eps.data<float>()));
 
     } else {
-        d->value = !(dtkAlmostEqualUlpsSimple(lhs_var.value<double>(), rhs_var.value<double>(), d->receiver_eps.data<double>()));
+        d->value = ( lhs_var.value<qlonglong>() != rhs_var.value<qlonglong>() );
 
     }
     d->emitter.setData(d->value);
@@ -261,13 +306,13 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
-    if (var.userType() == QMetaType::LongLong) {
-        d->emitter.setData<qlonglong>(var.value<qlonglong>() + 1);
+    if (var.userType() == QMetaType::Double || var.userType() == QMetaType::Float) {
+        d->emitter.setData<double>(var.value<double>() + 1);
 
     } else {
-        d->emitter.setData<double>(var.value<double>() + 1);
+        d->emitter.setData<qlonglong>(var.value<qlonglong>() + 1);
 
     }
 }
@@ -278,13 +323,13 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
-    if (var.userType() == QMetaType::LongLong) {
-        d->emitter.setData<qlonglong>(var.value<qlonglong>() - 1);
+    if (var.userType() == QMetaType::Double || var.userType() == QMetaType::Float) {
+        d->emitter.setData<double>(var.value<double>() - 1);
 
     } else {
-        d->emitter.setData<double>(var.value<double>() - 1);
+        d->emitter.setData<qlonglong>(var.value<qlonglong>() - 1);
 
     } 
 }
@@ -305,15 +350,15 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
-    if (var.userType() == QMetaType::LongLong) {
-        qlonglong value = var.value<qlonglong>();
-        d->emitter.setData<qlonglong>(value * value);
-
-    } else {
+    if (var.userType() == QMetaType::Double || var.userType() == QMetaType::Float) {
         double value = var.value<double>();
         d->emitter.setData<double>(value * value);
+
+    } else {
+        qlonglong value = var.value<qlonglong>();
+        d->emitter.setData<qlonglong>(value * value);
 
     }
 }
@@ -405,7 +450,7 @@ void dtkComposerNodeNumberOperatorUnaryAtan::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDeg2Rad::run(void)
 {
-    d->emitter.setData<double>( dtkDeg2Rad( d->receiver.data<double>() ) );
+    d->emitter.setData<double>( M_PI / 180. * d->receiver.data<double>() );
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -414,7 +459,7 @@ void dtkComposerNodeNumberOperatorUnaryDeg2Rad::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRad2Deg::run(void)
 {
-    d->emitter.setData<double>( dtkRad2Deg( d->receiver.data<double>() ) );
+    d->emitter.setData<double>( 180. / M_PI * d->receiver.data<double>() );
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -441,7 +486,7 @@ void dtkComposerNodeNumberOperatorUnaryOpp::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
     if (var.userType() == QMetaType::Double) {
         d->emitter.setData<qlonglong>( qCeil( var.value<double>() ) );
@@ -457,7 +502,7 @@ void dtkComposerNodeNumberOperatorUnaryCeil::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
     if (var.userType() == QMetaType::Double) {
         d->emitter.setData<qlonglong>( qFloor( var.value<double>() ) );
@@ -473,7 +518,7 @@ void dtkComposerNodeNumberOperatorUnaryFloor::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
     if (var.userType() == QMetaType::Double) {
         d->emitter.setData<qlonglong>( qRound( var.value<double>() ) );
@@ -489,7 +534,7 @@ void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 {
-    dtkComposerVariant var = d->receiver.variant();
+    QVariant var = d->receiver.variant();
 
     if (var.userType() == QMetaType::Double) {
         d->emitter.setData<double>( qAbs( var.value<double>() ) );

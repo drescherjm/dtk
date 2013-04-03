@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:19:44 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 28 16:40:06 2013 (+0100)
+ * Last-Updated: Wed Apr  3 12:15:39 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 14
+ *     Update #: 17
  */
 
 /* Change Log:
@@ -25,9 +25,10 @@ private slots:
     void init(void);
 
 private slots:
-    void testTransmitterAtomicType(void);
-    void testTransmitterComplexType(void);
-    void testTransmitterLinks(void);
+    void testAtomicType(void);
+    void testComplexType(void);
+    void testLinks(void);
+    void testProxyLoop(void);
 
 private slots:
     void cleanupTestCase(void);

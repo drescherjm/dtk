@@ -327,6 +327,17 @@ bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
     return false;
 }
 
+//! 
+/*! 
+ *  
+ */
+bool dtkComposerTransmitter::enableConnection(dtkComposerTransmitter *transmitter)
+{
+    Q_UNUSED(transmitter);
+
+    return false;
+}
+
 //! Finds all emitters connected to \a transmitter.
 /*! 
  *  All links from every emitter found to \a transmitter are stored in
@@ -462,7 +473,7 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter: " << transmitter.kindName() << " " << const_cast<dtkComposerTransmitter&>(transmitter).variant().typeName();
+    debug.nospace() << "dtkComposerTransmitter: " << transmitter.kindName() << " " << const_cast<dtkComposerTransmitter&>(transmitter).d->variant.typeName();
     
     return debug.space();
 }
@@ -473,7 +484,7 @@ QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
-    debug.nospace() << "dtkComposerTransmitter: " << transmitter->kindName() << " " << transmitter->variant().typeName();
+    debug.nospace() << "dtkComposerTransmitter: " << transmitter->kindName() << " " << transmitter->d->variant.typeName();
     
     return debug.space();
 }

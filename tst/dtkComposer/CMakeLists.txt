@@ -3,9 +3,9 @@
 ## Author: Thibaud Kloczko
 ## Created: Mon Mar 25 11:03:20 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Mar 25 12:17:58 2013 (+0100)
+## Last-Updated: Wed Apr  3 12:20:44 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 14
+##     Update #: 20
 ######################################################################
 ## 
 ### Change Log:
@@ -19,9 +19,11 @@ project(dtkComposerTest)
 ## ###################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkComposerNodeTest.h
   dtkComposerTransmitterTest.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkComposerNodeTest.cpp
   dtkComposerTransmitterTest.cpp)
 
 ## ###################################################################
@@ -58,4 +60,5 @@ target_link_libraries(${PROJECT_NAME} dtkLog)
 ## Test rules
 ## ###################################################################
 
+add_test(dtkComposerNodeTest        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkComposerTest dtkComposerNodeTest)
 add_test(dtkComposerTransmitterTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkComposerTest dtkComposerTransmitterTest)

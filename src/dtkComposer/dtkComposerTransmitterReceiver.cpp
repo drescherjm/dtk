@@ -3,15 +3,16 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 17:01:02 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 13:48:18 2013 (+0100)
+ * Last-Updated: Fri Mar 29 15:38:43 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 181
+ *     Update #: 203
  */
 
 /* Change Log:
  * 
  */
 
+#include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterReceiver.h"
 
 // ///////////////////////////////////////////////////////////////////
@@ -21,12 +22,12 @@
 dtkComposerTransmitterReceiverBase::dtkComposerTransmitterReceiverBase(dtkComposerNode *parent) : dtkComposerTransmitter(parent)
 {
 
-};
+}
 
 dtkComposerTransmitterReceiverBase::~dtkComposerTransmitterReceiverBase(void)
 {
 
-};
+}
 
 dtkComposerTransmitter::Kind dtkComposerTransmitterReceiverBase::kind(void) const
 {
@@ -42,9 +43,9 @@ bool dtkComposerTransmitterReceiverBase::connect(dtkComposerTransmitter *transmi
 {
     bool enable_connection = false;
 
-    if (transmitter->kind() == Emitter && !d->emitters.contains(transmitter)) {
+    if (!d->emitters.contains(transmitter)) {
 
-	enable_connection = transmitter->connect(this);
+	enable_connection = transmitter->enableConnection(this);
 
 	if (enable_connection) {
 	    d->emitters << transmitter;
@@ -54,7 +55,7 @@ bool dtkComposerTransmitterReceiverBase::connect(dtkComposerTransmitter *transmi
     }
 
     return enable_connection;
-};
+}
 
 bool dtkComposerTransmitterReceiverBase::disconnect(dtkComposerTransmitter *transmitter)
 {
@@ -72,10 +73,12 @@ bool dtkComposerTransmitterReceiverBase::disconnect(dtkComposerTransmitter *tran
     }
 
     return disable_connection;
-};
+}
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterReceiverBase::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
+    Q_UNUSED(transmitter);
+
     LinkMap link_map;
     foreach(dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);
@@ -90,9 +93,9 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterReceiverBase::rightLinks(d
 dtkComposerTransmitterReceiverVariant::dtkComposerTransmitterReceiverVariant(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
 {
 
-};
+}
 
 dtkComposerTransmitterReceiverVariant::~dtkComposerTransmitterReceiverVariant(void)
 {
 
-};
+}

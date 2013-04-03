@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 21:49:58 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr  2 17:00:22 2013 (+0200)
+ * Last-Updated: Tue Apr  2 21:42:38 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 60
+ *     Update #: 72
  */
 
 /* Change Log:
@@ -29,10 +29,15 @@ public:
     
 protected slots:
     void paint(void);
-    void sync(void);
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 protected:
     void itemChange(ItemChange change, const ItemChangeData &);
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
 
 private:
     dtk3DQuickViewPrivate *d;

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr  2 17:03:37 2013 (+0200)
+ * Last-Updated: Tue Apr  2 22:53:35 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 488
+ *     Update #: 659
  */
 
 /* Change Log:
@@ -18,9 +18,14 @@
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLPainter>
+#include <Qt3D/QGLSubsurface>
 #include <Qt3D/QGLTeapot>
 
+#if defined(Q_OS_MAC)
 #include <OpenGL/gl.h>
+#else
+#include <Gl/gl.h>
+#endif
 
 class dtk3DQuickViewPrivate
 {
@@ -32,6 +37,8 @@ dtk3DQuickView::dtk3DQuickView(QQuickItem *parent) : QQuickItem(parent), d(new d
 {
     d->view = NULL;
 
+    this->setAcceptedMouseButtons(Qt::LeftButton);
+    this->setAcceptHoverEvents(true);
     this->setFlag(QQuickItem::ItemHasContents, true);
 }
 
@@ -42,17 +49,18 @@ dtk3DQuickView::~dtk3DQuickView(void)
 
 void dtk3DQuickView::paint(void)
 {
-    QGLPainter painter;
-    painter.begin(this->window()->openglContext());
+    bool initialized = true;
 
     if(!d->view) {
 
-	QGLBuilder *builder = new QGLBuilder;
-	*builder << QGL::Smooth;
-	*builder << QGLTeapot();
+	initialized = false;
+
+	QGLBuilder builder;
+	builder << QGL::Smooth;
+	builder << QGLTeapot();
     
 	dtk3DItem *teapot = new dtk3DItem;
-	teapot->addNode(builder->finalizedSceneNode());
+	teapot->addNode(builder.finalizedSceneNode());
 	teapot->setEffect(QGL::LitMaterial);
 	teapot->setColor(Qt::green);
 
@@ -61,58 +69,83 @@ void dtk3DQuickView::paint(void)
 	
 	d->view = new dtk3DView;
 	d->view->setScene(scene);
-	d->view->resize(this->window()->size());
+    }
 
+    QOpenGLContext *context = QOpenGLContext::currentContext();
 
-	// -- here goes initializeGL
+    QSurfaceFormat format = context->format();
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
+    if (format.depthBufferSize() != 24) {
+    	qWarning() << Q_FUNC_INFO << "Problem detected with GL format!!";
+    }
+
+    QGLPainter painter;
+    painter.begin();
 
 #if defined(QT_OPENGL_ES)
-	glDepthRangef(0.0f, 1.0f);
+    glClearDepthf(1);
 #else
-	glDepthRange(0.0f, 1.0f);
+    glClearDepth(1);
 #endif
+    glDepthMask(GL_TRUE);
+#if defined(QT_OPENGL_ES)
+    glDepthRangef(0.0f, 1.0f);
+#else
+    glDepthRange(0.0f, 1.0f);
+#endif
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
 
-	if (painter.hasOpenGLFeature(QOpenGLFunctions::BlendColor))
-	    painter.glBlendColor(0, 0, 0, 0);
+    QColor clearColor(Qt::black);
+    painter.setClearColor(clearColor);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    d->view->resizeGL(this->width(), this->height());
 
-	if (painter.hasOpenGLFeature(QOpenGLFunctions::BlendEquation))
-	    painter.glBlendEquation(GL_FUNC_ADD);
-	else if (painter.hasOpenGLFeature(QOpenGLFunctions::BlendEquationSeparate))
-	    painter.glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-
-	glDisable(GL_CULL_FACE);
-
-	d->view->resizeGL(this->window()->width(), this->window()->height());
-
-	// --
-
+    if(!initialized) {
 	d->view->initializeGL(&painter);
-
-    } else {
-
-	d->view->resizeGL(this->window()->width(), this->window()->height());
-	painter.setCamera(d->view->camera());
-	d->view->earlyPaintGL(&painter);
-	d->view->paintGL(&painter);
     }
+
+    QGLTexture2D::processPendingResourceDeallocations();
+
+    painter.setEye(QGL::NoEye);
+
+    QRect viewport = mapRectToScene(boundingRect()).toRect();
+    QRect target_rect( (true)? viewport.x():0,
+                       (true)? viewport.y():0,
+                       viewport.width(),
+                       viewport.height() );
+
+    QGLSubsurface surface (painter.currentSurface(), target_rect);
+
+    painter.pushSurface(&surface);
+    d->view->earlyPaintGL(&painter);
+    painter.setCamera(d->view->camera());
+    glDisable(GL_CULL_FACE);
+    d->view->paintGL(&painter);
+    glDisable(GL_CULL_FACE);
+    painter.popSurface();
+    painter.disableEffect();
 }
 
-void dtk3DQuickView::sync(void)
+void dtk3DQuickView::mouseMoveEvent(QMouseEvent *event)
 {
+    d->view->mouseMoveEvent(event);
+}
 
+void dtk3DQuickView::mousePressEvent(QMouseEvent *event)
+{
+    d->view->mousePressEvent(event);
+}
+
+void dtk3DQuickView::mouseReleaseEvent(QMouseEvent *event)
+{
+    d->view->mouseReleaseEvent(event);
 }
 
 void dtk3DQuickView::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData& data)
 {
     if (change == QQuickItem::ItemSceneChange) {
-
-	qDebug() << 33;
 
         QQuickWindow *window = this->window();
 
@@ -120,10 +153,15 @@ void dtk3DQuickView::itemChange(QQuickItem::ItemChange change, const QQuickItem:
             return;
 
         connect(window, SIGNAL(beforeRendering()), this, SLOT(paint()), Qt::DirectConnection);
-        connect(window, SIGNAL(beforeSynchronizing()), this, SLOT(sync()), Qt::DirectConnection);
 
         window->setClearBeforeRendering(false);
     }
 
     QQuickItem::itemChange(change, data);
+}
+
+void dtk3DQuickView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+    if (d->view)
+	d->view->resize(newGeometry.size().toSize());
 }

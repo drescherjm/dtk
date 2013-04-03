@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:41:55 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  2 16:47:54 2013 (+0200)
+ * Last-Updated: Tue Apr  2 22:25:29 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 45
  */
 
 /* Change Log:
@@ -46,35 +46,16 @@ void dtk3DView::setScene(dtk3DScene *scene)
     d->scene = scene;
 }
 
-void dtk3DView::initializeGL(void)
-{
-    QGLView::initializeGL();
-}
-
 void dtk3DView::initializeGL(QGLPainter *painter)
 {
-    qDebug() << Q_FUNC_INFO;
-
     if (d->scene)
         d->scene->initialize(painter, this);
 
     QGLView::initializeGL(painter);
 }
 
-void dtk3DView::paintGL(void)
-{
-    QGLView::paintGL();
-}
-
-void dtk3DView::earlyPaintGL(QGLPainter *painter)
-{
-    QGLView::earlyPaintGL(painter);
-}
-
 void dtk3DView::paintGL(QGLPainter *painter)
 {
-    qDebug() << Q_FUNC_INFO;
-
     if (d->scene)
         d->scene->paint(painter, this);
 

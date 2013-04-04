@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:41:55 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 13:03:45 2013 (+0200)
+ * Last-Updated: Thu Apr  4 16:44:16 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 122
+ *     Update #: 234
  */
 
 /* Change Log:
@@ -26,15 +26,19 @@
 class dtk3DViewPrivate
 {
 public:
+    dtk3DItem *current;
+
+public:
     dtk3DScene *scene;
 };
 
 dtk3DView::dtk3DView(QWindow *parent) : QGLView(parent), d(new dtk3DViewPrivate)
 {
+    d->current = NULL;
     d->scene = NULL;
 
     this->camera()->setFieldOfView(30);
-    this->camera()->setNearPlane(1.0);
+    this->camera()->setNearPlane(0.01);
 
     this->setOption(QGLView::ObjectPicking, true);
 }
@@ -51,22 +55,67 @@ void dtk3DView::setScene(dtk3DScene *scene)
 
 void dtk3DView::fit(void)
 {
-    QBox3D sceneBoundingBox = d->scene->boundingBox();
+    QVector3D eye = this->camera()->eye();
+    QVector3D ctr = this->camera()->center();
+    QVector3D direction = ctr-eye;
 
-    QVector3D center = sceneBoundingBox.center();
-    QVector3D size = sceneBoundingBox.size();
-    QVector3D eye = sceneBoundingBox.center();
-    QVector3D up = QVector3D(0.0, 1.0, 0.0);
+    this->fit(direction);
+}
+
+void dtk3DView::fit(const QVector3D& direction)
+{
+    QBox3D box;
+
+    if(d->current)
+	box = d->current->boundingBox();
+    else
+	box = d->scene->boundingBox();
+
+    QVector3D center = box.center();
+    QVector3D size = box.size();
 
     qreal s = qMax(size.x(), qMax(size.y(), size.z()));
     qreal a = this->camera()->fieldOfView();
     qreal d = (s/2)/tan((a*M_PI/180)/2);
 
-    eye.setZ(eye.z()+d+s/2);
-
-    this->camera()->setEye(eye);
     this->camera()->setCenter(center);
-    this->camera()->setUpVector(up);
+    this->camera()->setEye(center - direction.normalized()*(d+s/2.0));
+}
+
+void dtk3DView::fitFromTop(void)
+{
+    this->fit(QVector3D(0.0, -1.0, 0.0));
+    this->camera()->setUpVector(QVector3D(0.0, 0.0, 1.0));
+}
+
+void dtk3DView::fitFromBack(void)
+{
+    this->fit(QVector3D(0.0, 0.0, 1.0));
+    this->camera()->setUpVector(QVector3D(0.0, 1.0, 0.0));
+}
+
+void dtk3DView::fitFromLeft(void)
+{
+    this->fit(QVector3D(-1.0, 0.0, 0.0));
+    this->camera()->setUpVector(QVector3D(0.0, 1.0, 0.0));
+}
+
+void dtk3DView::fitFromFront(void)
+{
+    this->fit(QVector3D(0.0, 0.0, -1.0));
+    this->camera()->setUpVector(QVector3D(0.0, 1.0, 0.0));
+}
+
+void dtk3DView::fitFromRight(void)
+{
+    this->fit(QVector3D(1.0, 0.0, 0.0));
+    this->camera()->setUpVector(QVector3D(0.0, 1.0, 0.0));
+}
+
+void dtk3DView::fitFromBottom(void)
+{
+    this->fit(QVector3D(0.0, 1.0, 0.0));
+    this->camera()->setUpVector(QVector3D(0.0, 0.0, -1.0));
 }
 
 const QPoint dtk3DView::mapToScreen(const QVector3D& point)
@@ -122,7 +171,24 @@ void dtk3DView::keyPressEvent(QKeyEvent *event)
 	break;
     case Qt::Key_F:
 	this->fit();
-	this->update();
+	break;
+    case Qt::Key_X:
+	if(event->modifiers() & Qt::AltModifier)
+	    this->fitFromLeft();
+	else
+	    this->fitFromRight();
+	break;
+    case Qt::Key_Y:
+	if(event->modifiers() & Qt::AltModifier)
+	    this->fitFromBottom();
+	else
+	    this->fitFromTop();
+	break;
+    case Qt::Key_Z:
+	if(event->modifiers() & Qt::AltModifier)
+	    this->fitFromBack();
+	else
+	    this->fitFromFront();
 	break;
     default:
 	QGLView::keyPressEvent(event);
@@ -131,6 +197,11 @@ void dtk3DView::keyPressEvent(QKeyEvent *event)
 
 void dtk3DView::mouseMoveEvent(QMouseEvent *event)
 {
+    if(dtk3DItem *item = qobject_cast<dtk3DItem *>(this->objectForPoint(event->pos())))
+	d->current = item;
+    else
+	d->current = NULL;
+
     QGLView::mouseMoveEvent(event);
 }
 

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Mar 27 14:14:24 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 12:19:52 2013 (+0200)
+ * Last-Updated: Thu Apr  4 16:37:11 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 160
+ *     Update #: 161
  */
 
 /* Change Log:
@@ -129,7 +129,7 @@ void dtk3DItemTestCase::testHierarchy(void)
 		item2_1_1->setObjectName("item2_1_1");
 		item2_1_1->addNode(node);
 		item2_1_1->translate(QVector3D(0.0, 1.0, 0.0));
-		item2_1_1->setFlag(dtk3DItem::Interactive, false);
+		item2_1_1->setFlag(dtk3DItem::Interactive, true);
 		item2_1_1->setEffect(QGL::LitMaterial);
 		item2_1_1->setColor(Qt::yellow);
 	    }

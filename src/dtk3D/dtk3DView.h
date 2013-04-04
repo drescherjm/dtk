@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:40:37 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 11:41:18 2013 (+0200)
+ * Last-Updated: Thu Apr  4 16:39:00 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 51
+ *     Update #: 77
  */
 
 /* Change Log:
@@ -31,11 +31,16 @@ public:
     void setScene(dtk3DScene *scene);
 
 #pragma mark -
-#pragma mark Navigation
-    
-public slots:
+#pragma mark Scene/Item fitting
 
     void fit(void);
+    void fit(const QVector3D& direction);
+    void fitFromTop(void);
+    void fitFromBack(void);
+    void fitFromLeft(void);
+    void fitFromFront(void);
+    void fitFromRight(void);
+    void fitFromBottom(void);
 
 #pragma mark -
 #pragma mark Coordinate mapping

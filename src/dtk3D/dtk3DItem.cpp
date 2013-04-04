@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:55:00 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 12:39:51 2013 (+0200)
+ * Last-Updated: Thu Apr  4 16:04:20 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 137
+ *     Update #: 147
  */
 
 /* Change Log:
@@ -181,7 +181,7 @@ const QVector3D dtk3DItem::mapToItem(const QVector3D& point)
 
 QBox3D dtk3DItem::boundingBox(void) const
 {
-    return QGLSceneNode::boundingBox();
+    return QGLSceneNode::boundingBox().transformed(d->global_transform);
 }
 
 QColor dtk3DItem::color(void)
@@ -213,6 +213,7 @@ void dtk3DItem::draw(QGLPainter *painter)
     if(d->flags & dtk3DItem::Interactive) {
 
 	if (d->i_id == -1) {
+
 	    if (d->p_id == -1)
 		d->view->registerObject((d->i_id = d->p_id = d->g_id++), this);
 	    else

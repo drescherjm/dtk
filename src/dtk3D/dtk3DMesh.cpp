@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:42:30 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:55:35 2013 (+0100)
+ * Last-Updated: Thu Apr  4 12:29:01 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 104
+ *     Update #: 105
  */
 
 /* Change Log:
@@ -34,6 +34,8 @@ dtk3DMesh::~dtk3DMesh(void)
 
 QBox3D dtk3DMesh::boundingBox(void) const
 {
+    qDebug() << Q_FUNC_INFO;
+
     return d->data.boundingBox();
 }
 

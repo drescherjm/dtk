@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:45:53 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 11:32:08 2013 (+0200)
+ * Last-Updated: Thu Apr  4 12:42:53 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 24
+ *     Update #: 30
  */
 
 /* Change Log:
@@ -54,6 +54,23 @@ void dtk3DScene::addNode(QGLSceneNode *node)
 void dtk3DScene::removeNode(QGLSceneNode *node)
 {
     d->root->removeNode(node);
+}
+
+QBox3D dtk3DScene::boundingBox(void) const
+{
+    QBox3D box;
+
+    foreach(QGLSceneNode *node, d->root->allChildren()) {
+
+	dtk3DItem *item;
+
+	if((item = qobject_cast<dtk3DItem *>(node)))
+	    box.unite(item->boundingBox());
+	else
+	    box.unite(node->boundingBox());
+    }
+
+    return box;
 }
 
 QGLSceneNode *dtk3DScene::mainNode(void) const

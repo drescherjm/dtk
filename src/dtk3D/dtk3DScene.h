@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:44:59 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 13:45:36 2013 (+0100)
+ * Last-Updated: Thu Apr  4 12:40:18 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 7
+ *     Update #: 9
  */
 
 /* Change Log:
@@ -36,6 +36,9 @@ public:
 public:
     void    addNode(QGLSceneNode *node);
     void removeNode(QGLSceneNode *node);
+
+public:
+    QBox3D boundingBox(void) const;
 
 public:
     QGLSceneNode *mainNode(void) const;

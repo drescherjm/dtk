@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:53:33 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 10:28:56 2013 (+0200)
+ * Last-Updated: Thu Apr  4 12:38:47 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 39
+ *     Update #: 41
  */
 
 /* Change Log:
@@ -68,6 +68,11 @@ public:
 
     const QVector3D mapToItem(const QPoint& point);
     const QVector3D mapToItem(const QVector3D& vector);
+
+#pragma mark -
+#pragma mark Geometric attributes
+
+    virtual QBox3D boundingBox(void) const;
 
 #pragma mark -
 #pragma mark Item attributes - getters

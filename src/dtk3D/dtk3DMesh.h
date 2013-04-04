@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:41:03 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 15:53:12 2013 (+0100)
+ * Last-Updated: Thu Apr  4 12:38:03 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 48
+ *     Update #: 50
  */
 
 /* Change Log:
@@ -31,7 +31,7 @@ public:
 #pragma mark -
 #pragma mark Geometric attributes
 
-    virtual QBox3D boundingBox(void) const;
+    QBox3D boundingBox(void) const;
 
 #pragma mark -
 #pragma mark Geometry data

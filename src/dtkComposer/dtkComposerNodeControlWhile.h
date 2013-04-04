@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Sat Feb 25 01:07:27 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 7
+ * Last-Updated: Thu Apr  4 09:57:04 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODECONTROLWHILE_H
-#define DTKCOMPOSERNODECONTROLWHILE_H
-
+#pragma once
 
 #include "dtkComposerNodeControl.h"
 
@@ -28,8 +26,8 @@ class dtkComposerNodeControlWhilePrivate;
 class  dtkComposerNodeControlWhile : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlWhile(void);
-    virtual ~dtkComposerNodeControlWhile(void);
+     dtkComposerNodeControlWhile(void);
+    ~dtkComposerNodeControlWhile(void);
 
 public:
     int blockCount(void);
@@ -55,5 +53,3 @@ public:
 private:
     dtkComposerNodeControlWhilePrivate *d;
 };
-
-#endif

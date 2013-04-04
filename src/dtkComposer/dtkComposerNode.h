@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:07:56 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 55
+ * Last-Updated: Thu Apr  4 09:48:34 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODE_H
-#define DTKCOMPOSERNODE_H
+#pragma once
 
 #include <QtCore>
 
@@ -71,4 +70,3 @@ private:
     dtkComposerNodePrivate *d;
 };
 
-#endif

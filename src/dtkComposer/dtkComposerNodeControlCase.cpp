@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 26 14:44:13 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 310
+ * Last-Updated: Thu Apr  4 15:32:03 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 359
  */
 
 /* Commentary:
@@ -23,7 +23,8 @@
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlCasePrivate definition
@@ -37,10 +38,13 @@ public:
 
     QList<dtkComposerNodeComposite *> blocks;
 
-    QList<dtkComposerTransmitterVariant *> blocks_input;
+    QList<dtkComposerTransmitterProxyLoop *> blocks_input;
 
 public:
-    dtkComposerTransmitterVariant cond;
+    dtkComposerTransmitterReceiverVariant cond;
+
+public:
+    block_id;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -95,7 +99,7 @@ dtkComposerNodeLeaf *dtkComposerNodeControlCase::footer(void)
 dtkComposerNodeComposite *dtkComposerNodeControlCase::block(int id)
 {
     if (id < d->blocks.count() && id >= 0)
-        return d->blocks[id];
+        return d->blocks.at(id);
 
     return NULL;
 }
@@ -107,7 +111,7 @@ void dtkComposerNodeControlCase::addBlock(void)
     c->setTitleHint("Case#"+id);
     d->blocks << c;
 
-    dtkComposerTransmitterVariant *v = new dtkComposerTransmitterVariant;
+    dtkComposerTransmitterProxyLoop *v = new dtkComposerTransmitterProxyLoop;
     d->blocks_input << v;
     c->appendReceiver(v);
     c->setInputLabelHint("case#"+id,0);
@@ -116,7 +120,7 @@ void dtkComposerNodeControlCase::addBlock(void)
 void dtkComposerNodeControlCase::addBlock(dtkComposerNodeComposite *c)
 {
     d->blocks << c;
-    d->blocks_input << dynamic_cast<dtkComposerTransmitterVariant*>(c->receivers().at(0));
+    d->blocks_input << dynamic_cast<dtkComposerTransmitterProxyLoop *>(c->receivers().at(0));
 }
 
 void dtkComposerNodeControlCase::removeBlock(int id)
@@ -153,58 +157,26 @@ void dtkComposerNodeControlCase::setVariables(void)
 
 int dtkComposerNodeControlCase::selectBranch(void)
 {
+    d->block_id = 0;
+
     if (d->cond.isEmpty())
-        return static_cast<int>(false);
+        return d->block_id;
 
-    int value = 0;
-    bool is_case = false;
+    QVariant var = d->cond.variant();
 
-    for (int i = 1; i < d->blocks.count(); ++i) {
-        dtkComposerTransmitterVariant *v =  d->blocks_input[i-1] ;
-        if (value > 0) //already found the good block, no need to check again.
-            is_case = false;
-        else {
+    if (!var.canConvert<QString>())
+        return d->block_id;
 
-            QString s_cond = d->cond.data<QString>();
-            QString s_v    = v->data<QString>();
-
-            if (!s_cond.isEmpty() && !s_v.isEmpty()) {
-                is_case = (s_cond == s_v);
-            }
-
-	    // else {
-            //     dtkAbstractObject *o_cond = d->cond.variant().toAbstractObject();
-            //     dtkAbstractObject *o_v    = v->variant().toAbstractObject();
-            //     if (o_cond && o_v)
-            //         is_case = (*o_cond == *o_v);
-            //     else
-            //         is_case = false;
-            // }
-        }
-
-        if (is_case) {
-
-            value = i;
-            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
-                t->setActive(true);
-            }
-
-        } else {
-
-            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters())
-                t->setActive(false);
-        }
+    QString s_cond = var.toString();
+    int count = d->blocks.count() - 1;    
+    for (int i = 0; i < count; ++i) {
+	if (s_cond == d->blocks_input.at(i)->variant().toString()) {
+	    d->block_id = i + 1;
+	    break;
+	}
     }
 
-    if (value == 0) {
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
-            t->setActive(true);
-    } else {
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
-            t->setActive(false);
-    }
-
-    return value;
+    return d->block_id;
 }
 
 void dtkComposerNodeControlCase::begin(void)
@@ -214,7 +186,14 @@ void dtkComposerNodeControlCase::begin(void)
 
 void dtkComposerNodeControlCase::end(void)
 {
-
+    int count = d->blocks.count();
+    bool active;
+    for (int i = 0; i < count; ++i) {
+	active = (i == d->block_id);
+	foreach(dtkComposerTransmitter *t, d->blocks.at(i)->emitters()) {
+	    t->setActive(active);
+	}	
+    }    
 }
 
 QString dtkComposerNodeControlCase::type(void)

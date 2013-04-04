@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar 21 10:25:19 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar 22 16:04:30 2012 (+0100)
- *           By: tkloczko
- *     Update #: 6
+ * Last-Updated: Thu Apr  4 09:59:34 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEPROXY_H
-#define DTKCOMPOSERNODEPROXY_H
-
+#pragma once
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -44,4 +42,3 @@ private:
     dtkComposerNodeProxyPrivate *d;
 };
 
-#endif

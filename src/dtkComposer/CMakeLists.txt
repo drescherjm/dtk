@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr  3 11:05:16 2013 (+0200)
+## Last-Updated: Thu Apr  4 14:36:30 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 131
+##     Update #: 139
 ######################################################################
 ## 
 ### Change Log:
@@ -54,12 +54,12 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeConstants.h
   dtkComposerNodeControl.h
   # dtkComposerNodeControlCase.h
-  # dtkComposerNodeControlDoWhile.h
+  dtkComposerNodeControlDoWhile.h
   # dtkComposerNodeControlIf.h
-  # dtkComposerNodeControlFor.h
-  # dtkComposerNodeControlForEach.h
+  dtkComposerNodeControlFor.h
+  dtkComposerNodeControlForEach.h
   # dtkComposerNodeControlMap.h
-  # dtkComposerNodeControlWhile.h
+  dtkComposerNodeControlWhile.h
   # dtkComposerNodeData.h
   # dtkComposerNodeFile.h
   dtkComposerNodeInteger.h
@@ -81,7 +81,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeMetaVector3DArrayExtractor.h
   dtkComposerNodeNumberOperator.h
   # dtkComposerNodeProcess.h
-  # dtkComposerNodeProxy.h
+  dtkComposerNodeProxy.h
   # dtkComposerNodeQuaternion.h
   # dtkComposerNodeQuaternionOperatorUnary.h
   # dtkComposerNodeQuaternionOperatorBinary.h
@@ -172,12 +172,12 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeConstants.cpp
   dtkComposerNodeControl.cpp
   # dtkComposerNodeControlCase.cpp
-  # dtkComposerNodeControlDoWhile.cpp
+  dtkComposerNodeControlDoWhile.cpp
   # dtkComposerNodeControlIf.cpp
-  # dtkComposerNodeControlFor.cpp
-  # dtkComposerNodeControlForEach.cpp
+  dtkComposerNodeControlFor.cpp
+  dtkComposerNodeControlForEach.cpp
   # dtkComposerNodeControlMap.cpp
-  # dtkComposerNodeControlWhile.cpp
+  dtkComposerNodeControlWhile.cpp
   # dtkComposerNodeData.cpp
   # dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
@@ -199,7 +199,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeMetaVector3DArrayExtractor.cpp
   dtkComposerNodeNumberOperator.cpp
   # dtkComposerNodeProcess.cpp
-  # dtkComposerNodeProxy.cpp
+  dtkComposerNodeProxy.cpp
   # dtkComposerNodeQuaternion.cpp
   # dtkComposerNodeQuaternionOperatorUnary.cpp
   # dtkComposerNodeQuaternionOperatorBinary.cpp

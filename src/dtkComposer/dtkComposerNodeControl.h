@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:58:44 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 42
+ * Last-Updated: Thu Apr  4 09:50:00 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -17,21 +17,18 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODECONTROL_H
-#define DTKCOMPOSERNODECONTROL_H
-
+#pragma once
 
 #include "dtkComposerNode.h"
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControl declaration
-// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeLeaf;
 class dtkComposerNodeComposite;
 class dtkComposerNodeControlPrivate;
+class dtkComposerTransmitterProxyLoop;
 
-class dtkComposerTransmitterVariant;
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeControl 
+// /////////////////////////////////////////////////////////////////
 
 class  dtkComposerNodeControl : public dtkComposerNode
 {
@@ -46,14 +43,14 @@ public:
     virtual dtkComposerNodeComposite *block(int id) = 0;
 
 public:
-    void appendInputTwin(dtkComposerTransmitterVariant *twin);
-    void removeInputTwin(dtkComposerTransmitterVariant *twin);
+    void appendInputTwin(dtkComposerTransmitterProxyLoop *twin);
+    void removeInputTwin(dtkComposerTransmitterProxyLoop *twin);
 
-    void appendOutputTwin(dtkComposerTransmitterVariant *twin);
-    void removeOutputTwin(dtkComposerTransmitterVariant *twin);
+    void appendOutputTwin(dtkComposerTransmitterProxyLoop *twin);
+    void removeOutputTwin(dtkComposerTransmitterProxyLoop *twin);
 
-    QList<dtkComposerTransmitterVariant *>  inputTwins(void);
-    QList<dtkComposerTransmitterVariant *> outputTwins(void);
+    QList<dtkComposerTransmitterProxyLoop *>  inputTwins(void);
+    QList<dtkComposerTransmitterProxyLoop *> outputTwins(void);
 
 public:
     virtual void setInputs(void);
@@ -67,4 +64,3 @@ private:
     dtkComposerNodeControlPrivate *d;
 };
 
-#endif

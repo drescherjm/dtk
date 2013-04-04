@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 26 14:41:40 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 57
+ * Last-Updated: Thu Apr  4 15:39:53 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 71
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlIfPrivate definition
@@ -39,7 +39,7 @@ public:
     dtkComposerNodeComposite else_block;
 
 public:
-    dtkComposerTransmitterVariant cond;
+    dtkComposerTransmitterReceiver<bool> cond;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -112,7 +112,6 @@ void dtkComposerNodeControlIf::setConditions(void)
 
 void dtkComposerNodeControlIf::setOutputs(void)
 {
-
 }
 
 void dtkComposerNodeControlIf::setVariables(void)
@@ -122,18 +121,10 @@ void dtkComposerNodeControlIf::setVariables(void)
 
 int dtkComposerNodeControlIf::selectBranch(void)
 {
-    if (d->cond.isEmpty())
-        return static_cast<int>(false);
-
-    bool value = d->cond.data<bool>();
-    
-    foreach(dtkComposerTransmitter *t, d->then_block.emitters())
-        t->setActive(value);
-
-    foreach(dtkComposerTransmitter *t, d->else_block.emitters())
-        t->setActive(!value);
+    if (!d->cond.isEmpty())
+	return static_cast<int>(!(d->cond.data()));
         
-    return (!value);
+    return static_cast<int>(false);
 }
 
 void dtkComposerNodeControlIf::begin(void)
@@ -143,7 +134,13 @@ void dtkComposerNodeControlIf::begin(void)
 
 void dtkComposerNodeControlIf::end(void)
 {
+    bool value = d->cond.data();
     
+    foreach(dtkComposerTransmitter *t, d->then_block.emitters())
+        t->setActive(value);
+
+    foreach(dtkComposerTransmitter *t, d->else_block.emitters())
+        t->setActive(!value);
 }
 
 QString dtkComposerNodeControlIf::type(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2013 Mon Jan 14 12:31:37 (+0100)
+ * Last-Updated: Thu Apr  4 14:52:20 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 94
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -24,9 +24,7 @@
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkGlobal.h>
+#include "dtkComposerTransmitterProxyLoop.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlWhilePrivate definition
@@ -43,6 +41,9 @@ public:
 
 public:
     dtkComposerTransmitterReceiver<bool> cond;
+
+public:
+    bool first_iteration;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -101,11 +102,11 @@ dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 
 void dtkComposerNodeControlWhile::setInputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-        v->setTwinned(false);
-        v->setDataFrom(v);
-        v->setTwinned(true);
+    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
+        t->disableLoopMode();
     }
+
+    d->first_iteration = true;
 }
 
 void dtkComposerNodeControlWhile::setConditions(void)
@@ -114,9 +115,12 @@ void dtkComposerNodeControlWhile::setConditions(void)
 
 void dtkComposerNodeControlWhile::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setDataFrom(v);
-    }    
+    if (d->first_iteration) {
+	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
+	    t->twin()->enableLoopMode();
+	}
+	d->first_iteration = false;
+    }
 }
 
 void dtkComposerNodeControlWhile::setVariables(void)
@@ -125,10 +129,10 @@ void dtkComposerNodeControlWhile::setVariables(void)
 
 int dtkComposerNodeControlWhile::selectBranch(void)
 {
-    if (d->cond.isEmpty())
-        return static_cast<int>(true);
+    if (!d->cond.isEmpty())
+	return static_cast<int>(!(d->cond.data()));
 
-    return static_cast<int>(!(d->cond.data()));
+    return static_cast<int>(true);
 }
 
 void dtkComposerNodeControlWhile::begin(void)

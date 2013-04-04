@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:12:58 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. mars 28 13:59:31 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 18
+ * Last-Updated: Thu Apr  4 10:03:29 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODECONTROLFOR_H
-#define DTKCOMPOSERNODECONTROLFOR_H
-
+#pragma once
 
 #include "dtkComposerNodeControl.h"
 
@@ -28,8 +26,8 @@ class dtkComposerNodeControlForPrivate;
 class  dtkComposerNodeControlFor : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlFor(void);
-    virtual ~dtkComposerNodeControlFor(void);
+     dtkComposerNodeControlFor(void);
+    ~dtkComposerNodeControlFor(void);
 
 public:
     int blockCount(void);
@@ -55,4 +53,3 @@ private:
     dtkComposerNodeControlForPrivate *d;
 };
 
-#endif

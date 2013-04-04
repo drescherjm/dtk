@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 26 14:37:37 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 63
+ * Last-Updated: Thu Apr  4 14:53:22 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 72
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitterProxyLoop.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlDoWhilePrivate definition
@@ -40,6 +40,9 @@ public:
 
 public:
     dtkComposerTransmitterReceiver<bool> cond;
+
+public:
+    bool first_iteration;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -98,17 +101,19 @@ dtkComposerNodeComposite *dtkComposerNodeControlDoWhile::block(int id)
 
 void dtkComposerNodeControlDoWhile::setInputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-        v->setTwinned(false);
-        v->setDataFrom(v);
-        v->setTwinned(true);
+    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
+        t->disableLoopMode();
     }
+    d->first_iteration = true;
 }
 
 void dtkComposerNodeControlDoWhile::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setDataFrom(v);
+    if (d->first_iteration) {
+	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
+	    t->twin()->enableLoopMode();
+	}
+	d->first_iteration = false;
     }
 }
 
@@ -119,10 +124,10 @@ void dtkComposerNodeControlDoWhile::setVariables(void)
 
 int dtkComposerNodeControlDoWhile::selectBranch(void)
 {
-    if (d->cond.isEmpty())
-        return static_cast<int>(true);
-
-    return static_cast<int>(!(d->cond.data()));
+    if (!d->cond.isEmpty())
+	return static_cast<int>(!(d->cond.data()));
+        
+    return static_cast<int>(true);
 }
 
 void dtkComposerNodeControlDoWhile::begin(void)

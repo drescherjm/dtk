@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2013 Mon Jan 14 12:32:01 (+0100)
+ * Last-Updated: Thu Apr  4 17:04:41 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 194
+ *     Update #: 258
  */
 
 /* Commentary: 
@@ -25,9 +25,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterProxy.h"
-#include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkGlobal.h>
+#include "dtkComposerTransmitterProxyLoop.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlForPrivate definition
@@ -47,10 +45,14 @@ public:
     dtkComposerTransmitterReceiver<bool> cond;
     dtkComposerTransmitterProxy          cond_prx;
 
-    dtkComposerTransmitterVariant block_rcv;
+    dtkComposerTransmitterProxyLoop block_rcv;
 
     dtkComposerTransmitterProxy   incr_rcv;
-    dtkComposerTransmitterVariant incr_emt;
+    dtkComposerTransmitterProxyLoop incr_emt;
+
+public:
+    bool first_iteration;
+    bool var_first_it;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -80,14 +82,12 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
     
     d->body_block.appendReceiver(&(d->block_rcv));
     d->body_block.setInputLabelHint("i", 0);
-    this->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->body_block.receivers().first()));  
 
     d->incr_block.appendReceiver(&(d->incr_rcv));
     d->incr_block.setInputLabelHint("i", 0);
 
     d->incr_block.appendEmitter(&(d->incr_emt));
     d->incr_block.setOutputLabelHint("i_next", 0);
-    this->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(d->incr_block.emitters().first()));
 
     d->body_block.receivers().first()->appendPrevious(d->header.receivers().first());
     d->header.receivers().first()->appendNext(d->body_block.receivers().first());
@@ -101,7 +101,8 @@ dtkComposerNodeControlFor::dtkComposerNodeControlFor(void) : dtkComposerNodeCont
     d->incr_block.emitters().first()->appendNext(d->footer.emitters().first());
     d->footer.emitters().first()->appendPrevious(d->incr_block.emitters().first());
 
-    this->outputTwins().first()->setTwin(this->inputTwins().first());
+    d->incr_emt.setTwin(&(d->block_rcv));
+    d->block_rcv.setTwin(&(d->incr_emt));
 }
 
 dtkComposerNodeControlFor::~dtkComposerNodeControlFor(void)
@@ -142,47 +143,42 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    QList<dtkComposerTransmitterVariant*> list = this->inputTwins();
-    QList<dtkComposerTransmitterVariant*>::const_iterator it  = list.constBegin();
-    QList<dtkComposerTransmitterVariant*>::const_iterator ite = list.constEnd();
-
-    while(it != ite) {
-        dtkComposerTransmitterVariant *v = *it++;
-        v->setTwinned(false);
-        v->setDataFrom(v);
-        v->setTwinned(true);
+    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
+	t->disableLoopMode();
     }
+    d->first_iteration = true;
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
-    QList<dtkComposerTransmitterVariant*> list = this->outputTwins();
-    // start from the second element of the list on purpose; the first port is the loop port.
-    QList<dtkComposerTransmitterVariant*>::const_iterator it  = list.constBegin() + 1;
-    QList<dtkComposerTransmitterVariant*>::const_iterator ite = list.constEnd();
-
-    while(it != ite) {
-        dtkComposerTransmitterVariant *v = *it++;
-        v->twin()->setDataFrom(v);
+    if (d->first_iteration) {
+	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
+	    t->twin()->enableLoopMode();
+	}
+	d->first_iteration = false;
     }
 }
 
 void dtkComposerNodeControlFor::setVariables(void)
 {
-    dtkComposerTransmitterVariant *twin = this->outputTwins().first();
-    twin->twin()->setDataFrom(twin);
+    if (d->var_first_it) {
+	d->incr_emt.twin()->enableLoopMode();
+	d->var_first_it = false;
+    }
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)
 {
-    if (d->cond.isEmpty())
-        return static_cast<int>(false);
+    if (!d->cond.isEmpty())
+	return static_cast<int>(!(d->cond.data()));
 
-    return static_cast<int>(!(d->cond.data()));
+    return static_cast<int>(true);
 }
 
 void dtkComposerNodeControlFor::begin(void)
 {
+    d->var_first_it = true;
+    d->block_rcv.disableLoopMode();
 }
 
 void dtkComposerNodeControlFor::end(void)

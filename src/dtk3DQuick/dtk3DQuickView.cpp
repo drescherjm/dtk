@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 16:51:45 2013 (+0200)
+ * Last-Updated: Thu Apr  4 10:08:49 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 950
+ *     Update #: 956
  */
 
 /* Change Log:
@@ -14,8 +14,6 @@
 
 #include "dtk3dQuickScene.h"
 #include "dtk3DQuickView.h"
-
-#include <dtk3D>
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLPainter>
@@ -40,6 +38,11 @@ dtk3DQuickView::~dtk3DQuickView(void)
     delete d;
 }
 
+dtk3DView *dtk3DQuickView::view(void)
+{
+    return d->view;
+}
+
 void dtk3DQuickView::paint(QPainter *p)
 {
     bool initialized = true;
@@ -56,7 +59,7 @@ void dtk3DQuickView::paint(QPainter *p)
 	    dtk3DQuickScene *scene;
 
 	    if((scene = qobject_cast<dtk3DQuickScene *>(object)))
-		d->view->setScene(scene);
+		d->view->setScene(scene->scene());
 	}
     }
 

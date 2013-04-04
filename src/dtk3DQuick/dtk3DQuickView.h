@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 21:49:58 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 16:51:49 2013 (+0200)
+ * Last-Updated: Thu Apr  4 10:08:31 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 95
+ *     Update #: 100
  */
 
 /* Change Log:
@@ -13,6 +13,8 @@
  */
 
 #pragma once
+
+#include <dtk3D>
 
 #include <QtGui>
 #include <QtQuick>
@@ -27,6 +29,9 @@ public:
      dtk3DQuickView(QQuickItem *parent = 0);
     ~dtk3DQuickView(void);
     
+public:
+    dtk3DView *view(void);
+
 protected slots:
     void paint(QPainter *painter);
 

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 12:50:26 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 16:46:58 2013 (+0200)
+ * Last-Updated: Thu Apr  4 10:04:30 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 43
+ *     Update #: 48
  */
 
 /* Change Log:
@@ -23,7 +23,7 @@
 
 class dtk3DQuickScenePrivate;
 
-class dtk3DQuickScene : public dtk3DScene
+class dtk3DQuickScene : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<dtk3DQuickItem> items READ items)
@@ -31,6 +31,9 @@ class dtk3DQuickScene : public dtk3DScene
 public:
      dtk3DQuickScene(QObject *parent = 0);
     ~dtk3DQuickScene(void);
+
+public:
+    dtk3DScene *scene(void);
 
 public:
     QQmlListProperty<dtk3DQuickItem> items(void);

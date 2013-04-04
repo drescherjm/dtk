@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:55:00 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 16:52:36 2013 (+0100)
+ * Last-Updated: Thu Apr  4 11:31:56 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 125
+ *     Update #: 134
  */
 
 /* Change Log:
@@ -177,6 +177,11 @@ const QVector3D dtk3DItem::mapToItem(const QVector3D& point)
     QMatrix4x4 trsf = (modl * objt).inverted();
 
     return trsf.mapVector(point);
+}
+
+QColor dtk3DItem::color(void)
+{
+    return d->material->ambientColor().lighter();
 }
 
 void dtk3DItem::setColor(const QColor& color)

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Mar 27 14:14:24 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 16:55:19 2013 (+0100)
+ * Last-Updated: Thu Apr  4 10:43:57 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 155
+ *     Update #: 157
  */
 
 /* Change Log:
@@ -135,8 +135,6 @@ void dtk3DItemTestCase::testHierarchy(void)
 	    }
 	}
     }
-
-    qDebug() << item2;
 
     dtk3DScene scene;
     scene.addNode(node0);

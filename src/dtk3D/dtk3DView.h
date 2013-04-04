@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:40:37 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Apr  3 10:05:06 2013 (+0200)
+ * Last-Updated: Thu Apr  4 10:38:53 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 40
+ *     Update #: 44
  */
 
 /* Change Log:
@@ -33,10 +33,8 @@ public:
 #pragma mark -
 #pragma mark Rendering pipeline
     
-    void initializeGL(void) { QGLView::initializeGL(); }
     void initializeGL(QGLPainter *painter);
-    void earlyPaintGL(QGLPainter *painter) { QGLView::earlyPaintGL(painter); }
-    void      paintGL(void) { QGLView::paintGL(); }
+    void earlyPaintGL(QGLPainter *painter);
     void      paintGL(QGLPainter *painter);
     void     resizeGL(int w, int h);
 

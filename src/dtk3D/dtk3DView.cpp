@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:41:55 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Apr  3 11:08:42 2013 (+0200)
+ * Last-Updated: Thu Apr  4 11:31:12 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 46
+ *     Update #: 51
  */
 
 /* Change Log:
@@ -52,6 +52,11 @@ void dtk3DView::initializeGL(QGLPainter *painter)
         d->scene->initialize(painter, this);
 
     QGLView::initializeGL(painter);
+}
+
+void dtk3DView::earlyPaintGL(QGLPainter *painter)
+{
+    QGLView::earlyPaintGL(painter);
 }
 
 void dtk3DView::paintGL(QGLPainter *painter)

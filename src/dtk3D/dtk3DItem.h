@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:53:33 2013 (+0100)
  * Version: 
- * Last-Updated: Sat Mar 30 16:24:49 2013 (+0100)
+ * Last-Updated: Thu Apr  4 10:28:56 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 34
+ *     Update #: 39
  */
 
 /* Change Log:
@@ -70,9 +70,13 @@ public:
     const QVector3D mapToItem(const QVector3D& vector);
 
 #pragma mark -
-#pragma mark Item attributes
+#pragma mark Item attributes - getters
 
-public:
+    QColor color(void);
+
+#pragma mark -
+#pragma mark Item attributes - setters
+
     void setColor(const QColor& color);
 
 #pragma mark -

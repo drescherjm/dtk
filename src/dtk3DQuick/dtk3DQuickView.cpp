@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr  4 10:08:49 2013 (+0200)
+ * Last-Updated: Thu Apr  4 11:31:30 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 956
+ *     Update #: 980
  */
 
 /* Change Log:
@@ -16,7 +16,9 @@
 #include "dtk3DQuickView.h"
 
 #include <Qt3D/QGLBuilder>
+#include <Qt3D/QGLCube>
 #include <Qt3D/QGLPainter>
+#include <Qt3D/QGLSphere>
 #include <Qt3D/QGLSubsurface>
 #include <Qt3D/QGLTeapot>
 
@@ -50,7 +52,7 @@ void dtk3DQuickView::paint(QPainter *p)
     if(!d->view) {
 
 	initialized = false;
-	
+
 	d->view = new dtk3DView;
 	d->view->setOption(QGLView::ObjectPicking, false);
 
@@ -58,14 +60,18 @@ void dtk3DQuickView::paint(QPainter *p)
 	
 	    dtk3DQuickScene *scene;
 
-	    if((scene = qobject_cast<dtk3DQuickScene *>(object)))
+	    if((scene = qobject_cast<dtk3DQuickScene *>(object))) {
 		d->view->setScene(scene->scene());
+	    }
 	}
     }
 
     QGLPainter painter;
     painter.begin(p);
     painter.setClearColor(Qt::black);
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 
     if(!initialized)
 	d->view->initializeGL(&painter);

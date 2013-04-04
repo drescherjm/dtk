@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 23:20:48 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 16:55:20 2013 (+0200)
+ * Last-Updated: Thu Apr  4 11:30:48 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 152
+ *     Update #: 181
  */
 
 /* Change Log:
@@ -27,9 +27,9 @@ Quick3DView {
         id: scene;
 
         items: [
-            Quick3DItem { id: item1 },
-            Quick3DItem { id: item2 },
-            Quick3DItem { id: item3 }
+            Quick3DItem { id: item1; color: "red"; },
+            Quick3DItem { id: item2; color: "green"; x: -2.0; },
+            Quick3DItem { id: item3; color: "blue";  x: +2.0; }
         ]
     }
 } 

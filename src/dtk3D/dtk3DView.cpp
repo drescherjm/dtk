@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:41:55 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 16:44:16 2013 (+0200)
+ * Last-Updated: Thu Apr  4 16:56:37 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 234
+ *     Update #: 238
  */
 
 /* Change Log:
@@ -171,6 +171,12 @@ void dtk3DView::keyPressEvent(QKeyEvent *event)
 	break;
     case Qt::Key_F:
 	this->fit();
+	break;
+    case Qt::Key_O:
+	this->camera()->setProjectionType(QGLCamera::Orthographic);
+	break;
+    case Qt::Key_P:
+	this->camera()->setProjectionType(QGLCamera::Perspective);
 	break;
     case Qt::Key_X:
 	if(event->modifiers() & Qt::AltModifier)

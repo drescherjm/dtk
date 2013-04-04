@@ -3,15 +3,16 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 11:49:37 2013 (+0200)
+ * Last-Updated: Wed Apr  3 16:51:45 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 886
+ *     Update #: 950
  */
 
 /* Change Log:
  * 
  */
 
+#include "dtk3dQuickScene.h"
 #include "dtk3DQuickView.h"
 
 #include <dtk3D>
@@ -20,12 +21,6 @@
 #include <Qt3D/QGLPainter>
 #include <Qt3D/QGLSubsurface>
 #include <Qt3D/QGLTeapot>
-
-#if defined(Q_OS_MAC)
-#include <OpenGL/gl.h>
-#else
-#include <Gl/gl.h>
-#endif
 
 class dtk3DQuickViewPrivate
 {
@@ -37,7 +32,6 @@ dtk3DQuickView::dtk3DQuickView(QQuickItem *parent) : QQuickPaintedItem(parent), 
 {
     d->view = NULL;
 
-    this->setAcceptedMouseButtons(Qt::AllButtons);
     this->setRenderTarget(QQuickPaintedItem::InvertedYFramebufferObject);
 }
 
@@ -53,30 +47,22 @@ void dtk3DQuickView::paint(QPainter *p)
     if(!d->view) {
 
 	initialized = false;
-
-	QGLBuilder builder;
-	builder << QGL::Smooth;
-	builder << QGLTeapot();
-    
-	dtk3DItem *teapot = new dtk3DItem;
-	teapot->addNode(builder.finalizedSceneNode());
-	teapot->setEffect(QGL::LitMaterial);
-	teapot->setColor(Qt::green);
-
-	dtk3DScene *scene = new dtk3DScene;
-	scene->addItem(teapot);
 	
 	d->view = new dtk3DView;
 	d->view->setOption(QGLView::ObjectPicking, false);
-	d->view->setScene(scene);
+
+	foreach(QObject *object, this->children()) {
+	
+	    dtk3DQuickScene *scene;
+
+	    if((scene = qobject_cast<dtk3DQuickScene *>(object)))
+		d->view->setScene(scene);
+	}
     }
 
     QGLPainter painter;
     painter.begin(p);
     painter.setClearColor(Qt::black);
-
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
 
     if(!initialized)
 	d->view->initializeGL(&painter);

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr  1 21:44:51 2013 (+0200)
 ## Version: 
-## Last-Updated: Tue Apr  2 16:55:45 2013 (+0200)
+## Last-Updated: Wed Apr  3 15:00:45 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 13
+##     Update #: 20
 ######################################################################
 ## 
 ### Change Log:
@@ -19,11 +19,15 @@ project(dtk3DQuick)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtk3DQuickItem.h
   dtk3DQuickPlugin.h
+  dtk3DQuickScene.h
   dtk3DQuickView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtk3DQuickItem.cpp
   dtk3DQuickPlugin.cpp
+  dtk3DQuickScene.cpp
   dtk3DQuickView.cpp)
 
 ## #################################################################
@@ -46,8 +50,6 @@ qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Quick)
 
 target_link_libraries(${PROJECT_NAME} dtk3D)
-
-target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 
 ## ###################################################################
 ## Install rules - files

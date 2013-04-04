@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 11:35:55 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  2 13:29:36 2013 (+0200)
+ * Last-Updated: Thu Apr  4 22:05:34 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 164
+ *     Update #: 166
  */
 
 /* Change Log:
@@ -70,6 +70,7 @@ void dtk3DViewTestCase::testClick(void)
         builder << QGL::Faceted;
         builder << QGLCube();
         cube->addNode(builder.finalizedSceneNode());
+        cube->setFlag(dtk3DItem::Interactive, true);
         cube->translate(QVector3D(2.5, 0.0, 0.0));
 	cube->setEffect(QGL::LitMaterial);
 	cube->setColor(Qt::blue);

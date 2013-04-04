@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:40:37 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 16:39:00 2013 (+0200)
+ * Last-Updated: Thu Apr  4 21:57:22 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 77
+ *     Update #: 91
  */
 
 /* Change Log:
@@ -67,6 +67,9 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+
+protected:
+    void exposeEvent(QExposeEvent *e);
 
 private:
     dtk3DViewPrivate *d;

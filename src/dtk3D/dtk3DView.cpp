@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:41:55 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 16:56:37 2013 (+0200)
+ * Last-Updated: Fri Apr  5 00:49:35 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 238
+ *     Update #: 257
  */
 
 /* Change Log:
@@ -15,6 +15,7 @@
 #include "dtk3DItem.h"
 #include "dtk3DScene.h"
 #include "dtk3DView.h"
+#include "dtk3DView_p.h"
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLSceneNode>
@@ -23,17 +24,9 @@
 
 #include <QtGui>
 
-class dtk3DViewPrivate
-{
-public:
-    dtk3DItem *current;
-
-public:
-    dtk3DScene *scene;
-};
-
 dtk3DView::dtk3DView(QWindow *parent) : QGLView(parent), d(new dtk3DViewPrivate)
 {
+    d->embedded = false;
     d->current = NULL;
     d->scene = NULL;
 
@@ -115,7 +108,7 @@ void dtk3DView::fitFromRight(void)
 void dtk3DView::fitFromBottom(void)
 {
     this->fit(QVector3D(0.0, 1.0, 0.0));
-    this->camera()->setUpVector(QVector3D(0.0, 0.0, -1.0));
+    this->camera()->setUpVector(QVector3D(0.0, 0.0, 1.0));
 }
 
 const QPoint dtk3DView::mapToScreen(const QVector3D& point)
@@ -203,12 +196,15 @@ void dtk3DView::keyPressEvent(QKeyEvent *event)
 
 void dtk3DView::mouseMoveEvent(QMouseEvent *event)
 {
+    QGLView::mouseMoveEvent(event);
+
+    if(d->embedded)
+	return;
+
     if(dtk3DItem *item = qobject_cast<dtk3DItem *>(this->objectForPoint(event->pos())))
 	d->current = item;
     else
 	d->current = NULL;
-
-    QGLView::mouseMoveEvent(event);
 }
 
 void dtk3DView::mousePressEvent(QMouseEvent *event)
@@ -219,4 +215,10 @@ void dtk3DView::mousePressEvent(QMouseEvent *event)
 void dtk3DView::mouseReleaseEvent(QMouseEvent *event)
 {
     QGLView::mouseReleaseEvent(event);
+}
+
+void dtk3DView::exposeEvent(QExposeEvent *event)
+{
+    if(!d->embedded)
+	QGLView::exposeEvent(event);
 }

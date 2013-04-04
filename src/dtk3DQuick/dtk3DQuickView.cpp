@@ -3,17 +3,19 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr  4 11:31:30 2013 (+0200)
+ * Last-Updated: Fri Apr  5 00:51:57 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 980
+ *     Update #: 1239
  */
 
 /* Change Log:
  * 
  */
 
-#include "dtk3dQuickScene.h"
+#include "dtk3DQuickScene.h"
 #include "dtk3DQuickView.h"
+
+#include <dtk3D/dtk3DView_p>
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLCube>
@@ -32,6 +34,9 @@ dtk3DQuickView::dtk3DQuickView(QQuickItem *parent) : QQuickPaintedItem(parent), 
 {
     d->view = NULL;
 
+    this->setAcceptHoverEvents(true);
+    this->setAcceptedMouseButtons(Qt::LeftButton);
+    this->setFocus(true);
     this->setRenderTarget(QQuickPaintedItem::InvertedYFramebufferObject);
 }
 
@@ -55,6 +60,14 @@ void dtk3DQuickView::paint(QPainter *p)
 
 	d->view = new dtk3DView;
 	d->view->setOption(QGLView::ObjectPicking, false);
+	d->view->d->embedded = true;
+
+	int w = this->boundingRect().width();
+	int h = this->boundingRect().height();
+
+	d->view->blockSignals(true);
+	d->view->setGeometry(QRect(0, 0, w, h));
+	d->view->blockSignals(false);
 
 	foreach(QObject *object, this->children()) {
 	
@@ -66,24 +79,72 @@ void dtk3DQuickView::paint(QPainter *p)
 	}
     }
 
+
+
     QGLPainter painter;
     painter.begin(p);
     painter.setClearColor(Qt::black);
 
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
     if(!initialized)
 	d->view->initializeGL(&painter);
-
-    QRect viewport = mapRectToScene(boundingRect()).toRect();
-    QRect target_rect(0, 0, viewport.width(), viewport.height());
-    QGLSubsurface surface(painter.currentSurface(), target_rect);
-
-    painter.pushSurface(&surface);
     d->view->earlyPaintGL(&painter);
     painter.setCamera(d->view->camera());
     d->view->paintGL(&painter);
-    painter.popSurface();
     painter.disableEffect();
 }
+
+void dtk3DQuickView::keyPressEvent(QKeyEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->keyPressEvent(event);
+
+    this->update();
+}
+
+void dtk3DQuickView::mouseMoveEvent(QMouseEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->mouseMoveEvent(event);
+
+    // Q_ASSERT(!qIsNaN(d->view->camera()->eye().x()));
+
+    this->update();
+}
+
+void dtk3DQuickView::mousePressEvent(QMouseEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->mousePressEvent(event);
+
+    this->update();
+}
+
+void dtk3DQuickView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->mouseReleaseEvent(event);
+
+    this->update();
+}
+
+#ifndef QT_NO_WHEELEVENT
+void dtk3DQuickView::wheelEvent(QWheelEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->wheelEvent(event);
+
+    this->update();
+}
+#endif

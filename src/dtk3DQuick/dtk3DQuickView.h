@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 21:49:58 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr  4 10:48:27 2013 (+0200)
+ * Last-Updated: Fri Apr  5 00:51:17 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 103
+ *     Update #: 117
  */
 
 /* Change Log:
@@ -34,6 +34,16 @@ public:
 
 protected slots:
     void paint(QPainter *painter);
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+#ifndef QT_NO_WHEELEVENT
+    void wheelEvent(QWheelEvent *event);
+#endif
 
 private:
     dtk3DQuickViewPrivate *d;

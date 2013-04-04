@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 14:57:36 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr  4 11:31:20 2013 (+0200)
+ * Last-Updated: Thu Apr  4 23:03:39 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 69
+ *     Update #: 72
  */
 
 /* Change Log:
@@ -42,6 +42,7 @@ dtk3DQuickItem::dtk3DQuickItem(QObject *parent) : QObject(parent), d(new dtk3DQu
     d->item->addNode(node);
     d->item->setEffect(QGL::LitMaterial);
     d->item->setColor(Qt::green);
+    d->item->setFlag(dtk3DItem::Interactive, true);
 }
 
 dtk3DQuickItem::~dtk3DQuickItem(void)

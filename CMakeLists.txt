@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Tue Apr  2 10:39:04 2013 (+0200)
+## Last-Updated: Fri Apr  5 01:02:35 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 159
+##     Update #: 166
 ######################################################################
 ## 
 ### Change Log:
@@ -65,6 +65,7 @@ enable_testing()
 ## Dependencies - Qt
 ## #################################################################
 
+find_package(OpenGL)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5Core       REQUIRED)
 find_package(Qt5Gui        REQUIRED)

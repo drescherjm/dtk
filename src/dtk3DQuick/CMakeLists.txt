@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr  1 21:44:51 2013 (+0200)
 ## Version: 
-## Last-Updated: Thu Apr  4 10:59:19 2013 (+0200)
+## Last-Updated: Fri Apr  5 01:02:51 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 25
+##     Update #: 35
 ######################################################################
 ## 
 ### Change Log:
@@ -36,6 +36,8 @@ set(${PROJECT_NAME}_SOURCES
 
 add_definitions(-DQT_PLUGIN)
 
+include_directories(${OPENGL_INCLUDE_DIRS})
+
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
@@ -49,9 +51,7 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Quick)
 
-target_link_libraries(${PROJECT_NAME} dtk3D)
-
-target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+target_link_libraries(${PROJECT_NAME} dtk3D ${OPENGL_LIBRARIES})
 
 ## ###################################################################
 ## Install rules - files

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:59:13 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr  3 16:55:07 2013 (+0200)
+ * Last-Updated: Fri Apr  5 19:32:52 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 30
+ *     Update #: 31
  */
 
 /* Change Log:
@@ -35,7 +35,7 @@ void dtk3DQuickViewTestCase::testView(void)
     QQuickView view;
     view.engine()->addImportPath(dtk3DQuickImportPath);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setSource(QUrl("qrc:dtk3DQuickViewTest.qml"));
+    view.setSource(QUrl("qrc:dtk3DQuickViewTest/dtk3DQuickViewTest.qml"));
     view.setTitle("dtk3DQuickViewTest");
     view.show();
 

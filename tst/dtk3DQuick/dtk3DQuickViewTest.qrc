@@ -1,5 +1,5 @@
 <RCC>
-    <qresource>
+    <qresource prefix="dtk3DQuickViewTest">
         <file>dtk3DQuickViewTest.qml</file>
     </qresource>
 </RCC>

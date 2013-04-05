@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 14:56:54 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr  4 11:28:49 2013 (+0200)
+ * Last-Updated: Fri Apr  5 13:52:10 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 45
+ *     Update #: 47
  */
 
 /* Change Log:
@@ -58,7 +58,6 @@ public:
 #pragma mark Invokables
 
 public slots:
-
     void translate(qreal dx, qreal dy, qreal dz);
 
 signals:

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 14:57:36 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr  4 23:03:39 2013 (+0200)
+ * Last-Updated: Fri Apr  5 13:45:44 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 72
+ *     Update #: 76
  */
 
 /* Change Log:
@@ -13,11 +13,6 @@
  */
 
 #include "dtk3DQuickItem.h"
-
-#include <Qt3D/QGLBuilder>
-#include <Qt3D/QGraphicsScale3D>
-#include <Qt3D/QGLSceneNode>
-#include <Qt3D/QGLSphere>
 
 class dtk3DQuickItemPrivate
 {
@@ -27,22 +22,7 @@ public:
 
 dtk3DQuickItem::dtk3DQuickItem(QObject *parent) : QObject(parent), d(new dtk3DQuickItemPrivate)
 {
-    QGLBuilder builder;
-    builder << QGL::Faceted;
-    builder << QGLSphere();
-
-    QGraphicsScale3D *transform = new QGraphicsScale3D;
-    transform->setScale(QVector3D(0.5, 0.5, 0.5));
-
-    QGLSceneNode *node = builder.finalizedSceneNode();
-    node->setObjectName("node");
-    node->addTransform(transform);
-
     d->item = new dtk3DItem;
-    d->item->addNode(node);
-    d->item->setEffect(QGL::LitMaterial);
-    d->item->setColor(Qt::green);
-    d->item->setFlag(dtk3DItem::Interactive, true);
 }
 
 dtk3DQuickItem::~dtk3DQuickItem(void)
@@ -97,7 +77,5 @@ void dtk3DQuickItem::setZ(qreal z)
 
 void dtk3DQuickItem::translate(qreal dx, qreal dy, qreal dz)
 {
-    qDebug() << Q_FUNC_INFO;
-
     d->item->translate(QVector3D(dx, dy, dz));
 }

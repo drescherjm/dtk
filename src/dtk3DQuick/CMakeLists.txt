@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr  1 21:44:51 2013 (+0200)
 ## Version: 
-## Last-Updated: Fri Apr  5 01:02:51 2013 (+0200)
+## Last-Updated: Fri Apr  5 13:53:55 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 35
+##     Update #: 47
 ######################################################################
 ## 
 ### Change Log:
@@ -19,13 +19,23 @@ project(dtk3DQuick)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtk3DQuickItem
   dtk3DQuickItem.h
+  dtk3DQuickMesh
+  dtk3DQuickMesh.h
+  dtk3DQuickPoint
+  dtk3DQuickPoint.h
+  dtk3DQuickPlugin
   dtk3DQuickPlugin.h
+  dtk3DQuickScene
   dtk3DQuickScene.h
+  dtk3DQuickView
   dtk3DQuickView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtk3DQuickItem.cpp
+  dtk3DQuickMesh.cpp
+  dtk3DQuickPoint.cpp
   dtk3DQuickPlugin.cpp
   dtk3DQuickScene.cpp
   dtk3DQuickView.cpp)

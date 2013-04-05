@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:42:30 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 12:29:01 2013 (+0200)
+ * Last-Updated: Fri Apr  5 13:31:52 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 105
+ *     Update #: 108
  */
 
 /* Change Log:
@@ -34,8 +34,6 @@ dtk3DMesh::~dtk3DMesh(void)
 
 QBox3D dtk3DMesh::boundingBox(void) const
 {
-    qDebug() << Q_FUNC_INFO;
-
     return d->data.boundingBox();
 }
 
@@ -56,10 +54,7 @@ void dtk3DMesh::write(const QString& path)
 
 void dtk3DMesh::draw(QGLPainter *painter)
 {
-    
-
     if (d->data.count()) {
-
 #if 1
         painter->clearAttributes();
 	if (d->data.colors().count())

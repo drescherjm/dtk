@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 00:51:57 2013 (+0200)
+ * Last-Updated: Fri Apr  5 09:54:16 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 1239
+ *     Update #: 1240
  */
 
 /* Change Log:
@@ -78,8 +78,6 @@ void dtk3DQuickView::paint(QPainter *p)
 	    }
 	}
     }
-
-
 
     QGLPainter painter;
     painter.begin(p);

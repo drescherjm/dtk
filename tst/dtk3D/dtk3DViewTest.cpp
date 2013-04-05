@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 11:35:55 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 22:05:34 2013 (+0200)
+ * Last-Updated: Fri Apr  5 19:27:24 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 166
+ *     Update #: 167
  */
 
 /* Change Log:
@@ -18,7 +18,7 @@
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLCube>
-#include <Qt3d/QGLSphere>
+#include <Qt3D/QGLSphere>
 #include <Qt3D/QGLTeapot>
 
 void dtk3DViewTestCase::initTestCase(void)

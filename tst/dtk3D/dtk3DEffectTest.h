@@ -1,11 +1,11 @@
-/* dtk3DShaderTest.h ---
+/* dtk3DEffectTest.h ---
  * 
  * Author: Julien Wintz
- * Created: Fri Apr  5 19:25:15 2013 (+0200)
+ * Created: Mon Apr  8 14:54:18 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr  8 14:54:39 2013 (+0200)
+ * Last-Updated: Mon Apr  8 14:55:42 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 10
+ *     Update #: 6
  */
 
 /* Change Log:
@@ -16,7 +16,7 @@
 
 #include <dtkTest>
 
-class dtk3DShaderTestCase : public QObject
+class dtk3DEffectTestCase : public QObject
 {
     Q_OBJECT
 

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="dtk3D">
+        <file>dtk3DEffectWireframe.vert</file>
+        <file>dtk3DEffectWireframe.geom</file>
+        <file>dtk3DEffectWireframe.frag</file>
+    </qresource>
+</RCC>

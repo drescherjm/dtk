@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr  1 22:48:59 2013 (+0200)
 ## Version: 
-## Last-Updated: Sun Apr  7 19:15:47 2013 (+0200)
+## Last-Updated: Mon Apr  8 15:03:04 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 37
+##     Update #: 40
 ######################################################################
 ## 
 ### Change Log:
@@ -52,6 +52,7 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Quick)
 qt5_use_modules(${PROJECT_NAME} Test)
+qt5_use_modules(${PROJECT_NAME} OpenGL)
 
 target_link_libraries(${PROJECT_NAME} dtk3DQuick)
 

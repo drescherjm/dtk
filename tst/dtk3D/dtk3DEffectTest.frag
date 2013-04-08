@@ -1,11 +1,13 @@
+#version 120
+
 /* dtk3DShaderTest.frag ---
  * 
  * Author: Julien Wintz
  * Created: Fri Apr  5 19:33:56 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr  8 11:02:27 2013 (+0200)
+ * Last-Updated: Mon Apr  8 18:03:36 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 8
  */
 
 /* Change Log:

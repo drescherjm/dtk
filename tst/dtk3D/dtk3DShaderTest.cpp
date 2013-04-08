@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Apr  5 19:25:58 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr  8 10:46:54 2013 (+0200)
+ * Last-Updated: Mon Apr  8 15:42:14 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 67
+ *     Update #: 116
  */
 
 /* Change Log:
@@ -17,9 +17,7 @@
 #include <dtk3D>
 
 #include <Qt3D/QGLBuilder>
-#include <Qt3D/QGLCube>
 #include <Qt3D/QGLShaderProgramEffect>
-#include <Qt3D/QGLSphere>
 #include <Qt3D/QGLTeapot>
 
 void dtk3DShaderTestCase::initTestCase(void)
@@ -38,7 +36,6 @@ void dtk3DShaderTestCase::test(void)
     {
 	QGLShaderProgramEffect *effect = new QGLShaderProgramEffect;
 	effect->setVertexShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.vert");
-	effect->setGeometryShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.geom");
 	effect->setFragmentShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.frag");
 
 	QGLBuilder builder;
@@ -49,20 +46,8 @@ void dtk3DShaderTestCase::test(void)
 	teapot->setUserEffect(effect);
     }
 
-    QGLSceneNode *node;
-    {
-	QGLBuilder builder;
-	builder << QGL::Faceted;
-	builder << QGLCube();
-
-	node = builder.finalizedSceneNode();
-	node->setEffect(QGL::LitMaterial);
-	node->setPosition(QVector3D(0.0, 0.0, -3.0));
-    }
-
     dtk3DScene scene;
     scene.addItem(teapot);
-    scene.addNode(node);
     
     dtk3DView view;
     view.setScene(&scene);

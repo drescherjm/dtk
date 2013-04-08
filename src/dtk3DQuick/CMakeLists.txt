@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr  1 21:44:51 2013 (+0200)
 ## Version: 
-## Last-Updated: Fri Apr  5 13:53:55 2013 (+0200)
+## Last-Updated: Mon Apr  8 15:03:20 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 47
+##     Update #: 49
 ######################################################################
 ## 
 ### Change Log:
@@ -58,6 +58,7 @@ add_library(${PROJECT_NAME} SHARED
 
 qt5_use_modules(${PROJECT_NAME} 3D)
 qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} OpenGL)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Quick)
 

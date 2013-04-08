@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  8 14:11:18 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr  8 17:37:54 2013 (+0200)
+ * Last-Updated: Mon Apr  8 19:41:36 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 153
+ *     Update #: 161
  */
 
 /* Change Log:
@@ -335,14 +335,8 @@ void dtk3DEffect::afterLink(void)
 // ///////////////////////////////////////////////////////////////////
 
 dtk3DEffectPrivate::dtk3DEffectPrivate(void)
-    : geometryInputType(GL_TRIANGLE_STRIP)
-    , geometryOutputType(GL_TRIANGLE_STRIP)
-    , maximumLights(8)
-    , attributes(0)
-    , regenerate(true)
-    , fixedFunction(false)
 #if !defined(QGL_FIXED_FUNCTION_ONLY)
-    , program(0)
+    : program(0)
     , matrix(-1)
     , mvMatrix(-1)
     , projMatrix(-1)
@@ -359,7 +353,12 @@ dtk3DEffectPrivate::dtk3DEffectPrivate(void)
     , haveMaterials(0)
 #endif
 {
-
+    this->geometryInputType = GL_TRIANGLE_STRIP;
+    this->geometryOutputType = GL_TRIANGLE_STRIP;
+    this->maximumLights = 8;
+    this->attributes = 0;
+    this->regenerate = true;
+    this->fixedFunction = false;
 }
 
 dtk3DEffectPrivate::~dtk3DEffectPrivate(void)
@@ -453,7 +452,6 @@ static inline QVector4D colorToVector4(const QColor &color, const QColor &lightC
 void dtk3DEffectPrivate::setMaterial(const QGLMaterial *mparams, const QGLLightModel *model, const QGLLightParameters *lparams, const char *array, int index)
 {
     if (lparams) {
-
         setUniformValue(array, index, "ambient", colorToVector4(mparams->ambientColor(), lparams->ambientColor()));
         setUniformValue(array, index, "diffuse", colorToVector4(mparams->diffuseColor(), lparams->diffuseColor()));
         setUniformValue(array, index, "specular", colorToVector4(mparams->specularColor(), lparams->specularColor()));

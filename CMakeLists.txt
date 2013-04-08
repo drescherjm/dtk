@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Apr  5 01:02:35 2013 (+0200)
+## Last-Updated: Mon Apr  8 22:29:40 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 166
+##     Update #: 170
 ######################################################################
 ## 
 ### Change Log:
@@ -131,8 +131,10 @@ mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
 mark_as_advanced(Qt5Gui_DIR)
 mark_as_advanced(Qt5Network_DIR)
+mark_as_advanced(Qt5OpenGL_DIR)
 mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
+mark_as_advanced(Qt5QuickTest_DIR)
 mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
 mark_as_advanced(Qt5Xml_DIR)

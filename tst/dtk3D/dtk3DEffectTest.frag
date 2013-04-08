@@ -5,9 +5,9 @@
  * Author: Julien Wintz
  * Created: Fri Apr  5 19:33:56 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr  8 20:54:00 2013 (+0200)
+ * Last-Updated: Mon Apr  8 22:12:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 37
+ *     Update #: 48
  */
 
 /* Change Log:
@@ -68,25 +68,18 @@ vec4 qLightPixel(vec4 ambient, vec4 diffuse)
 
     vec4 color;
     vec4 component;
-    vec3 normal = normalize(gs_Normal);
+    vec3 normal;
 
-    // Start with the ambient color.
     color = ambient;
-
-    // Determine the cosine of the angle between the normal and the
-    // vector from the vertex to the light.
+    normal = normalize(gs_Normal);
     angle = max(dot(normal, gs_LightDirection), 0.0);
-
-    // Calculate the diffuse light components.
     component = angle * diffuse;
 
-    // Calculate the specular light components.
     if (angle != 0.0) {
         angle = max(dot(normal, gs_HalfVector), 0.0);
         component += pow(angle, qt_Material.shininess) * qt_Material.specular;
     }
 
-    // Apply the spotlight angle and exponent.
     if (qt_Light.spotCutoff != 180.0) {
         spot = max(dot(normalize(gs_VertexToLight),
                        normalize(qt_Light.spotDirection)), 0.0);

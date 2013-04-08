@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Mar 22 10:30:51 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Apr  8 15:40:06 2013 (+0200)
+## Last-Updated: Mon Apr  8 22:14:57 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 57
+##     Update #: 58
 ######################################################################
 ## 
 ### Change Log:
@@ -75,4 +75,4 @@ add_test(dtk3DViewTest   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtk3DTest dtk3DViewTe
 add_test(dtk3DItemTest   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtk3DTest dtk3DItemTest)
 add_test(dtk3DMeshTest   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtk3DTest dtk3DMeshTest)
 add_test(dtk3DShaderTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtk3DTest dtk3DShaderTest)
-add_test(dtk3DEffectTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtk3DTest dtk3DEffecthTest)
+add_test(dtk3DEffectTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtk3DTest dtk3DEffectTest)

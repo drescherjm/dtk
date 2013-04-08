@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:59:13 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 19:32:52 2013 (+0200)
+ * Last-Updated: Mon Apr  8 22:16:49 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 31
+ *     Update #: 35
  */
 
 /* Change Log:
@@ -36,7 +36,7 @@ void dtk3DQuickViewTestCase::testView(void)
     view.engine()->addImportPath(dtk3DQuickImportPath);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:dtk3DQuickViewTest/dtk3DQuickViewTest.qml"));
-    view.setTitle("dtk3DQuickViewTest");
+    view.setTitle("Quit app to validate test");
     view.show();
 
     QEventLoop loop;

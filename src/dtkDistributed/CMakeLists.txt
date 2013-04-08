@@ -17,15 +17,22 @@ project(dtkDistributed)
 set(${PROJECT_NAME}_HEADERS
   dtkDistributed
   dtkDistributed.h
+  dtkDistributedArray
   dtkDistributedArray.h
   dtkDistributedArray.tpp
+  dtkDistributedCommunicator
   dtkDistributedCommunicator.h
+  dtkDistributedMapper
   dtkDistributedMapper.h
+  dtkDistributedPolicy
   dtkDistributedPolicy.h
   dtkDistributedSettings
   dtkDistributedSettings.h
+  dtkDistributedWork
   dtkDistributedWork.h
+  dtkDistributedWorker
   dtkDistributedWorker.h
+  dtkDistributedWorkerManager
   dtkDistributedWorkerManager.h)
 
 set(${PROJECT_NAME}_SOURCES

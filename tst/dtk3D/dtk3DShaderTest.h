@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Apr  5 19:25:15 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 21:47:38 2013 (+0200)
+ * Last-Updated: Mon Apr  8 10:46:42 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 3
+ *     Update #: 4
  */
 
 /* Change Log:
@@ -25,7 +25,7 @@ private slots:
     void init(void);
 
 private slots:
-    void testVertexShader(void);
+    void test(void);
 
 private slots:
     void cleanupTestCase(void);

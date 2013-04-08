@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Apr  5 19:25:58 2013 (+0200)
  * Version: 
- * Last-Updated: Sun Apr  7 19:19:16 2013 (+0200)
+ * Last-Updated: Mon Apr  8 10:46:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 33
+ *     Update #: 67
  */
 
 /* Change Log:
@@ -32,14 +32,14 @@ void dtk3DShaderTestCase::init(void)
 
 }
 
-void dtk3DShaderTestCase::testVertexShader(void)
+void dtk3DShaderTestCase::test(void)
 {
-    dtk3DItem *teapot = new dtk3DItem; {
-
+    dtk3DItem *teapot = new dtk3DItem;
+    {
 	QGLShaderProgramEffect *effect = new QGLShaderProgramEffect;
 	effect->setVertexShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.vert");
-	effect->setFragmentShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.vert");
-
+	effect->setGeometryShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.geom");
+	effect->setFragmentShaderFromFile(":dtk3DShaderTest/dtk3DShaderTest.frag");
 
 	QGLBuilder builder;
 	builder << QGL::Smooth;
@@ -47,11 +47,22 @@ void dtk3DShaderTestCase::testVertexShader(void)
 	teapot->addNode(builder.finalizedSceneNode());
 	teapot->setEffect(QGL::LitMaterial);
 	teapot->setUserEffect(effect);
-	teapot->setColor(Qt::red);
+    }
+
+    QGLSceneNode *node;
+    {
+	QGLBuilder builder;
+	builder << QGL::Faceted;
+	builder << QGLCube();
+
+	node = builder.finalizedSceneNode();
+	node->setEffect(QGL::LitMaterial);
+	node->setPosition(QVector3D(0.0, 0.0, -3.0));
     }
 
     dtk3DScene scene;
     scene.addItem(teapot);
+    scene.addNode(node);
     
     dtk3DView view;
     view.setScene(&scene);

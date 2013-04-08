@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 14:57:36 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 13:45:44 2013 (+0200)
+ * Last-Updated: Tue Apr  9 00:46:51 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 76
+ *     Update #: 78
  */
 
 /* Change Log:
@@ -55,6 +55,11 @@ qreal dtk3DQuickItem::z(void)
     return d->item->localPosition().z();
 }
 
+bool dtk3DQuickItem::wireframe(void)
+{
+    return d->item->flags() & dtk3DItem::Wireframe;
+}
+
 void dtk3DQuickItem::setColor(const QColor& color)
 {
     d->item->setColor(color);
@@ -73,6 +78,11 @@ void dtk3DQuickItem::setY(qreal y)
 void dtk3DQuickItem::setZ(qreal z)
 {
     d->item->translate(QVector3D(0.0, 0.0, z));
+}
+
+void dtk3DQuickItem::setWireframe(bool on)
+{
+    d->item->setFlag(dtk3DItem::Wireframe, on);
 }
 
 void dtk3DQuickItem::translate(qreal dx, qreal dy, qreal dz)

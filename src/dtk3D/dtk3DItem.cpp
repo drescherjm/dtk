@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:55:00 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Apr  8 23:54:10 2013 (+0200)
+ * Last-Updated: Tue Apr  9 01:39:12 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 221
+ *     Update #: 232
  */
 
 /* Change Log:
@@ -54,6 +54,7 @@ public:
 
 public:
     QGLMaterial      *material;
+    QGLMaterial  *backMaterial;
     QGLMaterial *hoverMaterial;
 
 public:
@@ -85,11 +86,14 @@ dtk3DItem::dtk3DItem(QObject *parent) : QGLSceneNode(parent), d(new dtk3DItemPri
     d->effect_wireframe = NULL;
     d->material = new QGLMaterial(this);
     d->material->setColor(qRgb(170, 202, 0));
+    d->backMaterial = new QGLMaterial(this);
+    d->backMaterial->setColor(qRgb(255, 127, 0));
     d->hoverMaterial = new QGLMaterial(this);
     d->hoverMaterial->setColor(qRgb(255, 186, 210));
     d->view = NULL;
 
     this->setMaterial(d->material);
+    this->setBackMaterial(d->backMaterial);
 }
 
 dtk3DItem::~dtk3DItem(void)

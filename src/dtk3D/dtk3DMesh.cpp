@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:42:30 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 01:29:47 2013 (+0200)
+ * Last-Updated: Tue Apr  9 01:40:23 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 142
+ *     Update #: 151
  */
 
 /* Change Log:
@@ -55,7 +55,7 @@ void dtk3DMesh::write(const QString& path)
 void dtk3DMesh::draw(QGLPainter *painter)
 {
     if (!d->data.count())
-	return;
+    	return;
 
     painter->clearAttributes();
     if (d->data.colors().count())

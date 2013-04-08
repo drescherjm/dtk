@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Mar 22 10:30:51 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Mar 27 14:31:33 2013 (+0100)
+## Last-Updated: Fri Apr  5 19:36:23 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 33
+##     Update #: 40
 ######################################################################
 ## 
 ### Change Log:
@@ -21,12 +21,17 @@ project(dtk3DTest)
 set(${PROJECT_NAME}_HEADERS
   dtk3DItemTest.h
   dtk3DMeshTest.h
+  dtk3DShaderTest.h
   dtk3DViewTest.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtk3DItemTest.cpp
   dtk3DMeshTest.cpp
+  dtk3DShaderTest.cpp
   dtk3DViewTest.cpp)
+
+set(${PROJECT_NAME}_SOURCES_RCC
+  dtk3DShaderTest.qrc)
 
 ## ###################################################################
 ## Input - introspected
@@ -41,7 +46,10 @@ create_test_sourcelist(
 ## Build rules
 ## ###################################################################
 
+qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_RCC})
+
 add_executable(${PROJECT_NAME}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES_TST}
   ${${PROJECT_NAME}_SOURCES})
 

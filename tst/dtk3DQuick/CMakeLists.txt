@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr  1 22:48:59 2013 (+0200)
 ## Version: 
-## Last-Updated: Tue Apr  2 10:54:43 2013 (+0200)
+## Last-Updated: Sun Apr  7 19:15:47 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 34
+##     Update #: 37
 ######################################################################
 ## 
 ### Change Log:
@@ -22,7 +22,7 @@ set(${PROJECT_NAME}_SOURCES
   dtk3DQuickViewTest.cpp)
 
 set(${PROJECT_NAME}_SOURCES_RCC
-  dtk3DQuickTest.qrc)
+  dtk3DQuickViewTest.qrc)
 
 ## ###################################################################
 ## Input - introspected

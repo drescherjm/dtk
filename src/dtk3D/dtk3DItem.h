@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:53:33 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 12:38:47 2013 (+0200)
+ * Last-Updated: Mon Apr  8 22:45:32 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 41
+ *     Update #: 46
  */
 
 /* Change Log:
@@ -38,7 +38,8 @@ public:
     enum Flag {
 	       None = 0 << 0,
 	     Hidden = 1 << 1,
-	Interactive = 1 << 2
+	  Wireframe = 1 << 2,
+	Interactive = 1 << 3
     };
 
     Q_DECLARE_FLAGS(Flags, Flag);

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  8 14:11:18 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr  8 19:41:36 2013 (+0200)
+ * Last-Updated: Tue Apr  9 00:34:30 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 161
+ *     Update #: 164
  */
 
 /* Change Log:
@@ -109,7 +109,7 @@ void dtk3DEffect::setActive(QGLPainter *painter, bool flag)
         d->texture0 = d->program->uniformLocation("qt_Texture0");
         d->texture1 = d->program->uniformLocation("qt_Texture1");
         d->texture2 = d->program->uniformLocation("qt_Texture2");
-        d->color = d->program->uniformLocation("qt_Color");
+	d->color = d->program->uniformLocation("qt_Color");
         d->numLights = d->program->uniformLocation("qt_NumLights");
         d->haveLight = (d->program->uniformLocation("qt_Light.position") != -1);
         d->haveLights = (d->program->uniformLocation("qt_Lights[0].position") != -1);

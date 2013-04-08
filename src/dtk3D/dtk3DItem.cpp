@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:55:00 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Apr  4 22:04:38 2013 (+0200)
+ * Last-Updated: Mon Apr  8 23:54:10 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 148
+ *     Update #: 221
  */
 
 /* Change Log:
@@ -13,6 +13,7 @@
  */
 
 #include "dtk3DItem.h"
+#include "dtk3DEffect.h"
 #include "dtk3DView.h"
 
 #include <Qt3D/QGraphicsRotation3D>
@@ -61,6 +62,9 @@ public:
 
 public:
     QGLView *view;
+
+public:
+    dtk3DEffect *effect_wireframe;
 };
 
 int dtk3DItemPrivate::g_id = 0;
@@ -78,6 +82,7 @@ dtk3DItem::dtk3DItem(QObject *parent) : QGLSceneNode(parent), d(new dtk3DItemPri
     d->panned = false;
     d->rotated = false;
     d->hovered = false;
+    d->effect_wireframe = NULL;
     d->material = new QGLMaterial(this);
     d->material->setColor(qRgb(170, 202, 0));
     d->hoverMaterial = new QGLMaterial(this);
@@ -89,6 +94,9 @@ dtk3DItem::dtk3DItem(QObject *parent) : QGLSceneNode(parent), d(new dtk3DItemPri
 
 dtk3DItem::~dtk3DItem(void)
 {
+    if(d->effect_wireframe)
+	delete d->effect_wireframe;
+
     delete d;
 }
 
@@ -210,6 +218,8 @@ void dtk3DItem::draw(QGLPainter *painter)
     
     painter->clearAttributes();
 
+    // Handling interactive flag
+
     if(d->flags & dtk3DItem::Interactive) {
 
 	if (d->i_id == -1) {
@@ -227,6 +237,29 @@ void dtk3DItem::draw(QGLPainter *painter)
 
     } else {
 	d->i_id = -1;
+    }
+
+    // Handling wireframe flag
+
+    if(d->flags & dtk3DItem::Wireframe) {
+	
+	if(!d->effect_wireframe && d->view) {
+	    d->effect_wireframe = new dtk3DEffect;
+	    d->effect_wireframe->setVertexShaderFromFile(":dtk3D/dtk3DEffectWireframe.vert");
+	    d->effect_wireframe->setGeometryShaderFromFile(":dtk3D/dtk3DEffectWireframe.geom");
+	    d->effect_wireframe->setFragmentShaderFromFile(":dtk3D/dtk3DEffectWireframe.frag");
+	}
+
+	this->setUserEffect(d->effect_wireframe);
+
+	QVector2D view = QVector2D(d->view->width(), d->view->height());
+
+	d->effect_wireframe->setActive(painter, true);
+	d->effect_wireframe->program()->setUniformValue("view", view);
+
+    } else {
+
+	this->setUserEffect(this->userEffect());
     }
 
     painter->modelViewMatrix().push();

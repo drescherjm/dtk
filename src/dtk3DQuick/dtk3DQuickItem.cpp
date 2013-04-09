@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 14:57:36 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr  9 00:46:51 2013 (+0200)
+ * Last-Updated: Tue Apr  9 18:00:49 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 78
+ *     Update #: 89
  */
 
 /* Change Log:
@@ -33,6 +33,12 @@ dtk3DQuickItem::~dtk3DQuickItem(void)
 dtk3DItem *dtk3DQuickItem::item(void)
 {
     return d->item;
+}
+
+void dtk3DQuickItem::setItem(dtk3DItem *item)
+{
+    delete d->item;
+    d->item = item;
 }
 
 QColor dtk3DQuickItem::color(void)

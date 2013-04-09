@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: lun. juin 18 16:08:06 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. juin 18 16:08:29 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 14
+ * Last-Updated: Fri Apr  5 08:42:17 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 16
  */
 
 /* Commentary:
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODECONTROLMAP_H
-#define DTKCOMPOSERNODECONTROLMAP_H
-
+#pragma once
 
 #include "dtkComposerNodeControl.h"
 
@@ -55,4 +53,3 @@ private:
     dtkComposerNodeControlMapPrivate *d;
 };
 
-#endif

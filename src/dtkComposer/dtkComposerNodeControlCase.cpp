@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Apr  4 15:32:03 2013 (+0200)
+ * Last-Updated: Fri Apr  5 08:34:03 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 359
+ *     Update #: 360
  */
 
 /* Commentary:
@@ -44,7 +44,7 @@ public:
     dtkComposerTransmitterReceiverVariant cond;
 
 public:
-    block_id;
+    int block_id;
 };
 
 // /////////////////////////////////////////////////////////////////

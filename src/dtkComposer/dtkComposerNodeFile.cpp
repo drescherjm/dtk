@@ -26,51 +26,53 @@
 
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
-    QFileInfo file_template_info = QFileInfo(url.path());
+    Q_UNUSED(url);
 
-    QTemporaryFile file;
-    if(!file_template_info.completeSuffix().isEmpty())
-        file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
-    file.setAutoRemove(false);
+    // QFileInfo file_template_info = QFileInfo(url.path());
+
+    // QTemporaryFile file;
+    // if(!file_template_info.completeSuffix().isEmpty())
+    //     file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
+    // file.setAutoRemove(false);
     
-    if (!file.open()) {
-        qDebug() << Q_FUNC_INFO << "Unable to file for saving";
-        return;
-    }
+    // if (!file.open()) {
+    //     qDebug() << Q_FUNC_INFO << "Unable to file for saving";
+    //     return;
+    // }
         
-    this->dwnl_ok = 0;
+    // this->dwnl_ok = 0;
     
-    QHttp http;
+    // QHttp http;
     
-    connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
+    // connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
 
-    http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
+    // http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
         
-    if (!url.userName().isEmpty())
-        http.setUser(url.userName(), url.password());
+    // if (!url.userName().isEmpty())
+    //     http.setUser(url.userName(), url.password());
         
-    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
+    // QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
     
-    if (path.isEmpty()) {
-        qDebug() << Q_FUNC_INFO << "Invalid path" << url.path();
-        return;
-    }
+    // if (path.isEmpty()) {
+    //     qDebug() << Q_FUNC_INFO << "Invalid path" << url.path();
+    //     return;
+    // }
     
-    this->dwnl_id = http.get(path, &file);
+    // this->dwnl_id = http.get(path, &file);
     
-    while(!this->dwnl_ok)
-        qApp->processEvents();
+    // while(!this->dwnl_ok)
+    //     qApp->processEvents();
 
-    file.close();
+    // file.close();
 
-    QFileInfo info(file);
+    // QFileInfo info(file);
     
-    this->tempName = info.absoluteFilePath();
+    // this->tempName = info.absoluteFilePath();
 }
 
 void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
 {
-    DTK_UNUSED(error);
+    Q_UNUSED(error);
 
     if(id == this->dwnl_id)
         this->dwnl_ok = 1;

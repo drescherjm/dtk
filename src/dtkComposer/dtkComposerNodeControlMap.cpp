@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: lun. juin 18 16:08:06 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2013 Fri Jan 18 14:37:20 (+0100)
+ * Last-Updated: Fri Apr  5 08:50:24 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 103
+ *     Update #: 127
  */
 
 /* Commentary:
@@ -18,18 +18,15 @@
  */
 
 #include "dtkComposerNodeControlMap.h"
+
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterProxy.h"
-#include "dtkComposerTransmitterVariant.h"
-
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkGlobal.h>
-
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
+#include "dtkComposerTransmitterProxyLoop.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlMapPrivate definition
@@ -44,21 +41,24 @@ public:
     dtkComposerNodeComposite body_block;
 
 public:
-    dtkComposerTransmitterVariant header_rcv;
-    dtkComposerTransmitterVariant footer_emit;
+    dtkComposerTransmitterReceiverVariant header_rcv;
+    dtkComposerTransmitterEmitterVariant footer_emit;
 
-    dtkComposerTransmitterProxy                 block_container;
+    dtkComposerTransmitterProxy              block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
-    dtkComposerTransmitterVariant               block_item;
-    dtkComposerTransmitterVariant               block_newitem;
+    dtkComposerTransmitterEmitterVariant     block_item;
+    dtkComposerTransmitterEmitterVariant     block_newitem;
 
 public:
     qlonglong counter;
     qlonglong size;
 
-    dtkAbstractContainerWrapper *container;
-    dtkAbstractContainerWrapper *out_container;
+    // dtkAbstractContainerWrapper *container;
+    // dtkAbstractContainerWrapper *out_container;
+
+public:
+    bool first_iteration;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -99,16 +99,10 @@ dtkComposerNodeControlMap::dtkComposerNodeControlMap(void) : dtkComposerNodeCont
 
     d->counter = 0;
     d->size = -1;
-
-    d->container = NULL;
-    d->out_container = NULL;
 }
 
 dtkComposerNodeControlMap::~dtkComposerNodeControlMap(void)
 {
-    if (d->out_container)
-        delete d->out_container;
-
     delete d;
 
     d = NULL;
@@ -139,39 +133,30 @@ dtkComposerNodeComposite *dtkComposerNodeControlMap::block(int id)
 
 void dtkComposerNodeControlMap::setInputs(void)
 {
-    d->container = d->header_rcv.container();
-
-    if (d->out_container)
-        delete d->out_container;
-    d->out_container = d->container->voidClone();    
-    d->footer_emit.setData(d->out_container);
-
-    d->counter = 0;
-    d->size = d->container->count();
-    d->block_size.setData(d->size);
-
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
-        v->setTwinned(false);
-        v->setDataFrom(v);
-        v->setTwinned(true);
+    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
+        t->disableLoopMode();
     }
+    d->first_iteration = true;
 }
 
 
 void dtkComposerNodeControlMap::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
-        v->twin()->setDataFrom(v);
+    if (d->first_iteration) {
+	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
+	    t->twin()->enableLoopMode();
+	}
+	d->first_iteration = false;
     }
-
-    d->out_container->append(d->block_newitem.variant());
-
-    d->block_index.setData(++(d->counter));
 }
 
 void dtkComposerNodeControlMap::setVariables(void)
 {
-    d->block_item.setData(d->container->at(d->counter));
+
+    //d->out_container->append(d->block_newitem.variant());
+
+    d->block_index.setData((d->counter)++);
+    //d->block_item.setData(d->container->at(d->counter));
 }
 
 int dtkComposerNodeControlMap::selectBranch(void)
@@ -181,7 +166,19 @@ int dtkComposerNodeControlMap::selectBranch(void)
 
 void dtkComposerNodeControlMap::begin(void)
 {
+    if (d->header_rcv.isEmpty())
+        return;
 
+    // d->container = d->header_rcv.container();
+
+    // if (d->out_container)
+    //     delete d->out_container;
+    // d->out_container = d->container->voidClone();    
+    // d->footer_emit.setData(d->out_container);
+
+    d->counter = 0;
+    // d->size = d->container->count();
+    d->block_size.setData(d->size);
 }
 
 void dtkComposerNodeControlMap::end(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Sep 21 16:12:57 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 12:12:14 2012 (+0200)
- *           By: tkloczko
- *     Update #: 7
+ * Last-Updated: Fri Apr  5 09:17:48 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEFILE_P_H
-#define DTKCOMPOSERNODEFILE_P_H
+#pragma once
 
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
@@ -49,4 +48,3 @@ public:
     dtkComposerTransmitterEmitter<QString> emitter;
 };
 
-#endif

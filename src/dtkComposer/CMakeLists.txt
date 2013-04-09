@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Thu Apr  4 14:36:30 2013 (+0200)
+## Last-Updated: Fri Apr  5 09:31:15 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 139
+##     Update #: 157
 ######################################################################
 ## 
 ### Change Log:
@@ -42,26 +42,22 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerMachine.h
   # dtkComposerMachineState.h
   dtkComposerNode.h
-  # dtkComposerNodeArrayData.h
-  # dtkComposerNodeArrayDataExtractor.h
-  # dtkComposerNodeArrayDataOperatorModifier.h
   # dtkComposerNodeArrayScalar.h
   # dtkComposerNodeArrayScalarExtractor.h
   # dtkComposerNodeArrayScalarOperatorModifier.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
-  # dtkComposerNodeConstants.h
+  dtkComposerNodeConstants.h
   dtkComposerNodeControl.h
-  # dtkComposerNodeControlCase.h
+  dtkComposerNodeControlCase.h
   dtkComposerNodeControlDoWhile.h
-  # dtkComposerNodeControlIf.h
+  dtkComposerNodeControlIf.h
   dtkComposerNodeControlFor.h
   dtkComposerNodeControlForEach.h
-  # dtkComposerNodeControlMap.h
+  dtkComposerNodeControlMap.h
   dtkComposerNodeControlWhile.h
-  # dtkComposerNodeData.h
-  # dtkComposerNodeFile.h
+  dtkComposerNodeFile.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   # dtkComposerNodeLeafData.h
@@ -72,15 +68,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeMatrixSquareRealExtractor.h
   # dtkComposerNodeMatrixSquareRealOperatorUnary.h
   # dtkComposerNodeMatrixSquareRealOperatorBinary.h
-  # dtkComposerNodeMetaScalarArray.h
-  # dtkComposerNodeMetaScalarArrayAppend.h
-  # dtkComposerNodeMetaScalarArrayExtractor.h
-  # dtkComposerNodeMetaScalarArrayReplace.h
-  # dtkComposerNodeMetaVector3DArray.h
-  # dtkComposerNodeMetaVector3DArrayAppend.h
-  # dtkComposerNodeMetaVector3DArrayExtractor.h
   dtkComposerNodeNumberOperator.h
-  # dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
   # dtkComposerNodeQuaternion.h
   # dtkComposerNodeQuaternionOperatorUnary.h
@@ -160,26 +148,22 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerMachine.cpp
   # dtkComposerMachineState.cpp
   dtkComposerNode.cpp
-  # dtkComposerNodeArrayData.cpp
-  # dtkComposerNodeArrayDataExtractor.cpp
-  # dtkComposerNodeArrayDataOperatorModifier.cpp
   # dtkComposerNodeArrayScalar.cpp
   # dtkComposerNodeArrayScalarExtractor.cpp
   # dtkComposerNodeArrayScalarOperatorModifier.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
-  # dtkComposerNodeConstants.cpp
+  dtkComposerNodeConstants.cpp
   dtkComposerNodeControl.cpp
-  # dtkComposerNodeControlCase.cpp
+  dtkComposerNodeControlCase.cpp
   dtkComposerNodeControlDoWhile.cpp
-  # dtkComposerNodeControlIf.cpp
+  dtkComposerNodeControlIf.cpp
   dtkComposerNodeControlFor.cpp
   dtkComposerNodeControlForEach.cpp
-  # dtkComposerNodeControlMap.cpp
+  dtkComposerNodeControlMap.cpp
   dtkComposerNodeControlWhile.cpp
-  # dtkComposerNodeData.cpp
-  # dtkComposerNodeFile.cpp
+  dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
   # dtkComposerNodeLeafData.cpp
@@ -190,15 +174,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeMatrixSquareRealExtractor.cpp
   # dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
   # dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
-  # dtkComposerNodeMetaScalarArray.cpp
-  # dtkComposerNodeMetaScalarArrayAppend.cpp
-  # dtkComposerNodeMetaScalarArrayExtractor.cpp
-  # dtkComposerNodeMetaScalarArrayReplace.cpp
-  # dtkComposerNodeMetaVector3DArray.cpp
-  # dtkComposerNodeMetaVector3DArrayAppend.cpp
-  # dtkComposerNodeMetaVector3DArrayExtractor.cpp
   dtkComposerNodeNumberOperator.cpp
-  # dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
   # dtkComposerNodeQuaternion.cpp
   # dtkComposerNodeQuaternionOperatorUnary.cpp

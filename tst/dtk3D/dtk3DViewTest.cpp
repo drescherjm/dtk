@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Mar 22 11:35:55 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 14:41:48 2013 (+0100)
+ * Last-Updated: Fri Apr  5 19:27:24 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 124
+ *     Update #: 167
  */
 
 /* Change Log:
@@ -18,7 +18,7 @@
 
 #include <Qt3D/QGLBuilder>
 #include <Qt3D/QGLCube>
-#include <Qt3d/QGLSphere>
+#include <Qt3D/QGLSphere>
 #include <Qt3D/QGLTeapot>
 
 void dtk3DViewTestCase::initTestCase(void)
@@ -46,51 +46,40 @@ void dtk3DViewTestCase::testInstanciation(void)
 
 void dtk3DViewTestCase::testClick(void)
 {
-    static int id;
-
-    QGLMaterial *material = new QGLMaterial(this);
-    material->setAmbientColor(QColor(192, 150, 128));
-    material->setSpecularColor(QColor(60, 60, 60));
-    material->setShininess(128);
-    
-    QGLMaterial *materialHighlight = new QGLMaterial(this);
-    materialHighlight->setAmbientColor(QColor(255, 192, 0));
-    materialHighlight->setSpecularColor(QColor(60, 60, 0));
-    materialHighlight->setShininess(128);
-
-    dtk3DScene scene;
-
-    dtk3DItem teapot(&scene); {
+    dtk3DItem *teapot = new dtk3DItem; {
 	QGLBuilder builder;
 	builder << QGL::Smooth;
 	builder << QGLTeapot();
-	teapot.setId(id++);
-	teapot.setNode(builder.finalizedSceneNode());
-	teapot.setMaterial(material);
-	teapot.setHoverMaterial(materialHighlight);
+	teapot->addNode(builder.finalizedSceneNode());
+	teapot->setEffect(QGL::LitMaterial);
+	teapot->setColor(Qt::red);
     }
 
-    dtk3DItem sphere(&scene); {
+    dtk3DItem *sphere = new dtk3DItem; {
 	QGLBuilder builder;
 	builder << QGL::Faceted;
 	builder << QGLSphere();
-	sphere.setId(id++);
-	sphere.setNode(builder.finalizedSceneNode());
-        sphere.setPosition(QVector3D(-2.5, 0.0, 0.0));
-	sphere.setMaterial(material);
-	sphere.setHoverMaterial(materialHighlight);
+	sphere->addNode(builder.finalizedSceneNode());
+        sphere->translate(QVector3D(-2.5, 0.0, 0.0));
+	sphere->setEffect(QGL::LitMaterial);
+	sphere->setColor(Qt::green);
     }
 
-    dtk3DItem cube(&scene); {
+    dtk3DItem *cube = new dtk3DItem; {
         QGLBuilder builder;
         builder << QGL::Faceted;
         builder << QGLCube();
-	cube.setId(id++);
-        cube.setNode(builder.finalizedSceneNode());
-        cube.setPosition(QVector3D(2.5, 0.0, 0.0));
-	cube.setMaterial(material);
-	cube.setHoverMaterial(materialHighlight);
+        cube->addNode(builder.finalizedSceneNode());
+        cube->setFlag(dtk3DItem::Interactive, true);
+        cube->translate(QVector3D(2.5, 0.0, 0.0));
+	cube->setEffect(QGL::LitMaterial);
+	cube->setColor(Qt::blue);
     }
+
+    dtk3DScene scene;
+    scene.addItem(teapot);
+    scene.addItem(sphere);
+    scene.addItem(cube);
     
     dtk3DView view;
     view.setScene(&scene);
@@ -100,7 +89,7 @@ void dtk3DViewTestCase::testClick(void)
     view.raise();
 
     QEventLoop loop;
-    connect(&cube, SIGNAL(clicked()), &loop, SLOT(quit()));
+    connect(cube, SIGNAL(clicked()), &loop, SLOT(quit()));
     loop.exec();
 }
 

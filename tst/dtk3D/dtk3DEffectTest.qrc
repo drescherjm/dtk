@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="dtk3DEffectTest">
+        <file>dtk3DEffectTest.vert</file>
+        <file>dtk3DEffectTest.geom</file>
+        <file>dtk3DEffectTest.frag</file>
+    </qresource>
+</RCC>

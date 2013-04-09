@@ -13,16 +13,17 @@
  */
 
 #include "dtkDistributedContainerTest.h"
-#include <dtkDistributed>
-#include <dtkDistributed/dtkDistributedArray.h>
-#include <dtkDistributed/dtkDistributedPolicy.h>
-#include <dtkDistributed/dtkDistributedWork.h>
-#include <dtkDistributed/dtkDistributedWorker.h>
-#include <dtkDistributed/dtkDistributedWorkerManager.h>
 
+#include <dtkDistributed>
+#include <dtkDistributed/dtkDistributedArray>
+#include <dtkDistributed/dtkDistributedPolicy>
+#include <dtkDistributed/dtkDistributedWork>
+#include <dtkDistributed/dtkDistributedWorker>
+#include <dtkDistributed/dtkDistributedWorkerManager>
 
 class qvectorWork : public dtkDistributedWork
 {
+public:
     qvectorWork *clone(void) { return new qvectorWork(*this); };
 
     void run(void)
@@ -36,69 +37,54 @@ class qvectorWork : public dtkDistributedWork
         dtkDistributedArray<qlonglong> array(myvector, this);
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-
         QVERIFY(myvector.at(1) == array.at(1));
         QVERIFY(myvector.at(N-1) == array.at(N-1));
-
         DTK_DISTRIBUTED_END_GLOBAL;
     }
 };
 
-
 class containerWork : public dtkDistributedWork
 {
+public:
     containerWork *clone(void) { return new containerWork(*this); };
 
     void run(void)
     {
         QTime time;
+
         dtkDistributedArray<qlonglong> array(11, this);
 
-        // ---
         DTK_DISTRIBUTED_BEGIN_LOCAL;
-
         for (qlonglong i = 0; i < array.count(); ++i)
             array.setAt(i, array.localToGlobal(i));
-
         qDebug() << array.first() << array.last() << wid();
-
         DTK_DISTRIBUTED_END_LOCAL;
 
-        // ---
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-
         for (qlonglong i = 0; i < array.count(); ++i)
             qDebug() << i << array.at(i) << wid();
-
         qDebug() << array.first() << array.last() << wid();
-
         DTK_DISTRIBUTED_END_GLOBAL;
 
         DTK_DISTRIBUTED_BEGIN_LOCAL;
-
         for (qlonglong i = 0; i < array.count(); ++i)
             array[i] += array.localToGlobal(i);
-
         DTK_DISTRIBUTED_END_LOCAL;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-
         for (qlonglong i = 0; i < array.count(); ++i)
             array[i] -= i;
-
         for (qlonglong i = 0; i < array.count(); ++i)
             qDebug() << i << array.at(i) << wid();
-
         DTK_DISTRIBUTED_END_GLOBAL;
     }
 };
 
 class randomWork : public dtkDistributedWork
 {
-
+public:
     randomWork *clone(void);
     void        run(void);
-
 };
 
 int randInt(int max)
@@ -125,9 +111,8 @@ void randomWork::run(void)
     dtkDistributedArray<qlonglong>::iterator it  = c.begin();
     dtkDistributedArray<qlonglong>::iterator ite = c.end();
     qsrand(wid());
-    while(it != ite) {
+    while(it != ite)
         *it++ = randInt(N);
-    }
     DTK_DISTRIBUTED_END_LOCAL;
 
     DTK_DISTRIBUTED_BEGIN_GLOBAL;
@@ -135,7 +120,7 @@ void randomWork::run(void)
     dtkDistributedArray<qlonglong>::const_iterator itb = c.cbegin();
     dtkDistributedArray<qlonglong>::const_iterator ite = c.cend();
     while(it != ite)
-        qDebug() << it-itb << *it++;
+	qDebug() << it-itb << *it++;	
     DTK_DISTRIBUTED_END_GLOBAL;
 }
 
@@ -153,7 +138,7 @@ sumWork *sumWork::clone(void)
 
 void sumWork::run(void)
 {
-    qDebug()<< "run!!!!";
+    qDebug() << "run!!!!";
 
     qlonglong N = 50000001;
     qlonglong sum = 0;
@@ -178,7 +163,6 @@ void sumWork::run(void)
     barrier();
 
     DTK_DISTRIBUTED_BEGIN_LOCAL;
-    // Do the computation in parallel
     qlonglong local_count = c.count();
     dtkDistributedArray<qlonglong>::iterator c_it  = c.begin();
     dtkDistributedArray<qlonglong>::iterator c_itb = c.begin();
@@ -187,15 +171,12 @@ void sumWork::run(void)
         *c_it = (2 * c.localToGlobal(c_it-c_itb)); 
         ++c_it;
     }
-    // Do the partial sum in parallel, and put the result in a parallel container (of size = number of process/threads)
     for (qlonglong i = 0; i < local_count; ++i)
         check_sum += c.at(i);
     partial_sum.setAt(0, check_sum);
-
     DTK_DISTRIBUTED_END_LOCAL;
 
     DTK_DISTRIBUTED_BEGIN_GLOBAL;
-    // Sum the partial sums in sequential mode
     check_sum = 0;
     dtkDistributedArray<qlonglong>::const_iterator partial_it  = partial_sum.constBegin();
     dtkDistributedArray<qlonglong>::const_iterator partial_ite = partial_sum.constEnd();
@@ -203,7 +184,6 @@ void sumWork::run(void)
         check_sum += *partial_it++;
     }
     qDebug() << "TOTAL SUM" << check_sum << sum << maintime.elapsed() << "ms";
-
     QVERIFY(sum == check_sum);
     DTK_DISTRIBUTED_END_GLOBAL;
 }
@@ -226,7 +206,7 @@ void dtkDistributedContainerTestCase::testAll(void)
     dtkDistributedPolicy policy;
 
     QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
-    QByteArray policyEnv   = qgetenv("DTK_DISTRIBUTED_POLICY");
+    QByteArray policyEnv = qgetenv("DTK_DISTRIBUTED_POLICY");
 
     int np = 2;
 
@@ -261,13 +241,9 @@ void dtkDistributedContainerTestCase::testAll(void)
     qDebug() << "spawn";
     manager.spawn();
     manager.exec(work);
-
     manager.exec(work2);
-
     manager.exec(work3);
-
     manager.exec(work4);
-
     manager.unspawn();
 
     qDebug() << "parallel section is over";

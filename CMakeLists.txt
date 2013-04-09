@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Mar 29 14:36:47 2013 (+0100)
+## Last-Updated: Tue Apr  9 13:14:25 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 161
+##     Update #: 172
 ######################################################################
 ## 
 ### Change Log:
@@ -65,6 +65,7 @@ enable_testing()
 ## Dependencies - Qt
 ## #################################################################
 
+find_package(OpenGL)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5Core       REQUIRED)
 find_package(Qt5Gui        REQUIRED)
@@ -88,6 +89,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkComposer)
 if(Qt53D_FOUND)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk3D)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtk3DQuick)
 endif(Qt53D_FOUND)
 
 ## ###################################################################
@@ -95,6 +97,7 @@ endif(Qt53D_FOUND)
 ## ###################################################################
 
 add_subdirectory(src)
+add_subdirectory(qml)
 add_subdirectory(tst)
 
 ## ###################################################################
@@ -129,8 +132,10 @@ mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
 mark_as_advanced(Qt5Gui_DIR)
 mark_as_advanced(Qt5Network_DIR)
+mark_as_advanced(Qt5OpenGL_DIR)
 mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
+mark_as_advanced(Qt5QuickTest_DIR)
 mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
 mark_as_advanced(Qt5Xml_DIR)

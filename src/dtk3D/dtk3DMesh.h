@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:41:03 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 12:03:38 2013 (+0100)
+ * Last-Updated: Tue Apr  9 12:31:50 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 56
  */
 
 /* Change Log:
@@ -31,7 +31,7 @@ public:
 #pragma mark -
 #pragma mark Geometric attributes
 
-    virtual QBox3D boundingBox(void) const;
+    QBox3D boundingBox(void) const;
 
 #pragma mark -
 #pragma mark Geometry data
@@ -45,7 +45,7 @@ public:
     virtual void write(const QString& path);
 
 protected:
-    virtual void draw(QGLView *view, QGLPainter *painter);
+    void draw(QGLPainter *painter);
 
 private:
     dtk3DMeshPrivate *d;

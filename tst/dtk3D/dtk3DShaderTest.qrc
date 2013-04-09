@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="dtk3DShaderTest">
+        <file>dtk3DShaderTest.vert</file>
+        <file>dtk3DShaderTest.frag</file>
+    </qresource>
+</RCC>

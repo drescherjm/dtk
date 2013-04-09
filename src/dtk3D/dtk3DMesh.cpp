@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sun Mar 24 16:42:30 2013 (+0100)
  * Version: 
- * Last-Updated: Wed Mar 27 14:03:29 2013 (+0100)
+ * Last-Updated: Tue Apr  9 01:40:23 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 101
+ *     Update #: 151
  */
 
 /* Change Log:
@@ -52,30 +52,21 @@ void dtk3DMesh::write(const QString& path)
     Q_UNUSED(path);
 }
 
-void dtk3DMesh::draw(QGLView *view, QGLPainter *painter)
+void dtk3DMesh::draw(QGLPainter *painter)
 {
-    if (d->data.count()) {
-#if 1
-        painter->clearAttributes();
-	if (d->data.colors().count())
-	    painter->setStandardEffect(QGL::FlatPerVertexColor);
-	else
-	    painter->setStandardEffect(QGL::FlatColor);
-        painter->setVertexAttribute(QGL::Position, d->data.vertices());
-	if (d->data.colors().count())
-	    painter->setVertexAttribute(QGL::Color, d->data.colors());
-	else
-	    painter->setColor(Qt::darkGreen);
-        painter->setVertexAttribute(QGL::Normal, d->data.normals());
-        painter->draw(QGL::Triangles, d->data.count());
-#endif
+    if (!d->data.count())
+    	return;
 
-#if 1
-        painter->clearAttributes();
-        painter->setStandardEffect(QGL::FlatColor);
-        painter->setColor(Qt::yellow);
-        painter->setVertexAttribute(QGL::Position, d->data.vertices());
-        painter->draw(QGL::LineLoop, d->data.count());
-#endif
-    }
+    painter->clearAttributes();
+    if (d->data.colors().count())
+    	painter->setStandardEffect(QGL::FlatPerVertexColor);
+    else
+    	painter->setStandardEffect(QGL::FlatColor);
+    painter->setVertexAttribute(QGL::Position, d->data.vertices());
+    if (d->data.colors().count())
+    	painter->setVertexAttribute(QGL::Color, d->data.colors());
+    else
+    	painter->setColor(Qt::darkGreen);
+    painter->setVertexAttribute(QGL::Normal, d->data.normals());
+    painter->draw(QGL::Triangles, d->data.count());
 }

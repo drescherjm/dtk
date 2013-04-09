@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Mar 25 09:23:52 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 09:23:58 2013 (+0100)
+ * Last-Updated: Tue Apr  9 12:28:59 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 2
+ *     Update #: 3
  */
 
 /* Change Log:
@@ -29,8 +29,8 @@ namespace dtkDistributed
         return _private::mode;
     }
 
-    namespace communicator {
-
+    namespace communicator
+    {
         namespace _private {
             dtkDistributedCommunicatorPluginFactory factory;
             dtkDistributedCommunicatorPluginManager manager;

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 15:43:06 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 15:07:41 2013 (+0100)
+ * Last-Updated: Tue Apr  9 12:36:49 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 9
+ *     Update #: 11
  */
 
 /* Change Log:
@@ -33,12 +33,12 @@ public:
     void record(QString key, creator func);
 
 #pragma mark -
-#pragma Type creator invokation
+#pragma mark Type creator invokation
 
     T *create(const QString& key);
 
 #pragma mark -
-#pragma Type creator inspection
+#pragma mark Type creator inspection
 
     QStringList keys(void);
 

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:55:00 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 01:39:12 2013 (+0200)
+ * Last-Updated: Tue Apr  9 11:48:17 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 232
+ *     Update #: 233
  */
 
 /* Change Log:
@@ -247,7 +247,7 @@ void dtk3DItem::draw(QGLPainter *painter)
 
     if(d->flags & dtk3DItem::Wireframe) {
 	
-	if(!d->effect_wireframe && d->view) {
+	if(!d->effect_wireframe) {
 	    d->effect_wireframe = new dtk3DEffect;
 	    d->effect_wireframe->setVertexShaderFromFile(":dtk3D/dtk3DEffectWireframe.vert");
 	    d->effect_wireframe->setGeometryShaderFromFile(":dtk3D/dtk3DEffectWireframe.geom");

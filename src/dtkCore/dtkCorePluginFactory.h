@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 15:43:06 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 12:36:49 2013 (+0200)
+ * Last-Updated: Tue Apr  9 13:08:29 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 22
  */
 
 /* Change Log:
@@ -15,6 +15,10 @@
 #pragma once
 
 #include <QtCore>
+
+// ///////////////////////////////////////////////////////////////////
+// dtkCorePluginFactory
+// ///////////////////////////////////////////////////////////////////
 
 template <typename T> class dtkCorePluginFactory : public QObject
 {
@@ -45,5 +49,13 @@ public:
 private:
     QHash<QString, creator> creators;
 };
+
+// ///////////////////////////////////////////////////////////////////
+// Helper functions
+// ///////////////////////////////////////////////////////////////////
+
+template <typename S, typename T> S *dtkCorePluginFactoryCeator(void) {
+    return new T;
+}
 
 #include "dtkCorePluginFactory.tpp"

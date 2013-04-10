@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 15:43:06 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 13:08:29 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 22
+ * Last-Updated: Tue Apr  9 17:31:17 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 23
  */
 
 /* Change Log:
@@ -54,7 +54,7 @@ private:
 // Helper functions
 // ///////////////////////////////////////////////////////////////////
 
-template <typename S, typename T> S *dtkCorePluginFactoryCeator(void) {
+template <typename S, typename T> S *dtkCorePluginFactoryCreator(void) {
     return new T;
 }
 

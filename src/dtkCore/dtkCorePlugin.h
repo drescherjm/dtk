@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:15:02 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 11:40:29 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 115
+ * Last-Updated: Wed Apr 10 15:01:18 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 132
  */
 
 /* Change Log:
@@ -57,8 +57,9 @@
 // DTK_DECLARE_PLUGIN_FACTORY
 // ///////////////////////////////////////////////////////////////////
 
-#define DTK_DECLARE_PLUGIN_FACTORY(type)        \
-    class type##PluginFactory : public dtkCorePluginFactory<type> {};
+#define DTK_DECLARE_PLUGIN_FACTORY(type)                              \
+    class type##PluginFactory : public dtkCorePluginFactory<type> {}; \
+    template <typename T> type *type##Creator(void) { return new T; }; 
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_PLUGIN_MANAGER

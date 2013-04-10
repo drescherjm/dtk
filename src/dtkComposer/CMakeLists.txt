@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Fri Apr  5 09:31:15 2013 (+0200)
+## Last-Updated: Wed Apr 10 12:10:27 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 157
+##     Update #: 163
 ######################################################################
 ## 
 ### Change Log:
@@ -19,7 +19,7 @@ project(dtkComposer)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  # dtkComposer.h
+  dtkComposer.h
   # dtkComposerCompass.h
   # dtkComposerControls.h
   # dtkComposerControlsDelegate.h
@@ -42,6 +42,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerMachine.h
   # dtkComposerMachineState.h
   dtkComposerNode.h
+  dtkComposerNodeFactory.h
   # dtkComposerNodeArrayScalar.h
   # dtkComposerNodeArrayScalarExtractor.h
   # dtkComposerNodeArrayScalarOperatorModifier.h
@@ -126,7 +127,7 @@ set(${PROJECT_NAME}_HEADERS
 )
 
 set(${PROJECT_NAME}_SOURCES
-  # dtkComposer.cpp
+  dtkComposer.cpp
   # dtkComposerCompass.cpp
   # dtkComposerControls.cpp
   # dtkComposerControlsDelegate.cpp
@@ -148,6 +149,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerMachine.cpp
   # dtkComposerMachineState.cpp
   dtkComposerNode.cpp
+  dtkComposerNodeFactory.cpp
   # dtkComposerNodeArrayScalar.cpp
   # dtkComposerNodeArrayScalarExtractor.cpp
   # dtkComposerNodeArrayScalarOperatorModifier.cpp
@@ -225,7 +227,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerReader.cpp
   # dtkComposerWriter.cpp
   )
-
+                     
 set(${PROJECT_NAME}_QRC dtkComposer.qrc)
 
 ## #################################################################

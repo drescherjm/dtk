@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jul 10 12:41:59 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 49
+ * Last-Updated: Tue Apr  9 09:41:12 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENEPORT_H
-#define DTKCOMPOSERSCENEPORT_H
+#pragma once
 
 #include <QtGui>
 
@@ -73,4 +72,3 @@ private:
 
 class dtkComposerScenePortList : public QList<dtkComposerScenePort *> {};
 
-#endif

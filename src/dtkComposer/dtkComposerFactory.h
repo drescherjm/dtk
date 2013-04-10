@@ -12,10 +12,7 @@
  *
  */
 
-#ifndef DTKCOMPOSERFACTORY_H
-#define DTKCOMPOSERFACTORY_H
-
-
+#pragma once
 
 #include <QtCore>
 
@@ -63,4 +60,3 @@ private:
     dtkComposerFactoryPrivate *d;
 };
 
-#endif

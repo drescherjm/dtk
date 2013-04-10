@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  4 09:48:34 2013 (+0200)
+ * Last-Updated: Wed Apr 10 15:07:28 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 57
+ *     Update #: 93
  */
 
 /* Commentary: 
@@ -19,17 +19,18 @@
 
 #pragma once
 
+#include <dtkCore>
+
 #include <QtCore>
 
+class dtkComposerNodePrivate;
 class dtkComposerTransmitter;
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNode declaration
+// dtkComposerNode
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodePrivate;
-
-class  dtkComposerNode
+class dtkComposerNode
 {
 public: 
              dtkComposerNode(void);
@@ -69,4 +70,3 @@ public:
 private:
     dtkComposerNodePrivate *d;
 };
-

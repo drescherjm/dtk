@@ -43,7 +43,7 @@
 #include "dtkComposerNodeRemote.h"
 #endif
 
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitterProxyLoop.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList
@@ -900,15 +900,17 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     command_body_i->setScene(d->scene);
     command_body_i->setNode(control->block("Body"));
     command_body_i->setType(dtkComposerScenePort::Input);
-    command_body_i->setKind(dtkComposerTransmitter::Variant);
+    command_body_i->setKind(dtkComposerTransmitter::ProxyLoop);
 
     command_body_o = new dtkComposerStackCommandCreatePort;
     command_body_o->setScene(d->scene);
     command_body_o->setNode(control->block("Body"));
     command_body_o->setType(dtkComposerScenePort::Output);
-    command_body_o->setKind(dtkComposerTransmitter::Variant);
+    command_body_o->setKind(dtkComposerTransmitter::ProxyLoop);
 
-    if (dynamic_cast<dtkComposerNodeControlForEach *>(d->node->wrapee()) || dynamic_cast<dtkComposerNodeControlMap *>(d->node->wrapee())) {
+    dtkComposerNodeControl *wrapee = static_cast<dtkComposerNodeControl *>(control->wrapee());
+
+    if (dynamic_cast<dtkComposerNodeControlForEach *>(wrapee) || dynamic_cast<dtkComposerNodeControlMap *>(wrapee)) {
         command_cond_i = NULL;
     } else {
         command_cond_i = new dtkComposerStackCommandCreatePort;
@@ -918,7 +920,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
         command_cond_i->setKind(dtkComposerTransmitter::Proxy);
     }
 
-    if (dynamic_cast<dtkComposerNodeControlFor *>(d->node->wrapee())) {
+    if (dynamic_cast<dtkComposerNodeControlFor *>(wrapee)) {
         command_incr_i = new dtkComposerStackCommandCreatePort;
         command_incr_i->setScene(d->scene);
         command_incr_i->setNode(control->block("Increment"));
@@ -979,10 +981,14 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
         control->block("Increment")->wrapee()->receivers().last()->appendPrevious(control->block("Body")->wrapee()->emitters().last());
     } 
 
-    dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last())->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
+    dtkComposerTransmitterProxyLoop *emitter  = dynamic_cast<dtkComposerTransmitterProxyLoop *>(control->block("Body")->wrapee()->emitters().last());
+    dtkComposerTransmitterProxyLoop *receiver = dynamic_cast<dtkComposerTransmitterProxyLoop *>(control->block("Body")->wrapee()->receivers().last());
 
-    dynamic_cast<dtkComposerNodeControl *>(control->wrapee())->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
-    dynamic_cast<dtkComposerNodeControl *>(control->wrapee())->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last()));
+    emitter->setTwin(receiver);
+    receiver->setTwin(emitter);
+
+    wrapee->appendInputTwin(receiver);
+    wrapee->appendOutputTwin(emitter);
 
 // /////////////////////////////////////////////////////////////////
 // 

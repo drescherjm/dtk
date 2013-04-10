@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:20:47 2013 (+0100)
  * Version: 
- * Last-Updated: Mon Mar 25 15:14:51 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 73
+ * Last-Updated: Wed Apr 10 11:22:57 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 76
  */
 
 /* Change Log:
@@ -29,6 +29,11 @@ template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
 
 template <typename T> void dtkCorePluginFactory<T>::record(QString key, creator func)
 {
+    if (this->creators.contains(key)) {
+	qDebug() << "Factory already contains key" << key << ". Nothing is done";
+	return;
+    }
+
     this->creators.insert(key, func);
 }
 

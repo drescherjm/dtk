@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr  3 14:56:54 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr  9 00:45:29 2013 (+0200)
+ * Last-Updated: Tue Apr  9 18:00:43 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 53
  */
 
 /* Change Log:
@@ -38,6 +38,7 @@ public:
 #pragma mark Wrappee
 
     dtk3DItem *item(void);
+    void setItem(dtk3DItem *item);
 
 #pragma mark -
 #pragma mark Properties getters

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:53:33 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 01:09:02 2013 (+0200)
+ * Last-Updated: Tue Apr  9 18:03:48 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 54
+ *     Update #: 76
  */
 
 /* Change Log:
@@ -89,8 +89,12 @@ public:
 #pragma mark Scene management
 
     void initialize(QGLPainter *painter, QGLView *view);
-    void       draw(QGLPainter *painter);
     void update(void);
+
+#pragma mark -
+#pragma mark Painting
+    
+    virtual void draw(QGLPainter *painter);
 
 #pragma mark -
 #pragma mark Event emission

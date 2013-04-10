@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Fri Apr  5 10:59:32 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 13:29:31 2013 (+0200)
+ * Last-Updated: Tue Apr  9 17:58:33 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 102
+ *     Update #: 110
  */
 
 /* Change Log:
@@ -85,7 +85,8 @@ void dtk3DQuickMeshPrivate::update(void)
 	dtk3D::mesh::pluginManager().initialize(path);
 
 	if((this->mesh = dtk3D::mesh::pluginFactory().create(type))) {
-	    q->item()->addNode(this->mesh);
+	    this->mesh->setEffect(QGL::LitMaterial);
+	    q->setItem(this->mesh);
 	}
     }
 

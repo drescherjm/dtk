@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Sat Mar 30 13:41:55 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Apr  5 00:49:35 2013 (+0200)
+ * Last-Updated: Wed Apr 10 12:33:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 257
+ *     Update #: 262
  */
 
 /* Change Log:
@@ -205,16 +205,22 @@ void dtk3DView::mouseMoveEvent(QMouseEvent *event)
 	d->current = item;
     else
 	d->current = NULL;
+
+    event->accept();
 }
 
 void dtk3DView::mousePressEvent(QMouseEvent *event)
 {
     QGLView::mousePressEvent(event);
+
+    event->accept();
 }
 
 void dtk3DView::mouseReleaseEvent(QMouseEvent *event)
 {
     QGLView::mouseReleaseEvent(event);
+
+    event->accept();
 }
 
 void dtk3DView::exposeEvent(QExposeEvent *event)

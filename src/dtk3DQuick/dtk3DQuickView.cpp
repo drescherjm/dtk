@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 09:54:16 2013 (+0200)
+ * Last-Updated: Wed Apr 10 12:34:16 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 1240
+ *     Update #: 1250
  */
 
 /* Change Log:
@@ -87,6 +87,7 @@ void dtk3DQuickView::paint(QPainter *p)
 
     if(!initialized)
 	d->view->initializeGL(&painter);
+
     d->view->earlyPaintGL(&painter);
     painter.setCamera(d->view->camera());
     d->view->paintGL(&painter);

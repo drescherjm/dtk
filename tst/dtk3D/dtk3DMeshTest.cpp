@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Mar 25 12:57:14 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 01:20:29 2013 (+0200)
+ * Last-Updated: Tue Apr  9 18:04:41 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 175
+ *     Update #: 187
  */
 
 /* Change Log:
@@ -30,7 +30,10 @@ void dtk3DMeshTestCase::testGeometry(void)
 {
     dtk3DMesh *mesh = new dtk3DMesh;
     mesh->data().appendVertex(QVector3D(-1, 0, 0), QVector3D(+1, 0, 0), QVector3D(+0, 1, 0));
+    mesh->data().appendNormal(QVector3D(+0, 0, 1), QVector3D(+0, 0, 1), QVector3D(+0, 0, 1));
     mesh->data().appendColor(QColor4ub(255, 0, 0), QColor4ub(0, 255, 0), QColor4ub(0, 0, 255));
+    mesh->setColor(Qt::blue);
+    mesh->setEffect(QGL::LitMaterial);
 
     dtk3DScene scene;
     scene.addItem(mesh);

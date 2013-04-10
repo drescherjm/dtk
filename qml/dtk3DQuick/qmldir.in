@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Tue Apr  2 10:02:06 2013 (+0200)
 ## Version: 
-## Last-Updated: Tue Apr  2 10:57:04 2013 (+0200)
+## Last-Updated: Wed Apr 10 16:30:15 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 8
+##     Update #: 9
 ######################################################################
 ## 
 ### Change Log:
@@ -26,4 +26,9 @@ module dtk3DQuick
 
 plugin dtk3DQuick @CMAKE_BINARY_DIR@/lib
 
-# - dtk3DQuickView 1.0
+# - dtk3DQuickItem  1.0 - Quick3DItem
+# - dtk3DQuickMesh  1.0 - Quick3DMesh
+# - dtk3DQuickPoint 1.0 - Quick3DPoint
+# - dtk3DQuickScene 1.0 - Quick3DScene
+# - dtk3DQuickView  1.0 - Quick3DView
+

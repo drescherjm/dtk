@@ -10,4 +10,10 @@
 
 * Proofread use of dtkLog layer
 
-* Proofread dtkComposerNodeCase
+* Finalize dtkComposerNodeFactoryView
+
+### dtk3D
+
+* Qt 5.1.0 adds geometry shader support (QOpenGLShaderProgram). Update
+  dtkEffect item accordingly or drop it whenever Qt3D is ready.
+

@@ -15,7 +15,7 @@
 
 #include <dtkConfig.h>
 
-#include "dtkComposerFactory.h"
+#include "dtkComposerNodeFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerNode.h"
@@ -57,7 +57,7 @@ DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_STACK, "fr.inria.dtk.composer.stack")
 class dtkComposerStackCommandPrivate
 {
 public:
-    dtkComposerFactory *factory;
+    dtkComposerNodeFactory *factory;
     dtkComposerScene *scene;
     dtkComposerGraph *graph;
 };
@@ -76,7 +76,7 @@ dtkComposerStackCommand::~dtkComposerStackCommand(void)
     d = NULL;
 }
 
-void dtkComposerStackCommand::setFactory(dtkComposerFactory *factory)
+void dtkComposerStackCommand::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
 }

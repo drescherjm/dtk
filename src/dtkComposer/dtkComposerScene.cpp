@@ -15,8 +15,6 @@
 
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
-#include "dtkComposerMachine.h"
-#include "dtkComposerMachineState.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -30,14 +28,11 @@
 #include "dtkComposerStack.h"
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"
-#include "dtkComposerWriter.h"
-
 #include <QtWidgets>
 
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
     d->factory = NULL;
-    d->machine = NULL;
     d->stack = NULL;
     d->graph = NULL;
 
@@ -151,14 +146,9 @@ bool dtkComposerScene::maskedEdges(void)
 #pragma mark - Setup
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerScene::setFactory(dtkComposerFactory *factory)
+void dtkComposerScene::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
-}
-
-void dtkComposerScene::setMachine(dtkComposerMachine *machine)
-{
-    d->machine = machine;
 }
 
 void dtkComposerScene::setStack(dtkComposerStack *stack)

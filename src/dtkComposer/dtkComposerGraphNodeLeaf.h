@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 22:05:33 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 37
+ * Last-Updated: Thu Apr 11 10:26:12 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 38
  */
 
 /* Commentary:
@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef DTKCOMPOSERGRAPHNODELEAF_H
-#define DTKCOMPOSERGRAPHNODELEAF_H
+#pragma once
 
 #include "dtkComposerGraphNode.h"
 
@@ -47,5 +46,4 @@ private:
     dtkComposerGraphNodeLeafPrivate *d;
 };
 
-#endif /* DTKCOMPOSERGRAPHNODELEAF_H */
 

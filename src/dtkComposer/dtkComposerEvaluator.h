@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:30:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:06:42 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: Thu Apr 11 10:30:04 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 44
  */
 
 /* Commentary: 
@@ -17,10 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSEREVALUATOR_H
-#define DTKCOMPOSEREVALUATOR_H
-
-
+#pragma once
 
 #include <QtCore/QObject>
 
@@ -61,4 +58,3 @@ private:
     dtkComposerEvaluatorPrivate *d;
 };
 
-#endif

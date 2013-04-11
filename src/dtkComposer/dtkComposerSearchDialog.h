@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov  5 16:35:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov  8 15:58:02 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 23
+ * Last-Updated: Thu Apr 11 10:32:14 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 25
  */
 
 /* Commentary: 
@@ -17,10 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSEARCHDIALOG_H
-#define DTKCOMPOSERSEARCHDIALOG_H
-
-
+#pragma once
 
 #include <QtGui>
 
@@ -49,4 +46,3 @@ private:
     dtkComposerSearchDialogPrivate *d;
 };
 
-#endif

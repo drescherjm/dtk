@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr 10 12:10:27 2013 (+0200)
+## Last-Updated: Thu Apr 11 11:09:56 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 163
+##     Update #: 251
 ######################################################################
 ## 
 ### Change Log:
@@ -20,32 +20,27 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
-  # dtkComposerCompass.h
-  # dtkComposerControls.h
-  # dtkComposerControlsDelegate.h
-  # dtkComposerEvaluator.h
-  # dtkComposerFactory.h
-  # dtkComposerFactoryView.h
-  # dtkComposerGraph.h
-  # dtkComposerGraphEdge.h
-  # dtkComposerGraphLayouter.h
-  # dtkComposerGraphNode.h
-  # dtkComposerGraphNodeBegin.h
-  # dtkComposerGraphNodeEnd.h
-  # dtkComposerGraphNode.h
-  # dtkComposerGraphNodeLeaf.h
-  # dtkComposerGraphNodeSelectBranch.h
-  # dtkComposerGraphNodeSetInputs.h
-  # dtkComposerGraphNodeSetOutputs.h
-  # dtkComposerGraphNodeSetVariables.h
-  # dtkComposerGraphView.h
-  # dtkComposerMachine.h
-  # dtkComposerMachineState.h
+  dtkComposerCompass.h
+  dtkComposerControls.h
+  dtkComposerControlsDelegate.h
+  dtkComposerEvaluator.h
+  dtkComposerEvaluator_p.h
+  dtkComposerGraph.h
+  dtkComposerGraphEdge.h
+  dtkComposerGraphLayouter.h
+  dtkComposerGraphNode.h
+  dtkComposerGraphNodeBegin.h
+  dtkComposerGraphNodeEnd.h
+  dtkComposerGraphNode.h
+  dtkComposerGraphNodeLeaf.h
+  dtkComposerGraphNodeSelectBranch.h
+  dtkComposerGraphNodeSetInputs.h
+  dtkComposerGraphNodeSetOutputs.h
+  dtkComposerGraphNodeSetVariables.h
+  dtkComposerGraphView.h
   dtkComposerNode.h
   dtkComposerNodeFactory.h
-  # dtkComposerNodeArrayScalar.h
-  # dtkComposerNodeArrayScalarExtractor.h
-  # dtkComposerNodeArrayScalarOperatorModifier.h
+  dtkComposerNodeFactoryView.h
   dtkComposerNodeBoolean.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
@@ -59,57 +54,39 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlMap.h
   dtkComposerNodeControlWhile.h
   dtkComposerNodeFile.h
+  dtkComposerNodeFile_p.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   # dtkComposerNodeLeafData.h
   # dtkComposerNodeLeafProcess.h
   # dtkComposerNodeLeafView.h
   dtkComposerNodeLogger.h
-  # dtkComposerNodeMatrixSquareReal.h
-  # dtkComposerNodeMatrixSquareRealExtractor.h
-  # dtkComposerNodeMatrixSquareRealOperatorUnary.h
-  # dtkComposerNodeMatrixSquareRealOperatorBinary.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProxy.h
-  # dtkComposerNodeQuaternion.h
-  # dtkComposerNodeQuaternionOperatorUnary.h
-  # dtkComposerNodeQuaternionOperatorBinary.h
   dtkComposerNodeReal.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
-  # dtkComposerNodeVector3D.h
-  # dtkComposerNodeVector3DOperatorUnary.h
-  # dtkComposerNodeVector3DOperatorBinary.h
-  # dtkComposerNodeVector3DOperatorTernary.h
-  # dtkComposerNodeVectorInteger.h
-  # dtkComposerNodeVectorIntegerExtractor.h
-  # dtkComposerNodeVectorIntegerOperatorModifier.h
-  # dtkComposerNodeVectorIntegerOperatorUnary.h
-  # dtkComposerNodeVectorIntegerOperatorBinary.h
-  # dtkComposerNodeVectorReal.h
-  # dtkComposerNodeVectorRealExtractor.h
-  # dtkComposerNodeVectorRealOperatorModifier.h
-  # dtkComposerNodeVectorRealOperatorUnary.h
-  # dtkComposerNodeVectorRealOperatorBinary.h
-  # dtkComposerNodeView.h
-  # dtkComposerPath.h
-  # dtkComposerScene.h
-  # dtkComposerSceneEdge.h
-  # dtkComposerSceneModel.h
-  # dtkComposerSceneNode.h
-  # dtkComposerSceneNodeComposite.h
-  # dtkComposerSceneNodeControl.h
-  # dtkComposerSceneNodeHandle.h
-  # dtkComposerSceneNodeEditor.h
-  # dtkComposerSceneNodeLeaf.h
-  # dtkComposerSceneNote.h
-  # dtkComposerScenePort.h
-  # dtkComposerSceneView.h
-  # dtkComposerSearchDialog.h
-  # dtkComposerStack.h
-  # dtkComposerStackCommand.h
-  # dtkComposerStackUtils.h
-  # dtkComposerStackView.h
+  dtkComposerPath.h
+  dtkComposerScene.h
+  dtkComposerScene_p.h
+  dtkComposerSceneEdge.h
+  dtkComposerSceneModel.h
+  dtkComposerSceneNode.h
+  dtkComposerSceneNode_p.h
+  dtkComposerSceneNodeComposite.h
+  dtkComposerSceneNodeControl.h
+  dtkComposerSceneNodeHandle.h
+  dtkComposerSceneNodeEditor.h
+  dtkComposerSceneNodeEditor_p.h
+  dtkComposerSceneNodeLeaf.h
+  dtkComposerSceneNote.h
+  dtkComposerScenePort.h
+  dtkComposerSceneView.h
+  dtkComposerSearchDialog.h
+  dtkComposerStack.h
+  dtkComposerStackCommand.h
+  dtkComposerStackUtils.h
+  dtkComposerStackView.h
   dtkComposerTransmitter.h
   dtkComposerTransmitter_p.h
   dtkComposerTransmitterEmitter.h
@@ -121,38 +98,31 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterProxyLoop.tpp
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
-  # dtkComposerView.h
-  # dtkComposerReader.h
-  # dtkComposerWriter.h
+  dtkComposerReader.h
+  dtkComposerWriter.h
 )
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
-  # dtkComposerCompass.cpp
-  # dtkComposerControls.cpp
-  # dtkComposerControlsDelegate.cpp
-  # dtkComposerEvaluator.cpp
-  # dtkComposerFactory.cpp
-  # dtkComposerFactoryView.cpp
-  # dtkComposerGraph.cpp
-  # dtkComposerGraphEdge.cpp
-  # dtkComposerGraphLayouter.cpp
-  # dtkComposerGraphNodeBegin.cpp
-  # dtkComposerGraphNode.cpp
-  # dtkComposerGraphNodeEnd.cpp
-  # dtkComposerGraphNodeLeaf.cpp
-  # dtkComposerGraphNodeSelectBranch.cpp
-  # dtkComposerGraphNodeSetInputs.cpp
-  # dtkComposerGraphNodeSetOutputs.cpp
-  # dtkComposerGraphNodeSetVariables.cpp
-  # dtkComposerGraphView.cpp
-  # dtkComposerMachine.cpp
-  # dtkComposerMachineState.cpp
+  dtkComposerCompass.cpp
+  dtkComposerControls.cpp
+  dtkComposerControlsDelegate.cpp
+  dtkComposerEvaluator.cpp
+  dtkComposerGraph.cpp
+  dtkComposerGraphEdge.cpp
+  dtkComposerGraphLayouter.cpp
+  dtkComposerGraphNodeBegin.cpp
+  dtkComposerGraphNode.cpp
+  dtkComposerGraphNodeEnd.cpp
+  dtkComposerGraphNodeLeaf.cpp
+  dtkComposerGraphNodeSelectBranch.cpp
+  dtkComposerGraphNodeSetInputs.cpp
+  dtkComposerGraphNodeSetOutputs.cpp
+  dtkComposerGraphNodeSetVariables.cpp
+  dtkComposerGraphView.cpp
   dtkComposerNode.cpp
   dtkComposerNodeFactory.cpp
-  # dtkComposerNodeArrayScalar.cpp
-  # dtkComposerNodeArrayScalarExtractor.cpp
-  # dtkComposerNodeArrayScalarOperatorModifier.cpp
+  dtkComposerNodeFactoryView.cpp
   dtkComposerNodeBoolean.cpp
   dtkComposerNodeBooleanOperator.cpp
   dtkComposerNodeComposite.cpp
@@ -172,60 +142,36 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeLeafProcess.cpp
   # dtkComposerNodeLeafView.cpp
   dtkComposerNodeLogger.cpp
-  # dtkComposerNodeMatrixSquareReal.cpp
-  # dtkComposerNodeMatrixSquareRealExtractor.cpp
-  # dtkComposerNodeMatrixSquareRealOperatorUnary.cpp
-  # dtkComposerNodeMatrixSquareRealOperatorBinary.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProxy.cpp
-  # dtkComposerNodeQuaternion.cpp
-  # dtkComposerNodeQuaternionOperatorUnary.cpp
-  # dtkComposerNodeQuaternionOperatorBinary.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
-  # dtkComposerNodeVector3D.cpp
-  # dtkComposerNodeVector3DOperatorUnary.cpp
-  # dtkComposerNodeVector3DOperatorBinary.cpp
-  # dtkComposerNodeVector3DOperatorTernary.cpp
-  # dtkComposerNodeVectorInteger.cpp
-  # dtkComposerNodeVectorIntegerExtractor.cpp
-  # dtkComposerNodeVectorIntegerOperatorModifier.cpp
-  # dtkComposerNodeVectorIntegerOperatorUnary.cpp
-  # dtkComposerNodeVectorIntegerOperatorBinary.cpp
-  # dtkComposerNodeVectorReal.cpp
-  # dtkComposerNodeVectorRealExtractor.cpp
-  # dtkComposerNodeVectorRealOperatorModifier.cpp
-  # dtkComposerNodeVectorRealOperatorUnary.cpp
-  # dtkComposerNodeVectorRealOperatorBinary.cpp
-  # dtkComposerNodeView.cpp
-  # dtkComposerPath.cpp
-  # dtkComposerScene.cpp
-  # dtkComposerSceneEdge.cpp
-  # dtkComposerSceneModel.cpp
-  # dtkComposerSceneNode.cpp
-  # dtkComposerSceneNodeComposite.cpp
-  # dtkComposerSceneNodeControl.cpp
-  # dtkComposerSceneNodeHandle.cpp
-  # dtkComposerSceneNodeEditor.cpp
-  # dtkComposerSceneNodeLeaf.cpp
-  # dtkComposerSceneNote.cpp
-  # dtkComposerScenePort.cpp
-  # dtkComposerSceneView.cpp
-  # dtkComposerSearchDialog.cpp
-  # dtkComposerStack.cpp
-  # dtkComposerStackUtils.cpp
-  # dtkComposerStackView.cpp
-  # dtkComposerStackCommand.cpp
+  dtkComposerPath.cpp
+  dtkComposerScene.cpp
+  dtkComposerSceneEdge.cpp
+  dtkComposerSceneModel.cpp
+  dtkComposerSceneNode.cpp
+  dtkComposerSceneNodeComposite.cpp
+  dtkComposerSceneNodeControl.cpp
+  dtkComposerSceneNodeHandle.cpp
+  dtkComposerSceneNodeEditor.cpp
+  dtkComposerSceneNodeLeaf.cpp
+  dtkComposerSceneNote.cpp
+  dtkComposerScenePort.cpp
+  dtkComposerSceneView.cpp
+  dtkComposerSearchDialog.cpp
+  dtkComposerStack.cpp
+  dtkComposerStackCommand.cpp
+  dtkComposerStackUtils.cpp
+  dtkComposerStackView.cpp
   dtkComposerTransmitter.cpp
   dtkComposerTransmitterEmitter.cpp
   dtkComposerTransmitterReceiver.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterProxyLoop.cpp
-  # dtkComposerView.cpp
-  # dtkComposerView.cpp
-  # dtkComposerReader.cpp
-  # dtkComposerWriter.cpp
+  dtkComposerReader.cpp
+  dtkComposerWriter.cpp
   )
                      
 set(${PROJECT_NAME}_QRC dtkComposer.qrc)

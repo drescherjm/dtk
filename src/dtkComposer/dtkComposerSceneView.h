@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:23:02 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:18:10 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 33
+ * Last-Updated: Thu Apr 11 10:08:01 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -17,10 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENEVIEW_H
-#define DTKCOMPOSERSCENEVIEW_H
-
-
+#pragma once
 
 #include <QtGui>
 
@@ -54,4 +51,3 @@ private:
     dtkComposerSceneViewPrivate *d;
 };
 
-#endif

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 13:10:54 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 51
+ * Last-Updated: Thu Apr 11 09:13:17 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERWRITER_H
-#define DTKCOMPOSERWRITER_H
+#pragma once
 
 #include <QtCore>
 #include <QtXml>
@@ -64,4 +63,3 @@ private:
     dtkComposerWriterPrivate *d;
 };
 
-#endif

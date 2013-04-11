@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 17:01:34 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 63
+ * Last-Updated: Wed Apr 10 16:58:27 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENENODECONTROL_H
-#define DTKCOMPOSERSCENENODECONTROL_H
-
+#pragma once
 
 #include "dtkComposerSceneNode.h"
 
@@ -84,5 +82,3 @@ protected:
 private:
     dtkComposerSceneNodeControlPrivate *d;
 };
-
-#endif

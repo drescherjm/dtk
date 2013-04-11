@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:14:41 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 161
+ * Last-Updated: Thu Apr 11 10:22:11 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 162
  */
 
 /* Commentary:
@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef DTKCOMPOSERGRAPHNODE_H
-#define DTKCOMPOSERGRAPHNODE_H
+#pragma once
 
 #include <QtCore>
 #include <QtGui>
@@ -113,4 +112,3 @@ public:
     dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other);
 };
 
-#endif

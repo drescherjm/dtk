@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. févr. 28 19:35:10 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 186
+ * Last-Updated: Wed Apr 10 17:00:57 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 191
  */
 
 /* Commentary: 
@@ -19,7 +19,7 @@
 
 #include "dtkComposerSceneEdge.h"
 
-#include "dtkComposerScene.h"
+//#include "dtkComposerScene.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerScenePort.h"
@@ -28,7 +28,7 @@ class dtkComposerSceneEdgePrivate
 {
 public:
     dtkComposerSceneNode *parent;
-    dtkComposerScene     *scene;
+    //dtkComposerScene     *scene;
 
 public:
     dtkComposerScenePort *source;
@@ -47,7 +47,7 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
 {
     d->source = NULL;
     d->destination = NULL;
-    d->scene = NULL;
+    //d->scene = NULL;
 
 
     d->parent = NULL;
@@ -81,13 +81,12 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
     painter->setPen(QPen(Qt::black, 1));
 
+    // if (!d->scene)
+    //     if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene * > ( this->scene()))
+    //         d->scene = scene;
 
-    if (!d->scene)
-        if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene * > ( this->scene()))
-            d->scene = scene;
-
-    if (d->scene && d->scene->maskedEdges())
-        this->setOpacity(0.05);
+    // if (d->scene && d->scene->maskedEdges())
+    //     this->setOpacity(0.05);
 
     if (d->connected_to_selection) {
         painter->setBrush(Qt::yellow);

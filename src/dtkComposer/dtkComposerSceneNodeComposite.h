@@ -12,9 +12,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENENODECOMPOSITE_H
-#define DTKCOMPOSERSCENENODECOMPOSITE_H
-
+#pragma once
 
 #include "dtkComposerSceneNode.h"
 
@@ -120,4 +118,3 @@ private:
     dtkComposerSceneNodeCompositePrivate *d;
 };
 
-#endif

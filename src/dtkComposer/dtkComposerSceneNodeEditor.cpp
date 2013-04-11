@@ -32,9 +32,9 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
-#include "dtkComposerNodeLeafData.h"
-#include "dtkComposerNodeLeafProcess.h"
-#include "dtkComposerNodeLeafView.h"
+// #include "dtkComposerNodeLeafData.h"
+// #include "dtkComposerNodeLeafProcess.h"
+// #include "dtkComposerNodeLeafView.h"
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
@@ -675,77 +675,77 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
         } else {
 
-            if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
+            // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
-                if (data_node->isAbstractData()) {
+            //     if (data_node->isAbstractData()) {
                     
-                    d->select_implementation->clear();
+            //         d->select_implementation->clear();
                     
-                    int current_index = 0;
-                    d->select_implementation->addItem("Choose implementation");
+            //         int current_index = 0;
+            //         d->select_implementation->addItem("Choose implementation");
                     
-                    for(int i = 0; i < data_node->implementations().count(); ++i) {
-                        if (data_node->implementations().at(i) == data_node->currentImplementation())
-                            current_index = i+1;
-                        d->select_implementation->addItem(data_node->implementations().at(i));
-                    }
+            //         for(int i = 0; i < data_node->implementations().count(); ++i) {
+            //             if (data_node->implementations().at(i) == data_node->currentImplementation())
+            //                 current_index = i+1;
+            //             d->select_implementation->addItem(data_node->implementations().at(i));
+            //         }
 
-                    d->select_implementation->setCurrentIndex(current_index);
+            //         d->select_implementation->setCurrentIndex(current_index);
                     
-                    d->select_implementation->blockSignals(false);
-                    d->select_implementation->setVisible(true);
-                    d->select_implementation->setEnabled(true);
+            //         d->select_implementation->blockSignals(false);
+            //         d->select_implementation->setVisible(true);
+            //         d->select_implementation->setEnabled(true);
                     
-                }
-            }
+            //     }
+            // }
 
-            else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
+            // else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
 
-                if (process_node->isAbstractProcess()) {
+            //     if (process_node->isAbstractProcess()) {
                     
-                    d->select_implementation->clear();
+            //         d->select_implementation->clear();
                     
-                    int current_index = 0;
-                    d->select_implementation->addItem("Choose implementation");
+            //         int current_index = 0;
+            //         d->select_implementation->addItem("Choose implementation");
                     
-                    for(int i = 0; i < process_node->implementations().count(); ++i) {
-                        if (process_node->implementations().at(i) == process_node->currentImplementation())
-                            current_index = i+1;
-                        d->select_implementation->addItem(process_node->implementations().at(i));
-                    }
+            //         for(int i = 0; i < process_node->implementations().count(); ++i) {
+            //             if (process_node->implementations().at(i) == process_node->currentImplementation())
+            //                 current_index = i+1;
+            //             d->select_implementation->addItem(process_node->implementations().at(i));
+            //         }
 
-                    d->select_implementation->setCurrentIndex(current_index);
+            //         d->select_implementation->setCurrentIndex(current_index);
                     
-                    d->select_implementation->blockSignals(false);
-                    d->select_implementation->setVisible(true);
-                    d->select_implementation->setEnabled(true);
+            //         d->select_implementation->blockSignals(false);
+            //         d->select_implementation->setVisible(true);
+            //         d->select_implementation->setEnabled(true);
                     
-                }
-            }
+            //     }
+            // }
 
-            else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
+            // else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
 
-                if (view_node->isAbstractView()) {
+            //     if (view_node->isAbstractView()) {
                     
-                    d->select_implementation->clear();
+            //         d->select_implementation->clear();
                     
-                    int current_index = 0;
-                    d->select_implementation->addItem("Choose implementation");
+            //         int current_index = 0;
+            //         d->select_implementation->addItem("Choose implementation");
                     
-                    for(int i = 0; i < view_node->implementations().count(); ++i) {
-                        if (view_node->implementations().at(i) == view_node->currentImplementation())
-                            current_index = i+1;
-                        d->select_implementation->addItem(view_node->implementations().at(i));
-                    }
+            //         for(int i = 0; i < view_node->implementations().count(); ++i) {
+            //             if (view_node->implementations().at(i) == view_node->currentImplementation())
+            //                 current_index = i+1;
+            //             d->select_implementation->addItem(view_node->implementations().at(i));
+            //         }
 
-                    d->select_implementation->setCurrentIndex(current_index);
+            //         d->select_implementation->setCurrentIndex(current_index);
                     
-                    d->select_implementation->blockSignals(false);
-                    d->select_implementation->setVisible(true);
-                    d->select_implementation->setEnabled(true);
+            //         d->select_implementation->blockSignals(false);
+            //         d->select_implementation->setVisible(true);
+            //         d->select_implementation->setEnabled(true);
                     
-                }
-            }
+            //     }
+            // }
 
             d->spin_d->blockSignals(true);
             d->spin_d->setVisible(false);
@@ -1290,12 +1290,12 @@ void dtkComposerSceneNodeEditor::onValueChanged(const QString& value)
 
 void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implementation)
 {
-    if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(d->node->wrapee()))
-        data_node->createData(implementation);
+    // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(d->node->wrapee()))
+    //     data_node->createData(implementation);
 
-    else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee()))
-        process_node->createProcess(implementation);
+    // else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee()))
+    //     process_node->createProcess(implementation);
 
-    else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(d->node->wrapee()))
-        view_node->createView(implementation);
+    // else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(d->node->wrapee()))
+    //     view_node->createView(implementation);
 }

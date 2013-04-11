@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:06:43 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 12:18:36 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 29
+ * Last-Updated: Thu Apr 11 10:36:50 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 30
  */
 
 /* Commentary: 
@@ -17,10 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSTACKVIEW_H
-#define DTKCOMPOSERSTACKVIEW_H
-
-
+#pragma once
 
 #include <QtGui>
 
@@ -42,4 +39,3 @@ private:
     dtkComposerStackViewPrivate *d;
 };
 
-#endif

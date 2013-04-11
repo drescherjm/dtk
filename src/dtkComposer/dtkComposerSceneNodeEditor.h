@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 16:03:56 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 50
+ * Last-Updated: Thu Apr 11 10:43:40 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -17,10 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENENODEEDITOR_H
-#define DTKCOMPOSERSCENENODEEDITOR_H
-
-
+#pragma once
 
 #include <QtGui>
 
@@ -80,4 +77,3 @@ private:
     dtkComposerSceneNodeEditorPrivate *d;
 };
 
-#endif

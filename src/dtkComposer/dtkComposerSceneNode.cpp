@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 25 09:04:53 2013 (+0100)
+ * Last-Updated: Wed Apr 10 16:45:31 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 94
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -20,7 +20,6 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
-#include "dtkComposerScenePort.h"
 
 dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkComposerSceneNodePrivate)
 {

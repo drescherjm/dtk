@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:35:33 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:05:25 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 49
+ * Last-Updated: Thu Apr 11 10:31:13 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERCOMPASS_H
-#define DTKCOMPOSERCOMPASS_H
+#pragma once
 
 #include <QtGui>
 #include <QtWidgets>
@@ -52,4 +51,3 @@ private:
     dtkComposerCompassPrivate *d;
 };
 
-#endif

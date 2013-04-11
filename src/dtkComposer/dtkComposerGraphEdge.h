@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:07:29 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 57
+ * Last-Updated: Thu Apr 11 10:22:37 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERGRAPHEDGE_H
-#define DTKCOMPOSERGRAPHEDGE_H
+#pragma once
 
 #include <QtCore>
 #include <QtGui>
@@ -71,4 +70,3 @@ public:
     dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other);
 };
 
-#endif

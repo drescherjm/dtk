@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: ven. mars  2 18:38:19 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 34
+ * Last-Updated: Thu Apr 11 10:28:16 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 35
  */
 
 /* Commentary:
@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef DTKCOMPOSERGRAPHNODESETVARIABLES_H
-#define DTKCOMPOSERGRAPHNODESETVARIABLES_H
+#pragma once
 
 #include "dtkComposerGraphNode.h"
 
@@ -47,5 +46,4 @@ private:
     dtkComposerGraphNodeSetVariablesPrivate *d;
 };
 
-#endif /* DTKCOMPOSERGRAPHNODESETVARIABLES_H */
 

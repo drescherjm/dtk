@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:15:01 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Feb 16 18:13:20 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 31
+ * Last-Updated: Wed Apr 10 16:46:14 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSCENENODE_P_H
-#define DTKCOMPOSERSCENENODE_P_H
+#pragma once
 
 #include <QtCore>
 
@@ -50,4 +49,3 @@ public:
     bool embedded;
 };
 
-#endif

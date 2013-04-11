@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:06:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:16:50 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 57
+ * Last-Updated: Thu Apr 11 10:33:43 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERCONTROLSDELEGATE_H
-#define DTKCOMPOSERCONTROLSDELEGATE_H
+#pragma once
 
 #include <QtGui>
 
@@ -51,4 +50,3 @@ private:
     dtkComposerControlsDelegatePrivate *d;
 };
 
-#endif

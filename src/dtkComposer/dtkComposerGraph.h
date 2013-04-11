@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:05:54 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 87
+ * Last-Updated: Thu Apr 11 10:17:46 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERGRAPH_H
-#define DTKCOMPOSERGRAPH_H
+#pragma once
 
 #include <QtGui>
 #include <QtWidgets>
@@ -82,5 +81,3 @@ protected slots:
 private:
     dtkComposerGraphPrivate *d;
 };
-
-#endif

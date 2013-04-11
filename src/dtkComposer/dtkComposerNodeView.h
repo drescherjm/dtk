@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:27:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 23:46:30 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 15
+ * Last-Updated: Thu Apr 11 10:57:42 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEVIEW_H
-#define DTKCOMPOSERNODEVIEW_H
-
+#pragma once
 
 #include "dtkComposerNodeLeafView.h"
 
@@ -54,5 +52,3 @@ public:
 private:
     dtkComposerNodeViewPrivate *d;
 };
-
-#endif

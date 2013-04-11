@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 09:56:37 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Fri Nov 16 15:49:52 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 41
+ * Last-Updated: Thu Apr 11 10:58:25 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -17,9 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODELEAFDATA_H
-#define DTKCOMPOSERNODELEAFDATA_H
-
+#pragma once
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -61,4 +59,3 @@ private:
     dtkComposerNodeLeafDataPrivate *d;
 };
 
-#endif

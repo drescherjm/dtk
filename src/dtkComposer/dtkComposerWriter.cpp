@@ -17,9 +17,9 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
-#include "dtkComposerNodeLeafData.h"
-#include "dtkComposerNodeLeafProcess.h"
-#include "dtkComposerNodeLeafView.h"
+// #include "dtkComposerNodeLeafData.h"
+// #include "dtkComposerNodeLeafProcess.h"
+// #include "dtkComposerNodeLeafView.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerScene.h"
@@ -33,7 +33,7 @@
 #include "dtkComposerScenePort.h"
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitterProxyLoop.h"
 #include "dtkComposerWriter.h"
 
 #include <dtkLog>
@@ -204,7 +204,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         dtkComposerScenePort *port = NULL;
 
-        for(int i = 0; i < composite->inputPorts().count(); i++) {
+        for(int i = 0; i < composite->inputPorts().count(); ++i) {
             port = composite->inputPorts().at(i);
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
@@ -218,14 +218,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 property.setAttribute("loop", port->loop());
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
                 property.setAttribute("kind", "proxy");
-            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Variant)
-                property.setAttribute("kind", "variant");
+            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
+                property.setAttribute("kind", "proxyloop");
             tag.appendChild(property);
         }
 
         port = NULL;
 
-        for(int i = 0; i < composite->outputPorts().count(); i++) {
+        for(int i = 0; i < composite->outputPorts().count(); ++i) {
             port = composite->outputPorts().at(i);
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
@@ -239,14 +239,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 property.setAttribute("loop", port->loop());
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
                 property.setAttribute("kind", "proxy");
-            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Variant)
-                property.setAttribute("kind", "variant");
+            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
+                property.setAttribute("kind", "proxyloop");
 
 // --- twin ports
 
-            if(dtkComposerTransmitterVariant *variant = dynamic_cast<dtkComposerTransmitterVariant *>(port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port)))) {
+            if(dtkComposerTransmitterProxyLoop *tpl = dynamic_cast<dtkComposerTransmitterProxyLoop *>(port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port)))) {
 
-                if (dtkComposerTransmitterVariant *twin = variant->twin()) {
+                if (dtkComposerTransmitterProxyLoop *twin = tpl->twin()) {
 
                     QString block = twin->parentNode()->titleHint();
 
@@ -379,44 +379,44 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(value);
         }
 
-        if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
+        // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
-            if (data_node->isAbstractData()) {
+        //     if (data_node->isAbstractData()) {
 
-                QDomText text = document.createTextNode(data_node->currentImplementation());
+        //         QDomText text = document.createTextNode(data_node->currentImplementation());
 
-                QDomElement implementation = document.createElement("implementation");
-                implementation.appendChild(text);
+        //         QDomElement implementation = document.createElement("implementation");
+        //         implementation.appendChild(text);
 
-                tag.appendChild(implementation);
-            }
-        }
+        //         tag.appendChild(implementation);
+        //     }
+        // }
 
-        if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
+        // if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
 
-            if (process_node->isAbstractProcess()) {
+        //     if (process_node->isAbstractProcess()) {
 
-                QDomText text = document.createTextNode(process_node->currentImplementation());
+        //         QDomText text = document.createTextNode(process_node->currentImplementation());
 
-                QDomElement implementation = document.createElement("implementation");
-                implementation.appendChild(text);
+        //         QDomElement implementation = document.createElement("implementation");
+        //         implementation.appendChild(text);
 
-                tag.appendChild(implementation);
-            }
-        }
+        //         tag.appendChild(implementation);
+        //     }
+        // }
 
-        if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
+        // if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
 
-            if (view_node->isAbstractView()) {
+        //     if (view_node->isAbstractView()) {
 
-                QDomText text = document.createTextNode(view_node->currentImplementation());
+        //         QDomText text = document.createTextNode(view_node->currentImplementation());
 
-                QDomElement implementation = document.createElement("implementation");
-                implementation.appendChild(text);
+        //         QDomElement implementation = document.createElement("implementation");
+        //         implementation.appendChild(text);
 
-                tag.appendChild(implementation);
-            }
-        }
+        //         tag.appendChild(implementation);
+        //     }
+        // }
 
         this->extend(node, tag, document);
     }

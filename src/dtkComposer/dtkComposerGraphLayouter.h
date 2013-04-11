@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 10 10:16:15 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Feb 10 10:27:11 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: Thu Apr 11 10:23:37 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 18
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERGRAPHLAYOUTER_H
-#define DTKCOMPOSERGRAPHLAYOUTER_H
+#pragma once
 
 class dtkComposerGraph;
 class dtkComposerGraphLayouterPrivate;
@@ -39,4 +38,3 @@ private:
     dtkComposerGraphLayouterPrivate *d;
 };
 
-#endif

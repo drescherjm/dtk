@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 18:24:52 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 436
+ * Last-Updated: Wed Apr 10 16:50:38 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 444
  */
 
 /* Commentary: 
@@ -18,14 +18,10 @@
  */
 
 #include "dtkComposerNode.h"
-#include "dtkComposerNodeLeafData.h"
-#include "dtkComposerNodeLeafProcess.h"
-#include "dtkComposerNodeLeafView.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
-#include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeLeafPrivate interface
@@ -109,23 +105,16 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
     this->setToolTip(node->type());
 
-    //foreach(dtkComposerTransmitter *receiver, node->receivers()) {
-
-    for(int i = 0; i < node->receivers().count(); ++i) {
-        
+    for(int i = 0; i < node->receivers().count(); ++i) {        
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         this->addInputPort(port);
-        port->setLabel(node->inputLabelHint(this->inputPorts().indexOf(port)));
-        
+        port->setLabel(node->inputLabelHint(this->inputPorts().indexOf(port)));        
     }
 
-    //foreach(dtkComposerTransmitter *emitter, node->emitters()) {
     for(int i = 0; i < node->emitters().count(); ++i) {
-
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, this);
         this->addOutputPort(port);
         port->setLabel(node->outputLabelHint(this->outputPorts().indexOf(port)));
-
     }
 
     this->layout();
@@ -258,23 +247,23 @@ void dtkComposerSceneNodeLeaf::layout(void)
         
         qreal stripe = 10. / d->rect.height();
         
-        if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
-            d->gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
-            d->gradiant.setColorAt(stripe, QColor(Qt::darkRed));
-            d->gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
-        } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
-            d->gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
-            d->gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
-            d->gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
-        } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
-            d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
-            d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
-            d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
-        } else {
+        // if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
+        //     d->gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
+        //     d->gradiant.setColorAt(stripe, QColor(Qt::darkRed));
+        //     d->gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
+        // } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
+        //     d->gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
+        //     d->gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
+        //     d->gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
+        // } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
+        //     d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
+        //     d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
+        //     d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
+        // } else {
             d->gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker());
-        }
+	// }
         
         d->gradiant_defined = true;
 

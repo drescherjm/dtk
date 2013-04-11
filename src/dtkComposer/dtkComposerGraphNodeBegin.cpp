@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:32:20 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 346
+ * Last-Updated: Thu Apr 11 10:25:50 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 347
  */
 
 /* Commentary:
@@ -16,8 +16,6 @@
 /* Change log:
  *
  */
-
-#include <dtkConfig.h>
 
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNode.h"

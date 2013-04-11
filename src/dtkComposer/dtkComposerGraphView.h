@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Mar 20 14:05:11 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 22
+ * Last-Updated: Thu Apr 11 10:28:43 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERGRAPHVIEW_H
-#define DTKCOMPOSERGRAPHVIEW_H
+#pragma once
 
 #include <QtGui>
 #include <QtWidgets>
@@ -37,4 +36,3 @@ private:
     dtkComposerGraphViewPrivate *d;
 };
 
-#endif

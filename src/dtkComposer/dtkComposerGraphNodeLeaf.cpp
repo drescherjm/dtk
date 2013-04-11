@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. sept. 21 10:03:14 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 72
+ * Last-Updated: Thu Apr 11 10:26:33 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 73
  */
 
 /* Commentary:
@@ -21,9 +21,9 @@
 #include "dtkComposerGraphNodeLeaf.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeLeaf.h"
-#include "dtkComposerNodeLeafData.h"
-#include "dtkComposerNodeLeafProcess.h"
-#include "dtkComposerNodeLeafView.h"
+// #include "dtkComposerNodeLeafData.h"
+// #include "dtkComposerNodeLeafProcess.h"
+// #include "dtkComposerNodeLeafView.h"
 
 class dtkComposerGraphNodeLeafPrivate
 {
@@ -39,13 +39,13 @@ public:
 dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeLeafPrivate)
 {
     d->composer_node = dynamic_cast<dtkComposerNodeLeaf *>(cnode);
-    if (dynamic_cast<dtkComposerNodeLeafProcess *>(cnode))
-        d->kind = dtkComposerGraphNode::Process;
-    else if (dynamic_cast<dtkComposerNodeLeafView *>(cnode))
-        d->kind = dtkComposerGraphNode::View;
-    else if (dynamic_cast<dtkComposerNodeLeafData *>(cnode))
-        d->kind = dtkComposerGraphNode::Data;
-    else
+    // if (dynamic_cast<dtkComposerNodeLeafProcess *>(cnode))
+    //     d->kind = dtkComposerGraphNode::Process;
+    // else if (dynamic_cast<dtkComposerNodeLeafView *>(cnode))
+    //     d->kind = dtkComposerGraphNode::View;
+    // else if (dynamic_cast<dtkComposerNodeLeafData *>(cnode))
+    //     d->kind = dtkComposerGraphNode::Data;
+    // else
         d->kind = dtkComposerGraphNode::Leaf;
 
     this->setTitle(title);

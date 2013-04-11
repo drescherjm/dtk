@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. juin  7 11:17:18 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 44
+ * Last-Updated: Thu Apr 11 10:01:07 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -17,15 +17,12 @@
  * 
  */
 
-#ifndef DTKCOMPOSERREADER_H
-#define DTKCOMPOSERREADER_H
-
-
+#pragma once
 
 #include <QtCore>
 #include <QtXml>
 
-class dtkComposerFactory;
+class dtkComposerNodeFactory;
 class dtkComposerGraph;
 class dtkComposerReaderPrivate;
 class dtkComposerScene;
@@ -40,7 +37,7 @@ public:
     virtual ~dtkComposerReader(void);
 
 public:
-    void setFactory(dtkComposerFactory *factory);
+    void setFactory(dtkComposerNodeFactory *factory);
     void setScene(dtkComposerScene *scene);
     void setGraph(dtkComposerGraph *graph);
 
@@ -59,4 +56,3 @@ private:
     dtkComposerReaderPrivate *d;
 };
 
-#endif

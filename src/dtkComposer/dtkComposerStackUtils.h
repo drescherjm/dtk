@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 20 16:07:10 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Mar  1 13:13:42 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 38
+ * Last-Updated: Thu Apr 11 10:17:01 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 39
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERSTACKUTILS_H
-#define DTKCOMPOSERSTACKUTILS_H
+#pragma once
 
 #include "dtkComposerTransmitter.h"
 
@@ -46,4 +45,3 @@ bool areBrothers(dtkComposerSceneNodeList nodes);
 bool areBrothers(dtkComposerSceneNoteList notes);
 bool areBrothers(dtkComposerSceneNodeList nodes, dtkComposerSceneNoteList notes);
 
-#endif

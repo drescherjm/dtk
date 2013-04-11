@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Thu Apr 11 11:09:56 2013 (+0200)
+## Last-Updated: Thu Apr 11 15:11:19 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 251
+##     Update #: 254
 ######################################################################
 ## 
 ### Change Log:
@@ -98,6 +98,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterProxyLoop.tpp
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
+  dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWriter.h
 )
@@ -170,6 +171,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterReceiver.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterProxyLoop.cpp
+  dtkComposerView.cpp
   dtkComposerReader.cpp
   dtkComposerWriter.cpp
   )

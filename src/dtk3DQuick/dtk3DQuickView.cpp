@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr 10 12:34:16 2013 (+0200)
+ * Last-Updated: Thu Apr 11 15:15:10 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 1250
+ *     Update #: 1285
  */
 
 /* Change Log:
@@ -48,6 +48,66 @@ dtk3DQuickView::~dtk3DQuickView(void)
 dtk3DView *dtk3DQuickView::view(void)
 {
     return d->view;
+}
+
+void dtk3DQuickView::fit(void)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    d->view->fit();
+    
+    this->update();
+}
+
+void dtk3DQuickView::fitFromTop(void)
+{
+    d->view->fitFromTop();
+
+    this->update();
+}
+
+void dtk3DQuickView::fitFromBack(void)
+{
+    d->view->fitFromBack();
+
+    this->update();
+}
+
+void dtk3DQuickView::fitFromLeft(void)
+{
+    d->view->fitFromLeft();
+
+    this->update();
+}
+
+void dtk3DQuickView::fitFromFront(void)
+{
+    d->view->fitFromFront();
+
+    this->update();
+}
+
+void dtk3DQuickView::fitFromRight(void)
+{
+    d->view->fitFromRight();
+
+    this->update();
+}
+
+void dtk3DQuickView::fitFromBottom(void)
+{
+    d->view->fitFromBottom();
+
+    this->update();
+}
+
+void dtk3DQuickView::togglePickPainting(void)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    d->view->setOption(QGLView::ShowPicking, ((d->view->options() & QGLView::ShowPicking) == 0));
+    d->view->update();
+    this->update();
 }
 
 void dtk3DQuickView::paint(QPainter *p)

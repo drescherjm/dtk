@@ -66,4 +66,3 @@
 #include "dtkComposerView.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerWriter.h"
-

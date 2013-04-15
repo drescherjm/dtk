@@ -3,9 +3,9 @@
 ## Author: Thibaud Kloczko
 ## Created: Mon Mar 25 11:03:20 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr  3 12:20:44 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 20
+## Last-Updated: Mon Apr 15 10:41:05 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 22
 ######################################################################
 ## 
 ### Change Log:
@@ -20,10 +20,12 @@ project(dtkComposerTest)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeTest.h
+  dtkComposerSceneTest.h
   dtkComposerTransmitterTest.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeTest.cpp
+  dtkComposerSceneTest.cpp
   dtkComposerTransmitterTest.cpp)
 
 ## ###################################################################

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr 15 10:32:46 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr 15 11:41:58 2013 (+0200)
+ * Last-Updated: Mon Apr 15 16:09:39 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 107
+ *     Update #: 118
  */
 
 /* Change Log:
@@ -38,10 +38,18 @@ void dtkComposerSceneTestCase::test(void)
 
     dtkComposerView *view = new dtkComposerView;
     view->setScene(scene);
-    view->setWindowTitle("Quit app to validate test");
-    view->resize(800, 600);
-    view->show();
-    view->raise();
+
+    dtkComposerNodeFactoryView *nodes = new dtkComposerNodeFactoryView;
+    nodes->setFactory(&(dtkComposer::node::factory()));
+
+    QSplitter *splitter = new QSplitter;
+    splitter->addWidget(nodes);
+    splitter->addWidget(view);
+    splitter->setHandleWidth(1);
+    splitter->setWindowTitle("Quit app to validate test");
+    splitter->resize(800, 600);
+    splitter->show();
+    splitter->raise();
 
     { // Create a boolean node
 

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Apr 15 10:23:10 2013 (+0200)
+## Last-Updated: Mon Apr 15 16:01:56 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 258
+##     Update #: 260
 ######################################################################
 ## 
 ### Change Log:
@@ -200,6 +200,7 @@ qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkLog)
 target_link_libraries(${PROJECT_NAME} dtkCore)
+target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 ## ###################################################################
 ## Install rules - files

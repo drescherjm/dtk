@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:38:29 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr 11 10:42:17 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 4
+ * Last-Updated: Mon Apr 15 16:06:34 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 5
  */
 
 /* Change Log:
@@ -38,4 +38,3 @@ public:
 private:
     dtkComposerNodeFactoryViewPrivate *d;
 };
-

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Mar 20 12:26:15 2013 (+0100)
 ## Version: 
-## Last-Updated: Thu Apr 11 15:11:19 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 254
+## Last-Updated: Mon Apr 15 10:23:10 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 258
 ######################################################################
 ## 
 ### Change Log:
@@ -100,8 +100,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterReceiver.tpp
   dtkComposerView.h
   dtkComposerReader.h
-  dtkComposerWriter.h
-)
+  dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -173,8 +172,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterProxyLoop.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp
-  dtkComposerWriter.cpp
-  )
+  dtkComposerWriter.cpp)
                      
 set(${PROJECT_NAME}_QRC dtkComposer.qrc)
 
@@ -200,6 +198,7 @@ qt5_use_modules(${PROJECT_NAME} Network)
 qt5_use_modules(${PROJECT_NAME} Widgets)
 qt5_use_modules(${PROJECT_NAME} Xml)
 
+target_link_libraries(${PROJECT_NAME} dtkLog)
 target_link_libraries(${PROJECT_NAME} dtkCore)
 
 ## ###################################################################

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr 10 16:30:55 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 173
+## Last-Updated: Mon Apr 15 12:13:04 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 179
 ######################################################################
 ## 
 ### Change Log:
@@ -82,11 +82,12 @@ find_package(Qt53D            QUIET)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkLog)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkComposer)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkCore)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkComposer)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkLog)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkWidgets)
 if(Qt53D_FOUND)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk3D)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk3DQuick)

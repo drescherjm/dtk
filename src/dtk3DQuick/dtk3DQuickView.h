@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 21:49:58 2013 (+0200)
  * Version: 
- * Last-Updated: Fri Apr  5 00:51:17 2013 (+0200)
+ * Last-Updated: Thu Apr 11 14:33:32 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 117
+ *     Update #: 127
  */
 
 /* Change Log:
@@ -31,6 +31,18 @@ public:
     
 public:
     dtk3DView *view(void);
+
+public:
+    Q_INVOKABLE void fit(void);
+    Q_INVOKABLE void fitFromTop(void);
+    Q_INVOKABLE void fitFromBack(void);
+    Q_INVOKABLE void fitFromLeft(void);
+    Q_INVOKABLE void fitFromFront(void);
+    Q_INVOKABLE void fitFromRight(void);
+    Q_INVOKABLE void fitFromBottom(void);
+
+public:
+    Q_INVOKABLE void togglePickPainting(void);
 
 protected slots:
     void paint(QPainter *painter);

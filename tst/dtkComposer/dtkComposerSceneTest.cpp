@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr 15 10:32:46 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr 15 16:26:24 2013 (+0200)
+ * Last-Updated: Mon Apr 15 16:30:40 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 128
+ *     Update #: 133
  */
 
 /* Change Log:
@@ -42,7 +42,11 @@ void dtkComposerSceneTestCase::test(void)
     dtkComposerNodeFactoryView *nodes = new dtkComposerNodeFactoryView;
     nodes->setFactory(&(dtkComposer::node::factory()));
 
+    dtkComposerSceneModel *scene_model = new dtkComposerSceneModel;
+    scene_model->setScene(scene);
+    
     dtkComposerSceneView *scene_view = new dtkComposerSceneView;
+    scene_view->setModel(scene_model);
     scene_view->setScene(scene);
 
     dtkComposerSceneNodeEditor *editor = new dtkComposerSceneNodeEditor;
@@ -54,6 +58,7 @@ void dtkComposerSceneTestCase::test(void)
     r_splitter->addWidget(scene_view);
     r_splitter->addWidget(editor);
     r_splitter->setHandleWidth(1);
+    r_splitter->setOrientation(Qt::Vertical);
 
     QSplitter *splitter = new QSplitter;
     splitter->addWidget(nodes);

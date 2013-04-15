@@ -3,9 +3,9 @@
 ## Author: Thibaud Kloczko
 ## Created: Mon Mar 25 11:03:20 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Apr 15 10:41:05 2013 (+0200)
+## Last-Updated: Mon Apr 15 11:20:24 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 24
 ######################################################################
 ## 
 ### Change Log:
@@ -63,4 +63,5 @@ target_link_libraries(${PROJECT_NAME} dtkLog)
 ## ###################################################################
 
 add_test(dtkComposerNodeTest        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkComposerTest dtkComposerNodeTest)
+add_test(dtkComposerSceneTest       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkComposerTest dtkComposerSceneTest)
 add_test(dtkComposerTransmitterTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkComposerTest dtkComposerTransmitterTest)

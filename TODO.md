@@ -10,7 +10,7 @@
 
 * Proofread use of dtkLog layer
 
-* Finalize dtkComposerNodeFactoryView
+* Handle layer related nodes, e.g. dtkComposerNodeRemote
 
 ### dtk3D
 

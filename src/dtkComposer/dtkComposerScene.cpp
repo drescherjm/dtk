@@ -102,8 +102,6 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 dtkComposerScene::~dtkComposerScene(void)
 {
     delete d;
-
-    d = NULL;
 }
 
 // /////////////////////////////////////////////////////////////////

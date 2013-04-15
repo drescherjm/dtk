@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: Thu Nov  8 16:04:15 2012 (+0100)
+ * Last-Updated: Mon Apr 15 11:37:50 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 149
+ *     Update #: 150
  */
 
 /* Commentary:
@@ -51,8 +51,6 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new
 dtkComposerView::~dtkComposerView(void)
 {
     delete d;
-
-    d = NULL;
 }
 
 QAction *dtkComposerView::searchAction(void)

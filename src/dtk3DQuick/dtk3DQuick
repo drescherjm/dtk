@@ -1,3 +1,6 @@
 #include "dtk3DQuickConfig.h"
+#include "dtk3DQuickItem.h"
+#include "dtk3DQuickMesh.h"
 #include "dtk3DQuickPlugin.h"
+#include "dtk3DQuickPoint.h"
 #include "dtk3DQuickView.h"

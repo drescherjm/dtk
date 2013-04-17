@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr 17 10:19:14 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr 17 10:28:44 2013 (+0200)
+ * Last-Updated: Wed Apr 17 11:40:58 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 6
+ *     Update #: 14
  */
 
 /* Change Log:
@@ -31,4 +31,9 @@ dtkComposerQuickScene::~dtkComposerQuickScene(void)
 {
     delete d->scene;
     delete d;
+}
+
+dtkComposerScene *dtkComposerQuickScene::scene(void)
+{
+    return d->scene;
 }

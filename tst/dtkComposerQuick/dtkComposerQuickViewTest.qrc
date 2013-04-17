@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="dtkComposerQuickViewTest">
+        <file>dtkComposerQuickViewTest.qml</file>
+    </qresource>
+</RCC>

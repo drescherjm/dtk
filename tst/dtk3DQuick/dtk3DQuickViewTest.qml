@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 23:20:48 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr 11 09:52:50 2013 (+0200)
+ * Last-Updated: Wed Apr 17 11:35:11 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 4
+ *     Update #: 5
  */
 
 /* Change Log:
@@ -30,5 +30,4 @@ Quick3DView {
       Quick3DPoint { id: item3; x: -2.0; color: "blue"; }
     ]
   }
-  
 }

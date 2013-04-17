@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr 15 10:32:46 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr 15 16:30:40 2013 (+0200)
+ * Last-Updated: Tue Apr 16 12:30:02 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 133
+ *     Update #: 142
  */
 
 /* Change Log:
@@ -66,7 +66,8 @@ void dtkComposerSceneTestCase::test(void)
     splitter->addWidget(r_splitter);
     splitter->setHandleWidth(1);
     splitter->setWindowTitle("Quit app to validate test");
-    splitter->resize(800, 600);
+    splitter->resize(1200, 600);
+    splitter->setSizes(QList<int>() << 300 << 1200 - 2*300 << 300);
     splitter->show();
     splitter->raise();
 

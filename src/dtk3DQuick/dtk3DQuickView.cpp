@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr  1 22:19:13 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Apr 11 15:15:10 2013 (+0200)
+ * Last-Updated: Wed Apr 17 10:45:09 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 1285
+ *     Update #: 1289
  */
 
 /* Change Log:
@@ -52,8 +52,6 @@ dtk3DView *dtk3DQuickView::view(void)
 
 void dtk3DQuickView::fit(void)
 {
-    qDebug() << Q_FUNC_INFO;
-
     d->view->fit();
     
     this->update();

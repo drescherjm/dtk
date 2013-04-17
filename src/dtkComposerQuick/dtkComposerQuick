@@ -1,0 +1,3 @@
+#include "dtkComposerQuickPlugin.h"
+#include "dtkComposerQuickScene.h"
+#include "dtkComposerQuickView.h"

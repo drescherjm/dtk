@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Apr 17 09:51:14 2013 (+0200)
 ## Version: 
-## Last-Updated: Fri Apr 19 11:03:34 2013 (+0200)
+## Last-Updated: Wed Apr 24 10:55:11 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 29
+##     Update #: 31
 ######################################################################
 ## 
 ### Change Log:
@@ -19,20 +19,10 @@ project(dtkComposerQuick)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkComposerQuickGraph.h
-  dtkComposerQuickNode.h
-  dtkComposerQuickPlugin.h
-  dtkComposerQuickScene.h
-  dtkComposerQuickStack.h
-  dtkComposerQuickView.h)
+  dtkComposerQuickPlugin.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkComposerQuickGraph.cpp
-  dtkComposerQuickNode.cpp
-  dtkComposerQuickPlugin.cpp
-  dtkComposerQuickScene.cpp
-  dtkComposerQuickStack.cpp
-  dtkComposerQuickView.cpp)
+  dtkComposerQuickPlugin.cpp)
 
 ## #################################################################
 ## Build rules

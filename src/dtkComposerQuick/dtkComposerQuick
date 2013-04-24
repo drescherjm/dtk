@@ -1,4 +1,6 @@
 #include "dtkComposerQuickConfig.h"
+#include "dtkComposerQuickGraph.h"
 #include "dtkComposerQuickPlugin.h"
 #include "dtkComposerQuickScene.h"
+#include "dtkComposerQuickStack.h"
 #include "dtkComposerQuickView.h"

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Apr 17 10:39:39 2013 (+0200)
  * Version: 
- * Last-Updated: Wed Apr 17 13:38:49 2013 (+0200)
+ * Last-Updated: Fri Apr 19 17:08:25 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 47
+ *     Update #: 87
  */
 
 /* Change Log:
@@ -31,6 +31,12 @@ dtkComposerQuickView::dtkComposerQuickView(QQuickItem *parent) : QQuickPaintedIt
     d->view = new dtkComposerView;
 
     d->initialized = false;
+
+    this->setAcceptHoverEvents(true);
+    this->setAcceptedMouseButtons(Qt::AllButtons);
+    this->setFlag(QQuickItem::ItemHasContents, true);
+    this->setFocus(true);
+    this->setRenderTarget(QQuickPaintedItem::FramebufferObject);
 }
 
 dtkComposerQuickView::~dtkComposerQuickView(void)
@@ -49,5 +55,57 @@ void dtkComposerQuickView::paint(QPainter *painter)
 	}
     }
 
-    d->view->render(painter, this->contentsBoundingRect(), QRect(), Qt::IgnoreAspectRatio);
+    d->view->render(painter, this->contentsBoundingRect(), QRect());
 }
+
+void dtkComposerQuickView::keyPressEvent(QKeyEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->keyPressEvent(event);
+
+    this->update();
+}
+
+void dtkComposerQuickView::mouseMoveEvent(QMouseEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->mouseMoveEvent(event);
+
+    this->update();
+}
+
+void dtkComposerQuickView::mousePressEvent(QMouseEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->mousePressEvent(event);
+
+    this->update();
+}
+
+void dtkComposerQuickView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->mouseReleaseEvent(event);
+
+    this->update();
+}
+
+#ifndef QT_NO_WHEELEVENT
+void dtkComposerQuickView::wheelEvent(QWheelEvent *event)
+{
+    if(!d->view)
+	return;
+
+    d->view->wheelEvent(event);
+
+    this->update();
+}
+#endif

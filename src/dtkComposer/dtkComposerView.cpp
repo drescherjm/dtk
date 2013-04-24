@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: Mon Apr 15 11:37:50 2013 (+0200)
+ * Last-Updated: Fri Apr 19 16:23:01 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 150
+ *     Update #: 164
  */
 
 /* Commentary:
@@ -67,6 +67,37 @@ void dtkComposerView::search(void)
     d->dialog->show();
 }
 
+void dtkComposerView::keyPressEvent(QKeyEvent *event)
+{
+    QGraphicsView::keyPressEvent(event);
+}
+
+void dtkComposerView::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QGraphicsView::mouseMoveEvent(event);
+    
+    event->accept();
+}
+
+void dtkComposerView::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QGraphicsView::mousePressEvent(event);
+
+    event->accept();
+}
+
+void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QGraphicsView::mouseReleaseEvent(event);
+}
+
+#ifndef QT_NO_WHEELEVENT
 void dtkComposerView::wheelEvent( QWheelEvent * event )
 {
     if (event->modifiers().testFlag(Qt::ControlModifier)){ //zoom only when CTRL key pressed
@@ -83,6 +114,7 @@ void dtkComposerView::wheelEvent( QWheelEvent * event )
         QGraphicsView::wheelEvent(event);
     }
 }
+#endif
 
 void dtkComposerView::scroll(int dx, int dy)
 {

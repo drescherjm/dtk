@@ -883,6 +883,10 @@ adjust_edges: // Adjusting edges of selected nodes
 
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    qDebug() << Q_FUNC_INFO;
+
+    event->accept();
+    
     QGraphicsScene::mousePressEvent(event);
 
     dtkComposerScenePort *source = this->portAt(event->scenePos());

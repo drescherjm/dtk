@@ -123,6 +123,11 @@ dtkComposerStackCommandCreateNode::~dtkComposerStackCommandCreateNode(void)
     e = NULL;
 }
 
+dtkComposerSceneNode *dtkComposerStackCommandCreateNode::node(void)
+{
+    return e->node;
+}
+
 void dtkComposerStackCommandCreateNode::setParent(dtkComposerSceneNodeComposite *parent)
 {
     e->parent = parent;

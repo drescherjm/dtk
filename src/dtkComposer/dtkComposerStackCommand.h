@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 11 09:10:41 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 200
+ * Last-Updated: Fri Apr 19 11:13:46 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 203
  */
 
 /* Commentary: 
@@ -67,6 +67,9 @@ class dtkComposerStackCommandCreateNode : public dtkComposerStackCommand
 public:
      dtkComposerStackCommandCreateNode(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateNode(void);
+
+public:
+    dtkComposerSceneNode *node(void);
 
 public:
     void setParent(dtkComposerSceneNodeComposite *parent);

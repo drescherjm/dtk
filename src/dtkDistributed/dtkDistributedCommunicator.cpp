@@ -76,6 +76,11 @@ void dtkDistributedCommunicator::uninitialize(void)
     d->initialized = false;
 }
 
+bool dtkDistributedCommunicator::active(void)
+{
+    return false;
+}
+
 void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
 {
     qDebug() << "PROUT";

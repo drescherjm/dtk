@@ -23,12 +23,16 @@ public:
     QStringList hosts;
 
 public:
+    qlonglong nthreads;
+
+public:
     dtkDistributedCommunicator *comm;
 };
 
 dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistributedPolicyPrivate)
 {
     d->comm = NULL;
+    d->nthreads = 1;
 }
 
 dtkDistributedPolicy::~dtkDistributedPolicy(void)
@@ -70,6 +74,10 @@ void dtkDistributedPolicy::setType(dtkDistributedPolicy::Type type)
         qDebug() << "create qthread communicator";
         d->comm = dtkDistributed::communicator::pluginFactory().create("qthread");
         break;
+    case dtkDistributedPolicy::HYB :
+        qDebug() << "create hybrid mpi/qthread communicator";
+        d->comm = dtkDistributed::communicator::pluginFactory().create("hybrid");
+        break;
     default:
         qDebug() << "unkwown policy ";
     }
@@ -79,3 +87,14 @@ QStringList dtkDistributedPolicy::hosts(void)
 {
     return d->hosts;
 }
+
+void dtkDistributedPolicy::setNThreads(qlonglong nthreads)
+{
+    d->nthreads = nthreads;
+}
+
+qlonglong dtkDistributedPolicy::nthreads(void)
+{
+    return d->nthreads;
+}
+

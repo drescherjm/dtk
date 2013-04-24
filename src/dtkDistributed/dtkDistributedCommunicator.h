@@ -41,6 +41,7 @@ public:
     virtual void  initialize(void);
     virtual bool  initialized(void);
     virtual void uninitialize(void);
+    virtual bool       active(void);
 
 public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);

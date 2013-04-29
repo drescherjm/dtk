@@ -81,6 +81,10 @@ bool dtkDistributedCommunicator::active(void)
     return false;
 }
 
+void dtkDistributedCommunicator::setPolicy(dtkDistributedPolicy::Type type)
+{
+}
+
 void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
 {
     qDebug() << "PROUT";

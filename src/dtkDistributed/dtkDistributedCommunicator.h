@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "dtkDistributedPolicy.h"
 #include <dtkCore>
 
 class dtkDistributedWork;
@@ -42,6 +43,9 @@ public:
     virtual bool  initialized(void);
     virtual void uninitialize(void);
     virtual bool       active(void);
+
+public:
+    virtual void setPolicy(dtkDistributedPolicy::Type type);
 
 public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);

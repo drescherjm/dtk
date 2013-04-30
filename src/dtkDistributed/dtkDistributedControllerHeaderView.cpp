@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. avril 26 11:12:12 2012 (+0200)
+ * Last-Updated: ven. janv. 18 15:22:25 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 248
+ *     Update #: 257
  */
 
 /* Commentary: 
@@ -139,7 +139,7 @@ void dtkDistributedControllerHeaderView::update(void)
             nabsent++;
     }
     int ncores = cores_free+cores_busy+cores_down;
-    d->stats->setText(QString("Nodes: %1\nCores: %2\nJobs: %3")
+    d->stats->setText(QString("Nodes: \t%1\nCores: \t%2\nJobs: \t%3")
                       .arg(total)
                       .arg(ncores)
                       .arg(d->controller->jobs(d->cluster).count()));
@@ -155,6 +155,9 @@ void dtkDistributedControllerHeaderView::update(void)
         d->pie_cores->addPiece(QString::number(cores_free), 100*cores_free/ncores, Qt::darkGreen);
         d->pie_cores->addPiece(QString::number(cores_busy), 100*cores_busy/ncores, QColor("#FF7722"));
         d->pie_cores->addPiece(QString::number(cores_down), 100*cores_down/ncores, Qt::red);
+
+        d->pie_jobs->setToolTip("free nodes: " + QString::number(nfree));
+        d->pie_cores->setToolTip("free cores: " + QString::number(cores_free));
     }
     QFrame::update();
 }

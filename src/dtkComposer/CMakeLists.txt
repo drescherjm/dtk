@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: lun. janv. 14 14:13:47 2013 (+0100)
+## Last-Updated: mer. mars 27 15:33:39 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 651
+##     Update #: 657
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -289,11 +289,13 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 
 if(DTK_BUILD_DISTRIBUTED)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+   dtkComposerEvaluatorSlave.h
    dtkComposerNodeRemote.h
    dtkComposerNodeDistributed.h
    )
   set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC} dtkComposerNodeRemote.h)
   set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerEvaluatorSlave.cpp
   dtkComposerNodeDistributed.cpp
   dtkComposerNodeRemote.cpp
    )

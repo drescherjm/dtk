@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Apr 27 17:53:02 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 291
+ * Last-Updated: mer. mars 27 17:06:59 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 298
  */
 
 /* Commentary: 
@@ -19,9 +19,11 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include "dtkComposerEvaluatorSlave.h"
 
 #include <dtkCore>
+
+#include <dtkComposer/dtkComposerFactory.h>
+#include <dtkComposer/dtkComposerEvaluatorSlave.h>
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
@@ -65,8 +67,10 @@ int main(int argc, char **argv)
     communicator->initialize();
 
     dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
+    dtkComposerFactory      *factory = new dtkComposerFactory;
     slave->setInternalCommunicator(communicator);
     slave->setServer(url);
+    slave->setFactory(factory);
 
     int value;
     do  { value = slave->exec(); } while (value  == 0);

@@ -3,10 +3,6 @@
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. oct.  9 16:53:48 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 818
  */
 
 /* Commentary:
@@ -51,6 +47,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->stack.setCapacity(1024);
     d->max_stack_size = 0;
     d->notify = true;
+
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)
@@ -78,8 +75,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     d->stack.clear();
     d->stack.append(d->graph->root());
 
-    if (d->notify)
-        emit evaluationStarted();
+    emit evaluationStarted();
 
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
@@ -97,8 +93,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 
     d->should_stop = false;
 
-    if (d->notify)
-        emit evaluationStopped();
+    emit evaluationStopped();
 }
 
 
@@ -126,11 +121,13 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
     if (!d->should_stop) {
         QString msg = QString("Evaluation resumed and finished");
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
     } else {
         QString msg = QString("Evaluation stopped ");
         dtkInfo() << msg;
-        dtkNotify(msg,30000);
+        if (d->notify)
+            dtkNotify(msg,30000);
         dtkInfo() << "stack size: " << d->stack.size();
     }
 
@@ -141,11 +138,13 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
 
 void dtkComposerEvaluator::logStack(void)
 {
-    // QListIterator<dtkComposerGraphNode *> i(d->stack);
-    // dtkDebug() << "stack content:";
-    // while (i.hasNext())
-    //     dtkDebug() << i.next()->title();
-    // dtkDebug() << "stack end";
+    dtkDebug() << "stack content:";
+
+    int j = d->stack.firstIndex();
+    while(j <= d->stack.lastIndex())
+        dtkDebug() << d->stack.at(j++)->title();
+
+    dtkDebug() << "stack end";
 }
 
 void dtkComposerEvaluator::next(bool run_concurrent)
@@ -237,9 +236,9 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             }
         } else {
             while(it != ite)
-                d->stack.append(*it++);            
+                d->stack.append(*it++);
         }
-        
+
 
         // while(it != ite) {
         //     node = *it++;
@@ -261,6 +260,6 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
     //     d->max_stack_size = d->stack.size();
     //     dtkDebug() << "Max stack size raised: "<< d->max_stack_size;
     // }
-
+    d->stack.normalizeIndexes();
     return !d->stack.isEmpty();
 }

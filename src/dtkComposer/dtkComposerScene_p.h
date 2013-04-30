@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 16:07:50 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 267
+ * Last-Updated: jeu. févr. 28 19:21:44 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 274
  */
 
 /* Commentary: 
@@ -52,6 +52,10 @@ public:
 
 public:
     dtkComposerSceneEdgeList connected_edges;
+    dtkComposerSceneEdgeList all_edges;
+
+public:
+    bool masked_edges;
 
 public:
     dtkComposerSceneEdge *current_edge;
@@ -71,6 +75,10 @@ public:
     QAction *flag_as_pink_action;
     QAction *flag_as_red_action;
     QAction *flag_as_yellow_action;
+
+public:
+    QAction *mask_edges_action;
+    QAction *unmask_edges_action;
 
 public:
     QHash<Qt::GlobalColor, QList<dtkComposerSceneNodeLeaf *> > flagged_nodes;

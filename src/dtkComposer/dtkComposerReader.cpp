@@ -78,12 +78,14 @@ public:
     dtkComposerSceneNodeControl *control;
 
 public:
-    QStringList missing;
+    QStringList missing_implementation;
+    QStringList default_implementation;
 };
 
 bool dtkComposerReaderPrivate::check(const QDomDocument& document)
 {
-    missing.clear();
+    missing_implementation.clear();
+    default_implementation.clear();
 
     QStringList implementations;
     implementations << dtkAbstractDataFactory::instance()->implementations();
@@ -93,10 +95,20 @@ bool dtkComposerReaderPrivate::check(const QDomDocument& document)
     QDomNodeList nodes = document.elementsByTagName("implementation");
 
     for(int i = 0; i < nodes.count(); i++)
-        if(!implementations.contains(nodes.at(i).toElement().text()))
-            missing << QString("- %1\n").arg(nodes.at(i).toElement().text());
+    {
+        QString composition_implementation = nodes.at(i).toElement().text();
 
-    return !missing.count();
+        if(composition_implementation.isEmpty())
+        {
+            default_implementation << QString("- %1\n").arg(nodes.at(i).parentNode().toElement().attribute("type"));
+        }
+        else if(!implementations.contains(composition_implementation))
+        {
+            missing_implementation << QString("- %1\n").arg(composition_implementation);
+        }
+    }
+
+    return (missing_implementation.count() + default_implementation.count()) == 0;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -172,20 +184,35 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     }
 
     if(!d->check(document)) {
+        if(d->missing_implementation.count() > 0) {
+            if (qApp->type() != QApplication::Tty) {
+                QMessageBox msgBox;
 
-        if (qApp->type() != QApplication::Tty) {
+                msgBox.setText("Node implementations are missing. Load anyway?");
+                msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
+                msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing_implementation.join("")));
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Cancel);
+
+                if(msgBox.exec() == QMessageBox::Cancel)
+                    return false;
+            } else {
+                dtkError() << "Can't load composition, mission implementation(s):" << d->missing_implementation.join("");
+                return false;
+            }
+        }
+
+        if(d->default_implementation.count() > 0) {
             QMessageBox msgBox;
-            msgBox.setText("Node implementations are missing. Load anyway?");
-            msgBox.setInformativeText("You will be able to load the composition structure but evaluation will fail if you do not set the missing implementations up.");
-            msgBox.setDetailedText(QString("The following implementations are missing:\n%1").arg(d->missing.join("")));
+
+            msgBox.setText("Default implementations are used. Load anyway?");
+            msgBox.setInformativeText("You will be able to load the composition structure and run the evaluation correctly as long as the default implementations fits your needs.");
+            msgBox.setDetailedText(QString("The following default implementations are used:\n%1").arg(d->default_implementation.join("")));
             msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
             msgBox.setDefaultButton(QMessageBox::Cancel);
 
             if(msgBox.exec() == QMessageBox::Cancel)
                 return false;
-        } else {
-            dtkError() << "Can't load composition, mission implementation(s):" << d->missing.join("");
-            return false;
         }
     }
 

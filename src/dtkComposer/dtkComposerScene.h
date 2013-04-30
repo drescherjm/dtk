@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:11:39
  * Version: $Id$
- * Last-Updated: Tue Nov 20 16:59:39 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 224
+ * Last-Updated: jeu. févr. 28 19:16:06 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 242
  */
 
 /* Commentary:
@@ -85,7 +85,14 @@ public:
     QAction *flagAsYellowAction(void);
 
 public:
+    QAction *maskEdgesAction(void);
+    QAction *unmaskEdgesAction(void);
+
+public:
     QList<dtkComposerSceneNodeLeaf *> flagged(Qt::GlobalColor);
+
+public:
+    bool maskedEdges(void);
 
 public slots:
     void clear(void);
@@ -118,6 +125,10 @@ protected slots:
     void onFlagAsPink(void);
     void onFlagAsYellow(void);
     void onFlagAs(Qt::GlobalColor);
+
+protected slots:
+    void onMaskEdge(void);
+    void onUnMaskEdge(void);
 
 // #pragma mark -
 // #pragma mark - Drag Drop Events
@@ -152,6 +163,11 @@ protected:
     dtkComposerSceneNode *nodeAt(const QPointF& point) const;
     dtkComposerScenePort *portAt(const QPointF& point) const;
     dtkComposerSceneNodeComposite *parentAt(const QPointF& point) const;
+
+// #pragma mark -
+// #pragma mark - Helper function
+protected:
+    void populateEdges(dtkComposerSceneNode *root = NULL);
 
 // #pragma mark -
 // #pragma mark - Internal sigs handling

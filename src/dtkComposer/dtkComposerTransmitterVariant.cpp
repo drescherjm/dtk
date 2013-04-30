@@ -342,12 +342,12 @@ void dtkComposerTransmitterVariant::setDataFrom(dtkComposerTransmitterVariant *s
     d->matrix = source->matrix();
 }
 
-void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array)
+void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array, dtkAbstractObject *object)
 {
-    this->setVariantFrom(array, true);
+    this->setVariantFrom(array, true, object);
 }
 
-QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool self)
+QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool self, dtkAbstractObject *object)
 {
 
     qint64 data_type;
@@ -499,8 +499,17 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
             if (array.size() >  header_length) {
 
                 if (self) {
-                    if (!d->object)
+                    if (!d->object && !object) {
                         d->object = dtkAbstractDataFactory::instance()->create(typeName);
+                    } else if (d->object && !object) {
+                        delete d->object;
+                        d->object = dtkAbstractDataFactory::instance()->create(typeName);
+                    } else if (object->identifier() != typeName) {
+                        dtkWarn() << "Can't deserialiaze into a different object " << typeName << object->identifier() << ", must create a new object";
+                        d->object = dtkAbstractDataFactory::instance()->create(typeName);
+                    } else {
+                        d->object =object;
+                    }
 
                     if (!d->object) {
                         dtkError() << "Unable to create data of type" << typeName;

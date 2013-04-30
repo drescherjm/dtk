@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 17 12:37:32 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 195
+ * Last-Updated: Tue Mar 19 10:26:13 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 199
  */
 
 /* Commentary: 
@@ -63,6 +63,7 @@ public:
 public:
              dtkMatrix(void);
              dtkMatrix(unsigned, unsigned);
+             dtkMatrix(unsigned, unsigned, T *);
              dtkMatrix(const dtkMatrix &);
              dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
     virtual ~dtkMatrix(void);
@@ -76,6 +77,7 @@ public:
 
 public:
     void   allocate(unsigned, unsigned);
+    void   allocate(unsigned, unsigned, T *);
     void deallocate(void);
 
     void mapInto(const dtkMatrix&, unsigned, unsigned, unsigned, unsigned);

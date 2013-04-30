@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
- * Version: $Id$
- * Last-Updated: ven. nov.  2 17:30:27 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 4542
  */
 
 /* Commentary: 
@@ -145,6 +141,7 @@ void dtkComposerStackCommandCreateNode::setType(const QString& type)
 
 void dtkComposerStackCommandCreateNode::redo(void)
 {
+
     if(!d->factory)
         return;
 
@@ -1290,8 +1287,8 @@ void dtkComposerStackCommandEnterGroup::undo(void)
     e->node->setPos(e->node->unrevealPos());
     e->node->layout();
 
-    d->scene->addItem(e->former);
     d->scene->setCurrent(e->former);
+    d->scene->addItem(e->former);
     d->scene->update();
 }
 
@@ -1514,11 +1511,6 @@ dtkComposerStackCommandCreatePort::dtkComposerStackCommandCreatePort(dtkComposer
 
 dtkComposerStackCommandCreatePort::~dtkComposerStackCommandCreatePort(void)
 {
-    if (e->port)
-        delete e->port;
-    if (e->transmitter)
-        delete e->transmitter;
-
     delete e;
 
     e = NULL;

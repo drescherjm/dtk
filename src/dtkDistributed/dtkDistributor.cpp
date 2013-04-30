@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. oct. 31 17:27:09 2012 (+0100)
+ * Last-Updated: mer. janv. 16 11:15:24 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 138
+ *     Update #: 142
  */
 
 /* Commentary: 
@@ -133,11 +133,13 @@ void dtkDistributor::onConnect(void)
     QUrl url = QUrl(d->host_address->currentText());
     if (!d->controller->connect(url)) {
         // can't connect, try to deploy:
-        if (!d->controller->deploy(url))
+        if (!d->controller->deploy(url)) {
             return;
-        else
+        } else {
+            dtkInfo() << "Server is now deployed, retry to connect";
             if (!d->controller->connect(url))
                 return;
+        }
     }
 
     d->header_view->setCluster(d->host_address->currentText());

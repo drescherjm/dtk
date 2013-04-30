@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mar. oct.  9 16:56:09 2012 (+0200)
+ * Last-Updated: mer. mars 27 17:08:03 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 239
+ *     Update #: 465
  */
 
 /* Commentary:
@@ -18,7 +18,6 @@
  */
 
 
-#include "dtkComposerEvaluatorSlave.h"
 
 #include <dtkCore/dtkAbstractDataFactory.h>
 #include <dtkCore/dtkAbstractData.h>
@@ -27,6 +26,7 @@
 #include <dtkCore/dtkGlobal.h>
 
 #include "dtkComposer/dtkComposerEvaluator.h"
+#include "dtkComposer/dtkComposerEvaluatorSlave.h"
 #include "dtkComposer/dtkComposerFactory.h"
 #include "dtkComposer/dtkComposerGraph.h"
 #include "dtkComposer/dtkComposerReader.h"
@@ -47,6 +47,9 @@ public:
     dtkDistributedCommunicator *communicator_i;
 
 public:
+    dtkDistributedSocket *composition_socket;
+
+public:
     dtkComposerScene     *scene;
     dtkComposerStack     *stack;
     dtkComposerGraph     *graph;
@@ -62,20 +65,20 @@ public:
 dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave(), d(new dtkComposerEvaluatorSlavePrivate)
 {
     d->scene     = new dtkComposerScene;
-    d->factory   = new dtkComposerFactory;
     d->stack     = new dtkComposerStack;
     d->evaluator = new dtkComposerEvaluator;
     d->reader    = new dtkComposerReader;
     d->graph     = new dtkComposerGraph;
 
-    d->scene->setFactory(d->factory);
+    d->factory   = NULL;
+    d->composition_socket = NULL;
+
     d->scene->setStack(d->stack);
     d->scene->setGraph(d->graph);
 
     d->evaluator->setGraph(d->graph);
     d->evaluator->setNotify(false);
 
-    d->reader->setFactory(d->factory);
     d->reader->setScene(d->scene);
     d->reader->setGraph(d->graph);
     d->count = 0;
@@ -87,9 +90,10 @@ dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
     delete d->scene;
     delete d->stack;
     delete d->graph;
-    delete d->factory;
     delete d->reader;
     delete d->evaluator;
+    if (d->composition_socket)
+        delete d->composition_socket;
     delete d;
 
     d = NULL;
@@ -98,6 +102,13 @@ dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
 void dtkComposerEvaluatorSlave::setCount(int count)
 {
     d->count = count;
+}
+
+void dtkComposerEvaluatorSlave::setFactory(dtkComposerFactory *factory)
+{
+    d->factory = factory;
+    d->scene->setFactory(d->factory);
+    d->reader->setFactory(d->factory);
 }
 
 void dtkComposerEvaluatorSlave::setServer(QUrl server)
@@ -113,6 +124,11 @@ void dtkComposerEvaluatorSlave::setInternalCommunicator(dtkDistributedCommunicat
 int dtkComposerEvaluatorSlave::exec(void)
 {
 
+    if (!d->factory) {
+        dtkFatal() << "No factory set ! abort slave execution";
+        return 1;
+    }
+
     int rank = d->communicator_i->rank();
     int size = d->communicator_i->size();
     dtkDebug() << "communicator size is" << size;
@@ -121,14 +137,30 @@ int dtkComposerEvaluatorSlave::exec(void)
 
     if ( rank == 0) {
 
-        dtkDebug() << "connect to server" << d->server;
+        QScopedPointer<dtkDistributedMessage> msg;
+
         if (!this->isConnected()) {
+            dtkDebug() << "connect to server" << d->server;
             this->connect(d->server);
             if (this->isConnected()) {
+                if (!d->composition_socket) {
+                    dtkDebug() << "open second socket to server" << d->server;
+                    d->composition_socket = new dtkDistributedSocket;
+                     d->composition_socket->connectToHost(d->server.host(), d->server.port());
+                     if (d->composition_socket->waitForConnected()) {
+                         msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(), dtkDistributedMessage::SLAVE_RANK ));
+                         d->composition_socket->sendRequest(msg.data());
+                     } else {
+                         dtkError() << "Can't connect to server";
+                         return 1;
+                     }
+                }
+
                 dtkDebug() << "connected, send our jobid to server" << this->jobId();
-                dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),rank);
-                this->communicator()->socket()->sendRequest(msg);
-                delete msg;
+                msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),0));
+                this->communicator()->socket()->sendRequest(msg.data());
+                this->communicator()->flush();
+                this->communicator()->socket()->setParent(0);
             } else  {
                 dtkFatal() << "Can't connect to server" << d->server;
                 return 1;
@@ -139,15 +171,15 @@ int dtkComposerEvaluatorSlave::exec(void)
 
         dtkDebug() << "Wait for composition from controller " ;
 
-        if (this->communicator()->socket()->bytesAvailable() > 10) {
-            dtkInfo() << "data already available, try to parse composition " << this->communicator()->socket()->bytesAvailable();
-        } else if (!this->communicator()->socket()->waitForReadyRead(600000)) {
+        if (d->composition_socket->bytesAvailable() > 10) {
+            dtkInfo() << "data already available, try to parse composition " << d->composition_socket->bytesAvailable();
+        } else if (!d->composition_socket->waitForReadyRead(600000)) {
             dtkFatal() << "No data received from server after 10mn, abort " ;
             return 1;
         } else
             dtkDebug() << "Ok, data received, parse" ;
 
-        dtkDistributedMessage *msg = this->communicator()->socket()->parseRequest();
+        msg.reset(d->composition_socket->parseRequest());
         if (msg->type() == "xml") {
             new_composition = true;
             composition = QString(msg->content());
@@ -155,10 +187,8 @@ int dtkComposerEvaluatorSlave::exec(void)
             new_composition = false;
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
-            delete msg;
             return 1;
         }
-        delete msg;
 
         if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;
@@ -192,7 +222,23 @@ int dtkComposerEvaluatorSlave::exec(void)
             }
         }
         dtkDebug() << "run composition" ;
-        d->evaluator->run();
+
+        QThread *workerThread = new QThread(this);
+        QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
+        QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
+
+        QEventLoop loop;
+        loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
+        loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+
+        this->communicator()->socket()->moveToThread(workerThread);
+        workerThread->start();
+
+        loop.exec();
+
+        workerThread->wait();
+        workerThread->deleteLater();
+        dtkDebug() << "finished" ;
 
     } else {
         QString composition;
@@ -209,7 +255,20 @@ int dtkComposerEvaluatorSlave::exec(void)
             remote->setJob(this->jobId());
             remote->setCommunicator(d->communicator_i);
             dtkDebug() << "run composition" ;
-            d->evaluator->run();
+
+            QThread *workerThread = new QThread(this);
+            QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
+            QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
+            QEventLoop loop;
+            loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
+            loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+
+            workerThread->start();
+            loop.exec();
+
+            workerThread->wait();
+            workerThread->deleteLater();
+            dtkDebug() << "finished" ;
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";
             return 1;

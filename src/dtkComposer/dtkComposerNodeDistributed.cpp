@@ -309,6 +309,7 @@ public:
     dtkComposerTransmitterReceiver<dtkDistributedCommunicator> receiver_comm;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
+    dtkComposerTransmitterVariant             receiver_data;
 
     QMap<qlonglong, dtkDistributedMessage *> msg_map;
 
@@ -324,6 +325,7 @@ dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : d
     this->appendReceiver(&(d->receiver_comm));
     this->appendReceiver(&(d->receiver_source));
     this->appendReceiver(&(d->receiver_tag));
+    this->appendReceiver(&(d->receiver_data));
 
     this->appendEmitter(&(d->emitter));
     this->appendEmitter(&(d->emitter_source));
@@ -345,8 +347,10 @@ dtkComposerNodeCommunicatorReceive::~dtkComposerNodeCommunicatorReceive(void)
 
 void dtkComposerNodeCommunicatorReceive::run(void)
 {
+
     if (!d->receiver_source.isEmpty() && !d->receiver_comm.isEmpty()) {
 
+        dtkAbstractObject *o = NULL ;
         d->source = *d->receiver_source.data();
         dtkDistributedCommunicator *communicator = d->receiver_comm.data();
 
@@ -359,13 +363,17 @@ void dtkComposerNodeCommunicatorReceive::run(void)
             return;
         }
 
+        if (!d->receiver_data.isEmpty()) {
+            o = d->receiver_data.object() ;
+        }
+
         if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
             dtkDebug() << "TCP communicator. Parse message from socket";
             if (d->msg_map.contains(d->tag)) {
                 dtkDebug() << "msg already received for tag" << d->tag;
                 d->emitter.setTwinned(false);
                 dtkDistributedMessage *msg = d->msg_map.take(d->tag);
-                d->emitter.setDataFrom(msg->content());
+                d->emitter.setDataFrom(msg->content(),o);
                 d->emitter.setTwinned(true);
                 delete msg;
                 return;
@@ -381,7 +389,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                 if (msg_tag == d->tag || d->tag == dtkDistributedCommunicator::ANY_TAG) {
                     dtkTrace() << "OK, this is the expected tag " << d->tag;
                     d->emitter.setTwinned(false);
-                    d->emitter.setDataFrom(msg->content());
+                    d->emitter.setDataFrom(msg->content(),o);
                     d->emitter.setTwinned(true);
                     delete msg;
                     if (d->tag == dtkDistributedCommunicator::ANY_TAG)
@@ -406,7 +414,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
 
             if (!array.isEmpty()) {
                 d->emitter.setTwinned(false);
-                d->emitter.setDataFrom(array);
+                d->emitter.setDataFrom(array,o);
                 d->emitter.setTwinned(true);
             } else {
                 dtkWarn() << "Empty data in receive";

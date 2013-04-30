@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 17:18:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril 24 15:02:52 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 33
+ * Last-Updated: Mon Mar 18 12:36:33 2013 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -44,6 +44,7 @@ public:
 
 public:
     void attachConsole(void);
+    void attachConsole(dtkLog::Level level);
     void detachConsole(void);
 
 public:
@@ -65,6 +66,7 @@ private:
 
 private:
     void write(const QString& message);
+    void write(const QString& message, dtkLog::Level level);
 
 private:
     dtkLogger& operator=(const dtkLogger& other);

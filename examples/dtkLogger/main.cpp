@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Mar  1 15:23:18 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 13:02:50 2012 (+0100)
+ * Last-Updated: Mon Mar 18 12:56:01 2013 (+0100)
  *           By: Julien Wintz
- *     Update #: 228
+ *     Update #: 238
  */
 
 /* Commentary: 
@@ -86,8 +86,12 @@ int main(int argc, char **argv)
     qRegisterMetaType<Pixel>();
 
     dtkLogger::instance().setLevel(dtkLog::Trace);
-    dtkLogger::instance().attachConsole();
+    dtkLogger::instance().attachConsole(dtkLog::Info);
     dtkLogger::instance().attachFile(dtkLogPath(&application));
+
+    // ///////////////////////////////////////////////////////////////////
+
+    dtkLog(dtkLog::Trace) << "As console is attached with dtkLog::Info level, dtkLog() logs it only to the file.";
 
     // /////////////////////////////////////////////////////////////////
 

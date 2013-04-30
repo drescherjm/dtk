@@ -838,3 +838,22 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
     else
         return true;
 }
+
+
+template <> long double norm_func(const dtkVector<long double> & val)
+{
+    long double elemResult = dtkZero<long double>();
+
+    elemResult = (val)*(val);
+
+    return sqrt( elemResult );
+}
+
+template <> inline float norm_func(const dtkVector<float> & val)
+{
+    float elemResult = dtkZero<float>();
+
+    elemResult = (val)*(val);
+
+    return sqrt( elemResult );
+}

@@ -1,23 +1,22 @@
-### CMakeLists.txt --- 
+### CMakeLists.txt ---
 ## 
-## Author: babette Lekouta
-## Copyright (C) 2008-2011 - Julien Wintz, Inria.
-## Created: Tue Jun 19 18:22:57 2012 (+0200)
-## Version: $Id$
-## Last-Updated: Wed Jun 20 13:11:31 2012 (+0200)
-##           By: 
-##     Update #: 
+## Author: Julien Wintz
+## Created: Tue Mar 12 15:01:41 2013 (+0100)
+## Version: 
+## Last-Updated: Tue Mar 12 15:01:42 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 1
 ######################################################################
 ## 
-### Commentary: 
-## 
-######################################################################
-## 
-### Change log:
+### Change Log:
 ## 
 ######################################################################
 
 project(dtkZipTest)
+
+## ###################################################################
+
+if(ZLIB_FOUND)
 
 ## #################################################################
 ## Input
@@ -70,3 +69,9 @@ endforeach()
 
 SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
 SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
+
+## ###################################################################
+
+endif(ZLIB_FOUND)
+
+## ###################################################################

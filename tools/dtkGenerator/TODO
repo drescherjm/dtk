@@ -1,0 +1,21 @@
+# ####################### #
+# Things remaining to do: #
+# ####################### #
+
+Global stuff:
+- Handle layer. The regex from the interface still needs to be corrected. ** See BUG keyword in dtkGeneratorWizard.cpp file.
+- Handle the license for plugins.
+- Add Doxygen comments.
+
+On the Generator:
+- Being able to modify the templates relatively to the Abstract level needs. **
+
+On the main:
+- Anyoption should be replaced:
+    + No way to have mandatory option for instance.
+    + No way to have more than one Synopsis line.
+    + Bugging many times.
+
+
+** : higher priority
+

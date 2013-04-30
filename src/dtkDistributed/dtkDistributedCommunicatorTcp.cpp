@@ -136,10 +136,7 @@ void dtkDistributedCommunicatorTcp::barrier(void)
 
 void dtkDistributedCommunicatorTcp::flush(void)
 {
-    while (this->socket()->bytesToWrite() > 0) {
-        this->socket()->flush();
-        this->socket()->waitForBytesWritten();
-    }
+    this->socket()->fflush();
 }
 
 // FIXME: unused now ?

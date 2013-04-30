@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:13:25
- * Version: $Id$
- * Last-Updated: Wed Nov 21 18:26:42 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 2475
  */
 
 /* Commentary:
@@ -44,6 +40,10 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->stack = NULL;
     d->graph = NULL;
 
+    // BspTreeIndex causes some bugs with (at least) "enter group"
+    setItemIndexMethod( QGraphicsScene::NoIndex);
+
+
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
     d->root_node->setTitle("Root");
@@ -53,6 +53,14 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->reparent_origin = NULL;
     d->reparent_target = NULL;
+
+    d->masked_edges = false;
+
+    d->mask_edges_action = new QAction("Mask Edges", this);
+    d->mask_edges_action->setShortcut(QKeySequence(Qt::ControlModifier  + Qt::Key_M));
+
+    d->unmask_edges_action = new QAction("Unmask Edges", this);
+    d->unmask_edges_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_M));
 
     d->flag_as_blue_action = new QAction("Flag as blue", this);
     d->flag_as_blue_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_B));
@@ -83,6 +91,9 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/pixmaps/dtk-composer-node-flag-yellow.png"));
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
+
+    connect(d->mask_edges_action, SIGNAL(triggered()), this, SLOT(onMaskEdge()));
+    connect(d->unmask_edges_action, SIGNAL(triggered()), this, SLOT(onUnMaskEdge()));
 
     connect(d->flag_as_blue_action, SIGNAL(triggered()), this, SLOT(onFlagAsBlue()));
     connect(d->flag_as_gray_action, SIGNAL(triggered()), this, SLOT(onFlagAsGray()));
@@ -127,6 +138,11 @@ void dtkComposerScene::clear(void)
 
         delete command;
     }
+}
+
+bool dtkComposerScene::maskedEdges(void)
+{
+    return d->masked_edges;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -209,11 +225,13 @@ void dtkComposerScene::setCurrent(dtkComposerSceneNode *node)
         d->current_node = composite;
     else
         qDebug() << DTK_PRETTY_FUNCTION << "Node should be a composite one";
+    emit changed();
 }
 
 void dtkComposerScene::setCurrent(dtkComposerSceneNodeComposite *current)
 {
     d->current_node = current;
+    emit changed();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -240,12 +258,12 @@ void dtkComposerScene::addItem(QGraphicsItem *item)
             dtkComposerSceneNode *node;
             for(int i = 0; i < block->nodes().count(); ++i) {
                 node = block->nodes()[i];
-                if (i == 0) 
+                if (i == 0)
                     first = node;
                 this->addItem(node);
                 control->stackBefore(node);
             }
-            
+
             foreach(dtkComposerSceneEdge *edge, block->edges()) {
                 this->addItem(edge);
                 if (first)
@@ -403,6 +421,16 @@ QAction *dtkComposerScene::flagAsYellowAction(void)
     return d->flag_as_yellow_action;
 }
 
+QAction *dtkComposerScene::maskEdgesAction(void)
+{
+    return d->mask_edges_action;
+}
+
+QAction *dtkComposerScene::unmaskEdgesAction(void)
+{
+    return d->unmask_edges_action;
+}
+
 QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor color)
 {
     return d->flagged_nodes[color];
@@ -416,6 +444,30 @@ QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor colo
 void dtkComposerScene::modify(bool b)
 {
     emit modified(b);
+}
+
+void dtkComposerScene::onMaskEdge(void)
+{
+    // if (d->masked_edges)
+    //     return;
+
+    d->masked_edges = true;
+    populateEdges();
+    foreach (dtkComposerSceneEdge * edge, d->all_edges) {
+        edge->setOpacity(0.05);
+    }
+}
+
+void dtkComposerScene::onUnMaskEdge(void)
+{
+    // if (!d->masked_edges)
+    //     return;
+
+    d->masked_edges = false;
+    populateEdges();
+    foreach (dtkComposerSceneEdge * edge, d->all_edges) {
+        edge->setOpacity(1);
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1054,7 +1106,6 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
         }        
     }
 
-    emit changed();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1168,4 +1219,32 @@ void dtkComposerScene::onSelectionChanged(void)
         emit selectionCleared();
 
     }
+}
+
+// /////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark - Helper functions
+// /////////////////////////////////////////////////////////////////
+
+void dtkComposerScene::populateEdges(dtkComposerSceneNode *node)
+{
+    if (!node) {
+        node = d->root_node;
+        d->all_edges.clear();
+    }
+
+    d->all_edges << node->inputEdges();
+    d->all_edges << node->outputEdges();
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        foreach(dtkComposerSceneNode *child, composite->nodes())
+            this->populateEdges(child);
+
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+        d->all_edges << control->header()->inputEdges();
+        d->all_edges << control->footer()->outputEdges();
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+            this->populateEdges(block);
+    }
+
 }

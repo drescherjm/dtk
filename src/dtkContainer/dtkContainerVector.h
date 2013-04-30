@@ -29,6 +29,7 @@
 // dtkContainerVector interface
 // /////////////////////////////////////////////////////////////////
 
+
 template <typename T> class dtkContainerVector : public dtkAbstractContainerOrdered<T>
 {
 public:

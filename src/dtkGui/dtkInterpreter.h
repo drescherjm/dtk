@@ -62,6 +62,7 @@ protected:
 protected:
     int currentLineNumber(void) const;
     QString currentLine(void) const;
+    QString currentBlock(void) const;
 
 private:
     dtkInterpreterPrivate *d;

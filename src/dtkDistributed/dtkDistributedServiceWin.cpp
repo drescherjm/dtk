@@ -28,6 +28,12 @@
 
 #include <stdio.h>
 
+#ifndef MAX_PATH
+#define	MAX_PATH	(260)
+#endif
+
+#define	_MAX_PATH	MAX_PATH
+
 typedef SERVICE_STATUS_HANDLE(WINAPI*PRegisterServiceCtrlHandler)(const wchar_t*,LPHANDLER_FUNCTION);
 static PRegisterServiceCtrlHandler pRegisterServiceCtrlHandler = 0;
 typedef BOOL(WINAPI*PSetServiceStatus)(SERVICE_STATUS_HANDLE,LPSERVICE_STATUS);

@@ -20,8 +20,10 @@
 #ifndef DTKQUATERNION_H
 #define DTKQUATERNION_H
 
+#include "dtkMathExport.h"
 #include "dtkVector.h"
 #include "dtkVector3D.h"
+
 
 // /////////////////////////////////////////////////////////////////
 // dtkQuaternion interface

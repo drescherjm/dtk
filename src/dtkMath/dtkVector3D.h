@@ -120,7 +120,7 @@ public:
 
 #include <QtCore>
 
-typedef dtkVector3D<qreal> dtkVector3DReal;
+typedef dtkVector3D<qreal>  dtkVector3DReal;
 
 Q_DECLARE_METATYPE(dtkVector3DReal);
 Q_DECLARE_METATYPE(dtkVector3DReal *);

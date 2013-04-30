@@ -59,7 +59,7 @@ public:
     static dtkAbstractDataFactory *instance(void);
 
     bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func);
-    bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func, const QString& interface);
+    bool registerDataType         (const QString& type,                             dtkAbstractDataCreator          func, const QString& itf);
     bool registerDataReaderType   (const QString& type, const QStringList& handled, dtkAbstractDataReaderCreator    func);
     bool registerDataWriterType   (const QString& type, const QStringList& handled, dtkAbstractDataWriterCreator    func);
     bool registerDataConverterType(const QString& type, const QStringList& fromTypes, const QString& toType,  dtkAbstractDataConverterCreator func);
@@ -91,7 +91,7 @@ public:
 
 public:
     QStringList implementations(void);
-    QStringList implementations(const QString& interface);
+    QStringList implementations(const QString& intf);
     QStringList interfaces(void);
 
 signals:

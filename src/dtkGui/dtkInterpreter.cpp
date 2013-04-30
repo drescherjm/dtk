@@ -1,5 +1,5 @@
 /* dtkInterpreter.cpp --- 
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:31:39 2009 (+0200)
@@ -10,11 +10,11 @@
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <iostream>
@@ -168,7 +168,7 @@ void dtkInterpreter::onKeyUpPressed(void)
         QString line = currentLine();
         if(d->interpreter)
             line.remove(d->prompt);
- 
+
         d->history.push_front(line);
         d->history_dirty = true;
     }
@@ -221,7 +221,7 @@ void dtkInterpreter::onKeyEnterPressed(void)
 {
     int stat;
 
-    QString line = currentLine();
+    QString line = currentBlock();
 
     if(d->interpreter)
         line.remove(d->prompt);
@@ -263,4 +263,24 @@ QString dtkInterpreter::currentLine(void) const
     tc.select(QTextCursor::LineUnderCursor);
     
     return tc.selectedText();
+}
+
+QString dtkInterpreter::currentBlock(void) const
+{
+    QTextCursor tc = textCursor();
+    tc.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    
+    while(!tc.selectedText().contains(d->prompt))
+        tc.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
+    QString block;
+    QString text = tc.selectedText();
+    QStringList lines = text.split(QChar(8233));
+
+    if(lines.count() > 1)
+        block = lines.join("\n");
+    else
+        block = text;
+
+    return block;
 }

@@ -37,9 +37,8 @@ public:
 
 public:
     static dtkAbstractProcessFactory *instance(void);
-
     bool registerProcessType(const QString& type, dtkAbstractProcessCreator func);
-    bool registerProcessType(const QString& type, dtkAbstractProcessCreator func, const QString& interface);
+    bool registerProcessType(const QString& type, dtkAbstractProcessCreator func, const QString& itf);
 
     unsigned int size(const QString& type);
 
@@ -48,7 +47,7 @@ public:
     QStringList creators(void) const;
 
     QStringList implementations(void);
-    QStringList implementations(const QString& interface);
+    QStringList implementations(const QString& itf);
     QStringList interfaces(void);
 
     dtkSmartPointer<dtkAbstractProcess> createSmartPointer(const QString& type);

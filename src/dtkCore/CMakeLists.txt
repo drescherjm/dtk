@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: jeu. nov.  8 18:23:30 2012 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 350
+## Last-Updated: Tue Apr 30 11:29:59 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 351
 ######################################################################
 ## 
 ### Commentary: 
@@ -214,9 +214,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
-set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADERS}
- "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
 ## Handling of generated script modules
@@ -264,6 +261,10 @@ foreach(header ${${PROJECT_NAME}_HEADERS})
   string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
   set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
 endforeach(header)
+
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
+ "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 install(FILES ${dtk_BINARY_DIR}/dtkConfig.h DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})

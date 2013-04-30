@@ -240,7 +240,6 @@ void dtkAbstractData::addWriter(const QString& writer)
 void dtkAbstractData::addConverter(const QString& converter)
 {
     DTK_D(dtkAbstractData);
-
     d->converters.insert(converter, false);
 }
 

@@ -16,6 +16,8 @@
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedWorker.h"
 
+//#include <dtkCore/dtkGlobal.h>
+
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedCommunicatorPrivate
 // /////////////////////////////////////////////////////////////////
@@ -87,7 +89,7 @@ void dtkDistributedCommunicator::setPolicy(dtkDistributedPolicy::Type type)
 
 void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
 {
-    qDebug() << "PROUT";
+    qDebug() << Q_FUNC_INFO;
 }
 
 void dtkDistributedCommunicator::unspawn(void)
@@ -96,22 +98,24 @@ void dtkDistributedCommunicator::unspawn(void)
 
 void dtkDistributedCommunicator::exec(dtkDistributedWork *work)
 {
-
+//   DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkDistributedCommunicator::barrier(void)
 {
-
+//   DTK_DEFAULT_IMPLEMENTATION;
 }
 
-int dtkDistributedCommunicator::pid(void)
+qint32 dtkDistributedCommunicator::wid(void)
 {
-    qDebug() << "Default impl.";
-
    return 0;
 }
 
-int dtkDistributedCommunicator::size(void)
+void dtkDistributedCommunicator::setWid(qint32 id)
+{
+}
+
+qint32 dtkDistributedCommunicator::size(void)
 {
    return 1;
 }
@@ -130,25 +134,12 @@ void dtkDistributedCommunicator::deallocate(qlonglong wid, const qlonglong& buff
     free (buffer);
 }
 
-void dtkDistributedCommunicator::get(qint32 from, qlonglong position, void *array, qlonglong buffer_id)
+void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qint32 tag)
 {
-
-    if (d->buffer_map.contains(buffer_id)) {
-        char *buffer = static_cast<char*>(d->buffer_map[buffer_id]);
-        memcpy ( array, buffer + position * sizeof(qlonglong), sizeof(qlonglong) );
-    } else {
-        qDebug() <<  "unknown buffer" << buffer_id;
-    }
+    return this->send(data, size, dtkDistributedCommunicatorChar, target, tag);
 }
 
-void dtkDistributedCommunicator::put(qint32 dest, qlonglong position, void *data, qlonglong buffer_id)
+void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)
 {
-    if (d->buffer_map.contains(buffer_id)) {
-        char *buffer = static_cast<char*>(d->buffer_map[buffer_id]);
-        memcpy ( buffer + position * sizeof(qlonglong), data, sizeof(qlonglong) );
-
-    } else {
-        qDebug() <<  "unknown buffer" << buffer_id;
-    }
+    return this->receive(data, size, dtkDistributedCommunicatorChar, source, tag);
 }
-

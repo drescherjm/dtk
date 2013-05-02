@@ -159,6 +159,7 @@ dtkDistributedCommunicator *dtkDistributedWorker::communicator(void)
 
 void dtkDistributedWorker::run(void)
 {
+    d->comm->setWid(d->work->wid());
     d->comm->barrier();
     d->work->run();
     d->comm->barrier();

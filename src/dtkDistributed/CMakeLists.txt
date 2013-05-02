@@ -22,6 +22,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArray.tpp
   dtkDistributedCommunicator
   dtkDistributedCommunicator.h
+  dtkDistributedCommunicatorStatus
+  dtkDistributedCommunicatorStatus.h
   dtkDistributedMapper
   dtkDistributedMapper.h
   dtkDistributedPolicy
@@ -38,6 +40,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
+  dtkDistributedCommunicatorStatus.cpp
   dtkDistributedMapper.cpp
   dtkDistributedPolicy.cpp
   dtkDistributedSettings.cpp

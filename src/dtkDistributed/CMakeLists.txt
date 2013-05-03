@@ -24,6 +24,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorStatus
   dtkDistributedCommunicatorStatus.h
+  dtkDistributedLocalMessage.h
   dtkDistributedMapper
   dtkDistributedMapper.h
   dtkDistributedPolicy
@@ -41,6 +42,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
+  dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedPolicy.cpp
   dtkDistributedSettings.cpp

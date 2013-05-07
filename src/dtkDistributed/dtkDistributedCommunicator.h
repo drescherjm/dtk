@@ -33,6 +33,7 @@ public:
 
 public:
     static const qint32 ANY_TAG    = -1;
+    static const qint32 BCAST_TAG  = -7;
     static const qint32 ANY_SOURCE = -1;
 
     enum DataType {
@@ -71,6 +72,9 @@ public:
     virtual void send(void *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;
     virtual void send(char *data, qint64 size, qint32 target, qint32 tag);
     virtual void send(QByteArray& array, qint32 target, qint32 tag) = 0;
+
+public:
+    virtual void broadcast(QByteArray& array, qint32 source) = 0;
 
 public:
     virtual void receive(void *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 00:19:02 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jun 28 14:35:10 2012 (+0200)
- *           By: tkloczko
- *     Update #: 122
+ * Last-Updated: Mon Jun  3 14:30:23 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -90,6 +90,7 @@ int main(int argc, char** argv)
 
         dtkPluginGeneratorMainWindow generator;
         generator.show();
+	generator.raise();
         return app.exec();
         
     }

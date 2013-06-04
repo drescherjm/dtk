@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:06:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 15:23:11 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 56
+ * Last-Updated: mar. juin  4 17:29:32 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -33,9 +33,6 @@ class DTKCOMPOSER_EXPORT dtkComposerControlsDelegate : public QStyledItemDelegat
 public:
      dtkComposerControlsDelegate(QObject *parent = 0);
     ~dtkComposerControlsDelegate(void);
-
-public:
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;

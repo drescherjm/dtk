@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:12:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 17:16:25 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 135
+ * Last-Updated: mar. juin  4 17:29:27 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 156
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerControls.h"
 #include "dtkComposerControlsDelegate.h"
+#include "dtkComposerControlsListItem.h"
 
 class dtkComposerControlsDelegatePrivate
 {
@@ -35,26 +36,6 @@ dtkComposerControlsDelegate::~dtkComposerControlsDelegate(void)
     delete d;
 
     d = NULL;
-}
-
-QWidget *dtkComposerControlsDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-    QListWidget *list = qobject_cast<QListWidget *>(parent->parent());
-
-    if(!list)
-        return QStyledItemDelegate::createEditor(parent, option, index);
-
-    QListWidgetItem *item = list->item(index.row());
-
-    if(!item)
-        return QStyledItemDelegate::createEditor(parent, option, index);
-
-    if(item->type() == dtkComposerControls::Integer)
-        qDebug() << Q_FUNC_INFO << "integer node";
-    else
-        qDebug() << Q_FUNC_INFO << "unknown node";
-
-    return QStyledItemDelegate::createEditor(parent, option, index);
 }
 
 void dtkComposerControlsDelegate::paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const

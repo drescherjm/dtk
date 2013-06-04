@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: mer. mars 27 15:33:39 2013 (+0100)
+## Last-Updated: mar. juin  4 17:08:26 2013 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 657
+##     Update #: 677
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -30,6 +30,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerCompass.h
   dtkComposerControls.h
   dtkComposerControlsDelegate.h
+  dtkComposerControlsListItem.h
+  dtkComposerControlsListItemFactory.h
+  dtkComposerControlsListItemBoolean.h
+  dtkComposerControlsListItemFile.h
+  dtkComposerControlsListItemInteger.h
+  dtkComposerControlsListItemReal.h
+  dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -148,6 +155,12 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerCompass.h
   dtkComposerControls.h
   dtkComposerControlsDelegate.h
+  dtkComposerControlsListItem.h
+  dtkComposerControlsListItemBoolean.h
+  dtkComposerControlsListItemFile.h
+  dtkComposerControlsListItemInteger.h
+  dtkComposerControlsListItemReal.h
+  dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
@@ -173,6 +186,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerCompass.cpp
   dtkComposerControls.cpp
   dtkComposerControlsDelegate.cpp
+  dtkComposerControlsListItem.cpp
+  dtkComposerControlsListItemBoolean.cpp
+  dtkComposerControlsListItemFactory.cpp
+  dtkComposerControlsListItemFile.cpp
+  dtkComposerControlsListItemInteger.cpp
+  dtkComposerControlsListItemReal.cpp
+  dtkComposerControlsListItemString.cpp
   dtkComposerEvaluator.cpp
   dtkComposerFactory.cpp
   dtkComposerFactoryView.cpp

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 16:10:54 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 166
+ * Last-Updated: mar. juin  4 17:29:01 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 197
  */
 
 /* Commentary: 
@@ -19,6 +19,8 @@
 
 #include "dtkComposerControls.h"
 #include "dtkComposerControlsDelegate.h"
+#include "dtkComposerControlsListItem.h"
+#include "dtkComposerControlsListItemFactory.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -66,7 +68,7 @@ dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(ne
 
     d->list = new QListWidget(this);
     d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->list->setEditTriggers(QAbstractItemView::DoubleClicked);
+    d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
 
 // /////////////////////////////////////////////////////////////////
@@ -145,9 +147,9 @@ void dtkComposerControls::setup(int index)
     d->list->clear();
 
     foreach(dtkComposerSceneNodeLeaf *node, nodes) {
-        QListWidgetItem *item = new QListWidgetItem(node->title(), d->list, type(node));
-        item->setFlags(item->flags() | Qt::ItemIsEditable);
-        d->list->addItem(item);
+        dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
+         d->list->addItem(item);
+         d->list->setItemWidget(item,item->widget());
     }
 }
 
@@ -155,10 +157,3 @@ void dtkComposerControls::setup(int index)
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-int type(dtkComposerSceneNodeLeaf *node)
-{
-    if(node->wrapee()->type() == "integer")
-        return dtkComposerControls::Integer;
-
-    return dtkComposerControls::None;
-}

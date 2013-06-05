@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 19 11:56:27 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 73
+ * Last-Updated: mer. juin  5 11:03:08 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -66,6 +66,7 @@ public slots:
 
 signals:
     void modified(bool);
+    void evaluationStopped(void);
 
 public:
     dtkComposerEvaluator *evaluator(void);

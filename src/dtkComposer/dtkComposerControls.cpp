@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mer. juin  5 09:59:49 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 203
  */
 
 /* Commentary: 
@@ -67,7 +63,6 @@ dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(ne
 // /////////////////////////////////////////////////////////////////
 
     d->list = new QListWidget(this);
-    d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
 

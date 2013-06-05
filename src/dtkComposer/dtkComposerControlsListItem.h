@@ -16,8 +16,7 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEM_H
 #define DTKCOMPOSERCONTROLSLISTITEM_H
 
-#include <dtkComposerExport.h>
-#include "dtkComposerSceneNode.h"
+#include <dtkComposerSceneNode.h>
 
 #include <QtGui>
 
@@ -32,12 +31,11 @@ public:
     dtkComposerControlsListItem(QListWidget *parent = 0, dtkComposerSceneNode *node = NULL);
     virtual ~dtkComposerControlsListItem(void);
 
-
 public:
     virtual QWidget *widget(void);
 
 public:
-    dtkComposerSceneNode *node();
+    dtkComposerSceneNode *node(void);
 
 private:
     dtkComposerControlsListItemPrivate *d;

@@ -16,17 +16,13 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEMBOOLEAN_H
 #define DTKCOMPOSERCONTROLSLISTITEMBOOLEAN_H
 
-#include <dtkComposerExport.h>
-#include "dtkComposerControlsListItem.h"
-
-#include <QtGui>
+#include <dtkComposerControlsListItem.h>
 
 class dtkComposerSceneNode;
 class dtkComposerControlsListItemBooleanPrivate;
 
 class dtkComposerControlsListItemBoolean: public dtkComposerControlsListItem
 {
-
     Q_OBJECT
 
 public:

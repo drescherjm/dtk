@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin  4 17:29:01 2013 (+0200)
+ * Last-Updated: mer. juin  5 09:59:49 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 197
+ *     Update #: 203
  */
 
 /* Commentary: 
@@ -148,8 +148,9 @@ void dtkComposerControls::setup(int index)
 
     foreach(dtkComposerSceneNodeLeaf *node, nodes) {
         dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
-         d->list->addItem(item);
-         d->list->setItemWidget(item,item->widget());
+        item->setFlags(Qt::ItemIsEnabled);
+        d->list->addItem(item);
+        d->list->setItemWidget(item,item->widget());
     }
 }
 

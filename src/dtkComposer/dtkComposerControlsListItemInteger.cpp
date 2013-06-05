@@ -13,12 +13,11 @@
  *
  */
 
-#include "dtkComposerControlsListItemInteger.h"
-
-#include "dtkComposerNodeInteger.h"
-
-#include "dtkComposerExport.h"
 #include <dtkCore/dtkGlobal.h>
+#include <dtkComposerExport.h>
+
+#include <dtkComposerControlsListItemInteger.h>
+#include <dtkComposerNodeInteger.h>
 
 class dtkComposerControlsListItemIntegerPrivate
 {
@@ -42,8 +41,9 @@ dtkComposerControlsListItemInteger::dtkComposerControlsListItemInteger(QListWidg
     if (dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(d->node->wrapee()))
         d->i_node = i_node;
     else
-        qDebug() << DTK_PRETTY_FUNCTION <<"Not an integer node, error";
+        dtkError() << "Not an integer node, can't create control list item";
 
+    d->spin_d = NULL;
     d->parent = parent;
 }
 
@@ -51,7 +51,7 @@ dtkComposerControlsListItemInteger::dtkComposerControlsListItemInteger(QListWidg
 dtkComposerControlsListItemInteger::~dtkComposerControlsListItemInteger(void )
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 QWidget *dtkComposerControlsListItemInteger::widget(void)
@@ -64,8 +64,8 @@ QWidget *dtkComposerControlsListItemInteger::widget(void)
     layout->addWidget(new QLabel(d->node->title(), frame));
 
     d->spin_d  = new QSpinBox(frame);
-    d->spin_d->setMinimum(-9999999);
-    d->spin_d->setMaximum(+9999999);
+    d->spin_d->setMinimum(-999999999);
+    d->spin_d->setMaximum(+999999999);
     d->spin_d->setSingleStep(1);
     d->spin_d->setEnabled(true);
     d->spin_d->setValue(d->i_node->value());
@@ -79,5 +79,3 @@ void dtkComposerControlsListItemInteger::onValueChanged(int value)
 {
     d->i_node->setValue(value);
 }
-
-

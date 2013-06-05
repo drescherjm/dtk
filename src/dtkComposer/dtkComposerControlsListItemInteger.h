@@ -16,10 +16,7 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEMINTEGER_H
 #define DTKCOMPOSERCONTROLSLISTITEMINTEGER_H
 
-#include <dtkComposerExport.h>
-#include "dtkComposerControlsListItem.h"
-
-#include <QtGui>
+#include <dtkComposerControlsListItem.h>
 
 class dtkComposerSceneNode;
 class dtkComposerControlsListItemIntegerPrivate;

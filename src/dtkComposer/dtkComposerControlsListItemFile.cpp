@@ -43,11 +43,10 @@ dtkComposerControlsListItemFile::dtkComposerControlsListItemFile(QListWidget *pa
     if (dtkComposerNodeFile *s_node = dynamic_cast<dtkComposerNodeFile *>(d->node->wrapee()))
         d->s_node = s_node;
     else
-        qDebug() << DTK_PRETTY_FUNCTION <<"Not an file node, error";
+        dtkError() << "Not a file node, can't create control list item";
 
     d->parent = parent;
 }
-
 
 dtkComposerControlsListItemFile::~dtkComposerControlsListItemFile(void )
 {
@@ -72,7 +71,6 @@ QWidget *dtkComposerControlsListItemFile::widget(void)
 
     QObject::connect(d->edit, SIGNAL(textChanged(QString)), this, SLOT(onValueChanged(QString)));
     QObject::connect(d->butn_f, SIGNAL(clicked()), this, SLOT(onBrowse()));
-
 
     layout->addWidget(d->edit);
     layout->addWidget(d->butn_f);

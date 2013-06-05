@@ -13,10 +13,9 @@
  *
  */
 
-#include "dtkComposerControlsListItem.h"
+#include <dtkComposerControlsListItem.h>
 
-#include "dtkComposerNodeInteger.h"
-
+#include <dtkComposerNodeInteger.h>
 
 class dtkComposerControlsListItemPrivate
 {
@@ -34,6 +33,13 @@ dtkComposerControlsListItem::dtkComposerControlsListItem(QListWidget *parent, dt
 {
     d->node   = node;
     d->parent = parent;
+    d->spin_d = NULL;
+}
+
+dtkComposerControlsListItem::~dtkComposerControlsListItem(void)
+{
+    delete d;
+    d = NULL;
 }
 
 QWidget *dtkComposerControlsListItem::widget(void)
@@ -47,13 +53,6 @@ QWidget *dtkComposerControlsListItem::widget(void)
     layout->addWidget(new QLabel("NOT EDITABLE !", frame));
 
     return frame;
-}
-
-
-dtkComposerControlsListItem::~dtkComposerControlsListItem(void )
-{
-    delete d;
-    d= NULL;
 }
 
 dtkComposerSceneNode *dtkComposerControlsListItem::node(void)

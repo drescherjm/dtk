@@ -42,7 +42,7 @@ dtkComposerControlsListItemString::dtkComposerControlsListItemString(QListWidget
     if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(d->node->wrapee()))
         d->s_node = s_node;
     else
-        qDebug() << DTK_PRETTY_FUNCTION <<"Not an string node, error";
+        dtkError() << "Not a string node, can't create control list item";
 
     d->parent = parent;
 }
@@ -51,7 +51,7 @@ dtkComposerControlsListItemString::dtkComposerControlsListItemString(QListWidget
 dtkComposerControlsListItemString::~dtkComposerControlsListItemString(void )
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 QWidget *dtkComposerControlsListItemString::widget(void)

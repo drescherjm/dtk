@@ -17,8 +17,6 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEMFACTORY_H
 #define DTKCOMPOSERCONTROLSLISTITEMFACTORY_H
 
-#include <dtkComposerExport.h>
-
 #include <QtGui>
 
 class dtkComposerSceneNode;

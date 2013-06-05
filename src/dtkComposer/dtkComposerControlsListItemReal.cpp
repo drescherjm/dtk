@@ -13,12 +13,12 @@
  *
  */
 
-#include "dtkComposerControlsListItemReal.h"
-
-#include "dtkComposerNodeReal.h"
-
-#include "dtkComposerExport.h"
+#include <dtkComposerExport.h>
 #include <dtkCore/dtkGlobal.h>
+
+#include <dtkComposerControlsListItemReal.h>
+#include <dtkComposerNodeReal.h>
+
 
 class dtkComposerControlsListItemRealPrivate
 {
@@ -42,7 +42,7 @@ dtkComposerControlsListItemReal::dtkComposerControlsListItemReal(QListWidget *pa
     if (dtkComposerNodeReal *r_node = dynamic_cast<dtkComposerNodeReal *>(d->node->wrapee()))
         d->r_node = r_node;
     else
-        qDebug() << DTK_PRETTY_FUNCTION <<"Not an real node, error";
+        dtkError() << "Not a real node, can't create control list item";
 
     d->parent = parent;
 }
@@ -51,7 +51,7 @@ dtkComposerControlsListItemReal::dtkComposerControlsListItemReal(QListWidget *pa
 dtkComposerControlsListItemReal::~dtkComposerControlsListItemReal(void )
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 QWidget *dtkComposerControlsListItemReal::widget(void)

@@ -57,6 +57,12 @@ public:
     void   activateZooming(void);
     void deactivateZooming(void);
 
+    void   activateGrid(void);
+    void deactivateGrid(void);
+
+    void   activateLegend(void);
+    void deactivateLegend(void);
+
 public:
     void zoomForward(void);
     void zoomBackward(void);
@@ -70,6 +76,8 @@ public:
 
     void setAxisScaleX(Scale scale);
     void setAxisScaleY(Scale scale);
+
+    void updateAxes(void);
 
     void setStyleSheet(const QString& sheet);
     

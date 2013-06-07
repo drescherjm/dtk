@@ -42,11 +42,17 @@ public:
     void append(const QPointF& data);
 
 public:
+    void setName(const QString& name);
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
     void clear();
 
     QColor color(void);
+
+    qreal minX(void) const;
+    qreal maxX(void) const;
+    qreal minY(void) const;
+    qreal maxY(void) const;
 
 public:
     void setData(const QVector<QPointF>& data);

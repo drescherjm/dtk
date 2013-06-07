@@ -38,6 +38,8 @@ class dtkPlotCurvePrivateData : public QwtPointSeriesData
 {
 public:
     void append(const QPointF& point);
+
+    void setData(const QVector<QPointF>& data);
     
 public:
     void clear(void);
@@ -60,6 +62,13 @@ void dtkPlotCurvePrivateData::append(const QPointF& data)
     xmax = qMax(xmax, data.x());
     ymin = qMin(ymin, data.y());
     ymax = qMax(ymax, data.y());
+}
+
+void dtkPlotCurvePrivateData::setData(const QVector<QPointF>& data)
+{
+    foreach (const QPointF& point, data) {
+        this->append(point);
+    }
 }
 
 void dtkPlotCurvePrivateData::clear(void)
@@ -95,6 +104,7 @@ dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(ti
 
 dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurvePrivate(title))
 {
+    d->setLegendAttribute(QwtPlotCurve::LegendShowLine);
 }
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))
@@ -129,6 +139,11 @@ void dtkPlotCurve::append(const QPointF& data)
     d->itemChanged();
 }
 
+void dtkPlotCurve::setName(const QString& name)
+{
+    d->setTitle(name);
+}
+
 void dtkPlotCurve::setAntialiased(bool antiliased)
 {
     d->setRenderHint(QwtPlotItem::RenderAntialiased, antiliased);
@@ -144,9 +159,29 @@ QColor dtkPlotCurve::color(void)
    return d->pen().color();
 }
 
+qreal dtkPlotCurve::minX(void) const
+{
+    return d->data.xmin;
+}
+
+qreal dtkPlotCurve::maxX(void) const
+{
+    return d->data.xmax;
+}
+
+qreal dtkPlotCurve::minY(void) const
+{
+    return d->data.ymin;
+}
+
+qreal dtkPlotCurve::maxY(void) const
+{
+    return d->data.ymax;
+}
+
 void dtkPlotCurve::setData(const QVector<QPointF>& data)
 {
-    d->data.setSamples(data);
+    d->data.setData(data);
 
     // emit updated();
 }

@@ -22,11 +22,15 @@
 #include "dtkPlotViewPanner.h"
 #include "dtkPlotViewPicker.h"
 #include "dtkPlotViewZoomer.h"
+#include "dtkPlotViewGrid.h"
+#include "dtkPlotViewLegend.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
 #include <qwt_scale_engine.h>
+
+#include <float.h>
 
 class dtkPlotViewPrivate : public QwtPlot
 {
@@ -34,6 +38,8 @@ public:
     dtkPlotViewPanner *panner;
     dtkPlotViewPicker *picker;
     dtkPlotViewZoomer *zoomer;
+    dtkPlotViewGrid *grid;
+    dtkPlotViewLegend *legend;
 
 public:
     QList<dtkPlotCurve *> curves;
@@ -44,6 +50,8 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
     d->panner = NULL;
     d->picker = NULL;
     d->zoomer = NULL;
+    d->grid = NULL;
+    d->legend = NULL;
 
     d->setAxisAutoScale(0, true);
     d->setAxisAutoScale(1, true);
@@ -71,6 +79,32 @@ void dtkPlotView::activatePanning(void)
         d->panner = new dtkPlotViewPanner(this);
 
     d->panner->activate();
+}
+
+void dtkPlotView::updateAxes()
+{
+    qreal xmin = DBL_MAX;
+    qreal xmax = DBL_MIN;
+    qreal ymin = DBL_MAX;
+    qreal ymax = DBL_MIN;
+
+    foreach(dtkPlotCurve *curve, d->curves) {
+      if (((QwtPlotCurve *)(curve->d))->isVisible()) {
+        xmin = qMin(xmin, curve->minX());
+        xmax = qMax(xmax, curve->maxX());
+	ymin = qMin(ymin, curve->minY());
+	ymax = qMax(ymax, curve->maxY());
+      }
+    }
+
+    if (xmin < xmax) {
+        this->setAxisScaleX(xmin, xmax);
+        this->setAxisScaleY(ymin, ymax);
+    }
+
+    d->updateAxes();
+
+    this->update();
 }
 
 void dtkPlotView::deactivatePanning(void)
@@ -124,6 +158,44 @@ void dtkPlotView::zoomForward(void)
 void dtkPlotView::zoomBackward(void)
 {
     d->zoomer->zoomBackward();
+}
+
+void dtkPlotView::activateGrid(void)
+{
+    if(!d->grid)
+        d->grid = new dtkPlotViewGrid(this);
+
+    d->grid->activate();
+
+    this->update();
+}
+
+void dtkPlotView::deactivateGrid(void)
+{
+    if(!d->grid)
+        d->grid = new dtkPlotViewGrid(this);
+
+    d->grid->deactivate();
+
+    this->update();
+}
+
+void dtkPlotView::activateLegend(void)
+{
+    if(!d->legend)
+        d->legend = new dtkPlotViewLegend(this);
+
+    this->update();
+}
+
+void dtkPlotView::deactivateLegend(void)
+{
+    if(d->legend) {
+      delete d->legend;
+      d->legend = NULL;
+    }
+
+    this->update();
 }
 
 void dtkPlotView::setAxisTitleX(const QString& title)

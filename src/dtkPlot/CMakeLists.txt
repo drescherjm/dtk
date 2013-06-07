@@ -35,14 +35,18 @@ set(${PROJECT_NAME}_HEADERS
   dtkPlotView.h
   dtkPlotViewPanner.h
   dtkPlotViewPicker.h
-  dtkPlotViewZoomer.h)
+  dtkPlotViewZoomer.h
+  dtkPlotViewLegend.h
+  dtkPlotViewGrid.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkPlotCurve.h
   dtkPlotView.h
   dtkPlotViewPanner.h
   dtkPlotViewPicker.h
-  dtkPlotViewZoomer.h)
+  dtkPlotViewZoomer.h
+  dtkPlotViewLegend.h
+  dtkPlotViewGrid.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
@@ -50,7 +54,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkPlotView.cpp
   dtkPlotViewPanner.cpp
   dtkPlotViewPicker.cpp
-  dtkPlotViewZoomer.cpp)
+  dtkPlotViewZoomer.cpp
+  dtkPlotViewLegend.cpp
+  dtkPlotViewGrid.cpp)
 
 ## #################################################################
 ## Build rules

@@ -81,5 +81,7 @@ void dtkComposerNodePlotView::run(void)
     foreach(dtkPlotCurve *curve, d->receiver_curve.allData())
         (*(d->view)) << curve;
 
+    d->view->updateAxes();
+
     d->view->update();
 }

@@ -82,12 +82,14 @@ public:
     void setStyleSheet(const QString& sheet);
     
 public:
-    virtual void setBackgroundColor(int red, int green, int blue);
-    virtual void setBackgroundColor(double red, double green, double blue);
-    virtual void setBackgroundColor(const QColor& color);
-    virtual QColor BackgroundColor() const;
+    void setBackgroundColor(int red, int green, int blue);
+    void setBackgroundColor(double red, double green, double blue);
+    void setBackgroundColor(const QColor& color);
+    QColor backgroundColor(void) const;
 
-    
+    void setForegroundColor(const QColor& color);
+    QColor foregroundColor(void) const;
+
 public:
     dtkPlotView& operator<<(dtkPlotCurve *curve);
 

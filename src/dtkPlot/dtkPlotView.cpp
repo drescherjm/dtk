@@ -41,6 +41,8 @@ public:
     dtkPlotViewGrid *grid;
     dtkPlotViewLegend *legend;
 
+    QColor foregroundColor;
+
 public:
     QList<dtkPlotCurve *> curves;
 };
@@ -59,6 +61,7 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
     d->canvas()->setFrameStyle(QFrame::NoFrame);
 
     d->setCanvasBackground(Qt::white);
+    this->setForegroundColor(Qt::gray);
 }
 
 dtkPlotView::~dtkPlotView(void)
@@ -251,9 +254,23 @@ void dtkPlotView::setBackgroundColor(const QColor& color)
     d->setCanvasBackground(color);
 }
 
-QColor dtkPlotView::BackgroundColor() const
+QColor dtkPlotView::backgroundColor() const
 {
     return d->canvasBackground().color();
+}
+
+void dtkPlotView::setForegroundColor(const QColor& color)
+{
+    d->foregroundColor = color;
+
+    QString sheet = "color: " + color.name() + ";";
+
+    this->setStyleSheet(sheet);
+}
+
+QColor dtkPlotView::foregroundColor() const
+{
+    return d->foregroundColor;
 }
 
 void dtkPlotView::setStyleSheet(const QString& sheet)

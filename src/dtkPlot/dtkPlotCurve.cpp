@@ -154,9 +154,14 @@ void dtkPlotCurve::setColor(const QColor& color)
     d->setPen(color);
 }
 
-QColor dtkPlotCurve::color(void)
+QString dtkPlotCurve::name(void) const
 {
-   return d->pen().color();
+    return d->title().text();
+}
+
+QColor dtkPlotCurve::color(void) const
+{
+    return d->pen().color();
 }
 
 qreal dtkPlotCurve::minX(void) const

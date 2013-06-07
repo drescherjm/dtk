@@ -47,7 +47,8 @@ public:
     void setColor(const QColor& color);
     void clear();
 
-    QColor color(void);
+    QString name(void) const;
+    QColor color(void) const;
 
     qreal minX(void) const;
     qreal maxX(void) const;

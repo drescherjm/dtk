@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 16:49:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 218
+ * Last-Updated: lun. juin 17 11:28:17 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 220
  */
 
 /* Commentary: 
@@ -309,7 +309,7 @@ bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps)
  *  An infinity has an exponent of 255 (shift left 23 positions) and a
  *  zero mantissa. There are two infinities - positive and negative.
  */
-inline bool dtkIsInfinite(float A)
+bool dtkIsInfinite(float A)
 {
     const int32_t kInfAsInt = EXP_255_BIT_32;
 
@@ -321,7 +321,7 @@ inline bool dtkIsInfinite(float A)
     return false;
 }
 
-inline bool dtkIsInfinite(double A)
+bool dtkIsInfinite(double A)
 {
     const int64_t kInfAsInt = EXP_255_BIT_64;
 
@@ -338,7 +338,7 @@ inline bool dtkIsInfinite(double A)
  *  A NAN has an exponent of 255 (shifted left 23 positions) and a
  *  non-zero mantissa.
  */
-inline bool dtkIsNan(float A)
+bool dtkIsNan(float A)
 {
     int32_t *AA = reinterpret_cast<int32_t*>(&A);
 
@@ -351,7 +351,7 @@ inline bool dtkIsNan(float A)
     return false;
 }
 
-inline bool dtkIsNan(double A)
+bool dtkIsNan(double A)
 {
     int64_t *AA = reinterpret_cast<int64_t*>(&A);
 
@@ -368,14 +368,14 @@ inline bool dtkIsNan(double A)
 /*! 
  *  The sign bit of a number is the high bit.
  */
-inline int32_t dtkSign(float A)
+int32_t dtkSign(float A)
 {
     int32_t *AA = reinterpret_cast<int32_t*>(&A);
 
     return (*AA) & HIGH_BIT_32;
 }
 
-inline int64_t dtkSign(double A)
+int64_t dtkSign(double A)
 {
     int64_t *AA = reinterpret_cast<int64_t*>(&A);
 

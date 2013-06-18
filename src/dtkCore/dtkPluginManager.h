@@ -55,6 +55,10 @@ public:
 
     void setPath(const QString& path);
 
+public:
+    virtual void   loadPlugin(const QString& path);
+    virtual void unloadPlugin(const QString& path);
+
 signals:
     void   loaded(const QString& plugin);
     void unloaded(const QString& plugin);
@@ -63,9 +67,6 @@ signals:
 protected:
      dtkPluginManager(void);
     ~dtkPluginManager(void);
-
-    virtual void   loadPlugin(const QString& path);
-    virtual void unloadPlugin(const QString& path);
 
     QString path(void) const;
 

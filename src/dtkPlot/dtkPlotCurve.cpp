@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Thu Dec 13 15:13:47 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 164
+ * Last-Updated: Fri Jun 21 15:17:22 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 171
  */
 
 /* Commentary: 
@@ -74,6 +74,11 @@ void dtkPlotCurvePrivateData::setData(const QVector<QPointF>& data)
 void dtkPlotCurvePrivateData::clear(void)
 {
     this->d_samples.clear();
+
+    xmin = DBL_MAX;
+    xmax = DBL_MIN;
+    ymin = DBL_MAX;
+    ymax = DBL_MIN;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -105,6 +110,8 @@ dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(ti
 dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurvePrivate(title))
 {
     d->setLegendAttribute(QwtPlotCurve::LegendShowLine);
+    this->setName("curve");
+    this->setAntialiased(true);
 }
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))
@@ -152,6 +159,11 @@ void dtkPlotCurve::setAntialiased(bool antiliased)
 void dtkPlotCurve::setColor(const QColor& color)
 {
     d->setPen(color);
+}
+
+void dtkPlotCurve::setColorArea(const QColor& color)
+{
+    d->setBrush(color);
 }
 
 QString dtkPlotCurve::name(void) const

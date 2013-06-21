@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 15 12:16:33 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 77
+ * Last-Updated: Fri Jun 21 15:19:31 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKPLOTVIEW_H
 
 #include "dtkPlotExport.h"
+
+#include "dtkPlotViewLegend.h"
 
 #include <dtkCore/dtkAbstractView.h>
 
@@ -40,9 +42,19 @@ public:
         Logarithmic
     };
 
+   enum LegendPosition {
+        LeftLegend,
+        RightLegend,
+        BottomLegend,
+        TopLegend
+    };
+
 public:
      dtkPlotView(void);
     ~dtkPlotView(void);
+
+public:
+    void clear(void);
 
 public:
      QList<dtkPlotCurve *> curves(void);
@@ -68,18 +80,41 @@ public:
     void zoomBackward(void);
 
 public:
+    void setTitle(const QString&);
+    void setTitleSize(const int&);
+
     void setAxisTitleX(const QString& title);
     void setAxisTitleY(const QString& title);
-    
+
+    void setAxisTitleSizeX(const int&);
+    void setAxisTitleSizeY(const int&);
+
     void setAxisScaleX(double min, double max);
     void setAxisScaleY(double min, double max);
 
     void setAxisScaleX(Scale scale);
     void setAxisScaleY(Scale scale);
 
-    void updateAxes(void);
+    void setLegendPosition(LegendPosition position);
+
+    void fillCurveArea(int alpha);
 
     void setStyleSheet(const QString& sheet);
+
+public:
+    QString title(void) const;
+    int titleSize(void) const;
+
+    QString axisTitleX(void) const;
+    QString axisTitleY(void) const;
+
+    int axisTitleSizeX(void) const;
+    int axisTitleSizeY(void) const;
+
+    void setGridColor(const QColor& color);
+    void setZoomColor(const QColor& color);
+
+    void updateAxes(void);
     
 public:
     void setBackgroundColor(int red, int green, int blue);
@@ -90,14 +125,18 @@ public:
     void setForegroundColor(const QColor& color);
     QColor foregroundColor(void) const;
 
+    void updateColors(void);
+
+public:
+    QWidget *plotWidget(void);
+
+    QWidget *widget(void);
+
 public:
     dtkPlotView& operator<<(dtkPlotCurve *curve);
 
 public slots:
     void update(void);
-
-public slots:
-    QWidget *widget(void);
 
 signals:
     void zoomForwardEnabled(bool);

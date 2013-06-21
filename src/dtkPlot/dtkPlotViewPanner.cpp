@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:44:00 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 28
+ * Last-Updated: Thu Jun 20 09:43:13 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 29
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ dtkPlotViewPannerPrivate::~dtkPlotViewPannerPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewPanner::dtkPlotViewPanner(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewPannerPrivate(reinterpret_cast<QwtPlot *>(parent->widget())->canvas()))
+dtkPlotViewPanner::dtkPlotViewPanner(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewPannerPrivate(reinterpret_cast<QwtPlot *>(parent->plotWidget())->canvas()))
 {
     
 }

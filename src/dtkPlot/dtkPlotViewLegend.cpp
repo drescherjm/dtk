@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:03:46 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: Thu Jun 20 15:56:27 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkPlotViewLegend.h"
 
 #include <qwt_plot.h>
+#include <qwt_plot_layout.h>
 #include <qwt_legend.h>
 #include <qwt_legend_item.h>
 #include <qwt_plot_item.h>
@@ -28,18 +29,21 @@
 class dtkPlotViewLegendPrivate : public QwtLegend
 {
 public:
-     dtkPlotViewLegendPrivate(QwtPlot *plot);
+     dtkPlotViewLegendPrivate(dtkPlotView *parent);
     ~dtkPlotViewLegendPrivate(void);
 
 public:
      dtkPlotView *plotView;
+     QwtPlot *plot;
 };
 
-dtkPlotViewLegendPrivate::dtkPlotViewLegendPrivate(QwtPlot *plot) : QwtLegend()
+dtkPlotViewLegendPrivate::dtkPlotViewLegendPrivate(dtkPlotView *parent) : QwtLegend()
 {
     setItemMode(QwtLegend::CheckableItem);
 
-    plot->insertLegend(this);
+    plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
+
+    plot->insertLegend(this, QwtPlot::LeftLegend);
 }
 
 dtkPlotViewLegendPrivate::~dtkPlotViewLegendPrivate(void)
@@ -51,13 +55,11 @@ dtkPlotViewLegendPrivate::~dtkPlotViewLegendPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewLegend::dtkPlotViewLegend(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewLegendPrivate(reinterpret_cast<QwtPlot *>(parent->widget())))
+dtkPlotViewLegend::dtkPlotViewLegend(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewLegendPrivate(parent))
 {
     d->plotView = parent;
 
-    QwtPlot *plot = reinterpret_cast<QwtPlot *>(parent->widget());
-
-    QwtPlotItemList items = plot->itemList();
+    QwtPlotItemList items = d->plot->itemList();
     for ( int i = 0; i < items.size(); i++ ) {
         QwtLegendItem *legendItem = (QwtLegendItem *)d->find(items[i]);
         if (legendItem) {
@@ -67,7 +69,7 @@ dtkPlotViewLegend::dtkPlotViewLegend(dtkPlotView *parent) : QObject(parent), d(n
         }
      }
 
-    connect(plot, SIGNAL(legendChecked(QwtPlotItem *, bool)), this, SLOT(showItem(QwtPlotItem *, bool)));
+    connect(d->plot, SIGNAL(legendChecked(QwtPlotItem *, bool)), this, SLOT(showItem(QwtPlotItem *, bool)));
 }
 
 dtkPlotViewLegend::~dtkPlotViewLegend(void)
@@ -94,5 +96,30 @@ void dtkPlotViewLegend::showItem(QwtPlotItem *item, bool value)
     d->plotView->updateAxes();
 }
 
+void dtkPlotViewLegend::setPosition(int position)
+{
+    QwtPlot::LegendPosition pos;
+
+    switch (position) {
+    case 0:
+        pos = QwtPlot::LeftLegend;
+        break;
+    case 1:
+        pos = QwtPlot::RightLegend;
+        break;
+    case 2:
+        pos = QwtPlot::BottomLegend;
+        break;
+    default:
+        pos = QwtPlot::TopLegend;
+        break;
+    }
+
+    d->plot->plotLayout()->setLegendPosition(pos);
+
+    d->plot->updateLayout();
+
+    d->plotView->update();
+}
 
 

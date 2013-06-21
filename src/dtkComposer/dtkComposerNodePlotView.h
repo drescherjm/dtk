@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. sept. 20 23:47:00 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 40
+ * Last-Updated: Fri Jun 21 14:10:49 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -55,8 +55,12 @@ public:
         case 0:
             return "curve";
         case 1:
-            return "x-axis label";
+            return "curves list";
         case 2:
+            return "title";
+        case 3:
+            return "x-axis label";
+        case 4:
             return "y-axis label";
         default:
             return dtkComposerNodeLeaf::inputLabelHint(port);

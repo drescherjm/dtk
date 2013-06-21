@@ -1,12 +1,12 @@
-/* dtkComposerNodePlotCurve.h --- 
+/* dtkComposerNodePlotCurveAppendPoint.h --- 
  * 
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 19 15:58:44 2013 (+0200)
+ * Last-Updated: Fri Jun 21 14:04:36 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 32
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -17,8 +17,8 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEPLOTCURVE_H
-#define DTKCOMPOSERNODEPLOTCURVE_H
+#ifndef DTKCOMPOSERNODEPLOTCURVEAPPENDPOINT_H
+#define DTKCOMPOSERNODEPLOTCURVEAPPENDPOINT_H
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
@@ -27,32 +27,34 @@
 
 #include <QtCore>
 
-class dtkComposerNodePlotCurvePrivate;
+class dtkComposerNodePlotCurveAppendPointPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePlotCurve : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodePlotCurveAppendPoint : public QObject, public dtkComposerNodeLeaf
 {
     Q_OBJECT
 
 public:
-     dtkComposerNodePlotCurve(void);
-    ~dtkComposerNodePlotCurve(void);
+     dtkComposerNodePlotCurveAppendPoint(void);
+    ~dtkComposerNodePlotCurveAppendPoint(void);
 
 public:
     inline QString type(void) {
-        return "dtkPlotCurve";
+        return "dtkPlotCurveAppendPoint";
     }
 
     inline QString titleHint(void) {
-        return "Plot curve";
+        return "Plot curve append point";
     }
 
 public:
     inline QString inputLabelHint(int port) {
         switch(port) {
         case 0:
-            return "vector x";
+            return "curve";
         case 1:
-            return "vector y";
+            return "x";
+        case 2:
+            return "y";
         default:
             return "port";
         }
@@ -63,10 +65,13 @@ public:
     }
 
 public:
+    dtkPlotCurve *curve(void);
+
+public:
     void run(void);
 
 private:
-    dtkComposerNodePlotCurvePrivate *d;
+    dtkComposerNodePlotCurveAppendPointPrivate *d;
 };
 
 #endif

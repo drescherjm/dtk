@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 21 14:01:13 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 66
+ * Last-Updated: Tue Jun 18 16:32:50 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -50,6 +50,7 @@ protected slots:
     void switchToCompo(void);
     void switchToDstrb(void);
     void switchToDebug(void);
+    void switchToView(void);
 
 protected slots:
     void showControls(void);

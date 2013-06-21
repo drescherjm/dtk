@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Nov 20 16:35:31 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 139
+ * Last-Updated: Fri Jun 21 15:47:49 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 146
  */
 
 /* Commentary: 
@@ -36,9 +36,11 @@ class dtkDistributor;
 
 class dtkRecentFilesMenu;
 
+class dtkSplitter;
+
 class dtkLogView;
 
-class dtkSplitter;
+class dtkViewManager;
 
 class dtkCreatorMainWindow;
 
@@ -74,6 +76,9 @@ public:
     dtkDistributor *distributor;
 
 public:
+    dtkViewManager *view;
+
+public:
     dtkLogView *log_view;
 
 public:
@@ -97,6 +102,7 @@ public:
     QPushButton *compo_button;
     QPushButton *distr_button;
     QPushButton *debug_button;
+    QPushButton *view_button;
 
 public:
     bool closing;

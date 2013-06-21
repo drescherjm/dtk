@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: mar. juin  4 17:08:26 2013 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 677
+## Last-Updated: Wed Jun 19 12:21:00 2013 (+0200)
+##           By: Selim Kraria
+##     Update #: 679
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -352,12 +352,18 @@ endif(DTK_HAVE_NITE AND DTK_BUILD_VR)
 if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerNodePlotCurve.h
+  dtkComposerNodePlotCurveFile.h
+  dtkComposerNodePlotCurveAppendPoint.h
   dtkComposerNodePlotView.h)
 set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
   dtkComposerNodePlotCurve.h
+  dtkComposerNodePlotCurveFile.h
+  dtkComposerNodePlotCurveAppendPoint.h
   dtkComposerNodePlotView.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodePlotCurve.cpp
+  dtkComposerNodePlotCurveFile.cpp
+  dtkComposerNodePlotCurveAppendPoint.cpp
   dtkComposerNodePlotView.cpp)
 endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
 

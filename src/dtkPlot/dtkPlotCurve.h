@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Dec  5 15:52:03 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 53
+ * Last-Updated: Fri Jun 21 15:17:45 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -45,6 +45,7 @@ public:
     void setName(const QString& name);
     void setAntialiased(bool antiliased);
     void setColor(const QColor& color);
+    void setColorArea(const QColor& color);
     void clear();
 
     QString name(void) const;
@@ -71,7 +72,12 @@ private:
     dtkPlotCurvePrivate *d;
 };
 
-Q_DECLARE_METATYPE(dtkPlotCurve)
-Q_DECLARE_METATYPE(dtkPlotCurve *)
+typedef QList<dtkPlotCurve *> dtkPlotCurves;
+
+Q_DECLARE_METATYPE(dtkPlotCurve);
+Q_DECLARE_METATYPE(dtkPlotCurve *);
+
+Q_DECLARE_METATYPE(dtkPlotCurves);
+Q_DECLARE_METATYPE(dtkPlotCurves *);
 
 #endif

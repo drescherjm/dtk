@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:03:52 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 34
+ * Last-Updated: Wed Jun 19 10:42:15 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -25,6 +25,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QRectF>
 
+#include <QtGui/QColor>
+
 class dtkPlotView;
 class dtkPlotViewZoomerPrivate;
 
@@ -39,6 +41,12 @@ public:
 public:
     void   activate(void);
     void deactivate(void);
+
+public:
+    void setColor(const QColor& color);
+
+public:
+    void updateBase(const QRectF& rectf);
 
 public:
     void zoomForward(void);

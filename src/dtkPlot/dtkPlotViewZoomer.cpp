@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:03:46 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: Wed Jun 19 16:42:15 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 87
  */
 
 /* Commentary: 
@@ -28,11 +28,15 @@ class dtkPlotViewZoomerPrivate : public QwtPlotZoomer
 public:
      dtkPlotViewZoomerPrivate(QwtPlotCanvas *canvas);
     ~dtkPlotViewZoomerPrivate(void);
+
+public:
+    dtkPlotView *view;
 };
 
 dtkPlotViewZoomerPrivate::dtkPlotViewZoomerPrivate(QwtPlotCanvas *canvas) : QwtPlotZoomer(canvas)
 {
-    
+    setMousePattern(QwtEventPattern::MouseSelect2, Qt::RightButton, Qt::ControlModifier);
+    setMousePattern(QwtEventPattern::MouseSelect3, Qt::RightButton);
 }
 
 dtkPlotViewZoomerPrivate::~dtkPlotViewZoomerPrivate(void)
@@ -44,12 +48,14 @@ dtkPlotViewZoomerPrivate::~dtkPlotViewZoomerPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewZoomer::dtkPlotViewZoomer(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewZoomerPrivate(reinterpret_cast<QwtPlot *>(parent->widget())->canvas()))
+dtkPlotViewZoomer::dtkPlotViewZoomer(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewZoomerPrivate(reinterpret_cast<QwtPlot *>(parent->plotWidget())->canvas()))
 {
-    connect(d, SIGNAL(zoomed(const QRectF &)), this, SLOT(onZoomed(const QRectF&)));
+    d->view = parent;
 
-    connect(this, SIGNAL(zoomForwardEnabled(bool)), parent, SIGNAL(zoomForwardEnabled(bool)));
-    connect(this, SIGNAL(zoomBackwardEnabled(bool)), parent, SIGNAL(zoomBackwardEnabled(bool)));
+    //connect(d, SIGNAL(zoomed(const QRectF &)), this, SLOT(onZoomed(const QRectF&)));
+
+    //connect(this, SIGNAL(zoomForwardEnabled(bool)), parent, SIGNAL(zoomForwardEnabled(bool)));
+    //connect(this, SIGNAL(zoomBackwardEnabled(bool)), parent, SIGNAL(zoomBackwardEnabled(bool)));
 }
 
 dtkPlotViewZoomer::~dtkPlotViewZoomer(void)
@@ -91,4 +97,14 @@ void dtkPlotViewZoomer::onZoomed(const QRectF&)
 
     emit zoomForwardEnabled(indx < size-1);
     emit zoomBackwardEnabled(indx > 0);
+}
+
+void dtkPlotViewZoomer::setColor(const QColor& color)
+{
+    d->setRubberBandPen(QPen(color));
+}
+
+void dtkPlotViewZoomer::updateBase(const QRectF& rectf)
+{
+    d->setZoomBase(rectf);
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:03:46 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: Thu Jun 20 13:12:27 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -26,12 +26,17 @@
 class dtkPlotViewGridPrivate : public QwtPlotGrid
 {
 public:
-     dtkPlotViewGridPrivate(QwtPlot *plot);
+     dtkPlotViewGridPrivate(dtkPlotView *parent);
     ~dtkPlotViewGridPrivate(void);
+
+public:
+    QwtPlot *plot;
 };
 
-dtkPlotViewGridPrivate::dtkPlotViewGridPrivate(QwtPlot *plot) : QwtPlotGrid()
+dtkPlotViewGridPrivate::dtkPlotViewGridPrivate(dtkPlotView *parent) : QwtPlotGrid()
 {
+    plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
+
     attach(plot);
 }
 
@@ -44,10 +49,10 @@ dtkPlotViewGridPrivate::~dtkPlotViewGridPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewGrid::dtkPlotViewGrid(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewGridPrivate(reinterpret_cast<QwtPlot *>(parent->widget())))
+dtkPlotViewGrid::dtkPlotViewGrid(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewGridPrivate(parent))
 {
     d->setPen(QPen(Qt::DotLine));
-    d->setMajPen(QPen(Qt::white, 0, Qt::DotLine));
+    d->setMajPen(QPen(Qt::gray, 0, Qt::DotLine));
 }
 
 dtkPlotViewGrid::~dtkPlotViewGrid(void)
@@ -67,3 +72,7 @@ void dtkPlotViewGrid::deactivate(void)
     d->setVisible(false);
 }
 
+void dtkPlotViewGrid::setColor(const QColor& color)
+{
+    d->setMajPen(QPen(color, 0, Qt::DotLine));
+}

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. févr. 28 19:43:24 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 1718
+ * Last-Updated: Fri Jun 21 16:20:57 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 1754
  */
 
 /* Commentary:
@@ -40,6 +40,7 @@
 #include <dtkGui/dtkRecentFilesMenu.h>
 #include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
+#include <dtkGui/dtkViewManager.h>
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkPluginManager.h>
@@ -153,6 +154,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->log_view = new dtkLogView(this);
     d->log_view->setVisible(false);
 
+    d->view = new dtkViewManager;
+    d->view->setVisible(false);
+
     d->closing = false;
 
     // -- Actions
@@ -181,14 +185,17 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *switchToCompoAction = new QAction("Switch to composition perspective", this);
     QAction *switchToDstrbAction = new QAction("Switch to distributed perspective", this);
     QAction *switchToDebugAction = new QAction("Switch to debug perspective", this);
+    QAction *switchToViewAction = new QAction("Switch to view perspective", this);
 
     switchToCompoAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_1);
     switchToDstrbAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_2);
     switchToDebugAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_3);
+    switchToViewAction->setShortcut(Qt::ControlModifier + Qt::AltModifier + Qt::Key_4);
 
     this->addAction(switchToCompoAction);
     this->addAction(switchToDstrbAction);
     this->addAction(switchToDebugAction);
+    this->addAction(switchToViewAction);
 
     // -- Toolbar
 
@@ -230,11 +237,17 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->debug_button->setFixedSize(75, 25);
     d->debug_button->setCheckable(true);
 
+    d->view_button = new QPushButton("View", buttons);
+    d->view_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
+    d->view_button->setFixedSize(75, 25);
+    d->view_button->setCheckable(true);
+
     QButtonGroup *button_group = new QButtonGroup(this);
     button_group->setExclusive(true);
     button_group->addButton(d->compo_button);
     button_group->addButton(d->distr_button);
     button_group->addButton(d->debug_button);
+    button_group->addButton(d->view_button);
 
     QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
     buttons_layout->setMargin(0);
@@ -242,6 +255,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     buttons_layout->addWidget(d->compo_button);
     buttons_layout->addWidget(d->distr_button);
     buttons_layout->addWidget(d->debug_button);
+    buttons_layout->addWidget(d->view_button);
 
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(new dtkNotificationDisplay(this));
@@ -285,6 +299,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     view_menu->addAction(switchToCompoAction);
     view_menu->addAction(switchToDstrbAction);
     view_menu->addAction(switchToDebugAction);
+    view_menu->addAction(switchToViewAction);
 
     QAction *showControlsAction = new QAction("Show controls", this);
     showControlsAction->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::ControlModifier + Qt::AltModifier + Qt::Key_C));
@@ -310,12 +325,14 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));
     connect(switchToDebugAction, SIGNAL(triggered()), this, SLOT(switchToDebug()));
+    connect(switchToViewAction, SIGNAL(triggered()), this, SLOT(switchToView()));
 
     connect(showControlsAction, SIGNAL(triggered()), this, SLOT(showControls()));
 
     connect(d->compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
     connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
     connect(d->debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
+    connect(d->view_button, SIGNAL(pressed()), this, SLOT(switchToView()));
 
     connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(close()));
 
@@ -335,6 +352,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     left->setOrientation(Qt::Vertical);
     left->addWidget(d->nodes);
     left->addWidget(d->distributor);
+    left->addWidget(d->view);
 
     dtkSplitter *right = new dtkSplitter(this);
     right->setOrientation(Qt::Vertical);
@@ -578,11 +596,14 @@ void dtkCreatorMainWindow::switchToCompo(void)
         d->wr = d->stack->size().width();
     }
 
+    d->composer->setVisible(true);
+    d->composer->compass()->setVisible(true);
     d->nodes->setVisible(true);
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
     d->distributor->setVisible(false);
+    d->view->setVisible(false);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -603,11 +624,14 @@ void dtkCreatorMainWindow::switchToDstrb(void)
         d->wr = d->stack->size().width();
     }
 
+    d->composer->setVisible(true);
+    d->composer->compass()->setVisible(true);
     d->nodes->setVisible(false);
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
     d->distributor->setVisible(true);
+    d->view->setVisible(false);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -626,11 +650,14 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->wl = d->nodes->size().width();
     d->wr = d->stack->size().width();
 
+    d->composer->setVisible(true);
+    d->composer->compass()->setVisible(true);
     d->nodes->setVisible(false);
     d->scene->setVisible(false);
     d->editor->setVisible(false);
     d->stack->setVisible(false);
     d->distributor->setVisible(false);
+    d->view->setVisible(false);
 
     d->graph->setVisible(true);
     d->log_view->setVisible(true);
@@ -638,6 +665,27 @@ void dtkCreatorMainWindow::switchToDebug(void)
     int w = this->size().width() - d->wl - d->wr;
 
     d->inner->setSizes(QList<int>() << d->wl << w/2 << w/2 << d->wr);
+}
+
+void dtkCreatorMainWindow::switchToView(void)
+{
+    dtkNotify("View workspace", 2000);
+
+    d->view_button->blockSignals(true);
+    d->view_button->setChecked(true);
+    d->view_button->blockSignals(false);
+
+    d->composer->setVisible(false);
+    d->composer->compass()->setVisible(false);
+    d->nodes->setVisible(false);
+    d->scene->setVisible(false);
+    d->editor->setVisible(false);
+    d->stack->setVisible(false);
+    d->distributor->setVisible(false);
+    d->view->setVisible(true);
+
+    d->graph->setVisible(false);
+    d->log_view->setVisible(false);
 }
 
 void dtkCreatorMainWindow::showControls(void)

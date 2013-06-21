@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Sun Jun 10 01:14:37 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 99
+## Last-Updated: Wed Jun 19 11:42:00 2013 (+0200)
+##           By: Selim Kraria
+##     Update #: 107
 ######################################################################
 ## 
 ### Commentary: 
@@ -37,7 +37,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkPlotViewPicker.h
   dtkPlotViewZoomer.h
   dtkPlotViewLegend.h
-  dtkPlotViewGrid.h)
+  dtkPlotViewGrid.h
+  dtkPlotViewSettings.h
+  dtkPlotViewToolBar.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkPlotCurve.h
@@ -46,7 +48,9 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkPlotViewPicker.h
   dtkPlotViewZoomer.h
   dtkPlotViewLegend.h
-  dtkPlotViewGrid.h)
+  dtkPlotViewGrid.h
+  dtkPlotViewSettings.h
+  dtkPlotViewToolBar.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
@@ -56,7 +60,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkPlotViewPicker.cpp
   dtkPlotViewZoomer.cpp
   dtkPlotViewLegend.cpp
-  dtkPlotViewGrid.cpp)
+  dtkPlotViewGrid.cpp
+  dtkPlotViewSettings.cpp
+  dtkPlotViewToolBar.cpp)
+
+set(${PROJECT_NAME}_RESOURCES dtkPlot.qrc)
 
 ## #################################################################
 ## Build rules
@@ -74,20 +82,23 @@ if(NOT WIN32)
 endif(NOT WIN32)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 if(BUILD_SHARED_LIBS)
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC})
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 else(BUILD_SHARED_LIBS)
 
 add_library(${PROJECT_NAME} STATIC
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC})
+  ${${PROJECT_NAME}_SOURCES_MOC}
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 endif(BUILD_SHARED_LIBS)
 
@@ -118,7 +129,7 @@ set(${PROJECT_NAME}_HEADERS
 ## #################################################################
 
 SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
+SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_QRC})
 
 ## #################################################################
 ## Installation

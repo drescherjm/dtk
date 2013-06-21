@@ -94,6 +94,8 @@
 
 #if defined(DTK_BUILD_PLOT) &&defined(DTK_HAVE_PLOT)
 #include "dtkComposerNodePlotCurve.h"
+#include "dtkComposerNodePlotCurveFile.h"
+#include "dtkComposerNodePlotCurveAppendPoint.h"
 #include "dtkComposerNodePlotView.h"
 #endif
 
@@ -263,6 +265,14 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "Plot Curve";
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
     d->types["Plot Curve"] = "dtkPlotCurve";
+
+    d->nodes << "Plot Curve File";
+    d->tags["Plot Curve File"] = QStringList() <<  "curve" << "plot" << "file";
+    d->types["Plot Curve File"] = "dtkPlotCurveFile";
+
+    d->nodes << "Plot Curve Append Point";
+    d->tags["Plot Curve Append Point"] = QStringList() <<  "curve" << "plot" << "append" << "point";
+    d->types["Plot Curve Append Point"] = "dtkPlotCurveAppendPoint";
 
     dtkAbstractViewFactory::instance()->registerViewType("dtkPlotView", createPlotView);
 
@@ -1791,6 +1801,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(type == "dtkPlotCurve")
         return new dtkComposerNodePlotCurve;
+
+    if(type == "dtkPlotCurveFile")
+        return new dtkComposerNodePlotCurveFile;
+
+    if(type == "dtkPlotCurveAppendPoint")
+        return new dtkComposerNodePlotCurveAppendPoint;
 
     if(type == "dtkPlotView")
         return new dtkComposerNodePlotView;

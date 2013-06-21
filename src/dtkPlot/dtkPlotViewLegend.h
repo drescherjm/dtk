@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:03:52 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 34
+ * Last-Updated: Thu Jun 20 13:32:22 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 46
  */
 
 /* Commentary: 
@@ -39,6 +39,9 @@ public:
 public:
     void   activate(void);
     void deactivate(void);
+
+public:
+    void setPosition(int position);
 
 protected slots:
     void showItem(QwtPlotItem *item, bool value);

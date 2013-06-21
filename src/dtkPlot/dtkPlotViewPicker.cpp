@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Jun 10 01:13:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:26:51 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 7
+ * Last-Updated: Thu Jun 20 09:40:35 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ dtkPlotViewPickerPrivate::~dtkPlotViewPickerPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewPicker::dtkPlotViewPicker(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewPickerPrivate(reinterpret_cast<QwtPlot *>(parent->widget())->canvas()))
+dtkPlotViewPicker::dtkPlotViewPicker(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewPickerPrivate(reinterpret_cast<QwtPlot *>(parent->plotWidget())->canvas()))
 {
     
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 11:47:12 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Wed Nov  7 17:44:59 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 60
+ * Last-Updated: Fri Jun 21 11:32:07 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 61
  */
 
 /* Commentary: 
@@ -156,8 +156,6 @@ void dtkComposerNodeArrayData::run(void)
                     d->container->replace(d->receiver_value.variant(), i);
                 }
             }
-
-            qDebug() << d->container->count();
 
         }
 

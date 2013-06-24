@@ -20,6 +20,8 @@
 class dtkDistributedCommunicatorPrivate
 {
 public:
+    QMap<qlonglong, dtkDistributedMessage *> msg_map;
+
 };
 
 dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject(), d(new dtkDistributedCommunicatorPrivate)
@@ -325,6 +327,12 @@ void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size,
     return this->reduce(send, recv, size, dtkDistributedCommunicatorDouble, operationType, target, all);
 }
 
+QMap<qlonglong, dtkDistributedMessage *> *dtkDistributedCommunicator::msgBuffer(void)
+{
+    return &(d->msg_map);
+}
+
+
 /*
  * Class dtkComposerCommunicatorStatus
  */
@@ -409,4 +417,5 @@ void dtkDistributedCommunicatorStatus::setError(int error)
 {
     d->error = error;
 }
+
 

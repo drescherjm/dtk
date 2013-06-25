@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008 - Julien Wintz, Inria.
 ;; Created: Tue Mar 16 08:49:21 2010 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Tue Jun 25 14:29:24 2013 (+0200)
+;; Last-Updated: Tue Jun 25 16:03:28 2013 (+0200)
 ;;           By: Selim Kraria
-;;     Update #: 61
+;;     Update #: 83
 */
 
 /* Commentary: 
@@ -16,75 +16,6 @@
 /* Change log:
 ;; 
 */
-
-/*****************************************************************
- * QSpinBox
- */
-
-QComboBox {
-    background-color: none;
-    color: black;
-}
-
-/*****************************************************************
- * QComboBox
- */
-
-QComboBox {
-    background-color: none;
-    color: black;
-}
-
-/*****************************************************************
- * QLabel
- */
-
-QLabel {
-    padding: 0px 2px 0px 0px;
-    background-color: none;
-    color: black;
-}
-
-/*****************************************************************
- * QLineEdit
- */
-
-QLineEdit {
-    background-color: white;
-    color: black;
-}
-
-/*****************************************************************
- * QPushButton
- */
-
-QPushButton {
-    background-color: none;
-    height: 20px;
-    padding: 0 5px 0 5px;
-    border-style: outset;
-}
-
-QPushButton:pressed {
-    background-color: none;
-    border-style: inset;
-}
-
-/*****************************************************************
- * QGroupBox
- */
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    padding: 0 2px;
-    background-color: none;
-}
-
-QGroupBox {
-    border: 0px solid gray;
-    margin-top: 5px;
-    font-weight: bold;
-}
 
 /*****************************************************************
  * QToolBar

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 15:07:19 2013 (+0200)
+ * Last-Updated: Tue Jun 25 16:46:14 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 467
+ *     Update #: 494
  */
 
 /* Commentary: 
@@ -51,9 +51,6 @@ public:
 
     QFormLayout *curvesColorLayout;
     QGroupBox *curvesColorGroup;
-
-    QFrame *frameData;
-    QScrollArea *areaData;
 
     dtkPlotView *view;
 
@@ -178,8 +175,8 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
 
     // Data layout
 
-    d->frameData = new QFrame;
-    QVBoxLayout *dataLayout = new QVBoxLayout(d->frameData);
+    QFrame *frameData = new QFrame;
+    QVBoxLayout *dataLayout = new QVBoxLayout(frameData);
     dataLayout->setAlignment(Qt::AlignCenter | Qt::AlignTop);
     dataLayout->setContentsMargins(2, 0, 2, 0);
     dataLayout->setSpacing(0);
@@ -189,20 +186,21 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
 
     // Scroll Area
 
-    d->areaData = new QScrollArea;
-    d->areaData->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->areaData->setFrameShape(QFrame::NoFrame);
-    d->areaData->setContentsMargins(0, 0, 0, 0);
-    d->areaData->setWidgetResizable(true);
-    d->areaData->setWidget(d->frameData);
-    d->areaData->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    QScrollArea *areaData = new QScrollArea;
+    areaData->setAttribute(Qt::WA_MacShowFocusRect, false);
+    areaData->setFrameShape(QFrame::NoFrame);
+    areaData->setContentsMargins(0, 0, 0, 0);
+    areaData->setWidgetResizable(true);
+    areaData->setWidget(frameData);
+    areaData->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    areaData->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Main layout
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(d->areaData);
+    layout->addWidget(areaData);
 
     // Behaviour
 
@@ -227,7 +225,7 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
 
     // General
 
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->setStyleSheet(dtkReadFile(":dtkPlot/dtkPlotView.qss"));
 }
 
 dtkPlotViewSettings::~dtkPlotViewSettings(void)
@@ -447,18 +445,6 @@ void dtkPlotViewSettings::updateCurves(void)
 
     connect(random, SIGNAL(clicked()), this, SLOT(onRandomColorsClicked()));
     connect(alphaCurveArea, SIGNAL(valueChanged(const int&)), this, SLOT(onColorAreaChanged(const int&)));
-
-    QColor color = curves[0]->color();
-    bool isSameColors = true;
-    for (int i = 1; i<numberOfCurves; i++) {
-        if (color != curves[i]->color()) {
-            isSameColors = false;
-            break;
-        }
-    }
-    if (isSameColors) {
-        this->onRandomColorsClicked();
-    }
 }
 
 void dtkPlotViewSettings::updateCurveName(int index)

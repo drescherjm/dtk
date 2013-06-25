@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 14:13:23 2013 (+0200)
+ * Last-Updated: Tue Jun 25 16:48:48 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 1788
+ *     Update #: 1789
  */
 
 /* Commentary:
@@ -625,8 +625,6 @@ void dtkCreatorMainWindow::switchToCompo(void)
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
-
-    qDebug() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr;
     
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }

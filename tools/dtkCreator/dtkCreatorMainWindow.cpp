@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 16:20:57 2013 (+0200)
+ * Last-Updated: Tue Jun 25 14:13:23 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 1754
+ *     Update #: 1788
  */
 
 /* Commentary:
@@ -44,6 +44,11 @@
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkPluginManager.h>
+
+#if defined(DTK_HAVE_PLOT)
+#include <dtkPlot/dtkPlotView.h>
+#include <dtkPlot/dtkPlotViewSettings.h>
+#endif
 
 #include <dtkLog/dtkLog.h>
 #include <dtkLog/dtkLogView.h>
@@ -154,8 +159,12 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->log_view = new dtkLogView(this);
     d->log_view->setVisible(false);
 
-    d->view = new dtkViewManager;
-    d->view->setVisible(false);
+    d->view_manager = new dtkViewManager;
+#if defined(DTK_HAVE_PLOT)
+    d->plot_view_settings = new dtkPlotViewSettings(d->view_manager);
+    d->view_manager->addWidget(d->plot_view_settings);
+#endif
+    d->view_manager->setVisible(false);
 
     d->closing = false;
 
@@ -241,13 +250,18 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->view_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
     d->view_button->setFixedSize(75, 25);
     d->view_button->setCheckable(true);
+#ifndef DTK_HAVE_PLOT
+    d->view_button->setVisible(false);
+#endif
 
     QButtonGroup *button_group = new QButtonGroup(this);
     button_group->setExclusive(true);
     button_group->addButton(d->compo_button);
     button_group->addButton(d->distr_button);
     button_group->addButton(d->debug_button);
+#if defined(DTK_HAVE_PLOT)
     button_group->addButton(d->view_button);
+#endif
 
     QHBoxLayout *buttons_layout = new QHBoxLayout(buttons);
     buttons_layout->setMargin(0);
@@ -255,7 +269,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     buttons_layout->addWidget(d->compo_button);
     buttons_layout->addWidget(d->distr_button);
     buttons_layout->addWidget(d->debug_button);
+#if defined(DTK_HAVE_PLOT)
     buttons_layout->addWidget(d->view_button);
+#endif
 
     mainToolBar->addWidget(new dtkSpacer(this));
     mainToolBar->addWidget(new dtkNotificationDisplay(this));
@@ -329,6 +345,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     connect(showControlsAction, SIGNAL(triggered()), this, SLOT(showControls()));
 
+    connect(d->view_manager, SIGNAL(focused(dtkAbstractView *)), this, SLOT(onViewFocused(dtkAbstractView *)));
+
     connect(d->compo_button, SIGNAL(pressed()), this, SLOT(switchToCompo()));
     connect(d->distr_button, SIGNAL(pressed()), this, SLOT(switchToDstrb()));
     connect(d->debug_button, SIGNAL(pressed()), this, SLOT(switchToDebug()));
@@ -352,7 +370,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     left->setOrientation(Qt::Vertical);
     left->addWidget(d->nodes);
     left->addWidget(d->distributor);
-    left->addWidget(d->view);
+    left->addWidget(d->view_manager);
 
     dtkSplitter *right = new dtkSplitter(this);
     right->setOrientation(Qt::Vertical);
@@ -603,10 +621,12 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->editor->setVisible(true);
     d->stack->setVisible(true);
     d->distributor->setVisible(false);
-    d->view->setVisible(false);
+    d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
+
+    qDebug() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr;
     
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
@@ -631,7 +651,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     d->editor->setVisible(true);
     d->stack->setVisible(true);
     d->distributor->setVisible(true);
-    d->view->setVisible(false);
+    d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -657,7 +677,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->editor->setVisible(false);
     d->stack->setVisible(false);
     d->distributor->setVisible(false);
-    d->view->setVisible(false);
+    d->view_manager->setVisible(false);
 
     d->graph->setVisible(true);
     d->log_view->setVisible(true);
@@ -682,7 +702,7 @@ void dtkCreatorMainWindow::switchToView(void)
     d->editor->setVisible(false);
     d->stack->setVisible(false);
     d->distributor->setVisible(false);
-    d->view->setVisible(true);
+    d->view_manager->setVisible(true);
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
@@ -714,4 +734,14 @@ void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
      } else {
          event->ignore();
      }
+}
+
+void dtkCreatorMainWindow::onViewFocused(dtkAbstractView *view)
+{
+#if defined(DTK_HAVE_PLOT)
+    if(dtkPlotView *v = dynamic_cast<dtkPlotView *>(view)) {
+        d->plot_view_settings->setView(v);
+        d->view_manager->setCurrentWidget(d->plot_view_settings);
+    }
+#endif
 }

@@ -73,7 +73,7 @@ QString dtkComposerNodePlotCurveFile::inputLabelHint(int port)
 QString dtkComposerNodePlotCurveFile::outputLabelHint(int port)
 {
     if(port == 0) {
-        return "curves";
+        return "curves list";
     }
 
     return dtkComposerNodeLeaf::outputLabelHint(port);

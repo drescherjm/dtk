@@ -3,7 +3,6 @@
 
     <file>dtkPlotView.qss</file>
 
-    <file>pixmaps/dtkSettings.png</file>
     <file>pixmaps/dtkZoom.png</file>
     <file>pixmaps/dtkGrid.png</file>
     <file>pixmaps/dtkPicking.png</file>

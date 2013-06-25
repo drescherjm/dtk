@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 20 13:32:22 2013 (+0200)
+ * Last-Updated: Tue Jun 25 14:24:06 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 46
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -23,6 +23,8 @@
 #include "dtkPlotExport.h"
 
 #include <QtCore/QObject>
+
+#include <qwt_plot.h>
 
 class QwtPlotItem;
 class dtkPlotView;
@@ -44,7 +46,10 @@ public:
     void setPosition(int position);
 
 protected slots:
-    void showItem(QwtPlotItem *item, bool value);
+#if QWT_VERSION >= 0x060100
+    void legendChecked(const QVariant& itemInfo, bool value);
+#endif
+    void showCurve(QwtPlotItem *item, bool value);
 
 private:
     dtkPlotViewLegendPrivate *d;

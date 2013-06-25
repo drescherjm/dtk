@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:17:22 2013 (+0200)
+ * Last-Updated: Mon Jun 24 16:47:08 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 171
+ *     Update #: 172
  */
 
 /* Commentary: 
@@ -112,6 +112,7 @@ dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurve
     d->setLegendAttribute(QwtPlotCurve::LegendShowLine);
     this->setName("curve");
     this->setAntialiased(true);
+    this->setColor(Qt::white);
 }
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))

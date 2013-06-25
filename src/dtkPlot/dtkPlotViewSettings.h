@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:28:38 2013 (+0200)
+ * Last-Updated: Mon Jun 24 16:24:54 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 68
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -31,24 +31,22 @@ class DTKPLOT_EXPORT dtkPlotViewSettings : public QFrame
 {
     Q_OBJECT
 
-    Q_PROPERTY(int width READ width WRITE setWidth)
-
 public:
-     dtkPlotViewSettings(dtkPlotView *parent);
+     dtkPlotViewSettings(QWidget *parent);
     ~dtkPlotViewSettings(void);
 
-     int width(void) const;
+public:
+    QColor gridColor(void) const;
+    QColor pickingColor(void) const;
+    QColor zoomColor(void) const;
 
 public:
+    void setView(dtkPlotView *view);
+
     void update(void);
 
 protected:
     void updateCurves(void);
-
-public slots:
-    void onShow(bool show);
-
-     void setWidth(int width);
 
 protected slots:
     void onMainTitleChanged(void);
@@ -58,6 +56,7 @@ protected slots:
     void onAxesTitleSizeChanged(const int& value);
     void onLegendPositionChanged(const int& index);
     void onGridColorChanged(const QColor& color);
+    void onPickingColorChanged(const QColor& color);
     void onZoomColorChanged(const QColor& color);
     void onBackgroundColorChanged(const QColor& color);
     void onForegroundColorChanged(const QColor& color);

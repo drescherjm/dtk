@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  1 12:37:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:47:49 2013 (+0200)
+ * Last-Updated: Tue Jun 25 10:04:05 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 146
+ *     Update #: 154
  */
 
 /* Commentary: 
@@ -41,6 +41,7 @@ class dtkSplitter;
 class dtkLogView;
 
 class dtkViewManager;
+class dtkPlotViewSettings;
 
 class dtkCreatorMainWindow;
 
@@ -76,7 +77,8 @@ public:
     dtkDistributor *distributor;
 
 public:
-    dtkViewManager *view;
+    dtkViewManager *view_manager;
+    dtkPlotViewSettings *plot_view_settings;
 
 public:
     dtkLogView *log_view;

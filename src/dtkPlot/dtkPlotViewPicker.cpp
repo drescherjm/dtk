@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Jun 10 01:13:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 20 09:40:35 2013 (+0200)
+ * Last-Updated: Mon Jun 24 14:53:55 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 8
+ *     Update #: 19
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkPlotViewPicker.h"
 
 #include <qwt_plot.h>
+#include <qwt_plot_canvas.h>
 #include <qwt_plot_picker.h>
 
 class dtkPlotViewPickerPrivate : public QwtPlotPicker
@@ -44,9 +45,10 @@ dtkPlotViewPickerPrivate::~dtkPlotViewPickerPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewPicker::dtkPlotViewPicker(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewPickerPrivate(reinterpret_cast<QwtPlot *>(parent->plotWidget())->canvas()))
+dtkPlotViewPicker::dtkPlotViewPicker(dtkPlotView *parent) : QObject(parent)
 {
-    
+    QwtPlot *plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
+    d = new dtkPlotViewPickerPrivate(reinterpret_cast<QwtPlotCanvas *>(plot->canvas()));
 }
 
 dtkPlotViewPicker::~dtkPlotViewPicker(void)
@@ -64,4 +66,14 @@ void dtkPlotViewPicker::activate(void)
 void dtkPlotViewPicker::deactivate(void)
 {
     d->setEnabled(false);
+}
+
+QColor dtkPlotViewPicker::color(void) const
+{
+    return d->trackerPen().color();
+}
+
+void dtkPlotViewPicker::setColor(const QColor& color)
+{
+    d->setTrackerPen(QPen(color));
 }

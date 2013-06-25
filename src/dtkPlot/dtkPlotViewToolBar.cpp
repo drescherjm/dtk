@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 20 13:17:06 2013 (+0200)
+ * Last-Updated: Tue Jun 25 10:07:43 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 355
+ *     Update #: 357
  */
 
 /* Commentary: 
@@ -27,7 +27,6 @@
 class dtkPlotViewToolBarPrivate
 {
 public:
-    QAction *settingsAction;
     QAction *pickingAction;
     QAction *zoomAction;
     QAction *gridAction;
@@ -42,14 +41,6 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new 
     // View
 
     d->view = parent;
-
-    // Settings
-
-    d->settingsAction = new QAction("Setting...",this);
-    d->settingsAction->setCheckable(true);
-    d->settingsAction->setChecked(false);
-    d->settingsAction->setToolTip("Settings");
-    d->settingsAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkSettings.png"));
 
     // Grid
 
@@ -91,7 +82,6 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new 
 
     // Actions
 
-    this->addAction(d->settingsAction);
     this->addWidget(new dtkSpacer);
     this->addAction(d->zoomAction);
     this->addAction(d->gridAction);
@@ -102,7 +92,6 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new 
 
     // Behaviour
 
-    connect(d->settingsAction, SIGNAL(triggered(bool)), this, SIGNAL(settingsClicked(bool)));
     connect(d->zoomAction, SIGNAL(triggered(bool)), this, SLOT(onZoomActivated(bool)));
     connect(d->gridAction, SIGNAL(triggered(bool)), this, SLOT(onGridActivated(bool)));
     connect(d->pickingAction, SIGNAL(triggered(bool)), this, SLOT(onPickingActivated(bool)));

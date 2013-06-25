@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Mon Jun  6 16:20:06 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jul  4 11:49:32 2011 (+0200)
-##           By: Julien Wintz
-##     Update #: 8
+## Last-Updated: Tue Jun 25 12:14:10 2013 (+0200)
+##           By: Selim Kraria
+##     Update #: 10
 ######################################################################
 ## 
 ### Commentary: 
@@ -50,6 +50,7 @@ if(QT4_FOUND)
     endif(CYGWIN)
     
   endif(QWT_INCLUDE_DIR AND QWT_LIBRARY)
+
 endif(QT4_FOUND)
 
 mark_as_advanced(QWT_INCLUDE_DIR QWT_LIBRARY QWT_DIR)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:37:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 16:21:09 2013 (+0200)
+ * Last-Updated: Tue Jun 25 10:45:48 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 10
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -17,36 +17,51 @@
  * 
  */
 
+#include "dtkViewManager.h"
 #include "dtkViewList.h"
 #include "dtkViewLayout.h"
-#include "dtkViewManager.h"
-#include "dtkSplitter.h"
+#include "dtkViewListControl.h"
 
 #include <QtGui>
 
 class dtkViewManagerPrivate
 {
 public:
-    dtkViewList *list;
-    dtkViewLayout *layout;
+    dtkViewList *view_list;
+    dtkViewLayout *view_layout;
+    QStackedWidget *view_inspector;
 };
 
 dtkViewManager::dtkViewManager(QWidget *parent) : QFrame(parent), d(new dtkViewManagerPrivate)
 {
-    dtkSplitter *splitter = new dtkSplitter(this);
+    d->view_list = new dtkViewList;
+    d->view_layout = new dtkViewLayout;
+    d->view_inspector = new QStackedWidget;
 
-    d->list = new dtkViewList;
-    d->layout = new dtkViewLayout;
+    dtkViewListControl *view_control = new dtkViewListControl(this);
+    view_control->setLayout(d->view_layout);
+    view_control->setList(d->view_list);
 
-    splitter->addWidget(d->list);
-    splitter->addWidget(d->layout);
-    splitter->setStretchFactor(0,1);
-    splitter->setStretchFactor(1,3);
+    QFrame *frame = new QFrame;
+    frame->setAutoFillBackground(true);
+    frame->setFixedWidth(300);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(frame);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(splitter);
+    layout->addWidget(view_control);
+    layout->addWidget(d->view_list);
+    layout->addWidget(d->view_inspector);
+
+    QHBoxLayout *main_layout = new QHBoxLayout(this);
+    main_layout->setContentsMargins(0, 0, 0, 0);
+    main_layout->setSpacing(0);
+    main_layout->addWidget(frame);
+    main_layout->addWidget(d->view_layout);
+
+    // Behaviour
+
+    connect(d->view_layout, SIGNAL(focused(dtkAbstractView *)), this, SIGNAL(focused(dtkAbstractView *)));
 }
 
 dtkViewManager::~dtkViewManager(void)
@@ -58,6 +73,23 @@ dtkViewManager::~dtkViewManager(void)
 
 void dtkViewManager::clear(void)
 {
-    d->list->clear();
-    d->layout->clear();
+    d->view_list->clear();
+    d->view_layout->clear();
 }
+
+void dtkViewManager::addWidget(QWidget *widget)
+{
+    d->view_inspector->addWidget(widget);
+    widget->setVisible(false);
+}
+
+void dtkViewManager::setCurrentWidget(QWidget *widget)
+{
+    widget->setVisible(true);
+    d->view_inspector->setCurrentWidget(widget);
+}
+
+
+
+
+

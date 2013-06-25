@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 20 09:43:13 2013 (+0200)
+ * Last-Updated: Mon Jun 24 10:38:27 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 29
+ *     Update #: 34
  */
 
 /* Commentary: 
@@ -21,6 +21,7 @@
 #include "dtkPlotViewPanner.h"
 
 #include <qwt_plot.h>
+#include <qwt_plot_canvas.h>
 #include <qwt_plot_panner.h>
 
 class dtkPlotViewPannerPrivate : public QwtPlotPanner
@@ -44,9 +45,10 @@ dtkPlotViewPannerPrivate::~dtkPlotViewPannerPrivate(void)
 // 
 // /////////////////////////////////////////////////////////////////
 
-dtkPlotViewPanner::dtkPlotViewPanner(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewPannerPrivate(reinterpret_cast<QwtPlot *>(parent->plotWidget())->canvas()))
+dtkPlotViewPanner::dtkPlotViewPanner(dtkPlotView *parent) : QObject(parent)
 {
-    
+    QwtPlot *plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
+    d = new dtkPlotViewPannerPrivate(reinterpret_cast<QwtPlotCanvas *>(plot->canvas()));
 }
 
 dtkPlotViewPanner::~dtkPlotViewPanner(void)

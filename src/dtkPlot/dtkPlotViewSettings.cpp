@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:37:48 2013 (+0200)
+ * Last-Updated: Tue Jun 25 15:07:19 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 390
+ *     Update #: 467
  */
 
 /* Commentary: 
@@ -38,6 +38,7 @@ public:
     QComboBox *legendPosition;
 
     dtkColorButton *gridColor;
+    dtkColorButton *pickingColor;
     dtkColorButton *zoomColor;
 
     dtkColorButton *backgroundColor;
@@ -60,11 +61,11 @@ public:
     QSignalMapper *mapperCurvesColor;
 };
 
-dtkPlotViewSettings::dtkPlotViewSettings(dtkPlotView *parent) : QFrame(), d(new dtkPlotViewSettingsPrivate())
+dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkPlotViewSettingsPrivate())
 {
     // View
 
-    d->view = parent;
+    d->view = NULL;
 
     // Titles
 
@@ -121,6 +122,8 @@ dtkPlotViewSettings::dtkPlotViewSettings(dtkPlotView *parent) : QFrame(), d(new 
     QStringList legendPositionList = QStringList() << "Left" << "Right" << "Bottom" << "Top";
     d->legendPosition = new QComboBox;
     d->legendPosition->addItems(legendPositionList);
+    d->legendPosition->setCurrentIndex(1);
+    d->legendPosition->setFocusPolicy(Qt::NoFocus);
 
     QFormLayout *legendLayout = new QFormLayout;
     legendLayout->setContentsMargins(2, 15, 2, 0);
@@ -151,18 +154,19 @@ dtkPlotViewSettings::dtkPlotViewSettings(dtkPlotView *parent) : QFrame(), d(new 
     // Colors
 
     d->gridColor = new dtkColorButton;
-    d->gridColor->setColor(Qt::gray);
+
+    d->pickingColor = new dtkColorButton;
+
     d->zoomColor = new dtkColorButton;
-    d->zoomColor->setColor(d->view->foregroundColor());
+
     d->backgroundColor = new dtkColorButton;
-    d->backgroundColor->setColor(d->view->backgroundColor());
     d->foregroundColor = new dtkColorButton;
-    d->foregroundColor->setColor(d->view->foregroundColor());
 
     QFormLayout *colorsLayout = new QFormLayout;
     colorsLayout->setContentsMargins(2, 15, 2, 0);
     colorsLayout->setSpacing(0);
     colorsLayout->addRow("Grid", d->gridColor);
+    colorsLayout->addRow("Picking", d->pickingColor);
     colorsLayout->addRow("Zoom", d->zoomColor);
     colorsLayout->addRow("Background", d->backgroundColor);
     colorsLayout->addRow("Foreground", d->foregroundColor);
@@ -192,7 +196,6 @@ dtkPlotViewSettings::dtkPlotViewSettings(dtkPlotView *parent) : QFrame(), d(new 
     d->areaData->setWidgetResizable(true);
     d->areaData->setWidget(d->frameData);
     d->areaData->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->areaData->setFixedWidth(d->frameData->sizeHint().width());
 
     // Main layout
 
@@ -216,6 +219,7 @@ dtkPlotViewSettings::dtkPlotViewSettings(dtkPlotView *parent) : QFrame(), d(new 
     connect(d->mapperCurvesColor, SIGNAL(mapped(int)), this, SLOT(updateCurveColor(int)));
 
     connect(d->gridColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(onGridColorChanged(const QColor&)));
+    connect(d->pickingColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(onPickingColorChanged(const QColor&)));
     connect(d->zoomColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(onZoomColorChanged(const QColor&)));
 
     connect(d->backgroundColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(onBackgroundColorChanged(const QColor&)));
@@ -223,7 +227,7 @@ dtkPlotViewSettings::dtkPlotViewSettings(dtkPlotView *parent) : QFrame(), d(new 
 
     // General
 
-    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 dtkPlotViewSettings::~dtkPlotViewSettings(void)
@@ -231,6 +235,15 @@ dtkPlotViewSettings::~dtkPlotViewSettings(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkPlotViewSettings::setView(dtkPlotView *view)
+{
+    d->view = view;
+
+    connect(d->view, SIGNAL(updated()), this, SLOT(update()));
+
+    this->update();
 }
 
 void dtkPlotViewSettings::onMainTitleChanged(void)
@@ -271,6 +284,12 @@ void dtkPlotViewSettings::onGridColorChanged(const QColor& color)
     d->view->update();
 }
 
+void dtkPlotViewSettings::onPickingColorChanged(const QColor& color)
+{
+    d->view->setPickingColor(d->pickingColor->color());
+    d->view->update();
+}
+
 void dtkPlotViewSettings::onZoomColorChanged(const QColor& color)
 {
     d->view->setZoomColor(d->zoomColor->color());
@@ -289,12 +308,12 @@ void dtkPlotViewSettings::onForegroundColorChanged(const QColor& color)
 
 void dtkPlotViewSettings::onRandomColorsClicked(void)
 {
-    int index = 2;
+    int index = 0;
     foreach (dtkPlotCurve *curve, d->view->curves()) {
 
         QColor color = QColor::fromHsv(qrand() % 256, 255, 190);
 
-        QLayoutItem *item = d->curvesColorLayout->itemAt(index, QFormLayout::FieldRole);
+        QLayoutItem *item = d->curvesColorLayout->itemAt(index+2, QFormLayout::FieldRole);
 
         dtkColorButton *button = dynamic_cast<dtkColorButton *>(item->widget());
         button->setColor(color);
@@ -304,6 +323,8 @@ void dtkPlotViewSettings::onRandomColorsClicked(void)
         index++;
     }
 
+    this->onColorAreaChanged(d->view->alphaCurveArea());
+
     d->view->update();
 }
 
@@ -312,12 +333,36 @@ void dtkPlotViewSettings::onColorAreaChanged(const int& value)
     d->view->fillCurveArea(value);
 }
 
+QColor dtkPlotViewSettings::gridColor(void) const
+{
+    return d->gridColor->color();
+}
+
+QColor dtkPlotViewSettings::pickingColor(void) const
+{
+    return d->pickingColor->color();
+}
+
+QColor dtkPlotViewSettings::zoomColor(void) const
+{
+    return d->zoomColor->color();
+}
+
 void dtkPlotViewSettings::update(void)
 {
+    if (!d->view)
+        return;
+
     d->mainTitle->setText(d->view->title());
     d->axisTitleX->setText(d->view->axisTitleX());
     d->axisTitleY->setText(d->view->axisTitleY());
 
+    d->titleSize->setValue(d->view->titleSize());
+    d->axesTitleSize->setValue(d->view->axisTitleSizeX());
+
+    d->gridColor->setColor(d->view->gridColor());
+    d->pickingColor->setColor(d->view->pickingColor());
+    d->zoomColor->setColor(d->view->zoomColor());
     d->backgroundColor->setColor(d->view->backgroundColor());
     d->foregroundColor->setColor(d->view->foregroundColor());
 
@@ -339,8 +384,18 @@ void dtkPlotViewSettings::updateCurves(void)
     d->curvesNameGroup->setVisible(true);
     d->curvesColorGroup->setVisible(true);
 
-    if (d->curvesNameLayout && numberOfCurves==d->curvesNameLayout->rowCount())
+    if (d->curvesNameLayout && numberOfCurves==d->curvesNameLayout->rowCount()) {
+        for (int i = 0; i<numberOfCurves; i++) {
+            QLayoutItem *item = d->curvesNameLayout->itemAt(i, QFormLayout::FieldRole);
+            QLineEdit *lineedit = dynamic_cast<QLineEdit *>(item->widget());
+            lineedit->setText(curves[i]->name());
+
+            item = d->curvesColorLayout->itemAt(i+2, QFormLayout::FieldRole);
+            dtkColorButton *button = dynamic_cast<dtkColorButton *>(item->widget());
+            button->setColor(curves[i]->color());
+        }
         return;
+    }
 
     if (d->curvesNameLayout)
         QWidget().setLayout(d->curvesNameLayout);
@@ -360,13 +415,13 @@ void dtkPlotViewSettings::updateCurves(void)
     random->setFocusPolicy(Qt::NoFocus);
     d->curvesColorLayout->addRow("Random", random);
 
-    QSpinBox *alpha = new QSpinBox;
-    alpha->setRange(0, 255);
-    alpha->setValue(0);
-    alpha->setFocusPolicy(Qt::StrongFocus);
-    alpha->setAlignment(Qt::AlignRight);
-    alpha->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->curvesColorLayout->addRow("Alpha color area", alpha);
+    QSpinBox *alphaCurveArea = new QSpinBox;
+    alphaCurveArea->setRange(0, 255);
+    alphaCurveArea->setValue(d->view->alphaCurveArea());
+    alphaCurveArea->setFocusPolicy(Qt::StrongFocus);
+    alphaCurveArea->setAlignment(Qt::AlignRight);
+    alphaCurveArea->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->curvesColorLayout->addRow("Alpha color area", alphaCurveArea);
 
     for (int i = 0; i<numberOfCurves; i++) {
         QString name = "Curve " + QString::number(i+1);
@@ -387,11 +442,11 @@ void dtkPlotViewSettings::updateCurves(void)
         d->curvesColorLayout->addRow(name, button);
 
         connect(button, SIGNAL(colorChanged(const QColor&)), d->mapperCurvesColor, SLOT(map()));
-        d->mapperCurvesColor->setMapping(button, i+2);
+        d->mapperCurvesColor->setMapping(button, i);
     }
 
     connect(random, SIGNAL(clicked()), this, SLOT(onRandomColorsClicked()));
-    connect(alpha, SIGNAL(valueChanged(const int&)), this, SLOT(onColorAreaChanged(const int&)));
+    connect(alphaCurveArea, SIGNAL(valueChanged(const int&)), this, SLOT(onColorAreaChanged(const int&)));
 
     QColor color = curves[0]->color();
     bool isSameColors = true;
@@ -404,8 +459,6 @@ void dtkPlotViewSettings::updateCurves(void)
     if (isSameColors) {
         this->onRandomColorsClicked();
     }
-
-    d->areaData->setFixedWidth(d->frameData->sizeHint().width());
 }
 
 void dtkPlotViewSettings::updateCurveName(int index)
@@ -419,45 +472,22 @@ void dtkPlotViewSettings::updateCurveName(int index)
     QLineEdit *lineedit = dynamic_cast<QLineEdit *>(item->widget());
 
     curves[index]->setName(lineedit->text());
+
+    d->view->update();
 }
 
 void dtkPlotViewSettings::updateCurveColor(int index)
 {
     QList<dtkPlotCurve *> curves = d->view->curves();
 
-    QLayoutItem *item = d->curvesColorLayout->itemAt(index, QFormLayout::FieldRole);
+    QLayoutItem *item = d->curvesColorLayout->itemAt(index+2, QFormLayout::FieldRole);
 
     dtkColorButton *button = dynamic_cast<dtkColorButton *>(item->widget());
 
     curves[index]->setColor(button->color());
 
+    this->onColorAreaChanged(d->view->alphaCurveArea());
+
     d->view->update();
 }
 
-int dtkPlotViewSettings::width(void) const
-{
-    return QFrame::width();
-}
-
-void dtkPlotViewSettings::setWidth(int width)
-{
-    this->setFixedWidth(width);
-}
-
-void dtkPlotViewSettings::onShow(bool show)
-{
-    QPropertyAnimation *animation = new QPropertyAnimation(this, "width");
-    animation->setDuration(1000);
-    animation->setStartValue(0);
-
-    qreal animationEndValue = 10+sizeHint().width();
-    animation->setEndValue(animationEndValue);
-    if(show) {
-        animation->setEasingCurve(QEasingCurve::OutQuad);
-        animation->setDirection(QAbstractAnimation::Forward);
-    } else {
-        animation->setEasingCurve(QEasingCurve::Linear);
-        animation->setDirection(QAbstractAnimation::Backward);
-    }
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
-}

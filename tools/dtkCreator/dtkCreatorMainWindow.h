@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 18 16:32:50 2013 (+0200)
+ * Last-Updated: Tue Jun 25 09:44:56 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 67
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -24,6 +24,7 @@
 
 #include <QtGui>
 
+class dtkAbstractView;
 class dtkCreatorMainWindowPrivate;
 
 class dtkCreatorMainWindow : public QMainWindow
@@ -54,6 +55,8 @@ protected slots:
 
 protected slots:
     void showControls(void);
+
+    void onViewFocused(dtkAbstractView *view);
 
 protected:
     void closeEvent(QCloseEvent *event);

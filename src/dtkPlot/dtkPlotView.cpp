@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:31:41 2013 (+0200)
+ * Last-Updated: Tue Jun 25 13:36:42 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 335
+ *     Update #: 417
  */
 
 /* Commentary: 
@@ -24,7 +24,6 @@
 #include "dtkPlotViewZoomer.h"
 #include "dtkPlotViewGrid.h"
 
-#include "dtkPlotViewSettings.h"
 #include "dtkPlotViewToolBar.h"
 
 #include <qwt_plot.h>
@@ -45,15 +44,20 @@ public:
     dtkPlotViewLegend *legend;
 
 public:
-    dtkPlotViewSettings *settings;
     dtkPlotViewToolBar *toolbar;
 
 public:
     QFrame *frame_view;
 
 public:
-    QColor backgroundColor;
-    QColor foregroundColor;
+    int alphaCurveArea;
+
+public:
+    QColor grid_color;
+    QColor picking_color;
+    QColor zoom_color;
+    QColor background_color;
+    QColor foreground_color;
 
 public:
     QList<dtkPlotCurve *> curves;
@@ -67,15 +71,24 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
     d->grid = NULL;
     d->legend = NULL;
 
+    // Colors
+
+    d->grid_color = Qt::white;
+    d->picking_color = Qt::white;
+    d->zoom_color = Qt::white;
+    d->background_color = Qt::black;
+    d->foreground_color = Qt::white;
+
+    d->alphaCurveArea = 0;
+
+    // Scale
+
     d->setAxisAutoScale(0, true);
     d->setAxisAutoScale(1, true);
 
-    d->canvas()->setFrameStyle(QFrame::NoFrame);
+    // Canvas
 
-    // Settings
-
-    d->settings = new dtkPlotViewSettings(this);
-    d->settings->setFixedWidth(0);
+    reinterpret_cast<QwtPlotCanvas *>(d->canvas())->setFrameStyle(QFrame::NoFrame);
 
     // Tool bar
 
@@ -83,31 +96,20 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 
     // Layout
 
-    QFrame *frame = new QFrame;
+    d->frame_view = new QFrame;
 
-    QVBoxLayout *layout = new QVBoxLayout(frame);
+    QVBoxLayout *layout = new QVBoxLayout(d->frame_view);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d);
     layout->addWidget(d->toolbar);
 
-    d->frame_view = new QFrame;
-
-    QHBoxLayout *main_layout = new QHBoxLayout(d->frame_view);
-    main_layout->setContentsMargins(0, 0, 0, 0);
-    main_layout->setSpacing(0);
-    main_layout->addWidget(d->settings);
-    main_layout->addWidget(frame);
-
     // Behaviour
-
-    connect(d->toolbar, SIGNAL(settingsClicked(bool)), d->settings, SLOT(onShow(bool)));
 
     // General
 
     this->setStyleSheet(dtkReadFile(":dtkPlot/dtkPlotView.qss"));
-    this->setBackgroundColor(Qt::white);
-    this->setForegroundColor(Qt::black);
+    this->readSettings();
 }
 
 dtkPlotView::~dtkPlotView(void)
@@ -180,8 +182,10 @@ void dtkPlotView::deactivatePanning(void)
 
 void dtkPlotView::activatePicking(void)
 {
-    if(!d->picker)
+    if(!d->picker) {
         d->picker = new dtkPlotViewPicker(this);
+        d->picker->setColor(d->picking_color);
+    }
 
     d->picker->activate();
 }
@@ -194,10 +198,27 @@ void dtkPlotView::deactivatePicking(void)
     d->picker->deactivate();
 }
 
+void dtkPlotView::setPickingColor(const QColor& color)
+{
+    if(d->picker)
+        d->picker->setColor(color);
+
+    d->picking_color = color;
+
+    this->writeSettings();
+}
+
+QColor dtkPlotView::pickingColor(void) const
+{
+    return d->picking_color;
+}
+
 void dtkPlotView::activateZooming(void)
 {
-    if(!d->zoomer)
+    if(!d->zoomer) {
         d->zoomer = new dtkPlotViewZoomer(this);
+        this->setZoomColor(d->zoom_color);
+    }
 
     d->zoomer->activate();
 }
@@ -214,25 +235,23 @@ void dtkPlotView::setZoomColor(const QColor& color)
 {
     if(d->zoomer)
         d->zoomer->setColor(color);
+
+    d->zoom_color = color;
+
+    this->writeSettings();
 }
 
-void dtkPlotView::zoomForward(void)
+QColor dtkPlotView::zoomColor(void) const
 {
-    if(!d->zoomer)
-        d->zoomer = new dtkPlotViewZoomer(this);
-
-    d->zoomer->zoomForward();
-}
-
-void dtkPlotView::zoomBackward(void)
-{
-    d->zoomer->zoomBackward();
+    return d->zoom_color;
 }
 
 void dtkPlotView::activateGrid(void)
 {
-    if(!d->grid)
+    if(!d->grid) {
         d->grid = new dtkPlotViewGrid(this);
+        d->grid->setColor(d->grid_color);
+    }
 
     d->grid->activate();
 
@@ -253,6 +272,15 @@ void dtkPlotView::setGridColor(const QColor& color)
 {
     if(d->grid)
         d->grid->setColor(color);
+
+    d->grid_color = color;
+
+    this->writeSettings();
+}
+
+QColor dtkPlotView::gridColor(void) const
+{
+    return d->grid_color;
 }
 
 void dtkPlotView::activateLegend(void)
@@ -268,7 +296,6 @@ void dtkPlotView::deactivateLegend(void)
     if(d->legend) {
       delete d->legend;
       d->legend = NULL;
-      d->updateLayout();
     }
 
     this->update();
@@ -373,8 +400,13 @@ void dtkPlotView::setAxisScaleX(dtkPlotView::Scale scale)
     if(scale == dtkPlotView::Linear)
         d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLinearScaleEngine);
     
-    if(scale == dtkPlotView::Logarithmic)
+    if(scale == dtkPlotView::Logarithmic) {
+#if QWT_VERSION >= 0x060100
+        d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLogScaleEngine);
+#else
         d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLog10ScaleEngine);
+#endif
+    }
 }
 
 void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
@@ -382,8 +414,13 @@ void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
     if(scale == dtkPlotView::Linear)
         d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLinearScaleEngine);
     
-    if(scale == dtkPlotView::Logarithmic)
+    if(scale == dtkPlotView::Logarithmic) {
+#if QWT_VERSION >= 0x060100
+        d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLogScaleEngine);
+#else
         d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLog10ScaleEngine);
+#endif
+    }
 }
 
 void dtkPlotView::setLegendPosition(LegendPosition position)
@@ -405,7 +442,7 @@ void dtkPlotView::setBackgroundColor(double red, double green, double blue)
 
 void dtkPlotView::setBackgroundColor(const QColor& color)
 {
-    d->backgroundColor = color;
+    d->background_color = color;
 
     d->setCanvasBackground(color);
 
@@ -419,23 +456,25 @@ QColor dtkPlotView::backgroundColor() const
 
 void dtkPlotView::setForegroundColor(const QColor& color)
 {
-    d->foregroundColor = color;
+    d->foreground_color = color;
 
     this->updateColors();
 }
 
 QColor dtkPlotView::foregroundColor() const
 {
-    return d->foregroundColor;
+    return d->foreground_color;
 }
 
 void dtkPlotView::updateColors(void)
 {
-    QString sheet = "background: " + d->backgroundColor.name() + "; color: " + d->foregroundColor.name() + ";";
+    QString sheet = "background: " + d->background_color.name() + "; color: " + d->foreground_color.name() + ";";
 
     d->setStyleSheet(sheet);
 
     this->update();
+
+    this->writeSettings();
 }
 
 void dtkPlotView::fillCurveArea(int alpha)
@@ -446,6 +485,8 @@ void dtkPlotView::fillCurveArea(int alpha)
         alpha = 255;
     }
 
+    d->alphaCurveArea = alpha;
+
     foreach (dtkPlotCurve *curve, d->curves) {
         QColor color = curve->color();
         color.setAlphaF(alpha/255.);
@@ -455,10 +496,14 @@ void dtkPlotView::fillCurveArea(int alpha)
     this->update();
 }
 
+int dtkPlotView::alphaCurveArea(void) const
+{
+    return d->alphaCurveArea;
+}
+
 void dtkPlotView::setStyleSheet(const QString& sheet)
 {
     d->setStyleSheet(sheet);
-    d->settings->setStyleSheet(sheet);
     d->toolbar->setStyleSheet(sheet);
 }
 
@@ -477,9 +522,11 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
 
 void dtkPlotView::update(void)
 {
+    d->updateLayout();
+
     d->replot();
 
-    d->settings->update();
+    emit updated();
 }
 
 QWidget *dtkPlotView::widget(void)
@@ -490,6 +537,32 @@ QWidget *dtkPlotView::widget(void)
 QWidget *dtkPlotView::plotWidget(void)
 {
     return d;
+}
+
+void dtkPlotView::readSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("plot");
+    d->grid_color = settings.value("grid_color").value<QColor>();
+    d->picking_color = settings.value("picking_color").value<QColor>();
+    d->zoom_color = settings.value("zoom_color").value<QColor>();
+    d->background_color = settings.value("background_color").value<QColor>();
+    d->foreground_color = settings.value("forergound_color").value<QColor>();
+    settings.endGroup();
+
+    this->updateColors();
+}
+
+void dtkPlotView::writeSettings(void)
+{
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("plot");
+    settings.setValue("grid_color", d->grid_color);
+    settings.setValue("picking_color", d->picking_color);
+    settings.setValue("zoom_color", d->zoom_color);
+    settings.setValue("background_color", d->background_color);
+    settings.setValue("forergound_color", d->foreground_color);
+    settings.endGroup();
 }
 
 // /////////////////////////////////////////////////////////////////

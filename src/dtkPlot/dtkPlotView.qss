@@ -4,9 +4,9 @@
 ;; Copyright (C) 2008 - Julien Wintz, Inria.
 ;; Created: Tue Mar 16 08:49:21 2010 (+0100)
 ;; Version: $Id$
-;; Last-Updated: Fri Jun 21 11:16:43 2013 (+0200)
+;; Last-Updated: Tue Jun 25 14:29:24 2013 (+0200)
 ;;           By: Selim Kraria
-;;     Update #: 53
+;;     Update #: 61
 */
 
 /* Commentary: 
@@ -16,6 +16,24 @@
 /* Change log:
 ;; 
 */
+
+/*****************************************************************
+ * QSpinBox
+ */
+
+QComboBox {
+    background-color: none;
+    color: black;
+}
+
+/*****************************************************************
+ * QComboBox
+ */
+
+QComboBox {
+    background-color: none;
+    color: black;
+}
 
 /*****************************************************************
  * QLabel
@@ -41,17 +59,14 @@ QLineEdit {
  */
 
 QPushButton {
-    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 white, stop: 1 #e8e8e8);
+    background-color: none;
     height: 20px;
-    border-width: 2px;
-    border-color: darkgray;
-    border-radius: 10;
     padding: 0 5px 0 5px;
     border-style: outset;
 }
 
 QPushButton:pressed {
-    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e8e8e8, stop: 1 white);
+    background-color: none;
     border-style: inset;
 }
 
@@ -66,7 +81,7 @@ QGroupBox::title {
 }
 
 QGroupBox {
-    border: 2px solid gray;
+    border: 0px solid gray;
     margin-top: 5px;
     font-weight: bold;
 }
@@ -76,7 +91,7 @@ QGroupBox {
  */
 
 QToolBar {
-    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop:0 #c8c8c8, stop:0.5 #ffffff, stop:1.0 #c8c8c8);
+    background: none;
     border: none;
 }
 

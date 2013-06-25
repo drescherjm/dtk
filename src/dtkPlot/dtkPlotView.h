@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:19:31 2013 (+0200)
+ * Last-Updated: Tue Jun 25 13:36:22 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 114
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -76,10 +76,6 @@ public:
     void deactivateLegend(void);
 
 public:
-    void zoomForward(void);
-    void zoomBackward(void);
-
-public:
     void setTitle(const QString&);
     void setTitleSize(const int&);
 
@@ -99,6 +95,8 @@ public:
 
     void fillCurveArea(int alpha);
 
+    int alphaCurveArea(void) const;
+
     void setStyleSheet(const QString& sheet);
 
 public:
@@ -111,11 +109,17 @@ public:
     int axisTitleSizeX(void) const;
     int axisTitleSizeY(void) const;
 
+    QColor gridColor(void) const;
     void setGridColor(const QColor& color);
+
+    QColor pickingColor(void) const;
+    void setPickingColor(const QColor& color);
+
+    QColor zoomColor(void) const;
     void setZoomColor(const QColor& color);
 
     void updateAxes(void);
-    
+
 public:
     void setBackgroundColor(int red, int green, int blue);
     void setBackgroundColor(double red, double green, double blue);
@@ -135,12 +139,15 @@ public:
 public:
     dtkPlotView& operator<<(dtkPlotCurve *curve);
 
+protected:
+    void readSettings(void);
+    void writeSettings(void);
+
 public slots:
     void update(void);
 
 signals:
-    void zoomForwardEnabled(bool);
-    void zoomBackwardEnabled(bool);
+    void updated(void);
 
 private:
     friend class dtkPlotCurve;

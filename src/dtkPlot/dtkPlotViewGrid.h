@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 19 10:42:12 2013 (+0200)
+ * Last-Updated: Mon Jun 24 12:37:57 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 38
+ *     Update #: 41
  */
 
 /* Commentary: 
@@ -42,6 +42,8 @@ public:
     void deactivate(void);
 
 public:
+    QColor color(void) const;
+
     void setColor(const QColor& color);
 
 private:

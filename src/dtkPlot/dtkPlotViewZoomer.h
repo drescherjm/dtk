@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 19 10:42:15 2013 (+0200)
+ * Last-Updated: Tue Jun 25 14:07:23 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 51
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -43,21 +43,12 @@ public:
     void deactivate(void);
 
 public:
+    QColor color(void) const;
+
     void setColor(const QColor& color);
 
 public:
     void updateBase(const QRectF& rectf);
-
-public:
-    void zoomForward(void);
-    void zoomBackward(void);
-
-signals:
-    void zoomForwardEnabled(bool);
-    void zoomBackwardEnabled(bool);
-
-protected slots:
-    void onZoomed(const QRectF&);
 
 private:
     dtkPlotViewZoomerPrivate *d;

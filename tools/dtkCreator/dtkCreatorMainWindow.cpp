@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 16:48:48 2013 (+0200)
+ * Last-Updated: Wed Jun 26 16:28:14 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 1789
+ *     Update #: 1791
  */
 
 /* Commentary:
@@ -665,8 +665,10 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->debug_button->setChecked(true);
     d->debug_button->blockSignals(false);
 
-    d->wl = d->nodes->size().width();
-    d->wr = d->stack->size().width();
+    if(!d->wl && !d->wr) {
+        d->wl = d->nodes->size().width();
+        d->wr = d->stack->size().width();
+    }
 
     d->composer->setVisible(true);
     d->composer->compass()->setVisible(true);
@@ -692,6 +694,11 @@ void dtkCreatorMainWindow::switchToView(void)
     d->view_button->blockSignals(true);
     d->view_button->setChecked(true);
     d->view_button->blockSignals(false);
+
+    if(!d->wl && !d->wr) {
+        d->wl = d->nodes->size().width();
+        d->wr = d->stack->size().width();
+    }
 
     d->composer->setVisible(false);
     d->composer->compass()->setVisible(false);

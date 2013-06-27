@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 14:24:06 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 49
+ * Last-Updated: Jeu jui 27 13:52:18 2013 (+0200)
+ *           By: Régis Duvigneau
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -23,8 +23,6 @@
 #include "dtkPlotExport.h"
 
 #include <QtCore/QObject>
-
-#include <qwt_plot.h>
 
 class QwtPlotItem;
 class dtkPlotView;

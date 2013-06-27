@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  8 09:38:45 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Jun 10 01:15:56 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 22
+ * Last-Updated: Thu Jun 27 12:02:15 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -42,15 +42,6 @@ signals:
 signals:
     void activatePanning(bool);
     void activatePicking(bool);
-    void activateZooming(bool);
-
-signals:
-    void zoomForward(void);
-    void zoomBackward(void);
-
-public slots:
-    void setZoomForwardEnabled(bool);
-    void setZoomBackwardEnabled(bool);
 
 private:
     tstSidePanePrivate *d;

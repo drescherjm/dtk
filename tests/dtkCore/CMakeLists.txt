@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 19 18:22:57 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Jun 20 13:11:31 2012 (+0200)
-##           By: Babette Lekouta
-##     Update #: 14
+## Last-Updated: Mon Jul  1 15:09:11 2013 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 20
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,7 @@ project(dtkCoreTest)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkArrayTest.h
   dtkSingletonTest.h
   dtkSmartPointerTest.h)
 
@@ -31,6 +32,7 @@ set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
+  dtkArrayTest.cpp
   dtkSingletonTest.cpp
   dtkSmartPointerTest.cpp)
 
@@ -41,6 +43,7 @@ set(${PROJECT_NAME}_SOURCES
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_MAIN_SOURCES
+  dtkArrayTest.cpp
   dtkSingletonTest.cpp
   dtkSmartPointerTest.cpp)
 

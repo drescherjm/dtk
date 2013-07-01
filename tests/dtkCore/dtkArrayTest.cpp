@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 14:28:27 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Jul  1 19:01:44 2013 (+0200)
+ * Last-Updated: Mon Jul  1 19:17:56 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 52
+ *     Update #: 53
  */
 
 /* Credits:
@@ -168,7 +168,7 @@ void dtkArrayTestObject::testCreate(void)
     QVERIFY(d < (const double *)((&array) + 1));
 
     // Add one element and check the basic properties again.
-    array.append(1.0d);
+    array.append(1.0);
     QVERIFY(!array.isEmpty());
     QCOMPARE(array.count(), 1);
     QCOMPARE(array.size(), 1);
@@ -251,7 +251,7 @@ void dtkArrayTestObject::testAppend(void)
     }
 
     // Append 1 more item and check for realloc.
-    array += double(1000.0d);
+    array += double(1000.0);
     QCOMPARE(array.count(), ExpectedMinCapacity + 1);
     QVERIFY(array.capacity() > ExpectedMinCapacity);
     QVERIFY(array.capacity() >= array.count());
@@ -261,7 +261,7 @@ void dtkArrayTestObject::testAppend(void)
     for (index = 0; index < ExpectedMinCapacity; ++index) {
         QCOMPARE(array[index], double(index));
     }
-    QCOMPARE(array[ExpectedMinCapacity], 1000.0d);
+    QCOMPARE(array[ExpectedMinCapacity], 1000.0);
 
     // Append a large number of values to test constant reallocation.
     for (index = 0; index < 1000; ++index)
@@ -291,7 +291,7 @@ void dtkArrayTestObject::testAppend(void)
     d = array2.constRawData();
 
     // Add another item to the original and check that the copy is unchanged.
-    array << double(1500.0d);
+    array << double(1500.0);
     QVERIFY(array.isDetached());
     QCOMPARE(array.count(), ExpectedMinCapacity + 1 + 1000 + 1);
     QCOMPARE(array2.count(), ExpectedMinCapacity + 1 + 1000);
@@ -309,18 +309,18 @@ void dtkArrayTestObject::testAppend(void)
         QCOMPARE(array2.at(index), double(index));
         QCOMPARE(array3.at(index), double(index));
     }
-    QCOMPARE(array.at(ExpectedMinCapacity), 1000.0d);
-    QCOMPARE(array2.at(ExpectedMinCapacity), 1000.0d);
-    QCOMPARE(array3.at(ExpectedMinCapacity), 1000.0d);
+    QCOMPARE(array.at(ExpectedMinCapacity), 1000.0);
+    QCOMPARE(array2.at(ExpectedMinCapacity), 1000.0);
+    QCOMPARE(array3.at(ExpectedMinCapacity), 1000.0);
     for (index = 0; index < 1000; ++index) {
         QCOMPARE(array.at(index + ExpectedMinCapacity + 1), double(index));
     }
-    QCOMPARE(array[ExpectedMinCapacity + 1000 + 1], 1500.0d);
+    QCOMPARE(array[ExpectedMinCapacity + 1000 + 1], 1500.0);
 
     // Check the detach conditions.
     QVERIFY(!array2.isDetached());
     QVERIFY(!array3.isDetached());
-    array3.append(1.0d);
+    array3.append(1.0);
     QVERIFY(array3.isDetached());
     QVERIFY(!array2.isDetached()); // Still thinks it is shared.
     array2.rawData();
@@ -441,12 +441,12 @@ void dtkArrayTestObject::testAppendTwoAtATime(void)
     int index;
 
     dtkArray<double> array;
-    array.append(1.0d, 2.0d);
-    array.append(3.0d, 4.0d);
-    QCOMPARE(array[0], 1.0d);
-    QCOMPARE(array[1], 2.0d);
-    QCOMPARE(array[2], 3.0d);
-    QCOMPARE(array[3], 4.0d);
+    array.append(1.0, 2.0);
+    array.append(3.0, 4.0);
+    QCOMPARE(array[0], 1.0);
+    QCOMPARE(array[1], 2.0);
+    QCOMPARE(array[2], 3.0);
+    QCOMPARE(array[3], 4.0);
     QCOMPARE(array.count(), 4);
 
     dtkArray<double> array2;
@@ -482,14 +482,14 @@ void dtkArrayTestObject::testAppendThreeAtATime(void)
     int index;
 
     dtkArray<double> array;
-    array.append(1.0d, 2.0d, 3.0d);
-    array.append(4.0d, 5.0d, 6.0d);
-    QCOMPARE(array[0], 1.0d);
-    QCOMPARE(array[1], 2.0d);
-    QCOMPARE(array[2], 3.0d);
-    QCOMPARE(array[3], 4.0d);
-    QCOMPARE(array[4], 5.0d);
-    QCOMPARE(array[5], 6.0d);
+    array.append(1.0, 2.0, 3.0);
+    array.append(4.0, 5.0, 6.0);
+    QCOMPARE(array[0], 1.0);
+    QCOMPARE(array[1], 2.0);
+    QCOMPARE(array[2], 3.0);
+    QCOMPARE(array[3], 4.0);
+    QCOMPARE(array[4], 5.0);
+    QCOMPARE(array[5], 6.0);
     QCOMPARE(array.count(), 6);
 
     dtkArray<double> array2;
@@ -530,16 +530,16 @@ void dtkArrayTestObject::testAppendFourAtATime(void)
     int index;
 
     dtkArray<double> array;
-    array.append(1.0d, 2.0d, 3.0d, 4.0d);
-    array.append(5.0d, 6.0d, 7.0d, 8.0d);
-    QCOMPARE(array[0], 1.0d);
-    QCOMPARE(array[1], 2.0d);
-    QCOMPARE(array[2], 3.0d);
-    QCOMPARE(array[3], 4.0d);
-    QCOMPARE(array[4], 5.0d);
-    QCOMPARE(array[5], 6.0d);
-    QCOMPARE(array[6], 7.0d);
-    QCOMPARE(array[7], 8.0d);
+    array.append(1.0, 2.0, 3.0, 4.0);
+    array.append(5.0, 6.0, 7.0, 8.0);
+    QCOMPARE(array[0], 1.0);
+    QCOMPARE(array[1], 2.0);
+    QCOMPARE(array[2], 3.0);
+    QCOMPARE(array[3], 4.0);
+    QCOMPARE(array[4], 5.0);
+    QCOMPARE(array[5], 6.0);
+    QCOMPARE(array[6], 7.0);
+    QCOMPARE(array[7], 8.0);
     QCOMPARE(array.count(), 8);
 
     dtkArray<double> array2;
@@ -617,11 +617,11 @@ void dtkArrayTestObject::testSetAt(void)
     int index;
 
     dtkArray<double> array;
-    array.append(1.0d);
-    QCOMPARE(array[0], 1.0d);
+    array.append(1.0);
+    QCOMPARE(array[0], 1.0);
 
-    array[0] = 6.0d;
-    QCOMPARE(array[0], 6.0d);
+    array[0] = 6.0;
+    QCOMPARE(array[0], 6.0);
 
     dtkArray<double> array2;
     for (index = 0; index < 1000; ++index)
@@ -644,14 +644,14 @@ void dtkArrayTestObject::testValue(void)
 
     for (int index = 0; index < 1000; ++index) {
         QCOMPARE(array.value(index), double(index));
-        QCOMPARE(array.value(index, 10001.0d), double(index));
+        QCOMPARE(array.value(index, 10001.0), double(index));
     }
 
-    QCOMPARE(array.value(-1), 0.0d);
-    QCOMPARE(array.value(1000), 0.0d);
+    QCOMPARE(array.value(-1), 0.0);
+    QCOMPARE(array.value(1000), 0.0);
 
-    QCOMPARE(array.value(-1, 10001.0d), 10001.0d);
-    QCOMPARE(array.value(1000, 10001.0d), 10001.0d);
+    QCOMPARE(array.value(-1, 10001.0), 10001.0);
+    QCOMPARE(array.value(1000, 10001.0), 10001.0);
 }
 
 void dtkArrayTestObject::testReplace(void)
@@ -700,7 +700,7 @@ void dtkArrayTestObject::testReplace(void)
     }
 
     // Replace beyond the end of the array.
-    static double const extras[] = {0.0d, 0.0d, 1.0d, 2.0d, 3.0d, 4.0d};
+    static double const extras[] = {0.0, 0.0, 1.0, 2.0, 3.0, 4.0};
     array.replace(1402, extras + 2, 4);
     QCOMPARE(array.count(), 1406);
     for (index = 0; index < 1406; ++index) {
@@ -730,39 +730,39 @@ void dtkArrayTestObject::testCopy(void)
 {
     dtkArray<double> array, array2, array3;
 
-    array2.append(1.0d);
-    array2.append(7.0d);
+    array2.append(1.0);
+    array2.append(7.0);
     array = array2;
     QCOMPARE(array.count(), 2);
-    QCOMPARE(array.at(0), double(1.0d));
-    QCOMPARE(array.at(1), double(7.0d));
+    QCOMPARE(array.at(0), double(1.0));
+    QCOMPARE(array.at(1), double(7.0));
 
     array = array3;
     QCOMPARE(array.count(), 0);
 
     array2 = array2;
     QCOMPARE(array2.count(), 2);
-    QCOMPARE(array2.at(0), double(1.0d));
-    QCOMPARE(array2.at(1), double(7.0d));
+    QCOMPARE(array2.at(0), double(1.0));
+    QCOMPARE(array2.at(1), double(7.0));
 
     dtkArray<double> array4(array2);
     QCOMPARE(array2.count(), 2);
-    QCOMPARE(array2.at(0), double(1.0d));
-    QCOMPARE(array2.at(1), double(7.0d));
+    QCOMPARE(array2.at(0), double(1.0));
+    QCOMPARE(array2.at(1), double(7.0));
 
     dtkArray<double> array5, array6;
     for (int index = 0; index < 32; ++index)
-        array5.append(2.0d);
+        array5.append(2.0);
     QCOMPARE(array5.count(), 32);
-    array6.append(1.0d);
+    array6.append(1.0);
     array5 = array6;
     QCOMPARE(array5.count(), 1);
-    QCOMPARE(array5.at(0), double(1.0d));
+    QCOMPARE(array5.at(0), double(1.0));
 
     array5.clear();
     QCOMPARE(array5.count(), 0);
     QCOMPARE(array6.count(), 1);
-    QCOMPARE(array6.at(0), double(1.0d));
+    QCOMPARE(array6.at(0), double(1.0));
     array6.clear();
     QCOMPARE(array5.count(), 0);
 }
@@ -876,9 +876,9 @@ void dtkArrayTestObject::testSqueeze(void)
 
     // Test squeezing within the preallocated area.
     dtkArray<double> array2;
-    array2.append(1.0d);
-    array2.append(2.0d);
-    array2.append(3.0d);
+    array2.append(1.0);
+    array2.append(2.0);
+    array2.append(3.0);
     array2.squeeze();
     QCOMPARE(array2.capacity(), ExpectedMinCapacity);
     QCOMPARE(array2.count(), 3);
@@ -902,8 +902,8 @@ void dtkArrayTestObject::testCompare(void)
 
     QVERIFY(array == array2);
 
-    array.append(1.0d);
-    array3.append(1.0d);
+    array.append(1.0);
+    array3.append(1.0);
     dtkArray<double> array4(array);
 
     QVERIFY(array == array);
@@ -911,10 +911,10 @@ void dtkArrayTestObject::testCompare(void)
     QVERIFY(array == array3);
     QVERIFY(array == array4);
 
-    array2.append(2.0d);
+    array2.append(2.0);
     QVERIFY(array != array2);
 
-    array2.append(1.0d);
+    array2.append(1.0);
     QVERIFY(array != array2);
 
     for (int index = 0; index < 100; ++index)
@@ -1002,39 +1002,39 @@ void dtkArrayTestObject::testExtend(void)
     dtkArray<double> array;
 
     double *ptr = array.extend(4);
-    ptr[0] = 1.0d;
-    ptr[1] = 2.0d;
-    ptr[2] = 3.0d;
-    ptr[3] = 4.0d;
+    ptr[0] = 1.0;
+    ptr[1] = 2.0;
+    ptr[2] = 3.0;
+    ptr[3] = 4.0;
     QCOMPARE(array.size(), 4);
-    QCOMPARE(array[0], 1.0d);
-    QCOMPARE(array[1], 2.0d);
-    QCOMPARE(array[2], 3.0d);
-    QCOMPARE(array[3], 4.0d);
+    QCOMPARE(array[0], 1.0);
+    QCOMPARE(array[1], 2.0);
+    QCOMPARE(array[2], 3.0);
+    QCOMPARE(array[3], 4.0);
 
-    array.append(5.0d);
+    array.append(5.0);
     ptr = array.extend(1);
-    ptr[0] = 6.0d;
+    ptr[0] = 6.0;
     QCOMPARE(array.size(), 6);
-    QCOMPARE(array[0], 1.0d);
-    QCOMPARE(array[1], 2.0d);
-    QCOMPARE(array[2], 3.0d);
-    QCOMPARE(array[3], 4.0d);
-    QCOMPARE(array[4], 5.0d);
-    QCOMPARE(array[5], 6.0d);
+    QCOMPARE(array[0], 1.0);
+    QCOMPARE(array[1], 2.0);
+    QCOMPARE(array[2], 3.0);
+    QCOMPARE(array[3], 4.0);
+    QCOMPARE(array[4], 5.0);
+    QCOMPARE(array[5], 6.0);
 
     dtkArray<double> array2(array);
 
     ptr = array.extend(1);
-    ptr[0] = 7.0d;
+    ptr[0] = 7.0;
     QCOMPARE(array.size(), 7);
-    QCOMPARE(array[0], 1.0d);
-    QCOMPARE(array[1], 2.0d);
-    QCOMPARE(array[2], 3.0d);
-    QCOMPARE(array[3], 4.0d);
-    QCOMPARE(array[4], 5.0d);
-    QCOMPARE(array[5], 6.0d);
-    QCOMPARE(array[6], 7.0d);
+    QCOMPARE(array[0], 1.0);
+    QCOMPARE(array[1], 2.0);
+    QCOMPARE(array[2], 3.0);
+    QCOMPARE(array[3], 4.0);
+    QCOMPARE(array[4], 5.0);
+    QCOMPARE(array[5], 6.0);
+    QCOMPARE(array[6], 7.0);
 
     QCOMPARE(array2.size(), 6);
 }
@@ -1049,40 +1049,40 @@ void dtkArrayTestObject::testReverse(void)
 
     // basic case
     double *ptr = array0.extend(1);
-    ptr[0] = 1.0d;
+    ptr[0] = 1.0;
     array0.reverse();
     QCOMPARE(array0.size(), 1);
-    QCOMPARE(array0.at(0), 1.0d);
+    QCOMPARE(array0.at(0), 1.0);
 
     // odd numbered size
     dtkArray<double> array1;
     ptr = array1.extend(5);
-    ptr[0] = 1.0d;
-    ptr[1] = 2.0d;
-    ptr[2] = 3.0d;
-    ptr[3] = 4.0d;
-    ptr[4] = 5.0d;
+    ptr[0] = 1.0;
+    ptr[1] = 2.0;
+    ptr[2] = 3.0;
+    ptr[3] = 4.0;
+    ptr[4] = 5.0;
     array1.reverse();
     QCOMPARE(array1.size(), 5);
-    QCOMPARE(array1.at(0), 5.0d);
-    QCOMPARE(array1.at(2), 3.0d);
-    QCOMPARE(array1.at(4), 1.0d);
+    QCOMPARE(array1.at(0), 5.0);
+    QCOMPARE(array1.at(2), 3.0);
+    QCOMPARE(array1.at(4), 1.0);
 
     // even numbered size
     dtkArray<double> array2;
     ptr = array2.extend(6);
-    ptr[0] = 1.0d;
-    ptr[1] = 2.0d;
-    ptr[2] = 3.0d;
-    ptr[3] = 4.0d;
-    ptr[4] = 5.0d;
-    ptr[5] = 6.0d;
+    ptr[0] = 1.0;
+    ptr[1] = 2.0;
+    ptr[2] = 3.0;
+    ptr[3] = 4.0;
+    ptr[4] = 5.0;
+    ptr[5] = 6.0;
     array2.reverse();
     QCOMPARE(array2.size(), 6);
-    QCOMPARE(array2.at(0), 6.0d);
-    QCOMPARE(array2.at(2), 4.0d);
-    QCOMPARE(array2.at(3), 3.0d);
-    QCOMPARE(array2.at(5), 1.0d);
+    QCOMPARE(array2.at(0), 6.0);
+    QCOMPARE(array2.at(2), 4.0);
+    QCOMPARE(array2.at(3), 3.0);
+    QCOMPARE(array2.at(5), 1.0);
 
     // complex type
     QVERIFY(QTypeInfo<QString>::isComplex);
@@ -1111,40 +1111,40 @@ void dtkArrayTestObject::testReversed(void)
 
     // basic case
     double *ptr = array0.extend(1);
-    ptr[0] = 1.0d;
+    ptr[0] = 1.0;
     res0 = array0.reversed();
     QCOMPARE(res0.size(), 1);
-    QCOMPARE(res0.at(0), 1.0d);
+    QCOMPARE(res0.at(0), 1.0);
 
     // odd numbered size
     dtkArray<double> array1;
     ptr = array1.extend(5);
-    ptr[0] = 1.0d;
-    ptr[1] = 2.0d;
-    ptr[2] = 3.0d;
-    ptr[3] = 4.0d;
-    ptr[4] = 5.0d;
+    ptr[0] = 1.0;
+    ptr[1] = 2.0;
+    ptr[2] = 3.0;
+    ptr[3] = 4.0;
+    ptr[4] = 5.0;
     dtkArray<double> res1 = array1.reversed();
     QCOMPARE(res1.size(), 5);
-    QCOMPARE(res1.at(0), 5.0d);
-    QCOMPARE(res1.at(2), 3.0d);
-    QCOMPARE(res1.at(4), 1.0d);
+    QCOMPARE(res1.at(0), 5.0);
+    QCOMPARE(res1.at(2), 3.0);
+    QCOMPARE(res1.at(4), 1.0);
 
     // even numbered size
     dtkArray<double> array2;
     ptr = array2.extend(6);
-    ptr[0] = 1.0d;
-    ptr[1] = 2.0d;
-    ptr[2] = 3.0d;
-    ptr[3] = 4.0d;
-    ptr[4] = 5.0d;
-    ptr[5] = 6.0d;
+    ptr[0] = 1.0;
+    ptr[1] = 2.0;
+    ptr[2] = 3.0;
+    ptr[3] = 4.0;
+    ptr[4] = 5.0;
+    ptr[5] = 6.0;
     dtkArray<double> res2 = array2.reversed();
     QCOMPARE(res2.size(), 6);
-    QCOMPARE(res2.at(0), 6.0d);
-    QCOMPARE(res2.at(2), 4.0d);
-    QCOMPARE(res2.at(3), 3.0d);
-    QCOMPARE(res2.at(5), 1.0d);
+    QCOMPARE(res2.at(0), 6.0);
+    QCOMPARE(res2.at(2), 4.0);
+    QCOMPARE(res2.at(3), 3.0);
+    QCOMPARE(res2.at(5), 1.0);
 
     // simple type with larger size
     dtkArray<QVector3D> array4;
@@ -1303,8 +1303,8 @@ void dtkArrayTestObject::testIterate(void)
 void dtkArrayTestObject::testCopyPrealloc(void)
 {
     dtkArray<double> array1;
-    array1.append(1.0d);
-    array1.append(2.0d);
+    array1.append(1.0);
+    array1.append(2.0);
 
     const double *data = array1.constRawData();
 
@@ -1314,8 +1314,8 @@ void dtkArrayTestObject::testCopyPrealloc(void)
     QVERIFY(array2.constRawData() != data);
 
     QCOMPARE(array2.size(), 2);
-    QCOMPARE(array2[0], double(1.0d));
-    QCOMPARE(array2[1], double(2.0d));
+    QCOMPARE(array2[0], double(1.0));
+    QCOMPARE(array2[1], double(2.0));
 
     dtkArray<double> array3;
     QCOMPARE(array3.size(), 0);
@@ -1325,8 +1325,8 @@ void dtkArrayTestObject::testCopyPrealloc(void)
     QVERIFY(array3.constRawData() != data);
 
     QCOMPARE(array3.size(), 2);
-    QCOMPARE(array3[0], double(1.0d));
-    QCOMPARE(array3[1], double(2.0d));
+    QCOMPARE(array3[0], double(1.0));
+    QCOMPARE(array3[1], double(2.0));
 }
 
 void dtkArrayTestObject::testInsert(void)
@@ -1335,34 +1335,34 @@ void dtkArrayTestObject::testInsert(void)
     for (int index = 0; index < 10; ++index)
         array.append(double(index));
 
-    array.prepend(-1.0d);
+    array.prepend(-1.0);
     QCOMPARE(array.size(), 11);
     for (int index = 0; index < array.size(); ++index)
         QCOMPARE(array[index], double(index - 1));
 
-    array.insert(array.size(), 10.0d);
+    array.insert(array.size(), 10.0);
     QCOMPARE(array.size(), 12);
     for (int index = 0; index < array.size(); ++index)
         QCOMPARE(array[index], double(index - 1));
 
-    array.insert(1, 0.5d);
+    array.insert(1, 0.5);
     QCOMPARE(array.size(), 13);
-    QCOMPARE(array[0], -1.0d);
-    QCOMPARE(array[1], 0.5d);
-    QCOMPARE(array[2], 0.0d);
-    QCOMPARE(array[12], 10.0d);
+    QCOMPARE(array[0], -1.0);
+    QCOMPARE(array[1], 0.5);
+    QCOMPARE(array[2], 0.0);
+    QCOMPARE(array[12], 10.0);
 
-    array.insert(10, 0, 7.5d);
-    array.insert(10, 4, 7.5d);
+    array.insert(10, 0, 7.5);
+    array.insert(10, 4, 7.5);
     QCOMPARE(array.size(), 17);
-    QCOMPARE(array[9], 7.0d);
-    QCOMPARE(array[10], 7.5d);
-    QCOMPARE(array[11], 7.5d);
-    QCOMPARE(array[12], 7.5d);
-    QCOMPARE(array[13], 7.5d);
-    QCOMPARE(array[14], 8.0d);
-    QCOMPARE(array[15], 9.0d);
-    QCOMPARE(array[16], 10.0d);
+    QCOMPARE(array[9], 7.0);
+    QCOMPARE(array[10], 7.5);
+    QCOMPARE(array[11], 7.5);
+    QCOMPARE(array[12], 7.5);
+    QCOMPARE(array[13], 7.5);
+    QCOMPARE(array[14], 8.0);
+    QCOMPARE(array[15], 9.0);
+    QCOMPARE(array[16], 10.0);
 
     // Repeat the tests with QString
     dtkArray<QString> array2;
@@ -1438,17 +1438,17 @@ void dtkArrayTestObject::testInsert(void)
 void dtkArrayTestObject::testSetRawData(void)
 {
     dtkArray<double> array;
-    double contents[] = {1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d,
-                        7.0d, 8.0d, 9.0d, 10.0d, 11.0d, 12.0d};
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
+                        7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
 
     array.setRawData(contents, 0);
     QCOMPARE(array.size(), 0);
     QCOMPARE(array.capacity(), 0);
     QVERIFY(!array.isDetached());
-    array.append(1.0d);
+    array.append(1.0);
     QCOMPARE(array.size(), 1);
     QVERIFY(array.capacity() > 0);
-    QCOMPARE(array.at(0), 1.0d);
+    QCOMPARE(array.at(0), 1.0);
     QVERIFY(array.isDetached());
 
     array.setRawData(contents, 6);
@@ -1460,16 +1460,16 @@ void dtkArrayTestObject::testSetRawData(void)
     QVERIFY(!array.isDetached());    
 
     // Force a copy-on-write.
-    array[3] = 42.0d;
+    array[3] = 42.0;
     QVERIFY(array.isDetached());
-    QCOMPARE(contents[3], 4.0d);
+    QCOMPARE(contents[3], 4.0);
     QCOMPARE(array.size(), 6);
     QVERIFY(array.capacity() > 6);
     for (int index = 0; index < 6; ++index) {
         if (index != 3)
             QCOMPARE(array.at(index), contents[index]);
         else
-            QCOMPARE(array.at(index), 42.0d);
+            QCOMPARE(array.at(index), 42.0);
     }
     QVERIFY(array.constRawData() != contents);
 
@@ -1503,17 +1503,17 @@ void dtkArrayTestObject::testSetRawData(void)
 void dtkArrayTestObject::testFromRawData(void)
 {
     dtkArray<double> array;
-    double contents[] = {1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d,
-                        7.0d, 8.0d, 9.0d, 10.0d, 11.0d, 12.0d};
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
+                        7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
 
     array = dtkArray<double>::fromRawData(contents, 0);
     QCOMPARE(array.size(), 0);
     QCOMPARE(array.capacity(), 0);
     QVERIFY(!array.isDetached());
-    array.append(1.0d);
+    array.append(1.0);
     QCOMPARE(array.size(), 1);
     QVERIFY(array.capacity() > 0);
-    QCOMPARE(array.at(0), 1.0d);
+    QCOMPARE(array.at(0), 1.0);
     QVERIFY(array.isDetached());
 
     array = dtkArray<double>::fromRawData(contents, 6);
@@ -1525,16 +1525,16 @@ void dtkArrayTestObject::testFromRawData(void)
     QVERIFY(!array.isDetached());
 
     // Force a copy-on-write.
-    array[3] = 42.0d;
+    array[3] = 42.0;
     QVERIFY(array.isDetached());
-    QCOMPARE(contents[3], 4.0d);
+    QCOMPARE(contents[3], 4.0);
     QCOMPARE(array.size(), 6);
     QVERIFY(array.capacity() > 6);
     for (int index = 0; index < 6; ++index) {
         if (index != 3)
             QCOMPARE(array.at(index), contents[index]);
         else
-            QCOMPARE(array.at(index), 42.0d);
+            QCOMPARE(array.at(index), 42.0);
     }
     QVERIFY(array.constRawData() != contents);
 
@@ -1568,17 +1568,17 @@ void dtkArrayTestObject::testFromRawData(void)
 void dtkArrayTestObject::testFromWritableRawData(void)
 {
     dtkArray<double> array;
-    double contents[] = {1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d};
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     double contentsModified[] =
-        {1.0d, 2.0d, 3.0d, 42.0d, 5.0d, 6.0d, 53.0d};
+        {1.0, 2.0, 3.0, 42.0, 5.0, 6.0, 53.0};
 
     array = dtkArray<double>::fromWritableRawData(contents, 0);
     QCOMPARE(array.size(), 0);
     QCOMPARE(array.capacity(), 0);
-    array.append(0.0d);
+    array.append(0.0);
     QCOMPARE(array.size(), 1);
     QVERIFY(array.capacity() > 0);
-    QCOMPARE(array.at(0), 0.0d);
+    QCOMPARE(array.at(0), 0.0);
 
     array = dtkArray<double>::fromWritableRawData(contents, 6);
     QCOMPARE(array.size(), 6);
@@ -1588,11 +1588,11 @@ void dtkArrayTestObject::testFromWritableRawData(void)
     QVERIFY(array.constRawData() == contents);
 
     // Modify the raw data in-place.
-    array[3] = 42.0d;
+    array[3] = 42.0;
     QVERIFY(array.constRawData() == contents);
 
     // Force a copy.
-    array.append(53.0d);
+    array.append(53.0);
     QVERIFY(array.constRawData() != contents);
     for (int index = 0; index < array.size(); ++index)
         QCOMPARE(array.at(index), contentsModified[index]);
@@ -1606,7 +1606,7 @@ void dtkArrayTestObject::testFromWritableRawData(void)
     QVERIFY(array.constRawData() == contents);
     for (int index = 0; index < array.size(); ++index)
         QCOMPARE(array.at(index), contentsModified[index]);
-    array.append(6.0d);
+    array.append(6.0);
     QVERIFY(array.constRawData() == contents);
     for (int index = 0; index < array.size(); ++index)
         QCOMPARE(array.at(index), contentsModified[index]);
@@ -1617,7 +1617,7 @@ void dtkArrayTestObject::testFromWritableRawData(void)
     QVERIFY(array.constRawData() != contents);
     for (int index = 0; index < 6; ++index)
         QCOMPARE(array.at(index), contentsModified[index]);
-    QCOMPARE(array.at(6), 0.0d);
+    QCOMPARE(array.at(6), 0.0);
 
     // Reserve to a larger size should force a copy.
     array = dtkArray<double>::fromWritableRawData(contents, 6);
@@ -1635,77 +1635,77 @@ void dtkArrayTestObject::testSearch(void)
     for (int index = 0; index < 1000; ++index)
         array.append(double(index));
 
-    QCOMPARE(array.indexOf(0.0d), 0);
-    QCOMPARE(array.indexOf(10.0d), 10);
-    QCOMPARE(array.indexOf(999.0d), 999);
-    QCOMPARE(array.indexOf(1000.0d), -1);
-    QCOMPARE(array.indexOf(10.0d, 9), 10);
-    QCOMPARE(array.indexOf(10.0d, 10), 10);
-    QCOMPARE(array.indexOf(10.0d, 11), -1);
-    QCOMPARE(array.indexOf(999.0d, -1), 999);
-    QCOMPARE(array.indexOf(998.0d, -1), -1);
-    QCOMPARE(array.indexOf(998.0d, -2), 998);
-    QCOMPARE(array.indexOf(998.0d, -3), 998);
-    QCOMPARE(array.indexOf(998.0d, -2000), 998);
-    QCOMPARE(array.indexOf(998.0d, 2000), -1);
+    QCOMPARE(array.indexOf(0.0), 0);
+    QCOMPARE(array.indexOf(10.0), 10);
+    QCOMPARE(array.indexOf(999.0), 999);
+    QCOMPARE(array.indexOf(1000.0), -1);
+    QCOMPARE(array.indexOf(10.0, 9), 10);
+    QCOMPARE(array.indexOf(10.0, 10), 10);
+    QCOMPARE(array.indexOf(10.0, 11), -1);
+    QCOMPARE(array.indexOf(999.0, -1), 999);
+    QCOMPARE(array.indexOf(998.0, -1), -1);
+    QCOMPARE(array.indexOf(998.0, -2), 998);
+    QCOMPARE(array.indexOf(998.0, -3), 998);
+    QCOMPARE(array.indexOf(998.0, -2000), 998);
+    QCOMPARE(array.indexOf(998.0, 2000), -1);
 
-    QCOMPARE(array.lastIndexOf(0.0d), 0);
-    QCOMPARE(array.lastIndexOf(10.0d), 10);
-    QCOMPARE(array.lastIndexOf(999.0d), 999);
-    QCOMPARE(array.lastIndexOf(1000.0d), -1);
-    QCOMPARE(array.lastIndexOf(10.0d, 9), -1);
-    QCOMPARE(array.lastIndexOf(10.0d, 10), 10);
-    QCOMPARE(array.lastIndexOf(10.0d, 11), 10);
-    QCOMPARE(array.lastIndexOf(999.0d, -1), 999);
-    QCOMPARE(array.lastIndexOf(998.0d, -1), 998);
-    QCOMPARE(array.lastIndexOf(998.0d, -2), 998);
-    QCOMPARE(array.lastIndexOf(998.0d, -3), -1);
-    QCOMPARE(array.lastIndexOf(998.0d, -2000), -1);
-    QCOMPARE(array.lastIndexOf(998.0d, 2000), 998);
+    QCOMPARE(array.lastIndexOf(0.0), 0);
+    QCOMPARE(array.lastIndexOf(10.0), 10);
+    QCOMPARE(array.lastIndexOf(999.0), 999);
+    QCOMPARE(array.lastIndexOf(1000.0), -1);
+    QCOMPARE(array.lastIndexOf(10.0, 9), -1);
+    QCOMPARE(array.lastIndexOf(10.0, 10), 10);
+    QCOMPARE(array.lastIndexOf(10.0, 11), 10);
+    QCOMPARE(array.lastIndexOf(999.0, -1), 999);
+    QCOMPARE(array.lastIndexOf(998.0, -1), 998);
+    QCOMPARE(array.lastIndexOf(998.0, -2), 998);
+    QCOMPARE(array.lastIndexOf(998.0, -3), -1);
+    QCOMPARE(array.lastIndexOf(998.0, -2000), -1);
+    QCOMPARE(array.lastIndexOf(998.0, 2000), 998);
 
-    QVERIFY(array.contains(0.0d));
-    QVERIFY(array.contains(10.0d));
-    QVERIFY(array.contains(999.0d));
-    QVERIFY(!array.contains(1000.0d));
-    QVERIFY(!array.contains(-1.0d));
+    QVERIFY(array.contains(0.0));
+    QVERIFY(array.contains(10.0));
+    QVERIFY(array.contains(999.0));
+    QVERIFY(!array.contains(1000.0));
+    QVERIFY(!array.contains(-1.0));
 
-    array.append(500.0d);
-    QCOMPARE(array.count(0.0d), 1);
-    QCOMPARE(array.count(10.0d), 1);
-    QCOMPARE(array.count(500.0d), 2);
-    QCOMPARE(array.count(999.0d), 1);
-    QCOMPARE(array.count(1000.0d), 0);
+    array.append(500.0);
+    QCOMPARE(array.count(0.0), 1);
+    QCOMPARE(array.count(10.0), 1);
+    QCOMPARE(array.count(500.0), 2);
+    QCOMPARE(array.count(999.0), 1);
+    QCOMPARE(array.count(1000.0), 0);
 
-    QVERIFY(array.startsWith(0.0d));
-    QVERIFY(!array.startsWith(1.0d));
+    QVERIFY(array.startsWith(0.0));
+    QVERIFY(!array.startsWith(1.0));
 
-    QVERIFY(array.endsWith(500.0d));
-    QVERIFY(!array.endsWith(1.0d));
+    QVERIFY(array.endsWith(500.0));
+    QVERIFY(!array.endsWith(1.0));
 
-    QCOMPARE(array.first(), 0.0d);
-    QCOMPARE(array.last(), 500.0d);
+    QCOMPARE(array.first(), 0.0);
+    QCOMPARE(array.last(), 500.0);
 }
 
 void dtkArrayTestObject::testFill(void)
 {
     dtkArray<double> array;
-    array.fill(1.0d);
+    array.fill(1.0);
     QCOMPARE(array.size(), 0);
 
-    array.fill(1.0d, 100);
+    array.fill(1.0, 100);
     QCOMPARE(array.size(), 100);
     for (int index = 0; index < 100; ++index)
-        QCOMPARE(array.at(index), 1.0d);
+        QCOMPARE(array.at(index), 1.0);
 
-    array.fill(2.0d);
+    array.fill(2.0);
     QCOMPARE(array.size(), 100);
     for (int index = 0; index < 100; ++index)
-        QCOMPARE(array.at(index), 2.0d);
+        QCOMPARE(array.at(index), 2.0);
 
-    array.fill(3.0d, 20);
+    array.fill(3.0, 20);
     QCOMPARE(array.size(), 20);
     for (int index = 0; index < 20; ++index)
-        QCOMPARE(array.at(index), 3.0d);
+        QCOMPARE(array.at(index), 3.0);
 }
 
 void dtkArrayTestObject::testZeroPrealloc(void)
@@ -1722,16 +1722,16 @@ void dtkArrayTestObject::testZeroPrealloc(void)
     QCOMPARE(array.size(), 0);
     QCOMPARE(array.capacity(), 0);
     QVERIFY(!array.constRawData()); // Will be null for PreallocSize == 0.
-    array.append(1.0d);
+    array.append(1.0);
     QCOMPARE(array.size(), 1);
-    QCOMPARE(array[0], 1.0d);
+    QCOMPARE(array[0], 1.0);
     dtkArray<double, 0> array3(array);
     QVERIFY(array.constRawData() == array3.constRawData());
 
-    dtkArray<double, 0> array4(100, 3.0d);
+    dtkArray<double, 0> array4(100, 3.0);
     QCOMPARE(array4.size(), 100);
     for (int index = 0; index < 100; ++index)
-        QCOMPARE(array4[index], 3.0d);
+        QCOMPARE(array4[index], 3.0);
     array4.clear();
     QCOMPARE(array4.size(), 0);
 }

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 14:28:27 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Jul  1 16:20:12 2013 (+0200)
+ * Last-Updated: Mon Jul  1 19:01:44 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 49
+ *     Update #: 52
  */
 
 /* Credits:
@@ -178,7 +178,7 @@ void dtkArrayTestObject::testCreate(void)
     QVERIFY(((const dtkArray<double> *)&array)->rawData() == array.constRawData());
 
     // Create another array that is filled with an initial value.
-    dtkArray<QVector3D> array2(100, QVector3D(1.0d, 2.0d, 3.0d));
+    dtkArray<QVector3D> array2(100, QVector3D(1.0f, 2.0f, 3.0f));
     QVERIFY(!array2.isEmpty());
     QCOMPARE(array2.count(), 100);
     QCOMPARE(array2.size(), 100);
@@ -187,7 +187,7 @@ void dtkArrayTestObject::testCreate(void)
     QVERIFY(array2.rawData() == array2.constRawData());
     QVERIFY(((const dtkArray<QVector3D> *)&array2)->rawData() == array2.constRawData());
     for (int index = 0; index < 100; ++index)
-        QVERIFY(array2.at(index) == QVector3D(1.0d, 2.0d, 3.0d));
+        QVERIFY(array2.at(index) == QVector3D(1.0f, 2.0f, 3.0f));
 
     // Create a filled array that is within the prealloc area.
     dtkArray<double> array3(ExpectedMinCapacity, 42.5f);
@@ -1149,12 +1149,12 @@ void dtkArrayTestObject::testReversed(void)
     // simple type with larger size
     dtkArray<QVector3D> array4;
     array4.extend(6);
-    QVector3D va(1.0d, 2.0d, 3.0d);
-    QVector3D vb(11.0d, 12.0d, 13.0d);
-    QVector3D vc(21.0d, 22.0d, 23.0d);
-    QVector3D vd(31.0d, 32.0d, 33.0d);
-    QVector3D ve(41.0d, 42.0d, 43.0d);
-    QVector3D vf(51.0d, 52.0d, 53.0d);
+    QVector3D va(1.0f, 2.0f, 3.0f);
+    QVector3D vb(11.0f, 12.0f, 13.0f);
+    QVector3D vc(21.0f, 22.0f, 23.0f);
+    QVector3D vd(31.0f, 32.0f, 33.0f);
+    QVector3D ve(41.0f, 42.0f, 43.0f);
+    QVector3D vf(51.0f, 52.0f, 53.0f);
     array4[0] = va;
     array4[1] = vb;
     array4[2] = vc;

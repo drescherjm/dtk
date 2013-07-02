@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 12:38:21 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Jul  1 12:40:55 2013 (+0200)
+ * Last-Updated: Tue Jul  2 10:56:29 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 11
+ *     Update #: 55
  */
 
 /* Commentary:
@@ -143,7 +143,7 @@
 
     This function can be used to determine if functions that
     write to this array such as append(), replace(),
-    and data(), will need to make a copy.
+    and rawData(), will need to make a copy.
 
     Raw data arrays that are created with fromRawData() are
     never detached.
@@ -180,7 +180,7 @@
     \a index must be a valid index position in the array (i.e., 0 <= \a
     index < size()).
 
-    \sa operator[](), constData(), value()
+    \sa operator[](), constRawData(), value()
 */
 
 /*!
@@ -568,7 +568,23 @@
 */
 
 /*!
-    \fn T *dtkArray::data()
+    \fn void dtkArray::setRawData(const T *raw_data, int size, RawDataType data_type = ReadOnly)
+
+    Sets the array using the raw data \a raw_data of \a size elements.
+
+    By default, the input \a raw_data is of type dtkArray::ReadOnly
+    which means that any modification of the content or the shape of
+    the array leads to a copy according to COW principles.
+
+    If the input \a raw_data is of type dtkArray::Writable, then its
+    elements can be modified in-place. The copy only occurs when the
+    shape of the array is enlarged.
+
+    \sa rawData(), constRawData(), fromWritableRawData(), fromRawData()
+*/
+
+/*!
+    \fn T *dtkArray::rawData()
 
     Returns a pointer to the data stored in the array.  The pointer
     can be used to access and modify the items in the array.
@@ -580,17 +596,17 @@
     that accepts a plain C++ array.  It may make a deep copy of the
     array's elements if the array is implicitly shared.
 
-    \sa constData(), operator[]()
+    \sa constRawData(), operator[]()
 */
 
 /*!
-    \fn const T *dtkArray::data() const
+    \fn const T *dtkArray::rawData() const
 
     \overload
 */
 
 /*!
-    \fn const T *dtkArray::constData() const
+    \fn const T *dtkArray::constRawData() const
 
     Returns a const pointer to the data stored in the array.
     The pointer can be used to access the items in the array.
@@ -600,7 +616,7 @@
     This function is mostly useful to pass an array to a function
     that accepts a plain C++ array.
 
-    \sa data(), operator[]()
+    \sa rawData(), operator[]()
 */
 
 /*!

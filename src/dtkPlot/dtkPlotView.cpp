@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 13:36:42 2013 (+0200)
+ * Last-Updated: Thu Jul  4 09:53:54 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 417
+ *     Update #: 422
  */
 
 /* Commentary: 
@@ -73,11 +73,11 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 
     // Colors
 
-    d->grid_color = Qt::white;
-    d->picking_color = Qt::white;
-    d->zoom_color = Qt::white;
-    d->background_color = Qt::black;
-    d->foreground_color = Qt::white;
+    d->grid_color = Qt::black;
+    d->picking_color = Qt::black;
+    d->zoom_color = Qt::black;
+    d->background_color = Qt::white;
+    d->foreground_color = Qt::black;
 
     d->alphaCurveArea = 0;
 
@@ -407,6 +407,8 @@ void dtkPlotView::setAxisScaleX(dtkPlotView::Scale scale)
         d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLog10ScaleEngine);
 #endif
     }
+
+    this->update();
 }
 
 void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
@@ -421,6 +423,8 @@ void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
         d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLog10ScaleEngine);
 #endif
     }
+
+    this->update();
 }
 
 void dtkPlotView::setLegendPosition(LegendPosition position)
@@ -543,11 +547,11 @@ void dtkPlotView::readSettings(void)
 {
     QSettings settings("inria", "dtk");
     settings.beginGroup("plot");
-    d->grid_color = settings.value("grid_color").value<QColor>();
-    d->picking_color = settings.value("picking_color").value<QColor>();
-    d->zoom_color = settings.value("zoom_color").value<QColor>();
-    d->background_color = settings.value("background_color").value<QColor>();
-    d->foreground_color = settings.value("forergound_color").value<QColor>();
+    d->grid_color = settings.value("grid_color", Qt::black).value<QColor>();
+    d->picking_color = settings.value("picking_color", Qt::black).value<QColor>();
+    d->zoom_color = settings.value("zoom_color", Qt::black).value<QColor>();
+    d->background_color = settings.value("background_color", Qt::white).value<QColor>();
+    d->foreground_color = settings.value("forergound_color", Qt::black).value<QColor>();
     settings.endGroup();
 
     this->updateColors();

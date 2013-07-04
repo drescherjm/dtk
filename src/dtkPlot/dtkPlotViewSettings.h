@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 24 16:24:54 2013 (+0200)
+ * Last-Updated: Thu Jul  4 09:36:28 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 82
+ *     Update #: 83
  */
 
 /* Commentary: 
@@ -54,6 +54,8 @@ protected slots:
     void onAxisTitleYChanged(void);
     void onTitleSizeChanged(const int& value);
     void onAxesTitleSizeChanged(const int& value);
+    void onAxisScaleXChanged(const int& index);
+    void onAxisScaleYChanged(const int& index);
     void onLegendPositionChanged(const int& index);
     void onGridColorChanged(const QColor& color);
     void onPickingColorChanged(const QColor& color);

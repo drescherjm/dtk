@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 16:46:14 2013 (+0200)
+ * Last-Updated: Thu Jul  4 09:45:22 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 494
+ *     Update #: 506
  */
 
 /* Commentary: 
@@ -33,6 +33,9 @@ public:
 
     QSpinBox *titleSize;
     QSpinBox *axesTitleSize;
+
+    QComboBox *axisScaleX;
+    QComboBox *axisScaleY;
 
     QGroupBox *legendGroup;
     QComboBox *legendPosition;
@@ -113,6 +116,31 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
     sizesGroup->setLayout(sizesLayout);
 
     d->groupBoxesList << sizesGroup;
+
+    // Scale
+
+    QStringList scaleList = QStringList() << "Linear" << "Logarithmic";
+
+    d->axisScaleX = new QComboBox;
+    d->axisScaleX->addItems(scaleList);
+    d->axisScaleX->setCurrentIndex(0);
+    d->axisScaleX->setFocusPolicy(Qt::NoFocus);
+
+    d->axisScaleY = new QComboBox;
+    d->axisScaleY->addItems(scaleList);
+    d->axisScaleY->setCurrentIndex(0);
+    d->axisScaleY->setFocusPolicy(Qt::NoFocus);
+
+    QFormLayout *scaleLayout = new QFormLayout;
+    scaleLayout->setContentsMargins(2, 15, 2, 0);
+    scaleLayout->setSpacing(0);
+    scaleLayout->addRow("X-axis", d->axisScaleX);
+    scaleLayout->addRow("Y-axis", d->axisScaleY);
+
+    QGroupBox *scaleGroup = new QGroupBox("Scale");
+    scaleGroup->setLayout(scaleLayout);
+
+    d->groupBoxesList << scaleGroup;
 
     // Legend
 
@@ -211,6 +239,9 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
     connect(d->titleSize, SIGNAL(valueChanged(const int&)), this, SLOT(onTitleSizeChanged(const int&)));
     connect(d->axesTitleSize, SIGNAL(valueChanged(const int&)), this, SLOT(onAxesTitleSizeChanged(const int&)));
 
+    connect(d->axisScaleX, SIGNAL(currentIndexChanged(const int&)), this, SLOT(onAxisScaleXChanged(const int&)));
+    connect(d->axisScaleY, SIGNAL(currentIndexChanged(const int&)), this, SLOT(onAxisScaleYChanged(const int&)));
+
     connect(d->legendPosition, SIGNAL(currentIndexChanged(const int&)), this, SLOT(onLegendPositionChanged(const int&)));
 
     connect(d->mapperCurvesName, SIGNAL(mapped(int)), this, SLOT(updateCurveName(int)));
@@ -270,10 +301,19 @@ void dtkPlotViewSettings::onAxesTitleSizeChanged(const int& value)
     d->view->setAxisTitleSizeY(value);
 }
 
+void dtkPlotViewSettings::onAxisScaleXChanged(const int& index)
+{
+    d->view->setAxisScaleX((dtkPlotView::Scale)index);
+}
+
+void dtkPlotViewSettings::onAxisScaleYChanged(const int& index)
+{
+    d->view->setAxisScaleY((dtkPlotView::Scale)index);
+}
+
 void dtkPlotViewSettings::onLegendPositionChanged(const int& index)
 {
     d->view->setLegendPosition((dtkPlotView::LegendPosition)index);
-    d->view->update();
 }
 
 void dtkPlotViewSettings::onGridColorChanged(const QColor& color)

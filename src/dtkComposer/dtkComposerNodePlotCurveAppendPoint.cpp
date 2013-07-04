@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 14:17:45 2013 (+0200)
+ * Last-Updated: Thu Jul  4 09:51:59 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 94
+ *     Update #: 96
  */
 
 /* Commentary: 
@@ -67,6 +67,11 @@ void dtkComposerNodePlotCurveAppendPoint::run(void)
         return;
 
     dtkPlotCurve *curve = d->receiver_curve.data();
+
+    if (!curve) {
+        dtkWarn() << "no curve speficied in Plot Curve Append Point node!";
+        return;
+    }
 
     curve->append(QPointF(*d->receiver_x.data(), *d->receiver_y.data()));
 

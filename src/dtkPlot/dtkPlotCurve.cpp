@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 24 16:47:08 2013 (+0200)
+ * Last-Updated: Thu Jul  4 10:42:50 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 172
+ *     Update #: 198
  */
 
 /* Commentary: 
@@ -25,12 +25,6 @@
 #include <float.h>
 
 // /////////////////////////////////////////////////////////////////
-// Helper functions
-// /////////////////////////////////////////////////////////////////
-
-QRectF qMakeRect(qreal xmin, qreal xmax, qreal ymin, qreal ymax);
-
-// /////////////////////////////////////////////////////////////////
 // dtkPlotCurvePrivateData
 // /////////////////////////////////////////////////////////////////
 
@@ -39,29 +33,49 @@ class dtkPlotCurvePrivateData : public QwtPointSeriesData
 public:
     void append(const QPointF& point);
 
+    qreal xmin(void) const;
+    qreal xmax(void) const;
+    qreal ymin(void) const;
+    qreal ymax(void) const;
+
     void setData(const QVector<QPointF>& data);
-    
+
+    QRectF boundingRect(void) const;
+
 public:
     void clear(void);
-
-public:
-    QRectF boundingRect(void) const {
-        return qMakeRect(xmin, xmax, ymin, ymax);
-    }
-
-public:
-    qreal xmin, xmax;
-    qreal ymin, ymax;
 };
 
 void dtkPlotCurvePrivateData::append(const QPointF& data)
 {
     this->d_samples << data;
+}
 
-    xmin = qMin(xmin, data.x());
-    xmax = qMax(xmax, data.x());
-    ymin = qMin(ymin, data.y());
-    ymax = qMax(ymax, data.y());
+qreal dtkPlotCurvePrivateData::xmin(void) const
+{
+    return boundingRect().left();
+}
+
+qreal dtkPlotCurvePrivateData::xmax(void) const
+{
+    return boundingRect().right();
+}
+
+qreal dtkPlotCurvePrivateData::ymin(void) const
+{
+    return boundingRect().top();
+}
+
+qreal dtkPlotCurvePrivateData::ymax(void) const
+{
+    return boundingRect().bottom();
+}
+
+QRectF dtkPlotCurvePrivateData::boundingRect(void) const
+{
+    QPolygonF poly(this->samples());
+
+    return poly.boundingRect();
 }
 
 void dtkPlotCurvePrivateData::setData(const QVector<QPointF>& data)
@@ -74,11 +88,6 @@ void dtkPlotCurvePrivateData::setData(const QVector<QPointF>& data)
 void dtkPlotCurvePrivateData::clear(void)
 {
     this->d_samples.clear();
-
-    xmin = DBL_MAX;
-    xmax = DBL_MIN;
-    ymin = DBL_MAX;
-    ymax = DBL_MIN;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -97,10 +106,6 @@ public:
 dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(title)
 {
     this->setData(&(this->data));
-    data.xmin = DBL_MAX;
-    data.xmax = DBL_MIN;
-    data.ymin = DBL_MAX;
-    data.ymax = DBL_MIN;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -112,7 +117,7 @@ dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurve
     d->setLegendAttribute(QwtPlotCurve::LegendShowLine);
     this->setName("curve");
     this->setAntialiased(true);
-    this->setColor(Qt::white);
+    this->setColor(Qt::black);
 }
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))
@@ -179,22 +184,22 @@ QColor dtkPlotCurve::color(void) const
 
 qreal dtkPlotCurve::minX(void) const
 {
-    return d->data.xmin;
+    return d->data.xmin();
 }
 
 qreal dtkPlotCurve::maxX(void) const
 {
-    return d->data.xmax;
+    return d->data.xmax();
 }
 
 qreal dtkPlotCurve::minY(void) const
 {
-    return d->data.ymin;
+    return d->data.ymin();
 }
 
 qreal dtkPlotCurve::maxY(void) const
 {
-    return d->data.ymax;
+    return d->data.ymax();
 }
 
 void dtkPlotCurve::setData(const QVector<QPointF>& data)
@@ -226,13 +231,4 @@ QString  dtkPlotCurve::description(void)
     string.append(" ]");
 
     return string;
-}
-
-// /////////////////////////////////////////////////////////////////
-// Helper functions
-// /////////////////////////////////////////////////////////////////
-
-QRectF qMakeRect(qreal xmin, qreal xmax, qreal ymin, qreal ymax)
-{
-    return QRectF(xmin, ymin, xmax-xmin, ymax-ymin);
 }

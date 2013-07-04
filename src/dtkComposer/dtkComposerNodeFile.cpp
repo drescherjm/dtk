@@ -17,6 +17,8 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
+#include <dtkNotification/dtkNotification.h>
+
 #include <QtCore>
 #include <QtNetwork>
 
@@ -106,18 +108,22 @@ void dtkComposerNodeFile::run(void)
         path = d->fileName;
 
     if (path.startsWith("http")) {
-        
+
         d->download(QUrl(path));
-        
+
         if (!d->tempName.isEmpty())
             d->fileName = d->tempName;
         else
             d->fileName = path;
-        
+
     } else {
-        
+
         d->fileName = path;
-        
+
+    }
+    if (!QFile(d->fileName).exists()) {
+        QString msg = QString("File %1 does not exist! ").arg(d->fileName);
+        dtkNotify(msg,30000);
     }
 }
 

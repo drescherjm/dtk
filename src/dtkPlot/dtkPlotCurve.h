@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 15:17:45 2013 (+0200)
+ * Last-Updated: Fri Jul  5 11:17:56 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 61
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -51,10 +51,7 @@ public:
     QString name(void) const;
     QColor color(void) const;
 
-    qreal minX(void) const;
-    qreal maxX(void) const;
-    qreal minY(void) const;
-    qreal maxY(void) const;
+    QRectF boundingRect(void) const;
 
 public:
     void setData(const QVector<QPointF>& data);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 14:06:33 2013 (+0200)
+ * Last-Updated: Fri Jul  5 11:15:15 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 87
+ *     Update #: 88
  */
 
 /* Commentary: 
@@ -61,16 +61,6 @@ dtkPlotViewGrid::~dtkPlotViewGrid(void)
     delete d;
 
     d = NULL;
-}
-
-void dtkPlotViewGrid::activate(void)
-{
-    d->setVisible(true);
-}
-
-void dtkPlotViewGrid::deactivate(void)
-{
-    d->setVisible(false);
 }
 
 QColor dtkPlotViewGrid::color(void) const

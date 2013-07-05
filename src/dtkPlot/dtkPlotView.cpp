@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  4 09:53:54 2013 (+0200)
+ * Last-Updated: Fri Jul  5 11:14:49 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 422
+ *     Update #: 438
  */
 
 /* Commentary: 
@@ -145,19 +145,18 @@ void dtkPlotView::activatePanning(void)
 
 void dtkPlotView::updateAxes()
 {
-    qreal xmin = DBL_MAX;
-    qreal xmax = DBL_MIN;
-    qreal ymin = DBL_MAX;
-    qreal ymax = DBL_MIN;
+    QRectF rect;
 
     foreach(dtkPlotCurve *curve, d->curves) {
       if (((QwtPlotCurve *)(curve->d))->isVisible()) {
-        xmin = qMin(xmin, curve->minX());
-        xmax = qMax(xmax, curve->maxX());
-	ymin = qMin(ymin, curve->minY());
-	ymax = qMax(ymax, curve->maxY());
+          rect = rect.united(curve->boundingRect());
       }
     }
+
+    qreal xmin = rect.left();
+    qreal xmax = rect.right();
+    qreal ymin = rect.top();
+    qreal ymax = rect.bottom();
 
     if (xmin < xmax) {
         this->setAxisScaleX(xmin, xmax);
@@ -167,7 +166,7 @@ void dtkPlotView::updateAxes()
     d->updateAxes();
 
     if(d->zoomer)
-        d->zoomer->updateBase(QRectF(xmin, xmax, ymin, ymax));
+        d->zoomer->updateBase(rect);
 
     this->update();
 }
@@ -253,17 +252,15 @@ void dtkPlotView::activateGrid(void)
         d->grid->setColor(d->grid_color);
     }
 
-    d->grid->activate();
-
     this->update();
 }
 
 void dtkPlotView::deactivateGrid(void)
 {
-    if(!d->grid)
-        d->grid = new dtkPlotViewGrid(this);
-
-    d->grid->deactivate();
+    if(d->grid) {
+        delete d->grid;
+        d->grid = NULL;
+    }
 
     this->update();
 }

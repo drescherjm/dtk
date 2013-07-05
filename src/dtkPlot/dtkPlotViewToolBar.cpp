@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 10:07:43 2013 (+0200)
+ * Last-Updated: Fri Jul  5 11:08:29 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 357
+ *     Update #: 379
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@
 class dtkPlotViewToolBarPrivate
 {
 public:
+    QAction *defaultViewAction;
     QAction *pickingAction;
     QAction *zoomAction;
     QAction *gridAction;
@@ -41,6 +42,12 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new 
     // View
 
     d->view = parent;
+
+   // Default view
+
+    d->defaultViewAction = new QAction("Default view",this);
+    d->defaultViewAction->setToolTip("Show default view");
+    d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkAxis.png"));
 
     // Grid
 
@@ -83,6 +90,7 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new 
     // Actions
 
     this->addWidget(new dtkSpacer);
+    this->addAction(d->defaultViewAction);
     this->addAction(d->zoomAction);
     this->addAction(d->gridAction);
     this->addAction(d->pickingAction);
@@ -92,6 +100,7 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new 
 
     // Behaviour
 
+    connect(d->defaultViewAction, SIGNAL(triggered(bool)), this, SLOT(onDefaultView()));
     connect(d->zoomAction, SIGNAL(triggered(bool)), this, SLOT(onZoomActivated(bool)));
     connect(d->gridAction, SIGNAL(triggered(bool)), this, SLOT(onGridActivated(bool)));
     connect(d->pickingAction, SIGNAL(triggered(bool)), this, SLOT(onPickingActivated(bool)));
@@ -113,6 +122,11 @@ dtkPlotViewToolBar::~dtkPlotViewToolBar(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkPlotViewToolBar::onDefaultView(void)
+{
+    d->view->updateAxes();
 }
 
 void dtkPlotViewToolBar::onPickingActivated(bool value)

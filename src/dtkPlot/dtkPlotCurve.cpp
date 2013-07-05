@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  4 10:42:50 2013 (+0200)
+ * Last-Updated: Fri Jul  5 11:17:48 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 198
+ *     Update #: 205
  */
 
 /* Commentary: 
@@ -33,11 +33,6 @@ class dtkPlotCurvePrivateData : public QwtPointSeriesData
 public:
     void append(const QPointF& point);
 
-    qreal xmin(void) const;
-    qreal xmax(void) const;
-    qreal ymin(void) const;
-    qreal ymax(void) const;
-
     void setData(const QVector<QPointF>& data);
 
     QRectF boundingRect(void) const;
@@ -49,26 +44,6 @@ public:
 void dtkPlotCurvePrivateData::append(const QPointF& data)
 {
     this->d_samples << data;
-}
-
-qreal dtkPlotCurvePrivateData::xmin(void) const
-{
-    return boundingRect().left();
-}
-
-qreal dtkPlotCurvePrivateData::xmax(void) const
-{
-    return boundingRect().right();
-}
-
-qreal dtkPlotCurvePrivateData::ymin(void) const
-{
-    return boundingRect().top();
-}
-
-qreal dtkPlotCurvePrivateData::ymax(void) const
-{
-    return boundingRect().bottom();
 }
 
 QRectF dtkPlotCurvePrivateData::boundingRect(void) const
@@ -182,24 +157,9 @@ QColor dtkPlotCurve::color(void) const
     return d->pen().color();
 }
 
-qreal dtkPlotCurve::minX(void) const
+QRectF dtkPlotCurve::boundingRect(void) const
 {
-    return d->data.xmin();
-}
-
-qreal dtkPlotCurve::maxX(void) const
-{
-    return d->data.xmax();
-}
-
-qreal dtkPlotCurve::minY(void) const
-{
-    return d->data.ymin();
-}
-
-qreal dtkPlotCurve::maxY(void) const
-{
-    return d->data.ymax();
+    return d->boundingRect();
 }
 
 void dtkPlotCurve::setData(const QVector<QPointF>& data)

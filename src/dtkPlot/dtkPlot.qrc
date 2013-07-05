@@ -3,12 +3,12 @@
 
     <file>dtkPlotView.qss</file>
 
+    <file>pixmaps/dtkAxis.png</file>
     <file>pixmaps/dtkZoom.png</file>
     <file>pixmaps/dtkGrid.png</file>
     <file>pixmaps/dtkPicking.png</file>
     <file>pixmaps/dtkLegend.png</file>
     <file>pixmaps/dtkExport.png</file>
-    <file>pixmaps/dtkFullscreen.png</file>
 
   </qresource>
 </RCC>

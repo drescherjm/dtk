@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 24 12:37:57 2013 (+0200)
+ * Last-Updated: Fri Jul  5 11:15:05 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 41
+ *     Update #: 42
  */
 
 /* Commentary: 
@@ -36,10 +36,6 @@ class DTKPLOT_EXPORT dtkPlotViewGrid : public QObject
 public:
      dtkPlotViewGrid(dtkPlotView *parent);
     ~dtkPlotViewGrid(void);
-
-public:
-    void   activate(void);
-    void deactivate(void);
 
 public:
     QColor color(void) const;

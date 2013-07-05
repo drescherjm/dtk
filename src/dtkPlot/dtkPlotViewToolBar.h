@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 20 13:17:31 2013 (+0200)
+ * Last-Updated: Thu Jul  4 17:03:33 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 71
+ *     Update #: 76
  */
 
 /* Commentary: 
@@ -42,6 +42,7 @@ signals:
     void settingsClicked(bool value);
 
 protected slots:
+    void onDefaultView(void);
     void onExport(void);
     void onGridActivated(bool value);
     void onLegendActivated(bool value);

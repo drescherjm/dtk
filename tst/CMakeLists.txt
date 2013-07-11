@@ -11,7 +11,6 @@
 
 add_subdirectory(dtkLog)
 add_subdirectory(dtkComposer)
-add_subdirectory(dtkComposerQuick)
 add_subdirectory(dtkWidgets)
 
 if(Qt53D_FOUND)

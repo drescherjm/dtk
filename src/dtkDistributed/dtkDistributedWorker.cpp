@@ -159,10 +159,8 @@ dtkDistributedCommunicator *dtkDistributedWorker::communicator(void)
 
 void dtkDistributedWorker::run(void)
 {
-    qDebug() << "thread " << d->wid << "barrier";
+    d->comm->setWid(d->work->wid());
     d->comm->barrier();
-    qDebug() << "thread " << d->wid << "barrier released, run";
     d->work->run();
-    qDebug() << "thread " << d->wid << "run finished, barrier";
     d->comm->barrier();
 }

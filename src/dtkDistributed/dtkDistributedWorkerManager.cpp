@@ -74,8 +74,7 @@ void dtkDistributedWorkerManager::spawn(void)
     d->worker.setCommunicator(d->comm);
 
     QStringList hosts = d->policy->hosts();
-
-    d->comm->spawn(hosts, hosts.count(), d->worker);
+    d->comm->spawn(hosts, d->policy->nthreads() * hosts.count() , d->worker);
     d->spawned = true;
 }
 

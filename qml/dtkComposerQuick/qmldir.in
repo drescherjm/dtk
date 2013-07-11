@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Wed Apr 17 10:49:24 2013 (+0200)
 ## Version: 
-## Last-Updated: Wed Apr 17 10:51:36 2013 (+0200)
+## Last-Updated: Wed Apr 24 10:53:29 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 6
+##     Update #: 14
 ######################################################################
 ## 
 ### Change Log:
@@ -25,6 +25,3 @@ module dtkComposerQuick
 ## ###################################################################
 
 plugin dtkComposerQuick @CMAKE_BINARY_DIR@/lib
-
-# - dtkComposerQuickScene 1.0 - Quick3DScene
-# - dtkComposerQuickView  1.0 - Quick3DView

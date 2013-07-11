@@ -35,15 +35,20 @@ public:
 public:
     enum Type {
         MP,
-        MT
+        MT,
+        HYB
     };
 
 public:
     void addHost(QString host);
     void setType(dtkDistributedPolicy::Type);
+    void setNThreads(qlonglong nthreads);
 
 public:
-    QStringList hosts(void);
+    QStringList    hosts(void);
+    qlonglong   nthreads(void);
+
+public:
     dtkDistributedCommunicator *communicator(void);
 
 public:

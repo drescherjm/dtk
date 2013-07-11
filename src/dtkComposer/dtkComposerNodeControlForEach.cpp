@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov 15 15:00:57 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 194
+ * Last-Updated: jeu. juil. 11 12:18:14 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 197
  */
 
 /* Commentary: 
@@ -133,6 +133,10 @@ void dtkComposerNodeControlForEach::setInputs(void)
         return;
 
     d->container = d->header_rcv.constContainer();
+
+    if (!d->container)
+        return;
+
     d->counter = 0;
     d->size = d->container->count();
 

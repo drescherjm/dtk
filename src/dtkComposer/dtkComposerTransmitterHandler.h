@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:22:41 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 15:36:30 2013 (+0100)
+ * Last-Updated: Thu Jul 11 10:03:04 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 107
+ *     Update #: 108
  */
 
 /* Change Log:
@@ -63,7 +63,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterHandler dtkCoreObject specialization
+// dtkComposerTransmitterHandler specialization for dtkCoreObject
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class dtkComposerTransmitterHandlerHelper<T *, true>

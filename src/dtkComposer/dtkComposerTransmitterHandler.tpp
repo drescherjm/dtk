@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Fri Mar 29 15:36:48 2013 (+0100)
+ * Last-Updated: Thu Jul 11 10:03:18 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 272
+ *     Update #: 273
  */
 
 /* Change Log:
@@ -127,7 +127,7 @@ template <typename T, bool U> T *dtkComposerTransmitterHandlerHelper<T *, U>::co
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterCopier dtkCoreObject implementation
+// dtkComposerTransmitterCopier implementation for dtkCoreObject
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> T *dtkComposerTransmitterHandlerHelper<T *, true>::copy(T *source, QVariant& target)

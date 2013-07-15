@@ -12,4 +12,4 @@
  * 
  */
 
-#define dtkComposerQuickImportPath QString("/Users/jwintz/Development/dtk/qml")
+#define dtkComposerQuickImportPath QString("/home/tkloczko/Development/dtk-1_0_0/qml")

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 15:29:10 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Jul 11 10:03:18 2013 (+0200)
+ * Last-Updated: Thu Jul 11 12:36:48 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 273
+ *     Update #: 274
  */
 
 /* Change Log:
@@ -137,7 +137,7 @@ template <typename T> T *dtkComposerTransmitterHandlerHelper<T *, true>::copy(T 
 
     T *copy = target.value<T*>();;
     if (!copy) {
-	copy = source->clone();
+	copy = reinterpret_cast<T *>(source->clone());
 	target.setValue(copy);
     } else {
 	*copy = *source;

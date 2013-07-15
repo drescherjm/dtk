@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:29:13 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr 17 10:25:46 2013 (+0200)
+## Last-Updated: Mon Jul 15 16:28:08 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 80
+##     Update #: 83
 ######################################################################
 ## 
 ### Change Log:
@@ -18,6 +18,7 @@ add_subdirectory(dtkComposer)
 add_subdirectory(dtkComposerQuick)
 add_subdirectory(dtkDistributed)
 add_subdirectory(dtkLog)
+add_subdirectory(dtkMath)
 add_subdirectory(dtkTest)
 add_subdirectory(dtkWidgets)
 
@@ -32,6 +33,7 @@ set(DTK_TARGETS ${DTK_TARGETS} dtkCore)
 set(DTK_TARGETS ${DTK_TARGETS} dtkComposer)
 set(DTK_TARGETS ${DTK_TARGETS} dtkComposerQuick)
 set(DTK_TARGETS ${DTK_TARGETS} dtkDistributed)
+set(DTK_TARGETS ${DTK_TARGETS} dtkMath)
 set(DTK_TARGETS ${DTK_TARGETS} dtkWidgets)
 
 if(Qt53D_FOUND)

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Tue Feb  5 10:26:22 2013 (+0100)
 ## Version: 
-## Last-Updated: Mon Mar 25 11:33:25 2013 (+0100)
+## Last-Updated: Mon Jul 15 16:23:11 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 22
+##     Update #: 23
 ######################################################################
 ## 
 ### Change Log:
@@ -25,6 +25,7 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_SOURCE_DIR@/src/dtkLog"
   "@CMAKE_SOURCE_DIR@/src/dtkCore"
   "@CMAKE_SOURCE_DIR@/src/dtkDistributed"
+  "@CMAKE_SOURCE_DIR@/src/dtkMath"
   "@CMAKE_SOURCE_DIR@/src/dtkTest")
 
 if(Qt53D_FOUND)

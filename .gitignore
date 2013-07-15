@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 11:31:43 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr 17 10:51:02 2013 (+0200)
+## Last-Updated: Mon Jul 15 16:41:39 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 11
+##     Update #: 13
 ######################################################################
 ## 
 ### Change Log:
@@ -22,8 +22,9 @@ src/dtk/dtkConfig.h
 
 src/dtk3DQuick/dtk3DQuickConfig
 src/dtk3DQuick/dtk3DQuickConfig.h
-src/dtk3DQuick/dtkComposerQuickConfig
-src/dtk3DQuick/dtkComposerQuickConfig.h
+
+src/dtk3DComposer/dtkComposerQuickConfig
+src/dtk3DComposer/dtkComposerQuickConfig.h
 
 qml/*/qmldir
 

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Jul 15 15:55:43 2013 (+0200)
 ## Version: 
-## Last-Updated: Mon Jul 15 16:17:14 2013 (+0200)
+## Last-Updated: Mon Jul 15 17:37:44 2013 (+0200)
 ##           By: Julien Wintz
-##     Update #: 27
+##     Update #: 34
 ######################################################################
 ## 
 ### Change Log:
@@ -22,7 +22,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkMath
   dtkMath.h
   dtkMatrix
-  dtkMatrix.h)
+  dtkMatrix.h
+  dtkMatrix.tpp)
 
 set(${PROJECT_NAME}_SOURCES
   dtkMath.cpp

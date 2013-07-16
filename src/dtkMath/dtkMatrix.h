@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 15:58:33 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul 16 14:50:59 2013 (+0200)
+ * Last-Updated: Tue Jul 16 15:02:52 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 206
+ *     Update #: 212
  */
 
 /* Change Log:
@@ -13,6 +13,8 @@
  */
 
 #pragma once
+
+#include <dtkCore>
 
 #include "dtkMatrix_p.h"
 
@@ -28,6 +30,7 @@ public:
 
 public:
     virtual QVariant at(qulonglong i, qulonglong j) const = 0;
+    virtual void setAt(qulonglong i, qulonglong j, QVariant value) = 0;
 
 public:
     virtual void allocate(qulonglong r, qulonglong c) = 0;
@@ -36,7 +39,7 @@ public:
 QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
 QDebug operator<<(QDebug debug, const dtkMatrix& matrix);
 
-DTK_DECLARE_OBJECT(dtkMatrix *)
+DTK_DECLARE_OBJECT(dtkMatrix*)
 DTK_DECLARE_PLUGIN(dtkMatrix)
 DTK_DECLARE_PLUGIN_FACTORY(dtkMatrix)
 DTK_DECLARE_PLUGIN_MANAGER(dtkMatrix)

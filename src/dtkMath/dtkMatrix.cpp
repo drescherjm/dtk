@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 16:04:38 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul 16 12:44:48 2013 (+0200)
+ * Last-Updated: Tue Jul 16 18:08:04 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 95
+ *     Update #: 158
  */
 
 /* Change Log:
@@ -13,6 +13,56 @@
  */
 
 #include "dtkMatrix.h"
+
+dtkMatrix& dtkMatrix::operator=(dtkMatrix& other)
+{
+    return cln(other);
+}
+
+dtkMatrix& dtkMatrix::operator+=(dtkMatrix& other)
+{
+    return sum(other);
+}
+
+dtkMatrix& dtkMatrix::operator-=(dtkMatrix& other)
+{
+    return sub(other);
+}
+
+dtkMatrix& dtkMatrix::operator*=(dtkMatrix& other)
+{
+    return mul(other);
+}
+
+dtkMatrix& dtkMatrix::operator+(dtkMatrix& other)
+{
+    return add(other);
+}
+
+dtkMatrix& dtkMatrix::operator-(dtkMatrix& other)
+{
+    return rem(other);
+}
+
+dtkMatrix& dtkMatrix::operator*(dtkMatrix& other)
+{
+    return scl(other);
+}
+
+// dtkMatrix& operator+(dtkMatrix& lhs, dtkMatrix& rhs)
+// {
+//     return lhs.add(rhs);
+// }
+
+// dtkMatrix& operator-(dtkMatrix& lhs, dtkMatrix& rhs)
+// {
+//     return lhs.rem(rhs);
+// }
+
+// dtkMatrix& operator*(dtkMatrix& lhs, dtkMatrix& rhs)
+// {
+//     return lhs.scl(rhs);
+// }
 
 QDebug operator<<(QDebug debug, const dtkMatrix *matrix)
 {

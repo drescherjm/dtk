@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Tue Jul 16 11:18:48 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul 16 15:07:19 2013 (+0200)
+ * Last-Updated: Tue Jul 16 18:14:00 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 23
+ *     Update #: 27
  */
 
 /* Change Log:
@@ -42,5 +42,5 @@ template <typename T> void dtkMatrixPrivate<T>::allocate(qulonglong c, qulonglon
 {
     this->buffer = new T[r*c];
     this->r_count = r;
-    this->c_count = c;    
+    this->c_count = c;
 }

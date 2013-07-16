@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 17:36:33 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul 16 15:05:55 2013 (+0200)
+ * Last-Updated: Tue Jul 16 15:18:00 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 11
+ *     Update #: 13
  */
 
 /* Change Log:
@@ -28,7 +28,7 @@ public:
     void setAt(qulonglong i, qulonglong j, T value);
 
 public:
-    void allocate(qulonglong c, qulonglong r);
+    void allocate(qulonglong r, qulonglong c);
 
 public:
     T *buffer;

@@ -33,6 +33,7 @@ template <class T = double> class dtkVector : public dtkMatrix<T>
 public:
              dtkVector(void): dtkMatrix<T>() {};
              dtkVector(unsigned crowInit): dtkMatrix<T>(crowInit, 1) {};
+             dtkVector(unsigned crowInit,T* buffer): dtkMatrix<T>(crowInit, 1,buffer) {};
              dtkVector(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
              dtkVector(const dtkVector& vec): dtkMatrix<T>(vec) {};
              dtkVector(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
@@ -44,6 +45,7 @@ public:
 
 public:
     void allocate(unsigned crowInit) { dtkMatrix<T>::allocate(crowInit, 1); }
+    void allocate(unsigned crowInit,T* buffer) { dtkMatrix<T>::allocate(crowInit, 1,buffer); }
 
     void mapInto(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
     void mapInto(const dtkVector&, unsigned, unsigned);

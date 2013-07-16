@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 16:04:38 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Jul 15 17:41:41 2013 (+0200)
+ * Last-Updated: Tue Jul 16 12:44:48 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 70
+ *     Update #: 95
  */
 
 /* Change Log:
@@ -13,30 +13,24 @@
  */
 
 #include "dtkMatrix.h"
-#include "dtkMatrix_p.h"
 
-dtkMatrix::dtkMatrix(QObject *parent) : QObject(), d(new dtkMatrixPrivate)
+QDebug operator<<(QDebug debug, const dtkMatrix *matrix)
 {
+    debug << *matrix;
 
+    return debug;
 }
 
-void dtkMatrix::setType(Type type)
+QDebug operator<<(QDebug debug, const dtkMatrix& matrix)
 {
-    switch(type) {
-    case Integer:
-	d->buffer = new int[10];
-	for(int i = 0; i < 10; i++)
-	    static_cast<int *>(d->buffer)[i] = i;
-	break;
-    case Double:
-	d->buffer = new double[10];
-	for(int i = 0; i < 10; i++)
-	    static_cast<double *>(d->buffer)[i] = i;
-	break;
+    debug.nospace() << "\n";
+    for(qulonglong i = 0; i < matrix.rowCount(); i++) {
+	debug.nospace() << "(";
+	for(qulonglong j = 0; j < matrix.colCount(); j++) {
+	    debug.nospace() << " " << matrix.at(i, j);
+	}
+	debug.nospace() << ")" << "\n";
     }
-}
 
-dtkMatrix::~dtkMatrix(void)
-{
-    delete d;
+    return debug.space();
 }

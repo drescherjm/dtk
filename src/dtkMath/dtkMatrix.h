@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 15:58:33 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul 16 10:31:23 2013 (+0200)
+ * Last-Updated: Tue Jul 16 14:50:59 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 82
+ *     Update #: 206
  */
 
 /* Change Log:
@@ -14,36 +14,29 @@
 
 #pragma once
 
-#include <dtkCore>
-
-class dtkMatrixPrivate;
+#include "dtkMatrix_p.h"
 
 class dtkMatrix : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(qulonglong colCount READ colCount)
+    Q_PROPERTY(qulonglong rowCount READ rowCount)
 
 public:
-    enum Type {
-	Integer,
-	Double
-    };
-    
-public:
-             dtkMatrix(QObject *parent = 0);
-    virtual ~dtkMatrix(void);
-
-    void setType(Type type);
+    virtual qulonglong colCount(void) const = 0;
+    virtual qulonglong rowCount(void) const = 0;
 
 public:
-    template <typename T> T at(int i);
+    virtual QVariant at(qulonglong i, qulonglong j) const = 0;
 
-private:
-    dtkMatrixPrivate *d;
+public:
+    virtual void allocate(qulonglong r, qulonglong c) = 0;
 };
+
+QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
+QDebug operator<<(QDebug debug, const dtkMatrix& matrix);
 
 DTK_DECLARE_OBJECT(dtkMatrix *)
 DTK_DECLARE_PLUGIN(dtkMatrix)
 DTK_DECLARE_PLUGIN_FACTORY(dtkMatrix)
 DTK_DECLARE_PLUGIN_MANAGER(dtkMatrix)
-
-#include "dtkMatrix.tpp"

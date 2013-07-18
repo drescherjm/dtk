@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 16:04:38 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Jul 18 16:17:53 2013 (+0200)
+ * Last-Updated: Thu Jul 18 16:34:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 353
+ *     Update #: 355
  */
 
 /* Change Log:
@@ -19,76 +19,9 @@ dtkMatrix::dtkMatrix(void)
     this->dirty = false;
 }
 
-dtkMatrix::dtkMatrix(const dtkMatrix& other)
-{
-    this->dirty = false;
-    this->cpy(other);
-}
-
 dtkMatrix::~dtkMatrix(void)
 {
 
-}
-
-qulonglong dtkMatrix::colCount(void) const
-{
-    return 0;
-}
-
-qulonglong dtkMatrix::rowCount(void) const
-{
-    return 0;
-}
-
-QVariant dtkMatrix::at(qulonglong i, qulonglong j) const
-{
-    Q_UNUSED(i);
-    Q_UNUSED(j);
-
-    return QVariant();
-}
-
-void dtkMatrix::setAt(qulonglong i, qulonglong j, QVariant value)
-{
-    Q_UNUSED(i);
-    Q_UNUSED(j);
-    Q_UNUSED(value);    
-}
-
-void dtkMatrix::cpy(const dtkMatrix& other)
-{
-    Q_UNUSED(other);
-}
-
-dtkMatrix& dtkMatrix::cln(void)
-{
-    return *this;
-}
-
-dtkMatrix& dtkMatrix::sum(const dtkMatrix& other)
-{
-    return (*this);
-}
-
-dtkMatrix& dtkMatrix::sub(const dtkMatrix& other)
-{
-    return (*this);
-}
-
-dtkMatrix& dtkMatrix::mul(const dtkMatrix& other)
-{
-    return (*this);
-}
-
-void dtkMatrix::allocate(qulonglong r, qulonglong c)
-{
-    Q_UNUSED(r);
-    Q_UNUSED(c);
-}
-
-void *dtkMatrix::buffer(void)
-{
-    return NULL;
 }
 
 dtkMatrix& dtkMatrix::operator=(const dtkMatrix& other)

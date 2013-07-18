@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 15:58:33 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Jul 18 16:04:57 2013 (+0200)
+ * Last-Updated: Thu Jul 18 16:34:59 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 325
+ *     Update #: 335
  */
 
 /* Change Log:
@@ -26,29 +26,28 @@ class dtkMatrix : public QObject
 
 public:
              dtkMatrix(void);
-             dtkMatrix(const dtkMatrix& other);
     virtual ~dtkMatrix(void);
 
 public:
-    virtual qulonglong colCount(void) const;
-    virtual qulonglong rowCount(void) const;
+    virtual qulonglong colCount(void) const = 0;
+    virtual qulonglong rowCount(void) const = 0;
 
 public:
-    virtual QVariant at(qulonglong i, qulonglong j) const;
-    virtual void setAt(qulonglong i, qulonglong j, QVariant value);
+    virtual QVariant at(qulonglong i, qulonglong j) const = 0;
+    virtual void setAt(qulonglong i, qulonglong j, QVariant value) = 0;
 
 public:
-    virtual void       cpy(const dtkMatrix& other);
-    virtual dtkMatrix& cln(void);
-    virtual dtkMatrix& sum(const dtkMatrix& other);
-    virtual dtkMatrix& sub(const dtkMatrix& other);
-    virtual dtkMatrix& mul(const dtkMatrix& other);
+    virtual void       cpy(const dtkMatrix& other) = 0;
+    virtual dtkMatrix& cln(void) = 0;
+    virtual dtkMatrix& sum(const dtkMatrix& other) = 0;
+    virtual dtkMatrix& sub(const dtkMatrix& other) = 0;
+    virtual dtkMatrix& mul(const dtkMatrix& other) = 0;
 
 public:
-    virtual void allocate(qulonglong r, qulonglong c);
+    virtual void allocate(qulonglong r, qulonglong c) = 0;
 
 public:
-    virtual void *buffer(void);
+    virtual void *buffer(void) = 0;
 
 public:
     dtkMatrix& operator =(const dtkMatrix& other);

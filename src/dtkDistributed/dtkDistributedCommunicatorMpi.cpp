@@ -263,7 +263,7 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
     QByteArray *array_tmp = data->serialize();
     if (array_tmp->count() > 0 ) {
         array.append(*array_tmp);
-        dtkDistributedCommunicator::send(array,target,tag);
+        dtkDistributedCommunicatorMpi::send(array,target,tag);
     } else {
         dtkError() <<"serialization failed";
     }
@@ -273,7 +273,7 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
 {
     QByteArray array;
 
-    dtkDistributedCommunicator::receive(array, source, tag);
+    dtkDistributedCommunicatorMpi::receive(array, source, tag);
 
     if( array.count() > 0) {
         QDataStream stream(&array, QIODevice::ReadOnly);

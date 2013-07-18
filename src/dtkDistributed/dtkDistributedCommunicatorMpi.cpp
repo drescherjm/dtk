@@ -256,58 +256,43 @@ void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType da
 void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, int tag)
 {
 
-    QString type = data->identifier();
-    qint64  typeLength = type.length()+1;
-    qint64  s=1;
-    dtkDistributedCommunicator::send(&typeLength,s,target,tag);
-
-    QByteArray typeArray = type.toAscii();
-    char *typeChar = typeArray.data();
-    dtkDistributedCommunicator::send(typeChar,typeLength,target,tag);
-
-    QByteArray *array = data->serialize();
-    if (!array) {
-        dtkError() <<"serialization failed";
+    QByteArray array;
+    QDataStream stream(&array, QIODevice::WriteOnly);
+    stream << data->identifier();
+// FIXME: handle container
+    QByteArray *array_tmp = data->serialize();
+    if (array_tmp->count() > 0 ) {
+        array.append(*array_tmp);
+        dtkDistributedCommunicator::send(array,target,tag);
     } else {
-        qint64   arrayLength = array->length();
-        dtkDistributedCommunicator::send(&arrayLength,1,target,tag);
-        dtkDistributedCommunicator::send(array->data(),arrayLength,target,tag);
+        dtkError() <<"serialization failed";
     }
 }
 
 void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 source, int tag)
 {
-    qint64   typeLength;
-    qint64   arrayLength;
+    QByteArray array;
 
-    dtkDistributedCommunicator::receive(&typeLength,1,source,tag);
-    char     type[typeLength];
+    dtkDistributedCommunicator::receive(array, source, tag);
 
-    dtkDistributedCommunicator::receive(type, typeLength, source,tag);
-    dtkDistributedCommunicator::receive(&arrayLength,1,source,tag);
+    if( array.count() > 0) {
+        QDataStream stream(&array, QIODevice::ReadOnly);
+        QString typeName ;
+        stream >> typeName;
 
-    char     rawArray[arrayLength];
-    dtkDistributedCommunicator::receive(rawArray, arrayLength, source,tag);
+        qlonglong  header_length=sizeof(int)+2*typeName.size();
 
-    if(!data) {
-        data = dtkAbstractDataFactory::instance()->create(QString(type));
+        data = dtkAbstractDataFactory::instance()->create(typeName);
         if (!data) {
-            dtkWarn() << "Can't instantiate object of type" << QString(type);
+            dtkWarn() << "Can't instantiate object of type" << QString(typeName);
             return;
         }
-    } else {
-        if(data->identifier() != QString(type)) {
-            dtkWarn() << DTK_PRETTY_FUNCTION << "Warning, type mismatch";
+
+        if (!data->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
+            dtkError() << "Warning: deserialization failed";
+        } else {
+            dtkDebug() << "deserialization succesful";
         }
-    }
-
-    QByteArray array = QByteArray::fromRawData(rawArray, arrayLength);
-    // FIXME: array is not null-terminated, does it matter ??
-
-    data = data->deserialize(array);
-    
-    if (!data) {
-        dtkError() << "Warning: deserialization failed";
     }
 }
 

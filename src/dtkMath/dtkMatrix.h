@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 15:58:33 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul 16 18:07:51 2013 (+0200)
+ * Last-Updated: Thu Jul 18 16:04:57 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 277
+ *     Update #: 325
  */
 
 /* Change Log:
@@ -25,41 +25,49 @@ class dtkMatrix : public QObject
     Q_PROPERTY(qulonglong rowCount READ rowCount)
 
 public:
-    virtual qulonglong colCount(void) const = 0;
-    virtual qulonglong rowCount(void) const = 0;
+             dtkMatrix(void);
+             dtkMatrix(const dtkMatrix& other);
+    virtual ~dtkMatrix(void);
 
 public:
-    virtual QVariant at(qulonglong i, qulonglong j) const = 0;
-    virtual void setAt(qulonglong i, qulonglong j, QVariant value) = 0;
+    virtual qulonglong colCount(void) const;
+    virtual qulonglong rowCount(void) const;
 
 public:
-    virtual dtkMatrix& cln(dtkMatrix& other) = 0;
-    virtual dtkMatrix& sum(dtkMatrix& other) = 0;
-    virtual dtkMatrix& sub(dtkMatrix& other) = 0;
-    virtual dtkMatrix& mul(dtkMatrix& other) = 0;
-    virtual dtkMatrix& add(dtkMatrix& other) = 0;
-    virtual dtkMatrix& rem(dtkMatrix& other) = 0;
-    virtual dtkMatrix& scl(dtkMatrix& other) = 0;
+    virtual QVariant at(qulonglong i, qulonglong j) const;
+    virtual void setAt(qulonglong i, qulonglong j, QVariant value);
 
 public:
-    virtual void allocate(qulonglong r, qulonglong c) = 0;
+    virtual void       cpy(const dtkMatrix& other);
+    virtual dtkMatrix& cln(void);
+    virtual dtkMatrix& sum(const dtkMatrix& other);
+    virtual dtkMatrix& sub(const dtkMatrix& other);
+    virtual dtkMatrix& mul(const dtkMatrix& other);
 
 public:
-    virtual void *buffer(void) = 0;
+    virtual void allocate(qulonglong r, qulonglong c);
 
 public:
-    dtkMatrix& operator =(dtkMatrix& other);
-    dtkMatrix& operator +(dtkMatrix& other);
-    dtkMatrix& operator -(dtkMatrix& other);
-    dtkMatrix& operator *(dtkMatrix& other);
-    dtkMatrix& operator+=(dtkMatrix& other);
-    dtkMatrix& operator-=(dtkMatrix& other);
-    dtkMatrix& operator*=(dtkMatrix& other);
+    virtual void *buffer(void);
+
+public:
+    dtkMatrix& operator =(const dtkMatrix& other);
+    dtkMatrix& operator+=(const dtkMatrix& other);
+    dtkMatrix& operator-=(const dtkMatrix& other);
+    dtkMatrix& operator*=(const dtkMatrix& other);
+
+public:
+    friend dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);
+    friend dtkMatrix& operator-(const dtkMatrix& lhs, const dtkMatrix& rhs);
+    friend dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
+
+public:
+    bool dirty;
 };
 
-// dtkMatrix& operator+(dtkMatrix& lhs, dtkMatrix& rhs);
-// dtkMatrix& operator-(dtkMatrix& lhs, dtkMatrix& rhs);
-// dtkMatrix& operator*(dtkMatrix& lhs, dtkMatrix& rhs);
+dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);
+dtkMatrix& operator-(const dtkMatrix& lhs, const dtkMatrix& rhs);
+dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
 
 QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
 QDebug operator<<(QDebug debug, const dtkMatrix& matrix);

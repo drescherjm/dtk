@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Oct 23 11:20:47 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 44
+ * Last-Updated: Mon Jul 22 14:38:38 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@ template <class T = double> class dtkVector : public dtkMatrix<T>
 public:
              dtkVector(void): dtkMatrix<T>() {};
              dtkVector(unsigned crowInit): dtkMatrix<T>(crowInit, 1) {};
-             dtkVector(unsigned crowInit,T* buffer): dtkMatrix<T>(crowInit, 1,buffer) {};
+             dtkVector(T *array, unsigned crowInit): dtkMatrix<T>(array, crowInit, 1) {};
              dtkVector(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
              dtkVector(const dtkVector& vec): dtkMatrix<T>(vec) {};
              dtkVector(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
@@ -46,6 +46,8 @@ public:
 public:
     void allocate(unsigned crowInit) { dtkMatrix<T>::allocate(crowInit, 1); }
     void allocate(unsigned crowInit,T* buffer) { dtkMatrix<T>::allocate(crowInit, 1,buffer); }
+
+    void fromRawData(T *array, unsigned crowInit) { dtkMatrix<T>::fromRawData(array, crowInit, 1); }
 
     void mapInto(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
     void mapInto(const dtkVector&, unsigned, unsigned);

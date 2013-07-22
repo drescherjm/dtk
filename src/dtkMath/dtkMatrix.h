@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Mar 19 10:26:13 2013 (+0100)
+ * Last-Updated: Tue Jun 18 11:22:16 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 199
+ *     Update #: 207
  */
 
 /* Commentary: 
@@ -63,7 +63,7 @@ public:
 public:
              dtkMatrix(void);
              dtkMatrix(unsigned, unsigned);
-             dtkMatrix(unsigned, unsigned, T *);
+             dtkMatrix(T *, unsigned, unsigned);
              dtkMatrix(const dtkMatrix &);
              dtkMatrix(const dtkMatrix &, unsigned, unsigned, unsigned, unsigned);
     virtual ~dtkMatrix(void);
@@ -77,9 +77,9 @@ public:
 
 public:
     void   allocate(unsigned, unsigned);
-    void   allocate(unsigned, unsigned, T *);
     void deallocate(void);
 
+    void fromRawData(T *, unsigned, unsigned);
     void mapInto(const dtkMatrix&, unsigned, unsigned, unsigned, unsigned);
 
     Q_DECL_DEPRECATED int getStatus(void) const;

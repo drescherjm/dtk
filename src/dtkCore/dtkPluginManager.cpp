@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  6 12:49:57 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 282
+ * Last-Updated: Mon Jul 22 14:44:37 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 288
  */
 
 /* Commentary:
@@ -321,7 +321,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
         error += path;
         error += " - ";
         error += loader->errorString();
-        if(d->verboseLoading) dtkDebug() << error;
+        if(d->verboseLoading) { dtkDebug() << error; }
         emit loadError(error);
         delete loader;
         return;
@@ -332,7 +332,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
     if(!plugin) {
         QString error = "Unable to retrieve ";
         error += path;
-        if(d->verboseLoading) dtkDebug() << error;
+        if(d->verboseLoading) { dtkDebug() << error; }
         emit loadError(error);
         return;
     }
@@ -341,14 +341,14 @@ void dtkPluginManager::loadPlugin(const QString& path)
         QString error = "Unable to initialize ";
         error += plugin->name();
         error += " plugin";
-        if(d->verboseLoading) dtkTrace() << error;
+        if(d->verboseLoading) { dtkTrace() << error; }
         emit loadError(error);
         return;
     }
 
     d->loaders.insert(path, loader);
 
-    if(d->verboseLoading) dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path;
+    if(d->verboseLoading) { dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path; }
 
     emit loaded(plugin->name());
 }
@@ -366,19 +366,19 @@ void dtkPluginManager::unloadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
 
     if(!plugin) {
-        if(d->verboseLoading) dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin";
+        if(d->verboseLoading) { dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin"; }
         return;
     }
 
     if(!plugin->uninitialize()) {
-        if(d->verboseLoading) dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin";
+        if(d->verboseLoading) { dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin"; }
         return;
     }
 
     QPluginLoader *loader = d->loaders.value(path);
 
     if(!loader->unload()) {
-        if(d->verboseLoading) dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString();
+        if(d->verboseLoading) { dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString(); }
         return;
     }
 

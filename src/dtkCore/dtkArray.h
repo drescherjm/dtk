@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 11:58:29 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Jul  2 10:54:41 2013 (+0200)
+ * Last-Updated: Thu Jul 11 10:14:54 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 143
+ *     Update #: 144
  */
 
 /* Commentary: 
@@ -106,7 +106,7 @@ public:
     dtkArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
 #endif
 
-    inline T *prealloc() 
+    inline T *prealloc(void) 
     { 
 	return reinterpret_cast<T *>(m_prealloc.data); 
     }
@@ -120,7 +120,7 @@ public:
 template <typename T> class dtkArrayData<T, 0>
 {
 public:
-    inline T *prealloc() { return 0; }
+    inline T *prealloc(void) { return 0; }
 
     inline bool isPrealloc(const T *start) const
     {

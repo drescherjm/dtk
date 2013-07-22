@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:00:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:15:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 54
+ * Last-Updated: Tue Jun 18 11:28:02 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 58
  */
 
 /* Commentary: 
@@ -32,7 +32,7 @@
 template <class T = double> class dtkQuaternion : public dtkVector<T>
 {
 public:	
-     dtkQuaternion(void): dtkVector<T>(4U) {};
+     dtkQuaternion(void) : dtkVector<T>(4U) {};
      dtkQuaternion(const dtkMatrix<T>& mat): dtkVector<T>(mat) {};
      dtkQuaternion(const dtkVector<T>& vec): dtkVector<T>(vec) {};
      dtkQuaternion(const dtkQuaternion& qtn): dtkVector<T>(qtn) {};

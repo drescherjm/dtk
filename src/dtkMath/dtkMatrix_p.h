@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 17:36:33 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Jul 18 16:28:36 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 14
+ * Last-Updated: Mon Jul 22 11:47:07 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 15
  */
 
 /* Change Log:

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Jul 15 15:58:33 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Jul 18 16:34:59 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 335
+ * Last-Updated: Mon Jul 22 12:17:04 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 341
  */
 
 /* Change Log:
@@ -54,6 +54,9 @@ public:
     dtkMatrix& operator+=(const dtkMatrix& other);
     dtkMatrix& operator-=(const dtkMatrix& other);
     dtkMatrix& operator*=(const dtkMatrix& other);
+
+protected:
+    dtkMatrix& lazyClone(void);
 
 public:
     friend dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);

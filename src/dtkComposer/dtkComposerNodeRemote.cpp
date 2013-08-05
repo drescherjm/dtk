@@ -221,7 +221,7 @@ void dtkComposerNodeRemote::begin(void)
             msg.reset(new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, 0, array.size(), "qvariant", array));
             d->server->socket()->sendRequest(msg.data());
         }
-        d->server->socket()->waitForBytesWritten();
+        d->server->socket()->fflush();
     } else if (d->communicator) {
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
@@ -316,7 +316,7 @@ void dtkComposerNodeRemote::end(void)
             }
         }
         if (d->communicator->rank() == 0) {
-            d->slave->communicator()->socket()->waitForBytesWritten();
+            d->slave->communicator()->socket()->fflush();
             d->slave->communicator()->socket()->moveToThread(QApplication::instance()->thread());
         }
     } else {

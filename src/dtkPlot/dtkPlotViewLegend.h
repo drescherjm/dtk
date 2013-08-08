@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 
-#include <qwt_global.h>
+//#include <qwt_global.h>
 
 class QwtPlotItem;
 class dtkPlotView;

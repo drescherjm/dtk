@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Aug  2 15:53:39 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 56
+ * Last-Updated: Thu Aug 29 12:20:56 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 
-//#include <qwt_global.h>
+#include <qwt_global.h>
 
 class QwtPlotItem;
 class dtkPlotView;

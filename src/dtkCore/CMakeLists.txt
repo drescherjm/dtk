@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Jul 22 14:39:35 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 359
+## Last-Updated: Thu Aug 29 15:02:12 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 363
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,6 +39,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractObject_p.h
   dtkAbstractProcess.h
   dtkAbstractProcess_p.h
+  dtkAbstractProcessController.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
   dtkAbstractView_p.h
@@ -75,6 +76,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkAbstractProcess.h
+  dtkAbstractProcessController.h
   dtkAbstractProcessFactory.h
   dtkAbstractView.h
   dtkAbstractViewAnimator.h
@@ -98,6 +100,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractObject.cpp
   dtkAbstractProcessFactory.cpp
   dtkAbstractProcess.cpp
+  dtkAbstractProcessController.cpp
   dtkAbstractViewFactory.cpp
   dtkAbstractView.cpp
   dtkAbstractViewAnimator.cpp

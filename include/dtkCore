@@ -17,6 +17,7 @@
 #include "../src/dtkCore/dtkAbstractObject_p.h"
 #include "../src/dtkCore/dtkAbstractProcess.h"
 #include "../src/dtkCore/dtkAbstractProcess_p.h"
+#include "../src/dtkCore/dtkAbstractProcessController.h"
 #include "../src/dtkCore/dtkAbstractProcessFactory.h"
 #include "../src/dtkCore/dtkAbstractView.h"
 #include "../src/dtkCore/dtkAbstractView_p.h"

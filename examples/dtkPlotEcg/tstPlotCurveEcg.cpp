@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 11:37:09 2013 (+0200)
+ * Last-Updated: mer. sept.  4 15:21:13 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 51
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -48,6 +48,6 @@ void tstPlotCurveEcg::read(const QString& file)
 
         qApp->processEvents();
 
-        SLEEP(10);
+        msleep(10);
     }
 }

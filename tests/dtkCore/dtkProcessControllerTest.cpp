@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:50:23 2013 (+0200)
  * Version: 
- * Last-Updated: mer. sept.  4 11:37:16 2013 (+0200)
+ * Last-Updated: mer. sept.  4 14:02:25 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 110
+ *     Update #: 111
  */
 
 /* Change Log:
@@ -39,7 +39,7 @@ int dummyProcess::update(void)
 
     forever {
         count++;
-        SLEEP(1000);
+        sleep(1);
     }
 }
 

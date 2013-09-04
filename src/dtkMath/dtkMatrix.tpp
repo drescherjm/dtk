@@ -131,8 +131,12 @@ template <typename T> QString dtkMatrix<T>::description(void) const
 //! 
 template <typename T> void dtkMatrix<T>::allocate(unsigned crowInit, unsigned ccolInit)
 {
-    if (m_nMatStatus != N_NOTALLOCATED)
-	deallocate();
+    if (m_nMatStatus != N_NOTALLOCATED) {
+	if (m_crow == crowInit && m_ccol == ccolInit)
+	    return;
+	else
+	    deallocate();
+    }
 
     m_crow = crowInit;
     m_ccol = ccolInit;

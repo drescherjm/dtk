@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:16:02 2012 (+0200)
- *           By: tkloczko
- *     Update #: 66
+ * Last-Updated: jeu. août 29 11:32:23 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -72,6 +72,8 @@ public:
     T norm(void) const { return sqrt( (*this)[0]*(*this)[0] + (*this)[1]*(*this)[1] + (*this)[2]*(*this)[2]); };
 
     dtkVector3D unit(void) const { return (*this)/(this->norm()); }
+
+    void makeUnit(void) { (*this) /= this->norm(); }
 };
 
 // /////////////////////////////////////////////////////////////////

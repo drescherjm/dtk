@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:50:23 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Aug 29 17:17:16 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 97
+ * Last-Updated: mer. sept.  4 11:00:15 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 102
  */
 
 /* Change Log:
@@ -17,6 +17,10 @@
 #include <dtkCore/dtkAbstractProcess>
 #include <dtkCore/dtkAbstractProcessController>
 #include <dtkCore/dtkAbstractProcessFactory>
+
+#if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
+#include <unistd.h>
+#endif
 
 // ///////////////////////////////////////////////////////////////////
 // 

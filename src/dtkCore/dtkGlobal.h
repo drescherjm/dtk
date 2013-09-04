@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Fri Oct 26 11:40:34 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 193
+ * Last-Updated: mer. sept.  4 11:35:52 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 194
  */
 
 /* Commentary: 
@@ -208,6 +208,15 @@ public:
         dtkMatrixRealPointer     = (sizeof(checkAbstractMatrix(static_cast<T*>(0))) == sizeof(yes_type))
     };
 };
+
+
+#if defined(Q_OS_WIN) && !defined(__MINGW32__)
+#include <windows.h>
+#define SLEEP(x) Sleep(x)
+#else
+#include <unistd.h>
+#define SLEEP(x) usleep(x*1000)
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

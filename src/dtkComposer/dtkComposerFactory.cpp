@@ -1160,7 +1160,7 @@ void dtkComposerFactory::initNodeControl(void)
     d->types["Case"] = "case";
 
     d->nodes << "Do While";
-    d->descriptions["Do While"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Do While"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlDoWhile.html");
     d->tags["Do While"] = QStringList() << "control" << "do" << "while" << "do while" << "loop";
     d->types["Do While"] = "do while";
 
@@ -1170,12 +1170,12 @@ void dtkComposerFactory::initNodeControl(void)
     d->types["If"] = "if";
 
     d->nodes << "For";
-    d->descriptions["For"] = "<p>Description not yet filled!</p>";
+    d->descriptions["For"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlFor.html");
     d->tags["For"] = QStringList() << "control" << "for" << "loop";
     d->types["For"] = "for";
 
     d->nodes << "Foreach";
-    d->descriptions["Foreach"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Foreach"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlForEach.html");
     d->tags["Foreach"] = QStringList() << "control" << "foreach" << "loop";
     d->types["Foreach"] = "foreach";
 
@@ -1185,7 +1185,7 @@ void dtkComposerFactory::initNodeControl(void)
     d->types["Map"] = "map";
 
     d->nodes << "While";
-    d->descriptions["While"] = "<p>Description not yet filled!</p>";
+    d->descriptions["While"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlWhile.html");
     d->tags["While"] = QStringList() << "control" << "while" << "loop";
     d->types["While"] = "while";
 }

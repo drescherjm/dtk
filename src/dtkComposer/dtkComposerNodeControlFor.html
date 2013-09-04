@@ -1,0 +1,23 @@
+<h3>Perform for loop</h3>
+<p>
+The <b>For</b> control node is a convenient node that enable users to
+mimic classical <em>for</em> instruction of C-language.
+</p>
+<p>
+The node layout has threee blocks plus an input counter
+value <em>i_begin</em> provided by a previous node of the
+composition. This counter value can be incremented and used for test
+stop criterion inside dedicated blocks, namely the 
+<em>conditional</em> block and the <em>increment</em>
+block. The body of the loop is defined by the subcomposition standing
+inside the <em>body</em> block.
+</p>
+<p>
+During execution, the condition is firstly tested, then if it is valid
+then the body composition is executed and eventually, the incrmental
+process is performed.
+</p>
+<p>
+The last value of the loop counter can be used further in the
+composition thanks to <em>i_end</em> port.
+</p>

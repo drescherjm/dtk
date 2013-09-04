@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:50:23 2013 (+0200)
  * Version: 
- * Last-Updated: mer. sept.  4 11:00:15 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 102
+ * Last-Updated: mer. sept.  4 14:02:25 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 111
  */
 
 /* Change Log:
@@ -18,9 +18,7 @@
 #include <dtkCore/dtkAbstractProcessController>
 #include <dtkCore/dtkAbstractProcessFactory>
 
-#if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
-#include <unistd.h>
-#endif
+#include <dtkCore/dtkGlobal.h>
 
 // ///////////////////////////////////////////////////////////////////
 // 
@@ -40,8 +38,8 @@ int dummyProcess::update(void)
     count = 0;
 
     forever {
-	count++;
-	sleep(1);
+        count++;
+        sleep(1);
     }
 }
 

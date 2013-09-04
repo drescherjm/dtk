@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. mars 28 16:59:03 2013 (+0100)
+ * Last-Updated: mer. sept.  4 15:21:13 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 49
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -20,14 +20,6 @@
 #include "tstPlotCurveEcg.h"
 
 #include <dtkCore/dtkGlobal.h>
-
-#if defined(Q_OS_WIN) && !defined(__MINGW32__)
-#include <windows.h>
-#define SLEEP(x) Sleep(x)
-#else
-#include <unistd.h>
-#define SLEEP(x) usleep(x*1000)
-#endif
 
 tstPlotCurveEcg::tstPlotCurveEcg(const QString& title) : dtkPlotCurve(title)
 {
@@ -56,6 +48,6 @@ void tstPlotCurveEcg::read(const QString& file)
 
         qApp->processEvents();
 
-        SLEEP(10);
+        msleep(10);
     }
 }

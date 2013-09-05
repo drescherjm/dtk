@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:33:55 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 15:21:13 2013 (+0200)
+ * Last-Updated: mer. sept.  4 18:00:28 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 56
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -20,6 +20,10 @@
 #include "tstPlotCurveEcg.h"
 
 #include <dtkCore/dtkGlobal.h>
+
+#if defined(Q_OS_WIN) && !defined(__MINGW32__)
+#include <windows.h>
+#endif
 
 tstPlotCurveEcg::tstPlotCurveEcg(const QString& title) : dtkPlotCurve(title)
 {

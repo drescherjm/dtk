@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 15:30:57 2013 (+0200)
+ * Last-Updated: mer. sept.  4 17:59:00 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 201
+ *     Update #: 202
  */
 
 /* Commentary: 
@@ -211,7 +211,6 @@ public:
 
 
 #if defined(Q_OS_WIN) && !defined(__MINGW32__)
-# include <windows.h>
 # define  sleep(t)  Sleep((t) * 1000)
 # define msleep(t)  Sleep(t)
 #else

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 14:02:35 2013 (+0200)
+ * Last-Updated: mer. sept.  4 17:59:44 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 1805
+ *     Update #: 1806
  */
 
 /* Commentary: 
@@ -39,6 +39,10 @@
 
 #if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
 #include <unistd.h>
+#endif
+
+#if defined(Q_OS_WIN) && !defined(__MINGW32__)
+#include <windows.h>
 #endif
 
 // /////////////////////////////////////////////////////////////////

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:50:23 2013 (+0200)
  * Version: 
- * Last-Updated: mer. sept.  4 14:02:25 2013 (+0200)
+ * Last-Updated: mer. sept.  4 18:01:09 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 111
+ *     Update #: 113
  */
 
 /* Change Log:
@@ -20,6 +20,9 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#if defined(Q_OS_WIN) && !defined(__MINGW32__)
+#include <windows.h>
+#endif
 // ///////////////////////////////////////////////////////////////////
 // 
 // ///////////////////////////////////////////////////////////////////

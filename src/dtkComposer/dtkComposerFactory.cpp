@@ -51,6 +51,7 @@
 #include "dtkComposerNodeMetaVector3DArrayAppend.h"
 #include "dtkComposerNodeMetaVector3DArrayExtractor.h"
 #include "dtkComposerNodeNumberOperator.h"
+#include "dtkComposerNodePrint.h"
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerNodeQuaternionOperatorUnary.h"
@@ -223,6 +224,13 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["Logger"] = "<p>Description not yet filled!</p>";
     d->tags["Logger"] = QStringList() << "logger" << "debug";
     d->types["Logger"] = "logger";
+
+    // print node
+
+    d->nodes << "Print";
+    d->descriptions["Print"] = "<p>Print data to stout and/or stderr</p>";
+    d->tags["Print"] = QStringList() << "print" << "debug" << "stdout" << "logger";
+    d->types["Print"] = "print";
 
     // generic nodes
 
@@ -1752,6 +1760,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "logger")
         return new dtkComposerNodeLogger;
+
+    if(type == "print")
+        return new dtkComposerNodePrint;
 
     // generic nodes
 

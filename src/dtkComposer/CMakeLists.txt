@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Se
-## Last-Updated: Wed Jun 19 12:21:00 2013 (+0200)
-##           By: Selim Kraria
-##     Update #: 679
+## Last-Updated: ven. sept.  6 13:55:28 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 681
 ## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
 ##           By: Thibaud Kloczko, Inria.
 ##     Update #: 623
@@ -94,6 +94,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeMetaVector3DArrayAppend.h
   dtkComposerNodeMetaVector3DArrayExtractor.h
   dtkComposerNodeNumberOperator.h
+  dtkComposerNodePrint.h
   dtkComposerNodeProcess.h
   dtkComposerNodeProxy.h
   dtkComposerNodeQuaternion.h
@@ -249,6 +250,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeMetaVector3DArrayAppend.cpp
   dtkComposerNodeMetaVector3DArrayExtractor.cpp
   dtkComposerNodeNumberOperator.cpp
+  dtkComposerNodePrint.cpp
   dtkComposerNodeProcess.cpp
   dtkComposerNodeProxy.cpp
   dtkComposerNodeQuaternion.cpp

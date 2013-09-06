@@ -20,7 +20,7 @@
 
 template <> QString dtkComposerTransmitterEmitter<qreal>::dataDescription(void)
 {
-    return QString::number(*m_data);
+    return QString::number(*m_data, 'G', 16);
 };
 
 template <> QString dtkComposerTransmitterEmitter<qlonglong>::dataDescription(void)

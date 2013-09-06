@@ -1,1 +1,1 @@
-#include "dtkComposerNodePlotAppendPoint.h"
+#include "dtkComposerNodePlotCurveAppendPoint.h"

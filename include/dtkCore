@@ -28,6 +28,7 @@
 #include "../src/dtkCore/dtkAbstractViewInteractor_p.h"
 #include "../src/dtkCore/dtkAbstractViewNavigator.h"
 #include "../src/dtkCore/dtkAbstractViewNavigator_p.h"
+#include "../src/dtkCore/dtkArray.h"
 #include "../src/dtkCore/dtkCpuid.h"
 #include "../src/dtkCore/dtkGlobal.h"
 #include "../src/dtkCore/dtkPlugin.h"

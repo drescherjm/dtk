@@ -17,7 +17,7 @@
 
 #include <dtkConfig.h>
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotCurve.h>
 #endif
 
@@ -92,7 +92,7 @@ public:
 public:
     bool data_owner;
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 public:
     dtkPlotCurve curve;
 #endif

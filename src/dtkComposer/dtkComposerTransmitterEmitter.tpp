@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Wed Oct 24 08:28:42 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 215
+ * Last-Updated: mar. sept. 10 16:17:30 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 218
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 
 #include <dtkContainer/dtkContainerVectorWrapper.h>
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotCurve.h>
 #endif
 

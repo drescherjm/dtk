@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Jun 26 16:28:14 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 1791
+ * Last-Updated: mar. sept. 10 16:18:32 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1800
  */
 
 /* Commentary:
@@ -45,7 +45,7 @@
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkPluginManager.h>
 
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotView.h>
 #include <dtkPlot/dtkPlotViewSettings.h>
 #endif
@@ -160,7 +160,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->log_view->setVisible(false);
 
     d->view_manager = new dtkViewManager;
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     d->plot_view_settings = new dtkPlotViewSettings(d->view_manager);
     d->view_manager->addWidget(d->plot_view_settings);
 #endif
@@ -250,7 +250,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->view_button->setObjectName("dtkCreatorMainWindowSegmentedButtonRight");
     d->view_button->setFixedSize(75, 25);
     d->view_button->setCheckable(true);
-#ifndef DTK_HAVE_PLOT
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     d->view_button->setVisible(false);
 #endif
 
@@ -259,7 +259,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     button_group->addButton(d->compo_button);
     button_group->addButton(d->distr_button);
     button_group->addButton(d->debug_button);
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     button_group->addButton(d->view_button);
 #endif
 
@@ -269,7 +269,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     buttons_layout->addWidget(d->compo_button);
     buttons_layout->addWidget(d->distr_button);
     buttons_layout->addWidget(d->debug_button);
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     buttons_layout->addWidget(d->view_button);
 #endif
 
@@ -743,7 +743,7 @@ void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 
 void dtkCreatorMainWindow::onViewFocused(dtkAbstractView *view)
 {
-#if defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(dtkPlotView *v = dynamic_cast<dtkPlotView *>(view)) {
         d->plot_view_settings->setView(v);
         d->view_manager->setCurrentWidget(d->plot_view_settings);

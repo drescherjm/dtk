@@ -216,6 +216,8 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
                 // dtkTrace() << "emit signal and wait for GUI thread to run the node";
                 emit runMainThread();
                 disconnect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()));
+            } else {
+                d->current->setStatus(dtkComposerGraphNode::Done);
             }
         } else {
             // dtkTrace() << "evaluating leaf node"<< d->current->title();

@@ -16,7 +16,7 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEM_H
 #define DTKCOMPOSERCONTROLSLISTITEM_H
 
-#include <dtkComposerSceneNode.h>
+#include "dtkComposerSceneNode.h"
 
 #include <QtGui>
 
@@ -24,7 +24,6 @@ class dtkComposerControlsListItemPrivate;
 
 class dtkComposerControlsListItem : public QObject, public QListWidgetItem
 {
-
     Q_OBJECT
 
 public:

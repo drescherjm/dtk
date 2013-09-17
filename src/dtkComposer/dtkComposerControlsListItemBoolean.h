@@ -16,7 +16,7 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEMBOOLEAN_H
 #define DTKCOMPOSERCONTROLSLISTITEMBOOLEAN_H
 
-#include <dtkComposerControlsListItem.h>
+#include "dtkComposerControlsListItem.h"
 
 class dtkComposerSceneNode;
 class dtkComposerControlsListItemBooleanPrivate;
@@ -40,7 +40,3 @@ private:
 };
 
 #endif
-
-
-
-

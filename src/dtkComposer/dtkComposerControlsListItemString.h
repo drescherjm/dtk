@@ -16,7 +16,7 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEMSTRING_H
 #define DTKCOMPOSERCONTROLSLISTITEMSTRING_H
 
-#include <dtkComposerControlsListItem.h>
+#include "dtkComposerControlsListItem.h"
 
 class dtkComposerSceneNode;
 class dtkComposerControlsListItemStringPrivate;

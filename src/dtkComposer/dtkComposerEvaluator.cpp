@@ -47,7 +47,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->stack.setCapacity(1024);
     d->max_stack_size = 0;
     d->notify = true;
-
+    d->use_gui= (qApp->type() != QApplication::Tty);
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)
@@ -211,10 +211,14 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             // dtkDebug() << "running process node in another thread"<< d->current->title();
             QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
         } else if ((d->current->kind() == dtkComposerGraphNode::View)) {
-            connect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()),Qt::BlockingQueuedConnection);
-            // dtkTrace() << "emit signal and wait for GUI thread to run the node";
-            emit runMainThread();
-            disconnect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()));
+            if (d->use_gui) {
+                connect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()),Qt::BlockingQueuedConnection);
+                // dtkTrace() << "emit signal and wait for GUI thread to run the node";
+                emit runMainThread();
+                disconnect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()));
+            } else {
+                d->current->setStatus(dtkComposerGraphNode::Done);
+            }
         } else {
             // dtkTrace() << "evaluating leaf node"<< d->current->title();
             d->current->eval();

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:50:23 2013 (+0200)
  * Version: 
- * Last-Updated: mer. sept.  4 18:01:09 2013 (+0200)
+ * Last-Updated: lun. sept. 16 18:18:14 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 113
+ *     Update #: 143
  */
 
 /* Change Log:
@@ -90,7 +90,7 @@ void dtkProcessControllerTestObject::testProcess(void)
 {
     using namespace QTest;
 
-    qWait(2000); QCOMPARE(dynamic_cast<dummyProcess *>(d->controller->process())->count, 3);
+    qWait(2500); QCOMPARE(dynamic_cast<dummyProcess *>(d->controller->process())->count, 3);
     qWait(2000); QCOMPARE(dynamic_cast<dummyProcess *>(d->controller->process())->count, 5);
     qWait(2000); QCOMPARE(dynamic_cast<dummyProcess *>(d->controller->process())->count, 7);
     qWait(2000); QCOMPARE(dynamic_cast<dummyProcess *>(d->controller->process())->count, 9);
@@ -104,9 +104,8 @@ void dtkProcessControllerTestObject::testStop(void)
 
     qWait(5000);
 
-    QVERIFY(dynamic_cast<dummyProcess *>(d->controller->process())->count > 13);
-
     d->controller->stop();
+    QVERIFY(dynamic_cast<dummyProcess *>(d->controller->process())->count > 13);
 }
 
 void dtkProcessControllerTestObject::cleanup(void)

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Tue Oct  9 12:05:08 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 50
+ * Last-Updated: mar. sept. 17 14:27:14 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -66,6 +66,10 @@ public:
 
 public:
     dtkComposerTransmitter::DataTransmission data_transmission;
+
+public:
+    bool ready;
+    QAtomicInt copy_counter;
 };
 
 #endif

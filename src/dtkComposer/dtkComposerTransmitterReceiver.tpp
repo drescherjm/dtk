@@ -258,17 +258,47 @@ template <typename T> void dtkComposerTransmitterReceiver<T>::activateEmitter(dt
     }
 }
 
+//! 
+/*! 
+ *  
+ */
+template <typename T> void dtkComposerTransmitterReceiver<T>::setReady(bool ready)
+{
+    if (d->ready == ready)
+	return;
+
+    d->ready = ready;
+
+    if (this->active_emitter) {
+	this->active_emitter->updateCopyCounter(ready);
+
+    } else if (this->active_variant) {
+	this->active_variant->updateCopyCounter(ready);	
+
+    }
+}
+
 //! Returns.
 /*! 
  *  
  */
 template <typename T> bool dtkComposerTransmitterReceiver<T>::enableCopy(void)
 {
-    if (active_emitter)
-        return active_emitter->enableCopy();
+    // if (active_emitter)
+    //     return active_emitter->enableCopy();
 
-    if (active_variant)
-        return active_variant->enableCopy();
+    // if (active_variant)
+    //     return active_variant->enableCopy();
+
+    // return false;
+
+    if (this->active_emitter) {
+    	return this->active_emitter->copyCounterIsGreaterThanOne();
+    }
+
+    if (this->active_variant) {
+    	return this->active_variant->copyCounterIsGreaterThanOne();
+    }
 
     return false;
 }
@@ -316,6 +346,7 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
                 active_emitter = emitter;
                 active_variant = NULL;
                 emitter->appendReceiver(this);
+		emitter->updateCopyCounter(true);
                 return true;
             }
         }
@@ -329,6 +360,7 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
             active_variant = v;
             active_emitter = NULL;
             v->appendReceiver(this);
+	    v->updateCopyCounter(true);
             return true;
         } else {
             foreach(int t, v->dataTypes()) {
@@ -337,6 +369,7 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::connect(dtkCompose
                     active_variant = v;
                     active_emitter = NULL;
                     v->appendReceiver(this);
+		    v->updateCopyCounter(true);
                     return true;
                 }
             }
@@ -404,6 +437,10 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
                 }
             }
         }
+    }
+
+    if (ok) {
+	transmitter->updateCopyCounter(false);
     }
 
     return ok;
@@ -586,18 +623,44 @@ template <typename T> void dtkComposerTransmitterReceiverVector<T>::activateEmit
     }
 }
 
+template <typename T> void dtkComposerTransmitterReceiverVector<T>::setReady(bool ready)
+{
+    if (ready == d->ready)
+	return;
+
+    d->ready = ready;
+
+    if (this->active_emitter) {
+	this->active_emitter->updateCopyCounter(ready);
+
+    } else if (this->active_variant) {
+	this->active_variant->updateCopyCounter(ready);
+
+    }
+}
+
 //! Returns.
 /*! 
  *  
  */
 template <typename T> bool dtkComposerTransmitterReceiverVector<T>::enableCopy(void)
 {
-    if (active_emitter)
-        return active_emitter->enableCopy();
+    // if (active_emitter)
+    //     return active_emitter->enableCopy();
 
-    if (active_variant)
-        return active_variant->enableCopy();
+    // if (active_variant)
+    //     return active_variant->enableCopy();
     
+    // return false;
+
+    if (this->active_emitter) {
+    	return this->active_emitter->copyCounterIsGreaterThanOne();
+    }
+
+    if (this->active_variant) {
+    	return this->active_variant->copyCounterIsGreaterThanOne();
+    }
+
     return false;
 }
     
@@ -645,6 +708,7 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::connect(dtkC
                 active_emitter = emitter;
                 active_variant = NULL;
                 emitter->appendReceiver(this);
+		emitter->updateCopyCounter(true);
                 return true;
             }
         }
@@ -658,6 +722,7 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::connect(dtkC
             active_variant = v;
             active_emitter = NULL;
             v->appendReceiver(this);
+	    v->updateCopyCounter(true);
             return true;
         } else {
             foreach(int t, v->dataTypes()) {
@@ -666,6 +731,7 @@ template <typename T> bool dtkComposerTransmitterReceiverVector<T>::connect(dtkC
                     active_variant = v;
                     active_emitter = NULL;
                     v->appendReceiver(this);
+		    v->updateCopyCounter(true);
                     return true;
                 }
             }

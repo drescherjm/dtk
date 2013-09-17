@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:17:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Oct 11 12:27:14 (+0200)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 32
+ * Last-Updated: mar. sept. 17 13:58:48 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -42,6 +42,9 @@ public:
 
 public:
     void setActive(bool active);
+
+public:
+    void setReady(bool ready);
 
 public:
     LinkMap  leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);

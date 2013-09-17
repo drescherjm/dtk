@@ -57,6 +57,9 @@ public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
+ public:
+    void setReady(bool ready);
+
 public:
     bool enableCopy(void);
 
@@ -122,6 +125,9 @@ public:
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
+
+public:
+    void setReady(bool ready);
 
 public:
     bool enableCopy(void);

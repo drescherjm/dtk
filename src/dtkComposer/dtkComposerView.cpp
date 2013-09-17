@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/01/30 10:02:53
  * Version: $Id$
- * Last-Updated: Thu Nov  8 16:04:15 2012 (+0100)
+ * Last-Updated: Tue Sep 17 10:52:44 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 149
+ *     Update #: 150
  */
 
 /* Commentary:
@@ -40,6 +40,7 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new
     this->setAcceptDrops(true);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setBackgroundBrush(QColor(0x55, 0x55, 0x55));
+    this->setContentsMargins(0, 0, 0, 0);
     this->setDragMode(QGraphicsView::RubberBandDrag);
     this->setFrameStyle(QFrame::NoFrame);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);

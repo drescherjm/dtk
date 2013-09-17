@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Nov 28 14:41:09 2012 (+0100)
+ * Last-Updated: Tue Sep 17 13:42:35 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 226
+ *     Update #: 234
  */
 
 /* Commentary: 
@@ -129,6 +129,7 @@ public:
     QString text(void);
 
 public:
+    void setBlue(void);
     void setDark(void);
 
 public slots:
@@ -241,6 +242,7 @@ public:
     void clear(void);
 
 public:
+    void setBlue(void);
     void setDark(void);
 
 signals:
@@ -258,6 +260,7 @@ protected:
 
 protected:
     friend class dtkItemListDelegate;
+    friend class dtkItemBlueDelegate;
     friend class dtkItemDarkDelegate;
 };
 
@@ -327,6 +330,25 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkItemBlueDelegate
+// /////////////////////////////////////////////////////////////////
+
+class DTKGUI_EXPORT dtkItemBlueDelegate: public QStyledItemDelegate
+{
+ public:
+    dtkItemBlueDelegate(dtkItemList *list);
+
+ public:
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+ public:
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+ protected:
+    dtkItemList *list;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkItemView
 // /////////////////////////////////////////////////////////////////
 
@@ -354,6 +376,7 @@ public:
     dtkItemDesc *desc(void);
 
 public:
+    void setBlue(void);
     void setDark(void);
     
 protected slots:

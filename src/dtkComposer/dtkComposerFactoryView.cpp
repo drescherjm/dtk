@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed May 16 10:40:38 2012 (+0200)
+ * Last-Updated: Tue Sep 17 13:44:10 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 151
+ *     Update #: 155
  */
 
 /* Commentary: 
@@ -87,6 +87,11 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
         d->controller->addItem(node, factory->descriptions().value(node), factory->tags().value(node), "node", factory->types().value(node));
  
     d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
+}
+
+void dtkComposerFactoryView::setBlue(void)
+{
+    d->view->setBlue();
 }
 
 void dtkComposerFactoryView::setDark(void)

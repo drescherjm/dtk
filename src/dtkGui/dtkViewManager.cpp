@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:37:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 10:45:48 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 51
+ * Last-Updated: Tue Sep 17 13:10:20 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 52
  */
 
 /* Commentary: 
@@ -88,8 +88,3 @@ void dtkViewManager::setCurrentWidget(QWidget *widget)
     widget->setVisible(true);
     d->view_inspector->setCurrentWidget(widget);
 }
-
-
-
-
-

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 17 13:42:48 2013 (+0200)
+ * Last-Updated: Tue Sep 17 14:01:37 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 1597
+ *     Update #: 1611
  */
 
 /* Commentary: 
@@ -532,6 +532,7 @@ public:
 
 public:
     bool light;
+    bool dark;
 };
 
 dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
@@ -541,6 +542,7 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     d = new dtkTagScopePrivate;
 
     d->light = true;
+    d->dark = false;
 
     d->completer_model = new QStringListModel(this);
 
@@ -615,9 +617,16 @@ void dtkTagScope::clear(void)
     d->edit->clear();
 }
 
+void dtkTagScope::setBlue(void)
+{
+    d->light = false;
+    d->dark = false;
+}
+
 void dtkTagScope::setDark(void)
 {
     d->light = false;
+    d->dark = true;
 }
 
 void dtkTagScope::toggle(void)
@@ -636,8 +645,10 @@ void dtkTagScope::render(void)
 
     foreach(QString filter, d->filters) {
         dtkTagScopeTag *tag = new dtkTagScopeTag;
-        if(!d->light)
-            tag->setDark();
+        if(!d->light && !d->dark)
+            tag->setBlue();
+	if(!d->light && d->dark)
+	    tag->setDark();
         tag->setText(filter);
         if(d->counts.contains(filter))
             tag->setCount(d->counts[filter]);
@@ -1060,13 +1071,12 @@ void dtkItemBlueDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
         return;
 
     QLinearGradient gradiant(option.rect.left(), option.rect.top(), option.rect.left(), option.rect.bottom());
-    gradiant.setColorAt(0.0, QColor(047, 047, 047));
-    gradiant.setColorAt(0.3, QColor(040, 040, 040));
-    gradiant.setColorAt(1.0, QColor(020, 020, 020));
+    gradiant.setColorAt(0.0, QColor("#60666c"));
+    gradiant.setColorAt(1.0, QColor("#4b5157"));
 
     painter->fillRect(option.rect, gradiant);
 
-    painter->setPen(QColor(055, 055, 055));
+    painter->setPen(QColor("#828589"));
     painter->drawLine(option.rect.topLeft() + QPoint(0, 1), option.rect.topRight() + QPoint(0, 1));
 
     static QPixmap arrow = QPixmap(":dtkGui/pixmaps/dtk-item-list-delegate-arrow.png");
@@ -1091,13 +1101,13 @@ void dtkItemBlueDelegate::paint(QPainter *painter, const QStyleOptionViewItem& o
     painter->setPen(Qt::lightGray);
     painter->drawText(name_rect, Qt::AlignLeft | Qt::AlignTop, item->name());
 
-    painter->setPen(Qt::darkGray);
+    painter->setPen(Qt::lightGray);
     painter->drawText(desc_rect, Qt::AlignLeft | Qt::AlignTop, metrics.elidedText(dtkItemListDelegateUnhtmlize(item->description()), Qt::ElideRight, desc_rect.width()));
 
     painter->setPen(QColor("#6a769d"));
     painter->drawText(tags_rect.adjusted(m + tags.width(), 0, -tags.width(), 0), Qt::AlignLeft | Qt::AlignTop, item->tags().join(", "));
 
-    painter->setPen(Qt::black);
+    painter->setPen(QColor("#1f2025"));
     painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
     QPointF arrow_pos = QPointF(r - m - arrow.width(), t + h/2 - arrow.height()/2);

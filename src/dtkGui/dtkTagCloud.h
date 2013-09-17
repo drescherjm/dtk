@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 17 13:42:35 2013 (+0200)
+ * Last-Updated: Tue Sep 17 14:00:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 234
+ *     Update #: 235
  */
 
 /* Commentary: 
@@ -170,6 +170,7 @@ public:
 
     void setTags(const QStringList& tags);
 
+    void setBlue(void);
     void setDark(void);
 
 signals:

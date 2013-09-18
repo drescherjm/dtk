@@ -97,6 +97,13 @@ public:
     virtual void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
 public:
+    virtual void setReady(bool ready);
+
+public:
+    void updateCopyCounter(bool value);
+    bool copyCounterIsGreaterThanOne(void);
+
+public:
     void setDataTransmission(DataTransmission value);
     
     DataTransmission dataTransmission(void) const;

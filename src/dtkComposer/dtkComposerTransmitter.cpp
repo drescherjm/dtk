@@ -40,6 +40,8 @@ dtkComposerTransmitter::dtkComposerTransmitter(dtkComposerNode *parent) : d(new 
     d->container = NULL;
     d->matrix = NULL;
     d->data_transmission = AutoCopy;
+
+    d->ready = true;
 }
 
 //! Destroys dtkComposerTransmitter.
@@ -216,6 +218,24 @@ void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitter *emitter)
 void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitterVariant *emitter)
 {
     DTK_UNUSED(emitter);
+}
+
+void dtkComposerTransmitter::setReady(bool ready)
+{
+    DTK_UNUSED(ready);
+}
+
+void dtkComposerTransmitter::updateCopyCounter(bool value)
+{
+    if (value)
+	d->copy_counter.ref();
+    else
+	d->copy_counter.deref();
+}
+
+bool dtkComposerTransmitter::copyCounterIsGreaterThanOne(void)
+{
+    return (d->copy_counter != 1);
 }
 
 //! Sets the type of data transmission.

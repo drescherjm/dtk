@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov 15 15:03:35 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 52
+ * Last-Updated: mar. sept. 17 17:14:16 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 65
  */
 
 /* Commentary: 
@@ -138,6 +138,12 @@ int dtkComposerNodeControlIf::selectBranch(void)
 
     foreach(dtkComposerTransmitter *t, d->else_block.emitters())
         t->setActive(!value);
+    
+    foreach(dtkComposerTransmitter *t, d->then_block.receivers())
+        t->setReady(value);
+
+    foreach(dtkComposerTransmitter *t, d->else_block.receivers())
+        t->setReady(!value);
         
     return (!value);
 }
@@ -149,7 +155,16 @@ void dtkComposerNodeControlIf::begin(void)
 
 void dtkComposerNodeControlIf::end(void)
 {
+    if (d->cond.isEmpty())
+    	return;
+
+    bool value = *d->cond.data<bool>();
     
+    foreach(dtkComposerTransmitter *t, d->then_block.receivers())
+        t->setReady(true);
+
+    foreach(dtkComposerTransmitter *t, d->else_block.receivers())
+        t->setReady(true);
 }
 
 QString dtkComposerNodeControlIf::type(void)

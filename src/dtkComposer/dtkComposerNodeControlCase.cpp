@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov 15 15:04:11 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 299
+ * Last-Updated: mer. sept. 18 09:45:43 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 317
  */
 
 /* Commentary:
@@ -192,21 +192,39 @@ int dtkComposerNodeControlCase::selectBranch(void)
             value = i;
             foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(true);
-            }
+            }    
+	    foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
+		t->setReady(true);
+	    }
 
         } else {
 
-            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters())
+            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(false);
+	    }
+    
+	    foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
+		t->setReady(false);
+	    }
         }
     }
 
     if (value == 0) {
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
+        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters()) {
             t->setActive(true);
+	}
+        foreach(dtkComposerTransmitter *t, d->blocks[0]->receivers()) {
+            t->setReady(true);
+	}
+
+
     } else {
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters())
+        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters()) {
             t->setActive(false);
+	}
+        foreach(dtkComposerTransmitter *t, d->blocks[0]->receivers()) {
+            t->setReady(false);
+	}
     }
 
     return value;
@@ -219,7 +237,11 @@ void dtkComposerNodeControlCase::begin(void)
 
 void dtkComposerNodeControlCase::end(void)
 {
-
+    for (int i = 0; i < d->blocks.count(); ++i) {
+	foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
+            t->setReady(true);
+	}
+    }
 }
 
 QString dtkComposerNodeControlCase::type(void)

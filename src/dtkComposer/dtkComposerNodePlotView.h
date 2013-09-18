@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 14:10:49 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 46
+ * Last-Updated: Wed Sep 18 16:52:29 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 54
  */
 
 /* Commentary: 
@@ -24,6 +24,8 @@
 #include "dtkComposerNodeLeafView.h"
 
 #include <QtCore>
+
+class dtkPlotView;
 
 class dtkComposerNodePlotViewPrivate;
 
@@ -48,6 +50,9 @@ public:
     inline bool isAbstractView(void) const {return false;} ;
 
     inline QString abstractViewType(void) const {return "";};
+
+public:
+    dtkAbstractView *view(void);
 
 public:
     inline QString inputLabelHint(int port) {

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 14:15:42 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 104
+ * Last-Updated: Wed Sep 18 16:58:18 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 113
  */
 
 /* Commentary: 
@@ -42,7 +42,7 @@ public:
 
 dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodePlotViewPrivate)
 {
-    d->view = NULL;
+    d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
 
     this->appendReceiver(&(d->receiver_curve));
     this->appendReceiver(&(d->receiver_list_curve));
@@ -55,11 +55,19 @@ dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
 {
     if (d->view)
         delete d->view;
+
     d->view = NULL;
 
     delete d;
 
     d = NULL;
+}
+
+dtkAbstractView *dtkComposerNodePlotView::view(void)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    return d->view;
 }
 
 void dtkComposerNodePlotView::run(void)
@@ -68,9 +76,6 @@ void dtkComposerNodePlotView::run(void)
         dtkWarn() << "no curve speficied!";
         return;
     }
-
-    if (!d->view)
-        d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
 
     if(!d->view)
         return;
@@ -101,6 +106,5 @@ void dtkComposerNodePlotView::run(void)
         d->view->setAxisTitleY(*d->receiver_y_axis_label.data());
 
     d->view->updateAxes();
-
     d->view->update();
 }

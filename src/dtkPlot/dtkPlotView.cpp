@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 19 15:45:58 2013 (+0200)
+ * Last-Updated: Thu Sep 19 16:09:26 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 445
+ *     Update #: 459
  */
 
 /* Commentary: 
@@ -512,6 +512,16 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
 
     if (c->plot() != d)
         c->attach((QwtPlot *)d);
+
+    QColor c_color = curve->color();
+    QColor v_color = this->backgroundColor();
+
+    if (c_color.value() - v_color.value() < 30) {
+	int r = c_color.red();
+	int g = c_color.green();
+	int b = c_color.blue();
+	curve->setColor(QColor(255 - r, 255 - g, 255 - b));
+    }
 
     return *(this);
 }

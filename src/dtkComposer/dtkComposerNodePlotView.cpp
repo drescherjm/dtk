@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 19 15:37:54 2013 (+0200)
+ * Last-Updated: Thu Sep 19 21:27:47 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 114
+ *     Update #: 116
  */
 
 /* Commentary: 
@@ -42,7 +42,7 @@ public:
 
 dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodePlotViewPrivate)
 {
-    d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+    d->view = NULL;
 
     this->appendReceiver(&(d->receiver_curve));
     this->appendReceiver(&(d->receiver_list_curve));
@@ -70,6 +70,9 @@ dtkAbstractView *dtkComposerNodePlotView::view(void)
 
 void dtkComposerNodePlotView::run(void)
 {
+    if(!d->view)
+	d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+
     if (d->receiver_curve.isEmpty() && d->receiver_list_curve.isEmpty()) {
         dtkWarn() << "no curve speficied!";
         return;

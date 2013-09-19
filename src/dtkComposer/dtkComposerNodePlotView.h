@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 18 16:52:29 2013 (+0200)
+ * Last-Updated: Thu Sep 19 21:13:53 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 54
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -73,7 +73,7 @@ public:
     }
 
 public:
-    void run(void);
+    virtual void run(void);
 
 private:
     dtkComposerNodePlotViewPrivate *d;

@@ -1,12 +1,12 @@
 /* dtkPlotViewToolBar.cpp --- 
  * 
- * Author: Julien Wintz
+ * Author: Selim Kraria
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  5 11:08:29 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 379
+ * Last-Updated: Thu Sep 19 15:50:13 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 423
  */
 
 /* Commentary: 
@@ -37,84 +37,69 @@ public:
     dtkPlotView *view;
 };
 
-dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QToolBar(), d(new dtkPlotViewToolBarPrivate())
+dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QFrame(parent->widget()), d(new dtkPlotViewToolBarPrivate())
 {
-    // View
+    QToolBar *bar = new QToolBar(this);
 
     d->view = parent;
 
-   // Default view
-
-    d->defaultViewAction = new QAction("Default view",this);
+    d->defaultViewAction = new QAction("Default", this);
     d->defaultViewAction->setToolTip("Show default view");
-    d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkAxis.png"));
+    d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis.png"));
 
-    // Grid
-
-    d->gridAction = new QAction("Grid",this);
+    d->gridAction = new QAction("Grid", this);
     d->gridAction->setCheckable(true);
     d->gridAction->setChecked(false);
     d->gridAction->setToolTip("Draw grid coodinates");
-    d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkGrid.png"));
+    d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid.png"));
 
-    // Picking
-
-    d->pickingAction = new QAction("Picking",this);
+    d->pickingAction = new QAction("Picking", this);
     d->pickingAction->setCheckable(true);
     d->pickingAction->setChecked(false);
     d->pickingAction->setToolTip("Activate picking");
-    d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPicking.png"));
+    d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking.png"));
 
-    // Zoom
-
-    d->zoomAction = new QAction("Zoom",this);
+    d->zoomAction = new QAction("Zoom", this);
     d->zoomAction->setCheckable(true);
     d->zoomAction->setChecked(false);
     d->zoomAction->setToolTip("Activate zoom");
-    d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkZoom.png"));
+    d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom.png"));
 
-    // Legend
-
-    d->legendAction = new QAction("Legend",this);
+    d->legendAction = new QAction("Legend", this);
     d->legendAction->setCheckable(true);
     d->legendAction->setChecked(false);
     d->legendAction->setToolTip("Activate legend");
-    d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkLegend.png"));
+    d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend.png"));
 
-    // Export view
-
-    d->exportAction = new QAction("Export...",this);
+    d->exportAction = new QAction("Export", this);
     d->exportAction->setToolTip("Export view");
-    d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkExport.png"));
+    d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotExport.png"));
 
-    // Actions
+    bar->addAction(d->defaultViewAction);
+    bar->addAction(d->zoomAction);
+    bar->addAction(d->gridAction);
+    bar->addAction(d->pickingAction);
+    bar->addAction(d->legendAction);
+    bar->addWidget(new dtkSpacer);
+    bar->addAction(d->exportAction);
+    bar->setFloatable(false);
+    bar->setIconSize(QSize(18, 18));
+    bar->setMovable(false);
+    bar->setOrientation(Qt::Horizontal);
+    bar->setFixedHeight(25);
+    bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    this->addWidget(new dtkSpacer);
-    this->addAction(d->defaultViewAction);
-    this->addAction(d->zoomAction);
-    this->addAction(d->gridAction);
-    this->addAction(d->pickingAction);
-    this->addAction(d->legendAction);
-    this->addWidget(new dtkSpacer);
-    this->addAction(d->exportAction);
-
-    // Behaviour
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(bar);
 
     connect(d->defaultViewAction, SIGNAL(triggered(bool)), this, SLOT(onDefaultView()));
     connect(d->zoomAction, SIGNAL(triggered(bool)), this, SLOT(onZoomActivated(bool)));
     connect(d->gridAction, SIGNAL(triggered(bool)), this, SLOT(onGridActivated(bool)));
     connect(d->pickingAction, SIGNAL(triggered(bool)), this, SLOT(onPickingActivated(bool)));
     connect(d->legendAction, SIGNAL(triggered(bool)), this, SLOT(onLegendActivated(bool)));
-    connect(d->exportAction, SIGNAL(triggered()), this, SLOT(onExport()));
-
-    // General
-
-    this->setFloatable(false);
-    this->setIconSize(QSize(24, 24));
-    this->setMovable(false);
-    this->setOrientation(Qt::Horizontal);
-    this->setFixedHeight(25);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(d->exportAction, SIGNAL(triggered()), this, SLOT(onExport()));    
 }
 
 dtkPlotViewToolBar::~dtkPlotViewToolBar(void)
@@ -205,6 +190,25 @@ void dtkPlotViewToolBar::onExport(void)
     }
 }
 
+void dtkPlotViewToolBar::setDark(bool dark)
+{
+    if(dark) {
+	d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis-light.png"));
+	d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid-light.png"));
+	d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking-light.png"));
+	d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom-light.png"));
+	d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend-light.png"));
+	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotExport-light.png"));
+    } else {
+	d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis.png"));
+	d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid.png"));
+	d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking.png"));
+	d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom.png"));
+	d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend.png"));
+	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotExport.png"));
+    }
+}
+
 void dtkPlotViewToolBar::onExport(const QString& file)
 {
     dtkPlotRenderer renderer;
@@ -213,4 +217,3 @@ void dtkPlotViewToolBar::onExport(const QString& file)
     renderer.setSize(QSize(300, 200));
     renderer.render();
 }
-

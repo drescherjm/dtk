@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  4 17:03:33 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 76
+ * Last-Updated: Thu Sep 19 15:46:21 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 79
  */
 
 /* Commentary: 
@@ -22,12 +22,12 @@
 
 #include "dtkPlotExport.h"
 
-#include <QtGui/QToolBar>
+#include <QtGui>
 
 class dtkPlotView;
 class dtkPlotViewToolBarPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewToolBar : public QToolBar
+class DTKPLOT_EXPORT dtkPlotViewToolBar : public QFrame
 {
     Q_OBJECT
 
@@ -40,6 +40,9 @@ protected:
 
 signals:
     void settingsClicked(bool value);
+
+public:
+    void setDark(bool dark);
 
 protected slots:
     void onDefaultView(void);

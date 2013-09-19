@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 13:36:22 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 123
+ * Last-Updated: Thu Sep 19 15:45:17 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 134
  */
 
 /* Commentary: 
@@ -124,16 +124,18 @@ public:
     void setBackgroundColor(int red, int green, int blue);
     void setBackgroundColor(double red, double green, double blue);
     void setBackgroundColor(const QColor& color);
-    QColor backgroundColor(void) const;
-
     void setForegroundColor(const QColor& color);
+    void setDark(bool dark);
+
+public:
+    QColor backgroundColor(void) const;
     QColor foregroundColor(void) const;
 
+public:
     void updateColors(void);
 
 public:
     QWidget *plotWidget(void);
-
     QWidget *widget(void);
 
 public:

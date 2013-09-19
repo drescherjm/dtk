@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  5 11:14:49 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 438
+ * Last-Updated: Thu Sep 19 15:45:58 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 445
  */
 
 /* Commentary: 
@@ -86,15 +86,9 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
     d->setAxisAutoScale(0, true);
     d->setAxisAutoScale(1, true);
 
-    // Canvas
-
     reinterpret_cast<QwtPlotCanvas *>(d->canvas())->setFrameStyle(QFrame::NoFrame);
 
-    // Tool bar
-
     d->toolbar = new dtkPlotViewToolBar(this);
-
-    // Layout
 
     d->frame_view = new QFrame;
 
@@ -103,10 +97,6 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
     layout->setSpacing(0);
     layout->addWidget(d);
     layout->addWidget(d->toolbar);
-
-    // Behaviour
-
-    // General
 
     this->setStyleSheet(dtkReadFile(":dtkPlot/dtkPlotView.qss"));
     this->readSettings();
@@ -476,6 +466,11 @@ void dtkPlotView::updateColors(void)
     this->update();
 
     this->writeSettings();
+}
+
+void dtkPlotView::setDark(bool dark)
+{
+    d->toolbar->setDark(dark);
 }
 
 void dtkPlotView::fillCurveArea(int alpha)

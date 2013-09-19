@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 18 16:58:18 2013 (+0200)
+ * Last-Updated: Thu Sep 19 15:37:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 113
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -65,8 +65,6 @@ dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
 
 dtkAbstractView *dtkComposerNodePlotView::view(void)
 {
-    qDebug() << Q_FUNC_INFO;
-
     return d->view;
 }
 

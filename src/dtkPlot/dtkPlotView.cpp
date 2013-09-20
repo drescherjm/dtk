@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 19 16:09:26 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 459
+ * Last-Updated: Fri Sep 20 16:23:46 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 473
  */
 
 /* Commentary: 
@@ -29,6 +29,7 @@
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
 #include <qwt_scale_engine.h>
 #include <qwt_scale_widget.h>
 
@@ -114,7 +115,8 @@ void dtkPlotView::clear(void)
     d->curves.clear();
 
     foreach (QwtPlotItem *item, d->itemList()) {
-        item->detach();
+        if (!((QwtPlotGrid *) item))
+            item->detach();
     }
 
     this->update();

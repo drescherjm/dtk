@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: mar. sept. 10 16:18:32 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1800
+ * Last-Updated: Fri Sep 20 15:56:53 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 1806
  */
 
 /* Commentary:
@@ -251,6 +251,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->view_button->setFixedSize(75, 25);
     d->view_button->setCheckable(true);
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#else
     d->view_button->setVisible(false);
 #endif
 

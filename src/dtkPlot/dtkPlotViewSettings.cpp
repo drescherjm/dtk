@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 10:03:24 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 751
+ * Last-Updated: Fri Sep 20 16:02:07 2013 (+0200)
+ *           By: Selim Kraria
+ *     Update #: 752
  */
 
 /* Commentary: 
@@ -407,8 +407,6 @@ void dtkPlotViewSettings::update(void)
 
 void dtkPlotViewSettings::updateCurves(void)
 {
-    qDebug() << Q_FUNC_INFO;
-
     QList<dtkPlotCurve *> curves = d->view->curves();
 
     d->c_count = curves.count();
@@ -442,11 +440,7 @@ void dtkPlotViewSettings::updateCurves(void)
 
     for (int i = 0; i < d->c_count; i++) {
 
-	qDebug() << Q_FUNC_INFO << i;
-
 	if(i < d->p_count) {
-
-	    qDebug() << Q_FUNC_INFO << i << "update";
 
 	    QLayoutItem *item;
 
@@ -459,8 +453,6 @@ void dtkPlotViewSettings::updateCurves(void)
 	    reinterpret_cast<dtkColorButton *>(item->widget())->setColor(curves[i]->color());
 
         } else {
-
-	    qDebug() << Q_FUNC_INFO << i << "create";
 	     	    
 	    QString name = "Curve " + QString::number(i+1);
 		

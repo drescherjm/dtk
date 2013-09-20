@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 16:23:51 2013 (+0200)
+ * Last-Updated: Fri Sep 20 17:16:23 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 138
+ *     Update #: 140
  */
 
 /* Commentary: 
@@ -117,6 +117,7 @@ public:
 
     QColor zoomColor(void) const;
     void setZoomColor(const QColor& color);
+    bool isZoomActivated(void) const;
 
     void updateAxes(void);
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 13:37:37 2013 (+0200)
+ * Last-Updated: Fri Sep 20 17:20:55 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 98
+ *     Update #: 102
  */
 
 /* Commentary: 
@@ -67,6 +67,11 @@ void dtkPlotViewZoomer::activate(void)
 void dtkPlotViewZoomer::deactivate(void)
 {
     d->setEnabled(false);
+}
+
+bool dtkPlotViewZoomer::isActivated(void) const
+{
+    return d->isEnabled();
 }
 
 QColor dtkPlotViewZoomer::color(void) const

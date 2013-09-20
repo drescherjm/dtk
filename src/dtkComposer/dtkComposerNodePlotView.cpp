@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 16:23:59 2013 (+0200)
+ * Last-Updated: Fri Sep 20 17:21:38 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 124
+ *     Update #: 129
  */
 
 /* Commentary: 
@@ -81,7 +81,7 @@ void dtkComposerNodePlotView::run(void)
     if(!d->view)
         return;
 
-    d->view->clear();
+    //d->view->clear();
 
     foreach(dtkPlotCurve *curve, d->receiver_curve.allData()) {
         if (curve) {
@@ -106,6 +106,8 @@ void dtkComposerNodePlotView::run(void)
     if(!d->receiver_y_axis_label.isEmpty())
         d->view->setAxisTitleY(*d->receiver_y_axis_label.data());
 
-    d->view->updateAxes();
+    if (!d->view->isZoomActivated())
+        d->view->updateAxes();
+
     d->view->update();
 }

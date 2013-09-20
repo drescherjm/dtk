@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 16:23:46 2013 (+0200)
+ * Last-Updated: Fri Sep 20 17:20:19 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 473
+ *     Update #: 489
  */
 
 /* Commentary: 
@@ -32,6 +32,7 @@
 #include <qwt_plot_grid.h>
 #include <qwt_scale_engine.h>
 #include <qwt_scale_widget.h>
+#include <qwt_plot_zoomer.h>
 
 #include <float.h>
 
@@ -115,8 +116,7 @@ void dtkPlotView::clear(void)
     d->curves.clear();
 
     foreach (QwtPlotItem *item, d->itemList()) {
-        if (!((QwtPlotGrid *) item))
-            item->detach();
+        item->detach();
     }
 
     this->update();
@@ -220,6 +220,16 @@ void dtkPlotView::deactivateZooming(void)
         d->zoomer = new dtkPlotViewZoomer(this);
 
     d->zoomer->deactivate();
+}
+
+bool dtkPlotView::isZoomActivated(void) const
+{
+    bool value = false;
+
+    if(d->zoomer)
+        value = d->zoomer->isActivated();
+
+    return value;
 }
 
 void dtkPlotView::setZoomColor(const QColor& color)

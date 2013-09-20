@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  4 09:45:22 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 506
+ * Last-Updated: Fri Sep 20 10:03:24 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 751
  */
 
 /* Commentary: 
@@ -47,50 +47,64 @@ public:
     dtkColorButton *backgroundColor;
     dtkColorButton *foregroundColor;
 
-    QList<QGroupBox *> groupBoxesList;
-
     QFormLayout *curvesNameLayout;
-    QGroupBox *curvesNameGroup;
-
     QFormLayout *curvesColorLayout;
-    QGroupBox *curvesColorGroup;
 
+    QFrame *curvesNameGroup;
+    QFrame *curvesColorGroup;
+
+public:
+    int c_count;
+    int p_count;
+
+public:
     dtkPlotView *view;
 
+public:
     QSignalMapper *mapperCurvesName;
     QSignalMapper *mapperCurvesColor;
 };
 
-dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkPlotViewSettingsPrivate())
+dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(new dtkPlotViewSettingsPrivate)
 {
-    // View
-
     d->view = NULL;
 
-    // Titles
+    d->c_count = 0;
+    d->p_count = 0;
 
-    d->mainTitle = new QLineEdit;
+    // ///////////////////////////////////////////////////////////////////
+    // Titles
+    // ///////////////////////////////////////////////////////////////////
+
+    {
+
+    d->mainTitle = new QLineEdit(this);
     d->mainTitle->setAlignment(Qt::AlignLeft);
-    d->axisTitleX = new QLineEdit;
+    d->axisTitleX = new QLineEdit(this);
     d->axisTitleX->setAlignment(Qt::AlignLeft);
-    d->axisTitleY = new QLineEdit;
+    d->axisTitleY = new QLineEdit(this);
     d->axisTitleY->setAlignment(Qt::AlignLeft);
 
-    QFormLayout *titlesLayout = new QFormLayout;
-    titlesLayout->setContentsMargins(2, 15, 2, 0);
-    titlesLayout->setSpacing(0);
-    titlesLayout->addRow("Main", d->mainTitle);
-    titlesLayout->addRow("X-axis", d->axisTitleX);
-    titlesLayout->addRow("Y-axis", d->axisTitleY);
+    QFormLayout *layout = new QFormLayout;
+    layout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    layout->addRow("Main", d->mainTitle);
+    layout->addRow("X-axis", d->axisTitleX);
+    layout->addRow("Y-axis", d->axisTitleY);
 
-    QGroupBox *titlesGroup = new QGroupBox("Titles");
-    titlesGroup->setLayout(titlesLayout);
+    QFrame *page = new QFrame(this);
+    page->setLayout(layout);
 
-    d->groupBoxesList << titlesGroup;
+    this->addItem(page, "Plot titles");
 
+    }
+
+    // ///////////////////////////////////////////////////////////////////
     // Sizes
+    // ///////////////////////////////////////////////////////////////////
 
-    d->titleSize = new QSpinBox;
+    {
+    
+    d->titleSize = new QSpinBox(this);
     d->titleSize->setRange(8, 25);
     d->titleSize->setValue(20);
     d->titleSize->setSuffix("px");
@@ -98,7 +112,7 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
     d->titleSize->setAlignment(Qt::AlignRight);
     d->titleSize->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    d->axesTitleSize = new QSpinBox;
+    d->axesTitleSize = new QSpinBox(this);
     d->axesTitleSize->setRange(8, 25);
     d->axesTitleSize->setValue(15);
     d->axesTitleSize->setSuffix("px");
@@ -106,131 +120,114 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
     d->axesTitleSize->setAlignment(Qt::AlignRight);
     d->axesTitleSize->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    QFormLayout *sizesLayout = new QFormLayout;
-    sizesLayout->setContentsMargins(2, 15, 2, 0);
-    sizesLayout->setSpacing(0);
-    sizesLayout->addRow("Title", d->titleSize);
-    sizesLayout->addRow("Axes title", d->axesTitleSize);
+    QFormLayout *layout = new QFormLayout;
+    layout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    layout->addRow("Title", d->titleSize);
+    layout->addRow("Axes title", d->axesTitleSize);
 
-    QGroupBox *sizesGroup = new QGroupBox("Sizes");
-    sizesGroup->setLayout(sizesLayout);
+    QFrame *page = new QFrame(this);
+    page->setLayout(layout);
 
-    d->groupBoxesList << sizesGroup;
+    this->addItem(page, "Plot sizes");
 
+    }
+
+    // ///////////////////////////////////////////////////////////////////
     // Scale
+    // ///////////////////////////////////////////////////////////////////
+
+    {
 
     QStringList scaleList = QStringList() << "Linear" << "Logarithmic";
 
-    d->axisScaleX = new QComboBox;
+    d->axisScaleX = new QComboBox(this);
     d->axisScaleX->addItems(scaleList);
     d->axisScaleX->setCurrentIndex(0);
     d->axisScaleX->setFocusPolicy(Qt::NoFocus);
 
-    d->axisScaleY = new QComboBox;
+    d->axisScaleY = new QComboBox(this);
     d->axisScaleY->addItems(scaleList);
     d->axisScaleY->setCurrentIndex(0);
     d->axisScaleY->setFocusPolicy(Qt::NoFocus);
 
-    QFormLayout *scaleLayout = new QFormLayout;
-    scaleLayout->setContentsMargins(2, 15, 2, 0);
-    scaleLayout->setSpacing(0);
-    scaleLayout->addRow("X-axis", d->axisScaleX);
-    scaleLayout->addRow("Y-axis", d->axisScaleY);
+    QFormLayout *layout = new QFormLayout;
+    layout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    layout->addRow("X-axis", d->axisScaleX);
+    layout->addRow("Y-axis", d->axisScaleY);
 
-    QGroupBox *scaleGroup = new QGroupBox("Scale");
-    scaleGroup->setLayout(scaleLayout);
+    QFrame *page = new QFrame(this);
+    page->setLayout(layout);
 
-    d->groupBoxesList << scaleGroup;
+    this->addItem(page, "Plot scales");
 
+    }
+
+    // ///////////////////////////////////////////////////////////////////
     // Legend
+    // ///////////////////////////////////////////////////////////////////
+
+    {
 
     QStringList legendPositionList = QStringList() << "Left" << "Right" << "Bottom" << "Top";
-    d->legendPosition = new QComboBox;
+
+    d->legendPosition = new QComboBox(this);
     d->legendPosition->addItems(legendPositionList);
     d->legendPosition->setCurrentIndex(1);
     d->legendPosition->setFocusPolicy(Qt::NoFocus);
 
-    QFormLayout *legendLayout = new QFormLayout;
-    legendLayout->setContentsMargins(2, 15, 2, 0);
-    legendLayout->setSpacing(0);
-    legendLayout->addRow("Position", d->legendPosition);
+    QFormLayout *layout = new QFormLayout;
+    layout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    layout->addRow("Position", d->legendPosition);
 
-    d->legendGroup = new QGroupBox("Legend");
-    d->legendGroup->setLayout(legendLayout);
+    QFrame *page = new QFrame(this);
+    page->setLayout(layout);
 
-    d->groupBoxesList << d->legendGroup;
+    this->addItem(page, "Plot legend");
 
-    // Curves name
-
-    d->curvesNameGroup = new QGroupBox("Curves name");
-
-    d->groupBoxesList << d->curvesNameGroup;
-
-    d->mapperCurvesName = new QSignalMapper;
-
-    // Curves color
-
-    d->curvesColorGroup = new QGroupBox("Curves color");
-
-    d->groupBoxesList << d->curvesColorGroup;
-
-    d->mapperCurvesColor = new QSignalMapper;
-
-    // Colors
-
-    d->gridColor = new dtkColorButton;
-
-    d->pickingColor = new dtkColorButton;
-
-    d->zoomColor = new dtkColorButton;
-
-    d->backgroundColor = new dtkColorButton;
-    d->foregroundColor = new dtkColorButton;
-
-    QFormLayout *colorsLayout = new QFormLayout;
-    colorsLayout->setContentsMargins(2, 15, 2, 0);
-    colorsLayout->setSpacing(0);
-    colorsLayout->addRow("Grid", d->gridColor);
-    colorsLayout->addRow("Picking", d->pickingColor);
-    colorsLayout->addRow("Zoom", d->zoomColor);
-    colorsLayout->addRow("Background", d->backgroundColor);
-    colorsLayout->addRow("Foreground", d->foregroundColor);
-
-    QGroupBox *colorsGroup = new QGroupBox("Colors");
-    colorsGroup->setLayout(colorsLayout);
-
-    d->groupBoxesList << colorsGroup;
-
-    // Data layout
-
-    QFrame *frameData = new QFrame;
-    QVBoxLayout *dataLayout = new QVBoxLayout(frameData);
-    dataLayout->setAlignment(Qt::AlignCenter | Qt::AlignTop);
-    dataLayout->setContentsMargins(2, 0, 2, 0);
-    dataLayout->setSpacing(0);
-    foreach(QGroupBox* groupBox, d->groupBoxesList) {
-        dataLayout->addWidget(groupBox);
     }
 
-    // Scroll Area
+    // ///////////////////////////////////////////////////////////////////
+    // Colors
+    // ///////////////////////////////////////////////////////////////////
 
-    QScrollArea *areaData = new QScrollArea;
-    areaData->setAttribute(Qt::WA_MacShowFocusRect, false);
-    areaData->setFrameShape(QFrame::NoFrame);
-    areaData->setContentsMargins(0, 0, 0, 0);
-    areaData->setWidgetResizable(true);
-    areaData->setWidget(frameData);
-    areaData->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    areaData->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    {
 
-    // Main layout
+    d->gridColor = new dtkColorButton(this);
+    d->pickingColor = new dtkColorButton(this);
+    d->zoomColor = new dtkColorButton(this);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    layout->addWidget(areaData);
+    d->backgroundColor = new dtkColorButton(this);
+    d->foregroundColor = new dtkColorButton(this);
 
-    // Behaviour
+    QFormLayout *layout = new QFormLayout;
+    layout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    layout->addRow("Grid", d->gridColor);
+    layout->addRow("Picking", d->pickingColor);
+    layout->addRow("Zoom", d->zoomColor);
+    layout->addRow("Background", d->backgroundColor);
+    layout->addRow("Foreground", d->foregroundColor);
+
+    QFrame *page = new QFrame(this);
+    page->setLayout(layout);
+
+    this->addItem(page, "Plot colors");
+
+    }
+
+    // ///////////////////////////////////////////////////////////////////
+    // 
+    // ///////////////////////////////////////////////////////////////////
+
+    d->curvesNameGroup = NULL;
+    d->curvesNameLayout = NULL;
+
+    d->curvesColorGroup = NULL;
+    d->curvesColorLayout = NULL;
+
+    d->mapperCurvesName = new QSignalMapper;
+    d->mapperCurvesColor = new QSignalMapper;
+
+    // ///////////////////////////////////////////////////////////////////
 
     connect(d->mainTitle, SIGNAL(returnPressed()), this, SLOT(onMainTitleChanged()));
     connect(d->axisTitleX, SIGNAL(returnPressed()), this, SLOT(onAxisTitleXChanged()));
@@ -254,7 +251,7 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QFrame(), d(new dtkP
     connect(d->backgroundColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(onBackgroundColorChanged(const QColor&)));
     connect(d->foregroundColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(onForegroundColorChanged(const QColor&)));
 
-    // General
+    // ///////////////////////////////////////////////////////////////
 
     this->setStyleSheet(dtkReadFile(":dtkPlot/dtkPlotView.qss"));
 }
@@ -347,6 +344,7 @@ void dtkPlotViewSettings::onForegroundColorChanged(const QColor& color)
 void dtkPlotViewSettings::onRandomColorsClicked(void)
 {
     int index = 0;
+
     foreach (dtkPlotCurve *curve, d->view->curves()) {
 
         QColor color = QColor::fromHsv(qrand() % 256, 255, 190);
@@ -409,82 +407,101 @@ void dtkPlotViewSettings::update(void)
 
 void dtkPlotViewSettings::updateCurves(void)
 {
+    qDebug() << Q_FUNC_INFO;
+
     QList<dtkPlotCurve *> curves = d->view->curves();
 
-    int numberOfCurves = curves.count();
+    d->c_count = curves.count();
 
-    if (numberOfCurves==0) {
-        d->curvesNameGroup->setVisible(false);
-        d->curvesColorGroup->setVisible(false);
-        return;
+    if(d->c_count && !d->p_count) {
+	
+	if(!d->curvesNameLayout) {
+	    d->curvesNameLayout = new QFormLayout;
+	    d->curvesNameLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+	}
+
+	if(!d->curvesColorLayout) {
+
+	    QPushButton *random = new QPushButton("Randomize colors", this);
+	    random->setFocusPolicy(Qt::NoFocus);
+
+	    QSpinBox *alphaCurveArea = new QSpinBox(this);
+	    alphaCurveArea->setRange(0, 255);
+	    alphaCurveArea->setValue(d->view->alphaCurveArea());
+
+	    d->curvesColorLayout = new QFormLayout;
+	    d->curvesColorLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+	    d->curvesColorLayout->addWidget(random);
+	    d->curvesColorLayout->addRow("Alpha", alphaCurveArea);
+
+	    connect(random, SIGNAL(clicked()), this, SLOT(onRandomColorsClicked()));
+	    connect(alphaCurveArea, SIGNAL(valueChanged(const int&)), this, SLOT(onColorAreaChanged(const int&)));
+
+	}
     }
 
-    d->curvesNameGroup->setVisible(true);
-    d->curvesColorGroup->setVisible(true);
+    for (int i = 0; i < d->c_count; i++) {
 
-    if (d->curvesNameLayout && numberOfCurves==d->curvesNameLayout->rowCount()) {
-        for (int i = 0; i<numberOfCurves; i++) {
-            QLayoutItem *item = d->curvesNameLayout->itemAt(i, QFormLayout::FieldRole);
-            QLineEdit *lineedit = dynamic_cast<QLineEdit *>(item->widget());
-            lineedit->setText(curves[i]->name());
+	qDebug() << Q_FUNC_INFO << i;
 
-            item = d->curvesColorLayout->itemAt(i+2, QFormLayout::FieldRole);
-            dtkColorButton *button = dynamic_cast<dtkColorButton *>(item->widget());
-            button->setColor(curves[i]->color());
-        }
-        return;
+	if(i < d->p_count) {
+
+	    qDebug() << Q_FUNC_INFO << i << "update";
+
+	    QLayoutItem *item;
+
+	    item = d->curvesNameLayout->itemAt(i, QFormLayout::FieldRole);
+	    
+	    reinterpret_cast<QLineEdit *>(item->widget())->setText(curves[i]->name());
+	
+	    item = d->curvesColorLayout->itemAt(i+2, QFormLayout::FieldRole);
+	    
+	    reinterpret_cast<dtkColorButton *>(item->widget())->setColor(curves[i]->color());
+
+        } else {
+
+	    qDebug() << Q_FUNC_INFO << i << "create";
+	     	    
+	    QString name = "Curve " + QString::number(i+1);
+		
+	    dtkPlotCurve *curve = curves[i];
+		
+	    QString title = curve->name();
+	    
+	    QLineEdit *entry = new QLineEdit(title, this);
+	    
+	    d->curvesNameLayout->addRow(name, entry);
+		
+	    connect(entry, SIGNAL(editingFinished()), d->mapperCurvesName, SLOT(map()));
+	    
+	    d->mapperCurvesName->setMapping(entry, i);
+		
+	    QColor color = curve->color();
+	    
+	    dtkColorButton *button = new dtkColorButton(this);
+	    button->setColor(color);
+	    
+	    d->curvesColorLayout->addRow(name, button);
+		
+	    connect(button, SIGNAL(colorChanged(const QColor&)), d->mapperCurvesColor, SLOT(map()));
+		
+	    d->mapperCurvesColor->setMapping(button, i);
+	}
     }
 
-    if (d->curvesNameLayout)
-        QWidget().setLayout(d->curvesNameLayout);
-    d->curvesNameLayout = new QFormLayout;
-    d->curvesNameLayout->setContentsMargins(2, 15, 2, 0);
-    d->curvesNameLayout->setSpacing(0);
-    d->curvesNameGroup->setLayout(d->curvesNameLayout);
+    if(d->c_count && !d->p_count) {
 
-    if (d->curvesColorLayout)
-        QWidget().setLayout(d->curvesColorLayout);
-    d->curvesColorLayout = new QFormLayout;
-    d->curvesColorLayout->setContentsMargins(2, 15, 2, 0);
-    d->curvesColorLayout->setSpacing(0);
-    d->curvesColorGroup->setLayout(d->curvesColorLayout);
+	d->curvesNameGroup = new QFrame(this);
+	d->curvesNameGroup->setLayout(d->curvesNameLayout);
 
-    QPushButton *random = new QPushButton("Apply");
-    random->setFocusPolicy(Qt::NoFocus);
-    d->curvesColorLayout->addRow("Random", random);
+	d->curvesColorGroup = new QFrame(this);
+	d->curvesColorGroup->setLayout(d->curvesColorLayout);
 
-    QSpinBox *alphaCurveArea = new QSpinBox;
-    alphaCurveArea->setRange(0, 255);
-    alphaCurveArea->setValue(d->view->alphaCurveArea());
-    alphaCurveArea->setFocusPolicy(Qt::StrongFocus);
-    alphaCurveArea->setAlignment(Qt::AlignRight);
-    alphaCurveArea->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->curvesColorLayout->addRow("Alpha color area", alphaCurveArea);
-
-    for (int i = 0; i<numberOfCurves; i++) {
-        QString name = "Curve " + QString::number(i+1);
-        dtkPlotCurve *curve = curves[i];
-
-        QString title = curve->name();
-        QLineEdit *entry = new QLineEdit(title);
-        entry->setAlignment(Qt::AlignLeft);
-
-        d->curvesNameLayout->addRow(name, entry);
-
-        connect(entry, SIGNAL(editingFinished()), d->mapperCurvesName, SLOT(map()));
-        d->mapperCurvesName->setMapping(entry, i);
-
-        QColor color = curve->color();
-        dtkColorButton *button = new dtkColorButton;
-        button->setColor(color);
-        d->curvesColorLayout->addRow(name, button);
-
-        connect(button, SIGNAL(colorChanged(const QColor&)), d->mapperCurvesColor, SLOT(map()));
-        d->mapperCurvesColor->setMapping(button, i);
+	this->addItem(d->curvesNameGroup, "Plot curves");
+	this->addItem(d->curvesColorGroup, "Plot curves attributes");
     }
 
-    connect(random, SIGNAL(clicked()), this, SLOT(onRandomColorsClicked()));
-    connect(alphaCurveArea, SIGNAL(valueChanged(const int&)), this, SLOT(onColorAreaChanged(const int&)));
+    d->p_count = d->c_count;
 }
 
 void dtkPlotViewSettings::updateCurveName(int index)
@@ -516,4 +533,3 @@ void dtkPlotViewSettings::updateCurveColor(int index)
 
     d->view->update();
 }
-

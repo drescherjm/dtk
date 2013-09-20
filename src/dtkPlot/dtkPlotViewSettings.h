@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  4 09:36:28 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 83
+ * Last-Updated: Thu Sep 19 22:14:59 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -22,12 +22,12 @@
 
 #include "dtkPlotExport.h"
 
-#include <QtGui/QFrame>
+#include <QtGui/QToolBox>
 
 class dtkPlotView;
 class dtkPlotViewSettingsPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewSettings : public QFrame
+class DTKPLOT_EXPORT dtkPlotViewSettings : public QToolBox
 {
     Q_OBJECT
 

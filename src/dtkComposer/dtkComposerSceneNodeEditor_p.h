@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 15:24:51 2012 (+0200)
+ * Last-Updated: Mon Sep 23 14:43:54 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 74
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -112,6 +112,9 @@ public:
 public:
     QLineEdit *edit_s;
     QToolButton *butn_f;
+
+public:
+    QHBoxLayout *layout;
 
 public:
     QRadioButton *t_b;

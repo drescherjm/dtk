@@ -369,7 +369,6 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     bv_layout->addWidget(d->blocks);
     bv_layout->addWidget(b_frame);
 
-    //
     QHBoxLayout *p_layout = new QHBoxLayout;
     p_layout->addLayout(ip_layout);
     p_layout->addLayout(op_layout);
@@ -378,14 +377,14 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     lb_layout->addLayout(lv_layout);
     lb_layout->addLayout(bv_layout);
 
-    QHBoxLayout *bb_layout = new QHBoxLayout;
-    bb_layout->setContentsMargins(0, 0, 0, 0);
-    bb_layout->setSpacing(0);
-    bb_layout->addWidget(d->spin_d);
-    bb_layout->addWidget(d->spin_f);
-    bb_layout->addWidget(d->edit_s);
-    bb_layout->addWidget(d->butn_f);
-    bb_layout->addWidget(d->bool_widget);
+    d->layout = new QHBoxLayout;
+    d->layout->setContentsMargins(0, 0, 0, 0);
+    d->layout->setSpacing(0);
+    d->layout->addWidget(d->spin_d);
+    d->layout->addWidget(d->spin_f);
+    d->layout->addWidget(d->edit_s);
+    d->layout->addWidget(d->butn_f);
+    d->layout->addWidget(d->bool_widget);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -393,7 +392,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     layout->addWidget(top);
     layout->addLayout(lb_layout);
     layout->addLayout(p_layout);
-    layout->addLayout(bb_layout);
+    layout->addLayout(d->layout);
 
     connect(d->add_loop_port, SIGNAL(clicked()), this, SLOT(addLoopPort()));
     connect(d->rem_loop_port, SIGNAL(clicked()), this, SLOT(removeLoopPort()));

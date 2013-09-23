@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 16:03:56 2012 (+0200)
+ * Last-Updated: Mon Sep 23 14:55:58 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 50
+ *     Update #: 53
  */
 
 /* Commentary: 
@@ -39,13 +39,13 @@ public:
     ~dtkComposerSceneNodeEditor(void);
 
 public slots:
-    void setNode(dtkComposerSceneNode *node);
-    void setScene(dtkComposerScene *scene);
-    void setStack(dtkComposerStack *stack);
-    void setGraph(dtkComposerGraph *graph);
+    virtual void setNode(dtkComposerSceneNode *node);
+    virtual void setScene(dtkComposerScene *scene);
+    virtual void setStack(dtkComposerStack *stack);
+    virtual void setGraph(dtkComposerGraph *graph);
 
 public slots:
-    void clear(void);
+    virtual void clear(void);
 
 protected slots:
     void addLoopPort(void);
@@ -76,7 +76,7 @@ protected slots:
     void onValueChanged(const QString&);
     void onImplementationChanged(const QString&);
 
-private:
+protected:
     dtkComposerSceneNodeEditorPrivate *d;
 };
 

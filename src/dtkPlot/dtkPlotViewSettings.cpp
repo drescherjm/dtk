@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 16:02:07 2013 (+0200)
+ * Last-Updated: Thu Sep 26 18:07:29 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 752
+ *     Update #: 756
  */
 
 /* Commentary: 
@@ -392,6 +392,9 @@ void dtkPlotViewSettings::update(void)
     d->mainTitle->setText(d->view->title());
     d->axisTitleX->setText(d->view->axisTitleX());
     d->axisTitleY->setText(d->view->axisTitleY());
+
+    d->axisScaleX->setCurrentIndex(d->view->axisScaleX());
+    d->axisScaleY->setCurrentIndex(d->view->axisScaleY());
 
     d->titleSize->setValue(d->view->titleSize());
     d->axesTitleSize->setValue(d->view->axisTitleSizeX());

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 17:20:19 2013 (+0200)
+ * Last-Updated: Thu Sep 26 18:04:02 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 489
+ *     Update #: 510
  */
 
 /* Commentary: 
@@ -62,6 +62,10 @@ public:
     QColor foreground_color;
 
 public:
+    dtkPlotView::Scale scaleEngineX;
+    dtkPlotView::Scale scaleEngineY;
+
+public:
     QList<dtkPlotCurve *> curves;
 };
 
@@ -87,6 +91,9 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 
     d->setAxisAutoScale(0, true);
     d->setAxisAutoScale(1, true);
+
+    d->scaleEngineX = dtkPlotView::Linear;
+    d->scaleEngineY = dtkPlotView::Linear;
 
     reinterpret_cast<QwtPlotCanvas *>(d->canvas())->setFrameStyle(QFrame::NoFrame);
 
@@ -407,7 +414,11 @@ void dtkPlotView::setAxisScaleX(dtkPlotView::Scale scale)
 #endif
     }
 
+    d->scaleEngineX = scale;
+
     this->update();
+
+    this->writeSettings();
 }
 
 void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
@@ -423,7 +434,21 @@ void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
 #endif
     }
 
+    d->scaleEngineY = scale;
+
     this->update();
+
+    this->writeSettings();
+}
+
+dtkPlotView::Scale dtkPlotView::axisScaleX(void) const
+{
+    return d->scaleEngineX;
+}
+
+dtkPlotView::Scale dtkPlotView::axisScaleY(void) const
+{
+    return d->scaleEngineY;
 }
 
 void dtkPlotView::setLegendPosition(LegendPosition position)
@@ -566,7 +591,12 @@ void dtkPlotView::readSettings(void)
     d->zoom_color = settings.value("zoom_color", Qt::black).value<QColor>();
     d->background_color = settings.value("background_color", Qt::white).value<QColor>();
     d->foreground_color = settings.value("forergound_color", Qt::black).value<QColor>();
+    d->scaleEngineX = (dtkPlotView::Scale) settings.value("axis_x_scale_engine", dtkPlotView::Linear).toUInt();
+    d->scaleEngineY = (dtkPlotView::Scale) settings.value("axis_y_scale_engine", dtkPlotView::Linear).toUInt();
     settings.endGroup();
+
+    this->setAxisScaleX(d->scaleEngineX);
+    this->setAxisScaleY(d->scaleEngineY);
 
     this->updateColors();
 }
@@ -580,6 +610,8 @@ void dtkPlotView::writeSettings(void)
     settings.setValue("zoom_color", d->zoom_color);
     settings.setValue("background_color", d->background_color);
     settings.setValue("forergound_color", d->foreground_color);
+    settings.setValue("axis_x_scale_engine", d->scaleEngineX);
+    settings.setValue("axis_y_scale_engine", d->scaleEngineY);
     settings.endGroup();
 }
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 17:16:23 2013 (+0200)
+ * Last-Updated: Thu Sep 26 18:03:39 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 140
+ *     Update #: 143
  */
 
 /* Commentary: 
@@ -102,6 +102,9 @@ public:
 public:
     QString title(void) const;
     int titleSize(void) const;
+
+    Scale axisScaleX(void) const;
+    Scale axisScaleY(void) const;
 
     QString axisTitleX(void) const;
     QString axisTitleY(void) const;

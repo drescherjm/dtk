@@ -145,13 +145,18 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
 
     } else {
 
+        dtkVectorReal *v_lhs = d->receiver_lhs.data();
+        dtkVectorReal *v_rhs = d->receiver_rhs.data();
+
+        if (!v_lhs || !v_rhs) {
+            dtkWarn()<< "NULL Input vectors. Nothing is done";
+            return;
+        }
+
         if (!d->vector) {
             d->vector = new dtkVectorReal();
             d->emitter_vec.setData(d->vector);
         }
-
-        dtkVectorReal *v_lhs = d->receiver_lhs.data();
-        dtkVectorReal *v_rhs = d->receiver_rhs.data();
 
         if (v_lhs->size() != v_rhs->size()) {
             dtkWarn()<< "Input vectors do not have the same size. Nothing is done";

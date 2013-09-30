@@ -177,6 +177,9 @@ void dtkComposerNodeRemote::begin(void)
             dtkTrace() << "waiting event loop ended, job has started" << d->jobid;
         } else
             dtkDebug() << " Job already running, go " << d->jobid;
+    } else if (!d->slave && d->jobid.isEmpty()) { // on controller but no job !
+        dtkError() << "No Job, can't run on remote node " ;
+        return;
     }
 
     if (d->controller) {
@@ -269,6 +272,11 @@ void dtkComposerNodeRemote::begin(void)
 void dtkComposerNodeRemote::end(void)
 {
     QScopedPointer<dtkDistributedMessage> msg;
+
+    if (!d->slave && d->jobid.isEmpty()) { // on controller but no job !
+        dtkError() << "No Job, skip end remote node " ;
+        return;
+    }
 
     if (d->controller) {
         dtkDebug() << "running node remote end statement on controller";

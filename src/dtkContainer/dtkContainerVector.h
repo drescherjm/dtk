@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 17 12:09:08 2012 (+0200)
+ * Last-Updated: Mon Sep 30 16:47:01 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 80
+ *     Update #: 81
  */
 
 /* Commentary: 
@@ -28,7 +28,6 @@
 // /////////////////////////////////////////////////////////////////
 // dtkContainerVector interface
 // /////////////////////////////////////////////////////////////////
-
 
 template <typename T> class dtkContainerVector : public dtkAbstractContainerOrdered<T>
 {

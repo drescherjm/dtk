@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue May 29 10:17:09 2012 (+0200)
-##           By: tkloczko
-##     Update #: 320
+## Last-Updated: Mon Sep 30 17:04:58 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 323
 ######################################################################
 ## 
 ### Commentary: 
@@ -38,7 +38,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkAbstractContainerWrapper.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkAbstractContainerWrapper.cpp)
+  dtkAbstractContainerWrapper.cpp
+  dtkContainerVector.cpp)
 
 ## #################################################################
 ## Build rules

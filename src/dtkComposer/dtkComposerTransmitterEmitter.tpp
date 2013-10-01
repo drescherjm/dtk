@@ -2,10 +2,6 @@
  * 
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. sept. 10 16:17:30 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 218
  */
 
 /* Commentary: 
@@ -36,10 +32,11 @@
 // Forward declaration of specialized method
 // /////////////////////////////////////////////////////////////////
 
-template <> DTKCOMPOSER_EXPORT QString     dtkComposerTransmitterEmitter<qreal>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString dtkComposerTransmitterEmitter<qlonglong>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString   dtkComposerTransmitterEmitter<QString>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString      dtkComposerTransmitterEmitter<bool>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString       dtkComposerTransmitterEmitter<qreal>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString   dtkComposerTransmitterEmitter<qlonglong>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString     dtkComposerTransmitterEmitter<QString>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString dtkComposerTransmitterEmitter<QStringList>::dataDescription(void);
+template <> DTKCOMPOSER_EXPORT QString        dtkComposerTransmitterEmitter<bool>::dataDescription(void);
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation

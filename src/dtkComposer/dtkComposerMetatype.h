@@ -3,10 +3,6 @@
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Sat Aug  4 00:26:47 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Jun 13 14:55:45 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 15
  */
 
 /* Commentary: 
@@ -38,5 +34,6 @@ Q_DECLARE_METATYPE(qreal*);
 Q_DECLARE_METATYPE(double **)
 
 Q_DECLARE_METATYPE(QString*);
+Q_DECLARE_METATYPE(QStringList*);
 
 #endif

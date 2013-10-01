@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/23 09:24:08
- * Version: $Id$
- * Last-Updated: Thu Aug  9 11:19:38 2012 (+0200)
- *           By: tkloczko
- *     Update #: 47
  */
 
 /* Commentary:
@@ -141,4 +137,151 @@ void dtkComposerNodeStringOperatorBinaryLogicEquality::run(void)
     d->value = (*(d->receiver_lhs.data()) == *(d->receiver_rhs.data()));
 }
 
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListAppend
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListAppendPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<QStringList> receiver_list;
+    dtkComposerTransmitterReceiver<QString> receiver_string;
+
+public:
+    dtkComposerTransmitterEmitter<QStringList> emitter;
+
+public:
+    QStringList list;
+};
+
+dtkComposerNodeStringListAppend::dtkComposerNodeStringListAppend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringListAppendPrivate)
+{
+    this->appendReceiver(&(d->receiver_list));
+    this->appendReceiver(&(d->receiver_string));
+
+    d->emitter.setData(&d->list);
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeStringListAppend::~dtkComposerNodeStringListAppend(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeStringListAppend::run(void)
+{
+    if (!d->receiver_list.isEmpty() && !d->receiver_string.isEmpty() ) {
+        d->list = *(d->receiver_list.data());
+        d->list.append(*(d->receiver_string.data()));
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter.clearData();
+    }
+}
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListExtract
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListExtractPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<QStringList> receiver_list;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+
+public:
+    dtkComposerTransmitterEmitter<QString> emitter;
+
+public:
+    QString value;
+};
+
+dtkComposerNodeStringListExtract::dtkComposerNodeStringListExtract(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringListExtractPrivate)
+{
+    this->appendReceiver(&(d->receiver_list));
+    this->appendReceiver(&(d->receiver_index));
+
+    d->emitter.setData(&d->value);
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeStringListExtract::~dtkComposerNodeStringListExtract(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeStringListExtract::run(void)
+{
+    if (!d->receiver_list.isEmpty() && !d->receiver_index.isEmpty() ) {
+        QStringList *list = d->receiver_list.data();
+        d->value = list->at(*(d->receiver_index.data()));
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter.clearData();
+    }
+}
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListSet
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListSetPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<QStringList> receiver_list;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+    dtkComposerTransmitterReceiver<QString> receiver_value;
+
+public:
+    dtkComposerTransmitterEmitter<QStringList> emitter;
+
+public:
+    QStringList list;
+};
+
+dtkComposerNodeStringListSet::dtkComposerNodeStringListSet(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeStringListSetPrivate)
+{
+    this->appendReceiver(&(d->receiver_list));
+    this->appendReceiver(&(d->receiver_index));
+    this->appendReceiver(&(d->receiver_value));
+
+    d->emitter.setData(&d->list);
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeStringListSet::~dtkComposerNodeStringListSet(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeStringListSet::run(void)
+{
+    if (!d->receiver_list.isEmpty() && !d->receiver_value.isEmpty()&& !d->receiver_index.isEmpty()  ) {
+        d->list = *(d->receiver_list.data());
+        qlonglong index = *(d->receiver_index.data());
+         if (index >= 0 && index < d->list.size())
+             d->list.replace(index, *(d->receiver_value.data()));
+         else
+             dtkWarn() << "bad index value in set string list" << index;
+    } else {
+        dtkWarn() << "Inputs not specified. Nothing is done";
+        d->emitter.clearData();
+    }
+
+}
 

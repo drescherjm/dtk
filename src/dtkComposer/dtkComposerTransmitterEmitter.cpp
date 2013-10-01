@@ -33,6 +33,11 @@ template <> QString dtkComposerTransmitterEmitter<QString>::dataDescription(void
     return *m_data;
 };
 
+template <> QString dtkComposerTransmitterEmitter<QStringList>::dataDescription(void)
+{
+    return m_data->join(";");
+};
+
 template <> QString dtkComposerTransmitterEmitter<bool>::dataDescription(void)
 {
     return QString::number(static_cast<int>(*m_data));

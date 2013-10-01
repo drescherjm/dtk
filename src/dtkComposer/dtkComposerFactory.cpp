@@ -171,6 +171,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["String"] = QStringList() << "primitive" << "string";
     d->types["String"] = "string";
 
+    d->nodes << "String List";
+    d->descriptions["String List"] = "<p>String List node</p>";
+    d->tags["String List"] = QStringList() << "primitive" << "string" << "list";
+    d->types["String List"] = "StringList";
+
     d->nodes << "File";
     d->descriptions["File"] = "<p>File node</p>";
     d->tags["File"] = QStringList() << "primitive" << "file";
@@ -189,9 +194,24 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["String Equality"] = "string_equality";
 
     d->nodes << "Append";
-    d->descriptions["Append"] = "<p>Description not yet filled!</p>";
+    d->descriptions["Append"] = "<p>Append two strings</p>";
     d->tags["Append"] = QStringList() << "concatenate" << "operator" << "append" << "string";
     d->types["Append"] = "append";
+
+    d->nodes << "String List Append";
+    d->descriptions["String List Append"] = "<p>Append a String to a String list</p>";
+    d->tags["String List Append"] = QStringList() << "list" << "operator" << "append" << "string";
+    d->types["String List Append"] = "appendStringList";
+
+    d->nodes << "String List Extract";
+    d->descriptions["String List Extract"] = "<p>Extract a String from a String list</p>";
+    d->tags["String List Extract"] = QStringList() << "list" << "operator" << "extract" << "string";
+    d->types["String List Extract"] = "extractStringList";
+
+    d->nodes << "String List Set Item";
+    d->descriptions["String List Set Item"] = "<p>set a String list item</p>";
+    d->tags["String List Set Item"] = QStringList() << "list" << "operator" << "set" << "string";
+    d->types["String List Set Item"] = "setStringList";
 
     // Boolean operators
     
@@ -1246,6 +1266,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "string")
         return new dtkComposerNodeString;
 
+    if(type == "StringList")
+        return new dtkComposerNodeStringList;
+
     if(type == "file")
         return new dtkComposerNodeFile;
 
@@ -1615,6 +1638,18 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "atan")
         return new dtkComposerNodeNumberOperatorUnaryAtan;
+
+    if (type == "append")
+        return new dtkComposerNodeStringOperatorBinaryAppend;
+
+    if (type == "extractStringList")
+        return new dtkComposerNodeStringListExtract;
+
+    if (type == "appendStringList")
+        return new dtkComposerNodeStringListAppend;
+
+    if (type == "setStringList")
+        return new dtkComposerNodeStringListSet;
 
     if (type == "append")
         return new dtkComposerNodeStringOperatorBinaryAppend;

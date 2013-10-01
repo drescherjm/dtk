@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:09:17 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  5 11:17:48 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 205
+ * Last-Updated: Tue Oct  1 09:14:19 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 239
  */
 
 /* Commentary: 
@@ -18,28 +18,11 @@
  */
 
 #include "dtkPlotCurve.h"
-
-#include <qwt_plot_curve.h>
-#include <qwt_series_data.h>
-
-#include <float.h>
+#include "dtkPlotCurve_p.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkPlotCurvePrivateData
 // /////////////////////////////////////////////////////////////////
-
-class dtkPlotCurvePrivateData : public QwtPointSeriesData
-{
-public:
-    void append(const QPointF& point);
-
-    void setData(const QVector<QPointF>& data);
-
-    QRectF boundingRect(void) const;
-
-public:
-    void clear(void);
-};
 
 void dtkPlotCurvePrivateData::append(const QPointF& data)
 {
@@ -69,18 +52,15 @@ void dtkPlotCurvePrivateData::clear(void)
 // dtkPlotCurvePrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkPlotCurvePrivate : public QwtPlotCurve
-{
-public:
-    dtkPlotCurvePrivate(const QString& title = QString());
-
-public:
-    dtkPlotCurvePrivateData data;
-};
-
 dtkPlotCurvePrivate::dtkPlotCurvePrivate(const QString& title) : QwtPlotCurve(title)
 {
-    this->setData(&(this->data));
+    this->data = new dtkPlotCurvePrivateData;
+    this->setData(this->data);
+}
+
+dtkPlotCurvePrivate::~dtkPlotCurvePrivate(void)
+{
+    delete this->data;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -97,7 +77,7 @@ dtkPlotCurve::dtkPlotCurve(const QString& title) : QObject(), d(new dtkPlotCurve
 
 dtkPlotCurve::dtkPlotCurve(const dtkPlotCurve& other) : QObject(), d(new dtkPlotCurvePrivate(other.d->title().text()))
 {
-    d->data.setSamples(other.d->data.samples());
+    d->data->setSamples(other.d->data->samples());
 }
 
 dtkPlotCurve::~dtkPlotCurve(void)
@@ -111,19 +91,19 @@ dtkPlotCurve& dtkPlotCurve::operator=(const dtkPlotCurve& other)
 {
     d->setTitle(other.d->title().text()); 
 
-    d->data.setSamples(other.d->data.samples());
+    d->data->setSamples(other.d->data->samples());
 
     return *this;
 }
 
 void dtkPlotCurve::clear(void)
 {
-    d->data.clear();
+    d->data->clear();
 }
 
 void dtkPlotCurve::append(const QPointF& data)
 {
-    d->data.append(data);
+    d->data->append(data);
     d->itemChanged();
 }
 
@@ -164,14 +144,14 @@ QRectF dtkPlotCurve::boundingRect(void) const
 
 void dtkPlotCurve::setData(const QVector<QPointF>& data)
 {
-    d->data.setData(data);
+    d->data->setData(data);
 
     // emit updated();
 }
 
 const QVector<QPointF> dtkPlotCurve::data(void) const
 {
-    return d->data.samples();
+    return d->data->samples();
 }
 
 QString  dtkPlotCurve::description(void)
@@ -179,12 +159,12 @@ QString  dtkPlotCurve::description(void)
     QString string;
 
     string = "[ " ;
-    for (unsigned i = 0; i < d->data.samples().count(); i++) {
+    for (unsigned i = 0; i < d->data->samples().count(); i++) {
         if (i > 0)
             string.append("; ");
 
-        QString stringx = QString("%1").arg(d->data.samples().at(i).x());
-        QString stringy = QString("%1").arg(d->data.samples().at(i).y());
+        QString stringx = QString("%1").arg(d->data->samples().at(i).x());
+        QString stringy = QString("%1").arg(d->data->samples().at(i).y());
 
         string += "(" +stringx + ", "+ stringy +")";
     }

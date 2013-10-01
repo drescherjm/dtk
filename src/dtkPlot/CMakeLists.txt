@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Jun 27 09:30:16 2013 (+0200)
-##           By: Selim Kraria
-##     Update #: 108
+## Last-Updated: Tue Oct  1 06:37:44 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 109
 ######################################################################
 ## 
 ### Commentary: 
@@ -69,17 +69,6 @@ set(${PROJECT_NAME}_RESOURCES dtkPlot.qrc)
 ## #################################################################
 ## Build rules
 ## #################################################################
-
-if(NOT WIN32)
-add_definitions(-Wno-write-strings)
-endif(NOT WIN32)
-
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-
-if(NOT WIN32)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT WIN32)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. nov.  2 16:00:27 2012 (+0100)
+ * Last-Updated: ven. oct.  4 12:10:23 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 110
+ *     Update #: 114
  */
 
 /* Commentary: 
@@ -42,6 +42,8 @@ public:
     bool  initialized(void);
     void uninitialize(void);
 
+    dtkDistributedCommunicatorMpi *spawn(qlonglong np);
+
     double time(void);
     double tick(void);
 
@@ -50,6 +52,7 @@ public:
 
     QString name(void) const;
 
+public:
     void   barrier(void);
     void      send(void *data,             qint64 size, DataType dataType, qint16 target, int tag);
     void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag);

@@ -69,12 +69,19 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
 class dtkDistributedCommunicatorMpiPrivate
 {
 public:
+    MPI_Comm parent_comm;
+    MPI_Comm comm;
+
+public:
+    int size, rank;
 
 };
 
 dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorMpiPrivate)
 {
-
+    d->comm = MPI_COMM_WORLD;
+    d->rank = -1;
+    d->size = 0;
 }
 
 dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
@@ -115,7 +122,6 @@ void dtkDistributedCommunicatorMpi::initialize(void)
 {
     int    argc = qApp->argc(); // These methods are obsolete but should be really exist in QCoreApplication
     char **argv = qApp->argv(); // These methods are obsolete but should be really exist in QCoreApplication
-
     MPI::Init(argc, argv);
 }
 
@@ -144,6 +150,60 @@ bool dtkDistributedCommunicatorMpi::initialized(void)
 void dtkDistributedCommunicatorMpi::uninitialize(void)
 {
     MPI::Finalize();
+}
+
+
+dtkDistributedCommunicatorMpi *dtkDistributedCommunicatorMpi::spawn(qlonglong np)
+{
+    MPI_Comm parentcomm, intercomm;
+    MPI_Comm_get_parent(&parentcomm);
+    QStringList args = qApp->arguments();
+
+    if (parentcomm == MPI_COMM_NULL) {
+        qDebug() << "I'm the parent";
+
+
+        int    argc = args.count();
+        char **argv=(char**)malloc(sizeof(char*)*(argc+1));
+
+        for (int i = 0; i < argc; ++i){
+            QByteArray tmp = args[i].toLocal8Bit();
+            argv[i] = strdup(tmp.data());
+        }
+        argv[argc] = NULL;
+        int errs[np];
+        MPI_Info info;
+        MPI_Info_create(&info );
+
+        QByteArray host = QString("localhost").toLocal8Bit();
+
+        for (qlonglong i =0; i < np; ++i) {
+            MPI_Info_set(info, const_cast<char*>("add-host"),host.data());
+        }
+
+        QByteArray wdir = qApp->applicationDirPath().toLocal8Bit();
+        MPI_Info_set(info, const_cast<char*>("wdir"), wdir.data());
+
+        QByteArray appname = QString("numMPISlave").toLocal8Bit(); //FIXME
+        qDebug() << "MPI spawn:" << appname  << np << qApp->applicationDirPath() << "args" << argv[0];
+
+        MPI_Comm_spawn( appname.data(), argv ,np, info, 0, MPI_COMM_WORLD, &intercomm, errs );
+
+        MPI_Request request;
+        MPI_Status status;
+
+        // MPI_Bcast(&(d->nspawn), 1, MPI_LONG_LONG, MPI_ROOT, intercomm);
+         MPI_Barrier(intercomm);
+         // our communicator is the iter on.
+         d->comm = intercomm;
+    } else {
+        MPI_Barrier(parentcomm);
+        d->comm = parentcomm;
+    }
+    // create another communicator for COMM_WORLD
+    dtkDistributedCommunicatorMpi *comm = new dtkDistributedCommunicatorMpi;
+    return comm;
+
 }
 
 //! 
@@ -183,7 +243,8 @@ double dtkDistributedCommunicatorMpi::tick(void)
 
 int dtkDistributedCommunicatorMpi::rank(void)
 {
-    return MPI::COMM_WORLD.Get_rank();
+    MPI_Comm_rank(d->comm, &d->rank);
+    return d->rank;
 }
 
 //!  
@@ -196,7 +257,8 @@ int dtkDistributedCommunicatorMpi::rank(void)
 
 int dtkDistributedCommunicatorMpi::size(void)
 {
-    return MPI::COMM_WORLD.Get_size();
+    MPI_Comm_size(d->comm, &d->size);
+    return d->size;
 }
 
 //! 
@@ -223,7 +285,7 @@ QString dtkDistributedCommunicatorMpi::name(void) const
 
 void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataType, qint16 target, int tag)
 {
-    MPI::COMM_WORLD.Send(data, size, data_type(dataType), target, tag);
+    MPI_Send(data, size, data_type(dataType), target, tag, d->comm);
 }
 
 //! Standard-mode, blocking receive.
@@ -234,17 +296,23 @@ void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataT
 
 void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag)
 {
-    MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag);
+    MPI_Status status;
+    MPI_Recv(data, size, data_type(dataType), source, tag, d->comm, &status);
 }
 
 void dtkDistributedCommunicatorMpi::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorStatus& status)
 {
-    MPI::Status mpi_status;
-    MPI::COMM_WORLD.Recv(data, size, data_type(dataType), source, tag, mpi_status);
-    status.setCount( mpi_status.Get_count(data_type(dataType)));
-    status.setTag(mpi_status.Get_tag());
-    status.setSource(mpi_status.Get_source());
-    status.setError(mpi_status.Get_error());
+    MPI_Status mpi_status;
+    MPI_Recv(data, size, data_type(dataType), source, tag, d->comm, &mpi_status);
+
+    int nelements;
+    MPI_Get_count(&mpi_status, data_type(dataType), &nelements);
+
+    status.setCount( nelements);
+
+    status.setTag(mpi_status.MPI_TAG);
+    status.setSource(mpi_status.MPI_SOURCE);
+    status.setError(mpi_status.MPI_ERROR);
 }
 
 
@@ -336,13 +404,17 @@ void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, in
 
 void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag, dtkDistributedCommunicatorStatus& status )
 {
-    MPI::Status mpi_status;
-    MPI::COMM_WORLD.Probe(source, tag, mpi_status);
-    qint64   count = mpi_status.Get_count(MPI::CHAR);
+    MPI_Status mpi_status;
+    MPI_Probe(source, tag, d->comm, &mpi_status);
+
+    int count;
+    MPI_Get_count(&mpi_status, MPI::CHAR, &count);
+
     status.setCount(count);
-    status.setTag(mpi_status.Get_tag());
-    status.setSource(mpi_status.Get_source());
-    status.setError(mpi_status.Get_error());
+
+    status.setTag(mpi_status.MPI_TAG);
+    status.setSource(mpi_status.MPI_SOURCE);
+    status.setError(mpi_status.MPI_ERROR);
     dtkTrace() << "probe mpi: count/source/tag : " << status.count() << status.source() << status.tag();
     array.resize(count);
     dtkDistributedCommunicator::receive(array.data(), count, source, tag);
@@ -358,18 +430,18 @@ void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, in
 
 void dtkDistributedCommunicatorMpi::barrier(void)
 {
-    MPI::COMM_WORLD.Barrier();
+    MPI_Barrier(d->comm);
 }
 
 //! Broadcast.
-/*! 
+/*!
  *  Broadcasts (sends) a message from the process with rank "source"
  *  to all other processes in the group.
  */
 
 void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType dataType, qint16 source)
 {
-    MPI::COMM_WORLD.Bcast(data, size, data_type(dataType), source); 
+    MPI_Bcast(data, size, data_type(dataType), source, d->comm);
 }
 
 //! Gather.
@@ -384,9 +456,9 @@ void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType 
 void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all)
 {
     if(all)
-        MPI::COMM_WORLD.Allgather(send, size, data_type(dataType), recv, size, data_type(dataType));
+        MPI_Allgather(send, size, data_type(dataType), recv, size, data_type(dataType), d->comm);
     else
-        MPI::COMM_WORLD.Gather(send, size, data_type(dataType), recv, size, data_type(dataType), target);
+        MPI_Gather(send, size, data_type(dataType), recv, size, data_type(dataType), target, d->comm);
 }
 
 //! Scatter.
@@ -399,7 +471,7 @@ void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, 
 
 void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source)
 {
-    MPI::COMM_WORLD.Scatter(send, size, data_type(dataType), recv, size, data_type(dataType), source);
+    MPI_Scatter(send, size, data_type(dataType), recv, size, data_type(dataType), source, d->comm);
 }
 
 //! Reduce.
@@ -414,9 +486,9 @@ void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size,
 void dtkDistributedCommunicatorMpi::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
 {
     if(all)
-        MPI::COMM_WORLD.Allreduce(send, recv, size, data_type(dataType), operation_type(operationType));
+        MPI_Allreduce(send, recv, size, data_type(dataType), operation_type(operationType), d->comm);
     else
-        MPI::COMM_WORLD.Reduce(send, recv, size, data_type(dataType), operation_type(operationType), target);
+        MPI_Reduce(send, recv, size, data_type(dataType), operation_type(operationType), target, d->comm);
 }
 
 // /////////////////////////////////////////////////////////////////

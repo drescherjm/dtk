@@ -52,6 +52,12 @@ void dtkDistributedCommunicator::initialize(void)
    DTK_DEFAULT_IMPLEMENTATION;
 }
 
+dtkDistributedCommunicator *dtkDistributedCommunicator::spawn(QString cmd, qlonglong np)
+{
+   DTK_DEFAULT_IMPLEMENTATION;
+   return new dtkDistributedCommunicator;
+}
+
 bool dtkDistributedCommunicator::initialized(void)
 {
    DTK_DEFAULT_IMPLEMENTATION;
@@ -250,6 +256,22 @@ void dtkDistributedCommunicator::broadcast(float *data, qint64 size, qint16 sour
 void dtkDistributedCommunicator::broadcast(double *data, qint64 size, qint16 source)
 {
     return this->broadcast(data, size, dtkDistributedCommunicatorDouble, source);
+}
+
+
+void dtkDistributedCommunicator::broadcast(QString &s,   qint16 source)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::broadcast(QByteArray &v,qint16 source)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::broadcast(dtkAbstractData *&data, qint16 source)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkDistributedCommunicator::gather(bool *send, bool *recv, qint64 size, qint16 target, bool all)

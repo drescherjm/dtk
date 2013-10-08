@@ -153,24 +153,22 @@ void dtkDistributedCommunicatorMpi::uninitialize(void)
 }
 
 
-dtkDistributedCommunicatorMpi *dtkDistributedCommunicatorMpi::spawn(qlonglong np)
+dtkDistributedCommunicator *dtkDistributedCommunicatorMpi::spawn(QString cmd, qlonglong np)
 {
+
+    this->initialize();
+
     MPI_Comm parentcomm, intercomm;
-    MPI_Comm_get_parent(&parentcomm);
+    MPI_Comm_get_parent(&(d->comm));
     QStringList args = qApp->arguments();
 
-    if (parentcomm == MPI_COMM_NULL) {
+    if (d->comm == MPI_COMM_NULL) {
         qDebug() << "I'm the parent";
-
-
         int    argc = args.count();
-        char **argv=(char**)malloc(sizeof(char*)*(argc+1));
+        char **argv=(char**)malloc(sizeof(char*)*(2));
 
-        for (int i = 0; i < argc; ++i){
-            QByteArray tmp = args[i].toLocal8Bit();
-            argv[i] = strdup(tmp.data());
-        }
-        argv[argc] = NULL;
+        argv[0] = const_cast<char*>("--spawn");
+        argv[1] = NULL;
         int errs[np];
         MPI_Info info;
         MPI_Info_create(&info );
@@ -184,25 +182,28 @@ dtkDistributedCommunicatorMpi *dtkDistributedCommunicatorMpi::spawn(qlonglong np
         QByteArray wdir = qApp->applicationDirPath().toLocal8Bit();
         MPI_Info_set(info, const_cast<char*>("wdir"), wdir.data());
 
-        QByteArray appname = QString("numMPISlave").toLocal8Bit(); //FIXME
-        qDebug() << "MPI spawn:" << appname  << np << qApp->applicationDirPath() << "args" << argv[0];
+        QByteArray appname = cmd.toLocal8Bit();
+        // dtkDebug() << "MPI spawn:" << appname  << np << qApp->applicationDirPath() << "args" << argv[0] << argv[1] << argv[2];
 
-        MPI_Comm_spawn( appname.data(), argv ,np, info, 0, MPI_COMM_WORLD, &intercomm, errs );
+        MPI_Comm_spawn( appname.data(), argv ,np, info, 0, MPI_COMM_WORLD, &(d->comm), errs );
 
         MPI_Request request;
         MPI_Status status;
 
         // MPI_Bcast(&(d->nspawn), 1, MPI_LONG_LONG, MPI_ROOT, intercomm);
-         MPI_Barrier(intercomm);
+        dtkDebug() << "spawn, barrier" ;
+        MPI_Barrier(d->comm);
+        dtkDebug() << "spawn, barrier, done" ;
          // our communicator is the iter on.
-         d->comm = intercomm;
+        dtkDebug() << "size"<<this->size();
     } else {
-        MPI_Barrier(parentcomm);
-        d->comm = parentcomm;
+        dtkDebug() << "spawn, slave, barrier" ;
+        MPI_Barrier(d->comm);
+        dtkDebug() << "spawn, slave barrier done" ;
+        dtkDebug() << "size"<<this->size();
     }
     // create another communicator for COMM_WORLD
-    dtkDistributedCommunicatorMpi *comm = new dtkDistributedCommunicatorMpi;
-    return comm;
+    return new dtkDistributedCommunicatorMpi;
 
 }
 
@@ -364,20 +365,74 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
     }
 }
 
+void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 source)
+{
+    QByteArray array;
+    if (d->rank == source) {
+        QDataStream stream(&array, QIODevice::WriteOnly);
+        stream << data->identifier();
+        // FIXME: handle container
+        QByteArray *array_tmp = data->serialize();
+        if (array_tmp->count() > 0 ) {
+            array.append(*array_tmp);
+        } else {
+            dtkError() <<"serialization failed" ;
+        }
+    }
+    this->broadcast(array, source);
+    if (d->rank != source) {
+        if( array.count() > 0) {
+            QDataStream stream(&array, QIODevice::ReadOnly);
+            QString typeName ;
+            stream >> typeName;
+
+            qlonglong  header_length=sizeof(int)+2*typeName.size();
+
+            data = dtkAbstractDataFactory::instance()->create(typeName);
+            if (!data) {
+                dtkWarn() << "Can't instantiate object of type" << QString(typeName);
+                return;
+            }
+
+            if (!data->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
+                dtkError() << "Warning: deserialization failed";
+            } else {
+                dtkDebug() << "deserialization succesful";
+            }
+        }
+    }
+}
+
+
 /*!
  *  send a QString
  */
 
 void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
 {
-    qint64  length = s.length()+1;
-    qint64  size_l=1;
-    dtkDistributedCommunicator::send(&length,size_l,target,tag);
-
     QByteArray Array = s.toAscii();
-    char *char_array = Array.data();
-    dtkDistributedCommunicator::send(char_array,length,target,tag);
+    dtkDistributedCommunicator::send(Array, target, tag);
 }
+
+void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
+{
+    QByteArray array;
+    this->receive(array, source, tag);
+    s.fromAscii(array);
+}
+
+void dtkDistributedCommunicatorMpi::broadcast(QString &s, qint16 source)
+{
+    QByteArray array;
+    if (d->rank == source) {
+        array = s.toAscii();
+    }
+    this->broadcast(array, source);
+    if (d->rank != source) {
+        s.fromAscii(array);
+    }
+}
+
 
 void dtkDistributedCommunicatorMpi::send(QByteArray &array, qint16 target, int tag)
 {
@@ -386,20 +441,31 @@ void dtkDistributedCommunicatorMpi::send(QByteArray &array, qint16 target, int t
 
 }
 
-void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
-{
-    qint64   length;
-    dtkDistributedCommunicator::receive(&length,1,source,tag);
-    char     s_c[length];
-
-    dtkDistributedCommunicator::receive(s_c, length, source,tag);
-    s = QString(s_c);
-}
-
 void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag)
 {
     dtkDistributedCommunicatorStatus status;
     this->receive(array, source, tag, status);
+}
+
+void dtkDistributedCommunicatorMpi::broadcast(QByteArray &array, qint16 source)
+{
+    MPI_Comm mpi_comm = d->comm;
+
+    int size;
+    if (source == ROOT ) {
+        size = array.size();
+        dtkTrace() << "broadcast byte array: " << size<< source;
+    }
+    dtkTrace() << "broadcast, size: ";
+    MPI_Bcast(&size, 1, data_type(dtkDistributedCommunicatorInt), source, mpi_comm);
+    dtkTrace() << "broadcast, size, received " << size;
+    if (source != ROOT ) {
+        dtkTrace() << "broadcast, resize array ";
+        array.resize(size);
+    }
+    dtkTrace() << "broadcast, array ";
+    MPI_Bcast(array.data(), size, data_type(dtkDistributedCommunicatorChar), source, mpi_comm);
+    dtkTrace() << "broadcast, done ";
 }
 
 void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag, dtkDistributedCommunicatorStatus& status )

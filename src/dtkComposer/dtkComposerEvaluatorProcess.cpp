@@ -13,14 +13,6 @@
  *
  */
 
-
-
-// #include <dtkCore/dtkAbstractDataFactory.h>
-// #include <dtkCore/dtkAbstractData.h>
-// #include <dtkCore/dtkAbstractProcessFactory.h>
-// #include <dtkCore/dtkAbstractProcess.h>
-// #include <dtkCore/dtkGlobal.h>
-
 #include "dtkComposer/dtkComposerEvaluator.h"
 #include "dtkComposer/dtkComposerEvaluatorProcess.h"
 #include "dtkComposer/dtkComposerFactory.h"
@@ -32,7 +24,6 @@
 #include "dtkComposer/dtkComposerNodeSpawn.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
 
 #include <dtkLog/dtkLog.h>
 

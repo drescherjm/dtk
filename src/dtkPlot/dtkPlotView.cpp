@@ -553,10 +553,19 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
     QColor c_color = curve->color();
     QColor v_color = this->backgroundColor();
 
-    if (c_color.value() - v_color.value() < 30) {
+    dtkDebug()<<"*************** BG Color : "<<v_color;
+    dtkDebug()<<"*************** C Color : "<<c_color;    
+    dtkDebug()<<"*************** BG Color Value : "<<v_color.value();
+    dtkDebug()<<"*************** C Color Value : "<<c_color.value();    
+    dtkDebug()<<"*************** C Color Red : "<<c_color.red();    
+    dtkDebug()<<"*************** C Color Green : "<<c_color.green();    
+    dtkDebug()<<"*************** C Color Blue : "<<c_color.blue();    
+
+    if ( qAbs(c_color.value() - v_color.value()) < 120) {
 	int r = c_color.red();
 	int g = c_color.green();
 	int b = c_color.blue();
+	dtkDebug()<<"*************** Setted Color : "<<QColor(255 - r, 255 - g, 255 - b);    
 	curve->setColor(QColor(255 - r, 255 - g, 255 - b));
     }
 

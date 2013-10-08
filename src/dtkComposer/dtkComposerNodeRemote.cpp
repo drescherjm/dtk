@@ -15,8 +15,7 @@
 #include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeRemote.h"
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerNodeRemote_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkDistributed/dtkDistributedController.h>
@@ -25,6 +24,7 @@
 #include <dtkDistributed/dtkDistributedSlave.h>
 
 #include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCore/dtkAbstractObject.h>
 #include <dtkCore/dtkGlobal.h>
 
 #include <dtkJson>
@@ -32,43 +32,6 @@
 #include <dtkMath/dtkMath.h>
 
 #include <dtkLog/dtkLog.h>
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeRemotePrivate interface
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeRemotePrivate
-{
-
-public:
-    dtkComposerTransmitterReceiver<QString> jobid_receiver;
-
-public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator > communicator_emitter;
-
-public:
-    QDomDocument composition;
-    QByteArray current_hash;
-    QByteArray last_sent_hash;
-
-public:
-    dtkDistributedController *controller;
-
-public:
-    dtkDistributedCommunicator *communicator;
-    dtkDistributedCommunicatorTcp *server;
-
-public:
-    dtkDistributedSlave *slave;
-
-public:
-    QString jobid;
-    QString last_jobid;
-
-public:
-    QString title;
-
-};
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRemote implementation
@@ -85,6 +48,8 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeC
 
     this->appendEmitter(&(d->communicator_emitter));
     this->setOutputLabelHint("communicator", 0);
+
+    dtkInfo() << "constructor remode, set communicator to null" ;
 
     d->communicator = NULL;
     d->controller   = NULL;
@@ -133,6 +98,7 @@ void dtkComposerNodeRemote::setSlave(dtkDistributedSlave *slave)
 
 void dtkComposerNodeRemote::setCommunicator(dtkDistributedCommunicator *c)
 {
+    dtkTrace() <<  "set communicator";
     d->communicator = c;
 }
 

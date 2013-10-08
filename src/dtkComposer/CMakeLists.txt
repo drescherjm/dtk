@@ -305,22 +305,15 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 if(DTK_BUILD_DISTRIBUTED)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
    dtkComposerEvaluatorSlave.h
-   dtkComposerEvaluatorProcess.h
    dtkComposerNodeRemote.h
    dtkComposerNodeRemote_p.h
-   dtkComposerNodeSpawn.h
-   dtkComposerNodeSpawn_p.h
    dtkComposerNodeDistributed.h)
   set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-    dtkComposerEvaluatorProcess.h
-    dtkComposerNodeRemote.h
-    dtkComposerNodeSpawn.h)
+    dtkComposerNodeRemote.h)
   set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerEvaluatorSlave.cpp
-  dtkComposerEvaluatorProcess.cpp
   dtkComposerNodeDistributed.cpp
-  dtkComposerNodeRemote.cpp
-  dtkComposerNodeSpawn.cpp)
+  dtkComposerNodeRemote.cpp)
 endif(DTK_BUILD_DISTRIBUTED)
 
 ## #################################################################
@@ -329,9 +322,16 @@ endif(DTK_BUILD_DISTRIBUTED)
 
 if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerEvaluatorProcess.h
+  dtkComposerNodeSpawn.h
+  dtkComposerNodeSpawn_p.h
   dtkComposerNodeWorld.h)
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkComposerEvaluatorProcess.h
+  dtkComposerNodeSpawn.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerEvaluatorProcess.cpp
+  dtkComposerNodeSpawn.cpp
   dtkComposerNodeWorld.cpp)
 endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 

@@ -32,6 +32,7 @@ public:
     ~dtkComposerEvaluatorProcess(void);
 
 public:
+    void setApplication(QString app);
     void setFactory(dtkComposerFactory *factory);
     void setInternalCommunicator(dtkDistributedCommunicator *communicator);
     void setParentCommunicator(dtkDistributedCommunicator *communicator);

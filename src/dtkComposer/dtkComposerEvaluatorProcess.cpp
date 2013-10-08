@@ -43,6 +43,9 @@ public:
     dtkDistributedCommunicator *parent_comm;
 
 public:
+    QString application;
+
+public:
     dtkComposerScene     *scene;
     dtkComposerStack     *stack;
     dtkComposerGraph     *graph;
@@ -89,6 +92,11 @@ void dtkComposerEvaluatorProcess::setFactory(dtkComposerFactory *factory)
     d->factory = factory;
     d->scene->setFactory(d->factory);
     d->reader->setFactory(d->factory);
+}
+
+void dtkComposerEvaluatorProcess::setApplication(QString application)
+{
+    d->application = application;
 }
 
 void dtkComposerEvaluatorProcess::setInternalCommunicator(dtkDistributedCommunicator *communicator)
@@ -140,6 +148,7 @@ int dtkComposerEvaluatorProcess::exec(void)
         if (dtkComposerNodeSpawn *spawn = dynamic_cast<dtkComposerNodeSpawn *>(d->scene->root()->nodes().first()->wrapee())) {
             spawn->setCommunicator(d->parent_comm);
             spawn->setInternalCommunicator(d->comm);
+            spawn->setApplication(d->application);
         } else {
             dtkFatal() <<  "Can't find spawn node in composition, abort";
             return 1;

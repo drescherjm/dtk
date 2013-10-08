@@ -64,7 +64,7 @@ dtkComposerNodeSpawn::dtkComposerNodeSpawn(void) : dtkComposerNodeRemote(),  d(n
     d->np   = -1;
     d->rank_emitter.setData(&d->rank);
 
-    d->application = "numComposerEvaluator"; //FIXME
+    d->application = "dtkComposerEvaluator";
 }
 
 dtkComposerNodeSpawn::~dtkComposerNodeSpawn(void)
@@ -88,6 +88,11 @@ QString dtkComposerNodeSpawn::titleHint(void)
 bool dtkComposerNodeSpawn::isSlave(void)
 {
     return !d->is_parent;
+}
+
+void dtkComposerNodeSpawn::setApplication(QString app)
+{
+    d->application = app;
 }
 
 void dtkComposerNodeSpawn::setComposition(QDomDocument document)
@@ -170,7 +175,7 @@ void dtkComposerNodeSpawn::begin(void)
             dtkDebug() << "rank/size"<< d->rank << d->np;
         }
 
-        dtktrace() << "get transmitter data";
+        dtkTrace() << "get transmitter data";
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
         for (int i = first_transmitter; i < max; i++) {

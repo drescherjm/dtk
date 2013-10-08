@@ -45,6 +45,7 @@ public:
     QString titleHint(void);
 
 public:
+    void setApplication(QString app);
     void setComposition(QDomDocument document);
     void setCommunicator(dtkDistributedCommunicator *comm);
     void setInternalCommunicator(dtkDistributedCommunicator *comm);

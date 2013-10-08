@@ -87,7 +87,6 @@ void dtkComposerNodeRemote::setController(dtkDistributedController *controller)
     if (d->jobid.isEmpty()) {
         dtkWarn() <<  "No job id while setting controller !";
     }
-    
     d->controller = controller;
 }
 
@@ -98,7 +97,6 @@ void dtkComposerNodeRemote::setSlave(dtkDistributedSlave *slave)
 
 void dtkComposerNodeRemote::setCommunicator(dtkDistributedCommunicator *c)
 {
-    dtkTrace() <<  "set communicator";
     d->communicator = c;
 }
 
@@ -109,9 +107,7 @@ void dtkComposerNodeRemote::setJob(QString jobid)
 
 bool dtkComposerNodeRemote::isSlave(void)
 {
-    if (d->slave)
-        return true;
-    return false;
+    return d->slave;
 }
 
 void dtkComposerNodeRemote::onJobStarted(QString jobid)

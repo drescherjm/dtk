@@ -111,14 +111,10 @@ int dtkComposerEvaluatorProcess::exec(void)
 
     int rank = d->comm->rank();
     int size = d->comm->size();
-    dtkDebug() << "communicator size is" << size;
-    dtkDebug() << "parent communicator size is" << d->parent_comm->size();
-    dtkDebug() << "our rank is" << rank;
     bool new_composition;
 
     QByteArray data;
 
-    dtkDebug() << "broadcast from" << 0;
     d->parent_comm->broadcast(data,0);
 
     dtkDebug() << "Ok, composition received, parse" ;
@@ -129,7 +125,6 @@ int dtkComposerEvaluatorProcess::exec(void)
         dtkInfo() << "composition hasn't changed";
         new_composition = false;
     } else {
-        dtkInfo() << "composition "<< composition;
         new_composition = true;
     }
 
@@ -137,8 +132,6 @@ int dtkComposerEvaluatorProcess::exec(void)
         dtkFatal() << "Empty composition, abort" ;
         return 1;
     }
-
-    dtkDebug() << "got composition from controller:" << composition;
 
     if (new_composition) {
         dtkDebug() << "parse composition" ;

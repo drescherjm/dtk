@@ -139,7 +139,6 @@ void dtkComposerNodeSpawn::begin(void)
     int first_transmitter = 3;
     if (d->is_parent) {
         int rank =  dtkDistributedCommunicator::ROOT;
-        dtkTrace() <<  " composition is " << d->current_hash ;
 
         if (d->current_hash != d->last_sent_hash){
             // send sub-composition to rank 0 on remote node
@@ -152,11 +151,9 @@ void dtkComposerNodeSpawn::begin(void)
             QByteArray data = QString("not-modified").toAscii();
             d->communicator->broadcast(data,  rank);
         }
-        dtkDebug() << "composition sent";
 
         // then send transmitters data
         int max  = dtkComposerNodeComposite::receivers().count();
-        dtkDebug() << "receivers"<< max << first_transmitter;
         for (int i = first_transmitter; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
@@ -173,7 +170,7 @@ void dtkComposerNodeSpawn::begin(void)
             dtkDebug() << "rank/size"<< d->rank << d->np;
         }
 
-        dtkDebug() << "get transmitter data";
+        dtktrace() << "get transmitter data";
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
         for (int i = first_transmitter; i < max; i++) {

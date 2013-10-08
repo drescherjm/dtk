@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. nov.  2 16:00:27 2012 (+0100)
+ * Last-Updated: lun. oct.  7 15:40:27 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 110
+ *     Update #: 133
  */
 
 /* Commentary: 
@@ -42,6 +42,8 @@ public:
     bool  initialized(void);
     void uninitialize(void);
 
+    dtkDistributedCommunicator *spawn(QString cmd, qlonglong np);
+
     double time(void);
     double tick(void);
 
@@ -50,6 +52,7 @@ public:
 
     QString name(void) const;
 
+public:
     void   barrier(void);
     void      send(void *data,             qint64 size, DataType dataType, qint16 target, int tag);
     void   receive(void *data,             qint64 size, DataType dataType, qint16 source, int tag);
@@ -59,12 +62,15 @@ public:
     void   scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source);
     void    reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
 
-    void    send(dtkAbstractData *data, qint16 target, int tag);
-    void receive(dtkAbstractData *&data, qint16 source, int tag);
-
+    void      send(dtkAbstractData *data, qint16 target, int tag);
     void      send(const QString& s, qint16 target, int tag) ;
     void      send(QByteArray& array, qint16 target, int tag) ;
 
+    void broadcast(     QByteArray& array, qint16 source);
+    void broadcast(            QString& s, qint16 source);
+    void broadcast(dtkAbstractData *&data, qint16 source);
+
+    void   receive(dtkAbstractData *&data, qint16 source, int tag);
     void   receive(QString &s, qint16 source, int tag) ;
     void   receive(QByteArray &a, qint16 source, int tag) ;
     void   receive(QByteArray &a, qint16 source, int tag, dtkDistributedCommunicatorStatus& status) ;

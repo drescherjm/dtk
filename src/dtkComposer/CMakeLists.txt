@@ -2,13 +2,6 @@
 ##
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Fri Se
-## Last-Updated: Mon Sep 30 17:04:35 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 682
-## Last-Updated: 2012 Thu Oct 11 12:32:19 (+0200)
-##           By: Thibaud Kloczko, Inria.
-##     Update #: 623
 ######################################################################
 ##
 ### Commentary:
@@ -313,8 +306,10 @@ if(DTK_BUILD_DISTRIBUTED)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
    dtkComposerEvaluatorSlave.h
    dtkComposerNodeRemote.h
+   dtkComposerNodeRemote_p.h
    dtkComposerNodeDistributed.h)
-  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC} dtkComposerNodeRemote.h)
+  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+    dtkComposerNodeRemote.h)
   set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerEvaluatorSlave.cpp
   dtkComposerNodeDistributed.cpp
@@ -327,9 +322,16 @@ endif(DTK_BUILD_DISTRIBUTED)
 
 if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkComposerEvaluatorProcess.h
+  dtkComposerNodeSpawn.h
+  dtkComposerNodeSpawn_p.h
   dtkComposerNodeWorld.h)
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
+  dtkComposerEvaluatorProcess.h
+  dtkComposerNodeSpawn.h)
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkComposerEvaluatorProcess.cpp
+  dtkComposerNodeSpawn.cpp
   dtkComposerNodeWorld.cpp)
 endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
  * Version: $Id$
- * Last-Updated: mer. oct. 31 15:55:55 2012 (+0100)
+ * Last-Updated: lun. oct.  7 22:51:41 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 36
+ *     Update #: 43
  */
 
 /* Commentary:
@@ -44,23 +44,23 @@ public:
     virtual ~dtkComposerNodeRemote(void);
 
 public:
-    QString type(void);
+    virtual QString type(void);
 
 public:
-    QString titleHint(void);
+    virtual QString titleHint(void);
 
 public slots:
     void onJobStarted(QString id);
 
 public:
-    void setComposition(QDomDocument document);
+    virtual void setComposition(QDomDocument document);
+    virtual void setCommunicator(dtkDistributedCommunicator  *communicator);
     void setController(dtkDistributedController  *controller);
-    void setCommunicator(dtkDistributedCommunicator  *communicator);
     void setSlave(dtkDistributedSlave *slave);
     void setJob(QString jobid);
 
 public:
-    bool isSlave(void);
+    virtual bool isSlave(void);
 
 public:
     virtual void begin(void);

@@ -21,6 +21,10 @@
 #include "dtkDistributedExport.h"
 #include <dtkCore/dtkAbstractData.h>
 
+#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+    #include "mpi.h"
+#endif
+
 class dtkDistributedCommunicatorPrivate;
 
 class dtkDistributedMessage;
@@ -67,9 +71,18 @@ public:
 
 public:
 
+#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
 // use the same value as defined in mpi.h
+    static const int    ANY_TAG    = MPI_ANY_TAG;
+    static const qint16 ANY_SOURCE = MPI_ANY_SOURCE;
+    static const qint16 ROOT       = MPI_ROOT;
+    static const qint16 PROC_NULL  = MPI_PROC_NULL;
+#else
     static const int    ANY_TAG    = -1;
     static const qint16 ANY_SOURCE = -1;
+    static const qint16 ROOT       = -4;
+    static const qint16 PROC_NULL  = -2;
+#endif
 
     enum DataType {
         dtkDistributedCommunicatorBool,
@@ -106,6 +119,7 @@ public:
     virtual void   initialize(void);
     virtual bool  initialized(void);
     virtual void uninitialize(void);
+    virtual dtkDistributedCommunicator *spawn(QString cmd, qlonglong np);
 
     virtual int rank(void);
     virtual int size(void);
@@ -155,6 +169,9 @@ public:
     virtual void broadcast(qint64 *data, qint64 size, qint16 source);
     virtual void broadcast(float  *data, qint64 size, qint16 source);
     virtual void broadcast(double *data, qint64 size, qint16 source);
+    virtual void broadcast(QString &s,   qint16 source);
+    virtual void broadcast(QByteArray &v,qint16 source);
+    virtual void broadcast(dtkAbstractData *&data, qint16 source);
 
     virtual void    gather(void   *send, void   *recv, qint64 size, DataType dataType, qint16 target, bool all = false);
     virtual void    gather(bool   *send, bool   *recv, qint64 size, qint16 target, bool all = false);

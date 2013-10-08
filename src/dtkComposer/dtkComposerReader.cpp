@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. janv. 14 17:32:30 2013 (+0100)
+ * Last-Updated: lun. oct.  7 16:07:57 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 844
+ *     Update #: 845
  */
 
 /* Commentary: 
@@ -392,7 +392,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         n = d->control->footer();
 
-    } else if( type_n == "composite" || type_n == "world" || type_n == "remote") {
+    } else if( type_n == "composite" || type_n == "world" || type_n == "remote"|| type_n == "spawn") {
 
         dtkComposerNode *c = d->factory->create(type_n);
         if (c) {

@@ -77,12 +77,13 @@
 #include "dtkComposerSceneNodeLeaf.h"
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-#include "dtkComposerNodeRemote.h"
 #include "dtkComposerNodeDistributed.h"
+#include "dtkComposerNodeRemote.h"
 #endif
 
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
 #include "dtkComposerNodeWorld.h"
+#include "dtkComposerNodeSpawn.h"
 #endif
 
 #if defined(DTK_BUILD_VR) && defined(DTK_HAVE_NITE)
@@ -339,6 +340,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
     d->tags["World"] = QStringList() <<  "distributed" << "mpi" << "tcp" << "world";
     d->types["World"] = "world";
+
+    d->nodes << "Spawn";
+    d->descriptions["Spawn"] = "<p>Spawn n process and run a sub-compisition inside this MPI context.</p>";
+    d->tags["Spawn"] = QStringList() <<  "distributed" << "mpi" << "spawn" << "world";
+    d->types["Spawn"] = "spawn";
 
     d->nodes << "CommunicatorInit";
     d->descriptions["CommunicatorInit"] = "<p>Initialize an MPI context.</p>";
@@ -1865,6 +1871,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 #if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
+
+    if(type == "spawn")
+        return new dtkComposerNodeSpawn;
 
     if(type == "communicatorInit")
         return new dtkComposerNodeCommunicatorInit;

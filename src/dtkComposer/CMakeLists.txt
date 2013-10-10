@@ -71,6 +71,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFile.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
+  dtkComposerNodeLeafActor.h
   dtkComposerNodeLeafData.h
   dtkComposerNodeLeafProcess.h
   dtkComposerNodeLeafView.h
@@ -227,6 +228,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
+  dtkComposerNodeLeafActor.cpp
   dtkComposerNodeLeafData.cpp
   dtkComposerNodeLeafProcess.cpp
   dtkComposerNodeLeafView.cpp

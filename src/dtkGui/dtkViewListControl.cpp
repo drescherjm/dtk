@@ -1,20 +1,20 @@
-/* dtkViewListControl.cpp --- 
- * 
+/* dtkViewListControl.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Oct 31 12:51:29 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov  5 13:10:17 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 318
+ * Last-Updated: jeu. oct. 10 19:20:24 2013 (+0200)
+ *           By: Etienne
+ *     Update #: 333
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkViewLayout.h"
@@ -35,6 +35,7 @@ public:
     QPushButton *hor;
     QPushButton *ver;
     QPushButton *grd;
+    QPushButton *cls;
 };
 
 dtkViewListControl::dtkViewListControl(QWidget *parent) : QFrame(parent), d(new dtkViewListControlPrivate)
@@ -45,15 +46,18 @@ dtkViewListControl::dtkViewListControl(QWidget *parent) : QFrame(parent), d(new 
     d->hor = new QPushButton("Horizontal", this);
     d->ver = new QPushButton("Vertical", this);
     d->grd = new QPushButton("Grid", this);
+    d->cls = new QPushButton("Close All", this);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(d->hor);
     layout->addWidget(d->ver);
     layout->addWidget(d->grd);
+    layout->addWidget(d->cls);
 
     connect(d->hor, SIGNAL(clicked()), this, SLOT(onLayoutHorizontally()));
-    connect(d->ver, SIGNAL(clicked()), this, SLOT(onLayoutVertically())); 
+    connect(d->ver, SIGNAL(clicked()), this, SLOT(onLayoutVertically()));
     connect(d->grd, SIGNAL(clicked()), this, SLOT(onLayoutGrid()));
+    connect(d->cls, SIGNAL(clicked()), this, SLOT(onLayoutCloseAll()));
 }
 
 dtkViewListControl::~dtkViewListControl(void)
@@ -76,6 +80,9 @@ void dtkViewListControl::setList(dtkViewList *list)
 void dtkViewListControl::onLayoutHorizontally(void)
 {
     if(!d->list)
+        return;
+
+    if(!d->list->count())
         return;
 
     if(!d->layout)
@@ -109,7 +116,10 @@ void dtkViewListControl::onLayoutVertically(void)
 {
     if(!d->list)
         return;
-    
+
+    if(!d->list->count())
+        return;
+
     if(!d->layout)
         return;
 
@@ -143,14 +153,14 @@ void dtkViewListControl::onLayoutGrid(void)
     if(!d->list)
         return;
 
+    if(!d->list->count())
+        return;
+
     if(!d->layout)
         return;
 
     int n = d->list->count();
     int i = 0;
-
-    if(!n)
-        return;
 
     typedef QPair<dtkViewLayoutItem *, Qt::Orientation> item_t;
 
@@ -174,4 +184,16 @@ void dtkViewListControl::onLayoutGrid(void)
         items << qMakePair(current->first(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
     }
+}
+void dtkViewListControl::onLayoutCloseAll(void)
+{
+    if(!d->list)
+        return;
+    if(!d->list->count())
+        return;
+    if(!d->layout)
+        return;
+
+    d->layout->clear();
+    d->layout->setCurrent(d->layout->root());
 }

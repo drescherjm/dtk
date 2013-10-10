@@ -1,20 +1,20 @@
-/* dtkViewLayoutItem.cpp --- 
- * 
+/* dtkViewLayoutItem.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  5 13:08:49 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 907
+ * Last-Updated: jeu. oct. 10 19:10:51 2013 (+0200)
+ *           By: Etienne
+ *     Update #: 976
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkViewLayout.h"
@@ -101,7 +101,7 @@ dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 
     if(!d->view->widget())
         goto finalize;
-    
+
     if(!d->view->widget()->parentWidget())
         goto finalize;
 
@@ -132,7 +132,7 @@ dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 //    qDebug() << __func__ << 7;
 
 finalize:
-    
+
     delete d;
 
     d = NULL;
@@ -146,7 +146,7 @@ dtkAbstractView *dtkViewLayoutItemProxy::view(void)
 void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
 {
     // qDebug() << __func__ << 1;
-    
+
     if(!view)
         return;
 
@@ -166,9 +166,9 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
     }
 
     this->layout()->addWidget(view->widget());
-    
-    d->view = view;
 
+    d->view = view;
+    d->view->widget()->show();
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
     if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
@@ -176,6 +176,11 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
         // qDebug() << "Got parent ! - setting name";
 
         item->d->label->setText(d->view->objectName());
+        item->d->close->setEnabled(true);
+        item->d->vertc->setEnabled(true);
+        item->d->horzt->setEnabled(true);
+        item->d->maxmz->setEnabled(true);
+        emit focusedIn();
     }
 
     // qDebug() << __func__ << 2 << this->parentWidget()->objectName() << this->parentWidget()->metaObject()->className();
@@ -242,7 +247,7 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     d->vertc = new QPushButton("Vertc", this);
     d->close = new QPushButton("Close", this);
     d->maxmz = new QPushButton("Maxmz", this);
-    
+
     d->label = new QLineEdit(this);
     d->label->setReadOnly(true);
 
@@ -274,6 +279,11 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
     connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
 
     d->proxy->setFocus(Qt::OtherFocusReason);
+
+    d->close->setEnabled(d->parent!=NULL);
+    d->vertc->setEnabled(false);
+    d->horzt->setEnabled(false);
+    d->maxmz->setEnabled(false);
 }
 
 dtkViewLayoutItem::~dtkViewLayoutItem(void)
@@ -349,28 +359,34 @@ void dtkViewLayoutItem::clear(void)
         d->proxy->view()->widget()->hide();
 
     delete d->proxy;
-    
+
     d->proxy = new dtkViewLayoutItemProxy(d->root);
-    
+
     connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
-    
+
     d->splitter->addWidget(d->proxy);
-    
+
     d->proxy->setFocus(Qt::OtherFocusReason);
-    
+
     d->footer->show();
-    
+
     this->setUpdatesEnabled(true);
-    
+
     if (d->a)
         d->a->deleteLater();
-    
+
     if (d->b)
         d->b->deleteLater();
-    
+
     d->a = NULL;
     d->b = NULL;
+
+    d->label->clear();
+    d->close->setEnabled(false);
+    d->vertc->setEnabled(false);
+    d->horzt->setEnabled(false);
+    d->maxmz->setEnabled(false);
 }
 
 void dtkViewLayoutItem::split(void)
@@ -391,7 +407,7 @@ void dtkViewLayoutItem::split(void)
 
     disconnect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     disconnect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
-    
+
     delete d->proxy;
 
     d->proxy = NULL;
@@ -455,7 +471,7 @@ void dtkViewLayoutItem::unsplit(void)
             // qDebug() << __func__ << "Current item is a, b has no children, proxy created.";
 
             connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
-            connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));      
+            connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
 
             // qDebug() << __func__ << "Current item is a, b has no children, proxy connected.";
 
@@ -570,7 +586,7 @@ void dtkViewLayoutItem::maximize(void)
 
     if(this == d->root)
         return;
-    
+
     d->root->setUpdatesEnabled(false);
 
     d->root->d->proxy = new dtkViewLayoutItemProxy(d->root);
@@ -624,6 +640,8 @@ void dtkViewLayoutItem::close(void)
 
     if (d->parent)
         d->parent->unsplit();
+    else
+        clear();
 }
 
 void dtkViewLayoutItem::horzt(void)

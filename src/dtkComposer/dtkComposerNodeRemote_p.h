@@ -11,7 +11,8 @@
 /* Change log:
  *
  */
-
+#ifndef DTKCOMPOSERNODEREMOTE_H_P_
+#define DTKCOMPOSERNODEREMOTE_H_P_
 
 #include <QtCore>
 
@@ -59,3 +60,5 @@ public:
     QString title;
 
 };
+
+#endif

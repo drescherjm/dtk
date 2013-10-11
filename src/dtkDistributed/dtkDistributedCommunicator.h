@@ -21,10 +21,6 @@
 #include "dtkDistributedExport.h"
 #include <dtkCore/dtkAbstractData.h>
 
-#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
-    #include "mpi.h"
-#endif
-
 class dtkDistributedCommunicatorPrivate;
 
 class dtkDistributedMessage;
@@ -71,18 +67,11 @@ public:
 
 public:
 
-#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
-// use the same value as defined in mpi.h
-    static const int    ANY_TAG    = MPI_ANY_TAG;
-    static const qint16 ANY_SOURCE = MPI_ANY_SOURCE;
-    static const qint16 ROOT       = MPI_ROOT;
-    static const qint16 PROC_NULL  = MPI_PROC_NULL;
-#else
+    // use the same value as defined in mpi.h from openmpi
     static const int    ANY_TAG    = -1;
     static const qint16 ANY_SOURCE = -1;
     static const qint16 ROOT       = -4;
     static const qint16 PROC_NULL  = -2;
-#endif
 
     enum DataType {
         dtkDistributedCommunicatorBool,

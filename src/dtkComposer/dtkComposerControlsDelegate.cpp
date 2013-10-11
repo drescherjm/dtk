@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:12:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin  4 17:29:27 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 156
+ * Last-Updated: ven. oct. 11 14:29:45 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 183
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@ public:
 
 dtkComposerControlsDelegate::dtkComposerControlsDelegate(QObject *parent) : QStyledItemDelegate(parent), d(new dtkComposerControlsDelegatePrivate)
 {
-    
+
 }
 
 dtkComposerControlsDelegate::~dtkComposerControlsDelegate(void)
@@ -70,7 +70,7 @@ void dtkComposerControlsDelegate::setModelData(QWidget *editor, QAbstractItemMod
 QSize dtkComposerControlsDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
-    size.setHeight(60);
+    size.setHeight(300);
 
     return size;
 }

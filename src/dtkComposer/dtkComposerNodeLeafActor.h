@@ -19,21 +19,24 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
 
+#include <QObject>
+
 class dtkAbstractActor;
+class dtkAbstractView;
 class dtkComposerNodeLeafActorPrivate;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafActor interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeLeafActor : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeLeafActor :  public QObject, public dtkComposerNodeLeaf
 {
+Q_OBJECT
+
 public:
-             dtkComposerNodeLeafActor(void);
+             dtkComposerNodeLeafActor(QObject *parent = 0);
     virtual ~dtkComposerNodeLeafActor(void);
 
-private:
-    dtkComposerNodeLeafActorPrivate *d;
 };
 
 #endif

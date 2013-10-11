@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
- * Version: $Id$
- * Last-Updated: ven. sept. 21 10:03:14 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 72
  */
 
 /* Commentary:
@@ -24,6 +20,7 @@
 #include "dtkComposerNodeLeafData.h"
 #include "dtkComposerNodeLeafProcess.h"
 #include "dtkComposerNodeLeafView.h"
+#include "dtkComposerNodeLeafActor.h"
 
 class dtkComposerGraphNodeLeafPrivate
 {
@@ -45,6 +42,8 @@ dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const
         d->kind = dtkComposerGraphNode::View;
     else if (dynamic_cast<dtkComposerNodeLeafData *>(cnode))
         d->kind = dtkComposerGraphNode::Data;
+    else if (dynamic_cast<dtkComposerNodeLeafActor *>(cnode))
+        d->kind = dtkComposerGraphNode::Actor;
     else
         d->kind = dtkComposerGraphNode::Leaf;
 

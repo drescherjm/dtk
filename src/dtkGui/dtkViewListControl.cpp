@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Oct 31 12:51:29 2012 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. oct. 10 19:20:24 2013 (+0200)
- *           By: Etienne
- *     Update #: 333
  */
 
 /* Commentary:
@@ -145,6 +141,14 @@ void dtkViewListControl::onLayoutVertically(void)
         }
 
         d->layout->setCurrent(current->second());
+    }
+}
+
+void dtkViewListControl::onActorStarted(QString view_name)
+{
+    dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(view_name);
+    if (view &&  !d->layout->current()->proxy()->view())  {
+        d->layout->current()->proxy()->setView(view);
     }
 }
 

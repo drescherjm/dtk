@@ -164,6 +164,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerNodeLeafActor.h
   dtkComposerNodeFile_p.h
   dtkComposerNodeView.h
   dtkComposerPath.h

@@ -20,7 +20,7 @@
 // dtkComposerNodeLeafActor implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeLeafActor::dtkComposerNodeLeafActor(void) : dtkComposerNodeLeaf()
+dtkComposerNodeLeafActor::dtkComposerNodeLeafActor(QObject *parent) : QObject(parent), dtkComposerNodeLeaf()
 {
 
 }

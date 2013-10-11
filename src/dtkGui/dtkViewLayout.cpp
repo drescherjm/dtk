@@ -1,20 +1,20 @@
-/* dtkViewLayout.cpp --- 
- * 
+/* dtkViewLayout.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Oct 31 15:10:03 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 17
+ * Last-Updated: ven. oct. 11 14:58:07 2013 (+0200)
+ *           By: Etienne
+ *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkViewLayout.h"
@@ -41,6 +41,7 @@ dtkViewLayout::dtkViewLayout(QWidget *parent) : QFrame(parent), d(new dtkViewLay
     layout->addWidget(d->root);
 
     connect(d->root, SIGNAL(focused(dtkAbstractView *)), this, SIGNAL(focused(dtkAbstractView *)));
+    connect(d->root, SIGNAL(unfocused(dtkAbstractView *)), this, SIGNAL(unfocused(dtkAbstractView *)));
 }
 
 dtkViewLayout::~dtkViewLayout(void)

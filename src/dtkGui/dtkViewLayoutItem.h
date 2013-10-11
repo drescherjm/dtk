@@ -1,20 +1,20 @@
-/* dtkViewLayoutItem.h --- 
- * 
+/* dtkViewLayoutItem.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:35 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Nov  5 13:07:25 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 80
+ * Last-Updated: ven. oct. 11 14:59:25 2013 (+0200)
+ *           By: Etienne
+ *     Update #: 81
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKVIEWLAYOUTITEM_H
@@ -105,6 +105,7 @@ public slots:
 
 signals:
     void focused(dtkAbstractView *view);
+    void unfocused(dtkAbstractView *view);
 
 protected slots:
     void close(void);

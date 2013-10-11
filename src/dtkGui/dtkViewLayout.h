@@ -1,20 +1,20 @@
-/* dtkViewLayout.h --- 
- * 
+/* dtkViewLayout.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed May 23 17:54:35 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 15
+ * Last-Updated: ven. oct. 11 14:56:46 2013 (+0200)
+ *           By: Etienne
+ *     Update #: 17
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKVIEWLAYOUT_H
@@ -46,7 +46,8 @@ public:
 
 signals:
     void focused(dtkAbstractView *view);
-    
+    void unfocused(dtkAbstractView *view);
+
 public slots:
     void clear(void);
 

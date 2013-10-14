@@ -9,6 +9,7 @@
 #include "../src/dtkComposer/dtkComposerControlsListItemFactory.h"
 #include "../src/dtkComposer/dtkComposerControlsListItemFile.h"
 #include "../src/dtkComposer/dtkComposerControlsListItemInteger.h"
+#include "../src/dtkComposer/dtkComposerControlsListItemLeafProcess.h"
 #include "../src/dtkComposer/dtkComposerControlsListItemReal.h"
 #include "../src/dtkComposer/dtkComposerControlsListItemString.h"
 #include "../src/dtkComposer/dtkComposerEvaluator.h"

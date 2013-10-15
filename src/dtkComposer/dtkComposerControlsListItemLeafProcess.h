@@ -27,12 +27,6 @@ public:
 public:
     QWidget *widget(void);
 
-public slots:
-    void onValueChanged(double value);
-    void onValueChanged(int value);
-    void  onTextChanged(const QString& text);
-    void  onEnumChanged(int index);
-
 private:
     dtkComposerControlsListItemLeafProcessPrivate *d;
 };

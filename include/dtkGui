@@ -10,6 +10,8 @@
 #include "../src/dtkGui/dtkPluginsEditor.h"
 #include "../src/dtkGui/dtkPopup.h"
 #include "../src/dtkGui/dtkProgressIndicator.h"
+#include "../src/dtkGui/dtkPropertyEditor.h"
+#include "../src/dtkGui/dtkPropertyEditorFactory.h"
 #include "../src/dtkGui/dtkRecentFilesMenu.h"
 #include "../src/dtkGui/dtkSearchField.h"
 #include "../src/dtkGui/dtkSettingsEditor.h"

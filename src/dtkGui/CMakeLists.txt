@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Jan 10 11:57:30 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 275
+## Last-Updated: mar. oct. 15 14:47:41 2013 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 283
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,6 +35,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
+  dtkPropertyEditor.h
+  dtkPropertyEditorFactory.h
   dtkRecentFilesMenu.h
   dtkSearchField.h
   dtkSettingsEditor.h
@@ -59,6 +61,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
+  dtkPropertyEditor.h
+  dtkPropertyEditorFactory.h
   dtkRecentFilesMenu.h
   dtkSearchField.h
   dtkSettingsEditor.h
@@ -84,6 +88,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkPluginsEditor.cpp
   dtkPopup.cpp
   dtkProgressIndicator.cpp
+  dtkPropertyEditor.cpp
+  dtkPropertyEditorFactory.cpp
   dtkRecentFilesMenu.cpp
   dtkSettingsEditor.cpp
   dtkSpacer.cpp
@@ -162,7 +168,8 @@ endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
-  dtkCore)
+  dtkCore
+  dtkLog)
 
 if(DTK_BUILD_SCRIPT)
 target_link_libraries(${PROJECT_NAME} dtkScript)

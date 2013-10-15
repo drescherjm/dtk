@@ -186,6 +186,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["File"] = QStringList() << "primitive" << "file";
     d->types["File"] = "file";
 
+    d->nodes << "File Exists";
+    d->descriptions["File Exists"] = "<p>return true if the File exists</p>";
+    d->tags["File Exists"] = QStringList() << "file" << "exists";
+    d->types["File Exists"] = "fileExists";
+
     // Number operators
 
     this->initNodeNumberOperatorUnary();
@@ -1293,6 +1298,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "file")
         return new dtkComposerNodeFile;
+
+    if(type == "fileExists")
+        return new dtkComposerNodeFileExists;
 
     // container nodes
 

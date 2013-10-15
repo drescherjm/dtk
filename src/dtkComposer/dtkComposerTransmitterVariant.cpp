@@ -358,6 +358,17 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
     dtkDebug() << DTK_PRETTY_FUNCTION << "Try to set data from " << data_type;
 
     switch(data_type) {
+    case QMetaType::Bool: {
+        if (self) {
+            stream >> *e->value_b;
+            this->setData<bool>(e->value_b);
+        } else {
+            bool b;
+            stream >> b;
+            return QVariant::fromValue(&b);
+        }
+        break;
+    }
     case QMetaType::Double: {
         if (self) {
             stream >> *e->value_r;
@@ -589,6 +600,12 @@ QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool se
     QDataStream stream(&array, QIODevice::WriteOnly);
 
     switch(data_type) {
+    case QMetaType::Bool: {
+        bool data = (self) ? *this->data<bool>() : v.value<bool>();
+        stream << data_type;
+        stream << data;
+        break;
+    }
     case QMetaType::Double: {
         double data = (self) ? *this->data<double>() : v.value<double>();
         stream << data_type;

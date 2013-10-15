@@ -1,20 +1,16 @@
-### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Wed Jan 13 13:57:41 2010 (+0100)
-## Version: $Id$
-## Last-Updated: mar. oct. 15 13:55:17 2013 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 360
+### CMakeLists.txt ---
+##
+## Author: Nicolas Niclausse
+## Copyright (C) 2013 Nicolas Niclausse, Inria.
+## Created: mar. oct. 15 21:44:06 2013 (+0200)
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change log:
-## 
+##
 ######################################################################
 
 project(dtkVideo)
@@ -36,11 +32,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkVideoDecoder.cpp
 )
 
-#find_package(FFmpeg REQUIRED)
-
 include_directories(${FFMPEG_INCLUDE_DIRS})
-
-# include_directories (${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
 
 ## #################################################################
 ## Build rules

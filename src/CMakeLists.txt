@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 19:22:37 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Mar 12 14:57:53 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 61
+## Last-Updated: mar. oct. 15 09:17:52 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 62
 ######################################################################
 ## 
 ### Commentary: 
@@ -49,3 +49,7 @@ endif(DTK_BUILD_DISTRIBUTED)
 if(DTK_BUILD_PLOT)
   add_subdirectory(dtkPlot)
 endif(DTK_BUILD_PLOT)
+
+if(DTK_BUILD_VIDEO)
+  add_subdirectory(dtkVideo)
+endif(DTK_BUILD_VIDEO)

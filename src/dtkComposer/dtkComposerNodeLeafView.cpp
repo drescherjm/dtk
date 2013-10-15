@@ -1,20 +1,16 @@
-/* dtkComposerNodeLeafView.cpp --- 
- * 
+/* dtkComposerNodeLeafView.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:55 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Wed Sep 18 16:54:31 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 7
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeLeafView.h"
@@ -93,10 +89,10 @@ dtkAbstractView *dtkComposerNodeLeafView::createView(const QString& implementati
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
-    
+
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractViewType();
-    
+
     if (!d->view) {
 
         d->view = dtkAbstractViewFactory::instance()->create(implementation);
@@ -111,9 +107,28 @@ dtkAbstractView *dtkComposerNodeLeafView::createView(const QString& implementati
 
         d->implementation_has_changed = true;
 
-    }        
+    }
 
     return d->view;
+}
+
+QImage dtkComposerNodeLeafView::screenshot(void) const
+{
+    QWidget *widget = d->view->widget();
+    QPixmap pixmap(widget->size());
+    widget->render(&pixmap);
+    if( pixmap.width() > 1920) {
+        // limit width to FULL HD res.
+        return pixmap.scaledToWidth(1920).toImage();
+    }
+
+    return pixmap.toImage();
+
+}
+
+void dtkComposerNodeLeafView::setView(dtkAbstractView *view)
+{
+    d->view = view;
 }
 
 dtkAbstractView *dtkComposerNodeLeafView::view(void)

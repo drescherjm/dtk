@@ -50,6 +50,7 @@
 #include "dtkComposerNodeMetaVector3DArray.h"
 #include "dtkComposerNodeMetaVector3DArrayAppend.h"
 #include "dtkComposerNodeMetaVector3DArrayExtractor.h"
+#include "dtkComposerNodeMovieWriter.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodePrint.h"
 #include "dtkComposerNodeProcess.h"
@@ -320,6 +321,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["KinectTracker"] = "kinectTracker";
 #endif
 
+    
     // /////////////////////////////////////////////////////////////////
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
@@ -329,6 +331,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
     d->types["VrpnTracker"] = "vrpnTracker";
 #endif
+
+    d->nodes << "Movie Writer";
+    d->descriptions["Movie Writer"] = "<p>Write a movie frame by frame.</p>";
+    d->tags["Movie Writer"] = QStringList() <<  "movie" << "video" << "writer" << "frame";
+    d->types["Movie Writer"] = "movieWriter";
 
     // /////////////////////////////////////////////////////////////////
     // MPI nodes
@@ -1863,6 +1870,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "dtkPlotView")
         return new dtkComposerNodePlotView;
 #endif
+
+    if(type == "movieWriter")
+        return new dtkComposerNodeMovieWriter;
 
 // /////////////////////////////////////////////////////////////////
 // MPI nodes

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 16:17:51 2013 (+0200)
+ * Last-Updated: mar. oct. 15 16:32:46 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 456
+ *     Update #: 460
  */
 
 /* Change Log:
@@ -112,18 +112,10 @@ QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
     const QMetaObject *metaobject = d->object->metaObject();
     int count = metaobject->propertyCount();
 
-    QWidget *editor;
-    qDebug() << Q_FUNC_INFO << metaobject->className();
-    if (metaobject->superClass())
-        qDebug() << Q_FUNC_INFO << metaobject->superClass()->className();
-    else
-        qDebug() << Q_FUNC_INFO << "No superclass.";
+    QWidget *editor = NULL;
 
     for (int i = 1; i < count; ++i) {
-        const QMetaProperty& metaproperty = metaobject->property(i);
-        const char *name = metaproperty.name();
-        QVariant value = d->object->property(name);
-
+        const char *name = metaobject->property(i).name();
         editor = dtkPropertyEditorFactory::instance()->create(name, d->object, frame);
         d->widgets.append(editor);
 

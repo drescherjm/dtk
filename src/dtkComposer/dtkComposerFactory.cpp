@@ -76,6 +76,10 @@
 #include "dtkComposerNodeView.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
+#include "dtkComposerNodeMovieWriter.h"
+#endif
+
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeRemote.h"
@@ -320,6 +324,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["KinectTracker"] = "kinectTracker";
 #endif
 
+
     // /////////////////////////////////////////////////////////////////
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
@@ -328,6 +333,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "VrpnTracker";
     d->tags["VrpnTracker"] = QStringList() <<  "vrpn" << "vr" << "ar" << "tracker";
     d->types["VrpnTracker"] = "vrpnTracker";
+#endif
+
+    // /////////////////////////////////////////////////////////////////
+    // Video nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
+    d->nodes << "Movie Writer";
+    d->descriptions["Movie Writer"] = "<p>Write a movie frame by frame.</p>";
+    d->tags["Movie Writer"] = QStringList() <<  "movie" << "video" << "writer" << "frame" << "encoder";
+    d->types["Movie Writer"] = "movieWriter";
 #endif
 
     // /////////////////////////////////////////////////////////////////
@@ -1862,6 +1878,11 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "dtkPlotView")
         return new dtkComposerNodePlotView;
+#endif
+
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
+    if(type == "movieWriter")
+        return new dtkComposerNodeMovieWriter;
 #endif
 
 // /////////////////////////////////////////////////////////////////

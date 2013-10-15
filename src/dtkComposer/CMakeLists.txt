@@ -72,6 +72,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFile.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
+  dtkComposerNodeLeafActor.h
   dtkComposerNodeLeafData.h
   dtkComposerNodeLeafProcess.h
   dtkComposerNodeLeafView.h
@@ -165,6 +166,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerNodeLeafActor.h
   dtkComposerNodeFile_p.h
   dtkComposerNodeView.h
   dtkComposerPath.h
@@ -230,6 +232,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
+  dtkComposerNodeLeafActor.cpp
   dtkComposerNodeLeafData.cpp
   dtkComposerNodeLeafProcess.cpp
   dtkComposerNodeLeafView.cpp
@@ -320,6 +323,18 @@ if(DTK_BUILD_DISTRIBUTED)
 endif(DTK_BUILD_DISTRIBUTED)
 
 ## #################################################################
+## Video sources
+## #################################################################
+
+if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+    dtkComposerNodeMovieWriter.h)
+  set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+    dtkComposerNodeMovieWriter.cpp)
+endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+
+## #################################################################
 ## Mpi sources
 ## #################################################################
 
@@ -383,6 +398,7 @@ set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodeTrackerVrpn.cpp)
 endif(DTK_HAVE_VRPN AND DTK_BUILD_VR)
+
 
 ## #################################################################
 ## Build rules
@@ -448,6 +464,11 @@ endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
 if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
   target_link_libraries(${PROJECT_NAME} dtkPlot)
 endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+
+if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+  target_link_libraries(${PROJECT_NAME} dtkVideo)
+endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+
 
 ## #################################################################
 ## Export header file

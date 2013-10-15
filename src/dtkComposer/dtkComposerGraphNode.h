@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
- * Version: $Id$
- * Last-Updated: lun. sept. 24 09:58:38 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 160
  */
 
 /* Commentary:
@@ -41,7 +37,7 @@ public:
 
 public:
     enum Status { Ready, Done, Running, Break};
-    enum   Kind { SelectBranch, Leaf, Data, Process, View, Begin, End, SetOutputs, SetInputs, SetVariables, SetConditions };
+    enum   Kind { SelectBranch, Leaf, Data, Process, View, Actor, Begin, End, SetOutputs, SetInputs, SetVariables, SetConditions };
 
 public:
     QRectF boundingRect(void) const;

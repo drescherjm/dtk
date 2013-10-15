@@ -210,7 +210,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Process)){
             // dtkDebug() << "running process node in another thread"<< d->current->title();
             QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
-        } else if ((d->current->kind() == dtkComposerGraphNode::View)) {
+        } else if ((d->current->kind() == dtkComposerGraphNode::View) || (d->current->kind() == dtkComposerGraphNode::Actor)) {
             if (d->use_gui) {
                 connect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()),Qt::BlockingQueuedConnection);
                 // dtkTrace() << "emit signal and wait for GUI thread to run the node";

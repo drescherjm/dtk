@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Tue Apr 30 11:45:48 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 396
+## Last-Updated: mar. oct. 15 09:18:48 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 398
 ######################################################################
 ## 
 ### Commentary: 
@@ -42,6 +42,7 @@ option(DTK_BUILD_WRAPPERS      "Build wrappers"          false)
 option(DTK_BUILD_REPORTING     "Build reporting"         false)
 option(DTK_BUILD_TUTORIALS     "Build tutorials"         false)
 option(DTK_BUILD_MPI           "Build mpi related code"  false)
+option(DTK_BUILD_VIDEO         "Build video related code" false)
 
 option(DTK_BUILD_DISTRIBUTED   "Build distributed layer" true)
 option(DTK_BUILD_COMPOSER      "Build composer layer"    true)

@@ -14,6 +14,7 @@
  */
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeLeafActor.h"
 #include "dtkComposerNodeLeafData.h"
 #include "dtkComposerNodeLeafProcess.h"
 #include "dtkComposerNodeLeafView.h"
@@ -291,6 +292,10 @@ void dtkComposerSceneNodeLeaf::layout(void)
             d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
+        } else if (dynamic_cast<dtkComposerNodeLeafActor*>(this->wrapee())) {
+            d->gradiant.setColorAt(0.0, QColor(255, 175, 0).lighter());
+            d->gradiant.setColorAt(stripe, QColor(155, 75, 0));
+            d->gradiant.setColorAt(1.0, QColor(155, 75, 0).darker());
         } else {
             d->gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));

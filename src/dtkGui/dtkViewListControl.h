@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Oct 31 12:49:39 2012 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. oct. 10 16:14:56 2013 (+0200)
- *           By: Etienne
- *     Update #: 18
  */
 
 /* Commentary:
@@ -39,6 +35,9 @@ public:
 public:
     void setLayout(dtkViewLayout *layout);
     void setList(dtkViewList *list);
+
+public slots:
+    void onActorStarted(QString view_name);
 
 protected slots:
     void onLayoutHorizontally(void);

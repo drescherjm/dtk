@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: jeu. mars 21 10:47:28 2013 (+0100)
+## Last-Updated: mar. oct. 15 11:14:45 2013 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 131
+##     Update #: 149
 ######################################################################
 ## 
 ### Commentary: 
@@ -175,7 +175,21 @@ if(DTK_BUILD_MPI)
     set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
     set(DTK_HAVE_MPI "YES")
   endif(MPI_FOUND)
+
 endif(DTK_BUILD_MPI)
+
+
+## #################################################################
+## Video / FFMPEG
+## #################################################################
+
+if(DTK_BUILD_VIDEO)
+  find_package(FFmpeg QUIET)
+  if(FFMPEG_FOUND)
+    include_directories(${MPI_INCLUDE_DIRS})
+    set(DTK_HAVE_FFMPEG "YES")
+  endif(FFMPEG_FOUND)
+endif(DTK_BUILD_VIDEO)
 
 ## #################################################################
 ## Vrpn

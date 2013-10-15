@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 18 16:51:55 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 7
+ * Last-Updated: lun. oct. 14 12:27:20 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -51,6 +51,10 @@ public:
     QString currentImplementation(void);
 
     QStringList implementations(void);
+
+public:
+    QImage screenshot(void) const;
+    void setView(dtkAbstractView *view);
 
 public:
     virtual dtkAbstractView *createView(const QString& implementation);

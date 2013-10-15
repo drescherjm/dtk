@@ -43,9 +43,6 @@ private:
     dtkComposerNodeMovieWriterPrivate *d;
 };
 
-
-Q_DECLARE_METATYPE(QImage *)
-
 #endif
 
 

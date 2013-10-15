@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 16:32:46 2013 (+0200)
+ * Last-Updated: mar. oct. 15 22:48:09 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 460
+ *     Update #: 540
  */
 
 /* Change Log:
@@ -20,8 +20,7 @@
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkAbstractProcess.h>
 
-#include <dtkGui/dtkPropertyEditorFactory.h>
-#include <dtkGui/dtkPropertyEditor.h>
+#include <dtkGui/dtkObjectEditor.h>
 
 #include <QObject>
 #include <QVariant>
@@ -29,9 +28,6 @@
 
 class dtkComposerControlsListItemLeafProcessPrivate
 {
-public:
-    dtkComposerControlsListItemLeafProcess *q;
-
 public:
     QListWidget *parent;
 
@@ -42,31 +38,8 @@ public:
     dtkComposerNodeLeafProcess *p_node;
 
 public:
-    QObject *object;
-
-public:
-    QList<QWidget *> widgets;
-
-public:
-    QList<QMetaProperty> enum_properties;
-
-public:
-    void clear(void);
+    QFrame *frame;
 };
-
-// ///////////////////////////////////////////////////////////////////
-// 
-// ///////////////////////////////////////////////////////////////////
-
-void dtkComposerControlsListItemLeafProcessPrivate::clear(void)
-{
-    foreach(QWidget *widget, widgets)
-        delete widget;
-
-    widgets.clear();
-
-    enum_properties.clear();
-}
 
 // ///////////////////////////////////////////////////////////////////
 // 
@@ -74,8 +47,6 @@ void dtkComposerControlsListItemLeafProcessPrivate::clear(void)
 
 dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemLeafProcessPrivate)
 {
-    d->q = this;
-
     d->node = node;
 
     if (dtkComposerNodeLeafProcess *p_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee()))
@@ -84,6 +55,8 @@ dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(Q
         dtkError() << Q_FUNC_INFO << "Can't create control list item of type Leaf Process.";
 
     d->parent = parent;
+
+    d->frame = NULL;
 }
 
 
@@ -95,36 +68,23 @@ dtkComposerControlsListItemLeafProcess::~dtkComposerControlsListItemLeafProcess(
 
 QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
 {
-    d->object = d->p_node->process();
-    if (!d->object)
-        return dtkComposerControlsListItem::widget();
+    if (d->frame && !(d->p_node->implementationHasChanged()))
+        return d->frame;
 
-    if (d->p_node->implementationHasChanged())
-        d->clear();
+    if (d->frame)
+        delete d->frame;
 
-    QFrame *frame = new QFrame(d->parent);
+    d->frame = new QFrame(d->parent);
 
-    QFormLayout *layout = new QFormLayout;
-    layout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    QVBoxLayout *layout = new QVBoxLayout(d->frame);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addRow(new QLabel(d->node->title(), frame));
+    layout->addWidget(new QLabel(d->node->title(), d->frame));
 
-    const QMetaObject *metaobject = d->object->metaObject();
-    int count = metaobject->propertyCount();
+    QObject *object = d->p_node->process();
+    if (object)
+        layout->addWidget(new dtkObjectEditor(object, d->frame));
 
-    QWidget *editor = NULL;
-
-    for (int i = 1; i < count; ++i) {
-        const char *name = metaobject->property(i).name();
-        editor = dtkPropertyEditorFactory::instance()->create(name, d->object, frame);
-        d->widgets.append(editor);
-
-        layout->addRow(new QLabel(QString(name).append(":"), frame));
-        layout->addRow(editor);
-    } 
-
-    frame->setLayout(layout);
-    return frame;
+    return d->frame;
 }
 
 

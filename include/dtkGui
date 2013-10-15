@@ -6,6 +6,7 @@
 #include "../src/dtkGui/dtkFinder.h"
 #include "../src/dtkGui/dtkFlowLayout.h"
 #include "../src/dtkGui/dtkInterpreter.h"
+#include "../src/dtkGui/dtkObjectEditor.h"
 #include "../src/dtkGui/dtkPieChart.h"
 #include "../src/dtkGui/dtkPluginsEditor.h"
 #include "../src/dtkGui/dtkPopup.h"

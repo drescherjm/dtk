@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 10:30:09 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 16:26:12 2013 (+0200)
+ * Last-Updated: mar. oct. 15 22:45:24 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 149
+ *     Update #: 156
  */
 
 /* Change Log:
@@ -36,10 +36,10 @@ public:
 // Forward declarations of creators (see dtkPropertyEditor.cpp for implementations).
 // ///////////////////////////////////////////////////////////////////
 
-dtkPropertyEditor  *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor  *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor    *createDtkPropertyEditorEnum(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUI_EXPORT  *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUI_EXPORT *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUI_EXPORT  *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUI_EXPORT    *createDtkPropertyEditorEnum(const QString& property_name, QObject *object, QWidget *parent = 0);
 
 // ///////////////////////////////////////////////////////////////////
 // dtkPropertyEditorFactory implementation

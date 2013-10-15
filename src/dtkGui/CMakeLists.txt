@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. oct. 15 14:47:41 2013 (+0200)
+## Last-Updated: mar. oct. 15 17:07:44 2013 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 283
+##     Update #: 289
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,6 +31,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
+  dtkObjectEditor.h
   dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
@@ -57,6 +58,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkColorButton.h
   dtkColorGrid.h
   dtkFinder.h
+  dtkObjectEditor.h
   dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
@@ -84,6 +86,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkColorGrid.cpp
   dtkFlowLayout.cpp
   dtkFinder.cpp
+  dtkObjectEditor.cpp
   dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp

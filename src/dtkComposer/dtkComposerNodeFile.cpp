@@ -23,7 +23,7 @@
 #include <QtNetwork>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerPrivate
+// dtkComposerNodeFilePrivate
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
@@ -161,4 +161,67 @@ QString dtkComposerNodeFile::value(void)
 void dtkComposerNodeFile::setValue(QString value)
 {
     d->fileName = value;
+}
+
+
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileExists implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileExists::dtkComposerNodeFileExists(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileExistsPrivate)
+{
+    this->appendReceiver(&(d->receiver));
+
+    d->exists = false;
+    d->emitter.setData(&d->exists);
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeFileExists::~dtkComposerNodeFileExists(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileExists::run(void)
+{
+    if (!d->receiver.isEmpty()) {
+        if (d->receiver.data()) {
+            QString filename = *(d->receiver.data());
+            d->exists = QFile(filename).exists();
+        }
+    }
+}
+
+QString dtkComposerNodeFileExists::type(void)
+{
+    return "fileExists";
+}
+
+QString dtkComposerNodeFileExists::titleHint(void)
+{
+    return "FileExists";
+}
+
+QString dtkComposerNodeFileExists::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "file";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileExists::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "exists";
+
+    return dtkComposerNode::outputLabelHint(port);
 }

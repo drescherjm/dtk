@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Sep 21 16:12:57 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 24 12:12:14 2012 (+0200)
- *           By: tkloczko
- *     Update #: 7
+ * Last-Updated: mar. oct. 15 15:25:20 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -45,8 +45,20 @@ public:
 public:
     dtkComposerTransmitterReceiver<QString> receiver;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<QString> emitter;
+};
+
+class dtkComposerNodeFileExistsPrivate
+{
+public:
+    bool exists;
+
+public:
+    dtkComposerTransmitterReceiver<QString> receiver;
+
+public:
+    dtkComposerTransmitterEmitter<bool> emitter;
 };
 
 #endif

@@ -28,6 +28,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerControlsListItemBoolean.h
   dtkComposerControlsListItemFile.h
   dtkComposerControlsListItemInteger.h
+  dtkComposerControlsListItemLeafProcess.h
   dtkComposerControlsListItemReal.h
   dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
@@ -154,6 +155,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkComposerControlsListItemBoolean.h
   dtkComposerControlsListItemFile.h
   dtkComposerControlsListItemInteger.h
+  dtkComposerControlsListItemLeafProcess.h
   dtkComposerControlsListItemReal.h
   dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
@@ -187,6 +189,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerControlsListItemFactory.cpp
   dtkComposerControlsListItemFile.cpp
   dtkComposerControlsListItemInteger.cpp
+  dtkComposerControlsListItemLeafProcess.cpp
   dtkComposerControlsListItemReal.cpp
   dtkComposerControlsListItemString.cpp
   dtkComposerEvaluator.cpp

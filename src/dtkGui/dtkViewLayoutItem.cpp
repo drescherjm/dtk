@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. oct. 10 19:10:51 2013 (+0200)
+ * Last-Updated: ven. oct. 11 15:44:53 2013 (+0200)
  *           By: Etienne
- *     Update #: 976
+ *     Update #: 1044
  */
 
 /* Commentary:
@@ -355,9 +355,10 @@ void dtkViewLayoutItem::setLayout(dtkViewLayout *layout)
 
 void dtkViewLayoutItem::clear(void)
 {
-    if (d->proxy && d->proxy->view())
+    if (d->proxy && d->proxy->view()){
         d->proxy->view()->widget()->hide();
-
+        emit unfocused(d->proxy->view());
+    }
     delete d->proxy;
 
     d->proxy = new dtkViewLayoutItemProxy(d->root);

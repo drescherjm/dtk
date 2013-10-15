@@ -50,7 +50,6 @@
 #include "dtkComposerNodeMetaVector3DArray.h"
 #include "dtkComposerNodeMetaVector3DArrayAppend.h"
 #include "dtkComposerNodeMetaVector3DArrayExtractor.h"
-#include "dtkComposerNodeMovieWriter.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodePrint.h"
 #include "dtkComposerNodeProcess.h"
@@ -76,6 +75,10 @@
 #include "dtkComposerNodeVectorRealOperatorBinary.h"
 #include "dtkComposerNodeView.h"
 #include "dtkComposerSceneNodeLeaf.h"
+
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
+#include "dtkComposerNodeMovieWriter.h"
+#endif
 
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeDistributed.h"
@@ -321,7 +324,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["KinectTracker"] = "kinectTracker";
 #endif
 
-    
+
     // /////////////////////////////////////////////////////////////////
     // VRPN nodes
     // /////////////////////////////////////////////////////////////////
@@ -332,10 +335,16 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["VrpnTracker"] = "vrpnTracker";
 #endif
 
+    // /////////////////////////////////////////////////////////////////
+    // Video nodes
+    // /////////////////////////////////////////////////////////////////
+
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
     d->nodes << "Movie Writer";
     d->descriptions["Movie Writer"] = "<p>Write a movie frame by frame.</p>";
-    d->tags["Movie Writer"] = QStringList() <<  "movie" << "video" << "writer" << "frame";
+    d->tags["Movie Writer"] = QStringList() <<  "movie" << "video" << "writer" << "frame" << "encoder";
     d->types["Movie Writer"] = "movieWriter";
+#endif
 
     // /////////////////////////////////////////////////////////////////
     // MPI nodes
@@ -1871,8 +1880,10 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodePlotView;
 #endif
 
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
     if(type == "movieWriter")
         return new dtkComposerNodeMovieWriter;
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // MPI nodes

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. mars 27 10:16:16 2013 (+0100)
+ * Last-Updated: mer. oct. 16 10:21:11 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 165
+ *     Update #: 175
  */
 
 /* Commentary:
@@ -52,10 +52,10 @@ public:
     };
 
              dtkDistributedMessage(void);
-             dtkDistributedMessage(Method method, QString jobid="", qint16 rank= SERVER_RANK,qint64 size=0, QString type ="json",  const QByteArray  &content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
+             dtkDistributedMessage(Method method, QString jobid="", int rank= SERVER_RANK,qint64 size=0, QString type ="json",  const QByteArray  &content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
     virtual ~dtkDistributedMessage(void);
 
-
+public:
     void addHeader(QString name, QString value);
     void setHeader(const QString &line);
     void setMethod(QString method);
@@ -66,15 +66,18 @@ public:
     void setSize(const QString &header);
     void setContent(QByteArray &content);
 
+public:
     Method method(void);
-    QString req(void);
-    QString jobid(void);
-    qint16  rank(void);
-    dtkDistributedHeaders headers();
-    QString header(const QString &name);
-    QString type(void);
-    qint64 size(void);
+    QString         req(void);
+    QString       jobid(void);
+    int            rank(void);
+    QString      header(const QString &name);
+    QString        type(void);
+    qint64         size(void);
     QByteArray &content(void);
+
+public:
+    dtkDistributedHeaders headers();
 
 private:
     dtkDistributedMessagePrivate *d;

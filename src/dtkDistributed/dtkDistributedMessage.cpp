@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 30 16:43:39 2012 (+0100)
+ * Last-Updated: mer. oct. 16 10:20:42 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 367
+ *     Update #: 370
  */
 
 /* Commentary:
@@ -28,7 +28,7 @@ class dtkDistributedMessagePrivate
 public:
     dtkDistributedMessage::Method method;
     QString jobid;
-    qint16 rank ;
+    int rank ;
     dtkDistributedMessage::dtkDistributedHeaders headers;
     qint64 size ;
     QString type;
@@ -45,7 +45,7 @@ dtkDistributedMessage::~dtkDistributedMessage(void)
 }
 
 
-dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, qint16 rank, qint64 size, QString type, const QByteArray  &content,  const QHash<QString,QString>  &headers ) :  d(new dtkDistributedMessagePrivate)
+dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, int rank, qint64 size, QString type, const QByteArray  &content,  const QHash<QString,QString>  &headers ) :  d(new dtkDistributedMessagePrivate)
 {
     d->method = method;
     d->size = size;
@@ -194,7 +194,7 @@ QString dtkDistributedMessage::jobid(void)
     return d->jobid;
 }
 
-qint16  dtkDistributedMessage::rank(void)
+int  dtkDistributedMessage::rank(void)
 {
     return d->rank;
 }

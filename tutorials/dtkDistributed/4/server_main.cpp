@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Sep 14 13:20:15 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:57:09 2012 (+0200)
- *           By: tkloczko
- *     Update #: 314
+ * Last-Updated: mer. oct. 16 10:08:49 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 319
  */
 
 /* Commentary: 
@@ -88,14 +88,13 @@ int main(int argc, char **argv)
     dtkDistributedServerManager *manager = server.manager();
 
     QString jobid = manager->submit(dtkJson::serialize(job));
-
-    server.waitForConnection(0);
+    server.waitForConnection(0, jobid);
 
 // /////////////////////////////////////////////////////////////////
 // Server waits for result on rank 0.
 // /////////////////////////////////////////////////////////////////
 
-    QByteArray res = server.waitForData(0);
+    QByteArray res = server.waitForData(0, jobid);
 
     qDebug() << "result is " << res;
 

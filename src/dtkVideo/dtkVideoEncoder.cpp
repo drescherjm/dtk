@@ -47,14 +47,14 @@ public:
     bool ok;
 
 public:
-    ffmpeg::AVFormatContext *pFormatCtx;
-    ffmpeg::AVOutputFormat *pOutputFormat;
-    ffmpeg::AVCodecContext *pCodecCtx;
-    ffmpeg::AVStream *pVideoStream;
-    ffmpeg::AVCodec *pCodec;
-    ffmpeg::AVFrame *ppicture;
-    ffmpeg::SwsContext *img_convert_ctx;
-    ffmpeg::AVPacket pkt;
+    AVFormatContext *pFormatCtx;
+    AVOutputFormat *pOutputFormat;
+    AVCodecContext *pCodecCtx;
+    AVStream *pVideoStream;
+    AVCodec *pCodec;
+    AVFrame *ppicture;
+    SwsContext *img_convert_ctx;
+    AVPacket pkt;
 
 public:
     uint8_t *picture_buf;
@@ -81,12 +81,12 @@ void dtkVideoEncoderPrivate::initVars()
 
 bool dtkVideoEncoderPrivate::initCodec()
 {
-   ffmpeg::avcodec_init();
-   ffmpeg::av_register_all();
+   avcodec_init();
+   av_register_all();
 
-   printf("License: %s\n",ffmpeg::avformat_license());
-   printf("AVCodec version %d\n",ffmpeg::avformat_version());
-   printf("AVFormat configuration: %s\n",ffmpeg::avformat_configuration());
+   printf("License: %s\n",avformat_license());
+   printf("AVCodec version %d\n",avformat_version());
+   printf("AVFormat configuration: %s\n",avformat_configuration());
 
    return true;
 }
@@ -109,7 +109,7 @@ int dtkVideoEncoderPrivate::encodeImage_p(const QImage &img,bool custompts, unsi
    if(custompts)                             // Handle custom pts
          pCodecCtx->coded_frame->pts = pts;  // Set the time stamp
 
-   int out_size = ffmpeg::avcodec_encode_video(pCodecCtx,outbuf,outbuf_size,ppicture);
+   int out_size = avcodec_encode_video(pCodecCtx,outbuf,outbuf_size,ppicture);
    //printf("Frame size: %d\n",out_size);
 
 
@@ -188,7 +188,7 @@ void dtkVideoEncoderPrivate::freeOutputBuf()
 
 bool dtkVideoEncoderPrivate::initFrame()
 {
-   ppicture = ffmpeg::avcodec_alloc_frame();
+   ppicture = avcodec_alloc_frame();
    if(ppicture==0)
       return false;
 
@@ -202,7 +202,7 @@ bool dtkVideoEncoderPrivate::initFrame()
    }
 
    // Setup the planes
-   avpicture_fill((ffmpeg::AVPicture *)ppicture, picture_buf,pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
+   avpicture_fill((AVPicture *)ppicture, picture_buf,pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
 
    return true;
 }
@@ -335,8 +335,8 @@ bool dtkVideoEncoderPrivate::convertImage_sws(const QImage &img)
       return false;
    }
 
-   img_convert_ctx = ffmpeg::sws_getCachedContext(img_convert_ctx,getWidth(),getHeight(),ffmpeg::PIX_FMT_BGRA,getWidth(),getHeight(),ffmpeg::PIX_FMT_YUV420P,SWS_BICUBIC, NULL, NULL, NULL);
-   //img_convert_ctx = ffmpeg::sws_getCachedContext(img_convert_ctx,getWidth(),getHeight(),ffmpeg::PIX_FMT_BGRA,getWidth(),getHeight(),ffmpeg::PIX_FMT_YUV420P,SWS_FAST_BILINEAR, NULL, NULL, NULL);
+   img_convert_ctx = sws_getCachedContext(img_convert_ctx,getWidth(),getHeight(),PIX_FMT_BGRA,getWidth(),getHeight(),PIX_FMT_YUV420P,SWS_BICUBIC, NULL, NULL, NULL);
+   //img_convert_ctx = sws_getCachedContext(img_convert_ctx,getWidth(),getHeight(),PIX_FMT_BGRA,getWidth(),getHeight(),PIX_FMT_YUV420P,SWS_FAST_BILINEAR, NULL, NULL, NULL);
    if (img_convert_ctx == NULL)
    {
       printf("Cannot initialize the conversion context\n");
@@ -354,7 +354,7 @@ bool dtkVideoEncoderPrivate::convertImage_sws(const QImage &img)
    srcstride[2]=0;
 
 
-   ffmpeg::sws_scale(img_convert_ctx, srcplanes, srcstride,0, getHeight(), ppicture->data, ppicture->linesize);
+   sws_scale(img_convert_ctx, srcplanes, srcstride,0, getHeight(), ppicture->data, ppicture->linesize);
 
    return true;
 }
@@ -415,13 +415,13 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
       return false;
    }
 
-   d->pOutputFormat = ffmpeg::av_guess_format(NULL, fileName.toStdString().c_str(), NULL);
+   d->pOutputFormat = av_guess_format(NULL, fileName.toStdString().c_str(), NULL);
    if (!d->pOutputFormat) {
       printf("Could not deduce output format from file extension: using MPEG.\n");
-      d->pOutputFormat = ffmpeg::av_guess_format("mpeg", NULL, NULL);
+      d->pOutputFormat = av_guess_format("mpeg", NULL, NULL);
    }
 
-   d->pFormatCtx=ffmpeg::avformat_alloc_context();
+   d->pFormatCtx=avformat_alloc_context();
    if(!d->pFormatCtx)
    {
       printf("Error allocating format context\n");
@@ -443,7 +443,7 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
 
    d->pCodecCtx=d->pVideoStream->codec;
    d->pCodecCtx->codec_id = d->pOutputFormat->video_codec;
-   d->pCodecCtx->codec_type = ffmpeg::AVMEDIA_TYPE_VIDEO;
+   d->pCodecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
 
    d->pCodecCtx->bit_rate = d->Bitrate;
    d->pCodecCtx->width = d->getWidth();
@@ -451,7 +451,7 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
    d->pCodecCtx->time_base.den = fps;
    d->pCodecCtx->time_base.num = 1;
    d->pCodecCtx->gop_size = d->Gop;
-   d->pCodecCtx->pix_fmt = ffmpeg::PIX_FMT_YUV420P;
+   d->pCodecCtx->pix_fmt = PIX_FMT_YUV420P;
 
    avcodec_thread_init(d->pCodecCtx, 10);
 
@@ -471,7 +471,7 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
       return false;
    }
 
-   ffmpeg::dump_format(d->pFormatCtx, 0, fileName.toStdString().c_str(), 1);
+   dump_format(d->pFormatCtx, 0, fileName.toStdString().c_str(), 1);
 
    // open_video
    // find the video encoder

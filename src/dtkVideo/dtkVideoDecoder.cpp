@@ -25,13 +25,13 @@ public:
     int videoStream;
 
 public:
-    ffmpeg::AVFormatContext *pFormatCtx;
-    ffmpeg::AVCodecContext  *pCodecCtx;
-    ffmpeg::AVCodec         *pCodec;
-    ffmpeg::AVFrame         *pFrame;
-    ffmpeg::AVFrame         *pFrameRGB;
-    ffmpeg::AVPacket        packet;
-    ffmpeg::SwsContext      *img_convert_ctx;
+    AVFormatContext *pFormatCtx;
+    AVCodecContext  *pCodecCtx;
+    AVCodec         *pCodec;
+    AVFrame         *pFrame;
+    AVFrame         *pFrameRGB;
+    AVPacket        packet;
+    SwsContext      *img_convert_ctx;
 
     uint8_t                 *buffer;
     int                     numBytes;
@@ -48,8 +48,8 @@ public:
     void InitVars();
 
     // Helpers
-    void dumpFormat(ffmpeg::AVFormatContext *ic,int index,const char *url,int is_output);
-    void saveFramePPM(ffmpeg::AVFrame *pFrame, int width, int height, int iFrame);
+    void dumpFormat(AVFormatContext *ic,int index,const char *url,int is_output);
+    void saveFramePPM(AVFrame *pFrame, int width, int height, int iFrame);
 
     // Seek
     bool decodeSeekFrame(int after);
@@ -57,13 +57,13 @@ public:
 
 bool dtkVideoDecoderPrivate::initCodec()
 {
-   ffmpeg::avcodec_init();
-   ffmpeg::avcodec_register_all();
-   ffmpeg::av_register_all();
+   avcodec_init();
+   avcodec_register_all();
+   av_register_all();
 
-   printf("License: %s\n",ffmpeg::avformat_license());
-   printf("AVCodec version %d\n",ffmpeg::avformat_version());
-   printf("AVFormat configuration: %s\n",ffmpeg::avformat_configuration());
+   printf("License: %s\n",avformat_license());
+   printf("AVCodec version %d\n",avformat_version());
+   printf("AVFormat configuration: %s\n",avformat_configuration());
 
    return true;
 }
@@ -83,7 +83,7 @@ void dtkVideoDecoderPrivate::InitVars()
 /**
   \brief Debug function: saves a frame as PPM
 **/
-void dtkVideoDecoderPrivate::saveFramePPM(ffmpeg::AVFrame *pFrame, int width, int height, int iFrame)
+void dtkVideoDecoderPrivate::saveFramePPM(AVFrame *pFrame, int width, int height, int iFrame)
 {
     FILE *pFile;
     char szFilename[32];
@@ -133,8 +133,8 @@ bool dtkVideoDecoderPrivate::decodeSeekFrame(int after)
       // This is the frame we want to return
 
       // Compute desired frame time
-      ffmpeg::AVRational millisecondbase = {1, 1000};
-      DesiredFrameTime = ffmpeg::av_rescale_q(after,pFormatCtx->streams[videoStream]->time_base,millisecondbase);
+      AVRational millisecondbase = {1, 1000};
+      DesiredFrameTime = av_rescale_q(after,pFormatCtx->streams[videoStream]->time_base,millisecondbase);
 
       //printf("Returning already available frame %d @ %d. DesiredFrameTime: %d\n",LastFrameNumber,LastFrameTime,DesiredFrameTime);
 
@@ -181,9 +181,9 @@ bool dtkVideoDecoderPrivate::decodeSeekFrame(int after)
          // Did we get a video frame?
          if(frameFinished)
          {
-            ffmpeg::AVRational millisecondbase = {1, 1000};
+            AVRational millisecondbase = {1, 1000};
             int f = packet.dts;
-            int t = ffmpeg::av_rescale_q(packet.dts,pFormatCtx->streams[videoStream]->time_base,millisecondbase);
+            int t = av_rescale_q(packet.dts,pFormatCtx->streams[videoStream]->time_base,millisecondbase);
             if(LastFrameOk==false)
             {
                LastFrameOk=true;
@@ -208,14 +208,14 @@ bool dtkVideoDecoderPrivate::decodeSeekFrame(int after)
                // Convert the image format (init the context the first time)
                int w = pCodecCtx->width;
                int h = pCodecCtx->height;
-               img_convert_ctx = ffmpeg::sws_getCachedContext(img_convert_ctx,w, h, pCodecCtx->pix_fmt, w, h, ffmpeg::PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
+               img_convert_ctx = sws_getCachedContext(img_convert_ctx,w, h, pCodecCtx->pix_fmt, w, h, PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
 
                if(img_convert_ctx == NULL)
                {
                   printf("Cannot initialize the conversion context!\n");
                   return false;
                }
-               ffmpeg::sws_scale(img_convert_ctx, pFrame->data, pFrame->linesize, 0, pCodecCtx->height, pFrameRGB->data, pFrameRGB->linesize);
+               sws_scale(img_convert_ctx, pFrame->data, pFrame->linesize, 0, pCodecCtx->height, pFrameRGB->data, pFrameRGB->linesize);
 
                // Convert the frame to QImage
                LastFrame=QImage(w,h,QImage::Format_RGB888);
@@ -224,7 +224,7 @@ bool dtkVideoDecoderPrivate::decodeSeekFrame(int after)
                   memcpy(LastFrame.scanLine(y),pFrameRGB->data[0]+y*pFrameRGB->linesize[0],w*3);
 
                // Set the time
-               DesiredFrameTime = ffmpeg::av_rescale_q(after,pFormatCtx->streams[videoStream]->time_base,millisecondbase);
+               DesiredFrameTime = av_rescale_q(after,pFormatCtx->streams[videoStream]->time_base,millisecondbase);
                LastFrameOk=true;
 
 
@@ -240,13 +240,13 @@ bool dtkVideoDecoderPrivate::decodeSeekFrame(int after)
    return done;   // done indicates whether or not we found a frame
 }
 
-void dtkVideoDecoderPrivate::dumpFormat(ffmpeg::AVFormatContext *ic,
+void dtkVideoDecoderPrivate::dumpFormat(AVFormatContext *ic,
                  int index,
                  const char *url,
                  int is_output)
 {
     //int i;
-    uint8_t *printed = (uint8_t*)ffmpeg::av_mallocz(ic->nb_streams);
+    uint8_t *printed = (uint8_t*)av_mallocz(ic->nb_streams);
     if (ic->nb_streams && !printed)
         return;
 
@@ -280,7 +280,7 @@ void dtkVideoDecoderPrivate::dumpFormat(ffmpeg::AVFormatContext *ic,
             secs = ic->start_time / AV_TIME_BASE;
             us = ic->start_time % AV_TIME_BASE;
             printf("%d.%06d\n",
-                   secs, (int)ffmpeg::av_rescale(us, 1000000, AV_TIME_BASE));
+                   secs, (int)av_rescale(us, 1000000, AV_TIME_BASE));
         }
         printf(", bitrate: ");
         if (ic->bit_rate) {
@@ -293,7 +293,7 @@ void dtkVideoDecoderPrivate::dumpFormat(ffmpeg::AVFormatContext *ic,
     if(ic->nb_programs) {
         unsigned int j, total=0;
         for(j=0; j<ic->nb_programs; j++) {
-            ffmpeg::AVMetadataTag *name = av_metadata_get(ic->programs[j]->metadata,
+            AVMetadataTag *name = av_metadata_get(ic->programs[j]->metadata,
                                                   "name", NULL, 0);
             printf("  Program %d %s\n", ic->programs[j]->id,
                    name ? name->value : "");
@@ -308,16 +308,16 @@ void dtkVideoDecoderPrivate::dumpFormat(ffmpeg::AVFormatContext *ic,
     }
     /*for(i=0;i<ic->nb_streams;i++)
         if (!printed[i])
-            ffmpeg::dump_stream_format(ic, i, index, is_output);*/
+            dump_stream_format(ic, i, index, is_output);*/
 
     if (ic->metadata) {
-        ffmpeg::AVMetadataTag *tag=NULL;
+        AVMetadataTag *tag=NULL;
         printf("  Metadata\n");
         while((tag=av_metadata_get(ic->metadata, "", tag, AV_METADATA_IGNORE_SUFFIX))) {
             printf("    %-16s: %s\n", tag->key, tag->value);
         }
     }
-    ffmpeg::av_free(printed);
+    av_free(printed);
 }
 
 
@@ -406,7 +406,7 @@ bool dtkVideoDecoder::openFile(QString filename)
    // Find the first video stream
    d->videoStream=-1;
    for(unsigned i=0; i<d->pFormatCtx->nb_streams; i++)
-       if(d->pFormatCtx->streams[i]->codec->codec_type==ffmpeg::AVMEDIA_TYPE_VIDEO)
+       if(d->pFormatCtx->streams[i]->codec->codec_type==AVMEDIA_TYPE_VIDEO)
        {
            d->videoStream=i;
            break;
@@ -432,19 +432,19 @@ bool dtkVideoDecoder::openFile(QString filename)
      d->pCodecCtx->time_base.den=1000;
 
    // Allocate video frame
-   d->pFrame=ffmpeg::avcodec_alloc_frame();
+   d->pFrame=avcodec_alloc_frame();
 
    // Allocate an AVFrame structure
-   d->pFrameRGB=ffmpeg::avcodec_alloc_frame();
+   d->pFrameRGB=avcodec_alloc_frame();
    if(d->pFrameRGB==NULL)
        return false;
 
    // Determine required buffer size and allocate buffer
-   d->numBytes=ffmpeg::avpicture_get_size(ffmpeg::PIX_FMT_RGB24, d->pCodecCtx->width,d->pCodecCtx->height);
+   d->numBytes=avpicture_get_size(PIX_FMT_RGB24, d->pCodecCtx->width,d->pCodecCtx->height);
    d->buffer=new uint8_t[d->numBytes];
 
    // Assign appropriate parts of buffer to image planes in pFrameRGB
-   avpicture_fill((ffmpeg::AVPicture *)d->pFrameRGB, d->buffer, ffmpeg::PIX_FMT_RGB24,
+   avpicture_fill((AVPicture *)d->pFrameRGB, d->buffer, PIX_FMT_RGB24,
        d->pCodecCtx->width, d->pCodecCtx->height);
 
    d->ok=true;
@@ -479,7 +479,7 @@ bool dtkVideoDecoder::seekMs(int tsms)
    //printf("**** SEEK TO ms %d. LLT: %d. LT: %d. LLF: %d. LF: %d. LastFrameOk: %d\n",tsms,d->LastLastFrameTime,LastFrameTime,LastLastFrameNumber,LastFrameNumber,(int)LastFrameOk);
 
    // Convert time into frame number
-   d->DesiredFrameNumber = ffmpeg::av_rescale(tsms,d->pFormatCtx->streams[d->videoStream]->time_base.den,d->pFormatCtx->streams[d->videoStream]->time_base.num);
+   d->DesiredFrameNumber = av_rescale(tsms,d->pFormatCtx->streams[d->videoStream]->time_base.den,d->pFormatCtx->streams[d->videoStream]->time_base.num);
    d->DesiredFrameNumber/=1000;
 
    return seekFrame(d->DesiredFrameNumber);
@@ -503,7 +503,7 @@ bool dtkVideoDecoder::seekFrame(int64_t frame)
    if( (d->LastFrameOk==false) || ((d->LastFrameOk==true) && (frame<=d->LastLastFrameNumber || frame>d->LastFrameNumber) ) )
    {
       //printf("\t avformat_seek_file\n");
-      if(ffmpeg::avformat_seek_file(d->pFormatCtx,d->videoStream,0,frame,frame,AVSEEK_FLAG_FRAME)<0)
+      if(avformat_seek_file(d->pFormatCtx,d->videoStream,0,frame,frame,AVSEEK_FLAG_FRAME)<0)
          return false;
 
       avcodec_flush_buffers(d->pCodecCtx);

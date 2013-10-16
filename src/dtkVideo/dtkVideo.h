@@ -5,7 +5,6 @@
  * Version:
  * Last-Updated:
  *           By:
- *     Update #: 19
  */
 
 /* Change Log:
@@ -17,9 +16,7 @@
 
 #include <stdint.h>
 
-namespace ffmpeg {
-
-    extern "C" {
+extern "C" {
 
 #ifndef INT64_C
 #define INT64_C(c) (c ## LL)
@@ -37,7 +34,6 @@ namespace ffmpeg {
 
 #include "libswscale/swscale.h"
 
-    }
 }
 
 // ///////////////////////////////////////////////////////////////////

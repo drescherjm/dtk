@@ -21,32 +21,19 @@ project(dtkVideo)
 
 set(${PROJECT_NAME}_HEADERS
   dtkVideoEncoder.h
-  dtkVideoDecoder.h
-)
+  dtkVideoDecoder.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-)
+set(${PROJECT_NAME}_HEADERS_MOC)
 
 set(${PROJECT_NAME}_SOURCES
   dtkVideoEncoder.cpp
-  dtkVideoDecoder.cpp
-)
+  dtkVideoDecoder.cpp)
 
 include_directories(${FFMPEG_INCLUDE_DIRS})
 
 ## #################################################################
 ## Build rules
 ## #################################################################
-
-if(NOT WIN32)
-add_definitions(-Wno-write-strings)
-endif(NOT WIN32)
-
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-if(NOT MSVC)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT MSVC)
 
 qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
@@ -77,14 +64,13 @@ add_library(${PROJECT_NAME} STATIC
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
-  )
+  ${QT_LIBRARIES})
 
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} wsock32)
 endif(MSVC)
 
-target_link_libraries(${PROJECT_NAME}  ${FFMPEG_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${FFMPEG_LIBRARIES})
 
 ## #################################################################
 ## Export header file

@@ -13,26 +13,26 @@
  *
  */
 
+#include "dtkVideo.h"
 #include "dtkVideoDecoder.h"
+
 #include <limits.h>
 #include <stdint.h>
 
-#include "ffmpeg.h"
-
-
 class dtkVideoDecoderPrivate
 {
+public:
+    int videoStream;
 
 public:
-    // Basic FFmpeg stuff
     ffmpeg::AVFormatContext *pFormatCtx;
-    int videoStream;
     ffmpeg::AVCodecContext  *pCodecCtx;
     ffmpeg::AVCodec         *pCodec;
     ffmpeg::AVFrame         *pFrame;
     ffmpeg::AVFrame         *pFrameRGB;
     ffmpeg::AVPacket        packet;
     ffmpeg::SwsContext      *img_convert_ctx;
+
     uint8_t                 *buffer;
     int                     numBytes;
 
@@ -139,7 +139,7 @@ bool dtkVideoDecoderPrivate::decodeSeekFrame(int after)
       //printf("Returning already available frame %d @ %d. DesiredFrameTime: %d\n",LastFrameNumber,LastFrameTime,DesiredFrameTime);
 
       return true;
-   }   
+   }
 
    // The last decoded frame wasn't ok; either we need any new frame (after=-1), or a specific new frame with time>after
 
@@ -556,17 +556,36 @@ int dtkVideoDecoder::getVideoLengthMs()
    return l;
 }
 
+// ///////////////////////////////////////////////////////////////////
+// Credits
+// ///////////////////////////////////////////////////////////////////
+
 /*
-	QTFFmpegWrapper - QT FFmpeg Wrapper Class 
-	Copyright (C) 2009,2010:
-			Daniel Roggen, droggen@gmail.com			
-			
-	All rights reserved.
+  QTFFmpegWrapper - QT FFmpeg Wrapper Class
+  Copyright (C) 2009,2010: Daniel Roggen, droggen@gmail.com
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+  All rights reserved.
 
-   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
 
-THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDERS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FREEBSD PROJECT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  1. Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+  2. Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+
+  THIS SOFTWARE IS PROVIDED BY COPYRIGHT HOLDERS ``AS IS'' AND ANY
+  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FREEBSD PROJECT OR
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+  USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+  SUCH DAMAGE.
 */

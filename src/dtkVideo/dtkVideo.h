@@ -1,45 +1,44 @@
-/* dtkVideoEncoder.h ---
+/* dtkVideo.h ---
  *
- * Author: Nicolas Niclausse
- * Copyright (C) 2013 - Nicolas Niclausse, Inria.
- * Created: mar. oct. 15 13:53:38 2013 (+0200)
+ * Author: Julien Wintz
+ * Created: Wed Oct 16 11:59:24 2013 (+0200)
+ * Version:
+ * Last-Updated:
+ *           By:
+ *     Update #: 19
  */
 
-/* Commentary:
+/* Change Log:
+ *
  * See credits at EOF.
- */
-
-/* Change log:
- *
  */
 
 #pragma once
 
-#include "dtkVideoExport.h"
+#include <stdint.h>
 
-#include <QtCore>
+namespace ffmpeg {
 
-class dtkVideoEncoderPrivate;
+    extern "C" {
 
-class DTKVIDEO_EXPORT dtkVideoEncoder
-{
-public:
-             dtkVideoEncoder(void);
-    virtual ~dtkVideoEncoder(void);
+#ifndef INT64_C
+#define INT64_C(c) (c ## LL)
+#define UINT64_C(c) (c ## ULL)
+#endif
 
-public:
-    bool createFile(QString filename,unsigned width,unsigned height,unsigned bitrate,unsigned gop,unsigned fps=25);
+#include "libavcodec/avcodec.h"
+#include "libavcodec/opt.h"
 
-public:
-    bool close(void);
+#include "libavformat/avformat.h"
 
-public:
-    int encodeImage(const QImage &);
-    int encodeImagePts(const QImage &,unsigned pts);
+#include "libavutil/mathematics.h"
+#include "libavutil/rational.h"
+#include "libavutil/avstring.h"
 
-private:
-    dtkVideoEncoderPrivate *d;
-};
+#include "libswscale/swscale.h"
+
+    }
+}
 
 // ///////////////////////////////////////////////////////////////////
 // Credits

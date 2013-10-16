@@ -512,7 +512,9 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
                 if (self) {
                     if (!d->object && !object) {
                         d->object = dtkAbstractDataFactory::instance()->create(typeName);
-                    } else if (d->object && !object) {
+                    } else if (d->object && !object && d->object->identifier() == typeName) {
+                        dtkDebug() << "reuse d->object, it has the good type" << typeName;
+                    } else if (d->object && !object && d->object->identifier() != typeName) {
                         delete d->object;
                         d->object = dtkAbstractDataFactory::instance()->create(typeName);
                     } else if (object->identifier() != typeName) {

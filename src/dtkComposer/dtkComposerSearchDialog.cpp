@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov  5 16:41:00 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Nov  8 16:34:43 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 263
+ * Last-Updated: ven. oct. 18 14:09:05 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 292
  */
 
 /* Commentary: 
@@ -33,6 +33,7 @@ class dtkComposerSearchDialogPrivate
 {
 public:
     void populate(dtkComposerSceneNode *node);
+    void sortCombo(QComboBox *combo);
 
 public:
     void update(void);
@@ -87,6 +88,16 @@ void dtkComposerSearchDialogPrivate::populate(dtkComposerSceneNode *node)
             this->populate(block);
 }
 
+void dtkComposerSearchDialogPrivate::sortCombo(QComboBox *combo)
+{
+    QSortFilterProxyModel* proxy = new QSortFilterProxyModel(combo);
+    proxy->setSourceModel(combo->model());
+    combo->model()->setParent(proxy);
+    combo->setModel(proxy);
+    combo->model()->sort(0);
+}
+
+
 void dtkComposerSearchDialogPrivate::update(void)
 {
     // dialog display
@@ -116,15 +127,12 @@ void dtkComposerSearchDialogPrivate::update(void)
     if(!node)
         return;
 
-    if(node->parent() != this->scene->current())
-        return;
-
     node->setSelected(true);
 
     // view display
 
     if (this->view)
-        this->view->centerOn(this->result.at(this->index)->pos());
+        this->view->centerOn(node->pos());
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -203,6 +211,9 @@ void dtkComposerSearchDialog::setScene(dtkComposerScene *scene)
     d->type_combo->clear(); d->type_combo->addItem("*");
 
     d->populate(scene->root());
+
+    d->sortCombo(d->node_combo);
+    d->sortCombo(d->type_combo);
 
     if(!node.isEmpty())
         d->node_combo->setEditText(node);

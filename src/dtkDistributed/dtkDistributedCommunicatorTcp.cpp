@@ -144,7 +144,10 @@ void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, i
 {
     QByteArray *array = data->serialize();
     if (array) {
-        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, "unknown", target, array->size(), data->identifier(), *array);
+        QVariant v_jobid = this->property("jobid");
+        QString jobid = (v_jobid.isValid()) ? v_jobid.toString() : "unknown";
+
+        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, target, array->size(), data->identifier(), *array);
         d->socket->sendRequest(msg);
         d->socket->waitForBytesWritten();
 
@@ -189,7 +192,11 @@ void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int ta
 
 void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
 {
-    dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, QString::number(tag), target, a.size(), "qvariant", a);
+
+    QVariant v_jobid = this->property("jobid");
+    QString jobid = (v_jobid.isValid()) ? v_jobid.toString() : "unknown";
+
+    dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, target, a.size(), "qvariant", a);
     msg->addHeader("Tag",QString::number(tag));
     d->socket->sendRequest(msg);
     this->flush();

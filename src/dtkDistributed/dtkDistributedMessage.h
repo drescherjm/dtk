@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
- * Version: $Id$
- * Last-Updated: mer. oct. 16 10:21:11 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 175
  */
 
 /* Commentary:
@@ -33,7 +29,7 @@ public:
 
     static const qint16 CONTROLLER_RANK = -1 ;
     static const qint16 SERVER_RANK     = -2 ;
-    static const qint16 CONTROLLER_RUN_RANK = -3 ;
+    static const qint16 CONTROLLER_RUN_RANK = -5 ;
     static const qint16 SLAVE_RANK = -4 ; // identify the slave tcp connection that handle composition send/receive.
 
     enum Method {

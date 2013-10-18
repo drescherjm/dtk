@@ -39,7 +39,7 @@
 
 dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
 {
-
+    static qlonglong count = 0;
     this->appendReceiver(&(d->jobid_receiver));
     this->setInputLabelHint("jobid", 0);
 
@@ -55,7 +55,9 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeC
     d->controller   = NULL;
     d->slave        = NULL;
     d->server       = NULL;
+    d->rank       = dtkDistributedMessage::CONTROLLER_RUN_RANK - count;
     d->title        = "Remote";
+    count ++;
 }
 
 dtkComposerNodeRemote::~dtkComposerNodeRemote(void)
@@ -158,7 +160,7 @@ void dtkComposerNodeRemote::begin(void)
         }
 
         if (d->last_jobid != d->jobid) {
-            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK ));
+            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid, d->rank));
             d->server->socket()->sendRequest(msg.data());
             d->last_jobid=d->jobid;
             // the job has changed, so we must send the composition even if it has not changed
@@ -208,6 +210,7 @@ void dtkComposerNodeRemote::begin(void)
                         dtkDebug() << "Ok, data received, parse" ;
                 }
                 msg.reset( d->slave->communicator()->socket()->parseRequest());
+                d->rank = msg->header("x-forwarded-for").toInt();
                 t->setTwinned(false);
                 t->setDataFrom(msg->content());
                 t->setTwinned(true);
@@ -272,10 +275,10 @@ void dtkComposerNodeRemote::end(void)
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
             if (d->communicator->rank() == 0) {
-                dtkDebug() << "end, send transmitter data (we are rank 0)";
+                dtkDebug() << "end, send transmitter data (we are rank 0) jobid is "<< d->jobid;
                 QByteArray array = t->dataToByteArray();
                 if (!array.isEmpty()) {
-                    msg.reset(new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), "qvariant", array));
+                    msg.reset(new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, d->rank, array.size(), "qvariant", array));
                     d->slave->communicator()->socket()->sendRequest(msg.data());
                 } else {
                     dtkError() << "serialization failed in transmitter";

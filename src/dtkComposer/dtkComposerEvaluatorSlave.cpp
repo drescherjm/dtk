@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: mer. mars 27 17:08:03 2013 (+0100)
+ * Last-Updated: ven. oct. 18 11:54:57 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 465
+ *     Update #: 502
  */
 
 /* Commentary:
@@ -60,6 +60,10 @@ public:
 public:
     QUrl server;
     int  count;
+    int  last_controller_rank;
+
+public:
+    QMap<int, QString> composition_cache;
 };
 
 dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave(), d(new dtkComposerEvaluatorSlavePrivate)
@@ -183,8 +187,17 @@ int dtkComposerEvaluatorSlave::exec(void)
         if (msg->type() == "xml") {
             new_composition = true;
             composition = QString(msg->content());
+            d->last_controller_rank = msg->header("x-forwarded-for").toInt();
+            d->composition_cache.insert(d->last_controller_rank, composition);
         } else if (msg->type() == "not-modified") { // reuse the old composition
-            new_composition = false;
+            if (msg->header("x-forwarded-for").toInt() == d->last_controller_rank) {
+                new_composition = false;
+            } else {
+                d->last_controller_rank = msg->header("x-forwarded-for").toInt();
+                dtkDebug() << "not modified, but from another controller" << d->last_controller_rank;
+                new_composition = true;
+                composition = d->composition_cache.value(d->last_controller_rank);
+            }
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
             return 1;
@@ -213,6 +226,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         }
         if (new_composition) {
             if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
+                this->communicator()->setProperty("jobid",this->jobId());
                 remote->setSlave(this);
                 remote->setJob(this->jobId());
                 remote->setCommunicator(d->communicator_i);

@@ -51,6 +51,7 @@ public:
 
 public:
     dtkDistributedSlave *slave;
+    qlonglong rank;
 
 public:
     QString jobid;

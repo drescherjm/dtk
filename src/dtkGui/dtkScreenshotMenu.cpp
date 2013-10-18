@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:45:35 2010 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 18 18:42:21 2013 (+0200)
+ * Last-Updated: ven. oct. 18 19:08:35 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 269
+ *     Update #: 270
  */
 
 /* Commentary: 
@@ -52,7 +52,9 @@ public:
 
 dtkScreenshotMenu::dtkScreenshotMenu(const QString &title, QWidget *parent) : QMenu(title, parent), d(new dtkScreenshotMenuPrivate)
 {
+#if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
     d->encoder = NULL;
+#endif
     d->fps     = 15;
     d->bitrate = 4000000;
     QAction* screenshot       = addAction(QString("Take screenshot"));

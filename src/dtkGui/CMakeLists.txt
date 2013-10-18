@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. oct. 15 17:07:44 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 289
+## Last-Updated: ven. oct. 18 17:18:57 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 293
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,6 +39,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
   dtkRecentFilesMenu.h
+  dtkScreenshotMenu.h
   dtkSearchField.h
   dtkSettingsEditor.h
   dtkSpacer.h
@@ -71,6 +72,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSpacer.h
   dtkSplitter.h
   dtkTagCloud.h
+  dtkScreenshotMenu.h
   dtkSwitch.h
   dtkViewManager.h
   dtkViewLayout.h
@@ -94,6 +96,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkPropertyEditor.cpp
   dtkPropertyEditorFactory.cpp
   dtkRecentFilesMenu.cpp
+  dtkScreenshotMenu.cpp
   dtkSettingsEditor.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp
@@ -173,6 +176,10 @@ target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES}
   dtkCore
   dtkLog)
+
+if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+  target_link_libraries(${PROJECT_NAME} dtkVideo)
+endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 
 if(DTK_BUILD_SCRIPT)
 target_link_libraries(${PROJECT_NAME} dtkScript)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 15:56:53 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 1806
+ * Last-Updated: ven. oct. 18 17:58:23 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 1824
  */
 
 /* Commentary:
@@ -37,6 +37,7 @@
 #include <dtkComposer/dtkComposerStackView.h>
 #include <dtkComposer/dtkComposerView.h>
 
+#include <dtkGui/dtkScreenshotMenu.h>
 #include <dtkGui/dtkRecentFilesMenu.h>
 #include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
@@ -295,6 +296,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->composition_menu->addSeparator();
     d->composition_menu->addAction(d->composition_quit_action);
 
+
     d->edit_menu = menu_bar->addMenu("Edit");
     d->edit_menu->addAction(d->composer->view()->searchAction());
     d->edit_menu->addSeparator();
@@ -317,6 +319,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     view_menu->addAction(switchToDstrbAction);
     view_menu->addAction(switchToDebugAction);
     view_menu->addAction(switchToViewAction);
+
+    dtkScreenshotMenu *screenshot_menu = new dtkScreenshotMenu("Record",this);
+    view_menu->addMenu(screenshot_menu);
 
     QAction *showControlsAction = new QAction("Show controls", this);
     showControlsAction->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::ControlModifier + Qt::AltModifier + Qt::Key_C));

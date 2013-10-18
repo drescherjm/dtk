@@ -14,6 +14,7 @@
 #include "../src/dtkGui/dtkPropertyEditor.h"
 #include "../src/dtkGui/dtkPropertyEditorFactory.h"
 #include "../src/dtkGui/dtkRecentFilesMenu.h"
+#include "../src/dtkGui/dtkScreenshotMenu.h"
 #include "../src/dtkGui/dtkSearchField.h"
 #include "../src/dtkGui/dtkSettingsEditor.h"
 #include "../src/dtkGui/dtkSpacer.h"

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Oct 21 10:45:11 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 152
+## Last-Updated: lun. oct. 21 11:38:40 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 153
 ######################################################################
 ## 
 ### Commentary: 
@@ -187,8 +187,6 @@ if(DTK_BUILD_VIDEO)
   find_package(FFmpeg QUIET)
   if(FFMPEG_FOUND)
     include_directories(${FFMPEG_INCLUDE_DIRS})
-    message("PROUT")
-    message(${FFMPEG_INCLUDE_DIRS})
     set(DTK_HAVE_FFMPEG "YES")
   endif(FFMPEG_FOUND)
 endif(DTK_BUILD_VIDEO)

@@ -72,7 +72,11 @@ endif(MSVC)
 
 target_link_libraries(${PROJECT_NAME} ${FFMPEG_LIBRARIES})
 
-target_link_libraries(${PROJECT_NAME} iconv bz2 z)
+if(APPLE OR MSVC)
+  target_link_libraries(${PROJECT_NAME} iconv)
+endif(APPLE OR MSVC)
+
+target_link_libraries(${PROJECT_NAME} bz2 z)
 
 ## #################################################################
 ## Export header file

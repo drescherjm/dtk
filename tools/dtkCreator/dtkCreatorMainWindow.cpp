@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 18 17:58:23 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 1824
+ * Last-Updated: Mon Oct 21 14:44:54 2013 (+0200)
+ *           By: Julien Wintz
+ *     Update #: 1831
  */
 
 /* Commentary:
@@ -37,7 +37,7 @@
 #include <dtkComposer/dtkComposerStackView.h>
 #include <dtkComposer/dtkComposerView.h>
 
-#include <dtkGui/dtkScreenshotMenu.h>
+#include <dtkGui/dtkScreenMenu.h>
 #include <dtkGui/dtkRecentFilesMenu.h>
 #include <dtkGui/dtkSpacer.h>
 #include <dtkGui/dtkSplitter.h>
@@ -125,7 +125,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->distributor = new dtkDistributor(this);
     d->distributor->setVisible(false);
 
-    // 
+    //
 
     d->composer = new dtkComposer;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
@@ -212,7 +212,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QToolBar *mainToolBar = this->addToolBar(tr("Main"));
     mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     mainToolBar->setIconSize(QSize(32, 32));
-    
+
     QAction *run_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Run_Active.png"), "Run");
     run_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_R);
 
@@ -320,8 +320,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     view_menu->addAction(switchToDebugAction);
     view_menu->addAction(switchToViewAction);
 
-    dtkScreenshotMenu *screenshot_menu = new dtkScreenshotMenu("Record",this);
-    view_menu->addMenu(screenshot_menu);
+    dtkScreenMenu *screen_menu = new dtkScreenMenu("Screen",this);
+    menu_bar->addMenu(screen_menu);
 
     QAction *showControlsAction = new QAction("Show controls", this);
     showControlsAction->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::ControlModifier + Qt::AltModifier + Qt::Key_C));
@@ -485,11 +485,11 @@ bool dtkCreatorMainWindow::compositionOpen(const QString& file)
     }
 
     QFileInfo info(file);
-    
+
     QSettings settings("inria", "dtk");
     settings.beginGroup("creator");
     settings.setValue("last_open_dir", info.absolutePath());
-    settings.endGroup();    
+    settings.endGroup();
 
     if(status)
         dtkNotify(QString("<div style=\"color: #006600\">Opened %1</div>").arg(info.baseName()), 3000);
@@ -562,7 +562,7 @@ bool dtkCreatorMainWindow::compositionSaveAs(const QString& file, dtkComposerWri
     }
 
     QFileInfo info(file);
-    
+
     QSettings settings("inria", "dtk");
     settings.beginGroup("creator");
     settings.setValue("last_open_dir", info.absolutePath());
@@ -598,11 +598,11 @@ bool dtkCreatorMainWindow::compositionInsert(const QString& file)
         this->setWindowModified(true);
 
     QFileInfo info(file);
-    
+
     QSettings settings("inria", "dtk");
     settings.beginGroup("creator");
     settings.setValue("last_open_dir", info.absolutePath());
-    settings.endGroup();    
+    settings.endGroup();
 
     return status;
 }
@@ -631,7 +631,7 @@ void dtkCreatorMainWindow::switchToCompo(void)
 
     d->graph->setVisible(false);
     d->log_view->setVisible(false);
-    
+
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
 

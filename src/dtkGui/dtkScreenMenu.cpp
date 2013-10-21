@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:45:35 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 21 15:12:08 2013 (+0200)
+ * Last-Updated: Mon Oct 21 15:32:14 2013 (+0200)
  *           By: Julien Wintz
- *     Update #: 363
+ *     Update #: 376
  */
 
 /* Commentary:
@@ -75,9 +75,12 @@ void dtkScreenMenu::startScreencast(void)
         d->encoder = new dtkVideoEncoder;
 
     QString path = QDir::homePath();
-    QString name = QString("%1 - Screencast - %2").arg(qApp->applicationName()).arg(QDateTime::currentDateTime().toString());
+    QString name = QString("%1 - Screencast - %2").arg(qApp->applicationName()).arg(QDateTime::currentDateTime().toString("MMM dd yyyy - hh:mm:ss"));
     QString file = QDir::home().filePath(name);
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save screencast"), file, tr("Screencast (*.avi *.mpg *.mp4 *.mov *.ogv)"));
+
+    if(fileName.isEmpty())
+        return;
 
     if (QWidget * widget = dynamic_cast<QWidget *>(parent())) {
 
@@ -135,9 +138,12 @@ void dtkScreenMenu::takeScreenshot(void)
     if (QWidget * widget = dynamic_cast<QWidget *>(parent())) {
 
         QString path = QDir::homePath();
-        QString name = QString("%1 - Screenshot - %2").arg(qApp->applicationName()).arg(QDateTime::currentDateTime().toString());
+        QString name = QString("%1 - Screenshot - %2").arg(qApp->applicationName()).arg(QDateTime::currentDateTime().toString("MMM dd yyyy - hh:mm:ss"));
         QString file = QDir::home().filePath(name);
         QString fileName = QFileDialog::getSaveFileName(this, tr("Save screenshot"), file, tr("Screenshot (*.png)"));
+
+        if(fileName.isEmpty())
+            return;
 
         QImage image = screenshot(widget);
         image.save(fileName, "PNG");

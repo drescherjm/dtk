@@ -1,3 +1,17 @@
+### FindFFmpeg.cmake ---
+## 
+## Author: Julien Wintz
+## Created: Mon Oct 21 10:21:28 2013 (+0200)
+## Version: 
+## Last-Updated: Mon Oct 21 10:47:14 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 55
+######################################################################
+## 
+### Change Log:
+## 
+######################################################################
+
 # - Try to find ffmpeg
 # Once done this will define
 #
@@ -11,83 +25,126 @@
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
-#
 
-
-# include this to handle the QUIETLY and REQUIRED arguments
 include(FindPackageHandleStandardArgs)
 include(GetPrerequisites)
 
-if (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
-  # in cache already
+if(FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
   set(FFMPEG_FOUND TRUE)
-else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
-  # use pkg-config to get the directories and then use these values
-  # in the FIND_PATH() and FIND_LIBRARY() calls
+else(FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
   find_package(PkgConfig)
-  if (PKG_CONFIG_FOUND)
+  if(PKG_CONFIG_FOUND)
     pkg_check_modules(_FFMPEG_AVCODEC libavcodec QUIET)
+    pkg_check_modules(_FFMPEG_AVDEVICE libavdevice QUIET)
+    pkg_check_modules(_FFMPEG_AVFILTER libavfilter QUIET)
     pkg_check_modules(_FFMPEG_AVFORMAT libavformat QUIET)
+    pkg_check_modules(_FFMPEG_AVUTIL libavutil QUIET)
+    pkg_check_modules(_FFMPEG_SWRESAMPLE libswresample QUIET)
     pkg_check_modules(_FFMPEG_SWSCALE libswscale QUIET)
-  endif (PKG_CONFIG_FOUND)
+  endif(PKG_CONFIG_FOUND)
 
   find_path(FFMPEG_AVCODEC_INCLUDE_DIR
     NAMES avcodec.h
-    PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS} /usr/include /usr/include/ffmpeg-compat /usr/local/include /opt/local/include /sw/include
-    PATH_SUFFIXES ffmpeg libavcodec
-  )
+    PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include
+    PATH_SUFFIXES ffmpeg libavcodec)
+
+  find_path(FFMPEG_AVDEVICE_INCLUDE_DIR
+    NAMES avdevice.h
+    PATHS ${_FFMPEG_AVDEVICE_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATH_SUFFIXES ffmpeg libavdevice)
+
+  find_path(FFMPEG_AVFILTER_INCLUDE_DIR
+    NAMES avfilter.h
+    PATHS ${_FFMPEG_AVFILTER_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATH_SUFFIXES ffmpeg libavfilter)
 
   find_path(FFMPEG_AVFORMAT_INCLUDE_DIR
     NAMES avformat.h
-    PATHS ${_FFMPEG_AVFORMAT_INCLUDE_DIRS} /usr/include /usr/include/ffmpeg-compat /usr/local/include /opt/local/include /sw/include
-    PATH_SUFFIXES ffmpeg libavformat
-  )
+    PATHS ${_FFMPEG_AVFORMAT_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATH_SUFFIXES ffmpeg libavformat)
+
+  find_path(FFMPEG_AVUTIL_INCLUDE_DIR
+    NAMES avutil.h
+    PATHS ${_FFMPEG_AVUTIL_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATH_SUFFIXES ffmpeg libavutil)
+
+  find_path(FFMPEG_SWRESAMPLE_INCLUDE_DIR
+    NAMES swresample.h
+    PATHS ${_FFMPEG_SWRESAMPLE_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATH_SUFFIXES ffmpeg libswresample)
 
   find_path(FFMPEG_SWSCALE_INCLUDE_DIR
     NAMES swscale.h
-    PATHS ${_FFMPEG_SWSCALE_INCLUDE_DIRS} /usr/include /usr/include/ffmpeg-compat /usr/local/include /opt/local/include /sw/include
-    PATH_SUFFIXES ffmpeg libswscale
-  )
+    PATHS ${_FFMPEG_SWSCALE_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATH_SUFFIXES ffmpeg libswscale)
 
   find_library(FFMPEG_AVCODEC_LIBRARY
     NAMES avcodec
-    PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS} /usr/lib /usr/lib/ffmpeg-compat /usr/local/lib /opt/local/lib /sw/lib
-  )
+    PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
+
+  find_library(FFMPEG_AVDEVICE_LIBRARY
+    NAMES avdevice
+    PATHS ${_FFMPEG_AVDEVICE_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
+
+  find_library(FFMPEG_AVFILTER_LIBRARY
+    NAMES avfilter
+    PATHS ${_FFMPEG_AVDEVICE_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
 
   find_library(FFMPEG_AVFORMAT_LIBRARY
     NAMES avformat
-    PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS} /usr/lib /usr/lib/ffmpeg-compat /usr/local/lib /opt/local/lib /sw/lib
-  )
+    PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
+
+  find_library(FFMPEG_AVUTIL_LIBRARY
+    NAMES avutil
+    PATHS ${_FFMPEG_AVUTIL_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
+
+  find_library(FFMPEG_SWRESAMPLE_LIBRARY
+    NAMES swresample
+    PATHS ${_FFMPEG_SWRESAMPLE_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
 
   find_library(FFMPEG_SWSCALE_LIBRARY
     NAMES swscale
-    PATHS ${_FFMPEG_SWSCALE_LIBRARY_DIRS} /usr/lib /usr/lib/ffmpeg-compat /usr/local/lib /opt/local/lib /sw/lib
-  )
+    PATHS ${_FFMPEG_SWSCALE_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib)
 
-  if (FFMPEG_AVCODEC_LIBRARY AND FFMPEG_AVFORMAT_LIBRARY AND FFMPEG_SWSCALE_LIBRARY)
+  if(FFMPEG_AVCODEC_LIBRARY)
     set(FFMPEG_FOUND TRUE)
-  endif (FFMPEG_AVCODEC_LIBRARY AND FFMPEG_AVFORMAT_LIBRARY AND FFMPEG_SWSCALE_LIBRARY)
+  endif(FFMPEG_AVCODEC_LIBRARY)
 
   if (FFMPEG_FOUND)
     get_filename_component(FFMPEG_INCLUDE_DIR ${FFMPEG_AVCODEC_INCLUDE_DIR} PATH)
     set(FFMPEG_INCLUDE_DIRS
       ${FFMPEG_INCLUDE_DIR}
       ${FFMPEG_AVCODEC_INCLUDE_DIR}
+      ${FFMPEG_AVDEVICE_INCLUDE_DIR}
+      ${FFMPEG_AVFILTER_INCLUDE_DIR}
       ${FFMPEG_AVFORMAT_INCLUDE_DIR}
-      ${FFMPEG_SWSCALE_INCLUDE_DIR}
-    )
-
+      ${FFMPEG_SWRESAMPLE_INCLUDE_DIR}
+      ${FFMPEG_SWSCALE_INCLUDE_DIR})
     set(FFMPEG_LIBRARIES
       ${FFMPEG_AVCODEC_LIBRARY}
+      ${FFMPEG_AVDEVICE_LIBRARY}
+      ${FFMPEG_AVFILTER_LIBRARY}
       ${FFMPEG_AVFORMAT_LIBRARY}
+      ${FFMPEG_AVUTIL_LIBRARY}
       ${FFMPEG_SWSCALE_LIBRARY}
-    )
-
+      ${FFMPEG_SWRESAMPLE_LIBRARY})
   endif (FFMPEG_FOUND)
 
-  # show the FFMPEG_INCLUDE_DIRS and FFMPEG_LIBRARIES variables only in the advanced view
   mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES)
-  mark_as_advanced(FFMPEG_SWSCALE_INCLUDE_DIR  FFMPEG_SWSCALE_LIBRARY FFMPEG_AVCODEC_INCLUDE_DIR)
-  mark_as_advanced(FFMPEG_AVCODEC_LIBRARY FFMPEG_AVFORMAT_INCLUDE_DIR FFMPEG_AVFORMAT_LIBRARY)
+  mark_as_advanced(
+    FFMPEG_AVCODEC_INCLUDE_DIR
+    FFMPEG_AVDEVICE_INCLUDE_DIR
+    FFMPEG_AVFILTER_INCLUDE_DIR
+    FFMPEG_AVFORMAT_INCLUDE_DIR
+    FFMPEG_AVUTIL_INCLUDE_DIR
+    FFMPEG_SWSCALE_INCLUDE_DIR 
+    FFMPEG_SWRESAMPLE_INCLUDE_DIR)
+  mark_as_advanced(
+    FFMPEG_AVCODEC_LIBRARY
+    FFMPEG_AVDEVICE_LIBRARY
+    FFMPEG_AVFILTER_LIBRARY
+    FFMPEG_AVFORMAT_LIBRARY
+    FFMPEG_AVUTIL_LIBRARY
+    FFMPEG_SWSCALE_LIBRARY 
+    FFMPEG_SWRESAMPLE_LIBRARY)
 endif (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
-

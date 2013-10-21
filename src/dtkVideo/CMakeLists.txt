@@ -72,6 +72,8 @@ endif(MSVC)
 
 target_link_libraries(${PROJECT_NAME} ${FFMPEG_LIBRARIES})
 
+target_link_libraries(${PROJECT_NAME} iconv bz2 z)
+
 ## #################################################################
 ## Export header file
 ## #################################################################

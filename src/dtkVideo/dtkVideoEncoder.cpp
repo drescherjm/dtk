@@ -81,12 +81,7 @@ void dtkVideoEncoderPrivate::initVars()
 
 bool dtkVideoEncoderPrivate::initCodec()
 {
-   avcodec_init();
    av_register_all();
-
-   printf("License: %s\n",avformat_license());
-   printf("AVCodec version %d\n",avformat_version());
-   printf("AVFormat configuration: %s\n",avformat_configuration());
 
    return true;
 }
@@ -109,9 +104,17 @@ int dtkVideoEncoderPrivate::encodeImage_p(const QImage &img,bool custompts, unsi
    if(custompts)                             // Handle custom pts
          pCodecCtx->coded_frame->pts = pts;  // Set the time stamp
 
-   int out_size = avcodec_encode_video(pCodecCtx,outbuf,outbuf_size,ppicture);
-   //printf("Frame size: %d\n",out_size);
+// ///////////////////////////////////////////////////////////////////
+// - ffmeg/git
+// ///////////////////////////////////////////////////////////////////
+// int out_size = avcodec_encode_video(pCodecCtx,outbuf,outbuf_size,ppicture);
+// ///////////////////////////////////////////////////////////////////
 
+   AVPacket framepkt = { 0 };
+   av_init_packet(&framepkt);
+   int got_output;
+   int out_size = avcodec_encode_video2(pCodecCtx, &framepkt, ppicture, &got_output);
+   out_size = framepkt.size;
 
    if(custompts)                             // Handle custom pts (must set it again for the rest of the processing)
          pCodecCtx->coded_frame->pts = pts;  // Set the time stamp
@@ -130,13 +133,17 @@ int dtkVideoEncoderPrivate::encodeImage_p(const QImage &img,bool custompts, unsi
       //printf("c %d. pts %d. codedframepts: %ld pkt.pts: %ld\n",custompts,pts,pCodecCtx->coded_frame->pts,pkt.pts);
 
       pkt.stream_index= pVideoStream->index;
-      pkt.data= outbuf;
+      // pkt.data= outbuf;
+      pkt.data = framepkt.data;
       pkt.size= out_size;
       int ret = av_interleaved_write_frame(pFormatCtx, &pkt);
       //printf("Wrote %d\n",ret);
       if(ret<0)
          return -1;
    }
+
+   av_free_packet(&framepkt);
+
    return out_size;
 }
 
@@ -428,18 +435,17 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
       return false;
    }
    d->pFormatCtx->oformat = d->pOutputFormat;
-   snprintf(d->pFormatCtx->filename, sizeof(d->pFormatCtx->filename), "%s", fileName.toStdString().c_str());
-
+   qsnprintf(d->pFormatCtx->filename, sizeof(d->pFormatCtx->filename), "%s", fileName.toStdString().c_str());
 
    // Add the video stream
 
-   d->pVideoStream = av_new_stream(d->pFormatCtx,0);
-   if(!d->pVideoStream )
+   d->pVideoStream = avformat_new_stream(d->pFormatCtx,NULL);
+
+   if(!d->pVideoStream)
    {
       printf("Could not allocate stream\n");
       return false;
    }
-
 
    d->pCodecCtx=d->pVideoStream->codec;
    d->pCodecCtx->codec_id = d->pOutputFormat->video_codec;
@@ -452,26 +458,21 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
    d->pCodecCtx->time_base.num = 1;
    d->pCodecCtx->gop_size = d->Gop;
    d->pCodecCtx->pix_fmt = PIX_FMT_YUV420P;
+   d->pCodecCtx->thread_count = 10;
 
-   avcodec_thread_init(d->pCodecCtx, 10);
+   // avcodec_thread_init(d->pCodecCtx, 10);
 
-   //if (c->codec_id == CODEC_ID_MPEG2VIDEO)
+   //if(d->pCodecCtx->codec_id == CODE_ID_MPEG2VIDEO)
    //{
-      //c->max_b_frames = 2;  // just for testing, we also add B frames
+   // d->pCodecCtx->max_b_frames = 2;
+
    //}
 
    // some formats want stream headers to be separate
    if(d->pFormatCtx->oformat->flags & AVFMT_GLOBALHEADER)
       d->pCodecCtx->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-
-   if (av_set_parameters(d->pFormatCtx, NULL) < 0)
-   {
-      printf("Invalid output format parameters\n");
-      return false;
-   }
-
-   dump_format(d->pFormatCtx, 0, fileName.toStdString().c_str(), 1);
+   av_dump_format(d->pFormatCtx, 0, fileName.toStdString().c_str(), 1);
 
    // open_video
    // find the video encoder
@@ -482,7 +483,7 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
       return false;
    }
    // open the codec
-   if (avcodec_open(d->pCodecCtx, d->pCodec) < 0)
+   if (avcodec_open2(d->pCodecCtx, d->pCodec, NULL) < 0)
    {
       printf("could not open codec\n");
       return false;
@@ -502,13 +503,13 @@ bool dtkVideoEncoder::createFile(QString fileName,unsigned width,unsigned height
       return false;
    }
 
-   if (url_fopen(&d->pFormatCtx->pb, fileName.toStdString().c_str(), URL_WRONLY) < 0)
+   if (avio_open(&d->pFormatCtx->pb, fileName.toStdString().c_str(), AVIO_FLAG_WRITE) < 0)
    {
       printf( "Could not open '%s'\n", fileName.toStdString().c_str());
       return false;
    }
 
-   av_write_header(d->pFormatCtx);
+   avformat_write_header(d->pFormatCtx, NULL);
 
 
 
@@ -536,14 +537,14 @@ bool dtkVideoEncoder::close()
 
    /* free the streams */
 
-   for(int i = 0; i < d->pFormatCtx->nb_streams; i++)
+   for(unsigned int i = 0; i < d->pFormatCtx->nb_streams; i++)
    {
        av_freep(&(d->pFormatCtx->streams[i]->codec));
-      av_freep(&(d->pFormatCtx->streams[i]));
+       av_freep(&(d->pFormatCtx->streams[i]));
    }
 
    // Close file
-   url_fclose(d->pFormatCtx->pb);
+   avio_close(d->pFormatCtx->pb);
 
    // Free the stream
    av_free(d->pFormatCtx);

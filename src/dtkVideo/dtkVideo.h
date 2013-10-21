@@ -24,13 +24,13 @@ extern "C" {
 #endif
 
 #include "libavcodec/avcodec.h"
-#include "libavcodec/opt.h"
 
 #include "libavformat/avformat.h"
 
 #include "libavutil/mathematics.h"
 #include "libavutil/rational.h"
 #include "libavutil/avstring.h"
+#include "libavutil/opt.h"
 
 #include "libswscale/swscale.h"
 

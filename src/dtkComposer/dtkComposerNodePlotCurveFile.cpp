@@ -106,6 +106,7 @@ bool dtkComposerNodePlotCurveFile::read(const QString& fileName)
         numberOfCurves = lineSplit.count() - 1;
 
         if (numberOfCurves<1) {
+            qDebug() << "Wrong file format" << fileName;
             return false;
         }
 
@@ -201,6 +202,7 @@ void dtkComposerNodePlotCurveFile::run(void)
 	dtkPlotCurve *curve = NULL;
 	if (index < d->curves.count()) {
 	  curve = d->curves[index];
+          curve->clear();
 	} else {
 	  curve = new dtkPlotCurve;
 	  d->curves << curve;

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: mar. mars 27 14:04:47 2012 (+0200)
+ * Last-Updated: jeu. sept. 12 10:23:43 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 38
+ *     Update #: 42
  */
 
 /* Commentary:
@@ -45,6 +45,7 @@ public:
 
 public:
      dtkComposerGraphNodeList successors();
+     dtkComposerGraphNode *firstSuccessor();
 
 public:
     void eval(void);

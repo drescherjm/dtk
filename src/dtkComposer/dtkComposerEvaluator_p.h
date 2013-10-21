@@ -4,9 +4,6 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:39:36 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. sept. 16 10:43:57 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 31
  */
 
 /* Commentary: 
@@ -30,9 +27,15 @@ public:
     dtkComposerGraph *graph;
     QContiguousCache<dtkComposerGraphNode *> stack;
     dtkComposerGraphNode *current;
+    dtkComposerGraphNode *start_node;
+    dtkComposerGraphNode *end_node;
 
 public:
     QHash<dtkComposerGraphNode *, int > connected_views;
+
+public:
+    QHash<dtkComposerGraphNode *, QFuture<void> > futures;
+    QMultiHash<dtkComposerGraphNode *, dtkComposerGraphNode * > waitfor;
 
 public:
     bool should_stop;

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 19 18:22:57 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Jun 20 13:11:31 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 14
+## Last-Updated: mar. sept.  3 14:09:42 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 17
 ######################################################################
 ## 
 ### Commentary: 
@@ -25,14 +25,17 @@ project(dtkMathTest)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkCompareDoubleTest.h
-  dtkCompareFloatTest.h)
+  dtkCompareFloatTest.h
+  dtkGraphTest.h
+)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
   dtkCompareDoubleTest.cpp
-  dtkCompareFloatTest.cpp)
+  dtkCompareFloatTest.cpp
+  dtkGraphTest.cpp)
 
 ## #################################################################
 ## Build rules
@@ -42,7 +45,8 @@ qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_MAIN_SOURCES
   dtkCompareDoubleTest.cpp
-  dtkCompareFloatTest.cpp)
+  dtkCompareFloatTest.cpp
+  dtkGraphTest.cpp)
 
 create_test_sourcelist(${PROJECT_NAME}_SOURCES_TEST ${PROJECT_NAME}.cxx
   ${${PROJECT_NAME}_MAIN_SOURCES})

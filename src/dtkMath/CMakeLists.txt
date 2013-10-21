@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Oct  4 12:56:07 2012 (+0200)
-##           By: tkloczko
-##     Update #: 58
+## Last-Updated: jeu. août 29 17:59:00 2013 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 62
 ######################################################################
 ## 
 ### Commentary: 
@@ -24,6 +24,8 @@ project(dtkMath)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkGraph.h
+  dtkGraphEdge.h
   dtkMath.h
   dtkMath.tpp
   dtkMatrix.h
@@ -37,9 +39,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkVector3D.h
   dtkVector3D.tpp)
 
-set(${PROJECT_NAME}_HEADERS_MOC)
+set(${PROJECT_NAME}_HEADERS_MOC
+  dtkGraph.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkGraph.cpp
+  dtkGraphEdge.cpp
   dtkMath.cpp
   dtkMatrix.cpp)
 

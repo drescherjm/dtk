@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: jeu. sept. 27 17:31:39 2012 (+0200)
+ * Last-Updated: ven. sept. 13 18:33:33 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 345
+ *     Update #: 390
  */
 
 /* Commentary:
@@ -19,6 +19,7 @@
 
 #include <dtkConfig.h>
 
+#include "dtkComposerGraph.h"
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerNode.h"
@@ -29,12 +30,16 @@
 #endif
 
 #include <dtkLog/dtkLog.h>
+#include <dtkMath/dtkGraph.h>
 
 class dtkComposerGraphNodeBeginPrivate
 {
 public:
     dtkComposerNodeControl *control_node;
     dtkComposerNodeComposite *composite;
+    dtkComposerGraphNodeList allchilds;
+
+    dtkComposerGraphNode::Kind kind;
 
 public:
     bool is_remote;
@@ -52,7 +57,7 @@ public:
 dtkComposerGraphNodeBegin::dtkComposerGraphNodeBegin(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeBeginPrivate)
 {
     d->is_remote = false;
-
+    d->kind = dtkComposerGraphNode::Begin;
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
 #if defined(DTK_BUILD_DISTRIBUTED)
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(cnode)) {
@@ -73,8 +78,14 @@ dtkComposerGraphNodeBegin::dtkComposerGraphNodeBegin(dtkComposerNode *cnode, con
 
 dtkComposerGraphNode::Kind dtkComposerGraphNodeBegin::kind(void)
 {
-    return dtkComposerGraphNode::Begin;
+    return d->kind ;
 }
+
+void dtkComposerGraphNodeBegin::setKind(dtkComposerGraphNode::Kind kind)
+{
+    d->kind = kind;
+}
+
 
 dtkComposerNode *dtkComposerGraphNodeBegin::wrapee(void)
 {
@@ -86,7 +97,6 @@ dtkComposerNode *dtkComposerGraphNodeBegin::wrapee(void)
 
 void dtkComposerGraphNodeBegin::eval(void)
 {
-
     if (!d->control_node  ) {
         if (d->composite)// may be NULL for root node
             d->composite->begin();
@@ -108,6 +118,23 @@ void dtkComposerGraphNodeBegin::setEnd(dtkComposerGraphNode *end)
     d->end = end;
 }
 
+dtkComposerGraphNodeList dtkComposerGraphNodeBegin::evaluableChilds(void)
+{
+    if (d->allchilds.isEmpty()) {
+        dtkGraph sg = this->graph()->subgraph(this, d->end);
+        QList<QObject*> L = (d->kind ==  dtkComposerGraphNode::BeginIf) ? sg.nodes(): sg.topologicalSort();
+        foreach (QObject * o,L) {
+            d->allchilds << static_cast<dtkComposerGraphNode *>(o);
+        }
+    }
+    return d->allchilds;
+}
+
+dtkComposerGraphNode *dtkComposerGraphNodeBegin::end(void)
+{
+    return d->end;
+}
+
 dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
 {
 #if defined(DTK_BUILD_DISTRIBUTED)
@@ -123,3 +150,4 @@ dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
     return dtkComposerGraphNode::successors();
 #endif
 }
+

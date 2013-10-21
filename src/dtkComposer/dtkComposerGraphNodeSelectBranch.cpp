@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: Tue Jul 17 15:38:32 2012 (+0200)
- *           By: tkloczko
- *     Update #: 202
+ * Last-Updated: jeu. sept. 12 17:50:51 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 212
  */
 
 /* Commentary:
@@ -81,6 +81,15 @@ void dtkComposerGraphNodeSelectBranch::removeSuccessor(dtkComposerGraphNode *nod
             d->successors[i] = NULL;
 }
 
+dtkComposerGraphNode *dtkComposerGraphNodeSelectBranch::firstSuccessor(void)
+{
+    if (d->result >= 0)
+        return d->successors[d->result];
+    else {
+        dtkError() << "Unknown first successor";
+        return NULL;
+    }
+}
 
 dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
 {

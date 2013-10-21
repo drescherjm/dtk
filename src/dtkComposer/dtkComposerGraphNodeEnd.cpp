@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: jeu. sept. 27 20:47:29 2012 (+0200)
+ * Last-Updated: mar. sept. 17 18:07:25 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 189
+ *     Update #: 233
  */
 
 /* Commentary:
@@ -20,6 +20,7 @@
 #include <dtkConfig.h>
 
 #include "dtkComposerGraphNode.h"
+#include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
@@ -45,7 +46,8 @@ public:
 #endif
 
 public:
-    dtkComposerGraphNode *begin;
+    dtkComposerGraphNodeBegin *begin;
+
 };
 
 
@@ -67,6 +69,7 @@ dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const Q
         d->composite = NULL;
     }
 
+    d->begin= NULL;
     this->setTitle(title);
 }
 
@@ -94,7 +97,7 @@ void dtkComposerGraphNodeEnd::eval(void)
     this->setStatus(dtkComposerGraphNode::Done);
 }
 
-void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNode *begin)
+void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNodeBegin *begin)
 {
     d->begin = begin;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: ven. avril 13 15:56:43 2012 (+0200)
+ * Last-Updated: ven. sept. 20 09:11:37 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 40
+ *     Update #: 67
  */
 
 /* Commentary:
@@ -40,6 +40,8 @@ public:
 public:
     dtkComposerGraphNode::Kind kind(void);
 
+    void setKind(dtkComposerGraphNode::Kind);
+
 public:
     dtkComposerNode *wrapee(void);
 
@@ -47,11 +49,16 @@ public:
     dtkComposerGraphNodeList successors(void);
 
 public:
+    dtkComposerGraphNodeList evaluableChilds(void);
+
+public:
+    dtkComposerGraphNode *end(void);
     void setEnd(dtkComposerGraphNode *end);
 
 private:
     dtkComposerGraphNodeBeginPrivate *d;
 };
+
 
 #endif /* DTKCOMPOSERGRAPHNODEBEGIN_H */
 

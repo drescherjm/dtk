@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. sept. 27 22:03:09 2012 (+0200)
+ * Last-Updated: ven. sept. 13 18:34:31 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 229
+ *     Update #: 256
  */
 
 /* Commentary:
@@ -19,6 +19,7 @@
 
 #include <dtkCore/dtkGlobal.h>
 
+#include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"
 
@@ -36,6 +37,9 @@ public:
     dtkComposerGraphNode::Status status;
 
 public:
+    dtkComposerGraph *graph;
+
+public:
     bool breakpoint;
     bool endloop_initial;
     bool endloop;
@@ -51,6 +55,7 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsObject(),d(new dtkCompos
     d->breakpoint      = false;
     d->endloop         = false;
     d->endloop_initial = false;
+    d->graph           = NULL;
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -69,6 +74,16 @@ dtkComposerNode *dtkComposerGraphNode::wrapee(void)
 dtkComposerGraphNode::Status dtkComposerGraphNode::status(void)
 {
     return d->status;
+}
+
+dtkComposerGraph *dtkComposerGraphNode::graph(void)
+{
+    return d->graph;
+}
+
+void dtkComposerGraphNode::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
 }
 
 void dtkComposerGraphNode::setStatus(dtkComposerGraphNode::Status status)
@@ -165,12 +180,22 @@ dtkComposerGraphNodeList dtkComposerGraphNode::successors(void)
     return d->successors;
 }
 
+dtkComposerGraphNode *dtkComposerGraphNode::firstSuccessor(void)
+{
+    return d->successors[0];
+}
+
 dtkComposerGraphNodeList dtkComposerGraphNode::predecessors(void)
 {
     return d->predecessors;
 }
 
 dtkComposerGraphNodeList dtkComposerGraphNode::childs(void)
+{
+    return d->childs;
+}
+
+dtkComposerGraphNodeList dtkComposerGraphNode::evaluableChilds(void)
 {
     return d->childs;
 }
@@ -183,6 +208,7 @@ const QString& dtkComposerGraphNode::title(void)
 
 void dtkComposerGraphNode::setTitle(const QString& title)
 {
+    this->setObjectName(title);
     d->title = title;
 }
 

@@ -19,6 +19,7 @@
 #include <QtCore>
 #include <QtGui>
 
+class dtkComposerGraph;
 class dtkComposerGraphNodePrivate;
 class dtkComposerGraphNodeList;
 class dtkComposerNode;
@@ -37,7 +38,7 @@ public:
 
 public:
     enum Status { Ready, Done, Running, Break};
-    enum   Kind { SelectBranch, Leaf, Data, Process, View, Actor, Begin, End, SetOutputs, SetInputs, SetVariables, SetConditions };
+    enum   Kind { SelectBranch, Leaf, Data, Process, View, Actor, Begin, BeginLoop, BeginComposite,BeginIf, End, SetOutputs, SetInputs, SetVariables, SetConditions };
 
 public:
     QRectF boundingRect(void) const;
@@ -73,6 +74,10 @@ public:
     bool   endloop(void);
 
 public:
+    dtkComposerGraph    *graph(void);
+    void              setGraph(dtkComposerGraph *graph);
+
+public:
     virtual void clean(void);
 
 public:
@@ -83,9 +88,11 @@ public:
     void  setBreakPoint(bool value = true);
 
 public:
-    virtual dtkComposerGraphNodeList successors();
-    virtual dtkComposerGraphNodeList predecessors();
-            dtkComposerGraphNodeList childs();
+    virtual dtkComposerGraphNodeList successors(void);
+    virtual dtkComposerGraphNode    *firstSuccessor(void);
+    virtual dtkComposerGraphNodeList predecessors(void);
+            dtkComposerGraphNodeList childs(void);
+    virtual dtkComposerGraphNodeList evaluableChilds(void);
 
 public:
     const QString&  title(void);

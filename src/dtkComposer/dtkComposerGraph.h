@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mai 15 16:58:32 2012 (+0200)
+ * Last-Updated: mer. sept. 11 14:49:28 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 86
+ *     Update #: 93
  */
 
 /* Commentary: 
@@ -31,6 +31,7 @@ class dtkComposerGraphNodeList;
 class dtkComposerGraphPrivate;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkGraph;
 
 class DTKCOMPOSER_EXPORT dtkComposerGraph : public QGraphicsScene
 {
@@ -62,6 +63,8 @@ public:
 public:
     dtkComposerGraphEdgeList edges(void);
     dtkComposerGraphNodeList nodes(void);
+    dtkGraph graph(void);
+    dtkGraph subgraph(dtkComposerGraphNode *from, dtkComposerGraphNode *to);
 
 // --
 

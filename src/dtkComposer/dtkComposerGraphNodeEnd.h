@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:55:56
  * Version: $Id$
- * Last-Updated: ven. avril 13 16:27:45 2012 (+0200)
+ * Last-Updated: mar. janv. 29 16:26:01 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 40
+ *     Update #: 43
  */
 
 /* Commentary:
@@ -23,6 +23,7 @@
 #include "dtkComposerGraphNode.h"
 
 class dtkComposerNode;
+class dtkComposerGraphNodeBegin;
 class dtkComposerGraphNodeEndPrivate;
 
 // /////////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ public:
     dtkComposerGraphNodeList predecessors(void);
 
 public:
-    void setBegin(dtkComposerGraphNode *begin);
+    void setBegin(dtkComposerGraphNodeBegin *begin);
 
 private:
     dtkComposerGraphNodeEndPrivate *d;

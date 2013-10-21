@@ -1,4 +1,4 @@
-/* dtkScreenshotMenu.h ---
+/* dtkScreenMenu.h ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2013 - Nicolas Niclausse, Inria.
@@ -13,22 +13,22 @@
  *
  */
 
-#ifndef DTKSCREENSHOTMENU_H
-#define DTKSCREENSHOTMENU_H
+#ifndef DTKSCREENMENU_H
+#define DTKSCREENENU_H
 
 #include <QMenu>
 #include <QImage>
 
 #include "dtkGuiExport.h"
 
-class dtkScreenshotMenuPrivate;
+class dtkScreenMenuPrivate;
 
-class DTKGUI_EXPORT dtkScreenshotMenu : public QMenu
+class DTKGUI_EXPORT dtkScreenMenu : public QMenu
 {
     Q_OBJECT
 
 public:
-    dtkScreenshotMenu(const QString &title, QWidget *parent = 0);
+    dtkScreenMenu(const QString &title, QWidget *parent = 0);
 
 public:
     QImage screenshot(QWidget *widget, qlonglong maxsize = 0);
@@ -37,11 +37,12 @@ public slots:
     void  takeScreenshot(void);
     void startScreencast(void);
     void  stopScreencast(void);
+
+protected slots:
     void addFrameToVideo(void);
 
 private:
-    dtkScreenshotMenuPrivate *d;
-
+    dtkScreenMenuPrivate *d;
 };
 
 #endif // DTKSCREENSHOTMENU_H

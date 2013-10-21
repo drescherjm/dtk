@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: ven. oct. 18 17:18:57 2013 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 293
+## Last-Updated: Mon Oct 21 14:42:09 2013 (+0200)
+##           By: Julien Wintz
+##     Update #: 296
 ######################################################################
 ## 
 ### Commentary: 
@@ -39,7 +39,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
   dtkRecentFilesMenu.h
-  dtkScreenshotMenu.h
+  dtkScreenMenu.h
   dtkSearchField.h
   dtkSettingsEditor.h
   dtkSpacer.h
@@ -72,7 +72,7 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkSpacer.h
   dtkSplitter.h
   dtkTagCloud.h
-  dtkScreenshotMenu.h
+  dtkScreenMenu.h
   dtkSwitch.h
   dtkViewManager.h
   dtkViewLayout.h
@@ -96,7 +96,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkPropertyEditor.cpp
   dtkPropertyEditorFactory.cpp
   dtkRecentFilesMenu.cpp
-  dtkScreenshotMenu.cpp
+  dtkScreenMenu.cpp
   dtkSettingsEditor.cpp
   dtkSpacer.cpp
   dtkSplitter.cpp

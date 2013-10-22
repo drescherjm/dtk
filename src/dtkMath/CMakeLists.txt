@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Thu Sep  9 11:30:33 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: jeu. août 29 17:59:00 2013 (+0200)
+## Last-Updated: mar. oct. 22 11:04:28 2013 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 62
+##     Update #: 63
 ######################################################################
 ## 
 ### Commentary: 
@@ -81,6 +81,9 @@ add_library(${PROJECT_NAME} STATIC
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
+
+target_link_libraries(${PROJECT_NAME}
+  dtkLog)
 
 ## #################################################################
 ## Export header file

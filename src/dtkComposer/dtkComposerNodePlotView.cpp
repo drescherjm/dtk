@@ -39,7 +39,11 @@ public:
 
 dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodePlotViewPrivate)
 {
-    d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+    if (qApp->type() != QApplication::Tty) {
+        d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+    } else {
+        d->view = NULL;
+    }
 
     this->appendReceiver(&(d->receiver_curve));
     this->appendReceiver(&(d->receiver_list_curve));

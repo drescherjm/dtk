@@ -59,6 +59,9 @@ public:
 public:
     void  logStack(void);
 
+protected:
+    void  run_static_rec(bool run_concurrent = false);
+
 private:
     dtkComposerEvaluatorPrivate *d;
 };

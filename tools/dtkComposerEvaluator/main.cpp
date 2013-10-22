@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 27 09:57:54 2012 (+0200)
+ * Last-Updated: mar. oct. 22 09:23:57 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 149
+ *     Update #: 150
  */
 
 /* Commentary: 
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
         return 1;
     }
     QObject::connect(evaluator,SIGNAL(evaluationStopped()),&application, SLOT(quit()));
-    QtConcurrent::run(evaluator, &dtkComposerEvaluator::run, false);
+    QtConcurrent::run(evaluator, &dtkComposerEvaluator::run_static, false);
     application.exec();
     dtkPluginManager::instance()->uninitialize();
 }

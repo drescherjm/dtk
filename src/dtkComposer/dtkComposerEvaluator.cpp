@@ -75,7 +75,7 @@ void dtkComposerEvaluator::setNotify(bool notify)
     d->notify = notify;
 }
 
-void dtkComposerEvaluator::run_static(bool run_concurrent)
+void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
 {
     if (!d->start_node) {
         d->start_node = d->graph->root();
@@ -99,7 +99,7 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
             dtkComposerEvaluator ev;
             ev.setGraph(d->graph);
             ev.setStartNode(node);
-            ev.run_static(false);
+            ev.run_static_rec(false);
             current ++;
         } else if (kind == dtkComposerGraphNode::SelectBranch ) {
             // dtkTrace() << "Select Branch";
@@ -110,7 +110,7 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
                 dtkComposerEvaluator ev;
                 ev.setGraph(d->graph);
                 ev.setStartNode(next);
-                ev.run_static(false);
+                ev.run_static_rec(false);
                 current = nodeCount;
             } else {
                 qlonglong i = 0;
@@ -133,8 +133,8 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
             } else {
                 current = end_loop_next;
             }
-        } else if (kind == dtkComposerGraphNode::View) {
-            // dtkTrace() << "View";
+        } else if (kind == dtkComposerGraphNode::View || kind == dtkComposerGraphNode::Actor ) {
+            // dtkTrace() << "View|Actor";
             if (d->use_gui) {
                 connect(this, SIGNAL(runMainThread()), node, SLOT(eval()),Qt::BlockingQueuedConnection);
                 // dtkTrace() << "emit signal and wait for GUI thread to run the node";
@@ -145,12 +145,24 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
             }
             current ++;
         } else {
-//            dtkTrace() << "eval" << node->title();
+            // dtkTrace() << "eval" << node->title();
             node->eval();
             current ++;
         }
     }
     d->should_stop = false;
+}
+
+void dtkComposerEvaluator::run_static(bool run_concurrent)
+{
+    QTime time; time.start();
+    emit evaluationStarted();
+    run_static_rec(run_concurrent);
+    QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
+    dtkInfo() << msg;
+    if (d->notify)
+        dtkNotify(msg,30000);
+    emit evaluationStopped();
 }
 
 void dtkComposerEvaluator::run(bool run_concurrent)

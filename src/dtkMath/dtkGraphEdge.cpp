@@ -41,10 +41,12 @@ dtkGraphEdge::dtkGraphEdge(const dtkGraphEdge &other) : d(new dtkGraphEdgePrivat
     d->destination = other.d->destination;
 }
 
-dtkGraphEdge dtkGraphEdge::operator=(const dtkGraphEdge &other)
+dtkGraphEdge& dtkGraphEdge::operator=(const dtkGraphEdge &other)
 {
     d->source      = other.d->source;
     d->destination = other.d->destination;
+
+    return (*this);
 }
 
 bool dtkGraphEdge::operator==(const dtkGraphEdge &other) const

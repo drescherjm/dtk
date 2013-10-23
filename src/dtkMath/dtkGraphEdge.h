@@ -31,7 +31,7 @@ public:
     virtual ~dtkGraphEdge(void);
 
 public:
-    dtkGraphEdge operator=(const dtkGraphEdge &other);
+    dtkGraphEdge& operator=(const dtkGraphEdge &other);
     bool operator==(const dtkGraphEdge &other) const;
 
 public:

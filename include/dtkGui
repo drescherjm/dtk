@@ -21,6 +21,7 @@
 #include "../src/dtkGui/dtkSplitter.h"
 #include "../src/dtkGui/dtkSwitch.h"
 #include "../src/dtkGui/dtkTagCloud.h"
+#include "../src/dtkGui/dtkToolBox.h"
 #include "../src/dtkGui/dtkViewLayout.h"
 #include "../src/dtkGui/dtkViewLayoutItem.h"
 #include "../src/dtkGui/dtkViewList.h"

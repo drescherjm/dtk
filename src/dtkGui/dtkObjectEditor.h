@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 16:54:54 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 17:01:48 2013 (+0200)
+ * Last-Updated: mer. oct. 23 14:30:58 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 17
+ *     Update #: 18
  */
 
 /* Change Log:
@@ -20,7 +20,7 @@
 
 class dtkObjectEditorPrivate;
 
-class DTKGUI_EXPORT dtkObjectEditor : public QScrollArea
+class DTKGUI_EXPORT dtkObjectEditor : public QFrame
 {
     Q_OBJECT
 

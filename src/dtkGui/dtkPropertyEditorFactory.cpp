@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 10:30:09 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 22:45:24 2013 (+0200)
+ * Last-Updated: mer. oct. 23 16:35:10 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 156
+ *     Update #: 250
  */
 
 /* Change Log:
@@ -77,6 +77,36 @@ dtkPropertyEditor *dtkPropertyEditorFactory::create(const QString& property_name
         return NULL;
 
     return d->creators[type](property_name, object, parent);
+}
+
+QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *object, int hierarchy_level)
+{    
+    QList<QWidget *> list;
+
+    if (!object) {
+        dtkError() << Q_FUNC_INFO << "Cannot create any dtkPropertyEditor for null object.";
+        return list;
+    }
+
+    const QMetaObject *meta_object = object->metaObject();
+
+    int limit_level = 0;
+    int offset = 0;
+    while(meta_object && limit_level <= hierarchy_level) {
+        meta_object = meta_object->superClass();
+        ++limit_level;
+        offset = meta_object->propertyCount();
+    }
+
+    meta_object = object->metaObject();
+    int count = meta_object->propertyCount();
+    QString name;
+    for (int i = offset; i < count; ++i) {
+        name = QString(meta_object->property(i).name());
+        list << reinterpret_cast<QWidget *>(dtkPropertyEditorFactory::instance()->create(name, object, NULL));
+    }
+
+    return list;
 }
 
 bool dtkPropertyEditorFactory::registerCreator(int type, dtkPropertyEditorCreator func)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Mar  9 21:06:43 2009 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Jan 10 14:02:20 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 100
+## Last-Updated: mer. oct. 23 14:09:20 2013 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 102
 ######################################################################
 ## 
 ### Commentary: 
@@ -67,6 +67,7 @@ if(DTK_BUILD_SCRIPT)
 endif(DTK_BUILD_SCRIPT)
 
 add_subdirectory(dtkTagCloud)
+add_subdirectory(dtkToolBox)
 add_subdirectory(dtkSettingsEditor)
 add_subdirectory(dtkFinder)
 add_subdirectory(dtkAboutPlugin)

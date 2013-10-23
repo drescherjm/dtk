@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 17:02:00 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 23:00:27 2013 (+0200)
+ * Last-Updated: mer. oct. 23 14:30:43 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 123
+ *     Update #: 137
  */
 
 /* Change Log:
@@ -29,17 +29,20 @@ class dtkObjectEditorPrivate
 public:   
 };
 
-dtkObjectEditor::dtkObjectEditor(QObject *object, QWidget *parent) : QScrollArea(parent), d(new dtkObjectEditorPrivate)
+dtkObjectEditor::dtkObjectEditor(QObject *object, QWidget *parent) : QFrame(parent), d(new dtkObjectEditorPrivate)
 {
+    //QFrame *frame = new QFrame(this);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->setAlignment(Qt::AlignTop);
 
-    this->setWidgetResizable(true);
-    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setContentsMargins(0, 0, 0, 0);
+    // this->setWidget(frame);
+    // this->setWidgetResizable(true);
+    // this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    // this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // this->setContentsMargins(0, 0, 0, 0);
 
     QList<const QMetaObject *> class_list;
     const QMetaObject *meta_object = object->metaObject();

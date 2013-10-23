@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 10:21:29 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 16:23:26 2013 (+0200)
+ * Last-Updated: mer. oct. 23 16:35:05 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 52
+ *     Update #: 68
  */
 
 /* Change Log:
@@ -17,6 +17,7 @@
 #include "dtkGuiExport.h"
 
 #include <QObject>
+#include <QList>
 
 class dtkPropertyEditor;
 class dtkPropertyEditorFactoryPrivate;
@@ -40,6 +41,9 @@ public:
 
 public slots:
     dtkPropertyEditor *create(const QString& property_name, QObject *object, QWidget *parent = 0);
+
+public slots:
+    QList<QWidget *> createObjectProperties(QObject *object, int hierarchy_level = -1);
 
 protected:
      dtkPropertyEditorFactory(void);

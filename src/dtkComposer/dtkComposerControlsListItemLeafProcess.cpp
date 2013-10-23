@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 22:48:09 2013 (+0200)
+ * Last-Updated: mer. oct. 23 17:05:20 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 540
+ *     Update #: 577
  */
 
 /* Change Log:
@@ -21,6 +21,7 @@
 #include <dtkCore/dtkAbstractProcess.h>
 
 #include <dtkGui/dtkObjectEditor.h>
+#include <dtkGui/dtkToolBox.h>
 
 #include <QObject>
 #include <QVariant>
@@ -38,7 +39,8 @@ public:
     dtkComposerNodeLeafProcess *p_node;
 
 public:
-    QFrame *frame;
+    dtkToolBox *box;
+    dtkToolBoxItem *item;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -56,7 +58,8 @@ dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(Q
 
     d->parent = parent;
 
-    d->frame = NULL;
+    d->box = new dtkToolBox(d->parent);
+    d->item = NULL;
 }
 
 
@@ -68,23 +71,19 @@ dtkComposerControlsListItemLeafProcess::~dtkComposerControlsListItemLeafProcess(
 
 QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
 {
-    if (d->frame && !(d->p_node->implementationHasChanged()))
-        return d->frame;
+    if (d->item && !(d->p_node->implementationHasChanged()))
+        return d->box;
 
-    if (d->frame)
-        delete d->frame;
-
-    d->frame = new QFrame(d->parent);
-
-    QVBoxLayout *layout = new QVBoxLayout(d->frame);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(new QLabel(d->node->title(), d->frame));
+    if (d->item)
+        delete d->item;
 
     QObject *object = d->p_node->process();
-    if (object)
-        layout->addWidget(new dtkObjectEditor(object, d->frame));
+    if (object) {
+        d->item = dtkToolBoxItem::fromObject(object);
+        d->box->appendItem(d->item);
+    }
 
-    return d->frame;
+    return d->box;
 }
 
 

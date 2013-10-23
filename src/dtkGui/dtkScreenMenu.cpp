@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:45:35 2010 (+0200)
- * Version: $Id$
- * Last-Updated: lun. oct. 21 16:38:12 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 390
  */
 
 /* Commentary:
@@ -50,13 +46,17 @@ dtkScreenMenu::dtkScreenMenu(const QString &title, QWidget *parent) : QMenu(titl
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
     d->encoder = NULL;
 #endif
-    d->fps = 15;
+    d->fps = 10;
     d->bitrate = 4000000;
 
     QAction* screenshot = this->addAction(QString("Take screenshot")); screenshot->setVisible(true);
+    screenshot->setShortcut(Qt::Key_Print);
+
     this->addSeparator();
     QAction* screencast_start = this->addAction(QString("Start screencast"));
     QAction* screencast_stop  = this->addAction(QString("Stop screencast"));
+    screencast_start->setShortcut(Qt::ControlModifier + Qt::Key_Print);
+    screencast_stop->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Print);
 
 #if !defined(DTK_BUILD_VIDEO) || !defined(DTK_HAVE_FFMPEG)
     screencast_start->setEnabled(false);
@@ -118,7 +118,18 @@ void dtkScreenMenu::addFrameToVideo(void)
 {
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
     if (QWidget * widget = dynamic_cast<QWidget *>(parent())) {
-        d->encoder->encodeImage(screenshot(widget, d->width));
+        QImage image = screenshot(widget, d->width);
+        QPoint mouse_pos= QCursor::pos() - widget->pos();
+        QPainter painter(&image);
+        int x = mouse_pos.x();
+        int y = mouse_pos.y();
+        int length = 8;
+        QLine line1(x-length,y,x+length,y);
+        QLine line2(x,y-length,x,y+length);
+        painter.setPen( Qt::red );
+        painter.drawLine(line1);
+        painter.drawLine(line2);
+       d->encoder->encodeImage(image);
     }
 #endif
 }
@@ -127,6 +138,7 @@ QImage dtkScreenMenu::screenshot(QWidget *widget, qlonglong maxsize)
 {
     QPixmap pixmap(widget->size());
     widget->render(&pixmap);
+
     if( maxsize > 0 && pixmap.width() > maxsize) {
          return pixmap.scaledToWidth(maxsize).toImage();
     }

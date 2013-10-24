@@ -25,14 +25,13 @@ public:
 
 public:
     dtkPlotCurves curves;
+    QStringList titlesCurve;
     QList<dtkContainerVectorReal> list_vector_x;
     QList<dtkContainerVectorReal> list_vector_y;
 };
 
 dtkComposerNodePlotCurveFile::dtkComposerNodePlotCurveFile(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodePlotCurveFilePrivate)
 {
-    d->curves.clear();
-
     this->appendReceiver(&(d->receiver_file));
 
     this->appendEmitter(&(d->emitter_curves));
@@ -94,13 +93,20 @@ bool dtkComposerNodePlotCurveFile::read(const QString& fileName)
     dtkContainerVectorReal vx;
     QList<dtkContainerVectorReal> vy;
     QString line;
-    QStringList lineSplit;
+    QStringList titlesSplit, lineSplit;
     int numberOfCurves;
 
-    line = in.readLine(); // First line is a description of file
+    int index = 0;
 
     do {
         line = in.readLine();
+
+        if (index == 0 && line.count() > 0 && line.contains("#")) {
+            titlesSplit = line.split(" ", QString::SkipEmptyParts);
+            line = in.readLine();
+            index++;
+        }
+
         lineSplit = line.split(" ", QString::SkipEmptyParts);
 
         numberOfCurves = lineSplit.count() - 1;
@@ -135,11 +141,18 @@ bool dtkComposerNodePlotCurveFile::read(const QString& fileName)
 
     file.close();
 
+    if ((titlesSplit.count() - 1) == numberOfCurves) {
+        for (int i = 0, j = 1; i<numberOfCurves; i++) {
+            d->titlesCurve << titlesSplit[j++];
+        }
+    }
+
     return true;
 }
 
 void dtkComposerNodePlotCurveFile::run(void)
 {
+    d->titlesCurve.clear();
     d->list_vector_x.clear();
     d->list_vector_y.clear();
 
@@ -207,6 +220,10 @@ void dtkComposerNodePlotCurveFile::run(void)
 	  curve = new dtkPlotCurve;
 	  d->curves << curve;
 	}
+
+        if (d->titlesCurve.count() > index) {
+            curve->setName(d->titlesCurve[index]);
+        }
 
         curve->setData(data);
     }

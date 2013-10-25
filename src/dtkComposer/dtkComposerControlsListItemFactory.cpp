@@ -72,6 +72,18 @@ dtkComposerControlsListItem *dtkComposerControlsListItemFactory::create(QListWid
         return new dtkComposerControlsListItem(list, node);
 }
 
+dtkToolBoxItem *dtkComposerControlsListItemFactory::create(dtkComposerSceneNode *node)
+{
+    if (dtkComposerNodeLeafProcess *p_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
+
+        QObject *object = reinterpret_cast<QObject *>(p_node->process());
+        if (object)
+            return dtkToolBoxItem::fromObject(object);
+    }
+    
+    return new dtkToolBoxItem();
+}
+
 dtkComposerControlsListItemFactory *dtkComposerControlsListItemFactory::s_instance = NULL;
 
 

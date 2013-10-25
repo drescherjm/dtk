@@ -21,6 +21,8 @@
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
+#include <dtkGui/dtkToolBox.h>
+
 // /////////////////////////////////////////////////////////////////
 // Helper functions
 // /////////////////////////////////////////////////////////////////
@@ -39,6 +41,7 @@ public:
 public:
     QComboBox *selector;
     QListWidget *list;
+    dtkToolBox *box;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -62,15 +65,22 @@ dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(ne
 
 // /////////////////////////////////////////////////////////////////
 
-    d->list = new QListWidget(this);
-    d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
+    //d->list = new QListWidget(this);
+    //d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
+    //d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
+
+// /////////////////////////////////////////////////////////////////
+
+    d->box = new dtkToolBox(this);
+    d->box->setDisplayMode(dtkToolBox::Default);
+    d->box->setDisplayMode(dtkToolBox::AllItemExpanded);
+    d->box->setDisplayMode(dtkToolBox::OneItemExpanded);
 
 // /////////////////////////////////////////////////////////////////
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->selector);
-    layout->addWidget(d->list);
+    layout->addWidget(d->box);
 
 // /////////////////////////////////////////////////////////////////
 
@@ -139,13 +149,15 @@ void dtkComposerControls::setup(int index)
         break;
     };
 
-    d->list->clear();
+    //d->list->clear();
+    d->box->clear();
 
     foreach(dtkComposerSceneNodeLeaf *node, nodes) {
-        dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
-        item->setFlags(Qt::ItemIsEnabled);
-        d->list->addItem(item);
-        d->list->setItemWidget(item,item->widget());
+        //dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
+        //item->setFlags(Qt::ItemIsEnabled);
+        // d->list->addItem(item);
+        // d->list->setItemWidget(item,item->widget());
+        d->box->addItem(dtkComposerControlsListItemFactory::instance()->create(node));
     }
 }
 

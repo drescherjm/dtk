@@ -19,6 +19,8 @@
 
 #include <QtGui>
 
+#include <dtkGui/dtkToolBox>
+
 class dtkComposerSceneNode;
 class dtkComposerControlsListItem;
 
@@ -37,6 +39,7 @@ private:
 
 public:
     dtkComposerControlsListItem *create(QListWidget *list, dtkComposerSceneNode *node);
+    dtkToolBoxItem *create(dtkComposerSceneNode *node);
 
 };
 

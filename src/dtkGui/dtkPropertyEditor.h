@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 13:03:43 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 16:16:22 2013 (+0200)
+ * Last-Updated: ven. oct. 25 08:58:09 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 126
+ *     Update #: 131
  */
 
 /* Change Log:
@@ -34,8 +34,8 @@ public:
      virtual ~dtkPropertyEditor(void);
 
 public:
-    virtual void  setValue(const QVariant& value);
-    virtual QVariant value(void) const;
+    void  setValue(const QVariant& value);
+    QVariant value(void) const;
 
 public:
     QObject *propertyObject(void);
@@ -65,7 +65,7 @@ public:
     QVariant editorData(void);
 
 public slots:
-    void onValueChanged(double value);
+    void onValueChanged(void);
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ public:
     QVariant editorData(void);
 
 public slots:
-    void onValueChanged(int value);
+    void onValueChanged(void);
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ public:
     QVariant editorData(void);
 
 public slots:
-    void onTextChanged(const QString& text);
+    void onTextChanged(void);
 };
 
 // ///////////////////////////////////////////////////////////////////

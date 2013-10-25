@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: mer. oct. 23 17:05:20 2013 (+0200)
+ * Last-Updated: jeu. oct. 24 09:56:53 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 577
+ *     Update #: 582
  */
 
 /* Change Log:
@@ -39,7 +39,7 @@ public:
     dtkComposerNodeLeafProcess *p_node;
 
 public:
-    dtkToolBox *box;
+    //dtkToolBox *box;
     dtkToolBoxItem *item;
 };
 
@@ -58,7 +58,7 @@ dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(Q
 
     d->parent = parent;
 
-    d->box = new dtkToolBox(d->parent);
+    //d->box = new dtkToolBox(d->parent);
     d->item = NULL;
 }
 
@@ -72,7 +72,7 @@ dtkComposerControlsListItemLeafProcess::~dtkComposerControlsListItemLeafProcess(
 QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
 {
     if (d->item && !(d->p_node->implementationHasChanged()))
-        return d->box;
+        return d->item;
 
     if (d->item)
         delete d->item;
@@ -80,10 +80,10 @@ QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
     QObject *object = d->p_node->process();
     if (object) {
         d->item = dtkToolBoxItem::fromObject(object);
-        d->box->appendItem(d->item);
+        //d->box->appendItem(d->item);
     }
 
-    return d->box;
+    return d->item;
 }
 
 

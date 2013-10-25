@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
     //item_b->setExpanded(true);
     //item_c->setEnforced(true);
 
-    box->appendItem(item_c);
-    box->appendItem(item_b);
+    box->addItem(item_c);
+    box->addItem(item_b);
 
     box->setOrder(dtkToolBox::AlphaBetics);
 

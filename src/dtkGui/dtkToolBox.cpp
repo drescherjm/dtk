@@ -22,6 +22,8 @@ dtkToolBoxButton::dtkToolBoxButton(QWidget *parent) : QAbstractButton(parent)
     this->setBackgroundRole(QPalette::Window);
     this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     this->setFocusPolicy(Qt::NoFocus);
+
+    this->m_selected = false;
 }
 
 QSize dtkToolBoxButton::sizeHint(void) const
@@ -50,6 +52,10 @@ void dtkToolBoxButton::initStyleOption(QStyleOptionToolBox *option) const
     if (!option)
         return;
     option->initFrom(this);
+    if (this->m_selected)
+        option->state |= QStyle::State_Selected;
+    if (this->isDown())
+        option->state |= QStyle::State_Sunken;
     option->text = this->text();
     option->icon = this->icon();
 }
@@ -83,6 +89,9 @@ public:
 public:
     bool is_expanded;
     bool is_enforced;
+
+public:
+    dtkToolBox *box;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -103,7 +112,8 @@ dtkToolBoxItem::dtkToolBoxItem(QWidget *parent) : QFrame(parent), d(new dtkToolB
     d->widget = NULL;
     d->is_expanded = false;
     d->is_enforced = false;
-        
+    d->box = NULL;
+
     this->setBackgroundRole(QPalette::Button);
     this->connect(d->button, SIGNAL(clicked()), this, SLOT(onButtonClicked()));
 }
@@ -123,6 +133,11 @@ bool dtkToolBoxItem::isExpanded(void) const
 bool dtkToolBoxItem::isEnforced(void) const
 {
     return d->is_enforced;
+}
+
+QString dtkToolBoxItem::name(void) const
+{
+    return d->button->text();
 }
 
 void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon &icon)
@@ -156,6 +171,7 @@ void dtkToolBoxItem::setExpanded(bool expanded)
     } else {
         d->widget->hide();        
     }
+    d->button->setSelected(expanded);
 }
 
 void dtkToolBoxItem::setEnforced(bool enforced)
@@ -175,14 +191,22 @@ void dtkToolBoxItem::setEnforced(bool enforced)
     }
 }
 
+void dtkToolBoxItem::setName(const QString& name)
+{
+    d->button->setText(name);
+}
+
 void dtkToolBoxItem::onButtonClicked(void)
 {
     this->setExpanded(!d->is_expanded);
+    
+    if (d->box)
+        d->box->setCurrentItem(this);
 }
 
-QString dtkToolBoxItem::name(void) const
+void dtkToolBoxItem::setToolBox(dtkToolBox *box)
 {
-    return d->button->text();
+    d->box = box;
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -194,8 +218,8 @@ dtkToolBoxItem *dtkToolBoxItem::fromObject(QObject *object, int hierarchy_level)
     QFrame *frame = new QFrame;
 
     QVBoxLayout *layout = new QVBoxLayout(frame);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 12);
+    layout->setSpacing(2);
     layout->setAlignment(Qt::AlignTop);
     
     QString name;
@@ -219,6 +243,10 @@ class dtkToolBoxPrivate
 {
 public:
     dtkToolBox::Order order;
+    dtkToolBox::DisplayMode mode;
+
+public:
+    dtkToolBoxItem *current_item;
 
 public:
     typedef QList<dtkToolBoxItem *> ItemList;
@@ -229,11 +257,22 @@ public:
     QVBoxLayout *layout;
 
 public:
+    void clear(void);
     void relayout(void);
     void insert(int index, dtkToolBoxItem *item);
+    void setCurrentItem(dtkToolBoxItem *item);
 };
 
 // ///////////////////////////////////////////////////////////////////
+
+void dtkToolBoxPrivate::clear(void)
+{
+    delete this->layout;
+    this->layout = NULL;
+
+    qDeleteAll(this->items);
+    this->items.clear();
+}
 
 void dtkToolBoxPrivate::relayout(void)
 { 
@@ -326,6 +365,23 @@ void dtkToolBoxPrivate::insert(int index, dtkToolBoxItem *item)
     }
 }
 
+void dtkToolBoxPrivate::setCurrentItem(dtkToolBoxItem *item)
+{
+    if (this->current_item == item)
+        this->current_item = NULL;
+    else
+        this->current_item = item;
+        
+
+    if (this->mode == dtkToolBox::OneItemExpanded) {
+        foreach(dtkToolBoxItem *it, this->items) {
+            it->setExpanded(false);
+        }
+        if (this->current_item)
+            this->current_item->setExpanded(true);
+    }
+}
+
 // ///////////////////////////////////////////////////////////////////
 // dtkToolBox implementation
 // ///////////////////////////////////////////////////////////////////
@@ -336,16 +392,18 @@ dtkToolBox::dtkToolBox(QWidget *parent) : QScrollArea(parent), d(new dtkToolBoxP
 
     this->setWidget(d->frame);
     this->setWidgetResizable(true);
-    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setContentsMargins(0, 0, 0, 0);
-
-    d->order = dtkToolBox::Ascending;
 
     d->layout = new QVBoxLayout(d->frame);
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
     d->layout->setAlignment(Qt::AlignTop);
+
+    d->order = dtkToolBox::Ascending;
+    d->mode = dtkToolBox::Default;
+    d->current_item = NULL;
 }
 
 dtkToolBox::~dtkToolBox(void)
@@ -353,6 +411,12 @@ dtkToolBox::~dtkToolBox(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkToolBox::clear(void)
+{
+    d->clear();
+    d->relayout();
 }
 
 int dtkToolBox::count(void) const
@@ -363,6 +427,11 @@ int dtkToolBox::count(void) const
 dtkToolBox::Order dtkToolBox::order(void) const
 {
     return d->order;
+}
+
+dtkToolBox::DisplayMode dtkToolBox::displayMode(void) const
+{
+    return d->mode;
 }
 
 dtkToolBoxItem *dtkToolBox::itemAt(int index) const
@@ -377,8 +446,15 @@ void dtkToolBox::insertItem(int index, dtkToolBoxItem *item)
         return;
     }
 
+    item->setToolBox(this);
+    item->setEnforced((d->mode == AllItemExpanded));
     d->items.insert(index, item);
     d->insert(index, item);
+}
+
+void dtkToolBox::setCurrentItem(dtkToolBoxItem *item)
+{
+    d->setCurrentItem(item);
 }
 
 void dtkToolBox::removeItem(int index)
@@ -398,4 +474,29 @@ void dtkToolBox::setOrder(Order order)
 
     d->order = order;
     d->relayout();
+}
+
+void dtkToolBox::setDisplayMode(DisplayMode mode)
+{
+    if (d->mode == mode)
+        return;
+
+    d->mode = mode;
+
+    bool display_all_items = false;
+    switch(mode) {
+    case Default:
+        break;
+    case AllItemExpanded:
+        display_all_items = true;
+        break;
+    case OneItemExpanded:
+        d->setCurrentItem(d->current_item);
+        break;
+    default:
+        break;
+    }    
+
+    foreach(dtkToolBoxItem * item, d->items)
+        item->setEnforced(display_all_items);
 }

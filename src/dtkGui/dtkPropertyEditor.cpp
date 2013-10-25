@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 13:33:45 2013 (+0200)
  * Version: 
- * Last-Updated: mar. oct. 15 16:17:39 2013 (+0200)
+ * Last-Updated: jeu. oct. 24 11:22:27 2013 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 261
+ *     Update #: 280
  */
 
 /* Change Log:
@@ -95,7 +95,7 @@ dtkPropertyEditorDouble::dtkPropertyEditorDouble(const QString& property_name, Q
     spin_d->setEnabled(true);
     spin_d->setValue(object->property(d->meta_property.name()).toDouble());
     
-    QObject::connect(spin_d, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
+    QObject::connect(spin_d, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
 
     d->editor = spin_d;
 
@@ -122,9 +122,9 @@ QVariant dtkPropertyEditorDouble::editorData(void)
     return QVariant::fromValue(static_cast<QDoubleSpinBox*>(d->editor)->value());
 }
 
-void dtkPropertyEditorDouble::onValueChanged(double value)
+void dtkPropertyEditorDouble::onValueChanged(void)
 {
-    d->object->setProperty(d->meta_property.name(), QVariant::fromValue(value));
+    d->object->setProperty(d->meta_property.name(), this->editorData());
 }
 
 dtkPropertyEditor *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent)
@@ -147,7 +147,7 @@ dtkPropertyEditorInteger::dtkPropertyEditorInteger(const QString& property_name,
     spin_i->setEnabled(true);
     spin_i->setValue(object->property(d->meta_property.name()).toLongLong());
     
-    QObject::connect(spin_i, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
+    QObject::connect(spin_i, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
 
     d->editor = spin_i;
 
@@ -174,9 +174,9 @@ QVariant dtkPropertyEditorInteger::editorData(void)
     return QVariant::fromValue(static_cast<QSpinBox *>(d->editor)->value());
 }
 
-void dtkPropertyEditorInteger::onValueChanged(int value)
+void dtkPropertyEditorInteger::onValueChanged(void)
 {
-    d->object->setProperty(d->meta_property.name(), QVariant::fromValue(value));
+    d->object->setProperty(d->meta_property.name(), this->editorData());
 }
 
 dtkPropertyEditor *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent)
@@ -195,7 +195,7 @@ dtkPropertyEditorString::dtkPropertyEditorString(const QString& property_name, Q
     edit->setEnabled(true);
     edit->setText(object->property(d->meta_property.name()).toString());
     
-    QObject::connect(edit, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
+    QObject::connect(edit, SIGNAL(returnPressed()), this, SLOT(onTextChanged()));
 
     d->editor = edit;
 
@@ -222,9 +222,9 @@ QVariant dtkPropertyEditorString::editorData(void)
     return QVariant::fromValue(static_cast<QLineEdit *>(d->editor)->text());
 }
 
-void dtkPropertyEditorString::onTextChanged(const QString& text)
+void dtkPropertyEditorString::onTextChanged(void)
 {
-    d->object->setProperty(d->meta_property.name(), QVariant::fromValue(text));
+    d->object->setProperty(d->meta_property.name(), this->editorData());
 }
 
 dtkPropertyEditor *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent)

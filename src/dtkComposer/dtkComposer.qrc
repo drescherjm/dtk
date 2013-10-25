@@ -10,6 +10,9 @@
     <file>dtkComposerNodeControlFor.html</file>
     <file>dtkComposerNodeControlForEach.html</file>
     <file>dtkComposerNodeControlWhile.html</file>
+    <file>dtkComposerNodePlotCurve.html</file>
+    <file>dtkComposerNodePlotCurveFile.html</file>
+    <file>dtkComposerNodePlotCurveAppendPoint.html</file>
 
     <!-- Pixmaps -->
     <file>pixmaps/dtk-composer-node-flag-blue.png</file>

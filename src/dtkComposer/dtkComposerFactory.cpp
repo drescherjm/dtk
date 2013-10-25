@@ -301,14 +301,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     d->nodes << "Plot Curve";
+    d->descriptions["Plot Curve"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurve.html");
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
     d->types["Plot Curve"] = "dtkPlotCurve";
 
     d->nodes << "Plot Curve File";
+    d->descriptions["Plot Curve File"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurveFile.html");
     d->tags["Plot Curve File"] = QStringList() <<  "curve" << "plot" << "file";
     d->types["Plot Curve File"] = "dtkPlotCurveFile";
 
     d->nodes << "Plot Curve Append Point";
+    d->descriptions["Plot Curve Append Point"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurveAppendPoint.html");
     d->tags["Plot Curve Append Point"] = QStringList() <<  "curve" << "plot" << "append" << "point";
     d->types["Plot Curve Append Point"] = "dtkPlotCurveAppendPoint";
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 26 18:04:02 2013 (+0200)
+ * Last-Updated: Thu Oct 24 15:07:51 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 510
+ *     Update #: 530
  */
 
 /* Commentary: 
@@ -553,11 +553,17 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
     QColor c_color = curve->color();
     QColor v_color = this->backgroundColor();
 
-    if ( qAbs(c_color.value() - v_color.value()) < 120) {
-	int r = c_color.red();
-	int g = c_color.green();
-	int b = c_color.blue();
+    int c_color_value = qGray(c_color.rgb());
+    int v_color_value = qGray(v_color.rgb());
+    int delta = 0;
+
+    while ( qAbs(c_color_value - v_color_value) < 50 && delta < 120) {
+	int r = (c_color.red() + delta) % 255;
+	int g = (c_color.green() + delta) % 255;
+	int b = (c_color.blue() + delta) % 255;
 	curve->setColor(QColor(255 - r, 255 - g, 255 - b));
+        c_color_value = qGray(255 - r, 255 - g, 255 - b);
+        delta += 10;
     }
 
     return *(this);
@@ -595,10 +601,10 @@ void dtkPlotView::readSettings(void)
     d->scaleEngineY = (dtkPlotView::Scale) settings.value("axis_y_scale_engine", dtkPlotView::Linear).toUInt();
     settings.endGroup();
 
+    this->updateColors();
+
     this->setAxisScaleX(d->scaleEngineX);
     this->setAxisScaleY(d->scaleEngineY);
-
-    this->updateColors();
 }
 
 void dtkPlotView::writeSettings(void)

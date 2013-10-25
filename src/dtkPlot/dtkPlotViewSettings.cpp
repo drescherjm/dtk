@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 26 18:07:29 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 756
+ * Last-Updated: ven. oct. 25 11:24:45 2013 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 785
  */
 
 /* Commentary: 
@@ -65,12 +65,14 @@ public:
     QSignalMapper *mapperCurvesColor;
 };
 
-dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(new dtkPlotViewSettingsPrivate)
+dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : dtkToolBox(parent), d(new dtkPlotViewSettingsPrivate)
 {
     d->view = NULL;
 
     d->c_count = 0;
     d->p_count = 0;
+
+    dtkToolBoxItem *item = NULL;    
 
     // ///////////////////////////////////////////////////////////////////
     // Titles
@@ -93,8 +95,11 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(
 
     QFrame *page = new QFrame(this);
     page->setLayout(layout);
+    
+    item = new dtkToolBoxItem(this);
+    item->setWidget(page, "Plot titles");
 
-    this->addItem(page, "Plot titles");
+    this->addItem(item);
 
     }
 
@@ -128,7 +133,10 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(
     QFrame *page = new QFrame(this);
     page->setLayout(layout);
 
-    this->addItem(page, "Plot sizes");
+    item = new dtkToolBoxItem(this);
+    item->setWidget(page, "Plot sizes");
+
+    this->addItem(item);
 
     }
 
@@ -158,7 +166,10 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(
     QFrame *page = new QFrame(this);
     page->setLayout(layout);
 
-    this->addItem(page, "Plot scales");
+    item = new dtkToolBoxItem(this);
+    item->setWidget(page, "Plot scales");
+
+    this->addItem(item);
 
     }
 
@@ -182,7 +193,10 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(
     QFrame *page = new QFrame(this);
     page->setLayout(layout);
 
-    this->addItem(page, "Plot legend");
+    item = new dtkToolBoxItem(this);
+    item->setWidget(page, "Plot legend");
+
+    this->addItem(item);
 
     }
 
@@ -210,7 +224,10 @@ dtkPlotViewSettings::dtkPlotViewSettings(QWidget *parent) : QToolBox(parent), d(
     QFrame *page = new QFrame(this);
     page->setLayout(layout);
 
-    this->addItem(page, "Plot colors");
+    item = new dtkToolBoxItem(this);
+    item->setWidget(page, "Plot colors");
+
+    this->addItem(item);
 
     }
 
@@ -489,11 +506,16 @@ void dtkPlotViewSettings::updateCurves(void)
 	d->curvesNameGroup = new QFrame(this);
 	d->curvesNameGroup->setLayout(d->curvesNameLayout);
 
+        dtkToolBoxItem *item = new dtkToolBoxItem(this);
+        item->setWidget(d->curvesNameGroup, "Plot curves");
+        this->addItem(item);
+
 	d->curvesColorGroup = new QFrame(this);
 	d->curvesColorGroup->setLayout(d->curvesColorLayout);
-
-	this->addItem(d->curvesNameGroup, "Plot curves");
-	this->addItem(d->curvesColorGroup, "Plot curves attributes");
+        
+        item = new dtkToolBoxItem(this);
+        item->setWidget(d->curvesColorGroup, "Plot curves attributes");
+        this->addItem(item);
     }
 
     d->p_count = d->c_count;

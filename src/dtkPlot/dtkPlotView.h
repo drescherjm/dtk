@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 26 18:03:39 2013 (+0200)
+ * Last-Updated: Fri Oct 25 13:09:11 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 143
+ *     Update #: 146
  */
 
 /* Commentary: 
@@ -136,7 +136,9 @@ public:
     QColor foregroundColor(void) const;
 
 public:
+    void setRandomCurvesColor(int seed = 0);
     void updateColors(void);
+    void updateCurveColor(dtkPlotCurve *curve);
 
 public:
     QWidget *plotWidget(void);

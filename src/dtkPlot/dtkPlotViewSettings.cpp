@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 26 18:07:29 2013 (+0200)
+ * Last-Updated: Fri Oct 25 17:12:56 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 756
+ *     Update #: 765
  */
 
 /* Commentary: 
@@ -345,16 +345,18 @@ void dtkPlotViewSettings::onRandomColorsClicked(void)
 {
     int index = 0;
 
+    QTime time = QTime::currentTime();
+
+    d->view->setRandomCurvesColor((uint)time.msec());
+
     foreach (dtkPlotCurve *curve, d->view->curves()) {
 
-        QColor color = QColor::fromHsv(qrand() % 256, 255, 190);
+        QColor color = curve->color();
 
         QLayoutItem *item = d->curvesColorLayout->itemAt(index+2, QFormLayout::FieldRole);
 
         dtkColorButton *button = dynamic_cast<dtkColorButton *>(item->widget());
         button->setColor(color);
-
-        curve->setColor(color);
 
         index++;
     }
@@ -438,6 +440,8 @@ void dtkPlotViewSettings::updateCurves(void)
 	    connect(random, SIGNAL(clicked()), this, SLOT(onRandomColorsClicked()));
 	    connect(alphaCurveArea, SIGNAL(valueChanged(const int&)), this, SLOT(onColorAreaChanged(const int&)));
 
+            if (d->c_count > 1)
+                d->view->setRandomCurvesColor();
 	}
     }
 

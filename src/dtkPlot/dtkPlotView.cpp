@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 24 15:07:51 2013 (+0200)
+ * Last-Updated: Fri Oct 25 17:16:41 2013 (+0200)
  *           By: Selim Kraria
- *     Update #: 530
+ *     Update #: 546
  */
 
 /* Commentary: 
@@ -550,6 +550,13 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
     if (c->plot() != d)
         c->attach((QwtPlot *)d);
 
+    this->updateCurveColor(curve);
+
+    return *(this);
+}
+
+void dtkPlotView::updateCurveColor(dtkPlotCurve *curve)
+{
     QColor c_color = curve->color();
     QColor v_color = this->backgroundColor();
 
@@ -565,8 +572,22 @@ dtkPlotView& dtkPlotView::operator<<(dtkPlotCurve *curve)
         c_color_value = qGray(255 - r, 255 - g, 255 - b);
         delta += 10;
     }
+}
 
-    return *(this);
+void dtkPlotView::setRandomCurvesColor(int seed)
+{
+    qsrand(seed);
+
+    int index = 0;
+
+    foreach (dtkPlotCurve *curve, d->curves) {
+        QColor color = QColor::fromHsv((qrand() * index) % 255, 255, 190);
+        curve->setColor(color);
+        this->updateCurveColor(curve);
+        index++;
+    }
+
+    this->update();
 }
 
 void dtkPlotView::update(void)

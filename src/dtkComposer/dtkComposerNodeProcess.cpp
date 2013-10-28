@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Tue Sep 25 08:33:25 2012 (+0200)
- *           By: tkloczko
- *     Update #: 288
+ * Last-Updated: lun. oct. 28 16:05:44 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 295
  */
 
 /* Commentary:
@@ -51,6 +51,9 @@ public:
 public:
     qlonglong index;
     qreal value;
+
+public:
+    QString implementation;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -102,8 +105,10 @@ QString dtkComposerNodeProcess::abstractProcessType(void) const
 
 void dtkComposerNodeProcess::run(void)
 {
-    if (this->implementationHasChanged())
+    if (this->implementationHasChanged(d->implementation)) {
         d->process = this->process();
+        d->implementation = d->process->identifier();
+    }
 
     if (!d->process) {
         dtkWarn() << "no process, abort "<< this->currentImplementation();

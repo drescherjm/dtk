@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Fri Nov 16 16:18:14 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 9
+ * Last-Updated: ven. oct. 25 15:51:09 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 49
  */
 
 /* Commentary: 
@@ -30,6 +30,7 @@ class dtkComposerNodeLeafProcessPrivate
 {
 public:
     dtkAbstractProcess *process;
+    dtkAbstractProcess *old_process;
 
     bool implementation_has_changed;
 };
@@ -41,6 +42,7 @@ public:
 dtkComposerNodeLeafProcess::dtkComposerNodeLeafProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLeafProcessPrivate)
 {
     d->process = NULL;
+    d->old_process = NULL;
     d->implementation_has_changed = false;
 }
 
@@ -49,7 +51,11 @@ dtkComposerNodeLeafProcess::~dtkComposerNodeLeafProcess(void)
     if (d->process)
         delete d->process;
 
+    if (d->old_process)
+        delete d->old_process;
+
     d->process = NULL;
+    d->old_process = NULL;
 
     delete d;
 
@@ -61,9 +67,9 @@ bool dtkComposerNodeLeafProcess::enableDefaultImplementation(void) const
     return false;
 }
 
-bool dtkComposerNodeLeafProcess::implementationHasChanged(void) const
+bool dtkComposerNodeLeafProcess::implementationHasChanged(const QString& implementation) const
 {
-    return d->implementation_has_changed;
+    return (d->implementation_has_changed && implementation != d->process->identifier());
 }
 
 QString dtkComposerNodeLeafProcess::currentImplementation(void) const
@@ -89,29 +95,35 @@ QStringList dtkComposerNodeLeafProcess::implementations(void)
 
 dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& implementation)
 {
+    if (d->old_process)
+        delete d->old_process;
+
     d->implementation_has_changed = false;
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
-    
+
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractProcessType();
-    
-    if (!d->process) {
 
+    if (!d->process) {
         d->process = dtkAbstractProcessFactory::instance()->create(implementation);
 
         d->implementation_has_changed = true;
 
     } else if (d->process->identifier() != implementation) {
-
-        delete d->process;
+        // since createProcess can be executed while the evaluator
+        // thread is running the update() method of d->process, we
+        // can't delete the object now.  We will delete object next
+        // time the implementation changes (we could use mutex
+        // instead)
+        d->old_process = d->process;
 
         d->process = dtkAbstractProcessFactory::instance()->create(implementation);
 
         d->implementation_has_changed = true;
 
-    }        
+    }
 
     return d->process;
 }

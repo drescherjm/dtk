@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: jeu. oct. 24 09:56:53 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 582
+ * Last-Updated: ven. oct. 25 16:01:28 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 594
  */
 
 /* Change Log:
@@ -39,6 +39,9 @@ public:
     dtkComposerNodeLeafProcess *p_node;
 
 public:
+    QString implementation;
+
+public:
     //dtkToolBox *box;
     dtkToolBoxItem *item;
 };
@@ -51,10 +54,13 @@ dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(Q
 {
     d->node = node;
 
-    if (dtkComposerNodeLeafProcess *p_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee()))
+    if (dtkComposerNodeLeafProcess *p_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee())) {
         d->p_node = p_node;
-    else
+        d->implementation = p_node->process()->identifier();
+    } else {
         dtkError() << Q_FUNC_INFO << "Can't create control list item of type Leaf Process.";
+        d->implementation = "";
+    }
 
     d->parent = parent;
 
@@ -71,7 +77,7 @@ dtkComposerControlsListItemLeafProcess::~dtkComposerControlsListItemLeafProcess(
 
 QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
 {
-    if (d->item && !(d->p_node->implementationHasChanged()))
+    if (d->item && !(d->p_node->implementationHasChanged(d->implementation)))
         return d->item;
 
     if (d->item)
@@ -80,7 +86,10 @@ QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
     QObject *object = d->p_node->process();
     if (object) {
         d->item = dtkToolBoxItem::fromObject(object);
+        d->implementation = d->p_node->process()->identifier();
         //d->box->appendItem(d->item);
+    } else {
+        d->implementation = "";
     }
 
     return d->item;

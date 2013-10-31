@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Oct 27 14:10:37 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. oct. 22 09:23:57 2013 (+0200)
+ * Last-Updated: mer. oct. 23 17:20:53 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 150
+ *     Update #: 152
  */
 
 /* Commentary: 
@@ -83,8 +83,16 @@ int main(int argc, char **argv)
     reader->setFactory(factory);
     reader->setScene(scene);
     reader->setGraph(graph);
-    if (!reader->read(argv[1])) {
-        dtkError() << "read failure for " << argv[1];
+
+    int index= 1;
+
+    if (argv[1] == "-pg") {
+        index = 2;
+        evaluator->setProfiling(true);
+    }
+
+    if (!reader->read(argv[index])) {
+        dtkError() << "read failure for " << argv[index];
         return 1;
     }
     QObject::connect(evaluator,SIGNAL(evaluationStopped()),&application, SLOT(quit()));

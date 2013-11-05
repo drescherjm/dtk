@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: ven. oct. 25 16:01:28 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 594
+ * Last-Updated: lun. nov.  4 10:36:49 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 597
  */
 
 /* Change Log:
@@ -42,7 +42,6 @@ public:
     QString implementation;
 
 public:
-    //dtkToolBox *box;
     dtkToolBoxItem *item;
 };
 
@@ -64,7 +63,6 @@ dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(Q
 
     d->parent = parent;
 
-    //d->box = new dtkToolBox(d->parent);
     d->item = NULL;
 }
 
@@ -87,7 +85,6 @@ QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
     if (object) {
         d->item = dtkToolBoxItem::fromObject(object);
         d->implementation = d->p_node->process()->identifier();
-        //d->box->appendItem(d->item);
     } else {
         d->implementation = "";
     }

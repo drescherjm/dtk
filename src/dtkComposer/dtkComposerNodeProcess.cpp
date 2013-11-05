@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: lun. oct. 28 16:05:44 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 295
+ * Last-Updated: lun. nov.  4 10:43:45 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 306
  */
 
 /* Commentary:
@@ -103,15 +103,20 @@ QString dtkComposerNodeProcess::abstractProcessType(void) const
     return "dtkAbstractProcess";
 }
 
+void dtkComposerNodeProcess::setProcess(dtkAbstractProcess *process)
+{
+    d->process = process;
+}
+
+dtkAbstractProcess *dtkComposerNodeProcess::process(void) const
+{
+    return d->process;
+}
+
 void dtkComposerNodeProcess::run(void)
 {
-    if (this->implementationHasChanged(d->implementation)) {
-        d->process = this->process();
-        d->implementation = d->process->identifier();
-    }
-
     if (!d->process) {
-        dtkWarn() << "no process, abort "<< this->currentImplementation();
+        dtkWarn() << Q_FUNC_INFO << "No process instantiated, abort:" << this->currentImplementation();
         return;
     }
 

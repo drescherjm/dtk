@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: ven. oct. 25 09:50:30 2013 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 110
+## Last-Updated: mar. nov.  5 10:58:47 2013 (+0100)
+##           By: edelclau
+##     Update #: 114
 ######################################################################
 ## 
 ### Commentary: 
@@ -16,12 +16,6 @@
 ### Change log:
 ## 
 ######################################################################
-
-if(QWT_FOUND)
-
-## #################################################################
-## 
-## #################################################################
 
 project(dtkPlot)
 
@@ -136,9 +130,3 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
-
-## #################################################################
-## 
-## #################################################################
-
-endif(QWT_FOUND)

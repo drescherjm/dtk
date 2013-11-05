@@ -1,20 +1,20 @@
-/* dtkPlotView.h --- 
- * 
+/* dtkPlotView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 25 13:09:11 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 146
+ * Last-Updated: mar. nov.  5 10:48:29 2013 (+0100)
+ *           By: edelclau
+ *     Update #: 147
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTVIEW_H
@@ -166,9 +166,9 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-DTKCORE_EXPORT dtkAbstractView *createPlotView(void);
+DTKPLOT_EXPORT dtkAbstractView *createPlotView(void);
 
 #endif

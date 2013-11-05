@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: lun. oct. 21 11:38:40 2013 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 153
+## Last-Updated: mar. nov.  5 11:31:07 2013 (+0100)
+##           By: edelclau
+##     Update #: 179
 ######################################################################
 ## 
 ### Commentary: 
@@ -229,13 +229,18 @@ endif(DTK_BUILD_MPI AND MPI_FOUND AND QUAT_LIBRARY AND VRPN_LIBRARY)
 ## Qwt
 ## #################################################################
 
-find_package(Qwt 6 QUIET)
-
+if(DTK_BUILD_PLOT)
+find_package(Qwt 6 REQUIRED)
 if(QWT_FOUND)
+  message(STATUS "Qwt Found")
   add_definitions(-DHAVE_PLOT)
   set(DTK_HAVE_PLOT "YES")
   include_directories(${QWT_INCLUDE_DIR})
+else(QWT_FOUND)
+  message(SEND_ERROR "dtkPlot needs Qwt. Please install Qwt or deactivate DTK_BUILD_PLOT.")
 endif(QWT_FOUND)
+
+endif(DTK_BUILD_PLOT)
 
 ## #################################################################
 ## OpenNI / Nite

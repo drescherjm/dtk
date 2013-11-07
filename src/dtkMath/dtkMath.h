@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:37:50 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jun 14 14:32:09 2012 (+0200)
- *           By: tkloczko
- *     Update #: 193
+ * Last-Updated: Thu Nov  7 12:09:33 2013 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 197
  */
 
 /* Commentary: 
@@ -38,6 +38,14 @@
 DTKMATH_EXPORT void dtkBubbleSort(unsigned int indices[], int size);
 DTKMATH_EXPORT void dtkBubbleSort(qint32 *indices, qint32 size);
 DTKMATH_EXPORT void dtkBubbleSort(qint64 *indices, qint64 size);
+
+// /////////////////////////////////////////////////////////////////
+// Minimum and maximum value of an array
+// /////////////////////////////////////////////////////////////////
+
+DTKMATH_EXPORT void dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minValue, qint32* maxValue);
+DTKMATH_EXPORT void dtkMinMaxValueOfArray(const qint64* array, const qint64& size, qint64* minValue, qint64* maxValue);
+DTKMATH_EXPORT void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* minValue, qreal* maxValue);
 
 // /////////////////////////////////////////////////////////////////
 // Some bit constants 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Nov  7 12:17:38 2013 (+0100)
+ * Last-Updated: Fri Nov  8 17:19:05 2013 (+0100)
  *           By: Selim Kraria
- *     Update #: 258
+ *     Update #: 260
  */
 
 /* Commentary: 
@@ -118,9 +118,9 @@ void dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minV
     qint32 maximum = minimum;
 
      for (qint32 i = 1; i<size; i++) {
-          if(array[i] > minimum)
+          if(array[i] < minimum)
               minimum = array[i];
-          if(array[i] < maximum)
+          if(array[i] > maximum)
               maximum = array[i];
      }
 
@@ -147,9 +147,9 @@ void dtkMinMaxValueOfArray(const qint64* array, const qint64& size, qint64* minV
     qint64 maximum = minimum;
 
      for (qint64 i = 1; i<size; i++) {
-          if(array[i] > minimum)
+          if(array[i] < minimum)
               minimum = array[i];
-          if(array[i] < maximum)
+          if(array[i] > maximum)
               maximum = array[i];
      }
 
@@ -176,9 +176,9 @@ void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* min
     qreal maximum = minimum;
 
      for (qlonglong i = 1; i<size; i++) {
-          if(array[i] > minimum)
+          if(array[i] < minimum)
               minimum = array[i];
-          if(array[i] < maximum)
+          if(array[i] > maximum)
               maximum = array[i];
      }
 

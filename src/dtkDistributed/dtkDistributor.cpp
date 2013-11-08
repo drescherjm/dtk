@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. janv. 16 11:15:24 2013 (+0100)
+ * Last-Updated: ven. nov.  8 10:03:55 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 142
+ *     Update #: 183
  */
 
 /* Commentary: 
@@ -27,6 +27,8 @@
 #include "dtkDistributedControllerSubmitView.h"
 #include "dtkDistributedControllerTargetView.h"
 #include "dtkDistributor.h"
+
+#include <dtkGui/dtkToolBox.h>
 
 class dtkDistributorPrivate
 {
@@ -101,12 +103,38 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(top);
-    layout->addWidget(d->target_view);
-    layout->addWidget(d->header_view);
-    layout->addWidget(d->status_view);
-    layout->addWidget(d->job_view);
-    layout->addWidget(d->filter_view);
-    layout->addWidget(d->submit_view);
+
+    dtkToolBox *toolbox = new dtkToolBox(this);
+    dtkToolBoxItem *item;
+
+    layout->addWidget(toolbox);
+
+    item = new dtkToolBoxItem(toolbox);
+    item->setWidget(d->target_view,"Clusters");
+    item->setExpanded(true);
+    toolbox->addItem(item);
+
+    item = new dtkToolBoxItem(toolbox);
+    item->setWidget(d->header_view,"Cluster load");
+    item->setExpanded(true);
+    toolbox->addItem(item);
+
+    item = new dtkToolBoxItem(toolbox);
+    item->setWidget(d->status_view,"Nodes");
+    toolbox->addItem(item);
+
+    item = new dtkToolBoxItem(toolbox);
+    item->setWidget(d->job_view,"Jobs");
+    toolbox->addItem(item);
+
+    item = new dtkToolBoxItem(toolbox);
+    item->setWidget(d->filter_view,"Filter");
+    toolbox->addItem(item);
+
+    item = new dtkToolBoxItem(toolbox);
+    item->setWidget(d->submit_view,"Submit");
+    item->setExpanded(true);
+    toolbox->addItem(item);
 
     connect(d->host_address, SIGNAL(activated(int)), this, SLOT(onConnect()));
     connect(d->host_button, SIGNAL(clicked()), this, SLOT(onConnect()));

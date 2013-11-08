@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: lun. juin 17 11:28:17 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 220
+ * Last-Updated: Fri Nov  8 17:19:05 2013 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 260
  */
 
 /* Commentary: 
@@ -97,6 +97,93 @@ void dtkBubbleSort(qint64 *indices, qint64 size)
         }
         j++;
     }
+}
+
+//! dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minValue, qint32* maxValue)
+/*! 
+ * Gives the minimum and maximum integer of an array.
+ */
+void dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minValue, qint32* maxValue)
+{
+    if (!minValue || !maxValue)
+        return;
+
+    if (size < 1) {
+        *minValue = 0;
+        *maxValue = 0;
+        return;
+    }
+
+    qint32 minimum = array[0];
+    qint32 maximum = minimum;
+
+     for (qint32 i = 1; i<size; i++) {
+          if(array[i] < minimum)
+              minimum = array[i];
+          if(array[i] > maximum)
+              maximum = array[i];
+     }
+
+     *minValue = minimum;
+     *maxValue = maximum;
+}
+
+//! Gives the minimum and maximum integer of an array.
+/*! 
+ * 
+ */
+void dtkMinMaxValueOfArray(const qint64* array, const qint64& size, qint64* minValue, qint64* maxValue)
+{
+    if (!minValue || !maxValue)
+        return;
+
+    if (size < 1) {
+        *minValue = 0;
+        *maxValue = 0;
+        return;
+    }
+
+    qint64 minimum = array[0];
+    qint64 maximum = minimum;
+
+     for (qint64 i = 1; i<size; i++) {
+          if(array[i] < minimum)
+              minimum = array[i];
+          if(array[i] > maximum)
+              maximum = array[i];
+     }
+
+     *minValue = minimum;
+     *maxValue = maximum;
+}
+
+//! Gives the minimum and maximum real of an array.
+/*! 
+ * 
+ */
+void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* minValue, qreal* maxValue)
+{
+    if (!minValue || !maxValue)
+        return;
+
+    if (size < 1) {
+        *minValue = 0;
+        *maxValue = 0;
+        return;
+    }
+
+    qreal minimum = array[0];
+    qreal maximum = minimum;
+
+     for (qlonglong i = 1; i<size; i++) {
+          if(array[i] < minimum)
+              minimum = array[i];
+          if(array[i] > maximum)
+              maximum = array[i];
+     }
+
+     *minValue = minimum;
+     *maxValue = maximum;
 }
 
 //! Non-optimal AlmostEqual function - not recommended.

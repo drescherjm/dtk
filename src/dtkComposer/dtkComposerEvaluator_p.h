@@ -31,7 +31,8 @@ public:
     dtkComposerGraphNode *end_node;
 
 public:
-    QHash<dtkComposerGraphNode *, int > connected_views;
+    QHash<dtkComposerGraphNode *, qlonglong >  eval_count;
+    QHash<dtkComposerGraphNode *, double >  eval_duration;
 
 public:
     QHash<dtkComposerGraphNode *, QFuture<void> > futures;
@@ -41,6 +42,7 @@ public:
     bool should_stop;
     bool notify;
     bool use_gui;
+    bool profiling;
 
 public:
     int max_stack_size;

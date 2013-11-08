@@ -44,6 +44,8 @@ public:
     void  setGraph(dtkComposerGraph *graph);
     void  setStartNode(dtkComposerGraphNode *node);
     void  setNotify(bool notify);
+    void  setProfiling(bool profiling);
+    void  printProfiling(qlonglong level=0);
 
 public slots:
     void  run(bool run_concurrent = false);

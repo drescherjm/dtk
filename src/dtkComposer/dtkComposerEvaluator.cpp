@@ -45,10 +45,11 @@
 
 dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d(new dtkComposerEvaluatorPrivate)
 {
-    d->should_stop = false;
+    d->should_stop    = false;
     d->max_stack_size = 0;
-    d->notify = true;
-    d->start_node = NULL;
+    d->notify         = true;
+    d->profiling      = false;
+    d->start_node     = NULL;
     d->use_gui= (qApp->type() != QApplication::Tty);
 }
 
@@ -75,6 +76,11 @@ void dtkComposerEvaluator::setNotify(bool notify)
     d->notify = notify;
 }
 
+void dtkComposerEvaluator::setProfiling(bool profiling)
+{
+    d->profiling = profiling;
+}
+
 void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
 {
     if (!d->start_node) {
@@ -90,16 +96,35 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
     qlonglong end_loop_next = -1 ;
     qlonglong nodeCount = L.count();
     qlonglong current = 0;
+
+    QElapsedTimer *timer = NULL;
+    qint64 nanoSec;
+
+
     dtkComposerGraphNode::Kind kind;
     while (current < nodeCount &&  !d->should_stop) {
+        if (d->profiling) {
+            timer = new QElapsedTimer;
+            timer->restart();
+        }
         dtkComposerGraphNode *node = L.at(current);
+        if (!d->eval_count.contains(node)) {
+            d->eval_count[node]    = 0;
+            d->eval_duration[node] = 0.0;
+        }
         kind = node->kind();
         if (kind == dtkComposerGraphNode::BeginLoop || kind == dtkComposerGraphNode::BeginIf) {
+
             node->eval();
-            dtkComposerEvaluator ev;
-            ev.setGraph(d->graph);
-            ev.setStartNode(node);
-            ev.run_static_rec(false);
+            // dtkComposerEvaluator ev;
+            // ev.setGraph(d->graph);
+            setStartNode(node);
+            run_static_rec(false);
+            if (d->profiling) {
+                d->eval_count[node] ++;
+                d->eval_duration[node] +=  timer->nsecsElapsed() / 1000000.0;
+            }
+
             current ++;
         } else if (kind == dtkComposerGraphNode::SelectBranch ) {
             // dtkTrace() << "Select Branch";
@@ -107,11 +132,13 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
             dtkComposerGraphNode *next = node->firstSuccessor();
 
             if (is_if) {
-                dtkComposerEvaluator ev;
-                ev.setGraph(d->graph);
-                ev.setStartNode(next);
-                ev.run_static_rec(false);
+                setStartNode(next);
+                run_static_rec(false);
                 current = nodeCount;
+                if (d->profiling) {
+                    d->eval_count[node] ++;
+                    d->eval_duration[node] +=  timer->nsecsElapsed() / 1000000.0;
+                }
             } else {
                 qlonglong i = 0;
                 while (i < nodeCount && (L[i]) != next) {
@@ -147,9 +174,17 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
         } else {
             // dtkTrace() << "eval" << node->title();
             node->eval();
+            if (d->profiling) {
+                d->eval_count[node] ++;
+                d->eval_duration[node] +=  timer->nsecsElapsed() / 1000000.0;
+            }
             current ++;
         }
     }
+    if (d->profiling && timer) {
+        delete timer;
+    }
+
     d->should_stop = false;
 }
 
@@ -163,6 +198,44 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
     if (d->notify)
         dtkNotify(msg,30000);
     emit evaluationStopped();
+    d->start_node = d->graph->root();
+
+    if (d->profiling) {
+        printProfiling();
+        // foreach(dtkComposerGraphNode * node, d->eval_count.keys()) {
+        //     qlonglong count = d->eval_count[node];
+        //     double mean = d->eval_duration[node] / count;
+        //     qDebug() << node->title() << ";" << count << ";" <<  mean << ";" << d->eval_duration[node];
+        // }
+    }
+
+}
+
+void  dtkComposerEvaluator::printProfiling(qlonglong level)
+{
+    dtkComposerGraphNodeBegin *begin = static_cast<dtkComposerGraphNodeBegin *>(d->start_node);
+    bool is_if  = (begin->kind() ==  dtkComposerGraphNode::BeginIf );
+
+    dtkComposerGraphNodeList L= begin->evaluableChilds();
+    qlonglong nodeCount = L.count();
+    qlonglong current = 0;
+
+    dtkComposerGraphNode::Kind kind;
+
+    while (current < nodeCount) {
+        dtkComposerGraphNode *node = L.at(current);
+
+        qlonglong count = d->eval_count[node];
+        double mean = d->eval_duration[node] / count;
+        qDebug() << QString(level, QChar(' ')) + node->title() << ";" << count << ";" <<  mean << ";" << d->eval_duration[node];
+        kind = node->kind();
+        if (kind == dtkComposerGraphNode::BeginLoop || kind == dtkComposerGraphNode::BeginIf) {
+            setStartNode(node);
+            qlonglong sublevel = level +1;
+            printProfiling(sublevel);
+        }
+        current++;
+    }
 }
 
 void dtkComposerEvaluator::run(bool run_concurrent)

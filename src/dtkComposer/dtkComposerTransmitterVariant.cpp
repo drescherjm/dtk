@@ -1128,7 +1128,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
                 e->active_variant = v;
                 e->active_emitter = NULL;
                 v->appendReceiver(this);
-		v->updateCopyCounter(true);
+                v->updateCopyCounter(true);
                 return true;
             }
         } else {
@@ -1138,7 +1138,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
                     e->active_variant = v;
                     e->active_emitter = NULL;
                     v->appendReceiver(this);
-		    v->updateCopyCounter(true);
+                    v->updateCopyCounter(true);
                     return true;
                 }
             }
@@ -1151,7 +1151,7 @@ bool dtkComposerTransmitterVariant::connect(dtkComposerTransmitter *transmitter)
             e->active_emitter = transmitter;
             e->active_variant = NULL;
             transmitter->appendReceiver(this);
-	    transmitter->updateCopyCounter(true);
+            transmitter->updateCopyCounter(true);
             return true;
         }
     }
@@ -1195,6 +1195,7 @@ bool dtkComposerTransmitterVariant::disconnect(dtkComposerTransmitter *transmitt
     } else {
 
         ok = e->emitters.removeOne(transmitter);
+        e->m_variant.clear(); // needed if the new emitter has not the same type
 
         if (transmitter == e->active_emitter) {
 

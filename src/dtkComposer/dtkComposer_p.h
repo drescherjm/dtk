@@ -22,6 +22,7 @@
 
 #include <QtCore>
 #include <QtNetwork>
+#include "dtkComposerExport.h"
 
 class dtkComposerCompass;
 class dtkComposerEvaluator;
@@ -33,7 +34,7 @@ class dtkComposerScene;
 class dtkComposerStack;
 class dtkComposerView;
 
-class dtkComposerPrivate : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerPrivate : public QObject
 {
     Q_OBJECT
 

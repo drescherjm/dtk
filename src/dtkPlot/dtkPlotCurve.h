@@ -1,26 +1,26 @@
 /* dtkPlotCurve.h ---
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jun  7 16:05:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 17 14:48:57 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 64
+ * Last-Updated: mar. nov.  5 10:55:11 2013 (+0100)
+ *           By: edelclau
+ *     Update #: 65
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTCURVE_H
 #define DTKPLOTCURVE_H
 
-#include <dtkPlotExport.h>
+#include "dtkPlotExport.h"
 
 #include <QtCore>
 

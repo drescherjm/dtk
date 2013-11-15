@@ -1,20 +1,20 @@
-/* dtkComposerNodePlotCurveAppendPoint.h --- 
- * 
+/* dtkComposerNodePlotCurveAppendPoint.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 14:04:36 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 34
+ * Last-Updated: mar. nov.  5 11:05:08 2013 (+0100)
+ *           By: edelclau
+ *     Update #: 36
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEPLOTCURVEAPPENDPOINT_H
@@ -23,10 +23,9 @@
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
 
-#include <dtkPlot/dtkPlotCurve.h>
-
 #include <QtCore>
 
+class dtkPlotCurve;
 class dtkComposerNodePlotCurveAppendPointPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodePlotCurveAppendPoint : public QObject, public dtkComposerNodeLeaf

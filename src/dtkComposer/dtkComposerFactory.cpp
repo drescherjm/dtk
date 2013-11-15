@@ -98,14 +98,12 @@
 #include "dtkComposerNodeTrackerVrpn.h"
 #endif
 
-#if defined(DTK_BUILD_PLOT) &&defined(DTK_HAVE_PLOT)
+#if defined(DTK_HAVE_PLOT)
 #include "dtkComposerNodePlotCurve.h"
 #include "dtkComposerNodePlotCurveFile.h"
 #include "dtkComposerNodePlotCurveAppendPoint.h"
 #include "dtkComposerNodePlotView.h"
-#endif
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotView.h>
 #endif
 
@@ -224,7 +222,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->types["String List Set Item"] = "setStringList";
 
     // Boolean operators
-    
+
     this->initNodeBooleanOperators();
 
     // Scalar Array

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov.  4 10:38:55 2013 (+0100)
+ * Last-Updated: ven. nov.  8 16:17:25 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 24
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -59,6 +59,9 @@ public:
 
 public:
     dtkAbstractProcess *createProcess(const QString& implementation);
+
+protected:
+    void clearProcess(void);
 
 private:
     dtkComposerNodeLeafProcessPrivate *d;

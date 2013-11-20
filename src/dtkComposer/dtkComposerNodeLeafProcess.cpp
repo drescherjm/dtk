@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. nov.  4 10:40:05 2013 (+0100)
+ * Last-Updated: ven. nov.  8 16:17:19 2013 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 95
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -91,8 +91,10 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
 
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractProcessType();
-
-    if (!this->process() || (this->process()->identifier() != implementation)) {
+    
+    if (!this->process()) {
+        this->setProcess(dtkAbstractProcessFactory::instance()->create(implementation));
+    } else if (this->process()->identifier() != implementation) {
         this->setProcess(dtkAbstractProcessFactory::instance()->create(implementation));
     }
 
@@ -104,4 +106,12 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
     }
 
     return this->process();
+}
+
+void dtkComposerNodeLeafProcess::clearProcess(void)
+{
+    dtkAbstractProcess *p = this->process();
+    if (p)
+        delete p;
+    this->setProcess(NULL);
 }

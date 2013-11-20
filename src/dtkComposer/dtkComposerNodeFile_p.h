@@ -1,20 +1,15 @@
-/* dtkComposerNodeFile_p.h --- 
- * 
+/* dtkComposerNodeFile_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Sep 21 16:12:57 2012 (+0200)
- * Version: $Id$
- * Last-Updated: mar. oct. 15 15:25:20 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 11
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEFILE_P_H
@@ -49,6 +44,7 @@ public:
     dtkComposerTransmitterEmitter<QString> emitter;
 };
 
+
 class dtkComposerNodeFileExistsPrivate
 {
 public:
@@ -59,6 +55,23 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
+};
+
+
+class dtkComposerNodeFileListPrivate
+{
+public:
+    bool exists;
+
+public:
+    dtkComposerTransmitterReceiver<QString> receiver_dir;
+    dtkComposerTransmitterVariant receiver_filters;
+
+public:
+    dtkComposerTransmitterEmitterVector<QString> emitter_files;
+
+public:
+    dtkContainerVector<QString> files;
 };
 
 #endif

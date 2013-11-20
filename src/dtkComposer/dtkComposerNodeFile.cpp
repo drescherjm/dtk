@@ -165,11 +165,6 @@ void dtkComposerNodeFile::setValue(QString value)
 
 
 
-
-
-
-
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileExists implementation
 // /////////////////////////////////////////////////////////////////
@@ -222,6 +217,90 @@ QString dtkComposerNodeFileExists::outputLabelHint(int port)
 {
     if(port == 0)
         return "exists";
+
+    return dtkComposerNode::outputLabelHint(port);
+}
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileList implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileList::dtkComposerNodeFileList(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileListPrivate)
+{
+    this->appendReceiver(&(d->receiver_dir));
+    QList<int> variant_list;
+    variant_list << QMetaType::QString << QMetaType::QStringList;
+    d->receiver_filters.setDataTypes(variant_list);
+    this->appendReceiver(&(d->receiver_filters));
+
+    d->emitter_files.setData(&(d->files));
+    this->appendEmitter(&(d->emitter_files));
+}
+
+dtkComposerNodeFileList::~dtkComposerNodeFileList(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileList::run(void)
+{
+    if (!d->receiver_dir.isEmpty()) {
+        d->files.clear();
+        if (d->receiver_dir.data()) {
+            QString dirname = *(d->receiver_dir.data());
+            QDir dir(dirname);
+            if (!d->receiver_filters.isEmpty()) {
+
+                switch(d->receiver_filters.dataType()) {
+                case QMetaType::QString: {
+                    dir.setNameFilters(QStringList(*(d->receiver_filters.data<QString>())));
+                    break;
+                }
+                case QMetaType::QStringList: {
+                    dir.setNameFilters(*(d->receiver_filters.data<QStringList>()));
+                    break;
+                }
+                default:
+                    dtkWarn() << "Type" << d->receiver_filters.dataType() << "is not handled by the node. Only QString and QString List are supported";
+                    break;
+                }
+            }
+            foreach (QString file, dir.entryList()) {
+                d->files << file;
+            }
+        }
+    }
+}
+
+QString dtkComposerNodeFileList::type(void)
+{
+    return "fileList";
+}
+
+QString dtkComposerNodeFileList::titleHint(void)
+{
+    return "FileList";
+}
+
+QString dtkComposerNodeFileList::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "directory";
+    if(port == 1)
+        return "pattern";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileList::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "files";
 
     return dtkComposerNode::outputLabelHint(port);
 }

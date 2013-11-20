@@ -74,4 +74,29 @@ public:
     dtkContainerVector<QString> files;
 };
 
+class dtkComposerNodeFileReadPrivate
+{
+public:
+    dtkComposerTransmitterReceiver<QString> receiver_file;
+
+public:
+    dtkComposerTransmitterEmitter<QByteArray> emitter;
+
+public:
+    QByteArray data;
+};
+
+class dtkComposerNodeFileWritePrivate
+{
+public:
+    dtkComposerTransmitterReceiver<QByteArray> receiver_data;
+    dtkComposerTransmitterReceiver<QString> receiver_file;
+
+public:
+    dtkComposerTransmitterEmitter<bool> emitter;
+
+public:
+    bool success;
+};
+
 #endif

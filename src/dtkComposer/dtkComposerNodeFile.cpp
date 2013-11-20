@@ -304,3 +304,148 @@ QString dtkComposerNodeFileList::outputLabelHint(int port)
 
     return dtkComposerNode::outputLabelHint(port);
 }
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileRead implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileRead::dtkComposerNodeFileRead(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileReadPrivate)
+{
+    this->appendReceiver(&(d->receiver_file));
+
+    d->emitter.setData(&(d->data));
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeFileRead::~dtkComposerNodeFileRead(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileRead::run(void)
+{
+    QString filename;
+
+    if(!d->receiver_file.isEmpty()) {
+        filename = *(d->receiver_file.data());
+
+        if (!filename.isEmpty()) {
+            QFile file(filename);
+            if (!file.open(QIODevice::ReadOnly)) return;
+            d->data = file.readAll();
+        }
+    }
+}
+
+QString dtkComposerNodeFileRead::type(void)
+{
+    return "fileRead";
+}
+
+QString dtkComposerNodeFileRead::titleHint(void)
+{
+    return "FileRead";
+}
+
+QString dtkComposerNodeFileRead::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "bytes";
+    if(port == 1)
+        return "file";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileRead::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "bytes";
+
+    return dtkComposerNode::outputLabelHint(port);
+}
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileWrite implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileWrite::dtkComposerNodeFileWrite(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileWritePrivate)
+{
+    this->appendReceiver(&(d->receiver_data));
+    this->appendReceiver(&(d->receiver_file));
+
+    d->success = false;
+    d->emitter.setData(&(d->success));
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeFileWrite::~dtkComposerNodeFileWrite(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileWrite::run(void)
+{
+    d->success = false;
+    if(!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
+         QString filename = *(d->receiver_file.data());
+
+        if (!filename.isEmpty()) {
+            QFile file(filename);
+
+            if(!file.open(QIODevice::WriteOnly)) {
+                dtkError() << "Can't open file for writing"<< filename;
+                return;
+            }
+
+            file.write(*(d->receiver_data.data()));
+            d->success = file.flush();
+            file.close();
+            //we should use QSaveFile, but only available in Qt 5.1.
+        } else {
+            dtkWarn() << Q_FUNC_INFO << "file name is empty";
+        }
+
+    } else {
+        dtkWarn() << Q_FUNC_INFO << "The input are not all set. Nothing is done.";
+    }
+}
+
+QString dtkComposerNodeFileWrite::type(void)
+{
+    return "fileWrite";
+}
+
+QString dtkComposerNodeFileWrite::titleHint(void)
+{
+    return "FileWrite";
+}
+
+QString dtkComposerNodeFileWrite::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "bytes";
+    if(port == 1)
+        return "file";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileWrite::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "success";
+
+    return dtkComposerNode::inputLabelHint(port);
+}

@@ -100,4 +100,58 @@ private:
     dtkComposerNodeFileListPrivate *d;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileRead definition
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeFileReadPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeFileRead : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeFileRead(void);
+    ~dtkComposerNodeFileRead(void);
+
+public:
+    void run(void);
+
+public:
+    QString type(void);
+    QString titleHint(void);
+
+public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
+
+private:
+    dtkComposerNodeFileReadPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileWrite definition
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeFileWritePrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeFileWrite : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeFileWrite(void);
+    ~dtkComposerNodeFileWrite(void);
+
+public:
+    void run(void);
+
+public:
+    QString type(void);
+    QString titleHint(void);
+
+public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
+
+private:
+    dtkComposerNodeFileWritePrivate *d;
+};
+
 #endif

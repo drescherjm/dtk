@@ -357,8 +357,6 @@ QString dtkComposerNodeFileRead::titleHint(void)
 QString dtkComposerNodeFileRead::inputLabelHint(int port)
 {
     if(port == 0)
-        return "bytes";
-    if(port == 1)
         return "file";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -409,7 +407,11 @@ void dtkComposerNodeFileWrite::run(void)
                 return;
             }
 
-            file.write(*(d->receiver_data.data()));
+            qlonglong size = file.write(*(d->receiver_data.data()));
+            if (size < 0) {
+                dtkWarn() << "error while writing to file" << filename << file.errorString();
+                return;
+            }
             d->success = file.flush();
             file.close();
             //we should use QSaveFile, but only available in Qt 5.1.

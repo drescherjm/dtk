@@ -26,9 +26,15 @@ class %NodeName%Private
 {
 public:
     /*
+      Here one must declare the pointer to the process that is wrapped by
+      the node.
+    */
+    %WrappedClass% *process;
+
+public:
+    /*
       Here one must declare the inputs of the node using
       dtkComposerTransmitterReceiver<T>, eg:
-
       \code
       dtkComposerTransmitterReceiver<qlonglong> receiver_index;
       dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
@@ -40,22 +46,11 @@ public:
     /*
       Here one must declare the outputs of the node using
       dtkComposerTransmitterEmitter<T>, eg:
-
       \code
-      dtkComposerTransmitterEmitter<dtkAbstractProcess> emitter_process;
+      dtkComposerTransmitterEmitter<dtkAbstractProcess> emitter_data;
       dtkComposerTransmitterEmitterVector<qreal> emitter_scalar_array;
       \endcode
     */
-
-public:
-    /*
-      Here one must declare the pointer to the process that is wrapped by
-      the node. Uncomment the following line if necessary.
-
-      \code
-      %WrappedClass% *process;
-      \endcode
-     */
 
 public:
     /*
@@ -83,19 +78,13 @@ public:
     node.
 
     \code
-    this->appendEmitter(&(d->emitter_process));
+    this->appendEmitter(&(d->emitter_data));
     this->appendEmitter(&(d->emitter_scalar_array));
-    \endcode
-
-    Do not forget to set the any pointers to NULL.
-
-    \code
-    d->process = NULL;
     \endcode
  */
 %NodeName%::%NodeName%(void) : dtkComposerNodeLeafProcess(), d(new %NodeName%Private)
 {
-
+    d->process = NULL;
 }
 
 //! Node destructor
@@ -111,6 +100,8 @@ public:
  */
 %NodeName%::~%NodeName%(void)
 {
+    this->clearProcess();
+
     delete d;
 
     d = NULL;
@@ -119,26 +110,21 @@ public:
 //! Returns the string that enables the node factory to identify the
 //! node.
 /*
-    By convention, this string is the name of the node class.
+    By convention, this string is the name of the node class minus the
+    root part "ComposerNode".
  */
 QString %NodeName%::type(void)
 {
-    return "%NodeName%";
+    return "%NodeName%"; // Do not forget to remove "ComposerNode" from type name.
 }
 
 //! Returns the title of the node that appears in the composer GUI.
-/*
-    The title should indicates the kind of process that it wraps.
- */
 QString %NodeName%::titleHint(void)
 {
     return "%WrappedClass%";
 }
 
 //! Returns the name of the input identified by its index \a port.
-/*
-    
- */
 QString %NodeName%::inputLabelHint(int port)
 {
     //  Here is a sample of what you can write. (You can erase it of
@@ -159,15 +145,12 @@ QString %NodeName%::inputLabelHint(int port)
 }
 
 //! Returns the name of the output identified by its index \a port.
-/*
-    
- */
 QString %NodeName%::outputLabelHint(int port)
 {
     /*
     switch (port) {
     case 0:
-        return "process";
+        return "data";
     case 1:
         return "scalar array";
     default:
@@ -176,11 +159,7 @@ QString %NodeName%::outputLabelHint(int port)
     */
 }
    
-//! Return true if the wrapped process is abstract, that is if there are
-//! likely plugins that implement this process.
-/*
-    
- */
+//! Return true if the wrapped process is abstract.
 bool %NodeName%::isAbstractProcess(void) const 
 {
     // Uncomment the line you need (Please, erase the other line and
@@ -191,29 +170,22 @@ bool %NodeName%::isAbstractProcess(void) const
 }
 
 //! Returns identifier of the wrapped process.
-/*
-    
- */
 QString %NodeName%::abstractProcessType(void) const 
 { 
     return "%WrappedClass%"; 
 }
 
+void %NodeName%::setProcess(dtkAbstractProcess *process)
+{
+    d->process = dynamic_cast<%WrappedClass% *>(process);
+}
+
+dtkAbstractProcess *%NodeName%::process(void) const
+{
+    return d->process;
+}
+
 //! Executes the logic of the node.
-/*
-    Firstly, one checks that the required receivers are all connected.
-    Secondly, one retrieves the process from these receivers. Thirdly, if
-    the wrapped process is abstract, one has to instanciate it using
-    following code:
-
-    \code
-    if (this->implementationHasChanged())
-        d->process = reinterpret_cast<%WrappedClass%*>(this->process());
-    \endcode
-
-    After these first steps, one can set the input of the process, update
-    it and then set the emitters using process outputs.
- */
 void %NodeName%::run(void)
 {
     //  Here is a sample of what can be the logic of a process node. (You
@@ -222,34 +194,32 @@ void %NodeName%::run(void)
     /* 
     if (!d->receiver_index.isEmpty() && !d->receiver_vector.isEmpty() && !d->receiver_process_array.isEmpty()) {
 
+        if (!d->process) {
+            dtkWarn() << Q_FUNC_INFO << "No process instanciated, abort:"<< this->currentImplementation();
+            d->emitter_data.clearData();
+            d->emitter_scalar_array.clearData();
+            return;
+        }
+
         qlonglong index = *d->receiver_index.process();
         dtkVectorReal *vector = d->receiver_vector.process();
         dtkContainerVector<dtkAbstractProcess*> *process_array = d->receiver_process_array.process();
 
-        if (this->implementationHasChanged())
-            d->process = reinterpret_cast<%WrappedClass%*>(this->process());
-
-        if (!d->process) {
-            dtkWarn() << "no process, abort "<< this->currentImplementation();
-            return;
-        }
-
         d->process->setParamater(index, 0);
         
-        for (int i = 0; i < vector->size(); ++i)
+        for(int i = 0; i < vector->size(); ++i)
             d->process->setParamater(*vector[i], i+1);
-
         
-        d->process->setProcess(process_array->first());
+        d->process->setData(process_array->first());
 
         d->process->update();
 
-        d->emitter_process.setProcess(d->process);
-        d->emitter_scalar_array.setProcess(reinterpret_cast<dtkContainerVector<qreal> *>(d->process->process()));
+        d->emitter_process.setData(d->process->output());
+        d->emitter_scalar_array.setProcess(reinterpret_cast<dtkContainerVector<qreal> *>(d->process->data()));
 
     } else {
-        dtkWarn() << "The input are not all set. Nothing is done.";
-        d->emitter_process.clearData();
+        dtkWarn() << Q_FUNC_INFO << "The input are not all set. Nothing is done.";
+        d->emitter_data.clearData();
         d->emitter_scalar_array.clearData();
         return;
     }

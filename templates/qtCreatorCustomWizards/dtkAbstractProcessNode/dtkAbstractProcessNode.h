@@ -42,6 +42,11 @@ public:
     bool isAbstractProcess(void) const;
 
     QString abstractProcessType(void) const;
+
+public:
+    void setProcess(dtkAbstractProcess *process);
+
+    dtkAbstractProcess *process(void) const;
     
 public:
     void run(void);

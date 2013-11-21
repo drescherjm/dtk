@@ -384,6 +384,8 @@ dtkComposerNodeFileWrite::dtkComposerNodeFileWrite(void) : dtkComposerNodeLeaf()
     d->success = false;
     d->emitter.setData(&(d->success));
     this->appendEmitter(&(d->emitter));
+    d->emitter_file.setData(&(d->filename));
+    this->appendEmitter(&(d->emitter_file));
 }
 
 dtkComposerNodeFileWrite::~dtkComposerNodeFileWrite(void)
@@ -397,19 +399,19 @@ void dtkComposerNodeFileWrite::run(void)
 {
     d->success = false;
     if(!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
-         QString filename = *(d->receiver_file.data());
+         d->filename = *(d->receiver_file.data());
 
-        if (!filename.isEmpty()) {
-            QFile file(filename);
+        if (!d->filename.isEmpty()) {
+            QFile file(d->filename);
 
             if(!file.open(QIODevice::WriteOnly)) {
-                dtkError() << "Can't open file for writing"<< filename;
+                dtkError() << "Can't open file for writing"<< d->filename;
                 return;
             }
 
             qlonglong size = file.write(*(d->receiver_data.data()));
             if (size < 0) {
-                dtkWarn() << "error while writing to file" << filename << file.errorString();
+                dtkWarn() << "error while writing to file" << d->filename << file.errorString();
                 return;
             }
             d->success = file.flush();
@@ -448,6 +450,8 @@ QString dtkComposerNodeFileWrite::outputLabelHint(int port)
 {
     if(port == 0)
         return "success";
+    if(port == 1)
+        return "file";
 
     return dtkComposerNode::inputLabelHint(port);
 }

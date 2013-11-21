@@ -94,9 +94,11 @@ public:
 
 public:
     dtkComposerTransmitterEmitter<bool> emitter;
+    dtkComposerTransmitterEmitter<QString> emitter_file;
 
 public:
     bool success;
+    QString filename;
 };
 
 #endif

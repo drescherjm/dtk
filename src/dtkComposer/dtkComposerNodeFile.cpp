@@ -165,11 +165,6 @@ void dtkComposerNodeFile::setValue(QString value)
 
 
 
-
-
-
-
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileExists implementation
 // /////////////////////////////////////////////////////////////////
@@ -224,4 +219,235 @@ QString dtkComposerNodeFileExists::outputLabelHint(int port)
         return "exists";
 
     return dtkComposerNode::outputLabelHint(port);
+}
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileList implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileList::dtkComposerNodeFileList(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileListPrivate)
+{
+    this->appendReceiver(&(d->receiver_dir));
+    QList<int> variant_list;
+    variant_list << QMetaType::QString << QMetaType::QStringList;
+    d->receiver_filters.setDataTypes(variant_list);
+    this->appendReceiver(&(d->receiver_filters));
+
+    d->emitter_files.setData(&(d->files));
+    this->appendEmitter(&(d->emitter_files));
+}
+
+dtkComposerNodeFileList::~dtkComposerNodeFileList(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileList::run(void)
+{
+    if (!d->receiver_dir.isEmpty()) {
+        d->files.clear();
+        if (d->receiver_dir.data()) {
+            QString dirname = *(d->receiver_dir.data());
+            QDir dir(dirname);
+            if (!d->receiver_filters.isEmpty()) {
+
+                switch(d->receiver_filters.dataType()) {
+                case QMetaType::QString: {
+                    dir.setNameFilters(QStringList(*(d->receiver_filters.data<QString>())));
+                    break;
+                }
+                case QMetaType::QStringList: {
+                    dir.setNameFilters(*(d->receiver_filters.data<QStringList>()));
+                    break;
+                }
+                default:
+                    dtkWarn() << "Type" << d->receiver_filters.dataType() << "is not handled by the node. Only QString and QString List are supported";
+                    break;
+                }
+            }
+            foreach (QString file, dir.entryList()) {
+                d->files << file;
+            }
+        }
+    }
+}
+
+QString dtkComposerNodeFileList::type(void)
+{
+    return "fileList";
+}
+
+QString dtkComposerNodeFileList::titleHint(void)
+{
+    return "FileList";
+}
+
+QString dtkComposerNodeFileList::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "directory";
+    if(port == 1)
+        return "pattern";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileList::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "files";
+
+    return dtkComposerNode::outputLabelHint(port);
+}
+
+
+
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileRead implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileRead::dtkComposerNodeFileRead(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileReadPrivate)
+{
+    this->appendReceiver(&(d->receiver_file));
+
+    d->emitter.setData(&(d->data));
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeFileRead::~dtkComposerNodeFileRead(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileRead::run(void)
+{
+    QString filename;
+
+    if(!d->receiver_file.isEmpty()) {
+        filename = *(d->receiver_file.data());
+
+        if (!filename.isEmpty()) {
+            QFile file(filename);
+            if (!file.open(QIODevice::ReadOnly)) return;
+            d->data = file.readAll();
+        }
+    }
+}
+
+QString dtkComposerNodeFileRead::type(void)
+{
+    return "fileRead";
+}
+
+QString dtkComposerNodeFileRead::titleHint(void)
+{
+    return "FileRead";
+}
+
+QString dtkComposerNodeFileRead::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "file";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileRead::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "bytes";
+
+    return dtkComposerNode::outputLabelHint(port);
+}
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileWrite implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileWrite::dtkComposerNodeFileWrite(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFileWritePrivate)
+{
+    this->appendReceiver(&(d->receiver_data));
+    this->appendReceiver(&(d->receiver_file));
+
+    d->success = false;
+    d->emitter.setData(&(d->success));
+    this->appendEmitter(&(d->emitter));
+}
+
+dtkComposerNodeFileWrite::~dtkComposerNodeFileWrite(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkComposerNodeFileWrite::run(void)
+{
+    d->success = false;
+    if(!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
+         QString filename = *(d->receiver_file.data());
+
+        if (!filename.isEmpty()) {
+            QFile file(filename);
+
+            if(!file.open(QIODevice::WriteOnly)) {
+                dtkError() << "Can't open file for writing"<< filename;
+                return;
+            }
+
+            qlonglong size = file.write(*(d->receiver_data.data()));
+            if (size < 0) {
+                dtkWarn() << "error while writing to file" << filename << file.errorString();
+                return;
+            }
+            d->success = file.flush();
+            file.close();
+            //we should use QSaveFile, but only available in Qt 5.1.
+        } else {
+            dtkWarn() << Q_FUNC_INFO << "file name is empty";
+        }
+
+    } else {
+        dtkWarn() << Q_FUNC_INFO << "The input are not all set. Nothing is done.";
+    }
+}
+
+QString dtkComposerNodeFileWrite::type(void)
+{
+    return "fileWrite";
+}
+
+QString dtkComposerNodeFileWrite::titleHint(void)
+{
+    return "FileWrite";
+}
+
+QString dtkComposerNodeFileWrite::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "bytes";
+    if(port == 1)
+        return "file";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeFileWrite::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "success";
+
+    return dtkComposerNode::inputLabelHint(port);
 }

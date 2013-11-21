@@ -82,6 +82,7 @@ public:
     qlonglong *value_i;
     qreal     *value_r;
     QString   *value_s;
+    QByteArray *value_qb;
 
 public:
     int metatypes[4];

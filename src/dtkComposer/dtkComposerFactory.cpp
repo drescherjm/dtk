@@ -189,6 +189,21 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["File Exists"] = QStringList() << "file" << "exists";
     d->types["File Exists"] = "fileExists";
 
+    d->nodes << "File List";
+    d->descriptions["File List"] = "<p>Returns a list of the names of all the files and directories in the directory, according to the attribute filters </p>";
+    d->tags["File List"] = QStringList() << "file" << "directory";
+    d->types["File List"] = "fileList";
+
+    d->nodes << "File Read";
+    d->descriptions["File Read"] = "<p> Read a file as a binary (QByteArray)</p>";
+    d->tags["File Read"] = QStringList() << "file" << "binary" << "qbytearray" <<"read";
+    d->types["File Read"] = "fileRead";
+
+    d->nodes << "File Write";
+    d->descriptions["File Write"] = "<p> Write a binary object (QByteArray) into a file</p>";
+    d->tags["File Write"] = QStringList() << "file" << "binary" << "qbytearray"<< "write";
+    d->types["File Write"] = "fileWrite";
+
     // Number operators
 
     this->initNodeNumberOperatorUnary();
@@ -1302,6 +1317,15 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "fileExists")
         return new dtkComposerNodeFileExists;
+
+    if(type == "fileList")
+        return new dtkComposerNodeFileList;
+
+    if(type == "fileRead")
+        return new dtkComposerNodeFileRead;
+
+    if(type == "fileWrite")
+        return new dtkComposerNodeFileWrite;
 
     // container nodes
 

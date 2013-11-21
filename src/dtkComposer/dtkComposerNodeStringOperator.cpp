@@ -182,6 +182,9 @@ void dtkComposerNodeStringListAppend::run(void)
     if (!d->receiver_list.isEmpty() && !d->receiver_string.isEmpty() ) {
         d->list = *(d->receiver_list.data());
         d->list.append(*(d->receiver_string.data()));
+    } else if (d->receiver_list.isEmpty() && !d->receiver_string.isEmpty() ) {
+        d->list.clear();
+        d->list.append(*(d->receiver_string.data()));
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
         d->emitter.clearData();

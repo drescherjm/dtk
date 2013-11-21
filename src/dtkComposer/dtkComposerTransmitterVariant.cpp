@@ -243,10 +243,11 @@ template <> QString *dtkComposerTransmitterVariant::data(void)
 
 dtkComposerTransmitterVariant::dtkComposerTransmitterVariant(dtkComposerNode *parent) : dtkComposerTransmitter(parent), e(new dtkComposerTransmitterVariantPrivate)
 {
-    e->value_i = new qlonglong;
-    e->value_r = new double;
-    e->value_s = new QString;
-    e->value_b = new bool;
+    e->value_i  = new qlonglong;
+    e->value_r  = new double;
+    e->value_s  = new QString;
+    e->value_b  = new bool;
+    e->value_qb = new QByteArray;
 
     e->active_emitter = NULL;
     e->active_variant = NULL;
@@ -349,7 +350,6 @@ void dtkComposerTransmitterVariant::setDataFrom(QByteArray& array, dtkAbstractOb
 
 QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool self, dtkAbstractObject *object)
 {
-
     qint64 data_type;
     QDataStream stream(&array, QIODevice::ReadOnly);
     qlonglong header_length=sizeof(data_type);
@@ -387,7 +387,7 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
         } else {
             qlonglong i;
             stream >> i;
-            QVariant::fromValue(&i);
+            return QVariant::fromValue(&i);
         }
         break;
     }
@@ -397,7 +397,17 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
             this->setData<QString>(e->value_s);
         } else {
             QString s = QString(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-            QVariant::fromValue(&s);
+            return QVariant::fromValue(&s);
+        }
+        break;
+    }
+    case QMetaType::QByteArray: {
+        if (self) {
+            *(e->value_qb) = array.remove(0,header_length);
+             this->setData<QByteArray>(e->value_qb);
+         } else {
+            QByteArray qb = array.remove(0,header_length);
+            return QVariant::fromValue(&qb);
         }
         break;
     }
@@ -623,6 +633,11 @@ QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool se
     case QMetaType::QString: {
         stream << data_type;
         array.append((self) ? this->data<QString>()->toAscii() : v.value<QString>().toAscii());
+        break;
+    }
+    case QMetaType::QByteArray: {
+        stream << data_type;
+        array.append( (self) ? *this->data<QByteArray>() : v.value<QByteArray>());
         break;
     }
     default:

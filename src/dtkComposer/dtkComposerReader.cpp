@@ -732,6 +732,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 }
             }
         }
+
+	this->extend(node,leaf);
     }
 
     d->node = t;
@@ -778,7 +780,6 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
             edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
-
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
@@ -794,4 +795,10 @@ handle_failure:
     delete edge;
     return NULL;
 
+}
+
+void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf)
+{
+  Q_UNUSED(node);
+  Q_UNUSED(leaf);
 }

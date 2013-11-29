@@ -104,7 +104,7 @@ class DTKGUI_EXPORT dtkToolBox : public QScrollArea
     Q_PROPERTY(Order order READ order WRITE setOrder)
     Q_ENUMS(Order)
     Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode)
-    Q_ENUMS(DisplayMode)    
+    Q_ENUMS(DisplayMode)
 
 public:
     enum Order {

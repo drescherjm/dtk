@@ -99,7 +99,7 @@ public:
 // ///////////////////////////////////////////////////////////////////
 
 dtkToolBoxItem::dtkToolBoxItem(QWidget *parent) : QFrame(parent), d(new dtkToolBoxItemPrivate)
-{   
+{
     d->layout = new QVBoxLayout(this);
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setAlignment(Qt::AlignTop);
@@ -155,6 +155,8 @@ void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon
         d->widget->hide();
 
     d->layout->addWidget(d->widget);
+
+    this->resize(d->button->size() + d->widget->size());
 }
 
 void dtkToolBoxItem::setExpanded(bool expanded)
@@ -218,7 +220,7 @@ dtkToolBoxItem *dtkToolBoxItem::fromObject(QObject *object, int hierarchy_level)
     QFrame *frame = new QFrame;
 
     QVBoxLayout *layout = new QVBoxLayout(frame);
-    layout->setContentsMargins(0, 0, 0, 12);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(2);
     layout->setAlignment(Qt::AlignTop);
     
@@ -229,9 +231,11 @@ dtkToolBoxItem *dtkToolBoxItem::fromObject(QObject *object, int hierarchy_level)
         layout->addWidget(w);
     }
 
+    frame->adjustSize();
+
     dtkToolBoxItem *item = new dtkToolBoxItem;
     item->setWidget(frame, qPrintable(object->objectName()));
-    
+
     return item;
 }
 

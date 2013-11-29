@@ -32,6 +32,7 @@ class dtkComposerScene;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkComposerSceneNote;
+class dtkComposerSceneNodeLeaf;
 
 class DTKCOMPOSER_EXPORT dtkComposerReader
 {
@@ -54,6 +55,9 @@ protected:
    virtual dtkComposerSceneNote *readNote(QDomNode node);
    virtual dtkComposerSceneNode *readNode(QDomNode node, bool paste = false);
    virtual dtkComposerSceneEdge *readEdge(QDomNode node);
+
+ protected:
+   virtual void extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf);
 
 private:
     dtkComposerReaderPrivate *d;

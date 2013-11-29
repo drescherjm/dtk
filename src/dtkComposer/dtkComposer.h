@@ -37,6 +37,8 @@ class dtkComposerStack;
 class dtkComposerView;
 class dtkComposerCompass;
 class dtkComposerPath;
+class dtkComposerWriter;
+class dtkComposerReader;
 
 class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
 {
@@ -48,6 +50,8 @@ public:
 
 public:
     void setFactory(dtkComposerFactory *factory);
+    void setWriter(dtkComposerWriter *writer);
+    void setReader(dtkComposerReader *reader);
 
 public slots:
     virtual bool   open(const QUrl& url);
@@ -78,6 +82,8 @@ public:
     dtkComposerStack *stack(void);
     dtkComposerView *view(void);
     dtkComposerPath *path(void);
+    dtkComposerWriter *writer(void);
+    dtkComposerReader *reader(void);
 
 public:
     void updateRemotes(dtkComposerSceneNodeComposite * composite);

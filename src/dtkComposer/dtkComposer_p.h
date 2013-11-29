@@ -33,6 +33,8 @@ class dtkComposerPath;
 class dtkComposerScene;
 class dtkComposerStack;
 class dtkComposerView;
+class dtkComposerWriter;
+class dtkComposerReader;
 
 class DTKCOMPOSER_EXPORT dtkComposerPrivate : public QObject
 {
@@ -54,6 +56,8 @@ public:
     dtkComposerStack *stack;
     dtkComposerView *view;
     dtkComposerPath *path;
+    dtkComposerWriter *writer;
+    dtkComposerReader *reader;
 
 public:
     QString fileName;

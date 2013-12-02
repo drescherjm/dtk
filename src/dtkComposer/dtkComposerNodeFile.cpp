@@ -250,29 +250,38 @@ dtkComposerNodeFileList::~dtkComposerNodeFileList(void)
 void dtkComposerNodeFileList::run(void)
 {
     if (!d->receiver_dir.isEmpty()) {
+      
         d->files.clear();
-        if (d->receiver_dir.data()) {
+      
+	if (d->receiver_dir.data()) {
+	  
             QString dirname = *(d->receiver_dir.data());
             QDir dir(dirname);
+	    
             if (!d->receiver_filters.isEmpty()) {
-
+	      
                 switch(d->receiver_filters.dataType()) {
-                case QMetaType::QString: {
+              
+		case QMetaType::QString: {
                     dir.setNameFilters(QStringList(*(d->receiver_filters.data<QString>())));
                     break;
                 }
-                case QMetaType::QStringList: {
+                
+		case QMetaType::QStringList: {
                     dir.setNameFilters(*(d->receiver_filters.data<QStringList>()));
                     break;
                 }
-                default:
+                
+		default:
                     dtkWarn() << "Type" << d->receiver_filters.dataType() << "is not handled by the node. Only QString and QString List are supported";
                     break;
                 }
             }
-            foreach (QString file, dir.entryList()) {
-                d->files << file;
+
+            foreach (QFileInfo file, dir.entryInfoList()) {
+	      d->files << file.absoluteFilePath();
             }
+
         }
     }
 }

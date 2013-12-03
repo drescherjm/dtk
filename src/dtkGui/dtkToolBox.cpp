@@ -66,7 +66,7 @@ void dtkToolBoxButton::paintEvent(QPaintEvent *event)
 
     QPainter paint(this);
     QPainter *p = &paint;
-    QStyleOptionToolBox opt;
+    QStyleOptionToolBoxV2 opt;
     this->initStyleOption(&opt);
     this->style()->drawControl(QStyle::CE_ToolBoxTab, &opt, p, this->parentWidget());
 }
@@ -140,6 +140,16 @@ QString dtkToolBoxItem::name(void) const
     return d->button->text();
 }
 
+void dtkToolBoxItem::showButton(void)
+{
+    d->button->show();
+}
+
+void dtkToolBoxItem::hideButton(void)
+{
+    d->button->hide();
+}
+
 void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon &icon)
 {
     if (!widget) {
@@ -156,7 +166,10 @@ void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon
 
     d->layout->addWidget(d->widget);
 
-    this->resize(d->button->size() + d->widget->size());
+    if (d->button->isVisible())
+        this->resize(d->button->size() + d->widget->size());
+    else
+        this->resize(d->widget->size());        
 }
 
 void dtkToolBoxItem::setExpanded(bool expanded)

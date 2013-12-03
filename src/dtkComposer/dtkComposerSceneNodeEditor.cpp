@@ -673,7 +673,8 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             
             if (object) {
                 dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
-                item->setContentsMargins(7, 0, 0, 0);
+                item->setContentsMargins(0, 0, 0, 0);
+                item->hideButton();
                 qreal height = item->size().height();
                 d->node_toolbox->resize(this->size().width(), height);
                 d->node_toolbox->setMinimumHeight(height);
@@ -1245,7 +1246,8 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
 
     if (object) {
         dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
-        item->setContentsMargins(7, 0, 0, 0);
+        item->setContentsMargins(0, 0, 0, 0);
+        item->hideButton();
         qreal height = item->size().height();
         d->node_toolbox->resize(this->size().width(), height);
         d->node_toolbox->setMinimumHeight(height);

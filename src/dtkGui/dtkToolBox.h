@@ -62,7 +62,7 @@ class DTKGUI_EXPORT dtkToolBoxItem : public QFrame
     Q_OBJECT
     Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded)
     Q_PROPERTY(bool enforced READ isEnforced WRITE setEnforced)
-    Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(QString  name READ       name WRITE     setName)
 
 public:
     explicit dtkToolBoxItem(QWidget *parent = 0);
@@ -71,7 +71,11 @@ public:
 public:
     bool isExpanded(void) const;
     bool isEnforced(void) const;
-    QString name(void) const;
+    QString    name(void) const;
+
+public:
+    void showButton(void);
+    void hideButton(void);
 
 public:
     void setWidget(QWidget *widget, const QString& text, const QIcon &icon = QIcon());
@@ -80,6 +84,8 @@ public slots:
     void setExpanded(bool expanded);
     void setEnforced(bool enforced);
     void setName(const QString& name);
+
+public slots:
     void onButtonClicked(void);
 
 public:

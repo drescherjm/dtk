@@ -3,10 +3,6 @@
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
-## Version: $Id$
-## Last-Updated: mer. déc.  4 15:15:44 2013 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 231
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,7 +23,7 @@ include (GenerateExportHeader)
 ## Configure cmake variables
 ## #################################################################
 
-set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type" FORCE)
+set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type")
 
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE OFF)

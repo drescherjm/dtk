@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Mar  1 14:34:49 2012 (+0100)
 ## Version: $Id$
-## Last-Updated: mar. nov.  6 14:35:47 2012 (+0100)
+## Last-Updated: mar. déc.  3 09:48:12 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 35
+##     Update #: 37
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,10 +26,12 @@ project(dtkLog)
 set(${PROJECT_NAME}_HEADERS
   dtkLog.h
   dtkLogger.h
+  dtkLogger_p.h
   dtkLogEngine.h
   dtkLogDestination.h
   dtkLogModel.h
-  dtkLogView.h)
+  dtkLogView.h
+  dtkLogView_p.h)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkLogModel.h
@@ -121,5 +123,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

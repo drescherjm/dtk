@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:51:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. oct. 15 11:06:05 2013 (+0200)
+## Last-Updated: mer. déc.  4 15:03:39 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 66
+##     Update #: 70
 ######################################################################
 ## 
 ### Commentary: 
@@ -35,9 +35,10 @@ set(DTK_HAVE_PLOT "@DTK_HAVE_PLOT@")
 set(DTK_HAVE_VRPN "@DTK_HAVE_VRPN@")
 set(DTK_HAVE_NITE "@DTK_HAVE_NITE@")
 set(DTK_HAVE_PYTHON "@DTK_HAVE_PYTHON@")
-set(DTK_BUILD_WRAPPERS "@DTK_BUILD_WRAPPERS@")
 set(DTK_HAVE_TCL "@DTK_HAVE_TCL@")
 
+set(DTK_BUILD_DISTRIBUTED  "@DTK_BUILD_DISTRIBUTED@")
+set(DTK_BUILD_PLOT  "@DTK_BUILD_PLOT@")
 set(DTK_BUILD_VIDEO "@DTK_BUILD_VIDEO@")
 set(DTK_BUILD_VR "@DTK_BUILD_VR@")
 set(DTK_BUILD_WRAPPERS "@DTK_BUILD_WRAPPERS@")

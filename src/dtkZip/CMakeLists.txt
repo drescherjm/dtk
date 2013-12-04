@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 21 12:08:14 2011 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Oct 21 10:49:21 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 64
+## Last-Updated: jeu. nov. 28 22:48:37 2013 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 70
 ######################################################################
 ## 
 ### Commentary: 
@@ -110,8 +110,8 @@ install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 ## #################################################################
 

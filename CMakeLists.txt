@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:30:43 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. oct. 15 09:18:48 2013 (+0200)
+## Last-Updated: jeu. nov. 28 22:52:33 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 398
+##     Update #: 402
 ######################################################################
 ## 
 ### Commentary: 
@@ -32,6 +32,8 @@ mark_as_advanced(${PROJECT_NAME}_VERSION_MINOR)
 mark_as_advanced(${PROJECT_NAME}_VERSION_BUILD)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include("GNUInstallDirs")
 
 option(BUILD_SHARED_LIBS       "Build shared libraries"  true)
 option(DTK_BUILD_TOOLS         "Build tools"             true)

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:05:55 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. sept. 25 14:15:28 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 214
+## Last-Updated: mer. déc.  4 15:15:44 2013 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 231
 ######################################################################
 ## 
 ### Commentary: 
@@ -69,9 +69,9 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_BINARY_DIR})
 
-set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR})
 set(${PROJECT_NAME}_RUNTIME_OUTPUT_DIRECTORY bin)
-set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY lib)
+set(${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR})
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${${PROJECT_NAME}_LIBRARY_OUTPUT_DIRECTORY})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${${PROJECT_NAME}_ARCHIVE_OUTPUT_DIRECTORY})
@@ -92,8 +92,8 @@ set(${PROJECT_NAME}_USE_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Use.cmake)
 set(${PROJECT_NAME}_INSTALL_INCLUDE_DIR ${${PROJECT_NAME}_INSTALL_INCLUDE_DIR} ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/dtk)
 set(${PROJECT_NAME}_INSTALL_LIBRARY_DIR ${LIBRARY_INSTALL_OUTPUT_PATH})
 set(${PROJECT_NAME}_INSTALL_RUNTIME_DIR ${RUNTIME_INSTALL_OUTPUT_PATH})
-set(${PROJECT_NAME}_INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/cmake)
-set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/cmake/${PROJECT_NAME}Use.cmake)
+set(${PROJECT_NAME}_INSTALL_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+set(${PROJECT_NAME}_INSTALL_USE_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/${PROJECT_NAME}Use.cmake)
 
 ## #################################################################
 ## Setup configration files
@@ -184,17 +184,21 @@ install(FILES
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
+  ${PROJECT_SOURCE_DIR}/cmake/FindQwt.cmake
+  ${PROJECT_SOURCE_DIR}/cmake/FindFFmpeg.cmake
   ${PROJECT_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
   DESTINATION
-  cmake)
+  ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 endif()
+
+install(FILES  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.h DESTINATION include/${PROJECT_NAME})
 
 if(EXISTS ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake)
 install(FILES
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake
   DESTINATION
-  cmake)
+  ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 endif()

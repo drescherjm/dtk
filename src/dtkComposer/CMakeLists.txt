@@ -49,6 +49,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphView.h
   dtkComposerMachine.h
   dtkComposerMachineState.h
+  dtkComposerMetatype.h
   dtkComposerNode.h
   dtkComposerNodeArrayData.h
   dtkComposerNodeArrayDataExtractor.h
@@ -70,6 +71,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlWhile.h
   dtkComposerNodeData.h
   dtkComposerNodeFile.h
+  dtkComposerNodeFile_p.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   dtkComposerNodeLeafActor.h
@@ -122,6 +124,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerSceneNodeControl.h
   dtkComposerSceneNodeHandle.h
   dtkComposerSceneNodeEditor.h
+  dtkComposerSceneNodeEditor_p.h
   dtkComposerSceneNodeLeaf.h
   dtkComposerSceneNote.h
   dtkComposerScenePort.h
@@ -141,6 +144,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
   dtkComposerTransmitterVariant.h
+  dtkComposerTransmitterVariant_p.h
+  dtkComposerTransmitterVariant.tpp
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWriter.h)
@@ -507,5 +512,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

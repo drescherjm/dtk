@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Aug 29 15:02:12 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 363
+## Last-Updated: mar. déc.  3 09:41:22 2013 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 380
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,12 +28,17 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractData_p.h
   dtkAbstractDataFactory.h
   dtkAbstractDataReader.h
+  dtkAbstractDataReader_p.h
   dtkAbstractDataDeserializer.h
+  dtkAbstractDataDeserializer_p.h
   dtkAbstractDataSerializer.h
+  dtkAbstractDataSerializer_p.h
   dtkAbstractDataWriter.h
+  dtkAbstractDataWriter_p.h
   dtkAbstractDataComposite.h
   dtkAbstractDataComposite.tpp
   dtkAbstractDataConverter.h
+  dtkAbstractDataConverter_p.h
   dtkAbstractFactory.h
   dtkAbstractObject.h
   dtkAbstractObject_p.h
@@ -44,9 +49,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractView.h
   dtkAbstractView_p.h
   dtkAbstractViewAnimator.h
+  dtkAbstractViewAnimator_p.h
   dtkAbstractViewFactory.h
   dtkAbstractViewInteractor.h
+  dtkAbstractViewInteractor_p.h
   dtkAbstractViewNavigator.h
+  dtkAbstractViewNavigator_p.h
   dtkArray.h
   dtkArray.tpp
   dtkCpuid.h
@@ -55,6 +63,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPlugin_p.h
   dtkPluginManager.h
   dtkUpdater.h
+  dtkUpdater_p.h
   dtkSignalBlocker.h
   dtkSingleton.h
   dtkSingletonDeclare.h
@@ -278,5 +287,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME}
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

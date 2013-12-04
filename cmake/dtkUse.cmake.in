@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Tue Apr  6 10:55:48 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Wed Sep 18 14:13:54 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 19
+## Last-Updated: mer. déc.  4 15:14:18 2013 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 22
 ######################################################################
 ## 
 ### Commentary: 
@@ -26,7 +26,7 @@ if(NOT DTK_USE_FILE_INCLUDED)
    link_directories(${dtk_LIBRARY_DIRS})
 
    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${dtk_CMAKE_DIRS})
-   
+
    include(dtkDependencies)
    include(dtkBuild)
    include(dtkReporting)

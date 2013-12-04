@@ -1,20 +1,16 @@
-### dtkConfig.cmake.in --- 
-## 
+### dtkConfig.install.cmake.in ---
+##
 ## Author: Julien Wintz
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:51:02 2009 (+0200)
-## Version: $Id$
-## Last-Updated: Fri Apr 27 21:48:43 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 27
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change log:
-## 
+##
 ######################################################################
 
 set(dtk_VERSION_MAJOR  "@dtk_VERSION_MAJOR@")
@@ -27,3 +23,10 @@ set(dtk_LIBRARY_DIRS "@dtk_INSTALL_LIBRARY_DIR@")
 set(dtk_CMAKE_DIRS   "@dtk_INSTALL_CMAKE_DIR@")
 
 set(dtk_USE_FILE "@dtk_INSTALL_USE_FILE@")
+
+set(DTK_BUILD_DISTRIBUTED  "@DTK_BUILD_DISTRIBUTED@")
+set(DTK_BUILD_PLOT      "@DTK_BUILD_PLOT@")
+set(DTK_BUILD_VIDEO     "@DTK_BUILD_VIDEO@")
+set(DTK_BUILD_VR        "@DTK_BUILD_VR@")
+set(DTK_BUILD_WRAPPERS  "@DTK_BUILD_WRAPPERS@")
+

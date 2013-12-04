@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Sep 30 17:04:58 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 323
+## Last-Updated: mer. déc.  4 13:40:08 2013 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 327
 ######################################################################
 ## 
 ### Commentary: 
@@ -29,6 +29,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractContainerOrdered.h
   dtkAbstractContainerOrdered.tpp
   dtkAbstractContainerWrapper.h
+  dtkAbstractContainerWrapper.tpp
   dtkContainerVector.h
   dtkContainerVector.tpp
   dtkContainerVectorWrapper.h
@@ -123,5 +124,5 @@ install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME}
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -28,13 +28,13 @@
 #include "dtkComposerMachine.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerPath.h"
-#include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerView.h"
 #include "dtkComposerWriter.h"
+#include "dtkComposerReader.h"
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkLog/dtkLog.h>
@@ -106,6 +106,8 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
     d->stack = new dtkComposerStack;
     d->scene = new dtkComposerScene;
     d->evaluator = new dtkComposerEvaluator;
+    d->writer = new dtkComposerWriter;
+    d->reader = new dtkComposerReader;
 
     d->scene->setFactory(d->factory);
     d->scene->setMachine(d->machine);
@@ -124,6 +126,12 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
     d->evaluator->setGraph(d->graph);
 
+    d->writer->setScene(d->scene);
+
+    d->reader->setFactory(d->factory);
+    d->reader->setScene(d->scene);
+    d->reader->setGraph(d->graph);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -141,6 +149,8 @@ dtkComposer::~dtkComposer(void)
     delete d->graph;
     delete d->stack;
     delete d->evaluator;
+    delete d->writer;
+    delete d->reader;
     delete d;
     
     d = NULL;
@@ -153,6 +163,29 @@ void dtkComposer::setFactory(dtkComposerFactory *factory)
     d->factory = factory;
 
     d->scene->setFactory(d->factory);
+    d->reader->setFactory(d->factory);
+}
+
+void dtkComposer::setWriter(dtkComposerWriter *writer)
+{
+  if(writer) {
+    delete d->writer;
+
+    d->writer = writer;
+    d->writer->setScene(d->scene);
+  }
+}
+
+void dtkComposer::setReader(dtkComposerReader *reader)
+{
+  if(reader) {
+    delete d->reader;
+
+    d->reader = reader;
+    d->reader->setFactory(d->factory);
+    d->reader->setScene(d->scene);
+    d->reader->setGraph(d->graph);
+  }
 }
 
 bool dtkComposer::open(const QUrl& url)
@@ -171,11 +204,7 @@ bool dtkComposer::open(QString file)
 {
     if (!file.isEmpty()) {
 
-        dtkComposerReader reader;
-        reader.setFactory(d->factory);
-        reader.setScene(d->scene);
-        reader.setGraph(d->graph);
-        reader.read(file);
+        d->reader->read(file);
 
         d->fileName = file;
     }
@@ -195,9 +224,7 @@ bool dtkComposer::saveNode(dtkComposerSceneNodeComposite *node, QString file, dt
     if(!file.isEmpty())
         fName = file;
 
-    dtkComposerWriter writer;
-    writer.setScene(d->scene);
-    writer.writeNode(node, fName, type);
+    d->writer->writeNode(node, fName, type);
 
     const QFileInfo fi(fName);
     d->fileName = fi.absoluteFilePath();
@@ -209,11 +236,7 @@ bool dtkComposer::insert(QString file)
 {
     if (!file.isEmpty()) {
 
-        dtkComposerReader reader;
-        reader.setFactory(d->factory);
-        reader.setScene(d->scene);
-        reader.setGraph(d->graph);
-        reader.read(file, true);
+        d->reader->read(file, true);
     }
 
     return true;
@@ -222,12 +245,9 @@ bool dtkComposer::insert(QString file)
 void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
 #if defined(DTK_BUILD_DISTRIBUTED)
-    dtkComposerWriter writer;
-    writer.setScene(d->scene);
-
     foreach(dtkComposerSceneNode *node, composite->nodes()) {
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
-            remote->setComposition(writer.toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
+            remote->setComposition(d->writer->toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
         else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
             this->updateRemotes(sub);
         else if (dtkComposerSceneNodeControl *ctrl = dynamic_cast<dtkComposerSceneNodeControl *>(node))
@@ -282,15 +302,10 @@ void dtkComposer::reset(void)
 {
     dtkTrace() << "Resetting composition ";
 
-    dtkComposerWriter writer;
-    writer.setScene(d->scene);
-    QString data = writer.toXML(d->scene->root(), false).toString();
+    d->writer->setScene(d->scene);
+    QString data = d->writer->toXML(d->scene->root(), false).toString();
 
-    dtkComposerReader reader;
-    reader.setFactory(d->factory);
-    reader.setScene(d->scene);
-    reader.setGraph(d->graph);
-    reader.readString(data);
+    d->reader->readString(data);
 
     d->evaluator->reset();
 
@@ -339,4 +354,9 @@ dtkComposerPath *dtkComposer::path(void)
 dtkComposerCompass *dtkComposer::compass(void)
 {
     return d->compass;
+}
+
+dtkComposerWriter *dtkComposer::writer(void)
+{
+    return d->writer;
 }

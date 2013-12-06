@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Sep 23 14:43:54 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 75
+ * Last-Updated: jeu. nov. 28 09:46:35 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 78
  */
 
 /* Commentary: 
@@ -27,6 +27,7 @@ class dtkComposerSceneNode;
 class dtkComposerScenePort;
 class dtkComposerStack;
 class dtkComposerGraph;
+class dtkToolBox;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList
@@ -127,6 +128,9 @@ public:
 
 public:
     QComboBox *selector;
+
+public:
+    dtkToolBox *node_toolbox;
 };
 
 #endif

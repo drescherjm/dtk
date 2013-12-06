@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. déc.  4 11:48:55 2013 (+0100)
+## Last-Updated: ven. déc.  6 09:23:33 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 135
+##     Update #: 151
 ######################################################################
 ## 
 ### Commentary: 
@@ -91,7 +91,23 @@ if(UNIX AND NOT APPLE)
     ## #################################################################
 
     set(CPACK_GENERATOR "RPM")
+
     set(CPACK_RPM_PACKAGE_REQUIRES "qt")
+
+    if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
+      set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} " openmpi")
+    endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
+
+    if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+      set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} " ffmpeg-libs")
+    endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
+
+    if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+      set(CPACK_RPM_PACKAGE_REQUIRES ${CPACK_RPM_PACKAGE_REQUIRES} " qwt")
+    endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+
+    message(STATUS "RPM REQUIRES: " ${CPACK_RPM_PACKAGE_REQUIRES})
+
     set(CPACK_RPM_PACKAGE_LICENSE "BSD")
     set(CPACK_RPM_PACKAGE_GROUP "System Environment/Libraries")
     set(CPACK_INSTALL_STUFF  ${CMAKE_BINARY_DIR})

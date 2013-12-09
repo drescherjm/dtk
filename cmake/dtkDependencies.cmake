@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. nov.  5 11:31:07 2013 (+0100)
-##           By: edelclau
-##     Update #: 179
+## Last-Updated: Mon Dec  9 11:23:58 2013 (+0100)
+##           By: Selim Kraria
+##     Update #: 181
 ######################################################################
 ## 
 ### Commentary: 
@@ -237,7 +237,7 @@ if(QWT_FOUND)
   set(DTK_HAVE_PLOT "YES")
   include_directories(${QWT_INCLUDE_DIR})
 else(QWT_FOUND)
-  message(SEND_ERROR "dtkPlot needs Qwt. Please install Qwt or deactivate DTK_BUILD_PLOT.")
+  message(SEND_ERROR "dtkPlot needs Qwt. Please install Qwt or deactivate DTK_BUILD_PLOT. If Qwt has been locally installed, set the environment variable QWT_DIR")
 endif(QWT_FOUND)
 
 endif(DTK_BUILD_PLOT)

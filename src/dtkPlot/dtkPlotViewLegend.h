@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Dec  9 11:06:55 2013 (+0100)
+ * Last-Updated: Mon Dec  9 16:41:34 2013 (+0100)
  *           By: Selim Kraria
- *     Update #: 62
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -21,12 +21,13 @@
 #define DTKPLOTVIEWLEGEND_H
 
 #include "dtkPlotExport.h"
-
-#include <QtCore/QObject>
+#include "dtkConfig.h"
 
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <qwt_global.h>
 #endif
+
+#include <QtCore/QObject>
 
 class QwtPlotItem;
 class dtkPlotView;

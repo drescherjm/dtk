@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. déc.  9 15:06:17 2013 (+0100)
+ * Last-Updated: lun. déc.  9 18:09:51 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 245
+ *     Update #: 249
  */
 
 /* Commentary: 
@@ -37,12 +37,10 @@ public:
 dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivate)
 {
     d->communicator = new dtkDistributedCommunicatorTcp();
-    std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
 }
 
 dtkDistributedSlave::dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator) : d(new dtkDistributedSlavePrivate)
 {
-    std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
     d->communicator = communicator;
 }
 

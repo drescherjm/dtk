@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: ven. oct. 18 11:54:57 2013 (+0200)
+ * Last-Updated: lun. déc.  9 18:36:09 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 502
+ *     Update #: 509
  */
 
 /* Commentary:
@@ -123,6 +123,9 @@ void dtkComposerEvaluatorSlave::setServer(QUrl server)
 void dtkComposerEvaluatorSlave::setInternalCommunicator(dtkDistributedCommunicator *communicator)
 {
     d->communicator_i = communicator;
+    if (communicator->rank() == 0) {
+        std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
+    }
 }
 
 int dtkComposerEvaluatorSlave::exec(void)

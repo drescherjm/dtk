@@ -398,14 +398,14 @@ void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 sou
 void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
 {
     QByteArray Array = s.toAscii();
-    dtkDistributedCommunicator::send(Array, target, tag);
+    dtkDistributedCommunicatorMpi::send(Array, target, tag);
 }
 
 void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
 {
     QByteArray array;
     this->receive(array, source, tag);
-    s.fromAscii(array);
+    s = QString(array);
 }
 
 void dtkDistributedCommunicatorMpi::broadcast(QString &s, qint16 source)
@@ -416,7 +416,7 @@ void dtkDistributedCommunicatorMpi::broadcast(QString &s, qint16 source)
     }
     this->broadcast(array, source);
     if (d->rank != source) {
-        s.fromAscii(array);
+        s = QString(array);
     }
 }
 

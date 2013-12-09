@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. avril 25 10:50:55 2012 (+0200)
+ * Last-Updated: lun. déc.  9 15:06:17 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 232
+ *     Update #: 245
  */
 
 /* Commentary: 
@@ -26,6 +26,7 @@
 #include <dtkLog/dtkLog.h>
 
 #include <QtNetwork>
+#include <iostream>
 
 class dtkDistributedSlavePrivate
 {
@@ -36,10 +37,12 @@ public:
 dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivate)
 {
     d->communicator = new dtkDistributedCommunicatorTcp();
+    std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
 }
 
 dtkDistributedSlave::dtkDistributedSlave(dtkDistributedCommunicatorTcp *communicator) : d(new dtkDistributedSlavePrivate)
 {
+    std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
     d->communicator = communicator;
 }
 

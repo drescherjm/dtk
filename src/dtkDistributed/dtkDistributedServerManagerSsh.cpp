@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. mai  3 16:56:17 2012 (+0200)
+ * Last-Updated: lun. déc.  9 15:56:53 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 224
+ *     Update #: 308
  */
 
 /* Commentary:
@@ -38,6 +38,9 @@ class dtkDistributedServerManagerSshPrivate
 {
 public:
     QHash<QString,QProcess *> slaves;
+
+public:
+    QTemporaryFile tmp_err;
 };
 
 
@@ -134,12 +137,13 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
     */
     QVariantMap json = dtkJson::parse(input).toMap();
 
+    QSettings settings("inria", "dtk");
+    settings.beginGroup("distributed");
+
     // script
     if (json.contains("script")) {
         qsub += " "+json["script"].toString();
     } else if (json.contains("application")) {
-        QSettings settings("inria", "dtk");
-        settings.beginGroup("distributed");
         QString server = QHostInfo::localHostName ();
 #if defined(Q_WS_MAC)
         server.replace(".", "_");
@@ -173,16 +177,40 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
 
     QProcess *stat = new QProcess;
     QStringList rargs= args.split(" ");
+    QString err_filename;
+
     dtkDebug() << DTK_PRETTY_FUNCTION << qsub << rargs;
-    // stat->setStandardErrorFile("/tmp/slave-err.log");
-    // stat->setStandardOutputFile("/tmp/slave-out.log");
+
+    if (d->tmp_err.open()) {
+        if (settings.contains("keep_output_files") && settings.value("keep_output_files").toBool() ) {
+            d->tmp_err.setAutoRemove(false);
+        }
+        err_filename = d->tmp_err.fileName();
+        stat->setStandardErrorFile(err_filename);
+        dtkInfo() << "std error file of job is" << err_filename;
+    } else {
+        return QString("ERROR");
+    }
+
     stat->start(qsub,rargs);
     if (stat->waitForStarted(5000))
         dtkDebug() << DTK_PRETTY_FUNCTION << "process started";
     else
         return QString("ERROR");
 
-    QString jobid = QString::number((int)stat->pid());
+    // Wait for jobid in stdout
+    QEventLoop loop;
+    loop.connect(stat,SIGNAL(readyRead()),&loop,SLOT(quit()));
+    loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+    loop.exec();
+
+    QString tmp = stat->readLine();
+    if (tmp.isEmpty()) {
+        dtkError() << DTK_PRETTY_FUNCTION << "empty output file";
+        return QString("ERROR");
+    }
+    QString jobid = tmp.simplified().split("=").at(1);
+
     d->slaves.insert(jobid,stat);
     dtkDebug() << DTK_PRETTY_FUNCTION << jobid;
     return jobid;

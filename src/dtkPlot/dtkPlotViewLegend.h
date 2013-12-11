@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Mon Dec  9 16:41:34 2013 (+0100)
- *           By: Selim Kraria
- *     Update #: 64
  */
 
 /* Commentary: 
@@ -23,13 +19,8 @@
 #include "dtkPlotExport.h"
 #include "dtkConfig.h"
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
-#include <qwt_global.h>
-#endif
-
 #include <QtCore/QObject>
 
-class QwtPlotItem;
 class dtkPlotView;
 class dtkPlotViewLegendPrivate;
 
@@ -47,12 +38,6 @@ public:
 
 public:
     void setPosition(int position);
-
-protected slots:
-#if QWT_VERSION >= 0x060100
-    void legendChecked(const QVariant& itemInfo, bool value);
-#endif
-    void showCurve(QwtPlotItem *item, bool value);
 
 private:
     dtkPlotViewLegendPrivate *d;

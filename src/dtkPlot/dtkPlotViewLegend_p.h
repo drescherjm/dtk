@@ -8,50 +8,37 @@
  * 
  */
 
-#pragma once
+#ifndef DTKPLOTVIEWLEGEND_P_H
+#define DTKPLOTVIEWLEGEND_P_H
 
 #include <dtkPlotExport.h>
 
-#include "dtkPlotView.h"
-
 #include <QtCore>
 
-#include <qwt_plot_layout.h>
 #include <qwt_legend.h>
-#include <qwt_plot_item.h>
 
-class dtkPlotViewLegendPrivate : public QwtLegend
+class dtkPlotView;
+
+class QwtPlot;
+class QwtPlotItem;
+
+class DTKPLOT_EXPORT dtkPlotViewLegendPrivate : public QwtLegend
 {
     Q_OBJECT
 
 public:
-    dtkPlotViewLegendPrivate(dtkPlotView *parent) {
-#if QWT_VERSION >= 0x060100
-        setDefaultItemMode(QwtLegendData::Checkable);
-#else
-        setItemMode(QwtLegend::CheckableItem);
-#endif
-
-        plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
-        plot->insertLegend(this, QwtPlot::RightLegend);
-    };
-    ~dtkPlotViewLegendPrivate(void) {};
+    dtkPlotViewLegendPrivate(dtkPlotView *parent);
+    ~dtkPlotViewLegendPrivate(void);
 
 protected slots:
 #if QWT_VERSION >= 0x060100
-    void legendChecked(const QVariant& itemInfo, bool value) {
-        QwtPlotItem *plotItem = plot->infoToItem(itemInfo);
-        if (plotItem) {
-            this->showCurve(plotItem, value);
-        }
-    };
+    void legendChecked(const QVariant& itemInfo, bool value);
 #endif
-    void showCurve(QwtPlotItem *item, bool value) {
-        item->setVisible(value);
-        plotView->updateAxes();
-    };
+    void showCurve(QwtPlotItem *item, bool value);
 
 public:
      dtkPlotView *plotView;
      QwtPlot *plot;
 };
+
+#endif

@@ -19,15 +19,11 @@
 #include "dtkPlotExport.h"
 #include "dtkConfig.h"
 
-#include <QtCore/QObject>
-
 class dtkPlotView;
 class dtkPlotViewLegendPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewLegend : public QObject
+class DTKPLOT_EXPORT dtkPlotViewLegend
 {
-    Q_OBJECT
-
 public:
      dtkPlotViewLegend(dtkPlotView *parent);
     ~dtkPlotViewLegend(void);

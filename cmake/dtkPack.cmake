@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:04:36 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: ven. déc.  6 09:28:49 2013 (+0100)
+## Last-Updated: mer. déc. 11 17:26:24 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 154
+##     Update #: 173
 ######################################################################
 ## 
 ### Commentary: 
@@ -36,7 +36,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   execute_process(COMMAND arch 
     OUTPUT_VARIABLE ARCH
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-${DISTRIB}-${ARCH}")
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}-1.${DISTRIB}-${ARCH}")
 
   set(CPACK_PACKAGING_INSTALL_PREFIX  "usr" CACHE PATH "Where you want to install your package")
   mark_as_advanced(CPACK_PACKAGING_INSTALL_PREFIX)
@@ -90,7 +90,12 @@ if(UNIX AND NOT APPLE)
     ## RPM generator settings
     ## #################################################################
 
+
+    set(CPACK_RPM_USER_BINARY_SPECFILE "${CMAKE_CURRENT_BINARY_DIR}/dtk.spec")
+
     set(CPACK_GENERATOR "RPM")
+
+#    set(CPACK_RPM_PACKAGE_DEBUG 1)
 
     set(CPACK_RPM_PACKAGE_REQUIRES "qt")
 
@@ -129,3 +134,6 @@ endif(UNIX AND NOT APPLE)
 ## #################################################################
 
 include(CPack)
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtk.spec.in" "${CMAKE_CURRENT_BINARY_DIR}/dtk.spec")
+

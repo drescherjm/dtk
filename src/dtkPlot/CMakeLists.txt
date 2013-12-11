@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Nov 22 10:20:27 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Wed Dec 11 14:52:41 2013 (+0100)
+## Last-Updated: Wed Dec 11 15:07:15 2013 (+0100)
 ##           By: Selim Kraria
-##     Update #: 115
+##     Update #: 116
 ######################################################################
 ## 
 ### Commentary: 
@@ -31,6 +31,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPlotViewPicker.h
   dtkPlotViewZoomer.h
   dtkPlotViewLegend.h
+  dtkPlotViewLegend_p.h
   dtkPlotViewGrid.h
   dtkPlotViewSettings.h
   dtkPlotViewToolBar.h)

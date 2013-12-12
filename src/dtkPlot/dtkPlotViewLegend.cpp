@@ -9,16 +9,13 @@
  * 
  */
 
-/* Change log:
- * 
- */
-
 #include "dtkPlotViewLegend.h"
 #include "dtkPlotViewLegend_p.h"
 #include "dtkPlotView.h"
 
 #include <qwt_plot_layout.h>
 #include <qwt_plot_item.h>
+#include <qwt_legend.h>
 
 #if QWT_VERSION >= 0x060100
 #include <qwt_legend_label.h>
@@ -32,16 +29,18 @@
 
 dtkPlotViewLegendPrivate::dtkPlotViewLegendPrivate(dtkPlotView *parent)
 {
-#if QWT_VERSION >= 0x060100
-    setDefaultItemMode(QwtLegendData::Checkable);
-#else
-    setItemMode(QwtLegend::CheckableItem);
-#endif
-    plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
-    plot->insertLegend(this, QwtPlot::RightLegend);
+    legend = new QwtLegend;
 
 #if QWT_VERSION >= 0x060100
-    connect(this, SIGNAL(checked(const QVariant&, bool, int)), this, SLOT(legendChecked(const QVariant&, bool)));
+    legend->setDefaultItemMode(QwtLegendData::Checkable);
+#else
+    legend->setItemMode(QwtLegend::CheckableItem);
+#endif
+    plot = reinterpret_cast<QwtPlot *>(parent->plotWidget());
+    plot->insertLegend(legend, QwtPlot::RightLegend);
+
+#if QWT_VERSION >= 0x060100
+    connect(legend, SIGNAL(checked(const QVariant&, bool, int)), this, SLOT(legendChecked(const QVariant&, bool)));
 #else
     connect(plot, SIGNAL(legendChecked(QwtPlotItem *, bool)), this, SLOT(showCurve(QwtPlotItem *, bool)));
 #endif
@@ -52,15 +51,14 @@ dtkPlotViewLegendPrivate::~dtkPlotViewLegendPrivate(void)
 
 }
 
-#if QWT_VERSION >= 0x060100
 void dtkPlotViewLegendPrivate::legendChecked(const QVariant& itemInfo, bool value)
 {
-    QwtPlotItem *plotItem = plot->infoToItem(itemInfo);
-    if (plotItem) {
-        this->showCurve(plotItem, value);
-    }
-}
+#if QWT_VERSION >= 0x060100
+    QwtPlotItem *item = plot->infoToItem(itemInfo);
+    if (item)
+        showCurve(item, value);
 #endif
+}
 
 void dtkPlotViewLegendPrivate::showCurve(QwtPlotItem *item, bool value)
 {
@@ -87,7 +85,7 @@ dtkPlotViewLegend::dtkPlotViewLegend(dtkPlotView *parent) : d(new dtkPlotViewLeg
             }
         }
 #else
-        QwtLegendItem *legendItem = (QwtLegendItem *)d->find(items[i]);
+        QwtLegendItem *legendItem = (QwtLegendItem *)d->legend->find(items[i]);
         if (legendItem) {
             if (items[i]->isVisible()) {
                 legendItem->setChecked(true);
@@ -106,12 +104,12 @@ dtkPlotViewLegend::~dtkPlotViewLegend(void)
 
 void dtkPlotViewLegend::activate(void)
 {
-    d->setVisible(true);
+    d->legend->setVisible(true);
 }
 
 void dtkPlotViewLegend::deactivate(void)
 {
-    d->setVisible(false);
+    d->legend->setVisible(false);
 }
 
 void dtkPlotViewLegend::setPosition(int position)

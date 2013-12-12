@@ -13,16 +13,15 @@
 
 #include <dtkPlotExport.h>
 
-#include <QtCore>
-
-#include <qwt_legend.h>
+#include <QtCore/QObject>
 
 class dtkPlotView;
 
 class QwtPlot;
 class QwtPlotItem;
+class QwtLegend;
 
-class DTKPLOT_EXPORT dtkPlotViewLegendPrivate : public QwtLegend
+class DTKPLOT_EXPORT dtkPlotViewLegendPrivate : public QObject
 {
     Q_OBJECT
 
@@ -31,14 +30,13 @@ public:
     ~dtkPlotViewLegendPrivate(void);
 
 protected slots:
-#if QWT_VERSION >= 0x060100
     void legendChecked(const QVariant& itemInfo, bool value);
-#endif
     void showCurve(QwtPlotItem *item, bool value);
 
 public:
      dtkPlotView *plotView;
      QwtPlot *plot;
+     QwtLegend *legend;
 };
 
 #endif

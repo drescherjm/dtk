@@ -77,7 +77,7 @@ dtkPlotViewLegend::dtkPlotViewLegend(dtkPlotView *parent) : d(new dtkPlotViewLeg
     QwtPlotItemList items = d->plot->itemList();
     for ( int i = 0; i < items.size(); i++ ) {
 #if QWT_VERSION >= 0x060100
-        QList<QWidget *> legendWidgets = d->legendWidgets(d->plot->itemToInfo(items[i]));
+        QList<QWidget *> legendWidgets = d->legend->legendWidgets(d->plot->itemToInfo(items[i]));
         if (legendWidgets.size() == 1 ) {
             QwtLegendLabel *legendLabel = qobject_cast<QwtLegendLabel *>(legendWidgets[0]);
             if (legendLabel) {

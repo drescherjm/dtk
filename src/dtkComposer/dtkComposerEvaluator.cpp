@@ -282,6 +282,7 @@ void dtkComposerEvaluator::reset(void)
 {
     d->stack.clear();
     d->should_stop   = false;
+    d->start_node    = NULL;
 }
 
 void dtkComposerEvaluator::cont(bool run_concurrent)

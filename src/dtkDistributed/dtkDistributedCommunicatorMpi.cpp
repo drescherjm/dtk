@@ -62,8 +62,45 @@ MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
     }
 }
 
+
 // /////////////////////////////////////////////////////////////////
-// dtkCommunicatorMpi
+// dtkDistributedCommunicatorRequestMpiPrivate
+// /////////////////////////////////////////////////////////////////
+
+class dtkDistributedCommunicatorRequestMpiPrivate
+{
+public:
+    dtkAbstractData *mdata;
+    QByteArray *marray;
+    QString *mstring;
+
+public:
+    MPI_Request request;
+};
+
+
+dtkDistributedCommunicatorRequestMpi::dtkDistributedCommunicatorRequestMpi(void) : dtkDistributedCommunicatorRequest(), d(new dtkDistributedCommunicatorRequestMpiPrivate)
+{
+    d->mdata   = NULL;
+    d->marray  = NULL;
+    d->mstring = NULL;
+};
+
+dtkDistributedCommunicatorRequestMpi::~dtkDistributedCommunicatorRequestMpi(void)
+{
+    delete d;
+    d = NULL;
+};
+
+void dtkDistributedCommunicatorRequestMpi::wait(void)
+{
+    MPI_Status mpi_status;
+    MPI_Wait(&(d->request), &mpi_status);
+}
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkDistributedCommunicatorMpiPrivate
 // /////////////////////////////////////////////////////////////////
 
 class dtkDistributedCommunicatorMpiPrivate
@@ -74,7 +111,6 @@ public:
 
 public:
     int size, rank;
-
 };
 
 dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorMpiPrivate)
@@ -275,6 +311,49 @@ void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataT
 {
     MPI_Send(data, size, data_type(dataType), target, tag, d->comm);
 }
+
+void dtkDistributedCommunicatorMpi::isend(void *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    if (dtkDistributedCommunicatorRequestMpi *mpi_req = dynamic_cast<dtkDistributedCommunicatorRequestMpi *>(req)) {
+        MPI_Isend(data, size, data_type(dataType), target, tag, d->comm, &(mpi_req->d_func()->request));
+    }
+}
+
+void dtkDistributedCommunicatorMpi::isend(dtkAbstractData *data, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    QByteArray array;
+    QDataStream stream(&array, QIODevice::WriteOnly);
+    stream << data->identifier();
+    // FIXME: handle container
+    QByteArray *array_tmp = data->serialize();
+    if (array_tmp->count() > 0 ) {
+        array.append(*array_tmp);
+        dtkDistributedCommunicatorMpi::isend(array,target,tag,req);
+    } else {
+        dtkError() <<"serialization failed";
+    }
+};
+
+void dtkDistributedCommunicatorMpi::isend(const QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    QByteArray Array = s.toAscii();
+    return dtkDistributedCommunicatorMpi::isend(Array, target, tag,req);
+};
+
+void dtkDistributedCommunicatorMpi::isend(QByteArray& array, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    qint64 arrayLength = array.length();
+    isend(array.data(), arrayLength, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, target, tag,req);
+};
+
+void dtkDistributedCommunicatorMpi::ireceive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    if (dtkDistributedCommunicatorRequestMpi *mpi_req = dynamic_cast<dtkDistributedCommunicatorRequestMpi *>(req)) {
+        MPI_Irecv(data, size, data_type(dataType), source, tag, d->comm, &(mpi_req->d_func()->request));
+    }
+};
+
+
 
 //! Standard-mode, blocking receive.
 /*! 

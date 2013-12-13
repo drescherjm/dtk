@@ -103,7 +103,7 @@ void dtkDistributedCommunicator::send(QByteArray& array,  qint16 target, int tag
    DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkDistributedCommunicator::receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag)
+void dtkDistributedCommunicator::receive(void *data, qint64 size, DataType dataType, qint16 source, int tag)
 {
    DTK_DEFAULT_IMPLEMENTATION;
 }
@@ -121,6 +121,18 @@ void dtkDistributedCommunicator::receive(QString &s, qint16 source, int tag)
 void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag)
 {
    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorStatus& status)
+{
+    DTK_UNUSED(data);
+    DTK_UNUSED(size);
+    DTK_UNUSED(dataType);
+    DTK_UNUSED(source);
+    DTK_UNUSED(tag);
+    DTK_UNUSED(status);
+
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag, dtkDistributedCommunicatorStatus &status)
@@ -188,6 +200,61 @@ void dtkDistributedCommunicator::send(double *data, qint64 size, qint16 target, 
     return this->send(data, size, dtkDistributedCommunicatorDouble, target, tag);
 }
 
+void dtkDistributedCommunicator::isend(void *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::isend(bool *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorBool, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(char *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorChar, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(int *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorInt, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(long *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorLong, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(qint64 *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorInt64, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(float *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorFloat, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(double *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->isend(data, size, dtkDistributedCommunicatorDouble, target, tag, req);
+}
+
+void dtkDistributedCommunicator::isend(dtkAbstractData *data,     qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::isend(const QString& s,   qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::isend(QByteArray& array,  qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
 void dtkDistributedCommunicator::receive(bool *data, qint64 size, qint16 source, int tag)
 {
     return this->receive(data, size, dtkDistributedCommunicatorBool, source, tag);
@@ -221,6 +288,62 @@ void dtkDistributedCommunicator::receive(float *data, qint64 size, qint16 source
 void dtkDistributedCommunicator::receive(double *data, qint64 size, qint16 source, int tag)
 {
     return this->receive(data, size, dtkDistributedCommunicatorDouble, source, tag);
+}
+
+void dtkDistributedCommunicator::ireceive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::ireceive(bool *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorBool, source, tag, req);
+}
+
+void dtkDistributedCommunicator::ireceive(char *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorChar, source, tag, req);
+}
+
+void dtkDistributedCommunicator::ireceive(int *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorInt, source, tag, req);
+}
+
+void dtkDistributedCommunicator::ireceive(long *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorLong, source, tag, req);
+}
+
+void dtkDistributedCommunicator::ireceive(qint64 *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorInt64, source, tag, req);
+}
+
+void dtkDistributedCommunicator::ireceive(float *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorFloat, source, tag, req);
+}
+
+void dtkDistributedCommunicator::ireceive(double *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    this->ireceive(data, size, dtkDistributedCommunicatorDouble, source, tag, req);
+}
+
+
+void dtkDistributedCommunicator::ireceive(dtkAbstractData *&data, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::ireceive(QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
+}
+
+void dtkDistributedCommunicator::ireceive(QByteArray& array, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
+{
+    DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkDistributedCommunicator::broadcast(bool *data, qint64 size, qint16 source)
@@ -354,6 +477,26 @@ QMap<qlonglong, dtkDistributedMessage *> *dtkDistributedCommunicator::msgBuffer(
     return &(d->msg_map);
 }
 
+
+
+/*
+ * Class dtkComposerCommunicatorRequest
+ */
+
+
+dtkDistributedCommunicatorRequest::dtkDistributedCommunicatorRequest(void)
+{
+
+}
+
+dtkDistributedCommunicatorRequest::~dtkDistributedCommunicatorRequest(void)
+{
+
+}
+
+void dtkDistributedCommunicatorRequest::wait(void)
+{
+}
 
 /*
  * Class dtkComposerCommunicatorStatus

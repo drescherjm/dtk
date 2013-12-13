@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: lun. oct.  7 15:40:27 2013 (+0200)
+ * Last-Updated: ven. déc. 13 10:02:24 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 133
+ *     Update #: 188
  */
 
 /* Commentary: 
@@ -66,6 +66,11 @@ public:
     void      send(const QString& s, qint16 target, int tag) ;
     void      send(QByteArray& array, qint16 target, int tag) ;
 
+    void isend(void *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
+    void isend(dtkAbstractData *data, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
+    void isend(const QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req) ;
+    void isend(QByteArray& array, qint16 target, int tag, dtkDistributedCommunicatorRequest *req) ;
+
     void broadcast(     QByteArray& array, qint16 source);
     void broadcast(            QString& s, qint16 source);
     void broadcast(dtkAbstractData *&data, qint16 source);
@@ -75,9 +80,36 @@ public:
     void   receive(QByteArray &a, qint16 source, int tag) ;
     void   receive(QByteArray &a, qint16 source, int tag, dtkDistributedCommunicatorStatus& status) ;
 
+    void ireceive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
+    /* void ireceive(dtkAbstractData *&data, qint16 source, int tag); */
+    /* void ireceive(QString &s, qint16 source, int tag) ; */
+    /* void ireceive(QByteArray &a, qint16 source, int tag) ; */
+
 private:
     dtkDistributedCommunicatorMpiPrivate *d;
 };
+
+
+
+
+class dtkDistributedCommunicatorRequestMpiPrivate;
+class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorRequestMpi : public dtkDistributedCommunicatorRequest
+{
+public:
+             dtkDistributedCommunicatorRequestMpi(void);
+    virtual ~dtkDistributedCommunicatorRequestMpi(void);
+
+public:
+    void wait(void);
+
+public:
+    dtkDistributedCommunicatorRequestMpiPrivate *d_func(void) { return d; }
+
+private:
+    dtkDistributedCommunicatorRequestMpiPrivate *d;
+};
+
+
 
 Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi);
 Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi*);

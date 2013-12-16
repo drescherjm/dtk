@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Fri Apr  2 09:11:53 2010 (+0200)
 ## Version: $Id$
-## Last-Updated: Mon Dec  9 11:23:58 2013 (+0100)
+## Last-Updated: Mon Dec 16 15:23:14 2013 (+0100)
 ##           By: Selim Kraria
-##     Update #: 181
+##     Update #: 182
 ######################################################################
 ## 
 ### Commentary: 
@@ -28,7 +28,6 @@ set(QT_USE_QTHELP        TRUE)
 set(QT_USE_QTNETWORK     TRUE)
 set(QT_USE_QTTEST        TRUE)
 set(QT_USE_QTWEBKIT      TRUE)
-set(QT_USE_QTTEST        TRUE)
 set(QT_USE_GUI           TRUE)
 set(QT_USE_QTDECLARATIVE TRUE)
 

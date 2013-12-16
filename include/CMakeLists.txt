@@ -1,20 +1,16 @@
-### CMakeLists.txt --- 
-## 
+### CMakeLists.txt ---
+##
 ## Author: Julien Wintz
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Sep  8 16:00:59 2011 (+0200)
-## Version: $Id$
-## Last-Updated: mer. déc.  4 14:02:49 2013 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 144
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change log:
-## 
+##
 ######################################################################
 
 ## #################################################################
@@ -22,8 +18,6 @@
 ## #################################################################
 
 file(GLOB dtk_HEADERS_LAYERS "dtk*")
-
-list(REMOVE_AT dtk_HEADERS_LAYERS 0)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/headers)
 

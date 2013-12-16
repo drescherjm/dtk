@@ -167,10 +167,10 @@ endif()
 ## Install cmake files
 ## #################################################################
 
+
 if( EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
 AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
 AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
-AND EXISTS ${${PROJECT_NAME}_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
 AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
 AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Use.cmake
 AND EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake)
@@ -179,15 +179,24 @@ install(FILES
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Dependencies.cmake
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Build.cmake
   ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Pack.cmake
-  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
-  ${PROJECT_SOURCE_DIR}/cmake/FindQwt.cmake
-  ${PROJECT_SOURCE_DIR}/cmake/FindFFmpeg.cmake
   ${PROJECT_BINARY_DIR}/install/${PROJECT_NAME}Config.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Use.cmake
   ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Uninstall.cmake
   DESTINATION
   cmake)
 
+endif()
+
+if( EXISTS  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
+AND EXISTS   ${PROJECT_SOURCE_DIR}/cmake/FindQwt.cmake
+AND EXISTS   ${PROJECT_SOURCE_DIR}/cmake/FindFFmpeg.cmake)
+
+install(FILES
+  ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Reporting.cmake
+  ${PROJECT_SOURCE_DIR}/cmake/FindQwt.cmake
+  ${PROJECT_SOURCE_DIR}/cmake/FindFFmpeg.cmake
+  DESTINATION
+  cmake)
 endif()
 
 install(FILES  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.h DESTINATION include/${PROJECT_NAME})

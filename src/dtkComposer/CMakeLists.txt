@@ -20,6 +20,7 @@ project(dtkComposer)
 
 set(${PROJECT_NAME}_HEADERS
   dtkComposer.h
+  dtkComposer_p.h
   dtkComposerCompass.h
   dtkComposerControls.h
   dtkComposerControlsDelegate.h
@@ -32,6 +33,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerControlsListItemReal.h
   dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
+  dtkComposerEvaluator_p.h
   dtkComposerFactory.h
   dtkComposerFactoryView.h
   dtkComposerGraph.h

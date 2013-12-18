@@ -1,27 +1,30 @@
-/* dtkComposerEvaluator_p.h --- 
- * 
+/* dtkComposerEvaluator_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:39:36 2012 (+0100)
  * Version: $Id$
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSEREVALUATOR_P_H
 #define DTKCOMPOSEREVALUATOR_P_H
 
+
+#include "dtkComposerExport.h"
+
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
 #include <QtCore>
 
-class dtkComposerEvaluatorPrivate : public QThread
+class DTKCOMPOSER_EXPORT dtkComposerEvaluatorPrivate : public QThread
 {
 public:
     dtkComposerGraph *graph;

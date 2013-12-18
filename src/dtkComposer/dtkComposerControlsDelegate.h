@@ -1,26 +1,26 @@
-/* dtkComposerControlsDelegate.h --- 
- * 
+/* dtkComposerControlsDelegate.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:06:31 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. juin  4 17:29:32 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 57
+ * Last-Updated: Wed Dec 18 15:39:32 2013 (+0100)
+ *           By: etienne delclaux
+ *     Update #: 58
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERCONTROLSDELEGATE_H
 #define DTKCOMPOSERCONTROLSDELEGATE_H
 
-#include <dtkComposerExport.h>
+#include "dtkComposerExport.h"
 
 #include <QtGui>
 

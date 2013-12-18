@@ -98,7 +98,6 @@ void dtkDistributedCommunicatorRequestMpi::wait(void)
     MPI_Wait(&(d->request), &mpi_status);
 }
 
-
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedCommunicatorMpiPrivate
 // /////////////////////////////////////////////////////////////////
@@ -314,8 +313,14 @@ void dtkDistributedCommunicatorMpi::send(void *data, qint64 size, DataType dataT
 
 void dtkDistributedCommunicatorMpi::isend(void *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
 {
-    if (dtkDistributedCommunicatorRequestMpi *mpi_req = dynamic_cast<dtkDistributedCommunicatorRequestMpi *>(req)) {
-        MPI_Isend(data, size, data_type(dataType), target, tag, d->comm, &(mpi_req->d_func()->request));
+    dtkDistributedCommunicatorRequestMpi *mpi_req = dynamic_cast<dtkDistributedCommunicatorRequestMpi *>(req);
+
+    if (mpi_req) {
+        MPI_Isend(data, size, data_type(dataType), target, tag, d->comm, &(mpi_req->d->request));
+    
+    } else {
+        MPI_Request request;
+        MPI_Isend(data, size, data_type(dataType), target, tag, d->comm, &request);
     }
 }
 
@@ -328,7 +333,7 @@ void dtkDistributedCommunicatorMpi::isend(dtkAbstractData *data, qint16 target, 
     QByteArray *array_tmp = data->serialize();
     if (array_tmp->count() > 0 ) {
         array.append(*array_tmp);
-        dtkDistributedCommunicatorMpi::isend(array,target,tag,req);
+        dtkDistributedCommunicatorMpi::isend(array, target, tag, req);
     } else {
         dtkError() <<"serialization failed";
     }
@@ -337,23 +342,27 @@ void dtkDistributedCommunicatorMpi::isend(dtkAbstractData *data, qint16 target, 
 void dtkDistributedCommunicatorMpi::isend(const QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
 {
     QByteArray Array = s.toAscii();
-    return dtkDistributedCommunicatorMpi::isend(Array, target, tag,req);
+    return dtkDistributedCommunicatorMpi::isend(Array, target, tag, req);
 };
 
 void dtkDistributedCommunicatorMpi::isend(QByteArray& array, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
 {
     qint64 arrayLength = array.length();
-    isend(array.data(), arrayLength, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, target, tag,req);
+    this->isend(array.data(), arrayLength, dtkDistributedCommunicator::dtkDistributedCommunicatorChar, target, tag, req);
 };
 
 void dtkDistributedCommunicatorMpi::ireceive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorRequest *req)
 {
-    if (dtkDistributedCommunicatorRequestMpi *mpi_req = dynamic_cast<dtkDistributedCommunicatorRequestMpi *>(req)) {
-        MPI_Irecv(data, size, data_type(dataType), source, tag, d->comm, &(mpi_req->d_func()->request));
+    dtkDistributedCommunicatorRequestMpi *mpi_req = dynamic_cast<dtkDistributedCommunicatorRequestMpi *>(req);
+
+    if (mpi_req) {
+        MPI_Irecv(data, size, data_type(dataType), source, tag, d->comm, &(mpi_req->d->request));
+    
+    } else {
+        MPI_Request request;
+        MPI_Irecv(data, size, data_type(dataType), source, tag, d->comm, &request);
     }
 };
-
-
 
 //! Standard-mode, blocking receive.
 /*! 

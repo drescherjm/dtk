@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
  * Version: $Id$
- * Last-Updated: ven. déc. 13 10:02:24 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 188
+ * Last-Updated: mar. déc. 17 14:10:56 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 211
  */
 
 /* Commentary: 
@@ -66,10 +66,10 @@ public:
     void      send(const QString& s, qint16 target, int tag) ;
     void      send(QByteArray& array, qint16 target, int tag) ;
 
-    void isend(void *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    void isend(dtkAbstractData *data, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    void isend(const QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req) ;
-    void isend(QByteArray& array, qint16 target, int tag, dtkDistributedCommunicatorRequest *req) ;
+    void isend(void *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    void isend(dtkAbstractData *data, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    void isend(const QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL) ;
+    void isend(QByteArray& array, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL) ;
 
     void broadcast(     QByteArray& array, qint16 source);
     void broadcast(            QString& s, qint16 source);
@@ -102,14 +102,12 @@ public:
 public:
     void wait(void);
 
-public:
-    dtkDistributedCommunicatorRequestMpiPrivate *d_func(void) { return d; }
+protected:
+    friend class dtkDistributedCommunicatorMpi;
 
 private:
     dtkDistributedCommunicatorRequestMpiPrivate *d;
 };
-
-
 
 Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi);
 Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi*);

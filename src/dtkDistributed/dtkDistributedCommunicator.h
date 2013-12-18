@@ -138,17 +138,17 @@ public:
     virtual void      send(const QString& s,   qint16 target, int tag);
     virtual void      send(QByteArray& array,  qint16 target, int tag);
 
-    virtual void isend(void   *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(bool   *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(char   *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(int    *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(long   *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(qint64 *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(float  *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(double *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(dtkAbstractData *data,     qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(const QString& s,   qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void isend(QByteArray& array,  qint16 target, int tag, dtkDistributedCommunicatorRequest *req);
+    virtual void isend(void   *data, qint64 size, DataType dataType, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(bool   *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(char   *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(int    *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(long   *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(qint64 *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(float  *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(double *data, qint64 size, qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(dtkAbstractData *data,     qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(const QString& s,   qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
+    virtual void isend(QByteArray& array,  qint16 target, int tag, dtkDistributedCommunicatorRequest *req = NULL);
 
     virtual void   receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag);
     virtual void   receive(bool   *data, qint64 size, qint16 source, int tag);

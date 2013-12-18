@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. déc.  4 13:40:08 2013 (+0100)
+## Last-Updated: lun. déc. 16 17:45:52 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 327
+##     Update #: 328
 ######################################################################
 ## 
 ### Commentary: 
@@ -118,7 +118,6 @@ foreach(header ${${PROJECT_NAME}_HEADERS})
   set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
 endforeach(header)
 
-install(FILES ${dtk_BINARY_DIR}/dtkConfig.h DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)

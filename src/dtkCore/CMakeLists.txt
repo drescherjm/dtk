@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. déc.  3 09:41:22 2013 (+0100)
+## Last-Updated: lun. déc. 16 17:45:42 2013 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 380
+##     Update #: 382
 ######################################################################
 ## 
 ### Commentary: 
@@ -281,7 +281,6 @@ set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
  "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
-install(FILES ${dtk_BINARY_DIR}/dtkConfig.h DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)

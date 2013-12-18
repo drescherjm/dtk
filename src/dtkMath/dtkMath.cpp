@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Nov  8 17:19:05 2013 (+0100)
- *           By: Selim Kraria
- *     Update #: 260
+ * Last-Updated: lun. déc. 16 20:48:35 2013 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 261
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
  * 
  */
 
-#include "dtkConfig.h"
+#include <dtkConfig.h>
 #include "dtkMath.h"
 #include "dtkVector3D.h"
 

@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:51:02 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. déc.  4 15:03:39 2013 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 70
+## Last-Updated: Mon Dec 16 15:31:15 2013 (+0100)
+##           By: Selim Kraria
+##     Update #: 97
 ######################################################################
 ## 
 ### Commentary: 
@@ -43,4 +43,29 @@ set(DTK_BUILD_VIDEO "@DTK_BUILD_VIDEO@")
 set(DTK_BUILD_VR "@DTK_BUILD_VR@")
 set(DTK_BUILD_WRAPPERS "@DTK_BUILD_WRAPPERS@")
 
+set(QT_USE_QTOPENGL      "@QT_USE_QTOPENGL@")
+set(QT_USE_QTXML         "@QT_USE_QTXML@")
+set(QT_USE_QTSQL         "@QT_USE_QTSQL@")
+set(QT_USE_QTHELP        "@QT_USE_QTHELP@")
+set(QT_USE_QTNETWORK     "@QT_USE_QTNETWORK@")
+set(QT_USE_QTTEST        "@QT_USE_QTTEST@")
+set(QT_USE_QTWEBKIT      "@QT_USE_QTWEBKIT@")
+set(QT_USE_GUI           "@QT_USE_GUI@")
+set(QT_USE_QTDECLARATIVE "@QT_USE_QTDECLARATIVE@")
+set(QT_USE_QTMAIN        "@QT_USE_QTMAIN@")
+
+set(MPI_INCLUDE_PATH "@MPI_INCLUDE_PATH@")
+set(MPI_LIBRARIES "@MPI_LIBRARIES@")
+set(MPI_COMPILE_FLAGS "@MPI_COMPILE_FLAGS@")
+
+set(FFMPEG_INCLUDE_DIRS "@FFMPEG_INCLUDE_DIRS@")
+set(FFMPEG_LIBRARIES "@FFMPEG_LIBRARIES@")
+
 set(QWT_INCLUDE_DIR "@QWT_INCLUDE_DIR@")
+set(QWT_LIBRARIES "@QWT_LIBRARIES@")
+
+set(PYTHON_INCLUDE_DIRS "@PYTHON_INCLUDE_DIRS@")
+set(PYTHON_LIBRARIES "@PYTHON_LIBRARIES@")
+
+set(TCL_INCLUDE_PATH "@TCL_INCLUDE_PATH@")
+set(TCL_LIBRARY "@TCL_LIBRARY@")

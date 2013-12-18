@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 17:59:00 2013 (+0200)
+ * Last-Updated: lun. déc. 16 20:49:05 2013 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 202
+ *     Update #: 204
  */
 
 /* Commentary: 
@@ -20,12 +20,12 @@
 #ifndef DTKGLOBAL_H
 #define DTKGLOBAL_H
 
-#include <QtCore> 
+#include <QtCore>
 #include <QtGui>
 
 #include <dtkLog/dtkLog.h>
 
-#include "dtkConfig.h"
+#include <dtkConfig.h>
 
 // /////////////////////////////////////////////////////////////////
 // Output colors

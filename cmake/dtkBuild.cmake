@@ -199,9 +199,7 @@ install(FILES
   cmake)
 endif()
 
-if(EXISTS ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.h)
-  install(FILES  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.h DESTINATION include/${PROJECT_NAME})
-endif()
+install(FILES  ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.h DESTINATION include/${PROJECT_NAME} OPTIONAL)
 
 if(EXISTS ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Plugin.cmake)
 install(FILES

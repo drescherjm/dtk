@@ -14,7 +14,7 @@
  */
 
 #ifndef DTKSCREENMENU_H
-#define DTKSCREENENU_H
+#define DTKSCREENMENU_H
 
 #include <QMenu>
 #include <QImage>
@@ -45,4 +45,4 @@ private:
     dtkScreenMenuPrivate *d;
 };
 
-#endif // DTKSCREENSHOTMENU_H
+#endif // DTKSCREENMENU_H

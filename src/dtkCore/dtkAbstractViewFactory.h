@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov  8 09:50:32 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 116
+ * Last-Updated: Thu Jan 16 12:43:40 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 119
  */
 
 /* Commentary:
@@ -69,15 +69,19 @@ public:
     dtkSmartPointer<dtkAbstractViewInteractor> interactorSmartPointer(const QString& type);
 
 public:
+    void remove(const QString& name);
+
+public:
     QStringList implementations(void);
     QStringList implementations(const QString& interface);
     QStringList interfaces(void);
 
 signals:
     void created(dtkAbstractView *view, const QString& type);
+    void cleared(void);
 
 public slots:
-    dtkAbstractView           *create(const QString& type);
+    dtkAbstractView           *create(const QString& type, QString name = QString());
     dtkAbstractViewAnimator   *animator(const QString& type);
     dtkAbstractViewNavigator  *navigator(const QString& type);
     dtkAbstractViewInteractor *interactor(const QString& type);

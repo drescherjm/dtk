@@ -50,13 +50,13 @@ public:
 public slots:
     void  run(bool run_concurrent = false);
     void  run_static(bool run_concurrent = false);
+    void  reset(void);
 
 public:
     void cont(bool run_concurrent = false);
     bool step(bool run_concurrent = false);
     void next(bool run_concurrent = false);
-    void stop();
-    void reset();
+    void stop(void);
 
 public:
     void  logStack(void);

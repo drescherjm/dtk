@@ -64,6 +64,8 @@ dtkComposerEvaluator::~dtkComposerEvaluator(void)
 void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
 {
     d->graph = graph;
+
+    connect(graph, SIGNAL(cleared()), this, SLOT(reset()));
 }
 
 void dtkComposerEvaluator::setStartNode(dtkComposerGraphNode *node)

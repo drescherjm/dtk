@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Oct 21 14:44:54 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 1831
+ * Last-Updated: Thu Jan 16 12:31:02 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 1832
  */
 
 /* Commentary:
@@ -749,6 +749,9 @@ void dtkCreatorMainWindow::closeEvent(QCloseEvent *event)
 
 void dtkCreatorMainWindow::onViewFocused(dtkAbstractView *view)
 {
+    if (!view)
+        return;
+
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
     if(dtkPlotView *v = dynamic_cast<dtkPlotView *>(view)) {
         d->plot_view_settings->setView(v);

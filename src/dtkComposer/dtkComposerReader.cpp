@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: lun. oct.  7 16:07:57 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 845
+ * Last-Updated: Thu Jan 16 11:22:33 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 853
  */
 
 /* Commentary: 
@@ -218,10 +218,8 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     // Clear scene if applicable
 
-    if(!append) {
-        d->scene->clear();
-        d->graph->clear();
-    }
+    if(!append)
+        this->clear();
 
     d->node_map.clear();
 
@@ -257,8 +255,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
             if (!(this->readNode(nodes.at(i),paste))) {
-                d->scene->clear();
-                d->graph->clear();
+                this->clear();
                 return false;
             }
 
@@ -801,4 +798,18 @@ void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* l
 {
   Q_UNUSED(node);
   Q_UNUSED(leaf);
+}
+
+void dtkComposerReader::clear(void)
+{
+    // Composer
+
+    if (d->scene)
+        d->scene->clear();
+    if (d->graph)
+        d->graph->clear();    
+
+    // Factory
+
+    dtkAbstractViewFactory::instance()->clear();
 }

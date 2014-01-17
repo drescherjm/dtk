@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept. 11 14:49:28 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 93
+ * Last-Updated: Thu Jan 16 13:32:16 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 94
  */
 
 /* Commentary: 
@@ -79,6 +79,9 @@ public:
 
 public:
     QString toString(void);
+
+signals:
+    void cleared(void);
 
 protected slots:
     void onSelectionChanged(void);

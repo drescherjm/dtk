@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. juin  7 11:17:18 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 44
+ * Last-Updated: Thu Jan 16 11:19:43 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 45
  */
 
 /* Commentary: 
@@ -44,6 +44,9 @@ public:
     void setFactory(dtkComposerFactory *factory);
     void setScene(dtkComposerScene *scene);
     void setGraph(dtkComposerGraph *graph);
+
+public:
+    void clear(void);
 
 public:
    bool read(const QString& file, bool append = false);

@@ -293,6 +293,14 @@ dtkViewLayoutItem::~dtkViewLayoutItem(void)
     d = NULL;
 }
 
+dtkAbstractView *dtkViewLayoutItem::view(void)
+{
+  if(this->proxy())
+    return proxy()->view();
+  else
+    return NULL;
+}
+
 dtkViewLayoutItem *dtkViewLayoutItem::parent(void)
 {
     return d->parent;

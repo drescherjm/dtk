@@ -74,6 +74,9 @@ public:
     ~dtkViewLayoutItem(void);
 
 public:
+    dtkAbstractView *view(void);
+
+public:
     dtkViewLayoutItem *parent(void);
     dtkViewLayoutItem *first(void);
     dtkViewLayoutItem *second(void);

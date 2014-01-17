@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:39:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 16:43:08 2013 (+0200)
+ * Last-Updated: Thu Jan 16 16:39:32 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 26
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -36,6 +36,8 @@ dtkViewList::dtkViewList(QWidget *parent) : QListWidget(parent), d(new dtkViewLi
     this->setFixedHeight(100);
 
     connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, const QString&)), this, SLOT(update()));
+
+    connect(dtkAbstractViewFactory::instance(), SIGNAL(cleared()), this, SLOT(clear()));
 
     this->update();
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 24 11:16:41 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 158
+ * Last-Updated: Thu Jan 16 12:44:11 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 183
  */
 
 /* Commentary:
@@ -36,13 +36,14 @@ public:
 public:
     QHash<QString, unsigned int> viewCount;
     QHash<QString, dtkAbstractView *> views;
+    QHash<dtkAbstractView *, QString> viewsType;
 
 public:
     dtkAbstractViewCreatorHash           creators;
     dtkAbstractViewAnimatorCreatorHash   animators;
     dtkAbstractViewNavigatorCreatorHash  navigators;
     dtkAbstractViewInteractorCreatorHash interactors;
-    dtkAbstractViewInterfacesHash       interfaces;
+    dtkAbstractViewInterfacesHash        interfaces;
 };
 
 DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
@@ -53,9 +54,12 @@ DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
     return s_instance;
 }
 
-dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
+dtkAbstractView *dtkAbstractViewFactory::create(const QString& type, QString name)
 {
     if(!d->creators.contains(type))
+        return NULL;
+
+    if (d->views.keys().contains(name))
         return NULL;
 
     dtkAbstractView *view = d->creators[type]();
@@ -72,13 +76,28 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
         if(key.second.contains(type) || key.second.contains("any"))
             view->addInteractor(d->interactors[key]());
 
-    if (view->objectName().isEmpty())
-        view->setObjectName(QString("%1%2").arg(view->metaObject()->className()).arg(d->viewCount[type]));
-    else
-        view->setObjectName(QString("%1%2").arg(view->objectName()).arg(d->viewCount[type]));
+    if (!name.isEmpty())
+        view->setObjectName(name);
+    else {
+        QString namePrefix;
+        if (view->objectName().isEmpty())
+            namePrefix = view->metaObject()->className();
+        else
+            namePrefix = view->objectName();
+
+        const QStringList& viewsName = d->views.keys();
+        int index = d->viewCount[type];
+        name = QString("%1%2").arg(namePrefix).arg(index);
+        while (viewsName.contains(name)) {
+            index++;
+            name = QString("%1%2").arg(namePrefix).arg(index);
+        }
+        view->setObjectName(name);
+    }
 
     d->viewCount[type]++;
     d->views[view->objectName()] = view;
+    d->viewsType[view] = type;
 
     emit created(view, type);
 
@@ -254,6 +273,8 @@ QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory
 
 void dtkAbstractViewFactory::clear(void)
 {
+    emit cleared();
+
     foreach(dtkAbstractView *view, d->views.values()) {
         view->deleteLater();
         view = NULL;
@@ -261,6 +282,21 @@ void dtkAbstractViewFactory::clear(void)
     
     d->views.clear();
     d->viewCount.clear();
+    d->viewsType.clear();
+}
+
+void dtkAbstractViewFactory::remove(const QString& name)
+{
+    dtkAbstractView *view = d->views.value(name);
+
+    if (view) {
+        QString type = d->viewsType[view];
+        d->viewsType.remove(view);
+        view->deleteLater();
+        view = NULL;
+        d->views.remove(name);
+        d->viewCount[type]--;
+    }
 }
 
 dtkAbstractViewFactory::dtkAbstractViewFactory(void) : dtkAbstractFactory(), d(new dtkAbstractViewFactoryPrivate)

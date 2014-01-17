@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 25 17:16:41 2013 (+0200)
+ * Last-Updated: Thu Jan 16 11:34:58 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 546
+ *     Update #: 548
  */
 
 /* Commentary: 
@@ -113,6 +113,8 @@ dtkPlotView::dtkPlotView(void) : dtkAbstractView(), d(new dtkPlotViewPrivate())
 
 dtkPlotView::~dtkPlotView(void)
 {
+    this->clear();
+
     delete d;
 
     d = NULL;
@@ -122,9 +124,8 @@ void dtkPlotView::clear(void)
 {
     d->curves.clear();
 
-    foreach (QwtPlotItem *item, d->itemList()) {
+    foreach (QwtPlotItem *item, d->itemList())
         item->detach();
-    }
 
     this->update();
 }

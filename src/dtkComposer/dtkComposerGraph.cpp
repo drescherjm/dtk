@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 20 09:37:29 2013 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 2419
+ * Last-Updated: Thu Jan 16 13:31:50 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 2427
  */
 
 /* Commentary:
@@ -214,7 +214,7 @@ dtkComposerGraph::~dtkComposerGraph(void)
 
 dtkComposerGraphNode *dtkComposerGraph::root(void)
 {
-    foreach(dtkComposerGraphNode *node, d->nodes)
+    foreach(dtkComposerGraphNode *node, d->nodes.values())
         if (node->predecessors().count() == 0)
             return node;
     return NULL;
@@ -629,19 +629,24 @@ QString dtkComposerGraph::toString(void)
     return txt.join("\n");
 }
 
-void dtkComposerGraph::clear(void) {
+void dtkComposerGraph::clear(void)
+{
     d->dummy_edges.clear();
     foreach(dtkComposerGraphEdge *e, d->edges.values()) {
         this->removeItem(e);
         delete e;
+        e = NULL;
     }
     d->edges.clear();
 
     foreach(dtkComposerGraphNode *n, d->nodes.values()) {
         this->removeItem(n);
         delete n;
+        n = NULL;
     }
     d->nodes.clear();
+
+    emit cleared();
 }
 
 void dtkComposerGraph::layout(void)

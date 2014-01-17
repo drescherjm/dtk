@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 11 14:58:07 2013 (+0200)
- *           By: Etienne
- *     Update #: 19
+ * Last-Updated: Thu Jan 16 16:39:20 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 22
  */
 
 /* Commentary:
@@ -19,6 +19,8 @@
 
 #include "dtkViewLayout.h"
 #include "dtkViewLayoutItem.h"
+
+#include <dtkCore/dtkAbstractViewFactory.h>
 
 class dtkViewLayoutPrivate
 {
@@ -42,6 +44,8 @@ dtkViewLayout::dtkViewLayout(QWidget *parent) : QFrame(parent), d(new dtkViewLay
 
     connect(d->root, SIGNAL(focused(dtkAbstractView *)), this, SIGNAL(focused(dtkAbstractView *)));
     connect(d->root, SIGNAL(unfocused(dtkAbstractView *)), this, SIGNAL(unfocused(dtkAbstractView *)));
+
+    connect(dtkAbstractViewFactory::instance(), SIGNAL(cleared()), this, SLOT(clear()));
 }
 
 dtkViewLayout::~dtkViewLayout(void)

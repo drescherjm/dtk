@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:37:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 17 13:10:20 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 52
+ * Last-Updated: Thu Jan 16 17:22:38 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 63
  */
 
 /* Commentary: 
@@ -62,6 +62,7 @@ dtkViewManager::dtkViewManager(QWidget *parent) : QFrame(parent), d(new dtkViewM
     // Behaviour
 
     connect(d->view_layout, SIGNAL(focused(dtkAbstractView *)), this, SIGNAL(focused(dtkAbstractView *)));
+    connect(d->view_layout, SIGNAL(unfocused(dtkAbstractView *)), this, SLOT(hideCurrentWidget()));
 }
 
 dtkViewManager::~dtkViewManager(void)
@@ -73,6 +74,7 @@ dtkViewManager::~dtkViewManager(void)
 
 void dtkViewManager::clear(void)
 {
+    this->hideCurrentWidget();
     d->view_list->clear();
     d->view_layout->clear();
 }
@@ -87,4 +89,11 @@ void dtkViewManager::setCurrentWidget(QWidget *widget)
 {
     widget->setVisible(true);
     d->view_inspector->setCurrentWidget(widget);
+}
+
+void dtkViewManager::hideCurrentWidget(void)
+{
+    QWidget *widget = d->view_inspector->currentWidget();
+    if (widget)
+        widget->setVisible(false);    
 }

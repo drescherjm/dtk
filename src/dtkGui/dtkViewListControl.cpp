@@ -189,6 +189,7 @@ void dtkViewListControl::onLayoutGrid(void)
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
     }
 }
+
 void dtkViewListControl::onLayoutCloseAll(void)
 {
     if(!d->list)

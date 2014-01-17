@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:37:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 25 10:08:50 2013 (+0200)
+ * Last-Updated: Thu Jan 16 17:22:17 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 13
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -44,6 +44,7 @@ signals:
 
 public slots:
     void clear(void);
+    void hideCurrentWidget(void);
     
 private:
     dtkViewManagerPrivate *d;

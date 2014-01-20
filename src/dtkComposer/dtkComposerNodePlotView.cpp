@@ -67,7 +67,7 @@ dtkAbstractView *dtkComposerNodePlotView::view(void)
 
 void dtkComposerNodePlotView::run(void)
 {
-    if(!d->view)
+    if (!d->view)
 	d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
 
     if (d->receiver_curve.isEmpty() && d->receiver_list_curve.isEmpty()) {
@@ -75,7 +75,7 @@ void dtkComposerNodePlotView::run(void)
         return;
     }
 
-    if(!d->view)
+    if (!d->view)
         return;
 
     foreach(dtkPlotCurve *curve, d->receiver_curve.allData()) {

@@ -39,11 +39,7 @@ public:
 
 dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodePlotViewPrivate)
 {
-    if (qApp->type() != QApplication::Tty) {
-        d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
-    } else {
-        d->view = NULL;
-    }
+    d->view = NULL;
 
     this->appendReceiver(&(d->receiver_curve));
     this->appendReceiver(&(d->receiver_list_curve));
@@ -55,7 +51,7 @@ dtkComposerNodePlotView::dtkComposerNodePlotView(void) : QObject(), dtkComposerN
 dtkComposerNodePlotView::~dtkComposerNodePlotView(void)
 {
     if (d->view)
-        delete d->view;
+        dtkAbstractViewFactory::instance()->destroy(d->view);
 
     d->view = NULL;
 
@@ -75,14 +71,12 @@ void dtkComposerNodePlotView::run(void)
 	d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
 
     if (d->receiver_curve.isEmpty() && d->receiver_list_curve.isEmpty()) {
-        dtkWarn() << "no curve speficied!";
+        dtkWarn() << "no curve specified!";
         return;
     }
 
     if(!d->view)
         return;
-
-    //d->view->clear();
 
     foreach(dtkPlotCurve *curve, d->receiver_curve.allData()) {
         if (curve) {

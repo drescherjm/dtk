@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jan 16 11:22:33 2014 (+0100)
+ * Last-Updated: Fri Jan 17 17:40:52 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 853
+ *     Update #: 857
  */
 
 /* Commentary: 
@@ -807,7 +807,7 @@ void dtkComposerReader::clear(void)
     if (d->scene)
         d->scene->clear();
     if (d->graph)
-        d->graph->clear();    
+        d->graph->clear();
 
     // Factory
 

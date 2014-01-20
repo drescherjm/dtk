@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jan 16 12:31:02 2014 (+0100)
+ * Last-Updated: Mon Jan 20 14:46:40 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 1832
+ *     Update #: 1845
  */
 
 /* Commentary:
@@ -228,6 +228,9 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QAction *stop_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
     stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
 
+    QAction *reset_action = mainToolBar->addAction(QIcon(":dtkCreator/pixmaps/dtkCreatorToolbarButton_Reset_Active.png"), "Reset");
+    reset_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
+
     QFrame *buttons = new QFrame(this);
     buttons->setObjectName("dtkCreatorMainWindowSegmentedButtons");
 
@@ -335,6 +338,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     debug_menu->addAction(continue_action);
     debug_menu->addAction(next_action);
     debug_menu->addAction(stop_action);
+    debug_menu->addAction(reset_action);
 
     // -- Connections
 
@@ -343,6 +347,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     connect(continue_action, SIGNAL(triggered()), d->composer, SLOT(cont()));
     connect(next_action, SIGNAL(triggered()), d->composer, SLOT(next()));
     connect(stop_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
+    connect(reset_action, SIGNAL(triggered()), d->composer, SLOT(reset()));
 
     connect(switchToCompoAction, SIGNAL(triggered()), this, SLOT(switchToCompo()));
     connect(switchToDstrbAction, SIGNAL(triggered()), this, SLOT(switchToDstrb()));

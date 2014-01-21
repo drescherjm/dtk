@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:03:26 2012 (+0200)
- *           By: tkloczko
- *     Update #: 331
+ * Last-Updated: Tue Jan 21 17:41:10 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 338
  */
 
 /* Commentary:
@@ -58,6 +58,7 @@ public:
 signals:
     void closed(void);
     void focused(void);
+    void nameChanged(void);
 
 public slots:
     virtual void   link(dtkAbstractView *other);
@@ -136,6 +137,10 @@ public slots:
 public slots:
     virtual void   initialize(void);
     virtual void uninitialize(void);
+
+public:
+    QString    name(void) const;
+    void    setName(const QString& name);
 
 // /////////////////////////////////////////////////////////////////
 // New VR API

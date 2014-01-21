@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:39:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jan 16 16:39:32 2014 (+0100)
+ * Last-Updated: Tue Jan 21 17:47:59 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 27
+ *     Update #: 48
  */
 
 /* Commentary: 
@@ -37,6 +37,8 @@ dtkViewList::dtkViewList(QWidget *parent) : QListWidget(parent), d(new dtkViewLi
 
     connect(dtkAbstractViewFactory::instance(), SIGNAL(created(dtkAbstractView *, const QString&)), this, SLOT(update()));
 
+    //connect(dtkAbstractViewFactory::instance(), SIGNAL(nameChanged(dtkAbstractView *, const QString&)), this, SLOT(update()));
+
     connect(dtkAbstractViewFactory::instance(), SIGNAL(cleared()), this, SLOT(clear()));
 
     this->update();
@@ -53,8 +55,17 @@ void dtkViewList::update(void)
 {
     this->clear();
 
-    foreach(QString view, dtkAbstractViewFactory::instance()->viewNames())
-        this->addItem(view);
+    foreach(QString objectName, dtkAbstractViewFactory::instance()->viewNames()) {
+        dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(objectName);
+        QListWidgetItem *item = new QListWidgetItem;
+        QString text = objectName;
+        if (!view->name().isEmpty())
+            text += " - " + view->name();
+        item->setText(text);
+        this->addItem(item);
+
+        connect(view, SIGNAL(nameChanged()), this, SLOT(update()));
+    }
 }
 
 void dtkViewList::clear(void)
@@ -65,7 +76,7 @@ void dtkViewList::clear(void)
 QMimeData *dtkViewList::mimeData(const QList<QListWidgetItem *> items) const
 {
     QMimeData *mimeData = new QMimeData;
-    mimeData->setText(items.first()->text());
+    mimeData->setText(items.first()->text().split(" ").first());
 
     return mimeData;
 }

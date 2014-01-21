@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 16:46:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 19:52:54 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: Tue Jan 21 16:28:37 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -48,6 +48,9 @@ public:
 
 public:
     bool stereo;
+
+public:
+    QString name;
 
 public:
     QMap<QString, dtkSmartPointer<dtkAbstractViewAnimator> >   animators;

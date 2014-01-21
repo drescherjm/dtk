@@ -96,7 +96,7 @@ void dtkViewListControl::onLayoutHorizontally(void)
 
         dtkViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Horizontal);
-        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text()));
+        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text().split(" ").first()));
         if(i != n) {
 
             QList<int> sizes = QList<int>() << v << current->width()-s-v;
@@ -132,7 +132,7 @@ void dtkViewListControl::onLayoutVertically(void)
 
         dtkViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Vertical);
-        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text()));
+        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text().split(" ").first()));
         if(i != n) {
 
             QList<int> sizes = QList<int>() << v+f << current->height()-s-v-f;
@@ -170,7 +170,7 @@ void dtkViewListControl::onLayoutGrid(void)
 
     d->layout->clear();
     d->layout->setCurrent(d->layout->root());
-    d->layout->current()->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i)->text()));
+    d->layout->current()->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i)->text().split(" ").first()));
 
     QList<item_t> items; items << qMakePair(d->layout->current(), Qt::Horizontal);
 
@@ -183,7 +183,7 @@ void dtkViewListControl::onLayoutGrid(void)
         dtkViewLayoutItem *current = item.first;
         current->setOrientation(item.second);
         current->split();
-        current->second()->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i)->text()));
+        current->second()->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i)->text().split(" ").first()));
 
         items << qMakePair(current->first(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);

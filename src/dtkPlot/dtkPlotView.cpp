@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jan 16 11:34:58 2014 (+0100)
+ * Last-Updated: Tue Jan 21 17:43:12 2014 (+0100)
  *           By: Selim Kraria
- *     Update #: 548
+ *     Update #: 550
  */
 
 /* Commentary: 
@@ -311,6 +311,7 @@ void dtkPlotView::deactivateLegend(void)
 void dtkPlotView::setTitle(const QString& title)
 {
     d->setTitle(title);
+    this->setName(title);
 }
 
 void dtkPlotView::setTitleSize(const int& size)

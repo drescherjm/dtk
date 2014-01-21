@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:38:45 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 11 15:44:53 2013 (+0200)
- *           By: Etienne
- *     Update #: 1044
+ * Last-Updated: Tue Jan 21 18:12:02 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 1049
  */
 
 /* Commentary:
@@ -170,12 +170,13 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
     d->view = view;
     d->view->widget()->show();
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
+    connect(view, SIGNAL(nameChanged()), this, SLOT(updateLabel()));
 
     if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
 
         // qDebug() << "Got parent ! - setting name";
 
-        item->d->label->setText(d->view->objectName());
+        this->updateLabel();
         item->d->close->setEnabled(true);
         item->d->vertc->setEnabled(true);
         item->d->horzt->setEnabled(true);
@@ -184,6 +185,16 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
     }
 
     // qDebug() << __func__ << 2 << this->parentWidget()->objectName() << this->parentWidget()->metaObject()->className();
+}
+
+void dtkViewLayoutItemProxy::updateLabel(void)
+{
+    if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
+        QString text = d->view->objectName();
+        if (!d->view->name().isEmpty())
+            text += " - " + d->view->name();
+        item->d->label->setText(text);  
+    }
 }
 
 void dtkViewLayoutItemProxy::focusInEvent(QFocusEvent *event)

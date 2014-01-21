@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:05:25 2012 (+0200)
- *           By: tkloczko
- *     Update #: 329
+ * Last-Updated: Tue Jan 21 17:43:58 2014 (+0100)
+ *           By: Selim Kraria
+ *     Update #: 343
  */
 
 /* Commentary:
@@ -145,6 +145,22 @@ void dtkAbstractView::initialize(void)
 void dtkAbstractView::uninitialize(void)
 {
 
+}
+
+QString dtkAbstractView::name(void) const
+{
+    DTK_D(const dtkAbstractView);
+
+    return d->name;
+}
+
+void dtkAbstractView::setName(const QString& name)
+{
+    DTK_D(dtkAbstractView);
+
+    d->name = name;
+
+    emit nameChanged();
 }
 
 void dtkAbstractView::link(dtkAbstractView *other)

@@ -73,19 +73,38 @@ void dtkViewListControl::setList(dtkViewList *list)
     d->list = list;
 }
 
-void dtkViewListControl::onLayoutHorizontally(void)
+bool dtkViewListControl::isEmpty(void) const
 {
-    if(!d->list)
+    if (!d->list)
+        return true;
+
+    if (!d->list->count())
+        return true;
+
+    if (!d->layout)
+        return true;
+
+    return false;
+}
+
+void dtkViewListControl::onActorStarted(QString view_name)
+{
+    if (!d->layout)
         return;
 
-    if(!d->list->count())
+    dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(view_name);
+    if (view && !d->layout->current()->proxy()->view())
+        d->layout->current()->proxy()->setView(view);
+}
+
+void dtkViewListControl::layoutHorizontally(void)
+{
+    if (this->isEmpty())
         return;
 
-    if(!d->layout)
-        return;
+    this->closeAllLayout();
 
-    d->layout->clear();
-    d->layout->setCurrent(d->layout->root());
+    qApp->sendPostedEvents(0, QEvent::DeferredDelete);
 
     int w = d->layout->current()->width();
     int n = d->list->count();
@@ -105,22 +124,22 @@ void dtkViewListControl::onLayoutHorizontally(void)
         }
 
         d->layout->setCurrent(current->second());
-    }
+    }    
 }
 
-void dtkViewListControl::onLayoutVertically(void)
+void dtkViewListControl::onLayoutHorizontally(void)
 {
-    if(!d->list)
+    this->layoutHorizontally();
+}
+
+void dtkViewListControl::layoutVertically(void)
+{
+    if (this->isEmpty())
         return;
 
-    if(!d->list->count())
-        return;
+    this->closeAllLayout();
 
-    if(!d->layout)
-        return;
-
-    d->layout->clear();
-    d->layout->setCurrent(d->layout->root());
+    qApp->sendPostedEvents(0, QEvent::DeferredDelete);
 
     int h = d->layout->current()->height();
     int f = d->layout->current()->footerHeight();
@@ -144,23 +163,14 @@ void dtkViewListControl::onLayoutVertically(void)
     }
 }
 
-void dtkViewListControl::onActorStarted(QString view_name)
+void dtkViewListControl::onLayoutVertically(void)
 {
-    dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(view_name);
-    if (view &&  !d->layout->current()->proxy()->view())  {
-        d->layout->current()->proxy()->setView(view);
-    }
+    this->layoutVertically();
 }
 
-void dtkViewListControl::onLayoutGrid(void)
+void dtkViewListControl::layoutGrid(void)
 {
-    if(!d->list)
-        return;
-
-    if(!d->list->count())
-        return;
-
-    if(!d->layout)
+    if (this->isEmpty())
         return;
 
     int n = d->list->count();
@@ -187,18 +197,24 @@ void dtkViewListControl::onLayoutGrid(void)
 
         items << qMakePair(current->first(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
-    }
+    }    
 }
 
-void dtkViewListControl::onLayoutCloseAll(void)
+void dtkViewListControl::onLayoutGrid(void)
 {
-    if(!d->list)
-        return;
-    if(!d->list->count())
-        return;
-    if(!d->layout)
+    this->layoutGrid();
+}
+
+void dtkViewListControl::closeAllLayout(void)
+{
+    if (this->isEmpty())
         return;
 
     d->layout->clear();
     d->layout->setCurrent(d->layout->root());
+}
+
+void dtkViewListControl::onLayoutCloseAll(void)
+{
+    this->closeAllLayout();
 }

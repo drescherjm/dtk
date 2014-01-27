@@ -36,6 +36,15 @@ public:
     void setLayout(dtkViewLayout *layout);
     void setList(dtkViewList *list);
 
+public:
+    bool isEmpty(void) const;
+
+public:
+    void closeAllLayout(void);
+    void layoutHorizontally(void);
+    void layoutVertically(void);
+    void layoutGrid(void);
+
 public slots:
     void onActorStarted(QString view_name);
 

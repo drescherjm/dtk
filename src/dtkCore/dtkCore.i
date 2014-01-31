@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jan  6 21:45:15 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Oct 23 12:42:28 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 487
+ * Last-Updated: ven. janv. 31 15:41:41 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 493
  */
 
 /* Commentary:
@@ -130,6 +130,13 @@
 
 %ignore closed();
 %ignore focused();
+%ignore nameChanged();
+
+// /////////////////////////////////////////////////////////////////
+// Ignore rules for dtkAbstractViewFactory signals
+// /////////////////////////////////////////////////////////////////
+
+%ignore cleared();
 
 // /////////////////////////////////////////////////////////////////
 // Ignore rules for dtkAbstractViewInteractor signals

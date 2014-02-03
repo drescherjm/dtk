@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:54:03 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 14:13:00 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 55
+ * Last-Updated: lun. févr.  3 15:39:50 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 62
  */
 
 /* Commentary: 
@@ -19,14 +19,16 @@
 
 #include "dtkSwitch.h"
 
+#include <QtQuick>
+
 class dtkSwitchPrivate
 {
 public:
     void update(void);
 
 public:
-    QDeclarativeItem *root_item;
-    QDeclarativeContext *root_context;
+    QQuickItem *root_item;
+    QQmlContext *root_context;
 
 public:
     QString foreground;
@@ -45,7 +47,7 @@ void dtkSwitchPrivate::update(void)
     this->root_context->setContextProperty("wrapper", q);
 }
 
-dtkSwitch::dtkSwitch(QWidget *parent) : QDeclarativeView(parent), d(new dtkSwitchPrivate)
+dtkSwitch::dtkSwitch(QWindow *parent) : QQuickView(parent), d(new dtkSwitchPrivate)
 {
     d->q = this;
 
@@ -59,10 +61,10 @@ dtkSwitch::dtkSwitch(QWidget *parent) : QDeclarativeView(parent), d(new dtkSwitc
     d->update();
 
     this->setSource(QUrl("qrc:dtkGui/dtkSwitch.qml"));
-    this->setStyleSheet("background: transparent;");
-    this->setResizeMode(QDeclarativeView::SizeViewToRootObject);
+    //this->setStyleSheet("background: transparent;");
+    this->setResizeMode(QQuickView::SizeViewToRootObject);
 
-    d->root_item = qobject_cast<QDeclarativeItem *>(this->rootObject());
+    d->root_item = qobject_cast<QQuickItem *>(this->rootObject());
 
     QMetaObject::invokeMethod(d->root_item, "init");
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 17 14:01:37 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 1611
+ * Last-Updated: lun. févr.  3 15:40:07 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 1634
  */
 
 /* Commentary: 
@@ -22,6 +22,7 @@
 #include "dtkTagCloud.h"
 
 #include <QtDebug>
+#include <QWidget>
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -559,17 +560,20 @@ dtkTagScope::dtkTagScope(QWidget *parent) : QFrame(parent)
     d->clear->setFixedHeight(21);
     d->clear->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    d->switsh = new dtkSwitch(this);
-    d->switsh->setFixedHeight(21);
-    d->switsh->setFixedWidth(39);
-    d->switsh->setAttribute(Qt::WA_MacShowFocusRect, false);
+    d->switsh = new dtkSwitch();
+    d->switsh->setMaximumHeight(21);
+    d->switsh->setMinimumHeight(21);
+    d->switsh->setMaximumWidth(39);
+    d->switsh->setMinimumWidth(39);
+    //QWidget *switsh_container = QWidget::createWindowContainer(d->switsh, this);
+    //d->switsh->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     QHBoxLayout *t_layout = new QHBoxLayout;
     t_layout->setContentsMargins(5, 5, 5, 5);
     // t_layout->setSpacing(0);
     t_layout->addWidget(d->edit);
     t_layout->addWidget(d->clear);
-    t_layout->addWidget(d->switsh);
+    //t_layout->addWidget(switsh_container);
 
     d->layout = new dtkFlowLayout;
     d->layout->setContentsMargins(5, 5, 5, 5);

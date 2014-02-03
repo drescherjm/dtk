@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Tue Jun 19 18:22:57 2012 (+0200)
 ## Version: $Id$
-## Last-Updated: Thu Aug 29 15:06:14 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 35
+## Last-Updated: mer. janv. 29 09:32:38 2014 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 39
 ######################################################################
 ## 
 ### Commentary: 
@@ -27,7 +27,8 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkArrayTest.h
   dtkProcessControllerTest.h
   dtkSingletonTest.h
-  dtkSmartPointerTest.h)
+  dtkSmartPointerTest.h
+  dtkSparseMatrixTest.h)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
@@ -36,7 +37,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkArrayTest.cpp
   dtkProcessControllerTest.cpp
   dtkSingletonTest.cpp
-  dtkSmartPointerTest.cpp)
+  dtkSmartPointerTest.cpp
+  dtkSparseMatrixTest.cpp)
 
 ## #################################################################
 ## Build rules
@@ -48,7 +50,8 @@ set(${PROJECT_NAME}_MAIN_SOURCES
   dtkArrayTest.cpp
   dtkProcessControllerTest.cpp
   dtkSingletonTest.cpp
-  dtkSmartPointerTest.cpp)
+  dtkSmartPointerTest.cpp
+  dtkSparseMatrixTest.cpp)
 
 create_test_sourcelist(${PROJECT_NAME}_SOURCES_TEST ${PROJECT_NAME}.cxx
   ${${PROJECT_NAME}_MAIN_SOURCES})

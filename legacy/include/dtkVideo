@@ -1,0 +1,3 @@
+#include "../src/dtkVideo/dtkVideo.h"
+#include "../src/dtkVideo/dtkVideoDecoder.h"
+#include "../src/dtkVideo/dtkVideoEncoder.h"

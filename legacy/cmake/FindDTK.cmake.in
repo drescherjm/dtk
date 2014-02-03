@@ -1,0 +1,38 @@
+### FindDTK.cmake.in --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008 - Julien Wintz, Inria.
+## Created: Tue Nov 16 15:32:20 2010 (+0100)
+## Version: $Id$
+## Last-Updated: Tue Apr  3 11:42:24 2012 (+0200)
+##           By: Julien Wintz
+##     Update #: 20
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change log:
+## 
+######################################################################
+
+set(dtk_INCLUDE_DIR  "@dtk_INCLUDE_DIR@")
+set(DTK_INCLUDE_DIR  "@dtk_INCLUDE_DIR@")
+set(dtk_INCLUDE_DIRS "@dtk_INCLUDE_DIR@")
+
+set(dtk_LIBRARY_DIR  "@dtk_LIBRARY_DIR@")
+set(DTK_LIBRARY_DIR  "@dtk_LIBRARY_DIR@")
+set(dtk_LIBRARY_DIRS "@dtk_LIBRARY_DIR@")
+
+set(dtk_CMAKE_DIRS   "@dtk_CMAKE_DIR@")
+
+set(dtk_USE_FILE "@dtk_USE_FILE@")
+
+set(DTK_LIBRARIES dtkMath dtkCore dtkGui dtkComposer)
+
+set(QT_QMAKE_EXECUTABLE "@QT_QMAKE_EXECUTABLE@")
+
+include(${dtk_USE_FILE})
+
+set(DTK_FOUND TRUE)

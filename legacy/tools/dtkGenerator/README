@@ -1,0 +1,20 @@
+# ################## #
+# Files description: #
+# ################## #
+
+- Generator:
+    * dtkGenerator.h
+    * dtkGenerator.cpp
+    * dtkGenerator.qrc
+    * templates/*
+
+- GUI for the Generator:
+    * dtkGeneratorWizard.h
+    * dtkGeneratorWizard.cpp
+    * images/*
+
+- AnyOption: Handle the command line options. ( http://www.hackorama.com/anyoption/ )
+    * anyoption.h
+    * anyoption.cpp
+
+

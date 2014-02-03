@@ -1,0 +1,39 @@
+/* dtkUpdater.h --- 
+ * 
+ * Author: Julien Wintz
+ * Copyright (C) 2008 - Julien Wintz, Inria.
+ * Created: Mon Jul 20 11:15:03 2009 (+0200)
+ * Version: $Id$
+ * Last-Updated: Mon Feb 15 20:06:19 2010 (+0100)
+ *           By: Julien Wintz
+ *     Update #: 3
+ */
+
+/* Commentary: 
+ * 
+ */
+
+/* Change log:
+ * 
+ */
+
+#ifndef DTKUPDATER_H
+#define DTKUPDATER_H
+
+#include <QtCore>
+
+#include "dtkCoreExport.h"
+
+class dtkUpdaterPrivate;
+
+class DTKCORE_EXPORT dtkUpdater
+{   
+public:
+     dtkUpdater(const QUrl& url);
+    ~dtkUpdater(void);
+
+private:
+    dtkUpdaterPrivate *d;
+};
+
+#endif // DTKUPDATER_H

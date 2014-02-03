@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 11:31:43 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. févr.  3 11:21:37 2014 (+0100)
+## Last-Updated: lun. févr.  3 11:28:27 2014 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 17
+##     Update #: 18
 ######################################################################
 ## 
 ### Change Log:
@@ -41,3 +41,12 @@ install*
 ## ###################################################################
 
 .DS_Store
+.*.swp
+*~
+.DS_Store
+build
+build-*
+
+*.user
+.cproject
+.project

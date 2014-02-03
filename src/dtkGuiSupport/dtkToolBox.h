@@ -10,15 +10,15 @@
 
 #pragma once
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 // ///////////////////////////////////////////////////////////////////
 // 
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkToolBoxButton : public QAbstractButton
+class DTKGUISUPPORT_EXPORT dtkToolBoxButton : public QAbstractButton
 {
     Q_OBJECT
 
@@ -57,7 +57,7 @@ inline bool dtkToolBoxButton::isSelected(void) const
 
 class dtkToolBox;
 class dtkToolBoxItemPrivate;
-class DTKGUI_EXPORT dtkToolBoxItem : public QFrame
+class DTKGUISUPPORT_EXPORT dtkToolBoxItem : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded)
@@ -103,7 +103,7 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 class dtkToolBoxPrivate;
-class DTKGUI_EXPORT dtkToolBox : public QScrollArea
+class DTKGUISUPPORT_EXPORT dtkToolBox : public QScrollArea
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count)

@@ -21,7 +21,7 @@
 #include <dtkVideo/dtkVideoEncoder.h>
 #endif
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 class dtkScreenMenuPrivate

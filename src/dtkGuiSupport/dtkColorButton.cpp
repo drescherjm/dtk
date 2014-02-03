@@ -21,9 +21,9 @@
 #include "dtkColorGrid.h"
 #include "dtkPopup.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkColorButtonPrivate
 {

@@ -20,10 +20,10 @@
 #ifndef DTKSETTINGSEDITOR_H
 #define DTKSETTINGSEDITOR_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
 // dtkSettingsEditorVariantDelegate
@@ -109,7 +109,7 @@ private:
 
 class dtkSettingsEditorPrivate;
 
-class DTKGUI_EXPORT dtkSettingsEditor : public QWidget
+class DTKGUISUPPORT_EXPORT dtkSettingsEditor : public QWidget
 {
     Q_OBJECT
 

@@ -20,13 +20,13 @@
 #ifndef DTKANCHOREDBAR_H
 #define DTKANCHOREDBAR_H
 
-#include <QtGui>
+#include <QtWidgets>
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 class dtkAnchoredBarPrivate;
 
-class DTKGUI_EXPORT dtkAnchoredBar : public QToolBar
+class DTKGUISUPPORT_EXPORT dtkAnchoredBar : public QToolBar
 {
     Q_OBJECT
 

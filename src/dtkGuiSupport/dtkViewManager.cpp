@@ -22,7 +22,7 @@
 #include "dtkViewLayout.h"
 #include "dtkViewListControl.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkViewManagerPrivate
 {

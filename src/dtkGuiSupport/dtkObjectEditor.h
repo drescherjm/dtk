@@ -14,13 +14,13 @@
 
 #pragma once
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 #include <QScrollArea>
 
 class dtkObjectEditorPrivate;
 
-class DTKGUI_EXPORT dtkObjectEditor : public QFrame
+class DTKGUISUPPORT_EXPORT dtkObjectEditor : public QFrame
 {
     Q_OBJECT
 

@@ -20,13 +20,13 @@
 #ifndef DTKVIEWLIST_H
 #define DTKVIEWLIST_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkViewListPrivate;
 
-class DTKGUI_EXPORT dtkViewList : public QListWidget
+class DTKGUISUPPORT_EXPORT dtkViewList : public QListWidget
 {
     Q_OBJECT
 

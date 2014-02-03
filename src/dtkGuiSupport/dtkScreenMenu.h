@@ -19,11 +19,11 @@
 #include <QMenu>
 #include <QImage>
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 class dtkScreenMenuPrivate;
 
-class DTKGUI_EXPORT dtkScreenMenu : public QMenu
+class DTKGUISUPPORT_EXPORT dtkScreenMenu : public QMenu
 {
     Q_OBJECT
 

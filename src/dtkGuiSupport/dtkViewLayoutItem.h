@@ -20,9 +20,9 @@
 #ifndef DTKVIEWLAYOUTITEM_H
 #define DTKVIEWLAYOUTITEM_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui/QFrame>
+#include <QtWidgets/QFrame>
 
 class dtkAbstractView;
 
@@ -35,7 +35,7 @@ class dtkViewLayoutItemPrivate;
 
 class dtkViewLayoutItemProxyPrivate;
 
-class DTKGUI_EXPORT dtkViewLayoutItemProxy : public QFrame
+class DTKGUISUPPORT_EXPORT dtkViewLayoutItemProxy : public QFrame
 {
     Q_OBJECT
 
@@ -68,7 +68,7 @@ private:
 // dtkViewLayoutItem
 // /////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkViewLayoutItem : public QFrame
+class DTKGUISUPPORT_EXPORT dtkViewLayoutItem : public QFrame
 {
     Q_OBJECT
 

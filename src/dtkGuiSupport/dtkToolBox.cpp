@@ -11,7 +11,7 @@
 #include "dtkToolBox.h"
 #include "dtkPropertyEditorFactory.h"
 
-#include <dtkLog>
+#include <QDebug>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkToolBoxButton implementation
@@ -153,7 +153,7 @@ void dtkToolBoxItem::hideButton(void)
 void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon &icon)
 {
     if (!widget) {
-        dtkError() << Q_FUNC_INFO << "Widget is not valid, nothing is done.";
+        qDebug() << Q_FUNC_INFO << "Widget is not valid, nothing is done.";
         return;
     }
 
@@ -177,7 +177,7 @@ void dtkToolBoxItem::setExpanded(bool expanded)
     d->is_expanded = expanded;
 
     if (!d->widget) {
-        dtkWarn() << Q_FUNC_INFO << "No widget, nothing is done.";
+        qDebug() << Q_FUNC_INFO << "No widget, nothing is done.";
         return;
     }
 
@@ -459,7 +459,7 @@ dtkToolBoxItem *dtkToolBox::itemAt(int index) const
 void dtkToolBox::insertItem(int index, dtkToolBoxItem *item)
 {
     if (d->items.contains(item)) {
-        dtkWarn() << Q_FUNC_INFO << "Item is already in the toolbox.";
+        qDebug() << Q_FUNC_INFO << "Item is already in the toolbox.";
         return;
     }
 

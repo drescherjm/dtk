@@ -20,7 +20,7 @@
 #ifndef DTKPOPUP_H
 #define DTKPOPUP_H
 
-#include <QtGui/QFrame>
+#include <QtWidgets/QFrame>
 
 class dtkPopupPrivate;
 

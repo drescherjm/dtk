@@ -4,20 +4,16 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. oct. 23 13:46:50 2013 (+0200)
+## Last-Updated: lun. févr.  3 14:45:02 2014 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 300
-######################################################################
-## 
-### Commentary: 
-## 
+##     Update #: 320
 ######################################################################
 ## 
 ### Change log:
 ## 
 ######################################################################
 
-project(dtkGui)
+project(dtkGuiSupport)
 
 ## #################################################################
 ## Sources
@@ -53,35 +49,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkViewList.h
   dtkViewListControl.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAboutBox.h
-  dtkAboutPlugin.h
-  dtkAnchoredBar.h
-  dtkColorButton.h
-  dtkColorGrid.h
-  dtkFinder.h
-  dtkObjectEditor.h
-  dtkPieChart.h
-  dtkPluginsEditor.h
-  dtkPopup.h
-  dtkProgressIndicator.h
-  dtkPropertyEditor.h
-  dtkPropertyEditorFactory.h
-  dtkRecentFilesMenu.h
-  dtkSearchField.h
-  dtkSettingsEditor.h
-  dtkSpacer.h
-  dtkSplitter.h
-  dtkTagCloud.h
-  dtkToolBox.h
-  dtkScreenMenu.h
-  dtkSwitch.h
-  dtkViewManager.h
-  dtkViewLayout.h
-  dtkViewLayoutItem.h
-  dtkViewList.h
-  dtkViewListControl.h)
-
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAboutPlugin.cpp
@@ -111,12 +78,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkViewList.cpp
   dtkViewListControl.cpp)
 
-if(DTK_BUILD_SCRIPT)
-set(${PROJECT_NAME}_HEADERS     ${${PROJECT_NAME}_HEADERS}     dtkInterpreter.h)
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC} dtkInterpreter.h)
-set(${PROJECT_NAME}_SOURCES     ${${PROJECT_NAME}_SOURCES}     dtkInterpreter.cpp)
-endif(DTK_BUILD_SCRIPT)
-
 if(APPLE)
 set(${PROJECT_NAME}_SOURCES
   ${${PROJECT_NAME}_SOURCES}
@@ -127,21 +88,21 @@ set(${PROJECT_NAME}_SOURCES
     dtkSearchField.cpp)
 endif(APPLE)
 
-set(${PROJECT_NAME}_RESOURCES dtkGui.qrc)
+set(${PROJECT_NAME}_SOURCES_RCC dtkGui.qrc)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
+
+qt5_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
+qt5_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_RCC})
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_SHARED)
 if(NOT MSVC)
   add_definitions(-DQT_NO_DEBUG)
 endif(NOT MSVC)
-
-qt4_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
@@ -176,21 +137,20 @@ add_library(${PROJECT_NAME} STATIC
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
-  dtkCore
-  dtkLog)
-
-if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
-  target_link_libraries(${PROJECT_NAME} dtkVideo)
-endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
-
-if(DTK_BUILD_SCRIPT)
-target_link_libraries(${PROJECT_NAME} dtkScript)
-endif(DTK_BUILD_SCRIPT)
+  dtkCoreSupport)
 
 if(APPLE)
 target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
 endif(APPLE)
+
+## ###################################################################
+## Link rules
+## ###################################################################
+
+qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Gui)
+qt5_use_modules(${PROJECT_NAME} Quick)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## #################################################################
 ## Export header file

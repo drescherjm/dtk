@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:53:52 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Mar 20 13:43:12 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 10
+ * Last-Updated: lun. févr.  3 14:44:07 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -20,12 +20,12 @@
 #ifndef DTKSWITCH_H
 #define DTKSWITCH_H
 
-#include <QtGui>
-#include <QtDeclarative>
+#include <QtWidgets>
+#include <QQuickView>
 
 class dtkSwitchPrivate;
 
-class dtkSwitch : public QDeclarativeView
+class dtkSwitch : public QQuickView
 {
     Q_OBJECT
 

@@ -20,10 +20,10 @@
 #include "dtkViewLayout.h"
 #include "dtkViewLayoutItem.h"
 
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
+#include <dtkCoreSupport/dtkAbstractView.h>
+#include <dtkCoreSupport/dtkAbstractViewFactory.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
 // dtkViewLayoutItemProxyPrivate

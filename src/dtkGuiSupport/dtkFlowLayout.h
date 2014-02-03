@@ -20,11 +20,11 @@
 #ifndef DTKFLOWLAYOUT_H
 #define DTKFLOWLAYOUT_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
-class DTKGUI_EXPORT dtkFlowLayout : public QLayout
+class DTKGUISUPPORT_EXPORT dtkFlowLayout : public QLayout
 {
 public:
      dtkFlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);

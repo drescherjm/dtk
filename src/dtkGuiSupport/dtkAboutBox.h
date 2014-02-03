@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Apr 19 12:51:22 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun  1 20:59:13 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 5
+ * Last-Updated: lun. févr.  3 14:01:25 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -20,13 +20,13 @@
 #ifndef DTKABOUTBOX_H
 #define DTKABOUTBOX_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkAboutBoxPrivate;
 
-class DTKGUI_EXPORT dtkAboutBox : public QMessageBox
+class DTKGUISUPPORT_EXPORT dtkAboutBox : public QMessageBox
 {
     Q_OBJECT
 

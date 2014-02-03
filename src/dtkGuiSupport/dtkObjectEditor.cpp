@@ -15,8 +15,8 @@
 #include "dtkObjectEditor.h"
 #include "dtkPropertyEditorFactory.h"
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QLabel>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
 
 #include <QObject>
 #include <QVariant>

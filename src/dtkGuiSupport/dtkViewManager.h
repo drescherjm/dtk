@@ -20,14 +20,14 @@
 #ifndef DTKVIEWMANAGER_H
 #define DTKVIEWMANAGER_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui/QFrame>
+#include <QtWidgets/QFrame>
 
 class dtkAbstractView;
 class dtkViewManagerPrivate;
 
-class DTKGUI_EXPORT dtkViewManager : public QFrame
+class DTKGUISUPPORT_EXPORT dtkViewManager : public QFrame
 {
     Q_OBJECT
 

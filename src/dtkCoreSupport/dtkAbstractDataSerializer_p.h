@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 11:04:31 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 16:54:08 2012 (+0200)
- *           By: tkloczko
- *     Update #: 7
+ * Last-Updated: lun. févr.  3 13:40:16 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATASERIALIZER_P
 #define DTKABSTRACTDATASERIALIZER_P
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 #include "dtkAbstractDataSerializer.h"
 
@@ -30,7 +30,7 @@ class QByteArray;
 // dtkAbstractDataSerializerPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataSerializerPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractDataSerializerPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractDataSerializerPrivate(dtkAbstractDataSerializer *q = 0) : dtkAbstractObjectPrivate(q) {}

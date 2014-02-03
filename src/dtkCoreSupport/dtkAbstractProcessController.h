@@ -19,7 +19,7 @@
 class dtkAbstractProcess;
 class dtkAbstractProcessControllerPrivate;
 
-class DTKCORE_EXPORT dtkAbstractProcessController : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractProcessController : public dtkAbstractObject
 {
     Q_OBJECT
 

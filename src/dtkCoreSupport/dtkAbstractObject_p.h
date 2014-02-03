@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 10:50:52 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 24 16:40:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 11
+ * Last-Updated: lun. févr.  3 13:40:37 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 12
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTOBJECT_P_H
 #define DTKABSTRACTOBJECT_P_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject.h"
 
 #include <QtCore>
@@ -29,7 +29,7 @@
 // dtkAbstractObjectPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractObjectPrivate(dtkAbstractObject *q = 0) : q_ptr(q) {}

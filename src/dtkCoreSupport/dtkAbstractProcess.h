@@ -29,7 +29,7 @@ class dtkAbstractProcessPrivate;
 // dtkAbstractProcess interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractProcess : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractProcess : public dtkAbstractObject
 {
     Q_OBJECT
 
@@ -48,8 +48,8 @@ protected:
    virtual void copy(const dtkAbstractObject& other);
 
 public:
-    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
-    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
+    friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
+    friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
     
 signals:
     void started(const QString& message);
@@ -126,7 +126,7 @@ private:
     DTK_DECLARE_PRIVATE(dtkAbstractProcess);
 };
 
-DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
-DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
+DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
+DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
 
 #endif

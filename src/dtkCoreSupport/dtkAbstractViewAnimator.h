@@ -30,7 +30,7 @@ class dtkAbstractViewAnimatorPrivate;
 // dtkAbstractViewAnimator interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractViewAnimator : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractViewAnimator : public dtkAbstractObject
 {
     Q_OBJECT
 

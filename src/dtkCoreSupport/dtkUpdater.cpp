@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Feb 13 15:35:40 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 12
+ * Last-Updated: lun. févr.  3 14:47:49 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 23
  */
 
 /* Commentary: 
@@ -89,16 +89,16 @@ void dtkUpdaterPrivate::check(const QUrl& url)
     if(!cfgFile->open(QFile::ReadWrite))
         qDebug() << "Unable to open config file for parsing";
 
-    http->setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
-
-    if (!url.userName().isEmpty())
-        http->setUser(url.userName(), url.password());
-
     QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
     if (path.isEmpty())
         path = "/";
 
-    cfgId = http->get(path, cfgFile);
+    QNetworkRequest req(url);
+
+    // FIXME: finish migration from QHTTP. Currently, it doesn't work.
+    //    cfgId = http->get(req);
+
+    // cfgId = http->get(path, cfgFile);
 }
 
 void dtkUpdaterPrivate::downl(const QUrl& url)
@@ -106,16 +106,9 @@ void dtkUpdaterPrivate::downl(const QUrl& url)
     if(!binFile->open(QFile::ReadWrite))
         qDebug() << "Unable to open binary file for saving";
 
-    http->setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
+    // FIXME: finish migration from QHTTP. Currently, it doesn't work.
 
-    if (!url.userName().isEmpty())
-        http->setUser(url.userName(), url.password());
-
-    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
-    if (path.isEmpty())
-        path = "/";
-
-    binId = http->get(path, binFile);
+//    binId = http->get(path, binFile);
 }
 
 void dtkUpdaterPrivate::extract(void)
@@ -145,7 +138,7 @@ dtkUpdater::dtkUpdater(const QUrl& cfgUrl)
     QFile::remove("/tmp/bin");
 
     d = new dtkUpdaterPrivate;
-    d->http = new QHttp;
+    d->http = new QNetworkAccessManager;
     d->cfgFile = new QFile("/tmp/cfg");
     d->binFile = new QFile("/tmp/bin");
 

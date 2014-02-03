@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 12:41:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Oct 13 01:21:58 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 6
+ * Last-Updated: lun. févr.  3 14:29:35 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ public slots:
     void onRequestFinished(int id, bool error);
 
 public:
-    QHttp *http;
+    QNetworkAccessManager *http;
     QFile *cfgFile;
     QFile *binFile;
     int cfgId;

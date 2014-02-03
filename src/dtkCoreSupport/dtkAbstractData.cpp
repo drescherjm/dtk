@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 08:55:26 2012 (+0200)
- *           By: tkloczko
- *     Update #: 492
+ * Last-Updated: lun. févr.  3 13:39:50 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 493
  */
 
 /* Commentary:
@@ -28,7 +28,7 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractData implementation
@@ -811,18 +811,18 @@ void dtkAbstractData::setParameter(dtkAbstractData *parameter, int channel)
     DTK_UNUSED(channel);
 }
 
-void dtkAbstractData::setParameter(dtkVectorReal parameter)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-}
+// void dtkAbstractData::setParameter(dtkVectorReal parameter)
+// {
+//     DTK_DEFAULT_IMPLEMENTATION;
+//     DTK_UNUSED(parameter);
+// }
 
-void dtkAbstractData::setParameter(dtkVectorReal parameter, int channel)
-{
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
-}
+// void dtkAbstractData::setParameter(dtkVectorReal parameter, int channel)
+// {
+//     DTK_DEFAULT_IMPLEMENTATION;
+//     DTK_UNUSED(parameter);
+//     DTK_UNUSED(channel);
+// }
 
 void dtkAbstractData::setData(void* data)
 {

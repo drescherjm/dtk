@@ -20,7 +20,7 @@
 #ifndef DTKPLUGIN_P
 #define DTKPLUGIN_P
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 
 class dtkPlugin;
@@ -29,7 +29,7 @@ class dtkPlugin;
 // dtkPluginPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkPluginPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkPluginPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkPluginPrivate(dtkPlugin *q = 0) : dtkAbstractObjectPrivate(q) {}

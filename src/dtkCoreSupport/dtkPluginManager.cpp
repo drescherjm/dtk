@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 22 14:44:37 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 288
+ * Last-Updated: lun. févr.  3 14:22:10 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 289
  */
 
 /* Commentary:
@@ -69,9 +69,9 @@ public:
 
 #include "dtkAbstractData.h"
 
-#include <dtkMath/dtkVector.h>
-#include <dtkMath/dtkVector3D.h>
-#include <dtkMath/dtkQuaternion.h>
+// #include <dtkMath/dtkVector.h>
+// #include <dtkMath/dtkVector3D.h>
+// #include <dtkMath/dtkQuaternion.h>
 
 dtkPluginManager *dtkPluginManager::instance(void)
 {
@@ -82,12 +82,12 @@ dtkPluginManager *dtkPluginManager::instance(void)
         qRegisterMetaType<dtkAbstractObject*>("dtkAbstractObject*");
         qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
         qRegisterMetaType<dtkAbstractData*>("dtkAbstractData*");
-        qRegisterMetaType<dtkVectorReal>("dtkVectorReal");
-        qRegisterMetaType<dtkVectorReal*>("dtkVectorReal*");
-        qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
-        qRegisterMetaType<dtkVector3DReal*>("dtkVector3DReal*");
-        qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
-        qRegisterMetaType<dtkQuaternionReal*>("dtkQuaternionReal*");
+        // qRegisterMetaType<dtkVectorReal>("dtkVectorReal");
+        // qRegisterMetaType<dtkVectorReal*>("dtkVectorReal*");
+        // qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
+        // qRegisterMetaType<dtkVector3DReal*>("dtkVector3DReal*");
+        // qRegisterMetaType<dtkQuaternionReal>("dtkQuaternionReal");
+        // qRegisterMetaType<dtkQuaternionReal*>("dtkQuaternionReal*");
     }
 
     return s_instance;

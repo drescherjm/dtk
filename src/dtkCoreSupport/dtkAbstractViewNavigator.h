@@ -31,7 +31,7 @@ class dtkAbstractView;
 // dtkAbstractViewNavigator interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractViewNavigator : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractViewNavigator : public dtkAbstractObject
 {
     Q_OBJECT
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/25 13:18:27
  * Version: $Id$
- * Last-Updated: Wed Sep 19 15:02:21 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 53
+ * Last-Updated: lun. févr.  3 14:21:46 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 55
  */
 
 /* Commentary:
@@ -19,7 +19,7 @@
 
 #include <dtkConfig.h>
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include "dtkCpuid.h"
 
@@ -65,8 +65,8 @@ QString dtkCpuid::vendor(void)
     this->load(0); // Get CPU vendor
 
     QString vendor;
-    vendor += QString::fromAscii((const char *)&d->regs[1],4);
-    vendor += QString::fromAscii((const char *)&d->regs[3],4);
-    vendor += QString::fromAscii((const char *)&d->regs[2],4);
+    vendor += QString::fromUtf8((const char *)&d->regs[1],4);
+    vendor += QString::fromUtf8((const char *)&d->regs[3],4);
+    vendor += QString::fromUtf8((const char *)&d->regs[2],4);
     return vendor;
 }

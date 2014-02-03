@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
 #include <QtCore/qglobal.h>
@@ -320,7 +320,7 @@ private:
     void setSize(int newSize);
 };
 
-int DTKCORE_EXPORT dtkArrayAllocMore(int alloc, int extra, int sizeOfT);
+int DTKCORESUPPORT_EXPORT dtkArrayAllocMore(int alloc, int extra, int sizeOfT);
 
 // ///////////////////////////////////////////////////////////////////
 // dtkArray implementation

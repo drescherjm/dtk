@@ -29,7 +29,7 @@
                   class dtkAbstractViewFactoryPrivate;
 template<class T> class dtkSmartPointer;
 
-class DTKCORE_EXPORT dtkAbstractViewFactory : public dtkAbstractFactory
+class DTKCORESUPPORT_EXPORT dtkAbstractViewFactory : public dtkAbstractFactory
 {
     Q_OBJECT
 

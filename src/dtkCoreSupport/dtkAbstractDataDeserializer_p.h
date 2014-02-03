@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATADESERIALIZER_P
 #define DTKABSTRACTDATADESERIALIZER_P
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 #include "dtkAbstractDataDeserializer.h"
 
@@ -30,7 +30,7 @@ class dtkAbstractData;
 // dtkAbstractDataDeserializerPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataDeserializerPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractDataDeserializerPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractDataDeserializerPrivate(dtkAbstractDataDeserializer *q = 0) : dtkAbstractObjectPrivate(q) {}

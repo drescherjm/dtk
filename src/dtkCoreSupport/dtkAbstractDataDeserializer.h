@@ -30,7 +30,7 @@ class dtkAbstractDataDeserializerPrivate;
 // dtkAbstractDataDeserializer interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataDeserializer : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractDataDeserializer : public dtkAbstractObject
 {
     Q_OBJECT
 

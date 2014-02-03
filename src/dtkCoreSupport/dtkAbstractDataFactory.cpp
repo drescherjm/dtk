@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov  8 09:50:05 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 291
+ * Last-Updated: lun. févr.  3 14:09:46 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 292
  */
 
 /* Commentary:
@@ -110,7 +110,7 @@ public:
 // dtkAbstractDataFactory
 // /////////////////////////////////////////////////////////////////
 
-DTKCORE_EXPORT dtkAbstractDataFactory *dtkAbstractDataFactory::instance(void)
+DTKCORESUPPORT_EXPORT dtkAbstractDataFactory *dtkAbstractDataFactory::instance(void)
 {
     if(!s_instance)
 	s_instance = new dtkAbstractDataFactory;

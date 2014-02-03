@@ -24,7 +24,7 @@
 #include "dtkAbstractViewAnimator.h"
 #include "dtkAbstractViewNavigator.h"
 #include "dtkAbstractViewInteractor.h"
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkSmartPointer.h"
 
 class dtkAbstractView;
@@ -33,7 +33,7 @@ class dtkAbstractView;
 // dtkAbstractViewPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractViewPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractViewPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractViewPrivate(dtkAbstractView *q = 0) : dtkAbstractObjectPrivate(q) {}

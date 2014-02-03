@@ -28,7 +28,7 @@
                   class dtkAbstractProcessFactoryPrivate;
 template<class T> class dtkSmartPointer;
 
-class DTKCORE_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
+class DTKCORESUPPORT_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
 {
     Q_OBJECT
 

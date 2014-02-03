@@ -22,10 +22,10 @@
 
 #include <QtCore/QObject>
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
-class DTKCORE_EXPORT dtkAbstractFactory : public QObject
+class DTKCORESUPPORT_EXPORT dtkAbstractFactory : public QObject
 {
     Q_OBJECT
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:43:14 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 09:08:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 127
+ * Last-Updated: lun. févr.  3 12:46:03 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 128
  */
 
 /* Commentary:
@@ -20,14 +20,14 @@
 #ifndef DTKABSTRACTOBJECT_H
 #define DTKABSTRACTOBJECT_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
 #include <typeinfo>
 
 class dtkAbstractObjectPrivate;
 
-class DTKCORE_EXPORT dtkAbstractObject : public QObject
+class DTKCORESUPPORT_EXPORT dtkAbstractObject : public QObject
 {
     Q_OBJECT
 

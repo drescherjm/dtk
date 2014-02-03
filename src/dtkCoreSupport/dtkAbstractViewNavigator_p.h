@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTVIEWNAVIGATOR_P_H
 #define DTKABSTRACTVIEWNAVIGATOR_P_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 
 #include "dtkAbstractObject_p.h"
 
@@ -34,7 +34,7 @@ class dtkAbstractViewNavigator;
 // dtkAbstractViewPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractViewNavigatorPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractViewNavigatorPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractViewNavigatorPrivate(dtkAbstractViewNavigator *q = 0) : dtkAbstractObjectPrivate(q) {}

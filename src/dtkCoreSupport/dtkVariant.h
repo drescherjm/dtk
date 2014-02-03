@@ -15,7 +15,7 @@
 #ifndef DTKVARIANT_H
 #define DTKVARIANT_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 #include <dtkContainer/dtkAbstractContainerWrapper.h>
 
@@ -35,7 +35,7 @@ template <typename T> class dtkQuaternion;
 // dtkVariant interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkVariant : public QVariant
+class DTKCORESUPPORT_EXPORT dtkVariant : public QVariant
 {
 public:
      dtkVariant(void);

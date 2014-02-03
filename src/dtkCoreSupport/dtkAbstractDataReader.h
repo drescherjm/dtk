@@ -29,7 +29,7 @@ class dtkAbstractDataReaderPrivate;
 // dtkAbstractDataReader interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataReader : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractDataReader : public dtkAbstractObject
 {
     Q_OBJECT
 

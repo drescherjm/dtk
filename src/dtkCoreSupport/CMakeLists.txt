@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. janv. 29 09:33:48 2014 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 385
+## Last-Updated: lun. févr.  3 14:25:58 2014 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 401
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,7 +17,7 @@
 ## 
 ######################################################################
 
-project(dtkCore)
+project(dtkCoreSupport)
 
 ## #################################################################
 ## Sources
@@ -70,32 +70,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkSmartPointer.h
   dtkSparseMatrix.h
   dtkTest.h
-# dtkVariant.h
-# dtkVariant.tpp
   )
-
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAbstractData.h
-  dtkAbstractDataFactory.h
-  dtkAbstractDataReader.h
-  dtkAbstractDataSerializer.h
-  dtkAbstractDataDeserializer.h
-  dtkAbstractDataWriter.h
-  dtkAbstractDataComposite.h
-  dtkAbstractDataConverter.h
-  dtkAbstractFactory.h
-  dtkAbstractObject.h
-  dtkAbstractProcess.h
-  dtkAbstractProcessController.h
-  dtkAbstractProcessFactory.h
-  dtkAbstractView.h
-  dtkAbstractViewAnimator.h
-  dtkAbstractViewFactory.h
-  dtkAbstractViewInteractor.h
-  dtkAbstractViewNavigator.h
-  dtkPlugin.h
-  dtkPluginManager.h
-  dtkUpdater_p.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataFactory.cpp
@@ -125,7 +100,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkSingletonDeclare.cpp
   dtkSmartPointer.cpp
   dtkUpdater.cpp
-# dtkVariant.cpp
   )
 
 ## #################################################################
@@ -159,63 +133,22 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/dtkConfig.h.in"
   "${PROJECT_BINARY_DIR}/../../dtkConfig.h")
 
+
 ## #################################################################
 ## Build rules
 ## #################################################################
 
-if(NOT MSVC)
-add_definitions(-Wno-write-strings)
-endif()
-
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-if(NOT MSVC)
-  add_definitions(-DQT_NO_DEBUG)
-endif()
-
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-
-if(DTK_USE_PRECOMPILED_HEADERS)
-  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
-    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
-    ${${PROJECT_NAME}_SOURCES}
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_WRAP})
-endif(DTK_USE_PRECOMPILED_HEADERS)
-
-if(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
+)
 
-else(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} STATIC
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_WRAP})
-
-endif(BUILD_SHARED_LIBS)
+qt5_use_modules(${PROJECT_NAME} Widgets)
+qt5_use_modules(${PROJECT_NAME} Network)
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
   dtkLog
   dtkMath)
-
-if(TCL_FOUND)
-  target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
-endif()
-
-if(PYTHONLIBS_FOUND)
-  target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif()
 
 ## #################################################################
 ## Export header file
@@ -231,43 +164,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
 
-## #################################################################
-## Handling of generated script modules
-## #################################################################
-
-set(${PROJECT_NAME}_MODULES)
-
-if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
-
-if(PYTHONLIBS_FOUND)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
-  COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/modules
-  COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${${PROJECT_NAME}_BINARY_DIR}/core.py ${CMAKE_BINARY_DIR}/modules
-  COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
-
-set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/core.py)
-
-endif(PYTHONLIBS_FOUND)
-
-file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
-
-foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
-  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    DEPENDS ${PROJECT_SOURCE_DIR}/dtkCore.i
-    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
-    COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
-endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
-
-endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
-
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

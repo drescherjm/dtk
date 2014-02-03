@@ -21,7 +21,7 @@
 #define DTKABSTRACTPLUGIN_H
 
 #include "dtkAbstractObject.h"
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
 class dtkPluginPrivate;
@@ -30,7 +30,7 @@ class dtkPluginPrivate;
 // dtkPlugin interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkPlugin : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkPlugin : public dtkAbstractObject
 {
     Q_OBJECT
 

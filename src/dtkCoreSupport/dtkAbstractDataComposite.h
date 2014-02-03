@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 13:46:31 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Apr 16 10:41:51 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 265
+ * Last-Updated: lun. févr.  3 14:10:05 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 266
  */
 
 /* Commentary: 
@@ -21,14 +21,14 @@
 #define DTKABSTRACTDATACOMPOSITE_H
 
 #include "dtkAbstractData.h"
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
 #include <dtkLog/dtkLog.h>
 
 class dtkAbstractDataCompositePrivate;
 
-class DTKCORE_EXPORT dtkAbstractDataComposite : public dtkAbstractData
+class DTKCORESUPPORT_EXPORT dtkAbstractDataComposite : public dtkAbstractData
 {
     Q_OBJECT
 
@@ -108,6 +108,6 @@ template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromList
 
 // /////////////////////////////////////////////////////////////////
 
-#include <dtkCore/dtkAbstractDataComposite.tpp>
+#include <dtkCoreSupport/dtkAbstractDataComposite.tpp>
 
 #endif

@@ -42,7 +42,7 @@ public:
     dtkAbstractViewInterfacesHash        interfaces;
 };
 
-DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
+DTKCORESUPPORT_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
 {
     if(!s_instance)
         s_instance = new dtkAbstractViewFactory;
@@ -300,4 +300,4 @@ dtkAbstractViewFactory::~dtkAbstractViewFactory(void)
     d = NULL;
 }
 
-DTKCORE_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::s_instance = NULL;
+DTKCORESUPPORT_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::s_instance = NULL;

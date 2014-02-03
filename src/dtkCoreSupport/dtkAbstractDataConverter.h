@@ -29,7 +29,7 @@ class dtkAbstractDataConverterPrivate;
 // dtkAbstractDataConverter interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataConverter : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractDataConverter : public dtkAbstractObject
 {
     Q_OBJECT
 

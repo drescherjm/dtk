@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATACONVERTER_P
 #define DTKABSTRACTDATACONVERTER_P
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 #include "dtkSmartPointer.h"
 
@@ -31,7 +31,7 @@ class dtkAbstractData;
 // dtkAbstractDataConverterPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataConverterPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractDataConverterPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractDataConverterPrivate(dtkAbstractDataConverter *q = 0) : dtkAbstractObjectPrivate(q) {}

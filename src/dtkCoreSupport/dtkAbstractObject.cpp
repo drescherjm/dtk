@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Dec  6 12:52:29 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 272
+ * Last-Updated: lun. févr.  3 14:20:19 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 276
  */
 
 /* Commentary:
@@ -60,7 +60,7 @@ dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(o
  */
 dtkAbstractObject::~dtkAbstractObject(void)
 {
-    if ( d_ptr->count != 0 ){
+    if ( d_ptr->count.deref()){
         dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 
@@ -242,7 +242,7 @@ QString dtkAbstractObject::name(void) const
 
 int dtkAbstractObject::count(void) const
 {
-    return d_ptr->count;
+    return d_ptr->count.load();
 }
 
 //! Retain reference count.

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:48:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Thu Nov  8 09:49:45 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 143
+ * Last-Updated: lun. févr.  3 13:43:19 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 144
  */
 
 /* Commentary:
@@ -21,13 +21,13 @@
 #define DTKABSTRACTDATAFACTORY_H
 
 #include "dtkAbstractFactory.h"
-#include <dtkCore/dtkSmartPointer>
-#include <dtkCore/dtkAbstractData>
-#include <dtkCore/dtkAbstractDataConverter>
-#include <dtkCore/dtkAbstractDataReader>
-#include <dtkCore/dtkAbstractDataWriter>
-#include <dtkCore/dtkAbstractDataSerializer>
-#include <dtkCore/dtkAbstractDataDeserializer>
+#include <dtkCoreSupport/dtkSmartPointer>
+#include <dtkCoreSupport/dtkAbstractData>
+#include <dtkCoreSupport/dtkAbstractDataConverter>
+#include <dtkCoreSupport/dtkAbstractDataReader>
+#include <dtkCoreSupport/dtkAbstractDataWriter>
+#include <dtkCoreSupport/dtkAbstractDataSerializer>
+#include <dtkCoreSupport/dtkAbstractDataDeserializer>
 
 class dtkAbstractData;
 class dtkAbstractDataReader;
@@ -38,7 +38,7 @@ class dtkAbstractDataDeserializer;
 class dtkAbstractDataFactoryPrivate;
 template<class T> class dtkSmartPointer;
 
-class DTKCORE_EXPORT dtkAbstractDataFactory : public dtkAbstractFactory
+class DTKCORESUPPORT_EXPORT dtkAbstractDataFactory : public dtkAbstractFactory
 {
     Q_OBJECT
 

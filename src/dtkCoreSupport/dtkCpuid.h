@@ -20,12 +20,12 @@
 #ifndef DTKCPUID_H
 #define DTKCPUID_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include <QtCore>
 
 class dtkCpuidPrivate;
 
-class DTKCORE_EXPORT dtkCpuid
+class DTKCORESUPPORT_EXPORT dtkCpuid
 {
 public:
              dtkCpuid(void);

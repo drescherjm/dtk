@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATAWRITER_P_H
 #define DTKABSTRACTDATAWRITER_P_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 #include "dtkSmartPointer.h"
 
@@ -31,7 +31,7 @@ class dtkAbstractData;
 // dtkAbstractDataWriterPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataWriterPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractDataWriterPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractDataWriterPrivate(dtkAbstractDataWriter *q = 0) : dtkAbstractObjectPrivate(q) {}

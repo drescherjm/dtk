@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 10:34:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 11:37:40 2012 (+0200)
- *           By: tkloczko
- *     Update #: 10
+ * Last-Updated: lun. févr.  3 13:40:09 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATAREADER_P_H
 #define DTKABSTRACTDATAREADER_P_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 #include "dtkSmartPointer.h"
 
@@ -31,7 +31,7 @@ class dtkAbstractData;
 // dtkAbstractDataReaderPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataReaderPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractDataReaderPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractDataReaderPrivate(dtkAbstractDataReader *q = 0) : dtkAbstractObjectPrivate(q) {}

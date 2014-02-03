@@ -22,11 +22,11 @@
 
 #include <QtCore>
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 
 class dtkUpdaterPrivate;
 
-class DTKCORE_EXPORT dtkUpdater
+class DTKCORESUPPORT_EXPORT dtkUpdater
 {   
 public:
      dtkUpdater(const QUrl& url);

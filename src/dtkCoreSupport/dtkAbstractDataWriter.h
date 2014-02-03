@@ -29,7 +29,7 @@ class dtkAbstractDataWriterPrivate;
 // dtkAbstractDataWriter interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataWriter : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractDataWriter : public dtkAbstractObject
 {
     Q_OBJECT
 

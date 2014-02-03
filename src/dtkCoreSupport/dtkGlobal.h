@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 16 09:54:33 2008 (+0200)
  * Version: $Id$
- * Last-Updated: lun. déc. 16 20:49:05 2013 (+0100)
+ * Last-Updated: lun. févr.  3 14:01:42 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 204
+ *     Update #: 225
  */
 
 /* Commentary: 
@@ -17,11 +17,11 @@
  * 
  */
 
-#ifndef DTKGLOBAL_H
-#define DTKGLOBAL_H
+#pragma once
+
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include <dtkLog/dtkLog.h>
 
@@ -226,7 +226,7 @@ public:
 
 inline bool dtkIsBinary(const QString& path)
 {
-    int c; std::ifstream a(path.toAscii().constData());
+    int c; std::ifstream a(path.toUtf8().constData());
 
     while(((c = a.get()) != EOF) && (c <= 127)) { ; }
 
@@ -258,7 +258,7 @@ inline bool dtkApplicationArgumentsContain(int argc, char **argv, QString value)
 
 inline bool dtkApplicationArgumentsContain(QCoreApplication *application, QString value)
 {
-    return dtkApplicationArgumentsContain(application->argc(), application->argv(), value); // I know the previous is deprecated but it really shouldn't :-|
+    return application->arguments().contains(value);
 }
 
 inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
@@ -277,7 +277,13 @@ inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
 
 inline QString dtkApplicationArgumentsValue(QCoreApplication *application, QString key)
 {
-    return dtkApplicationArgumentsValue(application->argc(), application->argv(), key); // I know the previous is deprecated but it really shouldn't :-|
+    QStringList args = application->arguments();
+    int i = args.indexOf(key);
+    if ( i > -1 && i < args.count()) {
+        return args.at(i+1);
+    } else {
+        return QString();
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -292,4 +298,3 @@ inline uint qHash(const QStringList &key)
     return hash;
 }
 
-#endif

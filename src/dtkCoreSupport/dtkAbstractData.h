@@ -4,8 +4,8 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- *           By: Julien Wintz
- *     Update #: 292
+ *           By: Nicolas Niclausse
+ *     Update #: 294
  */
 
 /* Commentary:
@@ -21,10 +21,8 @@
 
 #include "dtkAbstractObject.h"
 
-#include <dtkMath/dtkVector.h>
-
 #include <QtCore>
-#include <QtGui/QImage>
+#include <QImage>
 
 class dtkAbstractDataReader;
 class dtkAbstractDataWriter;
@@ -37,7 +35,7 @@ class dtkAbstractDataPrivate;
 // dtkAbstractData interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractData : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractData : public dtkAbstractObject
 {
     Q_OBJECT
 
@@ -62,8 +60,8 @@ protected:
    virtual bool isEqual(const dtkAbstractObject& other) const;
 
 public:
-    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
-    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+    friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
+    friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
     virtual void draw(void) {}
 
@@ -106,8 +104,8 @@ public slots:
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);
 
-    virtual void setParameter(dtkVectorReal parameter);
-    virtual void setParameter(dtkVectorReal parameter, int channel);
+    /* virtual void setParameter(dtkVectorReal parameter); */
+    /* virtual void setParameter(dtkVectorReal parameter, int channel); */
 
     virtual void setData(void *data);
     virtual void setData(void *data, int channel);
@@ -157,8 +155,8 @@ private:
     DTK_DECLARE_PRIVATE(dtkAbstractData);
 };
 
-DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
-DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
+DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
+DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractData *data);
 
 Q_DECLARE_METATYPE(dtkAbstractData)
 Q_DECLARE_METATYPE(dtkAbstractData *)

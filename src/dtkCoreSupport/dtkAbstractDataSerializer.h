@@ -29,7 +29,7 @@ class dtkAbstractDataSerializerPrivate;
 // dtkAbstractDataSerializer interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataSerializer : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractDataSerializer : public dtkAbstractObject
 {
     Q_OBJECT
 

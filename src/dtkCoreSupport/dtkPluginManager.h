@@ -22,12 +22,12 @@
 
 #include <QtCore>
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 
 class dtkPlugin;
 class dtkPluginManagerPrivate;
 
-class DTKCORE_EXPORT dtkPluginManager : public QObject
+class DTKCORESUPPORT_EXPORT dtkPluginManager : public QObject
 {
     Q_OBJECT
 

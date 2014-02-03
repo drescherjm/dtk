@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 21 17:41:10 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 338
+ * Last-Updated: lun. févr.  3 14:12:02 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 340
  */
 
 /* Commentary:
@@ -22,7 +22,7 @@
 
 #include "dtkAbstractObject.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class dtkAbstractViewPrivate;
 class dtkAbstractViewAnimator;
@@ -30,10 +30,10 @@ class dtkAbstractViewNavigator;
 class dtkAbstractViewInteractor;
 class dtkAbstractData;
 
-#include <dtkMath/dtkVector3D.h>
-#include <dtkMath/dtkQuaternion.h>
+/* #include <dtkMath/dtkVector3D.h> */
+/* #include <dtkMath/dtkQuaternion.h> */
 
-class DTKCORE_EXPORT dtkAbstractView : public dtkAbstractObject
+class DTKCORESUPPORT_EXPORT dtkAbstractView : public dtkAbstractObject
 {
     Q_OBJECT
 
@@ -52,8 +52,8 @@ protected:
    virtual void copy(const dtkAbstractObject& other);
 
 public:
-    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
-    friend DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
+    friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
+    friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 signals:
     void closed(void);
@@ -146,14 +146,14 @@ public:
 // New VR API
 // /////////////////////////////////////////////////////////////////
 
-public:
-    virtual void setHeadPosition(dtkVector3D<double> position);
-    virtual void setHeadOrientation(dtkQuaternion<double> orientation);
+/* public: */
+/*     virtual void setHeadPosition(dtkVector3D<double> position); */
+/*     virtual void setHeadOrientation(dtkQuaternion<double> orientation); */
 
-public:
-    virtual void setUpperLeft(dtkVector3D<double> position);
-    virtual void setLowerLeft(dtkVector3D<double> position);
-    virtual void setLowerRight(dtkVector3D<double> position);
+/* public: */
+/*     virtual void setUpperLeft(dtkVector3D<double> position); */
+/*     virtual void setLowerLeft(dtkVector3D<double> position); */
+/*     virtual void setLowerRight(dtkVector3D<double> position); */
 
 // /////////////////////////////////////////////////////////////////
 
@@ -161,7 +161,7 @@ private:
     DTK_DECLARE_PRIVATE(dtkAbstractView);
 };
 
-DTKCORE_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
-DTKCORE_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
+DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
+DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractView *viewer);
 
 #endif

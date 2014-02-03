@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 12:12:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jul 24 16:39:47 2012 (+0200)
- *           By: tkloczko
- *     Update #: 19
+ * Last-Updated: lun. févr.  3 13:41:15 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 20
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTDATA_P_H
 #define DTKABSTRACTDATA_P_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 #include "dtkAbstractObject_p.h"
 
 class dtkAbstractData;
@@ -29,7 +29,7 @@ class dtkAbstractData;
 // dtkAbstractDataPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractDataPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractDataPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractDataPrivate(dtkAbstractData *q = 0) : dtkAbstractObjectPrivate(q) {}

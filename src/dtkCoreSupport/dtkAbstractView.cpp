@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Jan 21 17:43:58 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 343
+ * Last-Updated: lun. févr.  3 14:12:21 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 345
  */
 
 /* Commentary:
@@ -24,8 +24,8 @@
 #include "dtkAbstractViewNavigator.h"
 #include "dtkAbstractViewInteractor.h"
 
-#include <dtkMath/dtkVector3D.h>
-#include <dtkMath/dtkQuaternion.h>
+// #include <dtkMath/dtkVector3D.h>
+// #include <dtkMath/dtkQuaternion.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -493,40 +493,40 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
     return ret;
 }
 
-void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
-{
-    DTK_UNUSED(position);
+// void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
+// {
+//     DTK_UNUSED(position);
 
-    DTK_DEFAULT_IMPLEMENTATION;
-}
+//     DTK_DEFAULT_IMPLEMENTATION;
+// }
 
-void dtkAbstractView::setHeadOrientation(dtkQuaternion<double> orientation)
-{
-    DTK_UNUSED(orientation);
+// void dtkAbstractView::setHeadOrientation(dtkQuaternion<double> orientation)
+// {
+//     DTK_UNUSED(orientation);
 
-    DTK_DEFAULT_IMPLEMENTATION;
-}
+//     DTK_DEFAULT_IMPLEMENTATION;
+// }
 
-void dtkAbstractView::setUpperLeft(dtkVector3D<double> position)
-{
-    DTK_UNUSED(position);
+// void dtkAbstractView::setUpperLeft(dtkVector3D<double> position)
+// {
+//     DTK_UNUSED(position);
 
-    DTK_DEFAULT_IMPLEMENTATION;
-}
+//     DTK_DEFAULT_IMPLEMENTATION;
+// }
 
-void dtkAbstractView::setLowerLeft(dtkVector3D<double> position)
-{
-    DTK_UNUSED(position);
+// void dtkAbstractView::setLowerLeft(dtkVector3D<double> position)
+// {
+//     DTK_UNUSED(position);
 
-    DTK_DEFAULT_IMPLEMENTATION;
-}
+//     DTK_DEFAULT_IMPLEMENTATION;
+// }
 
-void dtkAbstractView::setLowerRight(dtkVector3D<double> position)
-{
-    DTK_UNUSED(position);
+// void dtkAbstractView::setLowerRight(dtkVector3D<double> position)
+// {
+//     DTK_UNUSED(position);
 
-    DTK_DEFAULT_IMPLEMENTATION;
-}
+//     DTK_DEFAULT_IMPLEMENTATION;
+// }
 
 // /////////////////////////////////////////////////////////////////
 // Debug stream operators

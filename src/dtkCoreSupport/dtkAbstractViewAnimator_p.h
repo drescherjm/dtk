@@ -20,7 +20,7 @@
 #ifndef DTKABSTRACTVIEWANIMATOR_P_H
 #define DTKABSTRACTVIEWANIMATOR_P_H
 
-#include "dtkCoreExport.h"
+#include "dtkCoreSupportExport.h"
 
 #include "dtkAbstractObject_p.h"
 
@@ -34,7 +34,7 @@ class dtkAbstractViewAnimator;
 // dtkAbstractViewPrivate interface
 ////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkAbstractViewAnimatorPrivate : public dtkAbstractObjectPrivate
+class DTKCORESUPPORT_EXPORT dtkAbstractViewAnimatorPrivate : public dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractViewAnimatorPrivate(dtkAbstractViewAnimator *q = 0) : dtkAbstractObjectPrivate(q) {}

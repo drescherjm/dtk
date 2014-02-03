@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: Wed Apr 17 10:57:40 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 181
+## Last-Updated: lun. févr.  3 11:04:16 2014 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 184
 ######################################################################
 ## 
 ### Change Log:
@@ -65,7 +65,6 @@ enable_testing()
 ## Dependencies - Qt
 ## #################################################################
 
-find_package(OpenGL)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5Core       REQUIRED)
 find_package(Qt5Gui        REQUIRED)
@@ -74,7 +73,6 @@ find_package(Qt5Qml        REQUIRED)
 find_package(Qt5Quick      REQUIRED)
 find_package(Qt5Test       REQUIRED)
 find_package(Qt5Widgets    REQUIRED)
-find_package(Qt53D            QUIET)
 
 ## #################################################################
 ## Dependencies - internal
@@ -82,17 +80,11 @@ find_package(Qt53D            QUIET)
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtk)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkComposer)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkComposerQuick)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkCore)
+include_directories(${PROJECT_SOURCE_DIR}/src/dtkMath)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkLog)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
 include_directories(${PROJECT_SOURCE_DIR}/src/dtkWidgets)
-if(Qt53D_FOUND)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtk3D)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtk3DQuick)
-endif(Qt53D_FOUND)
 
 ## ###################################################################
 ## Input
@@ -129,12 +121,10 @@ mark_as_advanced(dtk_VERSION_MAJOR)
 mark_as_advanced(dtk_VERSION_MINOR)
 mark_as_advanced(dtk_VERSION_BUILD)
 
-mark_as_advanced(Qt53D_DIR)
 mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
 mark_as_advanced(Qt5Gui_DIR)
 mark_as_advanced(Qt5Network_DIR)
-mark_as_advanced(Qt5OpenGL_DIR)
 mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
 mark_as_advanced(Qt5QuickTest_DIR)

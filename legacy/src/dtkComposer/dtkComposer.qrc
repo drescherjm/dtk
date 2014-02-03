@@ -1,0 +1,27 @@
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource prefix="dtkComposer">
+
+    <!-- Descriptions -->
+    <file>dtkComposerNodePi.html</file>
+    <file>dtkComposerNodeE.html</file>
+    <file>dtkComposerNodeControlCase.html</file>
+    <file>dtkComposerNodeControlIf.html</file>
+    <file>dtkComposerNodeControlDoWhile.html</file>
+    <file>dtkComposerNodeControlFor.html</file>
+    <file>dtkComposerNodeControlForEach.html</file>
+    <file>dtkComposerNodeControlWhile.html</file>
+    <file>dtkComposerNodePlotCurve.html</file>
+    <file>dtkComposerNodePlotCurveFile.html</file>
+    <file>dtkComposerNodePlotCurveAppendPoint.html</file>
+
+    <!-- Pixmaps -->
+    <file>pixmaps/dtk-composer-node-flag-blue.png</file>
+    <file>pixmaps/dtk-composer-node-flag-gray.png</file>
+    <file>pixmaps/dtk-composer-node-flag-green.png</file>
+    <file>pixmaps/dtk-composer-node-flag-orange.png</file>
+    <file>pixmaps/dtk-composer-node-flag-pink.png</file>
+    <file>pixmaps/dtk-composer-node-flag-red.png</file>
+    <file>pixmaps/dtk-composer-node-flag-yellow.png</file>
+
+  </qresource>
+</RCC>

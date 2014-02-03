@@ -1,0 +1,8 @@
+#include "../src/dtkMath/dtkGraph.h"
+#include "../src/dtkMath/dtkGraphEdge.h"
+#include "../src/dtkMath/dtkMath.h"
+#include "../src/dtkMath/dtkMatrix.h"
+#include "../src/dtkMath/dtkMatrixSquared.h"
+#include "../src/dtkMath/dtkQuaternion.h"
+#include "../src/dtkMath/dtkVector.h"
+#include "../src/dtkMath/dtkVector3D.h"

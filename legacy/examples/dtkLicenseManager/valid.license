@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Blacklisted</key>
+	<string>false</string>
+	<key>Email</key>
+	<string>user@email.com</string>
+	<key>Name</key>
+	<string>User</string>
+	<key>Signature</key>
+	<data>
+	n/OvWMKfA6detD1cQIcy2hGhLr/vHoGynJNLUjVp7R3yt4Sxe8CKRBPMZPbNqdWny93q
+	NVM2UZm+CZ8jn5czOGO8m/xkeUCRR87T22NNrvJVo4L3OaakIZU4WLUXvUPOwTDh98Re
+	1wyNUk4Bu2wh/WDeeBCOXdNtbnVCvZUeTVM=
+	</data>
+	<key>Validity</key>
+	<string>valid</string>
+</dict>
+</plist>

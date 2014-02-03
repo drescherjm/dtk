@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. févr.  3 11:04:16 2014 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 184
+## Last-Updated: lun. févr.  3 12:40:54 2014 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 187
 ######################################################################
 ## 
 ### Change Log:
@@ -43,6 +43,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include("GNUInstallDirs")
+
 if(APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/lib/c++/v1")
 else(APPLE)
@@ -64,6 +67,12 @@ enable_testing()
 ## #################################################################
 ## Dependencies - Qt
 ## #################################################################
+
+if(MSVC)
+  option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
+endif(MSVC)
+
+include(dtkBuild)
 
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5Core       REQUIRED)

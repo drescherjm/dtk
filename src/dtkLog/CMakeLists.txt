@@ -4,9 +4,9 @@
 ## Copyright (C) 2008-2011 - Julien Wintz, Inria.
 ## Created: Thu Mar  1 14:34:49 2012 (+0100)
 ## Version: $Id$
-## Last-Updated: mar. déc.  3 09:48:12 2013 (+0100)
+## Last-Updated: lun. févr.  3 13:08:02 2014 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 37
+##     Update #: 41
 ######################################################################
 ## 
 ### Commentary: 
@@ -33,11 +33,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkLogView.h
   dtkLogView_p.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkLogModel.h
-  dtkLogView.h
-  dtkLogView_p.h)
-
 set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkLogger.cpp
@@ -50,34 +45,13 @@ set(${PROJECT_NAME}_SOURCES
 ## Build rules
 ## #################################################################
 
-if(NOT WIN32)
-add_definitions(-Wno-write-strings)
-endif(NOT WIN32)
-
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-
-if(NOT WIN32)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT WIN32)
-
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-
-if(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC})
+)
 
-else(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} STATIC
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC})
-
-endif(BUILD_SHARED_LIBS)
+qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 target_link_libraries(${PROJECT_NAME}
   ${QT_LIBRARIES})
@@ -102,13 +76,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
-
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

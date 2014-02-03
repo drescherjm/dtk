@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Mar  2 15:08:10 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar  5 14:27:11 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 9
+ * Last-Updated: lun. févr.  3 13:26:18 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 11
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkLogExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkLogViewPrivate;
 

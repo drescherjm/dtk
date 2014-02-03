@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. janv. 18 15:22:25 2013 (+0100)
+ * Last-Updated: lun. févr.  3 16:11:57 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 257
+ *     Update #: 258
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include "dtkDistributedCpu.h"
 #include "dtkDistributedNode.h"
 
-#include <dtkGui/dtkPieChart.h>
+#include <dtkGuiSupport/dtkPieChart.h>
 
 class dtkDistributedControllerHeaderViewPrivate
 {

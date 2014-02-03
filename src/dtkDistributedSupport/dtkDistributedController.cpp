@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 17:59:44 2013 (+0200)
+ * Last-Updated: lun. févr.  3 16:20:03 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 1806
+ *     Update #: 1825
  */
 
 /* Commentary: 
@@ -26,16 +26,13 @@
 #include "dtkDistributedGpu.h"
 #include "dtkDistributedSocket.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkGlobal.h>
-
-#include <dtkJson/dtkJson.h>
-#include <dtkJson/dtkJson.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
 
 #include <QtNetwork>
-#include <QtXml>
+// #include <QtXml>
 
 #if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
 #include <unistd.h>
@@ -91,7 +88,15 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         this->refreshing = false;
     }
 
-    QVariantMap json = dtkJson::parse(buffer).toMap();
+    // QVariantMap json = dtkJson::parse(buffer).toMap();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer);
+
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        dtkWarn() << "Error while parsing JSON document: not a json object" << buffer;
+        return;
+    }
+    QVariantMap json = jsonDoc.object().toVariantMap();
+
     // TODO: check version
     // First, read nodes status
 
@@ -250,7 +255,7 @@ dtkDistributedController::~dtkDistributedController(void)
     d = NULL;
 }
 
-DTKDISTRIBUTED_EXPORT dtkDistributedController *dtkDistributedController::instance(void)
+DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedController *dtkDistributedController::instance(void)
 {
     if(!s_instance)
         s_instance = new dtkDistributedController;
@@ -271,7 +276,7 @@ quint16 dtkDistributedController::defaultPort(void)
         return 9999;
     }
 
-    QByteArray bin = username.toAscii();
+    QByteArray bin = username.toUtf8();
     quint16 p =  qChecksum(bin.data(), bin.length());
     if (p < 1024) // listen port should be higher than 1024
         p += 1024;

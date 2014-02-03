@@ -22,13 +22,13 @@
 
 #include <QObject>
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 class dtkDistributedNode;
 class dtkDistributedCore;
 class dtkDistributedCpuPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedCpu : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCpu : public QObject
 {
     Q_OBJECT
 

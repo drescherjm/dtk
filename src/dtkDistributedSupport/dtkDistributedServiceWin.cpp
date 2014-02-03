@@ -402,7 +402,7 @@ void dtkDistributedServiceBase::logMessage(const QString &message, MessageType t
     case Information: //fall through
     default: dbgMsg += "Information] "; break;
     }
-    dbgMsg += message.toAscii();
+    dbgMsg += message.toUtf8();
     qtServiceLogDebug((dtkDistributedMsgType)-1, dbgMsg.constData());
 #endif
 

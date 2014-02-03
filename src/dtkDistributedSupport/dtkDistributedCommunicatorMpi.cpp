@@ -16,7 +16,7 @@
 
 #include "dtkDistributedCommunicatorMpi.h"
 
-#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
 #include <dtkLog/dtkLog.h>
 
 #include <dtkMath>
@@ -341,7 +341,7 @@ void dtkDistributedCommunicatorMpi::isend(dtkAbstractData *data, qint16 target, 
 
 void dtkDistributedCommunicatorMpi::isend(const QString& s, qint16 target, int tag, dtkDistributedCommunicatorRequest *req)
 {
-    QByteArray Array = s.toAscii();
+    QByteArray Array = s.toUtf8();
     return dtkDistributedCommunicatorMpi::isend(Array, target, tag, req);
 };
 
@@ -485,7 +485,7 @@ void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 sou
 
 void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
 {
-    QByteArray Array = s.toAscii();
+    QByteArray Array = s.toUtf8();
     dtkDistributedCommunicatorMpi::send(Array, target, tag);
 }
 
@@ -500,7 +500,7 @@ void dtkDistributedCommunicatorMpi::broadcast(QString &s, qint16 source)
 {
     QByteArray array;
     if (d->rank == source) {
-        array = s.toAscii();
+        array = s.toUtf8();
     }
     this->broadcast(array, source);
     if (d->rank != source) {

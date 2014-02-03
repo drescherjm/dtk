@@ -22,12 +22,12 @@
 
 #include <QtCore>
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 class dtkDistributedNode;
 class dtkDistributedGpuPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedGpu : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedGpu : public QObject
 {
     Q_OBJECT
 

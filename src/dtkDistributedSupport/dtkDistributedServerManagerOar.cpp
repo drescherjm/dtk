@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:07:15 2012 (+0200)
+ * Last-Updated: lun. févr.  3 16:37:42 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 419
+ *     Update #: 432
  */
 
 /* Commentary:
@@ -20,9 +20,7 @@
 #include "dtkDistributedServerManager_p.h"
 #include "dtkDistributedServerManagerOar.h"
 
-#include <dtkCore/dtkGlobal.h>
-
-#include <dtkJson/dtkJson.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -34,7 +32,14 @@ QString  dtkDistributedServerManagerOar::submit(QString input)
 {
     QString oarsub = "oarsub ";
 
-    QVariantMap json = dtkJson::parse(input).toMap();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(input.toUtf8());
+
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        dtkWarn() << "Error while parsing JSON document: not a json object" << input;
+        return QString("ERROR");
+    }
+    QVariantMap json = jsonDoc.object().toVariantMap();
+
 
     QVariantMap jprops = json["properties"].toMap();
     QString properties ;
@@ -179,10 +184,15 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     }
 
     data = stat.readAll();
-    json = dtkJson::parse(data,success).toMap();
-    if (!success) {
-        dtkDebug() << "Error retrieving JSON output out of oar";
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        dtkError() << "Error while parsing JSON document (OAR) : not a json object" << data;
+        return QByteArray();
     }
+    json = jsonDoc.object().toVariantMap();
+
     stat.close();
 
     QVariantList jobs;
@@ -265,10 +275,15 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     }
 
     data = stat.readAll();
-    json = dtkJson::parse(data,success).toMap();
-    if (!success) {
-        dtkDebug() << "Error retrieving JSON output out of oar";
+
+    jsonDoc = QJsonDocument::fromJson(data.toUtf8());
+
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        dtkError() << "Error while parsing JSON document (OAR) : not a JSON object" << data;
+        return QByteArray();
     }
+    json = jsonDoc.object().toVariantMap();
+
     stat.close();
 
     QVariantMap nodes;
@@ -342,5 +357,5 @@ QByteArray dtkDistributedServerManagerOar::status(void)
     }
     result.insert("nodes", realnodes);
 
-    return dtkJson::serialize(result);
+    return QJsonDocument(QJsonObject::fromVariantMap(result)).toJson();
 }

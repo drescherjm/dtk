@@ -15,7 +15,7 @@
 
 #include "dtkDistributedCommunicator.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 class dtkDistributedCommunicatorPrivate
 {

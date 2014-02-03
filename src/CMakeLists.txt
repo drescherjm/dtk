@@ -9,6 +9,7 @@ add_subdirectory(dtkTest)
 add_subdirectory(dtkWidgets)
 
 add_subdirectory(dtkCoreSupport)
+add_subdirectory(dtkDistributedSupport)
 add_subdirectory(dtkGuiSupport)
 
 set(DTK_TARGETS)

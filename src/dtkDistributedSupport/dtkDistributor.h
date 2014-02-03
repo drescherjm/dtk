@@ -20,13 +20,13 @@
 #ifndef DTKDISTRIBUTOR_H
 #define DTKDISTRIBUTOR_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributorPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributor : public QFrame
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributor : public QFrame
 {
     Q_OBJECT
 

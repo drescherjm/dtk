@@ -20,7 +20,7 @@
 #ifndef DTKDISTRIBUTEDSERVERDAEMON_H
 #define DTKDISTRIBUTEDSERVERDAEMON_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedServerManager.h"
 
 #include <QtCore>
@@ -28,7 +28,7 @@
 
 class dtkDistributedServerDaemonPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServerDaemon : public QTcpServer
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerDaemon : public QTcpServer
 {
     Q_OBJECT
 

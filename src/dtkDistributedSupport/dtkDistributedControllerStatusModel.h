@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERSTATUSMODEL_H
 #define DTKDISTRIBUTEDCONTROLLERSTATUSMODEL_H
 
-#include <QtGui>
+#include <QtWidgets>
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 class dtkDistributedController;
 class dtkDistributedControllerStatusModelPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerStatusModel : public QAbstractItemModel
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerStatusModel : public QAbstractItemModel
 {
     Q_OBJECT
 

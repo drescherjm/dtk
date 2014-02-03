@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:53:43 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. mai 29 09:55:10 2012 (+0200)
+ * Last-Updated: lun. févr.  3 16:16:36 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 106
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -19,8 +19,6 @@
 
 #include "dtkDistributedController.h"
 #include "dtkDistributedControllerSubmitView.h"
-
-#include <dtkJson/dtkJson.h>
 
 class dtkDistributedControllerSubmitViewPrivate
 {
@@ -134,7 +132,7 @@ void dtkDistributedControllerSubmitView::onSubmit(void)
     job.insert("walltime", d->time_edit->time().toString("hh:mm:ss"));
     job.insert("application", d->application +" "+d->cluster);
 
-    QByteArray data = dtkJson::serialize(job);
+    QByteArray data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
 
     d->controller->submit(QUrl(d->cluster), data);
 }

@@ -16,13 +16,13 @@
 #ifndef DTKDISTRIBUTEDMESSAGE_H
 #define DTKDISTRIBUTEDMESSAGE_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 #include <QtCore>
 
 class dtkDistributedMessagePrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedMessage
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedMessage
 {
 public:
     typedef QHash<QString, QString> dtkDistributedHeaders;

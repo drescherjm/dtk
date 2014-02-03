@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. déc.  9 15:56:53 2013 (+0100)
+ * Last-Updated: lun. févr.  3 16:35:45 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 308
+ *     Update #: 312
  */
 
 /* Commentary:
@@ -24,10 +24,8 @@
 #include "dtkDistributedServerManager_p.h"
 #include "dtkDistributedServerManagerSsh.h"
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkCpuid.h>
-
-#include <dtkJson/dtkJson.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+#include <dtkCoreSupport/dtkCpuid.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -119,7 +117,7 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
     result.insert("nodes", jnodes);
 
 
-    return dtkJson::serialize(result);
+    return QJsonDocument(QJsonObject::fromVariantMap(result)).toJson();
 }
 
 QString dtkDistributedServerManagerSsh::submit(QString input)
@@ -135,7 +133,13 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
                 "options": "string"
                 }
     */
-    QVariantMap json = dtkJson::parse(input).toMap();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(input.toUtf8());
+
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        dtkWarn() << "Error while parsing JSON document: not a json object" << input;
+        return QString("ERROR");
+    }
+    QVariantMap json = jsonDoc.object().toVariantMap();
 
     QSettings settings("inria", "dtk");
     settings.beginGroup("distributed");

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:19:21 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 18:23:12 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 21
+ * Last-Updated: lun. févr.  3 16:13:53 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -20,15 +20,15 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERSTATUSVIEW_H
 #define DTKDISTRIBUTEDCONTROLLERSTATUSVIEW_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 class dtkDistributedControllerStatusModel;
 class dtkDistributedControllerStatusViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerStatusView : public QTreeView
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerStatusView : public QTreeView
 {
     Q_OBJECT
 

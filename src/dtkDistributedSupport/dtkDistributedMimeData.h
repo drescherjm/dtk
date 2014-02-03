@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDMIMEDATA_H
 #define DTKDISTRIBUTEDMIMEDATA_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 class dtkDistributedMimeDataPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedMimeData : public QMimeData
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedMimeData : public QMimeData
 {
     Q_OBJECT
 

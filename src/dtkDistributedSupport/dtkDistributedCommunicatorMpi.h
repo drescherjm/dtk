@@ -20,12 +20,12 @@
 #ifndef DTKDISTRIBUTEDCOMMUNICATORMPI_H
 #define DTKDISTRIBUTEDCOMMUNICATORMPI_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedCommunicator.h"
 
 class dtkDistributedCommunicatorMpiPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorMpi : public dtkDistributedCommunicator
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorMpi : public dtkDistributedCommunicator
 {
     Q_OBJECT
 
@@ -93,7 +93,7 @@ private:
 
 
 class dtkDistributedCommunicatorRequestMpiPrivate;
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorRequestMpi : public dtkDistributedCommunicatorRequest
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorRequestMpi : public dtkDistributedCommunicatorRequest
 {
 public:
              dtkDistributedCommunicatorRequestMpi(void);

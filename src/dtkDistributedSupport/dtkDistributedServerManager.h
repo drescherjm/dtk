@@ -20,7 +20,7 @@
 #ifndef DTKDISTRIBUTEDSERVERMANAGER_H
 #define DTKDISTRIBUTEDSERVERMANAGER_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 #include <QtCore>
 
@@ -30,7 +30,7 @@ class dtkDistributedGpu;
 class dtkDistributedCore;
 class dtkDistributedServerManagerPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServerManager : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerManager : public QObject
 {
     Q_OBJECT
 

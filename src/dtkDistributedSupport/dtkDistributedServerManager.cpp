@@ -24,7 +24,7 @@
 #include "dtkDistributedServerManager.h"
 #include "dtkDistributedServerManager_p.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 dtkDistributedServerManager::dtkDistributedServerManager(void) : d(new dtkDistributedServerManagerPrivate)
 {

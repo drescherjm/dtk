@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Tue Jun 19 15:26:24 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 247
+## Last-Updated: lun. févr.  3 16:23:13 2014 (+0100)
+##           By: Nicolas Niclausse
+##     Update #: 254
 ######################################################################
 ## 
 ### Commentary: 
@@ -17,7 +17,7 @@
 ## 
 ######################################################################
 
-project(dtkDistributed)
+project(dtkDistributedSupport)
 
 ## #################################################################
 ## Sources
@@ -51,35 +51,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedServerManagerSsh.h
   dtkDistributedServerManagerTorque.h
   dtkDistributedService.h
-  dtkDistributedSocket.h
-  dtkDistributor.h)
-
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkDistributedCommunicator.h
-  dtkDistributedCommunicatorTcp.h
-  dtkDistributedSlave.h
-  dtkDistributedController.h
-  dtkDistributedControllerFilterView.h
-  dtkDistributedControllerHeaderView.h
-  dtkDistributedControllerJobView.h
-  dtkDistributedControllerStatusModel.h
-  dtkDistributedControllerStatusModelFilter.h
-  dtkDistributedControllerStatusView.h
-  dtkDistributedControllerSubmitView.h
-  dtkDistributedControllerTargetView.h
-  dtkDistributedControllerTargetViewDelegate.h
-  dtkDistributedCore.h
-  dtkDistributedCpu.h
-  dtkDistributedGpu.h
-  dtkDistributedJob.h
-  dtkDistributedMimeData.h
-  dtkDistributedNode.h
-  dtkDistributedServerDaemon.h
-  dtkDistributedServerManager.h
-  dtkDistributedServerManagerOar.h
-  dtkDistributedServerManagerSsh.h
-  dtkDistributedServerManagerTorque.h
-  dtkDistributedService_p.h
   dtkDistributedSocket.h
   dtkDistributor.h)
 
@@ -158,48 +129,18 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkDistributedCommunicatorMpi.cpp)
 endif(DTK_HAVE_MPI)
 
-## #################################################################
-## Build rules
-## #################################################################
 
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-if(NOT MSVC)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT MSVC)
-
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-
-if(DTK_USE_PRECOMPILED_HEADERS)
-  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
-    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
-    ${${PROJECT_NAME}_SOURCES}
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_MOC})
-endif(DTK_USE_PRECOMPILED_HEADERS)
-
-if(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_MOC})
+)
 
-else(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} STATIC
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_MOC})
-
-endif(BUILD_SHARED_LIBS)
+qt5_use_modules(${PROJECT_NAME} Widgets)
+qt5_use_modules(${PROJECT_NAME} Network)
+qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
-  dtkCore
-  dtkJson
+  dtkCoreSupportSupport
   dtkGui
   dtkLog)
 
@@ -223,13 +164,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
-
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_QRC})
 
 ## #################################################################
 ## Installation

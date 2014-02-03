@@ -20,12 +20,12 @@
 #ifndef DTKDISTRIBUTEDSERVERMANAGERSSH_H
 #define DTKDISTRIBUTEDSERVERMANAGERSSH_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedServerManager.h"
 
 class dtkDistributedServerManagerSshPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServerManagerSsh : public dtkDistributedServerManager
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerManagerSsh : public dtkDistributedServerManager
 {
     Q_OBJECT
 

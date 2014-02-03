@@ -18,15 +18,15 @@
 
 #include <QtCore>
 
-#include "dtkDistributedExport.h"
-#include <dtkCore/dtkAbstractData.h>
+#include "dtkDistributedSupportExport.h"
+#include <dtkCoreSupport/dtkAbstractData.h>
 
 class dtkDistributedCommunicatorPrivate;
 
 class dtkDistributedMessage;
 class dtkDistributedCommunicatorStatusPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorStatus
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorStatus
 {
 
 public:
@@ -53,7 +53,7 @@ private:
     dtkDistributedCommunicatorStatusPrivate *d;
 };
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorRequest
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorRequest
 {
 
 public:
@@ -66,7 +66,7 @@ public:
 };
 
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicator : public QObject
 {
     Q_OBJECT
 

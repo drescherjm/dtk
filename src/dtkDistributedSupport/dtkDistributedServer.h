@@ -20,7 +20,7 @@
 #ifndef DTKDISTRIBUTEDSERVER_H
 #define DTKDISTRIBUTEDSERVER_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedService.h"
 
 #include <QtCore>
@@ -28,7 +28,7 @@
 class dtkDistributedServerPrivate;
 class dtkDistributedServerManager;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServer : public dtkDistributedService<QCoreApplication>
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServer : public dtkDistributedService<QCoreApplication>
 {
 public:
      dtkDistributedServer(int argc, char **argv);

@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERTARGETVIEW_H
 #define DTKDISTRIBUTEDCONTROLLERTARGETVIEW_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 class dtkDistributedControllerTargetViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerTargetView : public QListWidget
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerTargetView : public QListWidget
 {
     Q_OBJECT
 

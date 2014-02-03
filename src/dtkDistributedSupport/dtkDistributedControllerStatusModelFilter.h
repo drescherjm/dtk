@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 15:20:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 10 22:12:40 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 23
+ * Last-Updated: lun. févr.  3 16:18:28 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 24
  */
 
 /* Commentary: 
@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERSTATUSMODELFILTER_H
 #define DTKDISTRIBUTEDCONTROLLERSTATUSMODELFILTER_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedNode.h"
 
-#include <QtGui/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 
 class dtkDistributedControllerStatusModelFilterPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerStatusModelFilter : public QSortFilterProxyModel
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerStatusModelFilter : public QSortFilterProxyModel
 {
     Q_OBJECT
 

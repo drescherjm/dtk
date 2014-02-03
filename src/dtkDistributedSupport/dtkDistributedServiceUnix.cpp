@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:38:51 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Thu May 26 10:55:22 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 36
+ * Last-Updated: lun. févr.  3 16:40:38 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -396,7 +396,7 @@ void dtkDistributedServiceBase::logMessage(const QString &message, dtkDistribute
     }
 
     if (!d_ptr->sysd->ident) {
-	QString tmp = encodeName(serviceName(), TRUE);
+	QString tmp = encodeName(serviceName(), true);
 	int len = tmp.toLocal8Bit().size();
 	d_ptr->sysd->ident = new char[len+1];
 	d_ptr->sysd->ident[len] = '\0';

@@ -20,7 +20,7 @@
 #ifndef DTKDISTRIBUTEDSLAVE_H
 #define DTKDISTRIBUTEDSLAVE_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedCommunicatorTcp.h"
 
 #include <QtCore>
@@ -29,7 +29,7 @@
 class dtkDistributedCommunicatorTcp;
 class dtkDistributedSlavePrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedSlave : public QObject
 {
     Q_OBJECT
 

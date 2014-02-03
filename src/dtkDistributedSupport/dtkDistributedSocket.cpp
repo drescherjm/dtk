@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: 2011/09/20 09:16:29
  * Version: $Id$
- * Last-Updated: ven. mars 22 16:36:43 2013 (+0100)
+ * Last-Updated: lun. févr.  3 16:40:59 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 814
+ *     Update #: 816
  */
 
 /* Commentary:
@@ -19,11 +19,11 @@
 
 #include "dtkDistributedSocket.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkMath/dtkMath.h>
+// #include <dtkMath/dtkMath.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -59,7 +59,7 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     buffer += msg->req();
     if (msg->size() == 0 ) {
         buffer += "content-size: 0\n\n";
-        qint64 ret = this->write(buffer.toAscii());
+        qint64 ret = this->write(buffer.toUtf8());
         this->flush();
         return ret;
     } else if (msg->size() > 0) {
@@ -75,9 +75,9 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     qint64 ret;
     if (msg->content().isNull() || msg->content().isEmpty()) {
         // no content provided, the caller is supposed to send the content itself
-        ret = this->write(buffer.toAscii());
+        ret = this->write(buffer.toUtf8());
     } else {
-        ret = this->write(buffer.toAscii());
+        ret = this->write(buffer.toUtf8());
         ret += this->write(msg->content());
     }
 

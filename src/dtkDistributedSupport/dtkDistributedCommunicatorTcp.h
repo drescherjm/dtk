@@ -16,17 +16,17 @@
 #ifndef DTKDISTRIBUTEDCOMMUNICATORTCP_H
 #define DTKDISTRIBUTEDCOMMUNICATORTCP_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedSocket.h"
 
-#include <dtkCore/dtkAbstractDataSerializer.h>
+#include <dtkCoreSupport/dtkAbstractDataSerializer.h>
 
 #include <QtNetwork/QAbstractSocket>
 
 class dtkDistributedCommunicatorTcpPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorTcp : public dtkDistributedCommunicator
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorTcp : public dtkDistributedCommunicator
 {
     Q_OBJECT
 

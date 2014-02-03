@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERJOBVIEW_H
 #define DTKDISTRIBUTEDCONTROLLERJOBVIEW_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 class dtkDistributedControllerJobViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerJobView : public QTreeWidget
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerJobView : public QTreeWidget
 {
     Q_OBJECT
 

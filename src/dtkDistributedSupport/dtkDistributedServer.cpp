@@ -22,7 +22,7 @@
 #include "dtkDistributedServerManager.h"
 #include "dtkDistributedService.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 class dtkDistributedServerPrivate
 {

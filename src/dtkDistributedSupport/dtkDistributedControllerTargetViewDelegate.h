@@ -20,9 +20,9 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERTARGETVIEWDELEGATE_H
 #define DTKDISTRIBUTEDCONTROLLERTARGETVIEWDELEGATE_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 
@@ -32,7 +32,7 @@ class dtkDistributedController;
 
 class dtkDistributedControllerTargetViewDelegatePrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerTargetViewDelegate : public QStyledItemDelegate
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerTargetViewDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 

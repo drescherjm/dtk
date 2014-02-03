@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: ven. avril 20 16:13:05 2012 (+0200)
+ * Last-Updated: lun. févr.  3 16:39:42 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 971
+ *     Update #: 977
  */
 
 /* Commentary: 
@@ -24,9 +24,7 @@
 #include "dtkDistributedServerManager_p.h"
 #include "dtkDistributedServerManagerTorque.h"
 
-#include <dtkCore/dtkGlobal.h>
-
-#include <dtkJson/dtkJson.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -168,7 +166,7 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
 
         QString walltime = resources_list.firstChildElement("walltime").text().simplified() ;
         QString state;
-        char J= jobs.item(i).firstChildElement("job_state").text().simplified().at(0).toAscii();
+        char J= jobs.item(i).firstChildElement("job_state").text().simplified().at(0).unicode();
         switch (J) {
         case 'R' : {
             state = "running";
@@ -204,7 +202,7 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         result.insert("jobs", jjobs);
     }
 
-    return dtkJson::serialize(result);
+    return QJsonDocument(QJsonObject::fromVariantMap(result)).toJson();
 }
 
 QString dtkDistributedServerManagerTorque::submit(QString input)
@@ -219,7 +217,14 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
                 "options": "string"
                 }
     */
-    QVariantMap json = dtkJson::parse(input).toMap();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(input.toUtf8());
+
+    if (jsonDoc.isNull() || !jsonDoc.isObject()) {
+        dtkWarn() << "Error while parsing JSON document: not a json object" << input;
+        return QString("ERROR");
+    }
+    QVariantMap json = jsonDoc.object().toVariantMap();
 
     // FIXME: we should read the properties mapping from a file instead of hardcoding it
     // Everything here is specific to nef setup.

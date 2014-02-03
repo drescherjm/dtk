@@ -27,7 +27,7 @@
 #include "dtkDistributedService.h"
 #include "dtkDistributedSocket.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
 

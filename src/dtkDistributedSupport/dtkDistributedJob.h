@@ -23,11 +23,11 @@
 #include <QObject>
 #include <QDateTime>
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 class dtkDistributedJobPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedJob : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedJob : public QObject
 {
     Q_OBJECT
 

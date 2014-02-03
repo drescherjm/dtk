@@ -20,11 +20,11 @@
 #ifndef DTKDISTRIBUTEDCONTROLLER_H
 #define DTKDISTRIBUTEDCONTROLLER_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedMessage.h"
 #include "dtkDistributedSocket.h"
 
-#include <dtkCore/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
 
 #include <QtCore>
 #include <QtNetwork>
@@ -33,7 +33,7 @@ class dtkDistributedControllerPrivate;
 class dtkDistributedJob;
 class dtkDistributedNode;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedController : public QObject
 {
     Q_OBJECT
 

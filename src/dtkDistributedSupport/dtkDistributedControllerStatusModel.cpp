@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril 24 10:25:04 2012 (+0200)
+ * Last-Updated: lun. févr.  3 16:51:29 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 327
+ *     Update #: 337
  */
 
 /* Commentary: 
@@ -25,7 +25,7 @@
 #include "dtkDistributedJob.h"
 #include "dtkDistributedNode.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 QVariant toString(dtkDistributedNode::Network flag)
 {
@@ -140,6 +140,8 @@ void dtkDistributedControllerStatusModelPrivate::clear(void)
 
 void dtkDistributedControllerStatusModelPrivate::update(void)
 {
+    q->beginResetModel();
+
     this->rootItem->clear();
 
     QList<dtkDistributedNode *> nodes;
@@ -179,7 +181,8 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
         this->rootItem->appendChild(nodeItem);
     }
 
-    q->reset();
+//    q->reset(); deprecated in Qt5: use {begin|end}ResetModel instead but: NOT TESTED!
+    q->endResetModel();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -273,22 +276,22 @@ QVariant dtkDistributedControllerStatusModel::data(const QModelIndex& index, int
     dtkDistributedControllerStatusModelItem *item = static_cast<dtkDistributedControllerStatusModelItem *>(index.internalPointer());
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Core)
-        return item->data(0).toString() == "Free" ? Qt::darkGreen : Qt::darkRed;
+        return item->data(0).toString() == "Free" ? QColor(Qt::darkGreen) : QColor(Qt::darkRed);
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "Down")
-        return Qt::red;
+        return QColor(Qt::red);
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "Busy")
         return  QColor("#FF7722");
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "StandBy")
-        return  Qt::blue;
+        return  QColor(Qt::blue);
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node && item->data(2).toString() == "Free")
-        return  Qt::darkGreen;
+        return  QColor(Qt::darkGreen);
 
     if (role == Qt::TextColorRole && item->kind == dtkDistributedControllerStatusModelItem::Node)
-        return  Qt::black;
+        return  QColor(Qt::black);
 
     if (role != Qt::DisplayRole)
         return QVariant();

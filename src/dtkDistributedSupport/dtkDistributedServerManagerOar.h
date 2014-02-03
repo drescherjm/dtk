@@ -20,12 +20,12 @@
 #ifndef DTKDISTRIBUTEDSERVERMANAGEROAR_H
 #define DTKDISTRIBUTEDSERVERMANAGEROAR_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedServerManager.h"
 
 class dtkDistributedServerManagerOarPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServerManagerOar : public dtkDistributedServerManager
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerManagerOar : public dtkDistributedServerManager
 {
     Q_OBJECT
 

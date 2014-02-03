@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:10:19 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr 11 12:40:05 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 32
+ * Last-Updated: lun. févr.  3 16:12:33 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 33
  */
 
 /* Commentary: 
@@ -20,15 +20,15 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERFILTERVIEW_H
 #define DTKDISTRIBUTEDCONTROLLERFILTERVIEW_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedNode.h"
 #include "dtkDistributedCpu.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedControllerFilterViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerFilterView : public QTreeWidget
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerFilterView : public QTreeWidget
 {
     Q_OBJECT
 

@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERHEADERVIEW_H
 #define DTKDISTRIBUTEDCONTROLLERHEADERVIEW_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 class dtkDistributedControllerHeaderViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerHeaderView : public QFrame
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerHeaderView : public QFrame
 {
     Q_OBJECT
 

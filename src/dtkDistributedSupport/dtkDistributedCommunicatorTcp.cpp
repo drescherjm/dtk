@@ -16,8 +16,8 @@
 #include "dtkDistributedCommunicatorTcp.h"
 #include "dtkDistributedSocket.h"
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkLog/dtkLog.h>
 

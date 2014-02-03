@@ -20,7 +20,7 @@
 #ifndef DTKDISTRIBUTEDSERVICE_H
 #define DTKDISTRIBUTEDSERVICE_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
 #include <QtCore>
 
@@ -30,7 +30,7 @@
 
 class dtkDistributedServiceControllerPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServiceController
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServiceController
 {
     Q_DECLARE_PRIVATE(dtkDistributedServiceController)
 
@@ -72,7 +72,7 @@ private:
 
 class dtkDistributedServiceBasePrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServiceBase
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServiceBase
 {
     Q_DECLARE_PRIVATE(dtkDistributedServiceBase)
 

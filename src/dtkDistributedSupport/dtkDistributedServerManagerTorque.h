@@ -20,12 +20,12 @@
 #ifndef DTKDISTRIBUTEDSERVERMANAGERTORQUE_H
 #define DTKDISTRIBUTEDSERVERMANAGERTORQUE_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedServerManager.h"
 
 class dtkDistributedServerManagerTorquePrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedServerManagerTorque : public dtkDistributedServerManager
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerManagerTorque : public dtkDistributedServerManager
 {
     Q_OBJECT
 

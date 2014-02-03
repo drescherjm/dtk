@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. nov.  8 10:03:55 2013 (+0100)
+ * Last-Updated: lun. févr.  3 16:38:23 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 183
+ *     Update #: 184
  */
 
 /* Commentary: 
@@ -28,7 +28,7 @@
 #include "dtkDistributedControllerTargetView.h"
 #include "dtkDistributor.h"
 
-#include <dtkGui/dtkToolBox.h>
+#include <dtkGuiSupport/dtkToolBox.h>
 
 class dtkDistributorPrivate
 {

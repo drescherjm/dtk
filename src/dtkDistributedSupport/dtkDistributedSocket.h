@@ -20,7 +20,7 @@
 #ifndef DTKDISTRIBUTEDSOCKET_H
 #define DTKDISTRIBUTEDSOCKET_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 #include "dtkDistributedMessage.h"
 
 #include <QtCore>
@@ -30,7 +30,7 @@ class dtkAbstractData;
 
 class dtkDistributedSocketPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedSocket : public QTcpSocket
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedSocket : public QTcpSocket
 {
     Q_OBJECT
 

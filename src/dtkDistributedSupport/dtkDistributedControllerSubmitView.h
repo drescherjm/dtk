@@ -20,14 +20,14 @@
 #ifndef DTKDISTRIBUTEDCONTROLLERSUBMITVIEW_H
 #define DTKDISTRIBUTEDCONTROLLERSUBMITVIEW_H
 
-#include "dtkDistributedExport.h"
+#include "dtkDistributedSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkDistributedController;
 class dtkDistributedControllerSubmitViewPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedControllerSubmitView : public QFrame
+class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerSubmitView : public QFrame
 {
     Q_OBJECT
 

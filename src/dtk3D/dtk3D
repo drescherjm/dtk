@@ -1,7 +1,0 @@
-#include "dtk3D.h"
-#include "dtk3DEffect.h"
-#include "dtk3DItem.h"
-#include "dtk3DMesh.h"
-#include "dtk3DScene.h"
-#include "dtk3DSettings.h"
-#include "dtk3DView.h"

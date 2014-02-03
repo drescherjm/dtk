@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Sep 22 14:34:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Apr  4 10:29:28 2012 (+0200)
- *           By: tkloczko
- *     Update #: 187
+ * Last-Updated: lun. févr.  3 16:51:39 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 188
  */
 
 /* Commentary: 
@@ -34,13 +34,13 @@
 template <typename T> const QVector<dtkAbstractData *>& dtkUpCastIntoDataVector(const QVector<T>& vector)
 {
     if (vector.isEmpty()) {        
-        dtkDebug() << "Input vector is empty. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is empty. Casting failed. Returns empty vector.";
         return *(new QVector<dtkAbstractData *>());
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(vector.at(0));
     if (!data) {
-        dtkDebug() << "Input vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
         return *(new QVector<dtkAbstractData *>());
     }
     
@@ -56,13 +56,13 @@ template <typename T> const QVector<dtkAbstractData *>& dtkUpCastIntoDataVector(
 template <typename T> QVector<dtkAbstractData *>& dtkUpCastIntoDataVector(QVector<T>& vector)
 {
     if (vector.isEmpty()) {        
-        dtkDebug() << "Input vector is empty. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is empty. Casting failed. Returns empty vector.";
         return *(new QVector<dtkAbstractData *>());
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(vector.at(0));
     if (!data) {
-        dtkDebug() << "Input vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
         return *(new QVector<dtkAbstractData *>());
     }
     
@@ -79,13 +79,13 @@ template <typename T> QVector<dtkAbstractData *>& dtkUpCastIntoDataVector(QVecto
 template <typename T> const QList<dtkAbstractData *>& dtkUpCastIntoDataList(const QList<T>& list)
 {
     if (list.isEmpty()) {        
-        dtkDebug() << "Input list is empty. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is empty. Casting failed. Returns empty list.";
         return *(new QList<dtkAbstractData *>());
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(list.at(0));
     if (!data) {
-        dtkDebug() << "Input list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
         return *(new QList<dtkAbstractData *>());
     }
     
@@ -101,13 +101,13 @@ template <typename T> const QList<dtkAbstractData *>& dtkUpCastIntoDataList(cons
 template <typename T> QList<dtkAbstractData *>& dtkUpCastIntoDataList(QList<T>& list)
 {
     if (list.isEmpty()) {        
-        dtkDebug() << "Input list is empty. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is empty. Casting failed. Returns empty list.";
         return *(new QList<dtkAbstractData *>());
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(list.at(0));
     if (!data) {
-        dtkDebug() << "Input list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
         return *(new QList<dtkAbstractData *>());
     }
     
@@ -124,13 +124,13 @@ template <typename T> QList<dtkAbstractData *>& dtkUpCastIntoDataList(QList<T>& 
 template <typename T> const QVector<T>& dtkDownCastFromDataVector(const QVector<dtkAbstractData *>& vector)
 {
     if (vector.isEmpty()) {        
-        dtkDebug() << "Input vector is empty. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is empty. Casting failed. Returns empty vector.";
         return *(new QVector<T>());
     }
 
     T data = dynamic_cast<T>(vector.at(0));
     if (!data) {
-        dtkDebug() << "Output vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Output vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
         return *(new QVector<T>());
     }
     
@@ -146,13 +146,13 @@ template <typename T> const QVector<T>& dtkDownCastFromDataVector(const QVector<
 template <typename T> QVector<T>& dtkDownCastFromDataVector(QVector<dtkAbstractData *>& vector)
 {
     if (vector.isEmpty()) {        
-        dtkDebug() << "Input vector is empty. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is empty. Casting failed. Returns empty vector.";
         return *(new QVector<T>());
     }
 
     T data = qobject_cast<T>(vector.at(0));
     if (!data) {
-        dtkDebug() << "Output vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Output vector is not made of dtkAbstractData*. Casting failed. Returns empty vector.";
         return *(new QVector<T>());
     }
     
@@ -169,13 +169,13 @@ template <typename T> QVector<T>& dtkDownCastFromDataVector(QVector<dtkAbstractD
 template <typename T> const QList<T>& dtkDownCastFromDataList(const QList<dtkAbstractData *>& list)
 {
     if (list.isEmpty()) {        
-        dtkDebug() << "Input list is empty. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is empty. Casting failed. Returns empty list.";
         return *(new QList<T>());
     }
 
     T data = qobject_cast<T>(list.at(0));
     if (!data) {
-        dtkDebug() << "Output list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Output list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
         return *(new QList<T>());
     }
     
@@ -191,13 +191,13 @@ template <typename T> const QList<T>& dtkDownCastFromDataList(const QList<dtkAbs
 template <typename T> QList<T>& dtkDownCastFromDataList(QList<dtkAbstractData *>& list)
 {
     if (list.isEmpty()) {        
-        dtkDebug() << "Input list is empty. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is empty. Casting failed. Returns empty list.";
         return *(new QList<T>());
     }
 
     T data = qobject_cast<T>(list.at(0));
     if (!data) {
-        dtkDebug() << "Output list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Output list is not made of dtkAbstractData*. Casting failed. Returns empty list.";
         return *(new QList<T>());
     }
     
@@ -212,13 +212,13 @@ template <typename T> QList<T>& dtkDownCastFromDataList(QList<dtkAbstractData *>
 template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromVectorCopy(const QVector<T>& vector)
 {
     if (vector.isEmpty()) {        
-        dtkDebug() << "Input vector is empty. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is empty. Creation failed. Returns empty composite.";
         return NULL;
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(vector.at(0));
     if (!data) {
-        dtkDebug() << "Input vector is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
         return NULL;
     }
 
@@ -233,13 +233,13 @@ template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromVect
 template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromVectorCopy(QVector<T>& vector)
 {
     if (vector.isEmpty()) {        
-        dtkDebug() << "Input vector is empty. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is empty. Creation failed. Returns empty composite.";
         return NULL;
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(vector.at(0));
     if (!data) {
-        dtkDebug() << "Input vector is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input vector is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
         return NULL;
     }
     
@@ -254,13 +254,13 @@ template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromVect
 template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromListCopy(const QList<T>& list)
 {
     if (list.isEmpty()) {        
-        dtkDebug() << "Input list is empty. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is empty. Creation failed. Returns empty composite.";
         return NULL;
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(list.at(0));
     if (!data) {
-        dtkDebug() << "Input list is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
         return NULL;
     }
     
@@ -275,13 +275,13 @@ template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromList
 template <typename T> dtkAbstractDataComposite *dtkAbstractDataCompositeFromListCopy(QList<T>& list)
 {
     if (list.isEmpty()) {        
-        dtkDebug() << "Input list is empty. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is empty. Creation failed. Returns empty composite.";
         return NULL;
     }
 
     dtkAbstractData *data = qobject_cast<dtkAbstractData *>(list.at(0));
     if (!data) {
-        dtkDebug() << "Input list is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Input list is not made of dtkAbstractData*. Creation failed. Returns empty composite.";
         return NULL;
     }
     

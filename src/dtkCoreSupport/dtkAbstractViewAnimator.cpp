@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 16:14:03 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 14:28:25 2012 (+0200)
- *           By: tkloczko
- *     Update #: 25
+ * Last-Updated: lun. févr.  3 16:42:52 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -93,10 +93,10 @@ void dtkAbstractViewAnimator::disable(void)
 
 void dtkAbstractViewAnimator::start(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractViewAnimator::stop(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }

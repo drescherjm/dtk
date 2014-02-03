@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 27 16:17:44 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 119
+ * Last-Updated: lun. févr.  3 16:46:57 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -21,7 +21,7 @@
 #include "dtkAbstractProcessFactory.h"
 #include "dtkSmartPointer.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 class dtkAbstractProcessFactoryPrivate
 {
@@ -116,7 +116,7 @@ QStringList dtkAbstractProcessFactory::implementations(const QString& interface)
     if(d->interfaces.keys().contains(interface))
         implementations << d->interfaces.values(interface);
     else
-        dtkWarn() << "There is no available implementation of " << interface ;
+        dtkWarning(dtkLoggingCategory::defaultCategory()) << "There is no available implementation of " << interface ;
 
     return implementations;
 }

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 13:46:31 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 14:10:05 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 266
+ * Last-Updated: lun. févr.  3 15:58:28 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 267
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 #include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 class dtkAbstractDataCompositePrivate;
 

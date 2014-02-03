@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 13:39:50 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 493
+ * Last-Updated: lun. févr.  3 16:48:58 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 502
  */
 
 /* Commentary:
@@ -26,7 +26,7 @@
 #include "dtkAbstractDataSerializer.h"
 #include "dtkAbstractDataDeserializer.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 #include <QtWidgets>
 
@@ -142,7 +142,7 @@ void dtkAbstractData::copy(const dtkAbstractObject& other)
         d->thumbnails = data.d_func()->thumbnails;
 
     } else {
-        dtkWarn() << "Other is not of same type than this, slicing is occuring.";
+        dtkWarning(dtkLoggingCategory::defaultCategory()) << "Other is not of same type than this, slicing is occuring.";
     }
 }
 
@@ -266,7 +266,7 @@ void dtkAbstractData::enableReader(const QString& reader)
     if (it != d->readers.end())
         it.value() = true;
     else
-        dtkDebug() << this->identifier() << " has no such reader: " << reader;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
@@ -288,7 +288,7 @@ void dtkAbstractData::enableWriter(const QString& writer)
     if (it != d->writers.end())
         it.value() = true;
     else
-        dtkDebug() << this->identifier() << " has no such writer: " << writer;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
@@ -310,7 +310,7 @@ void dtkAbstractData::enableConverter(const QString& converter)
     if (it != d->converters.end())
         it.value() = true;
     else
-        dtkDebug() << this->identifier() << " has no such converter: " << converter;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)
@@ -332,7 +332,7 @@ void dtkAbstractData::enableSerializer(const QString& serializer)
     if (it != d->serializers.end())
         it.value() = true;
     else
-        dtkDebug() << this->identifier() << " has no such serializer: " << serializer;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such serializer: " << serializer;
 }
 
 void dtkAbstractData::disableSerializer(const QString& serializer)
@@ -354,7 +354,7 @@ void dtkAbstractData::enableDeserializer(const QString& deserializer)
     if (it != d->deserializers.end())
         it.value() = true;
     else
-        dtkDebug() << this->identifier() << " has no such deserializer: " << deserializer;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such deserializer: " << deserializer;
 }
 
 void dtkAbstractData::disableDeserializer(const QString& deserializer)
@@ -444,7 +444,7 @@ void dtkAbstractData::setNumberOfChannels(int number)
 
 void dtkAbstractData::update(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 bool dtkAbstractData::read(const QString& file)
@@ -649,7 +649,7 @@ dtkAbstractData *dtkAbstractData::deserialize(const QByteArray &array)
 
                 deserialized = deserializer->deserialize(array);
                 if(!deserialized)
-                    dtkDebug() << "deserializer failed, try another one ...";
+                    dtkDebug(dtkLoggingCategory::defaultCategory()) << "deserializer failed, try another one ...";
                 else
                     break;
             }
@@ -697,158 +697,158 @@ QList<QImage>& dtkAbstractData::thumbnails(void)
 
 void *dtkAbstractData::output(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
 
 void *dtkAbstractData::output(int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(channel);
 
     return NULL;
 }
 
 void *dtkAbstractData::data(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
 
 void *dtkAbstractData::data(int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(channel);
 
     return NULL;
 }
 
 double dtkAbstractData::parameter(int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(channel);
 
     return -1;
 }
 
 void dtkAbstractData::setParameter(int parameter)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(int parameter, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(qlonglong parameter)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(qlonglong parameter, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(float parameter)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(float parameter, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(double parameter)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(double parameter, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(const QString& parameter)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(const QString& parameter, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractData::setParameter(dtkAbstractData *parameter)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
 }
 
 void dtkAbstractData::setParameter(dtkAbstractData *parameter, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(parameter);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(parameter);
+    Q_UNUSED(channel);
 }
 
 // void dtkAbstractData::setParameter(dtkVectorReal parameter)
 // {
-//     DTK_DEFAULT_IMPLEMENTATION;
-//     DTK_UNUSED(parameter);
+//     //DTK_DEFAULT_IMPLEMENTATION;
+//     Q_UNUSED(parameter);
 // }
 
 // void dtkAbstractData::setParameter(dtkVectorReal parameter, int channel)
 // {
-//     DTK_DEFAULT_IMPLEMENTATION;
-//     DTK_UNUSED(parameter);
-//     DTK_UNUSED(channel);
+//     //DTK_DEFAULT_IMPLEMENTATION;
+//     Q_UNUSED(parameter);
+//     Q_UNUSED(channel);
 // }
 
 void dtkAbstractData::setData(void* data)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(data);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
 }
 
 void dtkAbstractData::setData(void* data, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(data);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
+    Q_UNUSED(channel);
 }
 
 QVariant dtkAbstractData::toVariant(dtkAbstractData *data)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(data);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
 
     return qVariantFromValue(*data);
 }
 
 dtkAbstractData *dtkAbstractData::fromVariant(const QVariant& v)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(v);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(v);
 
     return NULL;
 }

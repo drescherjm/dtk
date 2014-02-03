@@ -10,5 +10,6 @@
 ######################################################################
 
 add_subdirectory(dtkMath)
+add_subdirectory(dtkLog)
 add_subdirectory(dtkWidgets)
 

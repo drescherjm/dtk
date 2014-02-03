@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Jan 29 14:38:31 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 14:31:54 2012 (+0200)
- *           By: tkloczko
- *     Update #: 66
+ * Last-Updated: lun. févr.  3 16:44:16 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 68
  */
 
 /* Commentary:
@@ -72,17 +72,17 @@ void dtkAbstractViewInteractor::setData(dtkAbstractData *data)
 
 void dtkAbstractViewInteractor::setData(dtkAbstractData *data, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(data);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractViewInteractor::setData(dtkAbstractData *data, int channel, int frame)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(data);
-    DTK_UNUSED(channel);
-    DTK_UNUSED(frame);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
+    Q_UNUSED(channel);
+    Q_UNUSED(frame);
 }
 
 void dtkAbstractViewInteractor::setView(dtkAbstractView *view)
@@ -101,24 +101,24 @@ dtkAbstractData *dtkAbstractViewInteractor::data(void)
 
 dtkAbstractData *dtkAbstractViewInteractor::output(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
 
 dtkAbstractData *dtkAbstractViewInteractor::output(int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(channel);
 
     return NULL;
 }
 
 dtkAbstractData *dtkAbstractViewInteractor::output(int channel, int frame)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(channel);
-    DTK_UNUSED(frame);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(channel);
+    Q_UNUSED(frame);
 
     return NULL;
 }
@@ -132,15 +132,15 @@ dtkAbstractView *dtkAbstractViewInteractor::view(void)
 
 void dtkAbstractViewInteractor::predraw(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractViewInteractor::draw(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractViewInteractor::postdraw(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }

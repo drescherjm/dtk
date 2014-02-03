@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 14:12:21 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 345
+ * Last-Updated: lun. févr.  3 16:50:57 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 351
  */
 
 /* Commentary:
@@ -27,7 +27,7 @@
 // #include <dtkMath/dtkVector3D.h>
 // #include <dtkMath/dtkQuaternion.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractView implementation
@@ -133,7 +133,7 @@ void dtkAbstractView::copy(const dtkAbstractObject& other)
         d->interactors = view.d_func()->interactors;
 
     } else {
-        dtkWarn() << "Other is not of same type than this, slicing is occuring.";
+        dtkWarning(dtkLoggingCategory::defaultCategory()) << "Other is not of same type than this, slicing is occuring.";
     }
 }
 
@@ -165,26 +165,26 @@ void dtkAbstractView::setName(const QString& name)
 
 void dtkAbstractView::link(dtkAbstractView *other)
 {
-    DTK_UNUSED(other);
-    DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(other);
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::unlink(dtkAbstractView *other)
 {
-    DTK_UNUSED(other);
-    DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(other);
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::select(dtkAbstractData *data)
 {
-    DTK_UNUSED(data);
-    DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::unselect(dtkAbstractData *data)
 {
-    DTK_UNUSED(data);
-    DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::setStereo(bool on)
@@ -196,12 +196,12 @@ void dtkAbstractView::setStereo(bool on)
 
 void dtkAbstractView::setView(void *)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::setData(dtkAbstractData *data)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     DTK_D(dtkAbstractView);
 
@@ -216,45 +216,45 @@ void dtkAbstractView::setData(dtkAbstractData *data)
 
 void dtkAbstractView::setData(dtkAbstractData *data, int channel)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(data);
-    DTK_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(data);
+    Q_UNUSED(channel);
 }
 
 void dtkAbstractView::setBackgroundColor(int red, int green, int blue)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(red);
-    DTK_UNUSED(green);
-    DTK_UNUSED(blue);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(red);
+    Q_UNUSED(green);
+    Q_UNUSED(blue);
 }
 
 void dtkAbstractView::setBackgroundColor(double red, double green, double blue)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
-    DTK_UNUSED(red);
-    DTK_UNUSED(green);
-    DTK_UNUSED(blue);
+    //DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(red);
+    Q_UNUSED(green);
+    Q_UNUSED(blue);
 }
 
 void *dtkAbstractView::view(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
 
 void *dtkAbstractView::data(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
 
 void *dtkAbstractView::data(int channel)
 {
-    DTK_UNUSED(channel);
-    DTK_DEFAULT_IMPLEMENTATION;
+    Q_UNUSED(channel);
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
@@ -268,22 +268,22 @@ bool dtkAbstractView::stereo(void)
 
 void dtkAbstractView::clear(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::reset(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 void dtkAbstractView::update(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 QWidget *dtkAbstractView::widget(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return NULL;
 }
@@ -332,7 +332,7 @@ void dtkAbstractView::resize(int width, int height)
 void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 {
     if(animator->identifier().isEmpty()) {
-        dtkDebug() << "No identifier specified for animator. Not add to" << this->identifier();
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "No identifier specified for animator. Not add to" << this->identifier();
         return;
     }
 
@@ -344,7 +344,7 @@ void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 {
     if(navigator->identifier().isEmpty()) {
-        dtkDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "No identifier specified for navigator. Not add to" << this->identifier();
         return;
     }
 
@@ -356,7 +356,7 @@ void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
 {
     if(interactor->identifier().isEmpty()) {
-        dtkDebug() << "No identifier specified for interactor. Not add to" << this->identifier();
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << "No identifier specified for interactor. Not add to" << this->identifier();
         return;
     }
 
@@ -375,7 +375,7 @@ void dtkAbstractView::enableAnimator(const QString& animator)
         d->animators.value(animator)->setView(this);
         d->animators.value(animator)->enable();
     } else
-        dtkDebug() << identifier() << " has no such animator: " << animator;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << identifier() << " has no such animator: " << animator;
 }
 
 void dtkAbstractView::disableAnimator(const QString& animator)
@@ -394,7 +394,7 @@ void dtkAbstractView::enableNavigator(const QString& navigator)
 //      d->navigators.value(navigator)->setView(this);
         d->navigators.value(navigator)->enable();
     } else
-        dtkDebug() << identifier() << " has no such navigator: " << navigator;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << identifier() << " has no such navigator: " << navigator;
 }
 
 void dtkAbstractView::disableNavigator(const QString& navigator)
@@ -413,7 +413,7 @@ void dtkAbstractView::enableInteractor(const QString& interactor)
         d->interactors.value(interactor)->setView(this);
         d->interactors.value(interactor)->enable();
     } else
-        dtkDebug() << identifier() << " has no such interactor: " << interactor;
+        dtkDebug(dtkLoggingCategory::defaultCategory()) << identifier() << " has no such interactor: " << interactor;
 }
 
 void dtkAbstractView::disableInteractor(const QString& interactor)
@@ -495,37 +495,37 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 
 // void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
 // {
-//     DTK_UNUSED(position);
+//     Q_UNUSED(position);
 
-//     DTK_DEFAULT_IMPLEMENTATION;
+//     //DTK_DEFAULT_IMPLEMENTATION;
 // }
 
 // void dtkAbstractView::setHeadOrientation(dtkQuaternion<double> orientation)
 // {
-//     DTK_UNUSED(orientation);
+//     Q_UNUSED(orientation);
 
-//     DTK_DEFAULT_IMPLEMENTATION;
+//     //DTK_DEFAULT_IMPLEMENTATION;
 // }
 
 // void dtkAbstractView::setUpperLeft(dtkVector3D<double> position)
 // {
-//     DTK_UNUSED(position);
+//     Q_UNUSED(position);
 
-//     DTK_DEFAULT_IMPLEMENTATION;
+//     //DTK_DEFAULT_IMPLEMENTATION;
 // }
 
 // void dtkAbstractView::setLowerLeft(dtkVector3D<double> position)
 // {
-//     DTK_UNUSED(position);
+//     Q_UNUSED(position);
 
-//     DTK_DEFAULT_IMPLEMENTATION;
+//     //DTK_DEFAULT_IMPLEMENTATION;
 // }
 
 // void dtkAbstractView::setLowerRight(dtkVector3D<double> position)
 // {
-//     DTK_UNUSED(position);
+//     Q_UNUSED(position);
 
-//     DTK_DEFAULT_IMPLEMENTATION;
+//     //DTK_DEFAULT_IMPLEMENTATION;
 // }
 
 // /////////////////////////////////////////////////////////////////

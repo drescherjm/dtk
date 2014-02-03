@@ -22,13 +22,13 @@
 
 #include <QSplitter>
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 class dtkSplitterPrivate;
 
-class DTKGUI_EXPORT dtkSplitter : public QSplitter
+class DTKGUISUPPORT_EXPORT dtkSplitter : public QSplitter
 {
     Q_OBJECT
 

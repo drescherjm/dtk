@@ -19,9 +19,9 @@
 
 #include "dtkColorGrid.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include <math.h>
 

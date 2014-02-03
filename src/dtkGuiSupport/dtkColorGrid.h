@@ -20,15 +20,15 @@
 #ifndef DTKCOLORGRID_H
 #define DTKCOLORGRID_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 #include "dtkColorButton.h"
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 class dtkColorGridPrivate;
 
-class DTKGUI_EXPORT dtkColorGrid : public QWidget
+class DTKGUISUPPORT_EXPORT dtkColorGrid : public QWidget
 {
     Q_OBJECT
 

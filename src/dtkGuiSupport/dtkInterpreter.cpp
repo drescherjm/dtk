@@ -21,7 +21,7 @@
 
 #include <QtDebug>
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include <dtkConfig.h>
 

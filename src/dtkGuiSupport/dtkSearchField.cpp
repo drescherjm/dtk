@@ -20,7 +20,7 @@
 #include "dtkSearchField.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkSearchFieldPrivate : public QObject
 {

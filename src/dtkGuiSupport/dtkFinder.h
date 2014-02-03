@@ -21,9 +21,9 @@
 #define DTKFINDER_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkFinderToolBar
@@ -31,7 +31,7 @@
 
 class dtkFinderToolBarPrivate;
 
-class DTKGUI_EXPORT dtkFinderToolBar : public QToolBar
+class DTKGUISUPPORT_EXPORT dtkFinderToolBar : public QToolBar
 {
     Q_OBJECT
 
@@ -67,7 +67,7 @@ private:
 
 class dtkFinderSideViewPrivate;
 
-class DTKGUI_EXPORT dtkFinderSideView : public QTreeWidget
+class DTKGUISUPPORT_EXPORT dtkFinderSideView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -118,7 +118,7 @@ private:
 
 class dtkFinderPathBarPrivate;
 
-class DTKGUI_EXPORT dtkFinderPathBar : public QFrame
+class DTKGUISUPPORT_EXPORT dtkFinderPathBar : public QFrame
 {
     Q_OBJECT
 
@@ -148,7 +148,7 @@ private:
 
 class dtkFinderListViewPrivate;
 
-class DTKGUI_EXPORT dtkFinderListView : public QListView
+class DTKGUISUPPORT_EXPORT dtkFinderListView : public QListView
 {
     Q_OBJECT
 
@@ -191,7 +191,7 @@ private:
 
 class dtkFinderTreeViewPrivate;
 
-class DTKGUI_EXPORT dtkFinderTreeView : public QTreeView
+class DTKGUISUPPORT_EXPORT dtkFinderTreeView : public QTreeView
 {
     Q_OBJECT
 
@@ -237,7 +237,7 @@ private:
 
 class dtkFinderPrivate;
 
-class DTKGUI_EXPORT dtkFinder : public QWidget
+class DTKGUISUPPORT_EXPORT dtkFinder : public QWidget
 {
     Q_OBJECT
 

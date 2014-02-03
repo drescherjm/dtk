@@ -24,8 +24,8 @@
 #import "AppKit/NSSearchField.h"
 
 #include <QtCore>
-#include <QtGui>
-#include <QtGui/QMacCocoaViewContainer>
+#include <QtWidgets>
+#include <QtWidgets/QMacCocoaViewContainer>
 
 // /////////////////////////////////////////////////////////////////
 // 

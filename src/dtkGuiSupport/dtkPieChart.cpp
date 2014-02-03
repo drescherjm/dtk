@@ -19,7 +19,7 @@
 
 #include "dtkPieChart.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 class dtkPieChartPrivate
 {

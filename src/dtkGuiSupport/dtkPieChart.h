@@ -20,13 +20,13 @@
 #ifndef DTKPIECHART_H
 #define DTKPIECHART_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class dtkPieChartPrivate;
 
-class DTKGUI_EXPORT dtkPieChart : public QWidget
+class DTKGUISUPPORT_EXPORT dtkPieChart : public QWidget
 {
     Q_OBJECT
 

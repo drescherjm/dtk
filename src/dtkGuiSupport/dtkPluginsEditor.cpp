@@ -19,7 +19,7 @@
 
 #include "dtkPluginsEditor.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkPluginsEditorPrivate
 {

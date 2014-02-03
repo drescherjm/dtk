@@ -19,8 +19,8 @@
 
 #include "dtkAboutPlugin.h"
 
-#include <dtkCore/dtkPlugin.h>
-#include <dtkCore/dtkPluginManager.h>
+#include <dtkCoreSupport/dtkPlugin.h>
+#include <dtkCoreSupport/dtkPluginManager.h>
 
 class dtkAboutPluginPrivate
 {

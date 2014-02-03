@@ -20,9 +20,9 @@
 #ifndef DTKTAGCLOUD_H
 #define DTKTAGCLOUD_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
 // dtkTag
@@ -30,7 +30,7 @@
 
 class dtkTagPrivate;
 
-class DTKGUI_EXPORT dtkTag
+class DTKGUISUPPORT_EXPORT dtkTag
 {
 public:
      dtkTag(void);
@@ -60,7 +60,7 @@ protected:
 
 class dtkTagCloudPrivate;
 
-class DTKGUI_EXPORT dtkTagCloud : public QTextBrowser
+class DTKGUISUPPORT_EXPORT dtkTagCloud : public QTextBrowser
 {
     Q_OBJECT
 
@@ -153,7 +153,7 @@ protected:
 
 class dtkTagScopePrivate;
 
-class DTKGUI_EXPORT dtkTagScope : public QFrame
+class DTKGUISUPPORT_EXPORT dtkTagScope : public QFrame
 {
     Q_OBJECT
 
@@ -200,7 +200,7 @@ protected:
 
 class dtkItemPrivate;
 
-class DTKGUI_EXPORT dtkItem : public QListWidgetItem
+class DTKGUISUPPORT_EXPORT dtkItem : public QListWidgetItem
 {
 public:
      dtkItem(QString name);
@@ -226,7 +226,7 @@ protected:
 
 class dtkItemListPrivate;
 
-class DTKGUI_EXPORT dtkItemList : public QListWidget
+class DTKGUISUPPORT_EXPORT dtkItemList : public QListWidget
 {
     Q_OBJECT
 
@@ -296,7 +296,7 @@ protected:
 // dtkItemListDelegate
 // /////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkItemListDelegate: public QStyledItemDelegate
+class DTKGUISUPPORT_EXPORT dtkItemListDelegate: public QStyledItemDelegate
 {
 public:
     dtkItemListDelegate(dtkItemList *list);
@@ -315,7 +315,7 @@ protected:
 // dtkItemDarkDelegate
 // /////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkItemDarkDelegate: public QStyledItemDelegate
+class DTKGUISUPPORT_EXPORT dtkItemDarkDelegate: public QStyledItemDelegate
 {
 public:
     dtkItemDarkDelegate(dtkItemList *list);
@@ -334,7 +334,7 @@ protected:
 // dtkItemBlueDelegate
 // /////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkItemBlueDelegate: public QStyledItemDelegate
+class DTKGUISUPPORT_EXPORT dtkItemBlueDelegate: public QStyledItemDelegate
 {
  public:
     dtkItemBlueDelegate(dtkItemList *list);
@@ -355,7 +355,7 @@ class DTKGUI_EXPORT dtkItemBlueDelegate: public QStyledItemDelegate
 
 class dtkItemViewPrivate;
 
-class DTKGUI_EXPORT dtkItemView : public QStackedWidget
+class DTKGUISUPPORT_EXPORT dtkItemView : public QStackedWidget
 {
     Q_OBJECT
 
@@ -413,7 +413,7 @@ protected:
 
 class dtkTagControllerPrivate;
 
-class DTKGUI_EXPORT dtkTagController : public QObject
+class DTKGUISUPPORT_EXPORT dtkTagController : public QObject
 {
     Q_OBJECT
 

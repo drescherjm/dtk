@@ -20,13 +20,13 @@
 #ifndef DTKPLUGINSEDITOR_H
 #define DTKPLUGINSEDITOR_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class dtkPluginsEditorPrivate;
 
-class DTKGUI_EXPORT dtkPluginsEditor : public QWidget
+class DTKGUISUPPORT_EXPORT dtkPluginsEditor : public QWidget
 {
     Q_OBJECT
 

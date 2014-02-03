@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 13:33:45 2013 (+0200)
  * Version: 
- * Last-Updated: jeu. oct. 24 11:22:27 2013 (+0200)
+ * Last-Updated: lun. févr.  3 14:33:55 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 280
+ *     Update #: 284
  */
 
 /* Change Log:
@@ -14,13 +14,8 @@
 
 #include "dtkPropertyEditor.h"
 
-#include <dtkLog>
-
-#include <QObject>
-#include <QMetaObject>
-#include <QMetaProperty>
-#include <QMetaEnum>
-#include <QHBoxLayout>
+#include <QtCore>
+#include <QtWidgets>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkPropertyEditorPrivate declaration
@@ -42,7 +37,7 @@ public:
 dtkPropertyEditor::dtkPropertyEditor(const QString& property_name, QObject *object, QWidget *parent) : QFrame(parent), d(new dtkPropertyEditorPrivate)
 {
     if (!object) {
-        dtkError() << Q_FUNC_INFO << "dtkPropertyEditor must be created using a valid QObject.";
+        qDebug() << Q_FUNC_INFO << "dtkPropertyEditor must be created using a valid QObject.";
         return;
     }
     

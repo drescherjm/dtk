@@ -20,16 +20,16 @@
 #ifndef DTKVIEWLAYOUT_H
 #define DTKVIEWLAYOUT_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkAbstractView;
 
 class dtkViewLayoutItem;
 class dtkViewLayoutPrivate;
 
-class DTKGUI_EXPORT dtkViewLayout : public QFrame
+class DTKGUISUPPORT_EXPORT dtkViewLayout : public QFrame
 {
     Q_OBJECT
 

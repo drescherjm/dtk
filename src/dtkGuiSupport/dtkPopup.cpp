@@ -19,7 +19,7 @@
 
 #include "dtkPopup.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkPopupPrivate
 {

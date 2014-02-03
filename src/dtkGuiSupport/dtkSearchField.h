@@ -20,7 +20,7 @@
 #ifndef DTKSEARCHFIELD_H
 #define DTKSEARCHFIELD_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class dtkSearchFieldPrivate;
 

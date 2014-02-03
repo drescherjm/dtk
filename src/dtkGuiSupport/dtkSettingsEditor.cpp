@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Dec 23 09:56:30 2009 (+0100)
  * Version: $Id$
- * Last-Updated: Tue May 15 13:43:35 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 26
+ * Last-Updated: lun. févr.  3 14:35:00 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -300,8 +300,8 @@ dtkSettingsEditorTree::dtkSettingsEditorTree(QWidget *parent) : QTreeWidget(pare
     QStringList labels;
     labels << tr("Setting") << tr("Type") << tr("Value");
     setHeaderLabels(labels);
-    header()->setResizeMode(0, QHeaderView::Stretch);
-    header()->setResizeMode(2, QHeaderView::Stretch);
+    header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    header()->setSectionResizeMode(2, QHeaderView::Stretch);
 
     settings = 0;
     refreshTimer.setInterval(2000);

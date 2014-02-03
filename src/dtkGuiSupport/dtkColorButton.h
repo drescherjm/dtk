@@ -20,9 +20,9 @@
 #ifndef DTKCOLORBUTTON_H
 #define DTKCOLORBUTTON_H
 
-#include <QtGui/QPushButton>
+#include <QtWidgets/QPushButton>
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
 class dtkColorButtonPrivate;
 class dtkColorGrid;
@@ -38,7 +38,7 @@ typedef QList<QColor> dtkColorList;
 // 
 // /////////////////////////////////////////////////////////////////
 
-class DTKGUI_EXPORT dtkColorButton : public QPushButton
+class DTKGUISUPPORT_EXPORT dtkColorButton : public QPushButton
 {
     Q_OBJECT
 

@@ -19,8 +19,8 @@
 
 #include "dtkViewList.h"
 
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
+#include <dtkCoreSupport/dtkAbstractView.h>
+#include <dtkCoreSupport/dtkAbstractViewFactory.h>
 
 class dtkViewListPrivate
 {

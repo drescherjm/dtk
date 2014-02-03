@@ -20,14 +20,14 @@
 #ifndef DTKABOUTPLUGIN_H
 #define DTKABOUTPLUGIN_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class dtkAboutPluginPrivate;
 class dtkPlugin;
 
-class DTKGUI_EXPORT dtkAboutPlugin : public QWidget
+class DTKGUISUPPORT_EXPORT dtkAboutPlugin : public QWidget
 {
     Q_OBJECT
 

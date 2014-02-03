@@ -20,9 +20,9 @@
 #ifndef DTKPROGRESSINDICATOR_H
 #define DTKPROGRESSINDICATOR_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkProgressIndicatorPrivate;
 

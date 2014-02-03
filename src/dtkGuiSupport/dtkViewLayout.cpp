@@ -20,7 +20,7 @@
 #include "dtkViewLayout.h"
 #include "dtkViewLayoutItem.h"
 
-#include <dtkCore/dtkAbstractViewFactory.h>
+#include <dtkCoreSupport/dtkAbstractViewFactory.h>
 
 class dtkViewLayoutPrivate
 {

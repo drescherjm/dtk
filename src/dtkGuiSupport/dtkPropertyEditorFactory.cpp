@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 10:30:09 2013 (+0200)
  * Version: 
- * Last-Updated: mer. oct. 23 16:35:10 2013 (+0200)
+ * Last-Updated: lun. févr.  3 14:33:32 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 250
+ *     Update #: 256
  */
 
 /* Change Log:
@@ -14,10 +14,7 @@
 
 #include "dtkPropertyEditorFactory.h"
 
-#include <dtkLog>
-
-#include <QHash>
-#include <QVariant>
+#include <QtCore>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkPropertyEditorFactoryPrivate declaration
@@ -36,16 +33,16 @@ public:
 // Forward declarations of creators (see dtkPropertyEditor.cpp for implementations).
 // ///////////////////////////////////////////////////////////////////
 
-dtkPropertyEditor DTKGUI_EXPORT  *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor DTKGUI_EXPORT *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor DTKGUI_EXPORT  *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor DTKGUI_EXPORT    *createDtkPropertyEditorEnum(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUISUPPORT_EXPORT  *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUISUPPORT_EXPORT *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUISUPPORT_EXPORT  *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKGUISUPPORT_EXPORT    *createDtkPropertyEditorEnum(const QString& property_name, QObject *object, QWidget *parent = 0);
 
 // ///////////////////////////////////////////////////////////////////
 // dtkPropertyEditorFactory implementation
 // ///////////////////////////////////////////////////////////////////
 
-DTKGUI_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(void)
+DTKGUISUPPORT_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(void)
 {
     if(!s_instance) {
         s_instance = new dtkPropertyEditorFactory;
@@ -62,7 +59,7 @@ DTKGUI_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(void)
 dtkPropertyEditor *dtkPropertyEditorFactory::create(const QString& property_name, QObject *object, QWidget *parent)
 {
     if (!object) {
-        dtkError() << Q_FUNC_INFO << "Cannot create any dtkPropertyEditor for null object.";
+        qDebug() << Q_FUNC_INFO << "Cannot create any dtkPropertyEditor for null object.";
         return NULL;
     }
 
@@ -84,7 +81,7 @@ QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *objec
     QList<QWidget *> list;
 
     if (!object) {
-        dtkError() << Q_FUNC_INFO << "Cannot create any dtkPropertyEditor for null object.";
+        qDebug() << Q_FUNC_INFO << "Cannot create any dtkPropertyEditor for null object.";
         return list;
     }
 
@@ -116,7 +113,7 @@ bool dtkPropertyEditorFactory::registerCreator(int type, dtkPropertyEditorCreato
         return true;
     }
 
-    dtkWarn() << Q_FUNC_INFO << QString("Unable to create dtkPropertyEditor of type %1").arg(QMetaType::typeName(type));
+    qDebug() << Q_FUNC_INFO << QString("Unable to create dtkPropertyEditor of type %1").arg(QMetaType::typeName(type));
     return false;
 }
 
@@ -134,4 +131,4 @@ dtkPropertyEditorFactory::~dtkPropertyEditorFactory(void)
     d = NULL;
 }
 
-DTKGUI_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::s_instance = NULL;
+DTKGUISUPPORT_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::s_instance = NULL;

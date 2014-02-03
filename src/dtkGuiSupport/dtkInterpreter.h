@@ -20,14 +20,14 @@
 #ifndef DTKINTERPRETER_H
 #define DTKINTERPRETER_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkScriptInterpreter;
 class dtkInterpreterPrivate;
 
-class DTKGUI_EXPORT dtkInterpreter : public QPlainTextEdit
+class DTKGUISUPPORT_EXPORT dtkInterpreter : public QPlainTextEdit
 {
     Q_OBJECT
 

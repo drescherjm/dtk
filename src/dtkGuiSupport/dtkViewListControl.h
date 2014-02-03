@@ -16,15 +16,15 @@
 #ifndef DTKVIEWLISTCONTROL_H
 #define DTKVIEWLISTCONTROL_H
 
-#include "dtkGuiExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkViewLayout;
 class dtkViewList;
 class dtkViewListControlPrivate;
 
-class DTKGUI_EXPORT dtkViewListControl : public QFrame
+class DTKGUISUPPORT_EXPORT dtkViewListControl : public QFrame
 {
     Q_OBJECT
 

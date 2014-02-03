@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:47:45 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Dec  6 12:30:58 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 164
+ * Last-Updated: lun. févr.  3 14:30:48 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 170
  */
 
 /* Commentary: 
@@ -19,7 +19,7 @@
 
 #include "dtkFinder.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #ifdef Q_WS_WIN
 #include <qt_windows.h>
@@ -262,20 +262,20 @@ void dtkFinderSideView::populate(void)
     QTreeWidgetItem *item21 = new QTreeWidgetItem(item2, QStringList() << "Desktop");
     item21->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     // item21->setData(0, Qt::FontRole, itemFont);
-    item21->setData(0, Qt::UserRole, QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
-    item21->setIcon(0, provider.icon(QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation))));
+    item21->setData(0, Qt::UserRole, QStandardPaths::displayName(QStandardPaths::DesktopLocation));
+    item21->setIcon(0, provider.icon(QFileInfo(QStandardPaths::displayName(QStandardPaths::DesktopLocation))));
 
     QTreeWidgetItem *item22 = new QTreeWidgetItem(item2, QStringList() << "Home");
     item22->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     // item22->setData(0, Qt::FontRole, itemFont);
-    item22->setData(0, Qt::UserRole, QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    item22->setIcon(0, provider.icon(QFileInfo(QDesktopServices::storageLocation(QDesktopServices::HomeLocation))));
+    item22->setData(0, Qt::UserRole, QStandardPaths::displayName(QStandardPaths::HomeLocation));
+    item22->setIcon(0, provider.icon(QFileInfo(QStandardPaths::displayName(QStandardPaths::HomeLocation))));
 
     QTreeWidgetItem *item23 = new QTreeWidgetItem(item2, QStringList() << "Documents");
     item23->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     // item23->setData(0, Qt::FontRole, itemFont);
-    item23->setData(0, Qt::UserRole, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    item23->setIcon(0, provider.icon(QFileInfo(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation))));
+    item23->setData(0, Qt::UserRole, QStandardPaths::displayName(QStandardPaths::DocumentsLocation));
+    item23->setIcon(0, provider.icon(QFileInfo(QStandardPaths::displayName(QStandardPaths::DocumentsLocation))));
 
     d->items << item21 << item22 << item23;
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 25 10:30:03 2013 (+0100)
+ * Last-Updated: mar. févr.  4 14:42:43 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 2108
+ *     Update #: 2109
  */
 
 /* Commentary:
@@ -46,7 +46,7 @@
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkLog categories
@@ -383,9 +383,9 @@ void dtkComposerGraph::addNode(dtkComposerSceneNode *node)
 
 void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
 {
-    dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "removing node" << node->title();
+    dtkDebug() << "removing node" << node->title();
     dtkComposerSceneNode *parent = node->parent();
-    dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) <<  "node parent is " << parent->title();
+    dtkDebug() <<  "node parent is " << parent->title();
     // For control nodes, we have to remove its blocks and then it's pending dummy edges
     if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
 
@@ -403,14 +403,14 @@ void dtkComposerGraph::removeNode(dtkComposerSceneNode *node)
         dtkComposerGraphNode *parent_begin = d->begin(parent);
         dtkComposerGraphNode *parent_end   = d->end(parent);
 
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << " removing dummy edges of parent";
+        dtkDebug() << " removing dummy edges of parent";
         foreach( dtkComposerGraphEdge *e, d->dummy_edges.values(parent)) {
             if ((e->source() == parent_begin && e->destination() == d->begin(node) ) || (e->destination() == parent_end && e->source() == d->end(node)))
                 d->remDummyEdge(e, parent);
         }
         // if parent composite is empty after removal, add back dummy edge
         if (d->dummy_edges.values(parent).count() == 0) {
-            dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << " add back dummy edge of empty parent";
+            dtkDebug() << " add back dummy edge of empty parent";
             d->addDummyEdge(  parent_begin, parent_end, parent);
         }
     }
@@ -450,7 +450,7 @@ void dtkComposerGraph::addBlock(dtkComposerSceneNode *node)
         d->addDummyEdge(d->end(blocks.last()), outputs,       noderef);
         d->end(blocks.last())->setEndLoop();
     } else  {
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "addGroup called on unsupported node" << node->title();
+        dtkDebug() << "addGroup called on unsupported node" << node->title();
         return;
     }
 }
@@ -532,7 +532,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         delete e;
         return;
     } else {
-        dtkTrace(FR_INRIA_DTK_COMPOSER_EVALUATOR) << " add regular edge" << scene_src->title() << scene_dest->title();
+        dtkTrace() << " add regular edge" << scene_src->title() << scene_dest->title();
         src = d->end(scene_src);
         dest = d->begin(scene_dest);
         // need to remove dummy edges that start with src
@@ -540,7 +540,7 @@ void dtkComposerGraph::addEdge(dtkComposerSceneEdge *edge)
         foreach( dtkComposerGraphEdge *e, d->dummy_edges.values()) {
             if ((e->source() == src ) || (e->destination() == dest)) {
                 // FIXME: is the condition ok for dummy edges in control nodes ?
-                dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << " remove dummy edge because of addEdge" << e->source()->title() << e->destination()->title() ;
+                dtkDebug() << " remove dummy edge because of addEdge" << e->source()->title() << e->destination()->title() ;
                 d->remDummyEdge(e,d->dummy_edges.key(e));
             }
         }

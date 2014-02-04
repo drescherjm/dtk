@@ -22,7 +22,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 #include <QVarLengthArray>
 

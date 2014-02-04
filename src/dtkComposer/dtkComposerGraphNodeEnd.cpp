@@ -26,7 +26,7 @@
 #include "dtkComposerNodeRemote.h"
 #endif
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 class dtkComposerGraphNodeEndPrivate
 {

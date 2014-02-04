@@ -28,7 +28,7 @@
 // #include "dtkComposerNodeRemote.h"
 // #endif
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 // #if defined(DTK_BUILD_DISTRIBUTED)
 // #include <dtkDistributed/dtkDistributedController.h>

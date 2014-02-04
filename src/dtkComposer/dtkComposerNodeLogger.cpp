@@ -16,7 +16,7 @@
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 // ///////////////////////////////////////////////////////////////////
 // Log categories
@@ -79,21 +79,21 @@ void dtkComposerNodeLogger::run(void)
         if (!d->receiver_level.isEmpty()) {
             QString level = d->receiver_level.data();
             if (level == "trace")
-                dtkTrace(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkTrace() <<  output;
             else if  (level == "debug")
-                dtkDebug(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkDebug() <<  output;
             else if  (level == "info")
-                dtkInfo(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkInfo() <<  output;
             else if  (level == "warn")
-                dtkWarning(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkWarning() <<  output;
             else if  (level == "error")
-                dtkError(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkError() <<  output;
             else if  (level == "fatal")
-                dtkCritical(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkCritical() <<  output;
             else
-                dtkInfo(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+                dtkInfo() <<  output;
         } else {
-            dtkInfo(FR_INRIA_DTK_COMPOSER_LOGGER) <<  output;
+            dtkInfo() <<  output;
         }
     }
 }

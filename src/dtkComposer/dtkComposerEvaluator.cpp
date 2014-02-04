@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:34:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Mar 25 08:44:42 2013 (+0100)
+ * Last-Updated: mar. févr.  4 14:42:20 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 839
+ *     Update #: 841
  */
 
 /* Commentary:
@@ -25,7 +25,7 @@
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 #include <QtCore>
 #include <QtConcurrent>
@@ -81,11 +81,11 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
         QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << msg;
+        dtkDebug() << msg;
         d->max_stack_size = 0;
     } else {
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << msg;
+        dtkDebug() << msg;
     }
 
     d->should_stop = false;
@@ -113,11 +113,11 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
     while (this->step(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
         QString msg = QString("Evaluation resumed and finished");
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << msg;
+        dtkDebug() << msg;
     } else {
         QString msg = QString("Evaluation stopped ");
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << msg;
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "stack size: " << d->stack.size();
+        dtkDebug() << msg;
+        dtkDebug() << "stack size: " << d->stack.size();
     }
 
     d->should_stop = false;
@@ -128,10 +128,10 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
 void dtkComposerEvaluator::logStack(void)
 {
     // QListIterator<dtkComposerGraphNode *> i(d->stack);
-    // dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "stack content:";
+    // dtkDebug() << "stack content:";
     // while (i.hasNext())
-    //     dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << i.next()->title();
-    // dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "stack end";
+    //     dtkDebug() << i.next()->title();
+    // dtkDebug() << "stack end";
 }
 
 void dtkComposerEvaluator::next(bool run_concurrent)
@@ -189,13 +189,13 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
 
     if (runnable) {
         if (d->current->breakpoint() && d->current->status() == dtkComposerGraphNode::Ready ) {
-            dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "break point reached";
+            dtkDebug() << "break point reached";
             d->current->setStatus(dtkComposerGraphNode::Break);
             d->stack.append( d->current);
             return false;
         }
         if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Process)){
-            // dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "running process node in another thread"<< d->current->title();
+            // dtkDebug() << "running process node in another thread"<< d->current->title();
             QtConcurrent::run(d->current, &dtkComposerGraphNode::eval);
         } else if ((d->current->kind() == dtkComposerGraphNode::View)) {
             connect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()),Qt::BlockingQueuedConnection);
@@ -240,12 +240,12 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         //         d->stack.append(node);
         // }
     } else if (run_concurrent) {
-        dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "add back current node to stack: "<< d->current->title();
+        dtkDebug() << "add back current node to stack: "<< d->current->title();
         d->stack.append(d->current);
     }
     // if (d->stack.size() > d->max_stack_size) {
     //     d->max_stack_size = d->stack.size();
-    //     dtkDebug(FR_INRIA_DTK_COMPOSER_EVALUATOR) << "Max stack size raised: "<< d->max_stack_size;
+    //     dtkDebug() << "Max stack size raised: "<< d->max_stack_size;
     // }
 
     return !d->stack.isEmpty();

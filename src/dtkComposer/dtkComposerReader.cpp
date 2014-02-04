@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 11 10:11:40 2013 (+0200)
+ * Last-Updated: mar. févr.  4 14:44:22 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 894
+ *     Update #: 895
  */
 
 /* Commentary: 
@@ -52,7 +52,7 @@
 #include <QtCore>
 #include <QtXml>
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkLog categories
@@ -206,7 +206,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
                 if(msgBox.exec() == QMessageBox::Cancel)
                     return false;
             } else {
-                dtkError(FR_INRIA_DTK_COMPOSER_IO) << "Can't load composition, mission implementation(s):" << d->missing_implementation.join("");
+                dtkError() << "Can't load composition, mission implementation(s):" << d->missing_implementation.join("");
                 return false;
             }
         }
@@ -428,7 +428,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 msgBox.exec();
 
             } else {
-                dtkError(FR_INRIA_DTK_COMPOSER_IO) <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
 	    }
             return NULL;
         }
@@ -450,7 +450,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 msgBox.exec();
 
             } else {
-                dtkError(FR_INRIA_DTK_COMPOSER_IO) <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
+                dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
 	    }
             delete n;
             return NULL;
@@ -801,7 +801,7 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     return edge;
 
 handle_failure:
-    dtkWarning(FR_INRIA_DTK_COMPOSER_IO) << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
+    dtkWarning() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
     delete edge;
     return NULL;
 

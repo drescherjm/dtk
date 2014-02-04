@@ -36,7 +36,7 @@
 #include "dtkComposerTransmitterProxyLoop.h"
 #include "dtkComposerWriter.h"
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 #include <QtCore>
 

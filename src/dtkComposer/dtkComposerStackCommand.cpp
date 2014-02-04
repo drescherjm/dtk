@@ -42,7 +42,7 @@
 #include "dtkComposerTransmitterProxyLoop.h"
 #include "dtkComposerWriter.h"
 
-#include <dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkLog categories
@@ -664,17 +664,17 @@ void dtkComposerStackCommandDestroyEdge::setEdge(dtkComposerSceneEdge *edge)
 void dtkComposerStackCommandDestroyEdge::redo(void)
 {
     if(!e->edge) {
-        dtkError(FR_INRIA_DTK_COMPOSER_STACK) << "no edge in destroy edge!" ;
+        dtkError() << "no edge in destroy edge!" ;
         return;
     }
 
     if(!e->parent) {
-        dtkError(FR_INRIA_DTK_COMPOSER_STACK) << "no parent in destroy edge!" ;
+        dtkError() << "no parent in destroy edge!" ;
         return;
     }
 
     if(!d->graph) {
-        dtkError(FR_INRIA_DTK_COMPOSER_STACK) << "no graph in destroy edge!" ;
+        dtkError() << "no graph in destroy edge!" ;
         return;
     }
 
@@ -702,17 +702,17 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
 void dtkComposerStackCommandDestroyEdge::undo(void)
 {
     if(!e->edge) {
-        dtkError(FR_INRIA_DTK_COMPOSER_STACK) << "no edge in destroy edge undo!" ;
+        dtkError() << "no edge in destroy edge undo!" ;
         return;
     }
 
     if(!e->parent) {
-        dtkError(FR_INRIA_DTK_COMPOSER_STACK) << "no parent in destroy edge undo!" ;
+        dtkError() << "no parent in destroy edge undo!" ;
         return;
     }
 
     if(!d->graph) {
-        dtkError(FR_INRIA_DTK_COMPOSER_STACK) << "no graph in destroy edge undo!" ;
+        dtkError() << "no graph in destroy edge undo!" ;
         return;
     }
 

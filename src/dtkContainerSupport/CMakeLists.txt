@@ -26,14 +26,6 @@ set(${PROJECT_NAME}_SOURCES
 ## Build rules
 ## #################################################################
 
-if(DTK_USE_PRECOMPILED_HEADERS)
-  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
-    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
-    ${${PROJECT_NAME}_SOURCES}
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_MOC})
-endif(DTK_USE_PRECOMPILED_HEADERS)
-
 add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}

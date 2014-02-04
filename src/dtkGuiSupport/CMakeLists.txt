@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. févr.  4 16:03:19 2014 (+0100)
+## Last-Updated: mar. févr.  4 16:46:00 2014 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 327
+##     Update #: 328
 ######################################################################
 ## 
 ### Change log:
@@ -96,16 +96,6 @@ set(${PROJECT_NAME}_SOURCES_RCC dtkGui.qrc)
 
 qt5_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
 qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_RCC})
-
-if(DTK_USE_PRECOMPILED_HEADERS)
-  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
-    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
-    ${${PROJECT_NAME}_SOURCES}
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_UIC}
-    ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_QRC})
-endif(DTK_USE_PRECOMPILED_HEADERS)
 
 add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}

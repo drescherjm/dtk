@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEARRAYSCALAREXTRACTOR_H
 #define DTKCOMPOSERNODEARRAYSCALAREXTRACTOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeArrayScalarExtractorPrivate;
@@ -29,7 +29,7 @@ class dtkComposerNodeArrayScalarExtractorPrivate;
 // dtkComposerNodeArrayScalarExtractor interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarExtractor : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarExtractor : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayScalarExtractor(void);
@@ -61,7 +61,7 @@ private:
 
 class dtkComposerNodeArrayScalarExtractorSubArrayPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarExtractorSubArray : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarExtractorSubArray : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayScalarExtractorSubArray(void);
@@ -93,7 +93,7 @@ private:
 
 class dtkComposerNodeArrayScalarExtractorArrayPartPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarExtractorArrayPart : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarExtractorArrayPart : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayScalarExtractorArrayPart(void);

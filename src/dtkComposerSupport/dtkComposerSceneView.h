@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERSCENEVIEW_H
 #define DTKCOMPOSERSCENEVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneView : public QTreeView
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneView : public QTreeView
 {
     Q_OBJECT
 

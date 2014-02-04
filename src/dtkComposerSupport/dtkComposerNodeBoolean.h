@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEBOOLEAN_H
 #define DTKCOMPOSERNODEBOOLEAN_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeBooleanPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBoolean : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBoolean : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeBoolean(void);

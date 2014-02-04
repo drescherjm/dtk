@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEMATRIXSQUAREREALOPERATORUNARY_H
 #define DTKCOMPOSERNODEMATRIXSQUAREREALOPERATORUNARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeMatrixSquareRealOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMatrixSquareRealOperatorUnary(void);
@@ -53,7 +53,7 @@ protected:
 
 class dtkComposerNodeMatrixSquareRealOperatorUnaryScalarPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalar : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMatrixSquareRealOperatorUnaryScalar(void);
@@ -75,7 +75,7 @@ protected:
 // dtkComposerNodeMatrixSquareRealOperatorUnary Transpose interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose : public dtkComposerNodeMatrixSquareRealOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryTranspose : public dtkComposerNodeMatrixSquareRealOperatorUnary
 {
 public:
     void run(void);
@@ -95,7 +95,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorUnary Inverse interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryInverse: public dtkComposerNodeMatrixSquareRealOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryInverse: public dtkComposerNodeMatrixSquareRealOperatorUnary
 {
 public:
     void run(void);
@@ -117,7 +117,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorUnaryScalar Determinant interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant : public dtkComposerNodeMatrixSquareRealOperatorUnaryScalar
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant : public dtkComposerNodeMatrixSquareRealOperatorUnaryScalar
 {
 public:
     void run(void);
@@ -136,7 +136,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorUnaryScalar Trace interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace : public dtkComposerNodeMatrixSquareRealOperatorUnaryScalar
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace : public dtkComposerNodeMatrixSquareRealOperatorUnaryScalar
 {
 public:
     void run(void);

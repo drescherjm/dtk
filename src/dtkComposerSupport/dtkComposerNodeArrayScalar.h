@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEARRAYSCALAR_H
 #define DTKCOMPOSERNODEARRAYSCALAR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeArrayScalarPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalar : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalar : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayScalar(void);

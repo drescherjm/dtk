@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERNODEPLOTCURVE_H
 #define DTKCOMPOSERNODEPLOTCURVE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 #include <QtCore>
 
 class dtkComposerNodePlotCurvePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePlotCurve : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotCurve : public QObject, public dtkComposerNodeLeaf
 {
     Q_OBJECT
 

@@ -16,14 +16,14 @@
 #ifndef DTKCOMPOSEREVALUATORPROCESS_H
 #define DTKCOMPOSEREVALUATORPROCESS_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include <QtCore>
 
 class dtkComposerFactory;
 class dtkDistributedCommunicator;
 class dtkComposerEvaluatorProcessPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluatorProcess : public QObject
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerEvaluatorProcess : public QObject
 {
     Q_OBJECT
 

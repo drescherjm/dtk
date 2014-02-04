@@ -20,13 +20,13 @@
 #ifndef DTKCOMPOSERCONTROLSDELEGATE_H
 #define DTKCOMPOSERCONTROLSDELEGATE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerControlsDelegatePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerControlsDelegate : public QStyledItemDelegate
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerControlsDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 

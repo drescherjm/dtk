@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEPLOTCURVEAPPENDPOINT_H
 #define DTKCOMPOSERNODEPLOTCURVEAPPENDPOINT_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 #include <QtCore>
@@ -28,7 +28,7 @@
 class dtkPlotCurve;
 class dtkComposerNodePlotCurveAppendPointPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePlotCurveAppendPoint : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotCurveAppendPoint : public QObject, public dtkComposerNodeLeaf
 {
     Q_OBJECT
 

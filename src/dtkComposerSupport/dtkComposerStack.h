@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERSTACK_H
 #define DTKCOMPOSERSTACK_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerStackCommand;
 

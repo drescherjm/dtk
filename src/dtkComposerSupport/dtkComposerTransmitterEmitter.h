@@ -15,7 +15,7 @@
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_H
 #define DTKCOMPOSERTRANSMITTEREMITTER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitterAbstractEmitter.h"
 
 #include <dtkCore/dtkGlobal>

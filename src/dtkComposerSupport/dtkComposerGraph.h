@@ -20,9 +20,9 @@
 #ifndef DTKCOMPOSERGRAPH_H
 #define DTKCOMPOSERGRAPH_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerGraphEdge;
 class dtkComposerGraphEdgeList;
@@ -33,7 +33,7 @@ class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkGraph;
 
-class DTKCOMPOSER_EXPORT dtkComposerGraph : public QGraphicsScene
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerGraph : public QGraphicsScene
 {
     Q_OBJECT
 

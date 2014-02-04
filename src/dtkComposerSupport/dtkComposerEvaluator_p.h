@@ -18,13 +18,13 @@
 #define DTKCOMPOSEREVALUATOR_P_H
 
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNode.h"
 #include <QtCore>
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluatorPrivate : public QThread
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerEvaluatorPrivate : public QThread
 {
 public:
     dtkComposerGraph *graph;

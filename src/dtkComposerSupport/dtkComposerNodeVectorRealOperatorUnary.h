@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEVECTORREALOPERATORUNARY_H
 #define DTKCOMPOSERNODEVECTORREALOPERATORUNARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeVectorRealOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorRealOperatorUnary(void);
@@ -53,7 +53,7 @@ protected:
 
 class dtkComposerNodeVectorRealOperatorUnaryScalarPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorUnaryScalar : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorRealOperatorUnaryScalar(void);
@@ -75,7 +75,7 @@ protected:
 // dtkComposerNodeVectorRealOperatorUnary UNITARY interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorUnaryUnitary : public dtkComposerNodeVectorRealOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorUnaryUnitary : public dtkComposerNodeVectorRealOperatorUnary
 {
 public:
     void run(void);
@@ -94,7 +94,7 @@ public:
 // dtkComposerNodeVectorRealOperatorUnaryScalar NORM interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealOperatorUnaryScalarNorm : public dtkComposerNodeVectorRealOperatorUnaryScalar
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorUnaryScalarNorm : public dtkComposerNodeVectorRealOperatorUnaryScalar
 {
 public:
     void run(void);

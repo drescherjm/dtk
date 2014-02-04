@@ -15,7 +15,7 @@
 #include "dtkComposerControlsListItemLeafProcess.h"
 #include "dtkComposerNodeLeafProcess.h"
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <dtkCore/dtkGlobal.h>
 #include <dtkCore/dtkAbstractProcess.h>

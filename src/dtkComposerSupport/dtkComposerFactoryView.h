@@ -20,17 +20,17 @@
 #ifndef DTKCOMPOSERFACTORYVIEW_H
 #define DTKCOMPOSERFACTORYVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerFactory;
 class dtkComposerFactoryViewPrivate;
 class dtkItemView;
 class dtkTagScope;
 
-class DTKCOMPOSER_EXPORT dtkComposerFactoryView : public QWidget
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerFactoryView : public QWidget
 {
     Q_OBJECT
 

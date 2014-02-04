@@ -12,7 +12,7 @@
 ##
 ######################################################################
 
-project(dtkComposer)
+project(dtkComposerSupport)
 
 ## #################################################################
 ## Sources
@@ -152,39 +152,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerReader.h
   dtkComposerWriter.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkComposer.h
-  dtkComposer_p.h
-  dtkComposerCompass.h
-  dtkComposerControls.h
-  dtkComposerControlsDelegate.h
-  dtkComposerControlsListItem.h
-  dtkComposerControlsListItemBoolean.h
-  dtkComposerControlsListItemFile.h
-  dtkComposerControlsListItemInteger.h
-  dtkComposerControlsListItemLeafProcess.h
-  dtkComposerControlsListItemReal.h
-  dtkComposerControlsListItemString.h
-  dtkComposerEvaluator.h
-  dtkComposerFactory.h
-  dtkComposerFactoryView.h
-  dtkComposerGraph.h
-  dtkComposerGraphNode.h
-  dtkComposerGraphView.h
-  dtkComposerMachine.h
-  dtkComposerMachineState.h
-  dtkComposerNodeLeafActor.h
-  dtkComposerNodeFile_p.h
-  dtkComposerNodeView.h
-  dtkComposerPath.h
-  dtkComposerSceneModel.h
-  dtkComposerScene.h
-  dtkComposerSceneNodeEditor.h
-  dtkComposerSceneNodeEditor_p.h
-  dtkComposerSceneView.h
-  dtkComposerSearchDialog.h
-  dtkComposerStackView.h
-  dtkComposerView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -411,51 +378,18 @@ endif(DTK_HAVE_VRPN AND DTK_BUILD_VR)
 ## Build rules
 ## #################################################################
 
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-if(NOT MSVC)
-  add_definitions(-DQT_NO_DEBUG)
-endif(NOT MSVC)
-
 add_definitions(-DQSTATEMACHINE_DEBUG)
 
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
-if(DTK_USE_PRECOMPILED_HEADERS)
-  add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
-    "dtkPch/dtkPch.h" "../dtkPch/dtkPch.cpp" 
-    ${${PROJECT_NAME}_SOURCES}
-    ${${PROJECT_NAME}_HEADERS}
-    ${${PROJECT_NAME}_SOURCES_MOC}
-    ${${PROJECT_NAME}_SOURCES_QRC})
-endif(DTK_USE_PRECOMPILED_HEADERS)
-
-if(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_QRC})
-
-else(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} STATIC
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}
-  ${${PROJECT_NAME}_SOURCES_QRC})
-
-endif(BUILD_SHARED_LIBS)
+)
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
   dtkMath
   dtkContainer
-  dtkCore
+  dtkCoreSupport
   dtkGui
   dtkLog
   dtkNotification)
@@ -476,6 +410,10 @@ if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
   target_link_libraries(${PROJECT_NAME} dtkVideo)
 endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 
+qt5_use_modules(${PROJECT_NAME} Concurrent)
+qt5_use_modules(${PROJECT_NAME} Xml)
+qt5_use_modules(${PROJECT_NAME} Widgets)
+
 
 ## #################################################################
 ## Export header file
@@ -493,13 +431,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
-
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERREADER_H
 #define DTKCOMPOSERREADER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
 #include <QtXml>
@@ -34,7 +34,7 @@ class dtkComposerSceneNode;
 class dtkComposerSceneNote;
 class dtkComposerSceneNodeLeaf;
 
-class DTKCOMPOSER_EXPORT dtkComposerReader
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerReader
 {
 public:
              dtkComposerReader(void);

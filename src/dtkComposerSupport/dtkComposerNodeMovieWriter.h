@@ -16,14 +16,14 @@
 #ifndef DTKCOMPOSERNODEMOVIEWRITER_H
 #define DTKCOMPOSERNODEMOVIEWRITER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 #include <QtCore>
 
 class dtkComposerNodeMovieWriterPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMovieWriter : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMovieWriter : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMovieWriter(void);

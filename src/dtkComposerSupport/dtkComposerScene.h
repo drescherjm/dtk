@@ -20,9 +20,9 @@
 #ifndef DTKCOMPOSERSCENE_H
 #define DTKCOMPOSERSCENE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerMachine;
 class dtkComposerFactory;
@@ -36,7 +36,7 @@ class dtkComposerScenePort;
 class dtkComposerScenePrivate;
 class dtkComposerStack;
 
-class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerScene : public QGraphicsScene
 {
     Q_OBJECT
 

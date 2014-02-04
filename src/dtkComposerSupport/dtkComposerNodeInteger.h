@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEINTEGER_H
 #define DTKCOMPOSERNODEINTEGER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 #include <dtkCore/dtkGlobal.h>
@@ -31,7 +31,7 @@ class dtkComposerNodeIntegerPrivate;
 // dtkComposerNodeInteger interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeInteger : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeInteger : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeInteger(void);

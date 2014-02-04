@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEBOOLEANOPERATOR_H
 #define DTKCOMPOSERNODEBOOLEANOPERATOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeBooleanOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeBooleanOperatorUnary(void);
@@ -54,7 +54,7 @@ protected:
 
 class dtkComposerNodeBooleanOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeBooleanOperatorBinary(void);
@@ -82,7 +82,7 @@ protected:
 // Unary boolean operator - NOT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorUnaryNot : public dtkComposerNodeBooleanOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorUnaryNot : public dtkComposerNodeBooleanOperatorUnary
 {
 public:
     void run(void);
@@ -101,7 +101,7 @@ public:
 // Binary boolean operator - AND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryAnd : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryAnd : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -120,7 +120,7 @@ public:
 // Binary boolean operator - OR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryOr : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryOr : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -139,7 +139,7 @@ public:
 // Binary boolean operator - XOR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryXor : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryXor : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -158,7 +158,7 @@ public:
 // Binary boolean operator - NAND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNand : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryNand : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -177,7 +177,7 @@ public:
 // Binary boolean operator - NOR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNor : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryNor : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -196,7 +196,7 @@ public:
 // Binary boolean operator - XNOR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryXnor : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryXnor : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -215,7 +215,7 @@ public:
 // Binary boolean operator - IMP
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryImp : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryImp : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);
@@ -234,7 +234,7 @@ public:
 // Binary boolean operator - NIMP
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNimp : public dtkComposerNodeBooleanOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinaryNimp : public dtkComposerNodeBooleanOperatorBinary
 {
 public:
     void run(void);

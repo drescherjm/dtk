@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEARRAYDATA_H
 #define DTKCOMPOSERNODEARRAYDATA_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeArrayDataPrivate;
@@ -29,7 +29,7 @@ class dtkComposerNodeArrayDataPrivate;
 // dtkComposerNodeArrayData interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayData : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayData : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayData(void);

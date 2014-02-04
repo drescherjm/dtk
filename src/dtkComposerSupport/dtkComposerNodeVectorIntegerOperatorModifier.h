@@ -10,7 +10,7 @@
 #ifndef DTKCOMPOSERNODEVECTORINTEGEROPERATORMODIFIER_H
 #define DTKCOMPOSERNODEVECTORINTEGEROPERATORMODIFIER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@
 
 class dtkComposerNodeVectorIntegerOperatorModifierPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifier : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifier : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorIntegerOperatorModifier(void);
@@ -49,7 +49,7 @@ protected:
 
 class dtkComposerNodeVectorIntegerOperatorModifierAllPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAll : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAll : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorIntegerOperatorModifierAll(void);
@@ -76,7 +76,7 @@ protected:
 
 class dtkComposerNodeVectorIntegerOperatorModifierPartPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierPart : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierPart : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorIntegerOperatorModifierPart(void);
@@ -103,7 +103,7 @@ protected:
 // dtkComposerNodeVectorIntegerOperatorModifier - SET
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierSet : public dtkComposerNodeVectorIntegerOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierSet : public dtkComposerNodeVectorIntegerOperatorModifier
 {
 public:
     void run(void);
@@ -122,7 +122,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifier - SUM
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierSum : public dtkComposerNodeVectorIntegerOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierSum : public dtkComposerNodeVectorIntegerOperatorModifier
 {
 public:
     void run(void);
@@ -141,7 +141,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifier - Substract
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierSubstract : public dtkComposerNodeVectorIntegerOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierSubstract : public dtkComposerNodeVectorIntegerOperatorModifier
 {
 public:
     void run(void);
@@ -160,7 +160,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifier - Mult
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierMult : public dtkComposerNodeVectorIntegerOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierMult : public dtkComposerNodeVectorIntegerOperatorModifier
 {
 public:
     void run(void);
@@ -179,7 +179,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifier - Divide
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierDivide : public dtkComposerNodeVectorIntegerOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierDivide : public dtkComposerNodeVectorIntegerOperatorModifier
 {
 public:
     void run(void);
@@ -198,7 +198,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifierAll - Add
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllAdd : public dtkComposerNodeVectorIntegerOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllAdd : public dtkComposerNodeVectorIntegerOperatorModifierAll
 {
 public:
     void run(void);
@@ -217,7 +217,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifierAll - Substract
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllSubstract : public dtkComposerNodeVectorIntegerOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllSubstract : public dtkComposerNodeVectorIntegerOperatorModifierAll
 {
 public:
     void run(void);
@@ -236,7 +236,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifierAll - Mult
 ///////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllMult : public dtkComposerNodeVectorIntegerOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllMult : public dtkComposerNodeVectorIntegerOperatorModifierAll
 {
 public:
     void run(void);
@@ -255,7 +255,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifierAll - Divide
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllDivide: public dtkComposerNodeVectorIntegerOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierAllDivide: public dtkComposerNodeVectorIntegerOperatorModifierAll
 {
 public:
     void run(void);
@@ -274,7 +274,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifierPart - Sum
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierPartSum: public dtkComposerNodeVectorIntegerOperatorModifierPart
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierPartSum: public dtkComposerNodeVectorIntegerOperatorModifierPart
 {
 public:
     void run(void);
@@ -293,7 +293,7 @@ public:
 // dtkComposerNodeVectorIntegerOperatorModifierPart - Substract
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorIntegerOperatorModifierPartSubstract: public dtkComposerNodeVectorIntegerOperatorModifierPart
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorIntegerOperatorModifierPartSubstract: public dtkComposerNodeVectorIntegerOperatorModifierPart
 {
 public:
     void run(void);

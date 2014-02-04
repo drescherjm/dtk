@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODENUMBEROPERATOR_H
 #define DTKCOMPOSERNODENUMBEROPERATOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeNumberOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeNumberOperatorUnary(void);
@@ -53,7 +53,7 @@ protected:
 
 class dtkComposerNodeNumberOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeNumberOperatorBinary(void);
@@ -82,7 +82,7 @@ protected:
 
 class dtkComposerNodeNumberComparatorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparator : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparator : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeNumberComparator(void);
@@ -111,7 +111,7 @@ protected:
 
 class dtkComposerNodeNumberAlmosteqPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberAlmosteq : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberAlmosteq : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeNumberAlmosteq(void);
@@ -154,7 +154,7 @@ protected:
 
 class dtkComposerNodeNumberNotalmosteqPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberNotalmosteq : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberNotalmosteq : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeNumberNotalmosteq(void);
@@ -195,7 +195,7 @@ protected:
 // dtkComposerNodeNumberOperatorUnary - INCR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryIncr : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryIncr : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -214,7 +214,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - DECR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryDecr : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryDecr : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -233,7 +233,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - SQRT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnarySqrt : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnarySqrt : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -252,7 +252,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - SQUARE
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnarySquare : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnarySquare : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -271,7 +271,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - LN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryLn : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryLn : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -290,7 +290,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - LOG10
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryLog10 : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryLog10 : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -309,7 +309,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - EXP
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryExp : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryExp : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -328,7 +328,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - COS
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryCos : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryCos : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -347,7 +347,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - SIN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnarySin : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnarySin : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -366,7 +366,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - TAN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryTan : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryTan : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -385,7 +385,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - ACOS
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryAcos : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryAcos : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -404,7 +404,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - ASIN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryAsin : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryAsin : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -423,7 +423,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - ATAN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryAtan : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryAtan : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -442,7 +442,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - DEG2RAD
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryDeg2Rad : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryDeg2Rad : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -461,7 +461,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - RAD2DEG
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryRad2Deg : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryRad2Deg : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -480,7 +480,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - INV
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryInv : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryInv : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -499,7 +499,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - OPP
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryOpp : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryOpp : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -518,7 +518,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - CEIL
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryCeil : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryCeil : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -537,7 +537,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - FLOOR
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryFloor : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryFloor : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -556,7 +556,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - ROUND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryRound : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryRound : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -575,7 +575,7 @@ public:
 // dtkComposerNodeNumberOperatorUnary - ROUND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnaryAbs : public dtkComposerNodeNumberOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnaryAbs : public dtkComposerNodeNumberOperatorUnary
 {
 public:
     void run(void);
@@ -594,7 +594,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - EUCLDIV
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryEucldiv : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryEucldiv : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -613,7 +613,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - Min
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMin: public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryMin: public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -632,7 +632,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - Max
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMax : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryMax : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -651,7 +651,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - LOGN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryLogn : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryLogn : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -670,7 +670,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - MINUS
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMinus : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryMinus : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -689,7 +689,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - MODULO
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryModulo : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryModulo : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -708,7 +708,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - MULT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryMult : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryMult : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -727,7 +727,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - PLUS
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryPlus : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryPlus : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -746,7 +746,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - POSNTHROOT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryPosnthroot : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryPosnthroot : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -765,7 +765,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - POWER
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryPower : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryPower : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -784,7 +784,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - RATIO
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryRatio : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryRatio : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -803,7 +803,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - EXPN
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinaryExpn : public dtkComposerNodeNumberOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinaryExpn : public dtkComposerNodeNumberOperatorBinary
 {
 public:
     void run(void);
@@ -822,7 +822,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - EQUAL
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorEqual : public dtkComposerNodeNumberComparator
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparatorEqual : public dtkComposerNodeNumberComparator
 {
 public:
     void run(void);
@@ -841,7 +841,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - NOTEQUAL
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorNotequal : public dtkComposerNodeNumberComparator
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparatorNotequal : public dtkComposerNodeNumberComparator
 {
 public:
     void run(void);
@@ -860,7 +860,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - GT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorGt : public dtkComposerNodeNumberComparator
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparatorGt : public dtkComposerNodeNumberComparator
 {
 public:
     void run(void);
@@ -879,7 +879,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - LT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorLt : public dtkComposerNodeNumberComparator
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparatorLt : public dtkComposerNodeNumberComparator
 {
 public:
     void run(void);
@@ -898,7 +898,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - GTE
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorGte : public dtkComposerNodeNumberComparator
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparatorGte : public dtkComposerNodeNumberComparator
 {
 public:
     void run(void);
@@ -917,7 +917,7 @@ public:
 // dtkComposerNodeNumberOperatorBinary - LTE
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparatorLte : public dtkComposerNodeNumberComparator
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparatorLte : public dtkComposerNodeNumberComparator
 {
 public:
     void run(void);

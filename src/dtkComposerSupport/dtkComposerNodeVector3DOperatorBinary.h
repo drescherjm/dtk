@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEVECTOR3DOPERATORBINARY_H
 #define DTKCOMPOSERNODEVECTOR3DOPERATORBINARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeVector3DOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVector3DOperatorBinary(void);
@@ -56,7 +56,7 @@ protected:
 
 class dtkComposerNodeVector3DOperatorBinaryScalarPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorBinaryScalar : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinaryScalar : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVector3DOperatorBinaryScalar(void);
@@ -83,7 +83,7 @@ protected:
 
 class dtkComposerNodeVector3DOperatorHomotheticPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorHomothetic : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorHomothetic : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVector3DOperatorHomothetic(void);
@@ -108,7 +108,7 @@ protected:
 // dtkComposerNodeVector3DOperatorBinary - SUM 
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorBinarySum : public dtkComposerNodeVector3DOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinarySum : public dtkComposerNodeVector3DOperatorBinary
 {
 public:
     void run(void);
@@ -127,7 +127,7 @@ public:
 // dtkComposerNodeVector3DOperatorBinary - SUBSTRACT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorBinarySubstract : public dtkComposerNodeVector3DOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinarySubstract : public dtkComposerNodeVector3DOperatorBinary
 {
 public:
     void run(void);
@@ -146,7 +146,7 @@ public:
 // dtkComposerNodeVector3DOperatorBinary - CROSS PROD
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorBinaryCrossProd : public dtkComposerNodeVector3DOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinaryCrossProd : public dtkComposerNodeVector3DOperatorBinary
 {
 public:
     void run(void);
@@ -165,7 +165,7 @@ public:
 // dtkComposerNodeVector3DOperatorBinaryScalar - DOT PRODUCT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorBinaryScalarDotProd : public dtkComposerNodeVector3DOperatorBinaryScalar
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinaryScalarDotProd : public dtkComposerNodeVector3DOperatorBinaryScalar
 {
 public:
     void run(void);
@@ -184,7 +184,7 @@ public:
 // dtkComposerNodeVector3DOperatorHomothetic - MULTIPLY
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorHomotheticMult : public dtkComposerNodeVector3DOperatorHomothetic
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorHomotheticMult : public dtkComposerNodeVector3DOperatorHomothetic
 {
 public:
     void run(void);
@@ -203,7 +203,7 @@ public:
 // dtkComposerNodeVector3DOperatorHomothetic - DIVIDE
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorHomotheticDivision : public dtkComposerNodeVector3DOperatorHomothetic
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorHomotheticDivision : public dtkComposerNodeVector3DOperatorHomothetic
 {
 public:
     void run(void);

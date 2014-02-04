@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEVECTORREALEXTRACTOR_H
 #define DTKCOMPOSERNODEVECTORREALEXTRACTOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeVectorRealExtractorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealExtractor : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealExtractor : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorRealExtractor(void);
@@ -57,7 +57,7 @@ private:
 
 class dtkComposerNodeVectorRealExtractorSubVectorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorRealExtractorSubVector : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealExtractorSubVector : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorRealExtractorSubVector(void);

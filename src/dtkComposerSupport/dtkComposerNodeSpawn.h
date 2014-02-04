@@ -16,7 +16,7 @@
 #ifndef DTKCOMPOSERNODESPAWN_H
 #define DTKCOMPOSERNODESPAWN_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerNodeLeaf.h"
@@ -32,7 +32,7 @@ class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeSpawn : public dtkComposerNodeRemote
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeSpawn : public dtkComposerNodeRemote
 {
     Q_OBJECT
 

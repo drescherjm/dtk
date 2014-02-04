@@ -17,7 +17,7 @@
 #ifndef DTKCOMPOSERNODESTRINGOPERATOR_H
 #define DTKCOMPOSERNODESTRINGOPERATOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@
 
 class dtkComposerNodeStringOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorUnary(void);
@@ -50,7 +50,7 @@ protected:
 
 class dtkComposerNodeStringOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorBinary(void);
@@ -79,7 +79,7 @@ protected:
 
 class dtkComposerNodeStringOperatorBinaryLogicPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorBinaryLogic(void);
@@ -106,7 +106,7 @@ protected:
 // dtkComposerNodeStringOperatorBinary - Append
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
 {
 public:
     void run(void);
@@ -125,7 +125,7 @@ public:
 // dtkComposerNodeStringOperatorBinaryLogic - Equality
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
 {
 public:
     void run(void);
@@ -154,7 +154,7 @@ public:
 
 class dtkComposerNodeStringListAppendPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringListAppend(void);
@@ -194,7 +194,7 @@ protected:
 
 class dtkComposerNodeStringListExtractPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringListExtract(void);
@@ -233,7 +233,7 @@ protected:
 
 class dtkComposerNodeStringListSetPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringListSet(void);

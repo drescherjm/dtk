@@ -17,7 +17,7 @@
 #ifndef DTKCOMPOSERCONTROLSLISTITEMFACTORY_H
 #define DTKCOMPOSERCONTROLSLISTITEMFACTORY_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include <dtkGui/dtkToolBox>
 

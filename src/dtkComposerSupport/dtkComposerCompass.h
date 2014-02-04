@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERCOMPASS_H
 #define DTKCOMPOSERCOMPASS_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerCompassPrivate;
 class dtkComposerView;
 
-class DTKCOMPOSER_EXPORT dtkComposerCompass : public QGraphicsView
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerCompass : public QGraphicsView
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODELEAFVIEW_H
 #define DTKCOMPOSERNODELEAFVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 #include <QStringList>
@@ -32,7 +32,7 @@ class dtkComposerNodeLeafViewPrivate;
 // dtkComposerNodeLeafView interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeLeafView : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLeafView : public dtkComposerNodeLeaf
 {
 public:
              dtkComposerNodeLeafView(void);

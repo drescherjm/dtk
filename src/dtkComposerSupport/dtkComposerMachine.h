@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERMACHINE_H
 #define DTKCOMPOSERMACHINE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerMachinePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerMachine : public QStateMachine
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerMachine : public QStateMachine
 {
     Q_OBJECT
 

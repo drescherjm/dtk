@@ -16,7 +16,7 @@
 #ifndef DTKCOMPOSERNODELEAFACTOR_H
 #define DTKCOMPOSERNODELEAFACTOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 #include <QObject>
@@ -29,7 +29,7 @@ class dtkComposerNodeLeafActorPrivate;
 // dtkComposerNodeLeafActor interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeLeafActor :  public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLeafActor :  public QObject, public dtkComposerNodeLeaf
 {
 Q_OBJECT
 

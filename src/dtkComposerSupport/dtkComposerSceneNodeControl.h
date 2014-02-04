@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERSCENENODECONTROL_H
 #define DTKCOMPOSERSCENENODECONTROL_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerNodeControl;
@@ -29,7 +29,7 @@ class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeControlPrivate;
 class dtkComposerSceneNodeLeaf;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneNodeControl : public dtkComposerSceneNode
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeControl : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeControl(void);

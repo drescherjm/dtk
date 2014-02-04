@@ -20,9 +20,9 @@
 #ifndef DTKCOMPOSERSCENENODEEDITOR_H
 #define DTKCOMPOSERSCENENODEEDITOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneNode;
@@ -30,7 +30,7 @@ class dtkComposerSceneNodeEditorPrivate;
 class dtkComposerStack;
 class dtkComposerGraph;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneNodeEditor : public QWidget
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeEditor : public QWidget
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEWORLD_H
 #define DTKCOMPOSERNODEWORLD_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeComposite.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeWorldPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeWorld : public dtkComposerNodeComposite
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeWorld : public dtkComposerNodeComposite
 {
 public:
              dtkComposerNodeWorld(void);

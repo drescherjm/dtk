@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEVECTORINTEGER_H
 #define DTKCOMPOSERNODEVECTORINTEGER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeVectorIntegerPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorInteger : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorInteger : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeVectorInteger(void);

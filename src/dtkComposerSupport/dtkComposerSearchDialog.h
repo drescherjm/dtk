@@ -20,15 +20,15 @@
 #ifndef DTKCOMPOSERSEARCHDIALOG_H
 #define DTKCOMPOSERSEARCHDIALOG_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSearchDialogPrivate;
 class dtkComposerView;
 
-class DTKCOMPOSER_EXPORT dtkComposerSearchDialog : public QDialog
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSearchDialog : public QDialog
 {
     Q_OBJECT
 

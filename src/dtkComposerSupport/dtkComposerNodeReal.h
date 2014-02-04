@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEREAL_H
 #define DTKCOMPOSERNODEREAL_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeRealPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeReal : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeReal : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeReal(void);

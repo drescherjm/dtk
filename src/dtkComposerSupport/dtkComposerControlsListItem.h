@@ -18,7 +18,7 @@
 
 #include "dtkComposerSceneNode.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerControlsListItemPrivate;
 

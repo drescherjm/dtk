@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEPROCESS_H
 #define DTKCOMPOSERNODEPROCESS_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeafProcess.h"
 
 class dtkComposerNodeProcessPrivate;
@@ -29,7 +29,7 @@ class dtkComposerNodeProcessPrivate;
 // dtkComposerNodeProcess interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcess
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcess
 {
 public:
      dtkComposerNodeProcess(void);

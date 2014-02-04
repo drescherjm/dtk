@@ -17,7 +17,7 @@
 #define DTKCOMPOSERGRAPHNODE_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerGraph;
 class dtkComposerGraphNodePrivate;

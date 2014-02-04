@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEVECTOR3D_H
 #define DTKCOMPOSERNODEVECTOR3D_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeVector3DPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3D : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3D : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVector3D(void);

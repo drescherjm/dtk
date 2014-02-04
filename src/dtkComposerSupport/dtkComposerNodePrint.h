@@ -16,12 +16,12 @@
 #ifndef DTKCOMPOSERNODEPRINT_H
 #define DTKCOMPOSERNODEPRINT_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodePrintPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePrint : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePrint : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodePrint(void);

@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEPROXY_H
 #define DTKCOMPOSERNODEPROXY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeProxyPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeProxy : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProxy : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeProxy(void);

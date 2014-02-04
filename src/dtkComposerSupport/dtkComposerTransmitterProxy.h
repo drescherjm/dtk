@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERTRANSMITTERPROXY_H
 #define DTKCOMPOSERTRANSMITTERPROXY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerTransmitterProxyPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxy : public dtkComposerTransmitter
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterProxy : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);

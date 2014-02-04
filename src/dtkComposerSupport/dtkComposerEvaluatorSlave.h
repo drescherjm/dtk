@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSEREVALUATORSLAVE_H
 #define DTKCOMPOSEREVALUATORSLAVE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <dtkDistributed/dtkDistributedSlave.h>
 
 class dtkComposerFactory;
 class dtkComposerEvaluatorSlavePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave
 {
 
 public:

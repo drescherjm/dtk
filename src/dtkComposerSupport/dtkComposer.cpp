@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. juin  5 10:55:54 2013 (+0200)
+ * Last-Updated: mar. févr.  4 10:45:44 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 417
+ *     Update #: 422
  */
 
 /* Commentary: 
@@ -36,12 +36,13 @@
 #include "dtkComposerWriter.h"
 #include "dtkComposerReader.h"
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkLog/dtkLog.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include <QtNetwork>
+#include <QtConcurrent>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerPrivate

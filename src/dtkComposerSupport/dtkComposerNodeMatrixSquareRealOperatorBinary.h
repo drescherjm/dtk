@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEMATRIXSQUAREREALOPERATORBINARY_H
 #define DTKCOMPOSERNODEMATRIXSQUAREREALOPERATORBINARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeMatrixSquareRealOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeMatrixSquareRealOperatorBinary(void);
@@ -56,7 +56,7 @@ protected:
 
 class dtkComposerNodeMatrixSquareRealOperatorBinaryProductMVPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV  : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV  : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV(void);
@@ -83,7 +83,7 @@ protected:
 
 class dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVectorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector(void);
@@ -110,7 +110,7 @@ protected:
 // dtkComposerNodeMatrixSquareRealOperatorBinary Sum interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinarySum : public dtkComposerNodeMatrixSquareRealOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinarySum : public dtkComposerNodeMatrixSquareRealOperatorBinary
 {
 public:
     void run(void);
@@ -130,7 +130,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinary Substract interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinarySubstract: public dtkComposerNodeMatrixSquareRealOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinarySubstract: public dtkComposerNodeMatrixSquareRealOperatorBinary
 {
 public:
     void run(void);
@@ -149,7 +149,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinary Mult interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryMult: public dtkComposerNodeMatrixSquareRealOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryMult: public dtkComposerNodeMatrixSquareRealOperatorBinary
 {
 public:
     void run(void);
@@ -168,7 +168,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductMV  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV : public dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryRightProductMV : public dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
 {
 public:
     void run(void);
@@ -188,7 +188,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM : public dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM : public dtkComposerNodeMatrixSquareRealOperatorBinaryProductMV
 {
 public:
     void run(void);
@@ -207,7 +207,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector: public dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector: public dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
 {
 public:
     void run(void);
@@ -226,7 +226,7 @@ public:
 // dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector  interface
 // /////////////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector : public dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector : public dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColAndRowMatrixByVector
 {
 public:
     void run(void);

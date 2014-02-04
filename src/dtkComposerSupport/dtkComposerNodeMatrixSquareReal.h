@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEMATRIXSQUAREREAL_H
 #define DTKCOMPOSERNODEMATRIXSQUAREREAL_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeMatrixSquareRealPrivate;
@@ -29,7 +29,7 @@ class dtkComposerNodeMatrixSquareRealPrivate;
 // dtkComposerNodeMatrixSquareReal interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareReal : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareReal : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMatrixSquareReal(void);

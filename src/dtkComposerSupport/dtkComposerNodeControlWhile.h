@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODECONTROLWHILE_H
 #define DTKCOMPOSERNODECONTROLWHILE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeControl.h"
 
 class dtkComposerNodeControlWhilePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeControlWhile : public dtkComposerNodeControl
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlWhile : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlWhile(void);

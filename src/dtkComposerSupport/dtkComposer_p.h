@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Nov 19 11:55:49 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 65
+ * Last-Updated: mar. févr.  4 10:42:42 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 66
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include <QtCore>
 #include <QtNetwork>
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 class dtkComposerCompass;
 class dtkComposerEvaluator;
@@ -36,7 +36,7 @@ class dtkComposerView;
 class dtkComposerWriter;
 class dtkComposerReader;
 
-class DTKCOMPOSER_EXPORT dtkComposerPrivate : public QObject
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerPrivate : public QObject
 {
     Q_OBJECT
 

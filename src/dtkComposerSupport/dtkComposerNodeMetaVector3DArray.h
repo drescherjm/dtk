@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEMETAVECTOR3DARRAY_H
 #define DTKCOMPOSERNODEMETAVECTOR3DARRAY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerMetatype.h"
 
 #include <dtkComposer/dtkComposerNodeLeaf.h>
@@ -31,7 +31,7 @@ class dtkComposerNodeMetaVector3DArrayPrivate;
 // dtkComposerNodeMetaVector3DArray interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMetaVector3DArray : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaVector3DArray : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMetaVector3DArray(void);

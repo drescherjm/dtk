@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEMETASCALARARRAYAPPEND_H
 #define DTKCOMPOSERNODEMETASCALARARRAYAPPEND_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <dtkComposer/dtkComposerNodeLeaf.h>
 
@@ -30,7 +30,7 @@ class dtkComposerNodeMetaScalarArrayAppendPrivate;
 // dtkComposerNodeMetaScalarArrayAppend interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMetaScalarArrayAppend : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaScalarArrayAppend : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMetaScalarArrayAppend(void);

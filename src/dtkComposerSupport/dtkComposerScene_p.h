@@ -23,7 +23,7 @@
 #include "dtkComposerSceneEdge.h"
 #include "dtkComposerSceneNode.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerFactory;
 class dtkComposerGraph;

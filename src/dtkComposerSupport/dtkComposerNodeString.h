@@ -16,12 +16,12 @@
 #ifndef DTKCOMPOSERNODESTRING_H
 #define DTKCOMPOSERNODESTRING_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeStringPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeString : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeString : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeString(void);
@@ -66,7 +66,7 @@ private:
 
 class dtkComposerNodeStringListPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeStringList : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringList : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringList(void);

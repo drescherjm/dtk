@@ -18,7 +18,7 @@
 
 #include <dtkConfig.h>
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 
@@ -28,7 +28,7 @@
 
 class dtkComposerNodePiPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePi : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePi : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodePi(void);
@@ -60,7 +60,7 @@ private:
 
 class dtkComposerNodeEPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeE : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeE : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeE(void);
@@ -94,7 +94,7 @@ private:
 
 class dtkComposerNodeControllerRunRankPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeControllerRunRank : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControllerRunRank : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeControllerRunRank(void);
@@ -130,7 +130,7 @@ private:
 
 class dtkComposerNodeAnyTagPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeAnyTag : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeAnyTag : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeAnyTag(void);
@@ -162,7 +162,7 @@ private:
 
 class dtkComposerNodeAnySourcePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeAnySource : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeAnySource : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeAnySource(void);

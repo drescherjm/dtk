@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:51:49 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:05:37 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 281
+ *     Update #: 283
  */
 
 /* Commentary:
@@ -61,7 +61,7 @@ dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(o
 dtkAbstractObject::~dtkAbstractObject(void)
 {
     if ( d_ptr->count.deref()){
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
+        dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 
     delete d_ptr;
@@ -311,12 +311,12 @@ void dtkAbstractObject::addProperty(const QString& key, const QString& value)
 void dtkAbstractObject::setProperty(const QString& key, const QString& value)
 {
     if(!d_ptr->values.contains(key)) {
-    	dtkDebug(dtkLoggingCategory::defaultCategory()) << this->metaObject()->className() << " has no such property:" << key;
+    	dtkDebug() << this->metaObject()->className() << " has no such property:" << key;
     	return;
     }
 
     if(!d_ptr->values.value(key).contains(value)) {
-    	dtkDebug(dtkLoggingCategory::defaultCategory()) << this->metaObject()->className() << " has no such value:" << value << " for key: " << key;
+    	dtkDebug() << this->metaObject()->className() << " has no such value:" << value << " for key: " << key;
     	return;
     }
 
@@ -348,7 +348,7 @@ bool dtkAbstractObject::hasProperty(const QString& key) const
 QString dtkAbstractObject::property(const QString& key) const
 {
     if(!d_ptr->values.contains(key)) {
-	dtkDebug(dtkLoggingCategory::defaultCategory()) << this->metaObject()->className() << "has no such property:" << key;
+	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
 	return QString();
     }
 
@@ -432,7 +432,7 @@ void dtkAbstractObject::onMetaDataSet(const QString& key, const QString& value)
 QString dtkAbstractObject::metadata(const QString& key) const
 {
     if(!d_ptr->metadatas.contains(key)) {
-	dtkDebug(dtkLoggingCategory::defaultCategory()) << this->metaObject()->className() << "has no such property:" << key;
+	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
 	return QString();
     }
 
@@ -442,7 +442,7 @@ QString dtkAbstractObject::metadata(const QString& key) const
 QStringList dtkAbstractObject::metadatas(const QString& key) const
 {
     if(!d_ptr->metadatas.contains(key)) {
-	dtkDebug(dtkLoggingCategory::defaultCategory()) << this->metaObject()->className() << "has no such property:" << key;
+	dtkDebug() << this->metaObject()->className() << "has no such property:" << key;
 	return QStringList();
     }
 

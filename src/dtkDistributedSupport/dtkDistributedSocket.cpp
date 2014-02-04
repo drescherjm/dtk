@@ -25,7 +25,7 @@
 
 // #include <dtkMath/dtkMath.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 class dtkDistributedSocketPrivate
 {
@@ -116,7 +116,7 @@ dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
             if (this->waitForReadyRead()) {
                 buffer.append(this->read(msg->size()-buffer.size()));
             } else {
-                dtkWarn() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
+                dtkWarning() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
                 msg->setContent(buffer);
                 msg->addHeader("missing_data",QString::number(msg->size()-buffer.size()));
                 break;

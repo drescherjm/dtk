@@ -29,7 +29,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 class dtkDistributedServerDaemonPrivate
 {
@@ -112,7 +112,7 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank, QString jobid)
     dtkDistributedSocket *socket = d->sockets.value(qMakePair(rank, jobid), NULL);
 
     if(!socket) {
-        dtkWarn() << "No socket found for rank " << rank;
+        dtkWarning() << "No socket found for rank " << rank;
         return QByteArray();
     }
 
@@ -123,14 +123,14 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank, QString jobid)
     if (socket->waitForReadyRead(30000))
         data = socket->parseRequest();
     else
-        dtkWarn() << "Data not ready for rank " << rank;
+        dtkWarning() << "Data not ready for rank " << rank;
 
     socket->blockSignals(false);
 
     if (data) {
         return data->content();
     } else {
-        dtkWarn() << "Message not allocated - return void QByteArray";
+        dtkWarning() << "Message not allocated - return void QByteArray";
         return QByteArray();
     }
 }
@@ -203,13 +203,13 @@ void dtkDistributedServerDaemon::read(void)
         if (d->sockets.contains(pair )) {
             (d->sockets[pair])->sendRequest(msg.data());
         } else {
-            dtkWarn() << "unknown socket for rank, store message" <<  msg->rank() << msg->jobid();
+            dtkWarning() << "unknown socket for rank, store message" <<  msg->rank() << msg->jobid();
         }
 
         break;
 
     default:
-        dtkWarn() << DTK_PRETTY_FUNCTION << "Unknown data";
+        dtkWarning() << DTK_PRETTY_FUNCTION << "Unknown data";
     };
 
     if (socket->bytesAvailable() > 0)

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:48:58 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:04:38 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 502
+ *     Update #: 507
  */
 
 /* Commentary:
@@ -142,7 +142,7 @@ void dtkAbstractData::copy(const dtkAbstractObject& other)
         d->thumbnails = data.d_func()->thumbnails;
 
     } else {
-        dtkWarning(dtkLoggingCategory::defaultCategory()) << "Other is not of same type than this, slicing is occuring.";
+        dtkWarning() << "Other is not of same type than this, slicing is occuring.";
     }
 }
 
@@ -266,7 +266,7 @@ void dtkAbstractData::enableReader(const QString& reader)
     if (it != d->readers.end())
         it.value() = true;
     else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such reader: " << reader;
+        dtkDebug() << this->identifier() << " has no such reader: " << reader;
 }
 
 void dtkAbstractData::disableReader(const QString& reader)
@@ -288,7 +288,7 @@ void dtkAbstractData::enableWriter(const QString& writer)
     if (it != d->writers.end())
         it.value() = true;
     else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such writer: " << writer;
+        dtkDebug() << this->identifier() << " has no such writer: " << writer;
 }
 
 void dtkAbstractData::disableWriter(const QString& writer)
@@ -310,7 +310,7 @@ void dtkAbstractData::enableConverter(const QString& converter)
     if (it != d->converters.end())
         it.value() = true;
     else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such converter: " << converter;
+        dtkDebug() << this->identifier() << " has no such converter: " << converter;
 }
 
 void dtkAbstractData::disableConverter(const QString& converter)
@@ -332,7 +332,7 @@ void dtkAbstractData::enableSerializer(const QString& serializer)
     if (it != d->serializers.end())
         it.value() = true;
     else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such serializer: " << serializer;
+        dtkDebug() << this->identifier() << " has no such serializer: " << serializer;
 }
 
 void dtkAbstractData::disableSerializer(const QString& serializer)
@@ -354,7 +354,7 @@ void dtkAbstractData::enableDeserializer(const QString& deserializer)
     if (it != d->deserializers.end())
         it.value() = true;
     else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << this->identifier() << " has no such deserializer: " << deserializer;
+        dtkDebug() << this->identifier() << " has no such deserializer: " << deserializer;
 }
 
 void dtkAbstractData::disableDeserializer(const QString& deserializer)
@@ -649,7 +649,7 @@ dtkAbstractData *dtkAbstractData::deserialize(const QByteArray &array)
 
                 deserialized = deserializer->deserialize(array);
                 if(!deserialized)
-                    dtkDebug(dtkLoggingCategory::defaultCategory()) << "deserializer failed, try another one ...";
+                    dtkDebug() << "deserializer failed, try another one ...";
                 else
                     break;
             }

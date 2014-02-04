@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:35:45 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 312
+ * Last-Updated: mar. févr.  4 11:10:10 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 321
  */
 
 /* Commentary:
@@ -27,7 +27,7 @@
 #include <dtkCoreSupport/dtkGlobal.h>
 #include <dtkCoreSupport/dtkCpuid.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <QtCore>
 #include <QHostInfo>
@@ -136,7 +136,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
     QJsonDocument jsonDoc = QJsonDocument::fromJson(input.toUtf8());
 
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        dtkWarn() << "Error while parsing JSON document: not a json object" << input;
+        dtkWarning() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
     QVariantMap json = jsonDoc.object().toVariantMap();

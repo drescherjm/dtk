@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:39:42 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 977
+ * Last-Updated: mar. févr.  4 11:06:03 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 990
  */
 
 /* Commentary: 
@@ -26,7 +26,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -221,7 +221,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     QJsonDocument jsonDoc = QJsonDocument::fromJson(input.toUtf8());
 
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        dtkWarn() << "Error while parsing JSON document: not a json object" << input;
+        dtkWarning() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
     QVariantMap json = jsonDoc.object().toVariantMap();
@@ -263,7 +263,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         QFile script(scriptName);
 
         if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
-            dtkWarn() << "unable to open script for writing";
+            dtkWarning() << "unable to open script for writing";
         } else {
             QTextStream out(&script);
             out << "#!/bin/bash\n";

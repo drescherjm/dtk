@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: lun. déc.  9 18:09:51 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 249
+ * Last-Updated: mar. févr.  4 11:09:46 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 255
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include "dtkDistributedCommunicatorTcp.h"
 
 #include <dtkCoreSupport/dtkGlobal.h>
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <QtNetwork>
 #include <iostream>
@@ -75,7 +75,7 @@ int dtkDistributedSlave::run(void)
 
 int dtkDistributedSlave::exec(void)
 {
-    DTK_DEFAULT_IMPLEMENTATION;
+    //DTK_DEFAULT_IMPLEMENTATION;
 
     return DTK_FAILURE;
 }
@@ -103,7 +103,7 @@ void dtkDistributedSlave::read(void)
     if( request->method() == dtkDistributedMessage::DATA) {
         dtkInfo() << DTK_PRETTY_FUNCTION << "DATA received in slave, unimplemented";
     } else {
-        dtkWarn() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
+        dtkWarning() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
     if (socket->bytesAvailable() > 0)
         this->read();
@@ -122,7 +122,7 @@ void dtkDistributedSlave::connect(const QUrl& server)
         emit connected(server);
 
     } else {
-        dtkWarn() << "Unable to connect to" << server.toString();
+        dtkWarning() << "Unable to connect to" << server.toString();
     }
 }
 

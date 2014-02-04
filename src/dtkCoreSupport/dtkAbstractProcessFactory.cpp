@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:46:57 2014 (+0100)
+ * Last-Updated: mar. févr.  4 10:56:51 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 123
+ *     Update #: 124
  */
 
 /* Commentary: 
@@ -116,7 +116,7 @@ QStringList dtkAbstractProcessFactory::implementations(const QString& interface)
     if(d->interfaces.keys().contains(interface))
         implementations << d->interfaces.values(interface);
     else
-        dtkWarning(dtkLoggingCategory::defaultCategory()) << "There is no available implementation of " << interface ;
+        dtkWarning() << "There is no available implementation of " << interface ;
 
     return implementations;
 }

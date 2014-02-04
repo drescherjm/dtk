@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 23:22:21 2013 (+0100)
  * Version: 
- * Last-Updated: lun. févr.  3 16:22:34 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:09:01 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 101
+ *     Update #: 124
  */
 
 /* Change Log:
@@ -149,29 +149,29 @@ protected:
             _cfgFile->addKey("Inria*", true);
             QByteArray arr = _cfgFile->array();
             dtkSetLoggingRules(arr);
-            dtkDebug(Inria_A_Project_com) << "A " << _logtext << " :true";
+            dtkDebug() << "A " << _logtext << " :true";
             _cfgFile->addKey("Inria*", false);
             arr = _cfgFile->array();
             dtkSetLoggingRules(arr);
-            dtkDebug(Inria_A_Project_com) << "A " << _logtext << " :false";
+            dtkDebug() << "A " << _logtext << " :false";
             
             _cfgFile->addKey("Inria*", true);
             arr = _cfgFile->array();
             dtkSetLoggingRules(arr);
-            dtkDebug(Inria_c_Project_com) << "C " << _logtext << " :true";
+            dtkDebug() << "C " << _logtext << " :true";
             _cfgFile->addKey("Inria*", false);
             arr = _cfgFile->array();
             dtkSetLoggingRules(arr);
-            dtkDebug(Inria_c_Project_com) << "C " << _logtext << " :false";
+            dtkDebug() << "C " << _logtext << " :false";
             
             _cfgFile->addKey("Inria*", true);
             arr = _cfgFile->array();
             dtkSetLoggingRules(arr);
-            dtkDebug(Inria_B_Project_com) << "B " << _logtext << " :true";
+            dtkDebug() << "B " << _logtext << " :true";
             _cfgFile->addKey("Inria*", false);
             arr = _cfgFile->array();
             dtkSetLoggingRules(arr);
-            dtkDebug(Inria_B_Project_com) << "B " << _logtext << " :false";
+            dtkDebug() << "B " << _logtext << " :false";
         }
     }
     
@@ -234,17 +234,17 @@ void dtkLoggerTestCase::checkNoCategoryLogActive(void)
     // Check category debug
     logMessage = "should not change";
     buf = logMessage;
-    dtkDebug(TST_LOG) << "Check category Debug with no log active";
+    dtkDebug() << "Check category Debug with no log active";
     QCOMPARE(logMessage, buf);
     
     // Check default warning
     buf = QString::fromLatin1("tst.log.warning: Check category Warning with no log active");
-    dtkWarning(TST_LOG) << "Check category Warning with no log active";
+    dtkWarning() << "Check category Warning with no log active";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     
     // Check default critical
     buf = QString::fromLatin1("tst.log.critical: Check category Critical with no log active");
-    dtkCritical(TST_LOG) << "Check category Critical with no log active";
+    dtkCritical() << "Check category Critical with no log active";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 }
 
@@ -257,24 +257,24 @@ void dtkLoggerTestCase::writeCategoryLogs(void)
     _configFile->addKey("tst.log", true);
     dtkSetLoggingRules(_configFile->array());
     QString buf = QString::fromLatin1("tst.log.debug: Check for default messagePattern");
-    dtkDebug(TST_LOG) << "Check for default messagePattern";
+    dtkDebug() << "Check for default messagePattern";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     
     // Activate TST_LOG category with default enabled function info
     _configFile->addKey("tst.log1", true);
     dtkSetLoggingRules(_configFile->array());
-    dtkDebug(TST_LOG) << "1";
+    dtkDebug() << "1";
     buf = QString::fromLatin1("tst.log.debug: 1");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     
     // Wite out all different types
-    dtkDebug(TST_LOG) << "DebugType";
+    dtkDebug() << "DebugType";
     buf = QString::fromLatin1("tst.log.debug: DebugType");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkWarning(TST_LOG) << "WarningType";
+    dtkWarning() << "WarningType";
     buf = QString::fromLatin1("tst.log.warning: WarningType");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkCritical(TST_LOG) << "CriticalType";
+    dtkCritical() << "CriticalType";
     buf = QString::fromLatin1("tst.log.critical: CriticalType");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 }
@@ -395,9 +395,9 @@ void dtkLoggerTestCase::checkFiltering(void)
 
     logMessage = "no change";
     QString buf = QString::fromLatin1("no change");
-    dtkDebug(Inria_A_Project_com) << "Inria.A.Project.fr 1";
-    dtkDebug(Inria_B_Project_com) << "Inria.B.Project.fr 1";
-    dtkDebug(Inria_c_Project_com) << "Inria.C.Project.fr 1";
+    dtkDebug() << "Inria.A.Project.fr 1";
+    dtkDebug() << "Inria.B.Project.fr 1";
+    dtkDebug() << "Inria.C.Project.fr 1";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
     _configFile->addKey("Inria.A.Project.fr", true);
@@ -405,13 +405,13 @@ void dtkLoggerTestCase::checkFiltering(void)
     _configFile->addKey("Inria.C.Project.fr", true);
     dtkSetLoggingRules(_configFile->array());
 
-    dtkDebug(Inria_A_Project_com) << "Inria.A.Project.fr 2";
+    dtkDebug() << "Inria.A.Project.fr 2";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Inria.A.Project.fr 2");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkDebug(Inria_B_Project_com) << "Inria.B.Project.fr 2";
+    dtkDebug() << "Inria.B.Project.fr 2";
     buf = QString::fromLatin1("Inria.B.Project.fr.debug: Inria.B.Project.fr 2");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkDebug(Inria_c_Project_com) << "Inria.C.Project.fr 2";
+    dtkDebug() << "Inria.C.Project.fr 2";
     buf = QString::fromLatin1("Inria.C.Project.fr.debug: Inria.C.Project.fr 2");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
@@ -422,13 +422,13 @@ void dtkLoggerTestCase::checkFiltering(void)
     _configFile->addKey("*Project.fr*", true);
     dtkSetLoggingRules(_configFile->array());
 
-    dtkDebug(Inria_A_Project_com) << "Inria.A.Project.fr 3";
+    dtkDebug() << "Inria.A.Project.fr 3";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Inria.A.Project.fr 3");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkDebug(Inria_B_Project_com) << "Inria.B.Project.fr 3";
+    dtkDebug() << "Inria.B.Project.fr 3";
     buf = QString::fromLatin1("Inria.B.Project.fr.debug: Inria.B.Project.fr 3");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkDebug(Inria_c_Project_com) << "Inria.C.Project.fr 3";
+    dtkDebug() << "Inria.C.Project.fr 3";
     buf = QString::fromLatin1("Inria.C.Project.fr.debug: Inria.C.Project.fr 3");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
@@ -437,13 +437,13 @@ void dtkLoggerTestCase::checkFiltering(void)
     _configFile->addKey("*Project.fr.debug", true);
     dtkSetLoggingRules(_configFile->array());
 
-    dtkDebug(Inria_A_Project_com) << "Debug: Inria.A.Project.fr 4";
+    dtkDebug() << "Debug: Inria.A.Project.fr 4";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Debug: Inria.A.Project.fr 4");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     logMessage = "no change";
     buf = QString::fromLatin1("no change");
-    dtkWarning(Inria_B_Project_com) << "Warning: Inria.B.Project.fr 4";
-    dtkCritical(Inria_c_Project_com) << "Critical: Inria.C.Project.fr 4";
+    dtkWarning() << "Warning: Inria.B.Project.fr 4";
+    dtkCritical() << "Critical: Inria.C.Project.fr 4";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
     // Check right filter
@@ -451,13 +451,13 @@ void dtkLoggerTestCase::checkFiltering(void)
     _configFile->addKey("Inria.*", true);
     dtkSetLoggingRules(_configFile->array());
 
-    dtkDebug(Inria_A_Project_com) << "Debug: Inria.A.Project.fr 5";
+    dtkDebug() << "Debug: Inria.A.Project.fr 5";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Debug: Inria.A.Project.fr 5");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkWarning(Inria_B_Project_com) << "Warning: Inria.B.Project.fr 5";
+    dtkWarning() << "Warning: Inria.B.Project.fr 5";
     buf = QString::fromLatin1("Inria.B.Project.fr.warning: Warning: Inria.B.Project.fr 5");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkCritical(Inria_c_Project_com) << "Critical: Inria.C.Project.fr 5";
+    dtkCritical() << "Critical: Inria.C.Project.fr 5";
     buf = QString::fromLatin1("Inria.C.Project.fr.critical: Critical: Inria.C.Project.fr 5");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
@@ -467,21 +467,21 @@ void dtkLoggerTestCase::checkFiltering(void)
 
     logMessage = "no change";
     buf = QString::fromLatin1("no change");
-    dtkDebug(Inria_A_Project_com) << "Debug: Inria.A.Project.fr 6";
-    dtkWarning(Inria_B_Project_com) << "Warning: Inria.B.Project.fr 6";
-    dtkCritical(Inria_c_Project_com) << "Critical: Inria.C.Project.fr 6";
+    dtkDebug() << "Debug: Inria.A.Project.fr 6";
+    dtkWarning() << "Warning: Inria.B.Project.fr 6";
+    dtkCritical() << "Critical: Inria.C.Project.fr 6";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
     _configFile->addKey("*.Project.*", true);
     dtkSetLoggingRules(_configFile->array());
 
-    dtkDebug(Inria_A_Project_com) << "Debug: Inria.A.Project.fr 7";
+    dtkDebug() << "Debug: Inria.A.Project.fr 7";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Debug: Inria.A.Project.fr 7");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkWarning(Inria_B_Project_com) << "Warning: Inria.B.Project.fr 7";
+    dtkWarning() << "Warning: Inria.B.Project.fr 7";
     buf = QString::fromLatin1("Inria.B.Project.fr.warning: Warning: Inria.B.Project.fr 7");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkCritical(Inria_c_Project_com) << "Critical: Inria.C.Project.fr 7";
+    dtkCritical() << "Critical: Inria.C.Project.fr 7";
     buf = QString::fromLatin1("Inria.C.Project.fr.critical: Critical: Inria.C.Project.fr 7");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 }
@@ -498,28 +498,28 @@ void dtkLoggerTestCase::checkLogWithCategoryObject(void)
 	logMessage = "no change";
 
 	QString buf = QString::fromLatin1("LoggingCategoryObject.debug: My Category Object");
-	dtkDebug(mycategoryobject) << "My Category Object";
+	dtkDebug() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.warning: My Category Object");
-	dtkWarning(mycategoryobject) << "My Category Object";
+	dtkWarning() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.critical: My Category Object");
-	dtkCritical(mycategoryobject) << "My Category Object";
+	dtkCritical() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	dtkLoggingCategory mycategoryobject2("LoggingCategoryObject");
 	buf = QString::fromLatin1("LoggingCategoryObject.debug: My Category Object");
-	dtkDebug(mycategoryobject) << "My Category Object";
+	dtkDebug() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.warning: My Category Object");
-	dtkWarning(mycategoryobject) << "My Category Object";
+	dtkWarning() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.critical: My Category Object");
-	dtkCritical(mycategoryobject) << "My Category Object";
+	dtkCritical() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     }
 
@@ -535,12 +535,12 @@ void dtkLoggerTestCase::checkEmptyCategoryName(void)
 
     logMessage = "no change";
     QString buf = QString::fromLatin1("no change");
-    dtkDebug(mycategoryobject) << "My Category Object";
+    dtkDebug() << "My Category Object";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
     dtkLoggingCategory mycategoryobject1(0);
     buf = QString::fromLatin1("no change");
-    dtkDebug(mycategoryobject1) << "My Category Object";
+    dtkDebug() << "My Category Object";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 }
 

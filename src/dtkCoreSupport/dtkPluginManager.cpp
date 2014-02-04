@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:49:48 2014 (+0100)
+ * Last-Updated: mar. févr.  4 10:58:11 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 305
+ *     Update #: 318
  */
 
 /* Commentary:
@@ -124,7 +124,7 @@ void dtkPluginManager::initialize(void)
             foreach (QFileInfo entry, dir.entryInfoList())
                 loadPlugin(entry.absoluteFilePath());
         } else {
-            dtkWarning(dtkLoggingCategory::defaultCategory()) << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
         }
     }
 }
@@ -168,7 +168,7 @@ void dtkPluginManager::load(const QString& name)
                 if(entry.fileName().contains(name))
                     loadPlugin(entry.absoluteFilePath());
         } else {
-            dtkWarning(dtkLoggingCategory::defaultCategory()) << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
         }
     }
 }
@@ -200,7 +200,7 @@ void dtkPluginManager::unload(const QString& name)
                     if (this->plugin(name))
                         this->unloadPlugin(entry.absoluteFilePath());
         } else {
-            dtkWarning(dtkLoggingCategory::defaultCategory()) << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
         }
     }
 }
@@ -220,7 +220,7 @@ void dtkPluginManager::readSettings(void)
     settings.beginGroup("plugins");
 
     if (!settings.contains("path")) {
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << "Filling in empty path in settings with default path:" << defaultPath;
+        dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
         settings.setValue("path", defaultPath);
     }
 
@@ -229,8 +229,8 @@ void dtkPluginManager::readSettings(void)
     settings.endGroup();
 
     if(d->path.isEmpty()) {
-        dtkWarning(dtkLoggingCategory::defaultCategory()) << "Your dtk config does not seem to be set correctly.";
-        dtkWarning(dtkLoggingCategory::defaultCategory()) << "Please set plugins.path.";
+        dtkWarning() << "Your dtk config does not seem to be set correctly.";
+        dtkWarning() << "Please set plugins.path.";
     }
 }
 
@@ -321,7 +321,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
         error += path;
         error += " - ";
         error += loader->errorString();
-        if(d->verboseLoading) { dtkDebug(dtkLoggingCategory::defaultCategory()) << error; }
+        if(d->verboseLoading) { dtkDebug() << error; }
         emit loadError(error);
         delete loader;
         return;
@@ -332,7 +332,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
     if(!plugin) {
         QString error = "Unable to retrieve ";
         error += path;
-        if(d->verboseLoading) { dtkDebug(dtkLoggingCategory::defaultCategory()) << error; }
+        if(d->verboseLoading) { dtkDebug() << error; }
         emit loadError(error);
         return;
     }
@@ -341,14 +341,14 @@ void dtkPluginManager::loadPlugin(const QString& path)
         QString error = "Unable to initialize ";
         error += plugin->name();
         error += " plugin";
-        if(d->verboseLoading) { dtkTrace(dtkLoggingCategory::defaultCategory()) << error; }
+        if(d->verboseLoading) { dtkTrace() << error; }
         emit loadError(error);
         return;
     }
 
     d->loaders.insert(path, loader);
 
-    if(d->verboseLoading) { dtkTrace(dtkLoggingCategory::defaultCategory()) << "Loaded plugin " << plugin->name() << " from " << path; }
+    if(d->verboseLoading) { dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path; }
 
     emit loaded(plugin->name());
 }
@@ -366,19 +366,19 @@ void dtkPluginManager::unloadPlugin(const QString& path)
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
 
     if(!plugin) {
-        if(d->verboseLoading) { dtkDebug(dtkLoggingCategory::defaultCategory()) << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin"; }
+        if(d->verboseLoading) { dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin"; }
         return;
     }
 
     if(!plugin->uninitialize()) {
-        if(d->verboseLoading) { dtkTrace(dtkLoggingCategory::defaultCategory()) << "Unable to uninitialize " << plugin->name() << " plugin"; }
+        if(d->verboseLoading) { dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin"; }
         return;
     }
 
     QPluginLoader *loader = d->loaders.value(path);
 
     if(!loader->unload()) {
-        if(d->verboseLoading) { dtkDebug(dtkLoggingCategory::defaultCategory()) << "dtkPluginManager - Unable to unload plugin: " << loader->errorString(); }
+        if(d->verboseLoading) { dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString(); }
         return;
     }
 

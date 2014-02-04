@@ -17,7 +17,7 @@
 #include "dtkDistributedCommunicatorMpi.h"
 
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <dtkMath>
 
@@ -428,7 +428,7 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
 
         data = dtkAbstractDataFactory::instance()->create(typeName);
         if (!data) {
-            dtkWarn() << "Can't instantiate object of type" << QString(typeName);
+            dtkWarning() << "Can't instantiate object of type" << QString(typeName);
             return;
         }
 
@@ -465,7 +465,7 @@ void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 sou
 
             data = dtkAbstractDataFactory::instance()->create(typeName);
             if (!data) {
-                dtkWarn() << "Can't instantiate object of type" << QString(typeName);
+                dtkWarning() << "Can't instantiate object of type" << QString(typeName);
                 return;
             }
 

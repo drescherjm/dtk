@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 16:50:57 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:05:15 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 351
+ *     Update #: 352
  */
 
 /* Commentary:
@@ -133,7 +133,7 @@ void dtkAbstractView::copy(const dtkAbstractObject& other)
         d->interactors = view.d_func()->interactors;
 
     } else {
-        dtkWarning(dtkLoggingCategory::defaultCategory()) << "Other is not of same type than this, slicing is occuring.";
+        dtkWarning() << "Other is not of same type than this, slicing is occuring.";
     }
 }
 
@@ -332,7 +332,7 @@ void dtkAbstractView::resize(int width, int height)
 void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 {
     if(animator->identifier().isEmpty()) {
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << "No identifier specified for animator. Not add to" << this->identifier();
+        dtkDebug() << "No identifier specified for animator. Not add to" << this->identifier();
         return;
     }
 
@@ -344,7 +344,7 @@ void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 {
     if(navigator->identifier().isEmpty()) {
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << "No identifier specified for navigator. Not add to" << this->identifier();
+        dtkDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
         return;
     }
 
@@ -356,7 +356,7 @@ void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
 {
     if(interactor->identifier().isEmpty()) {
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << "No identifier specified for interactor. Not add to" << this->identifier();
+        dtkDebug() << "No identifier specified for interactor. Not add to" << this->identifier();
         return;
     }
 
@@ -375,7 +375,7 @@ void dtkAbstractView::enableAnimator(const QString& animator)
         d->animators.value(animator)->setView(this);
         d->animators.value(animator)->enable();
     } else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << identifier() << " has no such animator: " << animator;
+        dtkDebug() << identifier() << " has no such animator: " << animator;
 }
 
 void dtkAbstractView::disableAnimator(const QString& animator)
@@ -394,7 +394,7 @@ void dtkAbstractView::enableNavigator(const QString& navigator)
 //      d->navigators.value(navigator)->setView(this);
         d->navigators.value(navigator)->enable();
     } else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << identifier() << " has no such navigator: " << navigator;
+        dtkDebug() << identifier() << " has no such navigator: " << navigator;
 }
 
 void dtkAbstractView::disableNavigator(const QString& navigator)
@@ -413,7 +413,7 @@ void dtkAbstractView::enableInteractor(const QString& interactor)
         d->interactors.value(interactor)->setView(this);
         d->interactors.value(interactor)->enable();
     } else
-        dtkDebug(dtkLoggingCategory::defaultCategory()) << identifier() << " has no such interactor: " << interactor;
+        dtkDebug() << identifier() << " has no such interactor: " << interactor;
 }
 
 void dtkAbstractView::disableInteractor(const QString& interactor)

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 12:18:35 2013 (+0100)
  * Version: 
- * Last-Updated: lun. févr.  3 16:41:29 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:04:29 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 54
+ *     Update #: 150
  */
 
 /* Change Log:
@@ -86,49 +86,49 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkDebug
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkDebug(category)	             \
-    for (bool enabled = category.isEnabled(QtDebugMsg); enabled; enabled = false)    \
-        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).debug()
+#define dtkDebug                                                           \
+    for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false)    \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
 // ///////////////////////////////////////////////////////////////////
 // dtkWarning
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkWarning(category)						             \
-    for (bool enabled = category.isEnabled(QtWarningMsg); enabled; enabled = false)  \
-        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).warning()
+#define dtkWarning						             \
+    for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtWarningMsg); enabled; enabled = false)  \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).warning
 
 // ///////////////////////////////////////////////////////////////////
 // dtkCritical
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkCritical(category)						             \
-    for (bool enabled = category.isEnabled(QtCriticalMsg); enabled; enabled = false) \
-        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).critical()
+#define dtkCritical						             \
+    for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtCriticalMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).critical
 
 // ///////////////////////////////////////////////////////////////////
 // dtkTrace
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkTrace(category)						             \
-    for (bool enabled = category.isEnabled(QtDebugMsg); enabled; enabled = false) \
-        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).debug()
+#define dtkTrace						             \
+    for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
 // ///////////////////////////////////////////////////////////////////
 // dtkInfo
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkInfo(category)						             \
-    for (bool enabled = category.isEnabled(QtDebugMsg); enabled; enabled = false) \
-        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).debug()
+#define dtkInfo						             \
+        for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
 // ///////////////////////////////////////////////////////////////////
 // dtkError
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkError(category)						             \
-    for (bool enabled = category.isEnabled(QtFatalMsg); enabled; enabled = false) \
-        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, category.categoryName()).critical()
+#define dtkError						             \
+    for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtFatalMsg); enabled; enabled = false) \
+        QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).critical
 
 /****************************************************************************
 **

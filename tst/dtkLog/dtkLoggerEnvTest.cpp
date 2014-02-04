@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 15:45:42 2013 (+0100)
  * Version: 
- * Last-Updated: lun. févr.  3 16:22:01 2014 (+0100)
+ * Last-Updated: mar. févr.  4 10:55:57 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 76
+ *     Update #: 77
  */
 
 /* Change Log:
@@ -122,17 +122,17 @@ protected:
 
 void LogThreadEnv::run()
 {
-    dtkDebug(My_Category_A) << "My_Category_A";
-    dtkDebug(My_Category_B) << "My_Category_B";
-    dtkDebug(My_Category_C) << "My_Category_C";
+    dtkDebug() << "My_Category_A";
+    dtkDebug() << "My_Category_B";
+    dtkDebug() << "My_Category_C";
 
-    dtkWarning(My_Category_A) << "My_Category_A";
-    dtkWarning(My_Category_B) << "My_Category_B";
-    dtkWarning(My_Category_C) << "My_Category_C";
+    dtkWarning() << "My_Category_A";
+    dtkWarning() << "My_Category_B";
+    dtkWarning() << "My_Category_C";
 
-    dtkCritical(My_Category_A) << "My_Category_A";
-    dtkCritical(My_Category_B) << "My_Category_B";
-    dtkCritical(My_Category_C) << "My_Category_C";
+    dtkCritical() << "My_Category_A";
+    dtkCritical() << "My_Category_B";
+    dtkCritical() << "My_Category_C";
 }
 
 // ///////////////////////////////////////////////////////////////////

@@ -58,13 +58,11 @@ set(${PROJECT_NAME}_SOURCES_RCC dtkPlot.qrc)
 ## Build rules
 ## #################################################################
 
-qt5_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_QRC})
 
 add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
@@ -77,7 +75,6 @@ target_link_libraries(${PROJECT_NAME}
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
-#qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## #################################################################

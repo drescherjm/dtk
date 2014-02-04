@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Sep 30 16:47:01 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 81
+ * Last-Updated: mar. févr.  4 16:32:43 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 82
  */
 
 /* Commentary: 
@@ -21,7 +21,7 @@
 #define DTKCONTAINERVECTOR_H
 
 #include "dtkAbstractContainerOrdered.h"
-#include "dtkContainerExport.h"
+#include "dtkContainerSupportExport.h"
 
 #include <QtCore>
 
@@ -176,7 +176,7 @@ Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
 // 
 // /////////////////////////////////////////////////////////////////
 
-#include <dtkMath/dtkVector3D.h>
+#include <dtkMathSupport/dtkVector3D.h>
 
 typedef dtkContainerVector<dtkVector3DReal*> dtkContainerVectorVector3DReal;
 

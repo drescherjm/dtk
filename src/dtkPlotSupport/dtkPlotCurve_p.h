@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <dtkPlotExport.h>
+#include <dtkPlotSupportExport.h>
 
 #include <QtCore>
 #include <QtWidgets>

@@ -20,14 +20,14 @@
 #ifndef DTKPLOTVIEWPANNER_H
 #define DTKPLOTVIEWPANNER_H
 
-#include "dtkPlotExport.h"
+#include "dtkPlotSupportExport.h"
 
 #include <QtCore/QObject>
 
 class dtkPlotView;
 class dtkPlotViewPannerPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewPanner : public QObject
+class DTKPLOTSUPPORT_EXPORT dtkPlotViewPanner : public QObject
 {
     Q_OBJECT
 

@@ -20,13 +20,13 @@
 #ifndef DTKPLOTCURVE_H
 #define DTKPLOTCURVE_H
 
-#include "dtkPlotExport.h"
+#include "dtkPlotSupportExport.h"
 
 #include <QtCore>
 
 class dtkPlotCurvePrivate;
 
-class DTKPLOT_EXPORT dtkPlotCurve : public QObject
+class DTKPLOTSUPPORT_EXPORT dtkPlotCurve : public QObject
 {
     Q_OBJECT
 

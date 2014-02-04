@@ -1,23 +1,6 @@
 ### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Jul 20 18:39:20 2009 (+0200)
-## Version: $Id$
-## Last-Updated: lun. déc. 16 17:45:52 2013 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 328
-######################################################################
-## 
-### Commentary: 
-## 
-######################################################################
-## 
-### Change log:
-## 
-######################################################################
 
-project(dtkContainer)
+project(dtkContainerSupport)
 
 ## #################################################################
 ## Sources
@@ -35,9 +18,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkContainerVectorWrapper.h
   dtkContainerVectorWrapper.tpp)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkAbstractContainerWrapper.h)
-
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractContainerWrapper.cpp
   dtkContainerVector.cpp)
@@ -45,14 +25,6 @@ set(${PROJECT_NAME}_SOURCES
 ## #################################################################
 ## Build rules
 ## #################################################################
-
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_SHARED)
-if(NOT MSVC)
-  add_definitions(-DQT_NO_DEBUG)
-endif()
-
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 
 if(DTK_USE_PRECOMPILED_HEADERS)
   add_precompiled_header(${PROJECT_NAME}_SOURCES_PCH 
@@ -62,28 +34,21 @@ if(DTK_USE_PRECOMPILED_HEADERS)
     ${${PROJECT_NAME}_SOURCES_MOC})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
-if(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_PCH})
 
-else(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} STATIC
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_PCH}})
-
-endif(BUILD_SHARED_LIBS)
-
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
-  dtkCore
+  dtkCoreSupport
   dtkLog)
+
+## ###################################################################
+## Link rules
+## ###################################################################
+
+qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## #################################################################
 ## Export header file
@@ -101,13 +66,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
-
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

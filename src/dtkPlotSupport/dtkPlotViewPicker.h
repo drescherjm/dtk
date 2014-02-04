@@ -20,7 +20,7 @@
 #ifndef DTKPLOTVIEWPICKER_H
 #define DTKPLOTVIEWPICKER_H
 
-#include "dtkPlotExport.h"
+#include "dtkPlotSupportExport.h"
 
 #include <QtCore/QObject>
 #include <QtGui/QColor>
@@ -28,7 +28,7 @@
 class dtkPlotView;
 class dtkPlotViewPickerPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewPicker : public QObject
+class DTKPLOTSUPPORT_EXPORT dtkPlotViewPicker : public QObject
 {
     Q_OBJECT
 

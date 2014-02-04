@@ -24,7 +24,7 @@
 // 
 // ///////////////////////////////////////////////////////////////////
 
-template <> DTKCONTAINER_EXPORT QString dtkAbstractContainer<double>::description(void) const;
+template <> DTKCONTAINERSUPPORT_EXPORT QString dtkAbstractContainer<double>::description(void) const;
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer implementation

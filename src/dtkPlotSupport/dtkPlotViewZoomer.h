@@ -20,7 +20,7 @@
 #ifndef DTKPLOTVIEWZOOMER_H
 #define DTKPLOTVIEWZOOMER_H
 
-#include "dtkPlotExport.h"
+#include "dtkPlotSupportExport.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QRectF>
@@ -30,7 +30,7 @@
 class dtkPlotView;
 class dtkPlotViewZoomerPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewZoomer : public QObject
+class DTKPLOTSUPPORT_EXPORT dtkPlotViewZoomer : public QObject
 {
     Q_OBJECT
 

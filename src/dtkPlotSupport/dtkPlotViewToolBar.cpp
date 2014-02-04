@@ -73,7 +73,7 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QFrame(parent->wid
 
     d->exportAction = new QAction("Export", this);
     d->exportAction->setToolTip("Export view");
-    d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotExport.png"));
+    d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport.png"));
 
     bar->addAction(d->defaultViewAction);
     bar->addAction(d->zoomAction);
@@ -198,14 +198,14 @@ void dtkPlotViewToolBar::setDark(bool dark)
 	d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking-light.png"));
 	d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom-light.png"));
 	d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend-light.png"));
-	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotExport-light.png"));
+	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport-light.png"));
     } else {
 	d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis.png"));
 	d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid.png"));
 	d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking.png"));
 	d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom.png"));
 	d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend.png"));
-	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotExport.png"));
+	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport.png"));
     }
 }
 

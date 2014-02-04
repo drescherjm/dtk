@@ -21,10 +21,10 @@
 #define DTKABSTRACTCONTAINERWRAPPER_H
 
 #include "dtkAbstractContainer.h"
-#include "dtkContainerExport.h"
+#include "dtkContainerSupportExport.h"
 #include "dtkContainerVector.h"
 
-#include <dtkCore/dtkAbstractData>
+#include <dtkCoreSupport/dtkAbstractData>
 
 #include <QSharedPointer>
 
@@ -32,7 +32,7 @@
 // dtkAbstractContainerWrapper interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCONTAINER_EXPORT dtkAbstractContainerWrapper : public dtkAbstractData
+class DTKCONTAINERSUPPORT_EXPORT dtkAbstractContainerWrapper : public dtkAbstractData
 {
     Q_OBJECT
 

@@ -16,13 +16,13 @@
 #ifndef DTKPLOTVIEWLEGEND_H
 #define DTKPLOTVIEWLEGEND_H
 
-#include "dtkPlotExport.h"
+#include "dtkPlotSupportExport.h"
 #include <dtkConfig.h>
 
 class dtkPlotView;
 class dtkPlotViewLegendPrivate;
 
-class DTKPLOT_EXPORT dtkPlotViewLegend
+class DTKPLOTSUPPORT_EXPORT dtkPlotViewLegend
 {
 public:
      dtkPlotViewLegend(dtkPlotView *parent);

@@ -20,9 +20,9 @@
 #ifndef DTKABSTRACTCONTAINER_H
 #define DTKABSTRACTCONTAINER_H
 
-#include "dtkContainerExport.h"
+#include "dtkContainerSupportExport.h"
 
-#include <dtkCore/dtkGlobal>
+#include <dtkCoreSupport/dtkGlobal>
 
 #include <typeinfo>
 

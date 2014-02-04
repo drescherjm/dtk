@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. févr.  4 15:13:32 2014 (+0100)
+## Last-Updated: mar. févr.  4 16:03:19 2014 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 325
+##     Update #: 327
 ######################################################################
 ## 
 ### Change log:
@@ -95,7 +95,6 @@ set(${PROJECT_NAME}_SOURCES_RCC dtkGui.qrc)
 ## #################################################################
 
 qt5_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
-qt5_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
 qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_RCC})
 
 if(DTK_USE_PRECOMPILED_HEADERS)
@@ -113,7 +112,6 @@ add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_PCH}
   ${${PROJECT_NAME}_SOURCES_UIC}
-  ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}

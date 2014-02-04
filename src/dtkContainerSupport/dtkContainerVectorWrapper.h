@@ -21,10 +21,10 @@
 #define DTKCONTAINERVECTORWRAPPER_H
 
 #include "dtkAbstractContainerWrapper.h"
-#include "dtkContainerExport.h"
+#include "dtkContainerSupportExport.h"
 #include "dtkContainerVector.h"
 
-#include <dtkCore/dtkGlobal>
+#include <dtkCoreSupport/dtkGlobal>
 
 #include <QtCore>
 

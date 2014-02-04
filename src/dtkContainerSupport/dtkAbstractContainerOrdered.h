@@ -21,7 +21,7 @@
 #define DTKABSTRACTCONTAINERORDERED_H
 
 #include "dtkAbstractContainer.h"
-#include "dtkContainerExport.h"
+#include "dtkContainerSupportExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractContainer interface

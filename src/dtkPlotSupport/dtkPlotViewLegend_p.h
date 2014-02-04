@@ -11,7 +11,7 @@
 #ifndef DTKPLOTVIEWLEGEND_P_H
 #define DTKPLOTVIEWLEGEND_P_H
 
-#include <dtkPlotExport.h>
+#include <dtkPlotSupportExport.h>
 
 #include <QtCore/QObject>
 
@@ -21,7 +21,7 @@ class QwtPlot;
 class QwtPlotItem;
 class QwtLegend;
 
-class DTKPLOT_EXPORT dtkPlotViewLegendPrivate : public QObject
+class DTKPLOTSUPPORT_EXPORT dtkPlotViewLegendPrivate : public QObject
 {
     Q_OBJECT
 

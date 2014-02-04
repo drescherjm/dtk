@@ -13,7 +13,7 @@
  *
  */
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include "dtkGraphEdge.h"
 #include "dtkGraph.h"
@@ -71,7 +71,7 @@ void dtkGraph::deleteNode(QObject *o)
         }
         d->nodes.removeAll(o);
     } else {
-        dtkWarn() << "removing unknown node from graph !" << o->objectName() ;
+        dtkWarning() << "removing unknown node from graph !" << o->objectName() ;
     }
 }
 

@@ -16,7 +16,7 @@
 #ifndef DTKMATRIX_TPP
 #define DTKMATRIX_TPP
 
-#include "dtkMathExport.h"
+#include "dtkMathSupportExport.h"
 
 #include <iostream>
 #include <iomanip>
@@ -31,8 +31,8 @@ enum { N_NOTALLOCATED, N_ALLOCATED, N_MAPPED };
 // Template specializations forward declarations
 // /////////////////////////////////////////////////////////////////
 
-template <> DTKMATH_EXPORT QByteArray *dtkMatrix<double>::serialize(void);
-template <> DTKMATH_EXPORT void dtkMatrix<double>::deserialize(const QByteArray& array);
+template <> DTKMATHSUPPORT_EXPORT QByteArray *dtkMatrix<double>::serialize(void);
+template <> DTKMATHSUPPORT_EXPORT void dtkMatrix<double>::deserialize(const QByteArray& array);
 
 // /////////////////////////////////////////////////////////////////
 // dtkMatrix implementation

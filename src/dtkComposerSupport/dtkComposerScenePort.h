@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERSCENEPORT_H
 #define DTKCOMPOSERSCENEPORT_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScenePortPrivate;
 class dtkComposerSceneNode;

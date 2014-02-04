@@ -17,7 +17,7 @@
 
 #include "dtkComposerNodeString.h"
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include <dtkCore/dtkGlobal.h>
 
 class dtkComposerControlsListItemStringPrivate

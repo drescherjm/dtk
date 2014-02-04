@@ -18,7 +18,7 @@
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <dtkCore/dtkGlobal.h>
 

@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODECONTROLFOREACH_H
 #define DTKCOMPOSERNODECONTROLFOREACH_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeControl.h"
 
 class dtkComposerNodeControlForEachPrivate;
@@ -29,7 +29,7 @@ class dtkComposerNodeControlForEachPrivate;
 // dtkComposerNodeControlForEach interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeControlForEach : public dtkComposerNodeControl
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlForEach : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlForEach(void);

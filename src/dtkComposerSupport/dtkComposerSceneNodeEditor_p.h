@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERSCENENODEEDITOR_P_H
 #define DTKCOMPOSERSCENENODEEDITOR_P_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneNode;

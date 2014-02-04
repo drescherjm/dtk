@@ -20,9 +20,9 @@
 #ifndef DTKCOMPOSERSCENENOTE_H
 #define DTKCOMPOSERSCENENOTE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerSceneNode;
 class dtkComposerSceneNotePrivate;
@@ -31,7 +31,7 @@ class dtkComposerSceneNotePrivate;
 // dtkComposerSceneNote
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneNote : public QGraphicsItem
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNote : public QGraphicsItem
 {
 public:
      dtkComposerSceneNote(void);

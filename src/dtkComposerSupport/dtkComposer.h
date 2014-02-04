@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. juin  5 11:03:08 2013 (+0200)
+ * Last-Updated: mar. févr.  4 10:41:15 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 76
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -20,11 +20,11 @@
 #ifndef DTKCOMPOSER_H
 #define DTKCOMPOSER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerWriter.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerEvaluator;
 class dtkComposerFactory;
@@ -40,7 +40,7 @@ class dtkComposerPath;
 class dtkComposerWriter;
 class dtkComposerReader;
 
-class DTKCOMPOSER_EXPORT dtkComposer : public QWidget
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposer : public QWidget
 {
     Q_OBJECT
 

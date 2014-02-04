@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODECONTROL_H
 #define DTKCOMPOSERNODECONTROL_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNode.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ class dtkComposerNodeControlPrivate;
 
 class dtkComposerTransmitterVariant;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControl : public dtkComposerNode
 {
 public:
              dtkComposerNodeControl(void);

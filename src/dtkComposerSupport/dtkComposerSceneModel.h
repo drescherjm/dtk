@@ -20,15 +20,15 @@
 #ifndef DTKCOMPOSERSCENEMODEL_H
 #define DTKCOMPOSERSCENEMODEL_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneModelPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneModel : public QAbstractItemModel
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneModel : public QAbstractItemModel
 {
     Q_OBJECT
 

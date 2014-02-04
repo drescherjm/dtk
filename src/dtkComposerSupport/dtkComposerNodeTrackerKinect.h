@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODETRACKERKINECT_H
 #define DTKCOMPOSERNODETRACKERKINECT_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeTrackerKinectPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeTrackerKinect : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeTrackerKinect : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeTrackerKinect(void);

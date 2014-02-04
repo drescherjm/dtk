@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERCONTROLS_H
 #define DTKCOMPOSERCONTROLS_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerControlsPrivate;
 class dtkComposerScene;
 
-class DTKCOMPOSER_EXPORT dtkComposerControls : public QFrame
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerControls : public QFrame
 {
     Q_OBJECT
 

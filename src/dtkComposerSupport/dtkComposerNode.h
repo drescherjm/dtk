@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODE_H
 #define DTKCOMPOSERNODE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
 
@@ -32,7 +32,7 @@ class dtkComposerTransmitter;
 
 class dtkComposerNodePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNode
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNode
 {
 public: 
              dtkComposerNode(void);

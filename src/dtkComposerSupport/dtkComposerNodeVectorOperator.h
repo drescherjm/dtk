@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEVECTOROPERATOR_H
 #define DTKCOMPOSERNODEVECTOROPERATOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeVectorOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorOperatorUnary(void);
@@ -54,7 +54,7 @@ protected:
 
 class dtkComposerNodeVectorOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVectorOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVectorOperatorBinary(void);

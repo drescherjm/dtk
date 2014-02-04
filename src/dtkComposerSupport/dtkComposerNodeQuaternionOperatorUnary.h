@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEQUATERNIONOPERATORUNARY_H
 #define DTKCOMPOSERNODEQUATERNIONOPERATORUNARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeQuaternionOperatorUnaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeQuaternionOperatorUnary(void);
@@ -53,7 +53,7 @@ protected:
 
 class dtkComposerNodeQuaternionOperatorUnaryScalarPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorUnaryScalar : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeQuaternionOperatorUnaryScalar(void);
@@ -75,7 +75,7 @@ protected:
 // dtkComposerNodeQuaternionOperatorUnary UNITARY interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorUnaryUnitary : public dtkComposerNodeQuaternionOperatorUnary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorUnaryUnitary : public dtkComposerNodeQuaternionOperatorUnary
 {
 public:
     void run(void);
@@ -94,7 +94,7 @@ public:
 // dtkComposerNodeQuaternionOperatorUnaryScalar NORM interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorUnaryScalarNorm : public dtkComposerNodeQuaternionOperatorUnaryScalar
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorUnaryScalarNorm : public dtkComposerNodeQuaternionOperatorUnaryScalar
 {
 public:
     void run(void);

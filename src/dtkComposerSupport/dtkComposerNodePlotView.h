@@ -17,7 +17,7 @@
 #ifndef DTKCOMPOSERNODEPLOTVIEW_H
 #define DTKCOMPOSERNODEPLOTVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeafView.h"
 
 #include <QtCore>
@@ -26,7 +26,7 @@ class dtkPlotView;
 
 class dtkComposerNodePlotViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodePlotView : public QObject, public dtkComposerNodeLeafView
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotView : public QObject, public dtkComposerNodeLeafView
 {
     Q_OBJECT
 

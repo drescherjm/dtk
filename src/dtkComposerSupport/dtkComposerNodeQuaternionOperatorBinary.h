@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEQUATERNIONOPERATORBINARY_H
 #define DTKCOMPOSERNODEQUATERNIONOPERATORBINARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeQuaternionOperatorBinaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeQuaternionOperatorBinary(void);
@@ -56,7 +56,7 @@ protected:
 
 class dtkComposerNodeQuaternionOperatorHomotheticPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorHomothetic : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorHomothetic : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeQuaternionOperatorHomothetic(void);
@@ -81,7 +81,7 @@ protected:
 // dtkComposerNodeQuaternionOperatorBinary - SUM 
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorBinarySum : public dtkComposerNodeQuaternionOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorBinarySum : public dtkComposerNodeQuaternionOperatorBinary
 {
 public:
     void run(void);
@@ -100,7 +100,7 @@ public:
 // dtkComposerNodeQuaternionOperatorBinary - SUBSTRACT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorBinarySubstract : public dtkComposerNodeQuaternionOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorBinarySubstract : public dtkComposerNodeQuaternionOperatorBinary
 {
 public:
     void run(void);
@@ -119,7 +119,7 @@ public:
 // dtkComposerNodeQuaternionOperatorBinary - HAMILTON MULT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorBinaryMult : public dtkComposerNodeQuaternionOperatorBinary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorBinaryMult : public dtkComposerNodeQuaternionOperatorBinary
 {
 public:
     void run(void);
@@ -138,7 +138,7 @@ public:
 // dtkComposerNodeQuaternionOperatorHomothetic - MULTIPLY
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorHomotheticMult : public dtkComposerNodeQuaternionOperatorHomothetic
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorHomotheticMult : public dtkComposerNodeQuaternionOperatorHomothetic
 {
 public:
     void run(void);
@@ -157,7 +157,7 @@ public:
 // dtkComposerNodeQuaternionOperatorHomothetic - DIVIDE
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternionOperatorHomotheticDivision : public dtkComposerNodeQuaternionOperatorHomothetic
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorHomotheticDivision : public dtkComposerNodeQuaternionOperatorHomothetic
 {
 public:
     void run(void);

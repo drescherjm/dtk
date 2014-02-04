@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. sept. 14 15:56:25 2012 (+0200)
+ * Last-Updated: mar. févr.  4 10:41:30 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 50
+ *     Update #: 51
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERWRITER_H
 #define DTKCOMPOSERWRITER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
 #include <QtXml>
@@ -32,7 +32,7 @@ class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNote;
 class dtkComposerWriterPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerWriter
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerWriter
 {
 public:
              dtkComposerWriter(void);

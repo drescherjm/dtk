@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERSTACKVIEW_H
 #define DTKCOMPOSERSTACKVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerStack;
 class dtkComposerStackViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerStackView : public QWidget
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerStackView : public QWidget
 {
     Q_OBJECT
 

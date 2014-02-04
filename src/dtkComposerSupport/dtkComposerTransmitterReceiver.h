@@ -15,7 +15,7 @@
 #ifndef DTKCOMPOSERTRANSMITTERRECEIVER_H
 #define DTKCOMPOSERTRANSMITTERRECEIVER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitterAbstractReceiver.h"
 
 #include <QtCore>

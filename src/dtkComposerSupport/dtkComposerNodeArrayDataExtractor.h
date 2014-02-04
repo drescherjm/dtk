@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEARRAYDATAEXTRACTOR_H
 #define DTKCOMPOSERNODEARRAYDATAEXTRACTOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeArrayDataExtractorPrivate;
@@ -29,7 +29,7 @@ class dtkComposerNodeArrayDataExtractorPrivate;
 // dtkComposerNodeArrayDataExtractor interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataExtractor : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataExtractor : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayDataExtractor(void);
@@ -61,7 +61,7 @@ private:
 
 class dtkComposerNodeArrayDataExtractorSubArrayPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataExtractorSubArray : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataExtractorSubArray : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayDataExtractorSubArray(void);
@@ -93,7 +93,7 @@ private:
 
 class dtkComposerNodeArrayDataExtractorArrayPartPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataExtractorArrayPart : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataExtractorArrayPart : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeArrayDataExtractorArrayPart(void);

@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODECONTROLMAP_H
 #define DTKCOMPOSERNODECONTROLMAP_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeControl.h"
 
 class dtkComposerNodeControlMapPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeControlMap : public dtkComposerNodeControl
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlMap : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlMap(void);

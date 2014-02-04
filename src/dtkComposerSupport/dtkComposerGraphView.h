@@ -20,13 +20,13 @@
 #ifndef DTKCOMPOSERGRAPHVIEW_H
 #define DTKCOMPOSERGRAPHVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerGraphViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerGraphView : public QGraphicsView
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerGraphView : public QGraphicsView
 {
     Q_OBJECT
 

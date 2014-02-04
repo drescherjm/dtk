@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERSCENEEDGE_H
 #define DTKCOMPOSERSCENEEDGE_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerSceneEdgePrivate;
 class dtkComposerSceneNode;

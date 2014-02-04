@@ -21,7 +21,7 @@
 #define DTKCOMPOSERGRAPHEDGE_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include <dtkMath/dtkGraphEdge.h>
 #include "dtkComposerGraphNode.h"

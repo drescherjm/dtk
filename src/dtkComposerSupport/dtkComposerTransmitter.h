@@ -15,7 +15,7 @@
 #ifndef DTKCOMPOSERTRANSMITTER_H
 #define DTKCOMPOSERTRANSMITTER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerMetatype.h"
 
 #include <QtCore>
@@ -33,7 +33,7 @@ template <typename T> class dtkMatrix;
 // dtkComposerTransmitter interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitter
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitter
 {
 public:
     enum Kind {
@@ -155,8 +155,8 @@ protected:
 // Debug operators
 // /////////////////////////////////////////////////////////////////
 
-DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
-DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
+DTKCOMPOSERSUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter);
+DTKCOMPOSERSUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter *transmitter);
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterLink declaration
@@ -164,7 +164,7 @@ DTKCOMPOSER_EXPORT QDebug operator<<(QDebug debug,       dtkComposerTransmitter 
 
 class dtkComposerTransmitterLinkPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterLink
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterLink
 {
 public:
      dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
@@ -182,6 +182,6 @@ private:
 // dtkComposerTransmitterLinkList declaration
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
 #endif

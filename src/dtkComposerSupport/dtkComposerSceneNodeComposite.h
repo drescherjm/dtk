@@ -15,7 +15,7 @@
 #ifndef DTKCOMPOSERSCENENODECOMPOSITE_H
 #define DTKCOMPOSERSCENENODECOMPOSITE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerSceneEdge;
@@ -25,7 +25,7 @@ class dtkComposerSceneNodeCompositePrivate;
 class dtkComposerSceneNote;
 class dtkComposerSceneNoteList;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneNodeComposite : public dtkComposerSceneNode
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeComposite : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeComposite(void);

@@ -17,7 +17,7 @@
 #ifndef DTKCOMPOSEREVALUATOR_H
 #define DTKCOMPOSEREVALUATOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore/QObject>
 
@@ -25,7 +25,7 @@ class dtkComposerGraph;
 class dtkComposerGraphNode;
 class dtkComposerEvaluatorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluator : public QObject
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerEvaluator : public QObject
 {
     Q_OBJECT
 

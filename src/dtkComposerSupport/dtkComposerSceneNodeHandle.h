@@ -20,16 +20,16 @@
 #ifndef DTKCOMPOSERSCENENODEHANDLE_H
 #define DTKCOMPOSERSCENENODEHANDLE_H
 
-#include <dtkComposerExport.h>
+#include <dtkComposerSupportExport.h>
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerSceneNodeControl;
 class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNodeHandlePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneNodeHandle : public QGraphicsItem
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeHandle : public QGraphicsItem
 {
 public:
      dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent);

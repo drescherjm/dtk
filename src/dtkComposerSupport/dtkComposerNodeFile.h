@@ -15,12 +15,12 @@
 #ifndef DTKCOMPOSERNODEFILE_H
 #define DTKCOMPOSERNODEFILE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeFilePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeFile(void);
@@ -50,7 +50,7 @@ private:
 
 class dtkComposerNodeFileExistsPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFileExists : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileExists : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeFileExists(void);
@@ -79,7 +79,7 @@ private:
 
 class dtkComposerNodeFileListPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFileList : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileList : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeFileList(void);
@@ -106,7 +106,7 @@ private:
 
 class dtkComposerNodeFileReadPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFileRead : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileRead : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeFileRead(void);
@@ -133,7 +133,7 @@ private:
 
 class dtkComposerNodeFileWritePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFileWrite : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileWrite : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeFileWrite(void);

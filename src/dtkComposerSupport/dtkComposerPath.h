@@ -20,15 +20,15 @@
 #ifndef DTKCOMPOSERPATH_H
 #define DTKCOMPOSERPATH_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerPathPrivate;
 class dtkComposerScene;
 
-class DTKCOMPOSER_EXPORT dtkComposerPath : public QFrame
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerPath : public QFrame
 {
     Q_OBJECT
 

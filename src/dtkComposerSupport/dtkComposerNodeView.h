@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERNODEVIEW_H
 #define DTKCOMPOSERNODEVIEW_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeafView.h"
 
 #include <QtCore>
 
 class dtkComposerNodeViewPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeafView
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeafView
 {
     Q_OBJECT
 

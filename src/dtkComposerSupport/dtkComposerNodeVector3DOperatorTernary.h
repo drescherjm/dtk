@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEVECTOR3DOPERATORTERNARY_H
 #define DTKCOMPOSERNODEVECTOR3DOPERATORTERNARY_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeVector3DOperatorTernaryPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorTernary : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorTernary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVector3DOperatorTernary(void);
@@ -58,7 +58,7 @@ protected:
 
 class dtkComposerNodeVector3DOperatorTernaryScalarPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorTernaryScalar : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorTernaryScalar : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeVector3DOperatorTernaryScalar(void);
@@ -85,7 +85,7 @@ protected:
 // dtkComposerNodeVector3DOperatorTernary - Vector Triple Prod
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorTernaryTripleProd : public dtkComposerNodeVector3DOperatorTernary
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorTernaryTripleProd : public dtkComposerNodeVector3DOperatorTernary
 {
 public:
     void run(void);
@@ -104,7 +104,7 @@ public:
 // dtkComposerNodeVector3DOperatorTernaryScalar - Mixed Prod
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeVector3DOperatorTernaryScalarMixedProd : public dtkComposerNodeVector3DOperatorTernaryScalar
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorTernaryScalarMixedProd : public dtkComposerNodeVector3DOperatorTernaryScalar
 {
 public:
     void run(void);

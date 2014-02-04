@@ -15,7 +15,7 @@
 #ifndef DTKCOMPOSERTRANSMITTERVARIANT_H
 #define DTKCOMPOSERTRANSMITTERVARIANT_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitter.h"
 
 #include <dtkCore/dtkGlobal>
@@ -28,7 +28,7 @@ template <typename T> class dtkContainerVector;
 
 class dtkComposerTransmitterVariantPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterVariant(dtkComposerNode *parent = 0);

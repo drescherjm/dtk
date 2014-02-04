@@ -15,7 +15,7 @@
 #ifndef DTKCOMPOSERTRANSMITTERABSTRACTRECEIVER_H
 #define DTKCOMPOSERTRANSMITTERABSTRACTRECEIVER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitter_p.h"
 
@@ -23,7 +23,7 @@
 // dtkComposerTransmitterAbstractReceiver interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerTransmitterAbstractReceiver : public dtkComposerTransmitter
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterAbstractReceiver : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterAbstractReceiver(dtkComposerNode *parent = 0);

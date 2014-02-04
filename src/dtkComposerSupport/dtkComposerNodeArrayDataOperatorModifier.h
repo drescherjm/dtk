@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEARRAYDATAOPERATORMODIFIER_H
 #define DTKCOMPOSERNODEARRAYDATAOPERATORMODIFIER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeArrayDataOperatorModifierPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorModifier : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataOperatorModifier : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeArrayDataOperatorModifier(void);
@@ -59,7 +59,7 @@ protected:
 
 class dtkComposerNodeArrayDataOperatorModifierAllPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorModifierAll  : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataOperatorModifierAll  : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeArrayDataOperatorModifierAll(void);
@@ -84,7 +84,7 @@ protected:
 // dtkComposerNodeArrayDataOperator - INSERT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorInsert : public dtkComposerNodeArrayDataOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataOperatorInsert : public dtkComposerNodeArrayDataOperatorModifier
 {
 public:
     void run(void);
@@ -103,7 +103,7 @@ public:
 // dtkComposerNodeArrayDataOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorSet : public dtkComposerNodeArrayDataOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataOperatorSet : public dtkComposerNodeArrayDataOperatorModifier
 {
 public:
     void run(void);
@@ -122,7 +122,7 @@ public:
 // dtkComposerNodeArrayDataOperator - APPEND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorAppend : public dtkComposerNodeArrayDataOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataOperatorAppend : public dtkComposerNodeArrayDataOperatorModifierAll
 {
 public:
     void run(void);
@@ -141,7 +141,7 @@ public:
 // dtkComposerNodeArrayDataOperatorModifierALL - PREPEND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayDataOperatorPrepend : public dtkComposerNodeArrayDataOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataOperatorPrepend : public dtkComposerNodeArrayDataOperatorModifierAll
 {
 public:
     void run(void);

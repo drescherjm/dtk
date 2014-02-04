@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEREMOTE_H
 #define DTKCOMPOSERNODEREMOTE_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeLeaf.h"
 
@@ -35,7 +35,7 @@ class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
 {
     Q_OBJECT
 
@@ -80,7 +80,7 @@ private:
 
 class dtkComposerNodeRemoteSubmitPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
 {
     Q_OBJECT
 

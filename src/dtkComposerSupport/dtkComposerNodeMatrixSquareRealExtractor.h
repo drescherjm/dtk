@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEMATRIXSQUAREREALEXTRACTOR_H
 #define DTKCOMPOSERNODEMATRIXSQUAREREALEXTRACTOR_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeMatrixSquareRealExtractorPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeMatrixSquareRealExtractor : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealExtractor : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeMatrixSquareRealExtractor(void);

@@ -17,7 +17,7 @@
 
 #include "dtkComposerNodeBoolean.h"
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include <dtkCore/dtkGlobal.h>
 
 class dtkComposerControlsListItemBooleanPrivate

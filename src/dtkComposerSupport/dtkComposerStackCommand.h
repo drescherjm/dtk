@@ -21,7 +21,7 @@
 #define DTKCOMPOSERSTACKCOMMAND_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerFactory;
 class dtkComposerGraph;

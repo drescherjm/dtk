@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODEQUATERNION_H
 #define DTKCOMPOSERNODEQUATERNION_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeQuaternionPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeQuaternion : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternion : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeQuaternion(void);

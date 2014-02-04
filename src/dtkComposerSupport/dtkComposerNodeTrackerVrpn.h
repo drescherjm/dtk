@@ -20,12 +20,12 @@
 #ifndef DTKCOMPOSERNODETRACKERVRPN_H
 #define DTKCOMPOSERNODETRACKERVRPN_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeTrackerVrpnPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeTrackerVrpn : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeTrackerVrpn : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeTrackerVrpn(void);

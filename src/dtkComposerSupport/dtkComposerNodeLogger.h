@@ -16,12 +16,12 @@
 #ifndef DTKCOMPOSERNODELOGGER_H
 #define DTKCOMPOSERNODELOGGER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeLoggerPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeLogger : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLogger : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeLogger(void);

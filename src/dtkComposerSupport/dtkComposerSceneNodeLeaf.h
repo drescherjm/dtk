@@ -20,14 +20,14 @@
 #ifndef DTKCOMPOSERSCENENODELEAF_H
 #define DTKCOMPOSERSCENENODELEAF_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerNode;
 class dtkComposerSceneNodeLeafPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeLeaf(void);

@@ -20,7 +20,7 @@
 #ifndef DTKCOMPOSERNODEARRAYSCALAROPERATORMODIFIER_H
 #define DTKCOMPOSERNODEARRAYSCALAROPERATORMODIFIER_H
 
-#include "dtkComposerExport.h"
+#include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 
 class dtkComposerNodeArrayScalarOperatorModifierPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifier : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorModifier : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeArrayScalarOperatorModifier(void);
@@ -59,7 +59,7 @@ protected:
 
 class dtkComposerNodeArrayScalarOperatorModifierAllPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAll  : public dtkComposerNodeLeaf
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorModifierAll  : public dtkComposerNodeLeaf
 {
 public:
     dtkComposerNodeArrayScalarOperatorModifierAll(void);
@@ -84,7 +84,7 @@ protected:
 // dtkComposerNodeArrayScalarOperator - INSERT
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorInsert : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorInsert : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
@@ -103,7 +103,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - Set
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorSet : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorSet : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
@@ -122,7 +122,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - APPEND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorAppend : public dtkComposerNodeArrayScalarOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorAppend : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -141,7 +141,7 @@ public:
 // dtkComposerNodeArrayScalarOperatorModifierALL - PREPEND
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorPrepend : public dtkComposerNodeArrayScalarOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorPrepend : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -160,7 +160,7 @@ public:
 // dtkComposerNodeArrayScalarOperatorModifierALL - Add
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllAdd : public dtkComposerNodeArrayScalarOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllAdd : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -179,7 +179,7 @@ public:
 // dtkComposerNodeArrayScalarOperatorModifierALL - Substract
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllSubstract : public dtkComposerNodeArrayScalarOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllSubstract : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -198,7 +198,7 @@ public:
 // dtkComposerNodeArrayScalarOperatorModifierALL - Mult
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllMult : public dtkComposerNodeArrayScalarOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllMult : public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -217,7 +217,7 @@ public:
 // dtkComposerNodeArrayScalarOperatorModifierALL - Divide
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllDivide: public dtkComposerNodeArrayScalarOperatorModifierAll
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorModifierAllDivide: public dtkComposerNodeArrayScalarOperatorModifierAll
 {
 public:
     void run(void);
@@ -236,7 +236,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - SUM
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorSum : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorSum : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
@@ -255,7 +255,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - Substract
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorSubstract : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorSubstract : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
@@ -274,7 +274,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - Mult
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorMult : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorMult : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);
@@ -293,7 +293,7 @@ public:
 // dtkComposerNodeArrayScalarOperator - Divide
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeArrayScalarOperatorDivide : public dtkComposerNodeArrayScalarOperatorModifier
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarOperatorDivide : public dtkComposerNodeArrayScalarOperatorModifier
 {
 public:
     void run(void);

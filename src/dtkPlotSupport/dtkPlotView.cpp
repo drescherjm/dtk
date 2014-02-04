@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jan 21 17:43:12 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 550
+ * Last-Updated: mar. févr.  4 15:53:41 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 560
  */
 
 /* Commentary: 
@@ -615,11 +615,11 @@ void dtkPlotView::readSettings(void)
 {
     QSettings settings("inria", "dtk");
     settings.beginGroup("plot");
-    d->grid_color = settings.value("grid_color", Qt::black).value<QColor>();
-    d->picking_color = settings.value("picking_color", Qt::black).value<QColor>();
-    d->zoom_color = settings.value("zoom_color", Qt::black).value<QColor>();
-    d->background_color = settings.value("background_color", Qt::white).value<QColor>();
-    d->foreground_color = settings.value("forergound_color", Qt::black).value<QColor>();
+    d->grid_color = settings.value("grid_color", QColor(Qt::black)).value<QColor>();
+    d->picking_color = settings.value("picking_color", QColor(Qt::black)).value<QColor>();
+    d->zoom_color = settings.value("zoom_color", QColor(Qt::black)).value<QColor>();
+    d->background_color = settings.value("background_color", QColor(Qt::white)).value<QColor>();
+    d->foreground_color = settings.value("forergound_color", QColor(Qt::black)).value<QColor>();
     d->scaleEngineX = (dtkPlotView::Scale) settings.value("axis_x_scale_engine", dtkPlotView::Linear).toUInt();
     d->scaleEngineY = (dtkPlotView::Scale) settings.value("axis_y_scale_engine", dtkPlotView::Linear).toUInt();
     settings.endGroup();

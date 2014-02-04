@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:02:08 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. nov.  5 10:48:29 2013 (+0100)
- *           By: edelclau
- *     Update #: 147
+ * Last-Updated: mar. févr.  4 15:22:07 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 148
  */
 
 /* Commentary:
@@ -24,7 +24,7 @@
 
 #include "dtkPlotViewLegend.h"
 
-#include <dtkCore/dtkAbstractView.h>
+#include <dtkCoreSupport/dtkAbstractView.h>
 
 #include <QtCore>
 #include <QtGui>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 19 15:46:21 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 79
+ * Last-Updated: mar. févr.  4 15:54:01 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 80
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkPlotExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkPlotView;
 class dtkPlotViewToolBarPrivate;

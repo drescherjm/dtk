@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Tue Oct  1 06:17:40 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Oct  1 06:45:09 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 38
+ * Last-Updated: mar. févr.  4 15:22:20 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 39
  */
 
 /* Change Log:
@@ -17,7 +17,7 @@
 #include <dtkPlotExport.h>
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 #include <qwt_plot_curve.h>
 #include <qwt_series_data.h>

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Oct 25 17:19:40 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 766
+ * Last-Updated: mar. févr.  4 15:43:37 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 767
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 #include "dtkPlotView.h"
 #include "dtkPlotCurve.h"
 
-#include <dtkGui/dtkColorButton.h>
+#include <dtkGuiSupport/dtkColorButton.h>
 
 class dtkPlotViewSettingsPrivate
 {

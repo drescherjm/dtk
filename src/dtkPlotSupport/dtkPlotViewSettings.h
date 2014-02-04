@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: ven. oct. 25 10:57:35 2013 (+0200)
+ * Last-Updated: mar. févr.  4 15:22:29 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 88
+ *     Update #: 89
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkPlotExport.h"
 
-#include <dtkGui/dtkToolBox.h>
+#include <dtkGuiSupport/dtkToolBox.h>
 
 class dtkPlotView;
 class dtkPlotViewSettingsPrivate;

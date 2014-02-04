@@ -13,7 +13,15 @@
 ## 
 ######################################################################
 
-project(dtkPlot)
+find_package(Qwt 6 REQUIRED)
+
+if(QWT_FOUND)
+
+message("QWT has been found")
+
+project(dtkPlotSupport)
+
+include_directories(${QWT_INCLUDE_DIR})
 
 ## #################################################################
 ## Sources
@@ -32,17 +40,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkPlotViewSettings.h
   dtkPlotViewToolBar.h)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  dtkPlotCurve.h
-  dtkPlotView.h
-  dtkPlotViewPanner.h
-  dtkPlotViewPicker.h
-  dtkPlotViewZoomer.h
-  dtkPlotViewLegend_p.h
-  dtkPlotViewGrid.h
-  dtkPlotViewSettings.h
-  dtkPlotViewToolBar.h)
-
 set(${PROJECT_NAME}_SOURCES
   dtkPlotCurve.cpp
   dtkPlotRenderer.cpp
@@ -55,38 +52,33 @@ set(${PROJECT_NAME}_SOURCES
   dtkPlotViewSettings.cpp
   dtkPlotViewToolBar.cpp)
 
-set(${PROJECT_NAME}_RESOURCES dtkPlot.qrc)
+set(${PROJECT_NAME}_SOURCES_RCC dtkPlot.qrc)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+qt5_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
+qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_QRC})
 
-if(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC})
-
-else(BUILD_SHARED_LIBS)
-
-add_library(${PROJECT_NAME} STATIC
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_MOC}
-  ${${PROJECT_NAME}_SOURCES_QRC})
-
-endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
   ${QWT_LIBRARIES}
   dtkCore
   dtkGui)
+
+## ###################################################################
+## Link rules
+## ###################################################################
+
+qt5_use_modules(${PROJECT_NAME} Core)
+#qt5_use_modules(${PROJECT_NAME} Gui)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 ## #################################################################
 ## Export header file
@@ -106,13 +98,6 @@ set(${PROJECT_NAME}_HEADERS
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC} ${${PROJECT_NAME}_SOURCES_QRC})
-
-## #################################################################
 ## Installation
 ## #################################################################
 
@@ -127,3 +112,5 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+endif(QWT_FOUND)

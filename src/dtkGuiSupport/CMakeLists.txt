@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 22:21:50 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. févr.  4 11:47:46 2014 (+0100)
+## Last-Updated: mar. févr.  4 15:13:32 2014 (+0100)
 ##           By: Thibaud Kloczko
-##     Update #: 324
+##     Update #: 325
 ######################################################################
 ## 
 ### Change log:
@@ -108,7 +108,7 @@ if(DTK_USE_PRECOMPILED_HEADERS)
     ${${PROJECT_NAME}_SOURCES_QRC})
 endif(DTK_USE_PRECOMPILED_HEADERS)
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
   ${${PROJECT_NAME}_SOURCES_PCH}

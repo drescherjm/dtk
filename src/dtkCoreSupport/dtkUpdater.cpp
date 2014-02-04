@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:27 2009 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 14:47:49 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:30:25 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 23
+ *     Update #: 50
  */
 
 /* Commentary: 
@@ -27,11 +27,18 @@
 // dtkUpdaterPrivate
 // /////////////////////////////////////////////////////////////////
 
-void dtkUpdaterPrivate::onRequestFinished(int id, bool error)
+void dtkUpdaterPrivate::onRequestFinished(QNetworkReply *reply)
 {
-    DTK_UNUSED(error);
 
-    if (id == cfgId) {
+    if (reply->url() == cfgUrl) { // WARN: the url may not be the same ...
+
+        if(!cfgFile->open(QFile::ReadWrite)) {
+            qDebug() << "Unable to open config file  for writing.";
+            return;
+        }
+        cfgFile->write(reply->readAll());
+        cfgFile->flush();
+        cfgFile->close();
 
         if(!cfgFile->openMode() == QIODevice::NotOpen)
             cfgFile->close();
@@ -68,12 +75,12 @@ void dtkUpdaterPrivate::onRequestFinished(int id, bool error)
 
         if(c == 'y')
             downl(binUrl);
-    }
 
-    else if (id == binId) {
+    }  else {
 
-        if(!binFile->openMode() == QIODevice::NotOpen)
-            binFile->close();
+        binFile->write(reply->readAll());
+        binFile->flush();
+        binFile->close();
 
         qDebug() << "Download completed, would you like to install ?";
 
@@ -84,31 +91,13 @@ void dtkUpdaterPrivate::onRequestFinished(int id, bool error)
     }
 }
 
-void dtkUpdaterPrivate::check(const QUrl& url)
-{   
-    if(!cfgFile->open(QFile::ReadWrite))
-        qDebug() << "Unable to open config file for parsing";
-
-    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
-    if (path.isEmpty())
-        path = "/";
-
-    QNetworkRequest req(url);
-
-    // FIXME: finish migration from QHTTP. Currently, it doesn't work.
-    //    cfgId = http->get(req);
-
-    // cfgId = http->get(path, cfgFile);
-}
-
 void dtkUpdaterPrivate::downl(const QUrl& url)
 {
     if(!binFile->open(QFile::ReadWrite))
         qDebug() << "Unable to open binary file for saving";
 
-    // FIXME: finish migration from QHTTP. Currently, it doesn't work.
+    http->get(QNetworkRequest(url));
 
-//    binId = http->get(path, binFile);
 }
 
 void dtkUpdaterPrivate::extract(void)
@@ -137,14 +126,14 @@ dtkUpdater::dtkUpdater(const QUrl& cfgUrl)
     QFile::remove("/tmp/cfg");
     QFile::remove("/tmp/bin");
 
-    d = new dtkUpdaterPrivate;
-    d->http = new QNetworkAccessManager;
+    d          = new dtkUpdaterPrivate;
+    d->http    = new QNetworkAccessManager;
     d->cfgFile = new QFile("/tmp/cfg");
     d->binFile = new QFile("/tmp/bin");
 
-    QObject::connect(d->http, SIGNAL(requestFinished(int, bool)), d, SLOT(onRequestFinished(int, bool)));
+    QObject::connect(d->http, SIGNAL(finished(QNetworkReply*)), d, SLOT(onRequestFinished(QNetworkReply*)));
 
-    d->check(cfgUrl);
+    d->http->get(QNetworkRequest(cfgUrl));
 }
 
 dtkUpdater::~dtkUpdater(void)

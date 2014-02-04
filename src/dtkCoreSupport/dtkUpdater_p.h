@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 12:41:15 2009 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 14:29:35 2014 (+0100)
+ * Last-Updated: mar. févr.  4 11:20:02 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 7
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -36,18 +36,17 @@ class dtkUpdaterPrivate : public QObject
     Q_OBJECT
 
 public:
-    void check(const QUrl& url);
     void downl(const QUrl& url);
     void extract(void);
 
 public slots:
-    void onRequestFinished(int id, bool error);
+    void onRequestFinished(QNetworkReply *reply);
 
 public:
     QNetworkAccessManager *http;
     QFile *cfgFile;
     QFile *binFile;
-    int cfgId;
+    QUrl cfgUrl;
     int binId;
     QUrl binUrl;
 };

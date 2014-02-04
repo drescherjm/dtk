@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:06:48 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. nov.  7 15:03:50 2012 (+0100)
+ * Last-Updated: mar. févr.  4 17:40:21 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 24
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -17,12 +17,12 @@
  * 
  */
 
-#include "dtkComposerNodeMetaScalarArray.h"
+#include <dtkComposerNodeMetaScalarArray.h>
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
+#include <dtkComposerTransmitterEmitter.h>
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
 #include <dtkLog/dtkLog>
 

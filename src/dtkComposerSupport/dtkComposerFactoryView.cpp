@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 17 13:58:20 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 158
+ * Last-Updated: mar. févr.  4 15:12:38 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 159
  */
 
 /* Commentary: 
@@ -20,8 +20,8 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerFactoryView.h"
 
-#include <dtkGui/dtkSplitter.h>
-#include <dtkGui/dtkTagCloud.h>
+#include <dtkGuiSupport/dtkSplitter.h>
+#include <dtkGuiSupport/dtkTagCloud.h>
 
 class dtkComposerFactoryViewPrivate
 {

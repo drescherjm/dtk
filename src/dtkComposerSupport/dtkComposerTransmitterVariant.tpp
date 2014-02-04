@@ -19,16 +19,16 @@
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterVariant_p.h"
 
-#include <dtkContainer/dtkContainerVectorWrapper.h>
+#include <dtkContainerSupport/dtkContainerVectorWrapper.h>
 
 // /////////////////////////////////////////////////////////////////
 // Forward declaration of specialized method
 // /////////////////////////////////////////////////////////////////
 
-template <> DTKCOMPOSER_EXPORT bool      *dtkComposerTransmitterVariant::data(void);
-template <> DTKCOMPOSER_EXPORT qlonglong *dtkComposerTransmitterVariant::data(void);
-template <> DTKCOMPOSER_EXPORT qreal     *dtkComposerTransmitterVariant::data(void);
-template <> DTKCOMPOSER_EXPORT QString   *dtkComposerTransmitterVariant::data(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT bool      *dtkComposerTransmitterVariant::data(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT qlonglong *dtkComposerTransmitterVariant::data(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT qreal     *dtkComposerTransmitterVariant::data(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT QString   *dtkComposerTransmitterVariant::data(void);
 
 // /////////////////////////////////////////////////////////////////
 // 

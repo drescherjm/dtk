@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:15:40 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 14:21:55 2012 (+0200)
- *           By: tkloczko
- *     Update #: 76
+ * Last-Updated: mar. févr.  4 17:49:04 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 77
  */
 
 /* Commentary:
@@ -23,7 +23,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkMath>
+#include <dtkMathSupport/dtkVector>
 
 #include <dtkLog/dtkLog>
 

@@ -14,7 +14,7 @@
  */
 
 #include <dtkComposerSupportExport.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkComposerControlsListItemReal.h>
 #include <dtkComposerNodeReal.h>

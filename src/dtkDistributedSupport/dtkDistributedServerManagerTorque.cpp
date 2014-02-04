@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 11:06:03 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 990
+ * Last-Updated: mar. févr.  4 15:20:28 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 991
  */
 
 /* Commentary: 
@@ -221,7 +221,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     QJsonDocument jsonDoc = QJsonDocument::fromJson(input.toUtf8());
 
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        dtkWarning() << "Error while parsing JSON document: not a json object" << input;
+        dtkWarn() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
     QVariantMap json = jsonDoc.object().toVariantMap();
@@ -263,7 +263,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         QFile script(scriptName);
 
         if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
-            dtkWarning() << "unable to open script for writing";
+            dtkWarn() << "unable to open script for writing";
         } else {
             QTextStream out(&script);
             out << "#!/bin/bash\n";

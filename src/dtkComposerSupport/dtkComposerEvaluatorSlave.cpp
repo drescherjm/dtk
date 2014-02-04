@@ -19,11 +19,11 @@
 
 
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractProcessFactory.h>
+#include <dtkCoreSupport/dtkAbstractProcess.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include "dtkComposer/dtkComposerEvaluator.h"
 #include "dtkComposer/dtkComposerEvaluatorSlave.h"
@@ -39,7 +39,7 @@
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
 #include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 class dtkComposerEvaluatorSlavePrivate
 {

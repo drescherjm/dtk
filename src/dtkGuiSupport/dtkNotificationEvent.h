@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 20:33:27 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Sun Apr 22 16:11:09 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 35
+ * Last-Updated: mar. févr.  4 15:29:05 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 37
  */
 
 /* Commentary: 
@@ -20,13 +20,13 @@
 #ifndef DTKNOTIFICATIONEVENT_H
 #define DTKNOTIFICATIONEVENT_H
 
-#include "dtkNotificationExport.h"
+#include "dtkGuiSupportExport.h"
 
 #include <QtCore>
 
 class dtkNotificationEventPrivate;
 
-class DTKNOTIFICATION_EXPORT dtkNotificationEvent : public QEvent
+class DTKGUISUPPORT_EXPORT dtkNotificationEvent : public QEvent
 {
 public:
     enum Type {

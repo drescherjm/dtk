@@ -23,7 +23,7 @@
 #include "dtkComposerSupportExport.h"
 #include "dtkComposerMetatype.h"
 
-#include <dtkComposer/dtkComposerNodeLeaf.h>
+#include <dtkComposerNodeLeaf.h>
 
 class dtkComposerNodeMetaVector3DArrayExtractorPrivate;
 

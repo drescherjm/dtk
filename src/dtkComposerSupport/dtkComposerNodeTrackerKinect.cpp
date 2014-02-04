@@ -23,8 +23,8 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkMath/dtkVector3D.h>
-#include <dtkMath/dtkQuaternion.h>
+#include <dtkMathSupport/dtkVector3D.h>
+#include <dtkMathSupport/dtkQuaternion.h>
 
 #include <dtkVr/dtkVrTrackerKinect.h>
 

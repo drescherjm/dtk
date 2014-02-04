@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:06:30 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:00:59 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 38
+ * Last-Updated: mar. févr.  4 15:54:36 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 40
  */
 
 /* Commentary: 
@@ -21,13 +21,13 @@
 #define DTKNOTIFICATIONDISPLAY_H
 
 #include "dtkNotifiable.h"
-#include "dtkNotificationExport.h"
+#include "dtkGuiSupportExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkNotificationDisplayPrivate;
 
-class DTKNOTIFICATION_EXPORT dtkNotificationDisplay : public QFrame, public dtkNotifiable
+class DTKGUISUPPORT_EXPORT dtkNotificationDisplay : public QFrame, public dtkNotifiable
 {
     Q_OBJECT    
 

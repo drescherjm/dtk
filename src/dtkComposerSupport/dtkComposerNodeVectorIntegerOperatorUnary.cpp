@@ -22,7 +22,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkMath>
+#include <dtkMathSupport/dtkVector>
 
 #include <dtkLog/dtkLog>
 

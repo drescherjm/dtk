@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 10:42:42 2014 (+0100)
+ * Last-Updated: mar. févr.  4 15:04:46 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 66
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -44,7 +44,7 @@ public:
     void download(const QUrl& url);
 
 public slots:
-    void onRequestFinished(int id, bool error);
+    void onRequestFinished(QNetworkReply *reply);
 
 public:
     dtkComposerCompass *compass;
@@ -63,7 +63,7 @@ public:
     QString fileName;
     QString tempName;
 
-    int dwnl_id;
+    QTemporaryFile file;
     int dwnl_ok;
 };
 

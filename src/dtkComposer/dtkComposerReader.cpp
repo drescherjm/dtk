@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 14:44:22 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 895
+ * Last-Updated: mar. févr.  4 15:18:39 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 896
  */
 
 /* Commentary: 
@@ -801,7 +801,7 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     return edge;
 
 handle_failure:
-    dtkWarning() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
+    dtkWarn() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
     delete edge;
     return NULL;
 

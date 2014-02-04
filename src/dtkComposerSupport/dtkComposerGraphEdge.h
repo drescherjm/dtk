@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mer. sept.  4 09:08:07 2013 (+0200)
+ * Last-Updated: mar. févr.  4 15:11:34 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 72
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include <QtCore>
 #include <QtWidgets>
 
-#include <dtkMath/dtkGraphEdge.h>
+#include <dtkMathSupport/dtkGraphEdge.h>
 #include "dtkComposerGraphNode.h"
 
 class dtkComposerGraphEdgePrivate;

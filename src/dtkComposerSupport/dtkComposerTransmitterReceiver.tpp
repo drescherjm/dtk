@@ -18,7 +18,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver implementation
@@ -450,7 +450,7 @@ template <typename T> bool dtkComposerTransmitterReceiver<T>::disconnect(dtkComp
 // dtkComposerTransmitterReceiverVector implementation
 // /////////////////////////////////////////////////////////////////
 
-#include <dtkContainer/dtkContainerVectorWrapper.h>
+#include <dtkContainerSupport/dtkContainerVectorWrapper.h>
 
 template <typename T> inline dtkComposerTransmitterReceiverVector<T>::dtkComposerTransmitterReceiverVector(dtkComposerNode *parent) : dtkComposerTransmitterAbstractReceiver(parent)
 {

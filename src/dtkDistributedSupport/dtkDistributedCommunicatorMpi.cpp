@@ -428,7 +428,7 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
 
         data = dtkAbstractDataFactory::instance()->create(typeName);
         if (!data) {
-            dtkWarning() << "Can't instantiate object of type" << QString(typeName);
+            dtkWarn() << "Can't instantiate object of type" << QString(typeName);
             return;
         }
 
@@ -465,7 +465,7 @@ void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 sou
 
             data = dtkAbstractDataFactory::instance()->create(typeName);
             if (!data) {
-                dtkWarning() << "Can't instantiate object of type" << QString(typeName);
+                dtkWarn() << "Can't instantiate object of type" << QString(typeName);
                 return;
             }
 

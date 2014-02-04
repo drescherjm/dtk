@@ -21,7 +21,7 @@
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNote.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 class dtkComposerSceneNotePrivate
 {

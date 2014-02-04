@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 24 23:29:24 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Sep 25 10:13:26 2012 (+0200)
- *           By: tkloczko
- *     Update #: 172
+ * Last-Updated: mar. févr.  4 17:57:59 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 177
  */
 
 /* Commentary: 
@@ -25,9 +25,10 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
-#include <dtkCore>
+#include <dtkCoreSupport/dtkAbstractData>
+#include <dtkCoreSupport/dtkAbstractView>
 
 class dtkComposerNodeViewPrivate
 {

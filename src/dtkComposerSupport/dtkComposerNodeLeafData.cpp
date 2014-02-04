@@ -19,8 +19,8 @@
 
 #include "dtkComposerNodeLeafData.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafDataPrivate interface

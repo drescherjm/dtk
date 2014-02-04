@@ -24,8 +24,8 @@
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
 #include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
 
-#include <dtkCore/dtkGlobal.h>
-//#include <dtkLog/dtkLog.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+//#include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeWorldPrivate definition

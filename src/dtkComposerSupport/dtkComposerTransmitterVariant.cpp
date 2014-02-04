@@ -18,19 +18,19 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerTransmitterVariant_p.h"
 
-#include <dtkContainer>
+#include <dtkContainerSupport/dtkContainerVector>
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
 
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include <dtkDistributed/dtkDistributedMessage.h>
 #endif
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
-#include <dtkMath/dtkMath.h>
+#include <dtkMathSupport/dtkMath.h>
 
 // /////////////////////////////////////////////////////////////////
 // Template specializations for atomic types
@@ -632,7 +632,7 @@ QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool se
     }
     case QMetaType::QString: {
         stream << data_type;
-        array.append((self) ? this->data<QString>()->toAscii() : v.value<QString>().toAscii());
+        array.append((self) ? this->data<QString>()->toUtf8() : v.value<QString>().toUtf8());
         break;
     }
     case QMetaType::QByteArray: {

@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerNodeVectorRealOperatorModifier.h"
 
-#include <dtkMath>
+#include <dtkMathSupport/dtkVector>
 
 #include <dtkLog/dtkLog>
 

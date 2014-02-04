@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Sep 18 14:52:06 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 927
+ * Last-Updated: mar. févr.  4 17:54:28 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 928
  */
 
 /* Commentary: 
@@ -31,7 +31,7 @@
 #include "dtkComposerNodeRemote.h"
 #endif
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include <dtkDistributed/dtkDistributedController.h>

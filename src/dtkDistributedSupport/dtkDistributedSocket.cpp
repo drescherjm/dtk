@@ -116,7 +116,7 @@ dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
             if (this->waitForReadyRead()) {
                 buffer.append(this->read(msg->size()-buffer.size()));
             } else {
-                dtkWarning() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
+                dtkWarn() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
                 msg->setContent(buffer);
                 msg->addHeader("missing_data",QString::number(msg->size()-buffer.size()));
                 break;

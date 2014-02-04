@@ -20,7 +20,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeStringOperatorUnary

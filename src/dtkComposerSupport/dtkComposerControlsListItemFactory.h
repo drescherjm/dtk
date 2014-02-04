@@ -19,7 +19,7 @@
 
 #include <QtWidgets>
 
-#include <dtkGui/dtkToolBox>
+#include <dtkGuiSupport/dtkToolBox>
 
 class dtkComposerSceneNode;
 class dtkComposerControlsListItem;

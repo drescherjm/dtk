@@ -91,7 +91,7 @@ private:
 
 // /////////////////////////////////////////////////////////////////
 
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
 template <typename T> class dtkComposerTransmitterEmitterVector;
 

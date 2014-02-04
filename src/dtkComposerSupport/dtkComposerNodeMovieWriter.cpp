@@ -17,10 +17,10 @@
 
 #include <dtkVideo/dtkVideoEncoder.h>
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include dtkComposerTransmitterEmitter.h
+#include <dtkComposerTransmitterReceiver.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 class dtkComposerNodeMovieWriterPrivate
 {

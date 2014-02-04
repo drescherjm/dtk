@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
 #include <dtkLog/dtkLog>
 

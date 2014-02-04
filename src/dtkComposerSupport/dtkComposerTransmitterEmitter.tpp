@@ -20,9 +20,9 @@
 
 #include "dtkComposerSupportExport.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkContainer/dtkContainerVectorWrapper.h>
+#include <dtkContainerSupport/dtkContainerVectorWrapper.h>
 
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
 #include <dtkPlot/dtkPlotCurve.h>
@@ -32,11 +32,11 @@
 // Forward declaration of specialized method
 // /////////////////////////////////////////////////////////////////
 
-template <> DTKCOMPOSER_EXPORT QString       dtkComposerTransmitterEmitter<qreal>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString   dtkComposerTransmitterEmitter<qlonglong>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString     dtkComposerTransmitterEmitter<QString>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString dtkComposerTransmitterEmitter<QStringList>::dataDescription(void);
-template <> DTKCOMPOSER_EXPORT QString        dtkComposerTransmitterEmitter<bool>::dataDescription(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT QString       dtkComposerTransmitterEmitter<qreal>::dataDescription(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT QString   dtkComposerTransmitterEmitter<qlonglong>::dataDescription(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT QString     dtkComposerTransmitterEmitter<QString>::dataDescription(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT QString dtkComposerTransmitterEmitter<QStringList>::dataDescription(void);
+template <> DTKCOMPOSERSUPPORT_EXPORT QString        dtkComposerTransmitterEmitter<bool>::dataDescription(void);
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter implementation

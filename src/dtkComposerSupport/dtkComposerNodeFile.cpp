@@ -17,7 +17,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkNotification/dtkNotification.h>
+#include <dtkGuiSupport/dtkNotification.h>
 
 #include <QtCore>
 #include <QtNetwork>
@@ -30,52 +30,38 @@ void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
     QFileInfo file_template_info = QFileInfo(url.path());
 
-    QTemporaryFile file;
     if(!file_template_info.completeSuffix().isEmpty())
-        file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
-    file.setAutoRemove(false);
-    
+        this->file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
+    this->file.setAutoRemove(false);
+
     if (!file.open()) {
         qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";
         return;
     }
-        
-    this->dwnl_ok = 0;
-    
-    QHttp http;
-    
-    connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
 
-    http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
-        
-    if (!url.userName().isEmpty())
-        http.setUser(url.userName(), url.password());
-        
-    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
-    
-    if (path.isEmpty()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Invalid path" << url.path();
-        return;
-    }
-    
-    this->dwnl_id = http.get(path, &file);
-    
+    this->dwnl_ok = 0;
+
+    QNetworkAccessManager http;
+
+    connect(&http, SIGNAL(requestFinished(QNetworkReply *)), this, SLOT(onRequestFinished(QNetworkReply *)));
+
+    http.get(QNetworkRequest(url));
+
     while(!this->dwnl_ok)
         qApp->processEvents();
 
-    file.close();
+    this->file.close();
 
-    QFileInfo info(file);
-    
+    QFileInfo info(this->file);
+
     this->tempName = info.absoluteFilePath();
 }
 
-void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
+void dtkComposerNodeFilePrivate::onRequestFinished(QNetworkReply *reply)
 {
-    DTK_UNUSED(error);
-
-    if(id == this->dwnl_id)
-        this->dwnl_ok = 1;
+    this->file.write(reply->readAll());
+    this->file.flush();
+    this->dwnl_ok = 1;
 }
 
 // /////////////////////////////////////////////////////////////////

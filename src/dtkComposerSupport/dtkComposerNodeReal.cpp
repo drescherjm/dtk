@@ -23,7 +23,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRealPrivate interface

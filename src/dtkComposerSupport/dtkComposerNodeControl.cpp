@@ -20,7 +20,7 @@
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlPrivate definition

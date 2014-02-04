@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 14:12:02 2014 (+0100)
+ * Last-Updated: mar. févr.  4 17:58:31 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 340
+ *     Update #: 342
  */
 
 /* Commentary:
@@ -30,8 +30,8 @@ class dtkAbstractViewNavigator;
 class dtkAbstractViewInteractor;
 class dtkAbstractData;
 
-/* #include <dtkMath/dtkVector3D.h> */
-/* #include <dtkMath/dtkQuaternion.h> */
+#include <dtkMathSupport/dtkVector3D.h>
+#include <dtkMathSupport/dtkQuaternion.h>
 
 class DTKCORESUPPORT_EXPORT dtkAbstractView : public dtkAbstractObject
 {
@@ -146,14 +146,14 @@ public:
 // New VR API
 // /////////////////////////////////////////////////////////////////
 
-/* public: */
-/*     virtual void setHeadPosition(dtkVector3D<double> position); */
-/*     virtual void setHeadOrientation(dtkQuaternion<double> orientation); */
+public:
+    virtual void setHeadPosition(dtkVector3D<double> position);
+    virtual void setHeadOrientation(dtkQuaternion<double> orientation);
 
-/* public: */
-/*     virtual void setUpperLeft(dtkVector3D<double> position); */
-/*     virtual void setLowerLeft(dtkVector3D<double> position); */
-/*     virtual void setLowerRight(dtkVector3D<double> position); */
+public:
+    virtual void setUpperLeft(dtkVector3D<double> position);
+    virtual void setLowerLeft(dtkVector3D<double> position);
+    virtual void setLowerRight(dtkVector3D<double> position);
 
 // /////////////////////////////////////////////////////////////////
 

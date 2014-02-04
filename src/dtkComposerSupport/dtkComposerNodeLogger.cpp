@@ -18,7 +18,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 class dtkComposerNodeLoggerPrivate
 {
@@ -70,8 +70,8 @@ void dtkComposerNodeLogger::run(void)
                 dtkWarn() <<  output;
             else if  (level == "error")
                 dtkError() <<  output;
-            else if  (level == "fatal")
-                dtkFatal() <<  output;
+            else if  (level == "critical")
+                dtkCritical() <<  output;
             else
                 dtkInfo() <<  output;
         } else {

@@ -19,8 +19,8 @@
 
 #include "dtkComposerNodeLeafProcess.h"
 
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
+#include <dtkCoreSupport/dtkAbstractProcess.h>
+#include <dtkCoreSupport/dtkAbstractProcessFactory.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafProcessPrivate interface

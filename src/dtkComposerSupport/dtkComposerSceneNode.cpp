@@ -22,7 +22,7 @@
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerScenePort.h"
 
-#include <dtkCore/dtkGlobal>
+#include <dtkCoreSupport/dtkGlobal>
 
 dtkComposerSceneNode::dtkComposerSceneNode(void) : QGraphicsItem(), d(new dtkComposerSceneNodePrivate)
 {

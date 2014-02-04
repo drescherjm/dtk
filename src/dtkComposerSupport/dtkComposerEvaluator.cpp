@@ -21,11 +21,12 @@
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
 
-#include <dtkLog/dtkLog.h>
-#include <dtkMath/dtkGraph.h>
-#include <dtkNotification/dtkNotification.h>
+#include <dtkLog/dtkLogger.h>
+#include <dtkMathSupport/dtkGraph.h>
+#include <dtkGuiSupport/dtkNotification.h>
 
 #include <QtCore>
+#include <QtConcurrent>
 
 // /////////////////////////////////////////////////////////////////
 // Helper definitions
@@ -50,7 +51,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->notify         = true;
     d->profiling      = false;
     d->start_node     = NULL;
-    d->use_gui= (qApp->type() != QApplication::Tty);
+    d->use_gui = (qApp && qobject_cast<QGuiApplication *>(qApp));
 }
 
 dtkComposerEvaluator::~dtkComposerEvaluator(void)

@@ -13,7 +13,7 @@
  *
  */
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 #include <dtkComposerSupportExport.h>
 
 #include <dtkComposerControlsListItemInteger.h>

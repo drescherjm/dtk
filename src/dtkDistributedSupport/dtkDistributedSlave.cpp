@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 11:09:46 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 255
+ * Last-Updated: mar. févr.  4 15:17:50 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 256
  */
 
 /* Commentary: 
@@ -103,7 +103,7 @@ void dtkDistributedSlave::read(void)
     if( request->method() == dtkDistributedMessage::DATA) {
         dtkInfo() << DTK_PRETTY_FUNCTION << "DATA received in slave, unimplemented";
     } else {
-        dtkWarning() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
+        dtkWarn() << DTK_PRETTY_FUNCTION << "WARNING: Unknown data";
     }
     if (socket->bytesAvailable() > 0)
         this->read();
@@ -122,7 +122,7 @@ void dtkDistributedSlave::connect(const QUrl& server)
         emit connected(server);
 
     } else {
-        dtkWarning() << "Unable to connect to" << server.toString();
+        dtkWarn() << "Unable to connect to" << server.toString();
     }
 }
 

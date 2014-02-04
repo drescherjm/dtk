@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette Lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 13:50:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 76
+ * Last-Updated: mar. févr.  4 17:25:15 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 79
  */
 
 /* Commentary:
@@ -21,9 +21,9 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkMath>
+#include <dtkMathSupport/dtkMatrix.h>
 
-#include <dtkLog/dtkLog>
+#include <dtkLog/dtkLogger.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealPrivate interface

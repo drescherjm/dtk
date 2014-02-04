@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: lun. nov.  4 10:43:45 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 306
+ * Last-Updated: mar. févr.  4 17:47:07 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 311
  */
 
 /* Commentary:
@@ -21,9 +21,10 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
-#include <dtkCore>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractProcess.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeProcessPrivate interface

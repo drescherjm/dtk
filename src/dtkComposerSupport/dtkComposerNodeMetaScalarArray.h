@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:04:11 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul 13 16:31:49 2012 (+0200)
- *           By: tkloczko
- *     Update #: 6
+ * Last-Updated: mar. févr.  4 15:22:12 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 8
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkComposerSupportExport.h"
 
-#include <dtkComposer/dtkComposerNodeLeaf.h>
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeMetaScalarArrayPrivate;
 

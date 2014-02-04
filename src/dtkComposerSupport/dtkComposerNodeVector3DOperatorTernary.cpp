@@ -24,7 +24,7 @@
 
 #include <dtkLog/dtkLog>
 
-#include <dtkMath/dtkMath.tpp>
+#include <dtkMathSupport/dtkMath.tpp>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeVector3DOperatorTernary 

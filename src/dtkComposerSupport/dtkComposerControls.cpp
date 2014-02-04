@@ -21,7 +21,7 @@
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeLeaf.h"
 
-#include <dtkGui/dtkToolBox.h>
+#include <dtkGuiSupport/dtkToolBox.h>
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions

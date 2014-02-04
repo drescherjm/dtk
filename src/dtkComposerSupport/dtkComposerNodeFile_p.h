@@ -19,6 +19,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 
 #include <QtCore>
+#include <QtNetwork>
 
 class dtkComposerNodeFilePrivate : public QObject
 {
@@ -28,13 +29,13 @@ public:
     void download(const QUrl& url);
 
 public slots:
-    void onRequestFinished(int id, bool error);
+    void onRequestFinished(QNetworkReply *reply);
 
 public:
     QString fileName;
     QString tempName;
 
-    int dwnl_id;
+    QTemporaryFile file;
     int dwnl_ok;
 
 public:

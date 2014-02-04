@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Jun 27 16:12:18 2012 (+0200)
- *           By: tkloczko
- *     Update #: 54
+ * Last-Updated: mar. févr.  4 15:45:31 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 56
  */
 
 /* Commentary: 
@@ -17,8 +17,7 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODE_H
-#define DTKCOMPOSERNODE_H
+#pragma once
 
 #include "dtkComposerSupportExport.h"
 
@@ -73,4 +72,3 @@ private:
     dtkComposerNodePrivate *d;
 };
 
-#endif

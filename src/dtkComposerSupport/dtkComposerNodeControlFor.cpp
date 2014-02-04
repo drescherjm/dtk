@@ -29,7 +29,7 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlForPrivate definition

@@ -166,7 +166,7 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
     d->socket->blockSignals(true);
 
     if (!d->socket->waitForReadyRead(300000))
-        dtkWarning() << "Data not ready in receive for rank " << source;
+        dtkWarn() << "Data not ready in receive for rank " << source;
     else {
         dtkDistributedMessage *msg = d->socket->parseRequest();
         if (msg->size() > 0) {
@@ -178,7 +178,7 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
                 dtkError() << "Deserialization failed";
             }
         } else {
-            dtkWarning() << "warning: no content in receive";
+            dtkWarn() << "warning: no content in receive";
         }
     }
     d->socket->blockSignals(false);
@@ -211,14 +211,14 @@ void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int ta
     d->socket->blockSignals(true);
 
     if (!d->socket->waitForReadyRead(300000))
-        dtkWarning() << "Data not ready in receive for rank " << source;
+        dtkWarn() << "Data not ready in receive for rank " << source;
     else {
         dtkDistributedMessage *msg = d->socket->parseRequest();
         if (msg->size() > 0) {
             QByteArray array = msg->content();
             data = QString(array);
         } else {
-            dtkWarning() << "warning: no content in receive";
+            dtkWarn() << "warning: no content in receive";
         }
     }
     d->socket->blockSignals(false);
@@ -255,7 +255,7 @@ void dtkDistributedCommunicatorTcp::broadcast(void *data, qint64 size, DataType 
     DTK_UNUSED(dataType);
     DTK_UNUSED(source);
 
-    dtkWarning() << "Collective operations are not supported on sockets";
+    dtkWarn() << "Collective operations are not supported on sockets";
 }
 
 void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all)
@@ -267,7 +267,7 @@ void dtkDistributedCommunicatorTcp::gather(void *send, void *recv, qint64 size, 
     DTK_UNUSED(target);
     DTK_UNUSED(all);
 
-    dtkWarning() << "Collective operations are not supported on sockets";
+    dtkWarn() << "Collective operations are not supported on sockets";
 }
 
 void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, qint64 size, DataType dataType, qint16 source)
@@ -278,7 +278,7 @@ void dtkDistributedCommunicatorTcp::scatter(void *send, void *recv, qint64 size,
     DTK_UNUSED(dataType);
     DTK_UNUSED(source);
 
-    dtkWarning() << "Collective operations are not supported on sockets";
+    dtkWarn() << "Collective operations are not supported on sockets";
 }
 
 void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
@@ -291,5 +291,5 @@ void dtkDistributedCommunicatorTcp::reduce(void *send, void *recv, qint64 size, 
     DTK_UNUSED(target);
     DTK_UNUSED(all);
 
-    dtkWarning() << "Collective operations are not supported on sockets";
+    dtkWarn() << "Collective operations are not supported on sockets";
 }

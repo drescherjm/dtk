@@ -17,7 +17,7 @@
  *
  */
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 10:58:11 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 318
+ * Last-Updated: mar. févr.  4 15:18:27 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 319
  */
 
 /* Commentary:
@@ -124,7 +124,7 @@ void dtkPluginManager::initialize(void)
             foreach (QFileInfo entry, dir.entryInfoList())
                 loadPlugin(entry.absoluteFilePath());
         } else {
-            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+            dtkWarn() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
         }
     }
 }
@@ -168,7 +168,7 @@ void dtkPluginManager::load(const QString& name)
                 if(entry.fileName().contains(name))
                     loadPlugin(entry.absoluteFilePath());
         } else {
-            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+            dtkWarn() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
         }
     }
 }
@@ -200,7 +200,7 @@ void dtkPluginManager::unload(const QString& name)
                     if (this->plugin(name))
                         this->unloadPlugin(entry.absoluteFilePath());
         } else {
-            dtkWarning() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
+            dtkWarn() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
         }
     }
 }
@@ -229,8 +229,8 @@ void dtkPluginManager::readSettings(void)
     settings.endGroup();
 
     if(d->path.isEmpty()) {
-        dtkWarning() << "Your dtk config does not seem to be set correctly.";
-        dtkWarning() << "Please set plugins.path.";
+        dtkWarn() << "Your dtk config does not seem to be set correctly.";
+        dtkWarn() << "Please set plugins.path.";
     }
 }
 

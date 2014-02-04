@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: jeu. sept. 12 17:50:51 2013 (+0200)
+ * Last-Updated: mar. févr.  4 15:22:23 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 212
+ *     Update #: 213
  */
 
 /* Commentary:
@@ -22,7 +22,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
 #include <QVarLengthArray>
 

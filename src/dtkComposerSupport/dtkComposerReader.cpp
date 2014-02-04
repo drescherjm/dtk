@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Fri Jan 17 17:40:52 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 857
+ * Last-Updated: mar. févr.  4 18:10:26 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 863
  */
 
 /* Commentary: 
@@ -45,10 +45,10 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkAbstractProcessFactory.h>
+#include <dtkCoreSupport/dtkAbstractViewFactory.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -185,7 +185,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
         if(d->missing_implementation.count() > 0) {
-            if (qApp->type() != QApplication::Tty) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
 
                 msgBox.setText("Node implementations are missing. Load anyway?");
@@ -402,7 +402,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 d->scene->addItem(n);
         } else {
 
-            if (qApp->type() != QApplication::Tty) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create node " + type_n);
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -427,7 +427,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
         if (!new_node) {
 
-            if (qApp->type() != QApplication::Tty) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create core node.");
                 msgBox.setInformativeText("You are not be able to load the composition.");

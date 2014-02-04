@@ -25,7 +25,7 @@
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 class dtkComposerEvaluatorProcessPrivate
 {

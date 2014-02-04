@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/02/14 13:59:57
  * Version: $Id$
- * Last-Updated: ven. sept. 13 18:33:33 2013 (+0200)
+ * Last-Updated: mar. févr.  4 15:21:17 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 390
+ *     Update #: 392
  */
 
 /* Commentary:
@@ -29,8 +29,8 @@
 #include "dtkComposerNodeRemote.h"
 #endif
 
-#include <dtkLog/dtkLog.h>
-#include <dtkMath/dtkGraph.h>
+#include <dtkLog/dtkLogger.h>
+#include <dtkMathSupport/dtkGraph.h>
 
 class dtkComposerGraphNodeBeginPrivate
 {

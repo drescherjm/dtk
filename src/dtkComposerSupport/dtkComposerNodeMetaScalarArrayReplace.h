@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Regis Duvigneau, Inria.
  * Created: Thu Jul 19 10:27:53 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul 19 10:28:43 2012 (+0200)
- *           By: Régis Duvigneau
- *     Update #: 1
+ * Last-Updated: mar. févr.  4 15:46:42 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 3
  */
 
 /* Commentary: 
@@ -17,12 +17,12 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEMETASCALARARRAYREPLACE_H
+#pragma once
 #define DTKCOMPOSERNODEMETASCALARARRAYREPLACE_H
 
 #include "dtkComposerSupportExport.h"
 
-#include <dtkComposer/dtkComposerNodeLeaf.h>
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeMetaScalarArrayReplacePrivate;
 
@@ -75,5 +75,4 @@ private:
     dtkComposerNodeMetaScalarArrayReplacePrivate *d;
 };
 
-#endif
 

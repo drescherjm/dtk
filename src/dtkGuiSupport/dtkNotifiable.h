@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Apr 23 11:49:55 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 00:00:23 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 16
+ * Last-Updated: mar. févr.  4 15:53:58 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -20,11 +20,11 @@
 #ifndef DTKNOTIFIABLE_H
 #define DTKNOTIFIABLE_H
 
-#include "dtkNotificationExport.h"
+#include "dtkGuiSupportExport.h"
 
 #include <QtCore>
 
-class DTKNOTIFICATION_EXPORT dtkNotifiable
+class DTKGUISUPPORT_EXPORT dtkNotifiable
 {
 public:
     virtual void clear(void) = 0;

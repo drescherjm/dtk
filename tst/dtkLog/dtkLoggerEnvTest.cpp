@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 15:45:42 2013 (+0100)
  * Version: 
- * Last-Updated: mar. févr.  4 10:55:57 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 77
+ * Last-Updated: mar. févr.  4 15:16:59 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 78
  */
 
 /* Change Log:
@@ -126,9 +126,9 @@ void LogThreadEnv::run()
     dtkDebug() << "My_Category_B";
     dtkDebug() << "My_Category_C";
 
-    dtkWarning() << "My_Category_A";
-    dtkWarning() << "My_Category_B";
-    dtkWarning() << "My_Category_C";
+    dtkWarn() << "My_Category_A";
+    dtkWarn() << "My_Category_B";
+    dtkWarn() << "My_Category_C";
 
     dtkCritical() << "My_Category_A";
     dtkCritical() << "My_Category_B";

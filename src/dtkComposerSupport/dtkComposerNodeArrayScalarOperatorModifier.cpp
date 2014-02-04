@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - babette lekouta, Inria.
  * Created: Tue May 15 11:35:09 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 21 16:25:51 2012 (+0200)
- *           By: tkloczko
- *     Update #: 116
+ * Last-Updated: mar. févr.  4 17:09:33 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 117
  */
 
 /* Commentary:
@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerNodeArrayScalarOperatorModifier.h"
 
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
 #include <dtkLog/dtkLog>
 

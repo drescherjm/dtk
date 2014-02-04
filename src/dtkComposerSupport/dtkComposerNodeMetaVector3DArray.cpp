@@ -1,30 +1,24 @@
-// dtkComposerNodeMetaVectorArray.cpp --- 
-// 
+// dtkComposerNodeMetaVector3DArray.cpp ---
+//
 // Author: Jeremie Labroquere
-// Copyright (C) 2011 - Jeremie Labroquere, Inria.
-// Created: Mon Aug  6 14:29:10 2012 (+0200)
-// Version: $Id$
-// Last-Updated: Wed Oct 17 11:37:25 2012 (+0200)
-//           By: Julien Wintz
-//     Update #: 6
-// 
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change log:
-// 
-// 
+//
+//
 
 #include "dtkComposerNodeMetaVector3DArray.h"
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
+#include <dtkComposerTransmitterEmitter.h>
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
-#include <dtkMath/dtkVector3D.h>
+#include <dtkMathSupport/dtkVector3D.h>
 
 #include <dtkLog/dtkLog>
 

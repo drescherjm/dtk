@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Wed Feb 13 12:18:35 2013 (+0100)
  * Version: 
- * Last-Updated: mar. févr.  4 11:04:29 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 150
+ * Last-Updated: mar. févr.  4 15:15:10 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 153
  */
 
 /* Change Log:
@@ -94,7 +94,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkWarning
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkWarning						             \
+#define dtkWarn \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtWarningMsg); enabled; enabled = false)  \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).warning
 

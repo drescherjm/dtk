@@ -14,7 +14,7 @@
 
 #include "dtkComposerTransmitterAbstractReceiver.h"
 
-#include <dtkCore/dtkGlobal>
+#include <dtkCoreSupport/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterAbstractReceiver implementation

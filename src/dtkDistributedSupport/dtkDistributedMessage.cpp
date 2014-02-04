@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: mar. oct. 11 10:46:57 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 11:06:21 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 375
+ * Last-Updated: mar. févr.  4 15:18:12 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 376
  */
 
 /* Commentary:
@@ -97,7 +97,7 @@ void dtkDistributedMessage::setMethod(QString method)
         d->jobid  = tokens[2];
         d->rank   = tokens[3].toInt();
     } else
-        dtkWarning() << DTK_PRETTY_FUNCTION << "Unsupported method " << method;
+        dtkWarn() << DTK_PRETTY_FUNCTION << "Unsupported method " << method;
 
 }
 
@@ -105,7 +105,7 @@ void dtkDistributedMessage::setSize(const QString &header)
 {
     QStringList tokens = header.split(QRegExp(":\\s*"));
     if (tokens[0].toLower() != "content-size") {
-        dtkWarning() << "Error: Not a size header ! " << header;
+        dtkWarn() << "Error: Not a size header ! " << header;
         d->size = -1;
     } else
         d->size = tokens[1].toInt();
@@ -115,7 +115,7 @@ void dtkDistributedMessage::setType(const QString &header)
 {
     QStringList tokens = header.split(QRegExp(":\\s*"));
     if (tokens[0].toLower() != "content-type") {
-        dtkWarning() << "Error: Not a content type header ! " << header;
+        dtkWarn() << "Error: Not a content type header ! " << header;
         d->type = "unknown";
     } else
         d->type = tokens[1].trimmed();
@@ -184,7 +184,7 @@ QString dtkDistributedMessage::req(void)
             req = "DELETE /";
             break;
         default:
-            dtkWarning() << "Unsupported method";
+            dtkWarn() << "Unsupported method";
         };
     return req +"\n";
 }

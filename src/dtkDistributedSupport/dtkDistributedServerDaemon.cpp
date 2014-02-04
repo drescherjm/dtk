@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mer. oct. 16 10:33:48 2013 (+0200)
+ * Last-Updated: mar. févr.  4 15:18:53 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 843
+ *     Update #: 844
  */
 
 /* Commentary: 
@@ -112,7 +112,7 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank, QString jobid)
     dtkDistributedSocket *socket = d->sockets.value(qMakePair(rank, jobid), NULL);
 
     if(!socket) {
-        dtkWarning() << "No socket found for rank " << rank;
+        dtkWarn() << "No socket found for rank " << rank;
         return QByteArray();
     }
 
@@ -123,14 +123,14 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank, QString jobid)
     if (socket->waitForReadyRead(30000))
         data = socket->parseRequest();
     else
-        dtkWarning() << "Data not ready for rank " << rank;
+        dtkWarn() << "Data not ready for rank " << rank;
 
     socket->blockSignals(false);
 
     if (data) {
         return data->content();
     } else {
-        dtkWarning() << "Message not allocated - return void QByteArray";
+        dtkWarn() << "Message not allocated - return void QByteArray";
         return QByteArray();
     }
 }
@@ -203,13 +203,13 @@ void dtkDistributedServerDaemon::read(void)
         if (d->sockets.contains(pair )) {
             (d->sockets[pair])->sendRequest(msg.data());
         } else {
-            dtkWarning() << "unknown socket for rank, store message" <<  msg->rank() << msg->jobid();
+            dtkWarn() << "unknown socket for rank, store message" <<  msg->rank() << msg->jobid();
         }
 
         break;
 
     default:
-        dtkWarning() << DTK_PRETTY_FUNCTION << "Unknown data";
+        dtkWarn() << DTK_PRETTY_FUNCTION << "Unknown data";
     };
 
     if (socket->bytesAvailable() > 0)

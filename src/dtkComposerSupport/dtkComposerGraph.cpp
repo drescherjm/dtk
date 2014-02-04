@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Jan 16 13:31:50 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 2427
+ * Last-Updated: mar. févr.  4 15:13:06 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 2429
  */
 
 /* Commentary:
@@ -46,9 +46,9 @@
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
 
-#include <dtkLog/dtkLog.h>
-#include <dtkMath/dtkGraph.h>
-#include <dtkMath/dtkGraphEdge.h>
+#include <dtkLog/dtkLogger.h>
+#include <dtkMathSupport/dtkGraph.h>
+#include <dtkMathSupport/dtkGraphEdge.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphPrivate

@@ -4,9 +4,9 @@
 // Copyright (C) 2008 - Regis Duvigneau, Inria.
 // Created: Thu Jul 19 11:27:24 2012 (+0200)
 // Version: $Id$
-// Last-Updated: 2012 Wed Oct 24 15:13:37 (+0200)
-//           By: Thibaud Kloczko, Inria.
-//     Update #: 23
+// Last-Updated: mar. févr.  4 17:40:38 2014 (+0100)
+//           By: Nicolas Niclausse
+//     Update #: 25
 // 
 
 // Commentary: 
@@ -19,13 +19,13 @@
 
 #include "dtkComposerNodeMetaScalarArrayExtractor.h"
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include <dtkComposerTransmitterEmitter.h>
+#include <dtkComposerTransmitterReceiver.h>
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
-#include <dtkMath/dtkVector.h>
+#include <dtkMathSupport/dtkVector.h>
 
 #include <dtkLog/dtkLog>
 

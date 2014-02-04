@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:05:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mer. sept. 18 09:45:43 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 317
+ * Last-Updated: mar. févr.  4 17:11:11 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 318
  */
 
 /* Commentary:
@@ -25,8 +25,8 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkLog/dtkLog.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+#include <dtkLog/dtkLogger.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlCasePrivate definition

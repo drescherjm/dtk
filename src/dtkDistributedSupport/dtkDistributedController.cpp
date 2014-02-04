@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 11:10:51 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 1834
+ * Last-Updated: mar. févr.  4 15:20:03 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 1836
  */
 
 /* Commentary: 
@@ -92,7 +92,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
     QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer);
 
     if (jsonDoc.isNull() || !jsonDoc.isObject()) {
-        dtkWarning() << "Error while parsing JSON document: not a json object" << buffer;
+        dtkWarn() << "Error while parsing JSON document: not a json object" << buffer;
         return;
     }
     QVariantMap json = jsonDoc.object().toVariantMap();
@@ -439,7 +439,7 @@ void dtkDistributedController::send(dtkDistributedMessage *msg)
 
         socket->sendRequest(msg);
     } else
-        dtkWarning() << "unknown job, can't send message" << msg->jobid();
+        dtkWarn() << "unknown job, can't send message" << msg->jobid();
 
 }
 
@@ -461,7 +461,7 @@ void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16
         socket->write(*array);
         delete msg;
     } else
-        dtkWarning() << "unknown job, can't send message" << jobid;
+        dtkWarn() << "unknown job, can't send message" << jobid;
 }
 
 dtkDistributedSocket *dtkDistributedController::socket(const QString& jobid)
@@ -514,7 +514,7 @@ bool dtkDistributedController::connect(const QUrl& server)
 
         } else {
 
-            dtkWarning() << "Unable to connect to" << server.toString();
+            dtkWarn() << "Unable to connect to" << server.toString();
             d->sockets.remove(server.toString());
             return false;
         }
@@ -617,7 +617,7 @@ void dtkDistributedController::read(void)
         emit dataPosted(result);
         break;
     default:
-        dtkWarning() << "unknown response from server ";
+        dtkWarn() << "unknown response from server ";
     };
     if (socket->bytesAvailable() > 0)
         this->read();

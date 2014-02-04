@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:11:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 01:07:22 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 36
+ * Last-Updated: mar. févr.  4 15:53:33 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 38
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #ifndef DTKNOTIFICATIONQUEUE_H
 #define DTKNOTIFICATIONQUEUE_H
 
-#include "dtkNotificationExport.h"
+#include "dtkGuiSupportExport.h"
 
 #include <QtCore>
 
@@ -28,7 +28,7 @@ class dtkNotifiable;
 class dtkNotificationEvent;
 class dtkNotificationQueuePrivate;
 
-class DTKNOTIFICATION_EXPORT dtkNotificationQueue : public QObject
+class DTKGUISUPPORT_EXPORT dtkNotificationQueue : public QObject
 {
     Q_OBJECT
 

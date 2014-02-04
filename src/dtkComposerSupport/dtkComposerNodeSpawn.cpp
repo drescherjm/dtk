@@ -25,14 +25,14 @@
 #include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include <dtkJson>
 
-#include <dtkMath/dtkMath.h>
+#include <dtkMathSupport/dtkMath.h>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 
 // /////////////////////////////////////////////////////////////////

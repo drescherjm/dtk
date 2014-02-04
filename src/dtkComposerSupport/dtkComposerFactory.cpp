@@ -107,9 +107,9 @@
 #include <dtkPlot/dtkPlotView.h>
 #endif
 
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractView.h>
+#include <dtkCoreSupport/dtkAbstractViewFactory.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 class dtkComposerFactoryPrivate
 {
@@ -1933,6 +1933,8 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeCommunicatorInit;
 #endif
 
+#if defined(DTK_BUILD_DISTRIBUTED)
+
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;
 
@@ -1947,6 +1949,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "communicatorReceive")
         return new dtkComposerNodeCommunicatorReceive;
+#endif
 
     return NULL;
 }

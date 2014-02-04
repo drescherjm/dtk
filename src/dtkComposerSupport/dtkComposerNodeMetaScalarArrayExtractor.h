@@ -1,20 +1,14 @@
-/* dtkComposerNodeMetaScalarArrayExtractor.h --- 
- * 
+/* dtkComposerNodeMetaScalarArrayExtractor.h ---
+ *
  * Author: Régis Duvigneau
- * Copyright (C) 2008 - Regis Duvigneau, Inria.
- * Created: Thu Jul 19 11:27:03 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Jul 19 11:27:54 2012 (+0200)
- *           By: Régis Duvigneau
- *     Update #: 2
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEMETASCALARARRAYEXTRACTOR_H
@@ -22,7 +16,7 @@
 
 #include "dtkComposerSupportExport.h"
 
-#include <dtkComposer/dtkComposerNodeLeaf.h>
+#include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeMetaScalarArrayExtractorPrivate;
 
@@ -35,7 +29,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaScalarArrayExtractor : public
 public:
      dtkComposerNodeMetaScalarArrayExtractor(void);
     ~dtkComposerNodeMetaScalarArrayExtractor(void);
-    
+
 public:
     void run(void);
 

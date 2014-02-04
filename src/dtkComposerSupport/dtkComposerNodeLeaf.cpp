@@ -19,7 +19,7 @@
 
 #include "dtkComposerNodeLeaf.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafPrivate definition

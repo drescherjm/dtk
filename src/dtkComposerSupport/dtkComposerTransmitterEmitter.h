@@ -18,8 +18,8 @@
 #include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitterAbstractEmitter.h"
 
-#include <dtkCore/dtkGlobal>
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkCoreSupport/dtkGlobal>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterEmitter interface

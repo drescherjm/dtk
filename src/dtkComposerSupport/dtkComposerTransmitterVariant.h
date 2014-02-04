@@ -18,7 +18,7 @@
 #include "dtkComposerSupportExport.h"
 #include "dtkComposerTransmitter.h"
 
-#include <dtkCore/dtkGlobal>
+#include <dtkCoreSupport/dtkGlobal>
 
 template <typename T> class dtkContainerVector;
 

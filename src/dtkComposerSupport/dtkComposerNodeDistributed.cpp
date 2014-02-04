@@ -21,7 +21,7 @@
 #include <dtkDistributed/dtkDistributedCommunicator>
 #include <dtkDistributed/dtkDistributedCommunicatorTcp>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
 #if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
 

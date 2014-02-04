@@ -24,10 +24,10 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlForEachPrivate interface

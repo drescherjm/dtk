@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: Fri Sep 21 10:15:34 2012 (+0200)
- *           By: tkloczko
- *     Update #: 296
+ * Last-Updated: mar. févr.  4 17:24:31 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 301
  */
 
 /* Commentary:
@@ -21,11 +21,11 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkCore>
+#include <dtkCoreSupport/dtkAbstractData>
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLogger.h>
 
-#include <dtkMath/dtkVector.h>
+#include <dtkMathSupport/dtkVector.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeDataPrivate declaration

@@ -71,7 +71,7 @@ void dtkGraph::deleteNode(QObject *o)
         }
         d->nodes.removeAll(o);
     } else {
-        dtkWarning() << "removing unknown node from graph !" << o->objectName() ;
+        dtkWarn() << "removing unknown node from graph !" << o->objectName() ;
     }
 }
 

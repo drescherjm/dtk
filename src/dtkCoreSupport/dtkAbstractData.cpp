@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 11:04:38 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 507
+ * Last-Updated: mar. févr.  4 15:17:10 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 508
  */
 
 /* Commentary:
@@ -142,7 +142,7 @@ void dtkAbstractData::copy(const dtkAbstractObject& other)
         d->thumbnails = data.d_func()->thumbnails;
 
     } else {
-        dtkWarning() << "Other is not of same type than this, slicing is occuring.";
+        dtkWarn() << "Other is not of same type than this, slicing is occuring.";
     }
 }
 

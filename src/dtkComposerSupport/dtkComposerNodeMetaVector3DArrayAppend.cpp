@@ -4,9 +4,9 @@
 // Copyright (C) 2011 - Jeremie Labroquere, Inria.
 // Created: Mon Aug  6 15:26:10 2012 (+0200)
 // Version: $Id$
-// Last-Updated: Wed Oct 17 12:23:51 2012 (+0200)
-//           By: Julien Wintz
-//     Update #: 11
+// Last-Updated: mar. févr.  4 17:42:20 2014 (+0100)
+//           By: Nicolas Niclausse
+//     Update #: 13
 // 
 
 // Commentary: 
@@ -19,14 +19,14 @@
 
 #include "dtkComposerNodeMetaVector3DArrayAppend.h"
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include <dtkComposerTransmitterEmitter.h>
+#include <dtkComposerTransmitterReceiver.h>
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkContainer/dtkContainerVector.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkContainerVector.h>
 
-// #include <dtkMath/dtkVector.h>
-#include <dtkMath/dtkVector3D.h>
+#include <dtkMathSupport/dtkVector.h>
+#include <dtkMathSupport/dtkVector3D.h>
 
 #include <dtkLog/dtkLog>
 

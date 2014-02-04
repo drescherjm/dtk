@@ -9,6 +9,7 @@ add_subdirectory(dtkMath)
 add_subdirectory(dtkTest)
 add_subdirectory(dtkWidgets)
 
+add_subdirectory(dtkComposerSupport)
 add_subdirectory(dtkCoreSupport)
 add_subdirectory(dtkContainerSupport)
 add_subdirectory(dtkDistributedSupport)

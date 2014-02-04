@@ -5,7 +5,7 @@
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
  *           By: Nicolas Niclausse
- *     Update #: 294
+ *     Update #: 296
  */
 
 /* Commentary:
@@ -20,6 +20,8 @@
 #define DTKABSTRACTDATA_H
 
 #include "dtkAbstractObject.h"
+
+#include <dtkMathSupport/dtkVector.h>
 
 #include <QtCore>
 #include <QImage>
@@ -104,8 +106,8 @@ public slots:
     virtual void setParameter(dtkAbstractData *parameter);
     virtual void setParameter(dtkAbstractData *parameter, int channel);
 
-    /* virtual void setParameter(dtkVectorReal parameter); */
-    /* virtual void setParameter(dtkVectorReal parameter, int channel); */
+    virtual void setParameter(dtkVectorReal parameter);
+    virtual void setParameter(dtkVectorReal parameter, int channel);
 
     virtual void setData(void *data);
     virtual void setData(void *data, int channel);

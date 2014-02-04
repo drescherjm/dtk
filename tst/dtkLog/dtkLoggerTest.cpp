@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 23:22:21 2013 (+0100)
  * Version: 
- * Last-Updated: mar. févr.  4 11:09:01 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 124
+ * Last-Updated: mar. févr.  4 15:16:47 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 130
  */
 
 /* Change Log:
@@ -239,7 +239,7 @@ void dtkLoggerTestCase::checkNoCategoryLogActive(void)
     
     // Check default warning
     buf = QString::fromLatin1("tst.log.warning: Check category Warning with no log active");
-    dtkWarning() << "Check category Warning with no log active";
+    dtkWarn() << "Check category Warning with no log active";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     
     // Check default critical
@@ -271,7 +271,7 @@ void dtkLoggerTestCase::writeCategoryLogs(void)
     dtkDebug() << "DebugType";
     buf = QString::fromLatin1("tst.log.debug: DebugType");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkWarning() << "WarningType";
+    dtkWarn() << "WarningType";
     buf = QString::fromLatin1("tst.log.warning: WarningType");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     dtkCritical() << "CriticalType";
@@ -442,7 +442,7 @@ void dtkLoggerTestCase::checkFiltering(void)
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     logMessage = "no change";
     buf = QString::fromLatin1("no change");
-    dtkWarning() << "Warning: Inria.B.Project.fr 4";
+    dtkWarn() << "Warning: Inria.B.Project.fr 4";
     dtkCritical() << "Critical: Inria.C.Project.fr 4";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
@@ -454,7 +454,7 @@ void dtkLoggerTestCase::checkFiltering(void)
     dtkDebug() << "Debug: Inria.A.Project.fr 5";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Debug: Inria.A.Project.fr 5");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkWarning() << "Warning: Inria.B.Project.fr 5";
+    dtkWarn() << "Warning: Inria.B.Project.fr 5";
     buf = QString::fromLatin1("Inria.B.Project.fr.warning: Warning: Inria.B.Project.fr 5");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     dtkCritical() << "Critical: Inria.C.Project.fr 5";
@@ -468,7 +468,7 @@ void dtkLoggerTestCase::checkFiltering(void)
     logMessage = "no change";
     buf = QString::fromLatin1("no change");
     dtkDebug() << "Debug: Inria.A.Project.fr 6";
-    dtkWarning() << "Warning: Inria.B.Project.fr 6";
+    dtkWarn() << "Warning: Inria.B.Project.fr 6";
     dtkCritical() << "Critical: Inria.C.Project.fr 6";
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
@@ -478,7 +478,7 @@ void dtkLoggerTestCase::checkFiltering(void)
     dtkDebug() << "Debug: Inria.A.Project.fr 7";
     buf = QString::fromLatin1("Inria.A.Project.fr.debug: Debug: Inria.A.Project.fr 7");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
-    dtkWarning() << "Warning: Inria.B.Project.fr 7";
+    dtkWarn() << "Warning: Inria.B.Project.fr 7";
     buf = QString::fromLatin1("Inria.B.Project.fr.warning: Warning: Inria.B.Project.fr 7");
     QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
     dtkCritical() << "Critical: Inria.C.Project.fr 7";
@@ -502,7 +502,7 @@ void dtkLoggerTestCase::checkLogWithCategoryObject(void)
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.warning: My Category Object");
-	dtkWarning() << "My Category Object";
+	dtkWarn() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.critical: My Category Object");
@@ -515,7 +515,7 @@ void dtkLoggerTestCase::checkLogWithCategoryObject(void)
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.warning: My Category Object");
-	dtkWarning() << "My Category Object";
+	dtkWarn() << "My Category Object";
 	QCOMPARE(cleanLogLine(logMessage), cleanLogLine(buf));
 
 	buf = QString::fromLatin1("LoggingCategoryObject.critical: My Category Object");

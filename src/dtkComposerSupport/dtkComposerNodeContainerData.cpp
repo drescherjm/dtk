@@ -21,10 +21,10 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkCore/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkContainer/dtkContainerVectorWrapper.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkContainerVectorWrapper.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeContainerDataPrivate declaration

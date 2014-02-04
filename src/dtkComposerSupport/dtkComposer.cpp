@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 10:45:44 2014 (+0100)
+ * Last-Updated: mar. févr.  4 15:03:19 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 422
+ *     Update #: 449
  */
 
 /* Commentary: 
@@ -50,49 +50,36 @@
 
 void dtkComposerPrivate::download(const QUrl& url)
 {
-    QTemporaryFile file; file.setAutoRemove(false);
-    
-    if (!file.open()) {
+    this->file.setAutoRemove(false);
+
+    if (!this->file.open()) {
         qDebug() << DTK_PRETTY_FUNCTION << "Unable to file for saving";
         return;
     }
-        
-    this->dwnl_ok = 0;
-    
-    QHttp http;
-    
-    connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
 
-    http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
-        
-    if (!url.userName().isEmpty())
-        http.setUser(url.userName(), url.password());
-        
-    QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
-    
-    if (path.isEmpty()) {
-        qDebug() << DTK_PRETTY_FUNCTION << "Invalid path" << url.path();
-        return;
-    }
-    
-    this->dwnl_id = http.get(path, &file);
-    
+    this->dwnl_ok = 0;
+
+    QNetworkAccessManager http;
+
+    connect(&http, SIGNAL(requestFinished(QNetworkReply *)), this, SLOT(onRequestFinished(QNetworkReply *)));
+
+    http.get(QNetworkRequest(url));
+
     while(!this->dwnl_ok)
         qApp->processEvents();
 
-    file.close();
+    this->file.close();
 
-    QFileInfo info(file);
-    
+    QFileInfo info(this->file);
+
     this->tempName = info.absoluteFilePath();
 }
 
-void dtkComposerPrivate::onRequestFinished(int id, bool error)
+void dtkComposerPrivate::onRequestFinished(QNetworkReply *reply)
 {
-    DTK_UNUSED(error);
-
-    if(id == this->dwnl_id)
-        this->dwnl_ok = 1;
+    this->file.write(reply->readAll());
+    this->file.flush();
+    this->dwnl_ok = 1;
 }
 
 // /////////////////////////////////////////////////////////////////

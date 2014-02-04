@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 21:48:39 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 12:35:49 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 27
+ * Last-Updated: mar. févr.  4 15:55:09 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 28
  */
 
 /* Commentary: 
@@ -20,7 +20,7 @@
 #include "dtkNotification.h"
 #include "dtkNotificationQueue.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 void dtkNotify(const QString& message)
 {

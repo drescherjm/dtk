@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:28:20 2012 (+0100)
  * Version: $Id$
- * Last-Updated: 2012 Fri Nov 23 09:10:33 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 495
+ * Last-Updated: mar. févr.  4 17:43:02 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 496
  */
 
 /* Commentary:
@@ -24,9 +24,9 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkLog/dtkLog.h>
+#include <dtkLog/dtkLog>
 
-#include <dtkMath/dtkMath.h>
+#include <dtkMathSupport/dtkMath.h>
 #include <QtCore/qmath.h>
 #include <math.h>
 

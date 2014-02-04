@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
  * Version: 
- * Last-Updated: lun. nov.  4 10:36:49 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 597
+ * Last-Updated: mar. févr.  4 15:07:27 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 598
  */
 
 /* Change Log:
@@ -17,11 +17,11 @@
 
 #include "dtkComposerSupportExport.h"
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkAbstractProcess.h>
+#include <dtkCoreSupport/dtkGlobal.h>
+#include <dtkCoreSupport/dtkAbstractProcess.h>
 
-#include <dtkGui/dtkObjectEditor.h>
-#include <dtkGui/dtkToolBox.h>
+#include <dtkGuiSupport/dtkObjectEditor.h>
+#include <dtkGuiSupport/dtkToolBox.h>
 
 #include <QObject>
 #include <QVariant>

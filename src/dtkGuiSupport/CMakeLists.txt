@@ -1,16 +1,4 @@
 ### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Jul 20 22:21:50 2009 (+0200)
-## Version: $Id$
-## Last-Updated: mar. févr.  4 16:46:00 2014 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 328
-######################################################################
-## 
-### Change log:
-## 
 ######################################################################
 
 project(dtkGuiSupport)
@@ -27,6 +15,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
+  dtkNotifiable.h
+  dtkNotification.h
+  dtkNotificationDisplay.h
+  dtkNotificationEvent.h
+  dtkNotificationQueue.h
   dtkObjectEditor.h
   dtkPieChart.h
   dtkPluginsEditor.h
@@ -58,6 +51,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkFlowLayout.cpp
   dtkFinder.cpp
   dtkObjectEditor.cpp
+  dtkNotification.cpp
+  dtkNotificationDisplay.cpp
+  dtkNotificationEvent.cpp
+  dtkNotificationQueue.cpp
   dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
@@ -88,7 +85,9 @@ set(${PROJECT_NAME}_SOURCES
     dtkSearchField.cpp)
 endif(APPLE)
 
-set(${PROJECT_NAME}_SOURCES_RCC dtkGui.qrc)
+set(${PROJECT_NAME}_SOURCES_RCC
+  dtkGui.qrc
+  dtkNotification.qrc)
 
 ## #################################################################
 ## Build rules

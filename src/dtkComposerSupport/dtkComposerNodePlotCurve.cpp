@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkMath/dtkMath.h>
+#include <dtkMathSupport/dtkMath.h>
 
 #include <dtkPlot/dtkPlotCurve.h>
 

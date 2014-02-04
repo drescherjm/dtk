@@ -17,9 +17,9 @@
 #include "dtkComposerTransmitterVariant.h"
 #include "dtkComposerNode.h"
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
-#include <dtkCore/dtkAbstractObject>
-#include <dtkCore/dtkGlobal>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
+#include <dtkCoreSupport/dtkAbstractObject>
+#include <dtkCoreSupport/dtkGlobal>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter implementation

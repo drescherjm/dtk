@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 12:07:20 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Wed Nov  7 17:40:35 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 63
+ * Last-Updated: mar. févr.  4 17:07:39 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 64
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkContainer/dtkAbstractContainerWrapper.h>
+#include <dtkContainerSupport/dtkAbstractContainerWrapper.h>
 
 #include <dtkLog/dtkLog>
 

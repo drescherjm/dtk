@@ -20,7 +20,7 @@
 #include "dtkComposerNodeProxy.h"
 #include "dtkComposerTransmitterProxy.h"
 
-#include <dtkCore/dtkGlobal.h>
+#include <dtkCoreSupport/dtkGlobal.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeProxyPrivate definition

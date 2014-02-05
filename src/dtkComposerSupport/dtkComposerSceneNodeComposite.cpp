@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 17:54:28 2014 (+0100)
+ * Last-Updated: mer. févr.  5 10:17:29 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 928
+ *     Update #: 929
  */
 
 /* Commentary: 
@@ -34,8 +34,8 @@
 #include <dtkLog/dtkLog>
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-#include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedMimeData.h>
+#include <dtkDistributedSupport/dtkDistributedController.h>
+#include <dtkDistributedSupport/dtkDistributedMimeData.h>
 #endif
 
 // /////////////////////////////////////////////////////////////////

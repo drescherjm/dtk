@@ -7,12 +7,12 @@
 
 #include "dtkComposerNodePlotCurveFile.h"
 
-#include dtkComposerTransmitterEmitter.h
+#include <dtkComposerTransmitterEmitter.h>
 #include <dtkComposerTransmitterReceiver.h>
 
 #include <dtkMathSupport/dtkMath.h>
 
-#include <dtkPlot/dtkPlotCurve.h>
+#include <dtkPlotSupport/dtkPlotCurve.h>
 
 #include <dtkLog/dtkLog>
 

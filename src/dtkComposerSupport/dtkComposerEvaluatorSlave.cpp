@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
  * Version: $Id$
- * Last-Updated: lun. déc.  9 18:36:09 2013 (+0100)
+ * Last-Updated: mer. févr.  5 10:21:56 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 509
+ *     Update #: 513
  */
 
 /* Commentary:
@@ -25,19 +25,19 @@
 #include <dtkCoreSupport/dtkAbstractProcess.h>
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include "dtkComposer/dtkComposerEvaluator.h"
-#include "dtkComposer/dtkComposerEvaluatorSlave.h"
-#include "dtkComposer/dtkComposerFactory.h"
-#include "dtkComposer/dtkComposerGraph.h"
-#include "dtkComposer/dtkComposerReader.h"
-#include "dtkComposer/dtkComposerScene.h"
-#include "dtkComposer/dtkComposerSceneNodeComposite.h"
-#include "dtkComposer/dtkComposerStack.h"
-#include "dtkComposer/dtkComposerNodeRemote.h"
+#include "dtkComposerEvaluator.h"
+#include "dtkComposerEvaluatorSlave.h"
+#include "dtkComposerFactory.h"
+#include "dtkComposerGraph.h"
+#include "dtkComposerReader.h"
+#include "dtkComposerScene.h"
+#include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerStack.h"
+#include "dtkComposerNodeRemote.h"
 
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>
 
 #include <dtkLog/dtkLog>
 
@@ -132,7 +132,7 @@ int dtkComposerEvaluatorSlave::exec(void)
 {
 
     if (!d->factory) {
-        dtkFatal() << "No factory set ! abort slave execution";
+        dtkCritical() << "No factory set ! abort slave execution";
         return 1;
     }
 
@@ -169,7 +169,7 @@ int dtkComposerEvaluatorSlave::exec(void)
                 this->communicator()->flush();
                 this->communicator()->socket()->setParent(0);
             } else  {
-                dtkFatal() << "Can't connect to server" << d->server;
+                dtkCritical() << "Can't connect to server" << d->server;
                 return 1;
             }
         }
@@ -181,7 +181,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         if (d->composition_socket->bytesAvailable() > 10) {
             dtkInfo() << "data already available, try to parse composition " << d->composition_socket->bytesAvailable();
         } else if (!d->composition_socket->waitForReadyRead(600000)) {
-            dtkFatal() << "No data received from server after 10mn, abort " ;
+            dtkCritical() << "No data received from server after 10mn, abort " ;
             return 1;
         } else
             dtkDebug() << "Ok, data received, parse" ;
@@ -202,12 +202,12 @@ int dtkComposerEvaluatorSlave::exec(void)
                 composition = d->composition_cache.value(d->last_controller_rank);
             }
         } else {
-            dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
+            dtkCritical() << "Bad composition type, abort" << msg->type() << msg->content();
             return 1;
         }
 
         if (new_composition && composition.isEmpty()) {
-            dtkFatal() << "Empty composition, abort" ;
+            dtkCritical() << "Empty composition, abort" ;
             return 1;
         }
 
@@ -234,7 +234,7 @@ int dtkComposerEvaluatorSlave::exec(void)
                 remote->setJob(this->jobId());
                 remote->setCommunicator(d->communicator_i);
             } else {
-                dtkFatal() <<  "Can't find remote node in composition, abort";
+                dtkCritical() <<  "Can't find remote node in composition, abort";
                 return 1;
             }
         }
@@ -287,7 +287,7 @@ int dtkComposerEvaluatorSlave::exec(void)
             workerThread->deleteLater();
             dtkDebug() << "finished" ;
         } else {
-            dtkFatal() <<  "Can't find remote node in composition, abort";
+            dtkCritical() <<  "Can't find remote node in composition, abort";
             return 1;
         }
     }

@@ -20,15 +20,13 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
-#include <dtkDistributed/dtkDistributedSlave.h>
+#include <dtkDistributedSupport/dtkDistributedController.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi.h>
+#include <dtkDistributedSupport/dtkDistributedSlave.h>
 
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 #include <dtkCoreSupport/dtkGlobal.h>
-
-#include <dtkJson>
 
 #include <dtkMathSupport/dtkMath.h>
 
@@ -153,7 +151,7 @@ void dtkComposerNodeSpawn::begin(void)
             d->last_sent_hash=d->current_hash;
         } else {
             dtkDebug() << "composition hash hasn't changed, send 'not-modified' to slave";
-            QByteArray data = QString("not-modified").toAscii();
+            QByteArray data = QString("not-modified").toUtf8();
             d->communicator->broadcast(data,  rank);
         }
 

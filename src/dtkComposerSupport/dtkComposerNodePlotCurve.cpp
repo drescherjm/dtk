@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun 21 14:14:08 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 108
+ * Last-Updated: mer. févr.  5 10:28:25 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 109
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 
 #include <dtkMathSupport/dtkMath.h>
 
-#include <dtkPlot/dtkPlotCurve.h>
+#include <dtkPlotSupport/dtkPlotCurve.h>
 
 class dtkComposerNodePlotCurvePrivate
 {

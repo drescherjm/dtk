@@ -18,8 +18,8 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkPlot/dtkPlotCurve.h>
-#include <dtkPlot/dtkPlotView.h>
+#include <dtkPlotSupport/dtkPlotCurve.h>
+#include <dtkPlotSupport/dtkPlotView.h>
 
 #include <dtkCoreSupport/dtkAbstractView.h>
 #include <dtkCoreSupport/dtkAbstractViewFactory.h>

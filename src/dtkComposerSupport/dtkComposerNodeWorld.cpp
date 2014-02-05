@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 13:04:23
  * Version: $Id$
- * Last-Updated: mer. oct. 17 15:00:20 2012 (+0200)
+ * Last-Updated: mer. févr.  5 10:30:59 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 111
+ *     Update #: 112
  */
 
 /* Commentary:
@@ -20,9 +20,9 @@
 #include "dtkComposerNodeWorld.h"
 #include "dtkComposerTransmitterEmitter.h"
 
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>
 
 #include <dtkCoreSupport/dtkGlobal.h>
 //#include <dtkLog/dtkLog>

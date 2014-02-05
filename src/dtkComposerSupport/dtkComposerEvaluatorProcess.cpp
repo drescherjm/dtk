@@ -13,17 +13,17 @@
  *
  */
 
-#include "dtkComposer/dtkComposerEvaluator.h"
-#include "dtkComposer/dtkComposerEvaluatorProcess.h"
-#include "dtkComposer/dtkComposerFactory.h"
-#include "dtkComposer/dtkComposerGraph.h"
-#include "dtkComposer/dtkComposerReader.h"
-#include "dtkComposer/dtkComposerScene.h"
-#include "dtkComposer/dtkComposerSceneNodeComposite.h"
-#include "dtkComposer/dtkComposerStack.h"
-#include "dtkComposer/dtkComposerNodeSpawn.h"
+#include "dtkComposerEvaluator.h"
+#include "dtkComposerEvaluatorProcess.h"
+#include "dtkComposerFactory.h"
+#include "dtkComposerGraph.h"
+#include "dtkComposerReader.h"
+#include "dtkComposerScene.h"
+#include "dtkComposerSceneNodeComposite.h"
+#include "dtkComposerStack.h"
+#include "dtkComposerNodeSpawn.h"
 
-#include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
 
 #include <dtkLog/dtkLog>
 
@@ -104,7 +104,7 @@ int dtkComposerEvaluatorProcess::exec(void)
 {
 
     if (!d->factory) {
-        dtkFatal() << "No factory set ! abort process execution";
+        dtkCritical() << "No factory set ! abort process execution";
         return 1;
     }
 
@@ -128,7 +128,7 @@ int dtkComposerEvaluatorProcess::exec(void)
     }
 
     if (new_composition && composition.isEmpty()) {
-        dtkFatal() << "Empty composition, abort" ;
+        dtkCritical() << "Empty composition, abort" ;
         return 1;
     }
 
@@ -141,7 +141,7 @@ int dtkComposerEvaluatorProcess::exec(void)
             spawn->setInternalCommunicator(d->comm);
             spawn->setApplication(d->application);
         } else {
-            dtkFatal() <<  "Can't find spawn node in composition, abort";
+            dtkCritical() <<  "Can't find spawn node in composition, abort";
             return 1;
         }
     }

@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:23:58
  * Version: $Id$
- * Last-Updated: mer. mars 27 17:07:35 2013 (+0100)
+ * Last-Updated: mer. févr.  5 10:21:27 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 35
+ *     Update #: 36
  */
 
 /* Commentary:
@@ -22,7 +22,7 @@
 
 #include "dtkComposerSupportExport.h"
 
-#include <dtkDistributed/dtkDistributedSlave.h>
+#include <dtkDistributedSupport/dtkDistributedSlave.h>
 
 class dtkComposerFactory;
 class dtkComposerEvaluatorSlavePrivate;

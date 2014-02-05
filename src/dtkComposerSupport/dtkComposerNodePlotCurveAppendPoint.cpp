@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Jul  4 09:51:59 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 96
+ * Last-Updated: mer. févr.  5 10:28:53 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 97
  */
 
 /* Commentary: 
@@ -21,7 +21,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkPlot/dtkPlotCurve.h>
+#include <dtkPlotSupport/dtkPlotCurve.h>
 
 class dtkComposerNodePlotCurveAppendPointPrivate
 {

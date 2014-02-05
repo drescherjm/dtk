@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:40 2012 (+0100)
  * Version: $Id$
- * Last-Updated: ven. nov.  2 15:44:46 2012 (+0100)
+ * Last-Updated: mer. févr.  5 10:17:04 2014 (+0100)
  *           By: Nicolas Niclausse
- *     Update #: 62
+ *     Update #: 63
  */
 
 /* Commentary:
@@ -30,8 +30,8 @@
 #endif
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-#include <dtkDistributed/dtkDistributedCommunicator>
-#include <dtkDistributed/dtkDistributedMessage>
+#include <dtkDistributedSupport/dtkDistributedCommunicator>
+#include <dtkDistributedSupport/dtkDistributedMessage>
 #endif
 
 // /////////////////////////////////////////////////////////////////

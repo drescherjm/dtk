@@ -18,7 +18,7 @@
 #include <dtkConfig.h>
 
 #if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
-#include <dtkPlot/dtkPlotCurve.h>
+#include <dtkPlotSupport/dtkPlotCurve.h>
 #endif
 
 #include <QtCore>

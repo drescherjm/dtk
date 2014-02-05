@@ -18,8 +18,8 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkDistributed/dtkDistributedCommunicator>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp>
+#include <dtkDistributedSupport/dtkDistributedCommunicator>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp>
 
 #include <dtkLog/dtkLog>
 

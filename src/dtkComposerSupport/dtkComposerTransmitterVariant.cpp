@@ -25,7 +25,7 @@
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 
 #if defined(DTK_BUILD_DISTRIBUTED)
-#include <dtkDistributed/dtkDistributedMessage.h>
+#include <dtkDistributedSupport/dtkDistributedMessage.h>
 #endif
 
 #include <dtkLog/dtkLog>

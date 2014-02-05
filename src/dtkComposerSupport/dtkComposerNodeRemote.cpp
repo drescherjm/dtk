@@ -18,16 +18,14 @@
 #include "dtkComposerNodeRemote_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
-#include <dtkDistributed/dtkDistributedSlave.h>
+#include <dtkDistributedSupport/dtkDistributedController.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>
+#include <dtkDistributedSupport/dtkDistributedSlave.h>
 
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 #include <dtkCoreSupport/dtkAbstractObject.h>
 #include <dtkCoreSupport/dtkGlobal.h>
-
-#include <dtkJson>
 
 #include <dtkMathSupport/dtkMath.h>
 
@@ -392,7 +390,7 @@ void dtkComposerNodeRemoteSubmit::run(void)
     job.insert("properties", QVariantMap());
     job.insert("application", d->slaveName+" "+cluster.toString());
 
-    QByteArray job_data = dtkJson::serialize(job);
+    QByteArray job_data = QJsonDocument::fromVariant(job).toJson();
 
     dtkTrace() << " submit job with parameters: "<< job_data;
 

@@ -19,7 +19,7 @@
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 #include <dtkLog/dtkLogger.h>
 
-#include <dtkMath>
+//#include <dtkMathSupport/>
 
 #include <mpi.h>
 

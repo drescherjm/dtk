@@ -104,7 +104,7 @@
 #include "dtkComposerNodePlotCurveAppendPoint.h"
 #include "dtkComposerNodePlotView.h"
 
-#include <dtkPlot/dtkPlotView.h>
+#include <dtkPlotSupport/dtkPlotView.h>
 #endif
 
 #include <dtkCoreSupport/dtkAbstractView.h>

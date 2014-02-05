@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. févr.  3 12:40:54 2014 (+0100)
+## Last-Updated: mer. févr.  5 15:49:54 2014 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 187
+##     Update #: 208
 ######################################################################
 ## 
 ### Change Log:
@@ -82,6 +82,33 @@ find_package(Qt5Qml        REQUIRED)
 find_package(Qt5Quick      REQUIRED)
 find_package(Qt5Test       REQUIRED)
 find_package(Qt5Widgets    REQUIRED)
+
+
+## #################################################################
+## Old options
+## #################################################################
+
+mark_as_advanced(MPI_EXTRA_LIBRARY)
+mark_as_advanced(MPI_LIBRARY)
+mark_as_advanced(DTK_BUILD_MPI)
+
+find_package(MPI QUIET)
+
+
+option(DTK_BUILD_DISTRIBUTED_SUPPORT   "Build distributed support layer" true)
+option(DTK_BUILD_COMPOSER_SUPPORT      "Build composer support layer"    true)
+option(DTK_BUILD_PLOT_SUPPORT          "Build plotting support layer"    true)
+option(DTK_BUILD_MPI                   "Build MPI support "              true)
+
+if(DTK_BUILD_MPI)
+  if(MPI_FOUND)
+    include_directories(${MPI_INCLUDE_PATH})
+    set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+    set(DTK_HAVE_MPI "YES")
+  endif(MPI_FOUND)
+endif(DTK_BUILD_MPI)
+
+
 
 ## #################################################################
 ## Dependencies - internal

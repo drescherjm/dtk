@@ -17,7 +17,7 @@ find_package(Qwt 6 REQUIRED)
 
 if(QWT_FOUND)
 
-message("QWT has been found")
+message(STATUS "QWT has been found")
 
 project(dtkPlotSupport)
 

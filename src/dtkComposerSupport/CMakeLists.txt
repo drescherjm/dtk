@@ -282,7 +282,7 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 ## 
 ## #################################################################
 
-if(DTK_BUILD_DISTRIBUTED)
+if(DTK_BUILD_DISTRIBUTED_SUPPORT)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
    dtkComposerEvaluatorSlave.h
    dtkComposerNodeRemote.h
@@ -294,7 +294,7 @@ if(DTK_BUILD_DISTRIBUTED)
   dtkComposerEvaluatorSlave.cpp
   dtkComposerNodeDistributed.cpp
   dtkComposerNodeRemote.cpp)
-endif(DTK_BUILD_DISTRIBUTED)
+endif(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
 ## #################################################################
 ## Video sources
@@ -312,7 +312,7 @@ endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 ## Mpi sources
 ## #################################################################
 
-if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
+if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED_SUPPORT)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerEvaluatorProcess.h
   dtkComposerNodeSpawn.h
@@ -325,7 +325,7 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerEvaluatorProcess.cpp
   dtkComposerNodeSpawn.cpp
   dtkComposerNodeWorld.cpp)
-endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED)
+endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED_SUPPORT)
 
 ## #################################################################
 ## Kinect sources
@@ -387,24 +387,24 @@ add_library(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-  dtkMath
-  dtkContainer
+  dtkMathSupport
+  dtkContainerSupport
   dtkCoreSupport
-  dtkGui
+  dtkGuiSupport
   dtkLog
-  dtkNotification)
+  )
 
-if(DTK_BUILD_DISTRIBUTED)
-  target_link_libraries(${PROJECT_NAME} dtkDistributed)
-endif(DTK_BUILD_DISTRIBUTED)
+if(DTK_BUILD_DISTRIBUTED_SUPPORT)
+  target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
+endif(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
 if(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
   target_link_libraries(${PROJECT_NAME} dtkVr)
 endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
 
-if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
-  target_link_libraries(${PROJECT_NAME} dtkPlot)
-endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+if(DTK_BUILD_PLOT_SUPPORT)
+  target_link_libraries(${PROJECT_NAME} dtkPlotSupport)
+endif(DTK_BUILD_PLOT_SUPPORT)
 
 if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
   target_link_libraries(${PROJECT_NAME} dtkVideo)

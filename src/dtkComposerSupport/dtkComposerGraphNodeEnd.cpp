@@ -25,7 +25,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 #include "dtkComposerNodeComposite.h"
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 #include "dtkComposerNodeRemote.h"
 #endif
 
@@ -40,7 +40,7 @@ public:
 public:
     bool is_remote;
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 public:
     dtkComposerNodeRemote *remote;
 #endif
@@ -55,7 +55,7 @@ dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const Q
 {
     d->is_remote = false;
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(cnode)) {
             d->is_remote = true;
             d->remote = remote ;
@@ -104,7 +104,7 @@ void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNodeBegin *begin)
 
 dtkComposerGraphNodeList dtkComposerGraphNodeEnd::predecessors(void)
 {
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     if (d->is_remote && !d->remote->isSlave()) {
         dtkDebug() << "we are running the end statement of a remote node on a controller, predecessor is only the begin statement";
         dtkComposerGraphNodeList list;

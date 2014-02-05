@@ -80,12 +80,12 @@
 #include "dtkComposerNodeMovieWriter.h"
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 #include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeRemote.h"
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
 #include "dtkComposerNodeWorld.h"
 #include "dtkComposerNodeSpawn.h"
 #endif
@@ -134,7 +134,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["E"] = QStringList() << "constant" << "e";
     d->types["E"] = "e";
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
     d->nodes << "CONTROLLER_RUN_RANK";
     d->descriptions["CONTROLLER_RUN_RANK"] = "<p>Controller rank value when communicating with remote slaves.</p>";
@@ -296,7 +296,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 // Distributed nodes
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     d->nodes << "Remote";
     d->descriptions["Remote"] = "<p>Execute a subcomposition on a remote node</p>";
     d->tags["Remote"] = QStringList() <<  "distributed" << "tcp" << "remote" << "world";
@@ -312,7 +312,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // Plot nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT_SUPPORT) 
     d->nodes << "Plot Curve";
     d->descriptions["Plot Curve"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurve.html");
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
@@ -371,7 +371,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // MPI nodes
     // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
 
     d->nodes << "World";
     d->descriptions["World"] = "<p>Run a sub-compisition in a MPI context (comm world, process rank, world size).</p>";
@@ -1281,12 +1281,12 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
     if(type == "e")
         return new dtkComposerNodeE;
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     if(type == "ControllerRunRank")
         return new dtkComposerNodeControllerRunRank;
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
     if(type == "AnyTag")
         return new dtkComposerNodeAnyTag;
@@ -1869,7 +1869,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 // Distributed nodes
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     if(type == "remote")
         return new dtkComposerNodeRemote;
 
@@ -1899,7 +1899,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 // Plot nodes
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT_SUPPORT) 
     if(type == "dtkPlotCurve")
         return new dtkComposerNodePlotCurve;
 
@@ -1922,7 +1922,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 // MPI nodes
 // /////////////////////////////////////////////////////////////////
 
-#if defined(DTK_BUILD_DISTRIBUTED) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT) && defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
     if(type == "world")
         return new dtkComposerNodeWorld;
 
@@ -1933,7 +1933,7 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
         return new dtkComposerNodeCommunicatorInit;
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
     if(type == "communicatorSize")
         return new dtkComposerNodeCommunicatorSize;

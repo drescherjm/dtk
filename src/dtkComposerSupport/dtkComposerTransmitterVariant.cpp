@@ -24,7 +24,7 @@
 #include <dtkCoreSupport/dtkAbstractData.h>
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 #include <dtkDistributedSupport/dtkDistributedMessage.h>
 #endif
 
@@ -481,7 +481,7 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
                 return QVariant::fromValue(m);
             }
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT_SUPPORT) 
         } else if (data_type == e->dtkPlotCurve_Id) {
 
             qlonglong size_curve;
@@ -696,7 +696,7 @@ QByteArray dtkComposerTransmitterVariant::variantToByteArray(QVariant v, bool se
             stream << e->dtkMatrixSquareReal_Id;
             tmp_array =  (self) ? this->data<dtkMatrixSquareReal>()->serialize() : v.value<dtkMatrixSquareReal*>()->serialize();
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT_SUPPORT) 
         } else if (data_type == qMetaTypeId<dtkPlotCurve>() || data_type == qMetaTypeId<dtkPlotCurve*>() ) {
             stream << e->dtkPlotCurve_Id;
             dtkPlotCurve *curve = (self) ? this->data<dtkPlotCurve>() : v.value<dtkPlotCurve *>() ;
@@ -901,7 +901,7 @@ QString dtkComposerTransmitterVariant::dataDescription(void)
 
         return this->data<dtkMatrixSquareReal>()->description();
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_PLOT_SUPPORT) 
     } else if (data_type == qMetaTypeId<dtkPlotCurve>(0)) {
 
         return this->data<dtkPlotCurve>()->description();

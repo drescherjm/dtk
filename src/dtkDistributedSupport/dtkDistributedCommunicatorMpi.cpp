@@ -109,11 +109,15 @@ public:
     MPI_Comm comm;
 
 public:
+    char **argv;
+
+public:
     int size, rank;
 };
 
 dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistributedCommunicator(), d(new dtkDistributedCommunicatorMpiPrivate)
 {
+    d->argv = NULL;
     d->comm = MPI_COMM_WORLD;
     d->rank = -1;
     d->size = 0;
@@ -121,6 +125,15 @@ dtkDistributedCommunicatorMpi::dtkDistributedCommunicatorMpi(void) : dtkDistribu
 
 dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
 {
+    if (d->argv) {
+        int i = 0;
+        while (d->argv[i]) {
+            delete d->argv[i];
+            i++;
+        }
+        delete d->argv;
+    }
+
     delete d;
 
     d = NULL;
@@ -155,9 +168,17 @@ dtkDistributedCommunicatorMpi& dtkDistributedCommunicatorMpi::operator=(const dt
 
 void dtkDistributedCommunicatorMpi::initialize(void)
 {
-    int    argc = qApp->argc(); // These methods are obsolete but should be really exist in QCoreApplication
-    char **argv = qApp->argv(); // These methods are obsolete but should be really exist in QCoreApplication
-    MPI::Init(argc, argv);
+    QStringList args = qApp->arguments();
+    int    argc = args.size();
+
+    d->argv = new char*[argc + 1];
+    for (int i = 0; i < argc; i++) {
+        d->argv[i] = new char[strlen(args.at(i).toStdString().c_str())+1];
+        memcpy(d->argv[i], args.at(i).toStdString().c_str(), strlen(args.at(i).toStdString().c_str())+1);
+    }
+    d->argv[argc] = ((char)NULL);
+
+    MPI::Init(argc, d->argv);
 }
 
 bool dtkDistributedCommunicatorMpi::initialized(void)

@@ -27,13 +27,13 @@
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
 #include "dtkComposerWriter.h"
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 #include "dtkComposerNodeRemote.h"
 #endif
 
 #include <dtkLog/dtkLog>
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 #include <dtkDistributedSupport/dtkDistributedController.h>
 #include <dtkDistributedSupport/dtkDistributedMimeData.h>
 #endif
@@ -620,7 +620,7 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
@@ -642,7 +642,7 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {
@@ -659,7 +659,7 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {

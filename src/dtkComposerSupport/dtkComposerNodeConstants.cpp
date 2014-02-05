@@ -29,7 +29,7 @@
 #define M_E 2.718281
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 #include <dtkDistributedSupport/dtkDistributedCommunicator>
 #include <dtkDistributedSupport/dtkDistributedMessage>
 #endif
@@ -98,7 +98,7 @@ void dtkComposerNodeE::run(void)
 
 }
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
 // /////////////////////////////////////////////////////////////////
 // MPI_ANY_TAG
@@ -133,7 +133,7 @@ void dtkComposerNodeControllerRunRank::run(void)
 }
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
 
 // /////////////////////////////////////////////////////////////////
 // MPI_ANY_TAG

@@ -407,7 +407,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 msgBox.setText("Can't create node " + type_n);
                 msgBox.setInformativeText("You are not be able to load the composition.");
                 if  (type_n == "remote")
-                    msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_DISTRIBUTED");
+                    msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_DISTRIBUTED_SUPPORT");
                 else
                     msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_MPI");
                 msgBox.setStandardButtons(QMessageBox::Ok);

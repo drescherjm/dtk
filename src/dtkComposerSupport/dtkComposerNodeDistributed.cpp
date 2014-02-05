@@ -23,11 +23,10 @@
 
 #include <dtkLog/dtkLog>
 
-#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+#if defined(DTK_HAVE_MPI)
 
-#include <dtkDistributed/dtkDistributedCommunicatorMpi>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi>
 #include <mpi.h>
-
 
 // /////////////////////////////////////////////////////////////////
 // Communicator Init

@@ -235,7 +235,9 @@ void dtkComposerTransmitter::updateCopyCounter(bool value)
 
 bool dtkComposerTransmitter::copyCounterIsGreaterThanOne(void)
 {
-    return (d->copy_counter != 1);
+//    return (d->copy_counter != 1);
+//  FIXME: is it ok ? != no longer exists in qt5
+    return (d->copy_counter.loadAcquire() != 1);
 }
 
 //! Sets the type of data transmission.

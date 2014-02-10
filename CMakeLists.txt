@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: mer. févr.  5 15:49:54 2014 (+0100)
+## Last-Updated: lun. févr. 10 15:21:53 2014 (+0100)
 ##           By: Nicolas Niclausse
-##     Update #: 208
+##     Update #: 215
 ######################################################################
 ## 
 ### Change Log:
@@ -73,19 +73,10 @@ if(MSVC)
 endif(MSVC)
 
 include(dtkBuild)
-
-find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5Core       REQUIRED)
-find_package(Qt5Gui        REQUIRED)
-find_package(Qt5Network    REQUIRED)
-find_package(Qt5Qml        REQUIRED)
-find_package(Qt5Quick      REQUIRED)
-find_package(Qt5Test       REQUIRED)
-find_package(Qt5Widgets    REQUIRED)
-
+include(${dtk_USE_FILE})
 
 ## #################################################################
-## Old options
+## Support options and deps
 ## #################################################################
 
 mark_as_advanced(MPI_EXTRA_LIBRARY)
@@ -93,7 +84,6 @@ mark_as_advanced(MPI_LIBRARY)
 mark_as_advanced(DTK_BUILD_MPI)
 
 find_package(MPI QUIET)
-
 
 option(DTK_BUILD_DISTRIBUTED_SUPPORT   "Build distributed support layer" true)
 option(DTK_BUILD_COMPOSER_SUPPORT      "Build composer support layer"    true)
@@ -107,8 +97,6 @@ if(DTK_BUILD_MPI)
     set(DTK_HAVE_MPI "YES")
   endif(MPI_FOUND)
 endif(DTK_BUILD_MPI)
-
-
 
 ## #################################################################
 ## Dependencies - internal

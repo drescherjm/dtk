@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: lun. févr.  3 16:23:13 2014 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 254
+## Last-Updated: lun. févr. 10 15:46:46 2014 (+0100)
+##           By: Thibaud Kloczko
+##     Update #: 255
 ######################################################################
 ## 
 ### Commentary: 
@@ -140,8 +140,8 @@ qt5_use_modules(${PROJECT_NAME} Network)
 qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME}
-  dtkCoreSupportSupport
-  dtkGui
+  dtkCoreSupport
+  dtkGuiSupport
   dtkLog)
 
 if(DTK_HAVE_MPI)

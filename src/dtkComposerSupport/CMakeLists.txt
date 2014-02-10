@@ -411,9 +411,9 @@ if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 
 qt5_use_modules(${PROJECT_NAME} Concurrent)
-qt5_use_modules(${PROJECT_NAME} Xml)
+qt5_use_modules(${PROJECT_NAME} Network)
 qt5_use_modules(${PROJECT_NAME} Widgets)
-
+qt5_use_modules(${PROJECT_NAME} Xml)
 
 ## #################################################################
 ## Export header file

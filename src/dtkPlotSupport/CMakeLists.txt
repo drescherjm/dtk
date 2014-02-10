@@ -67,8 +67,8 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   ${QWT_LIBRARIES}
-  dtkCore
-  dtkGui)
+  dtkCoreSupport
+  dtkGuiSupport)
 
 ## ###################################################################
 ## Link rules

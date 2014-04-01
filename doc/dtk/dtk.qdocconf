@@ -1,0 +1,8 @@
+#Include this file for a standard dtk module.
+
+#include standard set of macros and C++ defines and ignores
+include(fileextensions.qdocconf)
+include(macros.qdocconf)
+
+#extra configuration data DITA information
+include(config.qdocconf)

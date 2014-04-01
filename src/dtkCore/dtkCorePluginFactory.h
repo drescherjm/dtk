@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 15:43:06 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 17:31:17 2013 (+0200)
+ * Last-Updated: mar. avril  1 16:59:36 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 23
+ *     Update #: 28
  */
 
 /* Change Log:
@@ -23,18 +23,18 @@
 template <typename T> class dtkCorePluginFactory : public QObject
 {
 public:
-     dtkCorePluginFactory(void);
-    ~dtkCorePluginFactory(void);
+     dtkCorePluginFactory();
+    ~dtkCorePluginFactory();
 
 #pragma mark -
 #pragma mark Type creator definition
 
-    typedef T *(*creator) (void);
+    typedef T *(*creator) ();
 
 #pragma mark -
 #pragma mark Type creator registration
 
-    void record(QString key, creator func);
+    void record(const QString& key, creator func);
 
 #pragma mark -
 #pragma mark Type creator invokation
@@ -44,7 +44,7 @@ public:
 #pragma mark -
 #pragma mark Type creator inspection
 
-    QStringList keys(void);
+    QStringList keys();
 
 private:
     QHash<QString, creator> creators;

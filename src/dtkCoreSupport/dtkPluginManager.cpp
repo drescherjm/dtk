@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 15:18:27 2014 (+0100)
+ * Last-Updated: mar. avril  1 15:37:03 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 319
+ *     Update #: 320
  */
 
 /* Commentary:
@@ -65,6 +65,8 @@ public:
     QHash<QString, QPluginLoader *> loaders;
 
     bool verboseLoading;
+    int argc;
+    char * argv;
 };
 
 #include "dtkAbstractData.h"
@@ -99,10 +101,11 @@ dtkPluginManager *dtkPluginManager::instance(void)
 
 void dtkPluginManager::initializeApplication(void)
 {
-    int   argc = 1;
-    char *argv[] = {"dtk-embedded"};
-    
-    (void) new QApplication(argc, argv);
+    d->argc = 1;
+    d->argv = new char[13];
+    d->argv = (char *)"dtk-embedded";
+
+    (void) new QApplication(d->argc, &(d->argv));
 }
 
 void dtkPluginManager::initialize(void)
@@ -293,10 +296,14 @@ QString dtkPluginManager::path(void) const
 dtkPluginManager::dtkPluginManager(void) : d(new dtkPluginManagerPrivate)
 {
     d->verboseLoading = false;
+    d->argv = NULL;
 }
 
 dtkPluginManager::~dtkPluginManager(void)
 {
+    if (d->argv) {
+        delete d->argv;
+    }
     delete d;
 
     d = NULL;

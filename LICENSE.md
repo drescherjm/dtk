@@ -1,27 +1,9 @@
-LICENSE.txt --- New BSD
-;; 
-;; Author: Julien Wintz
-;; Copyright (C) 2008-2011 - Julien Wintz, Inria.
-;; Created: Tue Jul  5 15:02:15 2011 (+0200)
-;; Version: $Id$
-;; Last-Updated: Tue Jul  5 15:02:37 2011 (+0200)
-;;           By: Julien Wintz
-;;     Update #: 2
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+>LICENSE.txt --- New BSD
 
-Commentary:
-;; 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-Change log:
-;; 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-Copyright (c) 2008-2011, INRIA
+>Copyright (c) 2008-2011, INRIA
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without
+>Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
@@ -36,7 +18,7 @@ met:
   used to endorse or promote products derived from this software
   without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT

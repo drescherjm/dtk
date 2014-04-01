@@ -1,2 +1,2 @@
-> dtk is a meta-platform for modular scientific platform development.
+dtk is a meta-platform for modular scientific platform development.
 

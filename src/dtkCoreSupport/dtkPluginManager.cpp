@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Aug  4 12:20:59 2009 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril  1 15:37:03 2014 (+0200)
+ * Last-Updated: mer. avril  2 08:45:01 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 320
+ *     Update #: 321
  */
 
 /* Commentary:
@@ -19,6 +19,8 @@
 
 #include "dtkPlugin.h"
 #include "dtkPluginManager.h"
+
+#include <QApplication>
 
 #include <dtkLog/dtkLogger.h>
 

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Sep  5 13:23:20 2011 (+0200)
  * Version: $Id$
- * Last-Updated: Wed Sep 28 12:39:04 2011 (+0200)
- *           By: Julien Wintz
- *     Update #: 59
+ * Last-Updated: mer. avril  2 08:47:04 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 60
  */
 
 /* Commentary:
@@ -21,6 +21,8 @@
 
 #include <dtkCoreSupport/dtkPlugin.h>
 #include <dtkCoreSupport/dtkPluginManager.h>
+
+#include<QtWidgets>
 
 class dtkAboutPluginPrivate
 {

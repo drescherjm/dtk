@@ -18,6 +18,8 @@
 #include "dtkComposerNodeRemote_p.h"
 #include "dtkComposerTransmitterVariant.h"
 
+#include <QApplication>
+
 #include <dtkDistributedSupport/dtkDistributedController.h>
 #include <dtkDistributedSupport/dtkDistributedCommunicator.h>
 #include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>

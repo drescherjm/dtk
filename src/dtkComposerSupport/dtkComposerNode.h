@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 15:45:31 2014 (+0100)
+ * Last-Updated: mar. avril  1 22:32:13 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 56
+ *     Update #: 59
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@ class dtkComposerNodePrivate;
 
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNode
 {
-public: 
+public:
              dtkComposerNode(void);
     virtual ~dtkComposerNode(void);
 

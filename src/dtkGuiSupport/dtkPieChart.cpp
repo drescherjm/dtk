@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. avril 24 15:42:10 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon May 21 22:37:06 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 79
+ * Last-Updated: mer. avril  2 08:47:46 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 81
  */
 
 /* Commentary:
@@ -18,6 +18,8 @@
  */
 
 #include "dtkPieChart.h"
+
+#include <QtWidgets>
 
 #include <dtkCoreSupport/dtkGlobal.h>
 

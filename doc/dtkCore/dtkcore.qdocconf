@@ -1,5 +1,4 @@
-include(../dtk/fileextensions.qdocconf)
-include(../dtk/macros.qdocconf)
+include(../dtk/dtk.qdocconf)
 
 project     = dtkCore
 description = dtkCore Reference Documentation

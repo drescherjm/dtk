@@ -2,7 +2,8 @@
 
 #include standard set of macros and C++ defines and ignores
 include(fileextensions.qdocconf)
+include(html-templates-offline.qdocconf)
 include(macros.qdocconf)
 
 #extra configuration data DITA information
-include(config.qdocconf)
+# include(./config.qdocconf)

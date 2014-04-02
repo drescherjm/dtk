@@ -58,23 +58,23 @@ links
 */
 
 a:link {
-    color: #007330;
+    color: #e3292e;
     text-decoration: none;
     text-align: left;
 }
 
 a:hover {
-    color: #44a51c;
+    color: #932929;
     text-align: left;
 }
 
 a:visited {
-    color: #007330;
+    color: #e3292e;
     text-align: left;
 }
 
 a:visited:hover {
-    color: #44a51c;
+    color: #932929;
     text-align: left;
 }
 
@@ -287,7 +287,7 @@ headers
 
 @media screen {
     .title {
-        color: #313131;
+        color: #eee;
         font-size: 18px;
         font-weight: normal;
         left: 0;
@@ -297,7 +297,7 @@ headers
         position: absolute;
         right: 0;
         top: 0;
-        background-color: #E6E6E6;
+        background-color: #363842;
         border-bottom: 1px #CCC solid;
         border-top: 2px #CCC solid;
         font-weight: bold;

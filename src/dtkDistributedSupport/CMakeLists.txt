@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: lun. févr. 10 15:46:46 2014 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 255
+## Last-Updated: mer. avril  2 10:36:40 2014 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 256
 ######################################################################
 ## 
 ### Commentary: 
@@ -130,7 +130,7 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
 endif(DTK_HAVE_MPI)
 
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
 )

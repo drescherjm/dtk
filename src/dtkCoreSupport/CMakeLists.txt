@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: lun. févr. 10 15:46:23 2014 (+0100)
-##           By: Thibaud Kloczko
-##     Update #: 405
+## Last-Updated: mer. avril  2 10:35:39 2014 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 406
 ######################################################################
 ## 
 ### Commentary: 
@@ -138,7 +138,7 @@ configure_file (
 ## Build rules
 ## #################################################################
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
 )

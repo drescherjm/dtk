@@ -26,9 +26,11 @@ set(DTK_TARGETS ${DTK_TARGETS} dtkMath)
 set(DTK_TARGETS ${DTK_TARGETS} dtkWidgets)
 
 set(DTK_TARGETS ${DTK_TARGETS} dtkCoreSupport)
+set(DTK_TARGETS ${DTK_TARGETS} dtkComposerSupport)
 set(DTK_TARGETS ${DTK_TARGETS} dtkContainerSupport)
+set(DTK_TARGETS ${DTK_TARGETS} dtkDistributedSupport)
 set(DTK_TARGETS ${DTK_TARGETS} dtkGuiSupport)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMathSupport)
-#set(DTK_TARGETS ${DTK_TARGETS} dtkPlotSupport)
+set(DTK_TARGETS ${DTK_TARGETS} dtkPlotSupport)
 
 export(TARGETS ${DTK_TARGETS} FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")

@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 12:08:44 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Feb 28 16:01:42 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 57
+ * Last-Updated: mar. avril  1 22:11:13 2014 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 62
  */
 
 /* Change Log:
@@ -75,12 +75,12 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
 // dtkCorePluginManager
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate<T>)
+template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager() : d(new dtkCorePluginManagerPrivate<T>)
 {
 
 }
 
-template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
+template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager()
 {
     delete d;
 
@@ -101,7 +101,7 @@ template <typename T> void dtkCorePluginManager<T>::initialize(const QString& pa
         this->load(info.absoluteFilePath());
 }
 
-template <typename T> void dtkCorePluginManager<T>::uninitialize(void)
+template <typename T> void dtkCorePluginManager<T>::uninitialize()
 {
     foreach(const QString &path, d->loaders.keys())
         this->unload(path);
@@ -132,7 +132,7 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
     if(!d->check(path))
         return;
 
-    QPluginLoader *loader = new QPluginLoader(path);
+    QPluginLoader *loader = new QPluginLoader(path); // should not set this as parent to avoid bad deallocation
 
     if(!loader)
         return;
@@ -169,7 +169,7 @@ template <typename T> void dtkCorePluginManager<T>::unload(const QString& path)
 #pragma mark -
 #pragma Plugin Queries
 
-template <typename T> QStringList dtkCorePluginManager<T>::plugins(void)
+template <typename T> QStringList dtkCorePluginManager<T>::plugins()
 {
     return d->loaders.keys();
 }

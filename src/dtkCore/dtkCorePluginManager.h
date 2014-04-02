@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb 11 12:07:50 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Feb 28 15:58:49 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 43
+ * Last-Updated: mer. avril  2 10:04:36 2014 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 53
  */
 
 /* Change Log:
@@ -18,17 +18,21 @@
 
 template <typename T> class dtkCorePluginManagerPrivate;
 
+// ///////////////////////////////////////////////////////////////////
+// dtkCorePluginManager
+// ///////////////////////////////////////////////////////////////////
+
 template <typename T> class dtkCorePluginManager : public QObject
 {
 public:
-     dtkCorePluginManager(void);
-    ~dtkCorePluginManager(void);
+     dtkCorePluginManager();
+    ~dtkCorePluginManager();
 
 #pragma mark -
 #pragma Manager Management
 
     virtual void   initialize(const QString& path);
-    virtual void uninitialize(void);
+    virtual void uninitialize();
 
 #pragma mark -
 #pragma Plugin Management
@@ -40,10 +44,12 @@ public:
 #pragma mark -
 #pragma Plugin Queries
     
-    QStringList plugins(void);
+    QStringList plugins();
 
 protected:
     dtkCorePluginManagerPrivate<T> *d;
 };
 
-#include "dtkCorePluginManager.tpp"
+// ///////////////////////////////////////////////////////////////////
+
+#include "dtkCorePluginManager_t.h"

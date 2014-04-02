@@ -1,7 +1,7 @@
 /*!
   \class dtkCorePluginFactory
   \inmodule dtkCore
-  \brief The dtkCorePluginFactory class is a template class that provides a plugin factory for any template type.
+  \brief The dtkCorePluginFactory class is a template class that provides a plugin factory for any type.
  */
 
 
@@ -14,6 +14,9 @@
  */
 
 /*!  \typedef dtkCorePluginFactory::creator
+     Pattern defining creator functions provided by the plugin.
+     The signature of such functions must be:
+     \code T *(*creator) () \endcode
  */
 
 /*! \fn void dtkCorePluginFactory::record(const QString& key, creator func)

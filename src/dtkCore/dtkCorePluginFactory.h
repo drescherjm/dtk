@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 15:43:06 2013 (+0100)
  * Version: 
- * Last-Updated: mar. avril  1 16:59:36 2014 (+0200)
+ * Last-Updated: mer. avril  2 10:03:47 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 28
+ *     Update #: 31
  */
 
 /* Change Log:
@@ -58,4 +58,4 @@ template <typename S, typename T> S *dtkCorePluginFactoryCreator(void) {
     return new T;
 }
 
-#include "dtkCorePluginFactory.tpp"
+#include "dtkCorePluginFactory_t.h"

@@ -11,7 +11,5 @@ sourcedirs  = ../../src/dtkCore/
 exampledirs = .
 imagedirs   = .
 
-sources.fileextensions  += "*.tpp"
-
 navigation.landingpage = "dtkCore"
 navigation.cppclassespage = "dtkCore C++ Classes"

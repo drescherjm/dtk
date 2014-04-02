@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Feb  8 16:49:52 2013 (+0100)
 ## Version: 
-## Last-Updated: Sun Mar 24 16:58:43 2013 (+0100)
-##           By: Julien Wintz
-##     Update #: 34
+## Last-Updated: mer. avril  2 10:03:28 2014 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 35
 ######################################################################
 ## 
 ### Change Log:
@@ -27,10 +27,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePlugin.h
   dtkCorePluginFactory
   dtkCorePluginFactory.h
-  dtkCorePluginFactory.tpp
+  dtkCorePluginFactory_t.h
   dtkCorePluginManager
   dtkCorePluginManager.h
-  dtkCorePluginManager.tpp
+  dtkCorePluginManager_t.h
   dtkCoreSettings
   dtkCoreSettings.h)
 

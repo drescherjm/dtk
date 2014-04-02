@@ -1,0 +1,32 @@
+/*!
+    \module dtkDistributed
+    \title  dtkDistributed C++ Classes
+
+    \brief Provides all the mechanisms to perform distributed calculations.
+
+    dtkDistributed is one the top most layers, as it contains basic
+    distributed concepts such as data structures, cluster
+    introspection, but also end-user ready components that can be
+    integrated directly into a platform.
+
+    A communication manager is provided with a fallback mechanism: mpi
+    (message passing interface) library is used by default if
+    available, a socket backend is used otherwise or if instructed. It
+    features a dtk styled interface around methods of the fundamental
+    distributed computing idom: send, receive, broadcast, barrier,
+    etc.
+
+    Second, it is possible to query a computing cluster to introspect
+    its sate, and ultimately dialog with its job queues to deploy a
+    given series of processes and run them in a distributed fashion. A
+    high level component is provided, and will in term, support both
+    torque and oar schedulers.
+
+    This layer is still work in progress but its next feature will
+    concern the use of a cluster to achieve distributed render of
+    complex scenes. This work will make the connection between the
+    communication and clustering interfaces feature of dtkDistributed.
+
+    The distribution layer is the connection with INRIA's CRISAM
+    computing platform.
+*/

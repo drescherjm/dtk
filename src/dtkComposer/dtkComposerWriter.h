@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:40:30 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 11 09:13:17 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 53
+ * Last-Updated: mer. avril  2 13:07:54 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -20,7 +20,8 @@
 #pragma once
 
 #include <QtCore>
-#include <QtXml>
+
+#include <QDomDocument>
 
 class dtkComposerScene;
 class dtkComposerSceneEdge;

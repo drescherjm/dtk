@@ -32,7 +32,7 @@ set(${PROJECT_NAME}_SOURCES
 ## Build rules
 ## #################################################################
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 

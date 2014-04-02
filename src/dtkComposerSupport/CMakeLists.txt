@@ -381,7 +381,7 @@ endif(DTK_HAVE_VRPN AND DTK_BUILD_VR)
 add_definitions(-DQSTATEMACHINE_DEBUG)
 
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
 )

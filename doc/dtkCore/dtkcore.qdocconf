@@ -4,7 +4,7 @@ project     = dtkCore
 description = dtkCore Reference Documentation
 url         = http://dtk.inria.fr
 
-outputdir   = ../html
+outputdir   = ../html/dtkCore
 headerdirs  = ../../src/dtkCore/
 sourcedirs  = ../../src/dtkCore/
 exampledirs = .

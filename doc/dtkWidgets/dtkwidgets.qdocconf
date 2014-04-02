@@ -1,0 +1,14 @@
+include(../dtk/dtk.qdocconf)
+
+project     = dtkWidgets
+description = dtkWidgets Reference Documentation
+url         = http://dtk.inria.fr
+
+outputdir   = ../html/dtkWidgets
+headerdirs  = ../../src/dtkWidgets/
+sourcedirs  = ../../src/dtkWidgets/
+exampledirs = .
+imagedirs   = .
+
+navigation.landingpage = "dtkWidgets"
+navigation.cppclassespage = "dtkWidgets C++ Classes"

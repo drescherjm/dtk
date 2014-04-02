@@ -2,24 +2,16 @@
  * 
  * Author: Julien Wintz
  * Created: Fri Feb  8 16:20:47 2013 (+0100)
- * Version: 
- * Last-Updated: Wed Apr 10 11:22:57 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 76
- */
-
-/* Change Log:
- * 
  */
 
 #pragma once
 
-template <typename T> dtkCorePluginFactory<T>::dtkCorePluginFactory(void)
+template <typename T> dtkCorePluginFactory<T>::dtkCorePluginFactory()
 {
     
 }
 
-template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
+template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory()
 {
 
 }
@@ -27,7 +19,7 @@ template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
 #pragma mark -
 #pragma mark Type creator registration
 
-template <typename T> void dtkCorePluginFactory<T>::record(QString key, creator func)
+template <typename T> void dtkCorePluginFactory<T>::record(const QString& key, creator func)
 {
     if (this->creators.contains(key)) {
 	qDebug() << "Factory already contains key" << key << ". Nothing is done";
@@ -51,7 +43,7 @@ template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
 #pragma mark -
 #pragma mark Type creator inspection
 
-template <typename T> QStringList dtkCorePluginFactory<T>::keys(void)
+template <typename T> QStringList dtkCorePluginFactory<T>::keys()
 {
     return this->creators.keys();
 }

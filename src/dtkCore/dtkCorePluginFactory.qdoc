@@ -1,0 +1,31 @@
+/*!
+  \class dtkCorePluginFactory
+  \inmodule dtkCore
+  \brief The dtkCorePluginFactory class is a template class that provides a plugin factory for any template type.
+ */
+
+
+/*! \fn dtkCorePluginFactory::dtkCorePluginFactory()  
+    Constructs the plugin factory.
+ */
+
+/*! \fn dtkCorePluginFactory::~dtkCorePluginFactory()
+    Destroys the plugin factory
+ */
+
+/*!  \typedef dtkCorePluginFactory::creator
+ */
+
+/*! \fn void dtkCorePluginFactory::record(const QString& key, creator func)
+    Registers the creator function \a func under key \a key.
+ */
+
+/*! \fn T *dtkCorePluginFactory::create(const QString& key)
+    Creates object from the creator function identified by \a key.
+
+    Returns null pointer if \a key is not found.
+ */
+
+/*! \fn QStringList dtkCorePluginFactory::keys()
+    Returns all the recorded creator function keys.
+ */

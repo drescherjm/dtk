@@ -150,11 +150,11 @@ dtkDistributedCommunicatorMpi& dtkDistributedCommunicatorMpi::operator=(const dt
 }
 
 //! Mpi communicator initializer.
-/*! 
+/*!
  *  Initializes the MPI execution environment. This function must be
  *  called in every MPI program, must be called before any other MPI
  *  functions and must be called only once in an MPI program.
- * 
+ *
  *  \code
  *  dtkDistributedCommunicator *communicator = new dtkDistributedCommunicatorMpi;
  *  communicator->initialize();
@@ -176,7 +176,7 @@ void dtkDistributedCommunicatorMpi::initialize(void)
         d->argv[i] = new char[strlen(args.at(i).toStdString().c_str())+1];
         memcpy(d->argv[i], args.at(i).toStdString().c_str(), strlen(args.at(i).toStdString().c_str())+1);
     }
-    d->argv[argc] = ((char)NULL);
+    d->argv[argc] = NULL;
 
     MPI::Init(argc, d->argv);
 }
@@ -187,7 +187,7 @@ bool dtkDistributedCommunicatorMpi::initialized(void)
 }
 
 //! Mpi communicator uninitializer.
-/*! 
+/*!
  *  Terminates the MPI execution environment. This function should be
  *  the last MPI routine called in every MPI program - no other MPI
  *  routines may be called after it.
@@ -250,8 +250,8 @@ dtkDistributedCommunicator *dtkDistributedCommunicatorMpi::spawn(QString cmd, ql
 
 }
 
-//! 
-/*! 
+//!
+/*!
  *  Returns an elapsed wall clock time in seconds (double precision)
  *  on the calling processor.
  *
@@ -263,10 +263,10 @@ double dtkDistributedCommunicatorMpi::time(void)
     return MPI::Wtime();
 }
 
-//! 
-/*! 
+//!
+/*!
  *  Returns the resolution in seconds (double precision) of time().
- * 
+ *
  *  \sa time.
  */
 
@@ -275,8 +275,8 @@ double dtkDistributedCommunicatorMpi::tick(void)
     return MPI::Wtick();
 }
 
-//! 
-/*! 
+//!
+/*!
  *  Determines the rank of the calling process within the
  *  communicator. Initially, each process will be assigned a unique
  *  integer rank between 0 and number of processors - 1 within the
@@ -291,8 +291,8 @@ int dtkDistributedCommunicatorMpi::rank(void)
     return d->rank;
 }
 
-//!  
-/*! 
+//!
+/*!
  *  Determines the number of processes in the group associated with a
  *  communicator.
  *
@@ -305,8 +305,8 @@ int dtkDistributedCommunicatorMpi::size(void)
     return d->size;
 }
 
-//! 
-/*! 
+//!
+/*!
  *  Returns the name of the processor.
  */
 
@@ -322,7 +322,7 @@ QString dtkDistributedCommunicatorMpi::name(void) const
 }
 
 //! Standard-mode, blocking send.
-/*! 
+/*!
  *  Basic blocking send operation. Routine returns only after the
  *  application buffer in the sending task is free for reuse.
  */
@@ -338,7 +338,7 @@ void dtkDistributedCommunicatorMpi::isend(void *data, qint64 size, DataType data
 
     if (mpi_req) {
         MPI_Isend(data, size, data_type(dataType), target, tag, d->comm, &(mpi_req->d->request));
-    
+
     } else {
         MPI_Request request;
         MPI_Isend(data, size, data_type(dataType), target, tag, d->comm, &request);
@@ -378,7 +378,7 @@ void dtkDistributedCommunicatorMpi::ireceive(void *data, qint64 size, DataType d
 
     if (mpi_req) {
         MPI_Irecv(data, size, data_type(dataType), source, tag, d->comm, &(mpi_req->d->request));
-    
+
     } else {
         MPI_Request request;
         MPI_Irecv(data, size, data_type(dataType), source, tag, d->comm, &request);
@@ -386,7 +386,7 @@ void dtkDistributedCommunicatorMpi::ireceive(void *data, qint64 size, DataType d
 };
 
 //! Standard-mode, blocking receive.
-/*! 
+/*!
  *  Receive a message and block until the requested data is available
  *  in the application buffer in the receiving task.
  */
@@ -601,7 +601,7 @@ void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType 
 }
 
 //! Gather.
-/*! 
+/*!
  *  Gathers distinct messages from each task in the group to a single
  *  destination task. This routine is the reverse operation of
  *  scatter. If all is true, target is not taken into account.
@@ -618,7 +618,7 @@ void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, 
 }
 
 //! Scatter.
-/*! 
+/*!
  *  Distributes distinct messages from a single source task to each
  *  task in the group.
  *
@@ -631,7 +631,7 @@ void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size,
 }
 
 //! Reduce.
-/*! 
+/*!
  *  Applies a reduction operation on all tasks in the group and places
  *  the result in one task. If all is true, target is not taken into
  *  account.
@@ -652,6 +652,6 @@ void dtkDistributedCommunicatorMpi::reduce(void *send, void *recv, qint64 size, 
 // /////////////////////////////////////////////////////////////////
 
 //! \class dtkDistributedCommunicatorMpi
-/*! 
+/*!
  *  \brief A mpi based dtk communicator.
  */

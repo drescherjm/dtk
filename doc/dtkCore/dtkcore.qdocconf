@@ -1,0 +1,17 @@
+include(../dtk/fileextensions.qdocconf)
+include(../dtk/macros.qdocconf)
+
+project     = dtkCore
+description = dtkCore Reference Documentation
+url         = http://dtk.inria.fr
+
+outputdir   = ../html
+headerdirs  = ../../src/dtkCore/
+sourcedirs  = ../../src/dtkCore/
+exampledirs = .
+imagedirs   = .
+
+sources.fileextensions  += "*.tpp"
+
+navigation.landingpage = "dtkCore"
+navigation.cppclassespage = "dtkCore C++ Classes"

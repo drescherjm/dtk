@@ -1,3 +1,9 @@
+/* dtkCorePluginManager.cpp ---
+ * 
+ * Author: Thibaud Kloczko
+ * Created: jeu. avril  3 08:45:28 2014 (+0200)
+ */
+
 /*!
   \class dtkCorePluginManagerPrivate
   \internal
@@ -15,11 +21,11 @@
   \brief The dtkCorePluginManager class is a template class that handles plugins.
 */
 
-/*! \fn dtkCorePluginManager::dtkCorePluginManager()  
+/*! \fn dtkCorePluginManager::dtkCorePluginManager(void)  
     Constructs the plugin manager.
 */
 
-/*! \fn dtkCorePluginManager::~dtkCorePluginManager()
+/*! \fn dtkCorePluginManager::~dtkCorePluginManager(void)
     Destroys the plugin manager
 */
 
@@ -29,7 +35,7 @@
     \sa scan(), load(), uninitialize()
 */
 
-/*! \fn void dtkCorePluginManager::uninitialize()
+/*! \fn void dtkCorePluginManager::uninitialize(void)
     Unloads all plugin libraries handled by the manager.
 
     \sa initialize()
@@ -53,6 +59,6 @@
     \sa load()
  */
 
-/*! \fn QStringList dtkCorePluginManager::plugins()
+/*! \fn QStringList dtkCorePluginManager::plugins(void)
     Returns all absolute path to all the plugin libraries handled by the manager.
  */

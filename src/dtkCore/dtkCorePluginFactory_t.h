@@ -6,12 +6,12 @@
 
 #pragma once
 
-template <typename T> dtkCorePluginFactory<T>::dtkCorePluginFactory()
+template <typename T> dtkCorePluginFactory<T>::dtkCorePluginFactory(void)
 {
     
 }
 
-template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory()
+template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
 {
 
 }
@@ -43,7 +43,7 @@ template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
 #pragma mark -
 #pragma mark Type creator inspection
 
-template <typename T> QStringList dtkCorePluginFactory<T>::keys()
+template <typename T> QStringList dtkCorePluginFactory<T>::keys(void)
 {
     return this->creators.keys();
 }

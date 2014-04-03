@@ -7,3 +7,5 @@ include(macros.qdocconf)
 
 #extra configuration data DITA information
 # include(./config.qdocconf)
+
+spurious = "Missing parameter name"

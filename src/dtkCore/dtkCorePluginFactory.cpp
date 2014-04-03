@@ -1,3 +1,9 @@
+/* dtkCorePluginFactory.cpp ---
+ * 
+ * Author: Thibaud Kloczko
+ * Created: jeu. avril  3 08:44:47 2014 (+0200)
+ */
+
 /*!
   \class dtkCorePluginFactory
   \inmodule dtkCore
@@ -5,11 +11,11 @@
  */
 
 
-/*! \fn dtkCorePluginFactory::dtkCorePluginFactory()  
+/*! \fn dtkCorePluginFactory::dtkCorePluginFactory(void)
     Constructs the plugin factory.
  */
 
-/*! \fn dtkCorePluginFactory::~dtkCorePluginFactory()
+/*! \fn dtkCorePluginFactory::~dtkCorePluginFactory(void)
     Destroys the plugin factory
  */
 
@@ -29,6 +35,6 @@
     Returns null pointer if \a key is not found.
  */
 
-/*! \fn QStringList dtkCorePluginFactory::keys()
+/*! \fn QStringList dtkCorePluginFactory::keys(void)
     Returns all the recorded creator function keys.
  */

@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. févr. 10 15:21:53 2014 (+0100)
+## Last-Updated: lun. avril  7 11:24:11 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 215
+##     Update #: 216
 ######################################################################
 ## 
 ### Change Log:
@@ -132,10 +132,10 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
 install(FILES
   "${PROJECT_BINARY_DIR}/dtkConfig.cmake"
   "${PROJECT_BINARY_DIR}/dtkConfigVersion.cmake"
-  DESTINATION lib/cmake/dtk)
+  DESTINATION cmake)
 
 install(EXPORT dtkDepends
-  DESTINATION lib/cmake/dtk)
+  DESTINATION cmake)
 
 ## ###################################################################
 ## Beautifying

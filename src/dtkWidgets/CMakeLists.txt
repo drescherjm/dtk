@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Apr 15 11:46:27 2013 (+0200)
 ## Version: 
-## Last-Updated: Mon Apr 15 15:42:28 2013 (+0200)
-##           By: Julien Wintz
-##     Update #: 57
+## Last-Updated: lun. avril  7 11:13:47 2014 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 58
 ######################################################################
 ## 
 ### Change Log:
@@ -79,6 +79,6 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 ## ###################################################################
 
 install(TARGETS ${PROJECT_NAME}
-    DESTINATION lib
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT widgets
          EXPORT dtkDepends)

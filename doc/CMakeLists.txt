@@ -3,9 +3,9 @@
 ## Author: Thibaud Kloczko
 ## Created: lun. avril  7 19:17:05 2014 (+0200)
 ## Version: 
-## Last-Updated: lun. avril  7 19:20:04 2014 (+0200)
+## Last-Updated: mar. avril  8 00:36:08 2014 (+0200)
 ##           By: Julien Wintz
-##     Update #: 14
+##     Update #: 19
 ######################################################################
 ## 
 ### Change Log:
@@ -32,7 +32,7 @@ configure_file(${CMAKE_SOURCE_DIR}/doc/dtkCore/dtkcore.qdocconf.in ${CMAKE_CURRE
 add_custom_target(dtkCore-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkcore.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp -o ${CMAKE_BINARY_DIR}/html/dtkcore.qch
   COMMENT "-- Generating dtkCore documentation")
 
 ## ###################################################################
@@ -44,7 +44,7 @@ configure_file(${CMAKE_SOURCE_DIR}/doc/dtkDistributed/dtkdistributed.qdocconf.in
 add_custom_target(dtkDistributed-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkdistributed.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdistributed/dtkdistributed.qhp  
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdistributed/dtkdistributed.qhp -o ${CMAKE_BINARY_DIR}/html/dtkdistributed.qch
   COMMENT "-- Generating dtkDistributed documentation")
 
 add_dependencies(dtkDistributed-doc dtkCore-doc)
@@ -58,7 +58,7 @@ configure_file(${CMAKE_SOURCE_DIR}/doc/dtkWidgets/dtkwidgets.qdocconf.in ${CMAKE
 add_custom_target(dtkWidgets-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkwidgets.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkwidgets/dtkwidgets.qhp  
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkwidgets/dtkwidgets.qhp -o ${CMAKE_BINARY_DIR}/html/dtkwidgets.qch
   COMMENT "-- Generating dtkWidgets documentation")
 
 add_dependencies(dtkWidgets-doc dtkCore-doc)

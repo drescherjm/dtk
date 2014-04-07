@@ -1,15 +1,15 @@
 /* dtkWidgetsTagCloud.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 12:00:34 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 12:05:31 2013 (+0200)
+ * Version:
+ * Last-Updated: mar. avril  8 01:06:47 2014 (+0200)
  *           By: Julien Wintz
- *     Update #: 17
+ *     Update #: 25
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkWidgetsTag.h"
@@ -86,6 +86,15 @@ public:
 // /////////////////////////////////////////////////////////////////
 // dtkWidgetsTagCloud
 // /////////////////////////////////////////////////////////////////
+
+/*!
+  \class dtkWidgetsTagCloud
+
+  \inmodule dtkWidgets
+
+  \brief The dtkWidgetsTagCloud class provides a configurable tag
+  cloud.
+*/
 
 dtkWidgetsTagCloud::dtkWidgetsTagCloud(QWidget *parent) : QTextBrowser(parent)
 {

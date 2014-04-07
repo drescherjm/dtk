@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 17
+##     Update #: 35
 ######################################################################
 ##
 ### Change Log:
@@ -45,3 +45,6 @@ navigation.landingpage = "dtk Core"
 navigation.cppclassespage = "dtkCore C++ Classes"
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkcore
+
+indexes = \
+  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index

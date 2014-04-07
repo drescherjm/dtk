@@ -1,9 +1,18 @@
 ### dtk.qdocconf.in ---
-## 
+##
 ## Author: Thibaud Kloczko
-## Created: lun. avril  7 15:25:07 2014 (+0200)
+## Created: lun. avril  7 18:21:17 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 15
+######################################################################
+##
+### Change Log:
+##
+######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
 
 project     = dtkDoc
 description = dtk Reference Documentation
@@ -29,9 +38,9 @@ qhp.dtkDoc.subprojects.classes.indexTitle = dtkDoc C++ Classes
 qhp.dtkDoc.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDoc.subprojects.classes.sortPages  = true
 
-headerdirs  = ../dtk
-sourcedirs  = ../dtk
-exampledirs = ../dtk
-imagedirs   = ../dtk
+headerdirs  = ../../src/dtk
+sourcedirs  = ../../src/dtk
+exampledirs = ../../doc/dtk
+imagedirs   = ../../doc/dtk
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc

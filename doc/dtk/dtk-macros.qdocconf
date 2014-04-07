@@ -1,3 +1,17 @@
+### dtk-macros.qdocconf ---
+##
+## Author: Julien Wintz
+## Created: lun. avril  7 18:31:13 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 3
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+
 macro.aacute.HTML       = "&aacute;"
 macro.Aring.HTML        = "&Aring;"
 macro.aring.HTML        = "&aring;"
@@ -31,7 +45,6 @@ macro.mdash.HTML        = "&mdash;"
 macro.pi.HTML         = "&Pi;"
 macro.beginqdoc.HTML    = "/*!"
 macro.endqdoc.HTML      = "*/"
-
 macro.beginfloatleft.HTML   = "<div style=\"float: left; margin-right: 2em\">"
 macro.beginfloatright.HTML  = "<div style=\"float: right; margin-left: 2em\">"
 macro.endfloat.HTML         = "</div>"

@@ -1,16 +1,22 @@
 ### dtkcore.qdocconf.in ---
-## 
+##
 ## Author: Thibaud Kloczko
-## Created: lun. avril  7 09:53:27 2014 (+0200)
+## Created: lun. avril  7 18:38:20 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 17
+######################################################################
+##
+### Change Log:
+##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
 
 project     = dtkCore
 description = dtkCore Reference Documentation
 url         = ../dtkcore
-
-depends += dtkdoc
 
 qhp.projects = dtkCore
 
@@ -32,8 +38,8 @@ qhp.dtkCore.subprojects.classes.sortPages  = true
 
 headerdirs  = ../../src/dtkCore
 sourcedirs  = ../../src/dtkCore
-exampledirs = ../../src/dtkCore/doc
-imagedirs   = ../../src/dtkCore/doc/images
+exampledirs = ../../doc/dtkCore
+imagedirs   = ../../doc/dtkCore
 
 navigation.landingpage = "dtk Core"
 navigation.cppclassespage = "dtkCore C++ Classes"

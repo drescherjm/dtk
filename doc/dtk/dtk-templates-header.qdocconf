@@ -1,9 +1,19 @@
-#Default HTML header for QDoc builds.
+### dtk-templates-header.qdocconf ---
+##
+## Author: Julien Wintz
+## Created: lun. avril  7 18:33:49 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 7
+######################################################################
+##
+### Change Log:
+##
+######################################################################
 
-#specify the CSS file used by this template
-HTML.stylesheets = template/style/offline.css
+HTML.stylesheets = dtk-template/style/offline.css
 
-#for including files into the qch file
 qhp.extraFiles += style/offline.css
 
 HTML.headerstyles = \
@@ -19,8 +29,6 @@ HTML.postheader = \
     "    <div class=\"main-rounded\">\n" \
     "        <div class=\"navigationbar\">\n"\
     "        <ul>\n"\
-
-
 
 HTML.postpostheader = \
     "    </ul>\n"\

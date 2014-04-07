@@ -1,0 +1,38 @@
+### dtk-templates.qdocconf ---
+##
+## Author: Julien Wintz
+## Created: lun. avril  7 18:26:42 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 19
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+
+include(dtk-templates-config.qdocconf)
+include(dtk-templates-header.qdocconf)
+include(dtk-templates-footer.qdocconf)
+
+HTML.stylesheets  = dtk-template/style/offline.css
+
+HTML.extraimages += dtk-template/images/ico_out.png \
+                    dtk-template/images/ico_note.png \
+                    dtk-template/images/ico_note_attention.png \
+                    dtk-template/images/btn_prev.png \
+                    dtk-template/images/btn_next.png \
+                    dtk-template/images/bullet_dn.png \
+                    dtk-template/images/bullet_sq.png \
+                    dtk-template/images/bgrContent.png
+
+qhp.extraFiles +=   style/offline.css \
+                    images/ico_out.png \
+                    images/ico_note.png \
+                    images/ico_note_attention.png \
+                    images/btn_prev.png \
+                    images/btn_next.png \
+                    images/bullet_dn.png \
+                    images/bullet_sq.png \
+                    images/bgrContent.png

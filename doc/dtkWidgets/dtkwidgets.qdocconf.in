@@ -1,16 +1,24 @@
 ### dtkwidgets.qdocconf.in ---
-## 
+##
 ## Author: Thibaud Kloczko
-## Created: lun. avril  7 15:20:26 2014 (+0200)
+## Created: lun. avril  7 18:41:53 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 11
+######################################################################
+##
+### Change Log:
+##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
 
 project     = dtkWidgets
 description = dtkWidgets Reference Documentation
 url         = ../dtkwidgets
 
-depends += dtk dtkcore
+depends += dtkcore
 
 qhp.projects = dtkWidgets
 
@@ -32,8 +40,8 @@ qhp.dtkWidgets.subprojects.classes.sortPages  = true
 
 headerdirs  = ../../src/dtkWidgets
 sourcedirs  = ../../src/dtkWidgets
-exampledirs = ../../src/dtkWidgets/doc
-imagedirs   = ../../src/dtkWidgets/doc/images
+exampledirs = ../../doc/dtkWidgets
+imagedirs   = ../../doc/dtkWidgets
 
 navigation.landingpage = "dtk Widgets"
 navigation.cppclassespage = "dtkWidgets C++ Classes"

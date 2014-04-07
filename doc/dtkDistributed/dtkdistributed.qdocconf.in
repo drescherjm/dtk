@@ -1,16 +1,24 @@
 ### dtkdistributed.qdocconf.in ---
-## 
-## Author: Thibaud Kloczko
-## Created: lun. avril  7 15:13:29 2014 (+0200)
+##
+## Author: Julien Wintz
+## Created: lun. avril  7 18:40:06 2014 (+0200)
+## Version:
+## Last-Updated:
+##           By:
+##     Update #: 8
+######################################################################
+##
+### Change Log:
+##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
 
 project     = dtkDistributed
 description = dtkDistributed Reference Documentation
 url         = ../dtkdistributed
 
-depends += dtkcore dtkdoc
+depends += dtkcore
 
 qhp.projects = dtkDistributed
 
@@ -32,8 +40,8 @@ qhp.dtkDistributed.subprojects.classes.sortPages  = true
 
 headerdirs  = ../../src/dtkDistributed
 sourcedirs  = ../../src/dtkDistributed
-exampledirs = ../../src/dtkDistributed/doc
-imagedirs   = ../../src/dtkDistributed/doc/images
+exampledirs = ../../doc/dtkDistributed
+imagedirs   = ../../doc/dtkDistributed
 
 navigation.landingpage = "dtk Distributed"
 navigation.cppclassespage = "dtkDistributed C++ Classes"

@@ -4,6 +4,17 @@
 ## Created: lun. avril  7 11:14:31 2014 (+0200)
 ######################################################################
 
+get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
+get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} DIRECTORY)
+
+message(STATUS "Using Qt5 binary dir:  ${QT5_BINARY_DIR}")
+
+set(QT5_QDOC_EXECUTABLE "${QT5_BINARY_DIR}/qdoc")
+set(QT5_QHGN_EXECUTABLE "${QT5_BINARY_DIR}/qhelpgenerator")
+
+message(STATUS "Using Qt5 binary qdoc: ${QT5_QDOC_EXECUTABLE}")
+message(STATUS "Using Qt5 binary qhgn: ${QT5_QHGN_EXECUTABLE}")
+
 ## ###################################################################
 ## dtk
 ## ###################################################################
@@ -12,7 +23,7 @@ configure_file(dtk/dtk.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdoc.qdocconf I
 
 add_custom_target(dtk-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkdoc.qdocconf
+  COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkdoc.qdocconf
 )
 
 ## ###################################################################
@@ -23,8 +34,8 @@ configure_file(${CMAKE_SOURCE_DIR}/src/dtkCore/doc/dtkcore.qdocconf.in ${CMAKE_C
 
 add_custom_target(dtkCore-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkcore.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qhelpgenerator ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp
+  COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkcore.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp
   COMMENT "-- Generating dtkCore documentation")
 
 add_dependencies(dtkCore-doc dtk-doc)
@@ -37,8 +48,8 @@ configure_file(${CMAKE_SOURCE_DIR}/src/dtkDistributed/doc/dtkdistributed.qdoccon
 
 add_custom_target(dtkDistributed-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkdistributed.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qhelpgenerator ${CMAKE_BINARY_DIR}/html/dtkdistributed/dtkdistributed.qhp  
+  COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkdistributed.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdistributed/dtkdistributed.qhp  
   COMMENT "-- Generating dtkDistributed documentation")
 
 add_dependencies(dtkDistributed-doc dtkCore-doc)
@@ -51,8 +62,8 @@ configure_file(${CMAKE_SOURCE_DIR}/src/dtkWidgets/doc/dtkwidgets.qdocconf.in ${C
 
 add_custom_target(dtkWidgets-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkwidgets.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qhelpgenerator ${CMAKE_BINARY_DIR}/html/dtkwidgets/dtkwidgets.qhp  
+  COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkwidgets.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkwidgets/dtkwidgets.qhp  
   COMMENT "-- Generating dtkWidgets documentation")
 
 add_dependencies(dtkWidgets-doc dtkCore-doc)
@@ -63,8 +74,8 @@ add_dependencies(dtkWidgets-doc dtkCore-doc)
 
 add_custom_target(doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkdoc.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qhelpgenerator ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp  
+  COMMAND ${QT5_QDOC_EXECUTABLE} -indexdir ${CMAKE_BINARY_DIR}/html dtkdoc.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp  
   COMMENT "-- Generating dtk documentation")
 
 add_dependencies(doc dtkWidgets-doc dtkDistributed-doc dtkCore-doc)

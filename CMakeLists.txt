@@ -80,7 +80,10 @@ enable_testing()
 
 find_package(Qt5Core REQUIRED)
 
-# needed by dtkDistributedSupport
+## #################################################################
+## Dependencies - Optional                           [TO BE REMOVED]
+## #################################################################
+
 find_package(MPI QUIET)
 
 if(MPI_FOUND)

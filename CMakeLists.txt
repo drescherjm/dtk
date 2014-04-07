@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. avril  7 11:24:11 2014 (+0200)
+## Last-Updated: lun. avril  7 16:52:04 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 216
+##     Update #: 251
 ######################################################################
 ## 
 ### Change Log:
@@ -28,6 +28,14 @@ set(dtk_VERSION_PATCH 0)
 set(dtk_VERSION
   ${dtk_VERSION_MAJOR}.${dtk_VERSION_PATCH}.${dtk_VERSION_PATCH})
 
+## #################################################################
+## Install prefix
+## #################################################################
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
 ## ###################################################################
 ## Path setup
 ## ###################################################################
@@ -43,8 +51,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include("GNUInstallDirs")
+include(GNUInstallDirs)
+include(GenerateExportHeader)
 
 if(APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/lib/c++/v1")
@@ -58,6 +66,12 @@ else(NOT APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif(NOT APPLE)
 
+if(CMAKE_SIZEOF_VOID_P MATCHES 8)
+    set(DTK_PLATFORM_64 1)
+else()
+    set(DTK_PLATFORM_32 1)
+endif()
+
 ## ###################################################################
 ## Test setup
 ## ###################################################################
@@ -65,50 +79,37 @@ endif(NOT APPLE)
 enable_testing()
 
 ## #################################################################
-## Dependencies - Qt
+## Dependencies
 ## #################################################################
 
-if(MSVC)
-  option(DTK_USE_PRECOMPILED_HEADERS "Use precompiled headers" true)
-endif(MSVC)
+find_package(Qt5Core REQUIRED)
 
-include(dtkBuild)
-include(${dtk_USE_FILE})
-
-## #################################################################
-## Support options and deps
-## #################################################################
-
-mark_as_advanced(MPI_EXTRA_LIBRARY)
-mark_as_advanced(MPI_LIBRARY)
-mark_as_advanced(DTK_BUILD_MPI)
-
+# needed by dtkDistributedSupport
 find_package(MPI QUIET)
 
-option(DTK_BUILD_DISTRIBUTED_SUPPORT   "Build distributed support layer" true)
-option(DTK_BUILD_COMPOSER_SUPPORT      "Build composer support layer"    true)
-option(DTK_BUILD_PLOT_SUPPORT          "Build plotting support layer"    true)
-option(DTK_BUILD_MPI                   "Build MPI support "              true)
+if(MPI_FOUND)
+  include_directories(${MPI_INCLUDE_PATH})
+  set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
+  set(DTK_HAVE_MPI "YES")
+endif(MPI_FOUND)
 
-if(DTK_BUILD_MPI)
-  if(MPI_FOUND)
-    include_directories(${MPI_INCLUDE_PATH})
-    set(COMPILE_FLAGS ${COMPILE_FLAGS} ${MPI_COMPILE_FLAGS})
-    set(DTK_HAVE_MPI "YES")
-  endif(MPI_FOUND)
-endif(DTK_BUILD_MPI)
+option(DTK_BUILD_SUPPORT_DISTRIBUTED   "Build distributed support layer" true)
+option(DTK_BUILD_SUPPORT_COMPOSER      "Build composer support layer"    true)
+option(DTK_BUILD_SUPPORT_PLOT          "Build plotting support layer"    true)
 
 ## #################################################################
 ## Dependencies - internal
 ## #################################################################
 
-include_directories(${PROJECT_SOURCE_DIR}/src)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtk)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkCore)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkMath)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkDistributed)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkTest)
-include_directories(${PROJECT_SOURCE_DIR}/src/dtkWidgets)
+include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtk)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkComposer)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkCore)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkMath)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkDistributed)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkTest)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkWidgets)
 
 ## ###################################################################
 ## Input
@@ -124,18 +125,17 @@ add_subdirectory(tst)
 
 export(PACKAGE dtk)
 
-configure_file(${PROJECT_SOURCE_DIR}/cmake/dtkConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/dtkConfig.cmake" @ONLY)
-configure_file(${PROJECT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/dtkConfig.cmake.in
+  "${CMAKE_BINARY_DIR}/dtkConfig.cmake" @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
+  "${CMAKE_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
 install(FILES
-  "${PROJECT_BINARY_DIR}/dtkConfig.cmake"
-  "${PROJECT_BINARY_DIR}/dtkConfigVersion.cmake"
+  "${CMAKE_BINARY_DIR}/dtkConfig.cmake"
+  "${CMAKE_BINARY_DIR}/dtkConfigVersion.cmake"
   DESTINATION cmake)
 
-install(EXPORT dtkDepends
-  DESTINATION cmake)
+install(EXPORT dtkDepends DESTINATION cmake)
 
 ## ###################################################################
 ## Beautifying
@@ -162,6 +162,11 @@ mark_as_advanced(CMAKE_INSTALL_PREFIX)
 mark_as_advanced(CMAKE_OSX_ARCHITECTURES)
 mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
 mark_as_advanced(CMAKE_OSX_SYSROOT)
+
+mark_as_advanced(MPI_EXTRA_LIBRARY)
+mark_as_advanced(MPI_LIBRARY)
+
+mark_as_advanced(DTK_BUILD_MPI)
 
 ## ###################################################################
 ## Packaging

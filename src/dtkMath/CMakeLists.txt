@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Jul 15 15:55:43 2013 (+0200)
 ## Version: 
-## Last-Updated: Mon Jul 22 17:01:23 2013 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 37
+## Last-Updated: lun. avril  7 11:13:07 2014 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 38
 ######################################################################
 ## 
 ### Change Log:
@@ -59,6 +59,6 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 ## ###################################################################
 
 install(TARGETS ${PROJECT_NAME}
-    DESTINATION lib
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT math
          EXPORT dtkDepends)

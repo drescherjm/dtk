@@ -22,8 +22,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArray.tpp
   dtkDistributedCommunicator
   dtkDistributedCommunicator.h
-  dtkDistributedCommunicatorStatus
-  dtkDistributedCommunicatorStatus.h
   dtkDistributedLocalMessage.h
   dtkDistributedMapper
   dtkDistributedMapper.h
@@ -41,7 +39,6 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
-  dtkDistributedCommunicatorStatus.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedPolicy.cpp
@@ -80,6 +77,6 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 ## ###################################################################
 
 install(TARGETS ${PROJECT_NAME}
-    DESTINATION lib
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT distributed
          EXPORT dtkDepends)

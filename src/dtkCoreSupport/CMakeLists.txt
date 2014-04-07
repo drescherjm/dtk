@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. avril  2 10:35:39 2014 (+0200)
+## Last-Updated: lun. avril  7 11:10:18 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 406
+##     Update #: 407
 ######################################################################
 ## 
 ### Commentary: 
@@ -68,7 +68,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkSingleton.h
   dtkSingletonDeclare.h
   dtkSmartPointer.h
-  dtkSparseMatrix.h
   dtkTest.h
   )
 

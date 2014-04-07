@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Feb  8 16:49:52 2013 (+0100)
 ## Version: 
-## Last-Updated: mer. avril  2 10:03:28 2014 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 35
+## Last-Updated: lun. avril  7 11:12:18 2014 (+0200)
+##           By: Nicolas Niclausse
+##     Update #: 36
 ######################################################################
 ## 
 ### Change Log:
@@ -64,6 +64,6 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 ## ###################################################################
 
 install(TARGETS ${PROJECT_NAME}
-    DESTINATION lib
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT core
          EXPORT dtkDepends)

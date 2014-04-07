@@ -6,6 +6,6 @@ include(html-templates-offline.qdocconf)
 include(macros.qdocconf)
 
 #extra configuration data DITA information
-# include(./config.qdocconf)
+navigation.homepage = "dtk"
 
 spurious = "Missing parameter name"

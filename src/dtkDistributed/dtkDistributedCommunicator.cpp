@@ -39,6 +39,11 @@ public:
 // dtkDistributedCommunicator
 // /////////////////////////////////////////////////////////////////
 
+/*! \class dtkDistributedCommunicator
+  \inmodule dtkDistributed
+  \brief ...
+ */
+
 dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject(), d(new dtkDistributedCommunicatorPrivate)
 {
     d->id = 0;

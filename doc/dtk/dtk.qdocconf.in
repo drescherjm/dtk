@@ -7,7 +7,7 @@ include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
 
 project     = dtkDoc
 description = dtk Reference Documentation
-url         = ../dtk
+url         = ../dtkdoc
 
 depends += dtkcore dtkwidgets dtkdistributed
 
@@ -34,7 +34,4 @@ sourcedirs  = ../dtk
 exampledirs = ../dtk
 imagedirs   = ../dtk
 
-navigation.landingpage = "dtk"
-navigation.cppclassespage = "dtk C++ Classes"
-
-outputdir = @CMAKE_BINARY_DIR@/html/dtk
+outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc

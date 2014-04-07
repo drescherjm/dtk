@@ -1,6 +1,7 @@
 /*!
     \module dtkWidgets
     \title  dtkWidgets C++ Classes
+    \ingroup modules
 
     \brief Extends Qt Widgets for scientific applications.
 

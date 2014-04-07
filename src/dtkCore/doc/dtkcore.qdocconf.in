@@ -10,7 +10,7 @@ project     = dtkCore
 description = dtkCore Reference Documentation
 url         = ../dtkcore
 
-depends += dtk
+depends += dtkdoc
 
 qhp.projects = dtkCore
 
@@ -35,7 +35,7 @@ sourcedirs  = ../../src/dtkCore
 exampledirs = ../../src/dtkCore/doc
 imagedirs   = ../../src/dtkCore/doc/images
 
-navigation.landingpage = "dtkCore"
+navigation.landingpage = "dtk Core"
 navigation.cppclassespage = "dtkCore C++ Classes"
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkcore

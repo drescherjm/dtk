@@ -10,7 +10,7 @@ project     = dtkDistributed
 description = dtkDistributed Reference Documentation
 url         = ../dtkdistributed
 
-depends += dtkcore
+depends += dtkcore dtkdoc
 
 qhp.projects = dtkDistributed
 
@@ -35,7 +35,7 @@ sourcedirs  = ../../src/dtkDistributed
 exampledirs = ../../src/dtkDistributed/doc
 imagedirs   = ../../src/dtkDistributed/doc/images
 
-navigation.landingpage = "dtkDistributed"
+navigation.landingpage = "dtk Distributed"
 navigation.cppclassespage = "dtkDistributed C++ Classes"
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdistributed

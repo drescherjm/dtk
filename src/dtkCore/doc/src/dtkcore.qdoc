@@ -1,6 +1,7 @@
 /*!
     \module dtkCore
     \title  dtkCore C++ Classes
+    \ingroup modules
 
     \brief Provides fundamental concepts and related tools.
 

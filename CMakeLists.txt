@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. févr. 10 15:21:53 2014 (+0100)
-##           By: Nicolas Niclausse
-##     Update #: 215
+## Last-Updated: lun. avril  7 14:42:02 2014 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 217
 ######################################################################
 ## 
 ### Change Log:
@@ -117,6 +117,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src/dtkWidgets)
 add_subdirectory(src)
 add_subdirectory(qml)
 add_subdirectory(tst)
+add_subdirectory(doc)
 
 ## ###################################################################
 ## Exporting

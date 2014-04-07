@@ -1,0 +1,41 @@
+### dtkcore.qdocconf.in ---
+## 
+## Author: Thibaud Kloczko
+## Created: lun. avril  7 09:53:27 2014 (+0200)
+######################################################################
+
+include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+
+project     = dtkCore
+description = dtkCore Reference Documentation
+url         = ../dtkcore
+
+depends += dtk
+
+qhp.projects = dtkCore
+
+qhp.dtkCore.file             = dtkcore.qhp
+qhp.dtkCore.namespace        = fr.inria.dtk.dtkcore
+qhp.dtkCore.virtualFolder    = dtkcore
+qhp.dtkCore.indexTitle       = dtkCore
+qhp.dtkCore.indexRoot        =
+qhp.dtkCore.filterAttributes = dtkcore
+
+qhp.dtkCore.customFilters.dtk.name = dtkCore
+qhp.dtkCore.customFilters.dtk.filterAttributes = dtkcore
+
+qhp.dtkCore.subprojects                    = classes
+qhp.dtkCore.subprojects.classes.title      = C++ Classes
+qhp.dtkCore.subprojects.classes.indexTitle = dtkCore C++ Classes
+qhp.dtkCore.subprojects.classes.selectors  = class fake:headerfile
+qhp.dtkCore.subprojects.classes.sortPages  = true
+
+headerdirs  = ../../src/dtkCore
+sourcedirs  = ../../src/dtkCore
+exampledirs = ../../src/dtkCore/doc
+imagedirs   = ../../src/dtkCore/doc/images
+
+navigation.landingpage = "dtkCore"
+navigation.cppclassespage = "dtkCore C++ Classes"
+
+outputdir = @CMAKE_BINARY_DIR@/html/dtkcore

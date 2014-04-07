@@ -1,0 +1,41 @@
+### dtkdistributed.qdocconf.in ---
+## 
+## Author: Thibaud Kloczko
+## Created: lun. avril  7 15:13:29 2014 (+0200)
+######################################################################
+
+include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+
+project     = dtkDistributed
+description = dtkDistributed Reference Documentation
+url         = ../dtkdistributed
+
+depends += dtkcore
+
+qhp.projects = dtkDistributed
+
+qhp.dtkDistributed.file             = dtkdistributed.qhp
+qhp.dtkDistributed.namespace        = fr.inria.dtk.dtkdistributed
+qhp.dtkDistributed.virtualFolder    = dtkdistributed
+qhp.dtkDistributed.indexTitle       = dtkDistributed
+qhp.dtkDistributed.indexRoot        =
+qhp.dtkDistributed.filterAttributes = dtkdistributed
+
+qhp.dtkDistributed.customFilters.dtk.name = dtkDistributed
+qhp.dtkDistributed.customFilters.dtk.filterAttributes = dtkdistributed
+
+qhp.dtkDistributed.subprojects                    = classes
+qhp.dtkDistributed.subprojects.classes.title      = C++ Classes
+qhp.dtkDistributed.subprojects.classes.indexTitle = dtkDistributed C++ Classes
+qhp.dtkDistributed.subprojects.classes.selectors  = class fake:headerfile
+qhp.dtkDistributed.subprojects.classes.sortPages  = true
+
+headerdirs  = ../../src/dtkDistributed
+sourcedirs  = ../../src/dtkDistributed
+exampledirs = ../../src/dtkDistributed/doc
+imagedirs   = ../../src/dtkDistributed/doc/images
+
+navigation.landingpage = "dtkDistributed"
+navigation.cppclassespage = "dtkDistributed C++ Classes"
+
+outputdir = @CMAKE_BINARY_DIR@/html/dtkdistributed

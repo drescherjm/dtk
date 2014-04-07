@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Tue Feb  5 10:26:22 2013 (+0100)
 ## Version: 
-## Last-Updated: mer. avril  2 09:10:42 2014 (+0200)
+## Last-Updated: lun. avril  7 16:32:46 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 34
+##     Update #: 51
 ######################################################################
 ## 
 ### Change Log:
@@ -15,7 +15,6 @@
 ## ###################################################################
 ## Defines:
 ## - dtk_INCLUDE_DIRS
-## - dtk_LIBRARIES
 ## ###################################################################
 
 
@@ -28,6 +27,9 @@ set(dtk_INCLUDE_DIRS
 
 include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
 
-#set(dtk_LIBRARIES dtkDistributed)
+## ###################################################################
+## Options
+## ###################################################################
 
-set(dtk_USE_FILE "@dtk_USE_FILE@")
+# needed for Support
+set(DTK_HAVE_MPI @DTK_HAVE_MPI@)

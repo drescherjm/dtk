@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Feb  4 10:27:52 2013 (+0100)
  * Version: 
- * Last-Updated: mer. févr.  5 15:24:55 2014 (+0100)
+ * Last-Updated: lun. avril  7 17:00:06 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 11
+ *     Update #: 12
  */
 
 /* Change Log:
@@ -19,6 +19,6 @@
 #cmakedefine DTK_HAVE_MPI
 #cmakedefine DTK_HAVE_PLOT
 
-#cmakedefine DTK_BUILD_DISTRIBUTED_SUPPORT
-#cmakedefine DTK_BUILD_PLOT_SUPPORT
-#cmakedefine DTK_BUILD_COMPOSER_SUPPORT
+#cmakedefine DTK_BUILD_SUPPORT_DISTRIBUTED
+#cmakedefine DTK_BUILD_SUPPORT_PLOT
+#cmakedefine DTK_BUILD_SUPPORT_COMPOSER

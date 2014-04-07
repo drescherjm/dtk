@@ -5,6 +5,17 @@
 ######################################################################
 
 ## ###################################################################
+## dtk
+## ###################################################################
+
+configure_file(dtk/dtk.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdoc.qdocconf IMMEDIATE @ONLY)
+
+add_custom_target(dtk-doc
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkdoc.qdocconf
+)
+
+## ###################################################################
 ## dtkCore
 ## ###################################################################
 
@@ -15,6 +26,8 @@ add_custom_target(dtkCore-doc
   COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkcore.qdocconf
   COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qhelpgenerator ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp
   COMMENT "-- Generating dtkCore documentation")
+
+add_dependencies(dtkCore-doc dtk-doc)
 
 ## ###################################################################
 ## dtkDistributed
@@ -48,14 +61,9 @@ add_dependencies(dtkWidgets-doc dtkCore-doc)
 ## ALL
 ## ###################################################################
 
-configure_file(dtk/dtk.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdoc.qdocconf IMMEDIATE @ONLY)
-
 add_custom_target(doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkdoc.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkcore.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkdistributed.qdocconf
-  COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qdoc -indexdir ${CMAKE_BINARY_DIR}/html dtkwidgets.qdocconf
   COMMAND /home/tkloczko/Development/qt/5.3/gcc_64/bin/qhelpgenerator ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp  
   COMMENT "-- Generating dtk documentation")
 

@@ -1,0 +1,40 @@
+### dtk.qdocconf.in ---
+## 
+## Author: Thibaud Kloczko
+## Created: lun. avril  7 15:25:07 2014 (+0200)
+
+include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+
+project     = dtkDoc
+description = dtk Reference Documentation
+url         = ../dtk
+
+depends += dtkcore dtkwidgets dtkdistributed
+
+qhp.projects = dtkDoc
+
+qhp.dtkDoc.file             = dtkdoc.qhp
+qhp.dtkDoc.namespace        = fr.inria.dtk.dtkdoc
+qhp.dtkDoc.virtualFolder    = dtkdoc
+qhp.dtkDoc.indexTitle       = dtkDoc
+qhp.dtkDoc.indexRoot        =
+qhp.dtkDoc.filterAttributes = dtkdoc
+
+qhp.dtkDoc.customFilters.dtk.name = dtkDoc
+qhp.dtkDoc.customFilters.dtk.filterAttributes = dtkdoc
+
+qhp.dtkDoc.subprojects                    = classes
+qhp.dtkDoc.subprojects.classes.title      = C++ Classes
+qhp.dtkDoc.subprojects.classes.indexTitle = dtkDoc C++ Classes
+qhp.dtkDoc.subprojects.classes.selectors  = class fake:headerfile
+qhp.dtkDoc.subprojects.classes.sortPages  = true
+
+headerdirs  = ../dtk
+sourcedirs  = ../dtk
+exampledirs = ../dtk
+imagedirs   = ../dtk
+
+navigation.landingpage = "dtk"
+navigation.cppclassespage = "dtk C++ Classes"
+
+outputdir = @CMAKE_BINARY_DIR@/html/dtk

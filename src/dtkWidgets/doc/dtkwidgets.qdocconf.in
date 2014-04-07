@@ -1,0 +1,41 @@
+### dtkwidgets.qdocconf.in ---
+## 
+## Author: Thibaud Kloczko
+## Created: lun. avril  7 15:20:26 2014 (+0200)
+######################################################################
+
+include(@CMAKE_SOURCE_DIR@/doc/config/config.qdocconf)
+
+project     = dtkWidgets
+description = dtkWidgets Reference Documentation
+url         = ../dtkwidgets
+
+depends += dtk dtkcore
+
+qhp.projects = dtkWidgets
+
+qhp.dtkWidgets.file             = dtkwidgets.qhp
+qhp.dtkWidgets.namespace        = fr.inria.dtk.dtkwidgets
+qhp.dtkWidgets.virtualFolder    = dtkwidgets
+qhp.dtkWidgets.indexTitle       = dtkWidgets
+qhp.dtkWidgets.indexRoot        =
+qhp.dtkWidgets.filterAttributes = dtkwidgets
+
+qhp.dtkWidgets.customFilters.dtk.name = dtkWidgets
+qhp.dtkWidgets.customFilters.dtk.filterAttributes = dtkwidgets
+
+qhp.dtkWidgets.subprojects                    = classes
+qhp.dtkWidgets.subprojects.classes.title      = C++ Classes
+qhp.dtkWidgets.subprojects.classes.indexTitle = dtkWidgets C++ Classes
+qhp.dtkWidgets.subprojects.classes.selectors  = class fake:headerfile
+qhp.dtkWidgets.subprojects.classes.sortPages  = true
+
+headerdirs  = ../../src/dtkWidgets
+sourcedirs  = ../../src/dtkWidgets
+exampledirs = ../../src/dtkWidgets/doc
+imagedirs   = ../../src/dtkWidgets/doc/images
+
+navigation.landingpage = "dtkWidgets"
+navigation.cppclassespage = "dtkWidgets C++ Classes"
+
+outputdir = @CMAKE_BINARY_DIR@/html/dtkwidgets

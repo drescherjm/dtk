@@ -2,10 +2,6 @@
 ## 
 ## Author: Julien Wintz
 ## Created: Mon Feb  4 10:17:21 2013 (+0100)
-## Version: 
-## Last-Updated: lun. avril  7 16:52:04 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 251
 ######################################################################
 ## 
 ### Change Log:
@@ -118,6 +114,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/dtkWidgets)
 add_subdirectory(src)
 add_subdirectory(qml)
 add_subdirectory(tst)
+add_subdirectory(doc)
 
 ## ###################################################################
 ## Exporting

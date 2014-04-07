@@ -1,0 +1,31 @@
+/*!
+    \page dtkmodules.html
+    \title All Modules
+    \brief A list of all modules in dtk.
+
+    \ingroup classlists
+
+    \brief dtk consists of essential modules, add-on modules, and tools.
+
+    \section1 dtk Essentials
+
+    dtk Essentials blabla...
+
+    The following table lists the dtk essentials:
+
+    \table 80%
+    \header
+        \li Module
+        \li Description
+    \row
+        \li \l{dtkCore}
+        \li Core non-graphical classes used by other modules.
+    \row
+        \li \l{dtkDistributed}
+        \li Meuh
+    \row
+        \li \l{dtkWidgets}
+        \li Re-Meuh
+    \endtable
+
+*/

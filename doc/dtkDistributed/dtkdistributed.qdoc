@@ -1,6 +1,6 @@
 /*!
     \module dtkDistributed
-    \title  dtkDistributed C++ Classes
+    \title  dtkDistributed C++ Module
     \ingroup modules
 
     \brief Provides all the mechanisms to perform distributed calculations.

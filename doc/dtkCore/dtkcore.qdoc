@@ -1,6 +1,20 @@
+/* dtkcore.qdoc ---
+ *
+ * Author: Julien Wintz
+ * Created: lun. avril  7 19:29:38 2014 (+0200)
+ * Version:
+ * Last-Updated:
+ *           By:
+ *     Update #: 2
+ */
+
+/* Change Log:
+ *
+ */
+
 /*!
     \module dtkCore
-    \title  dtkCore C++ Classes
+    \title  dtkCore C++ Modules
     \ingroup modules
 
     \brief Provides fundamental concepts and related tools.

@@ -1,31 +1,31 @@
+/* dtk-modules.qdoc ---
+ *
+ * Author: Julien Wintz
+ * Created: lun. avril  7 19:29:47 2014 (+0200)
+ * Version:
+ * Last-Updated:
+ *           By:
+ *     Update #: 7
+ */
+
+/* Change Log:
+ *
+ */
+
 /*!
-    \page modules.html
-    \title All Modules
-    \brief A list of all modules in dtk.
+  \group modules
 
-    \ingroup classlists
+  \title All Modules
 
-    \brief dtk consists of essential modules, add-on modules, and tools.
+  \brief A list of all modules in dtk.
+  \brief dtk consists of essential modules, add-on modules, and tools.
 
-    \section1 dtk Essentials
+  \section1 dtk Essentials
 
-    dtk Essentials blabla...
+  dtk Essentials blabla...
 
-    The following table lists the dtk essentials:
+  The following table lists the dtk essentials:
 
-    \table 80%
-    \header
-        \li Module
-        \li Description
-    \row
-        \li \l{dtkCore}
-        \li Core non-graphical classes used by other modules.
-    \row
-        \li \l{dtkDistributed}
-        \li Meuh
-    \row
-        \li \l{dtkWidgets}
-        \li Re-Meuh
-    \endtable
+  \section1 dtk Modules
 
 */

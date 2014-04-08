@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr 15 12:00:34 2013 (+0200)
  * Version:
- * Last-Updated: mar. avril  8 01:06:47 2014 (+0200)
- *           By: Julien Wintz
- *     Update #: 25
+ * Last-Updated: mar. avril  8 14:54:47 2014 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 33
  */
 
 /* Change Log:
@@ -94,6 +94,8 @@ public:
 
   \brief The dtkWidgetsTagCloud class provides a configurable tag
   cloud.
+
+  \l {Core Module} {Core Module} ...
 */
 
 dtkWidgetsTagCloud::dtkWidgetsTagCloud(QWidget *parent) : QTextBrowser(parent)

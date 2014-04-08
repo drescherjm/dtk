@@ -5,20 +5,18 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 15
+##     Update #: 51
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
 
-project     = dtkDoc
-description = dtk Reference Documentation
-url         = ../dtkdoc
-
-depends += dtkcore dtkwidgets dtkdistributed
+project      = dtkDoc
+description  = dtk Reference Documentation
+url          = ../dtkdoc
 
 qhp.projects = dtkDoc
 
@@ -29,18 +27,29 @@ qhp.dtkDoc.indexTitle       = dtkDoc
 qhp.dtkDoc.indexRoot        =
 qhp.dtkDoc.filterAttributes = dtkdoc
 
-qhp.dtkDoc.customFilters.dtk.name = dtkDoc
+qhp.dtkDoc.customFilters.dtk.name             = dtkDoc
 qhp.dtkDoc.customFilters.dtk.filterAttributes = dtkdoc
 
 qhp.dtkDoc.subprojects                    = classes
-qhp.dtkDoc.subprojects.classes.title      = C++ Classes
-qhp.dtkDoc.subprojects.classes.indexTitle = dtkDoc C++ Classes
+qhp.dtkDoc.subprojects.classes.title      = Classes
+qhp.dtkDoc.subprojects.classes.indexTitle = All Classes
 qhp.dtkDoc.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDoc.subprojects.classes.sortPages  = true
 
-headerdirs  = ../../src/dtk
-sourcedirs  = ../../src/dtk
-exampledirs = ../../doc/dtk
-imagedirs   = ../../doc/dtk
+headerdirs  += ../../src/dtk
+sourcedirs  += ../../src/dtk \
+               ../../doc/dtk/src
+
+exampledirs += ../../doc/dtk/snp
+imagedirs   += ../../doc/dtk/img
+excludedirs += ../../doc/dtk/snp
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc
+
+indexes = \
+  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
+  @QT5_DOCUMENTATION_D@/qtgui/qtgui.index \
+  @QT5_DOCUMENTATION_D@/qtwidgets/qtwidgets.index \
+  @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
+  @CMAKE_BINARY_DIR@/html/dtkdistributed/dtkdistributed.index \
+  @CMAKE_BINARY_DIR@/html/dtkwidgets/dtkwidgets.index

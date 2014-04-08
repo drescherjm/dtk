@@ -1,9 +1,11 @@
 
 /*!
     \page dtkcore-index.html
-    \title dtk Core 
+    \title Core Module
 
     \brief The dtkCore module is part of dtk's essential modules.
+
+    \l {All Modules} ...
 
     \section1 Getting Started
 

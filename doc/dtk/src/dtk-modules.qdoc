@@ -5,7 +5,7 @@
  * Version:
  * Last-Updated:
  *           By:
- *     Update #: 7
+ *     Update #: 10
  */
 
 /* Change Log:
@@ -13,7 +13,7 @@
  */
 
 /*!
-  \group modules
+  \group dtk-modules
 
   \title All Modules
 
@@ -26,6 +26,8 @@
 
   The following table lists the dtk essentials:
 
-  \section1 dtk Modules
+  \section1 dtk Classes
+
+  \section1 Toto le haricot
 
 */

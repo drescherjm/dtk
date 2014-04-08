@@ -113,6 +113,7 @@ endif(APPLE)
 ## Link rules
 ## ###################################################################
 
+qt5_use_modules(${PROJECT_NAME} Declarative)
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Quick)

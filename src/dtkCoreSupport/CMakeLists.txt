@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: lun. avril  7 11:10:18 2014 (+0200)
+## Last-Updated: mar. avril  8 11:03:39 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 407
+##     Update #: 409
 ######################################################################
 ## 
 ### Commentary: 
@@ -142,8 +142,10 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_HEADERS}
 )
 
-qt5_use_modules(${PROJECT_NAME} Widgets)
+qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Network)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 
 target_link_libraries(${PROJECT_NAME}
   dtkLog

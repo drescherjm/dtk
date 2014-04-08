@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. août 29 11:32:23 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 67
+ * Last-Updated: mar. avril  8 18:13:57 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 68
  */
 
 /* Commentary: 
@@ -99,15 +99,15 @@ public:
         (*this)[2] = dtkVector3D<T>((T)(0), (T)(0), (T)(1));
     }
 
-    dtkReferential(dtkVector3D<T> i, dtkVector3D<T> j, dtkVector3D<T> k) {
+    dtkReferential(const dtkVector3D<T>& i, const dtkVector3D<T>& j, const dtkVector3D<T>& k) {
         (*this)[0] = i;
         (*this)[1] = j;
         (*this)[2] = k;
     }
 
-    dtkVector3D<T> i(void) { return (*this)[0]; }
-    dtkVector3D<T> j(void) { return (*this)[1]; }
-    dtkVector3D<T> k(void) { return (*this)[2]; }
+    const dtkVector3D<T>& i(void) { return (*this)[0]; }
+    const dtkVector3D<T>& j(void) { return (*this)[1]; }
+    const dtkVector3D<T>& k(void) { return (*this)[2]; }
 };
 
 // /////////////////////////////////////////////////////////////////

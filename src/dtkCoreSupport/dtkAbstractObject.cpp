@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 11:05:37 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 283
+ * Last-Updated: mar. avril  8 18:06:37 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 284
  */
 
 /* Commentary:
@@ -44,7 +44,7 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 /*!
  *  
  */
-dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(other.parent()), d_ptr(new dtkAbstractObjectPrivate(*this, *other.d_ptr))
+dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(other.parent()), d_ptr(new dtkAbstractObjectPrivate(*other.d_ptr, this))
 {
     d_ptr->count = 0;
 

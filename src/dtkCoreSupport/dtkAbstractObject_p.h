@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 10:50:52 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 13:40:37 2014 (+0100)
+ * Last-Updated: mar. avril  8 18:05:20 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 12
+ *     Update #: 13
  */
 
 /* Commentary: 
@@ -33,11 +33,10 @@ class DTKCORESUPPORT_EXPORT dtkAbstractObjectPrivate
 {
 public:
     dtkAbstractObjectPrivate(dtkAbstractObject *q = 0) : q_ptr(q) {}
-    dtkAbstractObjectPrivate(dtkAbstractObject& q, const dtkAbstractObjectPrivate& other) : q_ptr(&q), 
-                                                                                            values(other.values), 
-                                                                                            properties(other.properties), 
-                                                                                            metadatas(other.metadatas) {}
-
+    dtkAbstractObjectPrivate(const dtkAbstractObjectPrivate& other, dtkAbstractObject *q = 0) : q_ptr(q),
+                                                                     values(other.values),
+                                                                     properties(other.properties),
+                                                                     metadatas(other.metadatas) {}
 public:
     virtual ~dtkAbstractObjectPrivate(void) {}
 

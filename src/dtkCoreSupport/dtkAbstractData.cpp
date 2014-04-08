@@ -36,7 +36,7 @@ dtkAbstractData::dtkAbstractData(dtkAbstractData *parent) : dtkAbstractObject(*n
     d->numberOfChannels = 0;
 }
 
-dtkAbstractData::dtkAbstractData(const dtkAbstractData& other) : dtkAbstractObject(*new dtkAbstractDataPrivate(*other.d_func()), other)
+dtkAbstractData::dtkAbstractData(const dtkAbstractData& other) : dtkAbstractObject(*new dtkAbstractDataPrivate(*other.d_func()), this)
 {
 
 }

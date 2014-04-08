@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 12:12:08 2012 (+0200)
  * Version: $Id$
- * Last-Updated: lun. févr.  3 13:41:15 2014 (+0100)
+ * Last-Updated: mar. avril  8 18:03:40 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 20
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -33,7 +33,7 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataPrivate : public dtkAbstractObjectPri
 {
 public:
     dtkAbstractDataPrivate(dtkAbstractData *q = 0) : dtkAbstractObjectPrivate(q) {}
-    dtkAbstractDataPrivate(const dtkAbstractDataPrivate& other) : dtkAbstractObjectPrivate(other), 
+dtkAbstractDataPrivate(const dtkAbstractDataPrivate& other, dtkAbstractData *q = 0) : dtkAbstractObjectPrivate(other, q),
                                                                   readers(other.readers),
                                                                   writers(other.writers),
                                                                   converters(other.converters),

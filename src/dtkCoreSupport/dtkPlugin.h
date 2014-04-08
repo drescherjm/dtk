@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 13:49:50 2008 (+0100)
  * Version: $Id$
- * Last-Updated: Tue Apr 24 14:43:47 2012 (+0200)
- *           By: tkloczko
- *     Update #: 69
+ * Last-Updated: mar. avril  8 10:03:49 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 70
  */
 
 /* Commentary: 
@@ -58,6 +58,6 @@ private:
     DTK_DECLARE_PRIVATE(dtkPlugin);
 };
 
-Q_DECLARE_INTERFACE(dtkPlugin, "fr.inria.dtk/0.1.0")
+Q_DECLARE_INTERFACE(dtkPlugin, "fr.inria.dtk/1.0.0")
 
 #endif

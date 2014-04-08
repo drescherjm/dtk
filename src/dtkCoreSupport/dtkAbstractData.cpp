@@ -23,7 +23,7 @@
 
 #include <dtkLog/dtkLog>
 
-#include <QtWidgets>
+#include <QPainter>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractData implementation

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jun  8 13:09:49 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 21
+ * Last-Updated: mer. avril  9 13:25:52 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -22,7 +22,7 @@
 
 #include "dtkPlotSupportExport.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class dtkPlotView;
 class dtkPlotViewPannerPrivate;

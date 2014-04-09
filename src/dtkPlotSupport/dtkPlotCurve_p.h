@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Tue Oct  1 06:17:40 2013 (+0200)
  * Version: 
- * Last-Updated: mar. févr.  4 15:22:20 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 39
+ * Last-Updated: mer. avril  9 14:06:10 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 42
  */
 
 /* Change Log:
@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include <dtkPlotSupportExport.h>
+#include "dtkPlotSupportExport.h"
 
 #include <QtCore>
-#include <QtWidgets>
+#include <QPointF>
 
 #include <qwt_plot_curve.h>
 #include <qwt_series_data.h>

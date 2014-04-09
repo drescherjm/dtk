@@ -17,7 +17,6 @@
 #define DTKPLOTVIEWLEGEND_H
 
 #include "dtkPlotSupportExport.h"
-#include <dtkConfig.h>
 
 class dtkPlotView;
 class dtkPlotViewLegendPrivate;

@@ -7,30 +7,45 @@
 
 set(QWT_FOUND "NO")
 
-find_path(QWT_INCLUDE_DIR 
+set(QWT_NAMES ${QWT_NAMES} qwt libqwt)
+
+if(QWT_DIR)
+  find_path(QWT_INCLUDE_DIR
+    NAMES qwt.h
+    PATHS ${QWT_DIR}/src ${QWT_DIR}/include
+    NO_DEFAULT_PATH )
+
+  find_library(QWT_LIBRARY
+    NAMES ${QWT_NAMES}
+    PATHS ${QWT_DIR}/lib ${QWT_DIR}/lib64 NO_DEFAULT_PATH)
+
+else(QWT_DIR)
+
+  find_path(QWT_INCLUDE_DIR
+    NAMES qwt.h
+    PATHS $ENV{QWT_DIR}/src $ENV{QWT_DIR}/include $ENV{QWT_DIR}/qwt
+    NO_DEFAULT_PATH)
+
+  find_library(QWT_LIBRARY
+    NAMES ${QWT_NAMES}
+    PATHS $ENV{QWT_DIR}/lib $ENV{QWT_DIR}/lib64 NO_DEFAULT_PATH)
+
+endif(QWT_DIR)
+
+
+
+find_path(QWT_INCLUDE_DIR
   NAMES qwt.h
-  PATHS $ENV{QWT_DIR}/src
-  $ENV{QWT_DIR}/include
-  ${QWT_DIR}/src
-  ${QWT_DIR}/include
-  ${QWT_DIR}/include/qwt
+  PATHS
   /usr/local/qwt/include
   /usr/local/include
   /opt/qwt/include
   /usr/include/qwt
-# /usr/include/qwt-qt4
   /usr/include)
 
-#  set(QWT_NAMES ${QWT_NAMES} qwt qwt-qt4 libqwt) # libqwt-qt4)
-set(QWT_NAMES ${QWT_NAMES} qwt libqwt)
-
 find_library(QWT_LIBRARY
   NAMES ${QWT_NAMES}
-  PATHS $ENV{QWT_DIR}/lib NO_DEFAULT_PATH)
-
-find_library(QWT_LIBRARY
-  NAMES ${QWT_NAMES}
-  PATHS ${QWT_DIR}/lib ${QWT_DIR}/lib64 opt/qwt/lib /usr/local/qwt/lib /usr/local/lib /usr/lib)
+  PATHS /opt/qwt/lib /usr/local/qwt/lib /usr/local/lib /usr/lib)
 
 if(QWT_INCLUDE_DIR AND QWT_LIBRARY)
   set(QWT_LIBRARIES ${QWT_LIBRARY})

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Jun 10 01:13:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jun 24 12:38:06 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 6
+ * Last-Updated: mer. avril  9 13:21:24 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 7
  */
 
 /* Commentary: 
@@ -23,7 +23,7 @@
 #include "dtkPlotSupportExport.h"
 
 #include <QtCore/QObject>
-#include <QtGui/QColor>
+#include <QColor>
 
 class dtkPlotView;
 class dtkPlotViewPickerPrivate;

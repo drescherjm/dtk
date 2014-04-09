@@ -13,14 +13,13 @@
 ## 
 ######################################################################
 
+project(dtkPlotSupport)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
 find_package(Qwt 6 REQUIRED)
 
 if(QWT_FOUND)
-
-message(STATUS "QWT has been found")
-
-project(dtkPlotSupport)
 
 include_directories(${QWT_INCLUDE_DIR})
 

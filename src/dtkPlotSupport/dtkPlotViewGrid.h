@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Jul  5 11:15:05 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 42
+ * Last-Updated: mer. avril  9 13:21:05 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 43
  */
 
 /* Commentary: 
@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 
-#include <QtGui/QColor>
+#include <QColor>
 
 class dtkPlotView;
 class dtkPlotViewGridPrivate;

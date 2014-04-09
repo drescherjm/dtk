@@ -130,6 +130,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/dtkWidgets)
 add_subdirectory(src)
 add_subdirectory(qml)
 add_subdirectory(tst)
+add_subdirectory(app)
 add_subdirectory(doc)
 
 ## ###################################################################

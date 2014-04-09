@@ -24,14 +24,6 @@ set(dtk_VERSION_PATCH 0)
 set(dtk_VERSION
   ${dtk_VERSION_MAJOR}.${dtk_VERSION_PATCH}.${dtk_VERSION_PATCH})
 
-## #################################################################
-## Install prefix
-## #################################################################
-
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
-endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-
 ## ###################################################################
 ## Path setup
 ## ###################################################################
@@ -39,6 +31,14 @@ endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+
+## #################################################################
+## Install prefix
+## #################################################################
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 ## ###################################################################
 ## Build setup
@@ -64,15 +64,27 @@ endif(NOT APPLE)
 
 if(CMAKE_SIZEOF_VOID_P MATCHES 8)
     set(DTK_PLATFORM_64 1)
-else()
+else(CMAKE_SIZEOF_VOID_P MATCHES 8)
     set(DTK_PLATFORM_32 1)
-endif()
+endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
 ## ###################################################################
 ## Test setup
 ## ###################################################################
 
 enable_testing()
+
+## #################################################################
+## Options
+## #################################################################
+
+option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
+option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
+option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)
+option(DTK_BUILD_SUPPORT_DISTRIBUTED "Build support layer" false)
+option(DTK_BUILD_SUPPORT_GUI         "Build support layer" false)
+option(DTK_BUILD_SUPPORT_MATH        "Build support layer" false)
+option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
 
 ## #################################################################
 ## Dependencies
@@ -84,6 +96,8 @@ find_package(Qt5Core REQUIRED)
 ## Dependencies - Optional                           [TO BE REMOVED]
 ## #################################################################
 
+if(DTK_BUILD_SUPPORT_DISTRIBUTED)
+
 find_package(MPI QUIET)
 
 if(MPI_FOUND)
@@ -92,9 +106,7 @@ if(MPI_FOUND)
   set(DTK_HAVE_MPI "YES")
 endif(MPI_FOUND)
 
-option(DTK_BUILD_SUPPORT_DISTRIBUTED   "Build distributed support layer" true)
-option(DTK_BUILD_SUPPORT_COMPOSER      "Build composer support layer"    true)
-option(DTK_BUILD_SUPPORT_PLOT          "Build plotting support layer"    true)
+endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
 ## #################################################################
 ## Dependencies - internal
@@ -105,8 +117,9 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtk)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkComposer)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkCore)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkDistributed)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkLog)
+include_directories(${CMAKE_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkTest)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkWidgets)
 
@@ -165,8 +178,6 @@ mark_as_advanced(CMAKE_OSX_SYSROOT)
 
 mark_as_advanced(MPI_EXTRA_LIBRARY)
 mark_as_advanced(MPI_LIBRARY)
-
-mark_as_advanced(DTK_BUILD_MPI)
 
 ## ###################################################################
 ## Packaging

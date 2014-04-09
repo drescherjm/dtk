@@ -5,20 +5,18 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 8
+##     Update #: 22
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
 
-project     = dtkDistributed
-description = dtkDistributed Reference Documentation
-url         = ../dtkdistributed
-
-depends += dtkcore
+project      = dtkDistributed
+description  = dtkDistributed Reference Documentation
+url          = ../dtkdistributed
 
 qhp.projects = dtkDistributed
 
@@ -29,7 +27,7 @@ qhp.dtkDistributed.indexTitle       = dtkDistributed
 qhp.dtkDistributed.indexRoot        =
 qhp.dtkDistributed.filterAttributes = dtkdistributed
 
-qhp.dtkDistributed.customFilters.dtk.name = dtkDistributed
+qhp.dtkDistributed.customFilters.dtk.name             = dtkDistributed
 qhp.dtkDistributed.customFilters.dtk.filterAttributes = dtkdistributed
 
 qhp.dtkDistributed.subprojects                    = classes
@@ -38,12 +36,20 @@ qhp.dtkDistributed.subprojects.classes.indexTitle = dtkDistributed C++ Classes
 qhp.dtkDistributed.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDistributed.subprojects.classes.sortPages  = true
 
-headerdirs  = ../../src/dtkDistributed
-sourcedirs  = ../../src/dtkDistributed
-exampledirs = ../../doc/dtkDistributed
-imagedirs   = ../../doc/dtkDistributed
+headerdirs  += ../../src/dtkDistributed
+sourcedirs  += ../../src/dtkDistributed \
+               ../../doc/dtkDistributed/src            
 
-navigation.landingpage = "dtk Distributed"
-navigation.cppclassespage = "dtkDistributed C++ Classes"
+exampledirs += ../../doc/dtkDistributed/snp
+imagedirs   += ../../doc/dtkDistributed/img
+excludedirs += ../../doc/dtkDistributed/snp
+
+navigation.landingpage    = "Distributed Module"
+navigation.cppclassespage = "Distributed C++ Classes"
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdistributed
+
+indexes = \
+  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
+  @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
+  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index

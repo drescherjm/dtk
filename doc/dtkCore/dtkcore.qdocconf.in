@@ -5,18 +5,18 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 35
+##     Update #: 58
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
 
-project     = dtkCore
-description = dtkCore Reference Documentation
-url         = ../dtkcore
+project      = dtkCore
+description  = dtkCore Reference Documentation
+url          = ../dtkcore
 
 qhp.projects = dtkCore
 
@@ -27,7 +27,7 @@ qhp.dtkCore.indexTitle       = dtkCore
 qhp.dtkCore.indexRoot        =
 qhp.dtkCore.filterAttributes = dtkcore
 
-qhp.dtkCore.customFilters.dtk.name = dtkCore
+qhp.dtkCore.customFilters.dtk.name             = dtkCore
 qhp.dtkCore.customFilters.dtk.filterAttributes = dtkcore
 
 qhp.dtkCore.subprojects                    = classes
@@ -36,15 +36,19 @@ qhp.dtkCore.subprojects.classes.indexTitle = dtkCore C++ Classes
 qhp.dtkCore.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkCore.subprojects.classes.sortPages  = true
 
-headerdirs  = ../../src/dtkCore
-sourcedirs  = ../../src/dtkCore
-exampledirs = ../../doc/dtkCore
-imagedirs   = ../../doc/dtkCore
+headerdirs  += ../../src/dtkCore
+sourcedirs  += ../../src/dtkCore \
+               ../../doc/dtkCore/src
+              
+exampledirs += ../../doc/dtkCore/snp
+imagedirs   += ../../doc/dtkCore/img
+excludedirs += ../../doc/dtkCore/snp
 
-navigation.landingpage = "dtk Core"
-navigation.cppclassespage = "dtkCore C++ Classes"
+navigation.landingpage    = "Core Module"
+navigation.cppclassespage = "Core C++ Classes"
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkcore
 
 indexes = \
-  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index
+  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
+  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index

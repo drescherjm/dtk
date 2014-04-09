@@ -5,20 +5,18 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 16
+##     Update #: 40
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/dtk/dtk-config.qdocconf)
+include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
 
-project     = dtkWidgets
-description = dtkWidgets Reference Documentation
-url         = ../dtkwidgets
-
-depends += dtkcore
+project      = dtkWidgets
+description  = dtkWidgets Reference Documentation
+url          = ../dtkwidgets
 
 qhp.projects = dtkWidgets
 
@@ -29,7 +27,7 @@ qhp.dtkWidgets.indexTitle       = dtkWidgets
 qhp.dtkWidgets.indexRoot        =
 qhp.dtkWidgets.filterAttributes = dtkwidgets
 
-qhp.dtkWidgets.customFilters.dtk.name = dtkWidgets
+qhp.dtkWidgets.customFilters.dtk.name             = dtkWidgets
 qhp.dtkWidgets.customFilters.dtk.filterAttributes = dtkwidgets
 
 qhp.dtkWidgets.subprojects                    = classes
@@ -38,17 +36,22 @@ qhp.dtkWidgets.subprojects.classes.indexTitle = dtkWidgets C++ Classes
 qhp.dtkWidgets.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkWidgets.subprojects.classes.sortPages  = true
 
-headerdirs  = ../../src/dtkWidgets
-sourcedirs  = ../../src/dtkWidgets
-exampledirs = ../../doc/dtkWidgets
-imagedirs   = ../../doc/dtkWidgets
+headerdirs  += ../../src/dtkWidgets
+sourcedirs  += ../../src/dtkWidgets \
+               ../../doc/dtkWidgets/src
 
-navigation.landingpage = "dtk Widgets"
-navigation.cppclassespage = "dtkWidgets C++ Classes"
+exampledirs += ../../doc/dtkWidgets/snp
+imagedirs   += ../../doc/dtkWidgets/img
+excludedirs += ../../doc/dtkWidgets/snp
+
+navigation.landingpage    = "Widgets Module"
+navigation.cppclassespage = "Widgets C++ Classes"
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkwidgets
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
   @QT5_DOCUMENTATION_D@/qtgui/qtgui.index \
-  @QT5_DOCUMENTATION_D@/qtwidgets/qtwidgets.index
+  @QT5_DOCUMENTATION_D@/qtwidgets/qtwidgets.index \
+  @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
+  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index

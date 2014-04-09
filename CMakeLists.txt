@@ -8,7 +8,7 @@
 ## 
 ######################################################################
 
-cmake_minimum_required(VERSION 2.8.10)
+cmake_minimum_required(VERSION 2.8.11)
 
 ######################################################################
 
@@ -160,11 +160,13 @@ mark_as_advanced(dtk_VERSION_BUILD)
 
 mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
+mark_as_advanced(Qt5Declarative_DIR)
 mark_as_advanced(Qt5Gui_DIR)
 mark_as_advanced(Qt5Network_DIR)
 mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
 mark_as_advanced(Qt5QuickTest_DIR)
+mark_as_advanced(Qt5Script_DIR)
 mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
 mark_as_advanced(Qt5Xml_DIR)

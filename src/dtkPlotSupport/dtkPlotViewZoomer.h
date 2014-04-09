@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Fri Sep 20 17:19:15 2013 (+0200)
- *           By: Selim Kraria
- *     Update #: 54
+ * Last-Updated: mer. avril  9 13:22:49 2014 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 57
  */
 
 /* Commentary: 
@@ -22,10 +22,9 @@
 
 #include "dtkPlotSupportExport.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QRectF>
-
-#include <QtGui/QColor>
+#include <QObject>
+#include <QRectF>
+#include <QColor>
 
 class dtkPlotView;
 class dtkPlotViewZoomerPrivate;

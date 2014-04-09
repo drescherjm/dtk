@@ -13,7 +13,7 @@
 
 #include <dtkPlotSupportExport.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class dtkPlotView;
 

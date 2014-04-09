@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: mer. avril  2 10:36:40 2014 (+0200)
+## Last-Updated: mer. avril  9 15:14:54 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 256
+##     Update #: 264
 ######################################################################
 ## 
 ### Commentary: 
@@ -92,8 +92,8 @@ set(${PROJECT_NAME}_SOURCES
 
 if(WIN32)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  ${${PROJECT_NAME}_HEADERS_MOC}
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADERS}
   dtkDistributedServiceWin_p.h)
 
 set(${PROJECT_NAME}_SOURCES
@@ -102,8 +102,8 @@ set(${PROJECT_NAME}_SOURCES
 
 else(WIN32)
 
-set(${PROJECT_NAME}_HEADERS_MOC
-  ${${PROJECT_NAME}_HEADERS_MOC}
+set(${PROJECT_NAME}_HEADERS
+  ${${PROJECT_NAME}_HEADER}
   dtkDistributedServiceUnix_p.h
   dtkDistributedUnixServerSocket.h
   dtkDistributedUnixSocket.h)
@@ -121,12 +121,10 @@ endif(WIN32)
 ## #################################################################
 
 if(DTK_HAVE_MPI)
-set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkDistributedCommunicatorMpi.h)
-set(${PROJECT_NAME}_HEADERS_MOC ${${PROJECT_NAME}_HEADERS_MOC}
-  dtkDistributedCommunicatorMpi.h)
-set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkDistributedCommunicatorMpi.cpp)
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+    dtkDistributedCommunicatorMpi.h)
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+    dtkDistributedCommunicatorMpi.cpp)
 endif(DTK_HAVE_MPI)
 
 

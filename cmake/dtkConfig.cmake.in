@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Tue Feb  5 10:26:22 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. avril  7 16:32:46 2014 (+0200)
+## Last-Updated: mer. avril  9 15:52:50 2014 (+0200)
 ##           By: Nicolas Niclausse
-##     Update #: 51
+##     Update #: 55
 ######################################################################
 ## 
 ### Change Log:
@@ -33,3 +33,11 @@ include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
 
 # needed for Support
 set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
+
+set(DTK_BUILD_SUPPORT_CORE @DTK_BUILD_SUPPORT_CORE@)
+set(DTK_BUILD_SUPPORT_CONTAINER @DTK_BUILD_SUPPORT_CONTAINER@)
+set(DTK_BUILD_SUPPORT_COMPOSER @DTK_BUILD_SUPPORT_COMPOSER@)
+set(DTK_BUILD_SUPPORT_DISTRIBUTED @DTK_BUILD_SUPPORT_DISTRIBUTED@)
+set(DTK_BUILD_SUPPORT_GUI @DTK_BUILD_SUPPORT_GUI@)
+set(DTK_BUILD_SUPPORT_MATH @DTK_BUILD_SUPPORT_MATH@)
+set(DTK_BUILD_SUPPORT_PLOT @DTK_BUILD_SUPPORT_PLOT@)

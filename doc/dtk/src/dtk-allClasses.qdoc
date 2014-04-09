@@ -1,0 +1,27 @@
+/* dtk-allClasses.qdoc ---
+ * 
+ * Author: Thibaud Kloczko
+ * Created: mer. avril  9 10:30:12 2014 (+0200)
+ * Version: 
+ * Last-Updated: mer. avril  9 11:30:19 2014 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 27
+ */
+
+/* Change Log:
+ * 
+ */
+
+/*!
+    \page dtk-allClasses.html
+    \title All Classes
+    \ingroup dtk-classlists
+
+    \brief If you know the name of the class you want, find it here.
+
+    This is a list of all dtk classes.
+
+    \generatelist classes
+
+    \sa {All Modules}
+*/

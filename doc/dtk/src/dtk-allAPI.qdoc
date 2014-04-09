@@ -1,0 +1,22 @@
+/* dtk-allAPI.qdoc ---
+ * 
+ * Author: Thibaud Kloczko
+ * Created: mer. avril  9 10:18:20 2014 (+0200)
+ * Version: 
+ * Last-Updated: mer. avril  9 10:19:50 2014 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 4
+ */
+
+/* Change Log:
+ * 
+ */
+
+/*!
+    \group dtk-allAPI
+    \title All C++ APIs per Module
+    \brief A list of C++ modules API
+
+    This page lists the C++ APIs in dtk. The \l{All Modules} page contains a list
+    of all dtk modules.
+*/

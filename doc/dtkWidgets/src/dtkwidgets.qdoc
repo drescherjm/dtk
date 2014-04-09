@@ -1,9 +1,9 @@
 /*!
     \module dtkWidgets
     \title  Widgets C++ Classes
-    \ingroup dtk-modules
+    \ingroup dtk-allAPI
 
     \brief Extends Qt Widgets for scientific applications.
 
-    dtkWidgets blabla
+    dtkWidgets layer extends Qt Widgets for scientific applications.
 */

@@ -5,7 +5,7 @@
  * Version:
  * Last-Updated:
  *           By:
- *     Update #: 10
+ *     Update #: 80
  */
 
 /* Change Log:
@@ -13,21 +13,59 @@
  */
 
 /*!
-  \group dtk-modules
+  \page dtk-modules.html
 
   \title All Modules
 
   \brief A list of all modules in dtk.
   \brief dtk consists of essential modules, add-on modules, and tools.
 
-  \section1 dtk Essentials
-
-  dtk Essentials blabla...
+  \section1 dtk Essentials  
 
   The following table lists the dtk essentials:
 
-  \section1 dtk Classes
+  \table 80%
+  \header
+     \li Module
+     \li Description
+  \row
+     \li \l{Core Module} {Core}
+     \li Fundamental concepts and related tools.
+  \row
+     \li \l{Composer Module} {Composer}
+     \li Visual programming components.
+  \row
+     \li \l{Widgets Module} {Widgets}
+     \li Widgets for scientific applications.
+  \row
+     \li \l{Store Module} {Store}
+     \li Diffusion and publication framework.
+  \endtable
 
-  \section1 Toto le haricot
+  \section1 dtk Applicatives
+
+  
+  \table 80%
+  \header
+     \li Module
+     \li Description
+  \row
+     \li \l{Distributed Module} {Distributed}
+     \li Mechanisms to perform distributed calculations.
+  \row
+     \li \l{Geometry Module} {Geometry}
+     \li 
+  \row
+     \li \l{Linear Algebra Module} {Linear Algebra}
+     \li 
+  \row
+     \li \l{Virtual Reality Module} {Virtual Reality}
+     \li 
+  \row
+     \li \l{Optimization Module} {Optimization}
+     \li 
+  \endtable
+
+  \section1 dtk Tools
 
 */

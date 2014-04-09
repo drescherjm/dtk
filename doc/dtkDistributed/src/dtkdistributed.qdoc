@@ -1,7 +1,7 @@
 /*!
     \module dtkDistributed
     \title Distributed C++ Classes
-    \ingroup modules
+    \ingroup dtk-allAPI
 
     \brief Provides all the mechanisms to perform distributed calculations.
 

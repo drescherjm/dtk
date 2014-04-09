@@ -3,12 +3,13 @@
     \page dtkcore-index.html
     \title Core Module
 
-    \brief The dtkCore module is part of dtk's essential modules.
+    \brief The dtkCore module is part of dtk's essential \l {All Modules} {modules}.
 
-    \l {All Modules} ...
+    \section1 Reference
+    These are links to the API reference materials.
+    \list
+    \li \l{Core C++ Classes}{C++ Classes API}
+    \endlist
 
-    \section1 Getting Started
-
-    \section1 Core Functionalities
-
+    \sa {All Modules}
 */

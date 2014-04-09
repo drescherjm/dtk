@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 51
+##     Update #: 52
 ######################################################################
 ##
 ### Change Log:
@@ -47,9 +47,6 @@ excludedirs += ../../doc/dtk/snp
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc
 
 indexes = \
-  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @QT5_DOCUMENTATION_D@/qtgui/qtgui.index \
-  @QT5_DOCUMENTATION_D@/qtwidgets/qtwidgets.index \
   @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
   @CMAKE_BINARY_DIR@/html/dtkdistributed/dtkdistributed.index \
   @CMAKE_BINARY_DIR@/html/dtkwidgets/dtkwidgets.index

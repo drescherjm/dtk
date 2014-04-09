@@ -75,8 +75,8 @@ void dtkComposerNodePlotCurve::run(void)
     if (!d->receiver_vector_x.isEmpty() && !d->receiver_vector_y.isEmpty()) {
         int sizex, sizey;
 
-        const dtkVectorReal *vx = d->receiver_vector_x.data();
-        const dtkVectorReal *vy = d->receiver_vector_y.data();
+        const dtkVectorReal *vx = d->receiver_vector_x.constData();
+        const dtkVectorReal *vy = d->receiver_vector_y.constData();
 
         sizex = vx->size();
         sizey = vy->size();

@@ -282,7 +282,7 @@ set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 ## 
 ## #################################################################
 
-if(DTK_BUILD_DISTRIBUTED_SUPPORT)
+if(DTK_BUILD_SUPPORT_DISTRIBUTED)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
    dtkComposerEvaluatorSlave.h
    dtkComposerNodeRemote.h
@@ -294,7 +294,7 @@ if(DTK_BUILD_DISTRIBUTED_SUPPORT)
   dtkComposerEvaluatorSlave.cpp
   dtkComposerNodeDistributed.cpp
   dtkComposerNodeRemote.cpp)
-endif(DTK_BUILD_DISTRIBUTED_SUPPORT)
+endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
 ## #################################################################
 ## Video sources
@@ -312,7 +312,7 @@ endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 ## Mpi sources
 ## #################################################################
 
-if(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED_SUPPORT)
+if(DTK_HAVE_MPI AND DTK_BUILD_SUPPORT_DISTRIBUTED)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerEvaluatorProcess.h
   dtkComposerNodeSpawn.h
@@ -325,7 +325,7 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerEvaluatorProcess.cpp
   dtkComposerNodeSpawn.cpp
   dtkComposerNodeWorld.cpp)
-endif(DTK_HAVE_MPI AND DTK_BUILD_DISTRIBUTED_SUPPORT)
+endif(DTK_HAVE_MPI AND DTK_BUILD_SUPPORT_DISTRIBUTED)
 
 ## #################################################################
 ## Kinect sources
@@ -343,7 +343,7 @@ endif(DTK_HAVE_NITE AND DTK_BUILD_VR)
 ## Plot sources
 ## #################################################################
 
-if(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+if(DTK_BUILD_SUPPORT_PLOT)
 set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkComposerNodePlotCurve.h
   dtkComposerNodePlotCurveFile.h
@@ -359,7 +359,7 @@ set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
   dtkComposerNodePlotCurveFile.cpp
   dtkComposerNodePlotCurveAppendPoint.cpp
   dtkComposerNodePlotView.cpp)
-endif(DTK_HAVE_PLOT AND DTK_BUILD_PLOT)
+endif(DTK_BUILD_SUPPORT_PLOT)
 
 ## #################################################################
 ## Vrpn sources

@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 15 17:04:44 2011 (+0100)
  * Version: $Id$
- * Last-Updated: mar. oct. 15 14:51:38 2013 (+0200)
+ * Last-Updated: mer. avril  9 12:27:33 2014 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 23
+ *     Update #: 26
  */
 
 /* Commentary: 
@@ -32,13 +32,11 @@
 #cmakedefine DTK_HAVE_FFMPEG
 #cmakedefine DTK_HAVE_NITE
 #cmakedefine DTK_HAVE_VRPN
-#cmakedefine DTK_HAVE_PLOT
 #cmakedefine DTK_HAVE_PYTHON
 
-#cmakedefine DTK_BUILD_DISTRIBUTED
-#cmakedefine DTK_BUILD_MPI
-#cmakedefine DTK_BUILD_PLOT
-#cmakedefine DTK_BUILD_COMPOSER
+#cmakedefine DTK_BUILD_SUPPORT_DISTRIBUTED
+#cmakedefine DTK_BUILD_SUPPORT_PLOT
+#cmakedefine DTK_BUILD_SUPPORT_COMPOSER
 #cmakedefine DTK_BUILD_SCRIPT
 #cmakedefine DTK_BUILD_VIDEO
 #cmakedefine DTK_BUILD_VR

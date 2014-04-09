@@ -5,7 +5,7 @@
  * Version:
  * Last-Updated:
  *           By:
- *     Update #: 17
+ *     Update #: 23
  */
 
 /* Change Log:
@@ -37,8 +37,8 @@
                 \enddiv
                 \div {class="indexboxcont indexboxbar"}
                     \list
-                    \li \l{All Classes}{All dtk C++ Classes}
                     \li \l{All Modules}{All dtk Modules}
+                    \li \l{All Classes}{All dtk Classes}
                     \endlist
                 \enddiv
             \enddiv

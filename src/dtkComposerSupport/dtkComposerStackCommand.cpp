@@ -22,7 +22,7 @@
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeLeaf.h"
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
 #endif
 #include "dtkComposerReader.h"
@@ -2415,14 +2415,14 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
 #endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
 #endif
@@ -2521,14 +2521,14 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     command->setGraph(d->graph);
                     command->setKind(dtkComposerTransmitter::Proxy);
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
 #endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
                             command->setKind(dtkComposerTransmitter::Variant);
 #endif

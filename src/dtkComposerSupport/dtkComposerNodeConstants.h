@@ -86,7 +86,7 @@ private:
     dtkComposerNodeEPrivate *d;
 };
 
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
 // /////////////////////////////////////////////////////////////////
 // CONTROLLER_RUN_RANK
@@ -122,7 +122,7 @@ private:
 
 #endif
 
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
 // /////////////////////////////////////////////////////////////////
 // MPI_ANY_TAG

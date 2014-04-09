@@ -39,7 +39,7 @@
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
 
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
 #endif
 
@@ -1006,7 +1006,7 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Input);
 
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
              command->setKind(dtkComposerTransmitter::Variant);
 #endif
@@ -1082,7 +1082,7 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Output);
 
-#if defined(DTK_BUILD_DISTRIBUTED_SUPPORT)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
             command->setKind(dtkComposerTransmitter::Variant);
 #endif

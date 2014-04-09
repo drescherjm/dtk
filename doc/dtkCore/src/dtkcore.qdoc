@@ -5,7 +5,7 @@
  * Version:
  * Last-Updated:
  *           By:
- *     Update #: 9
+ *     Update #: 12
  */
 
 /* Change Log:
@@ -15,7 +15,7 @@
 /*!
     \module dtkCore
     \title Core C++ Classes
-    \ingroup dtk-modules
+    \ingroup dtk-allAPI
 
     \brief Provides fundamental concepts and related tools.
 

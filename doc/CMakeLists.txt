@@ -3,9 +3,9 @@
 ## Author: Thibaud Kloczko
 ## Created: lun. avril  7 19:17:05 2014 (+0200)
 ## Version: 
-## Last-Updated: mar. avril  8 16:56:11 2014 (+0200)
+## Last-Updated: mer. avril  9 11:14:19 2014 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 92
+##     Update #: 93
 ######################################################################
 ## 
 ### Change Log:
@@ -33,7 +33,7 @@ configure_file(dtk/dtk.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdoc.qdocconf I
 
 add_custom_target(dtk-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${QT5_QDOC_EXECUTABLE} dtkdoc.qdocconf)
+  COMMAND ${QT5_QDOC_EXECUTABLE} -no-link-errors dtkdoc.qdocconf)
 
 ## ###################################################################
 ## dtkCore

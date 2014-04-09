@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar  9 11:05:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Sep 13 16:25:21 2012 (+0200)
- *           By: tkloczko
- *     Update #: 94
+ * Last-Updated: mer. févr. 19 10:02:15 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 108
  */
 
 /* Commentary: 
@@ -54,6 +54,19 @@ template <class T>  T dtkMixedProduct(const dtkVector3D<T> &v0,
     dtkVector3D<T> v;
     v.storeOuterProduct(v1, v2);
     return (v0*v);
+}
+
+//! dtkMixedProduct(const T v0[3], const T v1[3], const T v2[3])
+/*! 
+ * This function calculates the mixed product (also called triple scalar product)
+ * formed by three vectors v0, v1, v2.
+ */
+template <class T>  inline T dtkMixedProduct(const T v0[3], 
+                                             const T v1[3], 
+                                             const T v2[3])
+{
+    return v0[0] * v1[1] * v2[2] + v1[0] * v2[1] * v0[2] + v2[0] * v0[1] * v1[2] -
+           v0[0] * v2[1] * v1[2] - v1[0] * v0[1] * v2[2] - v2[0] * v1[1] * v0[2];
 }
 
 //! dtkQuaternionFromEulerAxisAndAngle(const dtkVector3D<T> &dtkVecEulerAxis, const T &rotateEulerAngle)

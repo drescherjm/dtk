@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:15:10 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:16:19 2012 (+0200)
- *           By: tkloczko
- *     Update #: 3
+ * Last-Updated: ven. févr. 21 09:22:41 2014 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 15
  */
 
 /* Commentary: 
@@ -96,7 +96,15 @@ template <class T> inline dtkVector3D<T>& dtkVector3D<T>::operator /=(const T& v
 
 template <class T> inline dtkVector3D<T>& dtkVector3D<T>::operator %=(const dtkVector3D<T>& vec)
 {
-    return (*this) = (*this)%vec;
+    T vecThis0 = (*this)[0];
+    T vecThis1 = (*this)[1];
+    T vecThis2 = (*this)[2];
+
+    (*this)[0] = vecThis1 * vec[2] - vecThis2 * vec[1];
+    (*this)[1] = vecThis2 * vec[0] - vecThis0 * vec[2];
+    (*this)[2] = vecThis0 * vec[1] - vecThis1 * vec[0];
+    
+    return (*this);
 }
 
 template <class T> dtkVector3D<T> dtkVector3D<T>::operator +(const dtkVector3D<T>& vec3D) const

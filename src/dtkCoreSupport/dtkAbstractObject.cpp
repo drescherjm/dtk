@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Feb 28 17:54:04 2009 (+0100)
- * Version: $Id$
- * Last-Updated: mar. avril  8 18:06:37 2014 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 284
  */
 
 /* Commentary:
@@ -60,7 +56,7 @@ dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(o
  */
 dtkAbstractObject::~dtkAbstractObject(void)
 {
-    if ( d_ptr->count.deref()){
+    if ( d_ptr->count.load() != 0){
         dtkDebug() << "Warning : deleting object of type " << this->metaObject()->className() << " with non-zero reference count";
     }
 

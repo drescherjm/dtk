@@ -1,0 +1,144 @@
+/* dtkcore-pluginsystem.qdoc ---
+ * 
+ * Author: Thibaud Kloczko
+ * Created: mer. avril  9 15:36:05 2014 (+0200)
+ */
+
+/* Change Log:
+ * 
+ */
+
+/*!
+  \group dtkcore-plugin-system
+  \title dtk Plugin System
+  \brief A guide explaining the plugin system architecture of dtk and
+  how to implement it.
+
+  dtk framework is dedicated to design modular
+  \l{http://www.inria.fr}{Inria} scientific platforms. The first step
+  towards modularity is to define a set of interfaces that are meant
+  to be extended (or specialized) with respect to a given research
+  application field. The second step consists in implementing such
+  interfaces which may require the use of third-party software
+  library. 
+
+  In practice, such implementations are carried out into standalone
+  projects, the plugins, that relies both on the platform defining the
+  interfaces and optionally the software libraries, acting as glue
+  code to let them coexist. Thus, a plugin is nothing more than a
+  container for concrete types that specialize the abstract concepts
+  of the modular platform.
+
+  In the following, we recall the main principles of the \l{How to
+  Create Qt Plugins} {Qt's plugin system} that is used in dtk. Then,
+  we detail how it is implemented and how to use it.
+*/
+
+
+/*!
+  \page dtk-plugin-qt.html
+  \title Qt's Plugin System
+  \ingroup dtkcore-plugin-system
+  \brief Illustration of Qt's plugin system principles through a short example.
+
+  \section1 Principles
+
+  As dtk derives from Qt, it makes the use of the \l{The Lower-Level
+  API: Extending Qt Applications} {Qt's low-level API} for extending
+  any dtk-based application. This requires the application to detect
+  and load plugins using QPluginLoader. In dtk, such a mechanism is
+  fully encapsulated in the dtkCorePluginManager.
+
+  So far, let us explain how to make an application extensible through
+  plugins. This involves the following steps:
+  \list
+  \li Define a set of interfaces (classes with virtual methods) used to talk to the plugins.
+  \li Use the Q_DECLARE_INTERFACE() macro to tell Qt’s meta-object system about the interface.
+  \li Use QPluginLoader in the application to load the plugins.
+  \li Use qobject_cast() to test whether a plugin implements a given interface.
+  \endlist
+
+  Writing a plugin involves these steps:
+  \list
+  \li Declare a plugin class that inherits from QObject and from the
+  interfaces that the plugin wants to provide.
+  \li Use the Q_INTERFACES() macro to tell Qt's \l{meta-object
+  system} about the interfaces.
+  \li Export the plugin using the Q_PLUGIN_METADATA() macro.
+  \endlist
+
+  \section1 Basic example
+
+  Let us consider the following pure abstraction defining a dummy
+  solver interface:
+
+  \snippet plugins/dtkabstractsolver.h 0
+
+  In order to query at run-time whether a plugin implements this
+  interface, the Q_DECLARE_INTERFACE() macro has been added. The first
+  argument is the name of the interface. The second argument is a
+  string identifying the interface in a unique way. Following Qt's
+  convention, the "Java package name" syntax is used to identify
+  interfaces.
+
+  Now, let us take a look at a likely implementation of
+  dtkAbstractSolver interface:
+
+  \snippet plugins/xyzsolver.h 0
+
+  Here, the macro Q_INTERFACES specifies that the current
+  implementation fullfills the dtkAbstractSolver interface, while the
+  macro Q_PLUGIN_METADATA points out the interface implemented through
+  the plugin and references a file that contains the meta data of the
+  plugin.
+
+  This meta data is contained within a JSON object.
+
+  \snippet plugins/xyzsolver.json 0
+
+  Here, this meta data specifies the plugin name, its version number
+  and optionnaly its dependencies.
+
+  Now that the main principles of the Qt's plugin system have been
+  presented, readers can refer to \l{dtk Plugin Framework} so as to
+  see how these mechanisms are implemented in dtk.
+
+  \sa {dtk Plugin System}, {dtk Plugin Framework}, {How to create a plugin with dtk}
+*/
+
+/*!
+  \page dtk-plugin-framework.html
+  \title dtk Plugin Framework
+  \ingroup dtkcore-plugin-system
+
+  \brief Description of the classes and the macros enabling plugin
+  conception, management and instanciation.
+
+  The \l{dtkCore}{Core} of dtk provides a set of classes and macros
+  that facilitate the conception, the management and the instanciation
+  of the plugins. 
+
+  \section1 Plugin manager
+
+  \section1 Plugin factory
+
+  \section1 
+  
+
+  \sa {dtk Plugin System}, {Qt's Plugin System}, {How to create a plugin with dtk}
+
+*/
+
+/*!
+  \page dtk-plugin-use.html
+  \title How to create a plugin with dtk
+  \ingroup dtkcore-plugin-system
+
+  \brief Guidelines for plugin creation using dtkCore features.
+
+  \sa {dtk Plugin System}, {Qt's Plugin System}, {dtk Plugin Framework}
+
+*/
+
+
+

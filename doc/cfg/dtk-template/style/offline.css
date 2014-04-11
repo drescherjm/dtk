@@ -84,14 +84,14 @@ offline viewing: HTML links display an icon
 -----------
 */
 
-a[href*="http://"], a[href*="ftp://"], a[href*="https://"] {
-    text-decoration: none;
-    background-image: url(../images/ico_out.png);
-    background-repeat: no-repeat;
-    background-position: left;
-    padding-left: 20px;
-    text-align: left;
-}
+/* a[href*="http://"], a[href*="ftp://"], a[href*="https://"] { */
+/*     text-decoration: none; */
+/*     background-image: url(../images/ico_out.png); */
+/*     background-repeat: no-repeat; */
+/*     background-position: left; */
+/*     padding-left: 20px; */
+/*     text-align: left; */
+/* } */
 
 .flags {
     text-decoration: none;

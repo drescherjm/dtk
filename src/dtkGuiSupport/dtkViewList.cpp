@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:39:06 2012 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jan 21 17:47:59 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 48
+ * Last-Updated: jeu. févr. 20 16:32:37 2014 (+0100)
+ *           By: Nicolas Niclausse
+ *     Update #: 85
  */
 
 /* Commentary: 
@@ -25,6 +25,7 @@
 class dtkViewListPrivate
 {
 public:
+    QList<dtkAbstractView *> connected_views;
 };
 
 dtkViewList::dtkViewList(QWidget *parent) : QListWidget(parent), d(new dtkViewListPrivate)
@@ -46,6 +47,10 @@ dtkViewList::dtkViewList(QWidget *parent) : QListWidget(parent), d(new dtkViewLi
 
 dtkViewList::~dtkViewList(void)
 {
+    foreach (dtkAbstractView *view, d->connected_views) {
+        disconnect(view, SIGNAL(nameChanged()), this, SLOT(update()));
+    }
+
     delete d;
 
     d = NULL;
@@ -64,7 +69,10 @@ void dtkViewList::update(void)
         item->setText(text);
         this->addItem(item);
 
-        connect(view, SIGNAL(nameChanged()), this, SLOT(update()));
+        if (!d->connected_views.contains(view)) {
+            connect(view, SIGNAL(nameChanged()), this, SLOT(update()));
+            d->connected_views.append(view);
+        }
     }
 }
 

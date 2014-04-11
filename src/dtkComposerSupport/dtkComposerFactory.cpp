@@ -390,6 +390,8 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
 #endif
 
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+
     d->nodes << "CommunicatorRank";
     d->tags["CommunicatorRank"] = QStringList() <<  "rank" << "distributed" << "mpi" << "communicator";
     d->types["CommunicatorRank"] = "communicatorRank";
@@ -409,6 +411,7 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->nodes << "CommunicatorSend";
     d->tags["CommunicatorSend"] = QStringList() <<  "send" << "distributed" << "mpi" << "communicator";;
     d->types["CommunicatorSend"] = "communicatorSend";
+#endif
 }
 
 void dtkComposerFactory::initNodeNumberOperatorUnary()

@@ -43,7 +43,7 @@ void dtkComposerNodeFilePrivate::download(const QUrl& url)
 
     QNetworkAccessManager http;
 
-    connect(&http, SIGNAL(requestFinished(QNetworkReply *)), this, SLOT(onRequestFinished(QNetworkReply *)));
+    connect(&http, SIGNAL(finished(QNetworkReply *)), this, SLOT(onRequestFinished(QNetworkReply *)));
 
     http.get(QNetworkRequest(url));
 

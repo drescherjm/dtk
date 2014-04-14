@@ -14,6 +14,8 @@
   \brief A guide explaining the plugin system architecture of dtk and
   how to implement it.
 
+  \nextpage {Qt's Plugin System}
+
   dtk framework is dedicated to design modular
   \l{http://www.inria.fr}{Inria} scientific platforms. The first step
   towards modularity is to define a set of interfaces that are meant
@@ -40,6 +42,9 @@
   \title Qt's Plugin System
   \ingroup dtkcore-plugin-system
   \brief Illustration of Qt's plugin system principles through a short example.
+
+  \previouspage {dtk Plugin System}
+  \nextpage {dtk Plugin Framework}
 
   \section1 Principles
 
@@ -114,15 +119,32 @@
   \brief Description of the classes and the macros enabling plugin
   conception, management and instanciation.
 
-  The \l{dtkCore}{Core} of dtk provides a set of classes and macros
-  that facilitate the conception, the management and the instanciation
-  of the plugins. 
+  \previouspage {Qt's Plugin System}
+  \nextpage {How to create a plugin with dtk}
+
+  Unlike the example given in the \l{Qt's Plugin System}{previous
+  page}, a dtk plugin is not just an implementation of an interface
+  but a container for concrete types. Given an interface, designing a
+  dtk plugin requires three key ingredients, namely:
+
+  \list
+  \li A plugin interface used as entry point to register the concrete types that the plugin embeds.
+  \li A plugin manager that checks plugin validity and loads it.
+  \li A plugin factory responsible for the instanciation of concrete type
+  \endlist
+
+  The \l{<dtkCorePlugin>} header provides a set of macros that facilitate
+  the design of such a plugin.
+
+  \section1 Plugin interface
+
+  Given an interface, the DTK_DECLARE_PLUGIN() macro creates a class 
+
+  
 
   \section1 Plugin manager
 
   \section1 Plugin factory
-
-  \section1 
   
 
   \sa {dtk Plugin System}, {Qt's Plugin System}, {How to create a plugin with dtk}

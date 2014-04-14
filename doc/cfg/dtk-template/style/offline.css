@@ -171,6 +171,7 @@ Top navigation
      background-image: url(../images/btn_prev.png);
      background-repeat: no-repeat;
      background-position: left;
+     background-size: 16px 16px;
      padding-left: 20px;
      height: 20px;
      padding-left: 20px;
@@ -180,6 +181,7 @@ Top navigation
      background-image: url(../images/btn_next.png);
      background-repeat: no-repeat;
      background-position: right;
+     background-size: 16px 16px;
      padding-right: 20px;
      height: 20px;
      margin-left: 30px;

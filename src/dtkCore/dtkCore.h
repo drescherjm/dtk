@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:28:31 2013 (+0100)
  * Version: 
- * Last-Updated: mar. avril  1 14:26:46 2014 (+0200)
+ * Last-Updated: mar. avril 15 11:05:06 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 28
+ *     Update #: 60
  */
 
 /* Change Log:
@@ -17,35 +17,69 @@
 #include <QtCore>
 
 // ///////////////////////////////////////////////////////////////////
-// SFINAE trick to know whether an object derived from dtkCoreObject or not
+// SFINAE to detect serializable objects
 // ///////////////////////////////////////////////////////////////////
 
-template<typename T> class IsPointerToTypeDerivedFromCoreObject
+template<typename T> struct IsObjectSerializable
 {
-public:
     enum { Value = false };
 };
 
 // Specialize to avoid sizeof(void) warning
-template<> class IsPointerToTypeDerivedFromCoreObject<void *>
+template<> struct IsObjectSerializable<void *>
 {
-public:
     enum { Value = false };
 };
 
-/* template<> class IsPointerToTypeDerivedFromQObject<dtkCoreObject*> */
-/* { */
-/*     enum { Value = true }; */
-/* }; */
+class dtkObjectSerializable;
 
-class dtkCoreObject;
-
-template<typename T> class IsPointerToTypeDerivedFromCoreObject<T *>
+template<> struct IsObjectSerializable<dtkObjectSerializable *>
 {
-    typedef qint8 dtk_yes_type;
+    enum { Value = true };
+};
+
+template<typename T> struct isObjectSerializable<T *>
+{
+private:
+    typedef qint8  dtk_yes_type;
     typedef qint64 dtk_no_type;
 
-    static dtk_yes_type checkType(dtkCoreObject *);
+    static dtk_yes_type checkType(dtkObjectSerializable *);
+    static dtk_no_type  checkType(...);
+
+public:
+    enum { Value = sizeof(checkType(static_cast<T *>(0))) == sizeof(dtk_yes_type) };
+};
+
+// ///////////////////////////////////////////////////////////////////
+// SFINAE to detect copiable objects
+// ///////////////////////////////////////////////////////////////////
+
+template<typename T> struct IsObjectCopiable
+{
+    enum { Value = false };
+};
+
+// Specialize to avoid sizeof(void) warning
+template<> struct IsObjectCopiable<void *>
+{
+    enum { Value = false };
+};
+
+class dtkObjectCopiable;
+
+template<> struct IsObjectCopiable<dtkObjectCopiable *>
+{
+    enum { Value = true };
+};
+
+template<typename T> struct isObjectCopiable<T *>
+{
+private:
+    typedef qint8  dtk_yes_type;
+    typedef qint64 dtk_no_type;
+
+    static dtk_yes_type checkType(dtkObjectCopiable *);
     static dtk_no_type  checkType(...);
 
 public:

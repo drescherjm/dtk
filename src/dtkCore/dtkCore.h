@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:28:31 2013 (+0100)
  * Version: 
- * Last-Updated: mar. avril 15 11:05:06 2014 (+0200)
+ * Last-Updated: mar. avril 15 11:09:21 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 60
+ *     Update #: 62
  */
 
 /* Change Log:
@@ -38,7 +38,7 @@ template<> struct IsObjectSerializable<dtkObjectSerializable *>
     enum { Value = true };
 };
 
-template<typename T> struct isObjectSerializable<T *>
+template<typename T> struct IsObjectSerializable<T *>
 {
 private:
     typedef qint8  dtk_yes_type;
@@ -73,7 +73,7 @@ template<> struct IsObjectCopiable<dtkObjectCopiable *>
     enum { Value = true };
 };
 
-template<typename T> struct isObjectCopiable<T *>
+template<typename T> struct IsObjectCopiable<T *>
 {
 private:
     typedef qint8  dtk_yes_type;

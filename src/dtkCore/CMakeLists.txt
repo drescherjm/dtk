@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: Fri Feb  8 16:49:52 2013 (+0100)
 ## Version: 
-## Last-Updated: lun. avril  7 11:12:18 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 36
+## Last-Updated: mar. avril 15 11:07:38 2014 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 37
 ######################################################################
 ## 
 ### Change Log:
@@ -21,8 +21,6 @@ project(dtkCore)
 set(${PROJECT_NAME}_HEADERS
   dtkCore
   dtkCore.h
-  dtkCoreObject
-  dtkCoreObject.h
   dtkCorePlugin
   dtkCorePlugin.h
   dtkCorePluginFactory

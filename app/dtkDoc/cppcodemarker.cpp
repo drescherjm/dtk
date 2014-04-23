@@ -97,7 +97,8 @@ bool CppCodeMarker::recognizeExtension(const QString& extension)
             ext == "h++" ||
             ext == "hh" ||
             ext == "hpp" ||
-            ext == "hxx";
+            ext == "hxx" ||
+            ext == "tpp";
 }
 
 /*!

@@ -22,6 +22,9 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_SOURCE_DIR@"
   "@CMAKE_SOURCE_DIR@/include"
   "@CMAKE_SOURCE_DIR@/src"
+  "@CMAKE_SOURCE_DIR@/src/dtkCore"
+  "@CMAKE_SOURCE_DIR@/src/dtkDistributed"
+  "@CMAKE_SOURCE_DIR@/src/dtkTest"
   "@CMAKE_BINARY_DIR@"
   )
 

@@ -234,7 +234,7 @@ bool dtkDistributedServiceController::isRunning(void) const
 {
     dtkDistributedUnixSocket sock;
     if (sock.connectTo(socketPath(serviceName())))
-	return true;
+        return true;
     return false;
 }
 
@@ -246,7 +246,7 @@ dtkDistributedServiceSysPrivate::dtkDistributedServiceSysPrivate(void) : dtkDist
 dtkDistributedServiceSysPrivate::~dtkDistributedServiceSysPrivate(void)
 {
     if (ident)
-	delete[] ident;
+        delete[] ident;
 }
 
 void dtkDistributedServiceSysPrivate::incomingConnection(int socketDescriptor)
@@ -264,7 +264,7 @@ void dtkDistributedServiceSysPrivate::slotReady(void)
     QString cmd = getCommand(s);
     while (!cmd.isEmpty()) {
         bool retValue = false;
-	if (cmd == QLatin1String("terminate")) {
+        if (cmd == QLatin1String("terminate")) {
             if (!(serviceFlags & dtkDistributedServiceBase::CannotBeStopped)) {
                 dtkDistributedServiceBase::instance()->stop();
                 QCoreApplication::instance()->quit();

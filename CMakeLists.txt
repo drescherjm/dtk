@@ -132,6 +132,7 @@ add_subdirectory(qml)
 add_subdirectory(tst)
 add_subdirectory(app)
 add_subdirectory(doc)
+add_subdirectory(tools)
 
 ## ###################################################################
 ## Exporting

@@ -142,7 +142,23 @@ void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qi
     return this->send(data, size, dtkDistributedCommunicatorChar, target, tag);
 }
 
+void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 tag)
+{
+    QByteArray bytes;
+    QDataStream stream(&bytes,QIODevice::WriteOnly);
+    stream << v;
+    this->send(bytes, target, tag);
+}
+
 void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)
 {
     return this->receive(data, size, dtkDistributedCommunicatorChar, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
+{
+    QByteArray bytes;
+    this->receive(bytes, target, tag);
+    QDataStream stream(&bytes,QIODevice::ReadOnly);
+    stream >> v;
 }

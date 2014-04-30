@@ -23,11 +23,22 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicator
   dtkDistributedCommunicatorStatus.h
   dtkDistributedCommunicator.h
+  dtkDistributedController.h
+  dtkDistributedCore.h
+  dtkDistributedCpu.h
+  dtkDistributedGpu.h
+  dtkDistributedNode.h
   dtkDistributedLocalMessage.h
   dtkDistributedMapper
   dtkDistributedMapper.h
+  dtkDistributedMessage.h
   dtkDistributedPolicy
   dtkDistributedPolicy.h
+  dtkDistributedResourceManager.h
+  dtkDistributedResourceManagerLocal.h
+  dtkDistributedResourceManagerOar.h
+  dtkDistributedResourceManagerTorque.h
+  dtkDistributedServerDaemon.h
   dtkDistributedSettings
   dtkDistributedSettings.h
   dtkDistributedWork
@@ -41,13 +52,26 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
+  dtkDistributedController.cpp
+  dtkDistributedCore.cpp
+  dtkDistributedCpu.cpp
+  dtkDistributedGpu.cpp
+  dtkDistributedJob.cpp
+  dtkDistributedNode.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
+  dtkDistributedMessage.cpp
   dtkDistributedPolicy.cpp
+  dtkDistributedResourceManager.cpp
+  dtkDistributedResourceManagerLocal.cpp
+  dtkDistributedResourceManagerOar.cpp
+  dtkDistributedResourceManagerTorque.cpp
+  dtkDistributedServerDaemon.cpp
   dtkDistributedSettings.cpp
   dtkDistributedWork.cpp
   dtkDistributedWorker.cpp
   dtkDistributedWorkerManager.cpp)
+
 
 ## #################################################################
 ## Build rules
@@ -63,6 +87,7 @@ add_library(${PROJECT_NAME} SHARED
 
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Network)
+qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkCore)
 

@@ -61,9 +61,9 @@ QByteArray  dtkDistributedResourceManagerLocal::status(void)
     QString state = "free";
     node.insert("name", name);
 
-    QString ncpus  = "1";
-    QString njobs  = "0";
-    QString ngpus   = "0";
+    qlonglong ncpus  = 1;
+    qlonglong njobs  = 0;
+    qlonglong ngpus   = 0;
 
     for (int c=0;c< QThread::idealThreadCount();c++) {
         QVariantMap core;

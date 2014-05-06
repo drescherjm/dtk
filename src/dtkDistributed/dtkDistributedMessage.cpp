@@ -63,62 +63,65 @@ void dtkDistributedMessage::setMethod(QString method)
     QStringList tokens = QString(method).split(QRegExp("/"));
     if (method.startsWith("GET /status")) {
         d->method = STATUS;
-    } else if (method.startsWith("OK /status")) {
-        d->method = OKSTATUS;
-    } else if (method.startsWith("PUT /job")) {
+    } else if (method.startsWith("PUT /job HTTP")) {
         d->method = NEWJOB;
-    } else if (method.startsWith("OK /job")) {
-        d->method = OKJOB;
-        d->jobid  = tokens[2].trimmed();
-    } else if (method.startsWith("DELETE /job")) {
-        d->method = DELJOB;
-        d->jobid  = tokens[2].trimmed();
-    } else if (method.startsWith("OK /deleted")) {
-        d->method = OKDEL;
-        d->jobid  = tokens[2].trimmed();
-    } else if (method.startsWith("ERROR /deleted")) {
-        d->method = ERRORDEL;
-        d->jobid  = tokens[2].trimmed();
-    } else if (method.startsWith("STARTED /job")) {
+    } else if (method.startsWith("PUT /job/")) {
         d->method = STARTJOB;
-        d->jobid  = tokens[2].trimmed();
-    } else if (method.startsWith("ENDED /job")) {
-        d->method = ENDJOB;
-        d->jobid  = tokens[2].trimmed();
+        d->jobid  = tokens[2].remove("HTTP/1.1").trimmed();
+    } else if (method.startsWith("DELETE /job")) {
+        d->jobid  = tokens[2].remove("HTTP/1.1").trimmed();
+        if (d->headers.contains("x-dtk-finished")) {
+            d->method = ENDJOB;
+        } else {
+            d->method = DELJOB;
+        }
     } else if (method.startsWith("DELETE /")) {
         d->method = STOP;
     } else if (method.startsWith("POST /data")) {
         d->method = DATA;
         d->jobid  = tokens[2];
         if (tokens.size() > 2)
-            d->rank  = tokens[3].toInt();
+            d->rank  = tokens[3].remove("HTTP/1.1").toInt();
     } else if (method.startsWith("PUT /rank")) {
         d->method = SETRANK;
         d->jobid  = tokens[2];
-        d->rank   = tokens[3].toInt();
-    } else
+        d->rank   = tokens[3].remove("HTTP/1.1").toInt();
+    } else if (method.startsWith("HTTP/1.1 200 OK")) {
+        if (d->headers.contains("x-dtk-status")) {
+            d->method = OKSTATUS;
+        } else {
+            dtkWarn() << "Unsupported method " << method;
+        }
+    } else if (method.startsWith("HTTP/1.1 201 OK")) {
+        d->method = OKJOB;
+    } else if (method.startsWith("HTTP/1.1 204 OK")) {
+        d->method = OKDEL;
+    } else if (method.startsWith("HTTP/1.1 400 OK")) {
+        d->method = ERRORJOB;
+    } else if (method.startsWith("HTTP/1.1 410 OK")) {
+        d->method = ERRORDEL;
+    } else {
         dtkWarn() << "Unsupported method " << method;
+    }
 
 }
 
-void dtkDistributedMessage::setSize(const QString &header)
+void dtkDistributedMessage::setSize(void)
 {
-    QStringList tokens = header.split(QRegExp(":\\s*"));
-    if (tokens[0].toLower() != "content-size") {
-        dtkWarn() << "Error: Not a size header ! " << header;
+    if (d->headers.contains("content-length")) {
+        d->size = d->headers["content-length"].toInt();
+    } else {
         d->size = -1;
-    } else
-        d->size = tokens[1].toInt();
+    }
 }
 
-void dtkDistributedMessage::setType(const QString &header)
+void dtkDistributedMessage::setType(void)
 {
-    QStringList tokens = header.split(QRegExp(":\\s*"));
-    if (tokens[0].toLower() != "content-type") {
-        dtkWarn() << "Error: Not a content type header ! " << header;
+    if (d->headers.contains("content-type")) {
+        d->type = d->headers["content-type"].trimmed();
+    } else {
         d->type = "unknown";
-    } else
-        d->type = tokens[1].trimmed();
+    }
 }
 
 void dtkDistributedMessage::setContent(QByteArray &content)
@@ -130,7 +133,7 @@ void dtkDistributedMessage::setContent(QByteArray &content)
 void dtkDistributedMessage::setHeader(const QString &headerString)
 {
     QStringList tokens = headerString.split(QRegExp(":\\s*"));
-    d->headers.insert(tokens[0], tokens[1].trimmed());
+    d->headers.insert(tokens[0].toLower(), tokens[1].trimmed());
 }
 
 void dtkDistributedMessage::addHeader(QString name, QString value)
@@ -148,40 +151,43 @@ QString dtkDistributedMessage::req(void)
     QString req;
     switch (d->method) {
         case STATUS:
-            req = "GET /status";
+            req = "GET /status HTTP/1.1";
             break;
         case OKSTATUS:
-            req = "OK /status/"+d->jobid;
+            req = "HTTP/1.1 200 OK\nX-DTK-Status: OK";
             break;
         case NEWJOB:
-            req = "PUT /job";
+            req = "PUT /job HTTP/1.1";
             break;
         case OKJOB:
-            req = "OK /job/"+d->jobid;
+            req = "HTTP/1.1 201 OK\nX-DTK-JobId: "+d->jobid;
+            break;
+        case ERRORJOB:
+            req = "HTTP/1.1 400 OK";
             break;
         case DELJOB:
-            req = "DELETE /job/"+d->jobid;
+            req = "DELETE /job/"+d->jobid + " HTTP/1.1";
             break;
         case OKDEL:
-            req = "OK /deleted/"+d->jobid;
+            req = "HTTP/1.1 204 OK\nX-DTK-JobId: "+d->jobid;
             break;
         case ERRORDEL:
-            req = "ERROR /deleted/"+d->jobid;
+            req = "HTTP/1.1 410 OK\nX-DTK-JobId: "+d->jobid;
             break;
         case STARTJOB:
-            req = "STARTED /job/"+d->jobid;
+            req = "PUT /job/"+d->jobid + " HTTP/1.1";
             break;
         case ENDJOB:
-            req = "ENDED /job/"+d->jobid;
+            req = "DELETE /job/"+d->jobid+"\nX-DTK-Finished: "+d->jobid;
             break;
         case DATA:
-            req = "POST /data/"+d->jobid+"/"+QString::number(d->rank) ;
+            req = "POST /data/"+d->jobid+"/"+QString::number(d->rank)  + " HTTP/1.1" ;
             break;
         case SETRANK:
-            req = "PUT /rank/"+d->jobid +"/"+QString::number(d->rank) ;
+            req = "PUT /rank/"+d->jobid +"/"+QString::number(d->rank) + " HTTP/1.1" ;
             break;
         case STOP:
-            req = "DELETE /";
+            req = "DELETE / HTTP/1.1" ;
             break;
         default:
             dtkWarn() << "Unsupported method";
@@ -231,14 +237,14 @@ qlonglong dtkDistributedMessage::send(QTcpSocket *socket)
 
     buffer += this->req();
     if (d->size == 0 ) {
-        buffer += "content-size: 0\n\n";
+        buffer += "Content-Length: 0\n\n";
         ret = socket->write(buffer.toUtf8());
         socket->flush();
         return ret;
     } else if (d->size > 0) {
-        buffer += "content-size: "+ QString::number(d->size) +"\n";
+        buffer += "Content-Length: "+ QString::number(d->size) +"\n";
         if (!d->type.isEmpty() && !d->type.isNull())
-            buffer += "content-type: " +d->type +"\n";
+            buffer += "Content-Type: " +d->type +"\n";
 
         foreach (const QString &key, d->headers.keys() ) {
             buffer += key +": " + d->headers[key] +"\n";
@@ -259,21 +265,25 @@ qlonglong dtkDistributedMessage::send(QTcpSocket *socket)
 
 qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
 {
-    this->setMethod(socket->readLine());
+    QString resp = socket->readLine();
 
-    // read content-size
-    this->setSize(socket->readLine());
+    // read optional headers
+    QByteArray line = socket->readLine();
+    while (!QString(line).trimmed().isEmpty()) {// empty line after last header
+        this->setHeader(QString(line));
+        line=socket->readLine();
+    }
+
+    this->setMethod(resp);
+
+    this->setSize();
+    if (d->headers.contains("x-dtk-jobid")) {
+        d->jobid = d->headers["x-dtk-jobid"].trimmed();;
+    }
 
     if (d->size > 0) {
         //read content-type
-        this->setType(socket->readLine());
-
-        // read optional headers
-        QByteArray line = socket->readLine();
-        while (!QString(line).trimmed().isEmpty()) {// empty line after last header
-            this->setHeader(QString(line));
-            line=socket->readLine();
-        }
+        this->setType();
 
         // read content
         QByteArray buffer;

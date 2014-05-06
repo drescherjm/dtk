@@ -233,7 +233,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, QTcp
 // dtkDistributedController implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkDistributedController::dtkDistributedController(void) : d(new dtkDistributedControllerPrivate)
+dtkDistributedController::dtkDistributedController(QObject *parent) : QObject(parent), d(new dtkDistributedControllerPrivate)
 {
     d->refreshing = false;
 }
@@ -350,7 +350,9 @@ void dtkDistributedController::refresh(const QUrl& server)
 // deploy a server instance on remote host (to be executed before connect)
 bool dtkDistributedController::deploy(const QUrl& server)
 {
+
     if(!d->servers.keys().contains(server.toString())) {
+        int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
         QProcess *serverProc = new QProcess (this);
         QStringList args;
         args << "-t"; // that way, ssh will forward the SIGINT signal,
@@ -381,13 +383,14 @@ bool dtkDistributedController::deploy(const QUrl& server)
         QString forward = key+"_server_forward";
         if (settings.contains(forward) && settings.value(forward).toString() == "true") {
             dtkTrace() << "ssh port forwarding is set for server " << server.host();
-            args << "-L" << QString::number(server.port())+":localhost:"+QString::number(server.port());
+            int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
+            args << "-L" << QString::number(port)+":localhost:"+QString::number(port);
         }
 
         args << path;
         args << "-p";
-        args << QString::number(server.port());
-        args << "--"+settings.value(key+"_server_type", "torque").toString();
+        args << QString::number(port);
+        args << "-type "+settings.value(key+"_server_type", "torque").toString();
 
         settings.endGroup();
         serverProc->start("ssh", args);
@@ -478,10 +481,12 @@ bool dtkDistributedController::connect(const QUrl& server)
         settings.beginGroup("distributed");
         QString forward = key+"_server_forward";
 
+        int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
+
         if (settings.contains(forward) && settings.value(forward).toString() == "true")
-            socket->connectToHost("localhost", server.port());
+            socket->connectToHost("localhost", port);
         else
-            socket->connectToHost(server.host(), server.port());
+            socket->connectToHost(server.host(), port);
 
         settings.endGroup();
 

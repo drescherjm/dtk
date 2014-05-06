@@ -155,7 +155,7 @@ void dtkDistributedServerDaemon::read(void)
     switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
         r = d->manager->status();
-        resp.reset(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"json",r));
+        resp.reset(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"application/json",r));
         resp->send(socket);
         // GET status is from the controller, store the socket in sockets using rank=-1
         d->sockets.insert(controller, socket);
@@ -168,7 +168,11 @@ void dtkDistributedServerDaemon::read(void)
     case dtkDistributedMessage::NEWJOB:
         jobid = d->manager->submit(msg->content());
         dtkDebug() << jobid;
-        msg.reset(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
+        if (jobid == "ERROR") {
+            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::ERRORJOB, jobid));
+        } else {
+            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
+        }
         msg->send(socket);
         break;
 

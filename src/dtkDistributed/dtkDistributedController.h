@@ -28,15 +28,21 @@ class dtkDistributedController : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedController(void);
+     dtkDistributedController(QObject *parent=0);
     ~dtkDistributedController(void);
 
 public:
     static dtkDistributedController *instance(void);
 
 public:
+    Q_INVOKABLE static quint16 defaultPort(void);
+
+public:
     bool    isConnected(const QUrl& server);
     bool isDisconnected(const QUrl& server);
+
+public:
+    QTcpSocket *socket(const QString& jobid);
 
 signals:
     void    connected(const QUrl& server);
@@ -51,23 +57,15 @@ signals:
 
     void status(const QUrl& server);
 
-public:
-    static quint16 defaultPort(void);
-
-public:
-    QTcpSocket *socket(const QString& jobid);
-
 public slots:
     bool    connect(const QUrl& server);
     void disconnect(const QUrl& server);
-    bool     deploy(const QUrl& server);
     void       stop(const QUrl& server);
     void    refresh(const QUrl& server);
     void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);
     void       send(QVariant v, QString jobid, qint16 destrank);
-
-public slots:
+    bool     deploy(const QUrl& server);
     bool     submit(const QUrl& server, QByteArray& resources);
 
 public:

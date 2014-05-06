@@ -34,6 +34,7 @@ public:
         OKSTATUS,
         NEWJOB  ,
         OKJOB   ,
+        ERRORJOB,
         DELJOB  ,
         OKDEL   ,
         ERRORDEL,
@@ -50,13 +51,13 @@ public:
 
 public:
     void addHeader(QString name, QString value);
-    void setHeader(const QString &line);
+    void setHeader(const QString &headers);
     void setMethod(QString method);
     void setMethod(Method method);
     void setJobid(const QString &jobid);
     void setRank(qint16 rank);
-    void setType(const QString &header);
-    void setSize(const QString &header);
+    void setType(void);
+    void setSize(void);
     void setContent(QByteArray &content);
 
 public:

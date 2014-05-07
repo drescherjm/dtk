@@ -26,6 +26,7 @@ int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
 
+
     if(!dtkApplicationArgumentsContain(&application, "-type")) {
         qDebug() << "Usage:" << argv[0] << " [-p port] -type <Oar | Torque | Local |...>";
         return 1;
@@ -40,6 +41,9 @@ int main(int argc, char **argv)
     application.setApplicationVersion("0.0.1");
     application.setOrganizationName("inria");
     application.setOrganizationDomain("fr");
+
+    qDebug() << "Starting dtkDistributedServer"; // DO NOT REMOVE THIS
+    qInstallMessageHandler(dtkMessageOutput);
 
     QSettings settings("inria", "dtk");
     settings.beginGroup("server");

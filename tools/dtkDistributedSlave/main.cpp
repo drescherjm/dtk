@@ -22,6 +22,8 @@
 
 #include <QCoreApplication>
 
+#include <iostream>
+
 class simpleSlave : public dtkDistributedSlave
 {
 public:
@@ -48,10 +50,11 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    qDebug() << "slave connecting to server " << url;
-
-
     simpleSlave *slave = new simpleSlave;
+
+    // the server waits for the jobid in stdout
+    std::cout << QString("DTK_JOBID="+slave->jobId()).toStdString() << std::endl << std::flush;
+
     slave->connect(url);
     qDebug() << "slave connected to server " << slave->isConnected();
 

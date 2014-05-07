@@ -62,12 +62,15 @@ QByteArray  dtkDistributedResourceManagerLocal::status(void)
     node.insert("name", name);
 
     qlonglong ncpus  = 1;
-    qlonglong njobs  = 0;
-    qlonglong ngpus   = 0;
+    qlonglong njobs  = d->slaves.keys().count();
+    qlonglong ngpus  = 0;
 
     for (int c=0;c< QThread::idealThreadCount();c++) {
         QVariantMap core;
         core.insert("id",c);
+        if (c < njobs) {
+            core.insert("job",d->slaves.keys().at(c));
+        }
         cores << core;
     }
 
@@ -96,6 +99,11 @@ QByteArray  dtkDistributedResourceManagerLocal::status(void)
         job.insert("start_time", "");
         job.insert("walltime", "12:0:0");
         job.insert("state", "running");
+        QVariantMap jresources;
+        jresources.insert("nodes",1);
+        //FIXME: how many cores ?
+        jresources.insert("cores",1);
+        job.insert("resources", jresources);
         jjobs << job;
     }
 

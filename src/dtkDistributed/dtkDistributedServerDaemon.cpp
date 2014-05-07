@@ -1,22 +1,18 @@
-/* dtkDistributedServerDaemon.cpp --- 
- * 
+/* dtkDistributedServerDaemon.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
- * Version: $Id$
- * Last-Updated: mar. févr.  4 15:18:53 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 844
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  * debug logging: use dtkLog() << "message" or qDebug() << "message"
  *   run logging: use dtkDistributedServiceBase::instance()->logMessage("message");
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedMessage.h"
@@ -167,13 +163,12 @@ void dtkDistributedServerDaemon::read(void)
 
     case dtkDistributedMessage::NEWJOB:
         jobid = d->manager->submit(msg->content());
-        dtkDebug() << jobid;
         if (jobid == "ERROR") {
-            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::ERRORJOB, jobid));
+            resp.reset(new dtkDistributedMessage(dtkDistributedMessage::ERRORJOB, jobid));
         } else {
-            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
+            resp.reset(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
         }
-        msg->send(socket);
+        resp->send(socket);
         break;
 
     case dtkDistributedMessage::ENDJOB:
@@ -195,11 +190,11 @@ void dtkDistributedServerDaemon::read(void)
     case dtkDistributedMessage::DELJOB:
         jobid = msg->jobid();
         if (d->manager->deljob(jobid).startsWith("OK")) {
-            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::OKDEL, jobid));
-            msg->send(socket);
+            resp.reset(new dtkDistributedMessage(dtkDistributedMessage::OKDEL, jobid));
+            resp->send(socket);
         } else {
-            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::ERRORDEL, jobid));
-            msg->send(socket);
+            resp.reset(new dtkDistributedMessage(dtkDistributedMessage::ERRORDEL, jobid));
+            resp->send(socket);
         }
         break;
 
@@ -218,6 +213,8 @@ void dtkDistributedServerDaemon::read(void)
 
     default:
         dtkWarn() << "Unknown data";
+        resp.reset(new dtkDistributedMessage(dtkDistributedMessage::ERROR));
+        resp->send(socket);
     };
 
     if (socket->bytesAvailable() > 0)

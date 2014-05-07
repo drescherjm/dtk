@@ -55,8 +55,6 @@ signals:
     void jobStarted(QString jobid);
     void jobQueued(QString jobid);
 
-    void status(const QUrl& server);
-
 public slots:
     bool    connect(const QUrl& server);
     void disconnect(const QUrl& server);
@@ -67,13 +65,6 @@ public slots:
     void       send(QVariant v, QString jobid, qint16 destrank);
     bool     deploy(const QUrl& server);
     bool     submit(const QUrl& server, QByteArray& resources);
-
-public:
-    QList<dtkDistributedNode *> nodes(void);
-    QList<dtkDistributedNode *> nodes(const QString& cluster);
-
-    QList<dtkDistributedJob *> jobs(void);
-    QList<dtkDistributedJob *> jobs(const QString& cluster);
 
 public:
     bool is_running(const QString& jobid);

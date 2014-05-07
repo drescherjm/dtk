@@ -24,10 +24,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorStatus.h
   dtkDistributedCommunicator.h
   dtkDistributedController.h
-  dtkDistributedCore.h
-  dtkDistributedCpu.h
-  dtkDistributedGpu.h
-  dtkDistributedNode.h
   dtkDistributedLocalMessage.h
   dtkDistributedMapper
   dtkDistributedMapper.h
@@ -41,6 +37,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedServerDaemon.h
   dtkDistributedSettings
   dtkDistributedSettings.h
+  dtkDistributedSlave.h
   dtkDistributedWork
   dtkDistributedWork.h
   dtkDistributedWorker
@@ -53,11 +50,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
-  dtkDistributedCore.cpp
-  dtkDistributedCpu.cpp
-  dtkDistributedGpu.cpp
-  dtkDistributedJob.cpp
-  dtkDistributedNode.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedMessage.cpp
@@ -68,6 +60,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedResourceManagerTorque.cpp
   dtkDistributedServerDaemon.cpp
   dtkDistributedSettings.cpp
+  dtkDistributedSlave.cpp
   dtkDistributedWork.cpp
   dtkDistributedWorker.cpp
   dtkDistributedWorkerManager.cpp)

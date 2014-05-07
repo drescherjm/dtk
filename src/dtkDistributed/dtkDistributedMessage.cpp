@@ -189,6 +189,9 @@ QString dtkDistributedMessage::req(void)
         case STOP:
             req = "DELETE / HTTP/1.1" ;
             break;
+        case ERROR:
+            req = "HTTP/1.1 404 OK" ;
+            break;
         default:
             dtkWarn() << "Unsupported method";
         };

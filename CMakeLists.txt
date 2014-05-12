@@ -1,12 +1,16 @@
-### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Created: Mon Feb  4 10:17:21 2013 (+0100)
+## Version: $Id$
+##
 ######################################################################
-## 
+##
+### Commentary:
+##
+######################################################################
+##
 ### Change Log:
-## 
+##
 ######################################################################
+##
+### Code:
 
 cmake_minimum_required(VERSION 2.8.11)
 
@@ -121,7 +125,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/dtkDistributed)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkLog)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_SOURCE_DIR}/src/dtkTest)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkWidgets)
 
 ## ###################################################################
 ## Input
@@ -132,7 +135,6 @@ add_subdirectory(qml)
 add_subdirectory(tst)
 add_subdirectory(app)
 add_subdirectory(doc)
-add_subdirectory(tools)
 
 ## ###################################################################
 ## Exporting
@@ -194,3 +196,6 @@ set(CPACK_PACKAGE_VERSION_MINOR "${dtk_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${dtk_VERSION_PATCH}")
 
 include(CPack)
+
+######################################################################
+### CMakeLists.txt ends here

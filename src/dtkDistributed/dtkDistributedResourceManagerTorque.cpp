@@ -50,9 +50,9 @@ QByteArray  dtkDistributedResourceManagerTorque::status(void)
 
         node.insert("name", name);
 
-        QString ngpus  = nodes.item(i).firstChildElement("gpus").text().simplified();
+        qlonglong ngpus  = nodes.item(i).firstChildElement("gpus").text().toInt();
         // 2 cpus by default
-        QString ncpus  = "2";
+        qlonglong ncpus  = 2;
         // number of busy GPUs not implemented yet
 
         // properties
@@ -82,7 +82,7 @@ QByteArray  dtkDistributedResourceManagerTorque::status(void)
                 props.insert("gpu_arch", "nvidia-1.3");
             }
             if (prop.contains("dellr815")) {
-                ncpus = "4";
+                ncpus = 4;
             }
         }
 

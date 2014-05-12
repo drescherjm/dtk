@@ -1,16 +1,16 @@
-/* dtkCorePluginManager.cpp --- 
- * 
- * Author: Julien Wintz
- * Created: Mon Feb 11 12:08:44 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. avril  3 08:46:46 2014 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 66
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -77,7 +77,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
 
 template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate<T>)
 {
-
+    // dtkMetaPluginFactory::instance()->registerFactory<T>(this);
 }
 
 template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
@@ -114,7 +114,7 @@ template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
 {
     if(!QLibrary::isLibrary(path))
         return;
-    
+
     QPluginLoader *loader = new QPluginLoader(path);
 
            d->names.insert(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
@@ -173,3 +173,6 @@ template <typename T> QStringList dtkCorePluginManager<T>::plugins(void)
 {
     return d->loaders.keys();
 }
+
+//
+// dtkCorePluginManager_t.h ends here

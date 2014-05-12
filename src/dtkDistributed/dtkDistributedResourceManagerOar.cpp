@@ -291,6 +291,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             core.insert("id",jcore["resource_id"].toString());
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
+                int current_busy_cores = node["cores_busy"].toInt();
+                node.insert("cores_busy", current_busy_cores+1);
             }
             cores.append(core);
             node["cores"] = cores;
@@ -330,6 +332,9 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
+                node.insert("cores_busy",1);
+            } else {
+                node.insert("cores_busy",0);
             }
             cores << core;
             props << prop;

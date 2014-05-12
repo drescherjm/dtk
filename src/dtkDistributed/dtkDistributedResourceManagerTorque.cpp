@@ -231,9 +231,9 @@ QString dtkDistributedResourceManagerTorque::submit(QString input)
     }
 
     QVariantMap res = json["resources"].toMap();
-    if (res["nodes"].toInt() == 0) {
+    if (res["nodes"] == 0) {
         // no nodes, only cores; TODO
-    } else if (res["cores"].toInt() == 0) {
+    } else if (res["cores"] == 0) {
         // no cores, only nodes; TODO
     } else {
         qsub += " -l nodes="+res["nodes"].toString()+properties+":ppn="+res["cores"].toString();

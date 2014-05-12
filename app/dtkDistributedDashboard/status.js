@@ -1,13 +1,22 @@
-function url()
+function url(check_tunnel)
 {
-    return choices.get(combo.currentIndex).text + ":" +controller.defaultPort()
+    if (check_tunnel && tunnel.checked) {
+        return "http://localhost:" +controller.defaultPort()
+    } else {
+        return choices.get(combo.currentIndex).text + ":" +controller.defaultPort()
+    }
 }
 
-function submit(nodes, cores)
+function setWalltime(hours, min, sec)
+{
+    return hours + ":" + min +":" + sec ;
+}
+
+function submit(nodes, cores, walltime)
 {
     console.debug("submit " + cores + " nodes " +nodes )
     var xhr = new XMLHttpRequest();
-    xhr.open("PUT", url() +"/job", true);
+    xhr.open("PUT", url(true) +"/job", true);
     // timeout doesn't work in qml ?
     xhr.timeout = 5;
     xhr.ontimeout = function () { console.debug("Timeout !!!" )}
@@ -33,8 +42,8 @@ function submit(nodes, cores)
 
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     var resources = {  "resources": {"nodes": nodes, "cores": cores },
-                       "walltime": "1:0:0",
-                       "application": "dtkDistributedSlave --server " + url()
+                       "walltime": walltime,
+                       "application": "dtkDistributedSlave --server " + url(false)
                     }
     xhr.send(JSON.stringify(resources))
 }
@@ -42,13 +51,14 @@ function submit(nodes, cores)
 function show()
 {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", url() +"/status",true);
+    xhr.open("GET", url(true) +"/status",true);
     xhr.onreadystatechange = function()
     {
         if ( xhr.readyState == xhr.DONE)
         {
             if ( xhr.status == 200)
             {
+                console.debug("status OK, parse" )
                 var jsonObject = JSON.parse(xhr.responseText);
                 var cores = 0
                 var cores_busy = 0
@@ -73,6 +83,11 @@ function show()
                                        {value: nodes_busy, color: "orange"},
                                        {value: nodes_down, color: "red"}];
                 nodes_pie.repaint();
+                console.debug("cores " + cores )
+                console.debug("cores busy " + cores_busy )
+                console.debug("nodes free " + nodes_free )
+                console.debug("nodes busy " + nodes_busy )
+                console.debug("nodes dead " + nodes_down )
 
                 jobModel.clear()
                 for ( var index in jsonObject.jobs ) {
@@ -82,6 +97,8 @@ function show()
                                      "cores" : jsonObject.jobs[index].resources.cores,
                                      "queue" : jsonObject.jobs[index].queue })
                 }
+            } else {
+                console.debug("status NOK" + xhr.status)
             }
         }
     }

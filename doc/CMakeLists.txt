@@ -1,15 +1,15 @@
-### CMakeLists.txt --- 
-## 
+### CMakeLists.txt ---
+##
 ## Author: Thibaud Kloczko
 ## Created: lun. avril  7 19:17:05 2014 (+0200)
-## Version: 
+## Version:
 ## Last-Updated: mer. avril  9 14:19:02 2014 (+0200)
 ##           By: Thibaud Kloczko
 ##     Update #: 104
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
 
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)

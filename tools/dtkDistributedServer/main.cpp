@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     application.setOrganizationDomain("fr");
 
     qDebug() << "Starting dtkDistributedServer"; // DO NOT REMOVE THIS
-    qInstallMessageHandler(dtkMessageOutput);
+//    qInstallMessageHandler(dtkMessageOutput);
 
     QSettings settings("inria", "dtk");
     settings.beginGroup("server");

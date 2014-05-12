@@ -228,8 +228,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         Q_UNUSED(pos);
         
         QStringList resources_list = rx.capturedTexts();
-        QString nodes = resources_list.at(1);
-        QString cores = resources_list.at(2);
+        qlonglong nodes = resources_list.at(1).toInt();
+        qlonglong cores = resources_list.at(2).toInt();
         if (resources_list.count() > 3) {
             walltime = resources_list.at(3);
         } else {
@@ -291,6 +291,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             core.insert("id",jcore["resource_id"].toString());
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
+                int current_busy_cores = node["cores_busy"].toInt();
+                node.insert("cores_busy", current_busy_cores+1);
             }
             cores.append(core);
             node["cores"] = cores;
@@ -330,6 +332,9 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
+                node.insert("cores_busy",1);
+            } else {
+                node.insert("cores_busy",0);
             }
             cores << core;
             props << prop;
@@ -343,8 +348,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
     // now we can compute the number of cpus per node
     foreach(QVariant qv, nodes) {
         QVariantMap map = qv.toMap();
-        int corespercpu = map["corespercpu"].toInt();
-        int cores = map["cores"].toList().count();
+        qlonglong corespercpu = map["corespercpu"].toInt();
+        qlonglong cores = map["cores"].toList().count();
         map.insert("cpus", cores/corespercpu);
         map.remove("corespercpu");
         realnodes << map;

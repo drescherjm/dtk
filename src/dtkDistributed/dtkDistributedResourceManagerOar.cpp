@@ -228,8 +228,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         Q_UNUSED(pos);
         
         QStringList resources_list = rx.capturedTexts();
-        QString nodes = resources_list.at(1);
-        QString cores = resources_list.at(2);
+        qlonglong nodes = resources_list.at(1).toInt();
+        qlonglong cores = resources_list.at(2).toInt();
         if (resources_list.count() > 3) {
             walltime = resources_list.at(3);
         } else {
@@ -343,8 +343,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
     // now we can compute the number of cpus per node
     foreach(QVariant qv, nodes) {
         QVariantMap map = qv.toMap();
-        int corespercpu = map["corespercpu"].toInt();
-        int cores = map["cores"].toList().count();
+        qlonglong corespercpu = map["corespercpu"].toInt();
+        qlonglong cores = map["cores"].toList().count();
         map.insert("cpus", cores/corespercpu);
         map.remove("corespercpu");
         realnodes << map;

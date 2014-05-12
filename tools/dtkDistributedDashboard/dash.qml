@@ -20,7 +20,7 @@ ApplicationWindow {
         id: choices
         ListElement { text: "http://localhost" }
         ListElement { text: "http://nef-devel.inria.fr" }
-        ListElement { text: "http://sophia.grid5000.inria.fr" }
+        ListElement { text: "http://fsophia.sophia.grid5000.fr" }
     }
 
     RowLayout {
@@ -45,6 +45,11 @@ ApplicationWindow {
                         Status.show()
                     }
                 }
+                CheckBox {
+                        id: tunnel
+                        text: "SSH Tunnel"
+                        checked: true
+                    }
                 Button {
                     id: connectBotton
                     text: "Connect"
@@ -81,10 +86,33 @@ ApplicationWindow {
                     /* Layout.fillWidth: true */
                     text: "cores:"
                 }
+
                 SpinBox {
                     id: cores
                     minimumValue: 1
                     value: 1
+                }
+
+                Label {
+                    id: walltimeLabel
+                    text: "walltime:"
+                }
+                SpinBox {
+                    id: wallHours
+                    minimumValue: 0
+                    value: 0
+                }
+                SpinBox {
+                    id: wallMin
+                    minimumValue: 0
+                    value: 10
+                    maximumValue: 59
+                }
+                SpinBox {
+                    id: wallSec
+                    minimumValue: 0
+                    value: 0
+                    maximumValue: 59
                 }
 
                 Button {
@@ -94,7 +122,7 @@ ApplicationWindow {
                     tooltip: "Submit a job on a resource manager"
                     onClicked: {
                         console.debug("submit");
-                        Status.submit(nodes.value, cores.value)
+                        Status.submit(nodes.value, cores.value, Status.setWalltime(wallHours.value,wallMin.value,wallSec.value))
                     }
                 }
             }

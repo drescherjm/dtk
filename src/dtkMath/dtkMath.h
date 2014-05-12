@@ -1,26 +1,32 @@
-/* dtkMath.h ---
- * 
- * Author: Julien Wintz
- * Created: Mon Jul 15 16:14:50 2013 (+0200)
- * Version: 
- * Last-Updated: Tue Jul 16 11:33:26 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 17
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
-#include "dtkMath.h"
-#include "dtkMatrix.h"
+#include <QtCore>
+
+class dtkMatrix;
+class dtkMatrixPluginFactory;
+class dtkMatrixPluginManager;
 
 namespace dtkMath
 {
     namespace matrix {
-	dtkMatrixPluginFactory& pluginFactory(void);
-	dtkMatrixPluginManager& pluginManager(void);
+        dtkMatrixPluginFactory& pluginFactory(void);
+        dtkMatrixPluginManager& pluginManager(void);
     }
 }
+
+//
+// dtkMath.h ends here

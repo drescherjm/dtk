@@ -1,16 +1,16 @@
-### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Created: mer. avril  9 12:25:30 2014 (+0200)
-## Version: 
-## Last-Updated: mar. avril 15 10:35:16 2014 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 41
+## Version: $Id$
+##
 ######################################################################
-## 
+##
+### Commentary:
+##
+######################################################################
+##
 ### Change Log:
-## 
+##
 ######################################################################
+##
+### Code:
 
 ## #################################################################
 ## Essential layer
@@ -23,7 +23,6 @@ add_subdirectory(dtkDistributed)
 add_subdirectory(dtkLog)
 add_subdirectory(dtkMath)
 add_subdirectory(dtkTest)
-add_subdirectory(dtkWidgets)
 
 ## #################################################################
 ## Essential target
@@ -35,7 +34,6 @@ set(DTK_TARGETS ${DTK_TARGETS} dtkCore)
 set(DTK_TARGETS ${DTK_TARGETS} dtkDistributed)
 set(DTK_TARGETS ${DTK_TARGETS} dtkLog)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMath)
-set(DTK_TARGETS ${DTK_TARGETS} dtkWidgets)
 
 ## #################################################################
 ## Support layer
@@ -106,3 +104,6 @@ endif(DTK_BUILD_SUPPORT_PLOT)
 ## #################################################################
 
 export(TARGETS ${DTK_TARGETS} FILE "${CMAKE_BINARY_DIR}/dtkDepends.cmake")
+
+######################################################################
+### CMakeLists.txt ends here

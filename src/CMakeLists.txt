@@ -3,9 +3,9 @@
 ## Author: Julien Wintz
 ## Created: mer. avril  9 12:25:30 2014 (+0200)
 ## Version: 
-## Last-Updated: mar. avril 15 10:35:16 2014 (+0200)
+## Last-Updated: lun. mai 12 14:43:27 2014 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 41
+##     Update #: 45
 ######################################################################
 ## 
 ### Change Log:
@@ -22,6 +22,7 @@ add_subdirectory(dtkCore)
 add_subdirectory(dtkDistributed)
 add_subdirectory(dtkLog)
 add_subdirectory(dtkMath)
+add_subdirectory(dtkMeta)
 add_subdirectory(dtkTest)
 add_subdirectory(dtkWidgets)
 
@@ -35,6 +36,7 @@ set(DTK_TARGETS ${DTK_TARGETS} dtkCore)
 set(DTK_TARGETS ${DTK_TARGETS} dtkDistributed)
 set(DTK_TARGETS ${DTK_TARGETS} dtkLog)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMath)
+set(DTK_TARGETS ${DTK_TARGETS} dtkMeta)
 set(DTK_TARGETS ${DTK_TARGETS} dtkWidgets)
 
 ## #################################################################

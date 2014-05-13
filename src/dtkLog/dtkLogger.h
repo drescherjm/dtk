@@ -1,16 +1,16 @@
-/* dtkLogger.h --- 
- * 
- * Author: Julien Wintz
- * Created: Wed Feb 13 12:18:35 2013 (+0100)
- * Version: 
- * Last-Updated: mar. févr.  4 15:15:10 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 153
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -34,6 +34,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // default.critical=false
 // default.warning=true
 // default.debug=false
+
 //  *.Category.*=true
 // My.Category.B=false
 
@@ -45,7 +46,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 #  undef qDebug
 #endif
 
-#define qDebug								\
+#define qDebug                                                          \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
@@ -57,7 +58,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 #  undef qWarning
 #endif
 
-#define qWarning							\
+#define qWarning                                                        \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtWarningMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).warning
 
@@ -69,7 +70,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 #  undef qCritical
 #endif
 
-#define qCritical							\
+#define qCritical                                                       \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtCriticalMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).critical
 
@@ -77,8 +78,8 @@ void dtkSetLoggingRulesFile(const QString &path);
 // Helper macro
 // ///////////////////////////////////////////////////////////////////
 
-#define DTK_LOG_CATEGORY(categorytype, categoryname)			\
-    namespace {								\
+#define DTK_LOG_CATEGORY(categorytype, categoryname)                \
+    namespace {                                                     \
         static dtkLoggingCategory categorytype(categoryname);		\
     }
 
@@ -86,7 +87,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkDebug
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkDebug                                                           \
+#define dtkDebug                                                        \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false)    \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
@@ -94,7 +95,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkWarning
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkWarn \
+#define dtkWarn                                                         \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtWarningMsg); enabled; enabled = false)  \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).warning
 
@@ -102,7 +103,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkCritical
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkCritical						             \
+#define dtkCritical                                                     \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtCriticalMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).critical
 
@@ -110,7 +111,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkTrace
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkTrace						             \
+#define dtkTrace                                                        \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
@@ -118,7 +119,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkInfo
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkInfo						             \
+#define dtkInfo                                                         \
         for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
@@ -126,7 +127,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // dtkError
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkError						             \
+#define dtkError                                                        \
     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtFatalMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).critical
 
@@ -163,3 +164,6 @@ void dtkSetLoggingRulesFile(const QString &path);
 ** conditions contained in a signed written agreement between you and Nokia.
 **
 ****************************************************************************/
+
+//
+// dtkLogger.h ends here

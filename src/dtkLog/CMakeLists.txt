@@ -1,16 +1,16 @@
-### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Created: Mon Feb 11 19:23:24 2013 (+0100)
-## Version: 
-## Last-Updated: lun. avril  7 11:12:53 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 33
+## Version: $Id$
+##
 ######################################################################
-## 
+##
+### Commentary:
+##
+######################################################################
+##
 ### Change Log:
-## 
+##
 ######################################################################
+##
+### Code:
 
 project(dtkLog)
 
@@ -56,3 +56,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT log
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

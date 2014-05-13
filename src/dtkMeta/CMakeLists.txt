@@ -1,4 +1,16 @@
-### CMakeLists.txt --- 
+## Version: $Id$
+##
+######################################################################
+##
+### Commentary:
+##
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+##
+### Code:
 
 project(dtkMeta)
 
@@ -48,3 +60,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT meta
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

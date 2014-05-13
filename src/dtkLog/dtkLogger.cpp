@@ -1,16 +1,16 @@
-/* dtkLogger.cpp --- 
- * 
- * Author: Julien Wintz
- * Created: Mon Feb 11 23:38:21 2013 (+0100)
- * Version: 
- * Last-Updated: lun. févr.  3 15:53:33 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 14
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkLogger.h"
 #include "dtkLogger_p.h"
@@ -65,14 +65,10 @@
 
 Q_GLOBAL_STATIC(dtkLoggingPrivate, dtkLogging)
 
-// This object is returned from an exported API so it lives longer than dtkLoggingPrivate
 static class dtkLoggingCategoryDefault : public dtkLoggingCategory
 {
 public:
-    dtkLoggingCategoryDefault()
-        : dtkLoggingCategory("default")
-    {
-    }
+    dtkLoggingCategoryDefault(void) : dtkLoggingCategory("default") {}
 } default_dtkLoggingCategory;
 
 /*!
@@ -89,9 +85,9 @@ public:
     The object becomes the local identifier for the category.
 */
 dtkLoggingCategory::dtkLoggingCategory(const char *category)
-    : d_ptr(0)
-    , _categoryName(category)
+    : _categoryName(category)
 {
+    d_ptr = NULL;
 }
 
 /*!
@@ -115,9 +111,14 @@ dtkLoggingCategory& dtkLoggingCategory::defaultCategory()
 */
 dtkLoggingCategory::~dtkLoggingCategory()
 {
-    if (!d_ptr) return;
+    if (!d_ptr)
+        return;
+
     dtkLoggingPrivate *qlp = dtkLogging();
-    if (!qlp) return; // logging system is gone
+
+    if (!qlp)
+        return;
+
     qlp->releasePrivate(*this);
 }
 
@@ -148,16 +149,12 @@ bool dtkLoggingCategory::isEnabled(QtMsgType msgtype)
 {
     dtkLoggingPrivate *qlp = dtkLogging();
 
-    // If the logging system is available, we might need to register our category object.
     if (qlp && qlp->registerCategories())
         return dtkLogging()->isEnabled(*this, msgtype);
 
-    // If we're the default category or we were previously registered, we'll have cached values.
     if (d_ptr)
         return d_ptr->statusMessageType(msgtype);
 
-    // We don't have cached values. Use the defaults.
-    // NOTE qDebug/qWarning/qCritical never hit this (see default_dtkLoggingCategory)
     switch (msgtype) {
         case QtDebugMsg: return false;
         case QtWarningMsg: return true;
@@ -179,9 +176,15 @@ bool dtkLoggingCategory::isEnabled(QtMsgType msgtype)
 void dtkSetLoggingRulesFile(const QString &path)
 {
     dtkLoggingPrivate *qlp = dtkLogging();
-    if (!qlp) return; // logging system is gone
-    if (qlp->checkEnvironment()) return; // can't override the environment variable
+
+    if (!qlp)
+        return;
+
+    if (qlp->checkEnvironment())
+        return;
+
     QString config = dtkLoggingPrivate::resolveConfigFile(path);
+
     if (!config.isEmpty())
         qlp->setLoggingRulesFile(config);
 }
@@ -199,8 +202,13 @@ void dtkSetLoggingRulesFile(const QString &path)
 void dtkSetLoggingRules(const QByteArray &rules)
 {
     dtkLoggingPrivate *qlp = dtkLogging();
-    if (!qlp) return; // logging system is gone
-    if (qlp->checkEnvironment()) return; // can't override the environment variable
+
+    if (!qlp)
+        return;
+
+    if (qlp->checkEnvironment())
+        return;
+
     if (!rules.isEmpty())
         qlp->setLoggingRules(rules);
 }
@@ -252,9 +260,11 @@ void dtkSetLoggingRules(const QByteArray &rules)
  */
 dtkLoggingPrivate *dtkLogger(void)
 {
-    // If we're really unlucky, this will be null (during shutdown of the app)
     dtkLoggingPrivate *qlp = dtkLogging();
-    if (!qlp) qFatal("Cannot call dtkLogger() because dtkLogging() is 0");
+
+    if (!qlp)
+        qFatal("Cannot call dtkLogger() because dtkLogging() is 0");
+
     return qlp;
 }
 
@@ -268,15 +278,15 @@ dtkLoggingPrivate::dtkLoggingPrivate()
     , _environment(false)
     , _registerCategories(false)
 {
-    //Move object to the application thread
     if (QCoreApplication::instance())
         this->moveToThread(QCoreApplication::instance()->thread());
 
-    //setup the default category
     categoryPrivate(default_dtkLoggingCategory)->_enabledDebug = true;
+
     _registeredCategories.append(&default_dtkLoggingCategory);
 
-    QByteArray ba = qgetenv("QT_LOGGING_CONFIG");
+    QByteArray ba = qgetenv("DTK_LOGGING_CONFIG");
+
     if (!ba.isEmpty()) {
         QString path = QString::fromLocal8Bit(ba);
         QString config = dtkLoggingPrivate::resolveConfigFile(path);
@@ -293,6 +303,7 @@ dtkLoggingPrivate::dtkLoggingPrivate()
  */
 dtkLoggingPrivate::~dtkLoggingPrivate()
 {
+
 }
 
 /*!
@@ -302,11 +313,15 @@ dtkLoggingPrivate::~dtkLoggingPrivate()
 QString dtkLoggingPrivate::resolveConfigFile(const QString &path)
 {
     QFileInfo fi(path);
+
     if (fi.fileName() == path)
         fi.setFile(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1Char('/') + path);
+
     QString config = fi.absoluteFilePath();
+
     if (QFile::exists(config))
         return config;
+
     return QString();
 }
 
@@ -321,15 +336,12 @@ void dtkLoggingPrivate::setLoggingRulesFile(const QString &path)
     _registerCategories = false;
     _configFile = path;
 
-    //Create filewatcher only if a config file exists
     if (!_configFileWatcher) {
-        //This function can be called from a different thread.
-        //The creation of the filewatcher needs to be in the application thread.
-        //So we invoke the function that creates the filewatcher
         QMetaObject::invokeMethod(this, "createFileWatcher");
     }
 
     QFile cfgfile(_configFile);
+
     readSettings(cfgfile);
 }
 
@@ -340,8 +352,11 @@ void dtkLoggingPrivate::setLoggingRulesFile(const QString &path)
 void dtkLoggingPrivate::createFileWatcher()
 {
     _configFileWatcher = new QFileSystemWatcher(this);
+
     connect(_configFileWatcher, SIGNAL(fileChanged(QString)), SLOT(fileChanged(QString)));
+
     QStringList oldfiles = _configFileWatcher->files();
+
     if (!oldfiles.isEmpty())
         _configFileWatcher->removePaths(oldfiles);
     _configFileWatcher->addPath(_configFile);
@@ -357,7 +372,6 @@ void dtkLoggingPrivate::setLoggingRules(const QByteArray &rules)
 {
     _registerCategories = false;
 
-    //Disable file watcher
     if (_configFileWatcher) {
         delete _configFileWatcher;
         _configFileWatcher = 0;
@@ -374,8 +388,7 @@ void dtkLoggingPrivate::setLoggingRules(const QByteArray &rules)
 */
 void dtkLoggingPrivate::fileChanged(const QString &path)
 {
-    //check if the logging rule file was changed
-    if (path == _configFile){
+    if (path == _configFile) {
         QFile cfgfile(_configFile);
         readSettings(cfgfile);
         _configFileWatcher->addPath(path);
@@ -396,7 +409,6 @@ void dtkLoggingPrivate::readSettings(QIODevice &device)
             QByteArray truearray("true");
             QByteArray line;
             while (!device.atEnd()) {
-                //Simplify the string before creating pair
                 line = device.readLine().replace(" ", "");
                 line = line.simplified();
                 const QList<QByteArray> pair = line.split('=');
@@ -406,7 +418,6 @@ void dtkLoggingPrivate::readSettings(QIODevice &device)
             }
         }
 
-        //Now all the categories are read, so we can update all known dtkLoggingCategories members.
         foreach (dtkLoggingCategory *category, _registeredCategories) {
             updateCategory(category);
         }
@@ -423,12 +434,11 @@ void dtkLoggingPrivate::readSettings(QIODevice &device)
 void dtkLoggingPrivate::updateCategory(dtkLoggingCategory *log)
 {
     dtkLoggingCategoryPrivate *d_ptr = categoryPrivate(*log);
-    //set the default back (debug disable, warning and critical enabled)
+
     if (log == &dtkLoggingCategory::defaultCategory()) {
         d_ptr->_enabledDebug = true;
         d_ptr->_enabledWarning = true;
         d_ptr->_enabledCritical = true;
-
     } else {
         d_ptr->_enabledDebug = false;
         d_ptr->_enabledWarning = true;
@@ -436,17 +446,19 @@ void dtkLoggingPrivate::updateCategory(dtkLoggingCategory *log)
     }
 
     foreach (dtkLogConfigFilterItem item, _logConfigItemList) {
-        //Debug
+
         int filterpass = item.pass(log, QtDebugMsg);
-        //apply filter if filterpass is not 0
+
         if (filterpass != 0)
             d_ptr->_enabledDebug = (filterpass > 0);
-        //Warning
+
         filterpass = item.pass(log, QtWarningMsg);
+
         if (filterpass != 0)
             d_ptr->_enabledWarning = (filterpass > 0);
-        //Critical
+
         filterpass = item.pass(log, QtCriticalMsg);
+
         if (filterpass != 0)
             d_ptr->_enabledCritical = (filterpass > 0);
     }
@@ -459,14 +471,13 @@ void dtkLoggingPrivate::updateCategory(dtkLoggingCategory *log)
 bool dtkLoggingPrivate::isEnabled(dtkLoggingCategory &category, QtMsgType type)
 {
     dtkLoggingCategoryPrivate *d_ptr = categoryPrivate(category);
+
     if (d_ptr->_registered)
         return d_ptr->statusMessageType(type);
 
-    //category is unregistered.
-    //First update category (let it through the filter)
     {
         QMutexLocker locker(&_mutexRegisteredCategory);
-        //lock against _logConfigItemList between updateCategory and readSettings
+
         updateCategory(&category);
         d_ptr->_registered = true;
        _registeredCategories.append(&category);
@@ -494,15 +505,18 @@ void dtkLoggingPrivate::unregisterCategory(dtkLoggingCategory &category)
 dtkLoggingCategoryPrivate *dtkLoggingPrivate::categoryPrivate(dtkLoggingCategory &cat)
 {
     if (!cat.d_ptr) {
+
         QMutexLocker locker(&_privateCategoryObjectsMutex);
-        //Another thread can call this function for the same dtkLoggingCategory object now
-        //Check the d_ptr after mutex lock again.
+
         if (!cat.d_ptr) {
+
             QString strcategory;
-            //just for the insane case someone calls this constructor with an empty category parameter
+
             if (cat._categoryName)
                 strcategory = QString::fromLatin1(cat._categoryName);
+
             QMap<QString, dtkLoggingCategoryPrivate* >::iterator it = _privateCategoryObjects.find(strcategory);
+
             if (it != _privateCategoryObjects.end())
                 cat.d_ptr = *it;
             else {
@@ -512,6 +526,7 @@ dtkLoggingCategoryPrivate *dtkLoggingPrivate::categoryPrivate(dtkLoggingCategory
             cat.d_ptr->_references++;
         }
     }
+
     return cat.d_ptr;
 }
 
@@ -522,12 +537,18 @@ dtkLoggingCategoryPrivate *dtkLoggingPrivate::categoryPrivate(dtkLoggingCategory
 void dtkLoggingPrivate::releasePrivate(dtkLoggingCategory &cat)
 {
     QMutexLocker locker1(&_privateCategoryObjectsMutex);
+
     cat.d_ptr->_references--;
+
     if (cat.d_ptr->_references == 0) {
+
         if (cat.d_ptr->_registered)
             unregisterCategory(cat);
+
         QString strcategory = QString::fromLatin1(cat._categoryName);
+
         QMap<QString, dtkLoggingCategoryPrivate* >::iterator it = _privateCategoryObjects.find(strcategory);
+
         if (it != _privateCategoryObjects.end())
             _privateCategoryObjects.remove(strcategory);
 
@@ -561,10 +582,12 @@ dtkLoggingCategoryPrivate::dtkLoggingCategoryPrivate()
     , _registered(false)
     , _references(0)
 {
+
 }
 
 dtkLoggingCategoryPrivate::~dtkLoggingCategoryPrivate()
 {
+
 }
 
 /*!
@@ -587,6 +610,7 @@ bool dtkLoggingCategoryPrivate::statusMessageType(const QtMsgType &type)
 #define LEFTFILTER 0x02
 #define RIGHTFILTER 0x04
 #define MIDFILTER 0x06
+
 /*!
     \internal
     Constructor of a filter item.
@@ -602,14 +626,16 @@ dtkLogConfigFilterItem::dtkLogConfigFilterItem(const QString &category, bool act
     \internal
     Parses the category and check witch kind of wildcard the filter can contain.
     Allowed is f.e.g.:
-             com.Nokia.*     LEFTFILTER
-             *.Nokia         RIGHTFILTER
-             *.Nokia*        MIDFILTER
+             fr.inria.*       LEFTFILTER
+              *.inria         RIGHTFILTER
+              *.inria*        MIDFILTER
  */
 void dtkLogConfigFilterItem::parse()
 {
     _type = INVALID;
+
     int index = _category.indexOf(QString::fromLatin1("*"));
+
     if (index < 0)
         _type |= CATEGORY;
     else {
@@ -647,28 +673,21 @@ int dtkLogConfigFilterItem::pass(dtkLoggingCategory *log, const QtMsgType &type)
     }
 
     if (_type == CATEGORY) {
-        //Can be
-        //NOKIA.com.debug = true
-        //or
-        //NOKIA.com = true
         if (_category == QString::fromLatin1(log->categoryName()) || _category == fullCategory)
             return (_active ? 1 : -1);
     }
 
     int idx = 0;
     if (_type == MIDFILTER) {
-        //e.g. *.Nokia*
         idx = fullCategory.indexOf(_category);
         if (idx >= 0)
             return (_active ? 1 : -1);
     } else {
         idx = fullCategory.indexOf(_category);
         if (_type == LEFTFILTER) {
-            //e.g. com.Nokia.*
             if (idx == 0)
                 return (_active ? 1 : -1);
         } else if (_type == RIGHTFILTER) {
-            //e.g. *.Nokia
             if (idx == (fullCategory.count() - _category.count()))
                 return (_active ? 1 : -1);
         }
@@ -709,3 +728,6 @@ int dtkLogConfigFilterItem::pass(dtkLoggingCategory *log, const QtMsgType &type)
 ** conditions contained in a signed written agreement between you and Nokia.
 **
 ****************************************************************************/
+
+//
+// dtkLogger.cpp ends here

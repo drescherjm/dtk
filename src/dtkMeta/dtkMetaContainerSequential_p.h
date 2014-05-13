@@ -109,6 +109,7 @@ template<typename T> struct containerAPI : iteratorCapabilities<T>
     static bool empty(const T *c); 
     static int   size(const T *c);
     static void  insertData(T *c, int idx, const void *value);
+    static void  removeData(T *c, int idx);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -131,6 +132,7 @@ public:
     typedef       int  (*sizeFunc)      (void *c);
     typedef       void (*setAtFunc)     (void *c, int idx, const void *value);
     typedef       void (*insertFunc)    (void *c, int idx, const void *value);
+    typedef       void (*removeFunc)    (void *c, int idx);
     typedef       void (*advanceFunc)   (void *& it, int step);
     typedef       Data (*getDataFunc)   (void *const& it, int metaTypeId, uint flags);
     typedef const void *(*atFunc)       (const void *c, int);
@@ -147,6 +149,7 @@ public:
     sizeFunc      m_size;
     setAtFunc     m_setAt;
     insertFunc    m_insert;
+    removeFunc    m_remove;
     atFunc        m_at;
     advanceFunc   m_advance;
     advanceFunc   m_advanceConst;
@@ -176,6 +179,7 @@ public:
     template<typename T> static       int   sizePrivate(void *c);
     template<typename T> static       void  setAtPrivate(void *c, int idx, const void *val);
     template<typename T> static       void  insertPrivate(void *c, int idx, const void *val);
+    template<typename T> static       void  removePrivate(void *c, int idx);
     template<typename T> static const void *atPrivate(const void *c, int idx);
     template<typename T> static       void  moveToBeginPrivate(void *c, void *& it);
     template<typename T> static       void  moveToCBeginPrivate(void *c, void *& it);
@@ -210,6 +214,7 @@ public:
 
     void   setAt(int idx, const void *val);
     void  insert(int idx, const void *val);
+    void  remove(int idx);
 
     Data at(int idx) const;
 
@@ -267,6 +272,13 @@ template<typename From> struct convertFunctor<From *>
 } // end of dtkMetaContainerSequentialPrivate namespace
 
 Q_DECLARE_METATYPE(dtkMetaContainerSequentialPrivate::handler)
+
+// /////////////////////////////////////////////////////////////////
+
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QList);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVector);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::list);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
 
 // /////////////////////////////////////////////////////////////////
 // Redifinition of Qt helper classes to handle our meta containers

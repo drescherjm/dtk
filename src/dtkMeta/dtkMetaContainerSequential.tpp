@@ -229,6 +229,11 @@ template<typename T> inline void dtkMetaContainerSequential::insert(int idx, con
     m_handler.insert(idx, &t);
 }
 
+inline void dtkMetaContainerSequential::removeAt(int idx) 
+{
+    m_handler.remove(idx);
+}
+
 inline const QVariant dtkMetaContainerSequential::first(void) const 
 {
     return this->at(0);

@@ -168,6 +168,8 @@ public:
     template<typename T> void insert(int idx, const        T& t);
                          void insert(int idx, const QVariant& v);
 
+                         void removeAt(int idx);
+
 public:
     const QVariant at(int idx) const;
 

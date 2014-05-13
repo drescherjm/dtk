@@ -186,6 +186,13 @@ template<typename T> inline void containerAPI<T>::insertData(T *c, int idx, cons
     c->insert(it, *static_cast<const typename T::value_type *>(value));
 }
 
+template<typename T> inline void containerAPI<T>::removeData(T *c, int idx)
+{
+    typename T::iterator it(c->begin());
+    std::advance(it, idx);    
+    c->remove(it);
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::handler template method implementation
 // /////////////////////////////////////////////////////////////////
@@ -210,6 +217,11 @@ template<typename T> inline void handler::setAtPrivate(void *c, int idx, const v
 template<typename T> inline void handler::insertPrivate(void *c, int idx, const void *val)
 {
     containerAPI<T>::insertData(static_cast<T *>(c), idx, val);
+}
+
+template<typename T> inline void handler::removePrivate(void *c, int idx)
+{
+    containerAPI<T>::removeData(static_cast<T *>(c), idx);
 }
 
 template<typename T> inline const void *handler::atPrivate(const void *c, int idx)
@@ -347,6 +359,7 @@ template<typename T> inline handler::handler(T *c) : m_container(c),
                                                      m_size(sizePrivate<T>),
                                                      m_setAt(setAtPrivate<T>),
                                                      m_insert(insertPrivate<T>),
+                                                     m_remove(removePrivate<T>),
                                                      m_at(atPrivate<T>),
                                                      m_advance(advancePrivate<T>),
                                                      m_advanceConst(advanceConstPrivate<T>),
@@ -382,6 +395,7 @@ handler::handler(void) : m_container(0),
                          m_size(0),
                          m_setAt(0),
                          m_insert(0),
+                         m_remove(0),
                          m_at(0),
                          m_advance(0),
                          m_advanceConst(0),
@@ -409,11 +423,13 @@ handler::handler(void) : m_container(0),
 }
 inline bool handler::empty(void)
 {
+    Q_ASSERT(m_container);
     return this->m_empty(m_container);
 }
 
 inline int handler::size(void)
 {
+    Q_ASSERT(m_container);
     return this->m_size(m_container);
 }
 
@@ -425,6 +441,11 @@ inline void handler::setAt(int idx, const void *val)
 inline void handler::insert(int idx, const void *val)
 { 
     this->m_insert(m_container, idx, val);
+}
+
+inline void handler::remove(int idx)
+{ 
+    this->m_remove(m_container, idx);
 }
 
 inline Data handler::at(int idx) const
@@ -444,6 +465,7 @@ Data handler::currentConstData(void) const
 
 handler& handler::advance(int step)
 {
+    Q_ASSERT(step > 0 || m_iteratorCapabilities & BiDirectionalCapability);
     this->m_advance(m_iterator, step);
     return *this;
 }

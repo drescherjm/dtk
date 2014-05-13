@@ -13,3 +13,6 @@
 // Code:
 
 #include "dtkMeta.h"
+
+//
+// dtkMeta.cpp ends here

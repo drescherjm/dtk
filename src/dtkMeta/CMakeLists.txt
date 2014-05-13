@@ -9,10 +9,14 @@ project(dtkMeta)
 set(${PROJECT_NAME}_HEADERS
   dtkMeta
   dtkMeta.h
-  dtkMeta.tpp)
+  dtkMeta.tpp
+  dtkMetaContainerSequential_p.h
+  dtkMetaContainerSequential_p.tpp
+  dtkMetaContainerSequential.h
+  dtkMetaContainerSequential.tpp)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkMeta.cpp)
+  dtkMetaContainerSequential.cpp)
 
 ## #################################################################
 ## Build rules

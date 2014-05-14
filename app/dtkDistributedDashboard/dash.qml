@@ -17,7 +17,7 @@ ApplicationWindow {
     minimumWidth: 600
 
     ListModel {
-        id: choices
+        id: servers
         ListElement { text: "http://localhost" }
         ListElement { text: "http://nef-devel.inria.fr" }
         ListElement { text: "http://fsophia.sophia.grid5000.fr" }
@@ -37,11 +37,11 @@ ApplicationWindow {
                 ComboBox {
                     id: combo
                     editable: true
-                    model: choices
+                    model: servers
                     currentIndex: 0
                     Layout.fillWidth: true
                     onAccepted: {
-                        controller.deploy( choices.get(combo.currentIndex).text );
+                        controller.deploy( servers.get(combo.currentIndex).text );
                         Status.show()
                     }
                 }
@@ -55,7 +55,7 @@ ApplicationWindow {
                     text: "Connect"
                     tooltip: "Deploy resource manager daemon on remote host"
                     onClicked: {
-                        controller.deploy( choices.get(combo.currentIndex).text );
+                        controller.deploy( servers.get(combo.currentIndex).text );
                         Status.show()
                     }
                 }
@@ -114,7 +114,22 @@ ApplicationWindow {
                     value: 0
                     maximumValue: 59
                 }
+            }
+            RowLayout {
+                id: submitrow2
 
+                Label {
+                    id:  policyLabel
+                    text: "Distributed policy:"
+                }
+                ComboBox {
+                    id: comboPolicies
+                    editable: false
+                    /* model: policies */
+                    model: policy.types()
+                    currentIndex: 0
+                    Layout.fillWidth: true
+                }
                 Button {
                     id: submitButton
                     text: "Submit"
@@ -202,5 +217,8 @@ ApplicationWindow {
 
     DistributedController {
         id: controller
+    }
+    DistributedPolicy {
+        id: policy
     }
 }

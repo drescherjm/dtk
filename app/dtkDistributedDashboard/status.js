@@ -3,8 +3,12 @@ function url(check_tunnel)
     if (check_tunnel && tunnel.checked) {
         return "http://localhost:" +controller.defaultPort()
     } else {
-        return choices.get(combo.currentIndex).text + ":" +controller.defaultPort()
+        return combo.currentText + ":" +controller.defaultPort()
     }
+}
+function policy()
+{
+    return comboPolicies.currentText
 }
 
 function setWalltime(hours, min, sec)
@@ -43,7 +47,7 @@ function submit(nodes, cores, walltime)
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     var resources = {  "resources": {"nodes": nodes, "cores": cores },
                        "walltime": walltime,
-                       "application": "dtkDistributedSlave --server " + url(false)
+                       "application": "dtkDistributedSlave --server " + url(false) + " --policy " + policy()
                     }
     xhr.send(JSON.stringify(resources))
 }

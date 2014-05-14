@@ -40,6 +40,9 @@ public:
     };
 
 public:
+    Q_INVOKABLE QStringList types(void);
+
+public:
     void addHost(QString host);
     void setType(dtkDistributedPolicy::Type);
     void setType(const QString& type);

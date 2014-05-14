@@ -102,11 +102,11 @@ int main(int argc, char **argv)
 
     dtkDistributedPolicy policy;
 
-    policy.setType("qthread");
-
-    // for (int i=0; i < np; ++i)
-    //     policy.addHost("localhost");
-    // policy.setNThreads(2);
+    QString policyType = "qthread";
+    if (dtkApplicationArgumentsContain(qApp,"--policy")) {
+        policyType = dtkApplicationArgumentsValue(qApp,"--policy");
+    }
+    policy.setType(policyType);
 
     dtkDistributedWorkerManager manager;
 

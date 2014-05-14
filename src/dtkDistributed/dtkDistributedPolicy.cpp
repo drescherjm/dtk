@@ -91,6 +91,11 @@ void dtkDistributedPolicy::setType(dtkDistributedPolicy::Type type)
     }
 }
 
+QStringList dtkDistributedPolicy::types(void)
+{
+    return dtkDistributed::communicator::pluginFactory().keys();
+}
+
 QStringList dtkDistributedPolicy::hosts(void)
 {
     if (d->hosts.count() == 0) {

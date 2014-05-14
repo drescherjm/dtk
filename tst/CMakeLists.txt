@@ -14,7 +14,6 @@
 
 add_subdirectory(dtkMeta)
 add_subdirectory(dtkMath)
-add_subdirectory(dtkLog)
 
 ######################################################################
 ### CMakeLists.txt ends here

@@ -1,4 +1,16 @@
-// qlogger_p.h
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -25,7 +37,7 @@ public:
     bool _enabledWarning;
     bool _enabledCritical;
     bool _registered;
-    int _references;
+     int _references;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -41,11 +53,12 @@ public:
     ~dtkLoggingCategory(void);
 
     bool isEnabled(QtMsgType msgtype);
+
     const char *categoryName(void);
 
     static dtkLoggingCategory& defaultCategory(void);
 
- private:
+private:
     dtkLoggingCategoryPrivate *d_ptr;
 
     const char *_categoryName;
@@ -157,3 +170,6 @@ g** Other Usage
 ** conditions contained in a signed written agreement between you and Nokia.
 **
 ****************************************************************************/
+
+//
+// dtkLogger_p.h ends here

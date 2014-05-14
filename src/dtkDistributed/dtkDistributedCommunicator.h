@@ -73,7 +73,7 @@ public:
     virtual void send(void *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;
     virtual void send(char *data, qint64 size, qint32 target, qint32 tag);
     virtual void send(QByteArray& array, qint32 target, qint32 tag) = 0;
-    virtual void send(const QVariant& v, qint32 target, qint32 tag) = 0;
+    virtual void send(const QVariant& v, qint32 target, qint32 tag);
 
 public:
     virtual void broadcast(QByteArray& array, qint32 source) = 0;
@@ -83,7 +83,7 @@ public:
     virtual void receive(char *data, qint64 size, qint32 source, qint32 tag);
     virtual void receive(QByteArray &v,  qint32 source, qint32 tag) = 0 ;
     virtual void receive(QByteArray &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
-    virtual void receive(QVariant &v,  qint32 source, qint32 tag) = 0 ;
+    virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
     /* virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0; */
 
 public:

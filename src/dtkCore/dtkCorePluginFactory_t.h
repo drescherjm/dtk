@@ -24,8 +24,9 @@ template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
 
 }
 
-#pragma mark -
-#pragma mark Type creator registration
+// /////////////////////////////////////////////////////////////////
+// Type creator registration
+// /////////////////////////////////////////////////////////////////
 
 template <typename T> void dtkCorePluginFactory<T>::record(const QString& key, creator func)
 {
@@ -37,8 +38,9 @@ template <typename T> void dtkCorePluginFactory<T>::record(const QString& key, c
     this->creators.insert(key, func);
 }
 
-#pragma mark -
-#pragma mark Type creator invokation
+// /////////////////////////////////////////////////////////////////
+// Type creator invokation
+// /////////////////////////////////////////////////////////////////
 
 template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
 {
@@ -48,8 +50,9 @@ template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
     return this->creators.value(key)();
 }
 
-#pragma mark -
-#pragma mark Type creator inspection
+// /////////////////////////////////////////////////////////////////
+// Type creator inspection
+// /////////////////////////////////////////////////////////////////
 
 template <typename T> QStringList dtkCorePluginFactory<T>::keys(void)
 {

@@ -87,8 +87,9 @@ template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
     d = NULL;
 }
 
-#pragma mark -
-#pragma Manager Management
+// /////////////////////////////////////////////////////////////////
+// Manager Management
+// /////////////////////////////////////////////////////////////////
 
 template <typename T> void dtkCorePluginManager<T>::initialize(const QString& path)
 {
@@ -107,8 +108,9 @@ template <typename T> void dtkCorePluginManager<T>::uninitialize(void)
         this->unload(path);
 }
 
-#pragma mark -
-#pragma Plugin Management
+// /////////////////////////////////////////////////////////////////
+// Plugin Management
+// /////////////////////////////////////////////////////////////////
 
 template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
 {
@@ -142,6 +144,7 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
     T *plugin = qobject_cast<T *>(loader->instance());
 
     if(!plugin) {
+        qDebug() << loader->errorString();
         delete loader;
         return;
     }
@@ -158,16 +161,19 @@ template <typename T> void dtkCorePluginManager<T>::unload(const QString& path)
     T *plugin = qobject_cast<T *>(loader->instance());
 
     if (plugin)
-	plugin->uninitialize();
+        plugin->uninitialize();
 
     if(loader->unload()) {
         d->loaders.remove(path);
         delete loader;
+    } else {
+        qDebug() << loader->errorString();
     }
 }
 
-#pragma mark -
-#pragma Plugin Queries
+// /////////////////////////////////////////////////////////////////
+// Plugin Queries
+// /////////////////////////////////////////////////////////////////
 
 template <typename T> QStringList dtkCorePluginManager<T>::plugins(void)
 {

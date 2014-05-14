@@ -257,10 +257,9 @@ QString dtkDistributedResourceManagerTorque::submit(QString input)
         } else {
             QTextStream out(&script);
             out << "#!/bin/bash\n";
-            out << "mpirun "
-                + qApp->applicationDirPath()
-                + "/"
-                + json["application"].toString();
+            out << qApp->applicationDirPath()
+                    + "/"
+                    + json["application"].toString();
         }
 
         script.close();

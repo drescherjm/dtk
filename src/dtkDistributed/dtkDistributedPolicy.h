@@ -42,6 +42,7 @@ public:
 public:
     void addHost(QString host);
     void setType(dtkDistributedPolicy::Type);
+    void setType(const QString& type);
     void setNThreads(qlonglong nthreads);
 
 public:

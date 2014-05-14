@@ -520,7 +520,7 @@ Data handler::currentConstData(void) const
 
 handler& handler::advance(int step)
 {
-    Q_ASSERT(step > 0 || m_iteratorCapabilities & BiDirectionalCapability);
+    Q_ASSERT(step > 0 || m_iterator_capabilities & BiDirectionalCapability);
     this->m_advance(m_iterator, step);
     return *this;
 }

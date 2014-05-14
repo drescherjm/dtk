@@ -169,33 +169,63 @@ template<typename V> inline void iteratorOwner<V *, V>::div(void *& it, const vo
 // dtkMetaContainerSequentialPrivate::containerAPI implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> inline bool containerAPI<T>::empty(const T *c)
+template<typename T> inline void containerAPIBase<T>::clear(T *c)
+{
+    c->clear();
+}
+    
+template<typename T> inline void containerAPIBase<T>::reserve(T *c, int size)
+{
+    c->reserve(size);
+}
+    
+template<typename T> inline void containerAPIBase<T>::resize(T *c, int size)
+{
+    c->resize(size);
+}
+
+template<typename T> inline bool containerAPIBase<T>::empty(const T *c)
 {
     return c->empty();
 }
 
-template<typename T> inline int containerAPI<T>::size(const T *c)
+template<typename T> inline int containerAPIBase<T>::size(const T *c)
 {
     return c->size();
 }
 
-template<typename T> inline void containerAPI<T>::insertData(T *c, int idx, const void *value)
+template<typename T> inline void containerAPIBase<T>::insertData(T *c, int idx, const void *value)
 {
     typename T::iterator it(c->begin());
     std::advance(it, idx);    
     c->insert(it, *static_cast<const typename T::value_type *>(value));
 }
 
-template<typename T> inline void containerAPI<T>::removeData(T *c, int idx)
+template<typename T> inline void containerAPIBase<T>::removeData(T *c, int idx)
 {
     typename T::iterator it(c->begin());
     std::advance(it, idx);    
-    c->remove(it);
+    c->erase(it);
 }
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::handler template method implementation
 // /////////////////////////////////////////////////////////////////
+
+template<typename T> inline void handler::clearPrivate(void *c)
+{
+    containerAPI<T>::clear(static_cast<T *>(c));
+}
+
+template<typename T> inline void handler::reservePrivate(void *c, int size)
+{
+    containerAPI<T>::reserve(static_cast<T *>(c), size);
+}
+
+template<typename T> inline void handler::resizePrivate(void *c, int size)
+{
+    containerAPI<T>::resize(static_cast<T *>(c), size);
+}
 
 template<typename T> inline bool handler::emptyPrivate(void *c)
 {
@@ -355,6 +385,9 @@ template<typename T> inline handler::handler(T *c) : m_container(c),
                                                      m_metaType_id(qMetaTypeId<typename T::value_type>()),
                                                      m_metaType_flags(QTypeInfo<typename T::value_type>::isPointer),
                                                      m_iterator_capabilities(containerAPI<T>::IteratorCapabilities),
+                                                     m_clear(clearPrivate<T>),
+                                                     m_reserve(reservePrivate<T>),
+                                                     m_resize(resizePrivate<T>),
                                                      m_empty(emptyPrivate<T>),
                                                      m_size(sizePrivate<T>),
                                                      m_setAt(setAtPrivate<T>),
@@ -391,6 +424,9 @@ handler::handler(void) : m_container(0),
                          m_metaType_id(QMetaType::UnknownType),
                          m_metaType_flags(0),
                          m_iterator_capabilities(0),
+                         m_clear(0),
+                         m_reserve(0),
+                         m_resize(0),
                          m_empty(0),
                          m_size(0),
                          m_setAt(0),
@@ -421,6 +457,25 @@ handler::handler(void) : m_container(0),
                          m_indexOfConstIterator(0)
 {
 }
+
+inline void handler::clear(void)
+{
+    Q_ASSERT(m_container);
+    this->m_clear(m_container);
+}
+
+inline void handler::reserve(int size)
+{
+    Q_ASSERT(m_container);
+    this->m_reserve(m_container, size);
+}
+
+inline void handler::resize(int size)
+{
+    Q_ASSERT(m_container);
+    this->m_resize(m_container, size);
+}
+
 inline bool handler::empty(void)
 {
     Q_ASSERT(m_container);
@@ -572,7 +627,7 @@ inline int handler::indexOfConstIterator(void) const
 // dtkMetaContainerSequentialPrivate::convertFunctor for QMetatype system
 // /////////////////////////////////////////////////////////////////
 
-    template<typename From> handler convertFunctor<From *>::operator () (From *f) const
+template<typename From> handler convertFunctor<From *>::operator () (From *f) const
 {
     return handler(f);
 }

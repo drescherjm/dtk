@@ -45,6 +45,9 @@ public:
         const QVariant operator * (void) const;
 
     public:
+        template<typename T> T value(void) const;
+
+    public:
         template<typename T> item& operator  = (const T& value);
         template<typename T> item& operator += (const T& value);
         template<typename T> item& operator -= (const T& value);
@@ -150,6 +153,12 @@ public:
 public:
     bool hasBiDirectionalIterator(void) const;
     bool  hasRandomAccessIterator(void) const;
+
+public:
+    void clear(void);
+
+    void reserve(int size);
+    void  resize(int size);
 
 public:
     bool empty(void) const;

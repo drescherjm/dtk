@@ -104,12 +104,29 @@ template<typename T> struct iteratorCapabilities<T, std::random_access_iterator_
 // dtkMetaContainerSequentialPrivate::containerAPI definition
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> struct containerAPI : iteratorCapabilities<T>
+template<typename T> struct containerAPIBase : iteratorCapabilities<T>
 {
-    static bool empty(const T *c); 
+    static void       clear(T *c);
+    static void     reserve(T *c, int size);
+    static void      resize(T *c, int size);
+    static bool empty(const T *c);
     static int   size(const T *c);
     static void  insertData(T *c, int idx, const void *value);
     static void  removeData(T *c, int idx);
+};
+
+template<typename T> struct containerAPI : containerAPIBase<T>
+{
+};
+
+template<typename T> struct containerAPI<QList<T> > : containerAPIBase<QList<T> >
+{
+    static void resize(QList<T> *, int) {}
+};
+
+template<typename T> struct containerAPI<std::list<T> > : containerAPIBase<std::list<T> >
+{
+    static void reserve(std::list<T> *, int) {}
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -128,6 +145,8 @@ public:
     uint  m_iterator_capabilities;
 
 public:
+    typedef       void (*clearFunc)     (void *c);
+    typedef       void (*reserveFunc)   (void *c, int size);
     typedef       bool (*emptyFunc)     (void *c);
     typedef       int  (*sizeFunc)      (void *c);
     typedef       void (*setAtFunc)     (void *c, int idx, const void *value);
@@ -145,6 +164,9 @@ public:
     typedef       int  (*indexOfItFunc) (void *c, void *const& it);
 
 public:
+    clearFunc     m_clear;
+    reserveFunc   m_reserve;
+    reserveFunc   m_resize;
     emptyFunc     m_empty;
     sizeFunc      m_size;
     setAtFunc     m_setAt;
@@ -175,6 +197,9 @@ public:
     indexOfItFunc m_indexOfConstIterator;
 
 public:
+    template<typename T> static       void  clearPrivate(void *c);
+    template<typename T> static       void  reservePrivate(void *c, int size);
+    template<typename T> static       void  resizePrivate(void *c, int size);
     template<typename T> static       bool  emptyPrivate(void *c);
     template<typename T> static       int   sizePrivate(void *c);
     template<typename T> static       void  setAtPrivate(void *c, int idx, const void *val);
@@ -209,6 +234,11 @@ public:
                          handler(void);
 
 public:
+    void clear(void);
+
+    void reserve(int size);
+    void resize(int size);
+
     bool empty(void);
     int   size(void);
 
@@ -271,15 +301,6 @@ template<typename From> struct convertFunctor<From *>
 
 } // end of dtkMetaContainerSequentialPrivate namespace
 
-Q_DECLARE_METATYPE(dtkMetaContainerSequentialPrivate::handler)
-
-// /////////////////////////////////////////////////////////////////
-
-DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QList);
-DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVector);
-DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::list);
-DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
-
 // /////////////////////////////////////////////////////////////////
 // Redifinition of Qt helper classes to handle our meta containers
 // /////////////////////////////////////////////////////////////////
@@ -304,6 +325,18 @@ template<typename T> struct ValueTypeIsMetaType<T *, true>
     static bool registerConverter(int id);
 };
 }
+
+// /////////////////////////////////////////////////////////////////
+
+Q_DECLARE_METATYPE(dtkMetaContainerSequentialPrivate::handler)
+
+// /////////////////////////////////////////////////////////////////
+
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QList);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVector);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVarLengthArray);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::list);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
 
 // /////////////////////////////////////////////////////////////////
 

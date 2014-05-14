@@ -37,6 +37,11 @@ inline dtkMetaContainerSequential::item::~item()
     }
 }
 
+template<typename T> inline T dtkMetaContainerSequential::item::value(void) const
+{
+    return (*(*this)).value<T>();
+}
+
 template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (const T& value)
 {
     m_h.setValueToIterator(&value);
@@ -189,6 +194,21 @@ inline bool dtkMetaContainerSequential::hasRandomAccessIterator(void) const
     return m_handler.m_iterator_capabilities && dtkMetaContainerSequentialPrivate::RandomAccessCapability;
 }
 
+inline void dtkMetaContainerSequential::clear(void)
+{
+    m_handler.clear();
+}
+
+inline void dtkMetaContainerSequential::reserve(int size)
+{
+    m_handler.reserve(size);
+}
+
+inline void dtkMetaContainerSequential::resize(int size)
+{
+    m_handler.resize(size);
+}
+
 inline bool dtkMetaContainerSequential::empty(void) const 
 {
     return const_cast<dtkMetaContainerSequentialPrivate::handler&>(m_handler).empty();
@@ -206,12 +226,12 @@ template<typename T> inline void dtkMetaContainerSequential::setAt(int idx, cons
 
 template<typename T> inline void dtkMetaContainerSequential::append(const T& t) 
 {
-    m_handler.insert(this->size() - 1, &t);
+    m_handler.insert(this->size(), &t);
 }
 
 inline void dtkMetaContainerSequential::append(const QVariant& v) 
 {
-    this->insert(this->size() - 1, v);
+    this->insert(this->size(), v);
 }
 
 template<typename T> inline void dtkMetaContainerSequential::prepend(const T& t) 

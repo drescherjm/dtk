@@ -45,14 +45,14 @@ public:
         const QVariant operator * (void) const;
 
     public:
-        template<typename T> T value(void) const;
+        template <typename T> T value(void) const;
 
     public:
-        template<typename T> item& operator  = (const T& value);
-        template<typename T> item& operator += (const T& value);
-        template<typename T> item& operator -= (const T& value);
-        template<typename T> item& operator *= (const T& value);
-        template<typename T> item& operator /= (const T& value);
+        template <typename T> item& operator  = (const T& value);
+        template <typename T> item& operator += (const T& value);
+        template <typename T> item& operator -= (const T& value);
+        template <typename T> item& operator *= (const T& value);
+        template <typename T> item& operator /= (const T& value);
         
     };
     friend struct item;
@@ -165,19 +165,19 @@ public:
     int   size(void) const;
 
 public:
-    template<typename T> void setAt(int idx, const        T& t);
-                         void setAt(int idx, const QVariant& v);
+    template <typename T> void setAt(int idx, const        T& t);
+                          void setAt(int idx, const QVariant& v);
 
-    template<typename T> void append(const        T& t);
-                         void append(const QVariant& v);
+    template <typename T> void append(const        T& t);
+                          void append(const QVariant& v);
 
-    template<typename T> void prepend(const        T& t);
-                         void prepend(const QVariant& v);
+    template <typename T> void prepend(const        T& t);
+                          void prepend(const QVariant& v);
 
-    template<typename T> void insert(int idx, const        T& t);
-                         void insert(int idx, const QVariant& v);
+    template <typename T> void insert(int idx, const        T& t);
+                          void insert(int idx, const QVariant& v);
 
-                         void removeAt(int idx);
+                          void removeAt(int idx);
 
 public:
     const QVariant at(int idx) const;

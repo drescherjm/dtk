@@ -50,45 +50,23 @@ template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSe
 
 template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator += (const T& value)
 {
-    qWarning("Operator += not implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>())); return *this;
-}
-
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator -= (const T& value)
-{
-    qWarning("Operator -= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>())); return *this;
-}
-
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator *= (const T& value)
-{
-    qWarning("Operator *= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>())); return *this;
-}
-
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator /= (const T& value)
-{
-    qWarning("Operator /= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>())); return *this;
-}
-
-// /////////////////////////////////////////////////////////////////
-
-template<> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator += (const int& value)
-{
     m_h.addValueToIterator(&value);
     return *this;
 }
 
-template<> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator -= (const int& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator -= (const T& value)
 {
     m_h.subValueToIterator(&value);
     return *this;
 }
 
-template<> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator *= (const int& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator *= (const T& value)
 {
     m_h.mulValueToIterator(&value);
     return *this;
 }
 
-template<> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator /= (const int& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator /= (const T& value)
 {
     m_h.divValueToIterator(&value);
     return *this;

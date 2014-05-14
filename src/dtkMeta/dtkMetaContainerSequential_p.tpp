@@ -20,147 +20,195 @@ namespace dtkMetaContainerSequentialPrivate
 // dtkMetaContainerSequentialPrivate::iterator implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::assign(void *& ptr, const I& it)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::assign(void *& ptr, const I& it)
 {
     ptr = new I(it);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::assign(void *& ptr, void *const& src)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::assign(void *& ptr, void *const& src)
 {
     ptr = new I(*static_cast<I *>(src));
 }
     
-template<typename I, typename V> inline void iteratorOwner<I, V>::advance(void *& it, int step)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::advance(void *& it, int step)
 {
     I& ite = *static_cast<I *>(it);
     std::advance(ite, step);
 }
 
-template<typename I, typename V> inline const void *iteratorOwner<I, V>::data(void *const & it)
+template<typename I, typename V> inline const void *iteratorOwnerBase<I, V>::data(void *const & it)
 {
     return &**static_cast<I *>(it);
 }
 
-template<typename I, typename V> inline const void *iteratorOwner<I, V>::data(I& it)
+template<typename I, typename V> inline const void *iteratorOwnerBase<I, V>::data(I& it)
 {
     return &*it;
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::destroy(void *& it)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::destroy(void *& it)
 {
     delete static_cast<I *>(it);
 }
 
-template<typename I, typename V> inline int iteratorOwner<I, V>::distance(I& from, void *const& to)
+template<typename I, typename V> inline int iteratorOwnerBase<I, V>::distance(I& from, void *const& to)
 {
     return std::distance(from, *(static_cast<I *>(to)));
 }
 
-template<typename I, typename V> inline bool iteratorOwner<I, V>::equal(void *it, void *other)
+template<typename I, typename V> inline bool iteratorOwnerBase<I, V>::equal(void *it, void *other)
 {
     return *static_cast<I *>(it) == *static_cast<I *>(other);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::setData(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::setData(void *& it, const void *value)
 {
     **static_cast<I *>(it) = *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::setData(I& it, const void *value)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::setData(I& it, const void *value)
 {
     *it = *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::add(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::add(void *& it, const void *value)
+{
+    qWarning("Operator += not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    //**static_cast<I *>(it) += *static_cast<const V *>(value);
+}
+
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::sub(void *&, const void *)
+{
+    qWarning("Operator -= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    //**static_cast<I *>(it) -= *static_cast<const V *>(value);
+}
+
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::mul(void *&, const void *)
+{
+    qWarning("Operator *= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    //**static_cast<I *>(it) *= *static_cast<const V *>(value);
+}
+
+template<typename I, typename V> inline void iteratorOwnerBase<I, V>::div(void *&, const void *)
+{
+    qWarning("Operator /= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    //**static_cast<I *>(it) /= *static_cast<const V *>(value);
+}
+
+/////////////////////////////////////////////////////////////////
+
+template<typename I, typename V> inline void iteratorOwner<I, V, true>::add(void *& it, const void *value)
 {
     **static_cast<I *>(it) += *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::sub(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V, true>::sub(void *& it, const void *value)
 {
     **static_cast<I *>(it) -= *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::mul(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V, true>::mul(void *& it, const void *value)
 {
     **static_cast<I *>(it) *= *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::div(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V, true>::div(void *& it, const void *value)
 {
     **static_cast<I *>(it) /= *static_cast<const V *>(value);
 }
 
 // /////////////////////////////////////////////////////////////////
 
-template<typename V> inline void iteratorOwner<V *, V>::assign(void *& ptr, V *const it)
+template<typename V> inline void iteratorOwnerBase<V *, V>::assign(void *& ptr, V *const it)
 {
     ptr = const_cast<V *>(it);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::assign(void *& ptr, void *const& src)
+template<typename V> inline void iteratorOwnerBase<V *, V>::assign(void *& ptr, void *const& src)
 {
     ptr = static_cast<V *>(src);
 }
     
-template<typename V> inline void iteratorOwner<V *, V>::advance(void *& it, int step)
+template<typename V> inline void iteratorOwnerBase<V *, V>::advance(void *& it, int step)
 {
     V * ite = static_cast<V *>(it);
     std::advance(ite, step);
     it = ite;
 }
 
-template<typename V> inline const void *iteratorOwner<V *, V>::data(void *const& it)
+template<typename V> inline const void *iteratorOwnerBase<V *, V>::data(void *const& it)
 {
     return it;
 }
 
-template<typename V> inline const void *iteratorOwner<V *, V>::data(V *it)
+template<typename V> inline const void *iteratorOwnerBase<V *, V>::data(V *it)
 {
     return it;
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::destroy(void *&)
+template<typename V> inline void iteratorOwnerBase<V *, V>::destroy(void *&)
 {
     
 }
 
-template<typename V> inline int iteratorOwner<V *, V>::distance(V *from, void *const& to)
+template<typename V> inline int iteratorOwnerBase<V *, V>::distance(V *from, void *const& to)
 {
     return std::distance(from, (static_cast<V *>(to)));
 }
 
-template<typename V> inline bool iteratorOwner<V *, V>::equal(void *it, void *other)
+template<typename V> inline bool iteratorOwnerBase<V *, V>::equal(void *it, void *other)
 {
     return static_cast<V *>(it) == static_cast<V *>(other);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::setData(void *& it, const void *value)
+template<typename V> inline void iteratorOwnerBase<V *, V>::setData(void *& it, const void *value)
 {
     *static_cast<V *>(it) = *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::setData(V *it, const void *value)
+template<typename V> inline void iteratorOwnerBase<V *, V>::setData(V *it, const void *value)
 {
     *it = *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::add(void *& it, const void *value)
+template<typename V> inline void iteratorOwnerBase<V *, V>::add(void *& it, const void *value)
+{
+    qWarning("Operator += not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+}
+
+template<typename V> inline void iteratorOwnerBase<V *, V>::sub(void *& it, const void *value)
+{
+    qWarning("Operator -= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+}
+
+template<typename V> inline void iteratorOwnerBase<V *, V>::mul(void *& it, const void *value)
+{
+    qWarning("Operator *= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+}
+
+template<typename V> inline void iteratorOwnerBase<V *, V>::div(void *& it, const void *value)
+{
+    qWarning("Operator /= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+}
+
+// /////////////////////////////////////////////////////////////////
+
+template<typename V> inline void iteratorOwner<V *, V, true>::add(void *& it, const void *value)
 {
     *static_cast<V *>(it) += *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::sub(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V, true>::sub(void *& it, const void *value)
 {
     *static_cast<V *>(it) -= *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::mul(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V, true>::mul(void *& it, const void *value)
 {
     *static_cast<V *>(it) *= *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::div(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V, true>::div(void *& it, const void *value)
 {
     *static_cast<V *>(it) /= *static_cast<const V *>(value);
 }
@@ -169,33 +217,73 @@ template<typename V> inline void iteratorOwner<V *, V>::div(void *& it, const vo
 // dtkMetaContainerSequentialPrivate::containerAPI implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> inline bool containerAPI<T>::empty(const T *c)
+template<typename T> inline void containerAPIBase<T>::clear(T *c)
+{
+    c->clear();
+}
+    
+template<typename T> inline void containerAPIBase<T>::reserve(T *c, int size)
+{
+    c->reserve(size);
+}
+    
+template<typename T> inline void containerAPIBase<T>::resize(T *c, int size)
+{
+    c->resize(size);
+}
+
+template<typename T> inline bool containerAPIBase<T>::empty(const T *c)
 {
     return c->empty();
 }
 
-template<typename T> inline int containerAPI<T>::size(const T *c)
+template<typename T> inline int containerAPIBase<T>::size(const T *c)
 {
     return c->size();
 }
 
-template<typename T> inline void containerAPI<T>::insertData(T *c, int idx, const void *value)
+template<typename T> inline void containerAPIBase<T>::insertData(T *c, int idx, const void *value)
 {
     typename T::iterator it(c->begin());
     std::advance(it, idx);    
     c->insert(it, *static_cast<const typename T::value_type *>(value));
 }
 
-template<typename T> inline void containerAPI<T>::removeData(T *c, int idx)
+template<typename T> inline void containerAPIBase<T>::removeData(T *c, int idx)
 {
     typename T::iterator it(c->begin());
     std::advance(it, idx);    
-    c->remove(it);
+    c->erase(it);
+}
+    
+template<typename T> inline void containerAPI<std::list<T> >::reserve(std::list<T> *, int)
+{
+    qWarning("Current meta container is based on std::list which does not provide reserve method. Nothing is done.");
+}
+    
+template<typename T> inline void containerAPI<QList<T> >::resize(QList<T> *, int)
+{
+    qWarning("Current meta container is based on QList which does not provide resize method. Nothing is done.");
 }
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::handler template method implementation
 // /////////////////////////////////////////////////////////////////
+
+template<typename T> inline void handler::clearPrivate(void *c)
+{
+    containerAPI<T>::clear(static_cast<T *>(c));
+}
+
+template<typename T> inline void handler::reservePrivate(void *c, int size)
+{
+    containerAPI<T>::reserve(static_cast<T *>(c), size);
+}
+
+template<typename T> inline void handler::resizePrivate(void *c, int size)
+{
+    containerAPI<T>::resize(static_cast<T *>(c), size);
+}
 
 template<typename T> inline bool handler::emptyPrivate(void *c)
 {
@@ -355,6 +443,9 @@ template<typename T> inline handler::handler(T *c) : m_container(c),
                                                      m_metaType_id(qMetaTypeId<typename T::value_type>()),
                                                      m_metaType_flags(QTypeInfo<typename T::value_type>::isPointer),
                                                      m_iterator_capabilities(containerAPI<T>::IteratorCapabilities),
+                                                     m_clear(clearPrivate<T>),
+                                                     m_reserve(reservePrivate<T>),
+                                                     m_resize(resizePrivate<T>),
                                                      m_empty(emptyPrivate<T>),
                                                      m_size(sizePrivate<T>),
                                                      m_setAt(setAtPrivate<T>),
@@ -386,41 +477,63 @@ template<typename T> inline handler::handler(T *c) : m_container(c),
 {
 }
 
-handler::handler(void) : m_container(0),
-                         m_iterator(0),
-                         m_metaType_id(QMetaType::UnknownType),
-                         m_metaType_flags(0),
-                         m_iterator_capabilities(0),
-                         m_empty(0),
-                         m_size(0),
-                         m_setAt(0),
-                         m_insert(0),
-                         m_remove(0),
-                         m_at(0),
-                         m_advance(0),
-                         m_advanceConst(0),
-                         m_getData(0),
-                         m_getConstData(0),
-                         m_moveToBegin(0),
-                         m_moveToCBegin(0),
-                         m_moveToEnd(0),
-                         m_moveToCEnd(0),
-                         m_destroyIterator(0),
-                         m_destroyConstIterator(0),
-                         m_equalIterator(0),
-                         m_equalConstIterator(0),
-                         m_copyIterator(0),
-                         m_copyConstIterator(0),
-                         m_iteratorValue(0),
-                         m_setValueToIterator(0),
-                         m_addValueTotIterator(0),
-                         m_subValueTotIterator(0),
-                         m_mulValueTotIterator(0),
-                         m_divValueTotIterator(0),
-                         m_indexOfIterator(0),
-                         m_indexOfConstIterator(0)
+inline handler::handler(void) : m_container(0),
+                                m_iterator(0),
+                                m_metaType_id(QMetaType::UnknownType),
+                                m_metaType_flags(0),
+                                m_iterator_capabilities(0),
+                                m_clear(0),
+                                m_reserve(0),
+                                m_resize(0),
+                                m_empty(0),
+                                m_size(0),
+                                m_setAt(0),
+                                m_insert(0),
+                                m_remove(0),
+                                m_at(0),
+                                m_advance(0),
+                                m_advanceConst(0),
+                                m_getData(0),
+                                m_getConstData(0),
+                                m_moveToBegin(0),
+                                m_moveToCBegin(0),
+                                m_moveToEnd(0),
+                                m_moveToCEnd(0),
+                                m_destroyIterator(0),
+                                m_destroyConstIterator(0),
+                                m_equalIterator(0),
+                                m_equalConstIterator(0),
+                                m_copyIterator(0),
+                                m_copyConstIterator(0),
+                                m_iteratorValue(0),
+                                m_setValueToIterator(0),
+                                m_addValueTotIterator(0),
+                                m_subValueTotIterator(0),
+                                m_mulValueTotIterator(0),
+                                m_divValueTotIterator(0),
+                                m_indexOfIterator(0),
+                                m_indexOfConstIterator(0)
 {
 }
+
+inline void handler::clear(void)
+{
+    Q_ASSERT(m_container);
+    this->m_clear(m_container);
+}
+
+inline void handler::reserve(int size)
+{
+    Q_ASSERT(m_container);
+    this->m_reserve(m_container, size);
+}
+
+inline void handler::resize(int size)
+{
+    Q_ASSERT(m_container);
+    this->m_resize(m_container, size);
+}
+
 inline bool handler::empty(void)
 {
     Q_ASSERT(m_container);
@@ -453,24 +566,24 @@ inline Data handler::at(int idx) const
     return Data(m_metaType_id, this->m_at(m_container, idx), m_metaType_flags);
 }
 
-Data handler::currentData(void) const
+inline Data handler::currentData(void) const
 {
     return this->m_getData(m_iterator, m_metaType_id, m_metaType_flags);
 }
 
-Data handler::currentConstData(void) const
+inline Data handler::currentConstData(void) const
 {
     return this->m_getConstData(m_iterator, m_metaType_id, m_metaType_flags);
 }
 
-handler& handler::advance(int step)
+inline handler& handler::advance(int step)
 {
-    Q_ASSERT(step > 0 || m_iteratorCapabilities & BiDirectionalCapability);
+    Q_ASSERT(step > 0 || m_iterator_capabilities & BiDirectionalCapability);
     this->m_advance(m_iterator, step);
     return *this;
 }
 
-handler& handler::advanceConst(int step)
+inline handler& handler::advanceConst(int step)
 {
     this->m_advanceConst(m_iterator, step);
     return *this;
@@ -572,7 +685,7 @@ inline int handler::indexOfConstIterator(void) const
 // dtkMetaContainerSequentialPrivate::convertFunctor for QMetatype system
 // /////////////////////////////////////////////////////////////////
 
-    template<typename From> handler convertFunctor<From *>::operator () (From *f) const
+template<typename From> handler convertFunctor<From *>::operator () (From *f) const
 {
     return handler(f);
 }

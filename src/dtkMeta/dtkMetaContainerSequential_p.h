@@ -19,10 +19,10 @@
 namespace dtkMetaContainerSequentialPrivate
 {
 // /////////////////////////////////////////////////////////////////
-// dtkMetaContainerSequentialPrivate::iterator definition
+// dtkMetaContainerSequentialPrivate::iteratorOwner definition
 // /////////////////////////////////////////////////////////////////
 
-template<typename I, typename V> struct iteratorOwner
+template <typename I, typename V> struct iteratorOwnerBase
 {
     static       void  assign(void *& ptr, const I& it);
     static       void  assign(void *& ptr, void *const& src);
@@ -42,11 +42,27 @@ template<typename I, typename V> struct iteratorOwner
     static       void  div(void *& it, const void *value);
 };
 
+ template <typename I, typename V, bool = std::is_integral<V>::value || std::is_floating_point<V>::value> struct iteratorOwner : iteratorOwnerBase<I, V>
+{
+};
+
+ template <typename I, typename V> struct iteratorOwner<I, V, false> : iteratorOwnerBase<I, V>
+{
+};
+
+ template <typename I, typename V> struct iteratorOwner<I, V, true> : iteratorOwnerBase<I, V>
+{
+    static void  add(void *& it, const void *value);
+    static void  sub(void *& it, const void *value);
+    static void  mul(void *& it, const void *value);
+    static void  div(void *& it, const void *value);
+};
+
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::iterator specialization for pointers as iterators
 // /////////////////////////////////////////////////////////////////
 
-template<typename V> struct iteratorOwner<V *, V>
+template <typename V> struct iteratorOwnerBase<V *, V>
 {
     static       void  assign(void *& ptr, V *const it);
     static       void  assign(void *& ptr, void *const& src);
@@ -66,6 +82,18 @@ template<typename V> struct iteratorOwner<V *, V>
     static       void  div(void *& it, const void *value);
 };
 
+ template <typename V> struct iteratorOwner<V *, V, false> : iteratorOwnerBase<V *, V>
+{
+};
+
+ template <typename V> struct iteratorOwner<V *, V, true> : iteratorOwnerBase<V *, V>
+{
+    static void  add(void *& it, const void *value);
+    static void  sub(void *& it, const void *value);
+    static void  mul(void *& it, const void *value);
+    static void  div(void *& it, const void *value);
+};
+
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::iteratorCapabilities definition
 // /////////////////////////////////////////////////////////////////
@@ -77,23 +105,23 @@ enum IteratorCapability
     RandomAccessCapability  = 4
 };
 
-template<typename T, typename Category = typename std::iterator_traits<typename T::const_iterator>::iterator_category> struct iteratorCapabilities;
+template <typename T, typename Category = typename std::iterator_traits<typename T::const_iterator>::iterator_category> struct iteratorCapabilities;
 
-template<typename T> struct iteratorCapabilities<T, std::forward_iterator_tag>
+template <typename T> struct iteratorCapabilities<T, std::forward_iterator_tag>
 { 
     enum { 
         IteratorCapabilities = ForwardCapability 
     }; 
 };
 
-template<typename T> struct iteratorCapabilities<T, std::bidirectional_iterator_tag>
+template <typename T> struct iteratorCapabilities<T, std::bidirectional_iterator_tag>
 { 
     enum { 
         IteratorCapabilities = BiDirectionalCapability | ForwardCapability 
     }; 
 };
 
-template<typename T> struct iteratorCapabilities<T, std::random_access_iterator_tag>
+template <typename T> struct iteratorCapabilities<T, std::random_access_iterator_tag>
 { 
     enum { 
         IteratorCapabilities = RandomAccessCapability | BiDirectionalCapability | ForwardCapability 
@@ -104,12 +132,29 @@ template<typename T> struct iteratorCapabilities<T, std::random_access_iterator_
 // dtkMetaContainerSequentialPrivate::containerAPI definition
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> struct containerAPI : iteratorCapabilities<T>
+template <typename T> struct containerAPIBase : iteratorCapabilities<T>
 {
-    static bool empty(const T *c); 
+    static void       clear(T *c);
+    static void     reserve(T *c, int size);
+    static void      resize(T *c, int size);
+    static bool empty(const T *c);
     static int   size(const T *c);
     static void  insertData(T *c, int idx, const void *value);
     static void  removeData(T *c, int idx);
+};
+
+template <typename T> struct containerAPI : containerAPIBase<T>
+{
+};
+
+template <typename T> struct containerAPI<QList<T> > : containerAPIBase<QList<T> >
+{
+    static void resize(QList<T> *, int);
+};
+
+template <typename T> struct containerAPI<std::list<T> > : containerAPIBase<std::list<T> >
+{
+    static void reserve(std::list<T> *, int);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -128,6 +173,8 @@ public:
     uint  m_iterator_capabilities;
 
 public:
+    typedef       void (*clearFunc)     (void *c);
+    typedef       void (*reserveFunc)   (void *c, int size);
     typedef       bool (*emptyFunc)     (void *c);
     typedef       int  (*sizeFunc)      (void *c);
     typedef       void (*setAtFunc)     (void *c, int idx, const void *value);
@@ -145,6 +192,9 @@ public:
     typedef       int  (*indexOfItFunc) (void *c, void *const& it);
 
 public:
+    clearFunc     m_clear;
+    reserveFunc   m_reserve;
+    reserveFunc   m_resize;
     emptyFunc     m_empty;
     sizeFunc      m_size;
     setAtFunc     m_setAt;
@@ -175,40 +225,48 @@ public:
     indexOfItFunc m_indexOfConstIterator;
 
 public:
-    template<typename T> static       bool  emptyPrivate(void *c);
-    template<typename T> static       int   sizePrivate(void *c);
-    template<typename T> static       void  setAtPrivate(void *c, int idx, const void *val);
-    template<typename T> static       void  insertPrivate(void *c, int idx, const void *val);
-    template<typename T> static       void  removePrivate(void *c, int idx);
-    template<typename T> static const void *atPrivate(const void *c, int idx);
-    template<typename T> static       void  moveToBeginPrivate(void *c, void *& it);
-    template<typename T> static       void  moveToCBeginPrivate(void *c, void *& it);
-    template<typename T> static       void  moveToEndPrivate(void *c, void *& it);
-    template<typename T> static       void  moveToCEndPrivate(void *c, void *& it);
-    template<typename T> static       void  destroyIteratorPrivate(void *& it);
-    template<typename T> static       void  destroyConstIteratorPrivate(void *& it);
-    template<typename T> static       bool  equalIteratorPrivate(void *it, void *o);
-    template<typename T> static       bool  equalConstIteratorPrivate(void *it, void *o);
-    template<typename T> static       void  copyIteratorPrivate(void *& it, void *const& src);
-    template<typename T> static       void  copyConstIteratorPrivate(void *& it, void *const& src);
-    template<typename T> static       void  advancePrivate(void *& it, int step);
-    template<typename T> static       void  advanceConstPrivate(void *& it, int step);
-    template<typename T> static       Data  getDataPrivate(void *const& it, int metaTypeId, uint flags);
-    template<typename T> static       Data  getConstDataPrivate(void *const& it, int metaTypeId, uint flags);
-    template<typename T> static const void  *iteratorValuePrivate(void *const& it);
-    template<typename T> static       void  setValueToIteratorPrivate(void *& it, const void *val);
-    template<typename T> static       void  addValueToIteratorPrivate(void *& it, const void *val);
-    template<typename T> static       void  subValueToIteratorPrivate(void *& it, const void *val);
-    template<typename T> static       void  mulValueToIteratorPrivate(void *& it, const void *val);
-    template<typename T> static       void  divValueToIteratorPrivate(void *& it, const void *val);
-    template<typename T> static       int   indexOfIteratorPrivate(void *c, void *const& it);
-    template<typename T> static       int   indexOfConstIteratorPrivate(void *c, void *const& it);
+    template <typename T> static       void  clearPrivate(void *c);
+    template <typename T> static       void  reservePrivate(void *c, int size);
+    template <typename T> static       void  resizePrivate(void *c, int size);
+    template <typename T> static       bool  emptyPrivate(void *c);
+    template <typename T> static       int   sizePrivate(void *c);
+    template <typename T> static       void  setAtPrivate(void *c, int idx, const void *val);
+    template <typename T> static       void  insertPrivate(void *c, int idx, const void *val);
+    template <typename T> static       void  removePrivate(void *c, int idx);
+    template <typename T> static const void *atPrivate(const void *c, int idx);
+    template <typename T> static       void  moveToBeginPrivate(void *c, void *& it);
+    template <typename T> static       void  moveToCBeginPrivate(void *c, void *& it);
+    template <typename T> static       void  moveToEndPrivate(void *c, void *& it);
+    template <typename T> static       void  moveToCEndPrivate(void *c, void *& it);
+    template <typename T> static       void  destroyIteratorPrivate(void *& it);
+    template <typename T> static       void  destroyConstIteratorPrivate(void *& it);
+    template <typename T> static       bool  equalIteratorPrivate(void *it, void *o);
+    template <typename T> static       bool  equalConstIteratorPrivate(void *it, void *o);
+    template <typename T> static       void  copyIteratorPrivate(void *& it, void *const& src);
+    template <typename T> static       void  copyConstIteratorPrivate(void *& it, void *const& src);
+    template <typename T> static       void  advancePrivate(void *& it, int step);
+    template <typename T> static       void  advanceConstPrivate(void *& it, int step);
+    template <typename T> static       Data  getDataPrivate(void *const& it, int metaTypeId, uint flags);
+    template <typename T> static       Data  getConstDataPrivate(void *const& it, int metaTypeId, uint flags);
+    template <typename T> static const void  *iteratorValuePrivate(void *const& it);
+    template <typename T> static       void  setValueToIteratorPrivate(void *& it, const void *val);
+    template <typename T> static       void  addValueToIteratorPrivate(void *& it, const void *val);
+    template <typename T> static       void  subValueToIteratorPrivate(void *& it, const void *val);
+    template <typename T> static       void  mulValueToIteratorPrivate(void *& it, const void *val);
+    template <typename T> static       void  divValueToIteratorPrivate(void *& it, const void *val);
+    template <typename T> static       int   indexOfIteratorPrivate(void *c, void *const& it);
+    template <typename T> static       int   indexOfConstIteratorPrivate(void *c, void *const& it);
 
 public:
-    template<typename T> handler(T *c);
-                         handler(void);
+    template <typename T> handler(T *c);
+                          handler(void);
 
 public:
+    void clear(void);
+
+    void reserve(int size);
+    void resize(int size);
+
     bool empty(void);
     int   size(void);
 
@@ -258,11 +316,11 @@ public:
 // dtkMetaContainerSequentialPrivate::convertFunctor for QMetatype system
 // /////////////////////////////////////////////////////////////////
 
-template<typename From> struct convertFunctor
+template <typename From> struct convertFunctor
 {
 };
 
-template<typename From> struct convertFunctor<From *>
+template <typename From> struct convertFunctor<From *>
 {
     handler operator () (From *f) const;
 };
@@ -271,39 +329,42 @@ template<typename From> struct convertFunctor<From *>
 
 } // end of dtkMetaContainerSequentialPrivate namespace
 
+// /////////////////////////////////////////////////////////////////
+// Redifinition of Qt helper classes to handle our meta containers
+// /////////////////////////////////////////////////////////////////
+
+namespace QtPrivate {    
+template <typename T> struct SequentialContainerConverterHelper<T *, false>
+{
+    static bool registerConverter(int);
+};
+    
+template <typename T> struct SequentialContainerConverterHelper<T *, true> : ValueTypeIsMetaType<T *, QMetaTypeId2<typename T::value_type>::Defined>
+{
+};
+    
+template <typename T> struct ValueTypeIsMetaType<T *, false>
+{
+    static bool registerConverter(int);
+};
+    
+template <typename T> struct ValueTypeIsMetaType<T *, true>
+{
+    static bool registerConverter(int id);
+};
+}
+
+// /////////////////////////////////////////////////////////////////
+
 Q_DECLARE_METATYPE(dtkMetaContainerSequentialPrivate::handler)
 
 // /////////////////////////////////////////////////////////////////
 
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QList);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVector);
+DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVarLengthArray);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::list);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
-
-// /////////////////////////////////////////////////////////////////
-// Redifinition of Qt helper classes to handle our meta containers
-// /////////////////////////////////////////////////////////////////
-
-namespace QtPrivate {    
-template<typename T> struct SequentialContainerConverterHelper<T *, false>
-{
-    static bool registerConverter(int);
-};
-    
-template<typename T> struct SequentialContainerConverterHelper<T *, true> : ValueTypeIsMetaType<T *, QMetaTypeId2<typename T::value_type>::Defined>
-{
-};
-    
-template<typename T> struct ValueTypeIsMetaType<T *, false>
-{
-    static bool registerConverter(int);
-};
-    
-template<typename T> struct ValueTypeIsMetaType<T *, true>
-{
-    static bool registerConverter(int id);
-};
-}
 
 // /////////////////////////////////////////////////////////////////
 

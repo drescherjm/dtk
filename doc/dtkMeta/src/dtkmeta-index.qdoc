@@ -1,0 +1,31 @@
+// Version: $Id$
+// 
+// 
+
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
+/*!
+    \page dtkmeta-index.html
+    \title Meta Module
+
+    \brief The dtkMeta module is part of dtk's essential \l {All Modules} {modules}.
+
+    \section1 Reference
+    These are links to the API reference materials.
+    \list
+    \li \l{Meta C++ Classes}{C++ Classes API}
+    \endlist
+
+    \sa {All Modules}
+*/
+
+// 
+// dtkmeta-index.qdoc ends here

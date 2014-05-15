@@ -3,9 +3,9 @@
 ## Author: Thibaud Kloczko
 ## Created: lun. avril  7 19:17:05 2014 (+0200)
 ## Version:
-## Last-Updated: mer. avril  9 14:19:02 2014 (+0200)
+## Last-Updated: jeu. mai 15 10:48:40 2014 (+0200)
 ##           By: Thibaud Kloczko
-##     Update #: 104
+##     Update #: 110
 ######################################################################
 ##
 ### Change Log:
@@ -37,6 +37,20 @@ add_custom_target(dtk-doc
   COMMAND ${DTK_QDOC_EXECUTABLE} -no-link-errors dtkdoc.qdocconf)
 
 ## ###################################################################
+## dtkMeta
+## ###################################################################
+
+configure_file(${CMAKE_SOURCE_DIR}/doc/dtkMeta/dtkmeta.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkmeta.qdocconf IMMEDIATE @ONLY)
+
+add_custom_target(dtkMeta-doc
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${DTK_QDOC_EXECUTABLE} dtkmeta.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkmeta/dtkmeta.qhp -o ${CMAKE_BINARY_DIR}/html/dtkmeta.qch
+  COMMENT "-- Generating dtkMeta documentation")
+
+add_dependencies(dtkMeta-doc dtk-doc)
+
+## ###################################################################
 ## dtkCore
 ## ###################################################################
 
@@ -48,7 +62,7 @@ add_custom_target(dtkCore-doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp -o ${CMAKE_BINARY_DIR}/html/dtkcore.qch
   COMMENT "-- Generating dtkCore documentation")
 
-add_dependencies(dtkCore-doc dtk-doc)
+add_dependencies(dtkCore-doc dtk-Meta dtk-doc)
 
 ## ###################################################################
 ## dtkDistributed
@@ -88,4 +102,4 @@ add_custom_target(doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp -o ${CMAKE_BINARY_DIR}/html/dtkdoc.qch
   COMMENT "-- Generating dtk documentation")
 
-add_dependencies(doc dtkCore-doc dtkDistributed-doc dtkWidgets-doc)
+add_dependencies(doc dtkMeta-doc dtkCore-doc dtkDistributed-doc dtkWidgets-doc)

@@ -3,12 +3,24 @@ function url(check_tunnel)
     if (check_tunnel && tunnel.checked) {
         return "http://localhost:" +controller.defaultPort()
     } else {
-        return combo.currentText + ":" +controller.defaultPort()
+        return "http://" + combo.currentText + ":" +controller.defaultPort()
     }
 }
+
 function policy()
 {
     return comboPolicies.currentText
+}
+
+function guess_type(server)
+{
+    if (/nef/.test(server)) {
+        return "torque"
+    } else if (/grid5000/.test(server)) {
+        return "oar"
+    } else {
+        return "local"
+    }
 }
 
 function setWalltime(hours, min, sec)
@@ -54,6 +66,7 @@ function submit(nodes, cores, walltime)
 
 function show()
 {
+    console.debug("show")
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url(true) +"/status",true);
     xhr.onreadystatechange = function()

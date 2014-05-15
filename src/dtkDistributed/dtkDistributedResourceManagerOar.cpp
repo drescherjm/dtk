@@ -76,10 +76,9 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
             script.setPermissions(QFile::ExeOwner|QFile::ReadOwner|QFile::WriteOwner);
             QTextStream out(&script);
             out << "#!/bin/bash\n";
-            out << "mpirun "
-                + qApp->applicationDirPath()
-                + "/"
-                + json["application"].toString();
+            out <<  qApp->applicationDirPath()
+                    + "/"
+                    + json["application"].toString();
         }
 
         script.close();

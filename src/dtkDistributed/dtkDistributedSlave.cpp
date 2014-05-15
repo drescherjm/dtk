@@ -54,17 +54,6 @@ QString dtkDistributedSlave::jobId(void)
     return QString::number(QCoreApplication::applicationPid());
 }
 
-int dtkDistributedSlave::run(void)
-{
-    this->onStarted();
-
-    int status = this->exec();
-
-    this->onEnded();
-
-    return status;
-}
-
 bool dtkDistributedSlave::isConnected(void)
 {
     if (!d->socket)
@@ -79,29 +68,12 @@ bool dtkDistributedSlave::isDisconnected(void)
     return (d->socket->state() == QAbstractSocket::UnconnectedState);
 }
 
-
-void dtkDistributedSlave::read(void)
-{
-    dtkDistributedMessage request;
-    request.parse(d->socket);
-
-    if( request.method() == dtkDistributedMessage::DATA) {
-        dtkInfo() << "DATA received in slave, unimplemented";
-    } else {
-        dtkWarn() << "WARNING: Unknown data";
-    }
-    if (d->socket->bytesAvailable() > 0)
-        this->read();
-}
-
-
 void dtkDistributedSlave::connect(const QUrl& server)
 {
     d->socket->connectToHost(server.host(), server.port());
 
     if(d->socket->waitForConnected()) {
 
-//        QObject::connect(d->socket, SIGNAL(readyRead()), this , SLOT(read()));
         QObject::connect(d->socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
         emit connected(server);
@@ -117,20 +89,6 @@ void dtkDistributedSlave::disconnect(const QUrl& server)
     d->socket->disconnectFromHost();
 
     emit disconnected(server);
-}
-
-void dtkDistributedSlave::onStarted(void)
-{
-    QString jobid = "unknown"; //FIXME
-    dtkDistributedMessage msg(dtkDistributedMessage::STARTJOB,jobid);
-    msg.send(d->socket);
-}
-
-void dtkDistributedSlave::onEnded(void)
-{
-    QString jobid = "unknown"; //FIXME
-    dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,jobid);
-    msg.send(d->socket);
 }
 
 QTcpSocket *dtkDistributedSlave::socket(void)

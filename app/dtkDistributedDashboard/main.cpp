@@ -14,11 +14,15 @@
  */
 
 
-// #include <QGuiApplication>
-#include <QtQuick>
+#include <dtkDistributed/dtkDistributed.h>
+#include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedController.h>
+#include <dtkDistributed/dtkDistributedPolicy.h>
+#include <dtkDistributed/dtkDistributedSettings.h>
+
 #include <QtQml>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtQuick>
 #include <QtGui/QGuiApplication>
 
 int main(int argc, char *argv[])
@@ -27,6 +31,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<dtkDistributedController>("dtkDistributed", 1, 0, "DistributedController");
+    qmlRegisterType<dtkDistributedPolicy>("dtkDistributed", 1, 0, "DistributedPolicy");
+
+    dtkDistributedSettings settings;
+    settings.beginGroup("communicator");
+    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+    settings.endGroup();
 
     QQmlApplicationEngine engine(QUrl::fromLocalFile("dash.qml"));
     return app.exec();

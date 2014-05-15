@@ -168,11 +168,13 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
             if (procs > 1)
                 args += "-np "+ QString::number(procs) + " ";
 
-            if (settings.contains(server +"_server_mpirun_args"))
+            if (settings.contains(server +"_server_mpirun_args")) {
                 args += settings.value(server +"_server_mpirun_args").toString();
+            }
+
             args += qApp->applicationDirPath()
-                + "/"
-                + json["application"].toString();
+                  + "/"
+                  + json["application"].toString();
 
         } else {
             QStringList app = json["application"].toString().split(" ");
@@ -183,7 +185,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
             args += app.join(" ");
 
             if (procs > 1)
-                args += " -np "+ QString::number(procs) + " ";
+                args += " -np "+ QString::number(procs);
         }
 
     } else {

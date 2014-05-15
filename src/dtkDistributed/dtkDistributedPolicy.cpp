@@ -26,6 +26,7 @@ public:
 
 public:
     qlonglong nthreads;
+    QString type;
 
 public:
     dtkDistributedCommunicator *comm;
@@ -35,6 +36,7 @@ dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistribut
 {
     d->comm = NULL;
     d->nthreads = 1;
+    d->type = "qthread";
 }
 
 dtkDistributedPolicy::~dtkDistributedPolicy(void)
@@ -68,27 +70,8 @@ dtkDistributedCommunicator *dtkDistributedPolicy::communicator(void)
 void dtkDistributedPolicy::setType(const QString& type)
 {
     qDebug() << "create" << type << "communicator";
+    d->type = type;
     d->comm = dtkDistributed::communicator::pluginFactory().create(type);
-}
-
-void dtkDistributedPolicy::setType(dtkDistributedPolicy::Type type)
-{
-    switch (type) {
-    case dtkDistributedPolicy::MP :
-        qDebug() << "create mpi communicator";
-        d->comm = dtkDistributed::communicator::pluginFactory().create("mpi");
-        break;
-    case dtkDistributedPolicy::MT :
-        qDebug() << "create qthread communicator";
-        d->comm = dtkDistributed::communicator::pluginFactory().create("qthread");
-        break;
-    case dtkDistributedPolicy::HYB :
-        qDebug() << "create hybrid mpi/qthread communicator";
-        d->comm = dtkDistributed::communicator::pluginFactory().create("hybrid");
-        break;
-    default:
-        qDebug() << "unkwown policy ";
-    }
 }
 
 QStringList dtkDistributedPolicy::types(void)
@@ -115,6 +98,11 @@ QStringList dtkDistributedPolicy::hosts(void)
                 QTextStream in(&file);
                 while (!in.atEnd()) {
                     d->hosts <<  in.readLine();
+                }
+                if (d->type == "hybrid") {
+                    d->nthreads = d->hosts.count();
+                    d->hosts.removeDuplicates();
+                    d->nthreads /= d->hosts.count();
                 }
                 return d->hosts;
             }

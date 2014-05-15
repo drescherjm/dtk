@@ -58,7 +58,7 @@ public:
     virtual bool       active(void);
 
 public:
-    virtual void setPolicy(dtkDistributedPolicy::Type type);
+    virtual void setPolicy(QString type);
 
 public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);

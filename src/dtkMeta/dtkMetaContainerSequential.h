@@ -53,7 +53,10 @@ public:
         template <typename T> item& operator -= (const T& value);
         template <typename T> item& operator *= (const T& value);
         template <typename T> item& operator /= (const T& value);
-        
+
+    public:
+        template <typename T> bool operator == (const T& value);
+        template <typename T> bool operator != (const T& value);
     };
     friend struct item;
 

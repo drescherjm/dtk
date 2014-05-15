@@ -13,6 +13,7 @@
 // Code:
 
 #include "dtkMetaContainerSequentialTest.h"
+#include "dtkMetaContainerSequentialTest.tpp"
 
 #include <QtCore>
 #include <QtGui>
@@ -81,6 +82,15 @@ void dtkMetaContainerSequentialTestCase::testQVector(void)
     testContainer<ArrayInt>(c, values, size);
 
     QCOMPARE(2 * size, c.size());
+
+    typedef QVector<QString> ArrayString;
+    ArrayString c_s;
+    size = 4;
+    QString values_s[4] = {"toto", "allo", "ici", "bebe"};
+
+    testContainer<ArrayString>(c_s, values_s, size);
+
+    QCOMPARE(2 * size, c_s.size());
 }
 
 void dtkMetaContainerSequentialTestCase::testQVarLengthArray(void)
@@ -93,6 +103,15 @@ void dtkMetaContainerSequentialTestCase::testQVarLengthArray(void)
     testContainer<ArrayInt>(c, values, size);
 
     QCOMPARE(2 * size, c.size());
+
+    typedef QVarLengthArray<QString> ArrayString;
+    ArrayString c_s;
+    size = 4;
+    QString values_s[4] = {"toto", "allo", "ici", "bebe"};
+
+    testContainer<ArrayString>(c_s, values_s, size);
+
+    QCOMPARE(2 * size, c_s.size());
 }
 
 void dtkMetaContainerSequentialTestCase::testStdList(void)
@@ -105,6 +124,15 @@ void dtkMetaContainerSequentialTestCase::testStdList(void)
     testContainer<ArrayInt>(c, values, size);
 
     QCOMPARE(2 * size, (int)c.size());
+
+    typedef std::list<QString> ArrayString;
+    ArrayString c_s;
+    size = 4;
+    QString values_s[4] = {"toto", "allo", "ici", "bebe"};
+
+    testContainer<ArrayString>(c_s, values_s, size);
+
+    QCOMPARE(2 * size, (int)c_s.size());
 }
 
 void dtkMetaContainerSequentialTestCase::testStdVector(void)
@@ -117,6 +145,15 @@ void dtkMetaContainerSequentialTestCase::testStdVector(void)
     testContainer<ArrayInt>(c, values, size);
 
     QCOMPARE(2 * size, (int)c.size());
+
+    typedef std::vector<QString> ArrayString;
+    ArrayString c_s;
+    size = 4;
+    QString values_s[4] = {"toto", "allo", "ici", "bebe"};
+
+    testContainer<ArrayString>(c_s, values_s, size);
+
+    QCOMPARE(2 * size, (int)c_s.size());
 }
 
 DTKTEST_MAIN_NOGUI(dtkMetaContainerSequentialTest, dtkMetaContainerSequentialTestCase)

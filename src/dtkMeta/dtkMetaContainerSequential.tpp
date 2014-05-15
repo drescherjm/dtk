@@ -50,26 +50,36 @@ template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSe
 
 template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator += (const T& value)
 {
-    m_h.addValueToIterator(&value);
+    m_h.addValueToItem(&value);
     return *this;
 }
 
 template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator -= (const T& value)
 {
-    m_h.subValueToIterator(&value);
+    m_h.subValueToItem(&value);
     return *this;
 }
 
 template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator *= (const T& value)
 {
-    m_h.mulValueToIterator(&value);
+    m_h.mulValueToItem(&value);
     return *this;
 }
 
 template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator /= (const T& value)
 {
-    m_h.divValueToIterator(&value);
+    m_h.divValueToItem(&value);
     return *this;
+}
+
+template<typename T> inline bool dtkMetaContainerSequential::item::operator == (const T& value)
+{
+    return m_h.isItemEqualTo(&value);
+}
+
+template<typename T> inline bool dtkMetaContainerSequential::item::operator != (const T& value)
+{
+    return !(m_h.isItemEqualTo(&value));
 }
 
 // /////////////////////////////////////////////////////////////////

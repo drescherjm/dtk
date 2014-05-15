@@ -17,200 +17,233 @@
 namespace dtkMetaContainerSequentialPrivate
 {
 // /////////////////////////////////////////////////////////////////
+// dtkMetaContainerSequentialPrivate::itemOperator implementation
+// /////////////////////////////////////////////////////////////////
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::addValue(I&, const T *) 
+{
+    qWarning("Operator += NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::subValue(I&, const T *) 
+{
+    qWarning("Operator -= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::mulValue(I&, const T *) 
+{
+    qWarning("Operator *= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::divValue(I&, const T *) 
+{
+    qWarning("Operator /= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline bool itemOperatorBase<I, T>::isEqual(const I&, const T *) 
+{
+    qWarning("Comparison is NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+    return false;
+}
+
+template < typename I> inline void itemOperator<I, QString, false>::addValue(I& it, const QString *value) 
+{
+    *it += *value;
+}
+
+template < typename I> inline bool itemOperator<I, QString, false>::isEqual(const I& it, const QString *value) 
+{
+    return (*it == *value);
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::addValue(I& it, const T *value) 
+{
+    *it += *value;
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::subValue(I& it, const T *value) 
+{
+    *it -= *value;
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::mulValue(I& it, const T *value) 
+{
+    *it *= *value;
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::divValue(I& it, const T *value) 
+{
+    *it /= *value;
+}
+
+template < typename I, typename T> inline bool itemOperator<I, T, true>::isEqual(const I& it, const T *value) 
+{
+    return (*it == *value);
+}
+
+
+// /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::iterator implementation
 // /////////////////////////////////////////////////////////////////
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::assign(void *& ptr, const I& it)
+template<typename I, typename V> inline void iteratorOwner<I, V>::assign(void *& ptr, const I& it)
 {
     ptr = new I(it);
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::assign(void *& ptr, void *const& src)
+template<typename I, typename V> inline void iteratorOwner<I, V>::assign(void *& ptr, void *const& src)
 {
     ptr = new I(*static_cast<I *>(src));
 }
     
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::advance(void *& it, int step)
+template<typename I, typename V> inline void iteratorOwner<I, V>::advance(void *& it, int step)
 {
     I& ite = *static_cast<I *>(it);
     std::advance(ite, step);
 }
 
-template<typename I, typename V> inline const void *iteratorOwnerBase<I, V>::data(void *const & it)
+template<typename I, typename V> inline const void *iteratorOwner<I, V>::data(void *const & it)
 {
     return &**static_cast<I *>(it);
 }
 
-template<typename I, typename V> inline const void *iteratorOwnerBase<I, V>::data(I& it)
+template<typename I, typename V> inline const void *iteratorOwner<I, V>::data(I& it)
 {
     return &*it;
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::destroy(void *& it)
+template<typename I, typename V> inline void iteratorOwner<I, V>::destroy(void *& it)
 {
     delete static_cast<I *>(it);
 }
 
-template<typename I, typename V> inline int iteratorOwnerBase<I, V>::distance(I& from, void *const& to)
+template<typename I, typename V> inline int iteratorOwner<I, V>::distance(I& from, void *const& to)
 {
     return std::distance(from, *(static_cast<I *>(to)));
 }
 
-template<typename I, typename V> inline bool iteratorOwnerBase<I, V>::equal(void *it, void *other)
+template<typename I, typename V> inline bool iteratorOwner<I, V>::equal(void *it, void *other)
 {
     return *static_cast<I *>(it) == *static_cast<I *>(other);
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::setData(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::setData(void *it, const void *value)
 {
     **static_cast<I *>(it) = *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::setData(I& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::setData(I& it, const void *value)
 {
     *it = *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::add(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::add(void *it, const void *value)
 {
-    qWarning("Operator += not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
-    //**static_cast<I *>(it) += *static_cast<const V *>(value);
+    itemOperator<I, V>::addValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::sub(void *&, const void *)
+template<typename I, typename V> inline void iteratorOwner<I, V>::sub(void *it, const void *value)
 {
-    qWarning("Operator -= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
-    //**static_cast<I *>(it) -= *static_cast<const V *>(value);
+    itemOperator<I, V>::subValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::mul(void *&, const void *)
+template<typename I, typename V> inline void iteratorOwner<I, V>::mul(void *it, const void *value)
 {
-    qWarning("Operator *= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
-    //**static_cast<I *>(it) *= *static_cast<const V *>(value);
+    itemOperator<I, V>::mulValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-template<typename I, typename V> inline void iteratorOwnerBase<I, V>::div(void *&, const void *)
+template<typename I, typename V> inline void iteratorOwner<I, V>::div(void *it, const void *value)
 {
-    qWarning("Operator /= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
-    //**static_cast<I *>(it) /= *static_cast<const V *>(value);
+    itemOperator<I, V>::divValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-/////////////////////////////////////////////////////////////////
-
-template<typename I, typename V> inline void iteratorOwner<I, V, true>::add(void *& it, const void *value)
+template<typename I, typename V> inline bool iteratorOwner<I, V>::isEqual(void *it, const void *value)
 {
-    **static_cast<I *>(it) += *static_cast<const V *>(value);
-}
-
-template<typename I, typename V> inline void iteratorOwner<I, V, true>::sub(void *& it, const void *value)
-{
-    **static_cast<I *>(it) -= *static_cast<const V *>(value);
-}
-
-template<typename I, typename V> inline void iteratorOwner<I, V, true>::mul(void *& it, const void *value)
-{
-    **static_cast<I *>(it) *= *static_cast<const V *>(value);
-}
-
-template<typename I, typename V> inline void iteratorOwner<I, V, true>::div(void *& it, const void *value)
-{
-    **static_cast<I *>(it) /= *static_cast<const V *>(value);
+    return itemOperator<I, V>::isEqual(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
 // /////////////////////////////////////////////////////////////////
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::assign(void *& ptr, V *const it)
+template<typename V> inline void iteratorOwner<V *, V>::assign(void *& ptr, V *const it)
 {
     ptr = const_cast<V *>(it);
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::assign(void *& ptr, void *const& src)
+template<typename V> inline void iteratorOwner<V *, V>::assign(void *& ptr, void *const& src)
 {
     ptr = static_cast<V *>(src);
 }
     
-template<typename V> inline void iteratorOwnerBase<V *, V>::advance(void *& it, int step)
+template<typename V> inline void iteratorOwner<V *, V>::advance(void *& it, int step)
 {
     V * ite = static_cast<V *>(it);
     std::advance(ite, step);
     it = ite;
 }
 
-template<typename V> inline const void *iteratorOwnerBase<V *, V>::data(void *const& it)
+template<typename V> inline const void *iteratorOwner<V *, V>::data(void *const& it)
 {
     return it;
 }
 
-template<typename V> inline const void *iteratorOwnerBase<V *, V>::data(V *it)
+template<typename V> inline const void *iteratorOwner<V *, V>::data(V *it)
 {
     return it;
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::destroy(void *&)
+template<typename V> inline void iteratorOwner<V *, V>::destroy(void *&)
 {
     
 }
 
-template<typename V> inline int iteratorOwnerBase<V *, V>::distance(V *from, void *const& to)
+template<typename V> inline int iteratorOwner<V *, V>::distance(V *from, void *const& to)
 {
     return std::distance(from, (static_cast<V *>(to)));
 }
 
-template<typename V> inline bool iteratorOwnerBase<V *, V>::equal(void *it, void *other)
+template<typename V> inline bool iteratorOwner<V *, V>::equal(void *it, void *other)
 {
     return static_cast<V *>(it) == static_cast<V *>(other);
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::setData(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::setData(void *it, const void *value)
 {
     *static_cast<V *>(it) = *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::setData(V *it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::setData(V *it, const void *value)
 {
     *it = *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::add(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::add(void *it, const void *value)
 {
-    qWarning("Operator += not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::addValue(item, static_cast<const V *>(value));
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::sub(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::sub(void *it, const void *value)
 {
-    qWarning("Operator -= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::subValue(item, static_cast<const V *>(value));
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::mul(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::mul(void *it, const void *value)
 {
-    qWarning("Operator *= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::mulValue(item, static_cast<const V *>(value));
 }
 
-template<typename V> inline void iteratorOwnerBase<V *, V>::div(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::div(void *it, const void *value)
 {
-    qWarning("Operator /= not implemented for type: %s", QMetaType::typeName(qMetaTypeId<V>()));
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::divValue(item, static_cast<const V *>(value));
 }
 
-// /////////////////////////////////////////////////////////////////
-
-template<typename V> inline void iteratorOwner<V *, V, true>::add(void *& it, const void *value)
+template<typename V> inline bool iteratorOwner<V *, V>::isEqual(void *it, const void *value)
 {
-    *static_cast<V *>(it) += *static_cast<const V *>(value);
-}
-
-template<typename V> inline void iteratorOwner<V *, V, true>::sub(void *& it, const void *value)
-{
-    *static_cast<V *>(it) -= *static_cast<const V *>(value);
-}
-
-template<typename V> inline void iteratorOwner<V *, V, true>::mul(void *& it, const void *value)
-{
-    *static_cast<V *>(it) *= *static_cast<const V *>(value);
-}
-
-template<typename V> inline void iteratorOwner<V *, V, true>::div(void *& it, const void *value)
-{
-    *static_cast<V *>(it) /= *static_cast<const V *>(value);
+    V *item = static_cast<V *>(it);
+    return itemOperator<V*, V>::isEqual(item, static_cast<const V *>(value));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -396,29 +429,34 @@ template<typename T> inline const void *handler::iteratorValuePrivate(void *cons
     return iteratorOwner<typename T::iterator, typename T::value_type>::data(it);
 }
 
-template<typename T> inline void handler::setValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::setValueToIteratorPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::setData(it, val);
 }
 
-template<typename T> inline void handler::addValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::addValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::add(it, val);
 }
 
-template<typename T> inline void handler::subValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::subValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::sub(it, val);
 }
 
-template<typename T> inline void handler::mulValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::mulValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::mul(it, val);
 }
 
-template<typename T> inline void handler::divValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::divValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::div(it, val);
+}
+
+template<typename T> inline bool handler::isItemEqualToPrivate(void *it, const void *val)
+{
+    return iteratorOwner<typename T::iterator, typename T::value_type>::isEqual(it, val);
 }
 
 template<typename T> inline int handler::indexOfIteratorPrivate(void *c, void *const& it)
@@ -468,10 +506,11 @@ template<typename T> inline handler::handler(T *c) : m_container(c),
                                                      m_copyConstIterator(copyConstIteratorPrivate<T>),
                                                      m_iteratorValue(iteratorValuePrivate<T>),
                                                      m_setValueToIterator(setValueToIteratorPrivate<T>),
-                                                     m_addValueTotIterator(addValueToIteratorPrivate<T>),
-                                                     m_subValueTotIterator(subValueToIteratorPrivate<T>),
-                                                     m_mulValueTotIterator(mulValueToIteratorPrivate<T>),
-                                                     m_divValueTotIterator(divValueToIteratorPrivate<T>),
+                                                     m_addValueTotItem(addValueToItemPrivate<T>),
+                                                     m_subValueTotItem(subValueToItemPrivate<T>),
+                                                     m_mulValueTotItem(mulValueToItemPrivate<T>),
+                                                     m_divValueTotItem(divValueToItemPrivate<T>),
+                                                     m_isItemEqualTo(isItemEqualToPrivate<T>),
                                                      m_indexOfIterator(indexOfIteratorPrivate<T>),
                                                      m_indexOfConstIterator(indexOfConstIteratorPrivate<T>)
 {
@@ -507,10 +546,11 @@ inline handler::handler(void) : m_container(0),
                                 m_copyConstIterator(0),
                                 m_iteratorValue(0),
                                 m_setValueToIterator(0),
-                                m_addValueTotIterator(0),
-                                m_subValueTotIterator(0),
-                                m_mulValueTotIterator(0),
-                                m_divValueTotIterator(0),
+                                m_addValueTotItem(0),
+                                m_subValueTotItem(0),
+                                m_mulValueTotItem(0),
+                                m_divValueTotItem(0),
+                                m_isItemEqualTo(0),
                                 m_indexOfIterator(0),
                                 m_indexOfConstIterator(0)
 {
@@ -651,24 +691,29 @@ inline int handler::indexOfIterator(void) const
     return this->m_indexOfIterator(m_container, m_iterator);
 }
 
-inline void handler::addValueToIterator(const void *value)
+inline void handler::addValueToItem(const void *value)
 {
-    this->m_addValueTotIterator(m_iterator, value);
+    this->m_addValueTotItem(m_iterator, value);
 }
 
-inline void handler::subValueToIterator(const void *value)
+inline void handler::subValueToItem(const void *value)
 {
-    this->m_subValueTotIterator(m_iterator, value);
+    this->m_subValueTotItem(m_iterator, value);
 }
 
-inline void handler::mulValueToIterator(const void *value)
+inline void handler::mulValueToItem(const void *value)
 {
-    this->m_mulValueTotIterator(m_iterator, value);
+    this->m_mulValueTotItem(m_iterator, value);
 }
 
-inline void handler::divValueToIterator(const void *value)
+inline void handler::divValueToItem(const void *value)
 {
-    this->m_divValueTotIterator(m_iterator, value);
+    this->m_divValueTotItem(m_iterator, value);
+}
+
+inline bool handler::isItemEqualTo(const void *value) const
+{
+    return this->m_isItemEqualTo(m_iterator, value);
 }
 
 inline const void *handler::iteratorValue(void) const

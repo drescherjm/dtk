@@ -18,11 +18,52 @@
 
 namespace dtkMetaContainerSequentialPrivate
 {
+    class handler;
+
+// /////////////////////////////////////////////////////////////////
+// dtkMetaContainerSequentialPrivate::itemOperator definition
+// /////////////////////////////////////////////////////////////////
+
+template < typename I, typename T> struct itemOperatorBase
+{
+    static void addValue(I&, const T *);
+    static void subValue(I&, const T *);
+    static void mulValue(I&, const T *);
+    static void divValue(I&, const T *);
+
+    static bool isEqual(const I&, const T *);
+};
+
+template < typename I, typename T, bool = std::is_integral<T>::value || std::is_floating_point<T>::value > struct itemOperator
+{
+};
+
+template < typename I, typename T> struct itemOperator<I, T, false> : itemOperatorBase<I, T>
+{
+};
+
+template < typename I> struct itemOperator<I, QString, false> : itemOperatorBase<I, QString>
+{
+    static void addValue(I& it, const QString *value);
+
+    static bool isEqual(const I& it, const QString *value);
+};
+
+template < typename I, typename T> struct itemOperator<I, T, true>
+{
+    static void addValue(I& it, const T *value);
+    static void subValue(I& it, const T *value);
+    static void mulValue(I& it, const T *value);
+    static void divValue(I& it, const T *value);
+
+    static bool isEqual(const I& it, const T *value);
+};
+
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::iteratorOwner definition
 // /////////////////////////////////////////////////////////////////
 
-template <typename I, typename V> struct iteratorOwnerBase
+template <typename I, typename V> struct iteratorOwner
 {
     static       void  assign(void *& ptr, const I& it);
     static       void  assign(void *& ptr, void *const& src);
@@ -33,36 +74,22 @@ template <typename I, typename V> struct iteratorOwnerBase
     static       void  destroy(void *& it);
     static       bool  equal(void *it, void *other);
 
-    static       void  setData(void *& it, const void *value);
+    static       void  setData(void *it, const void *value);
     static       void  setData(I& it, const void *value);
 
-    static       void  add(void *& it, const void *value);
-    static       void  sub(void *& it, const void *value);
-    static       void  mul(void *& it, const void *value);
-    static       void  div(void *& it, const void *value);
-};
+    static       void  add(void *it, const void *value);
+    static       void  sub(void *it, const void *value);
+    static       void  mul(void *it, const void *value);
+    static       void  div(void *it, const void *value);
 
- template <typename I, typename V, bool = std::is_integral<V>::value || std::is_floating_point<V>::value> struct iteratorOwner : iteratorOwnerBase<I, V>
-{
-};
-
- template <typename I, typename V> struct iteratorOwner<I, V, false> : iteratorOwnerBase<I, V>
-{
-};
-
- template <typename I, typename V> struct iteratorOwner<I, V, true> : iteratorOwnerBase<I, V>
-{
-    static void  add(void *& it, const void *value);
-    static void  sub(void *& it, const void *value);
-    static void  mul(void *& it, const void *value);
-    static void  div(void *& it, const void *value);
+    static       bool  isEqual(void *it, const void *value);
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::iterator specialization for pointers as iterators
 // /////////////////////////////////////////////////////////////////
 
-template <typename V> struct iteratorOwnerBase<V *, V>
+template <typename V> struct iteratorOwner<V *, V>
 {
     static       void  assign(void *& ptr, V *const it);
     static       void  assign(void *& ptr, void *const& src);
@@ -73,25 +100,15 @@ template <typename V> struct iteratorOwnerBase<V *, V>
     static       int   distance(V *from, void *const& to);
     static       bool  equal(void *it, void *other);
 
-    static       void  setData(void *& it, const void *value);
+    static       void  setData(void *it, const void *value);
     static       void  setData(V *it, const void *value);
 
-    static       void  add(void *& it, const void *value);
-    static       void  sub(void *& it, const void *value);
-    static       void  mul(void *& it, const void *value);
-    static       void  div(void *& it, const void *value);
-};
+    static       void  add(void *it, const void *value);
+    static       void  sub(void *it, const void *value);
+    static       void  mul(void *it, const void *value);
+    static       void  div(void *it, const void *value);
 
- template <typename V> struct iteratorOwner<V *, V, false> : iteratorOwnerBase<V *, V>
-{
-};
-
- template <typename V> struct iteratorOwner<V *, V, true> : iteratorOwnerBase<V *, V>
-{
-    static void  add(void *& it, const void *value);
-    static void  sub(void *& it, const void *value);
-    static void  mul(void *& it, const void *value);
-    static void  div(void *& it, const void *value);
+    static       bool  isEqual(void *it, const void *value);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -188,7 +205,8 @@ public:
     typedef       bool (*equalItFunc)   (void *it, void *o);
     typedef       void (*copyItFunc)    (void *& it, void *const& src);
     typedef const void *(*itValFunc)    (void *const& it);
-    typedef       void (*opItFunc)      (void *& it, const void *value);
+    typedef       void (*opItFunc)      (void *it, const void *value);
+    typedef       bool (*compItFunc)    (void *it, const void *value);
     typedef       int  (*indexOfItFunc) (void *c, void *const& it);
 
 public:
@@ -217,10 +235,11 @@ public:
     copyItFunc    m_copyConstIterator;
     itValFunc     m_iteratorValue;
     opItFunc      m_setValueToIterator;
-    opItFunc      m_addValueTotIterator;
-    opItFunc      m_subValueTotIterator;
-    opItFunc      m_mulValueTotIterator;
-    opItFunc      m_divValueTotIterator;
+    opItFunc      m_addValueTotItem;
+    opItFunc      m_subValueTotItem;
+    opItFunc      m_mulValueTotItem;
+    opItFunc      m_divValueTotItem;
+    compItFunc    m_isItemEqualTo;
     indexOfItFunc m_indexOfIterator;
     indexOfItFunc m_indexOfConstIterator;
 
@@ -249,11 +268,12 @@ public:
     template <typename T> static       Data  getDataPrivate(void *const& it, int metaTypeId, uint flags);
     template <typename T> static       Data  getConstDataPrivate(void *const& it, int metaTypeId, uint flags);
     template <typename T> static const void  *iteratorValuePrivate(void *const& it);
-    template <typename T> static       void  setValueToIteratorPrivate(void *& it, const void *val);
-    template <typename T> static       void  addValueToIteratorPrivate(void *& it, const void *val);
-    template <typename T> static       void  subValueToIteratorPrivate(void *& it, const void *val);
-    template <typename T> static       void  mulValueToIteratorPrivate(void *& it, const void *val);
-    template <typename T> static       void  divValueToIteratorPrivate(void *& it, const void *val);
+    template <typename T> static       void  setValueToIteratorPrivate(void *it, const void *val);
+    template <typename T> static       void  addValueToItemPrivate(void *it, const void *val);
+    template <typename T> static       void  subValueToItemPrivate(void *it, const void *val);
+    template <typename T> static       void  mulValueToItemPrivate(void *it, const void *val);
+    template <typename T> static       void  divValueToItemPrivate(void *it, const void *val);
+    template <typename T> static       bool  isItemEqualToPrivate(void *it, const void *val);
     template <typename T> static       int   indexOfIteratorPrivate(void *c, void *const& it);
     template <typename T> static       int   indexOfConstIteratorPrivate(void *c, void *const& it);
 
@@ -302,10 +322,13 @@ public:
     const void *iteratorValue(void) const;
 
 public:
-    void addValueToIterator(const void *value);
-    void subValueToIterator(const void *value);
-    void mulValueToIterator(const void *value);
-    void divValueToIterator(const void *value);
+    void addValueToItem(const void *value);
+    void subValueToItem(const void *value);
+    void mulValueToItem(const void *value);
+    void divValueToItem(const void *value);
+
+public:
+    bool isItemEqualTo(const void *value) const;
 
 public:
     int      indexOfIterator(void) const;

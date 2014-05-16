@@ -18,9 +18,16 @@ ApplicationWindow {
 
     ListModel {
         id: servers
-        ListElement { text: "http://localhost" }
-        ListElement { text: "http://nef-devel.inria.fr" }
-        ListElement { text: "http://fsophia.sophia.grid5000.fr" }
+        ListElement { text: "localhost" }
+        ListElement { text: "nef-devel.inria.fr" }
+        ListElement { text: "fsophia.sophia.grid5000.fr" }
+    }
+
+    ListModel {
+        id: types
+        ListElement { text: "local" }
+        ListElement { text: "torque" }
+        ListElement { text: "oar" }
     }
 
     RowLayout {
@@ -33,29 +40,76 @@ ApplicationWindow {
             Layout.minimumWidth: 400
             Layout.fillWidth: false
             RowLayout {
-                id: statusrow
+                id: serverrow
+
+                Label {
+                    id: serverLabel
+                    text: "resources:"
+                }
+
                 ComboBox {
                     id: combo
                     editable: true
                     model: servers
                     currentIndex: 0
                     Layout.fillWidth: true
-                    onAccepted: {
-                        controller.deploy( servers.get(combo.currentIndex).text );
-                        Status.show()
+                    onCurrentIndexChanged: {
+                        if (combotypes) {
+                            /* console.log("index changed " + currentText +" " + combotypes.find(Status.guess_type(currentText))) */
+                            combotypes.currentIndex = combotypes.find(Status.guess_type(currentText))
+                        }
                     }
                 }
+                Label {
+                    id: typeLabel
+                    text: "type:"
+                }
+                ComboBox {
+                    id: combotypes
+                    editable: true
+                    model: types
+                    Layout.minimumWidth: 80
+                    currentIndex: 0
+                }
+            }
+            RowLayout {
+                id: pathrow
+                Label {
+                    id: pathLabel
+                    text: "path:"
+                }
+                TextEdit {
+                    id: serverPath
+                    Layout.fillWidth: true
+                    text: "/home/nniclaus/git/dtk-github/build/bin/dtkDistributedServer"
+                }
+            }
+            RowLayout {
+                id: apppathrow
+                Label {
+                    id: apppathLabel
+                    text: "application path:"
+                }
+                TextEdit {
+                    id: slavePath
+                    Layout.fillWidth: true
+                    text: "dtkDistributedSlave"
+                }
+            }
+            RowLayout {
+                id: actionrow
+
                 CheckBox {
                         id: tunnel
                         text: "SSH Tunnel"
-                        checked: true
+                        checked: false
                     }
                 Button {
                     id: connectBotton
                     text: "Connect"
                     tooltip: "Deploy resource manager daemon on remote host"
                     onClicked: {
-                        controller.deploy( servers.get(combo.currentIndex).text );
+                        controller.deploy( Status.url(false),combotypes.currentText, tunnel.checked, serverPath.text);
                         Status.show()
                     }
                 }
@@ -65,6 +119,14 @@ ApplicationWindow {
                     tooltip:"Refresh status"
                     onClicked: {
                         Status.show()
+                    }
+                }
+                Button {
+                    id: quitBotton
+                    text: "Stop"
+                    tooltip:"Deconnect and stop server"
+                    onClicked: {
+                        controller.stop( Status.url(false) );
                     }
                 }
             }

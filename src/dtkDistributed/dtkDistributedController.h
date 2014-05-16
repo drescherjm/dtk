@@ -56,14 +56,14 @@ signals:
     void jobQueued(QString jobid);
 
 public slots:
-    bool    connect(const QUrl& server);
+    bool    connect(const QUrl& server, bool ssh_tunnel = false);
     void disconnect(const QUrl& server);
     void       stop(const QUrl& server);
     void    refresh(const QUrl& server);
     void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);
     void       send(QVariant v, QString jobid, qint16 destrank);
-    bool     deploy(const QUrl& server);
+    bool     deploy(const QUrl& server, QString type = "local", bool ssh_tunnel = false, QString path = "./dtkDistributedServer");
     bool     submit(const QUrl& server, QByteArray& resources);
 
 public:

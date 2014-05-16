@@ -3,12 +3,24 @@ function url(check_tunnel)
     if (check_tunnel && tunnel.checked) {
         return "http://localhost:" +controller.defaultPort()
     } else {
-        return combo.currentText + ":" +controller.defaultPort()
+        return "http://" + combo.currentText + ":" +controller.defaultPort()
     }
 }
+
 function policy()
 {
     return comboPolicies.currentText
+}
+
+function guess_type(server)
+{
+    if (/nef/.test(server)) {
+        return "torque"
+    } else if (/grid5000/.test(server)) {
+        return "oar"
+    } else {
+        return "local"
+    }
 }
 
 function setWalltime(hours, min, sec)
@@ -47,13 +59,14 @@ function submit(nodes, cores, walltime)
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     var resources = {  "resources": {"nodes": nodes, "cores": cores },
                        "walltime": walltime,
-                       "application": "dtkDistributedSlave --server " + url(false) + " --policy " + policy()
+                       "application": slavePath.text +" --server " + url(false) + " --policy " + policy()
                     }
     xhr.send(JSON.stringify(resources))
 }
 
 function show()
 {
+    console.debug("show")
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url(true) +"/status",true);
     xhr.onreadystatechange = function()

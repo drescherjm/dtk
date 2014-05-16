@@ -12,53 +12,52 @@
 ##
 ### Code:
 
-project(dtkLog)
+project(dtkLogTest)
 
 ## #################################################################
 ## Input
 ## #################################################################
 
+set(${PROJECT_NAME}_HEADERS_MOC
+  dtkLoggerHandlersTest.h)
+
 set(${PROJECT_NAME}_HEADERS
-  dtkLog
-  dtkLog.h
-  dtkLogger.h
-  dtkLogger_p.h
-  dtkLoggerHandlers.h)
+  ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
-  dtkLogger.cpp
-  dtkLoggerHandlers.cpp)
+  dtkLoggerHandlersTest.cpp)
 
-## #################################################################
+## ###################################################################
+## Input - introspected
+## ###################################################################
+
+create_test_sourcelist(
+    ${PROJECT_NAME}_SOURCES_TST
+    ${PROJECT_NAME}.cpp
+  ${${PROJECT_NAME}_SOURCES})
+
+## ###################################################################
 ## Build rules
-## #################################################################
+## ###################################################################
 
-add_library(${PROJECT_NAME} SHARED
-  ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS})
+add_executable(${PROJECT_NAME}
+  ${${PROJECT_NAME}_SOURCES_TST}
+  ${${PROJECT_NAME}_SOURCES})
 
 ## ###################################################################
 ## Link rules
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Test)
+
+target_link_libraries(${PROJECT_NAME} dtkLog)
 
 ## ###################################################################
-## Install rules - files
+## Test rules
 ## ###################################################################
 
-install(FILES ${${PROJECT_NAME}_HEADERS}
-  DESTINATION include/${PROJECT_NAME}
-    COMPONENT log)
-
-## ###################################################################
-## Install rules - targets
-## ###################################################################
-
-install(TARGETS ${PROJECT_NAME}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      COMPONENT log
-         EXPORT dtkDepends)
+add_test(dtkLogTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkLogTest dtkLogTest)
 
 ######################################################################
 ### CMakeLists.txt ends here

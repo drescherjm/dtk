@@ -3,6 +3,7 @@
 //
 
 // Commentary:
+
 //
 //
 
@@ -14,13 +15,13 @@
 
 #pragma once
 
-namespace dtkLog {
+#include "dtkLog"
 
-    enum HandlerFlag {
+#include <QtCore>
+#include <QtDebug>
 
-    };
-
-};
+void   dtkInstallLoggerHandler(dtkLog::HandlerFlags);
+void dtkUninstallLoggerHandler(void);
 
 //
 // dtkLoggerHandlers.h ends here

@@ -86,7 +86,7 @@ bool dtkDistributedCommunicator::active(void)
     return false;
 }
 
-void dtkDistributedCommunicator::setPolicy(dtkDistributedPolicy::Type type)
+void dtkDistributedCommunicator::setPolicy(QString type)
 {
 }
 

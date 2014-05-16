@@ -140,12 +140,23 @@ void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 
 void dtkDistributedController::stop(const QUrl& server)
 {
-    dtkDebug() << "Want to stop server on " << server;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::STOP,"",dtkDistributedMessage::SERVER_RANK);
-    msg->send(d->sockets[server.toString()]);
+    dtkDebug() << "Want to stop server on " << server.toString();
+    if (!d->sockets.contains(server.toString())) {
+        dtkDebug() << "Needs to reconnect to server" << server.toString();
+        this->connect(server);
+    }
+
+    if (!isConnected(server)) {
+        dtkWarn() << "Can't stop server " << server.toString() << "not connected";
+        d->servers.remove(server.toString());
+        return;
+    }
+
+    dtkDebug() << "Send stop message to server" << server.toString();
+    dtkDistributedMessage msg(dtkDistributedMessage::STOP,"",dtkDistributedMessage::SERVER_RANK);
+    msg.send(d->sockets[server.toString()]);
     this->disconnect(server);
     d->servers.remove(server.toString());
-    delete msg;
 }
 
 void dtkDistributedController::refresh(const QUrl& server)
@@ -165,8 +176,9 @@ void dtkDistributedController::refresh(const QUrl& server)
 }
 
 // deploy a server instance on remote host (to be executed before connect)
-bool dtkDistributedController::deploy(const QUrl& server)
+bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh_tunnel, QString path)
 {
+    dtkDebug() << "deploy" << server << type << ssh_tunnel << path;
 
     if(!d->servers.keys().contains(server.toString())) {
         int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
@@ -181,25 +193,8 @@ bool dtkDistributedController::deploy(const QUrl& server)
         args << server.host();
 
         serverProc->setProcessChannelMode(QProcess::MergedChannels);
-        QSettings settings("inria", "dtk");
-        settings.beginGroup("distributed");
-        QString defaultPath;
 
-        QString key;
-#if defined(Q_WS_MAC)
-        key = server.host().replace(".", "_");
-#else
-        key = server.host();
-#endif
-
-        if (!settings.contains(key+"_server_path")) {
-            defaultPath =  "./dtkDistributedServer";
-            dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
-        }
-        QString path = settings.value(key+"_server_path", defaultPath).toString();
-
-        QString forward = key+"_server_forward";
-        if (settings.contains(forward) && settings.value(forward).toString() == "true") {
+        if (ssh_tunnel) {
             dtkTrace() << "ssh port forwarding is set for server " << server.host();
             int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
             args << "-L" << QString::number(port)+":localhost:"+QString::number(port);
@@ -208,13 +203,12 @@ bool dtkDistributedController::deploy(const QUrl& server)
         args << path;
         args << "-p";
         args << QString::number(port);
-        args << "-type "+settings.value(key+"_server_type", "torque").toString();
+        args << "-type "+ type;
 
-        settings.endGroup();
         serverProc->start("ssh", args);
 
         // need to wait a bit when ssh port forwarding is used
-        if (settings.contains(forward) && settings.value(forward).toString() == "true")
+        if (ssh_tunnel)
             sleep(1);
 
         dtkDebug() << "ssh" << args;
@@ -239,8 +233,15 @@ bool dtkDistributedController::deploy(const QUrl& server)
         return true;
 
     } else {
-        dtkDebug() << "dtkDistributedServer already started on " << server.host();
-        return true;
+        if (isConnected(server)) {
+            dtkDebug() << "dtkDistributedServer already started on " << server.host();
+            return true;
+        } else {
+            //server exists but is not connected, remove from list and retry
+            dtkWarn() << "dtkDistributedServer " << server.host() << "exist  but is not connected";
+            d->servers.remove(server.toString());
+            this->deploy(server,type,ssh_tunnel,path);
+        }
     }
 }
 
@@ -282,31 +283,22 @@ QTcpSocket *dtkDistributedController::socket(const QString& jobid)
     return NULL;
 }
 
-bool dtkDistributedController::connect(const QUrl& server)
+bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel)
 {
     if(!d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = new QTcpSocket(this);
 
         QString key;
-#if defined(Q_WS_MAC)
-        key = server.host().replace(".", "_");
-#else
-        key = server.host();
-#endif
 
-        QSettings settings("inria", "dtk");
-        settings.beginGroup("distributed");
-        QString forward = key+"_server_forward";
+        key = server.host();
 
         int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
 
-        if (settings.contains(forward) && settings.value(forward).toString() == "true")
+        if (ssh_tunnel)
             socket->connectToHost("localhost", port);
         else
             socket->connectToHost(server.host(), port);
-
-        settings.endGroup();
 
         if(socket->waitForConnected()) {
 
@@ -316,10 +308,6 @@ bool dtkDistributedController::connect(const QUrl& server)
             d->sockets.insert(server.toString(), socket);
 
             emit connected(server);
-
-            dtkDistributedMessage* msg = new dtkDistributedMessage(dtkDistributedMessage::STATUS);
-            msg->send(socket);
-            delete msg;
 
             return true;
 
@@ -416,7 +404,10 @@ void dtkDistributedController::cleanup()
 void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
 {
     Q_UNUSED(exitCode);
-    dtkInfo() <<  "remote server deployment failure" << exitStatus ;
+    if (exitStatus != QProcess::NormalExit)
+        dtkInfo() <<  "remote server deployment failure" << exitStatus ;
+    else
+        dtkInfo() <<  "remote server stopped";
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

@@ -16,24 +16,44 @@
 
 
 #include <dtkCore/dtkCore.h>
+
+#include <dtkDistributed/dtkDistributed.h>
+#include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedSettings.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
+#include <dtkDistributed/dtkDistributedPolicy.h>
 #include <dtkDistributed/dtkDistributedMessage.h>
+#include <dtkDistributed/dtkDistributedWork.h>
+#include <dtkDistributed/dtkDistributedWorker.h>
+#include <dtkDistributed/dtkDistributedWorkerManager.h>
 #include <dtkLog/dtkLogger.h>
 
 #include <QCoreApplication>
 
 #include <iostream>
 
-class simpleSlave : public dtkDistributedSlave
+class simpleWork : public dtkDistributedWork
 {
 public:
-    int exec(void) {
-        if (this->isConnected()) {
-            dtkDistributedMessage msg(dtkDistributedMessage::STARTJOB,this->jobId(),0);
-            msg.send(this->socket());
-        }
-        qDebug() << "I'm the simple slave" ;
+    simpleWork *clone(void) { return new simpleWork(*this); };
+
+public:
+    void run(void) {
+
+        QTime time;
+        qDebug() << wid();
+        qDebug() << wct();
+
+        DTK_DISTRIBUTED_BEGIN_GLOBAL;
+        qDebug() << "Running on master, connect to remote server" ;
+
+
+        DTK_DISTRIBUTED_END_GLOBAL;
+
+        qDebug() << "I'm the simple slave " << wid() ;
+
         QThread::sleep(60);
+
     }
 };
 
@@ -50,17 +70,49 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    simpleSlave *slave = new simpleSlave;
+    dtkDistributedSlave slave;
+    slave.connect(url);
+
+    std::cout << QString("DTK_JOBID="+slave.jobId()).toStdString() << std::endl << std::flush;
 
     // the server waits for the jobid in stdout
-    std::cout << QString("DTK_JOBID="+slave->jobId()).toStdString() << std::endl << std::flush;
+    qDebug() << "slave connected to server " << slave.isConnected();
 
-    slave->connect(url);
-    qDebug() << "slave connected to server " << slave->isConnected();
+    if (slave.isConnected()) {
+        dtkDistributedMessage msg(dtkDistributedMessage::STARTJOB,slave.jobId(),0);
+        msg.send(slave.socket());
+    }
 
-    int status = slave->exec();
+    // plugins
 
-    delete slave;
+    dtkDistributedSettings settings;
+    settings.beginGroup("communicator");
+    qDebug() << "initialize plugin manager "<< settings.value("plugins").toString();
+    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+    qDebug() << "initialization done ";
+    settings.endGroup();
 
-    return status;
+    qDebug() << dtkDistributed::communicator::pluginManager().plugins();
+    qDebug() << dtkDistributed::communicator::pluginFactory().keys();
+
+
+    // work
+
+    simpleWork *work = new simpleWork;
+
+    dtkDistributedPolicy policy;
+
+    QString policyType = "qthread";
+    if (dtkApplicationArgumentsContain(qApp,"--policy")) {
+        policyType = dtkApplicationArgumentsValue(qApp,"--policy");
+    }
+    policy.setType(policyType);
+
+    dtkDistributedWorkerManager manager;
+
+    manager.setPolicy(&policy);
+    manager.spawn();
+    manager.exec(work);
+
+    return 0;
 }

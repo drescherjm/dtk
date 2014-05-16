@@ -5,7 +5,7 @@
  * Version:
  * Last-Updated:
  *           By:
- *     Update #: 80
+ *     Update #: 83
  */
 
 /* Change Log:
@@ -28,6 +28,9 @@
   \header
      \li Module
      \li Description
+  \row
+     \li \l{Meta Module} {Meta}
+     \li Meta concepts.
   \row
      \li \l{Core Module} {Core}
      \li Fundamental concepts and related tools.

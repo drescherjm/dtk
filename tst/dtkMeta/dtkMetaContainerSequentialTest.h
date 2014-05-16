@@ -1,20 +1,22 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
 #pragma once
 
 #include <dtkTest>
+
+// ///////////////////////////////////////////////////////////////////
 
 class dtkMetaContainerSequentialTestCase : public QObject
 {
@@ -40,5 +42,5 @@ private slots:
     void cleanup(void);
 };
 
-// 
+//
 // dtkMetaContainerSequentialTest.h ends here

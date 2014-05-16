@@ -17,6 +17,72 @@
 namespace dtkMetaContainerSequentialPrivate
 {
 // /////////////////////////////////////////////////////////////////
+// dtkMetaContainerSequentialPrivate::itemOperator implementation
+// /////////////////////////////////////////////////////////////////
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::addValue(I&, const T *) 
+{
+    qWarning("Operator += NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::subValue(I&, const T *) 
+{
+    qWarning("Operator -= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::mulValue(I&, const T *) 
+{
+    qWarning("Operator *= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline void itemOperatorBase<I, T>::divValue(I&, const T *) 
+{
+    qWarning("Operator /= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+}
+
+template < typename I, typename T> inline bool itemOperatorBase<I, T>::isEqual(const I&, const T *) 
+{
+    qWarning("Comparison is NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
+    return false;
+}
+
+template < typename I> inline void itemOperator<I, QString, false>::addValue(I& it, const QString *value) 
+{
+    *it += *value;
+}
+
+template < typename I> inline bool itemOperator<I, QString, false>::isEqual(const I& it, const QString *value) 
+{
+    return (*it == *value);
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::addValue(I& it, const T *value) 
+{
+    *it += *value;
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::subValue(I& it, const T *value) 
+{
+    *it -= *value;
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::mulValue(I& it, const T *value) 
+{
+    *it *= *value;
+}
+
+template < typename I, typename T> inline void itemOperator<I, T, true>::divValue(I& it, const T *value) 
+{
+    *it /= *value;
+}
+
+template < typename I, typename T> inline bool itemOperator<I, T, true>::isEqual(const I& it, const T *value) 
+{
+    return (*it == *value);
+}
+
+
+// /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::iterator implementation
 // /////////////////////////////////////////////////////////////////
 
@@ -61,7 +127,7 @@ template<typename I, typename V> inline bool iteratorOwner<I, V>::equal(void *it
     return *static_cast<I *>(it) == *static_cast<I *>(other);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::setData(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::setData(void *it, const void *value)
 {
     **static_cast<I *>(it) = *static_cast<const V *>(value);
 }
@@ -71,24 +137,29 @@ template<typename I, typename V> inline void iteratorOwner<I, V>::setData(I& it,
     *it = *static_cast<const V *>(value);
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::add(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::add(void *it, const void *value)
 {
-    **static_cast<I *>(it) += *static_cast<const V *>(value);
+    itemOperator<I, V>::addValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::sub(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::sub(void *it, const void *value)
 {
-    **static_cast<I *>(it) -= *static_cast<const V *>(value);
+    itemOperator<I, V>::subValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::mul(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::mul(void *it, const void *value)
 {
-    **static_cast<I *>(it) *= *static_cast<const V *>(value);
+    itemOperator<I, V>::mulValue(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
-template<typename I, typename V> inline void iteratorOwner<I, V>::div(void *& it, const void *value)
+template<typename I, typename V> inline void iteratorOwner<I, V>::div(void *it, const void *value)
 {
-    **static_cast<I *>(it) /= *static_cast<const V *>(value);
+    itemOperator<I, V>::divValue(*static_cast<I *>(it), static_cast<const V *>(value));
+}
+
+template<typename I, typename V> inline bool iteratorOwner<I, V>::isEqual(void *it, const void *value)
+{
+    return itemOperator<I, V>::isEqual(*static_cast<I *>(it), static_cast<const V *>(value));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -135,7 +206,7 @@ template<typename V> inline bool iteratorOwner<V *, V>::equal(void *it, void *ot
     return static_cast<V *>(it) == static_cast<V *>(other);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::setData(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::setData(void *it, const void *value)
 {
     *static_cast<V *>(it) = *static_cast<const V *>(value);
 }
@@ -145,24 +216,34 @@ template<typename V> inline void iteratorOwner<V *, V>::setData(V *it, const voi
     *it = *static_cast<const V *>(value);
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::add(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::add(void *it, const void *value)
 {
-    *static_cast<V *>(it) += *static_cast<const V *>(value);
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::addValue(item, static_cast<const V *>(value));
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::sub(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::sub(void *it, const void *value)
 {
-    *static_cast<V *>(it) -= *static_cast<const V *>(value);
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::subValue(item, static_cast<const V *>(value));
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::mul(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::mul(void *it, const void *value)
 {
-    *static_cast<V *>(it) *= *static_cast<const V *>(value);
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::mulValue(item, static_cast<const V *>(value));
 }
 
-template<typename V> inline void iteratorOwner<V *, V>::div(void *& it, const void *value)
+template<typename V> inline void iteratorOwner<V *, V>::div(void *it, const void *value)
 {
-    *static_cast<V *>(it) /= *static_cast<const V *>(value);
+    V *item = static_cast<V *>(it);
+    itemOperator<V*, V>::divValue(item, static_cast<const V *>(value));
+}
+
+template<typename V> inline bool iteratorOwner<V *, V>::isEqual(void *it, const void *value)
+{
+    V *item = static_cast<V *>(it);
+    return itemOperator<V*, V>::isEqual(item, static_cast<const V *>(value));
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -206,6 +287,16 @@ template<typename T> inline void containerAPIBase<T>::removeData(T *c, int idx)
     typename T::iterator it(c->begin());
     std::advance(it, idx);    
     c->erase(it);
+}
+    
+template<typename T> inline void containerAPI<std::list<T> >::reserve(std::list<T> *, int)
+{
+    qWarning("Current meta container is based on std::list which does not provide reserve method. Nothing is done.");
+}
+    
+template<typename T> inline void containerAPI<QList<T> >::resize(QList<T> *, int)
+{
+    qWarning("Current meta container is based on QList which does not provide resize method. Nothing is done.");
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -338,29 +429,34 @@ template<typename T> inline const void *handler::iteratorValuePrivate(void *cons
     return iteratorOwner<typename T::iterator, typename T::value_type>::data(it);
 }
 
-template<typename T> inline void handler::setValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::setValueToIteratorPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::setData(it, val);
 }
 
-template<typename T> inline void handler::addValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::addValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::add(it, val);
 }
 
-template<typename T> inline void handler::subValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::subValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::sub(it, val);
 }
 
-template<typename T> inline void handler::mulValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::mulValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::mul(it, val);
 }
 
-template<typename T> inline void handler::divValueToIteratorPrivate(void *& it, const void *val)
+template<typename T> inline void handler::divValueToItemPrivate(void *it, const void *val)
 {
     iteratorOwner<typename T::iterator, typename T::value_type>::div(it, val);
+}
+
+template<typename T> inline bool handler::isItemEqualToPrivate(void *it, const void *val)
+{
+    return iteratorOwner<typename T::iterator, typename T::value_type>::isEqual(it, val);
 }
 
 template<typename T> inline int handler::indexOfIteratorPrivate(void *c, void *const& it)
@@ -410,51 +506,53 @@ template<typename T> inline handler::handler(T *c) : m_container(c),
                                                      m_copyConstIterator(copyConstIteratorPrivate<T>),
                                                      m_iteratorValue(iteratorValuePrivate<T>),
                                                      m_setValueToIterator(setValueToIteratorPrivate<T>),
-                                                     m_addValueTotIterator(addValueToIteratorPrivate<T>),
-                                                     m_subValueTotIterator(subValueToIteratorPrivate<T>),
-                                                     m_mulValueTotIterator(mulValueToIteratorPrivate<T>),
-                                                     m_divValueTotIterator(divValueToIteratorPrivate<T>),
+                                                     m_addValueTotItem(addValueToItemPrivate<T>),
+                                                     m_subValueTotItem(subValueToItemPrivate<T>),
+                                                     m_mulValueTotItem(mulValueToItemPrivate<T>),
+                                                     m_divValueTotItem(divValueToItemPrivate<T>),
+                                                     m_isItemEqualTo(isItemEqualToPrivate<T>),
                                                      m_indexOfIterator(indexOfIteratorPrivate<T>),
                                                      m_indexOfConstIterator(indexOfConstIteratorPrivate<T>)
 {
 }
 
-handler::handler(void) : m_container(0),
-                         m_iterator(0),
-                         m_metaType_id(QMetaType::UnknownType),
-                         m_metaType_flags(0),
-                         m_iterator_capabilities(0),
-                         m_clear(0),
-                         m_reserve(0),
-                         m_resize(0),
-                         m_empty(0),
-                         m_size(0),
-                         m_setAt(0),
-                         m_insert(0),
-                         m_remove(0),
-                         m_at(0),
-                         m_advance(0),
-                         m_advanceConst(0),
-                         m_getData(0),
-                         m_getConstData(0),
-                         m_moveToBegin(0),
-                         m_moveToCBegin(0),
-                         m_moveToEnd(0),
-                         m_moveToCEnd(0),
-                         m_destroyIterator(0),
-                         m_destroyConstIterator(0),
-                         m_equalIterator(0),
-                         m_equalConstIterator(0),
-                         m_copyIterator(0),
-                         m_copyConstIterator(0),
-                         m_iteratorValue(0),
-                         m_setValueToIterator(0),
-                         m_addValueTotIterator(0),
-                         m_subValueTotIterator(0),
-                         m_mulValueTotIterator(0),
-                         m_divValueTotIterator(0),
-                         m_indexOfIterator(0),
-                         m_indexOfConstIterator(0)
+inline handler::handler(void) : m_container(0),
+                                m_iterator(0),
+                                m_metaType_id(QMetaType::UnknownType),
+                                m_metaType_flags(0),
+                                m_iterator_capabilities(0),
+                                m_clear(0),
+                                m_reserve(0),
+                                m_resize(0),
+                                m_empty(0),
+                                m_size(0),
+                                m_setAt(0),
+                                m_insert(0),
+                                m_remove(0),
+                                m_at(0),
+                                m_advance(0),
+                                m_advanceConst(0),
+                                m_getData(0),
+                                m_getConstData(0),
+                                m_moveToBegin(0),
+                                m_moveToCBegin(0),
+                                m_moveToEnd(0),
+                                m_moveToCEnd(0),
+                                m_destroyIterator(0),
+                                m_destroyConstIterator(0),
+                                m_equalIterator(0),
+                                m_equalConstIterator(0),
+                                m_copyIterator(0),
+                                m_copyConstIterator(0),
+                                m_iteratorValue(0),
+                                m_setValueToIterator(0),
+                                m_addValueTotItem(0),
+                                m_subValueTotItem(0),
+                                m_mulValueTotItem(0),
+                                m_divValueTotItem(0),
+                                m_isItemEqualTo(0),
+                                m_indexOfIterator(0),
+                                m_indexOfConstIterator(0)
 {
 }
 
@@ -508,24 +606,24 @@ inline Data handler::at(int idx) const
     return Data(m_metaType_id, this->m_at(m_container, idx), m_metaType_flags);
 }
 
-Data handler::currentData(void) const
+inline Data handler::currentData(void) const
 {
     return this->m_getData(m_iterator, m_metaType_id, m_metaType_flags);
 }
 
-Data handler::currentConstData(void) const
+inline Data handler::currentConstData(void) const
 {
     return this->m_getConstData(m_iterator, m_metaType_id, m_metaType_flags);
 }
 
-handler& handler::advance(int step)
+inline handler& handler::advance(int step)
 {
     Q_ASSERT(step > 0 || m_iterator_capabilities & BiDirectionalCapability);
     this->m_advance(m_iterator, step);
     return *this;
 }
 
-handler& handler::advanceConst(int step)
+inline handler& handler::advanceConst(int step)
 {
     this->m_advanceConst(m_iterator, step);
     return *this;
@@ -593,24 +691,29 @@ inline int handler::indexOfIterator(void) const
     return this->m_indexOfIterator(m_container, m_iterator);
 }
 
-inline void handler::addValueToIterator(const void *value)
+inline void handler::addValueToItem(const void *value)
 {
-    this->m_addValueTotIterator(m_iterator, value);
+    this->m_addValueTotItem(m_iterator, value);
 }
 
-inline void handler::subValueToIterator(const void *value)
+inline void handler::subValueToItem(const void *value)
 {
-    this->m_subValueTotIterator(m_iterator, value);
+    this->m_subValueTotItem(m_iterator, value);
 }
 
-inline void handler::mulValueToIterator(const void *value)
+inline void handler::mulValueToItem(const void *value)
 {
-    this->m_mulValueTotIterator(m_iterator, value);
+    this->m_mulValueTotItem(m_iterator, value);
 }
 
-inline void handler::divValueToIterator(const void *value)
+inline void handler::divValueToItem(const void *value)
 {
-    this->m_divValueTotIterator(m_iterator, value);
+    this->m_divValueTotItem(m_iterator, value);
+}
+
+inline bool handler::isItemEqualTo(const void *value) const
+{
+    return this->m_isItemEqualTo(m_iterator, value);
 }
 
 inline const void *handler::iteratorValue(void) const

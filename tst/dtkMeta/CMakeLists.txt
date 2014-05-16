@@ -19,7 +19,8 @@ project(dtkMetaTest)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkMetaContainerSequentialTest.h)
+  dtkMetaContainerSequentialTest.h
+  dtkMetaContainerSequentialTest.tpp)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})

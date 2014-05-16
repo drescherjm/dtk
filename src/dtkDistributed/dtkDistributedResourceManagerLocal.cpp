@@ -149,28 +149,45 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
 #if defined(Q_WS_MAC)
         server.replace(".", "_");
 #endif
-        if (settings.contains(server +"_server_mpirun_path")) {
-            dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
-            qsub = settings.value(server +"_server_mpirun_path").toString();
-        } else
-            qsub = "mpirun";
+        dtkDebug() << "looking for setup in " << server;
 
         QVariantMap res = json["resources"].toMap();
+        int procs;
         if (res["nodes"].toInt() == 0) {
             // no nodes, only cores; TODO
         } else if (res["cores"].toInt() == 0) {
             // no cores, only nodes; TODO
         } else {
-            int procs = res["nodes"].toInt()*res["cores"].toInt();
-            if (procs > 1)
-                args += "-np "+ QString::number(procs) + " ";
+            procs = res["nodes"].toInt()*res["cores"].toInt();
         }
 
-        if (settings.contains(server +"_server_mpirun_args"))
-            args += settings.value(server +"_server_mpirun_args").toString();
-        args += qApp->applicationDirPath()
-            + "/"
-            + json["application"].toString();
+        if (settings.contains(server +"_server_mpirun_path")) {
+            dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
+            qsub = settings.value(server +"_server_mpirun_path").toString();
+
+            if (procs > 1)
+                args += "-np "+ QString::number(procs) + " ";
+
+            if (settings.contains(server +"_server_mpirun_args")) {
+                args += settings.value(server +"_server_mpirun_args").toString();
+            }
+
+            args += qApp->applicationDirPath()
+                  + "/"
+                  + json["application"].toString();
+
+        } else {
+            QStringList app = json["application"].toString().split(" ");
+            qsub = qApp->applicationDirPath()
+                + "/"
+                + app.takeFirst();
+
+            args += app.join(" ");
+
+            if (procs > 1)
+                args += " -np "+ QString::number(procs);
+        }
+
     } else {
         dtkError() << "no script and no application";
         return QString("ERROR");

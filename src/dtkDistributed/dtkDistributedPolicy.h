@@ -33,15 +33,11 @@ public:
     dtkDistributedPolicy& operator = (const dtkDistributedPolicy& other);
 
 public:
-    enum Type {
-        MP,
-        MT,
-        HYB
-    };
+    Q_INVOKABLE QStringList types(void);
 
 public:
     void addHost(QString host);
-    void setType(dtkDistributedPolicy::Type);
+    void setType(const QString& type);
     void setNThreads(qlonglong nthreads);
 
 public:

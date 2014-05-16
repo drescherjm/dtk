@@ -24,7 +24,7 @@ namespace dtkMetaContainerSequentialPrivate
 // dtkMetaContainerSequentialPrivate::itemOperator definition
 // /////////////////////////////////////////////////////////////////
 
-template < typename I, typename T> struct itemOperatorBase
+template <typename I, typename T> struct itemOperatorBase
 {
     static void addValue(I&, const T *);
     static void subValue(I&, const T *);
@@ -34,22 +34,22 @@ template < typename I, typename T> struct itemOperatorBase
     static bool isEqual(const I&, const T *);
 };
 
-template < typename I, typename T, bool = std::is_integral<T>::value || std::is_floating_point<T>::value > struct itemOperator
+template <typename I, typename T, bool = std::is_integral<T>::value || std::is_floating_point<T>::value > struct itemOperator
 {
 };
 
-template < typename I, typename T> struct itemOperator<I, T, false> : itemOperatorBase<I, T>
+template <typename I, typename T> struct itemOperator<I, T, false> : itemOperatorBase<I, T>
 {
 };
 
-template < typename I> struct itemOperator<I, QString, false> : itemOperatorBase<I, QString>
+template <typename I> struct itemOperator<I, QString, false> : itemOperatorBase<I, QString>
 {
     static void addValue(I& it, const QString *value);
 
     static bool isEqual(const I& it, const QString *value);
 };
 
-template < typename I, typename T> struct itemOperator<I, T, true>
+template <typename I, typename T> struct itemOperator<I, T, true>
 {
     static void addValue(I& it, const T *value);
     static void subValue(I& it, const T *value);

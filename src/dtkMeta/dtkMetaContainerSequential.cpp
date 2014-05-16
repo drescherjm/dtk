@@ -20,10 +20,56 @@
 // dtkMetaContainerSequential::item implementation
 // /////////////////////////////////////////////////////////////////
 
-/*!
-  \class dtkMetaContainerSequential::item
-  \inmodule dtkMeta
-  \brief The dtkMetaContainerSequential::item class ...
+/*! \class dtkMetaContainerSequential::item
+    \inmodule dtkMeta
+
+    \brief The dtkMetaContainerSequential::item class enables to use
+    arithmetic operations on the elements of a container in a
+    QVariant.    
+
+    \snippet dtkmeta_container_sequential.cpp 5
+
+    By default, the operators such as \c += , \c *= , \c -= , \c /= ,
+    \c == or \c != are available for elements of integer and floating
+    types. The += operator is also available for QString type. For any
+    other types, these operators are disabled, a warning being then
+    emitted.
+
+    However, it is likely to enable all or a part of these operators
+    by overloading the template struct \c
+    dtkMetaContainerSequentialPrivate::itemOperator<I,T,false> where
+    \c T is the type you want to deal with.
+
+    Given a type \c Dummy that supports \c += and \c /= operators for
+    instance. In order to enable these operators for an item that
+    refers a \c Dummy element in a container, one must overload the
+    template struct as follows:
+
+    \code
+    namespace dtkMetaContainerSequentialPrivate {
+       template <typename I> struct itemOperator<I, Dummy, false> : itemOperatorBase<I, Dummy>
+       {
+           static void addValue(I& it, const Dummy *value) { *it += *value; }
+           static void divValue(I& it, const Dummy *value) { *it /= *value; }
+       };
+    }
+    \endcode
+
+    Then, it is likely to use the items of the
+    dtkMetaContainerSequential as if they were \c Dummy variable.
+
+    \code
+    QList<Dummy> my_list;
+    my_list << Dummy() << Dummy() << Dummy();
+    QVariant variant = QVariant::fromValue(&my_list);
+    dtkMetaContainerSequential meta_list = variant.value<dtkMetaContainerSequential>();
+    for (dtkMetaContainerSequential::item &item : meta_list) {
+        item += Dummy();
+        item /= Dummy();
+    }
+    \endcode
+
+    \sa dtkMetaContainerSequential, dtkMetaContainerSequential::iterator
 */
 
 /*! \fn const QVariant dtkMetaContainerSequential::item::operator * (void) const
@@ -42,10 +88,24 @@ const QVariant dtkMetaContainerSequential::item::operator * (void) const
 // dtkMetaContainerSequential::iterator implementation
 // /////////////////////////////////////////////////////////////////
 
-/*!
-  \class dtkMetaContainerSequential::iterator
-  \inmodule dtkMeta
-  \brief The dtkMetaContainerSequential::iterator class ...
+/*! \class dtkMetaContainerSequential::iterator
+    \inmodule dtkMeta
+
+    \brief The dtkMetaContainerSequential::iterator together with the
+    dtkMetaContainerSequential::item enable to iterate over a container
+    in a QVariant and to modify its content.
+
+    As its const counterpart it can only be created by a
+    dtkMetaContainerSequential instance, and can be used in a way
+    similar to other stl-style iterators.
+
+    Furthermore, it gives access to the element via a
+    dtkMetaContainerSequential::item which provides functionalities to
+    modify the element.
+
+    \snippet dtkmeta_container_sequential.cpp 4
+
+    \sa dtkMetaContainerSequential::item, dtkMetaContainerSequential
 */
 
 /*! \fn dtkMetaContainerSequential::iterator::iterator(const dtkMetaContainerSequential& container, QAtomicInt *ref)
@@ -189,10 +249,17 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::opera
 // dtkMetaContainerSequential::const_iterator implementation
 // /////////////////////////////////////////////////////////////////
 
-/*!
-  \class dtkMetaContainerSequential::const_iterator
-  \inmodule dtkMeta
-  \brief The dtkMetaContainerSequential::const_iterator class ...
+/*! \class dtkMetaContainerSequential::const_iterator
+    \inmodule dtkMeta
+
+    \brief The dtkMetaContainerSequential::const_iterator enables to
+    iterate over a pointer of a container in a QVariant.
+
+    A dtkMetaContainerSequential::const_iterator can only be created
+    by a dtkMetaContainerSequential instance, and can be used in a way
+    similar to other stl-style iterators.
+
+    \snippet dtkmeta_container_sequential.cpp 3
 */
 
 /*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const dtkMetaContainerSequential& container, QAtomicInt *ref)
@@ -281,6 +348,12 @@ const QVariant dtkMetaContainerSequential::const_iterator::operator [] (int j) c
     return *cit;
 }
 
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator ++ (int)
+    
+    The postfix ++ operator (\c{it++}) advances the iterator to the
+    next element in the container and returns an iterator to the
+    previously current element.
+*/
 dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator ++ (int)
 {
     dtkMetaContainerSequentialPrivate::handler h;
@@ -289,6 +362,16 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
     return const_iterator(h, new QAtomicInt(0));
 }
 
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator -- (int)
+    
+    The postfix -- operator (\c{it--}) makes the preceding current and
+    returns an iterator to the new current element.
+
+    If the container in the QVariant does not support bi-directional
+    iteration, calling this function leads to undefined results.
+
+    \sa hasBiDirectionalIterator()
+*/
 dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator -- (int)
 {
     dtkMetaContainerSequentialPrivate::handler h;
@@ -297,6 +380,13 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
     return const_iterator(h, new QAtomicInt(0));
 }
 
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (int j) const
+    
+    Returns an iterator to the element at \a j positions forward from
+    this iterator.
+
+    \sa operator-(), operator+=()
+*/
 dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (int j) const
 {
     dtkMetaContainerSequentialPrivate::handler h;
@@ -305,6 +395,16 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
     return const_iterator(h, new QAtomicInt(0));
 }
 
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (int j) const
+    
+    Returns an iterator to the element at \a j positions backward from
+    this iterator.
+
+    If the container in the QVariant does not support bi-directional iteration, calling this function
+    leads to undefined results.
+
+    \sa operator+(), operator+=()
+*/
 dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (int j) const
 {
     dtkMetaContainerSequentialPrivate::handler h;
@@ -317,38 +417,39 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
 // dtkMetaContainerSequential implementation
 // /////////////////////////////////////////////////////////////////
 
-/*!
-  \class dtkMetaContainerSequential
-  \inmodule dtkMeta
-  \brief The dtkMetaContainerSequential class is an interface for a container encapsulated as a pointer in a QVariant.
+/*! \class dtkMetaContainerSequential
+    \inmodule dtkMeta
 
-  This interface provides usual methods to handle the container held
-  within a QVariant. In the manner of QSequentialIterable, it allows
-  to iterate over the container without extracting it from the
-  QVariant.
+    \brief The dtkMetaContainerSequential class is an interface for a
+    container encapsulated as a pointer in a QVariant.
 
-  \snippet dtkmeta_container_sequential.cpp 0
-
-  However, unlike its Qt counterpart, it provides a set of methods
-  that enable to modify the items of the container. The container
-  itself is never copied.
-
-  \snippet dtkmeta_container_sequential.cpp 1
-
-  Moreover, in order to enable the use of arithmetic operators, the
-  notion of item has been introduced together with a non const
-  iterator.
-
-  \snippet dtkmeta_container_sequential.cpp 2
-
-  Such arithmetic operators are available for container of all integer
-  and floating types. The += operator is also available for container
-  of QString. By default, these operators are disabled for container
-  of any other types. A warning is emitted if they are used. One can
-  refer to dtkMetaContainerSequential::item to know how to enable such
-  operators for other types.
-
-  \sa QSequentialIterable, QVariant
+    This interface provides usual methods to handle the container held
+    within a QVariant. In the manner of QSequentialIterable, it allows
+    to iterate over the container without extracting it from the
+    QVariant.
+    
+    \snippet dtkmeta_container_sequential.cpp 0
+    
+    However, unlike its Qt counterpart, it provides a set of methods
+    that enable to modify the elements of the container. The container
+    itself is never copied.
+    
+    \snippet dtkmeta_container_sequential.cpp 1
+    
+    Moreover, in order to enable the use of arithmetic operators, the
+    notion of item has been introduced together with a non const
+    iterator.
+    
+    \snippet dtkmeta_container_sequential.cpp 2
+    
+    Such arithmetic operators are available for container of all integer
+    and floating types. The += operator is also available for container
+    of QString. By default, these operators are disabled for container
+    of any other types. A warning is emitted if they are used. One can
+    refer to dtkMetaContainerSequential::item to know how to enable such
+    operators for other types.
+    
+    \sa QSequentialIterable, QVariant
 */
 
 /*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::begin(void)
@@ -560,6 +661,128 @@ void dtkMetaContainerSequential::insert(int idx, const QVariant& v)
 
 // ///////////////////////////////////////////////////////////////////
 
+/*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator * (void) const
+
+    Returns the current element, converted to a dtkMetaContainerSequential::item.
+*/
+
+/*! \fn bool dtkMetaContainerSequential::iterator::operator == (const iterator& o) const
+
+    Returns \c true if \a o points to the same item as this iterator;
+    otherwise returns \c false.
+
+    \sa operator!=()
+*/
+
+/*! \fn bool dtkMetaContainerSequential::iterator::operator != (const iterator& o) const
+
+    Returns \c true if \a o points to a different item than this
+    iterator; otherwise returns \c false.
+
+    \sa operator==()
+*/
+
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator ++ (void)
+
+    The prefix ++ operator (\c{++it}) advances the iterator to the
+    next element in the container and returns an iterator to the new
+    current element.
+
+    Calling this function on dtkMetaContainerSequential::end() leads
+    to undefined results.
+
+    \sa operator--()
+*/
+
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -- (void)
+
+    The prefix -- operator (\c{--it}) makes the preceding element
+    current and returns an iterator to the new current element.
+
+    Calling this function on dtkMetaContainerSequential::begin() leads
+
+    If the container in the QVariant does not support bi-directional
+    iteration, calling this function leads to undefined results.
+
+    \sa operator++(), hasBiDirectionalIterator()
+*/
+
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator += (int j)
+
+    Advances the iterator by \a j elements.
+
+    \sa operator-=(), operator+()
+*/
+
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -= (int j)
+
+    Makes the iterator go back by \a j elements.
+
+    If the container in the QVariant does not support bi-directional
+    iteration, calling this function leads to undefined results.
+
+    \sa operator+=(), operator-(), hasBiDirectionalIterator()
+*/
+
+// ///////////////////////////////////////////////////////////////////
+
+/*! \fn bool dtkMetaContainerSequential::const_iterator::operator == (const const_iterator& o) const
+
+    Returns \c true if \a o points to the same item as this iterator;
+    otherwise returns \c false.
+
+    \sa operator!=()
+*/
+
+/*! \fn bool dtkMetaContainerSequential::const_iterator::operator != (const const_iterator& o) const
+
+    Returns \c true if \a o points to a different item than this
+    iterator; otherwise returns \c false.
+
+    \sa operator==()
+*/
+
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator ++ (void)
+
+    The prefix ++ operator (\c{++it}) advances the iterator to the
+    next element in the container and returns an iterator to the new
+    current element.
+
+    Calling this function on dtkMetaContainerSequential::cend() leads
+    to undefined results.
+
+    \sa operator--()
+*/
+
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -- (void)
+
+    The prefix -- operator (\c{--it}) makes the preceding element
+    current and returns an iterator to the new current element.
+
+    Calling this function on dtkMetaContainerSequential::cbegin() leads
+
+    If the container in the QVariant does not support bi-directional
+    iteration, calling this function leads to undefined results.
+
+    \sa operator++(), hasBiDirectionalIterator()
+*/
+
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator += (int j)
+
+    Advances the iterator by \a j elements.
+
+    \sa operator-=(), operator+()
+*/
+
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -= (int j)
+
+    Makes the iterator go back by \a j elements.
+
+    If the container in the QVariant does not support bi-directional
+    iteration, calling this function leads to undefined results.
+
+    \sa operator+=(), operator-(), hasBiDirectionalIterator()
+*/
 
 // ///////////////////////////////////////////////////////////////////
 

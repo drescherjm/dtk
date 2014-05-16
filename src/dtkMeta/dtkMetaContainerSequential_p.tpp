@@ -20,63 +20,63 @@ namespace dtkMetaContainerSequentialPrivate
 // dtkMetaContainerSequentialPrivate::itemOperator implementation
 // /////////////////////////////////////////////////////////////////
 
-template < typename I, typename T> inline void itemOperatorBase<I, T>::addValue(I&, const T *) 
+template <typename I, typename T> inline void itemOperatorBase<I, T>::addValue(I&, const T *) 
 {
     qWarning("Operator += NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
 }
 
-template < typename I, typename T> inline void itemOperatorBase<I, T>::subValue(I&, const T *) 
+template <typename I, typename T> inline void itemOperatorBase<I, T>::subValue(I&, const T *) 
 {
     qWarning("Operator -= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
 }
 
-template < typename I, typename T> inline void itemOperatorBase<I, T>::mulValue(I&, const T *) 
+template <typename I, typename T> inline void itemOperatorBase<I, T>::mulValue(I&, const T *) 
 {
     qWarning("Operator *= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
 }
 
-template < typename I, typename T> inline void itemOperatorBase<I, T>::divValue(I&, const T *) 
+template <typename I, typename T> inline void itemOperatorBase<I, T>::divValue(I&, const T *) 
 {
     qWarning("Operator /= NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
 }
 
-template < typename I, typename T> inline bool itemOperatorBase<I, T>::isEqual(const I&, const T *) 
+template <typename I, typename T> inline bool itemOperatorBase<I, T>::isEqual(const I&, const T *) 
 {
     qWarning("Comparison is NOT implemented for type: %s", QMetaType::typeName(qMetaTypeId<T>()));
     return false;
 }
 
-template < typename I> inline void itemOperator<I, QString, false>::addValue(I& it, const QString *value) 
+template <typename I> inline void itemOperator<I, QString, false>::addValue(I& it, const QString *value) 
 {
     *it += *value;
 }
 
-template < typename I> inline bool itemOperator<I, QString, false>::isEqual(const I& it, const QString *value) 
+template <typename I> inline bool itemOperator<I, QString, false>::isEqual(const I& it, const QString *value) 
 {
     return (*it == *value);
 }
 
-template < typename I, typename T> inline void itemOperator<I, T, true>::addValue(I& it, const T *value) 
+template <typename I, typename T> inline void itemOperator<I, T, true>::addValue(I& it, const T *value) 
 {
     *it += *value;
 }
 
-template < typename I, typename T> inline void itemOperator<I, T, true>::subValue(I& it, const T *value) 
+template <typename I, typename T> inline void itemOperator<I, T, true>::subValue(I& it, const T *value) 
 {
     *it -= *value;
 }
 
-template < typename I, typename T> inline void itemOperator<I, T, true>::mulValue(I& it, const T *value) 
+template <typename I, typename T> inline void itemOperator<I, T, true>::mulValue(I& it, const T *value) 
 {
     *it *= *value;
 }
 
-template < typename I, typename T> inline void itemOperator<I, T, true>::divValue(I& it, const T *value) 
+template <typename I, typename T> inline void itemOperator<I, T, true>::divValue(I& it, const T *value) 
 {
     *it /= *value;
 }
 
-template < typename I, typename T> inline bool itemOperator<I, T, true>::isEqual(const I& it, const T *value) 
+template <typename I, typename T> inline bool itemOperator<I, T, true>::isEqual(const I& it, const T *value) 
 {
     return (*it == *value);
 }

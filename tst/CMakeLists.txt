@@ -12,6 +12,7 @@
 ##
 ### Code:
 
+add_subdirectory(dtkLog)
 add_subdirectory(dtkMeta)
 add_subdirectory(dtkMath)
 

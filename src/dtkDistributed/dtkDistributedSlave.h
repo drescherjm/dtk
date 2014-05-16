@@ -30,7 +30,7 @@ public:
     ~dtkDistributedSlave(void);
 
 public:
-    QString jobId(void);
+    static QString jobId(void);
 
 public:
     bool    isConnected(void);

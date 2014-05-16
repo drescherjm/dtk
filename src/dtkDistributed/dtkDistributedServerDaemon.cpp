@@ -35,6 +35,13 @@ public:
     QMap< QPair<int,QString>, QTcpSocket *> sockets;
 };
 
+
+/*! \class dtkDistributedServerDaemon
+    \inmodule dtkDistributed
+
+    \brief ...
+*/
+
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)
 {
     d->manager = NULL;
@@ -158,6 +165,7 @@ void dtkDistributedServerDaemon::read(void)
         break;
 
     case dtkDistributedMessage::STOP:
+        dtkDebug() << "Stop received, quit";
         qApp->quit();
         break;
 

@@ -52,6 +52,19 @@ public:
 // dtkDistributedController implementation
 // /////////////////////////////////////////////////////////////////
 
+/*!
+  \class dtkDistributedController
+  \inmodule dtkDistributed
+
+  \brief The controller is used to interact with a remote
+  dtkDistributedServer and get/view resources from this server using
+  a dtkDistributedResourceManager. Differents managers are
+  implemented: OAR, Torque, and Local resources on the server.
+
+  \sa dtkDistributedServer, dtkDistributedMessage, dtkDistributedResourceManager
+
+ */
+
 dtkDistributedController::dtkDistributedController(QObject *parent) : QObject(parent), d(new dtkDistributedControllerPrivate)
 {
     d->refreshing = false;

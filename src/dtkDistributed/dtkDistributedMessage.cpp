@@ -35,6 +35,13 @@ public:
     QByteArray content;
 };
 
+
+/*! \class dtkDistributedMessage
+    \inmodule dtkDistributed
+
+    \brief ...
+*/
+
 dtkDistributedMessage::dtkDistributedMessage(void) :  d(new dtkDistributedMessagePrivate)
 {
 }

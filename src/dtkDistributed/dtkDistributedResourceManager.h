@@ -26,7 +26,7 @@ public:
              dtkDistributedResourceManager(void);
     virtual ~dtkDistributedResourceManager(void);
 
-    static QString protocol(void) { return "1.0"; };
+    static QString protocol(void) { return "1.1"; };
 
 public slots:
     virtual QByteArray status(void) = 0;

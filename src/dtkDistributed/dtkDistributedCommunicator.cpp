@@ -90,6 +90,14 @@ void dtkDistributedCommunicator::setPolicy(QString type)
 {
 }
 
+/*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
+
+  Spawn a communicator on all hostnames, starting np threads on each
+  process. Once the processes and threads are started, use the worker
+  to do the work.
+
+*/
+
 void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
 {
     qDebug() << Q_FUNC_INFO;

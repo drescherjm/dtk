@@ -75,13 +75,13 @@ void dtkMetaContainerSequentialTestCase::testQList(void)
 void dtkMetaContainerSequentialTestCase::testQVector(void)
 {
     typedef QVector<int> ArrayInt;
-    ArrayInt c;
+    ArrayInt c_i;
     int size = 11;
-    int values[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int values_i[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    testContainer<ArrayInt>(c, values, size);
+    testContainer<ArrayInt>(c_i, values_i, size);
 
-    QCOMPARE(2 * size, c.size());
+    QCOMPARE(2 * size, c_i.size());
 
     typedef QVector<QString> ArrayString;
     ArrayString c_s;
@@ -96,13 +96,13 @@ void dtkMetaContainerSequentialTestCase::testQVector(void)
 void dtkMetaContainerSequentialTestCase::testQVarLengthArray(void)
 {
     typedef QVarLengthArray<int> ArrayInt;
-    ArrayInt c;
+    ArrayInt c_i;
     int size = 11;
-    int values[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int values_i[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    testContainer<ArrayInt>(c, values, size);
+    testContainer<ArrayInt>(c_i, values_i, size);
 
-    QCOMPARE(2 * size, c.size());
+    QCOMPARE(2 * size, c_i.size());
 
     typedef QVarLengthArray<QString> ArrayString;
     ArrayString c_s;
@@ -117,13 +117,13 @@ void dtkMetaContainerSequentialTestCase::testQVarLengthArray(void)
 void dtkMetaContainerSequentialTestCase::testStdList(void)
 {
     typedef std::list<int> ArrayInt;
-    ArrayInt c;
+    ArrayInt c_i;
     int size = 11;
-    int values[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int values_i[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    testContainer<ArrayInt>(c, values, size);
+    testContainer<ArrayInt>(c_i, values_i, size);
 
-    QCOMPARE(2 * size, (int)c.size());
+    QCOMPARE(2 * size, (int)c_i.size());
 
     typedef std::list<QString> ArrayString;
     ArrayString c_s;
@@ -138,13 +138,13 @@ void dtkMetaContainerSequentialTestCase::testStdList(void)
 void dtkMetaContainerSequentialTestCase::testStdVector(void)
 {
     typedef std::vector<int> ArrayInt;
-    ArrayInt c;
+    ArrayInt c_i;
     int size = 11;
-    int values[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int values_i[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    testContainer<ArrayInt>(c, values, size);
+    testContainer<ArrayInt>(c_i, values_i, size);
 
-    QCOMPARE(2 * size, (int)c.size());
+    QCOMPARE(2 * size, (int)c_i.size());
 
     typedef std::vector<QString> ArrayString;
     ArrayString c_s;

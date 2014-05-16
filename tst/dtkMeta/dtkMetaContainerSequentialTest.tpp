@@ -25,6 +25,7 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
     }
 
     QVariant v_c = QVariant::fromValue(&c);
+    QVERIFY(dtkMetaType::canGetMetaContainerFromVariant(v_c));
     dtkMetaContainerSequential m_c = v_c.value<dtkMetaContainerSequential>();
     QVERIFY(!m_c.empty());
     QCOMPARE(m_c.size(), (int)std::distance(c.begin(), c.end()));

@@ -41,9 +41,10 @@ template<typename T> struct dtkMetaTypeHandler<T *, true>
 class dtkMetaType
 {
 public:
+                         static     bool canGetMetaContainerFromVariant(const QVariant& v);
     template<typename T> static QVariant variantFromValue(const T& t);
     template<typename T> static QVariant variantFromValue(      T *t);
-    template<typename T> static T *clone(T *t);
+    template<typename T> static        T *clone(T *t);
 };
 
 // /////////////////////////////////////////////////////////////////

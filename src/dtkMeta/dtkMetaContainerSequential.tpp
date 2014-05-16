@@ -291,6 +291,17 @@ inline dtkMetaContainerSequential QVariantValueHelperInterface<dtkMetaContainerS
 }
 }
 
+// ///////////////////////////////////////////////////////////////////
+// Implementation of canGetMetaContainerFromVariant avoiding recursive header inclusion
+// ///////////////////////////////////////////////////////////////////
+
+inline bool dtkMetaType::canGetMetaContainerFromVariant(const QVariant& v)
+{
+    if (QMetaType::hasRegisteredConverterFunction(v.userType(), qMetaTypeId<dtkMetaContainerSequentialPrivate::handler>()))
+        return true;
+    return false;
+}
+
 //
 // dtkMetaContainerSequential.tpp ends here
 

@@ -56,7 +56,7 @@ signals:
     void jobQueued(QString jobid);
 
 public slots:
-    bool    connect(const QUrl& server, bool ssh_tunnel = false);
+    bool    connect(const QUrl& server, bool ssh_tunnel = false,bool ssh_rank = false);
     void disconnect(const QUrl& server);
     void       stop(const QUrl& server);
     void    refresh(const QUrl& server);

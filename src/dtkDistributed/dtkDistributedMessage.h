@@ -38,7 +38,6 @@ public:
         DELJOB  ,
         OKDEL   ,
         ERRORDEL,
-        STARTJOB,
         ENDJOB  ,
         DATA    ,
         SETRANK ,

@@ -296,7 +296,7 @@ QTcpSocket *dtkDistributedController::socket(const QString& jobid)
     return NULL;
 }
 
-bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel)
+bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool set_rank)
 {
     if(!d->sockets.keys().contains(server.toString())) {
 
@@ -321,6 +321,11 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel)
             d->sockets.insert(server.toString(), socket);
 
             emit connected(server);
+
+            if (set_rank) {
+                dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,"",dtkDistributedMessage::CONTROLLER_RANK);
+                msg.send(socket);
+            }
 
             return true;
 

@@ -72,11 +72,8 @@ void dtkDistributedMessage::setMethod(QString method)
         d->method = STATUS;
     } else if (method.startsWith("PUT /job HTTP")) {
         d->method = NEWJOB;
-    } else if (method.startsWith("PUT /job/")) {
-        d->method = STARTJOB;
-        d->jobid  = tokens[2].remove("HTTP/1.1").trimmed();
     } else if (method.startsWith("DELETE /job")) {
-        d->jobid  = tokens[2].remove("HTTP/1.1").trimmed();
+        d->jobid  = tokens[2].remove("HTTP").trimmed();
         if (d->headers.contains("x-dtk-finished")) {
             d->method = ENDJOB;
         } else {
@@ -88,11 +85,11 @@ void dtkDistributedMessage::setMethod(QString method)
         d->method = DATA;
         d->jobid  = tokens[2];
         if (tokens.size() > 2)
-            d->rank  = tokens[3].remove("HTTP/1.1").toInt();
+            d->rank  = tokens[3].remove("HTTP").toInt();
     } else if (method.startsWith("PUT /rank")) {
         d->method = SETRANK;
         d->jobid  = tokens[2];
-        d->rank   = tokens[3].remove("HTTP/1.1").toInt();
+        d->rank   = tokens[3].remove("HTTP").toInt();
     } else if (method.startsWith("HTTP/1.1 200 OK")) {
         if (d->headers.contains("x-dtk-status")) {
             d->method = OKSTATUS;
@@ -180,9 +177,6 @@ QString dtkDistributedMessage::req(void)
             break;
         case ERRORDEL:
             req = "HTTP/1.1 410 OK\nX-DTK-JobId: "+d->jobid;
-            break;
-        case STARTJOB:
-            req = "PUT /job/"+d->jobid + " HTTP/1.1";
             break;
         case ENDJOB:
             req = "DELETE /job/"+d->jobid+"\nX-DTK-Finished: "+d->jobid;

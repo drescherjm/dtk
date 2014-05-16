@@ -110,6 +110,7 @@ ApplicationWindow {
                     tooltip: "Deploy resource manager daemon on remote host"
                     onClicked: {
                         controller.deploy( Status.url(false),combotypes.currentText, tunnel.checked, serverPath.text);
+                        controller.connect( Status.url(false), tunnel.checked, true);
                         Status.show()
                     }
                 }
@@ -279,6 +280,12 @@ ApplicationWindow {
 
     DistributedController {
         id: controller
+        onJobStarted: {
+            console.debug("a job is started");
+        }
+        onJobQueued: {
+            console.debug("a job is queued");
+        }
     }
     DistributedPolicy {
         id: policy

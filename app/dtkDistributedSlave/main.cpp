@@ -54,7 +54,7 @@ public:
         qDebug() << "slave connected to server " << slave.isConnected();
 
         if (slave.isConnected()) {
-            dtkDistributedMessage msg(dtkDistributedMessage::STARTJOB,slave.jobId(),0);
+            dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
             msg.send(slave.socket());
         }
 

@@ -160,8 +160,6 @@ void dtkDistributedServerDaemon::read(void)
         r = d->manager->status();
         resp.reset(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"application/json",r));
         resp->send(socket);
-        // GET status is from the controller, store the socket in sockets using rank=-1
-        d->sockets.insert(controller, socket);
         break;
 
     case dtkDistributedMessage::STOP:
@@ -177,6 +175,9 @@ void dtkDistributedServerDaemon::read(void)
             resp.reset(new dtkDistributedMessage(dtkDistributedMessage::OKJOB, jobid));
         }
         resp->send(socket);
+        if (d->sockets[controller] != socket) {
+            resp->send(d->sockets[controller]);
+        }
         break;
 
     case dtkDistributedMessage::ENDJOB:
@@ -188,6 +189,7 @@ void dtkDistributedServerDaemon::read(void)
     case dtkDistributedMessage::SETRANK:
 
         dtkDebug() << "connected remote is of rank " << msg->rank() << msg->jobid();
+
         d->sockets.insert(qMakePair(msg->rank(),msg->jobid()), socket);
         // rank 0 is alive, warn the controller
         if (msg->rank() == dtkDistributedMessage::SLAVE_RANK && d->sockets.contains(controller)) {

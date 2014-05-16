@@ -45,8 +45,18 @@ public:
         qDebug() << wct();
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "Running on master, connect to remote server" ;
 
+        QUrl url(dtkApplicationArgumentsValue(qApp,"--server"));
+
+        qDebug() << "Running on master, connect to remote server" ;
+        dtkDistributedSlave slave;
+        slave.connect(url);
+        qDebug() << "slave connected to server " << slave.isConnected();
+
+        if (slave.isConnected()) {
+            dtkDistributedMessage msg(dtkDistributedMessage::STARTJOB,slave.jobId(),0);
+            msg.send(slave.socket());
+        }
 
         DTK_DISTRIBUTED_END_GLOBAL;
 
@@ -61,30 +71,15 @@ int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
 
-
-    QUrl url;
-    if (dtkApplicationArgumentsContain(qApp,"--server")) {
-        url=QUrl(dtkApplicationArgumentsValue(qApp,"--server"));
-    } else {
+    if (!dtkApplicationArgumentsContain(qApp,"--server")) {
         qCritical() << "no server set! use --server <url> " ;
         return 1;
     }
 
-    dtkDistributedSlave slave;
-    slave.connect(url);
-
-    std::cout << QString("DTK_JOBID="+slave.jobId()).toStdString() << std::endl << std::flush;
-
     // the server waits for the jobid in stdout
-    qDebug() << "slave connected to server " << slave.isConnected();
-
-    if (slave.isConnected()) {
-        dtkDistributedMessage msg(dtkDistributedMessage::STARTJOB,slave.jobId(),0);
-        msg.send(slave.socket());
-    }
+    std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
 
     // plugins
-
     dtkDistributedSettings settings;
     settings.beginGroup("communicator");
     qDebug() << "initialize plugin manager "<< settings.value("plugins").toString();

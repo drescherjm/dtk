@@ -53,15 +53,9 @@ ApplicationWindow {
                     model: servers
                     currentIndex: 0
                     Layout.fillWidth: true
-                    /* onAccepted: { */
-                    /*     console.log("accepted " + currentText +" " + Status.guess_type(currentText) + " "+ combotypes.find(Status.guess_type(currentText))) */
-                    /*     combotypes.currentIndex = combotypes.find(Status.guess_type(currentText)) */
-                    /*     /\* controller.deploy( Status.url(false),combotypes.currentText, tunnel.checked, serverPath.text); *\/ */
-                    /*     /\* Status.show() *\/ */
-                    /* } */
                     onCurrentIndexChanged: {
                         if (combotypes) {
-                            console.log("index changed " + currentText +" " + combotypes.find(Status.guess_type(currentText)))
+                            /* console.log("index changed " + currentText +" " + combotypes.find(Status.guess_type(currentText))) */
                             combotypes.currentIndex = combotypes.find(Status.guess_type(currentText))
                         }
                     }
@@ -87,9 +81,19 @@ ApplicationWindow {
                 TextEdit {
                     id: serverPath
                     Layout.fillWidth: true
-                    /* width: 72 */
-                    /* autoScroll: true */
                     text: "/home/nniclaus/git/dtk-github/build/bin/dtkDistributedServer"
+                }
+            }
+            RowLayout {
+                id: apppathrow
+                Label {
+                    id: apppathLabel
+                    text: "application path:"
+                }
+                TextEdit {
+                    id: slavePath
+                    Layout.fillWidth: true
+                    text: "dtkDistributedSlave"
                 }
             }
             RowLayout {

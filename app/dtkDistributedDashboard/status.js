@@ -7,6 +7,15 @@ function url(check_tunnel)
     }
 }
 
+function getJobIndex(jobid)
+{
+    for(var j = 0; j < myjobModel.count; j++) {
+        if (myjobModel.get(j).id == jobid) {
+            return j
+        }
+    }
+}
+
 function policy()
 {
     return comboPolicies.currentText
@@ -44,11 +53,11 @@ function submit(nodes, cores, walltime)
             {
                 var jobid = xhr.getResponseHeader("X-DTK-JobId");
                 console.debug("jobid is " + jobid )
-                jobModel.append({"id": jobid,
-                                 "user": "me",
-                                 "nodes" : NaN,
-                                 "cores" : NaN,
-                                 "queue" : "unknown"})
+                // jobModel.append({"id": jobid,
+                //                  "user": "me",
+                //                  "nodes" : NaN,
+                //                  "cores" : NaN,
+                //                  "queue" : "unknown"})
 
             } else {
                 console.debug("bad status " + xhr.status )

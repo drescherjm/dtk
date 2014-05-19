@@ -43,13 +43,13 @@ public:
         QTime time;
         qDebug() << wid();
         qDebug() << wct();
+        dtkDistributedSlave slave;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
 
         QUrl url(dtkApplicationArgumentsValue(qApp,"--server"));
 
         qDebug() << "Running on master, connect to remote server" ;
-        dtkDistributedSlave slave;
         slave.connect(url);
         qDebug() << "slave connected to server " << slave.isConnected();
 
@@ -63,6 +63,13 @@ public:
         qDebug() << "I'm the simple slave " << wid() ;
 
         QThread::sleep(60);
+
+        DTK_DISTRIBUTED_BEGIN_GLOBAL;
+        if (slave.isConnected()) {
+           dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
+           msg.send(slave.socket());
+        }
+        DTK_DISTRIBUTED_END_GLOBAL;
 
     }
 };

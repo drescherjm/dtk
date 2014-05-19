@@ -395,7 +395,7 @@ void dtkDistributedController::read(void)
         dtkDebug() << "job finished: " << msg->jobid();
         d->queued_jobs.remove(msg->jobid());
         d->running_jobs.remove(msg->jobid());
-        emit updated();
+        emit jobEnded(msg->jobid());
         break;
     case dtkDistributedMessage::DATA:
         result = msg->content();

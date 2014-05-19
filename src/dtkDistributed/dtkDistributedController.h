@@ -48,10 +48,13 @@ signals:
     void    connected(const QUrl& server);
     void disconnected(const QUrl& server);
 
+signals:
     void updated(void);
     void updated(const QUrl& server);
 
+signals:
     void dataPosted(const QByteArray& data);
+    void jobEnded(QString jobid);
     void jobStarted(QString jobid);
     void jobQueued(QString jobid);
 

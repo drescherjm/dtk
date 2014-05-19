@@ -1,13 +1,15 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 1.1
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.0
 
 import dtkDistributed 1.0
-import qml.jbQuick.Charts 1.0
 
 import "status.js" as Status
+
+import jbQuick.Charts 1.0
+
 
 ApplicationWindow {
     title: "DTK Distributed Dashboard"
@@ -208,8 +210,6 @@ ApplicationWindow {
                 id: jobs
                 Item {
                     id: root
-                    /* width: 600 */
-                    /* height: 300 */
                     anchors.fill: parent
                     /* anchors.margins: Qt.platform.os === "osx" ? 12 : 6 */
                     ListModel {
@@ -228,11 +228,6 @@ ApplicationWindow {
                             movable: false
                         }
                         TableViewColumn {
-                            role: "user"
-                            title: "User"
-                            width: 100
-                        }
-                        TableViewColumn {
                             role: "nodes"
                             title: "Nodes"
                             width: 52
@@ -249,9 +244,56 @@ ApplicationWindow {
                             width: 100
                             visible: true
                         }
+                        TableViewColumn {
+                            role: "user"
+                            title: "User"
+                            width: 100
+                        }
                     }
                 }
             }
+            RowLayout {
+                id: myjobs
+                Item {
+                    id: jobsitem
+                    anchors.fill: parent
+                    /* anchors.margins: Qt.platform.os === "osx" ? 12 : 6 */
+                    ListModel {
+                        id: myjobModel
+                    }
+
+                    TableView{
+                        model: myjobModel
+                        anchors.fill: parent
+
+                        TableViewColumn {
+                            role: "id"
+                            title: "jobid"
+                            width: 72
+                            resizable: false
+                            movable: false
+                        }
+                        TableViewColumn {
+                            role: "nodes"
+                            title: "Nodes"
+                            width: 52
+                        }
+                        TableViewColumn {
+                            role: "cores"
+                            title: "Cores"
+                            width: 52
+                            visible: true
+                        }
+                        TableViewColumn {
+                            role: "state"
+                            title: "State"
+                            width: 72
+                            visible: true
+                        }
+                    }
+                }
+            }
+
         }
         RowLayout {
             id: chartrow
@@ -280,11 +322,18 @@ ApplicationWindow {
 
     DistributedController {
         id: controller
-        onJobStarted: {
-            console.debug("a job is started");
-        }
+        property var jobs: { }
         onJobQueued: {
             console.debug("a job is queued");
+            myjobModel.append({"id": jobid,"nodes" : NaN, "cores" : NaN, "state": "Queued"})
+        }
+        onJobStarted: {
+            console.debug("a job is started");
+            myjobModel.setProperty(Status.getJobIndex(jobid), "state", "Running")
+        }
+        onJobEnded: {
+            console.debug("a job has ended");
+            myjobModel.remove(Status.getJobIndex(jobid))
         }
     }
     DistributedPolicy {

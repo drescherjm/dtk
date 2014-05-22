@@ -152,21 +152,24 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         dtkDebug() << "looking for setup in " << server;
 
         QVariantMap res = json["resources"].toMap();
-        int procs;
+        int nodes;
+        int threads;
         if (res["nodes"].toInt() == 0) {
             // no nodes, only cores; TODO
         } else if (res["cores"].toInt() == 0) {
             // no cores, only nodes; TODO
         } else {
-            procs = res["nodes"].toInt()*res["cores"].toInt();
+            nodes = res["nodes"].toInt();
+            threads = res["cores"].toInt();
         }
 
         if (settings.contains(server +"_server_mpirun_path")) {
             dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
             qsub = settings.value(server +"_server_mpirun_path").toString();
 
-            if (procs > 1)
-                args += "-np "+ QString::number(procs) + " ";
+            if (nodes > 1)
+                args += "-np " + QString::number(nodes*threads) + " ";
+
 
             if (settings.contains(server +"_server_mpirun_args")) {
                 args += settings.value(server +"_server_mpirun_args").toString();
@@ -184,8 +187,10 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
 
             args += app.join(" ");
 
-            if (procs > 1)
-                args += " -np "+ QString::number(procs);
+            if (nodes > 1)
+                args += " -np "+ QString::number(nodes)+ " ";
+            if (threads > 1)
+                args += " -nt "+ res["cores"].toString();
         }
 
     } else {

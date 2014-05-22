@@ -117,6 +117,18 @@ QStringList dtkDistributedPolicy::hosts(void)
             d->hosts <<  "localhost";
             d->nthreads = 1;
         }
+        if (dtkApplicationArgumentsContain(qApp,"-nt")) { // number of threads
+                if (d->type == "mpi") {
+                    int nt = dtkApplicationArgumentsValue(qApp,"-nt").toInt();
+                    int total = d->hosts.count() * nt;
+                    for (int i = d->hosts.count(); i <  total; i++) {
+                        d->hosts <<  "localhost";
+                    }
+                } else {
+                    d->nthreads = dtkApplicationArgumentsValue(qApp,"-nt").toInt();
+                }
+        }
+        qDebug() << "policy updated, hosts:" << d->hosts.count() << "threads:" <<  d->nthreads;
     }
     return d->hosts;
 }

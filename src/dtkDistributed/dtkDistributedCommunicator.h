@@ -47,6 +47,19 @@ public:
         dtkDistributedCommunicatorDouble
     };
 
+    enum OperationType {
+        dtkDistributedCommunicatorMin,
+        dtkDistributedCommunicatorMax,
+        dtkDistributedCommunicatorSum,
+        dtkDistributedCommunicatorProduct,
+        dtkDistributedCommunicatorBitwiseAnd,
+        dtkDistributedCommunicatorBitwiseOr,
+        dtkDistributedCommunicatorBitwiseXor,
+        dtkDistributedCommunicatorLogicalAnd,
+        dtkDistributedCommunicatorLogicalOr,
+        dtkDistributedCommunicatorLogicalXor
+    };
+
 public:
     dtkDistributedCommunicator(const dtkDistributedCommunicator& other);
     dtkDistributedCommunicator& operator = (const dtkDistributedCommunicator& other);
@@ -87,6 +100,14 @@ public:
     virtual void receive(QByteArray &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
     virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
     /* virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0; */
+
+public:
+    virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(float  *send, float  *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
 
 public:
     virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker);

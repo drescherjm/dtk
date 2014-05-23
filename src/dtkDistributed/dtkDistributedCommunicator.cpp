@@ -170,3 +170,33 @@ void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
     QDataStream stream(&bytes,QIODevice::ReadOnly);
     stream >> v;
 }
+
+void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
+{
+    qCritical() << "Default operator for reduce, not implemented";
+}
+
+void dtkDistributedCommunicator::reduce(bool *send, bool *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+{
+    return this->reduce(send, recv, size, dtkDistributedCommunicatorBool, operationType, target, all);
+}
+
+void dtkDistributedCommunicator::reduce(char *send, char *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+{
+    return this->reduce(send, recv, size, dtkDistributedCommunicatorChar, operationType, target, all);
+}
+
+void dtkDistributedCommunicator::reduce(int *send, int *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+{
+    return this->reduce(send, recv, size, dtkDistributedCommunicatorInt, operationType, target, all);
+}
+
+void dtkDistributedCommunicator::reduce(float *send, float *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+{
+    return this->reduce(send, recv, size, dtkDistributedCommunicatorFloat, operationType, target, all);
+}
+
+void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+{
+    return this->reduce(send, recv, size, dtkDistributedCommunicatorDouble, operationType, target, all);
+}

@@ -48,6 +48,7 @@ public:
     };
 
     enum OperationType {
+        None,
         dtkDistributedCommunicatorMin,
         dtkDistributedCommunicatorMax,
         dtkDistributedCommunicatorSum,
@@ -106,6 +107,7 @@ public:
     virtual void reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
     virtual void reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
     virtual void reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
     virtual void reduce(float  *send, float  *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
     virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
 

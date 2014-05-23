@@ -24,6 +24,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorStatus.h
   dtkDistributedCommunicator.h
   dtkDistributedController.h
+  dtkDistributedItem.h
   dtkDistributedLocalMessage.h
   dtkDistributedMapper
   dtkDistributedMapper.h

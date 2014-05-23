@@ -191,6 +191,11 @@ void dtkDistributedCommunicator::reduce(int *send, int *recv, qint64 size, Opera
     return this->reduce(send, recv, size, dtkDistributedCommunicatorInt, operationType, target, all);
 }
 
+void dtkDistributedCommunicator::reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+{
+    return this->reduce(send, recv, size, dtkDistributedCommunicatorInt64, operationType, target, all);
+}
+
 void dtkDistributedCommunicator::reduce(float *send, float *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
     return this->reduce(send, recv, size, dtkDistributedCommunicatorFloat, operationType, target, all);

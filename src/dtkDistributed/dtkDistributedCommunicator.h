@@ -76,6 +76,8 @@ public:
     virtual void send(const QVariant& v, qint32 target, qint32 tag);
 
 public:
+    virtual void broadcast(qlonglong *data, qint64 size, qint32 source) = 0;
+    virtual void broadcast(double    *data, qint64 size, qint32 source) = 0;
     virtual void broadcast(QByteArray& array, qint32 source) = 0;
 
 public:

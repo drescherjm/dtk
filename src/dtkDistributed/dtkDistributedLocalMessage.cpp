@@ -27,7 +27,7 @@ public:
     bool   wait_for_data;
 
 public:
-    QByteArray data;
+    QVariant data;
 };
 
 
@@ -38,11 +38,11 @@ dtkDistributedLocalMessage::dtkDistributedLocalMessage(): d(new dtkDistributedLo
     d->wait_for_data = false;
 }
 
-dtkDistributedLocalMessage::dtkDistributedLocalMessage(QByteArray &data, qint32 source, qint32 tag): d(new dtkDistributedLocalMessagePrivate)
+dtkDistributedLocalMessage::dtkDistributedLocalMessage(QVariant &v, qint32 source, qint32 tag): d(new dtkDistributedLocalMessagePrivate)
 {
     d->tag    = tag;
     d->source = source;
-    d->data   = data;
+    d->data   = v;
     d->wait_for_data = false;
 }
 
@@ -77,7 +77,7 @@ void dtkDistributedLocalMessage::wake(void)
     d->wait.wakeOne();
 }
 
-QByteArray &dtkDistributedLocalMessage::data(void)
+QVariant &dtkDistributedLocalMessage::data(void)
 {
     return d->data;
 }
@@ -97,7 +97,7 @@ void dtkDistributedLocalMessage::setWaitData(bool wait)
     d->wait_for_data = wait;
 }
 
-void dtkDistributedLocalMessage::setData(QByteArray &data)
+void dtkDistributedLocalMessage::setData(QVariant data)
 {
     d->data = data;
 }

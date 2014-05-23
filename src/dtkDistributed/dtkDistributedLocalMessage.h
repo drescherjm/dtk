@@ -23,22 +23,22 @@ class dtkDistributedLocalMessage
 {
 public:
     dtkDistributedLocalMessage(void);
-    dtkDistributedLocalMessage(QByteArray &data, qint32 source, qint32 tag);
+    dtkDistributedLocalMessage(QVariant &v, qint32 source, qint32 tag);
     virtual ~dtkDistributedLocalMessage(void);
 
 public:
     void        lock(void);
     void      unlock(void);
-    QByteArray& data(void);
     qint32       tag(void);
     void        wait(void);
     qint32    source(void);
     void        wake(void);
     bool wait_for_data(void);
+    QVariant& data(void);
 
 public:
     void setWaitData(bool wait_value);
-    void     setData(QByteArray &data);
+    void     setData(QVariant data);
     void      setTag(qint32 tag);
     void   setSource(qint32 source);
 

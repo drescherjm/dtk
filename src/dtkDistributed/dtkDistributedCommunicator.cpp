@@ -147,7 +147,7 @@ void dtkDistributedCommunicator::deallocate(qlonglong wid, const qlonglong& buff
 
 void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, dtkDistributedCommunicatorChar, target, tag);
+    return this->send(data, size, Char, target, tag);
 }
 
 void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 tag)
@@ -160,7 +160,7 @@ void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 t
 
 void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, dtkDistributedCommunicatorChar, source, tag);
+    return this->receive(data, size, Char, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
@@ -178,30 +178,30 @@ void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size,
 
 void dtkDistributedCommunicator::reduce(bool *send, bool *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
-    return this->reduce(send, recv, size, dtkDistributedCommunicatorBool, operationType, target, all);
+    return this->reduce(send, recv, size, Bool, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(char *send, char *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
-    return this->reduce(send, recv, size, dtkDistributedCommunicatorChar, operationType, target, all);
+    return this->reduce(send, recv, size, Char, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(int *send, int *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
-    return this->reduce(send, recv, size, dtkDistributedCommunicatorInt, operationType, target, all);
+    return this->reduce(send, recv, size, Int, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
-    return this->reduce(send, recv, size, dtkDistributedCommunicatorInt64, operationType, target, all);
+    return this->reduce(send, recv, size, Int64, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(float *send, float *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
-    return this->reduce(send, recv, size, dtkDistributedCommunicatorFloat, operationType, target, all);
+    return this->reduce(send, recv, size, Float, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all)
 {
-    return this->reduce(send, recv, size, dtkDistributedCommunicatorDouble, operationType, target, all);
+    return this->reduce(send, recv, size, Double, operationType, target, all);
 }

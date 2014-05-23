@@ -27,7 +27,7 @@ public:
 
 public:
     dtkDistributedItem& operator  = (const T& t) { op = dtkDistributedCommunicator::None;     data  = t; updated = true;  return *this; }
-    dtkDistributedItem& operator += (const T& t) { op = dtkDistributedCommunicator::dtkDistributedCommunicatorSum;      data += t; updated = false; return *this; }
+    dtkDistributedItem& operator += (const T& t) { op = dtkDistributedCommunicator::Sum;      data += t; updated = false; return *this; }
 
 public:
     T operator * (void) { this->update(); return data; }

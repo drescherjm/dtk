@@ -38,27 +38,27 @@ public:
     static const qint32 ANY_SOURCE = -1;
 
     enum DataType {
-        dtkDistributedCommunicatorBool,
-        dtkDistributedCommunicatorChar,
-        dtkDistributedCommunicatorInt,
-        dtkDistributedCommunicatorLong,
-        dtkDistributedCommunicatorInt64,
-        dtkDistributedCommunicatorFloat,
-        dtkDistributedCommunicatorDouble
+        Bool,
+        Char,
+        Int,
+        Long,
+        Int64,
+        Float,
+        Double
     };
 
     enum OperationType {
         None,
-        dtkDistributedCommunicatorMin,
-        dtkDistributedCommunicatorMax,
-        dtkDistributedCommunicatorSum,
-        dtkDistributedCommunicatorProduct,
-        dtkDistributedCommunicatorBitwiseAnd,
-        dtkDistributedCommunicatorBitwiseOr,
-        dtkDistributedCommunicatorBitwiseXor,
-        dtkDistributedCommunicatorLogicalAnd,
-        dtkDistributedCommunicatorLogicalOr,
-        dtkDistributedCommunicatorLogicalXor
+        Min,
+        Max,
+        Sum,
+        Product,
+        BitwiseAnd,
+        BitwiseOr,
+        BitwiseXor,
+        LogicalAnd,
+        LogicalOr,
+        LogicalXor
     };
 
 public:

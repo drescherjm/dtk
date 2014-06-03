@@ -21,8 +21,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArray.h
   dtkDistributedArray.tpp
   dtkDistributedCommunicator
-  dtkDistributedCommunicatorStatus.h
   dtkDistributedCommunicator.h
+  dtkDistributedCommunicatorStatus.h
+  dtkDistributedContainer.h
   dtkDistributedController.h
   dtkDistributedItem.h
   dtkDistributedLocalMessage.h

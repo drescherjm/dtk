@@ -10,21 +10,7 @@
 
 #pragma once
 
-#include "dtkDistributedMapper.h"
-#include "dtkDistributedWork.h"
-
-// /////////////////////////////////////////////////////////////////
-// dtkDistributedContainer
-// /////////////////////////////////////////////////////////////////
-
-class dtkDistributedContainer
-{
-public:
-    virtual ~dtkDistributedContainer(void) {}
-
-public:
-    virtual void setMode(const dtkDistributed::Mode& mode) = 0;
-};
+#include "dtkDistributedContainer.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedArray
@@ -37,8 +23,8 @@ public:
     class iterator;
 
 public:
-     inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWork *work);
-     inline  dtkDistributedArray(const QVector<T>& vector, dtkDistributedWork *work);
+     inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
+     inline  dtkDistributedArray(const QVector<T>& vector, dtkDistributedWorker *worker);
      inline ~dtkDistributedArray(void);
 
 #pragma mark -
@@ -253,17 +239,11 @@ public:
 
 private:
     qlonglong m_count;
-    qlonglong m_wid;
     qlonglong buffer_id;
     qlonglong buffer_count;
 
 private:
     T *buffer;
-
-private:
-    dtkDistributedMapper       *m_mapper;
-    dtkDistributedWorker       *m_worker;
-    dtkDistributedCommunicator *m_comm;
 };
 
 // ///////////////////////////////////////////////////////////////////

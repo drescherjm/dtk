@@ -222,7 +222,7 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
 
         // need to wait a bit when ssh port forwarding is used
         if (ssh_tunnel)
-            sleep(1);
+            QThread::sleep(1);
 
         dtkDebug() << "ssh" << args;
 

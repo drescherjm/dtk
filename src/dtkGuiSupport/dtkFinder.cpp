@@ -21,7 +21,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <qt_windows.h>
 #endif
 
@@ -77,7 +77,7 @@ dtkFinderToolBar::dtkFinderToolBar(QWidget *parent) : QToolBar(parent), d(new dt
     d->showHiddenFilesButton->setIconSize(QSize(16, 16));
     d->showHiddenFilesButton->setToolTip(tr("Show/Hide hidden files"));
     //By default the showHiddenFilesButton is enabled in MacOS
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->showHiddenFilesButton->setChecked(Qt::Checked);
 #endif
 
@@ -235,7 +235,7 @@ void dtkFinderSideView::populate(void)
     item1->setData(0, Qt::ForegroundRole, groupBrush);
 
 	QFileInfoList driveList;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	QDir macDir("/Volumes");
 	driveList = macDir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot);
 #else
@@ -445,7 +445,7 @@ void dtkFinderSideView::dropEvent(QDropEvent *event)
 
 QString dtkFinderSideView::driveLabel(QString drive)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 	drive.replace("/", "\\");
 	TCHAR  szVolumeName[256];
 	TCHAR  szFileSystemName[256];
@@ -469,7 +469,7 @@ QString dtkFinderSideView::driveLabel(QString drive)
 	return vName;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 	return QFileInfo(drive).baseName();
 #endif
 
@@ -1080,7 +1080,7 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->model->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
     d->hiddenFilesShown = false;
     //By default the showHiddenFilesButton is enabled in MacOS
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->hiddenFilesShown = true;
     d->model->setFilter(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
 #endif
@@ -1105,7 +1105,7 @@ dtkFinder::dtkFinder(QWidget *parent) : QWidget(parent), d(new dtkFinderPrivate)
     d->showHideAction = new QAction(tr("Show hidden files"), this);
 
     //By default the showHiddenFilesButton is enabled in MacOS
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     d->showHideAction->setText(tr("Hide hidden files"));
 #endif
     d->showHideAction->setIconVisibleInMenu(true);

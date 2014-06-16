@@ -149,7 +149,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
         qsub += " "+json["script"].toString();
     } else if (json.contains("application")) {
         QString server = QHostInfo::localHostName ();
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
         server.replace(".", "_");
 #endif
         if (settings.contains(server +"_server_mpirun_path")) {

@@ -32,7 +32,7 @@ QStringList dtkPluginManagerPathSplitter(QString path)
 {
     QString paths = path;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QStringList pathList;
     QRegExp pathFilterRx("(([a-zA-Z]:|)[^:]+)");
 
@@ -215,7 +215,7 @@ void dtkPluginManager::readSettings(void)
     QSettings settings("inria", "dtk");
     QString defaultPath;
     QDir plugins_dir;
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     plugins_dir = qApp->applicationDirPath() + "/../PlugIns";
 #else
     plugins_dir = qApp->applicationDirPath() + "/../plugins";

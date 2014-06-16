@@ -55,7 +55,7 @@ public:
 public:
     void setCurrentFile(const QString& file);
 
-#if defined(Q_WS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
+#if defined(Q_OS_MAC) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     void enableFullScreenSupport(void);
     void showFullScreen(void);
 #endif

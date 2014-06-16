@@ -28,7 +28,7 @@
 #include "dtkMath.h"
 #include "dtkVector3D.h"
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
 // on vs 9 abs() does not work with long long int or __uint64
 #define abs qAbs
 #endif

@@ -52,7 +52,7 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, dtkComposerSceneNode *pare
     d->ellipse->setRect(0, 0, 10, 10);
 
     d->label = new QGraphicsTextItem(this);
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     d->label->setFont(QFont("Lucida Grande", 11));
 #else
     d->label->setFont(QFont("Lucida Grande", 9));
@@ -75,7 +75,7 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, const QString& label, dtkC
     d->ellipse->setRect(0, 0, 10, 10);
 
     d->label = new QGraphicsTextItem(this);
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     d->label->setFont(QFont("Lucida Grande", 11));
 #else
     d->label->setFont(QFont("Lucida Grande", 9));

@@ -374,7 +374,7 @@ bool dtkDistributedController::deploy(const QUrl& server)
         QString defaultPath;
 
         QString key;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
         key = server.host().replace(".", "_");
 #else
         key = server.host();
@@ -480,7 +480,7 @@ bool dtkDistributedController::connect(const QUrl& server)
         dtkDistributedSocket *socket = new dtkDistributedSocket(this);
 
         QString key;
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
         key = server.host().replace(".", "_");
 #else
         key = server.host();

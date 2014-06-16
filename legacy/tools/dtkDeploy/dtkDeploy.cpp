@@ -559,15 +559,15 @@ void deployDtkPlugins(const QString &appBundlePath, DeploymentInfo deploymentInf
 
     const QString pluginDestinationPath = appBundlePath + "/" + "Contents/PlugIns";
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.dylib");
 #endif
 
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
     QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.dll");
 #endif
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_X11)
     QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.so");
 #endif
 

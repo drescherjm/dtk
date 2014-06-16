@@ -24,7 +24,7 @@
 
 #include <QtCore/QtGlobal>
 
-#if !defined(Q_WS_WIN)
+#if !defined(Q_OS_WIN)
 #include <inttypes.h>
 #else
 #define int32_t qint32

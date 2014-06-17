@@ -50,8 +50,8 @@ public:
     dtkDistributedCommunicator *communicator(void) { return m_comm; }
 
 protected:
-    qlonglong wid(void) { return m_worker->wid(); }
-    qlonglong cid(void) { return m_worker->containerId(this); }
+    qlonglong wid(void) const { return m_worker->wid(); }
+    qlonglong cid(void) const { return m_worker->containerId(this); }
 
 protected:
     dtkDistributedWorker       *m_worker;

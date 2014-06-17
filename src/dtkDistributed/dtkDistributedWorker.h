@@ -58,7 +58,7 @@ public:
 
     void unrecord(dtkDistributedContainer *container);
 
-    qlonglong containerId(dtkDistributedContainer *container);
+    qlonglong containerId(const dtkDistributedContainer *container);
 
 public:
     bool master(void);

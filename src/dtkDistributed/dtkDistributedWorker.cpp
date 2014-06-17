@@ -133,9 +133,9 @@ void dtkDistributedWorker::unrecord(dtkDistributedContainer *container)
     d->containers.remove(container);
 }
 
-qlonglong dtkDistributedWorker::containerId(dtkDistributedContainer *container)
+qlonglong dtkDistributedWorker::containerId(const dtkDistributedContainer *container)
 {
-    return d->containers.value(container);
+    return d->containers.value(const_cast<dtkDistributedContainer *>(container));
 }
 
 void dtkDistributedWorker::setWork(dtkDistributedWork *work)

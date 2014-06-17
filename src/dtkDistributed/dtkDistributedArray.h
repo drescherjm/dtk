@@ -1,12 +1,16 @@
-/* dtkDistributedArray.h ---
- *
- * Author: Thibaud Kloczko
- * Created: Fri Mar  8 15:06:15 2013 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- *
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -23,9 +27,9 @@ public:
     class iterator;
 
 public:
-     inline  dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
-     inline  dtkDistributedArray(const QVector<T>& vector, dtkDistributedWorker *worker);
-     inline ~dtkDistributedArray(void);
+      dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
+      dtkDistributedArray(const QVector<T>& vector, dtkDistributedWorker *worker);
+     ~dtkDistributedArray(void);
 
 #pragma mark -
 #pragma mark Handler nested class
@@ -43,16 +47,16 @@ public:
          T *buffer;
 
      public:
-         inline          handler(dtkDistributedArray<T>& array) : buffer(0), buffer_count(0) {;}
-         inline virtual ~handler(void) {}
+                  handler(dtkDistributedArray<T>& array) : buffer(0), buffer_count(0) {;}
+         virtual ~handler(void) {}
 
      public:
-         inline virtual bool      empty(void) const { return !buffer_count; }
-         inline virtual qlonglong count(void) const { return  buffer_count; }
-         inline virtual void      setAt(const qlonglong& index, const T& value) { buffer[index] = value; }
-         inline virtual T            at(const qlonglong& index) const { return buffer[index]; }
-         inline virtual T         first(void) const { return buffer[0]; }
-         inline virtual T          last(void) const { return buffer[buffer_count-1]; }
+         virtual bool      empty(void) const { return !buffer_count; }
+         virtual qlonglong count(void) const { return  buffer_count; }
+         virtual void      setAt(const qlonglong& index, const T& value) { buffer[index] = value; }
+         virtual T            at(const qlonglong& index) const { return buffer[index]; }
+         virtual T         first(void) const { return buffer[0]; }
+         virtual T          last(void) const { return buffer[buffer_count-1]; }
      };
      friend class handler;
 
@@ -75,12 +79,12 @@ private:
          ~global_handler(void) {;}
 
      public:
-         inline bool      empty(void) const { return !m_count; }
-         inline qlonglong count(void) const { return  m_count; }
-         inline void      setAt(const qlonglong& index, const T& value);
-         inline T    at(const qlonglong& index) const;
-         inline T first(void) const { return this->at(0); }
-         inline T  last(void) const { return this->at(m_count-1); }
+         bool      empty(void) const { return !m_count; }
+         qlonglong count(void) const { return  m_count; }
+         void      setAt(const qlonglong& index, const T& value);
+         T    at(const qlonglong& index) const;
+         T first(void) const { return this->at(0); }
+         T  last(void) const { return this->at(m_count-1); }
      };
      friend class global_handler;
 
@@ -95,27 +99,27 @@ public:
         qlonglong id;
 
     public:
-        inline  item(void) : h(0), id(0) {;}
-        inline  item(dtkDistributedArray<T>::handler *handler, const qlonglong& index) : h(handler), id(index) {;}
-        inline  item(const item& o) : h(o.h), id(o.id) {;}
-        inline ~item(void) {;}
+         item(void) : h(0), id(0) {;}
+         item(dtkDistributedArray<T>::handler *handler, const qlonglong& index) : h(handler), id(index) {;}
+         item(const item& o) : h(o.h), id(o.id) {;}
+        ~item(void) {;}
 
     public:
-        inline item& operator = (const item& o) { h = o.h; id = o.id; return *this; }  
+        item& operator = (const item& o) { h = o.h; id = o.id; return *this; }  
 
     public:
-        inline T operator * (void) const { return h->at(id); }
-        inline item& operator =  (const T& value) { h->setAt(id, value);             return *this; }
-        inline item& operator += (const T& value) { h->setAt(id, h->at(id) + value); return *this; }
-        inline item& operator -= (const T& value) { h->setAt(id, h->at(id) - value); return *this; }
-        inline item& operator *= (const T& value) { h->setAt(id, h->at(id) * value); return *this; }
-        inline item& operator /= (const T& value) { h->setAt(id, h->at(id) / value); return *this; }
-        inline bool  operator == (const item &o) const { return id == o.id; }
-        inline bool  operator != (const item &o) const { return id != o.id; }
-        inline bool  operator <  (const item &o) const { return id  < o.id; }
-        inline bool  operator >  (const item &o) const { return id  > o.id; }
-        inline bool  operator <= (const item &o) const { return id <= o.id; }
-        inline bool  operator >= (const item &o) const { return id >= o.id; }
+        T operator * (void) const { return h->at(id); }
+        item& operator =  (const T& value) { h->setAt(id, value);             return *this; }
+        item& operator += (const T& value) { h->setAt(id, h->at(id) + value); return *this; }
+        item& operator -= (const T& value) { h->setAt(id, h->at(id) - value); return *this; }
+        item& operator *= (const T& value) { h->setAt(id, h->at(id) * value); return *this; }
+        item& operator /= (const T& value) { h->setAt(id, h->at(id) / value); return *this; }
+        bool  operator == (const item &o) const { return id == o.id; }
+        bool  operator != (const item &o) const { return id != o.id; }
+        bool  operator <  (const item &o) const { return id  < o.id; }
+        bool  operator >  (const item &o) const { return id  > o.id; }
+        bool  operator <= (const item &o) const { return id <= o.id; }
+        bool  operator >= (const item &o) const { return id >= o.id; }
 
     private:
         item& operator ++ (void) { ++id; return *this; }
@@ -134,32 +138,32 @@ public:
         item it;
 
     public:
-        inline  iterator(void) : it(item()) {;}
-        inline  iterator(dtkDistributedArray<T>::handler *handler, const qlonglong& index = 0) : it(handler, index) {;}
-        inline  iterator(const iterator& o) : it(o.it) {;}
-        inline ~iterator(void) {;}
+         iterator(void) : it(item()) {;}
+         iterator(dtkDistributedArray<T>::handler *handler, const qlonglong& index = 0) : it(handler, index) {;}
+         iterator(const iterator& o) : it(o.it) {;}
+        ~iterator(void) {;}
 
     public:
-        inline iterator& operator = (const iterator& o) { it = o.it; }
+        iterator& operator = (const iterator& o) { it = o.it; }
 
     public:
-        inline item operator *  (void)        const { return it; }
-        inline item operator [] (qlonglong j) const { return item(it.h, it.id + j); }
-        inline bool operator == (const iterator &o) const { return it == o.it; }
-        inline bool operator != (const iterator &o) const { return it != o.it; }
-        inline bool operator <  (const iterator &o) const { return it  < o.it; }
-        inline bool operator >  (const iterator &o) const { return it  > o.it; }
-        inline bool operator <= (const iterator &o) const { return it <= o.it; }
-        inline bool operator >= (const iterator &o) const { return it >= o.it; }
-        inline iterator& operator ++ (void) { ++it; return *this; }
-        inline iterator  operator ++ (int)  { ++it; return iterator(it.h, it.id-1); }
-        inline iterator& operator -- (void) { --it; return *this; }
-        inline iterator  operator -- (int)  { --it; return iterator(it.h, it.id+1); }
-        inline iterator& operator += (qlonglong j) { it.id += j; return *this; }
-        inline iterator& operator -= (qlonglong j) { it.id -= j; return *this; }
-        inline iterator  operator +  (qlonglong j) const { return iterator(it.h, it.id + j); }
-        inline iterator  operator -  (qlonglong j) const { return iterator(it.h, it.id - j); }
-        inline qlonglong operator -  (const iterator& o) const { return it.id - o.it.id; }
+        item operator *  (void)        const { return it; }
+        item operator [] (qlonglong j) const { return item(it.h, it.id + j); }
+        bool operator == (const iterator &o) const { return it == o.it; }
+        bool operator != (const iterator &o) const { return it != o.it; }
+        bool operator <  (const iterator &o) const { return it  < o.it; }
+        bool operator >  (const iterator &o) const { return it  > o.it; }
+        bool operator <= (const iterator &o) const { return it <= o.it; }
+        bool operator >= (const iterator &o) const { return it >= o.it; }
+        iterator& operator ++ (void) { ++it; return *this; }
+        iterator  operator ++ (int)  { ++it; return iterator(it.h, it.id-1); }
+        iterator& operator -- (void) { --it; return *this; }
+        iterator  operator -- (int)  { --it; return iterator(it.h, it.id+1); }
+        iterator& operator += (qlonglong j) { it.id += j; return *this; }
+        iterator& operator -= (qlonglong j) { it.id -= j; return *this; }
+        iterator  operator +  (qlonglong j) const { return iterator(it.h, it.id + j); }
+        iterator  operator -  (qlonglong j) const { return iterator(it.h, it.id - j); }
+        qlonglong operator -  (const iterator& o) const { return it.id - o.it.id; }
     };
     friend class iterator;
 
@@ -173,33 +177,33 @@ public:
         qlonglong id;
 
     public:
-                 inline const_iterator(void) : h(0), id(0) {;}
-                 inline const_iterator(const dtkDistributedArray<T>::handler *handler, const qlonglong& index = 0) : h(handler), id(index) {;}
-                 inline const_iterator(const const_iterator& o) : h(o.h), id(o.id) {;}
-        explicit inline const_iterator(const iterator& o) : h(o.h), id(o.id) {;}
-        inline         ~const_iterator(void) {;}
+                  const_iterator(void) : h(0), id(0) {;}
+                  const_iterator(const dtkDistributedArray<T>::handler *handler, const qlonglong& index = 0) : h(handler), id(index) {;}
+                  const_iterator(const const_iterator& o) : h(o.h), id(o.id) {;}
+        explicit  const_iterator(const iterator& o) : h(o.h), id(o.id) {;}
+                 ~const_iterator(void) {;}
 
     public:
-        inline const_iterator& operator = (const const_iterator& o) { h = o.h; id = o.id; }
+        const_iterator& operator = (const const_iterator& o) { h = o.h; id = o.id; }
 
     public:
-        inline T operator *  (void)        const { return h->at(id); }
-        inline T operator [] (qlonglong j) const { return h->at(id + j); }
-        inline bool operator == (const const_iterator &o) const { return id == o.id; }
-        inline bool operator != (const const_iterator &o) const { return id != o.id; }
-        inline bool operator <  (const const_iterator &o) const { return id  < o.id; }
-        inline bool operator >  (const const_iterator &o) const { return id  > o.id; }
-        inline bool operator <= (const const_iterator &o) const { return id <= o.id; }
-        inline bool operator >= (const const_iterator &o) const { return id >= o.id; }
-        inline const_iterator& operator ++ (void) { ++id; return *this; }
-        inline const_iterator  operator ++ (int)  { ++id; return const_iterator(h, id-1); }
-        inline const_iterator& operator -- (void) { --id; return *this; }
-        inline const_iterator  operator -- (int)  { --id; return const_iterator(h, id+1); }
-        inline const_iterator& operator += (qlonglong j) { id += j; return *this; }
-        inline const_iterator& operator -= (qlonglong j) { id -= j; return *this; }
-        inline const_iterator  operator +  (qlonglong j) const { return const_iterator(h, id + j); }
-        inline const_iterator  operator -  (qlonglong j) const { return const_iterator(h, id - j); }
-        inline qlonglong       operator -  (const const_iterator& o) const { return id - o.id; }
+        T operator *  (void)        const { return h->at(id); }
+        T operator [] (qlonglong j) const { return h->at(id + j); }
+        bool operator == (const const_iterator &o) const { return id == o.id; }
+        bool operator != (const const_iterator &o) const { return id != o.id; }
+        bool operator <  (const const_iterator &o) const { return id  < o.id; }
+        bool operator >  (const const_iterator &o) const { return id  > o.id; }
+        bool operator <= (const const_iterator &o) const { return id <= o.id; }
+        bool operator >= (const const_iterator &o) const { return id >= o.id; }
+        const_iterator& operator ++ (void) { ++id; return *this; }
+        const_iterator  operator ++ (int)  { ++id; return const_iterator(h, id-1); }
+        const_iterator& operator -- (void) { --id; return *this; }
+        const_iterator  operator -- (int)  { --id; return const_iterator(h, id+1); }
+        const_iterator& operator += (qlonglong j) { id += j; return *this; }
+        const_iterator& operator -= (qlonglong j) { id -= j; return *this; }
+        const_iterator  operator +  (qlonglong j) const { return const_iterator(h, id + j); }
+        const_iterator  operator -  (qlonglong j) const { return const_iterator(h, id - j); }
+        qlonglong       operator -  (const const_iterator& o) const { return id - o.id; }
     };
     friend class const_iterator;
 
@@ -207,30 +211,30 @@ private:
     void initialize(void);
 
 public:
-    inline void setMode(const dtkDistributed::Mode& mode);
+    void setMode(const dtkDistributed::Mode& mode);
     
 public:
-    inline bool        empty(void) const { return m_handler->empty(); }
-    inline qlonglong   count(void) const { return m_handler->count(); }
-    inline void        setAt(const qlonglong& index, const T& value) { m_handler->setAt(index, value); }
-    inline T              at(const qlonglong& index) const { return m_handler->at(index); }
-    inline T           first(void) const { return m_handler->first(); }
-    inline T            last(void) const { return m_handler->last();  }
-    inline item       itemAt(const qlonglong& index) { return item(m_handler, index); } 
-    inline item operator [] (const qlonglong& index) { return item(m_handler, index); }
+    bool        empty(void) const { return m_handler->empty(); }
+    qlonglong   count(void) const { return m_handler->count(); }
+    void        setAt(const qlonglong& index, const T& value) { m_handler->setAt(index, value); }
+    T              at(const qlonglong& index) const { return m_handler->at(index); }
+    T           first(void) const { return m_handler->first(); }
+    T            last(void) const { return m_handler->last();  }
+    item       itemAt(const qlonglong& index) { return item(m_handler, index); } 
+    item operator [] (const qlonglong& index) { return item(m_handler, index); }
 
 public:
-    inline       iterator      begin(void)       { return       iterator(m_handler, 0); }
-    inline const_iterator      begin(void) const { return const_iterator(m_handler, 0); }
-    inline const_iterator     cbegin(void) const { return const_iterator(m_handler, 0); }
-    inline const_iterator constBegin(void) const { return const_iterator(m_handler, 0); }
-    inline       iterator        end(void)       { return       iterator(m_handler, this->count()); }
-    inline const_iterator        end(void) const { return const_iterator(m_handler, this->count()); }
-    inline const_iterator       cend(void) const { return const_iterator(m_handler, this->count()); }
-    inline const_iterator   constEnd(void) const { return const_iterator(m_handler, this->count()); }
+          iterator      begin(void)       { return       iterator(m_handler, 0); }
+    const_iterator      begin(void) const { return const_iterator(m_handler, 0); }
+    const_iterator     cbegin(void) const { return const_iterator(m_handler, 0); }
+    const_iterator constBegin(void) const { return const_iterator(m_handler, 0); }
+          iterator        end(void)       { return       iterator(m_handler, this->count()); }
+    const_iterator        end(void) const { return const_iterator(m_handler, this->count()); }
+    const_iterator       cend(void) const { return const_iterator(m_handler, this->count()); }
+    const_iterator   constEnd(void) const { return const_iterator(m_handler, this->count()); }
 
 public:
-    inline qlonglong localToGlobal(const qlonglong& index);
+    qlonglong localToGlobal(const qlonglong& index);
 
 public:
     handler       *m_handler;
@@ -249,3 +253,6 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkDistributedArray.tpp"
+
+// 
+// dtkDistributedArray.h ends here

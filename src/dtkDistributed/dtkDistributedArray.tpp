@@ -1,16 +1,16 @@
-/* dtkDistributedArray.tpp --- 
- * 
- * Author: Thibaud Kloczko
- * Created: 2013 Mon Feb 18 08:30:17 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
@@ -114,3 +114,5 @@ template<typename T> inline T dtkDistributedArray<T>::global_handler::at(const q
     }
 }
 
+// 
+// dtkDistributedArray.tpp ends here

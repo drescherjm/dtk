@@ -27,6 +27,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedController.h
   dtkDistributedGraph
   dtkDistributedGraph.h
+  dtkDistributedGraph.tpp
   dtkDistributedItem.h
   dtkDistributedLocalMessage.h
   dtkDistributedMapper

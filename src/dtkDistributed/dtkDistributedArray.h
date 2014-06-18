@@ -237,6 +237,10 @@ public:
     qlonglong localToGlobal(const qlonglong& index);
 
 public:
+    void setAtGlobal(const qlonglong& index, const T& value) { m_global_handler.setAt(index, value); }
+    T       atGlobal(const qlonglong& index) const { return m_global_handler.at(index); }
+
+public:
     handler       *m_handler;
     handler        m_local_handler;
     global_handler m_global_handler;

@@ -17,87 +17,68 @@
 #include "dtkDistributedContainer.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkDistributedGraph
+// dtkDistributedGraph declaration
 // /////////////////////////////////////////////////////////////////
 
 class dtkDistributedGraph : public dtkDistributedContainer
 {
 public:
-     dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker);
-    ~dtkDistributedGraph(void) {}
+    typedef QVarLengthArray<qlonglong, 32> EdgeList;
+    typedef QMap<qlonglong, EdgeList>      EdgeMap;
+
+public:
+      dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker);
+     ~dtkDistributedGraph(void);
 
 private:
     void initialize(void);
 
 public:
-    bool empty(void) const { return !m_vertex_count; }
+    bool empty(void) const;
 
-    qlonglong vertexCount(void) const { return m_vertex_count; }
-    qlonglong   edgeCount(void) const { return m_edge_count; }
+    qlonglong vertexCount(void) const;
+    qlonglong   edgeCount(void) const;
     
     void appendEdge(qlonglong from, qlonglong to);
 
-    qlonglong neighbourCount(qlonglong vertex_id) const;
+    qlonglong edgeCount(qlonglong vertex_id) const;
 
-    const QVarLengthArray<qlonglong, 32>& neighbours(qlonglong vertex_id) const;
+    const EdgeList& edges(qlonglong vertex_id) const;
 
 public:
-    typedef QMap<qlonglong, QVarLengthArray<qlonglong, 32> >::const_iterator const_iterator;
-    typedef QMap<qlonglong, QVarLengthArray<qlonglong, 32> >::iterator             iterator;
+    typedef EdgeMap::const_iterator const_iterator;
+    typedef EdgeMap::iterator             iterator;
 
-    typedef QVarLengthArray<qlonglong, 32>::const_iterator const_neighbour_iterator;
-    typedef QVarLengthArray<qlonglong, 32>::iterator             neighbour_iterator;
+    typedef EdgeList::const_iterator const_edge_iterator;
+    typedef EdgeList::iterator             edge_iterator;
 
-    typedef QMap<qlonglong, QVarLengthArray<qlonglong, 32> > Map;
+    const_iterator cbegin(void) const;
+    const_iterator   cend(void) const;
 
-    const_iterator cbegin(void) const { return m_map.cbegin(); }
-    const_iterator   cend(void) const { return m_map.cend(); }
+    const_iterator begin(void) const;
+    const_iterator   end(void) const;
 
-    const_neighbour_iterator cbeginNeighbours(qlonglong vertex_id) const { return const_cast<Map&>(m_map)[vertex_id].cbegin(); }
-    const_neighbour_iterator   cendNeighbours(qlonglong vertex_id) const { return const_cast<Map&>(m_map)[vertex_id].cend(); }
+    iterator begin(void);
+    iterator   end(void);
+
+    const_edge_iterator cbeginEdges(qlonglong vertex_id) const;
+    const_edge_iterator   cendEdges(qlonglong vertex_id) const;
+
+    const_edge_iterator beginEdges(qlonglong vertex_id) const;
+    const_edge_iterator   endEdges(qlonglong vertex_id) const;
+
+    edge_iterator beginEdges(qlonglong vertex_id);
+    edge_iterator   endEdges(qlonglong vertex_id);
 
 public:
     qlonglong m_vertex_count;
     qlonglong m_edge_count;
 
-    Map m_map;
+    EdgeMap m_map;
 };
 
 // /////////////////////////////////////////////////////////////////
 
-inline dtkDistributedGraph::dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker) : dtkDistributedContainer(worker), m_vertex_count(vertex_count) 
-{
-    this->initialize();
-}
-
-inline void dtkDistributedGraph::initialize(void)
-{
-    m_mapper->setMapping(m_vertex_count, m_comm->size());
-    
-}
-
-inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to) 
-{ 
-    qint32 owner = static_cast<qint32>(m_mapper->owner(from));
-    if (this->wid() == owner) {
-        m_map[from].append(to); 
-    }
-    owner = static_cast<qint32>(m_mapper->owner(to));
-    if (this->wid() == owner) {
-        m_map[to].append(from);
-    }
-}
-
-inline qlonglong dtkDistributedGraph::neighbourCount(qlonglong vertex_id) const
-{    
-    return const_cast<QMap<qlonglong, QVarLengthArray<qlonglong, 32> >& >(m_map)[vertex_id].count();
-}
-
-inline const QVarLengthArray<qlonglong, 32>&  dtkDistributedGraph::neighbours(qlonglong vertex_id) const
-{    
-    return const_cast<QMap<qlonglong, QVarLengthArray<qlonglong, 32> >& >(m_map)[vertex_id];
-}
-
-
+#include "dtkDistributedGraph.tpp"
 
 // dtkDistributedGraph.h ends here

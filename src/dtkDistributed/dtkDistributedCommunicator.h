@@ -80,8 +80,8 @@ public:
     virtual void deallocate(qlonglong wid, const qlonglong& buffer_id);
 
 public:
-    virtual void get(qint32 from, qlonglong position, void *array, qlonglong buffer_id) = 0;
-    virtual void put(qint32 dest, qlonglong position, void  *data, qlonglong buffer_id) = 0;
+    virtual void get(qint32 from, qlonglong position, void *array, qlonglong buffer_id, qlonglong nelements = 1) = 0;
+    virtual void put(qint32 dest, qlonglong position, void  *data, qlonglong buffer_id, qlonglong nelements = 1) = 0;
 
 public:
     virtual void send(void *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;

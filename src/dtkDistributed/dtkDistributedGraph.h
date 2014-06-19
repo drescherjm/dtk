@@ -15,6 +15,7 @@
 #pragma once
 
 #include "dtkDistributedContainer.h"
+#include "dtkDistributedArray.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraph declaration
@@ -34,6 +35,9 @@ private:
     void initialize(void);
 
 public:
+    void build(void);
+
+public:
     bool empty(void) const;
 
     qlonglong vertexCount(void) const;
@@ -47,10 +51,12 @@ public:
 
 public:
     typedef EdgeMap::const_iterator const_iterator;
-    typedef EdgeMap::iterator             iterator;
+    //typedef EdgeMap::iterator             iterator;
+    typedef qlonglong* iterator;
 
     typedef EdgeList::const_iterator const_edge_iterator;
-    typedef EdgeList::iterator             edge_iterator;
+    //typedef EdgeList::iterator             edge_iterator;
+    typedef qlonglong* edge_iterator;
 
     const_iterator cbegin(void) const;
     const_iterator   cend(void) const;
@@ -70,11 +76,18 @@ public:
     edge_iterator beginEdges(qlonglong vertex_id);
     edge_iterator   endEdges(qlonglong vertex_id);
 
+    void edgeIterators(qlonglong vertex_id, edge_iterator& begin, edge_iterator& end);
+
 public:
+    qlonglong *neighbour_cache;
+
     qlonglong m_vertex_count;
-    qlonglong m_edge_count;
 
     EdgeMap m_map;
+
+    dtkDistributedArray<qlonglong> *m_edge_count;
+    dtkDistributedArray<qlonglong>  m_vertices;
+    dtkDistributedArray<qlonglong> *m_edges;
 };
 
 // /////////////////////////////////////////////////////////////////

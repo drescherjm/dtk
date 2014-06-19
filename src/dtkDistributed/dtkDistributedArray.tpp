@@ -22,21 +22,35 @@
 // dtkDistributedArray implementation
 // ///////////////////////////////////////////////////////////////////
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : dtkDistributedContainer(worker),
-                                                                                                                                m_handler(0), 
-                                                                                                                                m_local_handler(*this), 
-                                                                                                                                m_global_handler(*this),
-                                                                                                                                m_count(count)
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : 
+    dtkDistributedContainer(worker),
+    m_handler(0), 
+    m_local_handler(*this), 
+    m_global_handler(*this),
+    m_count(count)
+{
+    this->m_mapper->setMapping(m_count, m_comm->size());
+    this->initialize();
+}
+
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
+    dtkDistributedContainer(worker, mapper),
+    m_handler(0), 
+    m_local_handler(*this), 
+    m_global_handler(*this),
+    m_count(count)
 {
     this->initialize();
 }
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const QVector<T>& qvector , dtkDistributedWorker *worker) : dtkDistributedContainer(worker),
-                                                                                                                                    m_handler(0), 
-                                                                                                                                    m_local_handler(*this), 
-															            m_global_handler(*this), 
-															            m_count(qvector.count())
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const QVector<T>& qvector, dtkDistributedWorker *worker) : 
+    dtkDistributedContainer(worker),
+    m_handler(0), 
+    m_local_handler(*this), 
+    m_global_handler(*this), 
+    m_count(qvector.count())
 {
+    this->m_mapper->setMapping(m_count, m_comm->size());
     this->initialize();
     for (qlonglong i = 0; i <  m_local_handler.buffer_count ; ++i)
         m_local_handler.buffer[i] = qvector.at(localToGlobal(i));
@@ -50,7 +64,6 @@ template<typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 
 template<typename T> inline void dtkDistributedArray<T>::initialize(void)
 {
-    m_mapper->setMapping(m_count, m_comm->size());
     this->setMode(dtkDistributed::mode());
     
     buffer_count = m_mapper->count(this->wid());

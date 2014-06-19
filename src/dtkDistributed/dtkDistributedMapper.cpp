@@ -28,6 +28,8 @@ public:
 
 public:
     void setMapping(const qlonglong& id_number, const qlonglong& pu_number);
+    void initMap(const qlonglong& map_size, const qlonglong& pu_size);
+    void setMap(const qlonglong& local_map_size, const qlonglong& pu_id);
 
 public:
     qlonglong localToGlobal(const qlonglong&  local_id, const qlonglong& pu_id) const;
@@ -90,6 +92,20 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
     }
 }
 
+void dtkDistributedMapperPrivate::initMap(const qlonglong& map_size, const qlonglong& pu_size)
+{
+    this->id_count = map_size;
+    this->pu_count = pu_size;
+    
+    this->map.resize(this->pu_count);
+    this->step = 0;
+}
+
+void dtkDistributedMapperPrivate::setMap(const qlonglong& offset, const qlonglong& pu_id)
+{
+    this->map[pu_id] = offset;
+}
+
 qlonglong dtkDistributedMapperPrivate::localToGlobal(const qlonglong& local_id, const qlonglong& pu_id) const
 {
     return ( local_id + this->map.at(pu_id) );
@@ -144,6 +160,16 @@ void dtkDistributedMapper::setMapping(const qlonglong& id_count, const qlonglong
     d->setMapping(id_count, pu_count);
 }
 
+void dtkDistributedMapper::initMap(const qlonglong& map_size, const qlonglong& pu_size)
+{
+    d->initMap(map_size, pu_size);
+}
+
+void dtkDistributedMapper::setMap(const qlonglong& offset, const qlonglong& pu_id)
+{
+    d->setMap(offset, pu_id);
+}
+
 qlonglong dtkDistributedMapper::localToGlobal(const qlonglong& local_id, const qlonglong& pu_id) const
 {
     return d->localToGlobal(local_id, pu_id);
@@ -157,6 +183,11 @@ qlonglong dtkDistributedMapper::globalToLocal(const qlonglong& global_id) const
 qlonglong dtkDistributedMapper::count(const qlonglong& pu_id) const
 {
     return d->count(pu_id);
+}
+
+qlonglong dtkDistributedMapper::startIndex(const qlonglong& pu_id) const
+{
+    return d->map[pu_id];
 }
 
 qlonglong dtkDistributedMapper::owner(const qlonglong& global_id) const

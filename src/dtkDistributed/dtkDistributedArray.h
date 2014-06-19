@@ -28,6 +28,7 @@ public:
 
 public:
       dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker);
+      dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker, dtkDistributedMapper *mapper);
       dtkDistributedArray(const QVector<T>& vector, dtkDistributedWorker *worker);
      ~dtkDistributedArray(void);
 
@@ -240,6 +241,8 @@ public:
     void setAtGlobal(const qlonglong& index, const T& value) { m_global_handler.setAt(index, value); }
     T       atGlobal(const qlonglong& index) const { return m_global_handler.at(index); }
 
+    qlonglong bufferId(void) const { return buffer_id; }
+
 public:
     handler       *m_handler;
     handler        m_local_handler;
@@ -250,7 +253,7 @@ private:
     qlonglong buffer_id;
     qlonglong buffer_count;
 
-private:
+public:
     T *buffer;
 };
 

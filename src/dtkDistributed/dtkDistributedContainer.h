@@ -33,6 +33,13 @@ public:
         m_worker->record(this);
     }
 
+    dtkDistributedContainer(dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : m_worker(worker), 
+                                                                                          m_mapper(mapper), 
+                                                                                          m_comm(worker->communicator()) 
+    {
+        m_worker->record(this);
+    }
+
 public:
     virtual ~dtkDistributedContainer(void) 
     {
@@ -49,7 +56,7 @@ public:
     dtkDistributedMapper             *mapper(void) { return m_mapper; }
     dtkDistributedCommunicator *communicator(void) { return m_comm; }
 
-protected:
+public:
     qlonglong wid(void) const { return m_worker->wid(); }
     qlonglong cid(void) const { return m_worker->containerId(this); }
 

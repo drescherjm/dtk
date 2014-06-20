@@ -22,109 +22,92 @@
 // dtkDistributedArray implementation
 // ///////////////////////////////////////////////////////////////////
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker) : 
-    dtkDistributedContainer(worker),
-    m_handler(0), 
-    m_local_handler(*this), 
-    m_global_handler(*this),
-    m_count(count)
-{
-    this->m_mapper->setMapping(m_count, m_comm->size());
-    this->initialize();
-}
-
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& count, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
-    dtkDistributedContainer(worker, mapper),
-    m_handler(0), 
-    m_local_handler(*this), 
-    m_global_handler(*this),
-    m_count(count)
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker) : 
+    dtkDistributedContainer(size, worker)
 {
     this->initialize();
 }
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const QVector<T>& qvector, dtkDistributedWorker *worker) : 
-    dtkDistributedContainer(worker),
-    m_handler(0), 
-    m_local_handler(*this), 
-    m_global_handler(*this), 
-    m_count(qvector.count())
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
+    dtkDistributedContainer(size, worker, mapper)
 {
-    this->m_mapper->setMapping(m_count, m_comm->size());
     this->initialize();
-    for (qlonglong i = 0; i <  m_local_handler.buffer_count ; ++i)
-        m_local_handler.buffer[i] = qvector.at(localToGlobal(i));
+}
 
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array, dtkDistributedWorker *worker) : 
+    dtkDistributedContainer(size, worker)
+{
+    this->initialize();
+
+    iterator it  = this->begin();
+    iterator end = this->end();
+
+    for (qlonglong i = 0; it != end; ++it, ++i) {
+        *it = array[m_mapper->localToGlobal(i, this->wid())];
+    }
 }
 
 template<typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
-    m_comm->deallocate(this->wid(), buffer_id);
+    m_comm->deallocate(this->wid(), data.id());
 }
 
 template<typename T> inline void dtkDistributedArray<T>::initialize(void)
 {
-    this->setMode(dtkDistributed::mode());
-    
-    buffer_count = m_mapper->count(this->wid());
-    buffer_id = m_worker->containerId(this);
+    qlonglong size = m_mapper->count(this->wid());
+    qlonglong   id = this->cid();
+    T *array = static_cast<T*>(m_comm->allocate(size, sizeof(T), this->wid(), id));
 
-    buffer = static_cast<T*>(m_comm->allocate(buffer_count, sizeof(T), this->wid(), buffer_id));
-
-    m_local_handler.buffer_count = buffer_count;
-    m_local_handler.buffer = buffer;
-
-    m_global_handler.m_count = m_count;
-    m_global_handler.m_wid = this->wid();
-    m_global_handler.buffer_id = buffer_id;
-    m_global_handler.buffer_count = buffer_count;
-    m_global_handler.buffer = buffer;
-    m_global_handler.m_mapper = m_mapper;
-    m_global_handler.m_comm   = m_comm;
+    data.setData(array, size, id);
 }
 
-template <typename T> inline void dtkDistributedArray<T>::setMode(const dtkDistributed::Mode& mode)
-{
-    switch(mode) {
-    case dtkDistributed::Local:
-        m_handler = &m_local_handler;
-        break;
-    case dtkDistributed::Global:
-        m_handler = &m_global_handler;
-        break;
-    default:
-        m_handler = &m_global_handler;
-        break;
-    }
-}
-
-template<typename T> inline qlonglong dtkDistributedArray<T>::localToGlobal(const qlonglong& index)
-{
-    return m_mapper->localToGlobal(index, this->wid());
-}
-
-// ///////////////////////////////////////////////////////////////////
-// dtkDistributedArray global handler
-// ///////////////////////////////////////////////////////////////////
-
-template<typename T> inline void dtkDistributedArray<T>::global_handler::setAt(const qlonglong& index, const T& value)
+template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
     qlonglong pos = m_mapper->globalToLocal(index);
-    m_comm->put(owner, pos, &(const_cast<T&>(value)), buffer_id);
+    m_comm->put(owner, pos, &(const_cast<T&>(value)), data.id());
 }
 
-template<typename T> inline T dtkDistributedArray<T>::global_handler::at(const qlonglong& index) const
+template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index) const
 {
     qint32 owner  = static_cast<qint32>(m_mapper->owner(index));
     qlonglong pos = m_mapper->globalToLocal(index);
-    if (m_wid == owner) {
-	return buffer[pos];
+
+    if (this->wid() == owner) {
+	return data.value(pos);
     } else {
-	T temp;
-	m_comm->get(owner, pos, &temp, buffer_id);
+	T temp = T(0);
+        qDebug() << Q_FUNC_INFO << pos;
+	m_comm->get(owner, pos, &temp, data.id());
 	return temp;
     }
+}
+
+template<typename T> inline T dtkDistributedArray<T>::first(void) const
+{
+    return this->at(0);
+}
+
+template<typename T> inline T dtkDistributedArray<T>::last(void) const
+{
+    return this->at(this->size() - 1);
+}
+
+template<typename T> inline void dtkDistributedArray<T>::setLocalValue(const qlonglong& index, const T& value)
+{
+    Q_ASSERT_X(index >= 0 && i < data.size(), "dtkDistributedArray<T>::setLocalValue", "index out of range");
+    data.setValue(index, value);
+}
+
+template<typename T> inline const T& dtkDistributedArray<T>::localValue(const qlonglong& index) const
+{
+    Q_ASSERT_X(index >= 0 && i < data.size(), "dtkDistributedArray<T>::localValue", "index out of range");
+    return data.value(index);
+}
+
+template<typename T> inline qlonglong dtkDistributedArray<T>::dataId(void) const
+{
+    return data.id();
 }
 
 // 

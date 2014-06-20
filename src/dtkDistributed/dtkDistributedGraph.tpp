@@ -16,7 +16,7 @@
 // dtkDistributedGraph implementation
 // /////////////////////////////////////////////////////////////////
 
-inline dtkDistributedGraph::dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker) : dtkDistributedContainer(worker), m_vertex_count(vertex_count), m_vertices(vertex_count + 1, worker), neighbour_cache(0)
+inline dtkDistributedGraph::dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker) : dtkDistributedContainer(vertex_count, worker), m_vertex_count(vertex_count), m_vertices(vertex_count + 1, worker), neighbour_cache(0)
 {
     this->initialize();
 }
@@ -42,7 +42,7 @@ inline qlonglong dtkDistributedGraph::vertexCount(void) const
 
 inline qlonglong dtkDistributedGraph::edgeCount(void) const
 { 
-    return m_edge_count->atGlobal(this->wid());
+    return m_edge_count->at(this->wid());
 }
 
 inline void dtkDistributedGraph::initialize(void)
@@ -55,7 +55,7 @@ inline void dtkDistributedGraph::build(void)
 {
     qlonglong edge_count = 0;
     for (qlonglong i = 0; i < m_comm->size(); ++i) {
-        edge_count += m_edge_count->m_global_handler.at(i);
+        edge_count += m_edge_count->at(i);
     }
     
     dtkDistributedMapper *mapper = new dtkDistributedMapper;
@@ -64,7 +64,7 @@ inline void dtkDistributedGraph::build(void)
     qlonglong offset = 0;
     for (qlonglong i = 0; i < m_comm->size(); ++i) {
         mapper->setMap(offset ,i);
-        offset += m_edge_count->m_global_handler.at(i);
+        offset += m_edge_count->at(i);
     }
 
     m_edges = new dtkDistributedArray<qlonglong>(edge_count, this->worker(), mapper);
@@ -75,22 +75,22 @@ inline void dtkDistributedGraph::build(void)
     offset = mapper->startIndex(this->wid());
     qlonglong index = 0;
     for (; it != end; ++it) {
-        m_vertices.m_global_handler.setAt(it.key(), offset);
+        m_vertices.setAt(it.key(), offset);
         offset += (*it).count();
         const_edge_iterator nit  = this->beginEdges(it.key());
         const_edge_iterator nend = this->endEdges(it.key());
         for(;nit != nend; ++nit) {
-            m_edges->m_local_handler.setAt(index, *nit);
+            m_edges->setLocalValue(index, *nit);
             ++index;
         }
     }
     if (this->wid() == this->m_comm->size() - 1)
-        m_vertices.m_global_handler.setAt(m_vertices.m_global_handler.count() - 1, offset);
+        m_vertices.setAt(m_vertices.size() - 1, offset);
 }
 
 inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to)
 {
-    qlonglong edge_counter = m_edge_count->atGlobal(this->wid());
+    qlonglong edge_counter = m_edge_count->at(this->wid());
     qint32 owner = static_cast<qint32>(m_mapper->owner(from));
     if (this->wid() == owner) {
         m_map[from].append(to);
@@ -101,7 +101,7 @@ inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to)
         m_map[to].append(from);
         ++edge_counter;
     }
-    m_edge_count->setAtGlobal(this->wid(), edge_counter);
+    m_edge_count->setAt(this->wid(), edge_counter);
 }
 
 inline qlonglong dtkDistributedGraph::edgeCount(qlonglong vertex_id) const
@@ -137,13 +137,13 @@ inline dtkDistributedGraph::const_iterator dtkDistributedGraph::end(void) const
 inline dtkDistributedGraph::iterator dtkDistributedGraph::begin(void)
 { 
     //return m_map.begin();
-    return m_vertices.buffer;
+    return (m_vertices.begin());
 }
 
 inline dtkDistributedGraph::iterator dtkDistributedGraph::end(void)
 {
     //return m_map.end();
-    return m_vertices.buffer + m_vertices.m_local_handler.count();
+    return (m_vertices.end());
 }
 
 inline dtkDistributedGraph::const_edge_iterator dtkDistributedGraph::cbeginEdges(qlonglong vertex_id) const
@@ -178,14 +178,14 @@ inline dtkDistributedGraph::edge_iterator dtkDistributedGraph::endEdges(qlonglon
 
 inline void dtkDistributedGraph::edgeIterators(qlonglong vertex_id, edge_iterator& begin, edge_iterator& end)
 {
-    qlonglong pos  = m_vertices.m_global_handler.at(vertex_id);
-    qlonglong size = m_vertices.m_global_handler.at(vertex_id + 1) - pos;
+    qlonglong pos  = m_vertices.at(vertex_id);
+    qlonglong size = m_vertices.at(vertex_id + 1) - pos;
 
     qint32 owner  = static_cast<qint32>(m_mapper->owner(vertex_id));
     pos -= m_edges->mapper()->startIndex(owner);
 
     if (this->wid() == owner) {
-        begin = m_edges->buffer + pos;
+        begin = &((m_edges->begin())[pos]);
     
     } else {
         //if (neighbour_cache)
@@ -193,7 +193,7 @@ inline void dtkDistributedGraph::edgeIterators(qlonglong vertex_id, edge_iterato
         neighbour_cache = new qlonglong[size];
         begin = neighbour_cache;
         for (int i = 0; i < size; ++i)
-            m_comm->get(owner, pos++, &(neighbour_cache[i]), m_edges->bufferId());
+            m_comm->get(owner, pos++, &(neighbour_cache[i]), m_edges->dataId());
     }
     end = begin + size;
 }

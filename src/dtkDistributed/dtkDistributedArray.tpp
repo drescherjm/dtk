@@ -67,11 +67,25 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
 
 template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index) const
 {
-    qint32 owner  = static_cast<qint32>(m_mapper->owner(index));
+    qint32 owner  = static_cast<qint32>(m_mapper->owner(index));    
     qlonglong pos = m_mapper->globalToLocal(index);
-    T temp;
-    m_comm->get(owner, pos, &temp, data.id());
-    return temp;
+
+    if (this->wid() == owner) {
+        T temp;
+        m_comm->get(owner, pos, &temp, data.id());
+        return temp;
+
+    } else {
+        int line_id = cache.isCached(index);
+        if (line_id < 0) {            
+            T *line = cache.cacheLine(line_id);
+            cache.setCacheLineEntry(line_id, index);
+            int size = qMin(cache.cacheLineSize(), static_cast<int>(this->size() - index));
+            m_comm->get(owner, pos, line, data.id(), size);
+        }
+
+        return cache.value(line_id, index);
+    }
 }
 
 template<typename T> inline T dtkDistributedArray<T>::first(void) const

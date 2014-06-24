@@ -20,6 +20,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArray
   dtkDistributedArray.h
   dtkDistributedArray.tpp
+  dtkDistributedArrayCache
+  dtkDistributedArrayCache.h
   dtkDistributedArrayData
   dtkDistributedArrayData.h
   dtkDistributedCommunicator

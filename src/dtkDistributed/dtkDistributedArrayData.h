@@ -38,10 +38,7 @@ public:
     qlonglong size(void) const { return buffer_size; }
     qlonglong   id(void) const { return   buffer_id; }
 
-    void setValue(const qlonglong& index, const T& value)
-    { 
-        buffer[index] = value;
-    }
+    void setValue(const qlonglong& index, const T& value) { buffer[index] = value; }
 
     const T& value(const qlonglong& index) const { return buffer[index]; }
     

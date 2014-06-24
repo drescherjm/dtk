@@ -14,8 +14,9 @@
 
 #pragma once
 
-#include "dtkDistributedContainer.h"
+#include "dtkDistributedArrayCache.h"
 #include "dtkDistributedArrayData.h"
+#include "dtkDistributedContainer.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedArray
@@ -42,7 +43,8 @@ public:
     T  last(void) const;
 
 public:
-    typedef dtkDistributedArrayData<T> Data;
+    typedef dtkDistributedArrayData<T>   Data;
+    typedef dtkDistributedArrayCache<T> Cache;
 
     typedef typename Data::const_iterator const_iterator;
     typedef typename Data::iterator             iterator;
@@ -64,7 +66,9 @@ public:
     qlonglong dataId(void) const;
 
 protected:
-    Data data;
+            Data   data;
+    mutable Cache cache;
+    
 };
 
 // ///////////////////////////////////////////////////////////////////

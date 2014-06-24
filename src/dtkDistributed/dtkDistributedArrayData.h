@@ -28,6 +28,22 @@ template<typename T> class dtkDistributedArrayData
 
 public:
     dtkDistributedArrayData(void) : buffer_id(-1), buffer_size(0), buffer(0) {}
+
+public:
+    void setData(T *data, const qlonglong& size, const qlonglong& id) { buffer = data; buffer_size = size; buffer_id = id; }
+
+          T *data(void)       { return buffer; }
+    const T *data(void) const { return buffer; }
+
+    qlonglong size(void) const { return buffer_size; }
+    qlonglong   id(void) const { return   buffer_id; }
+
+    void setValue(const qlonglong& index, const T& value)
+    { 
+        buffer[index] = value;
+    }
+
+    const T& value(const qlonglong& index) const { return buffer[index]; }
     
 public:
     class iterator 
@@ -110,21 +126,6 @@ public:
     friend class const_iterator;
 
 public:
-    void setData(T *data, const qlonglong& size, const qlonglong& id) { buffer = data; buffer_size = size; buffer_id = id; }
-
-          T *data(void)       { return buffer; }
-    const T *data(void) const { return buffer; }
-
-    qlonglong size(void) const { return buffer_size; }
-    qlonglong   id(void) const { return   buffer_id; }
-
-    void setValue(const qlonglong& index, const T& value)
-    { 
-        buffer[index] = value;
-    }
-
-    const T& value(const qlonglong& index) const { return buffer[index]; }
-
           iterator  begin(iterator = iterator())                   { return buffer; }
           iterator    end(iterator = iterator())                   { return buffer + buffer_size; }
     const_iterator  begin(const_iterator = const_iterator()) const { return buffer; }

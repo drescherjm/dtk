@@ -24,9 +24,6 @@
 template<typename T> class dtkDistributedArray : public dtkDistributedContainer
 {
 public:
-    typedef dtkDistributedArrayData<T> Data;
-
-public:
       dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker);
       dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper);
       dtkDistributedArray(const qlonglong& size, const T *array, dtkDistributedWorker *worker);
@@ -45,6 +42,8 @@ public:
     T  last(void) const;
 
 public:
+    typedef dtkDistributedArrayData<T> Data;
+
     typedef typename Data::const_iterator const_iterator;
     typedef typename Data::iterator             iterator;
 

@@ -38,12 +38,9 @@ template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const ql
     dtkDistributedContainer(size, worker)
 {
     this->initialize();
-
-    iterator it  = this->begin();
-    iterator end = this->end();
-
-    for (qlonglong i = 0; it != end; ++it, ++i) {
-        *it = array[m_mapper->localToGlobal(i, this->wid())];
+    
+    for (qlonglong i = 0; i < m_mapper->count(this->wid()); ++i) {
+        data.setValue(i, array[m_mapper->localToGlobal(i, this->wid())]);
     }
 }
 
@@ -72,15 +69,9 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
 {
     qint32 owner  = static_cast<qint32>(m_mapper->owner(index));
     qlonglong pos = m_mapper->globalToLocal(index);
-
-    if (this->wid() == owner) {
-	return data.value(pos);
-    } else {
-	T temp = T(0);
-        qDebug() << Q_FUNC_INFO << pos;
-	m_comm->get(owner, pos, &temp, data.id());
-	return temp;
-    }
+    T temp;
+    m_comm->get(owner, pos, &temp, data.id());
+    return temp;
 }
 
 template<typename T> inline T dtkDistributedArray<T>::first(void) const

@@ -62,8 +62,10 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
     // Check if entry_id is already in the Cache
     int line_id = -1;
     for (int i = 0; i < Length; ++i) {
-        if (entry_id < ids[i] || entry_id >= ids[i] + lines[i].size()) continue;
-        line_id = i;
+        if (entry_id >= ids[i] && entry_id < ids[i] + lines[i].size()) {
+            line_id = i;
+            break;
+        }
     }
 
     // If not then find an available cache line and store remote values into it

@@ -59,7 +59,7 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
     this->id_count = id_number;
     this->pu_count = pu_number;
 
-    this->map.reserve(this->pu_count);
+    this->map.reserve(this->pu_count + 1);
 
     if (this->pu_count == 1) {
         this->map << 0;
@@ -90,6 +90,8 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
 
         this->map << (this->map.at(this->pu_count - 2) + this->step);
     }
+
+    this->map << this->id_count;
 }
 
 void dtkDistributedMapperPrivate::initMap(const qlonglong& map_size, const qlonglong& pu_size)
@@ -97,7 +99,8 @@ void dtkDistributedMapperPrivate::initMap(const qlonglong& map_size, const qlong
     this->id_count = map_size;
     this->pu_count = pu_size;
     
-    this->map.resize(this->pu_count);
+    this->map.resize(this->pu_count + 1);
+    this->map[this->pu_count] = map_size;
     this->step = 0;
 }
 
@@ -120,11 +123,12 @@ qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id)
 
 qlonglong dtkDistributedMapperPrivate::count(const qlonglong& pu_id) const
 {
-    if ( pu_id != (this->pu_count - 1) )
-        return ( this->map.at(pu_id + 1) - this->map.at(pu_id) );
+    return ( this->map.at(pu_id + 1) - this->map.at(pu_id) );
+    // if ( pu_id != (this->pu_count - 1) )
+    //     return ( this->map.at(pu_id + 1) - this->map.at(pu_id) );
 
-    else
-        return ( this->id_count - this->map.at(pu_id) );
+    // else
+    //     return ( this->id_count - this->map.at(pu_id) );
 }
 
 qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id) const
@@ -132,7 +136,7 @@ qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id) const
     if (this->step > 0) {
         return qMin((qlonglong)(global_id / this->step), this->pu_count-1);
     } else {
-        qlonglong current_id = this->map.last();
+        qlonglong current_id = this->map[this->map.count() - 2];
         qlonglong pid = this->pu_count-1;
         while (global_id < current_id) {
             current_id = this->map.at(--pid);
@@ -188,6 +192,11 @@ qlonglong dtkDistributedMapper::count(const qlonglong& pu_id) const
 qlonglong dtkDistributedMapper::startIndex(const qlonglong& pu_id) const
 {
     return d->map[pu_id];
+}
+
+qlonglong dtkDistributedMapper::lastIndex(const qlonglong& pu_id) const
+{
+    return d->map[pu_id + 1] - 1;    
 }
 
 qlonglong dtkDistributedMapper::owner(const qlonglong& global_id) const

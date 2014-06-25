@@ -47,6 +47,8 @@ template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const ql
 template<typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
     m_comm->deallocate(this->wid(), data.id());
+
+    delete cache;
 }
 
 template<typename T> inline void dtkDistributedArray<T>::initialize(void)
@@ -56,6 +58,8 @@ template<typename T> inline void dtkDistributedArray<T>::initialize(void)
     T *array = static_cast<T*>(m_comm->allocate(size, sizeof(T), this->wid(), id));
 
     data.setData(array, size, id);
+
+    cache = new dtkDistributedArrayCache<T>(this);
 }
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
@@ -67,24 +71,16 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
 
 template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index) const
 {
-    qint32 owner  = static_cast<qint32>(m_mapper->owner(index));    
-    qlonglong pos = m_mapper->globalToLocal(index);
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
 
     if (this->wid() == owner) {
+        qlonglong pos = m_mapper->globalToLocal(index);
         T temp;
         m_comm->get(owner, pos, &temp, data.id());
         return temp;
 
     } else {
-        int line_id = cache.isCached(index);
-        if (line_id < 0) {            
-            T *line = cache.cacheLine(line_id);
-            cache.setCacheLineEntry(line_id, index);
-            int size = qMin(cache.cacheLineSize(), static_cast<int>(this->size() - index));
-            m_comm->get(owner, pos, line, data.id(), size);
-        }
-
-        return cache.value(line_id, index);
+        return cache->value(index);
     }
 }
 

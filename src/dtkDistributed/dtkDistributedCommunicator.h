@@ -78,6 +78,9 @@ public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);
 
     virtual void deallocate(qlonglong wid, const qlonglong& buffer_id);
+    virtual void rlock(qlonglong wid, const qlonglong& buffer_id)  = 0;
+    virtual void wlock(qlonglong wid, const qlonglong& buffer_id)  = 0;
+    virtual void unlock(qlonglong wid, const qlonglong& buffer_id) = 0;
 
 public:
     virtual void get(qint32 from, qlonglong position, void *array, qlonglong buffer_id, qlonglong nelements = 1) = 0;

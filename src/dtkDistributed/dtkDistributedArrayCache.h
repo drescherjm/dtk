@@ -16,6 +16,8 @@
 
 #include <QVarLengthArray>
 
+template<typename T> class dtkDistributedArray;
+
 // ///////////////////////////////////////////////////////////////////
 // dtkDistributedArrayCache
 // ///////////////////////////////////////////////////////////////////
@@ -26,13 +28,14 @@ public:
     typedef QVarLengthArray<T, Prealloc> Array;
 
 public:
-             dtkDistributedArrayCache(void);
+             dtkDistributedArrayCache(dtkDistributedArray<T> *array);
     virtual ~dtkDistributedArrayCache(void) {}
 
 public:
     int isCached(const qlonglong& entry_id);
     
     const T& value(const int& line_id, const qlonglong& entry_id);
+    const T& value(const qlonglong& entry_id);
 
     T* cacheLine(int& line_id);
 
@@ -44,11 +47,15 @@ private:
     Array lines[Length];
     qlonglong ids[Length];
     short counters[Length];
+
+    dtkDistributedArray<T> *m_array;
 };
 
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, int Prealloc, int Length> inline dtkDistributedArrayCache<T, Prealloc, Length>::dtkDistributedArrayCache(void) 
+#include "dtkDistributedArray.h"
+
+template <typename T, int Prealloc, int Length> inline dtkDistributedArrayCache<T, Prealloc, Length>::dtkDistributedArrayCache(dtkDistributedArray<T> *array) : m_array(array)
 { 
     for (int i = 0; i < Length; ++i) { 
         ids[i] = - Prealloc - 1; 
@@ -94,6 +101,22 @@ template <typename T, int Prealloc, int Length> inline int dtkDistributedArrayCa
 template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::setCacheLineEntry(const int& line_id, const qlonglong& entry_id)
 {
     ids[line_id] = entry_id;
+}
+
+template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id)
+{
+    qint32 owner  = static_cast<qint32>(this->m_array->mapper()->owner(entry_id));
+    qlonglong pos = this->m_array->mapper()->globalToLocal(entry_id);
+
+    int line_id = this->isCached(entry_id);
+    if (line_id < 0) {            
+        T *line = this->cacheLine(line_id);
+        this->setCacheLineEntry(line_id, entry_id);
+        int size = qMin(Prealloc, static_cast<int>(this->m_array->size() - entry_id));
+        this->m_array->communicator()->get(owner, pos, line, m_array->dataId(), size);
+    }
+    counters[line_id] += 1;
+    return lines[line_id].at(entry_id - ids[line_id]);
 }
 
 // 

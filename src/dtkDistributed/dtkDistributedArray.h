@@ -67,7 +67,7 @@ public:
 
 protected:
             Data   data;
-    mutable Cache cache;
+    mutable Cache *cache;
     
 };
 

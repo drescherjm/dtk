@@ -43,6 +43,11 @@ public:
     T  last(void) const;
 
 public:
+    void  rlock(qint32 owner);
+    void  wlock(qint32 owner);
+    void unlock(qint32 owner);
+
+public:
     typedef dtkDistributedArrayData<T>   Data;
     typedef dtkDistributedArrayCache<T> Cache;
 

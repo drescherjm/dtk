@@ -84,6 +84,21 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
     }
 }
 
+template<typename T> inline void dtkDistributedArray<T>::rlock(qint32 owner)
+{
+    m_comm->rlock(owner, data.id());
+}
+
+template<typename T> inline void dtkDistributedArray<T>::wlock(qint32 owner)
+{
+    m_comm->wlock(owner, data.id());
+}
+
+template<typename T> inline void dtkDistributedArray<T>::unlock(qint32 owner)
+{
+    m_comm->unlock(owner, data.id());
+}
+
 template<typename T> inline T dtkDistributedArray<T>::first(void) const
 {
     return this->at(0);

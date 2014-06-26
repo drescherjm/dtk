@@ -47,6 +47,8 @@ public:
     void  wlock(qint32 owner);
     void unlock(qint32 owner);
 
+    virtual bool read(const QString& filename);
+
 public:
     typedef dtkDistributedArrayData<T>   Data;
     typedef dtkDistributedArrayCache<T> Cache;

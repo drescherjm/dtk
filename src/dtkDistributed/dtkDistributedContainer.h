@@ -32,7 +32,9 @@ public:
         m_comm(worker->communicator()) 
     {
         m_worker->record(this);
-        m_mapper->setMapping(m_size, m_comm->size());
+        if (m_size > 0) {
+            m_mapper->setMapping(m_size, m_comm->size());
+        }
     }
 
     dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
@@ -58,7 +60,7 @@ public:
 public:
     bool      empty(void) const { return !m_size; }
     qlonglong  size(void) const { return  m_size; }
- 
+
 public:
     dtkDistributedWorker             *worker(void) { return m_worker; }
     dtkDistributedMapper             *mapper(void) { return m_mapper; }

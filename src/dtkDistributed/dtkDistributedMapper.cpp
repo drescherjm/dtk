@@ -67,8 +67,8 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
 
     } else if (this->id_count < this->pu_count  ) {
 
-        qDebug() << "NOT YET IMPLEMENTED";
-        qApp->quit();
+        qDebug() << "Number of ids less than process count: NOT YET IMPLEMENTED";
+        return;
 
     } else if (this->id_count < this->pu_count * 2) {
 

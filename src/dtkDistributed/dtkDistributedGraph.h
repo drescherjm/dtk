@@ -38,6 +38,9 @@ public:
     void build(void);
 
 public:
+    bool read(const QString& filename);
+
+public:
     bool empty(void) const;
 
     qlonglong vertexCount(void) const;
@@ -86,7 +89,7 @@ public:
     EdgeMap m_map;
 
     dtkDistributedArray<qlonglong> *m_edge_count;
-    dtkDistributedArray<qlonglong>  m_vertices;
+    dtkDistributedArray<qlonglong> *m_vertices;
     dtkDistributedArray<qlonglong> *m_edges;
 };
 

@@ -56,7 +56,7 @@ template<typename T> inline void dtkDistributedArray<T>::initialize(void)
     qlonglong size = m_mapper->count(this->wid());
     qlonglong   id = this->cid();
     T *array = static_cast<T*>(m_comm->allocate(size, sizeof(T), this->wid(), id));
-
+    m_comm->barrier();
     data.setData(array, size, id);
 
     cache = new dtkDistributedArrayCache<T>(this);
@@ -97,6 +97,11 @@ template<typename T> inline void dtkDistributedArray<T>::wlock(qint32 owner)
 template<typename T> inline void dtkDistributedArray<T>::unlock(qint32 owner)
 {
     m_comm->unlock(owner, data.id());
+}
+
+template<typename T> inline bool dtkDistributedArray<T>::read(const QString& filename)
+{
+    return false;
 }
 
 template<typename T> inline T dtkDistributedArray<T>::first(void) const

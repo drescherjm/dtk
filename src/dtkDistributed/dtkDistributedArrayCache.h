@@ -69,7 +69,7 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
     }
 
     // If not then find an available cache line and store remote values into it
-    if (line_id < 0) {     
+    if (line_id < 0) {
         dtkDistributedMapper *mapper = this->m_array->mapper();
         dtkDistributedCommunicator *comm = this->m_array->communicator();
 
@@ -85,7 +85,7 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
         ids[line_id] = entry_id;
 
         qint32 owner  = static_cast<qint32>(mapper->owner(entry_id));
-        int size = qMin(Prealloc, static_cast<int>(mapper->lastIndex(owner) - entry_id) + 1);      
+        int size = qMin(Prealloc, static_cast<int>(mapper->lastIndex(owner) - entry_id) + 1);
         lines[line_id].resize(size);
 
         T *line = lines[line_id].data();

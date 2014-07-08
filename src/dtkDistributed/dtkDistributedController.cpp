@@ -253,9 +253,11 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
             //server exists but is not connected, remove from list and retry
             dtkWarn() << "dtkDistributedServer " << server.host() << "exist  but is not connected";
             d->servers.remove(server.toString());
-            this->deploy(server,type,ssh_tunnel,path);
+            return this->deploy(server,type,ssh_tunnel,path);
         }
     }
+
+    return false;
 }
 
 void dtkDistributedController::send(dtkDistributedMessage *msg)

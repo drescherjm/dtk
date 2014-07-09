@@ -24,6 +24,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArrayCache.h
   dtkDistributedArrayData
   dtkDistributedArrayData.h
+  dtkDistributedArrayNavigator
+  dtkDistributedArrayNavigator.h
   dtkDistributedCommunicator
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorStatus.h

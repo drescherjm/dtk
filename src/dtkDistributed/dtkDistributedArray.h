@@ -35,6 +35,9 @@ private:
     void initialize(void);
 
 public:
+    void remap(dtkDistributedMapper *remapper);
+
+public:
     void setAt(const qlonglong& index, const T& value);
 
     T at(const qlonglong& index) const;
@@ -76,7 +79,7 @@ protected:
             Data   data;
     mutable Cache *cache;
     
-};
+}; 
 
 // ///////////////////////////////////////////////////////////////////
 

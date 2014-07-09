@@ -62,6 +62,26 @@ template<typename T> inline void dtkDistributedArray<T>::initialize(void)
     cache = new dtkDistributedArrayCache<T>(this);
 }
 
+template<typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)
+{
+    qlonglong size = remapper->count(this->wid());
+    qlonglong   id = this->cid();
+    T *array = static_cast<T*>(m_comm->allocate(size, sizeof(T), this->wid(), id));
+    m_comm->barrier();
+
+    for (qlonglong i = 0; i < size; ++i) {
+        array[i] = this->at(remapper->localToGlobal(i, this->wid()));
+    }
+    
+    m_comm->barrier();
+    m_comm->deallocate(this->wid(), data.id());
+
+    delete m_mapper;
+    m_mapper = remapper;
+    
+    data.setData(array, size, id);
+}
+
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));

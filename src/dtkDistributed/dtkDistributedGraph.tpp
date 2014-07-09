@@ -151,6 +151,8 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         }
     // }
     build();
+
+    return true;
 }
 
 inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to)
@@ -266,6 +268,15 @@ inline void dtkDistributedGraph::edgeIterators(qlonglong vertex_id, edge_iterato
         }
     }
     end = begin + size;
+}
+
+
+inline dtkDistributedGraph::Neighbours dtkDistributedGraph::neighbours(const qlonglong& vertex_id)
+{
+    qlonglong n_start = m_vertices->at(vertex_id);
+    qlonglong size = m_vertices->at(vertex_id + 1) - n_start;
+
+    return Neighbours(m_edges, n_start, size);    
 }
 
 //

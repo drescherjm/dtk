@@ -16,6 +16,7 @@
 
 #include "dtkDistributedContainer.h"
 #include "dtkDistributedArray.h"
+#include "dtkDistributedArrayNavigator.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraph declaration
@@ -50,7 +51,7 @@ public:
 
     qlonglong edgeCount(qlonglong vertex_id) const;
 
-    const EdgeList& edges(qlonglong vertex_id) const;
+    const EdgeList& edges(qlonglong vertex_id) const;        
 
 public:
     typedef EdgeMap::const_iterator const_iterator;
@@ -80,6 +81,11 @@ public:
     edge_iterator   endEdges(qlonglong vertex_id);
 
     void edgeIterators(qlonglong vertex_id, edge_iterator& begin, edge_iterator& end);
+
+public:
+    typedef dtkDistributedArrayNavigator<qlonglong> Neighbours;
+
+    Neighbours neighbours(const qlonglong& vertex_id);
 
 public:
     qlonglong *neighbour_cache;

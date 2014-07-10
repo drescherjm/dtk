@@ -100,38 +100,56 @@ inline void dtkDistributedGraph::build(void)
     this->m_comm->barrier();
 }
 
+
+// read graph from file as described in
+// http://people.sc.fsu.edu/~jburkardt/data/metis_graph/metis_graph.html
+
 inline bool dtkDistributedGraph::read(const QString& filename)
 {
     QFile file(filename);
-
-    if(filename.isEmpty() || (!file.exists())) {
-        qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
-        return false;
-    }
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return false;
-
     QTextStream in(&file);
-    QStringList header = in.readLine().split(' ');
-    m_vertex_count = header.first().toLongLong();
-    if (m_vertex_count  == 0) {
-        qWarning() << "Can't parse size of the graph" << filename;
-        return false;
-    }
-    qlonglong edges_count = header.at(1).toLongLong();
-    if (edges_count  == 0) {
-        qWarning() << "Can't parse the number of edges" << filename;
-        return false;
-    }
+    qlonglong edges_count = 0;
 
-    qWarning() << "will initialize graph with" << m_vertex_count << edges_count;
+    if (this->wid() == 0) {
+
+
+        if(filename.isEmpty() || (!file.exists())) {
+            qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
+            return false;
+        }
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            return false;
+
+        QStringList header = in.readLine().split(' ');
+        m_vertex_count = header.first().toLongLong();
+        if (m_vertex_count  == 0) {
+            qWarning() << "Can't parse size of the graph" << filename;
+            return false;
+        }
+        edges_count = header.at(1).toLongLong();
+        if (edges_count  == 0) {
+            qWarning() << "Can't parse the number of edges" << filename;
+            return false;
+        }
+
+        qWarning() << "will initialize graph with" << m_vertex_count << edges_count;
+
+    }
+    m_comm->broadcast(&m_vertex_count, 1, 0);
+    m_comm->broadcast(&edges_count, 1, 0);
+
     this->initialize();
     m_comm->barrier();
 
-    // if (this->wid() == 0) {
+    m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
 
-        qlonglong from = 0;
-        qlonglong to   = 0;
+
+    if (this->wid() == 0) {
+
+        qlonglong index              = 0;
+        qlonglong current_edge_count = 0;
+        qlonglong current_owner      = 0;
+        qlonglong current_vertice    = 0;
 
         QString line;
         QStringList edges;
@@ -139,30 +157,35 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         while (!in.atEnd()) {
             line = in.readLine().trimmed();
             edges = line.split(' ');
-            for (qlonglong i = 0; i < edges.size(); i++) {
-                to = edges.at(i).toLongLong();
-                // qDebug() << " edge" << from << to;
-                if (to > 0)
-                    appendEdge(from, to - 1);
-                else
-                    qWarning() << "bad edge value at line" << from << "value:"<< edges.at(i) <<"line:" << line;
+            for (qlonglong i = 0; i < edges.size(); ++i) {
+                m_edges->setAt(index, edges.at(i).toLongLong() -1);
+                ++index;
+                ++current_edge_count;
             }
-            from ++;
+            ++current_vertice;
+
+            if (m_vertices->mapper()->owner(current_vertice) != current_owner) {
+                m_edge_count->setAt(current_owner, current_edge_count);
+                current_owner = m_vertices->mapper()->owner(current_vertice);
+                current_edge_count = 0;
+            }
         }
-    // }
-    build();
+    }
+
+    m_comm->barrier();
 
     return true;
 }
 
 inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to)
 {
-    qlonglong edge_counter = m_edge_count->at(this->wid());
     qint32 from_owner = static_cast<qint32>(m_mapper->owner(from));
     qint32 to_owner = static_cast<qint32>(m_mapper->owner(to));
     qint32 wid = this->wid();
     if ((wid != from_owner) && (wid != to_owner))
         return;
+
+    qlonglong edge_counter = m_edge_count->at(this->wid());
 
     if (wid == from_owner) {
         m_map[from].append(to);
@@ -177,7 +200,8 @@ inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to)
 
 inline qlonglong dtkDistributedGraph::edgeCount(qlonglong vertex_id) const
 {
-    return const_cast<EdgeMap&>(m_map)[vertex_id].count();
+    return m_edges->size();
+    // return const_cast<EdgeMap&>(m_map)[vertex_id].count();
 }
 
 inline const dtkDistributedGraph::EdgeList& dtkDistributedGraph::edges(qlonglong vertex_id) const
@@ -186,8 +210,8 @@ inline const dtkDistributedGraph::EdgeList& dtkDistributedGraph::edges(qlonglong
 }
 
 inline dtkDistributedGraph::const_iterator dtkDistributedGraph::cbegin(void) const
-{ 
-    return m_map.cbegin(); 
+{
+    return m_map.cbegin();
 }
 
 inline dtkDistributedGraph::const_iterator dtkDistributedGraph::cend(void) const
@@ -196,8 +220,8 @@ inline dtkDistributedGraph::const_iterator dtkDistributedGraph::cend(void) const
 }
 
 inline dtkDistributedGraph::const_iterator dtkDistributedGraph::begin(void) const
-{ 
-    return m_map.begin(); 
+{
+    return m_map.begin();
 }
 
 inline dtkDistributedGraph::const_iterator dtkDistributedGraph::end(void) const
@@ -206,14 +230,12 @@ inline dtkDistributedGraph::const_iterator dtkDistributedGraph::end(void) const
 }
 
 inline dtkDistributedGraph::iterator dtkDistributedGraph::begin(void)
-{ 
-    //return m_map.begin();
+{
     return (m_vertices->begin());
 }
 
 inline dtkDistributedGraph::iterator dtkDistributedGraph::end(void)
 {
-    //return m_map.end();
     return (m_vertices->end());
 }
 

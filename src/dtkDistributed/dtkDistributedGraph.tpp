@@ -173,6 +173,18 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 
     m_comm->barrier();
 
+    qDebug() << "remap";
+    dtkDistributedMapper *mapper = new dtkDistributedMapper;
+    mapper->initMap(edges_count, m_comm->size());
+
+    qlonglong offset = 0;
+    for (qlonglong i = 0; i < m_comm->size(); ++i) {
+        mapper->setMap(offset ,i);
+        offset += m_edge_count->at(i);
+    }
+    m_edges->remap(mapper);
+    qDebug() << "remap done";
+
     return true;
 }
 

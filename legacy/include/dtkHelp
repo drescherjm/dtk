@@ -1,3 +1,0 @@
-#include "../src/dtkHelp/dtkHelpBrowser.h"
-#include "../src/dtkHelp/dtkHelpController.h"
-#include "../src/dtkHelp/dtkHelpExport.h"

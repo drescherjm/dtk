@@ -1,3 +1,0 @@
-#include "../src/dtkScript/dtkScriptInterpreter.h"
-#include "../src/dtkScript/dtkScriptInterpreterPython.h"
-#include "../src/dtkScript/dtkScriptInterpreterTcl.h"

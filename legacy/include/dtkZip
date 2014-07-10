@@ -1,2 +1,0 @@
-#include "../src/dtkZip/dtkZipReader.h"
-#include "../src/dtkZip/dtkZipWriter.h"

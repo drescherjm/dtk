@@ -1,5 +1,0 @@
-#include "../src/dtkContainer/dtkAbstractContainer.h"
-#include "../src/dtkContainer/dtkAbstractContainerOrdered.h"
-#include "../src/dtkContainer/dtkAbstractContainerWrapper.h"
-#include "../src/dtkContainer/dtkContainerVector.h"
-#include "../src/dtkContainer/dtkContainerVectorWrapper.h"

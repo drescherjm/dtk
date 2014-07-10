@@ -120,8 +120,8 @@ inline bool dtkDistributedGraph::read(const QString& filename)
             return false;
 
         QStringList header = in.readLine().split(' ');
-        m_vertex_count = header.first().toLongLong();
-        if (m_vertex_count  == 0) {
+        m_size = header.first().toLongLong();
+        if (m_size  == 0) {
             qWarning() << "Can't parse size of the graph" << filename;
             return false;
         }
@@ -132,14 +132,13 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         }
 
     }
-    m_comm->broadcast(&m_vertex_count, 1, 0);
+    m_comm->broadcast(&m_size, 1, 0);
     m_comm->broadcast(&edges_count, 1, 0);
 
     this->initialize();
     m_comm->barrier();
 
     m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
-
 
     if (this->wid() == 0) {
 
@@ -150,6 +149,7 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 
         QString line;
         QStringList edges;
+        m_vertices->setAt(0, 0);
 
         while (!in.atEnd()) {
             line = in.readLine().trimmed();
@@ -159,7 +159,9 @@ inline bool dtkDistributedGraph::read(const QString& filename)
                 ++index;
                 ++current_edge_count;
             }
+
             ++current_vertice;
+            m_vertices->setAt(current_vertice, index);
 
             if (m_vertices->mapper()->owner(current_vertice) != current_owner) {
                 m_edge_count->setAt(current_owner, current_edge_count);

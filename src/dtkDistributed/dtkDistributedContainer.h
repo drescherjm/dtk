@@ -25,6 +25,15 @@
 class dtkDistributedContainer
 {
 public:
+    dtkDistributedContainer(dtkDistributedWorker *worker) : 
+        m_size(0),
+        m_worker(worker), 
+        m_mapper(new dtkDistributedMapper), 
+        m_comm(worker->communicator()) 
+    {
+        m_worker->record(this);
+    }
+
     dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker) : 
         m_size(size),
         m_worker(worker), 

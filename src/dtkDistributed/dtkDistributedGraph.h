@@ -29,6 +29,7 @@ public:
     typedef QMap<qlonglong, EdgeList>      EdgeMap;
 
 public:
+      dtkDistributedGraph(dtkDistributedWorker *worker);
       dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker);
      ~dtkDistributedGraph(void);
 
@@ -42,8 +43,6 @@ public:
     bool read(const QString& filename);
 
 public:
-    bool empty(void) const;
-
     qlonglong vertexCount(void) const;
     qlonglong   edgeCount(void) const;
     
@@ -51,50 +50,56 @@ public:
 
     qlonglong edgeCount(qlonglong vertex_id) const;
 
-    const EdgeList& edges(qlonglong vertex_id) const;        
-
-public:
-    typedef EdgeMap::const_iterator const_iterator;
-    //typedef EdgeMap::iterator             iterator;
-    typedef qlonglong* iterator;
-
-    typedef EdgeList::const_iterator const_edge_iterator;
-    //typedef EdgeList::iterator             edge_iterator;
-    typedef qlonglong* edge_iterator;
-
-    const_iterator cbegin(void) const;
-    const_iterator   cend(void) const;
-
-    const_iterator begin(void) const;
-    const_iterator   end(void) const;
-
-    iterator begin(void);
-    iterator   end(void);
-
-    const_edge_iterator cbeginEdges(qlonglong vertex_id) const;
-    const_edge_iterator   cendEdges(qlonglong vertex_id) const;
-
-    const_edge_iterator beginEdges(qlonglong vertex_id) const;
-    const_edge_iterator   endEdges(qlonglong vertex_id) const;
-
-    edge_iterator beginEdges(qlonglong vertex_id);
-    edge_iterator   endEdges(qlonglong vertex_id);
-
-    void edgeIterators(qlonglong vertex_id, edge_iterator& begin, edge_iterator& end);
-
 public:
     typedef dtkDistributedArrayNavigator<qlonglong> Neighbours;
 
-    Neighbours neighbours(const qlonglong& vertex_id);
+    Neighbours neighbours(const qlonglong& vertex_id) const;
 
 public:
-    qlonglong *neighbour_cache;
+    class const_iterator
+    {
+        const dtkDistributedGraph *g;
+        qlonglong g_id;
 
-    qlonglong m_vertex_count;
+    public:
+        const_iterator(void) : g(0), g_id(0)  {}
+        const_iterator(const dtkDistributedGraph *graph, const qlonglong& gid) : g(graph), g_id(gid) {}
 
+    public:
+        qlonglong id(void) { return g_id; }
+
+    public:
+        Neighbours operator *  (void) const { return g->neighbours(g_id); }
+        Neighbours operator [] (qlonglong j) const { return *(*this + j); }
+        bool operator == (const const_iterator &o) const { return g_id == o.g_id; }
+        bool operator != (const const_iterator &o) const { return g_id != o.g_id; }
+        bool operator <  (const const_iterator &o) const { return g_id  < o.g_id; }
+        bool operator >  (const const_iterator &o) const { return g_id  > o.g_id; }
+        bool operator <= (const const_iterator &o) const { return g_id <= o.g_id; }
+        bool operator >= (const const_iterator &o) const { return g_id >= o.g_id; }
+        const_iterator& operator ++ (void) { ++g_id; return *this; }
+        const_iterator  operator ++ (int)  { const_iterator it(*this); ++g_id; return it; }
+        const_iterator& operator -- (void) { --g_id; return *this; }
+        const_iterator  operator -- (int)  { const_iterator it(*this); --g_id; return it; }
+        const_iterator& operator += (qlonglong j) { g_id += j; return *this; }
+        const_iterator& operator -= (qlonglong j) { g_id -= j; return *this; }
+        const_iterator  operator +  (qlonglong j) const { return const_iterator(*this + j); }
+        const_iterator  operator -  (qlonglong j) const { return const_iterator(*this - j); }
+        qlonglong operator -  (const const_iterator& o) const { return g_id - o.g_id; }
+    };
+    friend class const_iterator;
+
+public:
+    const_iterator cbegin(void) const { return const_iterator(this, this->m_mapper->startIndex(this->wid())); }
+    const_iterator   cend(void) const { return const_iterator(this, this->m_mapper->lastIndex(this->wid())); }
+
+    const_iterator begin(void) const { return const_iterator(this, this->m_mapper->startIndex(this->wid())); }
+    const_iterator   end(void) const { return const_iterator(this, this->m_mapper->lastIndex(this->wid())); }
+
+public:
+    dtkDistributedArray<qlonglong> *m_edge_count;
     EdgeMap m_map;
 
-    dtkDistributedArray<qlonglong> *m_edge_count;
     dtkDistributedArray<qlonglong> *m_vertices;
     dtkDistributedArray<qlonglong> *m_edges;
 };

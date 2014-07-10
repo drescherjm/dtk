@@ -1,18 +1,19 @@
-/* dtk-modules.qdoc ---
- *
- * Author: Julien Wintz
- * Created: lun. avril  7 19:29:47 2014 (+0200)
- * Version:
- * Last-Updated:
- *           By:
- *     Update #: 83
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- *
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 /*!
+
   \page dtk-modules.html
 
   \title All Modules
@@ -20,11 +21,12 @@
   \brief A list of all modules in dtk.
   \brief dtk consists of essential modules, add-on modules, and tools.
 
-  \section1 dtk Essentials  
+  \section1 dtk Essentials Layers
 
   The following table lists the dtk essentials:
 
   \table 80%
+
   \header
      \li Module
      \li Description
@@ -45,10 +47,10 @@
      \li Diffusion and publication framework.
   \endtable
 
-  \section1 dtk Applicatives
+  \section1 dtk Applicative Layers
 
-  
   \table 80%
+
   \header
      \li Module
      \li Description
@@ -57,18 +59,21 @@
      \li Mechanisms to perform distributed calculations.
   \row
      \li \l{Geometry Module} {Geometry}
-     \li 
+     \li
   \row
      \li \l{Linear Algebra Module} {Linear Algebra}
-     \li 
+     \li
   \row
      \li \l{Virtual Reality Module} {Virtual Reality}
-     \li 
+     \li
   \row
      \li \l{Optimization Module} {Optimization}
-     \li 
+     \li
   \endtable
 
-  \section1 dtk Tools
+  \section1 dtk Applications
 
 */
+
+//
+// dtk-modules.qdoc ends here

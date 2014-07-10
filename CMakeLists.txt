@@ -12,7 +12,11 @@
 ##
 ### Code:
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
+
+######################################################################
+
+cmake_policy(SET CMP0042 OLD)
 
 ######################################################################
 
@@ -95,6 +99,8 @@ option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
 ## #################################################################
 
 find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui  REQUIRED)
+find_package(Qt5Xml  REQUIRED)
 
 ## #################################################################
 ## Dependencies - Optional                           [TO BE REMOVED]

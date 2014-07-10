@@ -1,30 +1,28 @@
-### CMakeLists.txt ---
+## Version: $Id$
 ##
-## Author: Thibaud Kloczko
-## Created: lun. avril  7 19:17:05 2014 (+0200)
-## Version:
-## Last-Updated: jeu. mai 15 10:48:40 2014 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 110
+######################################################################
+##
+### Commentary:
+##
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
+##
+### Code:
 
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
 
 get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
 
-message(STATUS "Using Qt5 binary dir:  ${QT5_BINARY_DIR}")
-message(STATUS "Using Qt5 binary qdoc: ${QT5_QDOC_EXECUTABLE}")
-message(STATUS "Using Qt5 binary qhgn: ${QT5_QHGN_EXECUTABLE}")
-
-set(QT5_DOCUMENTATION_D "${QT5_BINARY_DIR}/../../../Docs/Qt-5.3")
 set(QT5_QDOC_EXECUTABLE "${QT5_BINARY_DIR}/qdoc")
 set(QT5_QHGN_EXECUTABLE "${QT5_BINARY_DIR}/qhelpgenerator")
-
 set(DTK_QDOC_EXECUTABLE "${CMAKE_BINARY_DIR}/bin/dtkDoc")
+
+message(STATUS "Using Qt5 binary dir: ${QT5_BINARY_DIR}")
+message(STATUS "Using dtk binary doc: ${DTK_QDOC_EXECUTABLE}")
+message(STATUS "Using Qt5 binary qhg: ${QT5_QDOC_EXECUTABLE}")
 
 ## ###################################################################
 ## dtk
@@ -62,7 +60,7 @@ add_custom_target(dtkCore-doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp -o ${CMAKE_BINARY_DIR}/html/dtkcore.qch
   COMMENT "-- Generating dtkCore documentation")
 
-add_dependencies(dtkCore-doc dtk-Meta dtk-doc)
+add_dependencies(dtkCore-doc dtkMeta dtk-doc)
 
 ## ###################################################################
 ## dtkDistributed
@@ -103,3 +101,6 @@ add_custom_target(doc
   COMMENT "-- Generating dtk documentation")
 
 add_dependencies(doc dtkMeta-doc dtkCore-doc dtkDistributed-doc dtkWidgets-doc)
+
+######################################################################
+### CMakeLists.txt ends here

@@ -18,15 +18,26 @@
 
 inline dtkDistributedGraph::dtkDistributedGraph(dtkDistributedWorker *worker) : dtkDistributedContainer(worker)
 {
+    m_edges      = NULL;
+    m_vertices   = NULL;
+    m_edge_count = NULL;
+
 }
 
 inline dtkDistributedGraph::dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker) : dtkDistributedContainer(vertex_count, worker)
 {
+    m_edges = NULL;
     this->initialize();
 }
 
 inline dtkDistributedGraph::~dtkDistributedGraph(void)
 {
+    if (m_vertices)
+        delete m_vertices;
+    if (m_edge_count)
+        delete m_edge_count;
+    if (m_edges)
+        delete m_edges;
 }
 
 inline qlonglong dtkDistributedGraph::vertexCount(void) const

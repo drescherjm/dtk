@@ -1,8 +1,16 @@
-### CMakeLists.txt ---
+## Version: $Id$
 ##
-## Author: Nicolas Niclausse
-## Copyright (C) 2012 - Nicolas Niclausse, Inria.
 ######################################################################
+##
+### Commentary:
+##
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+##
+### Code:
 
 project(dtkDistributedServer)
 
@@ -11,7 +19,7 @@ project(dtkDistributedServer)
 ## #################################################################
 
 set(${PROJECT_NAME}_SOURCES
-          main.cpp)
+  main.cpp)
 
 ## #################################################################
 ## Build rules
@@ -23,8 +31,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   dtkDistributed
-  dtkLog
- )
+  dtkLog)
 
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Network)
@@ -42,3 +49,6 @@ SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
 install(TARGETS ${PROJECT_NAME}
    BUNDLE DESTINATION bin
   RUNTIME DESTINATION bin)
+
+######################################################################
+### CMakeLists.txt ends here

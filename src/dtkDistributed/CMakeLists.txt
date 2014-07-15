@@ -1,12 +1,16 @@
-### CMakeLists.txt ---
+## Version: $Id$
 ##
-## Author: Julien Wintz
-## Created: Mon Feb  4 12:16:39 2013 (+0100)
+######################################################################
+##
+### Commentary:
+##
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
+##
+### Code:
 
 project(dtkDistributed)
 
@@ -76,7 +80,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedWorker.cpp
   dtkDistributedWorkerManager.cpp)
 
-
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -94,6 +97,7 @@ qt5_use_modules(${PROJECT_NAME} Network)
 qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkCore)
+target_link_libraries(${PROJECT_NAME} dtkLog)
 
 ## ###################################################################
 ## Install rules - files
@@ -111,3 +115,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT distributed
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

@@ -54,7 +54,12 @@ inline void dtkDistributedGraph::initialize(void)
 {
     qDebug() << "initialize graph with " << vertexCount() << "vertexes";
 
-    m_vertices = new dtkDistributedArray<qlonglong>(vertexCount() + 1, this->worker());
+    m_mapper->setMapping(vertexCount(), m_comm->size());
+
+    dtkDistributedMapper *mapper = new dtkDistributedMapper;
+    mapper->setMapping(vertexCount(), m_comm->size());
+    mapper->setMap(vertexCount()+1,m_comm->size());
+    m_vertices = new dtkDistributedArray<qlonglong>(vertexCount() + 1, this->worker(), mapper);
 
     m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size(), this->worker());
     for (qint32 i = 0; i< m_comm->size(); i++) {
@@ -62,8 +67,6 @@ inline void dtkDistributedGraph::initialize(void)
             m_edge_count->setAt(i,0);
         }
     }
-
-    m_mapper->setMapping(vertexCount(), m_comm->size());
 }
 
 inline void dtkDistributedGraph::build(void)

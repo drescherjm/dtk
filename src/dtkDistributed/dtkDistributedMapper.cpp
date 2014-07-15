@@ -70,29 +70,16 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
         qDebug() << "Number of ids less than process count: NOT YET IMPLEMENTED";
         return;
 
-    } else if (this->id_count < this->pu_count * 2) {
-
-        for (qlonglong i = 0; i < this->id_count - this->pu_count; ++i)
-            this->map << i * 2;
-
-        qlonglong start = (this->id_count - this->pu_count) *2;
-
-        for (qlonglong i = this->id_count - this->pu_count; i < this->pu_count; ++i)
-            this->map << start++;
-
-        this->step = 0;
     } else {
-        this->step = qRound(this->id_count / (1. * this->pu_count));
+        this->step = this->id_count / this->pu_count;
 
-        qlonglong last = qMin(this->id_count / this->step, this->pu_count -1);
-        for (qlonglong i = 0; i < last; ++i)
-            this->map << i * this->step;
-
-        qlonglong start = (last - 1) * this->step;
-
-        for (qlonglong i = last; i < this->pu_count; ++i) {
-            start += this->step -1;
-            this->map << qMin(start, this->id_count -1);
+        qlonglong rest = this->id_count % this->pu_count;
+        for (qlonglong i = 0; i < rest+1; ++i) {
+            this->map << i * (this->step+1);
+        }
+        qlonglong last = rest * (this->step +1);
+        for (qlonglong i = 1; i < this->pu_count-rest; ++i) {
+            this->map << last + i * this->step;
         }
 
         this->step = 0;
@@ -131,11 +118,6 @@ qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id)
 qlonglong dtkDistributedMapperPrivate::count(const qlonglong& pu_id) const
 {
     return ( this->map.at(pu_id + 1) - this->map.at(pu_id) );
-    // if ( pu_id != (this->pu_count - 1) )
-    //     return ( this->map.at(pu_id + 1) - this->map.at(pu_id) );
-
-    // else
-    //     return ( this->id_count - this->map.at(pu_id) );
 }
 
 qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id) const

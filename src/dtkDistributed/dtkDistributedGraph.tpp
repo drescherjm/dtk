@@ -223,5 +223,25 @@ inline dtkDistributedGraph::Neighbours dtkDistributedGraph::neighbours(const qlo
     return Neighbours(m_edges, n_start, size);
 }
 
+dtkDistributedGraph::const_iterator dtkDistributedGraph::cbegin(void) const
+{
+    return const_iterator(this, this->m_mapper->startIndex(this->wid())); 
+}
+
+dtkDistributedGraph::const_iterator dtkDistributedGraph::cend(void) const 
+{ 
+    return const_iterator(this, this->m_mapper->lastIndex(this->wid()) + 1); 
+}
+
+dtkDistributedGraph::const_iterator dtkDistributedGraph::begin(void) const 
+{ 
+    return const_iterator(this, this->m_mapper->startIndex(this->wid())); 
+}
+
+dtkDistributedGraph::const_iterator dtkDistributedGraph::end(void) const 
+{
+    return const_iterator(this, this->m_mapper->lastIndex(this->wid()) + 1); 
+}
+
 //
 // dtkDistributedGraph.tpp ends here

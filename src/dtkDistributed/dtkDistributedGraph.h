@@ -25,10 +25,6 @@
 class dtkDistributedGraph : public dtkDistributedContainer
 {
 public:
-    typedef QVarLengthArray<qlonglong, 32> EdgeList;
-    typedef QMap<qlonglong, EdgeList>      EdgeMap;
-
-public:
       dtkDistributedGraph(dtkDistributedWorker *worker);
       dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker);
      ~dtkDistributedGraph(void);
@@ -90,13 +86,16 @@ public:
     friend class const_iterator;
 
 public:
-    const_iterator cbegin(void) const { return const_iterator(this, this->m_mapper->startIndex(this->wid())); }
-    const_iterator   cend(void) const { return const_iterator(this, this->m_mapper->lastIndex(this->wid())); }
+    const_iterator cbegin(void) const;
+    const_iterator   cend(void) const;
 
-    const_iterator begin(void) const { return const_iterator(this, this->m_mapper->startIndex(this->wid())); }
-    const_iterator   end(void) const { return const_iterator(this, this->m_mapper->lastIndex(this->wid())); }
+    const_iterator begin(void) const;
+    const_iterator   end(void) const;
 
 public:
+    typedef QVarLengthArray<qlonglong, 32> EdgeList;
+    typedef QMap<qlonglong, EdgeList>      EdgeMap;
+
     dtkDistributedArray<qlonglong> *m_edge_count;
     EdgeMap m_map;
 

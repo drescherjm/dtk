@@ -52,7 +52,7 @@ inline qlonglong dtkDistributedGraph::edgeCount(void) const
 
 inline void dtkDistributedGraph::initialize(void)
 {
-    qDebug() << "initialize graph with " << vertexCount() << "vertexes";
+    qDebug() << "initialize graph with " << vertexCount() << "vertexes" << this->wid();
 
     m_mapper->setMapping(vertexCount(), m_comm->size());
 
@@ -168,6 +168,9 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         while (!in.atEnd()) {
             line = in.readLine().trimmed();
             edges = line.split(' ');
+            if (line.isEmpty() || line.at(0) == '#'){
+                continue ;
+            }
             for (qlonglong i = 0; i < edges.size(); ++i) {
                 m_edges->setAt(index, edges.at(i).toLongLong() -1);
                 ++index;

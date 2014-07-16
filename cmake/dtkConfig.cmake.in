@@ -27,7 +27,7 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_BINARY_DIR@"
   )
 
-include("@CMAKE_CURRENT_BINARY_DIR@/dtkDepends.cmake")
+include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
 
 ## ###################################################################
 ## Options

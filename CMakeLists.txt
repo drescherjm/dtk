@@ -46,7 +46,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 ## #################################################################
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 ## ###################################################################
@@ -124,14 +124,14 @@ endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 ## #################################################################
 
 include_directories(${CMAKE_BINARY_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtk)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkComposer)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkCore)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkDistributed)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkLog)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkMath)
-include_directories(${CMAKE_SOURCE_DIR}/src/dtkTest)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtk)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkComposer)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkCore)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkDistributed)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkLog)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
 
 ## ###################################################################
 ## Input
@@ -149,9 +149,9 @@ add_subdirectory(doc)
 
 export(PACKAGE dtk)
 
-configure_file(${CMAKE_SOURCE_DIR}/cmake/dtkConfig.cmake.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.cmake.in
   "${CMAKE_BINARY_DIR}/dtkConfig.cmake" @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
   "${CMAKE_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
 install(FILES

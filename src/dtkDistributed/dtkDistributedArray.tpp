@@ -84,14 +84,14 @@ template<typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMap
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
 {
-    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
     qlonglong pos = m_mapper->globalToLocal(index);
     m_comm->put(owner, pos, &(const_cast<T&>(value)), data.id());
 }
 
 template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index) const
 {
-    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
 
     if (this->wid() == owner) {
         qlonglong pos = m_mapper->globalToLocal(index);

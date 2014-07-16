@@ -46,7 +46,7 @@ public:
     qlonglong startIndex(const qlonglong& pu_id) const;
     qlonglong  lastIndex(const qlonglong& pu_id) const;
 
-    qlonglong owner(const qlonglong& global_id) const;
+    qlonglong owner(const qlonglong& global_id, qlonglong pu_id = -1) const;
 
 private:
     dtkDistributedMapperPrivate *d;

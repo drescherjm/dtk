@@ -38,7 +38,7 @@ add_custom_target(dtk-doc
 ## dtkMeta
 ## ###################################################################
 
-configure_file(${CMAKE_SOURCE_DIR}/doc/dtkMeta/dtkmeta.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkmeta.qdocconf IMMEDIATE @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkMeta/dtkmeta.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkmeta.qdocconf IMMEDIATE @ONLY)
 
 add_custom_target(dtkMeta-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -52,7 +52,7 @@ add_dependencies(dtkMeta-doc dtk-doc)
 ## dtkCore
 ## ###################################################################
 
-configure_file(${CMAKE_SOURCE_DIR}/doc/dtkCore/dtkcore.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkcore.qdocconf IMMEDIATE @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkCore/dtkcore.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkcore.qdocconf IMMEDIATE @ONLY)
 
 add_custom_target(dtkCore-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -66,7 +66,7 @@ add_dependencies(dtkCore-doc dtkMeta dtk-doc)
 ## dtkDistributed
 ## ###################################################################
 
-configure_file(${CMAKE_SOURCE_DIR}/doc/dtkDistributed/dtkdistributed.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdistributed.qdocconf IMMEDIATE @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkDistributed/dtkdistributed.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdistributed.qdocconf IMMEDIATE @ONLY)
 
 add_custom_target(dtkDistributed-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -80,7 +80,7 @@ add_dependencies(dtkDistributed-doc dtkCore-doc)
 ## dtkWidgets
 ## ###################################################################
 
-configure_file(${CMAKE_SOURCE_DIR}/doc/dtkWidgets/dtkwidgets.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkwidgets.qdocconf IMMEDIATE @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkWidgets/dtkwidgets.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkwidgets.qdocconf IMMEDIATE @ONLY)
 
 add_custom_target(dtkWidgets-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

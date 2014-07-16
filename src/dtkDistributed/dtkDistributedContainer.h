@@ -31,6 +31,7 @@ public:
         m_mapper(new dtkDistributedMapper), 
         m_comm(worker->communicator()) 
     {
+        m_mapper->ref();
         m_worker->record(this);
     }
 

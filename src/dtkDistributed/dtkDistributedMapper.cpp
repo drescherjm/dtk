@@ -47,7 +47,6 @@ public:
 
     qlonglong id_count;
     qlonglong pu_count;
-    qlonglong step;
 
     QVector<qlonglong> map;
 };
@@ -65,7 +64,6 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
 
     if (this->pu_count == 1) {
         this->map << 0;
-        this->step = this->id_count;
 
     } else if (this->id_count < this->pu_count  ) {
 
@@ -73,18 +71,16 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
         return;
 
     } else {
-        this->step = this->id_count / this->pu_count;
+        qlonglong step = this->id_count / this->pu_count + 1;
 
         qlonglong rest = this->id_count % this->pu_count;
         for (qlonglong i = 0; i < rest+1; ++i) {
-            this->map << i * (this->step+1);
+            this->map << i * step;
         }
-        qlonglong last = rest * (this->step +1);
+        qlonglong last = rest * step;
         for (qlonglong i = 1; i < this->pu_count-rest; ++i) {
-            this->map << last + i * this->step;
+            this->map << last + i * (step -1);
         }
-
-        this->step = 0;
     }
 
     this->map << this->id_count;
@@ -97,7 +93,6 @@ void dtkDistributedMapperPrivate::initMap(const qlonglong& map_size, const qlong
 
     this->map.resize(this->pu_count + 1);
     this->map[this->pu_count] = map_size;
-    this->step = 0;
 }
 
 void dtkDistributedMapperPrivate::setMap(const qlonglong& offset, const qlonglong& pu_id)
@@ -124,13 +119,29 @@ qlonglong dtkDistributedMapperPrivate::count(const qlonglong& pu_id) const
 
 qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id, qlonglong pu_id) const
 {
+    // qlonglong current_id = this->map[this->map.count() - 2];
+    // qlonglong pid = this->pu_count-1;
+    // while (global_id < current_id) {
+    //     current_id = this->map.at(--pid);
+    // }
+    // return pid;
+
     if (pu_id < 0) {
-        pu_id = global_id / this->id_count * (this->pu_count - 1);
+        pu_id =  qFloor((global_id * this->pu_count) / this->map.last());
     }
 
-    for(; global_id >= this->map.at(pu_id + 1); ++pu_id);
-    for(; global_id  < this->map.at(pu_id)    ; --pu_id);
-        
+    if (global_id >= this->map.at(pu_id + 1)) {
+        ++pu_id;
+        while(global_id >= this->map.at(pu_id + 1))
+            ++pu_id;
+    }
+    else if (global_id  < this->map.at(pu_id)) {
+        --pu_id;
+        while(global_id < this->map.at(pu_id))
+            --pu_id;
+
+    }
+
     return pu_id;
 }
 

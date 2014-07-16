@@ -40,6 +40,7 @@ public:
         m_mapper(new dtkDistributedMapper), 
         m_comm(worker->communicator()) 
     {
+        m_mapper->ref();
         m_worker->record(this);
         if (m_size > 0) {
             m_mapper->setMapping(m_size, m_comm->size());
@@ -52,6 +53,7 @@ public:
         m_mapper(mapper), 
         m_comm(worker->communicator()) 
     {
+        m_mapper->ref();
         m_worker->record(this);
     }
 
@@ -59,7 +61,7 @@ public:
     virtual ~dtkDistributedContainer(void) 
     {
         m_worker->unrecord(this);
-        if (m_mapper)
+        if (!m_mapper->deref())
             delete m_mapper;
     }
 

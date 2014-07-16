@@ -32,6 +32,10 @@ public:
     ~dtkDistributedMapper(void);
 
 public:
+    bool deref(void);
+    bool   ref(void);
+
+public:
     void setMapping(const qlonglong& id_count, const qlonglong& pu_count);
 
     void initMap(const qlonglong& map_size, const qlonglong& pu_size);

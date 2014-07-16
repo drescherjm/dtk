@@ -23,7 +23,7 @@
 class dtkDistributedMapperPrivate
 {
 public:
-     dtkDistributedMapperPrivate(void) {;}
+     dtkDistributedMapperPrivate(void) : ref(0) {;}
     ~dtkDistributedMapperPrivate(void) {;}
 
 public:
@@ -43,6 +43,8 @@ public:
     QVector<qlonglong> readers(const qlonglong& global_id) const;
 
 public:
+    QAtomicInt ref;
+
     qlonglong id_count;
     qlonglong pu_count;
     qlonglong step;
@@ -144,6 +146,16 @@ dtkDistributedMapper::dtkDistributedMapper(void) : QObject(), d(new dtkDistribut
 dtkDistributedMapper::~dtkDistributedMapper(void)
 {
     delete d;
+}
+
+bool dtkDistributedMapper::deref(void)
+{
+    return d->ref.deref();
+}
+
+bool dtkDistributedMapper::ref(void)
+{
+    return d->ref.ref();
 }
 
 void dtkDistributedMapper::setMapping(const qlonglong& id_count, const qlonglong& pu_count)

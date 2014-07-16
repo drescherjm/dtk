@@ -123,7 +123,7 @@ endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 ## Dependencies - internal
 ## #################################################################
 
-include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtk)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkComposer)
@@ -150,13 +150,13 @@ add_subdirectory(doc)
 export(PACKAGE dtk)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.cmake.in
-  "${CMAKE_BINARY_DIR}/dtkConfig.cmake" @ONLY)
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfig.cmake" @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
-  "${CMAKE_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
 install(FILES
-  "${CMAKE_BINARY_DIR}/dtkConfig.cmake"
-  "${CMAKE_BINARY_DIR}/dtkConfigVersion.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
   DESTINATION cmake)
 
 install(EXPORT dtkDepends DESTINATION cmake)

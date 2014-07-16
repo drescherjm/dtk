@@ -58,7 +58,7 @@ inline void dtkDistributedGraph::initialize(void)
 
     dtkDistributedMapper *mapper = new dtkDistributedMapper;
     mapper->setMapping(vertexCount(), m_comm->size());
-    mapper->setMap(vertexCount()+1,m_comm->size());
+    mapper->setMap(vertexCount() + 1, m_comm->size());
     m_vertices = new dtkDistributedArray<qlonglong>(vertexCount() + 1, this->worker(), mapper);
 
     m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size(), this->worker());

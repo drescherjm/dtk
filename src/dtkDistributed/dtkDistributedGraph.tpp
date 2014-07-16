@@ -122,9 +122,9 @@ inline bool dtkDistributedGraph::read(const QString& filename)
     QFile file(filename);
     QTextStream in(&file);
     qlonglong edges_count = 0;
-
+    QTime time;
     if (this->wid() == 0) {
-
+        time.start();
 
         if(filename.isEmpty() || (!file.exists())) {
             qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
@@ -202,7 +202,9 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         offset += m_edge_count->at(i);
     }
     m_edges->remap(mapper);
-    qDebug() << "remap done";
+    if (this->wid() == 0) {
+        qDebug() << "read and remap done in "<< time.elapsed() << "ms";
+    }
 
     return true;
 }

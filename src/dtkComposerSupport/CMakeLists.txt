@@ -279,7 +279,7 @@ set(${PROJECT_NAME}_SOURCES
 set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
 
 ## #################################################################
-## 
+##
 ## #################################################################
 
 if(DTK_BUILD_SUPPORT_DISTRIBUTED)
@@ -416,6 +416,16 @@ qt5_use_modules(${PROJECT_NAME} Concurrent)
 qt5_use_modules(${PROJECT_NAME} Network)
 qt5_use_modules(${PROJECT_NAME} Widgets)
 qt5_use_modules(${PROJECT_NAME} Xml)
+
+## ###################################################################
+## Target properties
+## ###################################################################
+
+if(APPLE)
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 1)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  INSTALL_NAME_DIR "@executable_path/../lib")
+endif(APPLE)
 
 ## #################################################################
 ## Export header file

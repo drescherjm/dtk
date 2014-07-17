@@ -1,16 +1,17 @@
-### CMakeLists.txt ---
-## 
-## Author: Julien Wintz
-## Created: Mon Jul 15 15:55:43 2013 (+0200)
-## Version: 
-## Last-Updated: lun. avril  7 11:13:07 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 38
+## Version: $Id$
+##
 ######################################################################
-## 
+##
+### Commentary:
+##
+######################################################################
+##
 ### Change Log:
-## 
+##
 ######################################################################
+##
+### Code:
+
 
 project(dtkMath)
 
@@ -47,6 +48,12 @@ add_library(${PROJECT_NAME} SHARED
 qt5_use_modules(${PROJECT_NAME} Core)
 
 ## ###################################################################
+## RPATH Handling
+## ###################################################################
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 1)
+
+## ###################################################################
 ## Install rules - files
 ## ###################################################################
 
@@ -62,3 +69,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT math
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

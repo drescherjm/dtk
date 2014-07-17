@@ -1,16 +1,16 @@
-### CMakeLists.txt ---
-## 
-## Author: Julien Wintz
-## Created: Wed Mar 20 12:26:15 2013 (+0100)
-## Version: 
-## Last-Updated: lun. avril  7 11:11:57 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 261
+## Version: $Id$
+##
 ######################################################################
-## 
+##
+### Commentary:
+##
+######################################################################
+##
 ### Change Log:
-## 
+##
 ######################################################################
+##
+### Code:
 
 project(dtkComposer)
 
@@ -173,7 +173,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerView.cpp
   dtkComposerReader.cpp
   dtkComposerWriter.cpp)
-                     
+
 set(${PROJECT_NAME}_QRC dtkComposer.qrc)
 
 ## #################################################################
@@ -203,6 +203,16 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 ## ###################################################################
+## Target properties
+## ###################################################################
+
+if(APPLE)
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 1)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  INSTALL_NAME_DIR "@executable_path/../lib")
+endif(APPLE)
+
+## ###################################################################
 ## Install rules - files
 ## ###################################################################
 
@@ -218,3 +228,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT composer
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

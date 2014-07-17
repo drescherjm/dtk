@@ -44,6 +44,16 @@ add_library(${PROJECT_NAME} SHARED
 qt5_use_modules(${PROJECT_NAME} Core)
 
 ## ###################################################################
+## Target prooerties
+## ###################################################################
+
+if(APPLE)
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 1)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  INSTALL_NAME_DIR "@executable_path/../lib")
+endif(APPLE)
+
+## ###################################################################
 ## Install rules - files
 ## ###################################################################
 

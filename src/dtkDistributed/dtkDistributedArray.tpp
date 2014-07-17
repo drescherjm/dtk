@@ -23,66 +23,59 @@
 // ///////////////////////////////////////////////////////////////////
 
 template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker) : 
-    dtkDistributedContainer(size, worker), data(new Data)
+    dtkDistributedContainer(size, worker), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
 {
     this->initialize();
 }
 
 template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
-    dtkDistributedContainer(size, worker, mapper), data(new Data)
+    dtkDistributedContainer(size, worker, mapper), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
 {
     this->initialize();
 }
 
 template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array, dtkDistributedWorker *worker) : 
-    dtkDistributedContainer(size, worker), data(new Data)
+    dtkDistributedContainer(size, worker), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
 {
     this->initialize();
     
     qlonglong count = m_mapper->count(this->wid());
     for (qlonglong i = 0; i < count; ++i) {
-        this->setLocalValue(i, array[m_mapper->localToGlobal(i, this->wid())]);
+        data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
     }
 }
 
 template<typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
-    m_comm->deallocate(this->wid(), data->id());
-
     this->freeData(data);
+
     delete cache;
 }
 
 template<typename T> inline void dtkDistributedArray<T>::initialize(void)
 {
-    qlonglong size = m_mapper->count(this->wid());
-    qlonglong id;
-    T *array = static_cast<T*>(m_comm->allocate(size, sizeof(T), this->wid(), id));
-
-    data->setRawData(array, size, id);
+    data->allocate(m_comm, this->wid(), m_mapper->count(this->wid()));
     m_comm->barrier();
-
-    cache = new dtkDistributedArrayCache<T>(this);
 }
 
 template<typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)
 {
     qlonglong size = remapper->count(this->wid());
-    qlonglong id;
-    T *array = static_cast<T*>(m_comm->allocate(size, sizeof(T), this->wid(), id));
+    Data *x = new Data;
+    x->allocate(m_comm, this->wid(), size);
 
     for (qlonglong i = 0; i < size; ++i) {
-        array[i] = this->at(remapper->localToGlobal(i, this->wid()));
+        x->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));
     }
-    
-    m_comm->barrier();
-    m_comm->deallocate(this->wid(), data->id());
 
     delete m_mapper;
     m_mapper = remapper;
-    
-    data->setRawData(array, size, id);
+
     m_comm->barrier();
+    cache->clear();
+    this->freeData(data);
+
+    data = x;
 }
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
@@ -115,6 +108,15 @@ template<typename T> inline T dtkDistributedArray<T>::first(void) const
 template<typename T> inline T dtkDistributedArray<T>::last(void) const
 {
     return this->at(this->size() - 1);
+}
+
+template<typename T> inline void dtkDistributedArray<T>::copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const
+{   
+    qint32 owner = static_cast<qint32>(m_mapper->owner(from));
+    size = qMin(size, m_mapper->lastIndex(owner) - from + 1);
+    qlonglong pos = m_mapper->globalToLocal(from);
+
+    m_comm->get(owner, pos, array, data->id(), size);
 }
 
 template<typename T> inline void dtkDistributedArray<T>::rlock(qint32 owner)
@@ -162,27 +164,9 @@ template<typename T> inline typename dtkDistributedArray<T>::const_iterator dtkD
     return data->cend();
 }
 
-template<typename T> inline const T& dtkDistributedArray<T>::localValue(const qlonglong& index) const
-{
-    Q_ASSERT_X(index >= 0 && i < data->size(), "dtkDistributedArray<T>::localValue", "index out of range");
-    return data->begin()[index];
-}
-
-template<typename T> inline void dtkDistributedArray<T>::setLocalValue(const qlonglong& index, const T& value)
-{
-    Q_ASSERT_X(index >= 0 && i < data->size(), "dtkDistributedArray<T>::setLocalValue", "index out of range");
-    data->begin()[index] = value;
-}
-
-template<typename T> inline qlonglong dtkDistributedArray<T>::dataId(void) const
-{
-    return data->id();
-}
-
 template<typename T> inline void dtkDistributedArray<T>::freeData(Data *x)
 {
     if (!x->ref.deref()) {
-        qDebug() << "Deallocating Data";
         if (QTypeInfo<T>::isComplex) {
             T *from = x->begin();
             T *to   = x->end();
@@ -190,10 +174,10 @@ template<typename T> inline void dtkDistributedArray<T>::freeData(Data *x)
                 from++->~T();
             }
         }
+        m_comm->deallocate(this->wid(), x->id());
         delete x;
     }
 }
-
 
 // 
 // dtkDistributedArray.tpp ends here

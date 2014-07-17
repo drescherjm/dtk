@@ -16,6 +16,8 @@
 
 #include <QtCore>
 
+class dtkDistributedCommunicator;
+
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedArrayData
 // /////////////////////////////////////////////////////////////////
@@ -26,7 +28,7 @@ public:
     dtkDistributedArrayData(void);
 
 public:
-    void setRawData(T *data, qlonglong n, qlonglong id);
+    void allocate(dtkDistributedCommunicator *comm, qlonglong wid, qlonglong n);
 
 public:
     qlonglong size(void) const;
@@ -40,19 +42,22 @@ private:
 };
 
 // ///////////////////////////////////////////////////////////////////
-    
+
+#include "dtkDistributedCommunicator.h"
+
 template<typename T> inline dtkDistributedArrayData<T>::dtkDistributedArrayData(void) : QTypedArrayData<T>(*dtkDistributedArrayData<T>::allocateHeader()), m_id(-1)
 {
 }
 
-template<typename T> inline void dtkDistributedArrayData<T>::setRawData(T *data, qlonglong n, qlonglong id) 
+template<typename T> inline void dtkDistributedArrayData<T>::allocate(dtkDistributedCommunicator *comm, qlonglong wid, qlonglong n)
 {
-    this->QTypedArrayData<T>::offset = reinterpret_cast<const char *>(data) - reinterpret_cast<const char *>(this);
+    void *array = comm->allocate(n, sizeof(T), wid, this->m_id);
+
+    this->QTypedArrayData<T>::offset = reinterpret_cast<const char *>(array) - reinterpret_cast<const char *>(this);
     this->QTypedArrayData<T>::size = n;
-    this->m_id = id;
 }
 
-template<typename T> inline qlonglong dtkDistributedArrayData<T>::size(void) const 
+template<typename T> inline qlonglong dtkDistributedArrayData<T>::size(void) const
 { 
     return QTypedArrayData<T>::size; 
 }

@@ -100,7 +100,7 @@ inline void dtkDistributedGraph::build(void)
         EdgeList::const_iterator nit  = (*it).begin();
         EdgeList::const_iterator nend = (*it).end();
         for(;nit != nend; ++nit) {
-            m_edges->setLocalValue(index, *nit);
+            m_edges->begin()[index] = *nit;
             ++index;
         }
     }

@@ -32,6 +32,8 @@ public:
     virtual ~dtkDistributedArrayCache(void) {}
 
 public:
+    void clear(void);
+
     const T& value(const qlonglong& entry_id);
 
 private:     
@@ -57,6 +59,16 @@ template <typename T, int Prealloc, int Length> inline dtkDistributedArrayCache<
     }
 }
 
+template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::clear(void)
+{
+    for (int i = 0; i < Length; ++i) { 
+        ids[i] = - Prealloc - 1; 
+        counters[i] = 0;
+        lines[i].resize(0);
+        lines[i].resize(Prealloc);
+    }    
+}
+
 template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id)
 {
     // Check if entry_id is already in the Cache
@@ -70,9 +82,6 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
 
     // If not then find an available cache line and store remote values into it
     if (line_id < 0) {
-        dtkDistributedMapper *mapper = this->m_array->mapper();
-        dtkDistributedCommunicator *comm = this->m_array->communicator();
-
         short min_counter = counters[0];
         line_id = 0;
         for(int i = 1; i < Length; ++i) {
@@ -84,14 +93,9 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
         counters[line_id] = 0;
         ids[line_id] = entry_id;
 
-        qint32 owner  = static_cast<qint32>(mapper->owner(entry_id));
-        int size = qMin(Prealloc, static_cast<int>(mapper->lastIndex(owner) - entry_id) + 1);
+        qlonglong size = Prealloc;
+        m_array->copyIntoArray(entry_id, lines[line_id].data(), size);
         lines[line_id].resize(size);
-
-        T *line = lines[line_id].data();
-
-        qlonglong pos = mapper->globalToLocal(entry_id);
-        comm->get(owner, pos, line, m_array->dataId(), size);
     }
 
     counters[line_id] += 1;

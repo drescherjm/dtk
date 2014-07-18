@@ -45,12 +45,12 @@ public:
     T first(void) const;
     T  last(void) const;
 
+    void copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const;
+
 public:
     void  rlock(qint32 owner);
     void  wlock(qint32 owner);
     void unlock(qint32 owner);
-
-    virtual bool read(const QString& filename);
 
 public:
     typedef dtkDistributedArrayData<T>   Data;
@@ -60,25 +60,19 @@ public:
     typedef typename Data::iterator             iterator;
 
 public:
-          iterator  begin(iterator = iterator())                   { return data.begin(); }
-          iterator    end(iterator = iterator())                   { return data.end(); }
-    const_iterator  begin(const_iterator = const_iterator()) const { return data.begin(); }
-    const_iterator    end(const_iterator = const_iterator()) const { return data.end(); }
-    const_iterator cbegin(const_iterator = const_iterator()) const { return data.cbegin(); }
-    const_iterator   cend(const_iterator = const_iterator()) const { return data.cend(); }
+          iterator  begin(iterator = iterator());
+          iterator    end(iterator = iterator());
+    const_iterator  begin(const_iterator = const_iterator()) const;
+    const_iterator    end(const_iterator = const_iterator()) const;
+    const_iterator cbegin(const_iterator = const_iterator()) const;
+    const_iterator   cend(const_iterator = const_iterator()) const;
 
-public:
-    void setLocalValue(const qlonglong& index, const T& value);
+private:
+    void freeData(Data *);
 
-    const T& localValue(const qlonglong& index) const;
-
-public:
-    qlonglong dataId(void) const;
-
-protected:
-            Data   data;
+private:
+            Data  *data;
     mutable Cache *cache;
-    
 }; 
 
 // ///////////////////////////////////////////////////////////////////

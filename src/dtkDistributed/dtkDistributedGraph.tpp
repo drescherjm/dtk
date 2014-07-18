@@ -166,6 +166,10 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         QStringList edges;
         m_vertices->setAt(0, 0);
 
+        qlonglong owner = 0;
+        m_edges->wlock(owner);
+        qlonglong next_index = m_edges->mapper()->lastIndex(owner);
+
         while (!in.atEnd()) {
             line = in.readLine().trimmed();
             edges = line.split(' ');
@@ -176,6 +180,12 @@ inline bool dtkDistributedGraph::read(const QString& filename)
                 m_edges->setAt(index, edges.at(i).toLongLong() -1);
                 ++index;
                 ++current_edge_count;
+                if (index > next_index) {
+                    m_edges->unlock(owner);
+                    owner++;
+                    next_index = m_edges->mapper()->lastIndex(owner);
+                    m_edges->wlock(owner);
+                }
             }
 
             ++current_vertice;
@@ -188,6 +198,7 @@ inline bool dtkDistributedGraph::read(const QString& filename)
                 current_edge_count = 0;
             }
         }
+        m_edges->unlock(owner);
     }
 
     m_comm->barrier();
@@ -210,7 +221,7 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 }
 
 inline void dtkDistributedGraph::appendEdge(qlonglong from, qlonglong to)
-{    
+{
     qint32 wid = this->wid();
     qint32 from_owner = static_cast<qint32>(m_mapper->owner(from, wid));
     qint32 to_owner = static_cast<qint32>(m_mapper->owner(to, wid));

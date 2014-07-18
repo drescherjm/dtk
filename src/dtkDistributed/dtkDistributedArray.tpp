@@ -179,5 +179,10 @@ template<typename T> inline void dtkDistributedArray<T>::freeData(Data *x)
     }
 }
 
+template<typename T> inline void dtkDistributedArray<T>::stats(void) const
+{
+    qDebug() << "cache hitrate:" << cache->hitrate();
+}
+
 // 
 // dtkDistributedArray.tpp ends here

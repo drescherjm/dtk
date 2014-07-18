@@ -67,13 +67,16 @@ public:
     const_iterator cbegin(const_iterator = const_iterator()) const;
     const_iterator   cend(const_iterator = const_iterator()) const;
 
+public:
+    void stats(void) const;
+
 private:
     void freeData(Data *);
 
 private:
             Data  *data;
     mutable Cache *cache;
-}; 
+};
 
 // ///////////////////////////////////////////////////////////////////
 

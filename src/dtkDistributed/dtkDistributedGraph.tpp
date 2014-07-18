@@ -183,8 +183,10 @@ inline bool dtkDistributedGraph::read(const QString& filename)
                 if (index > next_index) {
                     m_edges->unlock(owner);
                     owner++;
-                    next_index = m_edges->mapper()->lastIndex(owner);
-                    m_edges->wlock(owner);
+                    if (owner <  m_comm->size()) {
+                        next_index = m_edges->mapper()->lastIndex(owner);
+                        m_edges->wlock(owner);
+                    }
                 }
             }
 
@@ -198,7 +200,9 @@ inline bool dtkDistributedGraph::read(const QString& filename)
                 current_edge_count = 0;
             }
         }
-        m_edges->unlock(owner);
+        if (owner <  m_comm->size()) {
+            m_edges->unlock(owner);
+        }
     }
 
     m_comm->barrier();

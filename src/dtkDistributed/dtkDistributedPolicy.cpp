@@ -41,6 +41,10 @@ dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistribut
 
 dtkDistributedPolicy::~dtkDistributedPolicy(void)
 {
+    if (d->comm) {
+        delete d->comm;
+    }
+
     delete d;
 
     d = NULL;

@@ -112,8 +112,13 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
 
 template <typename T, int Prealloc, int Length> inline const double dtkDistributedArrayCache<T, Prealloc, Length>::hitrate()
 {
+    qlonglong sum = miss+hit;
     qDebug() <<"misses:" << miss << "hits:" << hit ;
-    return double(hit) / (double)(miss+hit);
+
+    if (sum == 0)
+        return 0;
+
+    return double(hit) / (double)(sum);
 }
-// 
+//
 // dtkDistributedArrayCache.h ends here

@@ -18,14 +18,14 @@
 ## ###################################################################
 
 set(dtk_INCLUDE_DIRS
-  "@{CMAKE_INSTALL_PREFIX}/include"
-  "@{CMAKE_INSTALL_PREFIX}/include/dtk"
-  "@{CMAKE_INSTALL_PREFIX}/include/dtkCore"
-  "@{CMAKE_INSTALL_PREFIX}/include/dtkDistributed"
-  "@{CMAKE_INSTALL_PREFIX}/include/dtkMeta"
+  "@CMAKE_INSTALL_PREFIX@/include"
+  "@CMAKE_INSTALL_PREFIX@/include/dtk"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkDistributed"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
   )
 
-include("@{CMAKE_INSTALL_PREFIX}/cmake/dtkDepends.cmake")
+include("@CMAKE_INSTALL_PREFIX@/cmake/dtkDepends.cmake")
 
 ## ###################################################################
 ## Options

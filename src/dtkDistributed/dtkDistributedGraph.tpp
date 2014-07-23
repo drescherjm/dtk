@@ -154,6 +154,10 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 
     m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
 
+    // dtkDistributedArray<qlonglong> *m_edges_orig = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
+
+    // dtkDistributedArray<qlonglong> *m_vertices_orig = new dtkDistributedArray<qlonglong>(m_size+1, this->worker(),m_vertices->mapper());
+
     if (this->wid() == 0) {
 
         qlonglong index              = 0;
@@ -164,10 +168,10 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 
         QString line;
         QStringList edges;
-        //m_vertices->setAt(0, 0);
+        // m_vertices_orig->setAt(0, 0);
 
         qlonglong owner = 0;
-        //m_edges->wlock(owner);
+//        m_edges_orig->wlock(owner);
         qlonglong next_index = m_edges->mapper()->lastIndex(owner);
 
         qlonglong max_vert_size = m_vertices->mapper()->countMax();
@@ -195,46 +199,51 @@ inline bool dtkDistributedGraph::read(const QString& filename)
                     qWarning() << "bad vertice id in graph for edge" << val << current_vertice;
                     continue;
                 }
-                //m_edges->setAt(index, val-1);
+                // m_edges_orig->setAt(index, val-1);
                 e_array[e_pos] = val-1;
                 ++e_pos;
                 ++index;
                 ++current_edge_count;
                 if (index > next_index) {
-                    //m_edges->unlock(owner);
+//                    m_edges_orig->unlock(owner);
                     m_edges->setAt(m_edges->mapper()->firstIndex(owner), e_array, e_pos);
                     owner++;
                     e_pos = 0;
                     if (owner <  m_comm->size()) {
                         next_index = m_edges->mapper()->lastIndex(owner);
-                        //m_edges->wlock(owner);
+                        // m_edges_orig->wlock(owner);
                     }
                 }
             }
 
             ++current_vertice;
-            qDebug() << v_pos << v_array[v_pos];
             ++v_pos;
-            //v_array[v_pos] = index; 
-            //m_vertices->setAt(current_vertice, index);
+            // m_vertices_orig->setAt(current_vertice, index);
 
             temp_owner = m_vertices->mapper()->owner(current_vertice, current_owner);
             if (temp_owner != current_owner) {
                 m_edge_count->setAt(current_owner, current_edge_count);
+                m_vertices->setAt(m_vertices->mapper()->firstIndex(current_owner), v_array, v_pos);
                 current_owner = temp_owner;
                 current_edge_count = 0;
-                m_vertices->setAt(m_vertices->mapper()->firstIndex(owner), v_array, v_pos);
                 v_pos = 0;
             }
         }
         v_array[v_pos] = index; ++v_pos;
         m_vertices->setAt(m_vertices->mapper()->firstIndex(m_vertices->mapper()->owner(current_vertice, current_owner)), v_array, v_pos);
-        
-        // if (owner <  m_comm->size()) {
-        //     m_edges->unlock(owner);
+
+        if (owner <  m_comm->size()) {
+//            m_edges_orig->unlock(owner);
+        }
+        // for (qlonglong i = 0; i < m_size; ++i) {
+        //     if (m_vertices->at(i) != m_vertices_orig->at(i))
+        //         qDebug() << "warn: bad m_vertices"<< i << m_vertices->at(i) << m_vertices_orig->at(i);
+        // }
+        // for (qlonglong i = 0; i < m_edges->size(); ++i) {
+        //     if (m_edges->at(i) != m_edges_orig->at(i))
+        //         qDebug() << "warn: bad m_edges"<< i << m_edges->at(i) << m_edges_orig->at(i);
         // }
 
-        
     }
 
     m_comm->barrier();

@@ -1,0 +1,46 @@
+## Version: $Id$
+## 
+######################################################################
+## 
+### Commentary: 
+## 
+######################################################################
+## 
+### Change Log:
+## 
+######################################################################
+## 
+### Code:
+
+## ###################################################################
+## Defines:
+## - dtk_INCLUDE_DIRS
+## ###################################################################
+
+set(dtk_INCLUDE_DIRS
+  "@CMAKE_INSTALL_PREFIX@/include"
+  "@CMAKE_INSTALL_PREFIX@/include/dtk"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkDistributed"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
+  )
+
+include("@CMAKE_INSTALL_PREFIX@/cmake/dtkDepends.cmake")
+
+## ###################################################################
+## Options
+## ###################################################################
+
+# needed for Support
+set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
+
+set(DTK_BUILD_SUPPORT_CORE @DTK_BUILD_SUPPORT_CORE@)
+set(DTK_BUILD_SUPPORT_CONTAINER @DTK_BUILD_SUPPORT_CONTAINER@)
+set(DTK_BUILD_SUPPORT_COMPOSER @DTK_BUILD_SUPPORT_COMPOSER@)
+set(DTK_BUILD_SUPPORT_DISTRIBUTED @DTK_BUILD_SUPPORT_DISTRIBUTED@)
+set(DTK_BUILD_SUPPORT_GUI @DTK_BUILD_SUPPORT_GUI@)
+set(DTK_BUILD_SUPPORT_MATH @DTK_BUILD_SUPPORT_MATH@)
+set(DTK_BUILD_SUPPORT_PLOT @DTK_BUILD_SUPPORT_PLOT@)
+
+######################################################################
+### dtkConfig.cmake.in ends here

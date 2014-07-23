@@ -149,8 +149,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.install.cmake.in
+  ${PROJECT_BINARY_DIR}/install/dtkConfig.cmake
+  @ONLY IMMEDIATE)
+
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
   DESTINATION cmake)
 

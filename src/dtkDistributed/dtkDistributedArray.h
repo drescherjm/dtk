@@ -39,6 +39,7 @@ public:
 
 public:
     void setAt(const qlonglong& index, const T& value);
+    void setAt(const qlonglong& index, const T *array, const qlonglong& size);
 
     T at(const qlonglong& index) const;
 

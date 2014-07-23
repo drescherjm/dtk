@@ -63,6 +63,7 @@ template<typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMap
     qlonglong size = remapper->count(this->wid());
     Data *x = new Data;
     x->allocate(m_comm, this->wid(), size);
+    m_comm->barrier();
 
     for (qlonglong i = 0; i < size; ++i) {
         x->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));

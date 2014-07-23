@@ -170,14 +170,21 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         m_edges->wlock(owner);
         qlonglong next_index = m_edges->mapper()->lastIndex(owner);
 
+        qlonglong val;
         while (!in.atEnd()) {
             line = in.readLine().trimmed();
             edges = line.split(' ');
             if (line.isEmpty() || line.at(0) == '#'){
+                qDebug() << "skip line" << line;
                 continue ;
             }
             for (qlonglong i = 0; i < edges.size(); ++i) {
-                m_edges->setAt(index, edges.at(i).toLongLong() -1);
+                val = edges.at(i).toLongLong();
+                if (val < 1 || val > m_size ) {
+                    qWarning() << "bad vertice id in graph for edge" << val << current_vertice;
+                    continue;
+                }
+                m_edges->setAt(index, val-1);
                 ++index;
                 ++current_edge_count;
                 if (index > next_index) {

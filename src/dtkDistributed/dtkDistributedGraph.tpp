@@ -92,7 +92,7 @@ inline void dtkDistributedGraph::build(void)
     EdgeMap::const_iterator it  = m_map.cbegin();
     EdgeMap::const_iterator end = m_map.cend();
 
-    offset = mapper->startIndex(this->wid());
+    offset = mapper->firstIndex(this->wid());
     qlonglong index = 0;
     for (; it != end; ++it) {
         m_vertices->setAt(it.key(), offset);
@@ -164,52 +164,77 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 
         QString line;
         QStringList edges;
-        m_vertices->setAt(0, 0);
+        //m_vertices->setAt(0, 0);
 
         qlonglong owner = 0;
-        m_edges->wlock(owner);
+        //m_edges->wlock(owner);
         qlonglong next_index = m_edges->mapper()->lastIndex(owner);
 
+        qlonglong max_vert_size = m_vertices->mapper()->countMax();
+        qlonglong max_edge_size = m_edges->mapper()->countMax();
+
+        qDebug() << Q_FUNC_INFO << max_edge_size << max_vert_size;
+
+        qlonglong *v_array = new qlonglong[max_vert_size];
+        qlonglong *e_array = new qlonglong[max_edge_size];
+
         qlonglong val;
+        qlonglong v_pos = 0;
+        qlonglong e_pos = 0;
         while (!in.atEnd()) {
             line = in.readLine().trimmed();
             edges = line.split(' ');
             if (line.isEmpty() || line.at(0) == '#'){
                 qDebug() << "skip line" << line;
-                continue ;
+                continue;
             }
+            v_array[v_pos] = index;
             for (qlonglong i = 0; i < edges.size(); ++i) {
                 val = edges.at(i).toLongLong();
                 if (val < 1 || val > m_size ) {
                     qWarning() << "bad vertice id in graph for edge" << val << current_vertice;
                     continue;
                 }
-                m_edges->setAt(index, val-1);
+                //m_edges->setAt(index, val-1);
+                e_array[e_pos] = val-1;
+                ++e_pos;
                 ++index;
                 ++current_edge_count;
                 if (index > next_index) {
-                    m_edges->unlock(owner);
+                    //m_edges->unlock(owner);
+                    m_edges->setAt(m_edges->mapper()->firstIndex(owner), e_array, e_pos);
                     owner++;
+                    e_pos = 0;
                     if (owner <  m_comm->size()) {
                         next_index = m_edges->mapper()->lastIndex(owner);
-                        m_edges->wlock(owner);
+                        //m_edges->wlock(owner);
                     }
                 }
             }
 
             ++current_vertice;
-            m_vertices->setAt(current_vertice, index);
+            qDebug() << v_pos << v_array[v_pos];
+            ++v_pos;
+            //v_array[v_pos] = index; 
+            //m_vertices->setAt(current_vertice, index);
 
             temp_owner = m_vertices->mapper()->owner(current_vertice, current_owner);
             if (temp_owner != current_owner) {
                 m_edge_count->setAt(current_owner, current_edge_count);
                 current_owner = temp_owner;
                 current_edge_count = 0;
+                m_vertices->setAt(m_vertices->mapper()->firstIndex(owner), v_array, v_pos);
+                v_pos = 0;
             }
         }
-        if (owner <  m_comm->size()) {
-            m_edges->unlock(owner);
-        }
+        v_array[v_pos] = index; ++v_pos;
+        m_vertices->setAt(m_vertices->mapper()->firstIndex(m_vertices->mapper()->owner(current_vertice, current_owner)), v_array, v_pos);
+        
+        // if (owner <  m_comm->size()) {
+        //     m_edges->unlock(owner);
+        // }
+
+        
     }
 
     m_comm->barrier();
@@ -269,7 +294,7 @@ inline dtkDistributedGraph::Neighbours dtkDistributedGraph::neighbours(const qlo
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::cbegin(void) const
 {
-    return const_iterator(this, this->m_mapper->startIndex(this->wid())); 
+    return const_iterator(this, this->m_mapper->firstIndex(this->wid())); 
 }
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::cend(void) const 
@@ -279,7 +304,7 @@ dtkDistributedGraph::const_iterator dtkDistributedGraph::cend(void) const
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::begin(void) const 
 { 
-    return const_iterator(this, this->m_mapper->startIndex(this->wid())); 
+    return const_iterator(this, this->m_mapper->firstIndex(this->wid())); 
 }
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::end(void) const 

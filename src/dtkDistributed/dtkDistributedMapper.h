@@ -47,7 +47,9 @@ public:
     qlonglong globalToLocal(const qlonglong& global_id) const;
 
     qlonglong count(const qlonglong& pu_id) const;
-    qlonglong startIndex(const qlonglong& pu_id) const;
+    qlonglong countMax(void) const;
+
+    qlonglong firstIndex(const qlonglong& pu_id) const;
     qlonglong  lastIndex(const qlonglong& pu_id) const;
 
     qlonglong owner(const qlonglong& global_id, qlonglong pu_id = -1) const;

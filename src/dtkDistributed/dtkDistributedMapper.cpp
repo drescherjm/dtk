@@ -37,6 +37,7 @@ public:
     qlonglong globalToLocal(const qlonglong& global_id) const;
 
     qlonglong count(const qlonglong& pu_id) const;
+    qlonglong countMax(void) const;
 
     qlonglong owner(const qlonglong& global_id, qlonglong pu_id = -1) const;
 
@@ -115,6 +116,15 @@ qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id)
 qlonglong dtkDistributedMapperPrivate::count(const qlonglong& pu_id) const
 {
     return ( this->map.at(pu_id + 1) - this->map.at(pu_id) );
+}
+
+qlonglong dtkDistributedMapperPrivate::countMax(void) const
+{
+    qlonglong count_max = this->map.at(1) - this->map.at(0);
+    for(int i = 1; i < this->map.count() - 1; ++i) {
+        count_max = qMax(count_max, this->map.at(i + 1) - this->map.at(i));
+    }
+    return count_max;
 }
 
 qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id, qlonglong pu_id) const
@@ -199,7 +209,12 @@ qlonglong dtkDistributedMapper::count(const qlonglong& pu_id) const
     return d->count(pu_id);
 }
 
-qlonglong dtkDistributedMapper::startIndex(const qlonglong& pu_id) const
+qlonglong dtkDistributedMapper::countMax(void) const
+{
+    return d->countMax();
+}
+
+qlonglong dtkDistributedMapper::firstIndex(const qlonglong& pu_id) const
 {
     return d->map[pu_id];
 }

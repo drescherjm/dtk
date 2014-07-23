@@ -85,7 +85,7 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
     m_comm->put(owner, pos, &(const_cast<T&>(value)), data->id());
 }
 
-template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T *array, const qlonglong& size)
+template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, T *array, const qlonglong& size)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
     qlonglong pos = m_mapper->globalToLocal(index);

@@ -113,6 +113,126 @@ inline void dtkDistributedGraph::build(void)
     this->m_comm->barrier();
 }
 
+inline bool dtkDistributedGraph::read2(const QString& filename)
+{
+    QFile file(filename);
+    QTextStream in(&file);
+    qlonglong edges_count = 0;
+    QTime time;
+
+    if (this->wid() == 0) {
+        time.start();
+
+        if(filename.isEmpty() || (!file.exists())) {
+            qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
+            return false;
+        }
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            return false;
+
+        QStringList header = in.readLine().split(' ');
+        m_size = header.first().toLongLong();
+        if (m_size  == 0) {
+            qWarning() << "Can't parse size of the graph" << filename;
+            return false;
+        }
+        edges_count = header.at(1).toLongLong();
+        if (edges_count  == 0) {
+            qWarning() << "Can't parse the number of edges" << filename;
+            return false;
+        }
+
+    }
+    m_comm->broadcast(&m_size, 1, 0);
+    m_comm->broadcast(&edges_count, 1, 0);
+
+    this->initialize();
+    m_comm->barrier();
+
+    m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
+
+    if (this->wid() == 0) {
+
+        QString line;
+        QStringList edges;
+
+        QVector<qlonglong> v_vec; v_vec.reserve(2 * m_vertices->mapper()->countMax());
+        QVector<qlonglong> e_vec; e_vec.reserve(2 * m_edges->mapper()->countMax());
+
+        qlonglong e_gid = 0;
+        qlonglong v_gid = 0;
+
+        qlonglong e_local_count = 0;
+        qlonglong v_local_count = 0;
+
+        qlonglong owner = 0;
+        qlonglong v_first_gid = m_vertices->mapper()->firstIndex(owner);
+        qlonglong v_last_gid  = m_vertices->mapper()->lastIndex(owner);
+        qlonglong e_first_gid = 0;
+
+        while (!in.atEnd()) {
+            line = in.readLine().trimmed();
+            edges = line.split(' ');
+            if (line.isEmpty() || line.at(0) == '#'){
+                qDebug() << "skip line" << line;
+                continue;
+            }
+            v_vec << e_gid;
+            for (qlonglong i = 0; i < edges.size(); ++i) {
+                qlonglong val = edges.at(i).toLongLong();
+                if (val < 1 || val > m_size ) {
+                    qWarning() << "bad vertice id in graph for edge" << val << v_gid;
+                    continue;
+                }
+                e_vec << val-1;
+                ++e_gid;
+                ++e_local_count;
+            }
+            ++v_gid;
+            if(v_gid > v_last_gid || in.atEnd()) {
+                if(in.atEnd()) {
+                    v_vec << e_gid;
+                    m_vertices->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                    m_edges->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                    m_edge_count->setAt(owner, e_local_count);
+                
+                } else {
+                    m_vertices->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                    m_edges->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                    m_edge_count->setAt(owner, e_local_count);
+
+                    ++owner;
+                    e_local_count = 0;
+                    v_first_gid = v_gid;
+                    v_last_gid  = m_vertices->mapper()->lastIndex(owner);
+                    e_first_gid = e_gid;
+                    v_vec.clear();
+                    v_vec.reserve(2 * m_vertices->mapper()->countMax());
+                    e_vec.clear();
+                    e_vec.reserve(2 * m_edges->mapper()->countMax());
+                }
+            }
+        }
+    }
+
+    m_comm->barrier();
+
+    qDebug() << "remap";
+    dtkDistributedMapper *mapper = new dtkDistributedMapper;
+    mapper->initMap(2 * edges_count, m_comm->size());
+
+    qlonglong offset = 0;
+    for (qlonglong i = 0; i < m_comm->size(); ++i) {
+        mapper->setMap(offset ,i);
+        offset += m_edge_count->at(i);
+    }
+    m_edges->remap(mapper);
+    if (this->wid() == 0) {
+        qDebug() << "read and remap done in "<< time.elapsed() << "ms";
+    }
+
+    return true;
+}
 
 // read graph from file as described in
 // http://people.sc.fsu.edu/~jburkardt/data/metis_graph/metis_graph.html

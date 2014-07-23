@@ -37,6 +37,7 @@ public:
 
 public:
     bool read(const QString& filename);
+    bool read2(const QString& filename);
 
 public:
     qlonglong vertexCount(void) const;

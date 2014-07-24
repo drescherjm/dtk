@@ -344,7 +344,10 @@ inline bool dtkDistributedGraph::read(const QString& filename)
 
     m_comm->barrier();
 
-    qDebug() << "remap";
+    if (this->wid() == 0) {
+        qDebug() << "read done in "<< time.elapsed() << "ms";
+        time.restart();
+    }
     dtkDistributedMapper *mapper = new dtkDistributedMapper;
     mapper->initMap(2 * edges_count, m_comm->size());
 
@@ -355,7 +358,7 @@ inline bool dtkDistributedGraph::read(const QString& filename)
     }
     m_edges->remap(mapper);
     if (this->wid() == 0) {
-        qDebug() << "read and remap done in "<< time.elapsed() << "ms";
+        qDebug() << "remap done in "<< time.elapsed() << "ms";
     }
 
     return true;

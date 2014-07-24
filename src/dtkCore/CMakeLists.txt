@@ -43,6 +43,9 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
 ## ###################################################################
 ## Link rules
 ## ###################################################################

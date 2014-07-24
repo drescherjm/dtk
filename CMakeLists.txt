@@ -143,8 +143,6 @@ add_subdirectory(doc)
 ## Exporting
 ## ###################################################################
 
-set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-
 export(PACKAGE dtk)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.cmake.in

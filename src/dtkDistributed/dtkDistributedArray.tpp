@@ -55,7 +55,6 @@ template<typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 template<typename T> inline void dtkDistributedArray<T>::initialize(void)
 {
     data->allocate(m_comm, this->wid(), m_mapper->count(this->wid()));
-    m_comm->barrier();
 }
 
 template<typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)
@@ -63,7 +62,6 @@ template<typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMap
     qlonglong size = remapper->count(this->wid());
     Data *x = new Data;
     x->allocate(m_comm, this->wid(), size);
-    m_comm->barrier();
 
     for (qlonglong i = 0; i < size; ++i) {
         x->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));

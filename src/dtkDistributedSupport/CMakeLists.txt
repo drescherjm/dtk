@@ -1,21 +1,16 @@
-### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Feb 15 09:10:57 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: mer. avril  9 15:14:54 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 264
+##
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
-### Change log:
-## 
+##
+### Change Log:
+##
 ######################################################################
+##
+### Code:
 
 project(dtkDistributedSupport)
 
@@ -178,3 +173,6 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+######################################################################
+### CMakeLists.txt ends here

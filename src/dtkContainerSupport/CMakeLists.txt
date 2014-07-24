@@ -1,4 +1,16 @@
-### CMakeLists.txt --- 
+## Version: $Id$
+##
+######################################################################
+##
+### Commentary:
+##
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+##
+### Code:
 
 project(dtkContainerSupport)
 
@@ -75,3 +87,6 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+######################################################################
+### CMakeLists.txt ends here

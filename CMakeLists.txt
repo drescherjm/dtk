@@ -32,9 +32,10 @@ set(dtk_VERSION
 ## Path setup
 ## ###################################################################
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set(CMAKE_CONFIGT_OUTPUT_FIRECTORY ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 ## #################################################################
 ## Install prefix
@@ -142,16 +143,18 @@ add_subdirectory(doc)
 ## Exporting
 ## ###################################################################
 
+set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
 export(PACKAGE dtk)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfig.cmake" @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
-  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.install.cmake.in
-  ${PROJECT_BINARY_DIR}/install/dtkConfig.cmake
-  @ONLY IMMEDIATE)
+  "${PROJECT_BINARY_DIR}/install/dtkConfig.cmake" @ONLY)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"

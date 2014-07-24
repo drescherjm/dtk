@@ -203,16 +203,6 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 ## ###################################################################
-## Target properties
-## ###################################################################
-
-if(APPLE)
-set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 1)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  INSTALL_NAME_DIR "@executable_path/../lib")
-endif(APPLE)
-
-## ###################################################################
 ## Install rules - files
 ## ###################################################################
 

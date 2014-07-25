@@ -83,10 +83,10 @@ template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlign
 #endif
 
 // ///////////////////////////////////////////////////////////////////
-// dtkArrayData base class
+// dtkArrayPrealloc base class
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize> class dtkArrayData
+template <typename T, qlonglong PreallocSize> class dtkArrayPrealloc
 {
 public:
 #if defined(Q_ALIGNOF)
@@ -106,7 +106,7 @@ public:
     }
 };
 
-template <typename T> class dtkArrayData<T, 0>
+template <typename T> class dtkArrayPrealloc<T, 0>
 {
 public:
     inline T *prealloc(void) { return 0; }
@@ -122,7 +122,7 @@ public:
 // dtkArray interface
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize = 8> class dtkArray : private dtkArrayData<T, PreallocSize>
+template <typename T, qlonglong PreallocSize = 8> class dtkArray : private dtkArrayPrealloc<T, PreallocSize>
 {
 public:
     enum RawDataType {
@@ -292,7 +292,7 @@ private:
 
     inline void initPrealloc(void)
     {
-        m_end = m_start = dtkArrayData<T, PreallocSize>::prealloc();
+        m_end = m_start = dtkArrayPrealloc<T, PreallocSize>::prealloc();
         m_limit = m_start + PreallocSize;
     }
 

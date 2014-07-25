@@ -30,10 +30,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager.h
   dtkCorePluginManager_t.h
   dtkCoreSettings
-  dtkCoreSettings.h)
+  dtkCoreSettings.h
+  dtkArrayData
+  dtkArrayData.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCoreSettings.cpp)
+  dtkCoreSettings.cpp
+  dtkArrayData.cpp)
 
 ## #################################################################
 ## Build rules

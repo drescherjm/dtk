@@ -1,17 +1,16 @@
-/* dtkDistributedMessage.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2011 - Nicolas Niclausse, Inria.
- * Created: mar. oct. 11 10:46:57 2011 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -81,3 +80,5 @@ private:
     dtkDistributedMessagePrivate *d;
 };
 
+//
+// dtkDistributedMessage.h ends here

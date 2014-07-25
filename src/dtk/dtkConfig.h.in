@@ -1,16 +1,16 @@
-/* dtkConfig.h.in --- 
- * 
- * Author: Julien Wintz
- * Created: Mon Feb  4 10:27:52 2013 (+0100)
- * Version: 
- * Last-Updated: lun. avril  7 17:00:06 2014 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 12
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #define dtk_VERSION_MAJOR @dtk_VERSION_MAJOR@
 #define dtk_VERSION_MINOR @dtk_VERSION_MINOR@
@@ -22,3 +22,6 @@
 #cmakedefine DTK_BUILD_SUPPORT_DISTRIBUTED
 #cmakedefine DTK_BUILD_SUPPORT_PLOT
 #cmakedefine DTK_BUILD_SUPPORT_COMPOSER
+
+//
+// dtkConfig.h.in ends here

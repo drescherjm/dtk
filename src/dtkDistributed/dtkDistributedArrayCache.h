@@ -40,9 +40,9 @@ public:
 private:     
     Array lines[Length];
     qlonglong ids[Length];
-    short counters[Length];
     qlonglong hit;
     qlonglong miss;
+    int       last;
 
     dtkDistributedArray<T> *m_array;
 };
@@ -57,18 +57,17 @@ template <typename T, int Prealloc, int Length> inline dtkDistributedArrayCache<
 { 
     for (int i = 0; i < Length; ++i) { 
         ids[i] = - Prealloc - 1; 
-        counters[i] = 0;
         lines[i].resize(Prealloc);
     }
     hit  = 0;
     miss = 0;
+    last = -1;
 }
 
 template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::clear(void)
 {
     for (int i = 0; i < Length; ++i) { 
         ids[i] = - Prealloc - 1; 
-        counters[i] = 0;
         lines[i].resize(0);
         lines[i].resize(Prealloc);
     }    
@@ -88,15 +87,7 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
     // If not then find an available cache line and store remote values into it
     if (line_id < 0) {
         miss++;
-        short min_counter = counters[0];
-        line_id = 0;
-        for(int i = 1; i < Length; ++i) {
-            if (min_counter > counters[i]) {
-                min_counter = counters[i];
-                line_id = i;
-            }
-        }
-        counters[line_id] = 0;
+        line_id = (last +1) % Length;
         ids[line_id] = entry_id;
 
         qlonglong size = Prealloc;
@@ -106,7 +97,7 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
         hit ++;
     }
 
-    counters[line_id] += 1;
+    last = line_id;
     return lines[line_id].at(entry_id - ids[line_id]);
 }
 

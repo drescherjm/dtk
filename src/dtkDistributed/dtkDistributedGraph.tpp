@@ -339,6 +339,8 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         }
         v_array[v_pos] = index; ++v_pos;
         m_vertices->setAt(m_vertices->mapper()->firstIndex(m_vertices->mapper()->owner(current_vertice, current_owner)), v_array, v_pos);
+        delete v_array;
+        delete e_array;
 
     }
 

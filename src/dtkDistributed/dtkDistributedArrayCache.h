@@ -22,7 +22,7 @@ template<typename T> class dtkDistributedArray;
 // dtkDistributedArrayCache
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, int Prealloc = 128, int Length = 16> class dtkDistributedArrayCache
+template <typename T, int Prealloc = 128, int Length = 32> class dtkDistributedArrayCache
 {
 public:
     typedef QVarLengthArray<T, Prealloc> Array;

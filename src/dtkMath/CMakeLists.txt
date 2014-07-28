@@ -20,17 +20,17 @@ project(dtkMath)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkArray.h
-  dtkArray.tpp
   dtkMath
   dtkMath.h
+  dtkMathArray.h
+  dtkMathArray.tpp
   dtkMatrix
   dtkMatrix.h
   dtkMatrix.tpp)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkArray.cpp
   dtkMath.cpp
+  dtkMathArray.cpp
   dtkMatrix.cpp)
 
 ## #################################################################

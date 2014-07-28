@@ -20,41 +20,6 @@
 // 
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> struct dtkNextPowerOfTwo;
-
-template <> struct dtkNextPowerOfTwo<quint32>
-{
-    static void roundUp(quint32& nalloc) 
-    {
-        nalloc |= nalloc >> 1;
-        nalloc |= nalloc >> 2;
-        nalloc |= nalloc >> 4;
-        nalloc |= nalloc >> 8;
-        nalloc |= nalloc >> 16;
-        ++nalloc;
-    }
-};
-
-template <> struct dtkNextPowerOfTwo<quint64>
-{
-    static void roundUp(quint64& nalloc)
-    {
-        nalloc |= nalloc >> 1;
-        nalloc |= nalloc >> 2;
-        nalloc |= nalloc >> 4;
-        nalloc |= nalloc >> 8;
-        nalloc |= nalloc >> 16;
-        nalloc |= nalloc >> 32;
-        ++nalloc;        
-    }
-};
-
-qintptr dtkAllocMore(qintptr alloc, qintptr extra);
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
 template <typename T> struct dtkArrayDataTemplate;
 
 template <> struct dtkArrayDataTemplate<qint32>

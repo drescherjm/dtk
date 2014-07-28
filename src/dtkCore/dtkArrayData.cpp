@@ -16,6 +16,29 @@
 
 #include <limits.h>
 
+// /////////////////////////////////////////////////////////////////
+
+void dtkRoundUpNextPowerOfTwo(quint32& nalloc) 
+{
+    nalloc |= nalloc >> 1;
+    nalloc |= nalloc >> 2;
+    nalloc |= nalloc >> 4;
+    nalloc |= nalloc >> 8;
+    nalloc |= nalloc >> 16;
+    ++nalloc;
+};
+
+void dtkRoundUpNextPowerOfTwo(quint64& nalloc)
+{
+    nalloc |= nalloc >> 1;
+    nalloc |= nalloc >> 2;
+    nalloc |= nalloc >> 4;
+    nalloc |= nalloc >> 8;
+    nalloc |= nalloc >> 16;
+    nalloc |= nalloc >> 32;
+    ++nalloc;        
+};
+
 qintptr dtkAllocMore(qintptr alloc, qintptr extra)
 {
     Q_ASSERT(alloc >= 0 && extra >= 0);
@@ -28,7 +51,7 @@ qintptr dtkAllocMore(qintptr alloc, qintptr extra)
     // Assuming container is growing, always overshoot
     //--nalloc;
 
-    dtkNextPowerOfTwo<quintptr>::roundUp(nalloc);
+    dtkRoundUpNextPowerOfTwo(nalloc);
 
     Q_ASSERT(nalloc > quint64(alloc + extra));
 

@@ -96,6 +96,7 @@ public:
     virtual void broadcast(qlonglong *data, qint64 size, qint32 source) = 0;
     virtual void broadcast(double    *data, qint64 size, qint32 source) = 0;
     virtual void broadcast(QByteArray& array, qint32 source) = 0;
+    virtual void broadcast(QVariant& v, qint32 source) = 0;
 
 public:
     virtual void receive(void *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;

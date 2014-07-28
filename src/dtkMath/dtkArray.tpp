@@ -175,8 +175,7 @@ Q_OUTOFLINE_TEMPLATE void dtkArray<T, PreallocSize>::setSize(qlonglong newSize)
         m_data = 0;
     } else {
         qlonglong newcapacity = dtkArrayAllocMore(newSize, 0, sizeof(T));
-        Data *newdata = reinterpret_cast<Data *>
-            (malloc(sizeof(Data) + sizeof(T) * (newcapacity - 1)));
+        Data *newdata = reinterpret_cast<Data *>(malloc(sizeof(Data) + sizeof(T) * (newcapacity - 1)));
         Q_CHECK_PTR(newdata);
         m_data = newdata;
         m_data->ref.store(1);

@@ -26,6 +26,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkMathArray.tpp
   dtkMatrix
   dtkMatrix.h
+  dtkMatrix_p.h
   dtkMatrix.tpp)
 
 set(${PROJECT_NAME}_SOURCES
@@ -50,6 +51,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
+
+target_link_libraries(${PROJECT_NAME} dtkCore)
+target_link_libraries(${PROJECT_NAME} dtkLog)
 
 ## ###################################################################
 ## Install rules - files

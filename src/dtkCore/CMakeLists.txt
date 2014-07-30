@@ -35,7 +35,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkArray.h
   dtkArray.tpp
   dtkArrayData
-  dtkArrayData.h)
+  dtkArrayData.h
+  dtkSpinLock.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkCoreSettings.cpp

@@ -28,6 +28,34 @@ ApplicationWindow {
     minimumHeight: 400;
     minimumWidth: 600;
 
+    Rectangle { id: first;
+
+        anchors.top: parent.top;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        height: 40;
+
+        PluginStoreShaderEffect {
+            gradient_top: "#666666";
+            gradient_mid: "#555555";
+            gradient_bot: "#222222";
+        }
+    }
+
+    Rectangle { id: second;
+
+        anchors.top: first.bottom;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        height: 40;
+
+        PluginStoreShaderEffect {
+            gradient_top: "#660000";
+            gradient_mid: "#550000";
+            gradient_bot: "#220000";
+        }
+    }
+
 }
 
 

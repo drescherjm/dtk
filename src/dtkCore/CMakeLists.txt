@@ -31,6 +31,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager_t.h
   dtkCoreSettings
   dtkCoreSettings.h
+  dtkArray
+  dtkArray.h
+  dtkArray.tpp
   dtkArrayData
   dtkArrayData.h)
 

@@ -26,6 +26,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkMathArray.tpp
   dtkMatrix
   dtkMatrix.h
+  dtkMatrix_p.h
   dtkMatrix.tpp)
 
 set(${PROJECT_NAME}_SOURCES

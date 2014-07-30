@@ -52,6 +52,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 
 qt5_use_modules(${PROJECT_NAME} Core)
 
+target_link_libraries(${PROJECT_NAME} dtkCore)
+target_link_libraries(${PROJECT_NAME} dtkLog)
+
 ## ###################################################################
 ## Install rules - files
 ## ###################################################################

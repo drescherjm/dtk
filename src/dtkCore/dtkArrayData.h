@@ -141,7 +141,6 @@ inline dtkArrayData::AllocationOptions dtkArrayData::cloneFlags(void) const
     return result;
 }
 
-
 // /////////////////////////////////////////////////////////////////
 // 
 // /////////////////////////////////////////////////////////////////
@@ -283,7 +282,7 @@ template <typename T> inline dtkTypedArrayData<T> *dtkTypedArrayData<T>::fromRaw
 
 template <typename T> inline dtkTypedArrayData<T> *dtkTypedArrayData<T>::sharedNull(void)
 {
-    Q_STATIC_ASSERT(sizeof(dtkTypedArrayData) == sizeof(QArrayData));
+    Q_STATIC_ASSERT(sizeof(dtkTypedArrayData) == sizeof(dtkArrayData));
 
     return static_cast<dtkTypedArrayData *>(dtkArrayData::sharedNull());
 }
@@ -300,7 +299,7 @@ template <typename T> inline dtkTypedArrayData<T> *dtkTypedArrayData<T>::unshara
     Q_STATIC_ASSERT(sizeof(dtkTypedArrayData) == sizeof(dtkArrayData));
 
     return allocate(/* capacity */ 0, Unsharable);
-} 
+}
 
 // 
 // dtkArrayData.h ends here

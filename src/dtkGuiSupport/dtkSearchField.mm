@@ -1,5 +1,5 @@
-/* dtkSearchField.mm --- 
- * 
+/* dtkSearchField.mm ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Mar 21 23:47:10 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 11
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkSearchField.h"
@@ -28,7 +28,7 @@
 #include <QtWidgets/QMacCocoaViewContainer>
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 static inline NSString* fromQString(const QString &string)
@@ -45,22 +45,16 @@ static inline QString toQString(NSString *string)
     return QString::fromUtf8([string UTF8String]);
 }
 
-static inline NSImage* fromQPixmap(const QPixmap &pixmap)
-{
-    CGImageRef cgImage = pixmap.toMacCGImageRef();
-    return [[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize];
-}
-
 static inline void setupLayout(void *cocoaView, QWidget *parent)
 {
     parent->setAttribute(Qt::WA_NativeWindow);
     QVBoxLayout *layout = new QVBoxLayout(parent);
     layout->setMargin(0);
-    layout->addWidget(new QMacCocoaViewContainer(cocoaView, parent));
+    layout->addWidget(new QMacCocoaViewContainer((NSView *)cocoaView, parent));
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkSearchFieldPrivate : public QObject

@@ -121,6 +121,7 @@ template <typename T, qlonglong PreallocSize = 8> class dtkArray : private dtkAr
 {
     typedef dtkTypedArrayData<T> Data;
     Data *d;
+    bool isRawData;
 
 public:
     typedef typename Data::iterator iterator;
@@ -136,19 +137,13 @@ public:
     typedef qlonglong size_type;
 
 public:
-    enum RawDataType {
-	ReadOnly = 0x001,
-	Writable = 0x002
-    };
-
-public:
              dtkArray(void);
     explicit dtkArray(qlonglong size);
              dtkArray(qlonglong size, const T& value);
              dtkArray(const T *values, qlonglong size);
              dtkArray(const dtkArray& other);
 #ifdef Q_COMPILER_RVALUE_REFS
-    //dtkArray(dtkArray&& other);
+             dtkArray(dtkArray&& other);
 #endif
 
 public:
@@ -157,7 +152,7 @@ public:
 public:
     dtkArray& operator = (const dtkArray& other);
 #ifdef Q_COMPILER_RVALUE_REFS
-    //dtkArray  operator = (dtkArray&& other);
+    dtkArray& operator = (dtkArray&& other);
 #endif
 
     bool operator == (const dtkArray& other) const;
@@ -227,6 +222,13 @@ public:
 
     dtkArray& fill(const T &t, qlonglong size = -1);
 
+    void setRawData(const T *raw_data, qlonglong size);
+    void setWritableRawData(T *raw_data, qlonglong size);
+
+public:
+    static dtkArray fromRawData(const T *data, qlonglong size);
+    static dtkArray fromWritableRawData(T *data, qlonglong size);
+
 public:
     iterator erase(iterator begin, iterator end);
     iterator erase(iterator pos);
@@ -279,9 +281,9 @@ public:
     qlonglong lastIndexOf(const T &t, qlonglong from = -1) const;
     qlonglong count(const T &t) const;
 
-    dtkArray<T, PreallocSize>   mid(qlonglong pos, qlonglong length = -1) const;
-    dtkArray<T, PreallocSize>  left(qlonglong length) const;
-    dtkArray<T, PreallocSize> right(qlonglong length) const;
+    dtkArray   mid(qlonglong pos, qlonglong length = -1) const;
+    dtkArray  left(qlonglong length) const;
+    dtkArray right(qlonglong length) const;
 
 public:
     void  push_back(const T &t) {  append(t); }
@@ -311,6 +313,8 @@ public:
 
 private:
     template <typename, qlonglong> friend class dtkArray;
+
+    void copyData(Data *other_d);
 
     void reallocData(const qlonglong size, const qlonglong alloc, dtkArrayData::AllocationOptions options = dtkArrayData::Default);
     void reallocData(const qlonglong size);

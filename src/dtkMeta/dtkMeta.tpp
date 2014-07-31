@@ -72,8 +72,9 @@ template <typename T> inline QDataStream& operator << (QDataStream& s, T *t)
 
 template <typename T> inline QDataStream& operator >> (QDataStream& s, T *& t)
 {
-    if (!t)
+    if (!t) {
         t = new T();
+    }
 
     s >> *t;
     return s;
@@ -91,8 +92,8 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, const QLis
 {
     l.clear();
     quint32 c; s >> c;
-    QVariant var;
     for(quint32 i = 0; i < c; ++i) {
+        QVariant var;
         s >> var;
         l << var.value<T *>();
         if (s.atEnd())
@@ -114,8 +115,8 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, QVector<T 
     v.clear();
     quint32 c; s >> c;
     v.resize(c);
-    QVariant var;
     for(quint32 i = 0; i < c; ++i) {
+        QVariant var;
         s >> var;
         v[i] = var.value<T *>();
     }
@@ -134,8 +135,8 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, const std:
 {
     l.clear();
     quint32 c; s >> c;
-    QVariant var;
     for(quint32 i = 0; i < c; ++i) {
+        QVariant var;
         s >> var;
         l.push_back(var.value<T *>());
         if (s.atEnd())
@@ -157,8 +158,8 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, const std:
     v.clear();
     quint32 c; s >> c;
     v.resize(c);
-    QVariant var;
     for(quint32 i = 0; i < c; ++i) {
+        QVariant var; // Very important to instantiate a void QVariant at each step, otherwise, it keeps the same pointer T* to store the stream.
         s >> var;
         v[i] = var.value<T *>();
     }

@@ -1469,199 +1469,224 @@ void dtkArrayTestCase::testInsert(void)
     QVERIFY(array3[16] == 10);
 }
 
-// void dtkArrayTestCase::testSetRawData(void)
-// {
-//     dtkArray<double> array;
-//     double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
-//                         7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
+void dtkArrayTestCase::testSetRawData(void)
+{
+    dtkArray<double> array;
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
+                        7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
 
-//     array.setRawData(contents, 0);
-//     QCOMPARE(array.size(), 0);
-//     QCOMPARE(array.capacity(), 0);
-//     QVERIFY(!array.isDetached());
-//     array.append(1.0);
-//     QCOMPARE(array.size(), 1);
-//     QVERIFY(array.capacity() > 0);
-//     QCOMPARE(array.at(0), 1.0);
-//     QVERIFY(array.isDetached());
+    array.setRawData(contents, 0);
+    QCOMPARE(array.size(), 0);
+    QCOMPARE(array.capacity(), 0);
+    QVERIFY(array.isDetached());
+    array.append(1.0);
+    QCOMPARE(array.size(), 1);
+    QVERIFY(array.capacity() > 0);
+    QCOMPARE(array.at(0), 1.0);
+    QVERIFY(array.isDetached());
 
-//     array.setRawData(contents, 6);
-//     QCOMPARE(array.size(), 6);
-//     QCOMPARE(array.capacity(), 6);
-//     for (int index = 0; index < 6; ++index)
-//         QCOMPARE(array.at(index), contents[index]);
-//     QVERIFY(array.constData() == contents);
-//     QVERIFY(!array.isDetached());
+    array.setRawData(contents, 6);
+    QCOMPARE(array.size(), 6);
+    QCOMPARE(array.capacity(), 6);
+    for (int index = 0; index < 6; ++index)
+        QCOMPARE(array.at(index), contents[index]);
+    QVERIFY(array.constData() == contents);
+    QVERIFY(!array.isDetached());
 
-//     // Force a copy-on-write.
-//     array[3] = 42.0;
-//     QVERIFY(array.isDetached());
-//     QCOMPARE(contents[3], 4.0);
-//     QCOMPARE(array.size(), 6);
-//     QVERIFY(array.capacity() > 6);
-//     for (int index = 0; index < 6; ++index) {
-//         if (index != 3)
-//             QCOMPARE(array.at(index), contents[index]);
-//         else
-//             QCOMPARE(array.at(index), 42.0);
-//     }
-//     QVERIFY(array.constData() != contents);
+    // Force a copy-on-write.
+    array[3] = 42.0;
+    QVERIFY(array.isDetached());
+    QCOMPARE(contents[3], 4.0);
+    QCOMPARE(array.size(), 6);
+    QVERIFY(array.capacity() > 6);
+    for (int index = 0; index < 6; ++index) {
+        if (index != 3)
+            QCOMPARE(array.at(index), contents[index]);
+        else
+            QCOMPARE(array.at(index), 42.0);
+    }
+    QVERIFY(array.constData() != contents);
 
-//     array.setRawData(contents, 12);
-//     QCOMPARE(array.size(), 12);
-//     QCOMPARE(array.capacity(), 12);
-//     for (int index = 0; index < 12; ++index)
-//         QCOMPARE(array.at(index), contents[index]);
-//     QVERIFY(array.constData() == contents);
+    // Writable mode
+    array.setWritableRawData(contents, 8);
+    QCOMPARE(array.size(), 8);
+    QCOMPARE(array.capacity(), 8);
+    QVERIFY(array.isDetached());
+    for (int index = 0; index < 8; ++index)
+        QCOMPARE(array.at(index), contents[index]);
+    QVERIFY(array.constData() == contents);
+    array[3] = 42.0;
+    QVERIFY(array.constData() == contents);
 
-//     QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
-//     dtkArray<QString> array2;
-//     array2.setRawData(strings, 2);
-//     QCOMPARE(array2.size(), 2);
-//     QCOMPARE(array2.capacity(), 2);
-//     QCOMPARE(array2.at(0), QLatin1String("foo"));
-//     QCOMPARE(array2.at(1), QLatin1String("bar"));
-//     QVERIFY(array2.constData() == strings);
+    //
+    array.setRawData(contents, 12);
+    QCOMPARE(array.size(), 12);
+    QCOMPARE(array.capacity(), 12);
+    for (int index = 0; index < 12; ++index) {
+        QCOMPARE(array.at(index), contents[index]);
+    }
+    QVERIFY(array.constData() == contents);
+    
 
-//     // Force a copy-on-write.
-//     array2[1] = QLatin1String("baz");
-//     QCOMPARE(array2.size(), 2);
-//     QVERIFY(array2.capacity() > 2);
-//     QCOMPARE(array2.at(0), QLatin1String("foo"));
-//     QCOMPARE(array2.at(1), QLatin1String("baz"));
-//     QVERIFY(array2.constData() != strings);
-//     QCOMPARE(strings[0], QLatin1String("foo"));
-//     QCOMPARE(strings[1], QLatin1String("bar"));
-// }
+    QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
+    dtkArray<QString> array2;
+    array2.setRawData(strings, 2);
+    QCOMPARE(array2.size(), 2);
+    QCOMPARE(array2.capacity(), 2);
+    QCOMPARE(array2.at(0), QLatin1String("foo"));
+    QCOMPARE(array2.at(1), QLatin1String("bar"));
+    QVERIFY(array2.constData() == strings);
 
-// void dtkArrayTestCase::testFromRawData(void)
-// {
-//     dtkArray<double> array;
-//     double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
-//                         7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
+    // Force a copy-on-write.
+    array2[1] = QLatin1String("baz");
+    QCOMPARE(array2.size(), 2);
+    QVERIFY(array2.capacity() > 2);
+    QCOMPARE(array2.at(0), QLatin1String("foo"));
+    QCOMPARE(array2.at(1), QLatin1String("baz"));
+    QVERIFY(array2.constData() != strings);
+    QCOMPARE(strings[0], QLatin1String("foo"));
+    QCOMPARE(strings[1], QLatin1String("bar"));
 
-//     array = dtkArray<double>::fromRawData(contents, 0);
-//     QCOMPARE(array.size(), 0);
-//     QCOMPARE(array.capacity(), 0);
-//     QVERIFY(!array.isDetached());
-//     array.append(1.0);
-//     QCOMPARE(array.size(), 1);
-//     QVERIFY(array.capacity() > 0);
-//     QCOMPARE(array.at(0), 1.0);
-//     QVERIFY(array.isDetached());
+    //
+    array2.setWritableRawData(strings, 2);
+    QCOMPARE(array2.size(), 2);
+    QCOMPARE(array2.capacity(), 2);
+    QVERIFY(array2.isDetached());
+    array2[1] = QLatin1String("baz");
+    QVERIFY(array2.constData() == strings);
+    for (int index = 0; index < 2; ++index) {
+        QCOMPARE(array2.at(index), strings[index]);
+    }    
+}
 
-//     array = dtkArray<double>::fromRawData(contents, 6);
-//     QCOMPARE(array.size(), 6);
-//     QCOMPARE(array.capacity(), 6);
-//     for (int index = 0; index < 6; ++index)
-//         QCOMPARE(array.at(index), contents[index]);
-//     QVERIFY(array.constData() == contents);
-//     QVERIFY(!array.isDetached());
+void dtkArrayTestCase::testFromRawData(void)
+{
+    dtkArray<double> array;
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
+                        7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
 
-//     // Force a copy-on-write.
-//     array[3] = 42.0;
-//     QVERIFY(array.isDetached());
-//     QCOMPARE(contents[3], 4.0);
-//     QCOMPARE(array.size(), 6);
-//     QVERIFY(array.capacity() > 6);
-//     for (int index = 0; index < 6; ++index) {
-//         if (index != 3)
-//             QCOMPARE(array.at(index), contents[index]);
-//         else
-//             QCOMPARE(array.at(index), 42.0);
-//     }
-//     QVERIFY(array.constData() != contents);
+    array = dtkArray<double>::fromRawData(contents, 0);
+    QCOMPARE(array.size(), 0);
+    QCOMPARE(array.capacity(), 0);
+    QVERIFY(!array.isDetached());
+    array.append(1.0);
+    QCOMPARE(array.size(), 1);
+    QVERIFY(array.capacity() > 0);
+    QCOMPARE(array.at(0), 1.0);
+    QVERIFY(array.isDetached());
 
-//     array = dtkArray<double>::fromRawData(contents, 12);
-//     QCOMPARE(array.size(), 12);
-//     QCOMPARE(array.capacity(), 12);
-//     for (int index = 0; index < 12; ++index)
-//         QCOMPARE(array.at(index), contents[index]);
-//     QVERIFY(array.constData() == contents);
+    array = dtkArray<double>::fromRawData(contents, 6);
+    QCOMPARE(array.size(), 6);
+    QCOMPARE(array.capacity(), 6);
+    for (int index = 0; index < 6; ++index)
+        QCOMPARE(array.at(index), contents[index]);
+    QVERIFY(array.constData() == contents);
+    QVERIFY(!array.isDetached());
 
-//     QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
-//     dtkArray<QString> array2;
-//     array2 = dtkArray<QString>::fromRawData(strings, 2);
-//     QCOMPARE(array2.size(), 2);
-//     QCOMPARE(array2.capacity(), 2);
-//     QCOMPARE(array2.at(0), QLatin1String("foo"));
-//     QCOMPARE(array2.at(1), QLatin1String("bar"));
-//     QVERIFY(array2.constData() == strings);
+    // Force a copy-on-write.
+    array[3] = 42.0;
+    QVERIFY(array.isDetached());
+    QCOMPARE(contents[3], 4.0);
+    QCOMPARE(array.size(), 6);
+    QVERIFY(array.capacity() > 6);
+    for (int index = 0; index < 6; ++index) {
+        if (index != 3)
+            QCOMPARE(array.at(index), contents[index]);
+        else
+            QCOMPARE(array.at(index), 42.0);
+    }
+    QVERIFY(array.constData() != contents);
 
-//     // Force a copy-on-write.
-//     array2[1] = QLatin1String("baz");
-//     QCOMPARE(array2.size(), 2);
-//     QVERIFY(array2.capacity() > 2);
-//     QCOMPARE(array2.at(0), QLatin1String("foo"));
-//     QCOMPARE(array2.at(1), QLatin1String("baz"));
-//     QVERIFY(array2.constData() != strings);
-//     QCOMPARE(strings[0], QLatin1String("foo"));
-//     QCOMPARE(strings[1], QLatin1String("bar"));
-// }
+    array = dtkArray<double>::fromRawData(contents, 12);
+    QCOMPARE(array.size(), 12);
+    QCOMPARE(array.capacity(), 12);
+    for (int index = 0; index < 12; ++index)
+        QCOMPARE(array.at(index), contents[index]);
+    QVERIFY(array.constData() == contents);
 
-// void dtkArrayTestCase::testFromWritableRawData(void)
-// {
-//     dtkArray<double> array;
-//     double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
-//     double contentsModified[] =
-//         {1.0, 2.0, 3.0, 42.0, 5.0, 6.0, 53.0};
+    QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
+    dtkArray<QString> array2;
+    array2 = dtkArray<QString>::fromRawData(strings, 2);
+    QCOMPARE(array2.size(), 2);
+    QCOMPARE(array2.capacity(), 2);
+    QCOMPARE(array2.at(0), QLatin1String("foo"));
+    QCOMPARE(array2.at(1), QLatin1String("bar"));
+    QVERIFY(array2.constData() == strings);
 
-//     array = dtkArray<double>::fromWritableRawData(contents, 0);
-//     QCOMPARE(array.size(), 0);
-//     QCOMPARE(array.capacity(), 0);
-//     array.append(0.0);
-//     QCOMPARE(array.size(), 1);
-//     QVERIFY(array.capacity() > 0);
-//     QCOMPARE(array.at(0), 0.0);
+    // Force a copy-on-write.
+    array2[1] = QLatin1String("baz");
+    QCOMPARE(array2.size(), 2);
+    QVERIFY(array2.capacity() > 2);
+    QCOMPARE(array2.at(0), QLatin1String("foo"));
+    QCOMPARE(array2.at(1), QLatin1String("baz"));
+    QVERIFY(array2.constData() != strings);
+    QCOMPARE(strings[0], QLatin1String("foo"));
+    QCOMPARE(strings[1], QLatin1String("bar"));
+}
 
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
-//     QCOMPARE(array.size(), 6);
-//     QCOMPARE(array.capacity(), 6);
-//     for (int index = 0; index < 6; ++index)
-//         QCOMPARE(array.at(index), contents[index]);
-//     QVERIFY(array.constData() == contents);
+void dtkArrayTestCase::testFromWritableRawData(void)
+{
+    dtkArray<double> array;
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    double contentsModified[] =
+        {1.0, 2.0, 3.0, 42.0, 5.0, 6.0, 53.0};
 
-//     // Modify the raw data in-place.
-//     array[3] = 42.0;
-//     QVERIFY(array.constData() == contents);
+    array = dtkArray<double>::fromWritableRawData(contents, 0);
+    QCOMPARE(array.size(), 0);
+    QCOMPARE(array.capacity(), 0);
+    array.append(0.0);
+    QCOMPARE(array.size(), 1);
+    QVERIFY(array.capacity() > 0);
+    QCOMPARE(array.at(0), 0.0);
 
-//     // Force a copy.
-//     array.append(53.0);
-//     QVERIFY(array.constData() != contents);
-//     for (int index = 0; index < array.size(); ++index)
-//         QCOMPARE(array.at(index), contentsModified[index]);
+    array = dtkArray<double>::fromWritableRawData(contents, 6);
+    QCOMPARE(array.size(), 6);
+    QCOMPARE(array.capacity(), 6);
+    for (int index = 0; index < 6; ++index)
+        QCOMPARE(array.at(index), contents[index]);
+    QVERIFY(array.constData() == contents);
 
-//     // Resize to smaller should stay within the raw data.
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
-//     array.resize(6);
-//     QCOMPARE(array.size(), 6);
-//     array.resize(5);
-//     QCOMPARE(array.size(), 5);
-//     QVERIFY(array.constData() == contents);
-//     for (int index = 0; index < array.size(); ++index)
-//         QCOMPARE(array.at(index), contentsModified[index]);
-//     array.append(6.0);
-//     QVERIFY(array.constData() == contents);
-//     for (int index = 0; index < array.size(); ++index)
-//         QCOMPARE(array.at(index), contentsModified[index]);
+    // Modify the raw data in-place.
+    array[3] = 42.0;
+    QVERIFY(array.constData() == contents);
 
-//     // Resize to larger should force a copy.
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
-//     array.resize(7);
-//     QVERIFY(array.constData() != contents);
-//     for (int index = 0; index < 6; ++index)
-//         QCOMPARE(array.at(index), contentsModified[index]);
-//     QCOMPARE(array.at(6), 0.0);
+    // Force a copy.
+    array.append(53.0);
+    QVERIFY(array.constData() != contents);
+    for (int index = 0; index < array.size(); ++index)
+        QCOMPARE(array.at(index), contentsModified[index]);
 
-//     // Reserve to a larger size should force a copy.
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
-//     array.reserve(7);
-//     QCOMPARE(array.size(), 6);
-//     QVERIFY(array.capacity() >= 7);
-//     QVERIFY(array.constData() != contents);
-//     for (int index = 0; index < 6; ++index)
-//         QCOMPARE(array.at(index), contentsModified[index]);
-// }
+    // Resize to smaller should stay within the raw data.
+    array = dtkArray<double>::fromWritableRawData(contents, 6);
+    array.resize(6);
+    QCOMPARE(array.size(), 6);
+    array.resize(5);
+    QCOMPARE(array.size(), 5);
+    QVERIFY(array.constData() == contents);
+    for (int index = 0; index < array.size(); ++index)
+        QCOMPARE(array.at(index), contentsModified[index]);
+    array.append(6.0);
+    QVERIFY(array.constData() == contents);
+    for (int index = 0; index < array.size(); ++index)
+        QCOMPARE(array.at(index), contentsModified[index]);
+
+    // Resize to larger should force a copy.
+    array = dtkArray<double>::fromWritableRawData(contents, 6);
+    array.resize(7);
+    QVERIFY(array.constData() != contents);
+    for (int index = 0; index < 6; ++index)
+        QCOMPARE(array.at(index), contentsModified[index]);
+    QCOMPARE(array.at(6), 0.0);
+
+    // Reserve to a larger size should force a copy.
+    array = dtkArray<double>::fromWritableRawData(contents, 6);
+    array.reserve(7);
+    QCOMPARE(array.size(), 6);
+    QVERIFY(array.capacity() >= 7);
+    QVERIFY(array.constData() != contents);
+    for (int index = 0; index < 6; ++index)
+        QCOMPARE(array.at(index), contentsModified[index]);
+}
 
 void dtkArrayTestCase::testSearch(void)
 {
@@ -1773,23 +1798,70 @@ void dtkArrayTestCase::testZeroPrealloc(void)
 void dtkArrayTestCase::testDataStream(void)
 {
 #ifndef QT_NO_DATASTREAM
-    dtkArray<double> array;
-    for (int index = 0; index < 1024; ++index)
-        array.append(double(index));
-
-    QByteArray data;
     {
-        QDataStream stream(&data, QIODevice::WriteOnly);
-        stream << array;
+        dtkArray<double> array;
+        for (int index = 0; index < 1024; ++index)
+            array.append(double(index));
+
+        QByteArray data;
+        {
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream << array;
+        }
+
+        dtkArray<double> array2;
+        {
+            QDataStream stream2(data);
+            stream2 >> array2;
+        }
+
+        QVERIFY(array == array2);
     }
 
-    dtkArray<double> array2;
-    {
-        QDataStream stream2(data);
-        stream2 >> array2;
-    }
+    // This part requires to declare QString* to the metatype system
+    // using Q_DECLARE_METATYPE(QString*) in a header.
 
-    QVERIFY(array == array2);
+    // {
+    // qRegisterMetaType<QString*>("QString*");
+    // qRegisterMetaTypeStreamOperators<QString*>("QString*");
+
+    //     QString *s = new QString("s");
+    //     QVariant var = dtkMetaType::variantFromValue(s);
+
+    //     QByteArray ba;
+    //     {
+    //         QDataStream stream(&ba, QIODevice::WriteOnly);
+    //         stream << var;
+    //     }
+
+    //     QVariant vvar;
+    //     {
+    //         QDataStream stream2(ba);
+    //         stream2 >> vvar;
+    //     }
+        
+
+    //     dtkArray<QString *> array;
+    //     for (int index = 0; index < 10; ++index)
+    //         array.append(new QString(QString::number(index)));
+        
+    //     QByteArray data;
+    //     {
+    //         QDataStream stream(&data, QIODevice::WriteOnly);
+    //         stream << array;
+    //     }
+
+    //     dtkArray<QString *> array2;
+    //     {
+    //         QDataStream stream2(data);
+    //         stream2 >> array2;
+    //     }
+
+    //     for (int index = 0; index < 10; ++index) {
+    //         QCOMPARE(*(array2.at(index)), *(array.at(index)));
+    //     }
+    // }
+    
 #endif
 }
 

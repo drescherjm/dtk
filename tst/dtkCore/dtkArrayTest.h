@@ -1,11 +1,11 @@
 /* dtkArrayTest.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 08:31:17 2013 (+0200)
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -38,26 +38,24 @@ private slots:
     void testResize(void);
     void testReserve(void);
     void testSqueeze(void);
-    /* void testCompare(void); */
+    void testCompare(void);
     void testRemove(void);
     void testRemoveFirstLast(void);
-    /* void testExtend(void); */
-    /* void testReverse(void); */
-    /* void testReversed(void); */
-    /* void testMid(void); */
-    /* void testLeft(void); */
-    /* void testRight(void); */
+    void testReverse(void);
+    void testReversed(void);
+    void testMid(void);
+    void testLeft(void);
+    void testRight(void);
     void testIterate(void);
     void testCopyPrealloc(void);
     void testInsert(void);
     /* void testSetRawData(void); */
     /* void testFromRawData(void); */
     /* void testFromWritableRawData(void); */
-    /* void testSearch(void); */
-    /* void testFill(void); */
-    /* void testZeroPrealloc(void); */
-    /* void testExceptions(void); */
-    /* void testDataStream(void); */    
+    void testSearch(void);
+    void testFill(void);
+    void testZeroPrealloc(void);
+    void testDataStream(void);
 
 private slots:
     void cleanupTestCase(void);

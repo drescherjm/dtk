@@ -16,7 +16,11 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 
-ApplicationWindow {
+ApplicationWindow { id: root
+
+    property FontLoader font_iconic: PluginStoreFontAwesomeLoader {}
+
+    // /////////////////////////////////////////////////////////////////
 
     visible: true;
 
@@ -28,38 +32,17 @@ ApplicationWindow {
     minimumHeight: 400;
     minimumWidth: 600;
 
-    Rectangle { id: first;
+    PluginStoreFlipper { id: flipper;
 
         anchors.top: parent.top;
         anchors.left: parent.left;
         anchors.right: parent.right;
         height: 40;
 
-        PluginStoreShaderEffect {
-            gradient_top: "#666666";
-            gradient_mid: "#555555";
-            gradient_bot: "#222222";
-        }
+        front: PluginStoreCategories { onClicked: flipper.swap(); }
+        back: PluginStoreSearch { onClicked: flipper.swap(); }
     }
-
-    Rectangle { id: second;
-
-        anchors.top: first.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        height: 40;
-
-        PluginStoreShaderEffect {
-            gradient_top: "#660000";
-            gradient_mid: "#550000";
-            gradient_bot: "#220000";
-        }
-    }
-
 }
-
-
-
 
 //
 //main.qml ends here

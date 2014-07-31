@@ -2,6 +2,14 @@
   <qresource prefix="/">
     <file>main.qml</file>
     <file>PluginStoreButtonStyle.qml</file>
+    <file>PluginStoreCategories.qml</file>
+    <file>PluginStoreFlipper.qml</file>
+    <file>PluginStoreFontAwesome.js</file>
+    <file>PluginStoreFontAwesome.ttf</file>
+    <file>PluginStoreFontAwesome.qml</file>
+    <file>PluginStoreFontAwesomeLoader.qml</file>
+    <file>PluginStoreSearch.qml</file>
+    <file>PluginStoreSeparator.qml</file>
     <file>PluginStoreShaderEffect.qml</file>
   </qresource>
 </RCC>

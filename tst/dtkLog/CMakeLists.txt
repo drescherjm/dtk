@@ -57,7 +57,7 @@ target_link_libraries(${PROJECT_NAME} dtkLog)
 ## Test rules
 ## ###################################################################
 
-add_test(dtkLogTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkLogTest dtkLogTest)
+add_test(dtkLoggerHandlersTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkLogTest dtkLoggerHandlersTest)
 
 ######################################################################
 ### CMakeLists.txt ends here

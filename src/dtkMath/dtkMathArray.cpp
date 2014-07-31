@@ -1,4 +1,4 @@
-/* dtkArray.cpp ---
+/* dtkMathArray.cpp ---
  * 
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 14:59:07 2013 (+0200)
@@ -9,41 +9,41 @@
  *  For credits, see EOF
  */
 
-#include "dtkArray.h"
+#include "dtkMathArray.h"
 #include <limits.h>
 
 /*!
-    \class dtkArray
-    \brief The dtkArray class is a template class that provides a dynamic array of simple types.
+    \class dtkMathArray
+    \brief The dtkMathArray class is a template class that provides a dynamic array of simple types.
     \since 4.8
     \ingroup qt3d
     \ingroup qt3d::arrays
 
-    dtkArray is similar to QVector except that it has much less overhead
+    dtkMathArray is similar to QVector except that it has much less overhead
     when constructing large arrays by appending individual elements
     one by one.
 
-    dtkArray instances have a preallocated data area for quickly
+    dtkMathArray instances have a preallocated data area for quickly
     building small arrays on the stack without malloc overhead.
     Once the array grows beyond the preallocated size, it is copied
     to the heap.  The size of the preallocated area, which defaults to 8,
     can be specified with the second template parameter:
 
     \code
-    dtkArray<QVector3D, 32> array;
+    dtkMathArray<QVector3D, 32> array;
     \endcode
 
-    dtkArray uses implicit sharing and copy-on-write semantics to support
+    dtkMathArray uses implicit sharing and copy-on-write semantics to support
     passing large arrays around an application with little overhead.
 
-    dtkArray is heavily optimized for copy-on-write and the case of
+    dtkMathArray is heavily optimized for copy-on-write and the case of
     constructing an array by calling append().  It has a slight
     performance penalty for random access using the non-const
     version of operator[]().
 */
 
 /*!
-    \fn dtkArray::dtkArray()
+    \fn dtkMathArray::dtkMathArray()
 
     Constructs an empty array.
 
@@ -51,7 +51,7 @@
 */
 
 /*!
-    \fn dtkArray::dtkArray(qlonglong size, const T &value)
+    \fn dtkMathArray::dtkMathArray(qlonglong size, const T &value)
 
     Constructs an array of \a size elements, all initialized
     to \a value.
@@ -60,21 +60,21 @@
 */
 
 /*!
-    \fn dtkArray::dtkArray(qlonglong size)
+    \fn dtkMathArray::dtkMathArray(qlonglong size)
 
     Constructs an array of \a size elements, all initialized
     to their default-constructed values.
 */
 
 /*!
-    \fn dtkArray::dtkArray(const T *values, qlonglong size)
+    \fn dtkMathArray::dtkMathArray(const T *values, qlonglong size)
 
     Constructs an array of \a size elements, initialized
     from \a values.
 */
 
 /*!
-    \fn dtkArray::dtkArray(const dtkArray<T, PreallocSize> &other)
+    \fn dtkMathArray::dtkMathArray(const dtkMathArray<T, PreallocSize> &other)
 
     Constructs a copy of \a other.
 
@@ -82,20 +82,20 @@
 */
 
 /*!
-    \fn dtkArray::~dtkArray()
+    \fn dtkMathArray::~dtkMathArray()
 
     Destroys the array.
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> &dtkArray::operator=(const dtkArray<T, PreallocSize> &other)
+    \fn dtkMathArray<T, PreallocSize> &dtkMathArray::operator=(const dtkMathArray<T, PreallocSize> &other)
 
     Assigns \a other to this array and returns a reference
     to this array.
 */
 
 /*!
-    \fn qlonglong dtkArray::size() const
+    \fn qlonglong dtkMathArray::size() const
 
     Returns the number of elements in this array.
 
@@ -103,14 +103,14 @@
 */
 
 /*!
-    \fn qlonglong dtkArray::count() const
+    \fn qlonglong dtkMathArray::count() const
     \overload
 
     Same as size(), provided for convenience.
 */
 
 /*!
-    \fn qlonglong dtkArray::capacity() const
+    \fn qlonglong dtkMathArray::capacity() const
 
     Returns the number of elements that can be stored in this
     array before reallocation.
@@ -119,7 +119,7 @@
 */
 
 /*!
-    \fn bool dtkArray::isEmpty() const
+    \fn bool dtkMathArray::isEmpty() const
 
     Returns true if this array is empty; false otherwise.
 
@@ -127,7 +127,7 @@
 */
 
 /*!
-    \fn bool dtkArray::isDetached() const
+    \fn bool dtkMathArray::isDetached() const
     \internal
 
     Returns true if this array has definitely been detached from all
@@ -148,7 +148,7 @@
 */
 
 /*!
-    \fn void dtkArray::detach()
+    \fn void dtkMathArray::detach()
     \internal
 
     Detaches this array from all other shared copies of the data.
@@ -157,7 +157,7 @@
 */
 
 /*!
-    \fn void dtkArray::clear()
+    \fn void dtkMathArray::clear()
 
     Clears all elements from this array and sets the size to zero.
 
@@ -169,7 +169,7 @@
 */
 
 /*!
-    \fn const T &dtkArray::at(qlonglong index) const
+    \fn const T &dtkMathArray::at(qlonglong index) const
 
     Returns the item at position \a index in the array.
 
@@ -180,21 +180,21 @@
 */
 
 /*!
-    \fn T &dtkArray::operator[](qlonglong index)
+    \fn T &dtkMathArray::operator[](qlonglong index)
 
     Returns the item at position \a index as a modifiable reference.
 
     \a index must be a valid index position in the vector (i.e., 0 <= \a index
     < size()).
 
-    Note that using non-const operators can cause dtkArray
+    Note that using non-const operators can cause dtkMathArray
     to do a deep copy.
 
     \sa at(), value()
 */
 
 /*!
-    \fn const T &dtkArray::operator[](qlonglong index) const
+    \fn const T &dtkMathArray::operator[](qlonglong index) const
 
     \overload
 
@@ -202,7 +202,7 @@
 */
 
 /*!
-    \fn T dtkArray::value(qlonglong index) const
+    \fn T dtkMathArray::value(qlonglong index) const
 
     Returns the value at position \a index in the vector.
 
@@ -215,7 +215,7 @@
 */
 
 /*!
-    \fn T dtkArray::value(qlonglong index, const T &defaultValue) const
+    \fn T dtkMathArray::value(qlonglong index, const T &defaultValue) const
     \overload
 
     If the \a index is out of bounds, the function returns
@@ -223,7 +223,7 @@
 */
 
 /*!
-    \fn T *dtkArray::extend(qlonglong size)
+    \fn T *dtkMathArray::extend(qlonglong size)
 
     Extends this array by \a size elements and returns a pointer
     to the storage, which is not initialized.  The pointer is only
@@ -235,7 +235,7 @@
     the in-place new operator to set elements:
 
     \code
-    dtkArray<QRegExp> array;
+    dtkMathArray<QRegExp> array;
     QRegExp *space = array.extend(1);
     new (space) QRegExp(QLatin1String("exp"));
     \endcode
@@ -244,7 +244,7 @@
 */
 
 /*!
-    \fn void dtkArray::append(const T &value)
+    \fn void dtkMathArray::append(const T &value)
 
     Appends \a value to this array.
 
@@ -252,7 +252,7 @@
 */
 
 /*!
-    \fn void dtkArray::append(const T &value1, const T &value2)
+    \fn void dtkMathArray::append(const T &value1, const T &value2)
 
     \overload
 
@@ -260,7 +260,7 @@
 */
 
 /*!
-    \fn void dtkArray::append(const T &value1, const T &value2, const T &value3)
+    \fn void dtkMathArray::append(const T &value1, const T &value2, const T &value3)
 
     \overload
 
@@ -268,7 +268,7 @@
 */
 
 /*!
-    \fn void dtkArray::append(const T &value1, const T &value2, const T &value3, const T &value4)
+    \fn void dtkMathArray::append(const T &value1, const T &value2, const T &value3, const T &value4)
 
     \overload
 
@@ -276,19 +276,19 @@
 */
 
 /*!
-    \fn void dtkArray::append(const T *values, qlonglong count)
+    \fn void dtkMathArray::append(const T *values, qlonglong count)
 
     Appends the \a count elements of \a values to this array.
 */
 
 /*!
-    \fn void dtkArray::append(const dtkArray<T, PreallocSize> &other)
+    \fn void dtkMathArray::append(const dtkMathArray<T, PreallocSize> &other)
 
     Appends the elements of \a other to this array.
 */
 
 /*!
-    \fn void dtkArray::prepend(const T &value)
+    \fn void dtkMathArray::prepend(const T &value)
 
     Prepends \a value to this array.
 
@@ -296,7 +296,7 @@
 */
 
 /*!
-    \fn void dtkArray::insert(qlonglong index, const T &value)
+    \fn void dtkMathArray::insert(qlonglong index, const T &value)
 
     Inserts \a value at position \a index in this array.
     If \a index is 0, then \a value is prepended to the array.
@@ -306,7 +306,7 @@
 */
 
 /*!
-    \fn void dtkArray::insert(qlonglong index, qlonglong count, const T &value)
+    \fn void dtkMathArray::insert(qlonglong index, qlonglong count, const T &value)
     \overload
 
     Inserts \a count copies of \a value at position \a index
@@ -314,7 +314,7 @@
 */
 
 /*!
-    \fn dtkArray::iterator dtkArray::insert(iterator before, qlonglong count, const T &value)
+    \fn dtkMathArray::iterator dtkMathArray::insert(iterator before, qlonglong count, const T &value)
 
     Inserts \a count copies of \a value in front of the item
     pointed to by the iterator \a before.  Returns an iterator
@@ -322,7 +322,7 @@
 */
 
 /*!
-    \fn dtkArray::iterator dtkArray::insert(iterator before, const T &value)
+    \fn dtkMathArray::iterator dtkMathArray::insert(iterator before, const T &value)
     \overload
 
     Inserts \a value in front of the item pointed to by the
@@ -331,7 +331,7 @@
 */
 
 /*!
-    \fn void dtkArray::replace(qlonglong index, const T &value)
+    \fn void dtkMathArray::replace(qlonglong index, const T &value)
 
     Replaces the element at \a index with \a value.
 
@@ -339,7 +339,7 @@
 */
 
 /*!
-    \fn void dtkArray::replace(qlonglong index, const T *values, qlonglong count)
+    \fn void dtkMathArray::replace(qlonglong index, const T *values, qlonglong count)
     \overload
 
     Replaces the \a count elements of this array with the
@@ -352,7 +352,7 @@
 */
 
 /*!
-    \fn void dtkArray::remove(qlonglong index)
+    \fn void dtkMathArray::remove(qlonglong index)
 
     \overload
 
@@ -360,7 +360,7 @@
 */
 
 /*!
-    \fn void dtkArray::remove(qlonglong index, qlonglong count)
+    \fn void dtkMathArray::remove(qlonglong index, qlonglong count)
 
     Removes the \a count elements starting at position \a index
     in this array.  If \a index or \a count is out of range,
@@ -369,7 +369,7 @@
 */
 
 /*!
-    \fn dtkArray::iterator dtkArray::erase(iterator begin, iterator end)
+    \fn dtkMathArray::iterator dtkMathArray::erase(iterator begin, iterator end)
     \overload
 
     Removes all the items from \a begin up to (but not including) \a
@@ -378,7 +378,7 @@
 */
 
 /*!
-    \fn dtkArray::iterator dtkArray::erase(iterator pos)
+    \fn dtkMathArray::iterator dtkMathArray::erase(iterator pos)
 
     Removes the item pointed to by the iterator \a pos from the
     vector, and returns an iterator to the next item in the vector
@@ -388,7 +388,7 @@
 */
 
 /*!
-    \fn void dtkArray::removeFirst()
+    \fn void dtkMathArray::removeFirst()
 
     Removes the first element from this array.  Does nothing if
     the array is empty.
@@ -397,7 +397,7 @@
 */
 
 /*!
-    \fn void dtkArray::removeLast()
+    \fn void dtkMathArray::removeLast()
 
     Removes the last element from this array.  Does nothing if
     the array is empty.
@@ -406,7 +406,7 @@
 */
 
 /*!
-    \fn qlonglong dtkArray::indexOf(const T &value, qlonglong from) const
+    \fn qlonglong dtkMathArray::indexOf(const T &value, qlonglong from) const
 
     Returns the index position of the first occurrence of
     \a value in the array, searching forward from index
@@ -423,7 +423,7 @@
 */
 
 /*!
-    \fn qlonglong dtkArray::lastIndexOf(const T &value, qlonglong from) const
+    \fn qlonglong dtkMathArray::lastIndexOf(const T &value, qlonglong from) const
 
     Returns the index position of the last occurrence of
     \a value in the array, searching backward from index
@@ -440,7 +440,7 @@
 */
 
 /*!
-    \fn bool dtkArray::contains(const T &value) const
+    \fn bool dtkMathArray::contains(const T &value) const
 
     Returns true if the array contains an occurrence of \a value;
     false otherwise.
@@ -452,7 +452,7 @@
 */
 
 /*!
-    \fn qlonglong dtkArray::count(const T &value) const
+    \fn qlonglong dtkMathArray::count(const T &value) const
 
     Returns the number of occurrences of \a value in the array.
 
@@ -463,7 +463,7 @@
 */
 
 /*!
-    \fn void dtkArray::resize(qlonglong size)
+    \fn void dtkMathArray::resize(qlonglong size)
 
     Sets the size of the array to \a size.  If \a size is greater
     than the current size, elements are added to the end and are
@@ -474,7 +474,7 @@
 */
 
 /*!
-    \fn void dtkArray::reserve(qlonglong size)
+    \fn void dtkMathArray::reserve(qlonglong size)
 
     Increases the capacity of this array to reserve space for
     at least \a size elements.  If the capacity is already larger
@@ -489,7 +489,7 @@
 */
 
 /*!
-    \fn void dtkArray::squeeze()
+    \fn void dtkMathArray::squeeze()
 
     Releases any memory not required to store the array's elements
     by reducing its capacity() to size().
@@ -504,7 +504,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> &dtkArray::fill(const T &value, qlonglong size)
+    \fn dtkMathArray<T, PreallocSize> &dtkMathArray::fill(const T &value, qlonglong size)
 
     Assigns \a value to all items in the array. If \a size is
     different from -1 (the default), the array is resized to
@@ -514,7 +514,7 @@
 */
 
 /*!
-    \fn void dtkArray::reverse()
+    \fn void dtkMathArray::reverse()
 
     Reverses the order of this array in place.
 
@@ -522,7 +522,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> dtkArray::reversed() const
+    \fn dtkMathArray<T, PreallocSize> dtkMathArray::reversed() const
 
     Returns a copy of this array with elements in the reverse order.
 
@@ -530,7 +530,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> dtkArray::mid(qlonglong index, qlonglong length) const
+    \fn dtkMathArray<T, PreallocSize> dtkMathArray::mid(qlonglong index, qlonglong length) const
 
     Returns an array containing the \a length elements of
     this array, starting at \a index.  If \a length is less
@@ -542,7 +542,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> dtkArray::left(qlonglong length) const;
+    \fn dtkMathArray<T, PreallocSize> dtkMathArray::left(qlonglong length) const;
 
     Returns an array containing the first \a length
     elements of this array.  If \a length is less than zero,
@@ -553,7 +553,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> dtkArray::right(qlonglong length) const;
+    \fn dtkMathArray<T, PreallocSize> dtkMathArray::right(qlonglong length) const;
 
     Returns an array containing the last \a length
     elements of this array.  If \a length is less than zero,
@@ -564,15 +564,15 @@
 */
 
 /*!
-    \fn void dtkArray::setRawData(const T *raw_data, qlonglong size, RawDataType data_type = ReadOnly)
+    \fn void dtkMathArray::setRawData(const T *raw_data, qlonglong size, RawDataType data_type = ReadOnly)
 
     Sets the array using the raw data \a raw_data of \a size elements.
 
-    By default, the input \a raw_data is of type dtkArray::ReadOnly
+    By default, the input \a raw_data is of type dtkMathArray::ReadOnly
     which means that any modification of the content or the shape of
     the array leads to a copy according to COW principles.
 
-    If the input \a raw_data is of type dtkArray::Writable, then its
+    If the input \a raw_data is of type dtkMathArray::Writable, then its
     elements can be modified in-place. The copy only occurs when the
     shape of the array is enlarged.
 
@@ -580,7 +580,7 @@
 */
 
 /*!
-    \fn T *dtkArray::rawData()
+    \fn T *dtkMathArray::rawData()
 
     Returns a pointer to the data stored in the array.  The pointer
     can be used to access and modify the items in the array.
@@ -596,13 +596,13 @@
 */
 
 /*!
-    \fn const T *dtkArray::rawData() const
+    \fn const T *dtkMathArray::rawData() const
 
     \overload
 */
 
 /*!
-    \fn const T *dtkArray::constRawData() const
+    \fn const T *dtkMathArray::constRawData() const
 
     Returns a const pointer to the data stored in the array.
     The pointer can be used to access the items in the array.
@@ -616,7 +616,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> dtkArray::fromRawData(const T *data, qlonglong size)
+    \fn dtkMathArray<T, PreallocSize> dtkMathArray::fromRawData(const T *data, qlonglong size)
 
     Returns an array consisting of the \a size elements from \a data.
 
@@ -630,19 +630,19 @@
 
     \code
     // Makes a copy of the data immediately.
-    dtkArray<float> array;
+    dtkMathArray<float> array;
     array.append(data, size);
 
     // Does not make a copy of the data until the array is modified.
-    dtkArray<float> array;
-    array = dtkArray<float>::fromRawData(data, size);
+    dtkMathArray<float> array;
+    array = dtkMathArray<float>::fromRawData(data, size);
     \endcode
 
     \sa fromWritableRawData(), append()
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> dtkArray::fromWritableRawData(T *data, qlonglong size)
+    \fn dtkMathArray<T, PreallocSize> dtkMathArray::fromWritableRawData(T *data, qlonglong size)
 
     Returns an array consisting of the \a size elements from \a data.
 
@@ -668,7 +668,7 @@
 */
 
 /*!
-    \fn bool dtkArray::operator==(const dtkArray<T, PreallocSize> &other) const
+    \fn bool dtkMathArray::operator==(const dtkMathArray<T, PreallocSize> &other) const
 
     Returns true if \a other is equal to this array; otherwise
     returns false.
@@ -683,7 +683,7 @@
 */
 
 /*!
-    \fn bool dtkArray::operator!=(const dtkArray<T, PreallocSize> &other) const
+    \fn bool dtkMathArray::operator!=(const dtkMathArray<T, PreallocSize> &other) const
 
     Returns true if \a other is not equal to this array; otherwise
     returns false.
@@ -698,7 +698,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> &dtkArray::operator+=(const T &value)
+    \fn dtkMathArray<T, PreallocSize> &dtkMathArray::operator+=(const T &value)
 
     \overload
 
@@ -709,7 +709,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> &dtkArray::operator+=(const dtkArray<T, PreallocSize> &other)
+    \fn dtkMathArray<T, PreallocSize> &dtkMathArray::operator+=(const dtkMathArray<T, PreallocSize> &other)
 
     Appends the elements of the \a other array to this array
     and returns a reference to this array.
@@ -718,7 +718,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> &dtkArray::operator<<(const T &value)
+    \fn dtkMathArray<T, PreallocSize> &dtkMathArray::operator<<(const T &value)
 
     \overload
 
@@ -729,7 +729,7 @@
 */
 
 /*!
-    \fn dtkArray<T, PreallocSize> &dtkArray::operator<<(const dtkArray<T, PreallocSize> &other)
+    \fn dtkMathArray<T, PreallocSize> &dtkMathArray::operator<<(const dtkMathArray<T, PreallocSize> &other)
 
     Appends the elements of the \a other array to this array
     and returns a reference to this array.
@@ -738,127 +738,127 @@
 */
 
 /*!
-    \typedef dtkArray::iterator
+    \typedef dtkMathArray::iterator
 
-    The dtkArray::iterator typedef provides an STL-style non-const
-    iterator for dtkArray.  The iterator is simply a typedef
+    The dtkMathArray::iterator typedef provides an STL-style non-const
+    iterator for dtkMathArray.  The iterator is simply a typedef
     for "T *" (pointer to T).
 
-    \sa dtkArray::begin(), dtkArray::const_iterator
+    \sa dtkMathArray::begin(), dtkMathArray::const_iterator
 */
 
 /*!
-    \typedef dtkArray::const_iterator
+    \typedef dtkMathArray::const_iterator
 
-    The dtkArray::iterator typedef provides an STL-style const
-    iterator for dtkArray.  The iterator is simply a typedef
+    The dtkMathArray::iterator typedef provides an STL-style const
+    iterator for dtkMathArray.  The iterator is simply a typedef
     for "const T *" (pointer to const T).
 
-    \sa dtkArray::constBegin(), dtkArray::iterator
+    \sa dtkMathArray::constBegin(), dtkMathArray::iterator
 */
 
 /*!
-    \typedef dtkArray::Iterator
+    \typedef dtkMathArray::Iterator
 
-    Qt-style synonym for dtkArray::iterator.
+    Qt-style synonym for dtkMathArray::iterator.
 */
 
 /*!
-    \typedef dtkArray::ConstIterator
+    \typedef dtkMathArray::ConstIterator
 
-    Qt-style synonym for dtkArray::const_iterator.
+    Qt-style synonym for dtkMathArray::const_iterator.
 */
 
 /*!
-    \typedef dtkArray::const_pointer
+    \typedef dtkMathArray::const_pointer
 
     Typedef for const T *. Provided for STL compatibility.
 */
 
 /*!
-    \typedef dtkArray::const_reference
+    \typedef dtkMathArray::const_reference
 
     Typedef for T &. Provided for STL compatibility.
 */
 
 /*!
-    \typedef dtkArray::difference_type
+    \typedef dtkMathArray::difference_type
 
     Typedef for ptrdiff_t. Provided for STL compatibility.
 */
 
 /*!
-    \typedef dtkArray::pointer
+    \typedef dtkMathArray::pointer
 
     Typedef for T *. Provided for STL compatibility.
 */
 
 /*!
-    \typedef dtkArray::reference
+    \typedef dtkMathArray::reference
 
     Typedef for T &. Provided for STL compatibility.
 */
 
 /*!
-    \typedef dtkArray::size_type
+    \typedef dtkMathArray::size_type
 
     Typedef for int. Provided for STL compatibility.
 */
 
 /*!
-    \typedef dtkArray::value_type
+    \typedef dtkMathArray::value_type
 
     Typedef for T. Provided for STL compatibility.
 */
 
 /*!
-    \fn dtkArray::iterator dtkArray::begin()
+    \fn dtkMathArray::iterator dtkMathArray::begin()
 
     Returns an STL-style iterator pointing to the first item
     in the array.
 
-    \sa end(), constBegin(), dtkArray::iterator
+    \sa end(), constBegin(), dtkMathArray::iterator
 */
 
 /*!
-    \fn dtkArray::const_iterator dtkArray::begin() const
+    \fn dtkMathArray::const_iterator dtkMathArray::begin() const
     \overload
 */
 
 /*!
-    \fn dtkArray::const_iterator dtkArray::constBegin() const
+    \fn dtkMathArray::const_iterator dtkMathArray::constBegin() const
 
     Returns a const STL-style iterator pointing to the first item
     in the array.
 
-    \sa constEnd(), begin(), dtkArray::const_iterator
+    \sa constEnd(), begin(), dtkMathArray::const_iterator
 */
 
 /*!
-    \fn dtkArray::iterator dtkArray::end()
+    \fn dtkMathArray::iterator dtkMathArray::end()
 
     Returns an STL-style iterator pointing to the imaginary item
     after the last item in the array.
 
-    \sa begin(), constEnd(), dtkArray::iterator
+    \sa begin(), constEnd(), dtkMathArray::iterator
 */
 
 /*!
-    \fn dtkArray::const_iterator dtkArray::end() const
+    \fn dtkMathArray::const_iterator dtkMathArray::end() const
     \overload
 */
 
 /*!
-    \fn dtkArray::const_iterator dtkArray::constEnd() const
+    \fn dtkMathArray::const_iterator dtkMathArray::constEnd() const
 
     Returns a const STL-style iterator pointing to the imaginary item
     after the last item in the array.
 
-    \sa constBegin(), end(), dtkArray::const_iterator
+    \sa constBegin(), end(), dtkMathArray::const_iterator
 */
 
 /*!
-    \fn T &dtkArray::first()
+    \fn T &dtkMathArray::first()
 
     Returns a reference to the first item in the array. This
     function assumes that the array isn't empty.
@@ -867,12 +867,12 @@
 */
 
 /*!
-    \fn const T &dtkArray::first() const
+    \fn const T &dtkMathArray::first() const
     \overload
 */
 
 /*!
-    \fn T &dtkArray::last()
+    \fn T &dtkMathArray::last()
 
     Returns a reference to the last item in the array. This function
     assumes that the array isn't empty.
@@ -881,12 +881,12 @@
 */
 
 /*!
-    \fn const T &dtkArray::last() const
+    \fn const T &dtkMathArray::last() const
     \overload
 */
 
 /*!
-    \fn bool dtkArray::startsWith(const T &value) const
+    \fn bool dtkMathArray::startsWith(const T &value) const
 
     Returns true if this array is not empty and its first
     item is equal to \a value; otherwise returns false.
@@ -895,7 +895,7 @@
 */
 
 /*!
-    \fn bool dtkArray::endsWith(const T &value) const
+    \fn bool dtkMathArray::endsWith(const T &value) const
 
     Returns true if this array is not empty and its last
     item is equal to \a value; otherwise returns false.
@@ -904,59 +904,59 @@
 */
 
 /*!
-    \fn void dtkArray::push_back(const T &value)
+    \fn void dtkMathArray::push_back(const T &value)
 
     This function is provided for STL compatibility. It is equivalent
     to append(\a value).
 */
 
 /*!
-    \fn void dtkArray::push_front(const T &value)
+    \fn void dtkMathArray::push_front(const T &value)
 
     This function is provided for STL compatibility. It is equivalent
     to prepend(\a value).
 */
 
 /*!
-    \fn void dtkArray::pop_front()
+    \fn void dtkMathArray::pop_front()
 
     This function is provided for STL compatibility. It is equivalent
     to removeFirst().
 */
 
 /*!
-    \fn void dtkArray::pop_back()
+    \fn void dtkMathArray::pop_back()
 
     This function is provided for STL compatibility. It is equivalent
     to removeLast().
 */
 
 /*!
-    \fn dtkArray::reference dtkArray::front()
+    \fn dtkMathArray::reference dtkMathArray::front()
 
     This function is provided for STL compatibility. It is equivalent
     to first().
 */
 
 /*!
-    \fn dtkArray::const_reference dtkArray::front() const
+    \fn dtkMathArray::const_reference dtkMathArray::front() const
     \overload
 */
 
 /*!
-    \fn dtkArray::reference dtkArray::back()
+    \fn dtkMathArray::reference dtkMathArray::back()
 
     This function is provided for STL compatibility. It is equivalent
     to last().
 */
 
 /*!
-    \fn dtkArray::const_reference dtkArray::back() const
+    \fn dtkMathArray::const_reference dtkMathArray::back() const
     \overload
 */
 
 /*!
-    \fn bool dtkArray::empty() const
+    \fn bool dtkMathArray::empty() const
 
     This function is provided for STL compatibility. It is equivalent
     to isEmpty(), returning true if the array is empty; otherwise
@@ -966,16 +966,16 @@
 #ifndef QT_NO_DATASTREAM
 
 /*!
-    \fn QDataStream& operator<<(QDataStream& stream, const dtkArray<T, PreallocSize>& array)
-    \relates dtkArray
+    \fn QDataStream& operator<<(QDataStream& stream, const dtkMathArray<T, PreallocSize>& array)
+    \relates dtkMathArray
 
     Writes \a array to the given \a stream and returns a reference
     to the \a stream.
 */
 
 /*!
-    \fn QDataStream& operator>>(QDataStream& stream, dtkArray<T, PreallocSize>& array)
-    \relates dtkArray
+    \fn QDataStream& operator>>(QDataStream& stream, dtkMathArray<T, PreallocSize>& array)
+    \relates dtkMathArray
 
     Reads \a array from the given \a stream and returns a reference
     to the \a stream.
@@ -983,7 +983,7 @@
 
 #endif
 
-qlonglong dtkArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong sizeOfT)
+qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong sizeOfT)
 {
     if (alloc == 0 && extra == 0)
         return 0;

@@ -1,4 +1,4 @@
-/* dtkArrayTest.h ---
+/* dtkMathArrayTest.h ---
  * 
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 08:31:17 2013 (+0200)
@@ -12,13 +12,13 @@
 
 #include <dtkTest>
 
-class dtkArrayTestCase : public QObject
+class dtkMathArrayTestCase : public QObject
 {
     Q_OBJECT
 
 public:
-             dtkArrayTestCase(void);
-    virtual ~dtkArrayTestCase(void);
+             dtkMathArrayTestCase(void);
+    virtual ~dtkMathArrayTestCase(void);
 
 private slots:
     void initTestCase(void);

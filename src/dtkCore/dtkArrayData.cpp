@@ -42,7 +42,7 @@ void dtkRoundUpNextPowerOfTwo(quint64& nalloc)
 qintptr dtkAllocMore(qintptr alloc, qintptr extra)
 {
     Q_ASSERT(alloc >= 0 && extra >= 0);
-    Q_ASSERT_X(alloc < (1ll << 62) - extra, "dtkAllocMore", "Requested size is too large!");
+    Q_ASSERT_X(alloc < (quint64(1) << 63) - (extra + 1), "dtkAllocMore", "Requested size is too large!");
 
     quint64 nalloc = alloc + extra;
 

@@ -49,9 +49,9 @@ private slots:
     void testIterate(void);
     void testCopyPrealloc(void);
     void testInsert(void);
-    /* void testSetRawData(void); */
-    /* void testFromRawData(void); */
-    /* void testFromWritableRawData(void); */
+    void testSetRawData(void);
+    void testFromRawData(void);
+    void testFromWritableRawData(void);
     void testSearch(void);
     void testFill(void);
     void testZeroPrealloc(void);

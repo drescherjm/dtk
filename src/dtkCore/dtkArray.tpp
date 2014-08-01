@@ -15,10 +15,36 @@
 #pragma once
 
 #include <QtCore>
+#include <dtkMeta/dtkMeta>
 
 // ///////////////////////////////////////////////////////////////////
 // Private practices
 // ///////////////////////////////////////////////////////////////////
+
+template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::copyData(Data *other_d)
+{
+    if (other_d->ref.ref()) {
+        d = other_d;
+
+    } else {
+        if (other_d->capacityReserved) {
+            if (other_d->alloc > PreallocSize) {
+                d = Data::allocate(other_d->alloc);
+                d->capacityReserved = true;
+            } else {
+                d = Data::fromRawData(this->preallocData(), other_d->size, dtkArrayData::Unsharable);
+                d->capacityReserved = bool(PreallocSize);
+                d->alloc = PreallocSize;
+            }
+        } else {
+            d = Data::allocate(other_d->size);
+        }
+        if (d->alloc) {
+            copyConstruct(other_d->begin(), other_d->end(), d->begin());
+            d->size = other_d->size;
+        }
+    }
+}
 
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::reallocData(const qlonglong asize, const qlonglong aalloc, dtkArrayData::AllocationOptions options)
 {
@@ -127,7 +153,8 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::freeData(Data *x)
 {
-    destruct(x->begin(), x->end());
+    if(!isRawData)
+        destruct(x->begin(), x->end());
     Data::deallocate(x);
 }
 
@@ -170,15 +197,20 @@ template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSi
 // Public API
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(void)
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(void) : isRawData(false)
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
-    d = Data::fromRawData(this->preallocData(), 0, dtkArrayData::Unsharable);
-    d->capacityReserved = bool(PreallocSize);
-    d->alloc = PreallocSize;
+    if (PreallocSize) {
+        d = Data::fromRawData(this->preallocData(), 0, dtkArrayData::Unsharable);
+        d->capacityReserved = bool(PreallocSize);
+        d->alloc = PreallocSize;
+
+    } else {
+        d = Data::fromRawData(this->preallocData(), 0);
+    }
 }
 
-template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(qlonglong size)
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(qlonglong size) : isRawData(false)
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater or equal than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
@@ -193,7 +225,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
     defaultConstruct(d->begin(), d->end());
 }
 
-template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(qlonglong size, const T& value)
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(qlonglong size, const T& value) : isRawData(false)
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
@@ -210,7 +242,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         new (--i) T(value);
 }
 
-template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(const T *values, qlonglong size)
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(const T *values, qlonglong size) : isRawData(false)
 {
     Q_STATIC_ASSERT_X(PreallocSize > 0, "dtkArray PreallocSize must be greater than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
@@ -228,40 +260,18 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         new (--i) T(*(--value));
 }
 
-template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(const dtkArray& other)
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(const dtkArray& other) : isRawData(false)
 {
-    if (other.d->ref.ref()) {
-        d = other.d;
-        
-    } else {
-        if (other.d->capacityReserved) {
-            if (other.d->alloc > PreallocSize) {
-                d = Data::allocate(other.d->alloc);
-                d->capacityReserved = true;
-            } else {
-                d = Data::fromRawData(this->preallocData(), other.d->size, dtkArrayData::Unsharable);
-                d->capacityReserved = bool(PreallocSize);
-                d->alloc = PreallocSize;
-            }
-        } else {
-            d = Data::allocate(other.d->size);
-        }
-        if (d->alloc) {
-            copyConstruct(other.d->begin(), other.d->end(), d->begin());
-            d->size = other.d->size;
-        }
-    }
+    this->copyData(other.d);
 }
 
-// #ifdef Q_COMPILER_RVALUE_REFS
-// template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(dtkArray&& other) : d(other.d)
-// {
-//     if(other.usePreallocation()) {
-//         copyConstruct(other.d->begin(), other.d->end(), preallocData());
-//     }
-//     other.clear();
-// }
-// #endif
+#ifdef Q_COMPILER_RVALUE_REFS
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(dtkArray&& other) : isRawData(false)
+{
+    this->copyData(other.d);
+    other.d = Data::sharedNull();
+}
+#endif
 
 template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::~dtkArray(void)
 {
@@ -276,22 +286,18 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>& 
         if (!d->ref.deref())
             freeData(d);
 
-        if (other.d->ref.ref()) {
-            d = other.d;
-
-        } else {
-            d = Data::fromRawData(this->preallocData(), other.d->size, dtkArrayData::Unsharable);
-            d->capacityReserved = bool(PreallocSize);
-            d->alloc = PreallocSize;
-
-            if (d->alloc) {
-                copyConstruct(other.d->begin(), other.d->end(), d->begin());
-                d->size = other.d->size;
-            }
-        }
+        this->copyData(other.d);
     }
     return *this;
 }
+
+#ifdef Q_COMPILER_RVALUE_REFS
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>& dtkArray<T, PreallocSize>::operator = (dtkArray&& other)
+{
+    this->swap(other);
+    return *this;
+}
+#endif
 
 template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSize>::operator == (const dtkArray<T, PreallocSize>& other) const
 {
@@ -315,34 +321,17 @@ template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSi
 
 template <typename T, qlonglong PreallocSize> template <qlonglong PreallocSizeOther> inline dtkArray<T, PreallocSize>::dtkArray(const dtkArray<T, PreallocSizeOther>& other)
 {
-    if (other.d->ref.ref()) {
-        d = other.d;
-
-    } else {
-        if (other.d->capacityReserved) {
-            if (other.d->alloc > PreallocSize) {
-                d = Data::allocate(other.d->alloc);
-                d->capacityReserved = true;
-            } else {
-                d = Data::fromRawData(this->preallocData(), other.d->size, dtkArrayData::Unsharable);
-                d->capacityReserved = bool(PreallocSize);
-                d->alloc = PreallocSize;
-            }
-        } else {
-            d = Data::allocate(other.d->size);
-        }
-        if (d->alloc) {
-            copyConstruct(other.d->begin(), other.d->end(), d->begin());
-            d->size = other.d->size;
-        }
-    }
+    this->copyData(other.d);
 }
 
 template <typename T, qlonglong PreallocSize> template <qlonglong PreallocSizeOther> inline dtkArray<T, PreallocSize>& dtkArray<T, PreallocSize>::operator = (const dtkArray<T, PreallocSizeOther>& other)
 {
     if (other.d != d) {
-        dtkArray<T, PreallocSize> tmp(other);
-        tmp.swap(*this);
+
+        if (!d->ref.deref())
+            freeData(d);
+
+        this->copyData(other.d);
     }
     return *this;
 }
@@ -378,45 +367,9 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
         qSwap(d, other.d);
 
     } else {
-        qSwap(d, other.d);
-        copyConstruct(other.preallocData(), other.preallocData() + d->size, d->begin());
-
-        // if(!usePreallocation()) {
-        //     Data *tmp = Data::fromRawData(dtkArrayPrealloc<T, PreallocSize>::preallocData(), other.size());
-        //     tmp->capacityReserved = bool(PreallocSize);
-        //     tmp->alloc = PreallocSize;
-        //     qSwap(tmp, d);
-        //     copyConstruct(other.d->begin(), other.d->end(), d->begin());
-        //     qSwap(tmp, other.d);
-
-        //     if (!tmp->ref.deref()) {
-        //         if (QTypeInfo<T>::isStatic || !aalloc || (isShared && QTypeInfo<T>::isComplex)) {
-        //             // data was copy constructed, we need to call destructors
-        //             // or if !alloc we did nothing to the old 'd'.
-        //             freeData(tmp);
-        //         } else {
-        //             Data::deallocate(tmp);
-        //         }
-        //     }
-
-        // } else if (!other.usePreallocation()) {
-        //     Data *tmp = Data::fromRawData(other.preallocData(), size());
-        //     tmp->capacityReserved = bool(PreallocSize);
-        //     tmp->alloc = PreallocSize;
-        //     qSwap(tmp, other.d);
-        //     copyConstruct(d->begin(), d->end(), other.d->begin());
-        //     qSwap(tmp, d);
-        //     Data::deallocate(tmp);
-
-        // } else {
-        //     T *tmp = new [d->size];
-        //     copyConstruct(d->begin(), d->end(), tmp);
-        //     copyConstruct(other.d->begin(), other.d->end(), d->begin());
-        //     copyConstruct(tmp, tmp + d->size, other.d->begin());
-        //     qSwap(d->ref, other.d->ref);
-        //     qSwap(d->size, other.d->size);
-        //     delete 
-        // }
+        dtkArray<T, PreallocSize> tmp(other);
+        other = *this;
+        *this = tmp;
     }
 }
 
@@ -806,6 +759,58 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>& 
     return *this;
 }
 
+template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::setRawData(const T *raw_data, qlonglong size)
+{
+    if (!d->ref.deref())
+        freeData(d);
+
+    if (!raw_data || ! size) {
+        d = Data::fromRawData(this->preallocData(), 0);
+    } else {
+        d = Data::fromRawData(raw_data, size);
+        d->ref.atomic.store(2);
+        d->alloc = size;
+        isRawData = true;
+    }
+}
+
+template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::setWritableRawData(T *raw_data, qlonglong size)
+{
+    if (!d->ref.deref())
+        freeData(d);
+
+    if (!raw_data || ! size) {
+        d = Data::fromRawData(this->preallocData(), 0);
+    } else {
+        d = Data::fromRawData(raw_data, size);
+        d->alloc = size;
+        isRawData = true;
+    }
+}
+
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize> dtkArray<T, PreallocSize>::fromRawData(const T *raw_data, qlonglong size)
+{
+    dtkArray result;
+
+    result.d = Data::fromRawData(raw_data, size);
+    result.d->ref.atomic.store(2);
+    result.d->alloc = size;
+    result.isRawData = true;
+
+    return result;
+}
+
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize> dtkArray<T, PreallocSize>::fromWritableRawData(T *raw_data, qlonglong size)
+{
+    dtkArray result;
+
+    result.d = Data::fromRawData(raw_data, size);
+    result.d->alloc = size;
+    result.isRawData = true;
+
+    return result;
+}
+
 template <typename T, qlonglong PreallocSize> inline typename dtkArray<T, PreallocSize>::iterator dtkArray<T, PreallocSize>::erase(iterator abegin, iterator aend)
 {
     Q_ASSERT_X(isValidIterator(abegin), "dtkArray<T, PreallocSize>::erase", "The specified iterator argument 'begin' is invalid");
@@ -1147,25 +1152,27 @@ template<typename T, qlonglong PreallocSize> inline QDataStream& operator>>(QDat
     return s;
 }
 
-// template<typename T, qlonglong PreallocSize> inline QDataStream& operator<<(QDataStream& s, const dtkArray<T *, PreallocSize>& a)
-// {
-//     s << quint64(a.size());
-//     for (typename dtkArray<T *, PreallocSize>::const_iterator it = a.begin(); it != a.end(); ++it)
-//         s << dtkMetaType::variantFromValue(*it);
-//     return s;
-// }
+template<typename T, qlonglong PreallocSize> inline QDataStream& operator<<(QDataStream& s, const dtkArray<T *, PreallocSize>& a)
+{
+    s << quint64(a.size());
+    for (typename dtkArray<T *, PreallocSize>::const_iterator it = a.begin(); it != a.end(); ++it)
+        s << dtkMetaType::variantFromValue(*it);
+    return s;
+}
 
-// template<typename T, qlonglong PreallocSize> inline QDataStream& operator>>(QDataStream& s, dtkArray<T *, PreallocSize>& a)
-// {
-//     a.clear();
-//     quint64 c; s >> c;
-//     a.resize(c);
-//     for(quint64 i = 0; i < c; ++i) {
-//         s >> var;
-//         a[i] = var.value<T *>();
-//     }
-//     return s;
-// }
+template<typename T, qlonglong PreallocSize> inline QDataStream& operator>>(QDataStream& s, dtkArray<T *, PreallocSize>& a)
+{
+    a.clear();
+    quint64 c; s >> c;
+    a.reserve(c);
+    for(quint64 i = 0; i < c; ++i) {
+        QVariant var;
+        s >> var;
+        a.append(var.value<T *>());
+    }
+
+    return s;
+}
 
 //
 // dtkArray.tpp ends here

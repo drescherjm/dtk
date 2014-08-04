@@ -1526,7 +1526,7 @@ void dtkArrayTestCase::testSetRawData(void)
         QCOMPARE(array.at(index), contents[index]);
     }
     QVERIFY(array.constData() == contents);
-    
+
 
     QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
     dtkArray<QString> array2;
@@ -1556,7 +1556,7 @@ void dtkArrayTestCase::testSetRawData(void)
     QVERIFY(array2.constData() == strings);
     for (int index = 0; index < 2; ++index) {
         QCOMPARE(array2.at(index), strings[index]);
-    }    
+    }
 }
 
 void dtkArrayTestCase::testFromRawData(void)
@@ -1839,12 +1839,12 @@ void dtkArrayTestCase::testDataStream(void)
     //         QDataStream stream2(ba);
     //         stream2 >> vvar;
     //     }
-        
+
 
     //     dtkArray<QString *> array;
     //     for (int index = 0; index < 10; ++index)
     //         array.append(new QString(QString::number(index)));
-        
+
     //     QByteArray data;
     //     {
     //         QDataStream stream(&data, QIODevice::WriteOnly);
@@ -1861,7 +1861,79 @@ void dtkArrayTestCase::testDataStream(void)
     //         QCOMPARE(*(array2.at(index)), *(array.at(index)));
     //     }
     // }
-    
+
+#endif
+}
+
+// Test is performed when using c++11
+void dtkArrayTestCase::testDynamicArray(void)
+{
+#ifdef Q_COMPILER_TEMPLATE_ALIAS
+    dtkArrayDynamic<double> array;
+
+    // Check the basic properties.
+    QVERIFY(array.isEmpty());
+    QVERIFY(!array.usePreallocation());
+    QCOMPARE(array.count(), 0LL);
+    QCOMPARE(array.size(), 0LL);
+    QCOMPARE(array.capacity(), 0LL);
+    QCOMPARE(array.preallocatedCapacity(), 0LL);
+    QVERIFY(array.constData() == 0);
+    QVERIFY(array.data() == 0);
+
+    // Add one element and check the basic properties again.
+    array.append(0.0);
+    QVERIFY(!array.isEmpty());
+    QVERIFY(!array.usePreallocation());
+    QCOMPARE(array.count(), 1LL);
+    QCOMPARE(array.size(), 1LL);
+    QVERIFY(array.capacity() > 1);
+    QVERIFY(array.constData() != 0);
+    QVERIFY(array.data() == array.constData());
+
+    //
+    array.append(1.0, 2.0);
+    array.append(3.0, 4.0, 5.0);
+    array.append(6.0, 7.0, 8.0, 9.0);
+    QVERIFY(array.size() == 10LL);
+    for (int i = 0; i < 10; ++i)
+        QCOMPARE(double(i), array.at(i));
+
+    dtkArray<double> array1;
+    array1 = array;
+    QVERIFY(array.isSharedWith(array1));
+    for (int i = 0; i < 10; ++i)
+        QCOMPARE(double(i), array1.at(i));
+
+    array[5] = 11.0;
+    QVERIFY(array.isDetached());
+    QVERIFY(array != array1);
+
+    array.resize(100);
+    QVERIFY(array.size() == 100LL);
+
+    double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
+                        7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
+
+    array.setRawData(contents, 12);
+    QVERIFY(!array.isDetached());
+    array[10] = 1./10.;
+    QVERIFY(array.isDetached());
+    QVERIFY(array[10] != contents[10]);
+
+    array.setWritableRawData(contents, 12);
+    QVERIFY(array.isDetached());
+
+    array[10] = 1./10.;
+    QCOMPARE(array[10], contents[10]);
+
+    //
+    dtkArrayDynamic<double> array2(contents, 12);
+    QVERIFY(!array.isEmpty());
+    QCOMPARE(array.count(), 12LL);
+
+    array2 = array1;
+
 #endif
 }
 

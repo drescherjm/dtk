@@ -87,7 +87,13 @@ public:
     virtual void put(qint32 dest, qlonglong position, void  *data, qlonglong buffer_id, qlonglong nelements = 1) = 0;
 
 public:
-    virtual void send(void *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;
+    virtual void send(void   *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;
+    virtual void send(bool   *data, qint64 size, qint32 target, int tag);
+    virtual void send(int    *data, qint64 size, qint32 target, int tag);
+    virtual void send(long   *data, qint64 size, qint32 target, int tag);
+    virtual void send(qint64 *data, qint64 size, qint32 target, int tag);
+    virtual void send(float  *data, qint64 size, qint32 target, int tag);
+    virtual void send(double *data, qint64 size, qint32 target, int tag);
     virtual void send(char *data, qint64 size, qint32 target, qint32 tag);
     virtual void send(QByteArray& array, qint32 target, qint32 tag) = 0;
     virtual void send(const QVariant& v, qint32 target, qint32 tag);
@@ -100,6 +106,12 @@ public:
 
 public:
     virtual void receive(void *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;
+    virtual void receive(bool   *data, qint64 size, qint32 source, int tag);
+    virtual void receive(int    *data, qint64 size, qint32 source, int tag);
+    virtual void receive(long   *data, qint64 size, qint32 source, int tag);
+    virtual void receive(qint64 *data, qint64 size, qint32 source, int tag);
+    virtual void receive(float  *data, qint64 size, qint32 source, int tag);
+    virtual void receive(double *data, qint64 size, qint32 source, int tag);
     virtual void receive(char *data, qint64 size, qint32 source, qint32 tag);
     virtual void receive(QByteArray &v,  qint32 source, qint32 tag) = 0 ;
     virtual void receive(QByteArray &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
@@ -107,13 +119,13 @@ public:
     /* virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0; */
 
 public:
-    virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
-    virtual void reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void reduce(float  *send, float  *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(float  *send, float  *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
 
 public:
     virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker);

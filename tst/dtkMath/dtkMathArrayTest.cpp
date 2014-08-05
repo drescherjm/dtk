@@ -1,4 +1,4 @@
-/* dtkArrayTest.cpp ---
+/* dtkMathArrayTest.cpp ---
  * 
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 15:00:18 2013 (+0200)
@@ -9,9 +9,9 @@
  * See EOF.
  */
 
-#include "dtkArrayTest.h"
+#include "dtkMathArrayTest.h"
 
-#include <dtkMath/dtkArray.h>
+#include <dtkMath/dtkMathArray.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -113,38 +113,38 @@ int ComplexValue::destroyCount = 0;
 // 
 // ///////////////////////////////////////////////////////////////////
 
-dtkArrayTestCase::dtkArrayTestCase(void)
+dtkMathArrayTestCase::dtkMathArrayTestCase(void)
 {
 }
 
-dtkArrayTestCase::~dtkArrayTestCase(void)
-{
-
-}
-
-void dtkArrayTestCase::initTestCase(void)
+dtkMathArrayTestCase::~dtkMathArrayTestCase(void)
 {
 
 }
 
-void dtkArrayTestCase::init(void)
+void dtkMathArrayTestCase::initTestCase(void)
 {
 
 }
 
-void dtkArrayTestCase::cleanup(void)
+void dtkMathArrayTestCase::init(void)
 {
 
 }
 
-void dtkArrayTestCase::cleanupTestCase(void)
+void dtkMathArrayTestCase::cleanup(void)
 {
 
 }
 
-void dtkArrayTestCase::testCreate(void)
+void dtkMathArrayTestCase::cleanupTestCase(void)
 {
-    dtkArray<double> array;
+
+}
+
+void dtkMathArrayTestCase::testCreate(void)
+{
+    dtkMathArray<double> array;
 
     // Check the basic properties.
     QVERIFY(array.isEmpty());
@@ -153,7 +153,7 @@ void dtkArrayTestCase::testCreate(void)
     QCOMPARE(array.capacity(), ExpectedMinCapacity);
     QVERIFY(array.constRawData() != 0);
     QVERIFY(array.rawData() == array.constRawData());
-    QVERIFY(((const dtkArray<double> *)&array)->rawData() == array.constRawData());
+    QVERIFY(((const dtkMathArray<double> *)&array)->rawData() == array.constRawData());
 
     // The current constRawData() pointer should be pointing into
     // the middle of "array" at the m_prealloc structure.
@@ -169,22 +169,22 @@ void dtkArrayTestCase::testCreate(void)
     QCOMPARE(array.capacity(), ExpectedMinCapacity);
     QVERIFY(array.constRawData() != 0);
     QVERIFY(array.rawData() == array.constRawData());
-    QVERIFY(((const dtkArray<double> *)&array)->rawData() == array.constRawData());
+    QVERIFY(((const dtkMathArray<double> *)&array)->rawData() == array.constRawData());
 
     // Create another array that is filled with an initial value.
-    dtkArray<QVector3D> array2(100, QVector3D(1.0f, 2.0f, 3.0f));
+    dtkMathArray<QVector3D> array2(100, QVector3D(1.0f, 2.0f, 3.0f));
     QVERIFY(!array2.isEmpty());
     QCOMPARE(array2.count(), 100LL);
     QCOMPARE(array2.size(), 100LL);
     QVERIFY(array2.capacity() >= 100LL);
     QVERIFY(array2.constRawData() != 0LL);
     QVERIFY(array2.rawData() == array2.constRawData());
-    QVERIFY(((const dtkArray<QVector3D> *)&array2)->rawData() == array2.constRawData());
+    QVERIFY(((const dtkMathArray<QVector3D> *)&array2)->rawData() == array2.constRawData());
     for (int index = 0; index < 100; ++index)
         QVERIFY(array2.at(index) == QVector3D(1.0f, 2.0f, 3.0f));
 
     // Create a filled array that is within the prealloc area.
-    dtkArray<double> array3(ExpectedMinCapacity, 42.5f);
+    dtkMathArray<double> array3(ExpectedMinCapacity, 42.5f);
     QVERIFY(!array3.isEmpty());
     QCOMPARE(array3.count(), ExpectedMinCapacity);
     QCOMPARE(array3.size(), ExpectedMinCapacity);
@@ -195,7 +195,7 @@ void dtkArrayTestCase::testCreate(void)
         QVERIFY(array3.at(index) == 42.5f);
 
     // Create an array of strings.
-    dtkArray<QString> array4;
+    dtkMathArray<QString> array4;
     QCOMPARE(array4.size(), 0LL);
     array4.append(QLatin1String("foo"));
     array4.append(QLatin1String("bar"));
@@ -209,7 +209,7 @@ void dtkArrayTestCase::testCreate(void)
     // the destructors are called when the array is destroyed.
     ComplexValue::destroyCount = 0;
     {
-        dtkArray<ComplexValue> array5;
+        dtkMathArray<ComplexValue> array5;
         array5.append(ComplexValue(1));
         array5.append(ComplexValue(2));
         array5.append(ComplexValue(3));
@@ -225,9 +225,9 @@ void dtkArrayTestCase::testCreate(void)
     QCOMPARE(ComplexValue::destroyCount, 6);
 }
 
-// void dtkArrayTestCase::testAppend(void)
+// void dtkMathArrayTestCase::testAppend(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     int index;
 
 //     // Appending up to the minimum capacity should not cause a realloc.
@@ -265,14 +265,14 @@ void dtkArrayTestCase::testCreate(void)
 
 //     // Make two copies of the array.
 //     QVERIFY(array.isDetached());
-//     dtkArray<double> array2(array);
+//     dtkMathArray<double> array2(array);
 //     QVERIFY(!array.isDetached());
 //     QVERIFY(!array2.isDetached());
 //     QCOMPARE(array2.count(), ExpectedMinCapacity + 1 + 1000);
 //     QCOMPARE(array2.size(), array2.count());
 //     QVERIFY(!array2.isEmpty());
 //     QVERIFY(array2.capacity() >= array2.size());
-//     dtkArray<double> array3;
+//     dtkMathArray<double> array3;
 //     array3 = array;
 //     QCOMPARE(array3.count(), ExpectedMinCapacity + 1 + 1000);
 //     QCOMPARE(array3.size(), array3.count());
@@ -321,7 +321,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array2.isDetached());  // Now knows that it isn't.
 
 //     // Create a large array of strings.
-//     dtkArray<QString> array4;
+//     dtkMathArray<QString> array4;
 //     for (index = 0; index < 1000; ++index)
 //         array4.append(QString::number(index));
 //     QCOMPARE(array4.size(), 1000);
@@ -329,7 +329,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QVERIFY(array4[index] == QString::number(index));
 
 //     // Make a copy of the array of strings and then force a detach.
-//     dtkArray<QString> array5(array4);
+//     dtkMathArray<QString> array5(array4);
 //     QCOMPARE(array4.size(), 1000);
 //     QCOMPARE(array5.size(), 1000);
 //     for (index = 0; index < 1000; ++index) {
@@ -348,7 +348,7 @@ void dtkArrayTestCase::testCreate(void)
 //     // Create an array of complex values and force one realloc
 //     // to test that copy constructors and destructors are called
 //     // when moving data from the prealloc array to the heap.
-//     dtkArray<ComplexValue> array6;
+//     dtkMathArray<ComplexValue> array6;
 //     ComplexValue::destroyCount = 0;
 //     for (index = 0; index < ExpectedMinCapacity; ++index)
 //         array6.append(ComplexValue(index));
@@ -383,7 +383,7 @@ void dtkArrayTestCase::testCreate(void)
 
 //     // Make a copy of array6 and force a detach.
 //     int size = array6.size();
-//     dtkArray<ComplexValue> array7(array6);
+//     dtkMathArray<ComplexValue> array7(array6);
 //     QCOMPARE(array6.size(), size);
 //     QCOMPARE(array7.size(), size);
 //     for (index = 0; index < size; ++index) {
@@ -400,7 +400,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array7[size].value() == size);
 
 //     // Make another copy using operator=.
-//     dtkArray<ComplexValue> array8;
+//     dtkMathArray<ComplexValue> array8;
 //     QCOMPARE(array8.size(), 0);
 //     array8 = array6;
 //     QCOMPARE(array6.size(), size);
@@ -419,10 +419,10 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array8[size].value() == size);
 
 //     // Copy the same object over itself.
-//     dtkArray<ComplexValue> array9(array8);
+//     dtkMathArray<ComplexValue> array9(array8);
 //     QVERIFY(array9.constRawData() == array8.constRawData());
 //     for (index = 0; index < array8.size(); ++index)
-//         QCOMPARE((*((const dtkArray<ComplexValue> *)&array9))[index],
+//         QCOMPARE((*((const dtkMathArray<ComplexValue> *)&array9))[index],
 //                  array8.at(index));
 //     array9 = array8;
 //     QVERIFY(array9.constRawData() == array8.constRawData());
@@ -430,11 +430,11 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array9.at(index), array8.at(index));
 // }
 
-// void dtkArrayTestCase::testAppendTwoAtATime(void)
+// void dtkMathArrayTestCase::testAppendTwoAtATime(void)
 // {
 //     int index;
 
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.append(1.0, 2.0);
 //     array.append(3.0, 4.0);
 //     QCOMPARE(array[0], 1.0);
@@ -443,7 +443,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array[3], 4.0);
 //     QCOMPARE(array.count(), 4);
 
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     for (index = 0; index < 1000; ++index)
 //         array2.append(double(index), double(index + 1));
 //     QCOMPARE(array2.count(), 2000);
@@ -452,7 +452,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array2[index * 2 + 1], double(index + 1));
 //     }
 
-//     dtkArray<QString> array3;
+//     dtkMathArray<QString> array3;
 //     for (index = 0; index < 1000; ++index)
 //         array3.append(QString::number(index), QString::number(index + 1));
 //     QCOMPARE(array3.count(), 2000);
@@ -461,7 +461,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array3[index * 2 + 1], QString::number(index + 1));
 //     }
 
-//     dtkArray<ComplexValue> array4;
+//     dtkMathArray<ComplexValue> array4;
 //     for (index = 0; index < 1000; ++index)
 //         array4.append(ComplexValue(index), ComplexValue(index + 1));
 //     QCOMPARE(array4.count(), 2000);
@@ -471,11 +471,11 @@ void dtkArrayTestCase::testCreate(void)
 //     }
 // }
 
-// void dtkArrayTestCase::testAppendThreeAtATime(void)
+// void dtkMathArrayTestCase::testAppendThreeAtATime(void)
 // {
 //     int index;
 
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.append(1.0, 2.0, 3.0);
 //     array.append(4.0, 5.0, 6.0);
 //     QCOMPARE(array[0], 1.0);
@@ -486,7 +486,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array[5], 6.0);
 //     QCOMPARE(array.count(), 6);
 
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     for (index = 0; index < 1000; ++index)
 //         array2.append(double(index), double(index + 1), double(index + 2));
 //     QCOMPARE(array2.count(), 3000);
@@ -496,7 +496,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array2[index * 3 + 2], double(index + 2));
 //     }
 
-//     dtkArray<QString> array3;
+//     dtkMathArray<QString> array3;
 //     for (index = 0; index < 1000; ++index)
 //         array3.append(QString::number(index), QString::number(index + 1),
 //                       QString::number(index + 2));
@@ -507,7 +507,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array3[index * 3 + 2], QString::number(index + 2));
 //     }
 
-//     dtkArray<ComplexValue> array4;
+//     dtkMathArray<ComplexValue> array4;
 //     for (index = 0; index < 1000; ++index)
 //         array4.append(ComplexValue(index), ComplexValue(index + 1),
 //                       ComplexValue(index + 2));
@@ -519,11 +519,11 @@ void dtkArrayTestCase::testCreate(void)
 //     }
 // }
 
-// void dtkArrayTestCase::testAppendFourAtATime(void)
+// void dtkMathArrayTestCase::testAppendFourAtATime(void)
 // {
 //     int index;
 
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.append(1.0, 2.0, 3.0, 4.0);
 //     array.append(5.0, 6.0, 7.0, 8.0);
 //     QCOMPARE(array[0], 1.0);
@@ -536,7 +536,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array[7], 8.0);
 //     QCOMPARE(array.count(), 8);
 
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     for (index = 0; index < 1000; ++index)
 //         array2.append(double(index), double(index + 1), double(index + 2), double(index + 3));
 //     QCOMPARE(array2.count(), 4000);
@@ -547,7 +547,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array2[index * 4 + 3], double(index + 3));
 //     }
 
-//     dtkArray<QString> array3;
+//     dtkMathArray<QString> array3;
 //     for (index = 0; index < 1000; ++index)
 //         array3.append(QString::number(index), QString::number(index + 1),
 //                       QString::number(index + 2), QString::number(index + 3));
@@ -559,7 +559,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array3[index * 4 + 3], QString::number(index + 3));
 //     }
 
-//     dtkArray<ComplexValue> array4;
+//     dtkMathArray<ComplexValue> array4;
 //     for (index = 0; index < 1000; ++index)
 //         array4.append(ComplexValue(index), ComplexValue(index + 1),
 //                       ComplexValue(index + 2), ComplexValue(index + 3));
@@ -572,10 +572,10 @@ void dtkArrayTestCase::testCreate(void)
 //     }
 // }
 
-// void dtkArrayTestCase::testAppendArray(void)
+// void dtkMathArrayTestCase::testAppendArray(void)
 // {
-//     dtkArray<double> array;
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array;
+//     dtkMathArray<double> array2;
 //     int index;
 
 //     for (index = 0; index < 1000; ++index) {
@@ -597,27 +597,27 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array2[index + 1000], double(1000 - index));
 //     }
 
-//     array2 += (dtkArray<double>());
+//     array2 += (dtkMathArray<double>());
 //     QCOMPARE(array2.count(), 2000);
 
-//     dtkArray<double> array3(array2.constRawData(), array2.size());
+//     dtkMathArray<double> array3(array2.constRawData(), array2.size());
 //     QCOMPARE(array3.size(), array2.size());
 //     for (index = 0; index < array2.size(); ++index)
 //         QCOMPARE(array3.at(index), array2.at(index));
 // }
 
-// void dtkArrayTestCase::testSetAt(void)
+// void dtkMathArrayTestCase::testSetAt(void)
 // {
 //     int index;
 
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.append(1.0);
 //     QCOMPARE(array[0], 1.0);
 
 //     array[0] = 6.0;
 //     QCOMPARE(array[0], 6.0);
 
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     for (index = 0; index < 1000; ++index)
 //         array2.append(index);
 //     for (index = 0; index < 1000; ++index)
@@ -630,9 +630,9 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array2[index], double(-index));
 // }
 
-// void dtkArrayTestCase::testValue(void)
+// void dtkMathArrayTestCase::testValue(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1000; ++index)
 //         array.append(double(index));
 
@@ -648,10 +648,10 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.value(1000, 10001.0), 10001.0);
 // }
 
-// void dtkArrayTestCase::testReplace(void)
+// void dtkMathArrayTestCase::testReplace(void)
 // {
-//     dtkArray<double> array;
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array;
+//     dtkMathArray<double> array2;
 //     int index;
 
 //     for (index = 0; index < 1000; ++index) {
@@ -708,8 +708,8 @@ void dtkArrayTestCase::testCreate(void)
 //             QCOMPARE(array[index], extras[index - 1400]);
 //     }
 
-//     dtkArray<ComplexValue> array3;
-//     dtkArray<ComplexValue> array4;
+//     dtkMathArray<ComplexValue> array3;
+//     dtkMathArray<ComplexValue> array4;
 //     for (index = 0; index < 1000; ++index) {
 //         array3.append(ComplexValue(index));
 //         array4.append(ComplexValue(1000 - index));
@@ -720,9 +720,9 @@ void dtkArrayTestCase::testCreate(void)
 // }
 
 // // Exercise the various conditionals in operator=().
-// void dtkArrayTestCase::testCopy(void)
+// void dtkMathArrayTestCase::testCopy(void)
 // {
-//     dtkArray<double> array, array2, array3;
+//     dtkMathArray<double> array, array2, array3;
 
 //     array2.append(1.0);
 //     array2.append(7.0);
@@ -739,12 +739,12 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array2.at(0), double(1.0));
 //     QCOMPARE(array2.at(1), double(7.0));
 
-//     dtkArray<double> array4(array2);
+//     dtkMathArray<double> array4(array2);
 //     QCOMPARE(array2.count(), 2);
 //     QCOMPARE(array2.at(0), double(1.0));
 //     QCOMPARE(array2.at(1), double(7.0));
 
-//     dtkArray<double> array5, array6;
+//     dtkMathArray<double> array5, array6;
 //     for (int index = 0; index < 32; ++index)
 //         array5.append(2.0);
 //     QCOMPARE(array5.count(), 32);
@@ -761,9 +761,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array5.count(), 0);
 // }
 
-// void dtkArrayTestCase::testResize(void)
+// void dtkMathArrayTestCase::testResize(void)
 // {
-//     dtkArray<int> array;
+//     dtkMathArray<int> array;
 
 //     array.resize(-1);
 //     QCOMPARE(array.count(), 0);
@@ -798,7 +798,7 @@ void dtkArrayTestCase::testCreate(void)
 //     array.resize(50);
 //     QCOMPARE(array.count(), 50);
 
-//     dtkArray<int> array2(array);
+//     dtkMathArray<int> array2(array);
 //     array.resize(40);
 //     QCOMPARE(array.count(), 40);
 //     QCOMPARE(array2.count(), 50);
@@ -831,9 +831,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array.capacity() == ExpectedMinCapacity);
 // }
 
-// void dtkArrayTestCase::testReserve(void)
+// void dtkMathArrayTestCase::testReserve(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.reserve(1000);
 //     QVERIFY(array.isEmpty());
 //     QVERIFY(array.capacity() >= 1000);
@@ -851,9 +851,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.count(), 1000);
 // }
 
-// void dtkArrayTestCase::testSqueeze(void)
+// void dtkMathArrayTestCase::testSqueeze(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.reserve(100);
 //     QVERIFY(array.isEmpty());
 //     QVERIFY(array.capacity() >= 100);
@@ -869,7 +869,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.count(), 100);
 
 //     // Test squeezing within the preallocated area.
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     array2.append(1.0);
 //     array2.append(2.0);
 //     array2.append(3.0);
@@ -878,7 +878,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array2.count(), 3);
 
 //     // Test copy-on-write during squeezing.
-//     dtkArray<double> array3(array);
+//     dtkMathArray<double> array3(array);
 //     array3.squeeze();
 //     QCOMPARE(array3.count(), 100);
 //     QCOMPARE(array.count(), 100);
@@ -890,15 +890,15 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.capacity(), ExpectedMinCapacity);
 // }
 
-// void dtkArrayTestCase::testCompare(void)
+// void dtkMathArrayTestCase::testCompare(void)
 // {
-//     dtkArray<double> array, array2, array3;
+//     dtkMathArray<double> array, array2, array3;
 
 //     QVERIFY(array == array2);
 
 //     array.append(1.0);
 //     array3.append(1.0);
-//     dtkArray<double> array4(array);
+//     dtkMathArray<double> array4(array);
 
 //     QVERIFY(array == array);
 //     QVERIFY(array != array2);
@@ -918,9 +918,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(!(array2 != array));
 // }
 
-// void dtkArrayTestCase::testRemove(void)
+// void dtkMathArrayTestCase::testRemove(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 
 //     array.remove(0, 100);
 //     QCOMPARE(array.count(), 0);
@@ -941,7 +941,7 @@ void dtkArrayTestCase::testCreate(void)
 //             QCOMPARE(array[index], double(index + 20));
 //     }
 
-//     dtkArray<double> array2(array);
+//     dtkMathArray<double> array2(array);
 //     array2.remove(-10, 20);
 //     array2.remove(60, 20);
 //     QCOMPARE(array2.count(), 60);
@@ -968,9 +968,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.count(), 0);
 // }
 
-// void dtkArrayTestCase::testRemoveFirstLast(void)
+// void dtkMathArrayTestCase::testRemoveFirstLast(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 
 //     array.removeFirst();
 //     QVERIFY(array.isEmpty());
@@ -991,9 +991,9 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array[index], double(index + 1));
 // }
 
-// void dtkArrayTestCase::testExtend(void)
+// void dtkMathArrayTestCase::testExtend(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 
 //     double *ptr = array.extend(4);
 //     ptr[0] = 1.0;
@@ -1017,7 +1017,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array[4], 5.0);
 //     QCOMPARE(array[5], 6.0);
 
-//     dtkArray<double> array2(array);
+//     dtkMathArray<double> array2(array);
 
 //     ptr = array.extend(1);
 //     ptr[0] = 7.0;
@@ -1033,9 +1033,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array2.size(), 6);
 // }
 
-// void dtkArrayTestCase::testReverse(void)
+// void dtkMathArrayTestCase::testReverse(void)
 // {
-//     dtkArray<double> array0;
+//     dtkMathArray<double> array0;
 
 //     // null case
 //     array0.reverse();
@@ -1049,7 +1049,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array0.at(0), 1.0);
 
 //     // odd numbered size
-//     dtkArray<double> array1;
+//     dtkMathArray<double> array1;
 //     ptr = array1.extend(5);
 //     ptr[0] = 1.0;
 //     ptr[1] = 2.0;
@@ -1063,7 +1063,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array1.at(4), 1.0);
 
 //     // even numbered size
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     ptr = array2.extend(6);
 //     ptr[0] = 1.0;
 //     ptr[1] = 2.0;
@@ -1080,7 +1080,7 @@ void dtkArrayTestCase::testCreate(void)
 
 //     // complex type
 //     QVERIFY(QTypeInfo<QString>::isComplex);
-//     dtkArray<QString> array3(6, QLatin1String("test"));
+//     dtkMathArray<QString> array3(6, QLatin1String("test"));
 //     array3[0] = QLatin1String("zero");
 //     array3[1] = QLatin1String("one");
 //     array3[2] = QLatin1String("two");
@@ -1095,12 +1095,12 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array3.at(5), QLatin1String("zero"));
 // }
 
-// void dtkArrayTestCase::testReversed(void)
+// void dtkMathArrayTestCase::testReversed(void)
 // {
-//     dtkArray<double> array0;
+//     dtkMathArray<double> array0;
 
 //     // null case
-//     dtkArray<double> res0 = array0.reversed();
+//     dtkMathArray<double> res0 = array0.reversed();
 //     QCOMPARE(res0.size(), 0);
 
 //     // basic case
@@ -1111,21 +1111,21 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(res0.at(0), 1.0);
 
 //     // odd numbered size
-//     dtkArray<double> array1;
+//     dtkMathArray<double> array1;
 //     ptr = array1.extend(5);
 //     ptr[0] = 1.0;
 //     ptr[1] = 2.0;
 //     ptr[2] = 3.0;
 //     ptr[3] = 4.0;
 //     ptr[4] = 5.0;
-//     dtkArray<double> res1 = array1.reversed();
+//     dtkMathArray<double> res1 = array1.reversed();
 //     QCOMPARE(res1.size(), 5LL);
 //     QCOMPARE(res1.at(0), 5.0);
 //     QCOMPARE(res1.at(2), 3.0);
 //     QCOMPARE(res1.at(4), 1.0);
 
 //     // even numbered size
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     ptr = array2.extend(6);
 //     ptr[0] = 1.0;
 //     ptr[1] = 2.0;
@@ -1133,7 +1133,7 @@ void dtkArrayTestCase::testCreate(void)
 //     ptr[3] = 4.0;
 //     ptr[4] = 5.0;
 //     ptr[5] = 6.0;
-//     dtkArray<double> res2 = array2.reversed();
+//     dtkMathArray<double> res2 = array2.reversed();
 //     QCOMPARE(res2.size(), 6LL);
 //     QCOMPARE(res2.at(0), 6.0);
 //     QCOMPARE(res2.at(2), 4.0);
@@ -1141,7 +1141,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(res2.at(5), 1.0);
 
 //     // simple type with larger size
-//     dtkArray<QVector3D> array4;
+//     dtkMathArray<QVector3D> array4;
 //     array4.extend(6);
 //     QVector3D va(1.0f, 2.0f, 3.0f);
 //     QVector3D vb(11.0f, 12.0f, 13.0f);
@@ -1155,7 +1155,7 @@ void dtkArrayTestCase::testCreate(void)
 //     array4[3] = vd;
 //     array4[4] = ve;
 //     array4[5] = vf;
-//     dtkArray<QVector3D> res4 = array4.reversed();
+//     dtkMathArray<QVector3D> res4 = array4.reversed();
 //     QCOMPARE(res4.size(), 6);
 //     QCOMPARE(res4.at(0), vf);
 //     QCOMPARE(res4.at(2), vd);
@@ -1163,13 +1163,13 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(res4.at(5), va);
 // }
 
-// void dtkArrayTestCase::testMid(void)
+// void dtkMathArrayTestCase::testMid(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1024; ++index)
 //         array.append(double(index));
 
-//     dtkArray<double> mid = array.mid(0);
+//     dtkMathArray<double> mid = array.mid(0);
 //     QCOMPARE(mid.size(), array.size());
 //     QVERIFY(!mid.isEmpty());
 //     QVERIFY(mid.constRawData() == array.constRawData());
@@ -1186,20 +1186,20 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(mid[index], double(index + 500));
 //     }
 
-//     dtkArray<double> mid2 = array.mid(500, 20);
+//     dtkMathArray<double> mid2 = array.mid(500, 20);
 //     QVERIFY(mid == mid2);
 //     QVERIFY(!(mid != mid2));
 
-//     dtkArray<double> mid3 = array.mid(500, 21);
+//     dtkMathArray<double> mid3 = array.mid(500, 21);
 //     QVERIFY(mid != mid3);
 //     QVERIFY(!(mid == mid3));
 
-//     dtkArray<double> mid4 = array.mid(400, 20);
+//     dtkMathArray<double> mid4 = array.mid(400, 20);
 //     QVERIFY(mid != mid4);
 //     QVERIFY(!(mid == mid4));
 
-//     dtkArray<double> mid5;
-//     dtkArray<double> mid6;
+//     dtkMathArray<double> mid5;
+//     dtkMathArray<double> mid6;
 //     QVERIFY(mid != mid5);
 //     QVERIFY(!(mid == mid5));
 //     QVERIFY(mid5 != mid);
@@ -1220,13 +1220,13 @@ void dtkArrayTestCase::testCreate(void)
 //     }
 // }
 
-// void dtkArrayTestCase::testLeft(void)
+// void dtkMathArrayTestCase::testLeft(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1024; ++index)
 //         array.append(double(index));
 
-//     dtkArray<double> left = array.left(-1);
+//     dtkMathArray<double> left = array.left(-1);
 //     QVERIFY(left == array);
 
 //     left = array.left(0);
@@ -1240,13 +1240,13 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(left == array);
 // }
 
-// void dtkArrayTestCase::testRight(void)
+// void dtkMathArrayTestCase::testRight(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1024; ++index)
 //         array.append(double(index));
 
-//     dtkArray<double> right = array.right(-1);
+//     dtkMathArray<double> right = array.right(-1);
 //     QVERIFY(right == array);
 
 //     right = array.right(0);
@@ -1260,19 +1260,19 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(right == array);
 // }
 
-// void dtkArrayTestCase::testIterate(void)
+// void dtkMathArrayTestCase::testIterate(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1024; ++index)
 //         array.append(double(index));
 
-//     dtkArray<double>::Iterator it1;
+//     dtkMathArray<double>::Iterator it1;
 //     int value = 0;
 //     for (it1 = array.begin(); it1 != array.end(); ++it1)
 //         QCOMPARE(*it1, double(value++));
 //     QCOMPARE(value, array.size());
 
-//     dtkArray<double>::ConstIterator it2;
+//     dtkMathArray<double>::ConstIterator it2;
 //     value = 0;
 //     for (it2 = array.constBegin(); it2 != array.constEnd(); ++it2)
 //         QCOMPARE(*it2, double(value++));
@@ -1294,15 +1294,15 @@ void dtkArrayTestCase::testCreate(void)
 
 // // Verify that when the data is in the preallocated section, it is
 // // copied across and the original constRawData() pointer remains the same.
-// void dtkArrayTestCase::testCopyPrealloc(void)
+// void dtkMathArrayTestCase::testCopyPrealloc(void)
 // {
-//     dtkArray<double> array1;
+//     dtkMathArray<double> array1;
 //     array1.append(1.0);
 //     array1.append(2.0);
 
 //     const double *data = array1.constRawData();
 
-//     dtkArray<double> array2(array1);
+//     dtkMathArray<double> array2(array1);
 
 //     QVERIFY(array1.constRawData() == data);
 //     QVERIFY(array2.constRawData() != data);
@@ -1311,7 +1311,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array2[0], double(1.0));
 //     QCOMPARE(array2[1], double(2.0));
 
-//     dtkArray<double> array3;
+//     dtkMathArray<double> array3;
 //     QCOMPARE(array3.size(), 0);
 //     array3 = array1;
 
@@ -1323,9 +1323,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array3[1], double(2.0));
 // }
 
-// void dtkArrayTestCase::testInsert(void)
+// void dtkMathArrayTestCase::testInsert(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 10; ++index)
 //         array.append(double(index));
 
@@ -1359,7 +1359,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array[16], 10.0);
 
 //     // Repeat the tests with QString
-//     dtkArray<QString> array2;
+//     dtkMathArray<QString> array2;
 //     for (int index = 0; index < 10; ++index)
 //         array2.append(QString::number(index));
 
@@ -1392,7 +1392,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array2[16], QString::number(10));
 
 //     // Repeat the tests with ComplexValue
-//     dtkArray<ComplexValue> array3;
+//     dtkMathArray<ComplexValue> array3;
 //     for (int index = 0; index < 10; ++index)
 //         array3.append(ComplexValue(index));
 
@@ -1429,9 +1429,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array3[16] == 10);
 // }
 
-// void dtkArrayTestCase::testSetRawData(void)
+// void dtkMathArrayTestCase::testSetRawData(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
 //                         7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
 
@@ -1475,7 +1475,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array.constRawData() == contents);
 
 //     QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
-//     dtkArray<QString> array2;
+//     dtkMathArray<QString> array2;
 //     array2.setRawData(strings, 2);
 //     QCOMPARE(array2.size(), 2);
 //     QCOMPARE(array2.capacity(), 2);
@@ -1494,13 +1494,13 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(strings[1], QLatin1String("bar"));
 // }
 
-// void dtkArrayTestCase::testFromRawData(void)
+// void dtkMathArrayTestCase::testFromRawData(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
 //                         7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
 
-//     array = dtkArray<double>::fromRawData(contents, 0);
+//     array = dtkMathArray<double>::fromRawData(contents, 0);
 //     QCOMPARE(array.size(), 0);
 //     QCOMPARE(array.capacity(), 0);
 //     QVERIFY(!array.isDetached());
@@ -1510,7 +1510,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.at(0), 1.0);
 //     QVERIFY(array.isDetached());
 
-//     array = dtkArray<double>::fromRawData(contents, 6);
+//     array = dtkMathArray<double>::fromRawData(contents, 6);
 //     QCOMPARE(array.size(), 6);
 //     QCOMPARE(array.capacity(), 6);
 //     for (int index = 0; index < 6; ++index)
@@ -1532,7 +1532,7 @@ void dtkArrayTestCase::testCreate(void)
 //     }
 //     QVERIFY(array.constRawData() != contents);
 
-//     array = dtkArray<double>::fromRawData(contents, 12);
+//     array = dtkMathArray<double>::fromRawData(contents, 12);
 //     QCOMPARE(array.size(), 12);
 //     QCOMPARE(array.capacity(), 12);
 //     for (int index = 0; index < 12; ++index)
@@ -1540,8 +1540,8 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array.constRawData() == contents);
 
 //     QString strings[] = {QLatin1String("foo"), QLatin1String("bar")};
-//     dtkArray<QString> array2;
-//     array2 = dtkArray<QString>::fromRawData(strings, 2);
+//     dtkMathArray<QString> array2;
+//     array2 = dtkMathArray<QString>::fromRawData(strings, 2);
 //     QCOMPARE(array2.size(), 2);
 //     QCOMPARE(array2.capacity(), 2);
 //     QCOMPARE(array2.at(0), QLatin1String("foo"));
@@ -1559,14 +1559,14 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(strings[1], QLatin1String("bar"));
 // }
 
-// void dtkArrayTestCase::testFromWritableRawData(void)
+// void dtkMathArrayTestCase::testFromWritableRawData(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     double contents[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
 //     double contentsModified[] =
 //         {1.0, 2.0, 3.0, 42.0, 5.0, 6.0, 53.0};
 
-//     array = dtkArray<double>::fromWritableRawData(contents, 0);
+//     array = dtkMathArray<double>::fromWritableRawData(contents, 0);
 //     QCOMPARE(array.size(), 0);
 //     QCOMPARE(array.capacity(), 0);
 //     array.append(0.0);
@@ -1574,7 +1574,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QVERIFY(array.capacity() > 0);
 //     QCOMPARE(array.at(0), 0.0);
 
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
+//     array = dtkMathArray<double>::fromWritableRawData(contents, 6);
 //     QCOMPARE(array.size(), 6);
 //     QCOMPARE(array.capacity(), 6);
 //     for (int index = 0; index < 6; ++index)
@@ -1592,7 +1592,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array.at(index), contentsModified[index]);
 
 //     // Resize to smaller should stay within the raw data.
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
+//     array = dtkMathArray<double>::fromWritableRawData(contents, 6);
 //     array.resize(6);
 //     QCOMPARE(array.size(), 6);
 //     array.resize(5);
@@ -1606,7 +1606,7 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array.at(index), contentsModified[index]);
 
 //     // Resize to larger should force a copy.
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
+//     array = dtkMathArray<double>::fromWritableRawData(contents, 6);
 //     array.resize(7);
 //     QVERIFY(array.constRawData() != contents);
 //     for (int index = 0; index < 6; ++index)
@@ -1614,7 +1614,7 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.at(6), 0.0);
 
 //     // Reserve to a larger size should force a copy.
-//     array = dtkArray<double>::fromWritableRawData(contents, 6);
+//     array = dtkMathArray<double>::fromWritableRawData(contents, 6);
 //     array.reserve(7);
 //     QCOMPARE(array.size(), 6);
 //     QVERIFY(array.capacity() >= 7);
@@ -1623,9 +1623,9 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array.at(index), contentsModified[index]);
 // }
 
-// void dtkArrayTestCase::testSearch(void)
+// void dtkMathArrayTestCase::testSearch(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1000; ++index)
 //         array.append(double(index));
 
@@ -1680,9 +1680,9 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array.last(), 500.0);
 // }
 
-// void dtkArrayTestCase::testFill(void)
+// void dtkMathArrayTestCase::testFill(void)
 // {
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     array.fill(1.0);
 //     QCOMPARE(array.size(), 0);
 
@@ -1702,12 +1702,12 @@ void dtkArrayTestCase::testCreate(void)
 //         QCOMPARE(array.at(index), 3.0);
 // }
 
-// void dtkArrayTestCase::testZeroPrealloc(void)
+// void dtkMathArrayTestCase::testZeroPrealloc(void)
 // {
 //     // Check that the zero-prealloc case actually uses less memory
 //     // by optimizing away the m_prealloc structure.
-//     dtkArray<double, 0> array;
-//     dtkArray<double, 1> array2;
+//     dtkMathArray<double, 0> array;
+//     dtkMathArray<double, 1> array2;
 //     QVERIFY(sizeof(array) < sizeof(array2));
 
 //     // Check that zero-prealloc arrays act properly by expanding the
@@ -1719,10 +1719,10 @@ void dtkArrayTestCase::testCreate(void)
 //     array.append(1.0);
 //     QCOMPARE(array.size(), 1);
 //     QCOMPARE(array[0], 1.0);
-//     dtkArray<double, 0> array3(array);
+//     dtkMathArray<double, 0> array3(array);
 //     QVERIFY(array.constRawData() == array3.constRawData());
 
-//     dtkArray<double, 0> array4(100, 3.0);
+//     dtkMathArray<double, 0> array4(100, 3.0);
 //     QCOMPARE(array4.size(), 100);
 //     for (int index = 0; index < 100; ++index)
 //         QCOMPARE(array4[index], 3.0);
@@ -1730,13 +1730,13 @@ void dtkArrayTestCase::testCreate(void)
 //     QCOMPARE(array4.size(), 0);
 // }
 
-// void dtkArrayTestCase::testExceptions(void)
+// void dtkMathArrayTestCase::testExceptions(void)
 // {
 // #ifndef QT_NO_EXCEPTIONS
 
 //     // Check that an exception thrown during append() will leave
 //     // the array in the pre-append state.
-//     dtkArray<ComplexValue> array;
+//     dtkMathArray<ComplexValue> array;
 //     try {
 //         array.append(ComplexValue(42, ComplexValue::ThrowOnCopy));
 //         QFAIL("should not be able to append - A");
@@ -1859,10 +1859,10 @@ void dtkArrayTestCase::testCreate(void)
 // #endif
 // }
 
-// void dtkArrayTestCase::testDataStream(void)
+// void dtkMathArrayTestCase::testDataStream(void)
 // {
 // #ifndef QT_NO_DATASTREAM
-//     dtkArray<double> array;
+//     dtkMathArray<double> array;
 //     for (int index = 0; index < 1024; ++index)
 //         array.append(double(index));
 
@@ -1872,7 +1872,7 @@ void dtkArrayTestCase::testCreate(void)
 //         stream << array;
 //     }
 
-//     dtkArray<double> array2;
+//     dtkMathArray<double> array2;
 //     {
 //         QDataStream stream2(data);
 //         stream2 >> array2;
@@ -1882,7 +1882,7 @@ void dtkArrayTestCase::testCreate(void)
 // #endif
 // }
 
-DTKTEST_MAIN_NOGUI(dtkArrayTest, dtkArrayTestCase)
+DTKTEST_MAIN_NOGUI(dtkMathArrayTest, dtkMathArrayTestCase)
 
 // ///////////////////////////////////////////////////////////////////
 // Credits

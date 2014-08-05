@@ -9,20 +9,20 @@
 ## 
 ######################################################################
 
-project(dtkMathTest)
+project(dtkCoreTest)
 
 ## #################################################################
 ## Input
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkMathArrayTest.h)
+  dtkArrayTest.h)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
-  dtkMathArrayTest.cpp)
+  dtkArrayTest.cpp)
 
 ## ###################################################################
 ## Input - introspected
@@ -52,10 +52,10 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Test)
 
-target_link_libraries(${PROJECT_NAME} dtkMath)
+target_link_libraries(${PROJECT_NAME} dtkCore)
 
 ## ###################################################################
 ## Test rules
 ## ###################################################################
 
-add_test(dtkMathArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkMathTest dtkMathArrayTest)
+add_test(dtkArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)

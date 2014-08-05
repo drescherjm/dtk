@@ -243,30 +243,36 @@ inline bool dtkDistributedGraph::read(const QString& filename)
     QTextStream in(&file);
     qlonglong edges_count = 0;
     QTime time;
+
     if (this->wid() == 0) {
         time.start();
 
         if(filename.isEmpty() || (!file.exists())) {
             qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
-            return false;
-        }
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-            return false;
+            m_size = -1;
+        } else if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            m_size = -1;
+        } else {
 
-        QStringList header = in.readLine().split(' ');
-        m_size = header.first().toLongLong();
-        if (m_size  == 0) {
-            qWarning() << "Can't parse size of the graph" << filename;
-            return false;
+            QStringList header = in.readLine().split(' ');
+            m_size = header.first().toLongLong();
+            if (m_size  == 0) {
+                qWarning() << "Can't parse size of the graph" << filename;
+                m_size = -1;
+            } else {
+                edges_count = header.at(1).toLongLong();
+                if (edges_count  == 0) {
+                    qWarning() << "Can't parse the number of edges" << filename;
+                    m_size = -1;
+                }
+            }
         }
-        edges_count = header.at(1).toLongLong();
-        if (edges_count  == 0) {
-            qWarning() << "Can't parse the number of edges" << filename;
-            return false;
-        }
-
     }
     m_comm->broadcast(&m_size, 1, 0);
+
+    if (m_size < 0)
+        return false;
+
     m_comm->broadcast(&edges_count, 1, 0);
 
     this->initialize();
@@ -339,6 +345,8 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         }
         v_array[v_pos] = index; ++v_pos;
         m_vertices->setAt(m_vertices->mapper()->firstIndex(m_vertices->mapper()->owner(current_vertice, current_owner)), v_array, v_pos);
+        delete v_array;
+        delete e_array;
 
     }
 
@@ -348,19 +356,20 @@ inline bool dtkDistributedGraph::read(const QString& filename)
         qDebug() << "read done in "<< time.elapsed() << "ms";
         time.restart();
     }
-    dtkDistributedMapper *mapper = new dtkDistributedMapper;
-    mapper->initMap(2 * edges_count, m_comm->size());
+    if (m_comm->size() > 1) {
+        dtkDistributedMapper *mapper = new dtkDistributedMapper;
+        mapper->initMap(2 * edges_count, m_comm->size());
 
-    qlonglong offset = 0;
-    for (qlonglong i = 0; i < m_comm->size(); ++i) {
-        mapper->setMap(offset ,i);
-        offset += m_edge_count->at(i);
+        qlonglong offset = 0;
+        for (qlonglong i = 0; i < m_comm->size(); ++i) {
+            mapper->setMap(offset ,i);
+            offset += m_edge_count->at(i);
+        }
+        m_edges->remap(mapper);
+        if (this->wid() == 0) {
+            qDebug() << "remap done in "<< time.elapsed() << "ms";
+        }
     }
-    m_edges->remap(mapper);
-    if (this->wid() == 0) {
-        qDebug() << "remap done in "<< time.elapsed() << "ms";
-    }
-
     return true;
 }
 

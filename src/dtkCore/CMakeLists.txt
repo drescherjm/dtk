@@ -30,10 +30,17 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager.h
   dtkCorePluginManager_t.h
   dtkCoreSettings
-  dtkCoreSettings.h)
+  dtkCoreSettings.h
+  dtkArray
+  dtkArray.h
+  dtkArray.tpp
+  dtkArrayData
+  dtkArrayData.h
+  dtkSpinLock.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkCoreSettings.cpp)
+  dtkCoreSettings.cpp
+  dtkArrayData.cpp)
 
 ## #################################################################
 ## Build rules
@@ -52,6 +59,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
+
+target_link_libraries(${PROJECT_NAME} dtkMeta)
 
 ## ###################################################################
 ## Install rules - files

@@ -1,4 +1,4 @@
-/* dtkArray.h ---
+/* dtkMathArray.h ---
  * 
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 14:56:30 2013 (+0200)
@@ -24,56 +24,56 @@
 #if defined(Q_DECL_ALIGN) && defined(Q_ALIGNOF)
 
 #if defined(Q_CC_GNU) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3))
-    typedef char __attribute__((__may_alias__)) dtkArrayAlignedChar;
+    typedef char __attribute__((__may_alias__)) dtkMathArrayAlignedChar;
 #else
-    typedef char dtkArrayAlignedChar;
+    typedef char dtkMathArrayAlignedChar;
 #endif
 
-template <typename T, qlonglong PreallocSize, size_t AlignT> struct dtkArrayAlignedPrealloc;
+template <typename T, qlonglong PreallocSize, size_t AlignT> struct dtkMathArrayAlignedPrealloc;
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 1>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 1>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(1) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(1) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 2>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 2>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(2) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(2) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 4>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 4>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(4) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(4) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 8>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 8>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(8) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(8) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 16>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 16>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(16) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(16) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 32>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 32>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(32) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(32) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 64>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 64>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(64) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(64) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 128>
+template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 128>
 {
-    dtkArrayAlignedChar Q_DECL_ALIGN(128) data[sizeof(T) * PreallocSize];
+    dtkMathArrayAlignedChar Q_DECL_ALIGN(128) data[sizeof(T) * PreallocSize];
 };
 
 #else
 
-template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlignedPrealloc
+template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkMathArrayAlignedPrealloc
 {
     char data[sizeof(T) * PreallocSize];
     qint64 q_for_alignment_1;
@@ -83,16 +83,16 @@ template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlign
 #endif
 
 // ///////////////////////////////////////////////////////////////////
-// dtkArrayData base class
+// dtkMathArrayPrealloc base class
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize> class dtkArrayData
+template <typename T, qlonglong PreallocSize> class dtkMathArrayPrealloc
 {
 public:
 #if defined(Q_ALIGNOF)
-    dtkArrayAlignedPrealloc<T, PreallocSize, Q_ALIGNOF(T)> m_prealloc;
+    dtkMathArrayAlignedPrealloc<T, PreallocSize, Q_ALIGNOF(T)> m_prealloc;
 #else
-    dtkArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
+    dtkMathArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
 #endif
 
     inline T *prealloc(void) 
@@ -106,7 +106,7 @@ public:
     }
 };
 
-template <typename T> class dtkArrayData<T, 0>
+template <typename T> class dtkMathArrayPrealloc<T, 0>
 {
 public:
     inline T *prealloc(void) { return 0; }
@@ -119,10 +119,10 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// dtkArray interface
+// dtkMathArray interface
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize = 8> class dtkArray : private dtkArrayData<T, PreallocSize>
+template <typename T, qlonglong PreallocSize = 8> class dtkMathArray : private dtkMathArrayPrealloc<T, PreallocSize>
 {
 public:
     enum RawDataType {
@@ -131,20 +131,20 @@ public:
     };
 
 public:
-             dtkArray(void);
-    explicit dtkArray(qlonglong arraySize);
-             dtkArray(qlonglong size, const T& value);
-             dtkArray(const T *values, qlonglong size);
-             dtkArray(const dtkArray<T, PreallocSize>& other);
+             dtkMathArray(void);
+    explicit dtkMathArray(qlonglong arraySize);
+             dtkMathArray(qlonglong size, const T& value);
+             dtkMathArray(const T *values, qlonglong size);
+             dtkMathArray(const dtkMathArray<T, PreallocSize>& other);
 
 public:
-    ~dtkArray(void);
+    ~dtkMathArray(void);
 
 public:
     typedef T *iterator;
     typedef const T *const_iterator;
 
-    dtkArray<T, PreallocSize>& operator = (const dtkArray<T, PreallocSize>& other);
+    dtkMathArray<T, PreallocSize>& operator = (const dtkMathArray<T, PreallocSize>& other);
 
     qlonglong size(void) const;
     qlonglong count(void) const;
@@ -172,7 +172,7 @@ public:
     void append(const T& value1, const T& value2, const T& value3);
     void append(const T& value1, const T& value2, const T& value3, const T& value4);
     void append(const T *values, qlonglong count);
-    void append(const dtkArray<T, PreallocSize>& other);
+    void append(const dtkMathArray<T, PreallocSize>& other);
 
     void prepend(const T& value);
 
@@ -201,14 +201,14 @@ public:
     void reserve(qlonglong size);
     void squeeze(void);
 
-    dtkArray<T, PreallocSize>& fill(const T& fillValue, qlonglong fillCount = -1);
+    dtkMathArray<T, PreallocSize>& fill(const T& fillValue, qlonglong fillCount = -1);
 
     void reverse(void);
-    dtkArray<T, PreallocSize> reversed(void) const;
+    dtkMathArray<T, PreallocSize> reversed(void) const;
 
-    dtkArray<T, PreallocSize> mid(qlonglong index, qlonglong length = -1) const;
-    dtkArray<T, PreallocSize> left(qlonglong length) const;
-    dtkArray<T, PreallocSize> right(qlonglong length) const;
+    dtkMathArray<T, PreallocSize> mid(qlonglong index, qlonglong length = -1) const;
+    dtkMathArray<T, PreallocSize> left(qlonglong length) const;
+    dtkMathArray<T, PreallocSize> right(qlonglong length) const;
 
     void setRawData(const T *raw_data, qlonglong size, RawDataType data_type = ReadOnly);
 
@@ -216,16 +216,16 @@ public:
     const T *rawData(void) const;
     const T *constRawData(void) const;
 
-    static dtkArray<T, PreallocSize> fromRawData(const T *data, qlonglong size);
-    static dtkArray<T, PreallocSize> fromWritableRawData(T *data, qlonglong size);
+    static dtkMathArray<T, PreallocSize> fromRawData(const T *data, qlonglong size);
+    static dtkMathArray<T, PreallocSize> fromWritableRawData(T *data, qlonglong size);
 
-    bool operator == (const dtkArray<T, PreallocSize>& other) const;
-    bool operator != (const dtkArray<T, PreallocSize>& other) const;
+    bool operator == (const dtkMathArray<T, PreallocSize>& other) const;
+    bool operator != (const dtkMathArray<T, PreallocSize>& other) const;
 
-    dtkArray<T, PreallocSize>& operator += (const T& value);
-    dtkArray<T, PreallocSize>& operator += (const dtkArray<T, PreallocSize>& other);
-    dtkArray<T, PreallocSize>& operator << (const T& value);
-    dtkArray<T, PreallocSize>& operator << (const dtkArray<T, PreallocSize>& other);
+    dtkMathArray<T, PreallocSize>& operator += (const T& value);
+    dtkMathArray<T, PreallocSize>& operator += (const dtkMathArray<T, PreallocSize>& other);
+    dtkMathArray<T, PreallocSize>& operator << (const T& value);
+    dtkMathArray<T, PreallocSize>& operator << (const dtkMathArray<T, PreallocSize>& other);
 
     typedef iterator Iterator;
     typedef const_iterator ConstIterator;
@@ -292,11 +292,11 @@ private:
 
     inline void initPrealloc(void)
     {
-        m_end = m_start = dtkArrayData<T, PreallocSize>::prealloc();
+        m_end = m_start = dtkMathArrayPrealloc<T, PreallocSize>::prealloc();
         m_limit = m_start + PreallocSize;
     }
 
-    dtkArray(const T *data, qlonglong size, bool isWritable);
+    dtkMathArray(const T *data, qlonglong size, bool isWritable);
 
     void free(T *data, qlonglong count);
     void release(void);
@@ -304,18 +304,18 @@ private:
     Data *copyData(const T *src, qlonglong size, qlonglong capacity);
     void reallocate(qlonglong capacity);
     void detach_helper(void);
-    void assign(const dtkArray<T, PreallocSize>& other);
+    void assign(const dtkMathArray<T, PreallocSize>& other);
     void grow(qlonglong needed);
     void setSize(qlonglong newSize);
 };
 
-qlonglong dtkArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong sizeOfT);
+qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong sizeOfT);
 
 // ///////////////////////////////////////////////////////////////////
-// dtkArray implementation
+// dtkMathArray implementation
 // ///////////////////////////////////////////////////////////////////
 
-#include "dtkArray.tpp"
+#include "dtkMathArray.tpp"
 
 // /////////////////////////////////////////////////////////////////
 // Credits

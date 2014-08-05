@@ -150,6 +150,36 @@ void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qi
     return this->send(data, size, Char, target, tag);
 }
 
+void dtkDistributedCommunicator::send(bool *data, qint64 size, qint32 target, qint32 tag)
+{
+    return this->send(data, size, Bool, target, tag);
+}
+
+void dtkDistributedCommunicator::send(int *data, qint64 size, qint32 target, qint32 tag)
+{
+    return this->send(data, size, Int, target, tag);
+}
+
+void dtkDistributedCommunicator::send(long *data, qint64 size, qint32 target, qint32 tag)
+{
+    return this->send(data, size, Long, target, tag);
+}
+
+void dtkDistributedCommunicator::send(qlonglong *data, qint64 size, qint32 target, qint32 tag)
+{
+    return this->send(data, size, Int64, target, tag);
+}
+
+void dtkDistributedCommunicator::send(float *data, qint64 size, qint32 target, qint32 tag)
+{
+    return this->send(data, size, Float, target, tag);
+}
+
+void dtkDistributedCommunicator::send(double *data, qint64 size, qint32 target, qint32 tag)
+{
+    return this->send(data, size, Double, target, tag);
+}
+
 void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 tag)
 {
     QByteArray bytes;
@@ -163,6 +193,36 @@ void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source,
     return this->receive(data, size, Char, source, tag);
 }
 
+void dtkDistributedCommunicator::receive(bool *data, qint64 size, qint32 source, qint32 tag)
+{
+    return this->receive(data, size, Bool, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(int *data, qint64 size, qint32 source, qint32 tag)
+{
+    return this->receive(data, size, Int, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(long *data, qint64 size, qint32 source, qint32 tag)
+{
+    return this->receive(data, size, Long, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(qlonglong *data, qint64 size, qint32 source, qint32 tag)
+{
+    return this->receive(data, size, Int64, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(float *data, qint64 size, qint32 source, qint32 tag)
+{
+    return this->receive(data, size, Float, source, tag);
+}
+
+void dtkDistributedCommunicator::receive(double *data, qint64 size, qint32 source, qint32 tag)
+{
+    return this->receive(data, size, Double, source, tag);
+}
+
 void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
 {
     QByteArray bytes;
@@ -171,37 +231,37 @@ void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
     stream >> v;
 }
 
-void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all)
 {
     qCritical() << "Default operator for reduce, not implemented";
 }
 
-void dtkDistributedCommunicator::reduce(bool *send, bool *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(bool *send, bool *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
     return this->reduce(send, recv, size, Bool, operationType, target, all);
 }
 
-void dtkDistributedCommunicator::reduce(char *send, char *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(char *send, char *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
     return this->reduce(send, recv, size, Char, operationType, target, all);
 }
 
-void dtkDistributedCommunicator::reduce(int *send, int *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(int *send, int *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
     return this->reduce(send, recv, size, Int, operationType, target, all);
 }
 
-void dtkDistributedCommunicator::reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
     return this->reduce(send, recv, size, Int64, operationType, target, all);
 }
 
-void dtkDistributedCommunicator::reduce(float *send, float *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(float *send, float *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
     return this->reduce(send, recv, size, Float, operationType, target, all);
 }
 
-void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all)
+void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
     return this->reduce(send, recv, size, Double, operationType, target, all);
 }

@@ -105,7 +105,7 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
     qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
 
     if (this->wid() == owner) {
-        qlonglong pos = m_mapper->globalToLocal(index);
+        qlonglong pos = m_mapper->globalToLocal(index, owner);
         T temp;
         m_comm->get(owner, pos, &temp, data->id());
         return temp;

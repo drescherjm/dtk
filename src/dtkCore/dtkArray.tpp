@@ -244,7 +244,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
 
 template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(const T *values, qlonglong size) : isRawData(false)
 {
-    Q_STATIC_ASSERT_X(PreallocSize > 0, "dtkArray PreallocSize must be greater than 0.");
+    Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
     if (size > PreallocSize) {
         d = Data::allocate(size);
@@ -1172,6 +1172,23 @@ template<typename T, qlonglong PreallocSize> inline QDataStream& operator>>(QDat
     }
 
     return s;
+}
+
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T, qlonglong PreallocSize> inline QDebug &operator<<(QDebug debug, const dtkArray<T, PreallocSize> &array)
+{
+    const bool oldSetting = debug.autoInsertSpaces();
+    debug.nospace() << "dtkArray";
+    debug.nospace() << '(';
+    for (typename dtkArray<T, PreallocSize>::size_type i = 0; i < array.size(); ++i) {
+        if (i)
+            debug << ", ";
+        debug << array.at(i);
+    }
+    debug << ')';
+    debug.setAutoInsertSpaces(oldSetting);
+    return debug.maybeSpace();
 }
 
 //

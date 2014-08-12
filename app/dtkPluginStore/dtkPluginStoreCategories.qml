@@ -54,7 +54,6 @@ Item { id: wrapper;
 
     PluginStoreSeparator { id: sep_1; anchors.top: header.bottom; direction: Qt.Horizontal; color: "#555555"; }
     PluginStoreSeparator { id: sep_2; anchors.top: sep_1.bottom; direction: Qt.Horizontal; color: "#000000"; }
-
 }
 
 //

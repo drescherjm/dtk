@@ -43,7 +43,7 @@ Item { id: wrapper;
             color: "#ffffff";
             radius: 10;
 
-            border.color: "#555555";
+            border.color: "#8f8f8f";
 
             TextInput {
                 anchors.fill: parent;
@@ -51,7 +51,7 @@ Item { id: wrapper;
             }
         }
 
-                MouseArea {
+        MouseArea {
             anchors.right: parent.right;
             anchors.top: parent.top;
             width: 40;
@@ -64,7 +64,7 @@ Item { id: wrapper;
                 anchors.centerIn: parent;
                 size: 25;
                 icon: PluginStoreFontAwesomeIcon.Icon.Search;
-                color: "#888888";
+                color: "#666666";
             }
         }
     }

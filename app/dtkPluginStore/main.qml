@@ -39,8 +39,12 @@ ApplicationWindow { id: root
         anchors.right: parent.right;
         height: 40;
 
-        front: PluginStoreCategories { onClicked: flipper.swap(); }
-        back: PluginStoreSearch { onClicked: flipper.swap(); }
+        front: PluginStoreCategories {
+            onClicked: flipper.flipUp();
+        }
+        back: PluginStoreSearch {
+            onClicked: flipper.flipDown();
+        }
     }
 }
 

@@ -1,15 +1,15 @@
 <RCC>
   <qresource prefix="/">
     <file>main.qml</file>
-    <file>PluginStoreButtonStyle.qml</file>
-    <file>PluginStoreCategories.qml</file>
-    <file>PluginStoreFlipper.qml</file>
-    <file>PluginStoreFontAwesome.js</file>
-    <file>PluginStoreFontAwesome.ttf</file>
-    <file>PluginStoreFontAwesome.qml</file>
-    <file>PluginStoreFontAwesomeLoader.qml</file>
-    <file>PluginStoreSearch.qml</file>
-    <file>PluginStoreSeparator.qml</file>
-    <file>PluginStoreShaderEffect.qml</file>
+    <file alias="PluginStoreCategories.qml">dtkPluginStoreCategories.qml</file>
+    <file alias="PluginStoreFlipper.qml">dtkPluginStoreFlipper.qml</file>
+    <file alias="PluginStoreFontAwesome.js">dtkPluginStoreFontAwesome.js</file>
+    <file alias="PluginStoreFontAwesome.ttf">dtkPluginStoreFontAwesome.ttf</file>
+    <file alias="PluginStoreFontAwesome.qml">dtkPluginStoreFontAwesome.qml</file>
+    <file alias="PluginStoreFontAwesomeLoader.qml">dtkPluginStoreFontAwesomeLoader.qml</file>
+    <file alias="PluginStoreSearch.qml">dtkPluginStoreSearch.qml</file>
+    <file alias="PluginStoreSeparator.qml">dtkPluginStoreSeparator.qml</file>
+    <file alias="PluginStoreShaderEffect.qml">dtkPluginStoreShaderEffect.qml</file>
+    <file alias="PluginStoreToolBar.qml">dtkPluginStoreToolBar.qml</file>
   </qresource>
 </RCC>

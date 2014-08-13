@@ -49,6 +49,10 @@ ApplicationWindow { id: root
         }
     }
 
+// /////////////////////////////////////////////////////////////////
+// TODO: Turn into standalone components
+////////////////////////////////////////////////////////////////////
+
     ListModel {
 
         id: model;
@@ -82,7 +86,12 @@ ApplicationWindow { id: root
 
             clip: true;
            model: model;
-        delegate: Rectangle {
+         delegate:
+
+         // /////////////////////////////////////////////////////////////////
+         // ListView delegate
+         ////////////////////////////////////////////////////////////////////
+           Rectangle {
             id: delegate
             width: ListView.view.width
             height: 40;
@@ -104,7 +113,9 @@ ApplicationWindow { id: root
                 anchors.right: parent.right
             }
         }
+        // /////////////////////////////////////////////////////////////////
     }
+////////////////////////////////////////////////////////////////////
 
     PluginStoreToolBar {
 

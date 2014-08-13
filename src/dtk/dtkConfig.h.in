@@ -23,5 +23,8 @@
 #cmakedefine DTK_BUILD_SUPPORT_PLOT
 #cmakedefine DTK_BUILD_SUPPORT_COMPOSER
 
+#cmakedefine DTK_BUILD_32
+#cmakedefine DTK_BUILD_64
+
 //
 // dtkConfig.h.in ends here

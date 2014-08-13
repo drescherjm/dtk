@@ -48,7 +48,8 @@ Rectangle {
         }
 
         onClicked: {
-            cloud = !cloud;
+            if(!cloud)
+                 cloud = true;
         }
     }
 
@@ -67,7 +68,8 @@ Rectangle {
         }
 
         onClicked: {
-            cloud = !cloud;
+            if (cloud)
+                cloud = false;
         }
     }
 }

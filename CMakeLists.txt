@@ -70,9 +70,11 @@ else(NOT APPLE AND NOT MSVC)
 endif(NOT APPLE AND NOT MSVC)
 
 if(CMAKE_SIZEOF_VOID_P MATCHES 8)
-    set(DTK_PLATFORM_64 1)
+  set(DTK_BUILD_32 0)
+  set(DTK_BUILD_64 1)
 else(CMAKE_SIZEOF_VOID_P MATCHES 8)
-    set(DTK_PLATFORM_32 1)
+  set(DTK_BUILD_32 1)
+  set(DTK_BUILD_64 0)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
 ## ###################################################################
@@ -104,6 +106,8 @@ find_package(Qt5Xml  REQUIRED)
 ## #################################################################
 ## Dependencies - Optional                           [TO BE REMOVED]
 ## #################################################################
+
+set(DTK_HAVE_MPI "NO")
 
 if(DTK_BUILD_SUPPORT_DISTRIBUTED)
 

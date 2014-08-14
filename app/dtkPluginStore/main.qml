@@ -16,11 +16,19 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 
+import dtkPluginStoreQuick 1.0
+
 import "PluginStoreFontAwesome.js" as PluginStoreFontAwesomeIcon
 
 ApplicationWindow { id: root
 
     property FontLoader font_iconic: PluginStoreFontAwesomeLoader {}
+
+    // ////////////////////////////////////////////////////////////////
+
+    PluginStoreController {
+        id: controller;
+    }
 
     // /////////////////////////////////////////////////////////////////
 
@@ -41,7 +49,7 @@ ApplicationWindow { id: root
         anchors.right: parent.right;
         height: 40;
 
-        front: PluginStoreCategories {
+        front: PluginStoreHeader {
             onClicked: flipper.flipUp();
         }
         back: PluginStoreSearch {

@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="/">
     <file>main.qml</file>
-    <file alias="PluginStoreCategories.qml">dtkPluginStoreCategories.qml</file>
+    <file alias="PluginStoreHeader.qml">dtkPluginStoreHeader.qml</file>
     <file alias="PluginStoreFlipper.qml">dtkPluginStoreFlipper.qml</file>
     <file alias="PluginStoreFontAwesome.js">dtkPluginStoreFontAwesome.js</file>
     <file alias="PluginStoreFontAwesome.ttf">dtkPluginStoreFontAwesome.ttf</file>

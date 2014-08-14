@@ -34,6 +34,19 @@ Item { id: wrapper;
             gradient_bot: "#333333";
         }
 
+        Text {
+
+            anchors.top: parent.top;
+            anchors.topMargin: 10;
+
+            anchors.left: parent.left;
+            anchors.leftMargin: 10;
+
+            color: "#dedede";
+
+            text: controller.os() + controller.arch();
+        }
+
         MouseArea {
             anchors.right: parent.right;
             anchors.top: parent.top;

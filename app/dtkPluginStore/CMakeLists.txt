@@ -18,7 +18,11 @@ project(dtkPluginStore)
 ## Sources
 ## #################################################################
 
+set(${PROJECT_NAME}_HEADERS
+  dtkPluginStoreController.h)
+
 set(${PROJECT_NAME}_SOURCES
+  dtkPluginStoreController.cpp
   main.cpp)
 
 ## #################################################################

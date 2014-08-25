@@ -1,20 +1,21 @@
-/* dtkDistributedCommunicator.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2013 - Nicolas Niclausse, Inria.
- * Created: 2013/02/07 11:38:59
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
+
 
 #pragma once
 
+#include "dtkDistributedExport.h"
 #include "dtkDistributedPolicy.h"
 
 #include <dtkCore/dtkCorePlugin.h>
@@ -24,7 +25,7 @@ class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 class dtkDistributedCommunicatorStatus;
 
-class dtkDistributedCommunicator : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator : public QObject
 {
     Q_OBJECT
 
@@ -150,3 +151,6 @@ DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
 DTK_DECLARE_PLUGIN(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator)
+
+//
+// dtkDistributedCommunicator.h ends here

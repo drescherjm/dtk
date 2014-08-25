@@ -15,12 +15,14 @@
 
 #pragma once
 
+#include <dtkDistributedExport>
+
 #include <QtCore>
 #include <QtNetwork>
 
 class dtkDistributedSlavePrivate;
 
-class dtkDistributedSlave : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
 {
     Q_OBJECT
 
@@ -53,4 +55,3 @@ protected slots:
 private:
     dtkDistributedSlavePrivate *d;
 };
-

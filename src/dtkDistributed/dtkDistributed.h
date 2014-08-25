@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <dtkDistributedExport>
+
 class dtkDistributedCommunicatorPlugin;
 class dtkDistributedCommunicatorPluginFactory;
 class dtkDistributedCommunicatorPluginManager;
@@ -35,19 +37,19 @@ namespace dtkDistributed
 #pragma mark -
 #pragma mark Setting distribution mode
 
-    void setMode(dtkDistributed::Mode);
+    DTKDISTRIBUTED_EXPORT void setMode(dtkDistributed::Mode);
 
 #pragma mark -
 #pragma mark Querying distribution mode
 
-    dtkDistributed::Mode mode(void);
+    DTKDISTRIBUTED_EXPORT dtkDistributed::Mode mode(void);
 
 #pragma mark -
 #pragma mark Modular concepts
 
     namespace communicator {
-        dtkDistributedCommunicatorPluginFactory& pluginFactory(void);
-        dtkDistributedCommunicatorPluginManager& pluginManager(void);
+        DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginFactory& pluginFactory(void);
+        DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginManager& pluginManager(void);
     }
 }
 

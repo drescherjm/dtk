@@ -15,6 +15,7 @@
 #pragma once
 
 #include "dtkDistributedMessage.h"
+#include <dtkDistributedExport>
 
 #include <QtCore>
 #include <QtNetwork>
@@ -23,7 +24,7 @@ class dtkDistributedControllerPrivate;
 class dtkDistributedJob;
 class dtkDistributedNode;
 
-class dtkDistributedController : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
 {
     Q_OBJECT
 
@@ -86,4 +87,3 @@ private:
 private:
     dtkDistributedControllerPrivate *d;
 };
-

@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <dtkDistributedExport>
+
 #include <QtCore>
 
 class dtkDistributedCommunicator;
@@ -22,7 +24,7 @@ class dtkDistributedPolicy;
 class dtkDistributedWork;
 class dtkDistributedWorkerManagerPrivate;
 
-class dtkDistributedWorkerManager: public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedWorkerManager: public QObject
 {
     Q_OBJECT
 
@@ -47,8 +49,3 @@ public:
     dtkDistributedWorkerManagerPrivate *d;
 
 };
-
-
-
-
-

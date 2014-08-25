@@ -1,21 +1,28 @@
-/* dtkDistributedServerDaemon.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Jun  1 11:27:42 2011 (+0200)
- */
+// Version: $Id$
+//
+//
 
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkDistributedResourceManager.h"
+#include <dtkDistributedExport>
 
 #include <QtCore>
 #include <QtNetwork>
 
-class dtkDistributedServerDaemonPrivate;
+class DTKDISTRIBUTED_EXPORT dtkDistributedServerDaemonPrivate;
 
-class dtkDistributedServerDaemon : public QTcpServer
+class DTKDISTRIBUTED_EXPORT dtkDistributedServerDaemon : public QTcpServer
 {
     Q_OBJECT
 
@@ -41,3 +48,5 @@ private:
     dtkDistributedServerDaemonPrivate *d;
 };
 
+//
+// dtkDistributedServerDaemon.h ends here

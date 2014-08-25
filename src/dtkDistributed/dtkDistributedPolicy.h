@@ -15,12 +15,14 @@
 
 #pragma once
 
+#include <dtkDistributedExport>
+
 #include <QtCore>
 
 class dtkDistributedPolicyPrivate;
 class dtkDistributedCommunicator;
 
-class dtkDistributedPolicy : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedPolicy : public QObject
 {
     Q_OBJECT
 
@@ -50,6 +52,3 @@ public:
 public:
     dtkDistributedPolicyPrivate *d;
 };
-
-
-

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -16,8 +16,10 @@
 
 #include <QtCore>
 
+#include <dtkCoreExport>
+
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> struct dtkArrayDataTemplate;
@@ -26,7 +28,7 @@ template <> struct dtkArrayDataTemplate<qint32>
 {
 public:
     dtkArrayDataTemplate(void) {}
-    dtkArrayDataTemplate(int r, qint32 s, quint32 a, quint32 c, qptrdiff o) : size(s), alloc(a), capacityReserved(c), offset(o) 
+    dtkArrayDataTemplate(int r, qint32 s, quint32 a, quint32 c, qptrdiff o) : size(s), alloc(a), capacityReserved(c), offset(o)
     {
         ref.atomic.store(r);
     }
@@ -57,12 +59,12 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 typedef dtkArrayDataTemplate<qintptr> dtkArrayDataBase;
 
-struct dtkArrayData : public dtkArrayDataBase
+struct DTKCORE_EXPORT dtkArrayData : public dtkArrayDataBase
 {
 public:
     using dtkArrayDataBase::ref;
@@ -100,7 +102,7 @@ public:
 
     AllocationOptions detachFlags(void) const;
     AllocationOptions  cloneFlags(void) const;
-    
+
 public:
     static dtkArrayData *allocate(size_t objectSize, size_t alignment, size_t capacity, AllocationOptions options = Default);
     static void deallocate(dtkArrayData *data, size_t objectSize, size_t alignment);
@@ -115,15 +117,15 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(dtkArrayData::AllocationOptions)
 // /////////////////////////////////////////////////////////////////
 
 inline size_t dtkArrayData::detachCapacity(size_t newSize) const
-{ 
-    if (capacityReserved && newSize < alloc) 
+{
+    if (capacityReserved && newSize < alloc)
         return alloc;
-    return newSize; 
+    return newSize;
 }
 
 inline dtkArrayData::AllocationOptions dtkArrayData::detachFlags(void) const
-{ 
-    AllocationOptions result; 
+{
+    AllocationOptions result;
 #if QT_SUPPORTS(UNSHARABLE_CONTAINERS)
     if (!ref.isSharable())
         result |= Unsharable;
@@ -142,7 +144,7 @@ inline dtkArrayData::AllocationOptions dtkArrayData::cloneFlags(void) const
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> struct dtkTypedArrayData : dtkArrayData
@@ -184,7 +186,7 @@ public:
         iterator  operator +  (qintptr j) const { return iterator(i+j); }
         iterator  operator -  (qintptr j) const { return iterator(i-j); }
         qintptr operator -  (const iterator& j) const { return i - j.i; }
-                  operator T* (void) const { return i; }        
+                  operator T* (void) const { return i; }
     };
     friend class iterator;
 
@@ -260,7 +262,7 @@ template <typename T> inline dtkTypedArrayData<T> *dtkTypedArrayData<T>::allocat
 }
 
 template <typename T> inline void dtkTypedArrayData<T>::deallocate(dtkArrayData *data)
-{ 
+{
     Q_STATIC_ASSERT(sizeof(dtkTypedArrayData) == sizeof(dtkArrayData));
 
     dtkArrayData::deallocate(data, sizeof(T), Q_ALIGNOF(AlignmentDummy));
@@ -301,5 +303,5 @@ template <typename T> inline dtkTypedArrayData<T> *dtkTypedArrayData<T>::unshara
     return allocate(/* capacity */ 0, Unsharable);
 }
 
-// 
+//
 // dtkArrayData.h ends here

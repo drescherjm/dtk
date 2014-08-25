@@ -16,12 +16,13 @@
 #pragma once
 
 #include "dtkLog"
+#include <dtkLogExport>
 
 #include <QtCore>
 #include <QtDebug>
 
-void   dtkInstallLoggerHandler(dtkLog::HandlerFlags);
-void dtkUninstallLoggerHandler(void);
+DTKLOG_EXPORT void   dtkInstallLoggerHandler(dtkLog::HandlerFlags);
+DTKLOG_EXPORT void dtkUninstallLoggerHandler(void);
 
 //
 // dtkLoggerHandlers.h ends here

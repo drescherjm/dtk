@@ -18,6 +18,7 @@
 #include <QtDebug>
 
 #include "dtkLogger_p.h"
+#include <dtkLogExport.h>
 
 // ///////////////////////////////////////////////////////////////////
 // Logging rules
@@ -80,7 +81,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 
 #define DTK_LOG_CATEGORY(categorytype, categoryname)                \
     namespace {                                                     \
-        static dtkLoggingCategory categorytype(categoryname);		\
+        DTKLOG_EXPORT static dtkLoggingCategory categorytype(categoryname);		\
     }
 
 // ///////////////////////////////////////////////////////////////////

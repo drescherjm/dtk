@@ -1,19 +1,20 @@
-/* @(#)dtkDistributedWork.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2013 - Nicolas Niclausse, Inria.
- * Created: 2013/02/15 13:47:58
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
+
+#include <dtkDistributedExport>
 
 #include <QtCore>
 
@@ -21,7 +22,7 @@ class dtkDistributedCommunicator;
 class dtkDistributedWorker;
 class dtkDistributedWorkPrivate;
 
-class dtkDistributedWork : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedWork : public QObject
 {
     Q_OBJECT
 
@@ -58,3 +59,6 @@ public:
 };
 
 
+
+//
+// dtkDistributedWork.h ends here

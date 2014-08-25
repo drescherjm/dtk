@@ -17,13 +17,15 @@
 #include <QtCore>
 #include <QtDebug>
 
+#include <dtkLogExport>
+
 class QFileSystemWatcher;
 
 // ///////////////////////////////////////////////////////////////////
 // dtkLoggingCategory
 // ///////////////////////////////////////////////////////////////////
 
-class dtkLoggingCategoryPrivate
+class DTKLOG_EXPORT dtkLoggingCategoryPrivate
 {
 public:
              dtkLoggingCategoryPrivate(void);
@@ -44,7 +46,7 @@ public:
 // dtkLoggingCategory
 // ///////////////////////////////////////////////////////////////////
 
-class dtkLoggingCategory
+class DTKLOG_EXPORT dtkLoggingCategory
 {
     Q_DISABLE_COPY(dtkLoggingCategory)
 
@@ -70,7 +72,7 @@ private:
 // dtkLogConfigFilterItem
 // ///////////////////////////////////////////////////////////////////
 
-class dtkLogConfigFilterItem
+class DTKLOG_EXPORT dtkLogConfigFilterItem
 {
 public:
     dtkLogConfigFilterItem(const QString &category, bool active);
@@ -85,7 +87,7 @@ public:
 // dtkLogging
 // ///////////////////////////////////////////////////////////////////
 
-class dtkLoggingPrivate : public QObject
+class DTKLOG_EXPORT dtkLoggingPrivate : public QObject
 {
     Q_OBJECT
 

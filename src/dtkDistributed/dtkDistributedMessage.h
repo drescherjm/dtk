@@ -14,11 +14,13 @@
 
 #pragma once
 
+#include <dtkDistributedExport>
+
 #include <QTcpSocket>
 
 class dtkDistributedMessagePrivate;
 
-class dtkDistributedMessage
+class DTKDISTRIBUTED_EXPORT dtkDistributedMessage
 {
 public:
     typedef QHash<QString, QString> dtkDistributedHeaders;

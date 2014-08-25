@@ -18,13 +18,14 @@
 #include <QtCore>
 
 #include "dtkDistributed.h"
+#include <dtkDistributedExport>
 
 class dtkDistributedCommunicator;
 class dtkDistributedContainer;
 class dtkDistributedWork;
 class dtkDistributedWorkerPrivate;
 
-class dtkDistributedWorker : public QRunnable
+class DTKDISTRIBUTED_EXPORT dtkDistributedWorker : public QRunnable
 {
 public:
              dtkDistributedWorker(void);

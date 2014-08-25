@@ -16,12 +16,13 @@
 
 #include "dtkMeta.h"
 #include "dtkMetaContainerSequential_p.h"
+#include <dtkMetaExport>
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential definition
 // /////////////////////////////////////////////////////////////////
 
-class dtkMetaContainerSequential
+class DTKMETA_EXPORT dtkMetaContainerSequential
 {
 public:
     struct iterator;
@@ -215,4 +216,3 @@ template<> struct QVariantValueHelperInterface<dtkMetaContainerSequential>
 
 //
 // dtkMetaContainerSequential.h ends here
-

@@ -1,20 +1,27 @@
-/* dtkMathArray.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Tue Jul 23 14:56:30 2013 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- *
- *  Credits see EOF
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
 
 #pragma once
+
+#include <dtkMathExport>
 
 #include <QtCore/qglobal.h>
 #include <QtCore/qatomic.h>
 #include <QtCore/qdatastream.h>
 #include <QtCore/qdebug.h>
+
 #include <string.h>
 
 // ///////////////////////////////////////////////////////////////////
@@ -95,14 +102,14 @@ public:
     dtkMathArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
 #endif
 
-    inline T *prealloc(void) 
-    { 
-	return reinterpret_cast<T *>(m_prealloc.data); 
+    inline T *prealloc(void)
+    {
+	return reinterpret_cast<T *>(m_prealloc.data);
     }
 
-    inline bool isPrealloc(const T *start) const 
-    { 
-	return start == reinterpret_cast<const T *>(m_prealloc.data); 
+    inline bool isPrealloc(const T *start) const
+    {
+	return start == reinterpret_cast<const T *>(m_prealloc.data);
     }
 };
 
@@ -309,7 +316,7 @@ private:
     void setSize(qlonglong newSize);
 };
 
-qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong sizeOfT);
+DTKMATH_EXPORT qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong sizeOfT);
 
 // ///////////////////////////////////////////////////////////////////
 // dtkMathArray implementation
@@ -362,4 +369,5 @@ qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong size
 **
 ****************************************************************************/
 
-
+//
+// dtkMathArray.h ends here

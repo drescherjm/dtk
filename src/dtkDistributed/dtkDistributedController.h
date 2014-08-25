@@ -15,7 +15,7 @@
 #pragma once
 
 #include "dtkDistributedMessage.h"
-#include <dtkDistributedExport>
+#include "dtkDistributedExport.h"
 
 #include <QtCore>
 #include <QtNetwork>

@@ -17,7 +17,7 @@
 #include <QtCore>
 #include <QtDebug>
 
-#include <dtkLogExport>
+#include "dtkLogExport.h"
 
 class QFileSystemWatcher;
 

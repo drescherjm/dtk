@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include <dtkMathExport>
+#include "dtkMathExport.h"
 
 #include <QtCore/qglobal.h>
 #include <QtCore/qatomic.h>

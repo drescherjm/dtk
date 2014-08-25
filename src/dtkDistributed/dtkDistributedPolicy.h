@@ -1,21 +1,20 @@
-/* @(#)dtkDistributedPolicy.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2013 - Nicolas Niclausse, Inria.
- * Created: 2013/02/18 15:10:52
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
-#include <dtkDistributedExport>
+#include "dtkDistributedExport.h"
 
 #include <QtCore>
 
@@ -52,3 +51,6 @@ public:
 public:
     dtkDistributedPolicyPrivate *d;
 };
+
+//
+// dtkDistributedPolicy.h ends here

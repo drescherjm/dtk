@@ -16,7 +16,7 @@
 #pragma once
 
 #include "dtkLog"
-#include <dtkLogExport>
+#include "dtkLogExport.h"
 
 #include <QtCore>
 #include <QtDebug>

@@ -1,21 +1,20 @@
-/* @(#)dtkDistributedWorkerManager.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2013 - Nicolas Niclausse, Inria.
- * Created: 2013/02/14 13:17:10
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
-#include <dtkDistributedExport>
+#include "dtkDistributedExport.h"
 
 #include <QtCore>
 
@@ -49,3 +48,6 @@ public:
     dtkDistributedWorkerManagerPrivate *d;
 
 };
+
+//
+// dtkDistributedWorkerManager.h ends here

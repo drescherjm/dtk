@@ -16,7 +16,7 @@
 
 #include "dtkMeta.h"
 #include "dtkMetaContainerSequential_p.h"
-#include <dtkMetaExport>
+#include "dtkMetaExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential definition

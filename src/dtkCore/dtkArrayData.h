@@ -16,7 +16,7 @@
 
 #include <QtCore>
 
-#include <dtkCoreExport>
+#include "dtkCoreExport.h"
 
 // /////////////////////////////////////////////////////////////////
 //

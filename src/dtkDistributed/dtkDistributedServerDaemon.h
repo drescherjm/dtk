@@ -15,7 +15,7 @@
 #pragma once
 
 #include "dtkDistributedResourceManager.h"
-#include <dtkDistributedExport>
+#include "dtkDistributedExport.h"
 
 #include <QtCore>
 #include <QtNetwork>

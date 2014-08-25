@@ -1,21 +1,16 @@
-// dtkComposerNodeMetaScalarArrayReplace.cpp --- 
-// 
-// Author: Régis Duvigneau
-// Copyright (C) 2008 - Regis Duvigneau, Inria.
-// Created: Thu Jul 19 10:28:54 2012 (+0200)
 // Version: $Id$
-// Last-Updated: mar. févr.  4 17:40:55 2014 (+0100)
-//           By: Nicolas Niclausse
-//     Update #: 26
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
-// Change log:
-// 
-// 
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNodeMetaScalarArrayReplace.h"
 
@@ -61,7 +56,7 @@ dtkComposerNodeMetaScalarArrayReplace::dtkComposerNodeMetaScalarArrayReplace(voi
 dtkComposerNodeMetaScalarArrayReplace::~dtkComposerNodeMetaScalarArrayReplace(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -78,11 +73,14 @@ void dtkComposerNodeMetaScalarArrayReplace::run(void)
 
     d->arrays = d->receiver_arrays.data();
 
-    dtkxarch_int size = d->arrays->count();
+    qlonglong  size = d->arrays->count();
     qlonglong index = (*(d->receiver_index.data()));
 
     for (qlonglong i=0; i<size; i++)
         (*d->arrays->at(i))[index] = (*(d->receiver_vector.data()))[i];
-    
+
     d->emitter_arrays.setData(d->arrays);
 }
+
+//
+// dtkComposerNodeMetaScalarArrayReplace.cpp ends here

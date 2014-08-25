@@ -27,7 +27,9 @@
 #include <dtkLog/dtkLog>
 
 #include <dtkMathSupport/dtkMath.h>
+
 #include <QtCore/qmath.h>
+
 #include <math.h>
 
 // /////////////////////////////////////////////////////////////////
@@ -197,7 +199,7 @@ void dtkComposerNodeNumberAlmosteq::run(void)
     if (d->receiver_lhs.dataType() == QMetaType::LongLong && d->receiver_rhs.dataType() == QMetaType::LongLong) {
 
         d->value = (*(d->receiver_lhs.data<qlonglong>()) == *(d->receiver_rhs.data<qlonglong>()));
-        
+
     } else {
 
             double lhs = *(d->receiver_lhs.data<double>());
@@ -257,7 +259,7 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
     if (d->receiver_lhs.dataType() == QMetaType::LongLong && d->receiver_rhs.dataType() == QMetaType::LongLong) {
 
         d->value = (*(d->receiver_lhs.data<qlonglong>()) != *(d->receiver_rhs.data<qlonglong>()));
-        
+
     } else {
 
             double lhs = *(d->receiver_lhs.data<double>());
@@ -591,7 +593,7 @@ void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
     qlonglong *rhs = d->receiver_rhs.data<qlonglong>();
 
     d->value_i = (*lhs) / (*rhs);;
-    
+
     d->emitter.setData<qlonglong>(&d->value_i);
 }
 
@@ -605,7 +607,7 @@ void dtkComposerNodeNumberOperatorBinaryLogn::run(void)
     double *rhs = d->receiver_rhs.data<double>();
 
     d->value_r = qLn(*lhs) / qLn(*rhs);
-    
+
     d->emitter.setData<double>(&d->value_r);
 }
 
@@ -619,7 +621,7 @@ void dtkComposerNodeNumberOperatorBinaryMin::run(void)
     double *rhs = d->receiver_rhs.data<double>();
 
     d->value_r = (*lhs) < (*rhs) ? (*lhs) : (*rhs);
-    
+
     d->emitter.setData<double>(&d->value_r);
 }
 
@@ -647,7 +649,7 @@ void dtkComposerNodeNumberOperatorBinaryMax::run(void)
     double *rhs = d->receiver_rhs.data<double>();
 
     d->value_r = (*lhs) > (*rhs) ? (*lhs) : (*rhs);
-    
+
     d->emitter.setData<double>(&d->value_r);
 }
 
@@ -672,7 +674,7 @@ void dtkComposerNodeNumberOperatorBinaryMult::run(void)
     double *rhs = d->receiver_rhs.data<double>();
 
     d->value_r = (*lhs) * (*rhs);
-    
+
     d->emitter.setData<double>(&d->value_r);
 }
 

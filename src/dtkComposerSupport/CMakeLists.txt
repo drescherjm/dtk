@@ -385,16 +385,14 @@ qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_QRC}
-)
+  ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
   dtkMathSupport
   dtkContainerSupport
   dtkCoreSupport
   dtkGuiSupport
-  dtkLog
-  )
+  dtkLog)
 
 if(DTK_BUILD_SUPPORT_DISTRIBUTED)
   target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
@@ -417,15 +415,13 @@ qt5_use_modules(${PROJECT_NAME} Network)
 qt5_use_modules(${PROJECT_NAME} Widgets)
 qt5_use_modules(${PROJECT_NAME} Xml)
 
-## ###################################################################
+## #################################################################
 ## Target properties
-## ###################################################################
+## #################################################################
 
-if(APPLE)
-set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 1)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  INSTALL_NAME_DIR "@executable_path/../lib")
-endif(APPLE)
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 ## #################################################################
 ## Export header file

@@ -159,6 +159,14 @@ set(${PROJECT_NAME}_HEADERS
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## #################################################################
+## Target properties
+## #################################################################
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+
+## #################################################################
 ## Installation
 ## #################################################################
 

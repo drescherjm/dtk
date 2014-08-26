@@ -132,7 +132,6 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/dtkConfig.h.in"
   "${PROJECT_BINARY_DIR}/../../dtkConfig.h")
 
-
 ## #################################################################
 ## Build rules
 ## #################################################################
@@ -150,6 +149,14 @@ qt5_use_modules(${PROJECT_NAME} Widgets)
 target_link_libraries(${PROJECT_NAME}
   dtkLog
   dtkMathSupport)
+
+## #################################################################
+## Target properties
+## #################################################################
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 ## #################################################################
 ## Export header file

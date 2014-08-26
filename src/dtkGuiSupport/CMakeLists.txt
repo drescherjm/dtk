@@ -1,4 +1,4 @@
-### CMakeLists.txt --- 
+### CMakeLists.txt ---
 ######################################################################
 
 project(dtkGuiSupport)
@@ -118,6 +118,14 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Quick)
 qt5_use_modules(${PROJECT_NAME} Widgets)
+
+## #################################################################
+## Target properties
+## #################################################################
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 ## #################################################################
 ## Export header file

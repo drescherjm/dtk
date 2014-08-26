@@ -77,7 +77,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
 
 template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate<T>)
 {
-    // dtkMetaPluginFactory::instance()->registerFactory<T>(this);
+
 }
 
 template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)

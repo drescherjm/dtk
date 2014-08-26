@@ -452,7 +452,7 @@ QString dtkFinderSideView::driveLabel(QString drive)
 	DWORD dwSerialNumber = 0;
 	DWORD dwMaxFileNameLength=256;
 	DWORD dwFileSystemFlags=0;
-	bool ret = GetVolumeInformation( drive.toAscii().constData(),
+	bool ret = GetVolumeInformation( drive.toLatin1().constData(),
 									 szVolumeName, 256,
 									 &dwSerialNumber, &dwMaxFileNameLength,
 									 &dwFileSystemFlags, szFileSystemName, 256);
@@ -462,7 +462,7 @@ QString dtkFinderSideView::driveLabel(QString drive)
 		return decoratedDrive;
 	}
 
-	QString vName = QString::fromAscii(szVolumeName) ;
+	QString vName = QString::fromLatin1(szVolumeName) ;
 	vName.trimmed();
 	drive.remove("\\");
 	vName += " ("+drive+")";

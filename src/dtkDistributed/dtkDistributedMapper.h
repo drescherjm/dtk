@@ -1,29 +1,32 @@
-/* dtkDistributedMapper.h --- 
- * 
- * Author: Thibaud Kloczko
- * Created: 2013 Thu Feb  7 10:40:37 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
+
+#include "dtkDistributedExport.h"
 
 #include <QtCore/QObject>
 
 template <typename T> class QVector;
+
 class dtkDistributedMapperPrivate;
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedMapper interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkDistributedMapper : public QObject
+class DTKDISTRIBUTED_EXPORT dtkDistributedMapper : public QObject
 {
     Q_OBJECT
 
@@ -58,3 +61,6 @@ public:
 private:
     dtkDistributedMapperPrivate *d;
 };
+
+//
+// dtkDistributedMapper.h ends here

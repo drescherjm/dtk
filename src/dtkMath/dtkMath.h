@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "dtkMathExport.h"
+
 #include <QtCore>
 
 class dtkMatrix;
@@ -23,8 +25,8 @@ class dtkMatrixPluginManager;
 namespace dtkMath
 {
     namespace matrix {
-        dtkMatrixPluginFactory& pluginFactory(void);
-        dtkMatrixPluginManager& pluginManager(void);
+        DTKMATH_EXPORT dtkMatrixPluginFactory& pluginFactory(void);
+        DTKMATH_EXPORT dtkMatrixPluginManager& pluginManager(void);
     }
 }
 

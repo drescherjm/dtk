@@ -1,24 +1,25 @@
-/* dtkMatrix.h ---
- * 
- * Author: Julien Wintz
- * Created: Mon Jul 15 15:58:33 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Jul 22 12:17:04 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 341
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include <dtkCore>
 
 #include "dtkMatrix_p.h"
+#include "dtkMathExport.h"
 
-class dtkMatrix : public QObject
+class DTKMATH_EXPORT dtkMatrix : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(qulonglong colCount READ colCount)
@@ -67,14 +68,17 @@ public:
     bool dirty;
 };
 
-dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);
-dtkMatrix& operator-(const dtkMatrix& lhs, const dtkMatrix& rhs);
-dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
+DTKMATH_EXPORT dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);
+DTKMATH_EXPORT dtkMatrix& operator-(const dtkMatrix& lhs, const dtkMatrix& rhs);
+DTKMATH_EXPORT dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
 
-QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
-QDebug operator<<(QDebug debug, const dtkMatrix& matrix);
+DTKMATH_EXPORT QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
+DTKMATH_EXPORT QDebug operator<<(QDebug debug, const dtkMatrix& matrix);
 
 DTK_DECLARE_OBJECT(dtkMatrix*)
 DTK_DECLARE_PLUGIN(dtkMatrix)
 DTK_DECLARE_PLUGIN_FACTORY(dtkMatrix)
 DTK_DECLARE_PLUGIN_MANAGER(dtkMatrix)
+
+//
+// dtkMatrix.h ends here

@@ -14,8 +14,6 @@
 
 #include "dtkArrayData.h"
 
-#include <limits.h>
-
 // /////////////////////////////////////////////////////////////////
 
 void dtkRoundUpNextPowerOfTwo(quint32& nalloc) 

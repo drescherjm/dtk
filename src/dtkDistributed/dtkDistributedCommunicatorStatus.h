@@ -15,11 +15,13 @@
 
 #pragma once
 
+#include "dtkDistributedExport.h"
+
 #include <QtCore>
 
 class dtkDistributedCommunicatorStatusPrivate;
 
-class dtkDistributedCommunicatorStatus
+class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorStatus
 {
 
 public:
@@ -45,5 +47,3 @@ public:
 private:
     dtkDistributedCommunicatorStatusPrivate *d;
 };
-
-

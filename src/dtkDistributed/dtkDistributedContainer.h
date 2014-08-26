@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -17,29 +17,30 @@
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedWorker.h"
+#include "dtkDistributedExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedContainer
 // /////////////////////////////////////////////////////////////////
 
-class dtkDistributedContainer
+class DTKDISTRIBUTED_EXPORT dtkDistributedContainer
 {
 public:
-    dtkDistributedContainer(dtkDistributedWorker *worker) : 
+    dtkDistributedContainer(dtkDistributedWorker *worker) :
         m_size(0),
-        m_worker(worker), 
-        m_mapper(new dtkDistributedMapper), 
-        m_comm(worker->communicator()) 
+        m_worker(worker),
+        m_mapper(new dtkDistributedMapper),
+        m_comm(worker->communicator())
     {
         m_mapper->ref();
         m_worker->record(this);
     }
 
-    dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker) : 
+    dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker) :
         m_size(size),
-        m_worker(worker), 
-        m_mapper(new dtkDistributedMapper), 
-        m_comm(worker->communicator()) 
+        m_worker(worker),
+        m_mapper(new dtkDistributedMapper),
+        m_comm(worker->communicator())
     {
         m_mapper->ref();
         m_worker->record(this);
@@ -48,18 +49,18 @@ public:
         }
     }
 
-    dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
+    dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) :
         m_size(size),
-        m_worker(worker), 
-        m_mapper(mapper), 
-        m_comm(worker->communicator()) 
+        m_worker(worker),
+        m_mapper(mapper),
+        m_comm(worker->communicator())
     {
         m_mapper->ref();
         m_worker->record(this);
     }
 
 public:
-    virtual ~dtkDistributedContainer(void) 
+    virtual ~dtkDistributedContainer(void)
     {
         m_worker->unrecord(this);
         if (!m_mapper->deref())
@@ -90,5 +91,5 @@ protected:
     dtkDistributedCommunicator *m_comm;
 };
 
-// 
+//
 // dtkDistributedContainer.h ends here

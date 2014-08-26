@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -17,12 +17,13 @@
 #include "dtkDistributedArrayCache.h"
 #include "dtkDistributedArrayData.h"
 #include "dtkDistributedContainer.h"
+#include "dtkDistributedExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedArray
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> class dtkDistributedArray : public dtkDistributedContainer
+template<typename T> class DTKDISTRIBUTED_EXPORT dtkDistributedArray : public dtkDistributedContainer
 {
 public:
       dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker);
@@ -30,7 +31,7 @@ public:
       dtkDistributedArray(const qlonglong& size, const T *array, dtkDistributedWorker *worker);
       dtkDistributedArray(const dtkDistributedArray& other);
      ~dtkDistributedArray(void);
-    
+
 private:
     void initialize(void);
 
@@ -83,5 +84,5 @@ private:
 
 #include "dtkDistributedArray.tpp"
 
-// 
+//
 // dtkDistributedArray.h ends here

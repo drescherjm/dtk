@@ -17,6 +17,7 @@
 
 #include "dtkCorePluginManager"
 #include "dtkCorePluginFactory"
+#include "dtkCoreExport.h"
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_OBJECT
@@ -38,20 +39,20 @@
 #define DTK_DECLARE_PLUGIN_INTERFACE(type)      \
     DTK_DECLARE_PLUGIN_INTERFACE_NAME_STRINGIFIED(DTK_DECLARE_PLUGIN_INTERFACE_NAME(type))
 
-#define DTK_DECLARE_PLUGIN(type)                \
-    class type##Plugin : public QObject         \
-    {                                           \
-        Q_OBJECT                                \
-                                                \
-     public:                                    \
-                 type##Plugin(void) {}          \
-        virtual ~type##Plugin(void) {}          \
-                                                \
-    public:                                     \
-        virtual void   initialize(void) = 0;	\
-        virtual void uninitialize(void) = 0;	\
-    };                                          \
-	                                            \
+#define DTK_DECLARE_PLUGIN(type)                               \
+    class DTKCORE_EXPORT type##Plugin : public QObject         \
+    {                                                          \
+        Q_OBJECT                                               \
+                                                               \
+    public:                                                    \
+                 type##Plugin(void) {}                         \
+        virtual ~type##Plugin(void) {}                         \
+                                                               \
+    public:                                                    \
+        virtual void   initialize(void) = 0;                   \
+        virtual void uninitialize(void) = 0;                   \
+    };                                                         \
+                                                               \
     Q_DECLARE_INTERFACE(type##Plugin, DTK_DECLARE_PLUGIN_INTERFACE(type))
 
 // ///////////////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DECLARE_PLUGIN_FACTORY(type)                              \
-    class type##PluginFactory : public dtkCorePluginFactory<type> {}; \
+    class DTKCORE_EXPORT type##PluginFactory : public dtkCorePluginFactory<type> {}; \
     template <typename T> type *type##Creator() { return new T; };
 
 // ///////////////////////////////////////////////////////////////////
@@ -67,7 +68,7 @@
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DECLARE_PLUGIN_MANAGER(type)        \
-    class type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
+    class DTKCORE_EXPORT type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DEFINE_PLUGIN

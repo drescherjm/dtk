@@ -1,28 +1,29 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
 #pragma once
 
-#include "dtkDistributedContainer.h"
 #include "dtkDistributedArray.h"
 #include "dtkDistributedArrayNavigator.h"
+#include "dtkDistributedContainer.h"
+#include "dtkDistributedExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraph declaration
 // /////////////////////////////////////////////////////////////////
 
-class dtkDistributedGraph : public dtkDistributedContainer
+class DTKDISTRIBUTED_EXPORT dtkDistributedGraph : public dtkDistributedContainer
 {
 public:
       dtkDistributedGraph(dtkDistributedWorker *worker);
@@ -42,7 +43,7 @@ public:
 public:
     qlonglong vertexCount(void) const;
     qlonglong   edgeCount(void) const;
-    
+
     void appendEdge(qlonglong from, qlonglong to);
 
     qlonglong edgeCount(qlonglong vertex_id) const;

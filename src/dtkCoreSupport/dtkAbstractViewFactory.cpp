@@ -98,14 +98,14 @@ QStringList dtkAbstractViewFactory::implementations(void)
     return d->interfaces.values();
 }
 
-QStringList dtkAbstractViewFactory::implementations(const QString& interface)
+QStringList dtkAbstractViewFactory::implementations(const QString& interface_name)
 {
     QStringList implementations;
 
-    if(d->interfaces.keys().contains(interface))
-        implementations << d->interfaces.values(interface);
+    if(d->interfaces.keys().contains(interface_name))
+        implementations << d->interfaces.values(interface_name);
     else
-        qDebug() << "There is no available implementation of " << interface ;
+        qDebug() << "There is no available implementation of " << interface_name ;
 
     return implementations;
 }
@@ -179,11 +179,11 @@ bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractVi
     return false;
 }
 
-bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func, const QString& interface)
+bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func, const QString& interface_name)
 {
     if(!d->creators.contains(type)) {
         d->creators.insert(type, func);
-        d->interfaces.insertMulti(interface, type);
+        d->interfaces.insertMulti(interface_name, type);
         return true;
     }
 

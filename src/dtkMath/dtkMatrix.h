@@ -60,9 +60,9 @@ protected:
     dtkMatrix& lazyClone(void);
 
 public:
-    friend dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);
-    friend dtkMatrix& operator-(const dtkMatrix& lhs, const dtkMatrix& rhs);
-    friend dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
+    friend DTKMATH_EXPORT dtkMatrix& operator+(const dtkMatrix& lhs, const dtkMatrix& rhs);
+    friend DTKMATH_EXPORT dtkMatrix& operator-(const dtkMatrix& lhs, const dtkMatrix& rhs);
+    friend DTKMATH_EXPORT dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
 
 public:
     bool dirty;

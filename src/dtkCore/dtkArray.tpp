@@ -701,7 +701,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
     Q_ASSERT_X(index >= 0 && length >= 0, "dtkArray<T, PreallocSize>::setAt", "index out of range or negative length");
 
     if (length != 0) {
-        quintptr newSize = qMax(d->size, index + length);
+        quintptr newSize = qMax((quintptr)d->size, (quintptr)(index + length));
         const bool isTooSmall = newSize > d->alloc;
         if (!isDetached() || isTooSmall) {
             dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);

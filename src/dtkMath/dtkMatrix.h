@@ -76,9 +76,9 @@ DTKMATH_EXPORT QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
 DTKMATH_EXPORT QDebug operator<<(QDebug debug, const dtkMatrix& matrix);
 
 DTK_DECLARE_OBJECT(dtkMatrix*)
-DTK_DECLARE_PLUGIN(dtkMatrix)
-DTK_DECLARE_PLUGIN_FACTORY(dtkMatrix)
-DTK_DECLARE_PLUGIN_MANAGER(dtkMatrix)
+DTK_DECLARE_PLUGIN(dtkMatrix, DTKMATH_EXPORT)
+DTK_DECLARE_PLUGIN_FACTORY(dtkMatrix, DTKMATH_EXPORT)
+DTK_DECLARE_PLUGIN_MANAGER(dtkMatrix, DTKMATH_EXPORT)
 
 //
 // dtkMatrix.h ends here

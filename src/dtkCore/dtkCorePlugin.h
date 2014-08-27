@@ -39,8 +39,8 @@
 #define DTK_DECLARE_PLUGIN_INTERFACE(type)      \
     DTK_DECLARE_PLUGIN_INTERFACE_NAME_STRINGIFIED(DTK_DECLARE_PLUGIN_INTERFACE_NAME(type))
 
-#define DTK_DECLARE_PLUGIN(type)                               \
-    class DTKCORE_EXPORT type##Plugin : public QObject         \
+#define DTK_DECLARE_PLUGIN(type, Export)                              \
+    class Export type##Plugin : public QObject         \
     {                                                          \
         Q_OBJECT                                               \
                                                                \
@@ -59,16 +59,16 @@
 // DTK_DECLARE_PLUGIN_FACTORY
 // ///////////////////////////////////////////////////////////////////
 
-#define DTK_DECLARE_PLUGIN_FACTORY(type)                              \
-    class DTKCORE_EXPORT type##PluginFactory : public dtkCorePluginFactory<type> {}; \
+#define DTK_DECLARE_PLUGIN_FACTORY(type,Export)                               \
+    class Export type##PluginFactory : public dtkCorePluginFactory<type> {}; \
     template <typename T> type *type##Creator() { return new T; };
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_PLUGIN_MANAGER
 // ///////////////////////////////////////////////////////////////////
 
-#define DTK_DECLARE_PLUGIN_MANAGER(type)        \
-    class DTKCORE_EXPORT type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
+#define DTK_DECLARE_PLUGIN_MANAGER(type,Export)                               \
+    class Export type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DEFINE_PLUGIN

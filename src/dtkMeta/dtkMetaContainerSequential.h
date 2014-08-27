@@ -26,7 +26,7 @@ class DTKMETA_EXPORT dtkMetaContainerSequential
 {
 public:
     struct iterator;
-    struct item
+    struct DTKMETA_EXPORT item
     {
     private:
         friend struct iterator;
@@ -62,7 +62,7 @@ public:
     friend struct item;
 
 public:
-    struct iterator
+    struct DTKMETA_EXPORT iterator
     {
     private:
         friend struct const_iterator;
@@ -104,7 +104,7 @@ public:
     friend struct iterator;
 
 public:
-    struct const_iterator
+    struct DTKMETA_EXPORT const_iterator
     {
     private:
         friend class dtkMetaContainerSequential;

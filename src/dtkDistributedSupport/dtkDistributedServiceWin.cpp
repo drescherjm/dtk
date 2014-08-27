@@ -746,7 +746,9 @@ bool dtkDistributedServiceBasePrivate::start(void)
     if (!app)
         return false;
 
-    dtkDistributedServiceSysPrivate::nextFilter = app->setEventFilter(myEventFilter);
+//    TODO: migration to qt5 with installNativeEventFilter (we must
+//    defined a new class that inherits from   QAbstractNativeEventFilter)
+//    dtkDistributedServiceSysPrivate::nextFilter = app->installNativeEventFilter(myEventFilter);
 
     sys->controllerHandler = new dtkDistributedServiceControllerHandler(sys);
     sys->startSemaphore2.release(); // let serviceMain continue (and end)

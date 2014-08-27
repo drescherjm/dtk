@@ -448,7 +448,8 @@ public:
     QStringList serviceArgs;
 
     static dtkDistributedServiceSysPrivate *instance;
-    static QCoreApplication::EventFilter nextFilter;
+
+    static EventFilter nextFilter;
 
     QWaitCondition condition;
     QMutex mutex;
@@ -472,7 +473,7 @@ void dtkDistributedServiceControllerHandler::customEvent(QEvent *e)
 
 dtkDistributedServiceSysPrivate *dtkDistributedServiceSysPrivate::instance = 0;
 
-QCoreApplication::EventFilter dtkDistributedServiceSysPrivate::nextFilter = 0;
+EventFilter dtkDistributedServiceSysPrivate::nextFilter = 0;
 
 dtkDistributedServiceSysPrivate::dtkDistributedServiceSysPrivate(void)
 {

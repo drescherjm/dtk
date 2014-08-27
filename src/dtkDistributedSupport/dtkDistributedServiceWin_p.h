@@ -22,6 +22,8 @@
 
 #include <QtCore>
 
+typedef bool (*EventFilter)(void *message, long *result);
+
 class dtkDistributedServiceSysPrivate;
 
 class dtkDistributedServiceControllerHandler : public QObject

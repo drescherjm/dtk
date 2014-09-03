@@ -59,12 +59,10 @@ include(GenerateExportHeader)
 
 if(APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/lib/c++/v1")
-else(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif(APPLE)
 
 if(NOT APPLE AND NOT MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-unknown-pragmas")
 else(NOT APPLE AND NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif(NOT APPLE AND NOT MSVC)
@@ -99,12 +97,12 @@ option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
 ## Dependencies
 ## #################################################################
 
-find_package(Qt5Core         REQUIRED)
-find_package(Qt5Quick        REQUIRED)
-find_package(Qt5Network      REQUIRED)
-find_package(Qt5Gui          REQUIRED)
-find_package(Qt5Xml          REQUIRED)
-find_package(Qt5Declarative  REQUIRED)
+find_package(Qt5Core        REQUIRED)
+find_package(Qt5Quick       REQUIRED)
+find_package(Qt5Network     REQUIRED)
+find_package(Qt5Gui         REQUIRED)
+find_package(Qt5Xml         REQUIRED)
+find_package(Qt5Declarative REQUIRED)
 
 ## #################################################################
 ## Dependencies - Optional                           [TO BE REMOVED]

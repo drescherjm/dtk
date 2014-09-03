@@ -148,9 +148,9 @@ public:
 };
 
 DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
-DTK_DECLARE_PLUGIN(dtkDistributedCommunicator)
-DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator)
-DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator)
+DTK_DECLARE_PLUGIN(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
+DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
+DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 
 //
 // dtkDistributedCommunicator.h ends here

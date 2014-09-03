@@ -45,7 +45,7 @@ public:
     static dtkAbstractViewFactory *instance(void);
 
     bool registerViewType          (const QString& type,                             dtkAbstractViewCreator           func);
-    bool registerViewType          (const QString& type,                             dtkAbstractViewCreator           func, const QString& interface);
+    bool registerViewType          (const QString& type,                             dtkAbstractViewCreator           func, const QString& interface_name);
     bool registerViewAnimatorType  (const QString& type, const QStringList& handled, dtkAbstractViewAnimatorCreator   func);
     bool registerViewNavigatorType (const QString& type, const QStringList& handled, dtkAbstractViewNavigatorCreator  func);
     bool registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func);
@@ -73,7 +73,7 @@ public:
 
 public:
     QStringList implementations(void);
-    QStringList implementations(const QString& interface);
+    QStringList implementations(const QString& interface_name);
     QStringList interfaces(void);
 
 signals:

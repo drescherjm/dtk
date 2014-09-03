@@ -150,8 +150,6 @@ QStringList CppCodeParser::headerFileNameFilter()
  */
 QStringList CppCodeParser::sourceFileNameFilter()
 {
-    qDebug() << Q_FUNC_INFO ;
-
     return QStringList() << "*.c++" << "*.cc" << "*.cpp" << "*.cxx" << "*.tpp" << "*.mm";
 }
 

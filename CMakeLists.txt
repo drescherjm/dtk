@@ -99,12 +99,12 @@ option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
 ## Dependencies
 ## #################################################################
 
-find_package(Qt5Core         REQUIRED)
-find_package(Qt5Quick        REQUIRED)
-find_package(Qt5Network      REQUIRED)
-find_package(Qt5Gui          REQUIRED)
-find_package(Qt5Xml          REQUIRED)
-find_package(Qt5Declarative  REQUIRED)
+find_package(Qt5Core        REQUIRED)
+find_package(Qt5Quick       REQUIRED)
+find_package(Qt5Network     REQUIRED)
+find_package(Qt5Gui         REQUIRED)
+find_package(Qt5Xml         REQUIRED)
+find_package(Qt5Declarative REQUIRED)
 
 ## #################################################################
 ## Dependencies - Optional                           [TO BE REMOVED]

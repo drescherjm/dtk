@@ -14,10 +14,6 @@
 
 #include <QtCore>
 
-namespace dtkPluginsMetaInfoFetcher {
-
-}
-
 int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);

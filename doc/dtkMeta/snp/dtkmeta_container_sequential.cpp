@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -18,7 +18,7 @@ int size = 11;
 for (int i = 0; i < size; ++i) {
     int_vector << i;
 }
-// Sets the variant from the address of the vector 
+// Sets the variant from the address of the vector
 QVariant variant = QVariant::fromValue(&int_vector);
 
 // Gets the meta container without copying the vector
@@ -82,7 +82,6 @@ for (int i = 0; i < size; ++i) {
     meta_vector[i] += i;
 }
 //! [2]
-
 
 //! [3]
 QVector<int> int_vector;
@@ -156,5 +155,5 @@ dtkMetaContainerSequential::iterator it = meta_vector.begin();
 *it /= 5;
 //! [5]
 
-// 
+//
 // dtkmeta_container_sequential.cpp ends here

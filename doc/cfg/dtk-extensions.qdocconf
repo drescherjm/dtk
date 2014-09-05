@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 2
+##     Update #: 3
 ######################################################################
 ##
 ### Change Log:
@@ -17,7 +17,7 @@ outputencoding          = UTF-8
 sourceencoding          = UTF-8
 
 headers.fileextensions  = "*.h *.hpp *.ch *.h++ *.hh *.hxx"
-sources.fileextensions  = "*.c++ *.cc *.cpp *.cxx *.mm *.qml *.qdoc"
+sources.fileextensions  = "*.c++ *.cc *.cpp *.cxx *.tpp *.mm *.qml *.qdoc"
 
 examples.fileextensions = "*.cpp *.h *.js *.xq *.svg *.xml *.ui *.qhp *.qhcp *.qml *.css"
 examples.imageextensions = "*.png *.jpg *.gif"

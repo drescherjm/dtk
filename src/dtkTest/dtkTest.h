@@ -17,7 +17,7 @@
 #include <QtTest>
 
 #define DTKTEST_MAIN(TestMain, TestObject)	        \
-    int TestMain(int argc, char **argv)			\
+    int TestMain(int argc, char *argv[])			\
     {							\
 	QApplication app(argc, argv);			\
 	TestObject tc;					\
@@ -25,7 +25,7 @@
     }
 
 #define DTKTEST_MAIN_GUI(TestMain, TestObject)		\
-    int TestMain(int argc, char **argv)			\
+    int TestMain(int argc, char *argv[])			\
     {							\
 	QGuiApplication app(argc, argv);		\
 	TestObject tc;					\
@@ -33,7 +33,7 @@
     }
 
 #define DTKTEST_MAIN_NOGUI(TestMain, TestObject)	\
-    int TestMain(int argc, char **argv)			\
+    int TestMain(int argc, char *argv[])			\
     {							\
 	QCoreApplication app(argc, argv);		\
 	TestObject tc;					\

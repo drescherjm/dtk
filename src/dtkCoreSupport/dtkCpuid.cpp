@@ -53,7 +53,7 @@ dtkCpuid::~dtkCpuid(void)
 void dtkCpuid::load(unsigned i) {
 #if defined(Q_OS_WIN) && defined(Q_CC_MSVC)
     __cpuid((int *)d->regs, (int)i);
-#elif defined(DTK_PLATFORM_64)
+#elif defined(DTK_BUILD_64)
     asm volatile
       ("cpuid" : "=a" (d->regs[0]), "=b" (d->regs[1]), "=c" (d->regs[2]), "=d" (d->regs[3])
        : "a" (i), "c" (0));

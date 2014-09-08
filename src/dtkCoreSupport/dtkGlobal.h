@@ -64,7 +64,7 @@
 #  define DTK_PRETTY_FUNCTION __FUNCSIG__
 #elif defined __GNUG__
 #  define DTK_PRETTY_FUNCTION __PRETTY_FUNCTION__
-#else 
+#else
 #  define DTK_PRETTY_FUNCTION __func__
 #endif
 
@@ -98,10 +98,10 @@
 #  define DTK_COMPILER_WARNING(str) ("WARNING: " str)
 #endif
 
-#ifdef DTK_PLATFORM_32
+#ifdef DTK_BUILD_32
 #  define dtkxarch_int qint32
 #  define dtkxarch_uint quint32
-#elif defined DTK_PLATFORM_64
+#elif defined DTK_BUILD_64
 #  define dtkxarch_int qint64
 #  define dtkxarch_uint quint64
 #endif
@@ -150,21 +150,21 @@
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class dtkTypeInfo
-{ 
+{
 public:
-    enum { 
+    enum {
         dtkObjectPointer = false,
         dtkAbstractObjectPointer = false,
         dtkMatrixRealPointer = false
     };
-};	
+};
 
 // Specialize to avoid sizeof(void) warning
 
 template<> class dtkTypeInfo<void*>
 {
 public:
-    enum { 
+    enum {
         dtkObjectPointer = false,
         dtkAbstractObjectPointer = false,
         dtkMatrixRealPointer = false
@@ -196,7 +196,7 @@ public:
     static no_type  checkAbstractMatrix(...);
 
 public:
-    enum { 
+    enum {
         dtkObjectPointer         = (sizeof(checkObject(static_cast<T*>(0))) == sizeof(yes_type)),
         dtkAbstractObjectPointer = (sizeof(checkAbstractObject(static_cast<T*>(0))) == sizeof(yes_type)),
         dtkMatrixRealPointer     = (sizeof(checkAbstractMatrix(static_cast<T*>(0))) == sizeof(yes_type))
@@ -291,4 +291,3 @@ inline uint qHash(const QStringList &key)
 	hash = hash ^ qHash(string);
     return hash;
 }
-

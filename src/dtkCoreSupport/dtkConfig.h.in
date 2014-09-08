@@ -1,5 +1,5 @@
-/* dtkConfig.h.in --- 
- * 
+/* dtkConfig.h.in ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 15 17:04:44 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 26
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCONFIG_H
@@ -24,8 +24,8 @@
 #define DTK_VERSION_MINOR @dtk_VERSION_MINOR@
 #define DTK_VERSION_BUILD @dtk_VERSION_BUILD@
 
-#cmakedefine DTK_PLATFORM_32
-#cmakedefine DTK_PLATFORM_64
+#cmakedefine DTK_BUILD_32
+#cmakedefine DTK_BUILD_64
 
 #cmakedefine DTK_HAVE_MPI
 #cmakedefine DTK_HAVE_EDIT

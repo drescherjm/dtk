@@ -1,24 +1,18 @@
-/* dtkContainerVector.tpp --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Wed May 23 12:30:17 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Mon Sep 30 17:00:43 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 268
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
 
-#ifndef DTKCONTAINERVECTOR_TPP
-#define DTKCONTAINERVECTOR_TPP
+// Code:
+
+#pragma once
 
 // /////////////////////////////////////////////////////////////////
 // dtkContainerVector implementation
@@ -26,7 +20,7 @@
 
 template <typename T> dtkContainerVector<T>::dtkContainerVector(void) : dtkAbstractContainerOrdered<T>()
 {
-    
+
 };
 
 template <typename T> dtkContainerVector<T>::dtkContainerVector(qlonglong size) : dtkAbstractContainerOrdered<T>(), m_vector(size)
@@ -289,7 +283,7 @@ template <typename T> bool dtkContainerVector<T>::contains(const dtkAbstractCont
     while(result && (i < size)) {
         result = m_vector.contains(array[i++]);
     }
-    
+
     return result;
 };
 
@@ -301,7 +295,7 @@ template <typename T> bool dtkContainerVector<T>::contains(const dtkContainerVec
     while(result && (i < size)) {
         result = m_vector.contains(values.at(i++));
     }
-    
+
     return result;
 };
 
@@ -383,30 +377,30 @@ template <typename T> dtkContainerVector<T> *dtkContainerVector<T>::subContainer
 template <typename T> const T *dtkContainerVector<T>::toArray(qlonglong& count) const
 {
     count = m_vector.count();
-    
-    return m_vector.data();
+
+    return m_vector.rawData();
 };
 
 template <typename T> T *dtkContainerVector<T>::toArray(qlonglong& count)
 {
     count = m_vector.count();
-    
-    return m_vector.data();
+
+    return m_vector.rawData();
 };
 
 template <typename T> T *dtkContainerVector<T>::array(void)
 {
-    return m_vector.data();
+    return m_vector.rawData();
 };
 
 template <typename T> const T *dtkContainerVector<T>::array(void) const
 {
-    return m_vector.data();
+    return m_vector.rawData();
 };
 
 template <typename T> const T *dtkContainerVector<T>::constArray(void) const
 {
-    return m_vector.constData();
+    return m_vector.constRawData();
 };
 
 template <typename T> const T& dtkContainerVector<T>::operator [] (qlonglong index) const
@@ -414,7 +408,7 @@ template <typename T> const T& dtkContainerVector<T>::operator [] (qlonglong ind
     return m_vector.at(index);
 };
 
-template <typename T> T& dtkContainerVector<T>::operator [] (qlonglong index)      
+template <typename T> T& dtkContainerVector<T>::operator [] (qlonglong index)
 {
     return m_vector[index];
 };
@@ -486,7 +480,10 @@ template <typename T> bool dtkContainerVector<T>::isEqual(const dtkAbstractConta
 
 template <typename T> dtkContainerVector<T> dtkContainerVector<T>::operator + (const dtkContainerVector<T>& other)
 {
-    return (m_vector + other.m_vector);
+	dtkContainerVector<T> vec;
+	vec.m_vector  = m_vector;
+        vec.m_vector += other.m_vector;
+    return vec;
 };
 
 template <typename T> dtkContainerVector<T>& dtkContainerVector<T>::operator += (const dtkContainerVector<T>& other)
@@ -501,19 +498,36 @@ template <typename T> dtkContainerVector<T>& dtkContainerVector<T>::operator += 
     return (*this);
 };
 
-template <typename T> dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector)
+template <typename T> inline dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector)
 {
     dtkContainerVector<T> result;
-    result.m_vector = vector;
+    result.m_vector.setRawData(vector.data(), vector.size(), dtkArray<T>::Writable);
 
     return result;
 };
 
-template <typename T> QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector)
+template <typename T> inline QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector)
 {
-    QVector<T> result(vector.m_vector);
+    QVector<T> result(vector.count());
+    for (int i = 0; i < vector.count(); ++i)
+        result[i] = vector.m_vector[i];
 
     return result;
 };
 
-#endif
+template <typename T> inline dtkContainerVector<T> dtkContainerVectorFromDtkArray(const dtkArray<T>& vector)
+{
+    dtkArray<T> result;
+    result.m_vector = vector;
+    return result;
+};
+
+template <typename T> inline dtkArray<T> dtkContainerVectorToDtkArray(const dtkContainerVector<T>& vector)
+{
+    dtkArray<T> result(vector.m_vector);
+
+    return result;
+};
+
+//
+// dtkContainerVector.tpp ends here

@@ -1,5 +1,5 @@
-/* dtkContainerVector.h --- 
- * 
+/* dtkContainerVector.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 82
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCONTAINERVECTOR_H
@@ -22,6 +22,8 @@
 
 #include "dtkAbstractContainerOrdered.h"
 #include "dtkContainerSupportExport.h"
+
+#include <dtkCoreSupport/dtkArray.h>
 
 #include <QtCore>
 
@@ -44,19 +46,19 @@ public:
 
 public:
     void clear(void);
-    
+
     void append(const T& value);
     void append(const dtkAbstractContainer<T>& values);
     void append(const   dtkContainerVector<T>& values);
-    
+
     void prepend(const T& value);
     void prepend(const dtkAbstractContainer<T>& values);
     void prepend(const   dtkContainerVector<T>& values);
-    
+
     void remove(const T& value);
     void remove(const dtkAbstractContainer<T>& values);
     void remove(const   dtkContainerVector<T>& values);
-    
+
     void insert(qlonglong index, const T& value);
     void insert(qlonglong from, const dtkAbstractContainer<T>& values);
     void insert(qlonglong from, qlonglong step, const dtkAbstractContainer<T>& values);
@@ -64,7 +66,7 @@ public:
     void insert(qlonglong from, const dtkContainerVector<T>& values);
     void insert(qlonglong from, qlonglong step, const dtkContainerVector<T>& values);
     void insert(qlonglong *indices, const dtkContainerVector<T>& values);
-    
+
     void replace(qlonglong index, const T& value);
     void replace(qlonglong from, const dtkAbstractContainer<T>& values);
     void replace(qlonglong from, qlonglong step, const dtkAbstractContainer<T>& values);
@@ -72,7 +74,7 @@ public:
     void replace(qlonglong from, const dtkContainerVector<T>& values);
     void replace(qlonglong from, qlonglong step, const dtkContainerVector<T>& values);
     void replace(qlonglong *indices, const dtkContainerVector<T>& values);
-    
+
     void removeAt(qlonglong index);
     void removeAt(qlonglong from, qlonglong to, qlonglong step = 1);
 
@@ -84,7 +86,7 @@ public:
 public:
     bool  isEmpty(void) const;
 
-    bool contains(const T& value) const; 
+    bool contains(const T& value) const;
     bool contains(const dtkAbstractContainer<T>& values) const;
     bool contains(const   dtkContainerVector<T>& values) const;
 
@@ -140,9 +142,11 @@ public:
 public:
     template <typename U> friend dtkContainerVector<U> dtkContainerVectorFromQVector(const QVector<U>& vector);
     template <typename U> friend QVector<U> dtkContainerVectorToQVector(const dtkContainerVector<U>& vector);
+    template <typename U> friend dtkContainerVector<T> dtkContainerVectorFromDtkArray(const dtkArray<U>& vector);
+    template <typename U> friend dtkArray<U> dtkContainerVectorToDtkArray(const dtkContainerVector<U>& vector);
 
 private:
-    QVector<T> m_vector;
+    dtkArray<T> m_vector;
 };
 
 // // /////////////////////////////////////////////////////////////////
@@ -151,6 +155,8 @@ private:
 
 template <typename T> dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector);
 template <typename T> QVector<T> dtkContainerVectorToQVector(const dtkContainerVector<T>& vector);
+template <typename T> dtkContainerVector<T> dtkContainerVectorFromDtkArray(const dtkArray<T>& vector);
+template <typename T> dtkArray<T> dtkContainerVectorToDtkArray(const dtkContainerVector<T>& vector);
 
 // /////////////////////////////////////////////////////////////////
 // dtkContainerVector implementation
@@ -159,7 +165,7 @@ template <typename T> QVector<T> dtkContainerVectorToQVector(const dtkContainerV
 #include "dtkContainerVector.tpp"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 typedef dtkContainerVector<qreal> dtkContainerVectorReal;
@@ -173,7 +179,7 @@ Q_DECLARE_METATYPE(dtkContainerVectorInteger  );
 Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 #include <dtkMathSupport/dtkVector3D.h>

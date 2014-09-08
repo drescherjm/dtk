@@ -1,15 +1,15 @@
-/* dtkCore.h --- 
- * 
+/* dtkCore.h ---
+ *
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:28:31 2013 (+0100)
- * Version: 
+ * Version:
  * Last-Updated: mar. avril 15 11:09:21 2014 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 62
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once

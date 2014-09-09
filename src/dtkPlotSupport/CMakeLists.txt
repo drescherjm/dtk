@@ -52,7 +52,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkPlotViewSettings.cpp
   dtkPlotViewToolBar.cpp)
 
-set(${PROJECT_NAME}_SOURCES_RCC dtkPlot.qrc)
+set(${PROJECT_NAME}_SOURCES_QRC dtkPlot.qrc)
 
 ## #################################################################
 ## Build rules

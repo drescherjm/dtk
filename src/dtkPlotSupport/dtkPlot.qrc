@@ -11,7 +11,7 @@
     <file>pixmaps/dtkPlotPicking-light.png</file>
     <file>pixmaps/dtkPlotLegend.png</file>
     <file>pixmaps/dtkPlotLegend-light.png</file>
-    <file>pixmaps/dtkPlotSupportExport.png</file>
-    <file>pixmaps/dtkPlotSupportExport-light.png</file>
+    <file>pixmaps/dtkPlotExport.png</file>
+    <file>pixmaps/dtkPlotExport-light.png</file>
   </qresource>
 </RCC>

@@ -1,5 +1,5 @@
-/* dtkAbstractDataComposite.h --- 
- * 
+/* dtkAbstractDataComposite.h ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Sep 21 13:46:31 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 267
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATACOMPOSITE_H
@@ -24,7 +24,7 @@
 #include "dtkCoreSupportExport.h"
 #include "dtkGlobal.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkAbstractDataCompositePrivate;
 
@@ -48,22 +48,22 @@ public:
              dtkAbstractDataComposite(const   QList<dtkAbstractData *>&   list, dtkAbstractData *parent = 0);
     virtual ~dtkAbstractDataComposite(void);
 
-public:     
+public:
     void append(dtkAbstractData *data);
     void remove(dtkAbstractData *data);
-     
+
     bool has(dtkAbstractData *data) const;
 
     qlonglong count(void);
-    
+
     qlonglong indexOf(dtkAbstractData *data, qlonglong from = 0);
 
     Type type(void);
-     
+
     const dtkAbstractData *at(qlonglong index) const;
           dtkAbstractData *at(qlonglong index);
-     
-    const QVector<dtkAbstractData *>& vector(void) const;  
+
+    const QVector<dtkAbstractData *>& vector(void) const;
           QVector<dtkAbstractData *>& vector(void);
 
     const QList<dtkAbstractData *>& list(void) const;
@@ -76,7 +76,7 @@ private:
     dtkAbstractDataComposite(QVector<dtkAbstractData *> *vector);
     dtkAbstractDataComposite(  QList<dtkAbstractData *>   *list);
 
-public:    
+public:
     static dtkAbstractDataComposite *createFromVectorCopy(const QVector<dtkAbstractData *>& vector);
     static dtkAbstractDataComposite *createFromVectorCopy(      QVector<dtkAbstractData *>& vector);
 

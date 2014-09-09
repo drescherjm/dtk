@@ -18,7 +18,7 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkComposerNodeLoggerPrivate
 {
@@ -79,4 +79,3 @@ void dtkComposerNodeLogger::run(void)
         }
     }
 }
-

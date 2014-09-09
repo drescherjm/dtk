@@ -21,7 +21,8 @@
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
+
 #include <dtkMathSupport/dtkGraph.h>
 #include <dtkGuiSupport/dtkNotification.h>
 

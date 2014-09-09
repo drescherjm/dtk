@@ -1,5 +1,5 @@
-/* dtkDistributedController.cpp --- 
- * 
+/* dtkDistributedController.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 1836
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -29,7 +29,7 @@
 #include <dtkCoreSupport/dtkAbstractData.h>
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QtNetwork>
 // #include <QtXml>
@@ -153,17 +153,17 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         } else {
             node->setNetwork(dtkDistributedNode::Ethernet1G);
         }
-        
+
         for(int i = 0; i < ngpus; i++) {
             dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
-            
+
             if(properties["gpu_model"] == "T10")
                 gpu->setModel(dtkDistributedGpu::T10);
             else if(properties["gpu_model"] == "C2050")
                 gpu->setModel(dtkDistributedGpu::C2050);
             else if(properties["gpu_model"] == "C2070")
                 gpu->setModel(dtkDistributedGpu::C2070);
-            
+
             if(properties["gpu_arch"] == "nvidia-1.0")
                 gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
             else if(properties["gpu_arch"] == "nvidia-1.3")
@@ -172,7 +172,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
                 gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
             else if(properties["gpu_arch"].toString().contains("amd"))
                 gpu->setArchitecture(dtkDistributedGpu::AMD);
-            
+
             *node << gpu;
         }
 
@@ -365,7 +365,7 @@ bool dtkDistributedController::deploy(const QUrl& server)
                       // and the server will stop when the ssh process
                       // is killed
         args << "-t"; // do it twice to force tty allocation
-        args << "-x"; // disable X11 forwarding 
+        args << "-x"; // disable X11 forwarding
         args << server.host();
 
         serverProc->setProcessChannelMode(QProcess::MergedChannels);
@@ -708,4 +708,3 @@ void dtkDistributedController::error(QAbstractSocket::SocketError error)
 }
 
 dtkDistributedController *dtkDistributedController::s_instance = NULL;
-

@@ -13,19 +13,15 @@
  *
  */
 
-
-
-#include <dtkCore/dtkCore.h>
 #include <dtkDistributed/dtkDistributedServerDaemon.h>
-#include <dtkLog/dtkLogger.h>
+#include <dtkCore>
+#include <dtkLog>
 
-#include <QCoreApplication>
-
+#include <QtCore>
 
 int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
-
 
     if(!dtkApplicationArgumentsContain(&application, "-type")) {
         qDebug() << "Usage:" << argv[0] << " [-p port] -type <Oar | Torque | Local |...>";
@@ -57,4 +53,3 @@ int main(int argc, char **argv)
 
     return status;
 }
-

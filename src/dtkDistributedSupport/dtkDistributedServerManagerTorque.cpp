@@ -1,5 +1,5 @@
-/* dtkDistributedServerManagerTorque.cpp --- 
- * 
+/* dtkDistributedServerManagerTorque.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:10:24 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 991
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedCore.h"
@@ -26,7 +26,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QtCore>
 #include <QtXml>

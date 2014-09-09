@@ -13,7 +13,7 @@
  *
  */
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include "dtkGraphEdge.h"
 #include "dtkGraph.h"

@@ -13,7 +13,6 @@
 // Code:
 
 #include "dtkLog.h"
-#include "dtkLoggerHandlers.h"
 
 #include <iostream>
 
@@ -32,6 +31,10 @@ namespace dtkLogPrivate {
                    QFile file;
     dtkLog::HandlerFlags flags;
 };
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
 
 namespace dtkLogPrivate {
 
@@ -76,5 +79,6 @@ void dtkUninstallLoggerHandler()
     qInstallMessageHandler(0);
 }
 
+
 //
-// dtkLoggerHandlers.cpp ends here
+// dtkLog.cpp ends here

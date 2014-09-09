@@ -46,7 +46,8 @@
 #include "dtkComposerSceneNodeLeaf.h"
 #include "dtkComposerScenePort.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
+
 #include <dtkMathSupport/dtkGraph.h>
 #include <dtkMathSupport/dtkGraphEdge.h>
 

@@ -25,7 +25,7 @@
 
 // #include <dtkMath/dtkMath.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkDistributedSocketPrivate
 {

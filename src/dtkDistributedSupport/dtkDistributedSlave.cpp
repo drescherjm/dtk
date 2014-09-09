@@ -1,5 +1,5 @@
-/* dtkDistributedSlave.cpp --- 
- * 
+/* dtkDistributedSlave.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 256
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedMessage.h"
@@ -23,7 +23,8 @@
 #include "dtkDistributedCommunicatorTcp.h"
 
 #include <dtkCoreSupport/dtkGlobal.h>
-#include <dtkLog/dtkLogger.h>
+
+#include <dtkLog>
 
 #include <QtNetwork>
 #include <iostream>

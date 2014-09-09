@@ -22,7 +22,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedServerManagerOar implementation
@@ -228,11 +228,11 @@ QByteArray dtkDistributedServerManagerOar::status(void)
         }
 
         QRegExp rx("/host=(\\d+|ALL|BEST)(?:/core=)?(\\d+)?.*(?:walltime=)?(\\d+:\\d+:\\d+)");
-        
+
         int pos = rx.indexIn(job["wanted_resources"].toString());
-        
+
         Q_UNUSED(pos);
-        
+
         QStringList resources_list = rx.capturedTexts();
         QString nodes = resources_list.at(1);
         QString cores = resources_list.at(2);

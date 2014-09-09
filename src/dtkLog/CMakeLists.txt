@@ -20,14 +20,10 @@ project(dtkLog)
 
 set(${PROJECT_NAME}_HEADERS
   dtkLog
-  dtkLog.h
-  dtkLogger.h
-  dtkLogger_p.h
-  dtkLoggerHandlers.h)
+  dtkLog.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkLogger.cpp
-  dtkLoggerHandlers.cpp)
+  dtkLog.cpp)
 
 ## #################################################################
 ## Build rules

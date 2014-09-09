@@ -27,7 +27,7 @@
 #include <dtkCoreSupport/dtkGlobal.h>
 #include <dtkCoreSupport/dtkCpuid.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QtCore>
 #include <QHostInfo>

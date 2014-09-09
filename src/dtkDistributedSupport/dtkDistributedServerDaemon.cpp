@@ -1,5 +1,5 @@
-/* dtkDistributedServerDaemon.cpp --- 
- * 
+/* dtkDistributedServerDaemon.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:28:54 2011 (+0200)
@@ -9,14 +9,14 @@
  *     Update #: 844
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  * debug logging: use dtkLog() << "message" or qDebug() << "message"
  *   run logging: use dtkDistributedServiceBase::instance()->logMessage("message");
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedServerDaemon.h"
@@ -29,7 +29,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkDistributedServerDaemonPrivate
 {
@@ -98,7 +98,7 @@ void dtkDistributedServerDaemon::incomingConnection(qintptr descriptor)
 //! Wait for incomming connection
 /*! Warning, in its current state, this method may never return if no
  *  connection is established.
- * 
+ *
  * \param rank, the identifier of the slave on the cluster side.
  */
 void dtkDistributedServerDaemon::waitForConnection(int rank, QString jobid)

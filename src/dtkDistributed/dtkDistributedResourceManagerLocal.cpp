@@ -17,7 +17,7 @@
 
 // #include <dtkCore/dtkCpuid.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QtCore>
 #include <QHostInfo>
@@ -251,4 +251,3 @@ QString dtkDistributedResourceManagerLocal::deljob(QString jobid)
 
     return QString("OK");
 }
-

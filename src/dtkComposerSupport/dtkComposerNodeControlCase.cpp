@@ -26,7 +26,8 @@
 #include "dtkComposerTransmitterVariant.h"
 
 #include <dtkCoreSupport/dtkGlobal.h>
-#include <dtkLog/dtkLogger.h>
+
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlCasePrivate definition
@@ -192,7 +193,7 @@ int dtkComposerNodeControlCase::selectBranch(void)
             value = i;
             foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(true);
-            }    
+            }
 	    foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
 		t->setReady(true);
 	    }
@@ -202,7 +203,7 @@ int dtkComposerNodeControlCase::selectBranch(void)
             foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(false);
 	    }
-    
+
 	    foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
 		t->setReady(false);
 	    }

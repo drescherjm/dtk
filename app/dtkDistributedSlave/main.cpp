@@ -26,9 +26,10 @@
 #include <dtkDistributed/dtkDistributedWork.h>
 #include <dtkDistributed/dtkDistributedWorker.h>
 #include <dtkDistributed/dtkDistributedWorkerManager.h>
-#include <dtkLog/dtkLogger.h>
 
-#include <QCoreApplication>
+#include <dtkLog>
+
+#include <QtCore>
 
 #include <iostream>
 

@@ -21,7 +21,7 @@
 
 #include <dtkCore/dtkCore.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkDistributedMessagePrivate
 {
@@ -310,4 +310,3 @@ qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
 
     return 0;
 }
-

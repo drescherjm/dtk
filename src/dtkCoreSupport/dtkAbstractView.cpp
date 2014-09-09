@@ -27,7 +27,7 @@
 // #include <dtkMath/dtkVector3D.h>
 // #include <dtkMath/dtkQuaternion.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractView implementation
@@ -360,7 +360,7 @@ void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
         return;
     }
 
-    if(interactor) {        
+    if(interactor) {
         DTK_D(dtkAbstractView);
 
         d->interactors.insert(interactor->identifier(), interactor);

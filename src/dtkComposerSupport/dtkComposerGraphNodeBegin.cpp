@@ -29,7 +29,8 @@
 #include "dtkComposerNodeRemote.h"
 #endif
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
+
 #include <dtkMathSupport/dtkGraph.h>
 
 class dtkComposerGraphNodeBeginPrivate
@@ -150,4 +151,3 @@ dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
     return dtkComposerGraphNode::successors();
 #endif
 }
-

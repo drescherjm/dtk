@@ -16,7 +16,7 @@
 #include "dtkAbstractObject.h"
 #include "dtkAbstractObject_p.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkAbstractObject implementation
@@ -38,7 +38,7 @@ dtkAbstractObject::dtkAbstractObject(dtkAbstractObject *parent) : QObject(parent
 
 //! Copy constructor.
 /*!
- *  
+ *
  */
 dtkAbstractObject::dtkAbstractObject(const dtkAbstractObject& other) : QObject(other.parent()), d_ptr(new dtkAbstractObjectPrivate(*other.d_ptr, this))
 {
@@ -93,7 +93,7 @@ dtkAbstractObject *dtkAbstractObject::clone(void)
 
 //! Assignement operator.
 /*!
- *  
+ *
  */
 dtkAbstractObject& dtkAbstractObject::operator = (const dtkAbstractObject& other)
 {
@@ -153,7 +153,7 @@ void dtkAbstractObject::copy(const dtkAbstractObject& other)
 
 //! Comparison operator.
 /*!
- *  
+ *
  */
 bool dtkAbstractObject::operator == (const dtkAbstractObject& other) const
 {
@@ -257,7 +257,7 @@ int dtkAbstractObject::retain(void) const
  *  count be null, the object is scheduled for deletion. Note it sends
  *  the destroyed signal just before being actually deleted.
  *  The method of deletion depends on isDeferredDeletionEnabled().
- *  If it is true (default) the object will be deleted using "this->deleteLater();", 
+ *  If it is true (default) the object will be deleted using "this->deleteLater();",
  *  otherwise "delete this;" is used.
  */
 
@@ -276,7 +276,7 @@ int dtkAbstractObject::release(void) const
     return newCount;
 }
 
-/*! 
+/*!
  * \brief Enable / disable use of this->deleteLater() when reference count reaches 0.
  * \param value Changes what happens when the objects reference count reaches 0.
  *  For most objects this should be set to true, as it allows existing events

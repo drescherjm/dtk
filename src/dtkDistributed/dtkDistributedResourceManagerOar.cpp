@@ -16,7 +16,7 @@
 
 #include "dtkDistributedResourceManagerOar.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedResourceManagerOar implementation
@@ -221,11 +221,11 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         }
 
         QRegExp rx("/host=(\\d+|ALL|BEST)(?:/core=)?(\\d+)?.*(?:walltime=)?(\\d+:\\d+:\\d+)");
-        
+
         int pos = rx.indexIn(job["wanted_resources"].toString());
-        
+
         Q_UNUSED(pos);
-        
+
         QStringList resources_list = rx.capturedTexts();
         qlonglong nodes = resources_list.at(1).toInt();
         qlonglong cores = resources_list.at(2).toInt();

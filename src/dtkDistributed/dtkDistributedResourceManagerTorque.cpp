@@ -16,10 +16,10 @@
 
 #include "dtkDistributedResourceManagerTorque.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QtCore>
-#include <QDomDocument>
+#include <QtXml>
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -358,4 +358,3 @@ QDomDocument getXML(QString command)
 
     return document;
 }
-

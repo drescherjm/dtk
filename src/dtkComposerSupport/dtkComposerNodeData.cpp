@@ -23,7 +23,7 @@
 
 #include <dtkCoreSupport/dtkAbstractData>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <dtkMathSupport/dtkVector.h>
 
@@ -69,15 +69,15 @@ dtkComposerNodeData::~dtkComposerNodeData(void)
 
     d = NULL;
 }
-   
-bool dtkComposerNodeData::isAbstractData(void) const 
+
+bool dtkComposerNodeData::isAbstractData(void) const
 {
-    return true; 
+    return true;
 }
 
-QString dtkComposerNodeData::abstractDataType(void) const 
-{ 
-    return "dtkAbstractData"; 
+QString dtkComposerNodeData::abstractDataType(void) const
+{
+    return "dtkAbstractData";
 }
 
 void dtkComposerNodeData::run(void)

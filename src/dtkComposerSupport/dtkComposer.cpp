@@ -1,5 +1,5 @@
-/* dtkComposer.cpp --- 
- * 
+/* dtkComposer.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:49 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 449
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <dtkConfig.h>
@@ -37,7 +37,8 @@
 #include "dtkComposerReader.h"
 
 #include <dtkCoreSupport/dtkGlobal.h>
-#include <dtkLog/dtkLogger.h>
+
+#include <dtkLog>
 
 #include <QtCore>
 #include <QtWidgets>
@@ -107,7 +108,7 @@ dtkComposer::dtkComposer(QWidget *parent) : QWidget(parent), d(new dtkComposerPr
 
     d->path = new dtkComposerPath(this);
     d->path->setScene(d->scene);
-    
+
     d->compass = new dtkComposerCompass;
     d->compass->setScene(d->scene);
     d->compass->setView(d->view);
@@ -140,7 +141,7 @@ dtkComposer::~dtkComposer(void)
     delete d->writer;
     delete d->reader;
     delete d;
-    
+
     d = NULL;
 }
 

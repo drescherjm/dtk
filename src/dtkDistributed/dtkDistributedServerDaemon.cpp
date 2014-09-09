@@ -22,7 +22,7 @@
 #include "dtkDistributedResourceManagerLocal.h"
 #include "dtkDistributedResourceManagerTorque.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QTcpSocket>
 
@@ -97,7 +97,7 @@ void dtkDistributedServerDaemon::incomingConnection(qintptr descriptor)
 //! Wait for incomming connection
 /*! Warning, in its current state, this method may never return if no
  *  connection is established.
- * 
+ *
  * \param rank, the identifier of the slave on the cluster side.
  */
 void dtkDistributedServerDaemon::waitForConnection(int rank, QString jobid)
@@ -240,4 +240,3 @@ void dtkDistributedServerDaemon::discard(void)
 
     // dtkDistributedServiceBase::instance()->logMessage("Connection closed");
 }
-

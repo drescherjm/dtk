@@ -17,7 +17,7 @@
 
 #include <dtkCore/dtkCore.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog/dtkLog.h>
 
 #include <QtNetwork>
 
@@ -202,7 +202,7 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
                       // and the server will stop when the ssh process
                       // is killed
         args << "-t"; // do it twice to force tty allocation
-        args << "-x"; // disable X11 forwarding 
+        args << "-x"; // disable X11 forwarding
         args << server.host();
 
         serverProc->setProcessChannelMode(QProcess::MergedChannels);
@@ -499,4 +499,3 @@ void dtkDistributedController::error(QAbstractSocket::SocketError error)
 }
 
 dtkDistributedController *dtkDistributedController::s_instance = NULL;
-

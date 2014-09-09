@@ -1,5 +1,5 @@
-/* dtkAbstractProcessFactory.cpp --- 
- * 
+/* dtkAbstractProcessFactory.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 15:54:10 2008 (+0100)
@@ -9,19 +9,19 @@
  *     Update #: 125
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractProcess.h"
 #include "dtkAbstractProcessFactory.h"
 #include "dtkSmartPointer.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkAbstractProcessFactoryPrivate
 {

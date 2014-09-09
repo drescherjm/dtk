@@ -17,7 +17,7 @@
 
 #include <QtCore>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <dtkConfig.h>
 

@@ -21,7 +21,7 @@
 
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 class dtkDistributedMessagePrivate
 {
@@ -223,4 +223,3 @@ QByteArray &dtkDistributedMessage::content(void)
 {
     return d->content;
 }
-

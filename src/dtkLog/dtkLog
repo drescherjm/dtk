@@ -1,4 +1,1 @@
 #include "dtkLog.h"
-#include "dtkLogger.h"
-#include "dtkLogger_p.h"
-#include "dtkLoggerHandlers.h"

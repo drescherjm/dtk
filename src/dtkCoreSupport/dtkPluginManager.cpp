@@ -20,9 +20,9 @@
 #include "dtkPlugin.h"
 #include "dtkPluginManager.h"
 
-#include <QApplication>
+#include <QtWidgets>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -149,7 +149,7 @@ void dtkPluginManager::uninitializeApplication(void)
 
 //! Load a specific plugin designated by its name.
 /*! The path is retrieved through the plugin manager settings.
- * 
+ *
  * \param name The name of the plugin, without platform specific prefix (.e.g lib) and suffix (e.g. .so or .dylib or .dll)
  */
 
@@ -180,7 +180,7 @@ void dtkPluginManager::load(const QString& name)
 
 //! Unload a specific plugin designated by its name.
 /*! The path is retrieved through the plugin manager settings.
- * 
+ *
  * \param name The name of the plugin, without platform specific prefix (.e.g lib) and suffix (e.g. .so or .dylib or .dll)
  */
 

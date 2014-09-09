@@ -1,16 +1,16 @@
 /* dtkDistributedCommunicatorTcp.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:51:02 2010 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedCommunicatorTcp.h"
@@ -19,7 +19,7 @@
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
 #include <dtkCoreSupport/dtkGlobal.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QtCore>
 #include <QtNetwork>

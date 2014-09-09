@@ -23,7 +23,7 @@
 
 #include <dtkMathSupport/dtkMatrix.h>
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMatrixSquareRealPrivate interface
@@ -67,7 +67,7 @@ dtkComposerNodeMatrixSquareReal::dtkComposerNodeMatrixSquareReal(void) : dtkComp
     this->appendReceiver(&d->receiver_value);
 
     this->appendEmitter(&d->emitter_matrix);
-    
+
     d->emitter_size.setData(&d->size);
     this->appendEmitter(&d->emitter_size);
 }

@@ -22,7 +22,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
 
-#include <dtkLog/dtkLogger.h>
+#include <dtkLog>
 
 #include <QVarLengthArray>
 
@@ -106,7 +106,7 @@ dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
     return val;
 }
 
-void dtkComposerGraphNodeSelectBranch::clean(void) 
+void dtkComposerGraphNodeSelectBranch::clean(void)
 {
     d->result = -1;
     dtkComposerGraphNode::clean();
@@ -120,5 +120,3 @@ void dtkComposerGraphNodeSelectBranch::eval(void)
     d->result = d->composer_node->selectBranch();
     this->setStatus(dtkComposerGraphNode::Done);
 }
-
-

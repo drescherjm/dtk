@@ -15,8 +15,8 @@
 #include "dtkDistributedMessage.h"
 #include "dtkDistributedSlave.h"
 
-#include <dtkCore/dtkCore.h>
-#include <dtkLog/dtkLogger.h>
+#include <dtkCore>
+#include <dtkLog>
 
 #include <QtNetwork>
 

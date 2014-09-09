@@ -17,7 +17,8 @@
 #include "dtkDistributedCommunicatorMpi.h"
 
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
-#include <dtkLog/dtkLogger.h>
+
+#include <dtkLog>
 
 //#include <dtkMathSupport/>
 

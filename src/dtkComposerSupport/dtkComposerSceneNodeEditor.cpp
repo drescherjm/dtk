@@ -1,16 +1,16 @@
-/* dtkComposerSceneNodeEditor.cpp --- 
- * 
+/* dtkComposerSceneNodeEditor.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:10:15 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraph.h"
@@ -197,7 +197,7 @@ dtkComposerScenePort *dtkComposerSceneNodeEditorListItem::port(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidget(parent), d(new dtkComposerSceneNodeEditorPrivate)
@@ -327,7 +327,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->node_toolbox->blockSignals(true);
     d->node_toolbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    // -- 
+    // --
 
     QHBoxLayout *l_layout = new QHBoxLayout;
     l_layout->setContentsMargins(0, 0, 0, 0);
@@ -470,10 +470,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
     d->output_ports->setVisible(true);
 
     if (dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
-        
+
         foreach(dtkComposerScenePort *port, node->inputPorts())
             d->input_ports->addInputPort(port);
-        
+
         foreach(dtkComposerScenePort *port, node->outputPorts())
             d->output_ports->addOutputPort(port);
 
@@ -492,14 +492,14 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         QList<int> loop_ports;
 
         foreach(dtkComposerSceneNodeComposite *block, c->blocks()) {
-        
+
             foreach(dtkComposerScenePort *port, block->inputPorts()) {
                 if (port->loop() && !loop_ports.contains(port->loop())) {
                     d->loop_ports->addInputPort(port);
                     loop_ports << port->loop();
                 }
             }
-            
+
             foreach(dtkComposerScenePort *port, block->outputPorts()) {
                 if (port->loop() && !loop_ports.contains(port->loop())) {
                     d->loop_ports->addOutputPort(port);
@@ -602,10 +602,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
                 if (data_node->isAbstractData()) {
-                    
+
                     int current_index = 0;
                     d->select_implementation->addItem("Choose implementation");
-                    
+
                     for(int i = 0; i < data_node->implementations().count(); ++i) {
                         if (data_node->implementations().at(i) == data_node->currentImplementation())
                             current_index = i+1;
@@ -614,7 +614,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
                     d->select_implementation->setMaximumWidth(this->size().width() - 10);
                     d->select_implementation->setCurrentIndex(current_index);
-                    
+
                     d->select_implementation->blockSignals(false);
                     d->select_implementation->setVisible(true);
                     d->select_implementation->setEnabled(true);
@@ -622,14 +622,14 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                     object = reinterpret_cast<QObject *>(data_node->data());
                 }
             }
-            
+
             else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee())) {
 
                 if (process_node->isAbstractProcess()) {
-                    
+
                     int current_index = 0;
                     d->select_implementation->addItem("Choose implementation");
-                    
+
                     for(int i = 0; i < process_node->implementations().count(); ++i) {
                         if (process_node->implementations().at(i) == process_node->currentImplementation())
                             current_index = i+1;
@@ -638,7 +638,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
                     d->select_implementation->setMaximumWidth(this->size().width() - 10);
                     d->select_implementation->setCurrentIndex(current_index);
-                    
+
                     d->select_implementation->blockSignals(false);
                     d->select_implementation->setVisible(true);
                     d->select_implementation->setEnabled(true);
@@ -646,31 +646,31 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                     object = reinterpret_cast<QObject *>(process_node->process());
                 }
             }
-            
+
             else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
-                
+
                 if (view_node->isAbstractView()) {
-                    
+
                     int current_index = 0;
                     d->select_implementation->addItem("Choose implementation");
-                    
+
                     for(int i = 0; i < view_node->implementations().count(); ++i) {
                         if (view_node->implementations().at(i) == view_node->currentImplementation())
                             current_index = i+1;
                         d->select_implementation->addItem(view_node->implementations().at(i));
                     }
-                    
+
                     d->select_implementation->setMaximumWidth(this->size().width() - 10);
                     d->select_implementation->setCurrentIndex(current_index);
-                    
+
                     d->select_implementation->blockSignals(false);
                     d->select_implementation->setVisible(true);
                     d->select_implementation->setEnabled(true);
-                    
+
                     object = reinterpret_cast<QObject *>(view_node->view());
                 }
             }
-            
+
             if (object) {
                 dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
                 item->setContentsMargins(0, 0, 0, 0);
@@ -915,11 +915,11 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
         control->block("Body")->wrapee()->receivers().last()->appendNext(control->block("Conditional")->wrapee()->receivers().last());
         control->block("Conditional")->wrapee()->receivers().last()->appendPrevious(control->block("Body")->wrapee()->receivers().last());
     }
-    
+
     if (command_incr_i) {
         control->block("Body")->wrapee()->emitters().last()->appendNext(control->block("Increment")->wrapee()->receivers().last());
         control->block("Increment")->wrapee()->receivers().last()->appendPrevious(control->block("Body")->wrapee()->emitters().last());
-    } 
+    }
 
     dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last())->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
 
@@ -927,7 +927,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     dynamic_cast<dtkComposerNodeControl *>(control->wrapee())->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last()));
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
     int index = -1;
@@ -1050,7 +1050,7 @@ void dtkComposerSceneNodeEditor::removeInputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setPort(item->port());
     }
-    
+
     d->stack->push(command);
 
     int index = -1;
@@ -1178,18 +1178,10 @@ void dtkComposerSceneNodeEditor::onBrowse(void)
     QString path = settings.value("last_open_file_node", QDir::homePath()).toString();
     settings.endGroup();
 
-    QFileDialog *dialog = new QFileDialog(0, tr("Open file"), path);
-    dialog->setStyleSheet("background-color: none ; color: none;");
-    dialog->setAcceptMode(QFileDialog::AcceptOpen);
-    dialog->setFileMode(QFileDialog::AnyFile);
-    dialog->open(this, SLOT(onBrowse(const QString&)));    
-}
+    QString file = QFileDialog::getOpenFileName(0, "Open composition");
 
-void dtkComposerSceneNodeEditor::onBrowse(const QString& file)
-{
     QFileInfo info(file);
-    
-    QSettings settings("inria", "dtk");
+
     settings.beginGroup("composer");
     settings.setValue("last_open_file_node", info.absolutePath());
     settings.endGroup();

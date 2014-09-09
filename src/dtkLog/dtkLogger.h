@@ -121,7 +121,7 @@ void dtkSetLoggingRulesFile(const QString &path);
 // ///////////////////////////////////////////////////////////////////
 
 #define dtkInfo                                                         \
-        for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
+    for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtDebugMsg); enabled; enabled = false) \
         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).debug
 
 // ///////////////////////////////////////////////////////////////////

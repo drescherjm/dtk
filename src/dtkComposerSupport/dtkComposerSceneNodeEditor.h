@@ -1,5 +1,5 @@
-/* dtkComposerSceneNodeEditor.h --- 
- * 
+/* dtkComposerSceneNodeEditor.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:08:29 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 53
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENODEEDITOR_H
@@ -69,7 +69,6 @@ protected slots:
 
 protected slots:
     void onBrowse(void);
-    void onBrowse(const QString&);
     void onValueChanged(bool);
     void onValueChanged(int);
     void onValueChanged(double);

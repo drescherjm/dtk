@@ -70,8 +70,6 @@ void dtkComposerNodeLogger::run(void)
                 dtkWarn() <<  output;
             else if  (level == "error")
                 dtkError() <<  output;
-            else if  (level == "critical")
-                dtkCritical() <<  output;
             else
                 dtkInfo() <<  output;
         } else {

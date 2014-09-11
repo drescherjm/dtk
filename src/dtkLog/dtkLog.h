@@ -14,34 +14,92 @@
 
 #pragma once
 
-#include "dtkLogExport.h"
-
 #include <QtCore>
 
-namespace dtkLog {
-
-    enum HandlerFlag {
-        Console = 0x00,
-           File = 0x01
+namespace dtkLog
+{
+    enum Level {
+        Trace = 0x000,
+        Debug = 0x001,
+         Info = 0x010,
+         Warn = 0x011,
+        Error = 0x100,
+        Fatal = 0x101
     };
+}
 
-    Q_DECLARE_FLAGS(HandlerFlags, HandlerFlag);
-    Q_DECLARE_OPERATORS_FOR_FLAGS(HandlerFlags);
-};
+#include "dtkLogger.h"
+#include "dtkLogEngine.h"
 
-DTKLOG_EXPORT void   dtkInstallLoggerHandler(dtkLog::HandlerFlags);
-DTKLOG_EXPORT void dtkUninstallLoggerHandler(void);
+// /////////////////////////////////////////////////////////////////
+// Trace level stream
+// /////////////////////////////////////////////////////////////////
 
-// #define qCritical                                                       \
-//     for (bool enabled = dtkLoggingCategory::defaultCategory().isEnabled(QtCriticalMsg); enabled; enabled = false) \
-//         QMessageLogger(__FILE__, __LINE__, Q_FUNC_INFO, dtkLoggingCategory::defaultCategory().categoryName()).critical
+#define dtkTrace()                                                      \
+    if (dtkLogger::instance().level() > dtkLog::Trace)                  \
+        ;                                                               \
+    else                                                                \
+        dtkLogEngine(dtkLog::Trace).stream()
 
-#define dtkDebug    qDebug
-#define dtkInfo     qDebug
-#define dtkTrace    qDebug
-#define dtkError    qDebug
-#define dtkWarn     qWarning
-#define dtkCritical qCritical
+// /////////////////////////////////////////////////////////////////
+// Debug level stream
+// /////////////////////////////////////////////////////////////////
+
+#define dtkDebug()                                                      \
+    if (dtkLogger::instance().level() > dtkLog::Debug)                  \
+        ;                                                               \
+    else                                                                \
+        dtkLogEngine(dtkLog::Debug).stream()
+
+// /////////////////////////////////////////////////////////////////
+// Info level stream
+// /////////////////////////////////////////////////////////////////
+
+#define dtkInfo()                                                       \
+    if (dtkLogger::instance().level() > dtkLog::Info)                   \
+        ;                                                               \
+    else                                                                \
+        dtkLogEngine(dtkLog::Info).stream()
+
+// /////////////////////////////////////////////////////////////////
+// Warn level stream
+// /////////////////////////////////////////////////////////////////
+
+#define dtkWarn()                                                       \
+    if (dtkLogger::instance().level() > dtkLog::Warn)                   \
+        ;                                                               \
+    else                                                                \
+        dtkLogEngine(dtkLog::Warn).stream()
+
+// /////////////////////////////////////////////////////////////////
+// Error level stream
+// /////////////////////////////////////////////////////////////////
+
+#define dtkError()                                                      \
+    if (dtkLogger::instance().level() > dtkLog::Error)                  \
+        ;                                                               \
+    else                                                                \
+        dtkLogEngine(dtkLog::Error).stream()
+
+// /////////////////////////////////////////////////////////////////
+// Fatal level stream
+// /////////////////////////////////////////////////////////////////
+
+#define dtkFatal()                                                      \
+    dtkLogEngine(dtkLog::Fatal).stream()
+
+// ///////////////////////////////////////////////////////////////////
+// Custom level stream
+// ///////////////////////////////////////////////////////////////////
+
+#define dtkLog(level)				                        \
+    dtkLogEngine(level, true).stream()
+
+// /////////////////////////////////////////////////////////////////
+// Helper functions
+// /////////////////////////////////////////////////////////////////
+
+QString DTKLOG_EXPORT dtkLogPath(QCoreApplication *application);
 
 //
 // dtkLog.h ends here

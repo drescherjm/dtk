@@ -104,7 +104,7 @@ int dtkComposerEvaluatorProcess::exec(void)
 {
 
     if (!d->factory) {
-        dtkCritical() << "No factory set ! abort process execution";
+        dtkError() << "No factory set ! abort process execution";
         return 1;
     }
 
@@ -128,7 +128,7 @@ int dtkComposerEvaluatorProcess::exec(void)
     }
 
     if (new_composition && composition.isEmpty()) {
-        dtkCritical() << "Empty composition, abort" ;
+        dtkError() << "Empty composition, abort" ;
         return 1;
     }
 
@@ -141,7 +141,7 @@ int dtkComposerEvaluatorProcess::exec(void)
             spawn->setInternalCommunicator(d->comm);
             spawn->setApplication(d->application);
         } else {
-            dtkCritical() <<  "Can't find spawn node in composition, abort";
+            dtkError() <<  "Can't find spawn node in composition, abort";
             return 1;
         }
     }

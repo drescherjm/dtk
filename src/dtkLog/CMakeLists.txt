@@ -15,15 +15,21 @@
 project(dtkLog)
 
 ## #################################################################
-## Input
+## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkLog
-  dtkLog.h)
+  dtkLog.h
+  dtkLogger.h
+  dtkLogger_p.h
+  dtkLogEngine.h
+  dtkLogDestination.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkLog.cpp)
+  dtkLog.cpp
+  dtkLogger.cpp
+  dtkLogEngine.cpp
+  dtkLogDestination.cpp)
 
 ## #################################################################
 ## Build rules
@@ -31,17 +37,19 @@ set(${PROJECT_NAME}_SOURCES
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS})
+  ${${PROJECT_NAME}_HEADERS}
+  ${${PROJECT_NAME}_SOURCES_MOC})
+
+qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Widgets)
+
+## #################################################################
+## Target properties
+## #################################################################
 
 set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-
-## ###################################################################
-## Link rules
-## ###################################################################
-
-qt5_use_modules(${PROJECT_NAME} Core)
 
 ## #################################################################
 ## Export header file

@@ -78,7 +78,7 @@ void dtkDistributedServerDaemon::setManager(QString name)
     } else if (name =="local") {
         d->manager = new dtkDistributedResourceManagerLocal;
     } else {
-        dtkCritical() << "unknown resource manager type" << name;
+        dtkError() << "unknown resource manager type" << name;
     }
 }
 

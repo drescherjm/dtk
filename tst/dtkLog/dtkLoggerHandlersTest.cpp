@@ -32,7 +32,7 @@ dtkLoggerHandlersTestCase::~dtkLoggerHandlersTestCase(void)
 
 void dtkLoggerHandlersTestCase::initTestCase(void)
 {
-    dtkInstallLoggerHandler(dtkLog::File);
+
 }
 
 void dtkLoggerHandlersTestCase::init(void)
@@ -52,7 +52,7 @@ void dtkLoggerHandlersTestCase::cleanup(void)
 
 void dtkLoggerHandlersTestCase::cleanupTestCase(void)
 {
-    dtkUninstallLoggerHandler();
+
 }
 
 DTKTEST_MAIN_NOGUI(dtkLoggerHandlersTest, dtkLoggerHandlersTestCase)

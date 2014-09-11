@@ -132,7 +132,7 @@ int dtkComposerEvaluatorSlave::exec(void)
 {
 
     if (!d->factory) {
-        dtkCritical() << "No factory set ! abort slave execution";
+        dtkError() << "No factory set ! abort slave execution";
         return 1;
     }
 
@@ -169,7 +169,7 @@ int dtkComposerEvaluatorSlave::exec(void)
                 this->communicator()->flush();
                 this->communicator()->socket()->setParent(0);
             } else  {
-                dtkCritical() << "Can't connect to server" << d->server;
+                dtkError() << "Can't connect to server" << d->server;
                 return 1;
             }
         }
@@ -181,7 +181,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         if (d->composition_socket->bytesAvailable() > 10) {
             dtkInfo() << "data already available, try to parse composition " << d->composition_socket->bytesAvailable();
         } else if (!d->composition_socket->waitForReadyRead(600000)) {
-            dtkCritical() << "No data received from server after 10mn, abort " ;
+            dtkError() << "No data received from server after 10mn, abort " ;
             return 1;
         } else
             dtkDebug() << "Ok, data received, parse" ;
@@ -202,12 +202,12 @@ int dtkComposerEvaluatorSlave::exec(void)
                 composition = d->composition_cache.value(d->last_controller_rank);
             }
         } else {
-            dtkCritical() << "Bad composition type, abort" << msg->type() << msg->content();
+            dtkError() << "Bad composition type, abort" << msg->type() << msg->content();
             return 1;
         }
 
         if (new_composition && composition.isEmpty()) {
-            dtkCritical() << "Empty composition, abort" ;
+            dtkError() << "Empty composition, abort" ;
             return 1;
         }
 
@@ -234,7 +234,7 @@ int dtkComposerEvaluatorSlave::exec(void)
                 remote->setJob(this->jobId());
                 remote->setCommunicator(d->communicator_i);
             } else {
-                dtkCritical() <<  "Can't find remote node in composition, abort";
+                dtkError() <<  "Can't find remote node in composition, abort";
                 return 1;
             }
         }
@@ -287,7 +287,7 @@ int dtkComposerEvaluatorSlave::exec(void)
             workerThread->deleteLater();
             dtkDebug() << "finished" ;
         } else {
-            dtkCritical() <<  "Can't find remote node in composition, abort";
+            dtkError() <<  "Can't find remote node in composition, abort";
             return 1;
         }
     }

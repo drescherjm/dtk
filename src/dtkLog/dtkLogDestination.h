@@ -23,7 +23,6 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
-#include <QtGui>
 
 class dtkLogModel;
 

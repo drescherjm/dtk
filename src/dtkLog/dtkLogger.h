@@ -24,7 +24,6 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
-#include <QtWidgets>
 
 class DTKLOG_EXPORT dtkLogger
 {

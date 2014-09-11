@@ -21,7 +21,6 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
-#include <QtGui>
 
 QString DTKLOG_EXPORT dtkLogPath(QCoreApplication *application)
 {

@@ -2,3 +2,5 @@
 #include "dtkCorePlugin.h"
 #include "dtkCorePluginFactory.h"
 #include "dtkCorePluginManager.h"
+#include "dtkArray.h"
+#include "dtkArray.tpp"

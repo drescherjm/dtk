@@ -21,8 +21,8 @@
 class DTKDISTRIBUTED_EXPORT dtkDistributedSettings : public QSettings
 {
 public:
-    explicit dtkDistributedSettings(void);
-    virtual ~dtkDistributedSettings(void);
+     dtkDistributedSettings(void);
+    ~dtkDistributedSettings(void);
 };
 
 //

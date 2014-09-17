@@ -48,7 +48,7 @@ public:
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
 
-        QUrl url(dtkApplicationArgumentsValue(qApp,"--server"));
+        QUrl url(dtkCoreApplicationArgumentsValue(qApp,"--server"));
 
         qDebug() << "Running on master, connect to remote server" ;
         slave.connect(url);
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
 
-    if (!dtkApplicationArgumentsContain(qApp,"--server")) {
+    if (!dtkCoreApplicationArgumentsContain(qApp,"--server")) {
         qCritical() << "no server set! use --server <url> " ;
         return 1;
     }
@@ -106,8 +106,8 @@ int main(int argc, char **argv)
     dtkDistributedPolicy policy;
 
     QString policyType = "qthread";
-    if (dtkApplicationArgumentsContain(qApp,"--policy")) {
-        policyType = dtkApplicationArgumentsValue(qApp,"--policy");
+    if (dtkCoreApplicationArgumentsContain(qApp,"--policy")) {
+        policyType = dtkCoreApplicationArgumentsValue(qApp,"--policy");
     }
     policy.setType(policyType);
 

@@ -23,13 +23,13 @@ int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
 
-    if(!dtkApplicationArgumentsContain(&application, "-type")) {
+    if(!dtkCoreApplicationArgumentsContain(&application, "-type")) {
         qDebug() << "Usage:" << argv[0] << " [-p port] -type <Oar | Torque | Local |...>";
         return 1;
     }
     int port;
-    if(dtkApplicationArgumentsContain(&application, "-p"))
-        port = dtkApplicationArgumentsValue(&application, "-p").toInt();
+    if(dtkCoreApplicationArgumentsContain(&application, "-p"))
+        port = dtkCoreApplicationArgumentsValue(&application, "-p").toInt();
     else
         port = 9999;
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
     dtkDistributedServerDaemon server(port);
 
-    server.setManager( dtkApplicationArgumentsValue(&application, "-type"));
+    server.setManager( dtkCoreApplicationArgumentsValue(&application, "-type"));
     qDebug() << "server started";
 
     int status = application.exec();

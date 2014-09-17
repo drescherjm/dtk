@@ -112,8 +112,8 @@ QStringList dtkDistributedPolicy::hosts(void)
             }
         }
         qDebug() << "No hostfile found, try qapp args";
-        if (dtkApplicationArgumentsContain(qApp,"-np")) {
-             int np = dtkApplicationArgumentsValue(qApp,"-np").toInt();
+        if (dtkCoreApplicationArgumentsContain(qApp,"-np")) {
+             int np = dtkCoreApplicationArgumentsValue(qApp,"-np").toInt();
              for (int i = 0; i <  np; i++) {
                 d->hosts <<  "localhost";
              }
@@ -121,15 +121,15 @@ QStringList dtkDistributedPolicy::hosts(void)
             d->hosts <<  "localhost";
             d->nthreads = 1;
         }
-        if (dtkApplicationArgumentsContain(qApp,"-nt")) { // number of threads
+        if (dtkCoreApplicationArgumentsContain(qApp,"-nt")) { // number of threads
                 if (d->type == "mpi") {
-                    int nt = dtkApplicationArgumentsValue(qApp,"-nt").toInt();
+                    int nt = dtkCoreApplicationArgumentsValue(qApp,"-nt").toInt();
                     int total = d->hosts.count() * nt;
                     for (int i = d->hosts.count(); i <  total; i++) {
                         d->hosts <<  "localhost";
                     }
                 } else {
-                    d->nthreads = dtkApplicationArgumentsValue(qApp,"-nt").toInt();
+                    d->nthreads = dtkCoreApplicationArgumentsValue(qApp,"-nt").toInt();
                 }
         }
         qDebug() << "policy updated, hosts:" << d->hosts.count() << "threads:" <<  d->nthreads;

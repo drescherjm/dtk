@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Thu Feb 28 16:28:31 2013 (+0100)
  * Version:
- * Last-Updated: mar. avril 15 11:09:21 2014 (+0200)
+ * Last-Updated: mer. sept. 17 11:23:04 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 62
+ *     Update #: 66
  */
 
 /* Change Log:
@@ -91,7 +91,7 @@ public:
 // Helper functions
 // ///////////////////////////////////////////////////////////////////
 
-inline bool dtkApplicationArgumentsContain(int argc, char **argv, QString value)
+inline bool dtkCoreApplicationArgumentsContain(int argc, char **argv, QString value)
 {
     for(int i = 1; i < argc; i++)
         if(QString(argv[i]) == value)
@@ -100,12 +100,12 @@ inline bool dtkApplicationArgumentsContain(int argc, char **argv, QString value)
     return false;
 }
 
-inline bool dtkApplicationArgumentsContain(QCoreApplication *application, QString value)
+inline bool dtkCoreApplicationArgumentsContain(QCoreApplication *application, QString value)
 {
     return application->arguments().contains(value);
 }
 
-inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
+inline QString dtkCoreApplicationArgumentsValue(int argc, char **argv, QString key)
 {
     for(int i = 1; i < argc; i++) {
         if(QString(argv[i]) == key) {
@@ -119,7 +119,7 @@ inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
     return QString();
 }
 
-inline QString dtkApplicationArgumentsValue(QCoreApplication *application, QString key)
+inline QString dtkCoreApplicationArgumentsValue(QCoreApplication *application, QString key)
 {
     QStringList args = application->arguments();
     int i = args.indexOf(key);

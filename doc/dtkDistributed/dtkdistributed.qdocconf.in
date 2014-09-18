@@ -1,16 +1,16 @@
-### dtkdistributed.qdocconf.in ---
+## Version: $Id$
 ##
-## Author: Julien Wintz
-## Created: lun. avril  7 18:40:06 2014 (+0200)
-## Version:
-## Last-Updated:
-##           By:
-##     Update #: 22
+######################################################################
+##
+### Commentary:
+##
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
+##
+### Code:
 
 include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
 
@@ -38,7 +38,7 @@ qhp.dtkDistributed.subprojects.classes.sortPages  = true
 
 headerdirs  += ../../src/dtkDistributed
 sourcedirs  += ../../src/dtkDistributed \
-               ../../doc/dtkDistributed/src            
+               ../../doc/dtkDistributed/src
 
 exampledirs += ../../doc/dtkDistributed/snp
 imagedirs   += ../../doc/dtkDistributed/img
@@ -53,3 +53,6 @@ indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
   @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
   @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+
+######################################################################
+### dtkdistributed.qdocconf.in ends here

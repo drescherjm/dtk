@@ -25,10 +25,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePlugin.h
   dtkCorePluginFactory
   dtkCorePluginFactory.h
-  dtkCorePluginFactory_t.h
+  dtkCorePluginFactory.tpp
   dtkCorePluginManager
   dtkCorePluginManager.h
-  dtkCorePluginManager_t.h
+  dtkCorePluginManager.tpp
   dtkCoreSettings
   dtkCoreSettings.h
   dtkArray

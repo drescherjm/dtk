@@ -50,7 +50,7 @@ protected:
     dtkCorePluginManagerPrivate<T> *d;
 };
 
-#include "dtkCorePluginManager_t.h"
+#include "dtkCorePluginManager.tpp"
 
 //
 // dtkCorePluginManager.h ends here

@@ -1,12 +1,16 @@
-/* dtkcore-pluginsystem.qdoc ---
- * 
- * Author: Thibaud Kloczko
- * Created: mer. avril  9 15:36:05 2014 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 /*!
   \group dtkcore-plugin-system
@@ -16,19 +20,18 @@
 
   \nextpage {Qt's Plugin System}
 
-  dtk framework is dedicated to design modular
-  \l{http://www.inria.fr}{Inria} scientific platforms. The first step
-  towards modularity is to define a set of interfaces that are meant
-  to be extended (or specialized) with respect to a given research
-  application field. The second step consists in implementing such
-  interfaces which may require the use of third-party software
-  library. 
+  dtk framework is dedicated to design modular scientific
+  platforms. The first step towards modularity is to define a set of
+  interfaces that are meant to be extended (or specialized) with
+  respect to a given research application field. The second step
+  consists in implementing such interfaces which may require the use
+  of third-party software library.
 
   In practice, such implementations are carried out into standalone
-  projects, the plugins, that relies both on the platform defining the
+  projects - plugins - that rely both on the platform defining the
   interfaces and optionally the software libraries, acting as glue
   code to let them coexist. Thus, a plugin is nothing more than a
-  container for concrete types that specialize the abstract concepts
+  container for concrete types that specializes the abstract concepts
   of the modular platform.
 
   In the following, we recall the main principles of the \l{How to
@@ -138,14 +141,14 @@
 
   \section1 Plugin interface
 
-  Given an interface, the DTK_DECLARE_PLUGIN() macro creates a class 
+  Given an interface, the DTK_DECLARE_PLUGIN() macro creates a class
 
-  
+
 
   \section1 Plugin manager
 
   \section1 Plugin factory
-  
+
 
   \sa {dtk Plugin System}, {Qt's Plugin System}, {How to create a plugin with dtk}
 
@@ -162,5 +165,5 @@
 
 */
 
-
-
+//
+// dtkcore-plugin-system.qdoc ends here

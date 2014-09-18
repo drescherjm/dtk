@@ -1,12 +1,16 @@
-/* interfaces.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: ven. avril 11 09:37:16 2014 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 //![0]
 #pragma once
@@ -28,3 +32,6 @@ public:
 
 Q_DECLARE_INTERFACE(dtkAbstractSolver, "fr.inria.dtkAbstractSolver")
 //! [0]
+
+//
+// dtkabstractsolver.h ends here

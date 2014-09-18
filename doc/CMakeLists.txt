@@ -52,6 +52,20 @@ add_custom_target(dtkMeta-doc
 add_dependencies(dtkMeta-doc dtk-doc)
 
 ## ###################################################################
+## dtkLog
+## ###################################################################
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkLog/dtklog.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtklog.qdocconf IMMEDIATE @ONLY)
+
+add_custom_target(dtkLog-doc
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${DTK_QDOC_EXECUTABLE} dtklog.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtklog/dtklog.qhp -o ${CMAKE_BINARY_DIR}/html/dtklog.qch
+  COMMENT "-- Generating dtkLog documentation")
+
+add_dependencies(dtkLog-doc dtk-doc)
+
+## ###################################################################
 ## dtkCore
 ## ###################################################################
 
@@ -80,20 +94,6 @@ add_custom_target(dtkDistributed-doc
 add_dependencies(dtkDistributed-doc dtkCore-doc)
 
 ## ###################################################################
-## dtkWidgets
-## ###################################################################
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkWidgets/dtkwidgets.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkwidgets.qdocconf IMMEDIATE @ONLY)
-
-add_custom_target(dtkWidgets-doc
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${DTK_QDOC_EXECUTABLE} dtkwidgets.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkwidgets/dtkwidgets.qhp -o ${CMAKE_BINARY_DIR}/html/dtkwidgets.qch
-  COMMENT "-- Generating dtkWidgets documentation")
-
-add_dependencies(dtkWidgets-doc dtkCore-doc)
-
-## ###################################################################
 ## ALL
 ## ###################################################################
 
@@ -103,7 +103,7 @@ add_custom_target(doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp -o ${CMAKE_BINARY_DIR}/html/dtkdoc.qch
   COMMENT "-- Generating dtk documentation")
 
-add_dependencies(doc dtkMeta-doc dtkCore-doc dtkDistributed-doc dtkWidgets-doc)
+add_dependencies(doc dtkMeta-doc dtkLog-doc dtkCore-doc dtkDistributed-doc)
 
 ######################################################################
 ### CMakeLists.txt ends here

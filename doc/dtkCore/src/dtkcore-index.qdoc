@@ -1,9 +1,27 @@
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 /*!
     \page dtkcore-index.html
     \title Core Module
 
     \brief The dtkCore module is part of dtk's essential \l {All Modules} {modules}.
+
+    \section1 Guides
+    \list
+    \li \l{dtk Plugin System}{dtk Plugin System}
+    \endlist
 
     \section1 Reference
     These are links to the API reference materials.
@@ -13,3 +31,6 @@
 
     \sa {All Modules}
 */
+
+//
+// dtkcore-index.qdoc ends here

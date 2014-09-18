@@ -47,7 +47,7 @@ excludedirs += ../../doc/dtk/snp
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc
 
 indexes = \
+  @CMAKE_BINARY_DIR@/html/dtklog/dtklog.index \
   @CMAKE_BINARY_DIR@/html/dtkmeta/dtkmeta.index \
   @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdistributed/dtkdistributed.index \
-  @CMAKE_BINARY_DIR@/html/dtkwidgets/dtkwidgets.index
+  @CMAKE_BINARY_DIR@/html/dtkdistributed/dtkdistributed.index

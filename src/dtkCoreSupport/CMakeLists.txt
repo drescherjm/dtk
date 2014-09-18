@@ -4,9 +4,9 @@
 ## Copyright (C) 2008 - Julien Wintz, Inria.
 ## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mar. avril  8 11:03:39 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 409
+## Last-Updated: mer. sept. 17 14:55:40 2014 (+0200)
+##           By: Thibaud Kloczko
+##     Update #: 411
 ######################################################################
 ##
 ### Commentary:
@@ -55,8 +55,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewInteractor_p.h
   dtkAbstractViewNavigator.h
   dtkAbstractViewNavigator_p.h
-  dtkArray.h
-  dtkArray.tpp
+#  dtkArray.h
+#  dtkArray.tpp
   dtkCpuid.h
   dtkGlobal.h
   dtkPlugin.h
@@ -90,7 +90,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewAnimator.cpp
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
-  dtkArray.cpp
+#  dtkArray.cpp
   dtkCpuid.cpp
   dtkPlugin.cpp
   dtkPluginManager.cpp

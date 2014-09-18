@@ -394,6 +394,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkGuiSupport
   dtkLog)
 
+target_link_libraries(${PROJECT_NAME}
+  dtkCore)
+
 if(DTK_BUILD_SUPPORT_DISTRIBUTED)
   target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
 endif(DTK_BUILD_SUPPORT_DISTRIBUTED)

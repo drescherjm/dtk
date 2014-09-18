@@ -47,6 +47,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkCoreSupport
   dtkLog)
 
+target_link_libraries(${PROJECT_NAME}
+  dtkCore)
+
 ## ###################################################################
 ## Link rules
 ## ###################################################################

@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 11:19:32 2012 (+0200)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 16:32:43 2014 (+0100)
+ * Last-Updated: mer. sept. 17 15:06:03 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 82
+ *     Update #: 84
  */
 
 /* Commentary:
@@ -23,7 +23,8 @@
 #include "dtkAbstractContainerOrdered.h"
 #include "dtkContainerSupportExport.h"
 
-#include <dtkCoreSupport/dtkArray.h>
+//#include <dtkCoreSupport/dtkArray.h>
+#include <dtkCore/dtkArray>
 
 #include <QtCore>
 

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 11:58:29 2013 (+0200)
  * Version: 
- * Last-Updated: Thu Jul 11 10:14:54 2013 (+0200)
+ * Last-Updated: mer. sept. 17 14:53:19 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 144
+ *     Update #: 148
  */
 
 /* Commentary: 
@@ -97,7 +97,7 @@ template <typename T, int PreallocSize, size_t AlignT> union dtkArrayAlignedPrea
 // dtkArrayData base class
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, int PreallocSize> class dtkArrayData
+template <typename T, int PreallocSize> class dtkArrayDataOld
 {
 public:
 #if defined(Q_ALIGNOF)
@@ -117,7 +117,7 @@ public:
     }
 };
 
-template <typename T> class dtkArrayData<T, 0>
+template <typename T> class dtkArrayDataOld<T, 0>
 {
 public:
     inline T *prealloc(void) { return 0; }
@@ -133,7 +133,7 @@ public:
 // dtkArray interface
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, int PreallocSize = 8> class dtkArray : private dtkArrayData<T, PreallocSize>
+template <typename T, int PreallocSize = 8> class dtkArray : private dtkArrayDataOld<T, PreallocSize>
 {
 public:
     enum RawDataType {
@@ -303,7 +303,7 @@ private:
 
     inline void initPrealloc(void)
     {
-        m_end = m_start = dtkArrayData<T, PreallocSize>::prealloc();
+        m_end = m_start = dtkArrayDataOld<T, PreallocSize>::prealloc();
         m_limit = m_start + PreallocSize;
     }
 

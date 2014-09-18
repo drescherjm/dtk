@@ -378,24 +378,24 @@ template <typename T> const T *dtkContainerVector<T>::toArray(qlonglong& count) 
 {
     count = m_vector.count();
 
-    return m_vector.rawData();
+    return m_vector.data();
 };
 
 template <typename T> T *dtkContainerVector<T>::toArray(qlonglong& count)
 {
     count = m_vector.count();
 
-    return m_vector.rawData();
+    return m_vector.data();
 };
 
 template <typename T> T *dtkContainerVector<T>::array(void)
 {
-    return m_vector.rawData();
+    return m_vector.data();
 };
 
 template <typename T> const T *dtkContainerVector<T>::array(void) const
 {
-    return m_vector.rawData();
+    return m_vector.data();
 };
 
 template <typename T> const T *dtkContainerVector<T>::constArray(void) const
@@ -501,7 +501,7 @@ template <typename T> dtkContainerVector<T>& dtkContainerVector<T>::operator += 
 template <typename T> inline dtkContainerVector<T> dtkContainerVectorFromQVector(const QVector<T>& vector)
 {
     dtkContainerVector<T> result;
-    result.m_vector.setRawData(vector.data(), vector.size(), dtkArray<T>::Writable);
+    result.m_vector.setWritableRawData(const_cast<QVector<T>&>(vector).data(), vector.size());
 
     return result;
 };

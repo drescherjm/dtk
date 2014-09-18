@@ -2,6 +2,7 @@
 #include "dtkCorePlugin.h"
 #include "dtkCorePluginFactory.h"
 #include "dtkCorePluginFactory.tpp"
+#include "dtkCorePluginFactoryTemplate.h"
 #include "dtkCorePluginManager.h"
 #include "dtkCorePluginManager.tpp"
 #include "dtkArrayData.h"

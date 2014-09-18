@@ -26,6 +26,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginFactory
   dtkCorePluginFactory.h
   dtkCorePluginFactory.tpp
+  dtkCorePluginFactoryTemplate
+  dtkCorePluginFactoryTemplate.h
   dtkCorePluginManager
   dtkCorePluginManager.h
   dtkCorePluginManager.tpp

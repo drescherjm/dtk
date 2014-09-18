@@ -31,7 +31,7 @@ template <typename T> dtkCorePluginFactory<T>::~dtkCorePluginFactory(void)
 template <typename T> void dtkCorePluginFactory<T>::record(const QString& key, creator func)
 {
     if (this->creators.contains(key)) {
-        qDebug() << "Factory already contains key" << key << ". Nothing is done";
+        qDebug() << Q_FUNC_INFO << "Factory already contains key" << key << ". Nothing is done";
         return;
     }
 

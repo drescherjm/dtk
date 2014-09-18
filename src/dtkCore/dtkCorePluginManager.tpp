@@ -144,7 +144,6 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
     T *plugin = qobject_cast<T *>(loader->instance());
 
     if(!plugin) {
-        qDebug() << loader->errorString();
         delete loader;
         return;
     }
@@ -167,7 +166,7 @@ template <typename T> void dtkCorePluginManager<T>::unload(const QString& path)
         d->loaders.remove(path);
         delete loader;
     } else {
-        qDebug() << loader->errorString();
+        qDebug() << Q_FUNC_INFO << loader->errorString();
     }
 }
 

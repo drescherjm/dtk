@@ -31,20 +31,14 @@
      \li Module
      \li Description
   \row
-     \li \l{Meta Module} {Meta}
-     \li Meta concepts.
-  \row
      \li \l{Core Module} {Core}
      \li Fundamental concepts and related tools.
   \row
-     \li \l{Composer Module} {Composer}
-     \li Visual programming components.
+     \li \l{Meta Module} {Meta}
+     \li Meta concepts.
   \row
-     \li \l{Widgets Module} {Widgets}
-     \li Widgets for scientific applications.
-  \row
-     \li \l{Store Module} {Store}
-     \li Diffusion and publication framework.
+     \li \l{Log Module} {Log}
+     \li Logging framework.
   \endtable
 
   \section1 dtk Applicative Layers
@@ -57,18 +51,6 @@
   \row
      \li \l{Distributed Module} {Distributed}
      \li Mechanisms to perform distributed calculations.
-  \row
-     \li \l{Geometry Module} {Geometry}
-     \li
-  \row
-     \li \l{Linear Algebra Module} {Linear Algebra}
-     \li
-  \row
-     \li \l{Virtual Reality Module} {Virtual Reality}
-     \li
-  \row
-     \li \l{Optimization Module} {Optimization}
-     \li
   \endtable
 
   \section1 dtk Applications

@@ -1,19 +1,16 @@
-/* dtkDistributedServerDaemon.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Jun  1 11:28:54 2011 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- * debug logging: use dtkLog() << "message" or qDebug() << "message"
- *   run logging: use dtkDistributedServiceBase::instance()->logMessage("message");
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkDistributedMessage.h"
 #include "dtkDistributedServerDaemon.h"
@@ -240,3 +237,6 @@ void dtkDistributedServerDaemon::discard(void)
 
     // dtkDistributedServiceBase::instance()->logMessage("Connection closed");
 }
+
+//
+// dtkDistributedServerDaemon.cpp ends here

@@ -240,6 +240,9 @@ public:
     class AlignmentDummy { dtkArrayData header; T data; };
 
 public:
+    dtkTypedArrayData(const dtkTypedArrayData& other);
+
+public:
     static dtkTypedArrayData *allocate(qintptr capacity, AllocationOptions options = Default);
 
     static void deallocate(dtkArrayData *data);
@@ -253,6 +256,9 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
+
+template <typename T> inline dtkTypedArrayData<T>::dtkTypedArrayData(const dtkTypedArrayData& other) : dtkArrayData(other.ref.atomic.load(), other.size, other.alloc, other.capacityReserved, other.offset)
+{}
 
 template <typename T> inline dtkTypedArrayData<T> *dtkTypedArrayData<T>::allocate(qintptr capacity, AllocationOptions options)
 {

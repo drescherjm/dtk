@@ -26,5 +26,7 @@
 #cmakedefine DTK_BUILD_32
 #cmakedefine DTK_BUILD_64
 
+#cmakedefine COMPILER_SUPPORTS_CXX11
+
 //
 // dtkConfig.h.in ends here

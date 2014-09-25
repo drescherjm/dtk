@@ -19,6 +19,7 @@ project(dtkLog)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkLog
   dtkLog.h
   dtkLogger.h
   dtkLogger_p.h

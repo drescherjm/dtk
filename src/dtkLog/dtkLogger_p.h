@@ -34,8 +34,8 @@ public:
     QHash<dtkLogDestinationPointer, dtkLog::Level> levels;
 
 public:
-                            dtkLogDestinationPointer  console;
-    QHash<QString,          dtkLogDestinationPointer> files;
+                   dtkLogDestinationPointer  console;
+    QHash<QString, dtkLogDestinationPointer> files;
 
 public:
     QList<dtkLogDestinationPointer> destinations;

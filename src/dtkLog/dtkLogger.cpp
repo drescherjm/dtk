@@ -1,25 +1,26 @@
-/* dtkLogger.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Mar  1 17:19:52 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar 18 12:57:12 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 128
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkLogger.h"
 #include "dtkLogger_p.h"
 #include "dtkLogDestination.h"
+
+/*! \fn dtkLogger& dtkLogger::instance(void)
+ *
+ * Returns the logger instance (which is built upon the singleton
+ * design pattern).
+ */
 
 dtkLogger& dtkLogger::instance(void)
 {
@@ -28,19 +29,34 @@ dtkLogger& dtkLogger::instance(void)
     return log;
 }
 
+/*! \fn dtkLog::Level dtkLogger::level(void) const
+ *
+ * Returns the logger level.
+ */
+
 dtkLog::Level dtkLogger::level(void) const
 {
     return d->level;
 }
+
+/*! \fn dtkLogger::setLevel(dtkLog::Level level)
+ *
+ * Sets the logger level using the dtkLog::Level enum.
+ */
 
 void dtkLogger::setLevel(dtkLog::Level level)
 {
     d->level = level;
 }
 
+/*! \fn dtkLog::Level dtkLogger::level(QString level) const
+ *
+ * Sets the logger level using a string, \e e.g. \c trace, \c debug,
+ * \c info, \c warn, \c error or \c fatal.
+ */
+
 void dtkLogger::setLevel(QString level)
 {
-
     if (level == "trace")
         d->level = dtkLog::Trace;
     else if (level == "debug")
@@ -55,10 +71,21 @@ void dtkLogger::setLevel(QString level)
         d->level = dtkLog::Fatal;
 }
 
+/*! \fn void dtkLogger::attachConsole(void)
+ *
+ * Attaches the console to the list of logging destinations.
+ */
+
 void dtkLogger::attachConsole(void)
 {
     d->destinations << d->console;
 }
+
+/*! \fn void dtkLogger::attachConsole(dtkLog::Level)
+ *
+ * Attaches the console to the list of logging destinations for a
+ * given level of logging.
+ */
 
 void dtkLogger::attachConsole(dtkLog::Level level)
 {
@@ -67,10 +94,20 @@ void dtkLogger::attachConsole(dtkLog::Level level)
     d->levels[d->console] = level;
 }
 
+/*! \fn void dtkLogger::detachConsole(void)
+ *
+ * Detaches the console from the list of logging destinations.
+ */
+
 void dtkLogger::detachConsole(void)
 {
     d->destinations.removeOne(d->console);
 }
+
+/*! \fn void dtkLogger::attachFile(const QString& path)
+ *
+ * Attaches a file to the list of logging destinations.
+ */
 
 void dtkLogger::attachFile(const QString& path)
 {
@@ -91,6 +128,14 @@ void dtkLogger::detachFile(const QString& path)
 
     d->files.remove(path);
 }
+
+/*!
+ * \class dtkLogger
+ * \brief ...
+ *
+ *
+ * \inmodule dtkLog
+ */
 
 dtkLogger::dtkLogger(void) : d(new dtkLoggerPrivate)
 {
@@ -125,3 +170,6 @@ void dtkLogger::write(const QString& message, dtkLog::Level level)
         }
     }
 }
+
+//
+// dtkLogger.cpp ends here

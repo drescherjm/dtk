@@ -1,27 +1,30 @@
-/* dtkLogDestination.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Mar  1 15:15:19 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Apr  4 10:00:39 2012 (+0200)
- *           By: tkloczko
- *     Update #: 85
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkLogDestination.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogDestination
 // /////////////////////////////////////////////////////////////////
+
+/*!
+ * \class dtkLogDestination
+ * \brief An interface for log message destinations,
+ *
+ *
+ * \inmodule dtkLog
+ */
 
 dtkLogDestination::~dtkLogDestination(void)
 {
@@ -82,3 +85,6 @@ void dtkLogDestinationFile::write(const QString& message)
     d->stream << message << endl;
     d->stream.flush();
 }
+
+//
+// dtkLogDestination.cpp ends here

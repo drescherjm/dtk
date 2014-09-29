@@ -1,24 +1,18 @@
-/* dtkLogEngine.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Mar  1 16:15:38 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar 18 12:33:03 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 13
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
 
-#ifndef DTKLOGENGINE_H
-#define DTKLOGENGINE_H
+// Code:
+
+#pragma once
 
 #include "dtkLog.h"
 #include "dtkLogExport.h"
@@ -40,4 +34,5 @@ private:
     dtkLogEnginePrivate *d;
 };
 
-#endif
+//
+// dtkLogEngine.h ends here

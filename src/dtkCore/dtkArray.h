@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -309,6 +309,7 @@ public:
           iterator end(iterator = iterator())                        { detach(); return d->end(); }
     const_iterator end(const_iterator = const_iterator()) const      { return d->constEnd(); }
     const_iterator cend(const_iterator = const_iterator()) const     { return d->constEnd(); }
+
     const_iterator constEnd(const_iterator = const_iterator()) const { return d->constEnd(); }
 
 private:
@@ -347,5 +348,5 @@ template<typename T> using dtkArrayDynamic = dtkArray<T, 0>;
 
 #include "dtkArray.tpp"
 
-// 
+//
 // dtkArray.h ends here

@@ -18,11 +18,32 @@
 #include <QtCore>
 
 /*!
- * \namespace dtkLog
- *
- * \brief Contains main enumeration used throughout the Log module.
- *
- * \inmodule dtkLog
+  \namespace dtkLog
+
+  \brief Contains main enumeration and helper functions used throughout the Log module.
+
+  \inmodule dtkLog
+
+  Log messages are redirected to a stream that is connected to one or many destinations.
+
+  The logging layer should be configured as such:
+\code
+QString log_file = dtkLogPath(qApp);
+
+dtkLogger::instance()->attachConsole();
+dtkLogger::instance()->attachFile(log_file);
+
+dtkLogger::setLevel(dtkLog::Info);
+
+dtkDebug() << "Debug messaage"; // will not output as dtkLog::Debug < dtkLog::Info
+dtkWarn()  <<  "Warn messaage"; // will     output as dtkLog::Warn >= dtkLog::Info
+\endcode
+
+  In this example, the console is attached to the logger, and a file
+  which path is retrieved using the \c dtkLogPath function using Qt
+  standard path in conjunction with the application name that has to
+  be set correctly.
+
  */
 
 /*!

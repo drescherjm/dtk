@@ -18,14 +18,6 @@
 // dtkLogDestination
 // /////////////////////////////////////////////////////////////////
 
-/*!
- * \class dtkLogDestination
- * \brief An interface for log message destinations,
- *
- *
- * \inmodule dtkLog
- */
-
 dtkLogDestination::~dtkLogDestination(void)
 {
 

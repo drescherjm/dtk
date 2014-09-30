@@ -92,7 +92,7 @@ namespace dtkLog
 // Custom level stream
 // ///////////////////////////////////////////////////////////////////
 
-#define dtkLog(level)				                        \
+#define dtkLog(level)                                                   \
     dtkLogEngine(level, true).stream()
 
 // /////////////////////////////////////////////////////////////////

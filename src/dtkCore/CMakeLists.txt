@@ -19,6 +19,11 @@ project(dtkCore)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkArray
+  dtkArray.h
+  dtkArray.tpp
+  dtkArrayData
+  dtkArrayData.h
   dtkCore
   dtkCore.h
   dtkCorePlugin
@@ -33,11 +38,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager.tpp
   dtkCoreSettings
   dtkCoreSettings.h
-  dtkArray
-  dtkArray.h
-  dtkArray.tpp
-  dtkArrayData
-  dtkArrayData.h
   dtkSpinLock.h)
 
 set(${PROJECT_NAME}_SOURCES

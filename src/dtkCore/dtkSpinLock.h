@@ -1,37 +1,49 @@
-/* dtkSpinLock.h ---
- *
- * Author: Nicolas Niclausse
- * Created: 29 jul 2014
- */
+// Version: $Id$
+//
+//
 
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
-#include <QAtomicInt>
-
-//
-// https://gist.github.com/aperezdc/5582452
+#include <QtCore>
 
 class dtkSpinLock: private QAtomicInt
 {
 public:
-    class Acquire {
-    public:
-    Acquire(dtkSpinLock& spinLock): m_spinLock(spinLock)
-        { m_spinLock.lock(); }
+    dtkSpinLock(void) : QAtomicInt(Unlocked) {
 
-        ~Acquire()
-        { m_spinLock.unlock(); }
+    }
+
+public:
+    class Acquire
+    {
+    public:
+        Acquire(dtkSpinLock& spinLock): m_spinLock(spinLock) {
+            m_spinLock.lock();
+        }
+
+        ~Acquire(void) {
+            m_spinLock.unlock();
+        }
 
     private:
         dtkSpinLock& m_spinLock;
 
-// Disable copy constructor and assignment operator
+    public:
         Acquire& operator=(const Acquire&);
+
+    public:
         Acquire(const Acquire&);
     };
-
-dtkSpinLock(): QAtomicInt(Unlocked) {}
 
     void lock() {
         while (!testAndSetOrdered(Unlocked, Locked));
@@ -49,3 +61,6 @@ private:
     static const int Unlocked = 1;
     static const int Locked = 0;
 };
+
+//
+// dtkSpinLock.h ends here

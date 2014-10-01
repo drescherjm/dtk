@@ -1,21 +1,16 @@
-/* dtkLogger.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Mar  1 17:19:52 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar 18 12:57:12 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 128
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkLogger.h"
 #include "dtkLogger_p.h"
@@ -40,7 +35,6 @@ void dtkLogger::setLevel(dtkLog::Level level)
 
 void dtkLogger::setLevel(QString level)
 {
-
     if (level == "trace")
         d->level = dtkLog::Trace;
     else if (level == "debug")
@@ -125,3 +119,6 @@ void dtkLogger::write(const QString& message, dtkLog::Level level)
         }
     }
 }
+
+//
+// dtkLogger.cpp ends here

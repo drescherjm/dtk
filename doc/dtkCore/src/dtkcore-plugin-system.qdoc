@@ -39,7 +39,6 @@
   we detail how it is implemented and how to use it.
 */
 
-
 /*!
   \page dtk-plugin-qt.html
   \title Qt's Plugin System
@@ -143,8 +142,6 @@
 
   Given an interface, the DTK_DECLARE_PLUGIN() macro creates a class
 
-
-
   \section1 Plugin manager
 
   \section1 Plugin factory
@@ -162,7 +159,6 @@
   \brief Guidelines for plugin creation using dtkCore features.
 
   \sa {dtk Plugin System}, {Qt's Plugin System}, {dtk Plugin Framework}
-
 */
 
 //

@@ -140,7 +140,7 @@ dtkMetaContainerSequential::iterator::iterator(const iterator& o) : m_h(o.m_h), 
 */
 dtkMetaContainerSequential::iterator::~iterator(void)
 {
-    if (!m_ref->deref()) {
+    if(!m_ref->deref()) {
         m_h.destroyIterator();
         delete m_ref;
     }
@@ -156,7 +156,7 @@ dtkMetaContainerSequential::iterator::~iterator(void)
 */
 dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (const iterator& o)
 {
-    if (!m_h.equal(o.m_h)) {
+    if(!m_h.equal(o.m_h)) {
         m_h = o.m_h;
         m_ref = o.m_ref;
     }

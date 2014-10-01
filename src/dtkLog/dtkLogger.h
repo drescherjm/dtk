@@ -1,24 +1,18 @@
-/* dtkLogger.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Mar  1 17:18:31 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar 18 12:36:33 2013 (+0100)
- *           By: Julien Wintz
- *     Update #: 40
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
 
-#ifndef DTKLOGGER_H
-#define DTKLOGGER_H
+// Code:
+
+#pragma once
 
 #include "dtkLog.h"
 #include "dtkLogExport.h"
@@ -66,4 +60,5 @@ private:
     friend class dtkLogEnginePrivate;
 };
 
-#endif
+//
+// dtkLogger.h ends here

@@ -19,13 +19,16 @@
 
 #pragma once
 
+
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerControlsPrivate;
 class dtkComposerScene;
 
-class  dtkComposerControls : public QFrame
+class DTKCOMPOSER_EXPORT  dtkComposerControls : public QFrame
 {
     Q_OBJECT
 

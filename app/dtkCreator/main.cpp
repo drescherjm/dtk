@@ -19,7 +19,7 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkCore/dtkPluginManager.h>
+#include <dtkCore/dtkCorePluginManager.h>
 
 #include "dtkCreatorMainWindow.h"
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
     dtkLogger::instance().attachFile(dtkLogPath(&application));
 
-    dtkPluginManager::instance()->initialize();
+    // dtkCorePluginManager::instance()->initialize();
 
     dtkCreatorMainWindow mainwindow;
     mainwindow.show();
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
     int status = application.exec();
 
-    dtkPluginManager::instance()->uninitialize();
+    // dtkCorePluginManager::instance()->uninitialize();
 
     return status;
 }

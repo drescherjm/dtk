@@ -22,7 +22,7 @@
 
 #include <dtkComposer/dtkComposerWriter.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkAbstractView;
 class dtkCreatorMainWindowPrivate;

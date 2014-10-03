@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/03 15:15:12
- * Version: $Id$
- * Last-Updated: mer. oct. 31 15:55:55 2012 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 36
  */
 
 /* Commentary:
@@ -17,9 +13,7 @@
  *
  */
 
-#ifndef DTKCOMPOSERNODEREMOTE_H
-#define DTKCOMPOSERNODEREMOTE_H
-
+#include "dtkComposerExport.h"
 
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeLeaf.h"
@@ -35,7 +29,7 @@ class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
-class  dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
 {
     Q_OBJECT
 
@@ -132,5 +126,3 @@ protected:
     dtkComposerNodeRemoteSubmitPrivate *d;
 };
 
-
-#endif /* DTKCOMPOSERNODEREMOTE_H */

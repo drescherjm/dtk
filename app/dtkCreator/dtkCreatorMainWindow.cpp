@@ -20,13 +20,14 @@
 #include "dtkCreatorMainWindow.h"
 #include "dtkCreatorMainWindow_p.h"
 
-#include <dtkDistributed/dtkDistributor.h>
+#include <dtkDistributedSupport/dtkDistributor.h>
 
 #include <dtkComposer/dtkComposer.h>
+#include <dtkComposer/dtkComposerWidget.h>
 #include <dtkComposer/dtkComposerCompass.h>
 #include <dtkComposer/dtkComposerControls.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
-#include <dtkComposer/dtkComposerFactoryView.h>
+#include <dtkComposer/dtkComposerNodeFactoryView.h>
 #include <dtkComposer/dtkComposerGraph.h>
 #include <dtkComposer/dtkComposerGraphView.h>
 #include <dtkComposer/dtkComposerScene.h>
@@ -37,25 +38,25 @@
 #include <dtkComposer/dtkComposerStackView.h>
 #include <dtkComposer/dtkComposerView.h>
 
-#include <dtkGui/dtkScreenMenu.h>
-#include <dtkGui/dtkRecentFilesMenu.h>
-#include <dtkGui/dtkSpacer.h>
-#include <dtkGui/dtkSplitter.h>
-#include <dtkGui/dtkViewManager.h>
+#include <dtkGuiSupport/dtkScreenMenu.h>
+#include <dtkGuiSupport/dtkRecentFilesMenu.h>
+#include <dtkGuiSupport/dtkSpacer.h>
+#include <dtkGuiSupport/dtkSplitter.h>
+#include <dtkGuiSupport/dtkViewManager.h>
 
-#include <dtkCore/dtkGlobal.h>
-#include <dtkCore/dtkPluginManager.h>
+#include <dtkCore/dtkCore.h>
+#include <dtkCore/dtkCorePluginManager.h>
 
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
-#include <dtkPlot/dtkPlotView.h>
-#include <dtkPlot/dtkPlotViewSettings.h>
+#if defined(DTK_BUILD_SUPPORT_PLOT)
+#include <dtkPlotSupport/dtkPlotView.h>
+#include <dtkPlotSupport/dtkPlotViewSettings.h>
 #endif
 
 #include <dtkLog/dtkLog.h>
-#include <dtkLog/dtkLogView.h>
+// #include <dtkLog/dtkLogView.h>
 
-#include <dtkNotification/dtkNotification.h>
-#include <dtkNotification/dtkNotificationDisplay.h>
+#include <dtkGuiSupport/dtkNotification.h>
+#include <dtkGuiSupport/dtkNotificationDisplay.h>
 
 #include <QtCore>
 #include <QtGui>
@@ -127,7 +128,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     //
 
-    d->composer = new dtkComposer;
+    d->composer = new dtkComposerWidget;
     d->composer->view()->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerScene-bg.png")));
     d->composer->view()->setCacheMode(QGraphicsView::CacheBackground);
 
@@ -148,7 +149,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->stack = new dtkComposerStackView(this);
     d->stack->setStack(d->composer->stack());
 
-    d->nodes = new dtkComposerFactoryView(this);
+    d->nodes = new dtkComposerNodeFactoryView(this);
     d->nodes->setFactory(d->composer->factory());
 
     d->graph = new dtkComposerGraphView(this);
@@ -157,11 +158,11 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->graph->setVisible(false);
     d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
 
-    d->log_view = new dtkLogView(this);
-    d->log_view->setVisible(false);
+    // d->log_view = new dtkLogView(this);
+    // d->log_view->setVisible(false);
 
     d->view_manager = new dtkViewManager;
-#if defined(DTK_BUILD_PLOT) && defined(DTK_HAVE_PLOT)
+#if defined(DTK_BUILD_SUPPORT_PLOT)
     d->plot_view_settings = new dtkPlotViewSettings(d->view_manager);
     d->view_manager->addWidget(d->plot_view_settings);
 #endif
@@ -410,7 +411,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     QHBoxLayout *b_layout = new QHBoxLayout;
     b_layout->setContentsMargins(0, 0, 0, 0);
     b_layout->setSpacing(0);
-    b_layout->addWidget(d->log_view);
+    // b_layout->addWidget(d->log_view);
 
     QWidget *bottom = new QWidget(this);
     bottom->setLayout(b_layout);
@@ -430,7 +431,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     d->setCurrentFile("");
 
-    dtkNotify(QString("Discovered %1 plugins").arg(dtkPluginManager::instance()->plugins().count()), 5000);
+    //FIXME
+    // dtkNotify(QString("Discovered %1 plugins").arg(dtkPluginManager::instance()->plugins().count()), 5000);
 }
 
 dtkCreatorMainWindow::~dtkCreatorMainWindow(void)
@@ -635,7 +637,7 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
-    d->log_view->setVisible(false);
+    // d->log_view->setVisible(false);
 
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
@@ -663,7 +665,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
-    d->log_view->setVisible(false);
+    // d->log_view->setVisible(false);
 
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
 }
@@ -691,7 +693,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->view_manager->setVisible(false);
 
     d->graph->setVisible(true);
-    d->log_view->setVisible(true);
+    // d->log_view->setVisible(true);
 
     int w = this->size().width() - d->wl - d->wr;
 
@@ -721,7 +723,7 @@ void dtkCreatorMainWindow::switchToView(void)
     d->view_manager->setVisible(true);
 
     d->graph->setVisible(false);
-    d->log_view->setVisible(false);
+    // d->log_view->setVisible(false);
 }
 
 void dtkCreatorMainWindow::showControls(void)

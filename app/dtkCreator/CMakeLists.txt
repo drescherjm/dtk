@@ -27,9 +27,6 @@ set(${PROJECT_NAME}_HEADERS_MOC
   dtkCreatorMainWindow.h
   dtkCreatorMainWindow_p.h)
 
-set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADERS_MOC})
-
 set(${PROJECT_NAME}_SOURCES
   dtkCreatorMainWindow.cpp
   main.cpp)
@@ -51,29 +48,37 @@ if(NOT MSVC)
 add_definitions(-Wno-write-strings)
 endif(NOT MSVC)
 
-qt4_wrap_cpp(${PROJECT_NAME}_SOURCES_MOC ${${PROJECT_NAME}_HEADERS_MOC})
-
-qt4_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
+qt5_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
   ${${PROJECT_NAME}_SOURCES_WRAP}
-  ${${PROJECT_NAME}_SOURCES_MOC}
   ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
+
 target_link_libraries(${PROJECT_NAME}
-  ${QT_LIBRARIES}
   dtkLog
   dtkCore
   dtkComposer
-  dtkDistributed
-  dtkNotification)
+  dtkDistributedSupport
+  dtkGuiSupport
+  dtkWidgets)
+
+if(DTK_BUILD_SUPPORT_PLOT)
+  target_link_libraries(${PROJECT_NAME} dtkPlotSupport)
+endif(DTK_BUILD_SUPPORT_PLOT)
+
 
 if(APPLE)
 target_link_libraries(${PROJECT_NAME}
   "-framework Cocoa")
 endif(APPLE)
+
+qt5_use_modules(${PROJECT_NAME} Core)
+qt5_use_modules(${PROJECT_NAME} Gui)
+qt5_use_modules(${PROJECT_NAME} Widgets)
+
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

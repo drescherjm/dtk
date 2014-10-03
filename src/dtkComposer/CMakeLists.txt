@@ -64,6 +64,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeNumberOperator.h
   dtkComposerNodeProxy.h
   dtkComposerNodeReal.h
+  dtkComposerNodeRemote.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
   dtkComposerPath.h
@@ -100,6 +101,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterReceiver.tpp
   dtkComposerView.h
   dtkComposerReader.h
+  dtkComposerWidget.h
   dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_SOURCES
@@ -145,6 +147,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodeProxy.cpp
   dtkComposerNodeReal.cpp
+  dtkComposerNodeRemote.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
   dtkComposerPath.cpp
@@ -172,6 +175,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterProxyLoop.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp
+  dtkComposerWidget.cpp
   dtkComposerWriter.cpp)
 
 set(${PROJECT_NAME}_QRC dtkComposer.qrc)

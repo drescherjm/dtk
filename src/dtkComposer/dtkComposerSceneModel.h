@@ -19,13 +19,15 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
 #include <QtGui>
 
 class dtkComposerScene;
 class dtkComposerSceneModelPrivate;
 
-class  dtkComposerSceneModel : public QAbstractItemModel
+class DTKCOMPOSER_EXPORT dtkComposerSceneModel : public QAbstractItemModel
 {
     Q_OBJECT
 

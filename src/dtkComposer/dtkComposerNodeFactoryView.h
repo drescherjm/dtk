@@ -14,14 +14,15 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
-#include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerNodeFactory;
 class dtkComposerNodeFactoryViewPrivate;
 
-class  dtkComposerNodeFactoryView : public QWidget
+class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryView : public QWidget
 {
     Q_OBJECT
 

@@ -17,15 +17,14 @@
  * 
  */
 
-#ifndef DTKCREATORMAINWINDOW_P_H
-#define DTKCREATORMAINWINDOW_P_H
+#pragma once
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
-class dtkComposer;
+class dtkComposerWidget;
 class dtkComposerControls;
-class dtkComposerFactoryView;
+class dtkComposerNodeFactoryView;
 class dtkComposerGraphView;
 class dtkComposerSceneModel;
 class dtkComposerSceneNodeEditor;
@@ -38,7 +37,7 @@ class dtkRecentFilesMenu;
 
 class dtkSplitter;
 
-class dtkLogView;
+/* class dtkLogView; */
 
 class dtkViewManager;
 class dtkPlotViewSettings;
@@ -64,9 +63,9 @@ public slots:
     void setModified(bool modified);
 
 public:
-    dtkComposer *composer;
+    dtkComposerWidget *composer;
     dtkComposerControls *controls;
-    dtkComposerFactoryView *nodes;
+    dtkComposerNodeFactoryView *nodes;
     dtkComposerGraphView *graph;
     dtkComposerSceneModel *model;
     dtkComposerSceneNodeEditor *editor;
@@ -80,8 +79,8 @@ public:
     dtkViewManager *view_manager;
     dtkPlotViewSettings *plot_view_settings;
 
-public:
-    dtkLogView *log_view;
+/* public: */
+/*     dtkLogView *log_view; */
 
 public:
     dtkSplitter *inner;
@@ -120,5 +119,3 @@ public:
 public:
     dtkCreatorMainWindow *q;
 };
-
-#endif

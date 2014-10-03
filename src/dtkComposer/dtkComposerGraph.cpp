@@ -52,7 +52,7 @@
 // dtkLog categories
 // /////////////////////////////////////////////////////////////////
 
-DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_EVALUATOR, "fr.inria.dtk.composer.evaluator")
+//DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_EVALUATOR, "fr.inria.dtk.composer.evaluator")
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphPrivate

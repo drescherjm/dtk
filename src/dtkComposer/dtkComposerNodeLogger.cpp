@@ -22,7 +22,7 @@
 // Log categories
 // ///////////////////////////////////////////////////////////////////
 
-DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_LOGGER, "fr.inria.dtk.composer.logger")
+//DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_LOGGER, "fr.inria.dtk.composer.logger")
 
 // ///////////////////////////////////////////////////////////////////
 // 
@@ -89,7 +89,7 @@ void dtkComposerNodeLogger::run(void)
             else if  (level == "error")
                 dtkError() <<  output;
             else if  (level == "fatal")
-                dtkCritical() <<  output;
+                dtkFatal() <<  output;
             else
                 dtkInfo() <<  output;
         } else {

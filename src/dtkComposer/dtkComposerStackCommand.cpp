@@ -48,7 +48,7 @@
 // dtkLog categories
 // /////////////////////////////////////////////////////////////////
 
-DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_STACK, "fr.inria.dtk.composer.stack")
+//DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_STACK, "fr.inria.dtk.composer.stack")
 
 // /////////////////////////////////////////////////////////////////
 // Base Command

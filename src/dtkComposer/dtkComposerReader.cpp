@@ -58,7 +58,7 @@
 // dtkLog categories
 // /////////////////////////////////////////////////////////////////
 
-DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_IO, "fr.inria.dtk.composer.io")
+//DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_IO, "fr.inria.dtk.composer.io")
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerReaderPrivate

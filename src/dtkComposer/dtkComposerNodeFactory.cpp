@@ -15,6 +15,7 @@
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlFor.h"
@@ -34,6 +35,9 @@ dtkComposerNodeFactory::dtkComposerNodeFactory(void) : dtkCorePluginFactory<dtkC
     this->initNodeControl();
     this->initNodeNumber();
     this->initNodeString();
+
+    this->record("composite", &dtkComposerNodeCreator<dtkComposerNodeComposite>);
+
 }
 
 dtkComposerNodeFactory::~dtkComposerNodeFactory(void)

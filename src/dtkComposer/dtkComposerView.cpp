@@ -74,16 +74,16 @@ void dtkComposerView::keyPressEvent(QKeyEvent *event)
 
 void dtkComposerView::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 
     QGraphicsView::mouseMoveEvent(event);
-    
+
     event->accept();
 }
 
 void dtkComposerView::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 
     QGraphicsView::mousePressEvent(event);
 
@@ -92,7 +92,7 @@ void dtkComposerView::mousePressEvent(QMouseEvent *event)
 
 void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 
     QGraphicsView::mouseReleaseEvent(event);
 }

@@ -1,16 +1,16 @@
-/* dtkCorePluginFactory.h --- 
- * 
- * Author: Julien Wintz
- * Created: Thu Feb 28 15:43:06 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. sept. 18 09:06:35 2014 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 33
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -59,3 +59,6 @@ template <typename S, typename T> S *dtkCorePluginFactoryCreator(void) {
 }
 
 #include "dtkCorePluginFactory.tpp"
+
+//
+// dtkCorePluginFactory.h ends here

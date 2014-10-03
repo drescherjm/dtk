@@ -91,6 +91,8 @@ public:
 // Helper functions
 // ///////////////////////////////////////////////////////////////////
 
+#include <fstream>
+
 inline bool dtkCoreApplicationArgumentsContain(int argc, char **argv, QString value)
 {
     for(int i = 1; i < argc; i++)
@@ -128,4 +130,13 @@ inline QString dtkCoreApplicationArgumentsValue(QCoreApplication *application, Q
     } else {
         return QString();
     }
+}
+
+inline bool dtkFileIsBinary(const QString& path)
+{
+    int c; std::ifstream a(path.toUtf8().constData());
+
+    while(((c = a.get()) != EOF) && (c <= 127)) { ; }
+
+    return (c != EOF);
 }

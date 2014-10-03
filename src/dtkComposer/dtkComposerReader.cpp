@@ -45,6 +45,7 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
 
+#include <dtkCore/dtkCore.h>
 // #include <dtkCore/dtkAbstractDataFactory.h>
 // #include <dtkCore/dtkAbstractProcessFactory.h>
 // #include <dtkCore/dtkAbstractViewFactory.h>
@@ -169,15 +170,15 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
         return false;
 
 
-    // if (!dtkIsBinary(fileName)) {
-    //     c_bytes = file.readAll();
-    //     content = QString::fromUtf8(c_bytes.data());
+    if (!dtkFileIsBinary(fileName)) {
+        c_bytes = file.readAll();
+        content = QString::fromUtf8(c_bytes.data());
 
-    // } else {
+    } else {
         QDataStream stream(&file); stream >> c_bytes;
         QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
         content = QString::fromUtf8(u_bytes.data(), u_bytes.size());
-	//}
+    }
 
     file.close();
     return this->readString(content,append);

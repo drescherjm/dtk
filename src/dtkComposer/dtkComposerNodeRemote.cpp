@@ -23,7 +23,7 @@
 #include <dtkDistributedSupport/dtkDistributedSlave.h>
 
 // #include <dtkCore/dtkAbstractDataFactory.h>
-// #include <dtkCore/dtkCore.h>
+//#include <dtkCore/dtkCore.h>
 
 #include <dtkLog/dtkLog.h>
 

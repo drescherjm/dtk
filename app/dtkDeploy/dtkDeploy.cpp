@@ -192,7 +192,9 @@ QString findAppBinary(const QString &appBundlePath)
 
     if (QFile::exists(binaryPath))
         return binaryPath;
+
     LogError() << "Could not find bundle binary for" << appBundlePath;
+
     return QString();
 }
 
@@ -214,6 +216,7 @@ QList<FrameworkInfo> getQtFrameworks(const QString &path, bool useDebugLibs)
 {
     LogDebug() << "Using otool:";
     LogDebug() << " inspecting" << path;
+
     QProcess otool;
     otool.start("otool", QStringList() << "-L" << path);
     otool.waitForFinished();
@@ -225,6 +228,7 @@ QList<FrameworkInfo> getQtFrameworks(const QString &path, bool useDebugLibs)
     QString output = otool.readAllStandardOutput();
     QStringList outputLines = output.split("\n");
     outputLines.removeFirst(); // remove line containing the binary path
+
     if (path.contains(".framework") || path.contains(".dylib"))
         outputLines.removeFirst(); // frameworks and dylibs lists themselves as a dependency.
 
@@ -562,7 +566,7 @@ void deployDtkPlugins(const QString &appBundlePath, DeploymentInfo deploymentInf
     QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.dll");
 #endif
 
-#if defined(Q_OS_X11)
+#if defined(Q_OS_LINUX)
     QStringList plugins = QDir(pluginsPath).entryList(QStringList() << "*.so");
 #endif
 

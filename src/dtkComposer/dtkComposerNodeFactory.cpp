@@ -45,6 +45,11 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 
 }
 
+QStringList dtkComposerNodeFactory::implementations(void)
+{
+    return QStringList();
+}
+
 void dtkComposerNodeFactory::initNodeBoolean(void)
 {
     this->record("boolean", &dtkComposerNodeCreator<dtkComposerNodeBoolean>);
@@ -83,6 +88,8 @@ void dtkComposerNodeFactory::initNodeNumber(void)
     this->record("abs",    &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryAbs>);
     this->record("sqrt",   &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnarySqrt>);
     this->record("square", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnarySquare>);
+
+    this->record("inv", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryInv>);
 
     this->record("incr", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryIncr>);
     this->record("decr", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryDecr>);

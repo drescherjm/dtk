@@ -35,7 +35,6 @@ set(dtk_VERSION
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-set(CMAKE_CONFIGT_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
@@ -151,7 +150,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
 ## ###################################################################
 
 add_subdirectory(src)
-add_subdirectory(qml)
 add_subdirectory(tst)
 add_subdirectory(app)
 add_subdirectory(doc)

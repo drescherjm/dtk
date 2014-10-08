@@ -172,9 +172,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
-  DESTINATION cmake)
+  DESTINATION lib/cmake/dtk)
 
-install(EXPORT dtkDepends DESTINATION cmake)
+install(EXPORT dtkDepends DESTINATION lib/cmake/dtk)
 
 ## ###################################################################
 ## Beautifying

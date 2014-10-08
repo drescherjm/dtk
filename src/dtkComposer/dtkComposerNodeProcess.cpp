@@ -51,6 +51,9 @@ public:
 public:
     qlonglong index;
     qreal value;
+
+public:
+    QString implementation;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -98,16 +101,20 @@ QString dtkComposerNodeProcess::abstractProcessType(void) const
     return "dtkAbstractProcess";
 }
 
+void dtkComposerNodeProcess::setProcess(dtkAbstractProcess *process)
+{
+    d->process = process;
+}
+
+dtkAbstractProcess *dtkComposerNodeProcess::process(void) const
+{
+    return d->process;
+}
+
 void dtkComposerNodeProcess::run(void)
 {
-    if (this->implementationHasChanged())
-        d->process = this->process();
-
     if (!d->process) {
-        dtkWarn() << "dtkComposerNodeProcess::" << Q_FUNC_INFO << "No process, abort "<< this->currentImplementation();
-        d->emitter_data.clearData();
-        d->emitter_integer.clearData();
-        d->emitter_real.clearData();
+        dtkWarn() << Q_FUNC_INFO << "No process instantiated, abort:" << this->currentImplementation();
         return;
     }
 
@@ -135,13 +142,9 @@ void dtkComposerNodeProcess::run(void)
         d->process->setInput(d->receiver_rhs.data(), 1);
 
     d->index = d->process->run();
-    d->emitter_integer.setData(d->index);
 
-
-    if (d->process->data(0)) {
+    if (d->process->data(0))
         d->value = *(static_cast<qreal *>(d->process->data(0)));
-        d->emitter_real.setData(d->value);
-    }
 
     if (d->process->output())
         d->emitter_data.setData(d->process->output());

@@ -3,10 +3,7 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/20 14:34:00
- * Version: $Id$
- * Last-Updated: Tue Jun 26 17:31:44 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
+
  */
 
 /* Commentary:
@@ -20,6 +17,7 @@
 #ifndef DTKCOMPOSERNODESTRINGOPERATOR_H
 #define DTKCOMPOSERNODESTRINGOPERATOR_H
 
+#include "dtkComposerExport.h"
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -120,7 +118,7 @@ public:
     }
 
     inline QString titleHint(void) {
-        return "Append";
+        return "String Append";
     }
 };
 
@@ -143,6 +141,172 @@ public:
     }
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorReplace
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringReplacePrivate;
+
+class dtkComposerNodeStringReplace : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringReplace(void);
+    ~dtkComposerNodeStringReplace(void);
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "string_replace";
+    }
+
+    inline QString titleHint(void) {
+        return "String replace";
+    }
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "string";
+        else if (port == 1)
+            return "regexp";
+        else if (port == 2)
+            return "after";
+        return "port";
+    }
+
+    inline QString outputLabelHint(int port) {
+        if (port == 0)
+            return "string";
+        return "port";
+    }
+
+protected:
+    dtkComposerNodeStringReplacePrivate *d;
+
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListAppend
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListAppendPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringListAppend(void);
+    ~dtkComposerNodeStringListAppend(void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "list";
+        else if (port == 1)
+            return "string";
+        return "port";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "list";
+    }
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "appendStringList";
+    }
+
+    inline QString titleHint(void) {
+        return "Append to String List";
+    }
+
+protected:
+    dtkComposerNodeStringListAppendPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListExtract
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListExtractPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringListExtract(void);
+    ~dtkComposerNodeStringListExtract(void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "list";
+        else if (port == 1)
+            return "index";
+        return "port";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "string";
+    }
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "extractStringList";
+    }
+
+    inline QString titleHint(void) {
+        return "Extract from String List";
+    }
+protected:
+    dtkComposerNodeStringListExtractPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListSet
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListSetPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringListSet(void);
+    ~dtkComposerNodeStringListSet(void);
+
+    inline QString inputLabelHint(int port) {
+        if (port == 0)
+            return "list";
+        else if (port == 1)
+            return "index";
+        else if (port == 2)
+            return "string";
+        return "port";
+    }
+
+    inline QString outputLabelHint(int) {
+        return "list";
+    }
+
+public:
+    void run(void);
+
+public:
+    inline QString type(void) {
+        return "setStringList";
+    }
+
+    inline QString titleHint(void) {
+        return "Set String List item";
+    }
+protected:
+    dtkComposerNodeStringListSetPrivate *d;
+};
 
 
 #endif /* DTKCOMPOSERNODESTRINGOPERATOR_H */

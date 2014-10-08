@@ -18,6 +18,7 @@
  */
 
 #include "dtkComposerGraphNode.h"
+#include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
@@ -43,7 +44,8 @@ public:
 #endif
 
 public:
-    dtkComposerGraphNode *begin;
+    dtkComposerGraphNodeBegin *begin;
+
 };
 
 
@@ -65,6 +67,7 @@ dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const Q
         d->composite = NULL;
     }
 
+    d->begin= NULL;
     this->setTitle(title);
 }
 
@@ -92,7 +95,7 @@ void dtkComposerGraphNodeEnd::eval(void)
     this->setStatus(dtkComposerGraphNode::Done);
 }
 
-void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNode *begin)
+void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNodeBegin *begin)
 {
     d->begin = begin;
 }

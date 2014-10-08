@@ -22,6 +22,7 @@
 #include "dtkComposerGraphNode.h"
 
 class dtkComposerNode;
+class dtkComposerGraphNodeBegin;
 class dtkComposerGraphNodeEndPrivate;
 
 // /////////////////////////////////////////////////////////////////
@@ -46,7 +47,7 @@ public:
     dtkComposerGraphNodeList predecessors(void);
 
 public:
-    void setBegin(dtkComposerGraphNode *begin);
+    void setBegin(dtkComposerGraphNodeBegin *begin);
 
 private:
     dtkComposerGraphNodeEndPrivate *d;

@@ -21,6 +21,8 @@
 #define DTKCOMPOSERNODEDISTRIBUTED_H
 
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -29,7 +31,7 @@
 
 class dtkComposerNodeCommunicatorInitPrivate;
 
-class dtkComposerNodeCommunicatorInit : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorInit : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorInit(void);
@@ -62,7 +64,7 @@ protected:
 
 class dtkComposerNodeCommunicatorUninitializePrivate;
 
-class  dtkComposerNodeCommunicatorUninitialize : public dtkComposerNodeLeaf
+class  DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorUninitialize : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorUninitialize(void);
@@ -97,7 +99,7 @@ protected:
 
 class dtkComposerNodeCommunicatorRankPrivate;
 
-class  dtkComposerNodeCommunicatorRank : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorRank : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorRank(void);
@@ -131,7 +133,7 @@ protected:
 
 class dtkComposerNodeCommunicatorSizePrivate;
 
-class  dtkComposerNodeCommunicatorSize : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorSize : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorSize(void);
@@ -165,7 +167,7 @@ protected:
 
 class dtkComposerNodeCommunicatorSendPrivate;
 
-class  dtkComposerNodeCommunicatorSend : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorSend : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorSend(void);
@@ -215,7 +217,7 @@ protected:
 
 class dtkComposerNodeCommunicatorReceivePrivate;
 
-class  dtkComposerNodeCommunicatorReceive : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorReceive : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeCommunicatorReceive(void);

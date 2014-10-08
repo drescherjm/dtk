@@ -23,6 +23,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerCompass.h
   dtkComposerControls.h
   dtkComposerControlsDelegate.h
+  dtkComposerControlsListItem.h
+  dtkComposerControlsListItemFactory.h
+  dtkComposerControlsListItemBoolean.h
+  dtkComposerControlsListItemFile.h
+  dtkComposerControlsListItemInteger.h
+  # dtkComposerControlsListItemLeafProcess.h
+  dtkComposerControlsListItemReal.h
+  dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
   dtkComposerEvaluator_p.h
   dtkComposerGraph.h
@@ -38,6 +46,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphNodeSetOutputs.h
   dtkComposerGraphNodeSetVariables.h
   dtkComposerGraphView.h
+  dtkComposerMetaType.h
   dtkComposerNode.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
@@ -109,6 +118,14 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerCompass.cpp
   dtkComposerControls.cpp
   dtkComposerControlsDelegate.cpp
+  dtkComposerControlsListItem.cpp
+  dtkComposerControlsListItemBoolean.cpp
+  dtkComposerControlsListItemFactory.cpp
+  dtkComposerControlsListItemFile.cpp
+  dtkComposerControlsListItemInteger.cpp
+  # dtkComposerControlsListItemLeafProcess.cpp
+  dtkComposerControlsListItemReal.cpp
+  dtkComposerControlsListItemString.cpp
   dtkComposerEvaluator.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp

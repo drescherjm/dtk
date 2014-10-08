@@ -40,6 +40,7 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new
     this->setAcceptDrops(true);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setBackgroundBrush(QColor(0x55, 0x55, 0x55));
+    this->setContentsMargins(0, 0, 0, 0);
     this->setDragMode(QGraphicsView::RubberBandDrag);
     this->setFrameStyle(QFrame::NoFrame);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);

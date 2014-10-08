@@ -229,8 +229,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     // Clear scene if applicable
 
     if(!append) {
-        d->scene->clear();
-        d->graph->clear();
+        this->clear();
     }
 
     d->node_map.clear();
@@ -267,8 +266,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
             if (!(this->readNode(nodes.at(i),paste))) {
-                d->scene->clear();
-                d->graph->clear();
+                this->clear();
                 return false;
             }
 
@@ -385,7 +383,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             n = d->control->blocks().last();
         } else {
             n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
- 
+
             qreal x = node.toElement().attribute("x").toFloat();
             qreal y = node.toElement().attribute("y").toFloat();
             qreal w = node.toElement().attribute("w").toFloat()-4;
@@ -402,7 +400,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         n = d->control->footer();
 
-    } else if( type_n == "composite" || type_n == "world" || type_n == "remote") {
+    } else if( type_n == "composite" || type_n == "world" || type_n == "remote"|| type_n == "spawn") {
 
         dtkComposerNode *c = d->factory->create(type_n);
         if (c) {
@@ -744,6 +742,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         //         }
         //     }
         // }
+
+        this->extend(node,leaf);
     }
 
     d->node = t;
@@ -757,16 +757,16 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
 {
     QDomElement source = node.firstChildElement("source");
     QDomElement destin = node.firstChildElement("destination");
-    
+
     int source_node = source.attribute("node").toInt();
     int destin_node = destin.attribute("node").toInt();
-    
+
     int source_id = source.attribute("id").toInt();
     int destin_id = destin.attribute("id").toInt();
 
     QString source_type = source.attribute("type");
     QString destin_type = destin.attribute("type");
-    
+
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
     if (source_type == "input")
         if (source_id >= d->node_map.value(source_node)->inputPorts().count())
@@ -790,7 +790,6 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
             edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
-
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
@@ -806,4 +805,24 @@ handle_failure:
     delete edge;
     return NULL;
 
+}
+
+void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf)
+{
+  Q_UNUSED(node);
+  Q_UNUSED(leaf);
+}
+
+void dtkComposerReader::clear(void)
+{
+    // Composer
+
+    if (d->scene)
+        d->scene->clear();
+    if (d->graph)
+        d->graph->clear();
+
+    // Factory
+
+    //dtkAbstractViewFactory::instance()->clear();
 }

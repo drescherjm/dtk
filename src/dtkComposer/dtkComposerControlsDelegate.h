@@ -32,9 +32,6 @@ public:
     ~dtkComposerControlsDelegate(void);
 
 public:
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-
-public:
     void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 public:
     void setEditorData(QWidget *editor, const QModelIndex& index ) const;

@@ -39,13 +39,17 @@ public:
 public:
     dtkComposerGraphNode::Kind kind(void);
 
+    void setKind(dtkComposerGraphNode::Kind);
+
 public:
     dtkComposerNode *wrapee(void);
 
 public:
     dtkComposerGraphNodeList successors(void);
+    dtkComposerGraphNodeList evaluableChilds(void);
 
 public:
+    dtkComposerGraphNode *end(void);
     void setEnd(dtkComposerGraphNode *end);
 
 private:

@@ -33,12 +33,6 @@ class DTKCOMPOSER_EXPORT  dtkComposerControls : public QFrame
     Q_OBJECT
 
 public:
-    enum Type {
-        Integer,
-           None
-    };
-
-public:
      dtkComposerControls(QWidget *parent = 0);
     ~dtkComposerControls(void);
 

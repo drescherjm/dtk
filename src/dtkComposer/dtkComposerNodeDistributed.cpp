@@ -313,7 +313,6 @@ public:
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
     dtkComposerTransmitterVariant             receiver_data;
 
-    QMap<qlonglong, dtkDistributedMessage *> msg_map;
 
 public:
     qlonglong source;
@@ -368,15 +367,18 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         }
 
         if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
-            dtkDebug() << "TCP communicator. Parse message from socket";
-            if (d->msg_map.contains(d->tag)) {
+            dtkDebug() << "TCP communicator. Parse message from socket, waiting for tag" << d->tag;
+            QMap<qlonglong, dtkDistributedMessage *> *msg_map = tcp->msgBuffer();
+            if (msg_map->contains(d->tag)) {
                 dtkDebug() << "msg already received for tag" << d->tag;
                 d->emitter.setTwinned(false);
-                dtkDistributedMessage *msg = d->msg_map.take(d->tag);
+                dtkDistributedMessage *msg = msg_map.take(d->tag);
                 d->emitter.setDataFrom(msg->content());
                 d->emitter.setTwinned(true);
                 delete msg;
                 return;
+            } else {
+                dtkTrace() << "msg not yet received, wait for data";
             }
 
             tcp->socket()->blockSignals(true); // needed ?
@@ -397,7 +399,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                 } else {
                     //store msg for another call with the right tag
                     dtkInfo() << "Msg received, but wrong tag, store the msg" << d->tag << msg_tag;
-                    d->msg_map.insert(msg_tag,msg);
+                    msg_map->insert(msg_tag,msg);
                     this->run(); // do it again
                 }
             }

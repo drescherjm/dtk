@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Fri Nov 16 16:18:14 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 9
+ * Last-Updated: ven. nov.  8 16:17:19 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 123
  */
 
 /* Commentary: 
@@ -29,9 +29,7 @@
 class dtkComposerNodeLeafProcessPrivate
 {
 public:
-    dtkAbstractProcess *process;
-
-    bool implementation_has_changed;
+    dtkAbstractProcess *old_process;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -40,16 +38,15 @@ public:
 
 dtkComposerNodeLeafProcess::dtkComposerNodeLeafProcess(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeLeafProcessPrivate)
 {
-    d->process = NULL;
-    d->implementation_has_changed = false;
+    d->old_process = NULL;
 }
 
 dtkComposerNodeLeafProcess::~dtkComposerNodeLeafProcess(void)
 {
-    if (d->process)
-        delete d->process;
+    if (d->old_process)
+        delete d->old_process;
 
-    d->process = NULL;
+    d->old_process = NULL;
 
     delete d;
 
@@ -61,15 +58,15 @@ bool dtkComposerNodeLeafProcess::enableDefaultImplementation(void) const
     return false;
 }
 
-bool dtkComposerNodeLeafProcess::implementationHasChanged(void) const
+bool dtkComposerNodeLeafProcess::implementationHasChanged(const QString& implementation) const
 {
-    return d->implementation_has_changed;
+    return (this->currentImplementation() != implementation);
 }
 
 QString dtkComposerNodeLeafProcess::currentImplementation(void) const
 {
-    if (d->process)
-        return d->process->identifier();
+    if (this->process())
+        return this->process()->identifier();
 
     return QString();
 }
@@ -89,34 +86,32 @@ QStringList dtkComposerNodeLeafProcess::implementations(void)
 
 dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& implementation)
 {
-    d->implementation_has_changed = false;
-
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
-    
+
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractProcessType();
     
-    if (!d->process) {
+    if (!this->process()) {
+        this->setProcess(dtkAbstractProcessFactory::instance()->create(implementation));
+    } else if (this->process()->identifier() != implementation) {
+        this->setProcess(dtkAbstractProcessFactory::instance()->create(implementation));
+    }
 
-        d->process = dtkAbstractProcessFactory::instance()->create(implementation);
+    if (d->old_process != this->process()) {
+        if (d->old_process) {
+            delete d->old_process;
+        }
+        d->old_process = this->process();
+    }
 
-        d->implementation_has_changed = true;
-
-    } else if (d->process->identifier() != implementation) {
-
-        delete d->process;
-
-        d->process = dtkAbstractProcessFactory::instance()->create(implementation);
-
-        d->implementation_has_changed = true;
-
-    }        
-
-    return d->process;
+    return this->process();
 }
 
-dtkAbstractProcess *dtkComposerNodeLeafProcess::process(void)
+void dtkComposerNodeLeafProcess::clearProcess(void)
 {
-    return d->process;
+    dtkAbstractProcess *p = this->process();
+    if (p)
+        delete p;
+    this->setProcess(NULL);
 }

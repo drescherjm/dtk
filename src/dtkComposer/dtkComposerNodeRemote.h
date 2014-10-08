@@ -38,23 +38,23 @@ public:
     virtual ~dtkComposerNodeRemote(void);
 
 public:
-    QString type(void);
+    virtual QString type(void);
 
 public:
-    QString titleHint(void);
+    virtual QString titleHint(void);
 
 public slots:
     void onJobStarted(QString id);
 
 public:
-    void setComposition(QDomDocument document);
+    virtual void setComposition(QDomDocument document);
+    virtual void setCommunicator(dtkDistributedCommunicator  *communicator);
     void setController(dtkDistributedController  *controller);
-    void setCommunicator(dtkDistributedCommunicator  *communicator);
     void setSlave(dtkDistributedSlave *slave);
     void setJob(QString jobid);
 
 public:
-    bool isSlave(void);
+    virtual bool isSlave(void);
 
 public:
     virtual void begin(void);

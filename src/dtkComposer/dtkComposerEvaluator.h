@@ -22,6 +22,7 @@
 #include <QtCore/QObject>
 
 class dtkComposerGraph;
+class dtkComposerGraphNode;
 class dtkComposerEvaluatorPrivate;
 
 class  dtkComposerEvaluator : public QObject
@@ -40,19 +41,28 @@ signals:
     void runMainThread(void);
 
 public:
-    void setGraph(dtkComposerGraph *graph);
+    void  setGraph(dtkComposerGraph *graph);
+    void  setStartNode(dtkComposerGraphNode *node);
+    void  setNotify(bool notify);
+    void  setProfiling(bool profiling);
+    void  printProfiling(qlonglong level=0);
+
+public slots:
+    void  run(bool run_concurrent = false);
+    void  run_static(bool run_concurrent = false);
+    void  reset(void);
 
 public:
-    void  run(bool run_concurrent = false);
     void cont(bool run_concurrent = false);
     bool step(bool run_concurrent = false);
     void next(bool run_concurrent = false);
     void stop();
-    void reset();
-
 
 public:
     void  logStack(void);
+
+protected:
+    void  run_static_rec(bool run_concurrent = false);
 
 private:
     dtkComposerEvaluatorPrivate *d;

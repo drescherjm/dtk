@@ -29,6 +29,7 @@ class dtkComposerGraphNodeList;
 class dtkComposerGraphPrivate;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkGraph;
 
 class  dtkComposerGraph : public QGraphicsScene
 {
@@ -60,6 +61,8 @@ public:
 public:
     dtkComposerGraphEdgeList edges(void);
     dtkComposerGraphNodeList nodes(void);
+    dtkGraph graph(void);
+    dtkGraph subgraph(dtkComposerGraphNode *from, dtkComposerGraphNode *to);
 
 // --
 
@@ -74,6 +77,9 @@ public:
 
 public:
     QString toString(void);
+
+signals:
+    void cleared(void);
 
 protected slots:
     void onSelectionChanged(void);

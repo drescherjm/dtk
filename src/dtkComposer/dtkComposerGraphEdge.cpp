@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. mars 13 14:35:43 2012 (+0100)
+ * Last-Updated: jeu. sept.  5 17:06:03 2013 (+0200)
  *           By: Nicolas Niclausse
- *     Update #: 144
+ *     Update #: 167
  */
 
 /* Commentary: 
@@ -20,20 +20,15 @@
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"
 
+
 class dtkComposerGraphEdgePrivate
 {
-public:
-    dtkComposerGraphNode *source;
-    dtkComposerGraphNode *destination;
-
 public:
     int id;
 };
 
-dtkComposerGraphEdge::dtkComposerGraphEdge(void) : QGraphicsItem(), d(new dtkComposerGraphEdgePrivate)
+dtkComposerGraphEdge::dtkComposerGraphEdge(void) : QGraphicsItem(), dtkGraphEdge(), d(new dtkComposerGraphEdgePrivate)
 {
-    d->source = NULL;
-    d->destination = NULL;
     d->id = 0;
 
     this->setZValue(0);
@@ -51,14 +46,14 @@ int dtkComposerGraphEdge::id(void)
     return d->id;
 }
 
-dtkComposerGraphNode *dtkComposerGraphEdge::source(void)
+dtkComposerGraphNode *dtkComposerGraphEdge::source(void) const
 {
-    return d->source;
+    return reinterpret_cast<dtkComposerGraphNode *>(dtkGraphEdge::source());
 }
 
-dtkComposerGraphNode *dtkComposerGraphEdge::destination(void)
+dtkComposerGraphNode *dtkComposerGraphEdge::destination(void) const
 {
-    return d->destination;
+    return reinterpret_cast<dtkComposerGraphNode *>(dtkGraphEdge::destination());
 }
 
 void dtkComposerGraphEdge::setId(int id)
@@ -66,23 +61,13 @@ void dtkComposerGraphEdge::setId(int id)
     d->id = id;
 }
 
-void dtkComposerGraphEdge::setSource(dtkComposerGraphNode *source)
-{
-    d->source = source;
-}
-
-void dtkComposerGraphEdge::setDestination(dtkComposerGraphNode *destination)
-{
-    d->destination = destination;
-}
-
 QRectF dtkComposerGraphEdge::boundingRect(void) const
 {
-    if(!d->source || !d->destination)
+    if(!source() || !destination())
         return QRectF();
 
-    QPointF s = d->source->sceneBoundingRect().center();
-    QPointF e = d->destination->sceneBoundingRect().center();
+    QPointF s = source()->sceneBoundingRect().center();
+    QPointF e = destination()->sceneBoundingRect().center();
 
     qreal xmin = qMin(s.x(), e.x());
     qreal xmax = qMax(s.x(), e.x());
@@ -102,8 +87,8 @@ void dtkComposerGraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QPointF s = d->source->sceneBoundingRect().center();
-    QPointF e = d->destination->sceneBoundingRect().center();
+    QPointF s = source()->sceneBoundingRect().center();
+    QPointF e = destination()->sceneBoundingRect().center();
 
     if (d->id == 0)
         painter->setPen(Qt::black);

@@ -29,6 +29,7 @@ class dtkComposerScene;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
 class dtkComposerSceneNote;
+class dtkComposerSceneNodeLeaf;
 
 class  dtkComposerReader
 {
@@ -42,6 +43,9 @@ public:
     void setGraph(dtkComposerGraph *graph);
 
 public:
+    void clear(void);
+
+public:
    bool read(const QString& file, bool append = false);
 
 public:
@@ -51,6 +55,9 @@ protected:
    virtual dtkComposerSceneNote *readNote(QDomNode node);
    virtual dtkComposerSceneNode *readNode(QDomNode node, bool paste = false);
    virtual dtkComposerSceneEdge *readEdge(QDomNode node);
+
+ protected:
+   virtual void extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf);
 
 private:
     dtkComposerReaderPrivate *d;

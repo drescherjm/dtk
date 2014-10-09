@@ -22,9 +22,9 @@
 
 #include "dtkComposerExport.h"
 
-#include <dtkDistributed/dtkDistributedSlave.h>
+#include <dtkDistributedSupport/dtkDistributedSlave.h>
 
-class dtkComposerFactory;
+class dtkComposerNodeFactory;
 class dtkComposerEvaluatorSlavePrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave
@@ -37,7 +37,7 @@ public:
 public:
     void setCount(int count);
     void setServer(QUrl server);
-    void setFactory(dtkComposerFactory *factory);
+    void setFactory(dtkComposerNodeFactory *factory);
     void setInternalCommunicator(dtkDistributedCommunicator *communicator);
 
 public:

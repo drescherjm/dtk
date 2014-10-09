@@ -90,14 +90,14 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
 
 
     if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
-        d->use_gui = false;
-        d->flag = NULL;
-    } else {
         d->use_gui = true;
         d->flag = new QGraphicsPixmapItem(this);
         d->flag->setVisible(false);
 
         d->flag_color = Qt::transparent;
+    } else {
+        d->use_gui = false;
+        d->flag = NULL;
     }
 }
 

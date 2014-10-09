@@ -19,15 +19,14 @@
 
 
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkGlobal.h>
+// #include <dtkCore/dtkAbstractDataFactory.h>
+// #include <dtkCore/dtkAbstractData.h>
+// #include <dtkCore/dtkAbstractProcessFactory.h>
+// #include <dtkCore/dtkAbstractProcess.h>
 
 #include "dtkComposer/dtkComposerEvaluator.h"
 #include "dtkComposer/dtkComposerEvaluatorSlave.h"
-#include "dtkComposer/dtkComposerFactory.h"
+#include "dtkComposer/dtkComposerNodeFactory.h"
 #include "dtkComposer/dtkComposerGraph.h"
 #include "dtkComposer/dtkComposerReader.h"
 #include "dtkComposer/dtkComposerScene.h"
@@ -35,9 +34,9 @@
 #include "dtkComposer/dtkComposerStack.h"
 #include "dtkComposer/dtkComposerNodeRemote.h"
 
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -53,7 +52,7 @@ public:
     dtkComposerScene     *scene;
     dtkComposerStack     *stack;
     dtkComposerGraph     *graph;
-    dtkComposerFactory   *factory;
+    dtkComposerNodeFactory   *factory;
     dtkComposerReader    *reader;
     dtkComposerEvaluator *evaluator;
 
@@ -108,7 +107,7 @@ void dtkComposerEvaluatorSlave::setCount(int count)
     d->count = count;
 }
 
-void dtkComposerEvaluatorSlave::setFactory(dtkComposerFactory *factory)
+void dtkComposerEvaluatorSlave::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
     d->scene->setFactory(d->factory);

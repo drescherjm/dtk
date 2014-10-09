@@ -21,6 +21,10 @@
 
 class dtkComposerNodeFactory;
 class dtkComposerNodeFactoryViewPrivate;
+class dtkWidgetsItemView;
+class dtkWidgetsTagCloud;
+class dtkWidgetsTagCloudScope;
+class dtkWidgetsTagCloudView;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryView : public QWidget
 {
@@ -35,6 +39,11 @@ public:
 
 public:
     void setDark(void);
+
+public:
+    dtkWidgetsTagCloud      *cloudView(void) const;
+    dtkWidgetsTagCloudView   *itemView(void) const;
+    dtkWidgetsTagCloudScope *scopeView(void) const;
 
 private:
     dtkComposerNodeFactoryViewPrivate *d;

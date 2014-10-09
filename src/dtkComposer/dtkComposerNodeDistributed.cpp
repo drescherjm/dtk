@@ -16,16 +16,15 @@
 #include "dtkComposerNodeDistributed.h"
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
 
-#include <dtkDistributed/dtkDistributedCommunicator>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp>
+#include <dtkDistributedSupport/dtkDistributedCommunicator>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp>
 
 #include <dtkLog/dtkLog.h>
 
-#if defined(DTK_HAVE_MPI) && defined(DTK_BUILD_MPI)
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
-#include <dtkDistributed/dtkDistributedCommunicatorMpi>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi>
 #include <mpi.h>
 
 
@@ -82,7 +81,7 @@ class dtkComposerNodeCommunicatorUninitializePrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkDistributedCommunicator*> receiver;
-    dtkComposerTransmitterVariant receiver_fake;
+    dtkComposerTransmitterReceiverVariant receiver_fake;
 
 };
 
@@ -90,7 +89,6 @@ dtkComposerNodeCommunicatorUninitialize::dtkComposerNodeCommunicatorUninitialize
 {
     d->receiver.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver));
-
     this->appendReceiver(&(d->receiver_fake));
 }
 
@@ -104,7 +102,9 @@ dtkComposerNodeCommunicatorUninitialize::~dtkComposerNodeCommunicatorUninitializ
 void dtkComposerNodeCommunicatorUninitialize::run(void)
 {
     if (!d->receiver.isEmpty()) {
-        dtkDistributedCommunicator *communicator = d->receiver.data();
+        dtkDistributedCommunicator *communicator = NULL;
+        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
+        // communicator = d->receiver.data();
 
         if (communicator) {
             communicator->uninitialize();
@@ -152,7 +152,9 @@ void dtkComposerNodeCommunicatorRank::run(void)
 {
     if (!d->receiver.isEmpty()) {
 
-        dtkDistributedCommunicator *communicator = d->receiver.data();
+        dtkDistributedCommunicator *communicator = NULL;
+        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
+        // communicator = d->receiver.data();
 
         if (!communicator) {
             d->rank = -1;
@@ -208,7 +210,9 @@ void dtkComposerNodeCommunicatorSize::run(void)
 {
     if (!d->receiver.isEmpty()) {
 
-        dtkDistributedCommunicator *communicator = d->receiver.data();
+        dtkDistributedCommunicator *communicator = NULL;
+        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
+        // communicator = d->receiver.data();
 
         if (!communicator) {
             d->size = 0;
@@ -236,7 +240,7 @@ class dtkComposerNodeCommunicatorSendPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkDistributedCommunicator*> receiver_comm;
-    dtkComposerTransmitterVariant receiver_data;
+    dtkComposerTransmitterReceiverVariant receiver_data;
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
 
@@ -271,10 +275,11 @@ void dtkComposerNodeCommunicatorSend::run(void)
 {
     if (!d->receiver_data.isEmpty() && !d->receiver_comm.isEmpty() && !d->receiver_target.isEmpty() ) {
 
-        QByteArray array = d->receiver_data.dataToByteArray();
-        dtkTrace() << "Got data as byte array to be sent size:" << array.size()  ;
+        QVariant v = d->receiver_data.variant();
 
-        d->communicator = d->receiver_comm.data();
+        dtkDistributedCommunicator *communicator = NULL;
+        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
+        // communicator = d->receiver.data();
 
         if (!d->communicator) {
             dtkError() << "Input communicator not valid.";
@@ -289,7 +294,8 @@ void dtkComposerNodeCommunicatorSend::run(void)
 
         qlonglong target = d->receiver_target.data();
         dtkTrace() << "send to target: " << target ;
-        d->communicator->send(array, target , tag);
+        // FIXME: [migration] handle variant in send (should be ok with new distributed layer
+        // d->communicator->send(v, target , tag);
 
     } else {
         dtkWarn() << "Inputs not specified in Send node. Nothing is done"  ;
@@ -304,14 +310,14 @@ void dtkComposerNodeCommunicatorSend::run(void)
 class dtkComposerNodeCommunicatorReceivePrivate
 {
 public:
-    dtkComposerTransmitterVariant emitter;
+    dtkComposerTransmitterEmitterVariant emitter;
     dtkComposerTransmitterEmitter<qlonglong> emitter_source;
     dtkComposerTransmitterEmitter<qlonglong> emitter_tag;
 
     dtkComposerTransmitterReceiver<dtkDistributedCommunicator*> receiver_comm;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
-    dtkComposerTransmitterVariant             receiver_data;
+    dtkComposerTransmitterReceiverVariant     receiver_data;
 
 
 public:
@@ -350,7 +356,9 @@ void dtkComposerNodeCommunicatorReceive::run(void)
     if (!d->receiver_source.isEmpty() && !d->receiver_comm.isEmpty()) {
 
         d->source = d->receiver_source.data();
-        dtkDistributedCommunicator *communicator = d->receiver_comm.data();
+        dtkDistributedCommunicator *communicator = NULL;
+        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
+        // communicator = d->receiver.data();
 
         d->tag = 0;
         if (!d->receiver_tag.isEmpty())
@@ -371,10 +379,10 @@ void dtkComposerNodeCommunicatorReceive::run(void)
             QMap<qlonglong, dtkDistributedMessage *> *msg_map = tcp->msgBuffer();
             if (msg_map->contains(d->tag)) {
                 dtkDebug() << "msg already received for tag" << d->tag;
-                d->emitter.setTwinned(false);
-                dtkDistributedMessage *msg = msg_map.take(d->tag);
-                d->emitter.setDataFrom(msg->content());
-                d->emitter.setTwinned(true);
+                // d->emitter.setTwinned(false);
+                dtkDistributedMessage *msg = msg_map->take(d->tag);
+                d->emitter.setData(msg->content());
+                // d->emitter.setTwinned(true);
                 delete msg;
                 return;
             } else {
@@ -390,9 +398,9 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                 int msg_tag = msg->header("Tag").toInt();
                 if (msg_tag == d->tag || d->tag == dtkDistributedCommunicator::ANY_TAG) {
                     dtkTrace() << "OK, this is the expected tag " << d->tag;
-                    d->emitter.setTwinned(false);
-                    d->emitter.setDataFrom(msg->content());
-                    d->emitter.setTwinned(true);
+                    // d->emitter.setTwinned(false);
+                    d->emitter.setData(msg->content());
+                    // d->emitter.setTwinned(true);
                     delete msg;
                     if (d->tag == dtkDistributedCommunicator::ANY_TAG)
                         d->tag = msg_tag;
@@ -415,9 +423,9 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                 d->source = status.source();
 
             if (!array.isEmpty()) {
-                d->emitter.setTwinned(false);
-                d->emitter.setDataFrom(array);
-                d->emitter.setTwinned(true);
+                // d->emitter.setTwinned(false);
+                d->emitter.setData(array);
+                // d->emitter.setTwinned(true);
             } else {
                 dtkWarn() << "Empty data in receive";
                 d->emitter.clearData();

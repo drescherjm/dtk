@@ -12,18 +12,19 @@
 /* Change log:
  *
  */
-#include "dtkComposerMetatype.h"
+#include "dtkComposerMetaType.h"
 
 #include "dtkComposerNodePrint.h"
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 #include <iostream>
 
 class dtkComposerNodePrintPrivate
 {
 public:
-    dtkComposerTransmitterVariant receiver_stdout;
-    dtkComposerTransmitterVariant receiver_stderr;
+    dtkComposerTransmitterReceiverVariant receiver_stdout;
+    dtkComposerTransmitterReceiverVariant receiver_stderr;
 
 };
 
@@ -42,12 +43,12 @@ dtkComposerNodePrint::~dtkComposerNodePrint(void)
 
 void dtkComposerNodePrint::run(void)
 {
-    foreach (QString s, d->receiver_stdout.allDataDescription()) {
-        std::cout << s.toUtf8().constData() <<  std::endl ;
-    }
-    foreach (QString s, d->receiver_stderr.allDataDescription()) {
-        std::cerr << s.toUtf8().constData() <<  std::endl ;
-    }
+    // foreach (QString s, d->receiver_stdout.allDataDescription()) {
+    //     std::cout << s.toUtf8().constData() <<  std::endl ;
+    // }
+    // foreach (QString s, d->receiver_stderr.allDataDescription()) {
+    //     std::cerr << s.toUtf8().constData() <<  std::endl ;
+    // }
 
 }
 

@@ -72,6 +72,11 @@ dtkComposerEvaluator::~dtkComposerEvaluator(void)
     d = NULL;
 }
 
+void dtkComposerEvaluator::setNotify(bool notify)
+{
+    d->notify = notify;
+}
+
 void dtkComposerEvaluator::setProfiling(bool profiling)
 {
     d->profiling = profiling;

@@ -1,5 +1,5 @@
-/* dtkMath.h --- 
- * 
+/* dtkMath.h ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:37:50 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 197
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKMATH_H
@@ -48,7 +48,7 @@ DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qint64* array, const qint
 DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* minValue, qreal* maxValue);
 
 // /////////////////////////////////////////////////////////////////
-// Some bit constants 
+// Some bit constants
 // /////////////////////////////////////////////////////////////////
 
 #define ONE_BIT_32 (1u)
@@ -77,6 +77,8 @@ DTKMATHSUPPORT_EXPORT bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t 
 
 DTKMATHSUPPORT_EXPORT bool dtkAlmostEqual2sComplement( float A,  float B, int32_t maxUlps);
 DTKMATHSUPPORT_EXPORT bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps);
+
+DTKMATHSUPPORT_EXPORT bool dtkAlmostEqualMixedAbsoluteRelative(const double A, const double B, const double tolerance);
 
 DTKMATHSUPPORT_EXPORT bool dtkIsInfinite( float A);
 DTKMATHSUPPORT_EXPORT bool dtkIsInfinite(double A);

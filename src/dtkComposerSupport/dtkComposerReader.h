@@ -34,9 +34,9 @@ public:
     virtual ~dtkComposerReader(void);
 
 public:
-    void setFactory(dtkComposerFactory *factory);
     void setScene(dtkComposerScene *scene);
     void setGraph(dtkComposerGraph *graph);
+    void setFactory(dtkComposerFactory *factory);
 
 public:
     void clear(void);
@@ -52,10 +52,9 @@ protected:
    virtual dtkComposerSceneNode *readNode(QDomNode node, bool paste = false);
    virtual dtkComposerSceneEdge *readEdge(QDomNode node);
 
- protected:
+protected:
    virtual void extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf);
 
 private:
-    dtkComposerReaderPrivate *d;
+   dtkComposerReaderPrivate *d;
 };
-

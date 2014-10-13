@@ -1,20 +1,16 @@
-/* dtkComposerReader.cpp --- 
- * 
+/* dtkComposerReader.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. févr.  4 15:18:39 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 896
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeFactory.h"
@@ -428,7 +424,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
             } else {
                 dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
-	    }
+            }
             return NULL;
         }
 
@@ -450,7 +446,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
             } else {
                 dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
-	    }
+            }
             delete n;
             return NULL;
         }
@@ -510,9 +506,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             foreach(dtkComposerScenePort *port, body->inputPorts()) {
 
                 if(int loop = port->loop()) {
-                    
+
                     dtkComposerTransmitter *proxyloop = port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port));
-                    
+
                     if(dtkComposerSceneNodeComposite *conditional = control->block("Conditional")) {
 
                         foreach(dtkComposerScenePort *i, conditional->inputPorts()) {
@@ -536,9 +532,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             foreach(dtkComposerScenePort *port, body->outputPorts()) {
 
                 if(int loop = port->loop()) {
-                    
+
                     dtkComposerTransmitter *proxyloop = port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port));
-                    
+
                     if(dtkComposerSceneNodeComposite *increment = control->block("Increment")) {
 
                         foreach(dtkComposerScenePort *i, increment->inputPorts()) {
@@ -604,31 +600,31 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 // ---- twins for loops
 
                 if (ports.at(i).toElement().hasAttribute("twin")) {
-                    
+
                     int twin = ports.at(i).toElement().attribute("twin").toInt();
-                    
+
                     QString block;
-                    
+
                     if (ports.at(i).toElement().hasAttribute("block"))
                         block = ports.at(i).toElement().attribute("block");
-                    
+
                     dtkComposerNode *wrapee = NULL;
-                    
+
                     if(block.isEmpty())
                         wrapee = composite->wrapee();
                     else if (d->control) {
                         wrapee = d->control->block(block)->wrapee();
                     }
-                    
+
                     if(wrapee) {
-                        
+
                         dtkComposerTransmitterProxyLoop *proxyloop = dynamic_cast<dtkComposerTransmitterProxyLoop *>(composite->wrapee()->emitters().last());
-                        
+
                         if(proxyloop) {
-			    
-			    dtkComposerTransmitterProxyLoop *twinproxy = dynamic_cast<dtkComposerTransmitterProxyLoop *>(wrapee->receivers().at(twin));
+
+                            dtkComposerTransmitterProxyLoop *twinproxy = dynamic_cast<dtkComposerTransmitterProxyLoop *>(wrapee->receivers().at(twin));
                             proxyloop->setTwin(twinproxy);
-			    twinproxy->setTwin(proxyloop);
+                            twinproxy->setTwin(proxyloop);
 
                             dynamic_cast<dtkComposerNodeControl *>(d->control->wrapee())->appendInputTwin(twinproxy);
                             dynamic_cast<dtkComposerNodeControl *>(d->control->wrapee())->appendOutputTwin(proxyloop);

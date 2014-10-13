@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Tue Jun 26 16:22:02 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
  */
 
 /* Commentary: 
@@ -17,9 +13,9 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODECONTROLFOREACH_H
-#define DTKCOMPOSERNODECONTROLFOREACH_H
+#pragma once
 
+#include "dtkComposerExport.h"
 
 #include "dtkComposerNodeControl.h"
 
@@ -29,7 +25,7 @@ class dtkComposerNodeControlForEachPrivate;
 // dtkComposerNodeControlForEach interface
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeControlForEach : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlForEach : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlForEach(void);
@@ -58,5 +54,3 @@ public:
 private:
     dtkComposerNodeControlForEachPrivate *d;
 };
-
-#endif

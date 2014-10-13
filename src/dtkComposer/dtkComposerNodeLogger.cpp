@@ -59,12 +59,12 @@ void dtkComposerNodeLogger::run(void)
     QStringList descriptions;
     QString str;
     foreach (QVariant v, list) {
-	identifiers << v.typeName();
-	QDataStream ds;
-	ds << v;
-	ds >> str;
-	descriptions << str;
-	str.clear();
+        identifiers << v.typeName();
+        QDataStream ds;
+        ds << v;
+        ds >> str;
+        descriptions << str;
+        str.clear();
     }
 
     for(int i = 0; i < descriptions.count(); ++i) {

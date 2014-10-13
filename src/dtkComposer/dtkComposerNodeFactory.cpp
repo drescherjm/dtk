@@ -29,6 +29,9 @@
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
 
+#include "dtkComposerNodeLogger.h"
+#include "dtkComposerNodePrint.h"
+
 dtkComposerNodeFactory::dtkComposerNodeFactory(void) : dtkCorePluginFactory<dtkComposerNode>()
 {
     this->initNodeBoolean();
@@ -37,6 +40,8 @@ dtkComposerNodeFactory::dtkComposerNodeFactory(void) : dtkCorePluginFactory<dtkC
     this->initNodeString();
 
     this->record("composite", &dtkComposerNodeCreator<dtkComposerNodeComposite>);
+    this->record("logger", &dtkComposerNodeCreator<dtkComposerNodeLogger>);
+    this->record("print", &dtkComposerNodeCreator<dtkComposerNodePrint>);
 
 }
 

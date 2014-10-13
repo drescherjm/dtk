@@ -589,6 +589,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setVisible(true);
             d->edit_s->setEnabled(true);
             d->edit_s->setText(s_node->value());
+            d->edit_s->setMaximumWidth(this->sizeHint().width());
 
         } else if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(node->wrapee())) {
 
@@ -602,6 +603,19 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->edit_s->setText(f_node->value());
 
             d->edit_s->setMaximumWidth(this->sizeHint().width() - d->butn_f->sizeHint().width());
+
+        } else if (dtkComposerNodeDirectory *d_node = dynamic_cast<dtkComposerNodeDirectory *>(node->wrapee())) {
+
+            d->butn_d->blockSignals(false);
+            d->butn_d->setEnabled(true);
+            d->butn_d->setVisible(true);
+
+            d->edit_s->blockSignals(false);
+            d->edit_s->setVisible(true);
+            d->edit_s->setEnabled(true);
+            d->edit_s->setText(d_node->value());
+
+            d->edit_s->setMaximumWidth(this->sizeHint().width() - d->butn_d->sizeHint().width());
 
         } else {
 
@@ -1248,11 +1262,15 @@ void dtkComposerSceneNodeEditor::onValueChanged(double value)
 
 void dtkComposerSceneNodeEditor::onValueChanged(const QString& value)
 {
-    if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(d->node->wrapee()))
+    if (dtkComposerNodeString    *s_node = dynamic_cast<dtkComposerNodeString *>(d->node->wrapee()))
         s_node->setValue(value);
 
-    if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(d->node->wrapee()))
+    if (dtkComposerNodeFile      *f_node = dynamic_cast<dtkComposerNodeFile *>(d->node->wrapee()))
         f_node->setValue(value);
+
+    if (dtkComposerNodeDirectory *d_node = dynamic_cast<dtkComposerNodeDirectory *>(d->node->wrapee()))
+        d_node->setValue(value);
+
 }
 
 void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implementation)

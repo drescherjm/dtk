@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerSceneNode.h"
 
 class dtkComposerSceneEdge;
@@ -23,7 +25,7 @@ class dtkComposerSceneNodeCompositePrivate;
 class dtkComposerSceneNote;
 class dtkComposerSceneNoteList;
 
-class  dtkComposerSceneNodeComposite : public dtkComposerSceneNode
+class DTKCOMPOSER_EXPORT dtkComposerSceneNodeComposite : public dtkComposerSceneNode
 {
 public:
      dtkComposerSceneNodeComposite(void);

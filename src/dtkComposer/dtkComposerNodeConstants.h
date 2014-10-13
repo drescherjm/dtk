@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerNodeLeaf.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -23,7 +25,7 @@
 
 class dtkComposerNodePiPrivate;
 
-class  dtkComposerNodePi : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodePi : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodePi(void);
@@ -55,7 +57,7 @@ private:
 
 class dtkComposerNodeEPrivate;
 
-class  dtkComposerNodeE : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeE : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeE(void);

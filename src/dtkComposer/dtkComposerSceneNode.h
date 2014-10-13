@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar 25 09:06:25 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 82
  */
 
 /* Commentary: 
@@ -18,6 +14,8 @@
  */
 
 #pragma once
+
+#include "dtkComposerExport.h"
 
 #include <QtGui>
 #include <QtWidgets>
@@ -34,7 +32,7 @@ class dtkComposerScenePortList;
 
 class dtkComposerSceneNodePrivate;
 
-class  dtkComposerSceneNode : public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerSceneNode : public QGraphicsItem
 {
 public:
              dtkComposerSceneNode(void);

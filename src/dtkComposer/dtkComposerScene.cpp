@@ -37,6 +37,9 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->stack = NULL;
     d->graph = NULL;
 
+    // BspTreeIndex causes some bugs with (at least) "enter group"
+    setItemIndexMethod( QGraphicsScene::NoIndex);
+
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
     d->root_node->setTitle("Root");
@@ -102,6 +105,8 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 dtkComposerScene::~dtkComposerScene(void)
 {
     delete d;
+
+    d = NULL;
 }
 
 // /////////////////////////////////////////////////////////////////

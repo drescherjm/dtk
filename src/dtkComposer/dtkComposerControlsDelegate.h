@@ -19,11 +19,13 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerControlsDelegatePrivate;
 
-class  dtkComposerControlsDelegate : public QStyledItemDelegate
+class DTKCOMPOSER_EXPORT dtkComposerControlsDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 

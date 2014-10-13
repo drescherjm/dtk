@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:38:40 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr 11 10:01:07 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 48
  */
 
 /* Commentary: 
@@ -18,6 +14,8 @@
  */
 
 #pragma once
+
+#include "dtkComposerExport.h"
 
 #include <QtCore>
 #include <QtXml>
@@ -31,7 +29,7 @@ class dtkComposerSceneNode;
 class dtkComposerSceneNote;
 class dtkComposerSceneNodeLeaf;
 
-class  dtkComposerReader
+class DTKCOMPOSER_EXPORT dtkComposerReader
 {
 public:
              dtkComposerReader(void);

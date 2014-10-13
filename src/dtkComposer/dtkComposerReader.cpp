@@ -195,7 +195,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
         if(d->missing_implementation.count() > 0) {
-            if (dynamic_cast<QApplication *>(qApp)) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
 
                 msgBox.setText("Node implementations are missing. Load anyway?");
@@ -413,7 +413,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 d->scene->addItem(n);
         } else {
 
-            if (dynamic_cast<QApplication *>(qApp)) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create node " + type_n);
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -438,7 +438,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
         if (!new_node) {
 
-            if (dynamic_cast<QApplication *>(qApp)) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create core node.");
                 msgBox.setInformativeText("You are not be able to load the composition.");

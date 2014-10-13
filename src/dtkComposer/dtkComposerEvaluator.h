@@ -19,13 +19,15 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtCore/QObject>
 
 class dtkComposerGraph;
 class dtkComposerGraphNode;
 class dtkComposerEvaluatorPrivate;
 
-class  dtkComposerEvaluator : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerEvaluator : public QObject
 {
     Q_OBJECT
 
@@ -56,7 +58,7 @@ public:
     void cont(bool run_concurrent = false);
     bool step(bool run_concurrent = false);
     void next(bool run_concurrent = false);
-    void stop();
+    void stop(void);
 
 public:
     void  logStack(void);

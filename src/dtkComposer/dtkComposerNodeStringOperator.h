@@ -14,8 +14,7 @@
  *
  */
 
-#ifndef DTKCOMPOSERNODESTRINGOPERATOR_H
-#define DTKCOMPOSERNODESTRINGOPERATOR_H
+#pragma once
 
 #include "dtkComposerExport.h"
 
@@ -27,7 +26,7 @@
 
 class dtkComposerNodeStringOperatorUnaryPrivate;
 
-class  dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorUnary(void);
@@ -51,7 +50,7 @@ protected:
 
 class dtkComposerNodeStringOperatorBinaryPrivate;
 
-class  dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT  dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorBinary(void);
@@ -80,7 +79,7 @@ protected:
 
 class dtkComposerNodeStringOperatorBinaryLogicPrivate;
 
-class  dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorBinaryLogic(void);
@@ -107,7 +106,7 @@ protected:
 // dtkComposerNodeStringOperatorBinary - Append
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
 {
 public:
     void run(void);
@@ -126,7 +125,7 @@ public:
 // dtkComposerNodeStringOperatorBinaryLogic - Equality
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
 {
 public:
     void run(void);
@@ -147,7 +146,7 @@ public:
 
 class dtkComposerNodeStringReplacePrivate;
 
-class dtkComposerNodeStringReplace : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringReplace : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringReplace(void);
@@ -307,7 +306,3 @@ public:
 protected:
     dtkComposerNodeStringListSetPrivate *d;
 };
-
-
-#endif /* DTKCOMPOSERNODESTRINGOPERATOR_H */
-

@@ -24,16 +24,16 @@
 #include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
-// #if defined(DTK_BUILD_DISTRIBUTED)
-// #include "dtkComposerNodeRemote.h"
-// #endif
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+#include "dtkComposerNodeRemote.h"
+#endif
 
 #include <dtkLog/dtkLogger.h>
 
-// #if defined(DTK_BUILD_DISTRIBUTED)
-// #include <dtkDistributed/dtkDistributedController.h>
-// #include <dtkDistributed/dtkDistributedMimeData.h>
-// #endif
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+#include <dtkDistributedSupport/dtkDistributedController.h>
+#include <dtkDistributedSupport/dtkDistributedMimeData.h>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -614,19 +614,22 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
-//     if(!remote) {
-//         event->ignore();
-//         return;
-//     }
-// #endif
+    if(!remote) {
+        event->ignore();
+        return;
+    }
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
     else
         event->ignore();
+
+#else
+        event->ignore();
+#endif
 }
 
 void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
@@ -636,48 +639,49 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
-//     if(!remote) {
-//         event->ignore();
-//         return;
-//     }
-// #endif
-
+     if(!remote) {
+         event->ignore();
+         return;
+     }
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
     else
         event->ignore();
+#else
+    event->ignore();
+#endif
 }
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
-//     if(!remote) {
-//         event->ignore();
-//         return;
-//     }
+    if(!remote) {
+        event->ignore();
+        return;
+    }
 
-//     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
+    const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
-//     if(!data) {
-//         dtkDebug() << "Unable to retrieve distributed mime data";
-//     }
+    if(!data) {
+        dtkDebug() << "Unable to retrieve distributed mime data";
+    }
 
-//     QString job = data->text();
+    QString job = data->text();
 
-//     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
+    dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
-//     remote->setJob(job);
-//     remote->setController(controller);
-//     this->setTitle("Remote on "+ job);
+    remote->setJob(job);
+    remote->setController(controller);
+    this->setTitle("Remote on "+ job);
 
-//     event->acceptProposedAction();
-//     this->update();
-// #else
-    Q_UNUSED(event);
-//#endif
+    event->acceptProposedAction();
+    this->update();
+#else
+    event->ignore();
+#endif
 }

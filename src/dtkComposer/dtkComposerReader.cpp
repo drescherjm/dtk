@@ -572,7 +572,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxy->setRequired(false);
                     composite->wrapee()->appendReceiver(proxy);
                 }
-                if (ports.at(i).toElement().attribute("kind") == "proxyloop") {
+                if ((ports.at(i).toElement().attribute("kind") == "proxyloop") ||
+                    // for backward compatibility :
+                    (ports.at(i).toElement().attribute("kind") == "variant" && ports.at(i).toElement().hasAttribute("loop"))) {
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendReceiver(proxyloop);
@@ -589,7 +591,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxy->setRequired(false);
                     composite->wrapee()->appendEmitter(proxy);
                 }
-                if (ports.at(i).toElement().attribute("kind") == "proxyloop") {
+                if ((ports.at(i).toElement().attribute("kind") == "proxyloop") ||
+                    // for backward compatibility :
+                    (ports.at(i).toElement().attribute("kind") == "variant" && ports.at(i).toElement().hasAttribute("loop"))) {
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendEmitter(proxyloop);

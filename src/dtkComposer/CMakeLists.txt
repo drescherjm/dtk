@@ -235,6 +235,10 @@ target_link_libraries(${PROJECT_NAME} dtkLog)
 target_link_libraries(${PROJECT_NAME} dtkCore)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
+target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
+target_link_libraries(${PROJECT_NAME} dtkGuiSupport)
+target_link_libraries(${PROJECT_NAME} dtkMathSupport)
+
 ## #################################################################
 ## Export header file
 ## #################################################################

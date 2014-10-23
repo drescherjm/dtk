@@ -19,6 +19,8 @@
 
 #include <dtkGuiSupport/dtkNotification.h>
 
+#include <dtkLog>
+
 #include <QtCore>
 #include <QtNetwork>
 

@@ -22,7 +22,6 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkContainerSupport/dtkContainerVector.h>
 #include <QtCore>
 
 class dtkComposerNodeFilePrivate : public QObject

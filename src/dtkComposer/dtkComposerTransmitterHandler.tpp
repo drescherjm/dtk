@@ -29,8 +29,8 @@ template <typename T> bool dtkComposerTransmitterHandler<T>::enableConnection(dt
     bool enable_connection = true;
     QVariant var = QVariant(qMetaTypeId<T>(reinterpret_cast<T *>(0)), 0);
 
-    foreach(int t, t.d->type_list) {
-        if (!var.canConvert(t)) {
+    foreach(int i, t.d->type_list) {
+        if (!var.canConvert(i)) {
             enable_connection = false;
             break;
         }

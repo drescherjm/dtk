@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 10:41:02 2013 (+0100)
  * Version: 
- * Last-Updated: Thu Mar 28 17:10:34 2013 (+0100)
+ * Last-Updated: jeu. oct. 23 15:34:11 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 93
+ *     Update #: 96
  */
 
 /* Change Log:
@@ -14,13 +14,15 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerTransmitter.h" 
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverBase
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerTransmitterReceiverBase : public dtkComposerTransmitter
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverBase : public dtkComposerTransmitter
 {
 public:
              dtkComposerTransmitterReceiverBase(dtkComposerNode *parent = 0);
@@ -52,7 +54,7 @@ public:
 // dtkComposerTransmitterReceiverVariant 
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerTransmitterReceiverVariant : public dtkComposerTransmitterReceiverBase
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVariant : public dtkComposerTransmitterReceiverBase
 {
 public:
      dtkComposerTransmitterReceiverVariant(dtkComposerNode *parent = 0);

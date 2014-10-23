@@ -19,6 +19,7 @@ project(dtkComposer)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkComposer
   dtkComposer.h
   dtkComposerCompass.h
   dtkComposerControls.h
@@ -233,6 +234,7 @@ qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkLog)
 target_link_libraries(${PROJECT_NAME} dtkCore)
+target_link_libraries(${PROJECT_NAME} dtkMeta)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)

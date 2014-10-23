@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerMetaType.h"
 
 #include <QtCore>
@@ -28,7 +30,7 @@ class dtkComposerTransmitterVariant;
 // dtkComposerTransmitter interface
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerTransmitter
+class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
 public:
     enum Kind {
@@ -168,7 +170,7 @@ QDebug operator << (QDebug debug,       dtkComposerTransmitter *transmitter);
 
 class dtkComposerTransmitterLinkPrivate;
 
-class  dtkComposerTransmitterLink
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterLink
 {
 public:
      dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
@@ -186,5 +188,5 @@ private:
 // dtkComposerTransmitterLinkList declaration
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 

@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Fri Mar 29 14:54:14 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  2 09:32:31 2013 (+0200)
+ * Last-Updated: jeu. oct. 23 15:37:19 2014 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 42
+ *     Update #: 44
  */
 
 /* Change Log:
@@ -14,13 +14,15 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerTransmitter.h"
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterProxyLoop
 // ///////////////////////////////////////////////////////////////////
 
-class dtkComposerTransmitterProxyLoop : public dtkComposerTransmitter
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxyLoop : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterProxyLoop(dtkComposerNode *parent = 0);

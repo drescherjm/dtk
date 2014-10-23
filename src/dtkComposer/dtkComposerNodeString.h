@@ -22,7 +22,7 @@
 
 class dtkComposerNodeStringPrivate;
 
-class  dtkComposerNodeString : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeString : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeString(void);

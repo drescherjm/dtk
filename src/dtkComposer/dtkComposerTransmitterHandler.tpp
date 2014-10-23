@@ -1,13 +1,18 @@
-/* dtkComposerTransmitterHandler.tpp ---
- *
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 15:29:10 2013 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- *
- */
+// Commentary: 
+// 
+// 
 
+// Change Log:
+// 
+// 
+
+// Code:
+
+#include <dtkMeta/dtkMeta.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterHandler implementation
@@ -61,8 +66,8 @@ template <typename T> bool dtkComposerTransmitterHandler<T *>::enableConnection(
     T *ptr = new T();
     QVariant var = QVariant::fromValue(ptr);
 
-    foreach(int t, t.d->type_list) {
-        if (!var.canConvert(t)) {
+    foreach(int i, t.d->type_list) {
+        if (!var.canConvert(i)) {
             enable_connection = false;
             break;
         }
@@ -79,18 +84,20 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTra
 
     switch(t.dataTransmission()) {
     case dtkComposerTransmitter::AutoCopy:
-        if (!t.enableCopy()) {
-            return source;
-        } else {
-            return dtkComposerTransmitterHandlerHelper<T *, QtPrivate::IsPointerToTypeDerivedFromQObject<T *>::Value>::copy(source, t.d->variant);
-        }
-        break;
+	if (!t.enableCopy()) {
+	    return source;
+	} else {
+	    //return dtkComposerTransmitterHandlerHelper<T *, QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value>::copy(source, t.d->variant);
+            return copy(source, t.d->variant);
+	}
+    	break;
     case dtkComposerTransmitter::Reference:
         return source;
         break;
     case dtkComposerTransmitter::Copy:
-        return dtkComposerTransmitterHandlerHelper<T *, QtPrivate::IsPointerToTypeDerivedFromQObject<T *>::Value>::copy(source, t.d->variant);
-        break;
+    	//return dtkComposerTransmitterHandlerHelper<T *, QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value>::copy(source, t.d->variant);
+        return copy(source, t.d->variant);
+    	break;
     default:
         return source;
     }
@@ -101,19 +108,15 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::constData(dtkCompos
     return t.variant().value<T *>();
 }
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterCopier implementation
-// /////////////////////////////////////////////////////////////////
-
-template <typename T, bool U> T *dtkComposerTransmitterHandlerHelper<T *, U>::copy(T *source, QVariant& target)
+template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *source, QVariant& target)
 {
     if (!source)
         return source;
 
     T *copy = target.value<T *>();
     if (!copy) {
-        copy = new T(*source);
-        target.setValue(copy);
+	copy = dtkMetaTypeHandler< T *, QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value >::clone(source);
+	target.setValue(copy);
     } else {
         *copy = *source;
     }
@@ -121,22 +124,45 @@ template <typename T, bool U> T *dtkComposerTransmitterHandlerHelper<T *, U>::co
     return copy;
 }
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterCopier implementation for dtkCoreObject
-// /////////////////////////////////////////////////////////////////
+// // /////////////////////////////////////////////////////////////////
+// // dtkComposerTransmitterCopier implementation
+// // /////////////////////////////////////////////////////////////////
 
-template <typename T> T *dtkComposerTransmitterHandlerHelper<T *, true>::copy(T *source, QVariant& target)
-{
-    if (!source)
-        return source;
+// template <typename T, bool U> T *dtkComposerTransmitterHandlerHelper<T *, U>::copy(T *source, QVariant& target)
+// {
+//     if (!source)
+//         return source;
 
-    T *copy = target.value<T*>();;
-    if (!copy) {
-        copy = reinterpret_cast<T *>(source->clone());
-        target.setValue(copy);
-    } else {
-        *copy = *source;
-    }
+//     T *copy = target.value<T *>();
+//     if (!copy) {
+// 	copy = new T(*source);
+// 	target.setValue(copy);
+//     } else {
+// 	*copy = *source;
+//     }
 
-    return copy;
-}
+//     return copy;
+// }
+
+// // /////////////////////////////////////////////////////////////////
+// // dtkComposerTransmitterCopier implementation for dtkCoreObject
+// // /////////////////////////////////////////////////////////////////
+
+// template <typename T> T *dtkComposerTransmitterHandlerHelper<T *, true>::copy(T *source, QVariant& target)
+// {
+//     if (!source)
+//         return source;
+
+//     T *copy = target.value<T*>();;
+//     if (!copy) {
+// 	copy = reinterpret_cast<T *>(source->clone());
+// 	target.setValue(copy);
+//     } else {
+// 	*copy = *source;
+//     }
+
+//     return copy;
+// }
+
+// 
+// dtkComposerTransmitterHandler.tpp ends here

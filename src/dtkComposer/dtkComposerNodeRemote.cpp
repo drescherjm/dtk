@@ -13,60 +13,23 @@
  */
 
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeRemote_p.h"
+
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
+// #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorTcp.h>
-#include <dtkDistributed/dtkDistributedSlave.h>
+#include <dtkDistributedSupport/dtkDistributedController.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
+#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>
+#include <dtkDistributedSupport/dtkDistributedSlave.h>
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkGlobal.h>
-
-#include <dtkJson>
-
-#include <dtkMath/dtkMath.h>
+// #include <dtkCore/dtkAbstractDataFactory.h>
+//#include <dtkCore/dtkCore.h>
 
 #include <dtkLog/dtkLog.h>
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeRemotePrivate interface
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeRemotePrivate
-{
-
-public:
-    dtkComposerTransmitterReceiver<QString> jobid_receiver;
-
-public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator*> communicator_emitter;
-
-public:
-    QDomDocument composition;
-    QByteArray current_hash;
-    QByteArray last_sent_hash;
-
-public:
-    dtkDistributedController *controller;
-
-public:
-    dtkDistributedCommunicator *communicator;
-    dtkDistributedCommunicatorTcp *server;
-
-public:
-    dtkDistributedSlave *slave;
-
-public:
-    QString jobid;
-    QString last_jobid;
-
-public:
-    QString title;
-
-};
+#include <QApplication>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRemote implementation
@@ -74,7 +37,7 @@ public:
 
 dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
 {
-
+    static qlonglong count = 0;
     this->appendReceiver(&(d->jobid_receiver));
     this->setInputLabelHint("jobid", 0);
 
@@ -84,11 +47,15 @@ dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeC
     this->appendEmitter(&(d->communicator_emitter));
     this->setOutputLabelHint("communicator", 0);
 
+    dtkInfo() << "constructor remode, set communicator to null" ;
+
     d->communicator = NULL;
     d->controller   = NULL;
     d->slave        = NULL;
     d->server       = NULL;
+    d->rank       = dtkDistributedMessage::CONTROLLER_RUN_RANK - count;
     d->title        = "Remote";
+    count ++;
 }
 
 dtkComposerNodeRemote::~dtkComposerNodeRemote(void)
@@ -120,7 +87,6 @@ void dtkComposerNodeRemote::setController(dtkDistributedController *controller)
     if (d->jobid.isEmpty()) {
         dtkWarn() <<  "No job id while setting controller !";
     }
-    
     d->controller = controller;
 }
 
@@ -141,9 +107,7 @@ void dtkComposerNodeRemote::setJob(QString jobid)
 
 bool dtkComposerNodeRemote::isSlave(void)
 {
-    if (d->slave)
-        return true;
-    return false;
+    return d->slave;
 }
 
 void dtkComposerNodeRemote::onJobStarted(QString jobid)
@@ -157,6 +121,8 @@ void dtkComposerNodeRemote::onJobStarted(QString jobid)
 
 void dtkComposerNodeRemote::begin(void)
 {
+    QScopedPointer<dtkDistributedMessage> msg;
+
     if (!d->slave && !d->jobid_receiver.isEmpty()) {
         // we are running on the controller but controller and job was
         // not drag&dropped, get job from transmitter and main
@@ -173,6 +139,9 @@ void dtkComposerNodeRemote::begin(void)
             dtkTrace() << "waiting event loop ended, job has started" << d->jobid;
         } else
             dtkDebug() << " Job already running, go " << d->jobid;
+    } else if (!d->slave && d->jobid.isEmpty()) { // on controller but no job !
+        dtkError() << "No Job, can't run on remote node " ;
+        return;
     }
 
     if (d->controller) {
@@ -187,11 +156,10 @@ void dtkComposerNodeRemote::begin(void)
                 return;
             }
         }
-        dtkDistributedMessage *msg;
+
         if (d->last_jobid != d->jobid) {
-            msg = new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid,dtkDistributedMessage::CONTROLLER_RUN_RANK );
-            d->server->socket()->sendRequest(msg);
-            delete msg;
+            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,d->jobid, d->rank));
+            d->server->socket()->sendRequest(msg.data());
             d->last_jobid=d->jobid;
             // the job has changed, so we must send the composition even if it has not changed
             d->last_sent_hash.clear();
@@ -200,37 +168,38 @@ void dtkComposerNodeRemote::begin(void)
             // send sub-composition to rank 0 on remote node
             QByteArray compo = d->composition.toByteArray();
             dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
-            msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,compo.size(), "xml", compo );
+            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,dtkDistributedMessage::SLAVE_RANK,compo.size(), "xml", compo ));
             d->last_sent_hash=d->current_hash;
         } else {
             dtkDebug() << "composition hash hasn't changed, send 'not-modified' to slave";
-            msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,0,d->current_hash.size(), "not-modified", d->current_hash );
+            msg.reset(new dtkDistributedMessage(dtkDistributedMessage::DATA,d->jobid,dtkDistributedMessage::SLAVE_RANK,d->current_hash.size(), "not-modified", d->current_hash ));
         }
-        d->server->socket()->sendRequest(msg);
-        delete msg;
+        d->server->socket()->sendRequest(msg.data());
         dtkDebug() << "composition sent";
         // then send transmitters data
         QList<dtkComposerTransmitter*> receivers = this->dtkComposerNodeComposite::receivers();
         int max  = receivers.count();
-        dtkComposerTransmitterVariant *t = NULL;
-        for (int i = 2; i < max; ++i) {
-            t = reinterpret_cast<dtkComposerTransmitterVariant*>(receivers.at(i));            
-            QByteArray array = t->dataToByteArray();
-            dtkDebug() << "sending transmitter" << i << "of size" << array.size();
-            msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, 0, array.size(), "qvariant", array);
-            d->server->socket()->sendRequest(msg);
-            delete msg;
 
-        }
+        //FIXME dtkComposerTransmitterVariant
+        // dtkComposerTransmitterVariant *t = NULL;
+        // for (int i = 2; i < max; ++i) {
+        //     t = reinterpret_cast<dtkComposerTransmitterVariant*>(receivers.at(i));            
+        //     QByteArray array = t->dataToByteArray();
+        //     dtkDebug() << "sending transmitter" << i << "of size" << array.size();
+        //     msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, 0, array.size(), "qvariant", array);
+        //     d->server->socket()->sendRequest(msg);
+        //     delete msg;
+
+        // }
         d->server->socket()->waitForBytesWritten();
     } else if (d->communicator) {
         // running on the slave, receive data and set transmitters
         QList<dtkComposerTransmitter*> receivers = this->dtkComposerNodeComposite::receivers();
         int max  = receivers.count();
         int size = d->communicator->size();
-        dtkComposerTransmitterVariant *t = NULL;
+        // dtkComposerTransmitterVariant *t = NULL;
         for (int i = 2; i < max; ++i) {
-            t = reinterpret_cast<dtkComposerTransmitterVariant*>(receivers.at(i));
+            // t = reinterpret_cast<dtkComposerTransmitterVariant*>(receivers.at(i));
             if (d->communicator->rank() == 0) {
 
                 d->communicator_emitter.setData(d->slave->communicator());
@@ -246,25 +215,24 @@ void dtkComposerNodeRemote::begin(void)
                         dtkDebug() << "Ok, data received, parse" ;
                 }
                 dtkDistributedMessage *msg = d->slave->communicator()->socket()->parseRequest();
-                t->setTwinned(false);
-                t->clearData();
-                t->setDataFrom(msg->content());
-                t->setTwinned(true);
+                // t->setTwinned(false);
+                // t->clearData();
+                // t->setDataFrom(msg->content());
+                // t->setTwinned(true);
 
                 dtkDebug() << "send data to slaves";
                 for (int j=1; j< size; j++)
                     d->communicator->send(msg->content(),j,0);
 
-                delete msg;
             } else {
                 QByteArray array;
                 dtkDebug() << "receive data from rank 0";
                 d->communicator->receive(array, 0, 0);
                 dtkDebug() << "data received, set";
-                t->setTwinned(false);
-                t->clearData();
-                t->setDataFrom(array);
-                t->setTwinned(true);
+                // t->setTwinned(false);
+                // t->clearData();
+                // t->setDataFrom(array);
+                // t->setTwinned(true);
             }
         }
     } else {
@@ -274,13 +242,20 @@ void dtkComposerNodeRemote::begin(void)
 
 void dtkComposerNodeRemote::end(void)
 {
+    QScopedPointer<dtkDistributedMessage> msg;
+
+    if (!d->slave && d->jobid.isEmpty()) { // on controller but no job !
+        dtkError() << "No Job, skip end remote node " ;
+        return;
+    }
+
     if (d->controller) {
         dtkDebug() << "running node remote end statement on controller";
         QList<dtkComposerTransmitter*> emitters = this->dtkComposerNodeComposite::emitters();
         int max  = this->emitters().count();
-        dtkComposerTransmitterVariant *t = NULL;
+        // dtkComposerTransmitterVariant *t = NULL;
         for (int i = 1; i < max; ++i) {
-            t = reinterpret_cast<dtkComposerTransmitterVariant*>(emitters.at(i));
+            // t = reinterpret_cast<dtkComposerTransmitterVariant*>(emitters.at(i));
 
             if (d->server->socket()->bytesAvailable()) {
                 dtkDebug() << "data already available, parse" ;
@@ -292,10 +267,10 @@ void dtkComposerNodeRemote::end(void)
                     dtkDebug() << "Ok, data received, parse" ;
             }
             dtkDistributedMessage *msg = d->server->socket()->parseRequest();
-            t->setTwinned(false);
-            t->clearData();
-            t->setDataFrom(msg->content());
-            t->setTwinned(true);
+            // t->setTwinned(false);
+            // t->clearData();
+            // t->setDataFrom(msg->content());
+            // t->setTwinned(true);
             delete msg;
 
         }
@@ -306,27 +281,29 @@ void dtkComposerNodeRemote::end(void)
         int max  = this->emitters().count();
         int size = d->communicator->size();
         Q_UNUSED(size);
-        dtkComposerTransmitterVariant *t = NULL;
+        // dtkComposerTransmitterVariant *t = NULL;
         for (int i = 1; i < max; ++i) {
-            t = reinterpret_cast<dtkComposerTransmitterVariant*>(emitters.at(i));
+            // t = reinterpret_cast<dtkComposerTransmitterVariant*>(emitters.at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
             if (d->communicator->rank() == 0) {
                 dtkDebug() << "end, send transmitter data (we are rank 0)";
-                QByteArray array = t->dataToByteArray();
-                if (!array.isEmpty()) {
-                    dtkDistributedMessage *req = new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), "qvariant", array);
-                    d->slave->communicator()->socket()->sendRequest(req);
-                    delete req;
-                } else {
-                    dtkError() << "serialization failed in transmitter";
-                }
+                // QByteArray array = t->dataToByteArray();
+                // if (!array.isEmpty()) {
+                //     dtkDistributedMessage *req = new dtkDistributedMessage(dtkDistributedMessage::DATA, d->jobid, dtkDistributedMessage::CONTROLLER_RUN_RANK, array.size(), "qvariant", array);
+                //     d->slave->communicator()->socket()->sendRequest(req);
+                //     delete req;
+                // } else {
+                //     dtkError() << "serialization failed in transmitter";
+                // }
 
             } else {
                 //TODO rank >0
             }
         }
-        if (d->communicator->rank() == 0)
-            d->slave->communicator()->socket()->waitForBytesWritten();
+        if (d->communicator->rank() == 0) {
+            d->slave->communicator()->socket()->fflush();
+            d->slave->communicator()->socket()->moveToThread(QApplication::instance()->thread());
+        }
     } else {
         dtkError() << "No communicator and no controller on remote node: can't run end node";
     }
@@ -422,7 +399,9 @@ void dtkComposerNodeRemoteSubmit::run(void)
     job.insert("properties", QVariantMap());
     job.insert("application", d->slaveName+" "+cluster.toString());
 
-    QByteArray job_data = dtkJson::serialize(job);
+    QByteArray job_data;
+    //FIXME
+    //job_data = dtkJson::serialize(job);
 
     dtkTrace() << " submit job with parameters: "<< job_data;
 

@@ -23,6 +23,9 @@ public:
     virtual ~dtkComposerNodeFactory(void);
 
 public:
+    virtual QStringList implementations(void);
+
+public:
     void initNodeBoolean(void);
     void initNodeControl(void);
     void initNodeNumber (void);

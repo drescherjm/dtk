@@ -40,6 +40,7 @@ dtkComposerView::dtkComposerView(QWidget *parent) : QGraphicsView(parent), d(new
     this->setAcceptDrops(true);
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setBackgroundBrush(QColor(0x55, 0x55, 0x55));
+    this->setContentsMargins(0, 0, 0, 0);
     this->setDragMode(QGraphicsView::RubberBandDrag);
     this->setFrameStyle(QFrame::NoFrame);
     this->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
@@ -74,16 +75,16 @@ void dtkComposerView::keyPressEvent(QKeyEvent *event)
 
 void dtkComposerView::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 
     QGraphicsView::mouseMoveEvent(event);
-    
+
     event->accept();
 }
 
 void dtkComposerView::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 
     QGraphicsView::mousePressEvent(event);
 
@@ -92,7 +93,7 @@ void dtkComposerView::mousePressEvent(QMouseEvent *event)
 
 void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
 
     QGraphicsView::mouseReleaseEvent(event);
 }

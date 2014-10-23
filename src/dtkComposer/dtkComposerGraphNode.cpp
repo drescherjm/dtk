@@ -17,6 +17,7 @@
  *
  */
 
+#include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"
 
@@ -34,6 +35,9 @@ public:
     dtkComposerGraphNode::Status status;
 
 public:
+    dtkComposerGraph *graph;
+
+public:
     bool breakpoint;
     bool endloop_initial;
     bool endloop;
@@ -49,6 +53,7 @@ dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsObject(),d(new dtkCompos
     d->breakpoint      = false;
     d->endloop         = false;
     d->endloop_initial = false;
+    d->graph           = NULL;
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -67,6 +72,16 @@ dtkComposerNode *dtkComposerGraphNode::wrapee(void)
 dtkComposerGraphNode::Status dtkComposerGraphNode::status(void)
 {
     return d->status;
+}
+
+dtkComposerGraph *dtkComposerGraphNode::graph(void)
+{
+    return d->graph;
+}
+
+void dtkComposerGraphNode::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
 }
 
 void dtkComposerGraphNode::setStatus(dtkComposerGraphNode::Status status)
@@ -163,12 +178,22 @@ dtkComposerGraphNodeList dtkComposerGraphNode::successors(void)
     return d->successors;
 }
 
+dtkComposerGraphNode *dtkComposerGraphNode::firstSuccessor(void)
+{
+    return d->successors[0];
+}
+
 dtkComposerGraphNodeList dtkComposerGraphNode::predecessors(void)
 {
     return d->predecessors;
 }
 
 dtkComposerGraphNodeList dtkComposerGraphNode::childs(void)
+{
+    return d->childs;
+}
+
+dtkComposerGraphNodeList dtkComposerGraphNode::evaluableChilds(void)
 {
     return d->childs;
 }
@@ -181,6 +206,7 @@ const QString& dtkComposerGraphNode::title(void)
 
 void dtkComposerGraphNode::setTitle(const QString& title)
 {
+    this->setObjectName(title);
     d->title = title;
 }
 

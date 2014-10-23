@@ -14,14 +14,19 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtCore>
-#include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerNodeFactory;
 class dtkComposerNodeFactoryViewPrivate;
+class dtkWidgetsItemView;
+class dtkWidgetsTagCloud;
+class dtkWidgetsTagCloudScope;
+class dtkWidgetsTagCloudView;
 
-class  dtkComposerNodeFactoryView : public QWidget
+class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryView : public QWidget
 {
     Q_OBJECT
 
@@ -34,6 +39,11 @@ public:
 
 public:
     void setDark(void);
+
+public:
+    dtkWidgetsTagCloud      *cloudView(void) const;
+    dtkWidgetsTagCloudView   *itemView(void) const;
+    dtkWidgetsTagCloudScope *scopeView(void) const;
 
 private:
     dtkComposerNodeFactoryViewPrivate *d;

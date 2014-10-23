@@ -143,6 +143,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkCore)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkDistributed)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkLog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
 
 ## ###################################################################

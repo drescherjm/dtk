@@ -37,6 +37,9 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->stack = NULL;
     d->graph = NULL;
 
+    // BspTreeIndex causes some bugs with (at least) "enter group"
+    setItemIndexMethod( QGraphicsScene::NoIndex);
+
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->setRoot(true);
     d->root_node->setTitle("Root");
@@ -102,6 +105,8 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 dtkComposerScene::~dtkComposerScene(void)
 {
     delete d;
+
+    d = NULL;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -883,10 +888,8 @@ adjust_edges: // Adjusting edges of selected nodes
 
 void dtkComposerScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << Q_FUNC_INFO;
-
     event->accept();
-    
+
     QGraphicsScene::mousePressEvent(event);
 
     dtkComposerScenePort *source = this->portAt(event->scenePos());
@@ -1106,7 +1109,7 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
 {
-    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::AscendingOrder);
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::DescendingOrder);
 
     foreach(QGraphicsItem *item, items)
         if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item))
@@ -1117,7 +1120,7 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point) const
 
 dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposerSceneNode *exclude) const
 {
-    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::AscendingOrder);
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::DescendingOrder);
 
     foreach(QGraphicsItem *item, items) {
         if (dtkComposerSceneNode *node = dynamic_cast<dtkComposerSceneNode *>(item)) {
@@ -1138,7 +1141,7 @@ dtkComposerSceneNode *dtkComposerScene::nodeAt(const QPointF& point, dtkComposer
 
 dtkComposerScenePort *dtkComposerScene::portAt(const QPointF& point) const
 {
-    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::AscendingOrder);
+    QList<QGraphicsItem *> items = this->items(point.x(), point.y(), 1, 1, Qt::IntersectsItemBoundingRect, Qt::DescendingOrder);
 
     foreach(QGraphicsItem *item, items)
         if (dtkComposerScenePort *port = dynamic_cast<dtkComposerScenePort *>(item))

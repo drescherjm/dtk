@@ -2,11 +2,6 @@
  * 
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Tue Feb 14 16:46:54 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Sat Aug  4 00:08:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 19
  */
 
 /* Commentary: 
@@ -17,15 +12,15 @@
  * 
  */
 
-#ifndef DTKCOMPOSERNODEBOOLEAN_H
-#define DTKCOMPOSERNODEBOOLEAN_H
+#pragma once
 
+#include "dtkComposerExport.h"
 
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeBooleanPrivate;
 
-class  dtkComposerNodeBoolean : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeBoolean : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeBoolean(void);
@@ -60,5 +55,3 @@ public:
 private:
     dtkComposerNodeBooleanPrivate *d;
 };
-
-#endif

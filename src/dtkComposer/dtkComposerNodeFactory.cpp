@@ -15,6 +15,7 @@
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeControlDoWhile.h"
 #include "dtkComposerNodeControlFor.h"
@@ -28,17 +29,30 @@
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
 
+#include "dtkComposerNodeLogger.h"
+#include "dtkComposerNodePrint.h"
+
 dtkComposerNodeFactory::dtkComposerNodeFactory(void) : dtkCorePluginFactory<dtkComposerNode>()
 {
     this->initNodeBoolean();
     this->initNodeControl();
     this->initNodeNumber();
     this->initNodeString();
+
+    this->record("composite", &dtkComposerNodeCreator<dtkComposerNodeComposite>);
+    this->record("logger", &dtkComposerNodeCreator<dtkComposerNodeLogger>);
+    this->record("print", &dtkComposerNodeCreator<dtkComposerNodePrint>);
+
 }
 
 dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 {
 
+}
+
+QStringList dtkComposerNodeFactory::implementations(void)
+{
+    return QStringList();
 }
 
 void dtkComposerNodeFactory::initNodeBoolean(void)
@@ -79,6 +93,8 @@ void dtkComposerNodeFactory::initNodeNumber(void)
     this->record("abs",    &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryAbs>);
     this->record("sqrt",   &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnarySqrt>);
     this->record("square", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnarySquare>);
+
+    this->record("inv", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryInv>);
 
     this->record("incr", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryIncr>);
     this->record("decr", &dtkComposerNodeCreator<dtkComposerNodeNumberOperatorUnaryDecr>);

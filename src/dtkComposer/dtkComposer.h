@@ -19,6 +19,6 @@ class dtkComposerNodeFactory;
 namespace dtkComposer
 {
     namespace node {
-	dtkComposerNodeFactory& factory(void);
+        dtkComposerNodeFactory& factory(void);
     }
 }

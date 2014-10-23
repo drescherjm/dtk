@@ -23,30 +23,31 @@
 #include <QtGui>
 #include <QtWidgets>
 
+#include <dtkMathSupport/dtkGraphEdge.h>
+#include "dtkComposerGraphNode.h"
+
 class dtkComposerGraphEdgePrivate;
-class dtkComposerGraphNode;
+class dtkGraphEdge;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphEdge
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerGraphEdge : public QGraphicsItem
+class dtkComposerGraphEdge : public QGraphicsItem, public dtkGraphEdge
 {
 public:
      dtkComposerGraphEdge(void);
     ~dtkComposerGraphEdge(void);
 
 public:
-    dtkComposerGraphNode *source(void);
-    dtkComposerGraphNode *destination(void);
+    dtkComposerGraphNode *source(void) const ;
+    dtkComposerGraphNode *destination(void) const;
 
 public:
     int id(void);
 
 public:
     void setId(int id);
-    void setSource(dtkComposerGraphNode *source);
-    void setDestination(dtkComposerGraphNode *destination);
 
 public:
     QRectF boundingRect(void) const;

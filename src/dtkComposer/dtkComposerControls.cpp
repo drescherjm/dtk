@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Nov 28 16:10:54 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 166
  */
 
 /* Commentary: 
@@ -19,9 +15,13 @@
 
 #include "dtkComposerControls.h"
 #include "dtkComposerControlsDelegate.h"
+#include "dtkComposerControlsListItem.h"
+#include "dtkComposerControlsListItemFactory.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerSceneNodeLeaf.h"
+
+#include <dtkGuiSupport/dtkToolBox.h>
 
 // /////////////////////////////////////////////////////////////////
 // Helper functions
@@ -41,6 +41,7 @@ public:
 public:
     QComboBox *selector;
     QListWidget *list;
+    dtkToolBox *box;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -64,16 +65,22 @@ dtkComposerControls::dtkComposerControls(QWidget *parent) : QFrame(parent), d(ne
 
 // /////////////////////////////////////////////////////////////////
 
-    d->list = new QListWidget(this);
-    d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->list->setEditTriggers(QAbstractItemView::DoubleClicked);
-    d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
+    //d->list = new QListWidget(this);
+    //d->list->setAttribute(Qt::WA_MacShowFocusRect, false);
+    //d->list->setItemDelegate(new dtkComposerControlsDelegate(this));
+
+// /////////////////////////////////////////////////////////////////
+
+    d->box = new dtkToolBox(this);
+    d->box->setDisplayMode(dtkToolBox::Default);
+    d->box->setDisplayMode(dtkToolBox::AllItemExpanded);
+    d->box->setDisplayMode(dtkToolBox::OneItemExpanded);
 
 // /////////////////////////////////////////////////////////////////
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->selector);
-    layout->addWidget(d->list);
+    layout->addWidget(d->box);
 
 // /////////////////////////////////////////////////////////////////
 
@@ -142,12 +149,15 @@ void dtkComposerControls::setup(int index)
         break;
     };
 
-    d->list->clear();
+    //d->list->clear();
+    d->box->clear();
 
     foreach(dtkComposerSceneNodeLeaf *node, nodes) {
-        QListWidgetItem *item = new QListWidgetItem(node->title(), d->list, type(node));
-        item->setFlags(item->flags() | Qt::ItemIsEditable);
-        d->list->addItem(item);
+        //dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
+        //item->setFlags(Qt::ItemIsEnabled);
+        // d->list->addItem(item);
+        // d->list->setItemWidget(item,item->widget());
+        d->box->addItem(dtkComposerControlsListItemFactory::instance()->create(node));
     }
 }
 
@@ -155,10 +165,3 @@ void dtkComposerControls::setup(int index)
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-int type(dtkComposerSceneNodeLeaf *node)
-{
-    if(node->wrapee()->type() == "integer")
-        return dtkComposerControls::Integer;
-
-    return dtkComposerControls::None;
-}

@@ -389,6 +389,7 @@ DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVarLengthArray);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::list);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
 
+
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkMetaContainerSequential_p.tpp"

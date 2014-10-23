@@ -53,6 +53,7 @@ void dtkComposerPropagateEdgeValidity(dtkComposerSceneNodeComposite *node, const
                 edge->validate();
     }
 
+
     foreach(dtkComposerSceneNode *n, node->nodes()) {
 
         if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {

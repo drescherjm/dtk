@@ -80,6 +80,15 @@ void dtkComposerGraphNodeSelectBranch::removeSuccessor(dtkComposerGraphNode *nod
             d->successors[i] = NULL;
 }
 
+dtkComposerGraphNode *dtkComposerGraphNodeSelectBranch::firstSuccessor(void)
+{
+    if (d->result >= 0)
+        return d->successors[d->result];
+    else {
+        dtkError() << "Unknown first successor";
+        return NULL;
+    }
+}
 
 dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
 {

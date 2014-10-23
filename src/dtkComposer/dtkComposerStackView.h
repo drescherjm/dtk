@@ -19,12 +19,14 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerStack;
 class dtkComposerStackViewPrivate;
 
-class  dtkComposerStackView : public QWidget
+class DTKCOMPOSER_EXPORT dtkComposerStackView : public QWidget
 {
     Q_OBJECT
 

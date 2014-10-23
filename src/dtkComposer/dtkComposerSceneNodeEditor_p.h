@@ -1,20 +1,20 @@
-/* dtkComposerSceneNodeEditor_p.h --- 
- * 
+/* dtkComposerSceneNodeEditor_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Wed Sep 26 15:24:51 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 74
+ * Last-Updated: jeu. nov. 28 09:46:35 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 78
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENODEEDITOR_P_H
@@ -27,6 +27,7 @@ class dtkComposerSceneNode;
 class dtkComposerScenePort;
 class dtkComposerStack;
 class dtkComposerGraph;
+class dtkToolBox;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList
@@ -112,6 +113,11 @@ public:
 public:
     QLineEdit *edit_s;
     QToolButton *butn_f;
+    QToolButton *butn_d;
+
+public:
+    QHBoxLayout *layout_widg_edit;
+    QVBoxLayout *layout;
 
 public:
     QRadioButton *t_b;
@@ -124,6 +130,9 @@ public:
 
 public:
     QComboBox *selector;
+
+public:
+    dtkToolBox *node_toolbox;
 };
 
 #endif

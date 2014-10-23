@@ -3,10 +3,6 @@
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr  4 09:50:00 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 51
  */
 
 /* Commentary: 
@@ -19,6 +15,8 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerNode.h"
 
 class dtkComposerNodeLeaf;
@@ -30,7 +28,7 @@ class dtkComposerTransmitterProxyLoop;
 // dtkComposerNodeControl 
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeControl : public dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
 {
 public:
              dtkComposerNodeControl(void);

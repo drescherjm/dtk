@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include <QtGui>
 
 class dtkComposerSceneNode;
@@ -28,7 +30,7 @@ class dtkComposerSceneNotePrivate;
 // dtkComposerSceneNote
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerSceneNote : public QGraphicsItem
+class DTKCOMPOSER_EXPORT dtkComposerSceneNote : public QGraphicsItem
 {
 public:
      dtkComposerSceneNote(void);

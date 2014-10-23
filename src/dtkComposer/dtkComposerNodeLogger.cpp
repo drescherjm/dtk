@@ -22,7 +22,7 @@
 // Log categories
 // ///////////////////////////////////////////////////////////////////
 
-DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_LOGGER, "fr.inria.dtk.composer.logger")
+//DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_LOGGER, "fr.inria.dtk.composer.logger")
 
 // ///////////////////////////////////////////////////////////////////
 // 
@@ -59,12 +59,12 @@ void dtkComposerNodeLogger::run(void)
     QStringList descriptions;
     QString str;
     foreach (QVariant v, list) {
-	identifiers << v.typeName();
-	QDataStream ds;
-	ds << v;
-	ds >> str;
-	descriptions << str;
-	str.clear();
+        identifiers << v.typeName();
+        QDataStream ds;
+        ds << v;
+        ds >> str;
+        descriptions << str;
+        str.clear();
     }
 
     for(int i = 0; i < descriptions.count(); ++i) {
@@ -89,7 +89,7 @@ void dtkComposerNodeLogger::run(void)
             else if  (level == "error")
                 dtkError() <<  output;
             else if  (level == "fatal")
-                dtkCritical() <<  output;
+                dtkFatal() <<  output;
             else
                 dtkInfo() <<  output;
         } else {

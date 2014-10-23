@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "dtkComposerMetaType.h"
+
 #include <QtCore>
 
 class dtkComposerNode;

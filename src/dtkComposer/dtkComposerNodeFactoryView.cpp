@@ -42,8 +42,8 @@ dtkComposerNodeFactoryView::dtkComposerNodeFactoryView(QWidget *parent) : QWidge
     d->cloud = new dtkWidgetsTagCloud(this);
     d->cloud->setSortingType(dtkWidgetsTagCloud::Alpha);
     d->cloud->setSortingOrder(dtkWidgetsTagCloud::Asc);
-    d->cloud->setFontSize(14);
-    d->cloud->setFontRange(10);
+    d->cloud->setFontSize(17);
+    d->cloud->setFontRange(15);
 
     d->view = new dtkWidgetsTagCloudView(this);
 
@@ -88,4 +88,19 @@ void dtkComposerNodeFactoryView::setDark(void)
 {
     d->scope->setDark();
     d->view->setDark();
+}
+
+dtkWidgetsTagCloudView *dtkComposerNodeFactoryView::itemView(void) const
+{
+    return d->view;
+}
+
+dtkWidgetsTagCloud *dtkComposerNodeFactoryView::cloudView(void) const
+{
+    return d->cloud;
+}
+
+dtkWidgetsTagCloudScope *dtkComposerNodeFactoryView::scopeView(void) const
+{
+    return d->scope;
 }

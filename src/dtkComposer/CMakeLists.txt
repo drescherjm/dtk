@@ -23,8 +23,17 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerCompass.h
   dtkComposerControls.h
   dtkComposerControlsDelegate.h
+  dtkComposerControlsListItem.h
+  dtkComposerControlsListItemFactory.h
+  dtkComposerControlsListItemBoolean.h
+  dtkComposerControlsListItemFile.h
+  dtkComposerControlsListItemInteger.h
+  # dtkComposerControlsListItemLeafProcess.h
+  dtkComposerControlsListItemReal.h
+  dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
   dtkComposerEvaluator_p.h
+  dtkComposerEvaluatorSlave.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h
   dtkComposerGraphLayouter.h
@@ -38,7 +47,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphNodeSetOutputs.h
   dtkComposerGraphNodeSetVariables.h
   dtkComposerGraphView.h
+  dtkComposerMetaType.h
   dtkComposerNode.h
+  dtkComposerNodeDistributed.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
   dtkComposerNodeBoolean.h
@@ -57,13 +68,16 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFile_p.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
+  # dtkComposerNodeLeafActor.h
   # dtkComposerNodeLeafData.h
   # dtkComposerNodeLeafProcess.h
   # dtkComposerNodeLeafView.h
   dtkComposerNodeLogger.h
   dtkComposerNodeNumberOperator.h
+  dtkComposerNodePrint.h
   dtkComposerNodeProxy.h
   dtkComposerNodeReal.h
+  dtkComposerNodeRemote.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
   dtkComposerPath.h
@@ -100,6 +114,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterReceiver.tpp
   dtkComposerView.h
   dtkComposerReader.h
+  dtkComposerWidget.h
   dtkComposerWriter.h)
 
 set(${PROJECT_NAME}_SOURCES
@@ -107,7 +122,16 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerCompass.cpp
   dtkComposerControls.cpp
   dtkComposerControlsDelegate.cpp
+  dtkComposerControlsListItem.cpp
+  dtkComposerControlsListItemBoolean.cpp
+  dtkComposerControlsListItemFactory.cpp
+  dtkComposerControlsListItemFile.cpp
+  dtkComposerControlsListItemInteger.cpp
+  # dtkComposerControlsListItemLeafProcess.cpp
+  dtkComposerControlsListItemReal.cpp
+  dtkComposerControlsListItemString.cpp
   dtkComposerEvaluator.cpp
+  dtkComposerEvaluatorSlave.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
   dtkComposerGraphLayouter.cpp
@@ -135,16 +159,20 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlForEach.cpp
   dtkComposerNodeControlMap.cpp
   dtkComposerNodeControlWhile.cpp
+  dtkComposerNodeDistributed.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
+  # dtkComposerNodeLeafActor.cpp
   # dtkComposerNodeLeafData.cpp
   # dtkComposerNodeLeafProcess.cpp
   # dtkComposerNodeLeafView.cpp
   dtkComposerNodeLogger.cpp
   dtkComposerNodeNumberOperator.cpp
+  dtkComposerNodePrint.cpp
   dtkComposerNodeProxy.cpp
   dtkComposerNodeReal.cpp
+  dtkComposerNodeRemote.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
   dtkComposerPath.cpp
@@ -172,6 +200,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterProxyLoop.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp
+  dtkComposerWidget.cpp
   dtkComposerWriter.cpp)
 
 set(${PROJECT_NAME}_QRC dtkComposer.qrc)

@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Apr 19 11:13:46 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 203
  */
 
 /* Commentary: 
@@ -18,6 +14,8 @@
  */
 
 #pragma once
+
+#include "dtkComposerExport.h"
 
 #include <QtCore>
 #include <QtGui>
@@ -41,7 +39,7 @@ class dtkComposerStackCommandPrivate;
 // Command Interface
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerStackCommand : public QUndoCommand
+class DTKCOMPOSER_EXPORT dtkComposerStackCommand : public QUndoCommand
 {
 public:
              dtkComposerStackCommand(dtkComposerStackCommand *parent = 0);

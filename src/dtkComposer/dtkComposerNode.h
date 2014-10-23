@@ -3,10 +3,6 @@
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. févr.  4 15:45:55 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 95
  */
 
 /* Commentary: 
@@ -19,8 +15,9 @@
 
 #pragma once
 
-#include <dtkCore>
+#include "dtkComposerExport.h"
 
+#include <dtkCore>
 #include <QtCore>
 
 class dtkComposerNodePrivate;
@@ -30,7 +27,7 @@ class dtkComposerTransmitter;
 // dtkComposerNode
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNode
 {
 public: 
              dtkComposerNode(void);

@@ -1,2 +1,3 @@
 #include "dtkMeta.h"
+#include "dtkMetaContainerSequential.h"
 

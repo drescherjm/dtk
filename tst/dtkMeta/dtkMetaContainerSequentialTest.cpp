@@ -88,6 +88,8 @@ void dtkMetaContainerSequentialTestCase::testQVector(void)
     size = 4;
     QString values_s[4] = {"toto", "allo", "ici", "bebe"};
 
+    qDebug() << qMetaTypeId<QVector<QString> *>(reinterpret_cast<QVector<QString> **>(0));
+
     testContainer<ArrayString>(c_s, values_s, size);
 
     QCOMPARE(2 * size, c_s.size());

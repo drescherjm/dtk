@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <QtGui>
+#include "dtkComposerExport.h"
+
 #include <QtWidgets>
 
 class dtkComposerNodeFactory;
@@ -37,7 +38,7 @@ class dtkComposerStack;
 // dtkComposerScene
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerScene : public QGraphicsScene
+class DTKCOMPOSER_EXPORT dtkComposerScene : public QGraphicsScene
 {
     Q_OBJECT
 

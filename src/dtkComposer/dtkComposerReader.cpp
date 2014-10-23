@@ -1,20 +1,16 @@
-/* dtkComposerReader.cpp --- 
- * 
+/* dtkComposerReader.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 23:41:08 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. févr.  4 15:18:39 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 896
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeFactory.h"
@@ -45,6 +41,7 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
 
+#include <dtkCore/dtkCore.h>
 // #include <dtkCore/dtkAbstractDataFactory.h>
 // #include <dtkCore/dtkAbstractProcessFactory.h>
 // #include <dtkCore/dtkAbstractViewFactory.h>
@@ -58,7 +55,7 @@
 // dtkLog categories
 // /////////////////////////////////////////////////////////////////
 
-DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_IO, "fr.inria.dtk.composer.io")
+//DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_IO, "fr.inria.dtk.composer.io")
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerReaderPrivate
@@ -169,15 +166,15 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
         return false;
 
 
-    // if (!dtkIsBinary(fileName)) {
-    //     c_bytes = file.readAll();
-    //     content = QString::fromUtf8(c_bytes.data());
+    if (!dtkFileIsBinary(fileName)) {
+        c_bytes = file.readAll();
+        content = QString::fromUtf8(c_bytes.data());
 
-    // } else {
+    } else {
         QDataStream stream(&file); stream >> c_bytes;
         QByteArray u_bytes = QByteArray::fromHex(qUncompress(c_bytes));
         content = QString::fromUtf8(u_bytes.data(), u_bytes.size());
-	//}
+    }
 
     file.close();
     return this->readString(content,append);
@@ -194,7 +191,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
         if(d->missing_implementation.count() > 0) {
-            if (dynamic_cast<QApplication *>(qApp)) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
 
                 msgBox.setText("Node implementations are missing. Load anyway?");
@@ -228,8 +225,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     // Clear scene if applicable
 
     if(!append) {
-        d->scene->clear();
-        d->graph->clear();
+        this->clear();
     }
 
     d->node_map.clear();
@@ -266,8 +262,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     for(int i = 0; i < nodes.count(); i++)
         if(nodes.at(i).toElement().tagName() == "node")
             if (!(this->readNode(nodes.at(i),paste))) {
-                d->scene->clear();
-                d->graph->clear();
+                this->clear();
                 return false;
             }
 
@@ -384,7 +379,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             n = d->control->blocks().last();
         } else {
             n = d->control->blocks().at(node.toElement().attribute("blockid").toInt());
- 
+
             qreal x = node.toElement().attribute("x").toFloat();
             qreal y = node.toElement().attribute("y").toFloat();
             qreal w = node.toElement().attribute("w").toFloat()-4;
@@ -401,7 +396,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
         n = d->control->footer();
 
-    } else if( type_n == "composite" || type_n == "world" || type_n == "remote") {
+    } else if( type_n == "composite" || type_n == "world" || type_n == "remote"|| type_n == "spawn") {
 
         dtkComposerNode *c = d->factory->create(type_n);
         if (c) {
@@ -414,13 +409,13 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 d->scene->addItem(n);
         } else {
 
-            if (dynamic_cast<QApplication *>(qApp)) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create node " + type_n);
                 msgBox.setInformativeText("You are not be able to load the composition.");
                 if  (type_n == "remote")
                     msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_DISTRIBUTED");
-                else
+                else if (type_n == "world")
                     msgBox.setDetailedText("You need to compile DTK with DTK_BUILD_MPI");
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.setDefaultButton(QMessageBox::Ok);
@@ -429,7 +424,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
             } else {
                 dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
-	    }
+            }
             return NULL;
         }
 
@@ -439,7 +434,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
         if (!new_node) {
 
-            if (dynamic_cast<QApplication *>(qApp)) {
+            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create core node.");
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -451,7 +446,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 
             } else {
                 dtkError() <<  "Can't read composition, the following node is unknown:" << node.toElement().attribute("type");
-	    }
+            }
             delete n;
             return NULL;
         }
@@ -511,9 +506,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             foreach(dtkComposerScenePort *port, body->inputPorts()) {
 
                 if(int loop = port->loop()) {
-                    
+
                     dtkComposerTransmitter *proxyloop = port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port));
-                    
+
                     if(dtkComposerSceneNodeComposite *conditional = control->block("Conditional")) {
 
                         foreach(dtkComposerScenePort *i, conditional->inputPorts()) {
@@ -537,9 +532,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             foreach(dtkComposerScenePort *port, body->outputPorts()) {
 
                 if(int loop = port->loop()) {
-                    
+
                     dtkComposerTransmitter *proxyloop = port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port));
-                    
+
                     if(dtkComposerSceneNodeComposite *increment = control->block("Increment")) {
 
                         foreach(dtkComposerScenePort *i, increment->inputPorts()) {
@@ -577,7 +572,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxy->setRequired(false);
                     composite->wrapee()->appendReceiver(proxy);
                 }
-                if (ports.at(i).toElement().attribute("kind") == "proxyloop") {
+                if ((ports.at(i).toElement().attribute("kind") == "proxyloop") ||
+                    // for backward compatibility :
+                    (ports.at(i).toElement().attribute("kind") == "variant" && ports.at(i).toElement().hasAttribute("loop"))) {
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendReceiver(proxyloop);
@@ -594,7 +591,9 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxy->setRequired(false);
                     composite->wrapee()->appendEmitter(proxy);
                 }
-                if (ports.at(i).toElement().attribute("kind") == "proxyloop") {
+                if ((ports.at(i).toElement().attribute("kind") == "proxyloop") ||
+                    // for backward compatibility :
+                    (ports.at(i).toElement().attribute("kind") == "variant" && ports.at(i).toElement().hasAttribute("loop"))) {
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendEmitter(proxyloop);
@@ -605,31 +604,31 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
 // ---- twins for loops
 
                 if (ports.at(i).toElement().hasAttribute("twin")) {
-                    
+
                     int twin = ports.at(i).toElement().attribute("twin").toInt();
-                    
+
                     QString block;
-                    
+
                     if (ports.at(i).toElement().hasAttribute("block"))
                         block = ports.at(i).toElement().attribute("block");
-                    
+
                     dtkComposerNode *wrapee = NULL;
-                    
+
                     if(block.isEmpty())
                         wrapee = composite->wrapee();
                     else if (d->control) {
                         wrapee = d->control->block(block)->wrapee();
                     }
-                    
+
                     if(wrapee) {
-                        
+
                         dtkComposerTransmitterProxyLoop *proxyloop = dynamic_cast<dtkComposerTransmitterProxyLoop *>(composite->wrapee()->emitters().last());
-                        
+
                         if(proxyloop) {
-			    
-			    dtkComposerTransmitterProxyLoop *twinproxy = dynamic_cast<dtkComposerTransmitterProxyLoop *>(wrapee->receivers().at(twin));
+
+                            dtkComposerTransmitterProxyLoop *twinproxy = dynamic_cast<dtkComposerTransmitterProxyLoop *>(wrapee->receivers().at(twin));
                             proxyloop->setTwin(twinproxy);
-			    twinproxy->setTwin(proxyloop);
+                            twinproxy->setTwin(proxyloop);
 
                             dynamic_cast<dtkComposerNodeControl *>(d->control->wrapee())->appendInputTwin(twinproxy);
                             dynamic_cast<dtkComposerNodeControl *>(d->control->wrapee())->appendOutputTwin(proxyloop);
@@ -743,6 +742,8 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         //         }
         //     }
         // }
+
+        this->extend(node,leaf);
     }
 
     d->node = t;
@@ -756,16 +757,16 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
 {
     QDomElement source = node.firstChildElement("source");
     QDomElement destin = node.firstChildElement("destination");
-    
+
     int source_node = source.attribute("node").toInt();
     int destin_node = destin.attribute("node").toInt();
-    
+
     int source_id = source.attribute("id").toInt();
     int destin_id = destin.attribute("id").toInt();
 
     QString source_type = source.attribute("type");
     QString destin_type = destin.attribute("type");
-    
+
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
     if (source_type == "input")
         if (source_id >= d->node_map.value(source_node)->inputPorts().count())
@@ -789,7 +790,6 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
             edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
     edge->link();
     edge->adjust();
-
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
@@ -805,4 +805,24 @@ handle_failure:
     delete edge;
     return NULL;
 
+}
+
+void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf)
+{
+  Q_UNUSED(node);
+  Q_UNUSED(leaf);
+}
+
+void dtkComposerReader::clear(void)
+{
+    // Composer
+
+    if (d->scene)
+        d->scene->clear();
+    if (d->graph)
+        d->graph->clear();
+
+    // Factory
+
+    //dtkAbstractViewFactory::instance()->clear();
 }

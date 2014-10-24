@@ -19,6 +19,7 @@
 #include "dtkComposerNodeLeaf.h"
 
 #include <QDomDocument>
+#include <QtNetwork>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRemote declaration
@@ -48,8 +49,9 @@ public slots:
 
 public:
     virtual void setComposition(QDomDocument document);
-    virtual void setCommunicator(dtkDistributedCommunicator  *communicator);
+    virtual void setSocket(QTcpSocket  *socket);
     void setController(dtkDistributedController  *controller);
+    void setCommunicator(dtkDistributedCommunicator  *communicator);
     void setSlave(dtkDistributedSlave *slave);
     void setJob(QString jobid);
 

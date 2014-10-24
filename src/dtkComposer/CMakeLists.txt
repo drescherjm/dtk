@@ -50,7 +50,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphView.h
   dtkComposerMetaType.h
   dtkComposerNode.h
-  dtkComposerNodeDistributed.h
+#  dtkComposerNodeDistributed.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
   dtkComposerNodeBoolean.h
@@ -160,7 +160,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlForEach.cpp
   dtkComposerNodeControlMap.cpp
   dtkComposerNodeControlWhile.cpp
-  dtkComposerNodeDistributed.cpp
+#  dtkComposerNodeDistributed.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
@@ -237,7 +237,7 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 target_link_libraries(${PROJECT_NAME} dtkMeta)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
-target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
+target_link_libraries(${PROJECT_NAME} dtkDistributed)
 target_link_libraries(${PROJECT_NAME} dtkGuiSupport)
 target_link_libraries(${PROJECT_NAME} dtkMathSupport)
 

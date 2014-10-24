@@ -17,15 +17,11 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkDistributedSupport/dtkDistributedCommunicator>
-#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp>
+#include <dtkLog>
+#include <dtkDistributed>
 
-#include <dtkLog/dtkLog.h>
+#include <QTcpSocket>
 
-#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
-
-#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi>
-#include <mpi.h>
 
 
 // /////////////////////////////////////////////////////////////////
@@ -35,17 +31,26 @@
 class dtkComposerNodeCommunicatorInitPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicatorMpi*> emitter;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator*> emitter;
 
 public:
-    dtkDistributedCommunicatorMpi *communicator;
+    dtkComposerTransmitterReceiver<QString> receiver_type;
+
+public:
+    dtkDistributedCommunicator *communicator;
+    QString type;
 };
 
 dtkComposerNodeCommunicatorInit::dtkComposerNodeCommunicatorInit(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorInitPrivate)
 {
     d->communicator = NULL;
 
+    d->type = QString::fromUtf8(qgetenv(qPrintable("DTK_DISTRIBUTED_POLICY")));
+    if (d->type.isEmpty()) {
+        d->type = "qthreads";
+    }
     this->appendEmitter(&(d->emitter));
+    this->appendReceiver(&(d->receiver_type));
 }
 
 dtkComposerNodeCommunicatorInit::~dtkComposerNodeCommunicatorInit(void)
@@ -61,16 +66,18 @@ dtkComposerNodeCommunicatorInit::~dtkComposerNodeCommunicatorInit(void)
 
 void dtkComposerNodeCommunicatorInit::run(void)
 {
+    if (!d->receiver_type.isEmpty()) {
+        d->type = d->receiver_type.data();
+    }
     if (!d->communicator) {
-        d->communicator = new dtkDistributedCommunicatorMpi;
+        dtkDistributedCommunicator *communicator = dtkDistributed::communicator::pluginFactory().create(d->type);
+
         d->emitter.setData(d->communicator);
     }
 
     if (!d->communicator->initialized())
         d->communicator->initialize();
 }
-
-#endif
 
 // /////////////////////////////////////////////////////////////////
 // Communicator Uninitialize
@@ -153,8 +160,7 @@ void dtkComposerNodeCommunicatorRank::run(void)
     if (!d->receiver.isEmpty()) {
 
         dtkDistributedCommunicator *communicator = NULL;
-        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
-        // communicator = d->receiver.data();
+        communicator = d->receiver.constData();
 
         if (!communicator) {
             d->rank = -1;
@@ -210,9 +216,7 @@ void dtkComposerNodeCommunicatorSize::run(void)
 {
     if (!d->receiver.isEmpty()) {
 
-        dtkDistributedCommunicator *communicator = NULL;
-        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
-        // communicator = d->receiver.data();
+        dtkDistributedCommunicator *communicator = d->receiver.constData();
 
         if (!communicator) {
             d->size = 0;
@@ -240,22 +244,27 @@ class dtkComposerNodeCommunicatorSendPrivate
 {
 public:
     dtkComposerTransmitterReceiver<dtkDistributedCommunicator*> receiver_comm;
+    dtkComposerTransmitterReceiver<QTcpSocket*> receiver_socket;
     dtkComposerTransmitterReceiverVariant receiver_data;
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
 
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator*> emitter;
+    dtkComposerTransmitterEmitter<bool> emitter;
 
 public:
     dtkDistributedCommunicator *communicator;
+    QTcpSocket *socket;
 
 };
 
 dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeCommunicatorSendPrivate)
 {
     d->communicator = NULL;
+    d->socket       = NULL;
     d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
+    d->receiver_socket.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
+    this->appendReceiver(&(d->receiver_socket));
     this->appendReceiver(&(d->receiver_data));
 
     this->appendReceiver(&(d->receiver_target));
@@ -273,29 +282,41 @@ dtkComposerNodeCommunicatorSend::~dtkComposerNodeCommunicatorSend(void)
 
 void dtkComposerNodeCommunicatorSend::run(void)
 {
-    if (!d->receiver_data.isEmpty() && !d->receiver_comm.isEmpty() && !d->receiver_target.isEmpty() ) {
+    d->emitter.setData(false);
+    if (!d->receiver_data.isEmpty()  && !d->receiver_target.isEmpty() ) {
 
-        QVariant v = d->receiver_data.variant();
-
-        dtkDistributedCommunicator *communicator = NULL;
-        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
-        // communicator = d->receiver.data();
-
-        if (!d->communicator) {
-            dtkError() << "Input communicator not valid.";
+        if (d->receiver_comm.isEmpty() && d->receiver_socket.isEmpty()) {
+            dtkError() << "Send node at either a socket or a communicator.";
             return;
         }
 
-        d->emitter.setData(d->communicator);
+        QVariant v = d->receiver_data.variant();
 
-        int tag = 0;
+        qint32 tag = 0;
         if (!d->receiver_tag.isEmpty())
             tag = d->receiver_tag.data();
 
         qlonglong target = d->receiver_target.data();
+
+        if (d->receiver_comm.isEmpty()) {
+            d->socket = d->receiver_socket.constData();
+            d->communicator = NULL;
+            //FIXME: we need the jobid
+            dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, target, v);
+            msg->addHeader("Tag",QString::number(tag));
+            msg->send(d->socket);
+        } else {
+            //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
+            d->communicator = d->receiver_comm.constData();
+            d->socket = NULL;
+            // FIXME: [migration] handle variant in send (should be ok with new distributed layer
+            // d->communicator->send(v, target , tag);
+        }
+
+
+        d->emitter.setData(true);
+
         dtkTrace() << "send to target: " << target ;
-        // FIXME: [migration] handle variant in send (should be ok with new distributed layer
-        // d->communicator->send(v, target , tag);
 
     } else {
         dtkWarn() << "Inputs not specified in Send node. Nothing is done"  ;
@@ -315,14 +336,15 @@ public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_tag;
 
     dtkComposerTransmitterReceiver<dtkDistributedCommunicator*> receiver_comm;
+    dtkComposerTransmitterReceiver<QTcpSocket*> receiver_socket;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
     dtkComposerTransmitterReceiverVariant     receiver_data;
 
-
 public:
     qlonglong source;
     qlonglong tag;
+    QMap<qlonglong, dtkDistributedMessage *> msg_map;
 
 };
 
@@ -330,6 +352,7 @@ dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : d
 {
     d->receiver_comm.setDataTransmission(dtkComposerTransmitter::Reference);
     this->appendReceiver(&(d->receiver_comm));
+    this->appendReceiver(&(d->receiver_socket));
     this->appendReceiver(&(d->receiver_source));
     this->appendReceiver(&(d->receiver_tag));
     this->appendReceiver(&(d->receiver_data));
@@ -353,34 +376,32 @@ dtkComposerNodeCommunicatorReceive::~dtkComposerNodeCommunicatorReceive(void)
 void dtkComposerNodeCommunicatorReceive::run(void)
 {
 
-    if (!d->receiver_source.isEmpty() && !d->receiver_comm.isEmpty()) {
+    if (!d->receiver_source.isEmpty()) {
+
+
+        if (d->receiver_comm.isEmpty() && d->receiver_socket.isEmpty()) {
+            dtkError() << "Send node at either a socket or a communicator.";
+            return;
+        }
 
         d->source = d->receiver_source.data();
-        dtkDistributedCommunicator *communicator = NULL;
-        //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
-        // communicator = d->receiver.data();
 
         d->tag = 0;
         if (!d->receiver_tag.isEmpty())
             d->tag = d->receiver_tag.data();
-
-        if (!communicator) {
-            dtkError() << "Input communicator not valid.";
-            return;
-        }
 
         d->emitter.clearData();
         if (!d->receiver_data.isEmpty()) {
             d->emitter.setData(d->receiver_data.variant());
         }
 
-        if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
+        if (d->receiver_comm.isEmpty()) {
+            QTcpSocket *socket = d->receiver_socket.constData();
             dtkDebug() << "TCP communicator. Parse message from socket, waiting for tag" << d->tag;
-            QMap<qlonglong, dtkDistributedMessage *> *msg_map = tcp->msgBuffer();
-            if (msg_map->contains(d->tag)) {
+            if (d->msg_map.contains(d->tag)) {
                 dtkDebug() << "msg already received for tag" << d->tag;
                 // d->emitter.setTwinned(false);
-                dtkDistributedMessage *msg = msg_map->take(d->tag);
+                dtkDistributedMessage *msg = d->msg_map.take(d->tag);
                 d->emitter.setData(msg->content());
                 // d->emitter.setTwinned(true);
                 delete msg;
@@ -389,32 +410,34 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                 dtkTrace() << "msg not yet received, wait for data";
             }
 
-            tcp->socket()->blockSignals(true); // needed ?
+            socket->blockSignals(true); // needed ?
 
-            if (!tcp->socket()->waitForReadyRead(300000)) {
+            if (!socket->waitForReadyRead(300000)) {
                 dtkWarn() << "Data not ready in receive for rank " << d->source;
             } else {
-                dtkDistributedMessage *msg = tcp->socket()->parseRequest();
-                int msg_tag = msg->header("Tag").toInt();
+                dtkDistributedMessage msg;
+                msg.parse(socket);
+                qlonglong msg_tag = msg.header("Tag").toLongLong();
                 if (msg_tag == d->tag || d->tag == dtkDistributedCommunicator::ANY_TAG) {
                     dtkTrace() << "OK, this is the expected tag " << d->tag;
                     // d->emitter.setTwinned(false);
-                    d->emitter.setData(msg->content());
+                    d->emitter.setData(msg.content());
                     // d->emitter.setTwinned(true);
-                    delete msg;
                     if (d->tag == dtkDistributedCommunicator::ANY_TAG)
                         d->tag = msg_tag;
                 } else {
                     //store msg for another call with the right tag
                     dtkInfo() << "Msg received, but wrong tag, store the msg" << d->tag << msg_tag;
-                    msg_map->insert(msg_tag,msg);
+                    d->msg_map.insert(msg_tag, &msg);
                     this->run(); // do it again
                 }
             }
-            tcp->socket()->blockSignals(false); // needed ?
+            socket->blockSignals(false); // needed ?
         } else { // MPI
             QByteArray array;
             dtkDistributedCommunicatorStatus status;
+            dtkDistributedCommunicator *communicator = d->receiver_comm.constData();
+            //FIXME:[migration] new transmitter requieres a clone method in object, even if dataTransmission is set to reference
             communicator->receive(array, d->source, d->tag, status);
 
             if (d->tag == dtkDistributedCommunicator::ANY_TAG)

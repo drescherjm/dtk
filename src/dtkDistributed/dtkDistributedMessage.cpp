@@ -33,6 +33,7 @@ public:
     qint64 size ;
     QString type;
     QByteArray content;
+    QVariant variant;
 };
 
 
@@ -61,6 +62,19 @@ dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, int r
     d->rank = rank;
     d->headers = headers;
     d->content = content;
+
+}
+
+dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, int rank, const QVariant  &v, const QHash<QString,QString>  &headers ) :  d(new dtkDistributedMessagePrivate)
+{
+    d->method = method;
+    d->jobid = jobid;
+    d->rank = rank;
+    d->headers = headers;
+    QDataStream stream(&d->content, QIODevice::WriteOnly);
+    stream << v;
+    d->size = d->content.size();
+    d->type = "qvariant";
 
 }
 
@@ -232,6 +246,14 @@ qint64  dtkDistributedMessage::size(void)
 QByteArray &dtkDistributedMessage::content(void)
 {
     return d->content;
+}
+
+QVariant &dtkDistributedMessage::variant(void)
+{
+    d->variant.clear();
+    QDataStream stream(&(d->content),QIODevice::ReadOnly);
+    stream >> d->variant;
+    return d->variant;
 }
 
 qlonglong dtkDistributedMessage::send(QTcpSocket *socket)

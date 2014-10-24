@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:25:39
- * Version: $Id$
- * Last-Updated: lun. déc.  9 18:36:09 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 509
  */
 
 /* Commentary:
@@ -19,11 +15,6 @@
 
 
 
-// #include <dtkCore/dtkAbstractDataFactory.h>
-// #include <dtkCore/dtkAbstractData.h>
-// #include <dtkCore/dtkAbstractProcessFactory.h>
-// #include <dtkCore/dtkAbstractProcess.h>
-
 #include "dtkComposer/dtkComposerEvaluator.h"
 #include "dtkComposer/dtkComposerEvaluatorSlave.h"
 #include "dtkComposer/dtkComposerNodeFactory.h"
@@ -34,11 +25,12 @@
 #include "dtkComposer/dtkComposerStack.h"
 #include "dtkComposer/dtkComposerNodeRemote.h"
 
-#include <dtkDistributedSupport/dtkDistributedCommunicator.h>
-#include <dtkDistributedSupport/dtkDistributedCommunicatorMpi.h>
-#include <dtkDistributedSupport/dtkDistributedCommunicatorTcp.h>
+#include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedMessage.h>
 
 #include <dtkLog/dtkLog.h>
+
+#include <iostream>
 
 class dtkComposerEvaluatorSlavePrivate
 {
@@ -46,7 +38,7 @@ public:
     dtkDistributedCommunicator *communicator_i;
 
 public:
-    dtkDistributedSocket *composition_socket;
+    QTcpSocket *composition_socket;
 
 public:
     dtkComposerScene     *scene;
@@ -151,11 +143,11 @@ int dtkComposerEvaluatorSlave::exec(void)
             if (this->isConnected()) {
                 if (!d->composition_socket) {
                     dtkDebug() << "open second socket to server" << d->server;
-                    d->composition_socket = new dtkDistributedSocket;
+                    d->composition_socket = new QTcpSocket;
                      d->composition_socket->connectToHost(d->server.host(), d->server.port());
                      if (d->composition_socket->waitForConnected()) {
                          msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(), dtkDistributedMessage::SLAVE_RANK ));
-                         d->composition_socket->sendRequest(msg.data());
+                         msg->send(d->composition_socket);
                      } else {
                          dtkError() << "Can't connect to server";
                          return 1;
@@ -164,9 +156,9 @@ int dtkComposerEvaluatorSlave::exec(void)
 
                 dtkDebug() << "connected, send our jobid to server" << this->jobId();
                 msg.reset(new dtkDistributedMessage(dtkDistributedMessage::SETRANK,this->jobId(),0));
-                this->communicator()->socket()->sendRequest(msg.data());
-                this->communicator()->flush();
-                this->communicator()->socket()->setParent(0);
+                msg->send(this->socket());
+                this->socket()->flush();
+                this->socket()->setParent(0);
             } else  {
                 dtkFatal() << "Can't connect to server" << d->server;
                 return 1;
@@ -185,7 +177,8 @@ int dtkComposerEvaluatorSlave::exec(void)
         } else
             dtkDebug() << "Ok, data received, parse" ;
 
-        msg.reset(d->composition_socket->parseRequest());
+        msg.reset();
+        msg->parse(d->composition_socket);
         if (msg->type() == "xml") {
             new_composition = true;
             composition = QString(msg->content());
@@ -228,7 +221,8 @@ int dtkComposerEvaluatorSlave::exec(void)
         }
         if (new_composition) {
             if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
-                this->communicator()->setProperty("jobid",this->jobId());
+                //FIXME: can we remove this ?
+                // this->communicator()->setProperty("jobid",this->jobId());
                 remote->setSlave(this);
                 remote->setJob(this->jobId());
                 remote->setCommunicator(d->communicator_i);
@@ -247,7 +241,7 @@ int dtkComposerEvaluatorSlave::exec(void)
         loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
         loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
 
-        this->communicator()->socket()->moveToThread(workerThread);
+        this->socket()->moveToThread(workerThread);
         workerThread->start();
 
         loop.exec();

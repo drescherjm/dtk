@@ -28,7 +28,7 @@
 
 #include <dtkLog/dtkLogger.h>
 
-#include <dtkDistributedSupport/dtkDistributedController.h>
+#include <dtkDistributed/dtkDistributedController.h>
 // #include <dtkDistributedSupport/dtkDistributedMimeData.h>
 
 // /////////////////////////////////////////////////////////////////

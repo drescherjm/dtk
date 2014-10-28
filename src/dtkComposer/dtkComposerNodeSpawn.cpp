@@ -16,23 +16,15 @@
 #include "dtkComposerNodeSpawn.h"
 #include "dtkComposerNodeSpawn_p.h"
 
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
-#include "dtkComposerTransmitterVariant.h"
+#include "dtkComposerTransmitter.h"
+#include "dtkComposerEvaluatorProcess.h"
 
-#include <dtkDistributed/dtkDistributedController.h>
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCommunicatorMpi.h>
+// #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkGlobal.h>
+// #include <dtkMath/dtkMath.h>
 
-#include <dtkJson>
-
-#include <dtkMath/dtkMath.h>
-
-#include <dtkLog/dtkLog.h>
+#include <dtkLog>
 
 
 // /////////////////////////////////////////////////////////////////
@@ -62,7 +54,6 @@ dtkComposerNodeSpawn::dtkComposerNodeSpawn(void) : dtkComposerNodeRemote(),  d(n
     d->communicator = NULL;
     d->rank = -1;
     d->np   = -1;
-    d->rank_emitter.setData(&d->rank);
 
     d->application = "dtkComposerEvaluator";
 }
@@ -123,19 +114,22 @@ void dtkComposerNodeSpawn::begin(void)
             d->np =  QThread::idealThreadCount();
             dtkInfo() << "Set number of spawned proceses to" << d->np;
         } else {
-            d->np = *d->size_receiver.data();
+            d->np = d->size_receiver.data();
         }
-
-        d->communicator = new dtkDistributedCommunicatorMpi;
-        d->internal_comm = d->communicator->spawn(d->application, d->np);
+        d->policy.setNThreads(d->np);
+        // FIXME: don't use hardcoded plugin name
+        d->policy.setType("qthreads");
+        d->manager.setPolicy(&d->policy);
+        d->internal_comm = d->policy.communicator();
         d->interval_comm_emitter.setData(d->internal_comm);
         d->rank = d->internal_comm->rank();
-
+        d->rank_emitter.setData(d->rank);
 
         if (!d->internal_comm) {
             dtkError() << "NULL internal communicator, spawn has failed !";
             return;
         }
+        d->manager.spawn();
 
     } else {
         dtkTrace() << "communicator exists,  no spawn";
@@ -153,16 +147,19 @@ void dtkComposerNodeSpawn::begin(void)
             d->last_sent_hash=d->current_hash;
         } else {
             dtkDebug() << "composition hash hasn't changed, send 'not-modified' to slave";
-            QByteArray data = QString("not-modified").toAscii();
+            QByteArray data = QString("not-modified").toUtf8();
             d->communicator->broadcast(data,  rank);
         }
 
         // then send transmitters data
         int max  = dtkComposerNodeComposite::receivers().count();
         for (int i = first_transmitter; i < max; i++) {
-            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
+            dtkComposerTransmitterReceiverVariant *t = dynamic_cast<dtkComposerTransmitterReceiverVariant *>(dtkComposerNodeComposite::receivers().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
-            QByteArray array = t->dataToByteArray();
+            QByteArray array;
+            QDataStream stream(&array, QIODevice::WriteOnly);
+            stream << t->variant();
+
             dtkDebug() << "sending transmitter" << i << "of size" << array.size();
             d->communicator->broadcast(array, rank);
         }
@@ -179,13 +176,17 @@ void dtkComposerNodeSpawn::begin(void)
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
         for (int i = first_transmitter; i < max; i++) {
-            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
-            QByteArray array ;
+            dtkComposerTransmitterReceiverVariant *t = dynamic_cast<dtkComposerTransmitterReceiverVariant *>(dtkComposerNodeComposite::receivers().at(i));
+            QByteArray array;
             qint16 parent_rank = 0;
             d->communicator->broadcast(array, parent_rank);
-            t->setTwinned(false);
-            t->setDataFrom(array);
-            t->setTwinned(true);
+            // t->setTwinned(false);
+            QDataStream stream(&array, QIODevice::ReadOnly);
+            QVariant variant;
+            stream >> variant;
+            // FIXME : how can we set data ?
+            // t->setVariant(variant);
+            // t->setTwinned(true);
         }
     } else {
         dtkError() << "No communicator on spawned node: can't run begin node";
@@ -199,14 +200,20 @@ void dtkComposerNodeSpawn::end(void)
         dtkDebug() << "running node remote end statement on controller";
         int max  = this->emitters().count();
         for (int i = 1; i < max; i++) {
-            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
+            dtkComposerTransmitterEmitterVariant *t = dynamic_cast<dtkComposerTransmitterEmitterVariant *>(this->emitters().at(i));
 
             QByteArray array;
             d->communicator->receive(array, dtkDistributedCommunicator::ANY_SOURCE, tag);
 
-            t->setTwinned(false);
-            t->setDataFrom(array);
-            t->setTwinned(true);
+            QDataStream stream(&array, QIODevice::ReadOnly);
+            QVariant variant;
+            stream >> variant;
+            // FIXME : how can we set data ?
+            // t->setVariant(variant);
+
+            // t->setTwinned(false);
+//            t->setDataFrom(array);
+            // t->setTwinned(true);
         }
     } else if (d->communicator) {
         // running on the slave, send data and set transmitters
@@ -216,11 +223,13 @@ void dtkComposerNodeSpawn::end(void)
         qint16 parent_rank = 0;
 
         for (int i = 1; i < max; i++) {
-            dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
+            dtkComposerTransmitterEmitterVariant *t = dynamic_cast<dtkComposerTransmitterEmitterVariant *>(this->emitters().at(i));
             if (d->communicator->rank() == 0) {
                 dtkDebug() << "end, send transmitter data (we are rank 0)";
 
-                QByteArray array = t->dataToByteArray();
+                QByteArray array;
+                QDataStream stream(&array, QIODevice::WriteOnly);
+                stream << t->variant();
 
                 if (!array.isEmpty()) {
                     d->communicator->send(array, parent_rank, tag);

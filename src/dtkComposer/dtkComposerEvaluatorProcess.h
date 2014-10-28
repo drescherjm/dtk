@@ -13,17 +13,19 @@
  *
  */
 
-#ifndef DTKCOMPOSEREVALUATORPROCESS_H
-#define DTKCOMPOSEREVALUATORPROCESS_H
+#pragma once
 
 #include "dtkComposerExport.h"
+
+#include <dtkDistributed/dtkDistributedWork.h>
+
 #include <QtCore>
 
-class dtkComposerFactory;
+class dtkComposerNodeFactory;
 class dtkDistributedCommunicator;
 class dtkComposerEvaluatorProcessPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluatorProcess : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerEvaluatorProcess : public dtkDistributedWork
 {
     Q_OBJECT
 
@@ -32,18 +34,17 @@ public:
     ~dtkComposerEvaluatorProcess(void);
 
 public:
+    dtkComposerEvaluatorProcess *clone(void);
+
+public:
     void setApplication(QString app);
-    void setFactory(dtkComposerFactory *factory);
+    void setFactory(dtkComposerNodeFactory *factory);
     void setInternalCommunicator(dtkDistributedCommunicator *communicator);
     void setParentCommunicator(dtkDistributedCommunicator *communicator);
 
 public:
-    int exec(void);
+    int run(void);
 
 private:
     dtkComposerEvaluatorProcessPrivate *d;
 };
-
-
-#endif /* DTKCOMPOSEREVALUATORPROCESS_H */
-

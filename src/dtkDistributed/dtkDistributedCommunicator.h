@@ -34,9 +34,12 @@ public:
     virtual ~dtkDistributedCommunicator(void);
 
 public:
+    // use the same value as defined in mpi.h from openmpi
     static const qint32 ANY_TAG    = -1;
     static const qint32 BCAST_TAG  = -7;
     static const qint32 ANY_SOURCE = -1;
+    static const qint16 ROOT       = -4;
+    static const qint16 PROC_NULL  = -2;
 
     enum DataType {
         Bool,

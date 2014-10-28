@@ -34,6 +34,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
   dtkComposerEvaluator_p.h
+  dtkComposerEvaluatorProcess.h
   dtkComposerEvaluatorSlave.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h
@@ -50,7 +51,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphView.h
   dtkComposerMetaType.h
   dtkComposerNode.h
-#  dtkComposerNodeDistributed.h
+  dtkComposerNodeDistributed.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
   dtkComposerNodeBoolean.h
@@ -79,6 +80,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeProxy.h
   dtkComposerNodeReal.h
   dtkComposerNodeRemote.h
+  dtkComposerNodeSpawn.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
   dtkComposerPath.h
@@ -132,6 +134,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerControlsListItemReal.cpp
   dtkComposerControlsListItemString.cpp
   dtkComposerEvaluator.cpp
+  dtkComposerEvaluatorProcess.cpp
   dtkComposerEvaluatorSlave.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
@@ -160,7 +163,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlForEach.cpp
   dtkComposerNodeControlMap.cpp
   dtkComposerNodeControlWhile.cpp
-#  dtkComposerNodeDistributed.cpp
+  dtkComposerNodeDistributed.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
@@ -174,6 +177,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeProxy.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeRemote.cpp
+  dtkComposerNodeSpawn.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
   dtkComposerPath.cpp

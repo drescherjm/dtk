@@ -302,6 +302,7 @@ void dtkComposerNodeCommunicatorSend::run(void)
             d->socket = d->receiver_socket.constData();
             d->communicator = NULL;
             //FIXME: we need the jobid
+            QString jobid;
             dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, target, v);
             msg->addHeader("Tag",QString::number(tag));
             msg->send(d->socket);

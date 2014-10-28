@@ -13,6 +13,8 @@
  *
  */
 
+#pragma once
+
 #include "dtkComposerExport.h"
 
 #include "dtkComposerNodeComposite.h"

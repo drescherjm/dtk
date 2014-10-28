@@ -15,13 +15,13 @@
 
 #include "dtkComposer/dtkComposerEvaluator.h"
 #include "dtkComposer/dtkComposerEvaluatorProcess.h"
-#include "dtkComposer/dtkComposerFactory.h"
 #include "dtkComposer/dtkComposerGraph.h"
+#include "dtkComposer/dtkComposerNodeFactory.h"
+#include "dtkComposer/dtkComposerNodeSpawn.h"
 #include "dtkComposer/dtkComposerReader.h"
 #include "dtkComposer/dtkComposerScene.h"
 #include "dtkComposer/dtkComposerSceneNodeComposite.h"
 #include "dtkComposer/dtkComposerStack.h"
-#include "dtkComposer/dtkComposerNodeSpawn.h"
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
@@ -40,13 +40,13 @@ public:
     dtkComposerScene     *scene;
     dtkComposerStack     *stack;
     dtkComposerGraph     *graph;
-    dtkComposerFactory   *factory;
+    dtkComposerNodeFactory   *factory;
     dtkComposerReader    *reader;
     dtkComposerEvaluator *evaluator;
 
 };
 
-dtkComposerEvaluatorProcess::dtkComposerEvaluatorProcess(void) : QObject(), d(new dtkComposerEvaluatorProcessPrivate)
+dtkComposerEvaluatorProcess::dtkComposerEvaluatorProcess(void) : dtkDistributedWork(), d(new dtkComposerEvaluatorProcessPrivate)
 {
     d->scene     = new dtkComposerScene;
     d->stack     = new dtkComposerStack;
@@ -78,7 +78,12 @@ dtkComposerEvaluatorProcess::~dtkComposerEvaluatorProcess(void)
     d = NULL;
 }
 
-void dtkComposerEvaluatorProcess::setFactory(dtkComposerFactory *factory)
+dtkComposerEvaluatorProcess *dtkComposerEvaluatorProcess::clone(void)
+{
+    return new dtkComposerEvaluatorProcess (*this);
+}
+
+void dtkComposerEvaluatorProcess::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
     d->scene->setFactory(d->factory);
@@ -100,7 +105,7 @@ void dtkComposerEvaluatorProcess::setParentCommunicator(dtkDistributedCommunicat
     d->parent_comm = communicator;
 }
 
-int dtkComposerEvaluatorProcess::exec(void)
+int dtkComposerEvaluatorProcess::run(void)
 {
 
     if (!d->factory) {

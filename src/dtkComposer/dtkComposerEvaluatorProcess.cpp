@@ -17,7 +17,7 @@
 #include "dtkComposer/dtkComposerEvaluatorProcess.h"
 #include "dtkComposer/dtkComposerGraph.h"
 #include "dtkComposer/dtkComposerNodeFactory.h"
-#include "dtkComposer/dtkComposerNodeSpawn.h"
+// #include "dtkComposer/dtkComposerNodeSpawn.h"
 #include "dtkComposer/dtkComposerReader.h"
 #include "dtkComposer/dtkComposerScene.h"
 #include "dtkComposer/dtkComposerSceneNodeComposite.h"
@@ -35,6 +35,9 @@ public:
 
 public:
     QString application;
+
+public:
+    int status;
 
 public:
     dtkComposerScene     *scene;
@@ -55,6 +58,7 @@ dtkComposerEvaluatorProcess::dtkComposerEvaluatorProcess(void) : dtkDistributedW
     d->graph     = new dtkComposerGraph;
 
     d->factory   = NULL;
+    d->status    = 0;
 
     d->scene->setStack(d->stack);
     d->scene->setGraph(d->graph);
@@ -105,12 +109,20 @@ void dtkComposerEvaluatorProcess::setParentCommunicator(dtkDistributedCommunicat
     d->parent_comm = communicator;
 }
 
-int dtkComposerEvaluatorProcess::run(void)
+int dtkComposerEvaluatorProcess::exec(void)
+{
+    run();
+    return d->status;
+}
+
+void dtkComposerEvaluatorProcess::run(void)
 {
 
+    d->status = 0;
     if (!d->factory) {
         dtkFatal() << "No factory set ! abort process execution";
-        return 1;
+        d->status = 1;
+        return;
     }
 
     int rank = d->comm->rank();
@@ -134,25 +146,25 @@ int dtkComposerEvaluatorProcess::run(void)
 
     if (new_composition && composition.isEmpty()) {
         dtkFatal() << "Empty composition, abort" ;
-        return 1;
+        d->status = 1;
+        return;
     }
 
     if (new_composition) {
         dtkDebug() << "parse composition" ;
         d->reader->readString(composition);
 
-        if (dtkComposerNodeSpawn *spawn = dynamic_cast<dtkComposerNodeSpawn *>(d->scene->root()->nodes().first()->wrapee())) {
-            spawn->setCommunicator(d->parent_comm);
-            spawn->setInternalCommunicator(d->comm);
-            spawn->setApplication(d->application);
-        } else {
-            dtkFatal() <<  "Can't find spawn node in composition, abort";
-            return 1;
-        }
+        // if (dtkComposerNodeSpawn *spawn = dynamic_cast<dtkComposerNodeSpawn *>(d->scene->root()->nodes().first()->wrapee())) {
+        //     spawn->setCommunicator(d->parent_comm);
+        //     spawn->setInternalCommunicator(d->comm);
+        //     spawn->setApplication(d->application);
+        // } else {
+        //     dtkFatal() <<  "Can't find spawn node in composition, abort";
+        //     return 1;
+        // }
     }
     dtkDebug() << "run composition" ;
     d->evaluator->run();
     dtkDebug() << "finished" ;
 
-    return 0;
 }

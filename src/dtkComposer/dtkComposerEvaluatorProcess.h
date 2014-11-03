@@ -43,7 +43,8 @@ public:
     void setParentCommunicator(dtkDistributedCommunicator *communicator);
 
 public:
-    int run(void);
+    void run(void);
+    int exec(void);
 
 private:
     dtkComposerEvaluatorProcessPrivate *d;

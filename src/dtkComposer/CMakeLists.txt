@@ -80,7 +80,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeProxy.h
   dtkComposerNodeReal.h
   dtkComposerNodeRemote.h
-  dtkComposerNodeSpawn.h
+#  dtkComposerNodeSpawn.h
   dtkComposerNodeString.h
   dtkComposerNodeStringOperator.h
   dtkComposerPath.h
@@ -177,7 +177,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeProxy.cpp
   dtkComposerNodeReal.cpp
   dtkComposerNodeRemote.cpp
-  dtkComposerNodeSpawn.cpp
+#  dtkComposerNodeSpawn.cpp
   dtkComposerNodeString.cpp
   dtkComposerNodeStringOperator.cpp
   dtkComposerPath.cpp

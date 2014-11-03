@@ -91,10 +91,9 @@ qlonglong dtkDistributedWork::wid(void)
     return d->worker->wid() ;
 }
 
-int dtkDistributedWork::run(void)
+void dtkDistributedWork::run(void)
 {
     qDebug() << "should be implemented in sub classes";
-    return -1;
 }
 
 

@@ -40,7 +40,7 @@ dtkComposerNodeSpawn::dtkComposerNodeSpawn(void) : dtkComposerNodeRemote(),  d(n
     this->appendReceiver(&(d->size_receiver));
     this->setInputLabelHint("np", 0);
 
-    this->appendReceiver(&(d->interval_comm_emitter));
+    this->appendReceiver(&(d->internal_comm_emitter));
     this->setInputLabelHint("internal communicator", 1);
 
     this->appendReceiver(&(d->rank_emitter));
@@ -120,8 +120,9 @@ void dtkComposerNodeSpawn::begin(void)
         // FIXME: don't use hardcoded plugin name
         d->policy.setType("qthreads");
         d->manager.setPolicy(&d->policy);
-        d->internal_comm = d->policy.communicator();
-        d->interval_comm_emitter.setData(d->internal_comm);
+        d->communicator  = d->policy.communicator();
+        d->internal_comm = d->manager.spawn();
+        d->internal_comm_emitter.setData(d->internal_comm);
         d->rank = d->internal_comm->rank();
         d->rank_emitter.setData(d->rank);
 
@@ -129,7 +130,13 @@ void dtkComposerNodeSpawn::begin(void)
             dtkError() << "NULL internal communicator, spawn has failed !";
             return;
         }
-        d->manager.spawn();
+
+        dtkComposerEvaluatorProcess p;
+        p.setInternalCommunicator(d->internal_comm);
+        p.setParentCommunicator(comm);
+        p.setFactory(factory);
+
+        d->manager.exec(&p);
 
     } else {
         dtkTrace() << "communicator exists,  no spawn";
@@ -166,7 +173,7 @@ void dtkComposerNodeSpawn::begin(void)
     } else if (d->communicator) {
         if (d->rank < 0) {
             dtkDebug() << "get rank/size on slave";
-            d->interval_comm_emitter.setData(d->internal_comm);
+            d->internal_comm_emitter.setData(d->internal_comm);
             d->rank = d->internal_comm->rank();
             d->np = d->internal_comm->size();
             dtkDebug() << "rank/size"<< d->rank << d->np;

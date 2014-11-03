@@ -42,7 +42,7 @@ public:
     dtkDistributedPolicy policy;
 
 public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator *> interval_comm_emitter;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator *> internal_comm_emitter;
     dtkComposerTransmitterEmitter<dtkDistributedCommunicator *> communicator_emitter;
     dtkComposerTransmitterEmitter<qlonglong > rank_emitter;
     dtkComposerTransmitterReceiver<qlonglong > size_receiver;

@@ -39,7 +39,7 @@ public:
     virtual dtkDistributedWork* clone(void);
 
 public:
-    virtual int run(void);
+    virtual void run(void);
 
 public:
     void barrier(void);

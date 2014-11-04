@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Mar 21 10:41:02 2013 (+0100)
  * Version: 
- * Last-Updated: jeu. oct. 23 15:34:11 2014 (+0200)
+ * Last-Updated: mar. nov.  4 08:48:31 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 96
+ *     Update #: 97
  */
 
 /* Change Log:
@@ -83,7 +83,7 @@ public:
     inline int type(void) const;
 
 private:
-    void setTypeList(const TypeList& list) {;}
+    void setTypeList(const TypeList&) {;}
 
 private:
     using dtkComposerTransmitterReceiverBase::d;

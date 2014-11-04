@@ -206,6 +206,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->scene = NULL;
 
     d->loop_ports = new dtkComposerSceneNodeEditorList(this);
+    d->loop_ports->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     d->loop_ports->setVisible(false);
 
     d->add_loop_port = new QPushButton("+", this);
@@ -217,6 +218,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->rem_loop_port->setVisible(false);
 
     d->blocks = new dtkComposerSceneNodeEditorList(this);
+    d->blocks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     d->blocks->setVisible(false);
 
     d->add_block = new QPushButton("+", this);
@@ -517,6 +519,8 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         }
 
         if (!dynamic_cast<dtkComposerNodeControlIf *>(node->wrapee()) && !dynamic_cast<dtkComposerNodeControlCase *>(node->wrapee())) {
+            d->loop_ports->setVisible(true);
+
             d->add_loop_port->setEnabled(true);
             d->add_loop_port->setVisible(true);
             d->rem_loop_port->setEnabled(true);
@@ -524,8 +528,12 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         }
 
         if (dynamic_cast<dtkComposerNodeControlCase *>(node->wrapee())) {
+            d->blocks->setVisible(true);
+
             d->add_block->setEnabled(true);
+            d->add_block->setVisible(true);
             d->rem_block->setEnabled(true);
+            d->rem_block->setVisible(true);
         }
 
         d->add_input_port->setEnabled(true);
@@ -746,6 +754,7 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->rem_loop_port->setEnabled(false);
     d->rem_loop_port->setVisible(false);
 
+    d->blocks->clear();
     d->blocks->setVisible(false);
 
     d->add_block->setEnabled(false);

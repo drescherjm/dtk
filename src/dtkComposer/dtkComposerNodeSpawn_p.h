@@ -17,6 +17,9 @@
 
 #include "dtkComposerNodeRemote_p.h"
 
+#include <dtkDistributed/dtkDistributedWorkerManager.h>
+#include <dtkDistributed/dtkDistributedCommunicator.h>
+
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeSpawnPrivate interface
@@ -35,10 +38,12 @@ public:
 
 public:
     dtkDistributedCommunicator *internal_comm;
+    dtkDistributedWorkerManager manager;
+    dtkDistributedPolicy policy;
 
 public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator > interval_comm_emitter;
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator > communicator_emitter;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator *> internal_comm_emitter;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator *> communicator_emitter;
     dtkComposerTransmitterEmitter<qlonglong > rank_emitter;
     dtkComposerTransmitterReceiver<qlonglong > size_receiver;
 

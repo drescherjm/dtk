@@ -11,17 +11,16 @@
 /* Change log:
  *
  */
-#ifndef DTKCOMPOSERNODEREMOTE_H_P_
-#define DTKCOMPOSERNODEREMOTE_H_P_
+
+#pragma once
 
 #include <QtCore>
+#include <QtNetwork>
 
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
 class dtkDistributedController;
-class dtkDistributedCommunicator;
-class dtkDistributedCommunicatorTcp;
 class dtkDistributedSlave;
 
 // /////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@ public:
     dtkComposerTransmitterReceiver<QString> jobid_receiver;
 
 public:
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator* > communicator_emitter;
+    dtkComposerTransmitterEmitter<QTcpSocket* > socket_emitter;
 
 public:
     QDomDocument composition;
@@ -46,8 +45,8 @@ public:
     dtkDistributedController *controller;
 
 public:
+    QTcpSocket *socket;
     dtkDistributedCommunicator *communicator;
-    dtkDistributedCommunicatorTcp *server;
 
 public:
     dtkDistributedSlave *slave;
@@ -61,5 +60,3 @@ public:
     QString title;
 
 };
-
-#endif

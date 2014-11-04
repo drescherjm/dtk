@@ -34,9 +34,12 @@ public:
     virtual ~dtkDistributedCommunicator(void);
 
 public:
+    // use the same value as defined in mpi.h from openmpi
     static const qint32 ANY_TAG    = -1;
     static const qint32 BCAST_TAG  = -7;
     static const qint32 ANY_SOURCE = -1;
+    static const qint16 ROOT       = -4;
+    static const qint16 PROC_NULL  = -2;
 
     enum DataType {
         Bool,
@@ -98,6 +101,7 @@ public:
     virtual void send(char *data, qint64 size, qint32 target, qint32 tag);
     virtual void send(QByteArray& array, qint32 target, qint32 tag) = 0;
     virtual void send(const QVariant& v, qint32 target, qint32 tag);
+    virtual void send(const QString& s, qint32 target, qint32 tag);
 
 public:
     virtual void broadcast(qlonglong *data, qint64 size, qint32 source) = 0;
@@ -106,17 +110,18 @@ public:
     virtual void broadcast(QVariant& v, qint32 source) = 0;
 
 public:
-    virtual void receive(void *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;
+    virtual void receive(void   *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;
     virtual void receive(bool   *data, qint64 size, qint32 source, int tag);
     virtual void receive(int    *data, qint64 size, qint32 source, int tag);
     virtual void receive(long   *data, qint64 size, qint32 source, int tag);
     virtual void receive(qint64 *data, qint64 size, qint32 source, int tag);
     virtual void receive(float  *data, qint64 size, qint32 source, int tag);
     virtual void receive(double *data, qint64 size, qint32 source, int tag);
-    virtual void receive(char *data, qint64 size, qint32 source, qint32 tag);
-    virtual void receive(QByteArray &v,  qint32 source, qint32 tag) = 0 ;
-    virtual void receive(QByteArray &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
+    virtual void receive(char   *data, qint64 size, qint32 source, qint32 tag);
+    virtual void receive(QByteArray &v,qint32 source, qint32 tag) = 0 ;
+    virtual void receive(QByteArray &v,qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
     virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
+    virtual void receive(QString &s,   qint32 source, qint32 tag) ;
     /* virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0; */
 
 public:
@@ -138,6 +143,7 @@ public:
 
 public:
     virtual qint32  wid(void);
+    inline  qint32 rank(void) {return wid();};
     virtual qint32 size(void);
 
 public:

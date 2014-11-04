@@ -3,10 +3,6 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/06 14:23:58
- * Version: $Id$
- * Last-Updated: mer. mars 27 17:07:35 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 35
  */
 
 /* Commentary:
@@ -17,14 +13,14 @@
  *
  */
 
-#ifndef DTKCOMPOSEREVALUATORSLAVE_H
-#define DTKCOMPOSEREVALUATORSLAVE_H
+#pragma once
 
 #include "dtkComposerExport.h"
 
-#include <dtkDistributedSupport/dtkDistributedSlave.h>
+#include <dtkDistributed/dtkDistributedSlave.h>
 
 class dtkComposerNodeFactory;
+class dtkDistributedCommunicator;
 class dtkComposerEvaluatorSlavePrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave
@@ -46,7 +42,4 @@ public:
 private:
     dtkComposerEvaluatorSlavePrivate *d;
 };
-
-
-#endif /* DTKCOMPOSEREVALUATORLAVE_H */
 

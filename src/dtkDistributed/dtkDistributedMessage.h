@@ -48,6 +48,7 @@ public:
 
              dtkDistributedMessage(void);
              dtkDistributedMessage(Method method, QString jobid="", int rank= SERVER_RANK,qint64 size=0, QString type ="json",  const QByteArray  &content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
+             dtkDistributedMessage(Method method, QString jobid, int rank, const QVariant  &v, const dtkDistributedHeaders &headers= dtkDistributedHeaders());
     virtual ~dtkDistributedMessage(void);
 
 public:
@@ -74,6 +75,7 @@ public:
     QString        type(void);
     qint64         size(void);
     QByteArray &content(void);
+    QVariant   &variant(void);
 
 public:
     dtkDistributedHeaders headers();

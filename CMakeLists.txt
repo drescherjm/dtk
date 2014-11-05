@@ -94,6 +94,7 @@ enable_testing()
 ## Options
 ## #################################################################
 
+option(DTK_BUILD_COMPOSER           "Build composer layer" false)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)

@@ -18,6 +18,8 @@
 
 // ///////////////////////////////////////////////////////////////////
 
+class dtkMetaTypeTestCasePrivate;
+
 class dtkMetaTypeTestCase : public QObject
 {
     Q_OBJECT
@@ -32,10 +34,14 @@ private slots:
 
 private slots:
     void testVariantFromValue(void);
+    void testClone(void);
 
 private slots:
     void cleanupTestCase(void);
     void cleanup(void);
+
+private:
+    dtkMetaTypeTestCasePrivate *d;
 };
 
 //

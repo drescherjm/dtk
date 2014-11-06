@@ -161,13 +161,29 @@ Q_DECLARE_METATYPE(VirtualObject *);
 
 // ///////////////////////////////////////////////////////////////////
 
-class DeriveVirtualObject : public VirtualObject 
+class VirtualObject2 : public VirtualObject 
 {
     Q_OBJECT
 
 public:
-     DeriveVirtualObject(void) : VirtualObject(), m_id(-1), m_name(QString()) {;}
-     DeriveVirtualObject(const DeriveVirtualObject& other) : VirtualObject(), m_id(other.m_id), m_name(other.m_name) {;}
+             VirtualObject2(void) {;}
+    virtual ~VirtualObject2(void) {;}
+
+public:
+    virtual QString identifier(void) { return "VirtualObject2"; }
+};
+
+Q_DECLARE_METATYPE(VirtualObject2 *);
+
+// ///////////////////////////////////////////////////////////////////
+
+class DeriveVirtualObject : public VirtualObject2
+{
+    Q_OBJECT
+
+public:
+     DeriveVirtualObject(void) : VirtualObject2(), m_id(-1), m_name(QString()) {;}
+     DeriveVirtualObject(const DeriveVirtualObject& other) : VirtualObject2(), m_id(other.m_id), m_name(other.m_name) {;}
     ~DeriveVirtualObject(void) {;}
 
 public:
@@ -186,11 +202,37 @@ private:
 Q_DECLARE_METATYPE(DeriveVirtualObject);
 Q_DECLARE_METATYPE(DeriveVirtualObject *);
 
+VirtualObject *toto(VirtualObject2* from)
+{
+    qDebug() << Q_FUNC_INFO;
+    return from;
+}
+
 // ///////////////////////////////////////////////////////////////////
-// 
+// dtkMetaTypeTestCasePrivate
 // ///////////////////////////////////////////////////////////////////
 
-dtkMetaTypeTestCase::dtkMetaTypeTestCase(void)
+class dtkMetaTypeTestCasePrivate
+{
+public:
+    dtkMetaTypeTestCasePrivate(void) : count(0), data(0), derive_data(0), abstract(0), virtual_object(0), virtual_object2(0) {;}
+    ~dtkMetaTypeTestCasePrivate(void) {;}
+
+public:
+    int count;
+
+    Data *data;
+    DeriveData *derive_data;
+    MyAbstract *abstract;
+    VirtualObject *virtual_object;
+    VirtualObject2 *virtual_object2;
+};
+
+// ///////////////////////////////////////////////////////////////////
+// dtkMetaTypeTestCase implementation
+// ///////////////////////////////////////////////////////////////////
+
+dtkMetaTypeTestCase::dtkMetaTypeTestCase(void) : QObject(), d(new dtkMetaTypeTestCasePrivate)
 {
     // Register debug operators
     QMetaType::registerDebugStreamOperator<Data>();
@@ -215,12 +257,34 @@ void dtkMetaTypeTestCase::initTestCase(void)
 
 void dtkMetaTypeTestCase::init(void)
 {
+    d->count = 0;
 
+    d->data = new Data(d->count ++, "PData");
+
+    d->derive_data = new DeriveData();
+    d->derive_data->setId(d->count++);
+    d->derive_data->setName("PDeriveData");
+
+    d->abstract = new DeriveMyAbstract();
+    d->abstract->setName("PDeriveMyAbstract");
+    d->abstract->setId(d->count++);
+
+    d->virtual_object = new DeriveVirtualObject();
+    d->virtual_object->setName("PDeriveVirtualObject");
+    d->virtual_object->setId(d->count++);
+
+    d->virtual_object2 = new DeriveVirtualObject();
+    d->virtual_object2->setName("PDeriveVirtualObject2");
+    d->virtual_object2->setId(d->count++);
 }
 
 void dtkMetaTypeTestCase::cleanup(void)
 {
-
+    delete d->data;
+    delete d->derive_data;
+    delete d->abstract;
+    delete d->virtual_object;
+    delete d->virtual_object2;
 }
 
 void dtkMetaTypeTestCase::cleanupTestCase(void)
@@ -230,11 +294,9 @@ void dtkMetaTypeTestCase::cleanupTestCase(void)
 
 void dtkMetaTypeTestCase::testVariantFromValue(void)
 {
-    int count = 0;
-
     // Non QObject Data
     {
-        Data d0(count ++, "Non Object Data");
+        Data d0 = *d->data;
         QVariant v_d0 = dtkMetaType::variantFromValue(d0);
         QVERIFY(v_d0.isValid());
         QCOMPARE(v_d0.typeName(), "Data");
@@ -243,15 +305,13 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
 
     // Non QObject Data pointer
     {
-        Data *d0 = new Data(count ++, "PData");
+        Data *d0 = d->data;
         QVariant v_d0 = dtkMetaType::variantFromValue(d0);
         QVERIFY(v_d0.isValid());
         QCOMPARE(v_d0.typeName(), "Data*");
         QCOMPARE(*(v_d0.value<Data*>()), *d0);
 
-        DeriveData *dd0 = new DeriveData();
-        dd0->setId(count++);
-        dd0->setName("PDeriveData");
+        DeriveData *dd0 = d->derive_data;
         QVariant v_dd0 = dtkMetaType::variantFromValue(dd0);
         QVERIFY(v_dd0.isValid());
         QCOMPARE(v_dd0.typeName(), "DeriveData*");
@@ -266,16 +326,11 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
 
         Data *d2 = v_dd0.value<Data*>();
         QCOMPARE(*d1, *d2);
-
-        delete d0;
-        delete dd0;
     }
 
     // Non QObject Abstract class
     {
-        MyAbstract *a0 = new DeriveMyAbstract();
-        a0->setName("PDeriveMyAbstract");
-        a0->setId(count++);
+        MyAbstract *a0 = d->abstract;
 
         QVariant v_a0 = dtkMetaType::variantFromValue(a0);
         QVERIFY(v_a0.isValid());
@@ -291,14 +346,11 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
         QVERIFY(v_b0.canConvert(v_a0.userType()));
         QVERIFY(v_b0.convert(v_a0.userType()));
 
-        delete a0;
     }
 
     // QObject Abstract class
     {
-        VirtualObject *a0 = new DeriveVirtualObject();
-        a0->setName("PDeriveVirtualObject");
-        a0->setId(count++);
+        VirtualObject *a0 = d->virtual_object;
 
         // Since DeriveVirtualObject has not been registered at
         // runtime, the resulting variant is of type VirtualObject*.
@@ -317,8 +369,19 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
         QCOMPARE(w_a0.typeName(), "DeriveVirtualObject*");
         QCOMPARE(*(w_a0.value<VirtualObject*>()), *a0);
 
-        delete a0;
+
+        // QMetaType::registerConverter<VirtualObject2*, VirtualObject*>(toto);
+
+        // VirtualObject2 *b1 = d->virtual_object2;
+        // QVariant vv_b1 = QVariant::fromValue(b1);
+        // QVERIFY(vv_b1.canConvert(qMetaTypeId<VirtualObject*>()));
+        // QVERIFY(vv_b1.convert(qMetaTypeId<VirtualObject*>()));
     }
+}
+
+void dtkMetaTypeTestCase::testClone(void)
+{
+    
 }
 
 DTKTEST_MAIN_NOGUI(dtkMetaTypeTest, dtkMetaTypeTestCase)

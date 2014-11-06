@@ -87,15 +87,17 @@ template<typename T> inline T *dtkMetaTypeHandler<T *, true>::clone(T *t)
 
 template<typename T> inline bool dtkMetaTypeHandlerHelper<T *, false>::canConvert(const QList<int>& types)
 {
-    if ((types.size() == 1 && types.first() == qMetaTypeId<T *>()) || types.isEmpty())
+    int from = qMetaTypeId<T *>();
+
+    if ((types.size() == 1 && types.first() == from) || types.isEmpty())
         return true;
 
     bool can_convert = true;
     T *ptr = new T();
-    QVariant var = dtkMetaTypeHandler<T *>::variantFromValue(ptr);
+    QVariant var = QVariant::fromValue(ptr);
 
-    foreach(int i, types) {
-        if (!var.canConvert(i)) {
+    foreach(int to, types) {
+        if (!(var.canConvert(to) || QMetaType::hasRegisteredConverterFunction(from, to))) {
             can_convert = false;
             break;
         }
@@ -115,7 +117,15 @@ template<typename T> inline T *dtkMetaTypeHandlerHelper<T *, false>::clone(T *t)
 
 template<typename T> inline bool dtkMetaTypeHandlerHelper<T *, true>::canConvert(const QList<int>& types)
 {
-    return ((types.size() == 1 && types.first() == qMetaTypeId<T *>()) || types.isEmpty());
+    if ((types.size() == 1 && types.first() == qMetaTypeId<T *>()) || types.isEmpty())
+        return true;
+
+    int from = qMetaTypeId<T *>();
+    foreach(int to, types) {
+        if (!QMetaType::hasRegisteredConverterFunction(from, to))
+            return false;
+    }
+    return true;
 }
 
 template<typename T> inline T *dtkMetaTypeHandlerHelper<T *, true>::clone(T *t)

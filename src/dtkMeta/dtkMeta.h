@@ -42,7 +42,7 @@ template<typename T> struct dtkMetaTypeHandler<T *, true>
     static T *clone(T *t);
 };
 
-template< typename T, bool > struct dtkMetaTypeHandlerHelper;
+template< typename T, bool = std::is_abstract<T>::value> struct dtkMetaTypeHandlerHelper;
 
 template< typename T> struct dtkMetaTypeHandlerHelper<T *, false>
 {

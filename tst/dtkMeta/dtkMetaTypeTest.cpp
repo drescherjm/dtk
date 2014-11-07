@@ -63,7 +63,25 @@ QDebug operator << (QDebug dbg, Data *data)
     dbg.nospace() << "Data(" << data->id() << ", " << data->name() << ")"; return dbg.space();
 }
 
-class DeriveData : public Data {};
+class DeriveData : public Data
+{
+public:
+    DeriveData(void) : Data(), m_value(0) {;}
+    DeriveData(const int& id, const QString& name, double value = 0) : Data(id, name), m_value(value) {;}
+    DeriveData(const DeriveData& o) : Data(o), m_value(o.m_value) {;}
+
+public:
+    bool operator == (const DeriveData& o) const { if (m_value != o.m_value) return false; return (static_cast<const Data&>(*this) == static_cast<const Data &>(o)); }
+
+public:
+    void setValue(double value) { m_value = value; }
+
+public:
+    double value(void) const { return m_value; }
+
+private:
+    double m_value;
+};
 
 Q_DECLARE_METATYPE(DeriveData);
 Q_DECLARE_METATYPE(DeriveData *);
@@ -261,9 +279,7 @@ void dtkMetaTypeTestCase::init(void)
 
     d->data = new Data(d->count ++, "PData");
 
-    d->derive_data = new DeriveData();
-    d->derive_data->setId(d->count++);
-    d->derive_data->setName("PDeriveData");
+    d->derive_data = new DeriveData(d->count++, "PDeriveData", 0.879);
 
     d->abstract = new DeriveMyAbstract();
     d->abstract->setName("PDeriveMyAbstract");
@@ -381,6 +397,32 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
 
 void dtkMetaTypeTestCase::testClone(void)
 {
+    // Non QObject Data pointer
+    {
+        Data *d0 = d->data;
+        Data *c0 = dtkMetaType::clone(d0);
+        QCOMPARE(*d0, *c0);
+
+        DeriveData *dd0 = d->derive_data;
+        DeriveData *cc0 = dtkMetaType::clone(dd0);
+        QCOMPARE(*dd0, *cc0);
+        
+        // When cloning from parent class, slicing occurs.
+        Data *d1 = dd0;
+        Data *c1 = dtkMetaType::clone(d1);
+        // The resulting copy is not a DeriveData object.
+        QVERIFY(!dynamic_cast<DeriveData*>(c1));
+    }
+
+    // Non QObject Abstract class
+    {
+        MyAbstract *a0 = d->abstract;
+        QVERIFY(dynamic_cast<DeriveMyAbstract*>(a0));
+
+        // Here again slicing occurs
+        MyAbstract *c0 = dtkMetaType::clone(a0);
+        QVERIFY(!dynamic_cast<DeriveMyAbstract*>(c0));
+    }
     
 }
 

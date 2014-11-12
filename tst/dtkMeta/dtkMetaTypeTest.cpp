@@ -259,8 +259,8 @@ dtkMetaTypeTestCase::dtkMetaTypeTestCase(void) : QObject(), d(new dtkMetaTypeTes
     QMetaType::registerDebugStreamOperator<VirtualObject*>();
 
     // Register converters
-    QMetaType::registerConverter<DeriveData*, Data*>();
-    QMetaType::registerConverter<DeriveMyAbstract*, MyAbstract*>();
+    //QMetaType::registerConverter<DeriveData*, Data*>();
+    //QMetaType::registerConverter<DeriveMyAbstract*, MyAbstract*>();
 }
 
 dtkMetaTypeTestCase::~dtkMetaTypeTestCase(void)
@@ -306,6 +306,40 @@ void dtkMetaTypeTestCase::cleanup(void)
 void dtkMetaTypeTestCase::cleanupTestCase(void)
 {
 
+}
+
+void dtkMetaTypeTestCase::testCanConvert(void)
+{
+    // Non QObject Data pointer
+    {
+        QVERIFY(!dtkMetaType::canConvert<Data*>(QMetaType::type("DeriveData*")));
+
+        QVERIFY(!dtkMetaType::canConvert<DeriveData*>(QMetaType::type("Data*")));
+        QMetaType::registerConverter<DeriveData*, Data*>();
+        QVERIFY(dtkMetaType::canConvert<DeriveData*>(QMetaType::type("Data*")));
+    }
+
+    // Non QObject Abstract class
+    {
+        QVERIFY(!dtkMetaType::canConvert<MyAbstract*>(QMetaType::type("DeriveMyAbstract*")));
+
+        QVERIFY(!dtkMetaType::canConvert<DeriveMyAbstract*>(QMetaType::type("MyAbstract*")));
+        QMetaType::registerConverter<DeriveMyAbstract*, MyAbstract*>();
+        QVERIFY(dtkMetaType::canConvert<DeriveMyAbstract*>(QMetaType::type("MyAbstract*")));
+    }
+
+    // QObject Abstract class
+    {
+        QVERIFY(dtkMetaType::canConvert<DeriveVirtualObject*>(QMetaType::type("VirtualObject*")));
+
+        QVERIFY(!dtkMetaType::canConvert<DeriveVirtualObject*>(QMetaType::type("VirtualObject2*")));
+        qRegisterMetaType<VirtualObject2*>();
+        QVERIFY(dtkMetaType::canConvert<DeriveVirtualObject*>(QMetaType::type("VirtualObject2*")));
+
+        QVERIFY(!dtkMetaType::canConvert<VirtualObject2*>(QMetaType::type("VirtualObject *")));
+        QMetaType::registerConverter<VirtualObject2*, VirtualObject*>();
+        QVERIFY(dtkMetaType::canConvert<VirtualObject2*>(QMetaType::type("VirtualObject*")));        
+    }
 }
 
 void dtkMetaTypeTestCase::testVariantFromValue(void)
@@ -368,30 +402,19 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
     {
         VirtualObject *a0 = d->virtual_object;
 
-        // Since DeriveVirtualObject has not been registered at
-        // runtime, the resulting variant is of type VirtualObject*.
+        // As DeriveVirtualObject* type has been registered, the
+        // created variant is of the lowest type even if it is created
+        // from the abstract class.
         QVariant v_a0 = dtkMetaType::variantFromValue(a0);
         QVERIFY(v_a0.isValid());
-        QCOMPARE(v_a0.typeName(), "VirtualObject*");
+        QCOMPARE(v_a0.typeName(), "DeriveVirtualObject*");
         QCOMPARE(*(v_a0.value<VirtualObject*>()), *a0);
 
-        // Now, let us register DeriveVirtualObject class
-        qRegisterMetaType<DeriveVirtualObject*>();
-
-        // It follows that the resulting variant is of the truly type
-        // DeriveVirtualObject*.
-        QVariant w_a0 = dtkMetaType::variantFromValue(a0);
-        QVERIFY(w_a0.isValid());
-        QCOMPARE(w_a0.typeName(), "DeriveVirtualObject*");
-        QCOMPARE(*(w_a0.value<VirtualObject*>()), *a0);
-
-
-        // QMetaType::registerConverter<VirtualObject2*, VirtualObject*>(toto);
-
-        // VirtualObject2 *b1 = d->virtual_object2;
-        // QVariant vv_b1 = QVariant::fromValue(b1);
-        // QVERIFY(vv_b1.canConvert(qMetaTypeId<VirtualObject*>()));
-        // QVERIFY(vv_b1.convert(qMetaTypeId<VirtualObject*>()));
+        VirtualObject2 *b1 = d->virtual_object2;
+        QVariant vv_b1 = QVariant::fromValue(b1);
+        QVERIFY(vv_b1.canConvert(qMetaTypeId<VirtualObject*>()));
+        QVERIFY(vv_b1.convert(qMetaTypeId<VirtualObject*>()));
+        QCOMPARE(*(vv_b1.value<VirtualObject*>()), *(dynamic_cast<VirtualObject*>(b1)));
     }
 }
 
@@ -423,7 +446,24 @@ void dtkMetaTypeTestCase::testClone(void)
         MyAbstract *c0 = dtkMetaType::clone(a0);
         QVERIFY(!dynamic_cast<DeriveMyAbstract*>(c0));
     }
-    
+
+    // QObject Abstract class
+    {
+        VirtualObject *a0 = d->virtual_object;
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(a0));
+
+        // To avoid slicing when copying, the deriveed class must be
+        // registered at runtime
+        qRegisterMetaType<DeriveVirtualObject>();
+        VirtualObject *c0 = dtkMetaType::clone(a0);
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(c0));
+        QCOMPARE(*c0, *a0);
+
+        VirtualObject2 *b1 = d->virtual_object2;
+        VirtualObject2 *c1 = dtkMetaType::clone(b1);
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(c1));
+        QCOMPARE(*c1, *b1);
+    }    
 }
 
 DTKTEST_MAIN_NOGUI(dtkMetaTypeTest, dtkMetaTypeTestCase)

@@ -75,8 +75,9 @@ template<typename T> inline T *dtkMetaTypeHandler<T *, true>::clone(T *t)
     QString class_name(t->metaObject()->className());
     int class_type = QMetaType::type(qPrintable(class_name));
 
-    if (class_type == QMetaType::UnknownType)
+    if (class_type == QMetaType::UnknownType) {
         return dtkMetaTypeHandlerHelper<T *, std::is_abstract<T>::value>::clone(t);
+    }
 
     return static_cast<T *>(QMetaType::create(class_type, t));
 }

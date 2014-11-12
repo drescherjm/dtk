@@ -33,6 +33,7 @@ private slots:
     void init(void);
 
 private slots:
+    void testCanConvert(void);
     void testVariantFromValue(void);
     void testClone(void);
 

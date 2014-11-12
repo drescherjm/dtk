@@ -121,7 +121,7 @@ void dtkComposerNodeSpawn::begin(void)
         d->policy.setType("qthreads");
         d->manager.setPolicy(&d->policy);
         d->communicator  = d->policy.communicator();
-        d->internal_comm = d->manager.spawn();
+        // d->internal_comm = d->manager.spawn();
         d->internal_comm_emitter.setData(d->internal_comm);
         d->rank = d->internal_comm->rank();
         d->rank_emitter.setData(d->rank);
@@ -133,8 +133,8 @@ void dtkComposerNodeSpawn::begin(void)
 
         dtkComposerEvaluatorProcess p;
         p.setInternalCommunicator(d->internal_comm);
-        p.setParentCommunicator(comm);
-        p.setFactory(factory);
+        // p.setParentCommunicator(comm);
+        // p.setFactory(factory);
 
         d->manager.exec(&p);
 

@@ -20,7 +20,7 @@
 #include "dtkCreatorMainWindow.h"
 #include "dtkCreatorMainWindow_p.h"
 
-#include <dtkDistributedSupport/dtkDistributor.h>
+// #include <dtkDistributedSupport/dtkDistributor.h>
 
 #include <dtkComposer/dtkComposer.h>
 #include <dtkComposer/dtkComposerWidget.h>
@@ -123,8 +123,8 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
 
     // -- to be encupsulated within distributed layer
 
-    d->distributor = new dtkDistributor(this);
-    d->distributor->setVisible(false);
+    // d->distributor = new dtkDistributor(this);
+    // d->distributor->setVisible(false);
 
     //
 
@@ -381,7 +381,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     dtkSplitter *left = new dtkSplitter(this);
     left->setOrientation(Qt::Vertical);
     left->addWidget(d->nodes);
-    left->addWidget(d->distributor);
+    // left->addWidget(d->distributor);
     left->addWidget(d->view_manager);
 
     dtkSplitter *right = new dtkSplitter(this);
@@ -633,7 +633,7 @@ void dtkCreatorMainWindow::switchToCompo(void)
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
-    d->distributor->setVisible(false);
+    // d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
@@ -661,7 +661,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     d->scene->setVisible(true);
     d->editor->setVisible(true);
     d->stack->setVisible(true);
-    d->distributor->setVisible(true);
+    // d->distributor->setVisible(true);
     d->view_manager->setVisible(false);
 
     d->graph->setVisible(false);
@@ -689,7 +689,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     d->scene->setVisible(false);
     d->editor->setVisible(false);
     d->stack->setVisible(false);
-    d->distributor->setVisible(false);
+    // d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
 
     d->graph->setVisible(true);
@@ -719,7 +719,7 @@ void dtkCreatorMainWindow::switchToView(void)
     d->scene->setVisible(false);
     d->editor->setVisible(false);
     d->stack->setVisible(false);
-    d->distributor->setVisible(false);
+    // d->distributor->setVisible(false);
     d->view_manager->setVisible(true);
 
     d->graph->setVisible(false);

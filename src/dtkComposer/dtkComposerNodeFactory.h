@@ -14,9 +14,11 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerNode.h"
 
-class dtkComposerNodeFactory : public dtkCorePluginFactory<dtkComposerNode>
+class DTKCOMPOSER_EXPORT dtkComposerNodeFactory : public dtkCorePluginFactory<dtkComposerNode>
 {
 public:
              dtkComposerNodeFactory(void);

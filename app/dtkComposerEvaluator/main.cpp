@@ -14,10 +14,10 @@
  */
 
 
-#include <dtkComposer>
-#include <dtkDistributed>
 
-#include <dtkCore/dtkCore.h>
+
+#include <dtkDistributed>
+#include <dtkComposer>
 
 #include <QtConcurrent>
 
@@ -51,8 +51,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    // dtkComposerNodeFactory *factory = new dtkComposerNodeFactory;
-    dtkComposerNodeFactory *factory;
+    dtkComposerNodeFactory *factory = new dtkComposerNodeFactory;
 
     if (args[1] == "--spawn") {
 

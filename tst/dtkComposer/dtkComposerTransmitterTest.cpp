@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: mar. nov.  4 22:39:51 2014 (+0100)
+ * Last-Updated: mer. nov. 12 12:27:56 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1076
+ *     Update #: 1077
  */
 
 /* Change Log:
@@ -314,7 +314,7 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
     r_var.disconnect(&e_str);    
 }
 
-void dtkComposerTransmitterTestCase::testComplexType(void)\
+void dtkComposerTransmitterTestCase::testComplexType(void)
 {
     int count = 0;
 

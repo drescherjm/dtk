@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. nov. 13 09:35:54 2014 (+0100)
+ * Last-Updated: jeu. nov. 13 10:22:47 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 265
+ *     Update #: 270
  */
 
 /* Commentary: 
@@ -168,6 +168,7 @@ void dtkComposerNodeControlFor::setVariables(void)
 	d->incr_emt.twin()->enableLoopMode();
 	d->var_first_it = false;
     }
+    d->incr_emt.twin()->setVariant(d->incr_emt.variant());
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)

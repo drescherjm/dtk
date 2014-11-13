@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Fri Mar 29 15:46:58 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  2 10:21:44 2013 (+0200)
+ * Last-Updated: jeu. nov. 13 09:21:11 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 47
+ *     Update #: 52
  */
 
 /* Change Log:
@@ -30,10 +30,15 @@ bool dtkComposerTransmitterProxyLoop::enableCopy(void)
 
 QVariant dtkComposerTransmitterProxyLoop::variant(void)
 {
-    if (m_source)	
+    if (m_source == d->active_emitter)	
 	return m_source->variant();
 
     return d->variant;
+}
+
+inline void dtkComposerTransmitterProxyLoop::setVariant(const QVariant& v)
+{
+    d->variant = v;
 }
 
 QVariantList dtkComposerTransmitterProxyLoop::allData(void)

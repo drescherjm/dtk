@@ -1,16 +1,18 @@
-/* dtkComposerTransmitterTest.cpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Mon Mar 25 11:36:34 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. nov. 13 09:22:52 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 1080
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
+
 
 #include "dtkComposerTransmitterTest.h"
 
@@ -551,6 +553,52 @@ void dtkComposerTransmitterTestCase::testProxyLoop(void)
     QCOMPARE(i, r_1.data());
 }
 
+void dtkComposerTransmitterTestCase::testSwapPointer(void)
+{
+    // VirtualObject data pointer
+    {
+        dtkComposerTransmitterEmitter<VirtualObject *>  e_data;
+        dtkComposerTransmitterReceiver<VirtualObject *> r_0;
+        dtkComposerTransmitterReceiver<VirtualObject *> r_1;
+        QVERIFY(r_0.connect(&e_data));
+        QVERIFY(r_1.connect(&e_data));	
+
+        DeriveVirtualObject *data_ed = new DeriveVirtualObject;
+        data_ed->setName("Derived Virtual Object");
+        data_ed->setId(1);
+
+        // Register DeriveVirtualObject class to perform cloning operation.
+        qMetaTypeId<DeriveVirtualObject>();
+        e_data.setData(data_ed);
+
+        VirtualObject *res_0 = r_0.data();
+        VirtualObject *res_1 = r_1.constData();
+
+        QVERIFY(res_0);
+        QVERIFY(res_1);
+
+        QCOMPARE(*res_0, *(static_cast<VirtualObject*>(data_ed)));
+        QCOMPARE(*res_1, *(static_cast<VirtualObject*>(data_ed)));
+
+        // Enforce swaping in receiver r_0;
+        e_data.setData(res_0);
+        VirtualObject *res_2 = r_0.data();
+        QVERIFY(res_2);
+        QVERIFY(res_2 != res_0);
+
+        // Check that the second swaping returns the first pointer
+        e_data.setData(res_2);
+        VirtualObject *res_3 = r_0.data();
+        QVERIFY(res_3);
+        QVERIFY(res_3 == res_0);        
+
+        QVERIFY(r_0.disconnect(&e_data));
+        QVERIFY(r_1.disconnect(&e_data));
+	
+        delete data_ed;
+    }    
+}
+
 void dtkComposerTransmitterTestCase::cleanupTestCase(void)
 {
 
@@ -558,9 +606,11 @@ void dtkComposerTransmitterTestCase::cleanupTestCase(void)
 
 void dtkComposerTransmitterTestCase::cleanup(void)
 {
-
 }
 
 DTKTEST_MAIN(dtkComposerTransmitterTest, dtkComposerTransmitterTestCase)
 
 #include "dtkComposerTransmitterTest.moc"
+
+// 
+// dtkComposerTransmitterTest.cpp ends here

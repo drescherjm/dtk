@@ -1,16 +1,18 @@
-/* dtkComposerTransmitterHandler.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 15:22:41 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. oct. 23 13:27:47 2014 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 114
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
+
 
 #pragma once
 
@@ -50,7 +52,7 @@ public:
     static inline T *constData(dtkComposerTransmitter& t);
 
 protected:
-    static T *copy(T * source, QVariant& target);
+    static T *copy(T * source, QVariant& target, QVariant& swap);
 };
 
 /* // ///////////////////////////////////////////////////////////////// */
@@ -80,3 +82,6 @@ protected:
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterHandler.tpp"
+
+// 
+// dtkComposerTransmitterHandler.h ends here

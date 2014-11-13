@@ -1,16 +1,18 @@
-/* dtkComposerTransmitter.cpp --- 
- * 
- * Author: Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 16:37:29 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
+
+
 
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitter_p.h"
@@ -111,7 +113,8 @@ bool dtkComposerTransmitter::required(void)
 
 void dtkComposerTransmitter::clearData(void)
 {
-    d->variant = QVariant(d->type_list.first(), 0);
+    d->variant.clear(); d->variant = QVariant(d->type_list.first(), 0);
+    d->swap.clear();    d->swap    = QVariant(d->type_list.first(), 0);
 }
 
 bool dtkComposerTransmitter::isEmpty(void) const
@@ -526,3 +529,6 @@ dtkComposerTransmitter *dtkComposerTransmitterLink::destination(void)
 {
     return d->destination;
 }
+
+// 
+// dtkComposerTransmitter.cpp ends here

@@ -1,20 +1,16 @@
-/* dtkComposerTransmitterEmitter.tpp --- 
- * 
- * Author: Thibaud Kloczko, Inria.
- * Created: Tue Feb 14 10:37:37 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Mar 29 15:37:14 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 402
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -90,3 +86,6 @@ template <typename T> bool dtkComposerTransmitterEmitter<T>::enableConnection(dt
 {
     return dtkComposerTransmitterHandler<T>::enableConnection(*transmitter);
 }
+
+// 
+// dtkComposerTransmitterEmitter.tpp ends here

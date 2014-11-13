@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterReceiver.tpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 13:53:01 2013 (+0100)
- * Version: 
- * Last-Updated: Fri Mar 29 14:16:31 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 210
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterHandler.h"
@@ -94,3 +95,5 @@ template <typename T> int dtkComposerTransmitterReceiver<T>::type(void) const
     return d->type_list.first();
 }
 
+// 
+// dtkComposerTransmitterReceiver.tpp ends here

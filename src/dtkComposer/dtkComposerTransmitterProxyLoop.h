@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterProxyLoop.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Fri Mar 29 14:54:14 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. nov. 13 09:19:44 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 45
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #pragma once
 
@@ -75,3 +76,6 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterProxyLoop.tpp"
+
+// 
+// dtkComposerTransmitterProxyLoop.h ends here

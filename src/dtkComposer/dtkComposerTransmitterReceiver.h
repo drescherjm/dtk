@@ -1,16 +1,16 @@
-/* dtkComposerTransmitterReceiver.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 10:41:02 2013 (+0100)
- * Version: 
- * Last-Updated: mar. nov.  4 08:48:31 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 97
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -94,3 +94,6 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterReceiver.tpp"
+
+// 
+// dtkComposerTransmitterReceiver.h ends here

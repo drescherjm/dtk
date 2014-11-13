@@ -1,21 +1,17 @@
-/* dtkComposerTransmitterProxy.cpp --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Feb 20 11:47:39 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Mar 29 15:34:40 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 65
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterProxy.h"
@@ -85,3 +81,6 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkCompo
 
     return link_map;
 }
+
+// 
+// dtkComposerTransmitterProxy.cpp ends here

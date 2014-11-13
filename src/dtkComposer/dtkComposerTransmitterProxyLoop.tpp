@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterProxyLoop.tpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Fri Mar 29 15:46:58 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. nov. 13 09:21:11 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 52
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #include "dtkComposerTransmitter_p.h"
 
@@ -68,3 +69,6 @@ dtkComposerTransmitterProxyLoop *dtkComposerTransmitterProxyLoop::twin(void) con
 {
     return m_twin;
 }
+
+// 
+// dtkComposerTransmitterProxyLoop.tpp ends here

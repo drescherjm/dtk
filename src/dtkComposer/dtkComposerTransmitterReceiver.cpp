@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterReceiver.cpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 17:01:02 2013 (+0100)
- * Version: 
- * Last-Updated: Fri Mar 29 15:38:43 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 203
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #include "dtkComposerTransmitter_p.h"
 #include "dtkComposerTransmitterReceiver.h"
@@ -99,3 +100,6 @@ dtkComposerTransmitterReceiverVariant::~dtkComposerTransmitterReceiverVariant(vo
 {
 
 }
+
+// 
+// dtkComposerTransmitterReceiver.cpp ends here

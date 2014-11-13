@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterEmitter.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 09:39:35 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. oct. 23 15:33:10 2014 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 100
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #pragma once
 
@@ -94,3 +95,5 @@ public:
 
 #include "dtkComposerTransmitterEmitter.tpp"
 
+// 
+// dtkComposerTransmitterEmitter.h ends here

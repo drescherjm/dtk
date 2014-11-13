@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  4 17:04:41 2013 (+0200)
+ * Last-Updated: jeu. nov. 13 09:35:54 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 258
+ *     Update #: 265
  */
 
 /* Commentary: 
@@ -143,7 +143,7 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
+    for(dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
 	t->disableLoopMode();
     }
     d->first_iteration = true;
@@ -152,10 +152,13 @@ void dtkComposerNodeControlFor::setInputs(void)
 void dtkComposerNodeControlFor::setOutputs(void)
 {
     if (d->first_iteration) {
-	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
+	for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
 	    t->twin()->enableLoopMode();
 	}
 	d->first_iteration = false;
+    }
+    for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+        t->twin()->setVariant(t->variant());
     }
 }
 

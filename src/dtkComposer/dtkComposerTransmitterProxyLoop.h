@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Fri Mar 29 14:54:14 2013 (+0100)
  * Version: 
- * Last-Updated: jeu. oct. 23 15:37:19 2014 (+0200)
+ * Last-Updated: jeu. nov. 13 09:19:44 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 44
+ *     Update #: 45
  */
 
 /* Change Log:
@@ -38,6 +38,7 @@ public:
 
 public:
     inline QVariant variant(void);
+    void setVariant(const QVariant&);
 
 public:
     inline QVariantList allData(void);

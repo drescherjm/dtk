@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Mon Mar 25 11:36:34 2013 (+0100)
  * Version: 
- * Last-Updated: mer. nov. 12 12:27:56 2014 (+0100)
+ * Last-Updated: jeu. nov. 13 09:22:52 2014 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 1077
+ *     Update #: 1080
  */
 
 /* Change Log:
@@ -542,7 +542,9 @@ void dtkComposerTransmitterTestCase::testProxyLoop(void)
 	qlonglong value = r_0.data();
 	value += 1;
 	e_1.setData(value);
-	p_0.enableLoopMode();
+        if (i == 0)
+            p_0.enableLoopMode();
+        p_0.setVariant(p_1.variant());
 	++i;
     }
 

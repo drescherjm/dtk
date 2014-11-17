@@ -20,7 +20,7 @@
 // dtkComposerTransmitterReceiverBase inline implementation
 // /////////////////////////////////////////////////////////////////
 
-bool dtkComposerTransmitterReceiverBase::enableCopy(void)
+inline bool dtkComposerTransmitterReceiverBase::enableCopy(void)
 {
     if (d->active_emitter)
         return d->active_emitter->enableCopy();
@@ -28,7 +28,7 @@ bool dtkComposerTransmitterReceiverBase::enableCopy(void)
     return false;
 }
 
-QVariant dtkComposerTransmitterReceiverBase::variant(void)
+inline QVariant dtkComposerTransmitterReceiverBase::variant(void)
 {
     if (d->active_emitter)
 	return d->active_emitter->variant();
@@ -36,7 +36,7 @@ QVariant dtkComposerTransmitterReceiverBase::variant(void)
     return d->variant;
 }
 
-QVariantList dtkComposerTransmitterReceiverBase::allData(void)
+inline QVariantList dtkComposerTransmitterReceiverBase::allData(void)
 {
     QVariantList list;
 
@@ -52,12 +52,12 @@ QVariantList dtkComposerTransmitterReceiverBase::allData(void)
 // dtkComposerTransmitterReceiverVariant template implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> T dtkComposerTransmitterReceiverVariant::data(void)
+template <typename T> inline T dtkComposerTransmitterReceiverVariant::data(void)
 {
     return dtkComposerTransmitterHandler<T>::data(*this);
 }
 
-template <typename T> T dtkComposerTransmitterReceiverVariant::constData(void)
+template <typename T> inline T dtkComposerTransmitterReceiverVariant::constData(void)
 {
     return dtkComposerTransmitterHandler<T>::constData(*this);
 }
@@ -70,29 +70,34 @@ template <typename T> T dtkComposerTransmitterReceiverVariant::constData(void)
 /*! 
  *  Initialize the type of the receiver and the variant that it contains.
  */
-template <typename T> dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
+template <typename T> inline dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
 {
     dtkComposerTransmitterHandler<T>::init(*this);
 }
 
-template <typename T> dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitterReceiver(void)
+template <typename T> inline dtkComposerTransmitterReceiver<T>::~dtkComposerTransmitterReceiver(void)
 {
 
 }
 
-template <typename T> T dtkComposerTransmitterReceiver<T>::data(void)
+template <typename T> inline T dtkComposerTransmitterReceiver<T>::data(void)
 {
     return dtkComposerTransmitterHandler<T>::data(*this);
 }
 
-template <typename T> T dtkComposerTransmitterReceiver<T>::constData(void)
+template <typename T> inline T dtkComposerTransmitterReceiver<T>::constData(void)
 {
     return dtkComposerTransmitterHandler<T>::constData(*this);
 }
 
-template <typename T> int dtkComposerTransmitterReceiver<T>::type(void) const
+template <typename T> inline int dtkComposerTransmitterReceiver<T>::type(void) const
 {
     return d->type_list.first();
+}
+
+template <typename T> inline void dtkComposerTransmitterReceiver<T>::setTypeList(const TypeList&) 
+{
+    // Forbiden method.
 }
 
 // 

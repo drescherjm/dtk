@@ -302,6 +302,23 @@ inline bool dtkMetaType::canGetMetaContainerFromVariant(const QVariant& v)
     return false;
 }
 
+// /////////////////////////////////////////////////////////////////
+// Specialization of dtkMetaTypeHandler for dtkMetaContainerSequential
+// /////////////////////////////////////////////////////////////////
+
+inline bool dtkMetaTypeHandler<dtkMetaContainerSequential>::canConvert(const QList<int>& types)
+{
+    int to = qMetaTypeId<dtkMetaContainerSequentialPrivate::handler>();
+
+    foreach(int from, types) {
+        if (!QMetaType::hasRegisteredConverterFunction(from, to)) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 //
 // dtkMetaContainerSequential.tpp ends here
 

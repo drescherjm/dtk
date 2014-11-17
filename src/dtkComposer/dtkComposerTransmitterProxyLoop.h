@@ -35,23 +35,23 @@ public:
     QString kindName(void) const;
 
 public:
-    inline bool enableCopy(void);
+    bool enableCopy(void);
 
 public:
-    inline QVariant variant(void);
+    QVariant variant(void);
     void setVariant(const QVariant&);
 
 public:
-    inline QVariantList allData(void);
+    QVariantList allData(void);
 
 public:
-    inline void  enableLoopMode(void);
-    inline void disableLoopMode(void);
+    void  enableLoopMode(void);
+    void disableLoopMode(void);
 
 public:
-    inline void setTwin(dtkComposerTransmitterProxyLoop *twin);
+    void setTwin(dtkComposerTransmitterProxyLoop *twin);
 
-    inline dtkComposerTransmitterProxyLoop *twin(void) const;
+    dtkComposerTransmitterProxyLoop *twin(void) const;
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);

@@ -31,6 +31,7 @@ private slots:
     void init(void);
 
 private slots:
+    void testConversion(void);
     void testQList(void);
     void testQVector(void);
     void testQVarLengthArray(void);

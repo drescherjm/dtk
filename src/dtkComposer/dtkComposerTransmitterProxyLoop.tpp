@@ -19,7 +19,7 @@
 // dtkComposerTransmitterProxyLoop inline implementations
 // ///////////////////////////////////////////////////////////////////
 
-bool dtkComposerTransmitterProxyLoop::enableCopy(void)
+inline bool dtkComposerTransmitterProxyLoop::enableCopy(void)
 {
     bool enable_copy = (d->receivers.count() > 1);
 
@@ -29,7 +29,7 @@ bool dtkComposerTransmitterProxyLoop::enableCopy(void)
     return enable_copy;
 }
 
-QVariant dtkComposerTransmitterProxyLoop::variant(void)
+inline QVariant dtkComposerTransmitterProxyLoop::variant(void)
 {
     if (m_source == d->active_emitter)	
 	return m_source->variant();
@@ -42,7 +42,7 @@ inline void dtkComposerTransmitterProxyLoop::setVariant(const QVariant& v)
     d->variant = v;
 }
 
-QVariantList dtkComposerTransmitterProxyLoop::allData(void)
+inline QVariantList dtkComposerTransmitterProxyLoop::allData(void)
 {
     if (m_source)
 	m_source->allData();
@@ -50,22 +50,22 @@ QVariantList dtkComposerTransmitterProxyLoop::allData(void)
     return QVariantList();
 }
 
-void dtkComposerTransmitterProxyLoop::enableLoopMode(void)
+inline void dtkComposerTransmitterProxyLoop::enableLoopMode(void)
 {
     m_source = static_cast<dtkComposerTransmitter *>(m_twin);
 }
 
-void dtkComposerTransmitterProxyLoop::disableLoopMode(void)
+inline void dtkComposerTransmitterProxyLoop::disableLoopMode(void)
 {
     m_source = d->active_emitter;
 }
 
-void dtkComposerTransmitterProxyLoop::setTwin(dtkComposerTransmitterProxyLoop *twin)
+inline void dtkComposerTransmitterProxyLoop::setTwin(dtkComposerTransmitterProxyLoop *twin)
 {
     m_twin = twin;
 }
 
-dtkComposerTransmitterProxyLoop *dtkComposerTransmitterProxyLoop::twin(void) const
+inline dtkComposerTransmitterProxyLoop *dtkComposerTransmitterProxyLoop::twin(void) const
 {
     return m_twin;
 }

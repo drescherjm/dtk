@@ -21,7 +21,7 @@
 // dtkComposerTransmitterEmitterBase
 // /////////////////////////////////////////////////////////////////
 
-bool dtkComposerTransmitterEmitterBase::enableCopy(void)
+inline bool dtkComposerTransmitterEmitterBase::enableCopy(void)
 {
     return (d->receivers.count() > 1);
 }
@@ -30,17 +30,17 @@ bool dtkComposerTransmitterEmitterBase::enableCopy(void)
 // dtkComposerTransmitterEmitterVariant template implementation
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerTransmitterEmitterVariant::setVariant(const QVariant& variant)
+inline void dtkComposerTransmitterEmitterVariant::setVariant(const QVariant& variant)
 {
     d->variant = variant;
 }
 
-template <typename T> void dtkComposerTransmitterEmitterVariant::setData(const T& data)
+template <typename T> inline void dtkComposerTransmitterEmitterVariant::setData(const T& data)
 {
     d->variant.setValue(const_cast<T&>(data));
 }
 
-template <typename T> void dtkComposerTransmitterEmitterVariant::setData(T& data)
+template <typename T> inline void dtkComposerTransmitterEmitterVariant::setData(T& data)
 {
    d->variant.setValue(data);
 }
@@ -53,7 +53,7 @@ template <typename T> void dtkComposerTransmitterEmitterVariant::setData(T& data
 /*! 
  *  Initialize the type of the emitter and the variant that it contains.
  */
-template <typename T> dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterEmitterBase(parent)
+template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterEmitterBase(parent)
 {
     dtkComposerTransmitterHandler<T>::init(*this);
 };
@@ -62,27 +62,27 @@ template <typename T> dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEm
 /*! 
  *  
  */
-template <typename T> dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
+template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
 {
 
 };
 
-template <typename T> void dtkComposerTransmitterEmitter<T>::setData(const T& data)
+template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(const T& data)
 {
     d->variant.setValue(const_cast<T&>(data)); 
 }
 
-template <typename T> void dtkComposerTransmitterEmitter<T>::setData(T& data)
+template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T& data)
 {
     d->variant.setValue(data);
 }
 
-template <typename T> int dtkComposerTransmitterEmitter<T>::type(void) const
+template <typename T> inline int dtkComposerTransmitterEmitter<T>::type(void) const
 {
     return d->type_list.first();
 }
 
-template <typename T> bool dtkComposerTransmitterEmitter<T>::enableConnection(dtkComposerTransmitter *transmitter)
+template <typename T> inline bool dtkComposerTransmitterEmitter<T>::enableConnection(dtkComposerTransmitter *transmitter)
 {
     return dtkComposerTransmitterHandler<T>::enableConnection(*transmitter);
 }

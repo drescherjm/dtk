@@ -16,7 +16,6 @@
 #include "dtkMetaContainerSequentialTest.tpp"
 
 #include <QtCore>
-#include <QtGui>
 
 // ///////////////////////////////////////////////////////////////////
 // 
@@ -49,6 +48,31 @@ void dtkMetaContainerSequentialTestCase::cleanup(void)
 void dtkMetaContainerSequentialTestCase::cleanupTestCase(void)
 {
 
+}
+
+void dtkMetaContainerSequentialTestCase::testConversion(void)
+{
+    QVariant var;
+
+    QList<int> list;
+    var = dtkMetaType::variantFromValue(&list);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));
+
+    QVector<QString> vec;
+    var = dtkMetaType::variantFromValue(&vec);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));
+
+    QVarLengthArray<double> vla;
+    var = dtkMetaType::variantFromValue(&vla);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));
+
+    std::list<double> std_l;
+    var = dtkMetaType::variantFromValue(&std_l);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));
+
+    std::vector<double> std_v;
+    var = dtkMetaType::variantFromValue(&std_v);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));
 }
 
 void dtkMetaContainerSequentialTestCase::testQList(void)

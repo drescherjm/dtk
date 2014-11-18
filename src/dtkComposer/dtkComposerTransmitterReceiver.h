@@ -1,16 +1,16 @@
-/* dtkComposerTransmitterReceiver.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 10:41:02 2013 (+0100)
- * Version: 
- * Last-Updated: mar. nov.  4 08:48:31 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 97
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -34,13 +34,13 @@ public:
     QString kindName(void) const;
 
 public:
-    inline bool enableCopy(void);
+    bool enableCopy(void);
 
 public:
-    inline QVariant variant(void);
+    QVariant variant(void);
 
 public:
-    inline QVariantList allData(void);
+    QVariantList allData(void);
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
@@ -61,8 +61,8 @@ public:
     ~dtkComposerTransmitterReceiverVariant(void);
 
 public:
-    template <typename T> inline T      data(void);
-    template <typename T> inline T constData(void);
+    template <typename T> T      data(void);
+    template <typename T> T constData(void);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -76,14 +76,14 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    inline T      data(void);
-    inline T constData(void);
+    T      data(void);
+    T constData(void);
 
 public:
-    inline int type(void) const;
+    int type(void) const;
 
 private:
-    void setTypeList(const TypeList&) {;}
+    void setTypeList(const TypeList&);
 
 private:
     using dtkComposerTransmitterReceiverBase::d;
@@ -94,3 +94,6 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterReceiver.tpp"
+
+// 
+// dtkComposerTransmitterReceiver.h ends here

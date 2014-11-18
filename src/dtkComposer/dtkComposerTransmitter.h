@@ -1,16 +1,18 @@
-/* dtkComposerTransmitter.h --- 
- * 
- * Author: Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 16:36:09 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
+
+
 
 #pragma once
 
@@ -190,3 +192,5 @@ private:
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
+// 
+// dtkComposerTransmitter.h ends here

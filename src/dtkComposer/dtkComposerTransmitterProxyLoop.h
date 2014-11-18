@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterProxyLoop.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Fri Mar 29 14:54:14 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. nov. 13 09:19:44 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 45
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #pragma once
 
@@ -34,23 +35,23 @@ public:
     QString kindName(void) const;
 
 public:
-    inline bool enableCopy(void);
+    bool enableCopy(void);
 
 public:
-    inline QVariant variant(void);
+    QVariant variant(void);
     void setVariant(const QVariant&);
 
 public:
-    inline QVariantList allData(void);
+    QVariantList allData(void);
 
 public:
-    inline void  enableLoopMode(void);
-    inline void disableLoopMode(void);
+    void  enableLoopMode(void);
+    void disableLoopMode(void);
 
 public:
-    inline void setTwin(dtkComposerTransmitterProxyLoop *twin);
+    void setTwin(dtkComposerTransmitterProxyLoop *twin);
 
-    inline dtkComposerTransmitterProxyLoop *twin(void) const;
+    dtkComposerTransmitterProxyLoop *twin(void) const;
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
@@ -75,3 +76,6 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterProxyLoop.tpp"
+
+// 
+// dtkComposerTransmitterProxyLoop.h ends here

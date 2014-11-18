@@ -1,16 +1,16 @@
-/* dtkComposerTransmitterTest.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Mon Mar 25 11:19:44 2013 (+0100)
- * Version: 
- * Last-Updated: Wed Apr  3 12:15:39 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 17
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -29,8 +29,12 @@ private slots:
     void testComplexType(void);
     void testLinks(void);
     void testProxyLoop(void);
+    void testSwapPointer(void);
 
 private slots:
     void cleanupTestCase(void);
     void cleanup(void);
 };
+
+// 
+// dtkComposerTransmitterTest.h ends here

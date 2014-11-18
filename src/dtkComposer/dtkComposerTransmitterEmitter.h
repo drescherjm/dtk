@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterEmitter.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 09:39:35 2013 (+0100)
- * Version: 
- * Last-Updated: jeu. oct. 23 15:33:10 2014 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 100
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #pragma once
 
@@ -34,7 +35,7 @@ public:
     QString kindName(void) const;
 
 public:
-    inline bool enableCopy(void);
+    bool enableCopy(void);
 
 public:
     virtual bool enableConnection(dtkComposerTransmitter *transmitter);
@@ -54,11 +55,11 @@ public:
     ~dtkComposerTransmitterEmitterVariant(void);
 
 public:
-    inline void setVariant(const QVariant& variant);
+    void setVariant(const QVariant& variant);
 
 public:
-    template <typename T> inline void setData(const T& data);
-    template <typename T> inline void setData(      T& data);
+    template <typename T> void setData(const T& data);
+    template <typename T> void setData(      T& data);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -72,11 +73,11 @@ public:
      ~dtkComposerTransmitterEmitter(void);
 
 public:
-    inline void setData(const T& data);
-    inline void setData(      T& data);
+    void setData(const T& data);
+    void setData(      T& data);
 
 public:
-    inline int type(void) const;
+    int type(void) const;
 
 public:
     bool enableConnection(dtkComposerTransmitter *transmitter);
@@ -94,3 +95,5 @@ public:
 
 #include "dtkComposerTransmitterEmitter.tpp"
 
+// 
+// dtkComposerTransmitterEmitter.h ends here

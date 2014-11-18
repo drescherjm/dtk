@@ -48,6 +48,7 @@ template <typename T> void dtkComposerTransmitterHandler<T *>::init(dtkComposerT
     t.d->type_list << qMetaTypeId<T*>(reinterpret_cast<T **>(0));
     T *ptr = NULL;
     t.d->variant = QVariant::fromValue(ptr);
+    t.d->swap = QVariant::fromValue(ptr);
 }
 
 template <typename T> bool dtkComposerTransmitterHandler<T *>::enableConnection(dtkComposerTransmitter& t)
@@ -64,14 +65,14 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTra
 	if (!t.enableCopy()) {
 	    return source;
 	} else {
-            return copy(source, t.d->variant);
+            return copy(source, t.d->variant, t.d->swap);
 	}
     	break;
     case dtkComposerTransmitter::Reference:
         return source;
         break;
     case dtkComposerTransmitter::Copy:
-        return copy(source, t.d->variant);
+        return copy(source, t.d->variant, t.d->swap);
     	break;
     default:
         return source;
@@ -83,7 +84,7 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::constData(dtkCompos
     return t.variant().value<T *>();
 }
 
-template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *source, QVariant& target)
+template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *source, QVariant& target, QVariant& swap)
 {
     if (!source)
         return source;
@@ -93,7 +94,18 @@ template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *sour
 	copy = dtkMetaType::clone(source);
 	target.setValue(copy);
     } else {
-        *copy = *source;
+        if (copy != source) {
+            *copy = *source;
+        } else {
+            copy = swap.value<T *>();
+            if (!copy) {
+                copy = dtkMetaType::clone(source);
+            } else {
+                *copy = *source;
+            }
+            swap.setValue(source);
+            target.setValue(copy);
+        }
     }
 
     return copy;

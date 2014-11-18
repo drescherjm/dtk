@@ -211,6 +211,16 @@ template<> struct QVariantValueHelperInterface<dtkMetaContainerSequential>
 }
 
 // /////////////////////////////////////////////////////////////////
+// Specialization of dtkMetaTypeHandler for dtkMetaContainerSequential
+// /////////////////////////////////////////////////////////////////
+
+template<> 
+struct dtkMetaTypeHandler <dtkMetaContainerSequential>
+{
+    static bool canConvert(const QList<int>& types);
+};
+
+// /////////////////////////////////////////////////////////////////
 
 #include "dtkMetaContainerSequential.tpp"
 

@@ -152,8 +152,8 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         dtkDebug() << "looking for setup in " << server;
 
         QVariantMap res = json["resources"].toMap();
-        int nodes;
-        int threads;
+        int nodes   = 0;
+        int threads = 0;
         if (res["nodes"].toInt() == 0) {
             // no nodes, only cores; TODO
         } else if (res["cores"].toInt() == 0) {

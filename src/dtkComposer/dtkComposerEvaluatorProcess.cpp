@@ -125,8 +125,8 @@ void dtkComposerEvaluatorProcess::run(void)
         return;
     }
 
-    int rank = d->comm->rank();
-    int size = d->comm->size();
+    // int rank = d->comm->rank();
+    // int size = d->comm->size();
     bool new_composition;
 
     QByteArray data;

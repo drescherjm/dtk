@@ -63,7 +63,6 @@ int main(int argc, char **argv)
 
         dtkComposerEvaluatorProcess p;
 
-        qlonglong np;
         QStringList hosts;
         // dtkDistributedCommunicator *comm = manager.spawn();
         dtkDistributedCommunicator *comm ;

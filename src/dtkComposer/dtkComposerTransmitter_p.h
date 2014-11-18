@@ -33,10 +33,10 @@ class dtkComposerTransmitterPrivate
 {
 public:
     dtkComposerTransmitterPrivate(dtkComposerNode *p) : active(true),
-							required(true), 
-							parent(p), 
-							data_transmission(dtkComposerTransmitter::AutoCopy),
-							active_emitter(0) {}
+        required(true),
+        parent(p),
+        active_emitter(0),
+        data_transmission(dtkComposerTransmitter::AutoCopy) {}
 
 public:
     bool active;

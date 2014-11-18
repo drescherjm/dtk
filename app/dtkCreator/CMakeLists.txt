@@ -61,7 +61,6 @@ target_link_libraries(${PROJECT_NAME}
   dtkLog
   dtkCore
   dtkComposer
-  dtkDistributedSupport
   dtkGuiSupport
   dtkWidgets)
 

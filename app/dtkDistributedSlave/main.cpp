@@ -70,6 +70,7 @@ public:
            dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
            msg.send(slave.socket());
         }
+
         DTK_DISTRIBUTED_END_GLOBAL;
 
     }

@@ -15,6 +15,7 @@
 #pragma once
 
 #include <QtCore>
+#include <initializer_list>
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaTypeHandler implementation

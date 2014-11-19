@@ -141,7 +141,9 @@ template<typename T> inline T *dtkMetaTypeHandlerHelper<T *, true>::clone(T *t)
 
 template<typename T> inline bool dtkMetaType::canConvert(int type)
 {
-    return dtkMetaType::canConvert<T>(QList<int>({type}));
+    QList<int> list ;
+    list.append(type);
+    return dtkMetaType::canConvert<T>(QList<int>(list));
 }
 
 template<typename T> inline bool dtkMetaType::canConvert(const QList<int>& types)

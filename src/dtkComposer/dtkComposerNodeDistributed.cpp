@@ -70,7 +70,7 @@ void dtkComposerNodeCommunicatorInit::run(void)
         d->type = d->receiver_type.data();
     }
     if (!d->communicator) {
-        dtkDistributedCommunicator *communicator = dtkDistributed::communicator::pluginFactory().create(d->type);
+        d->communicator = dtkDistributed::communicator::pluginFactory().create(d->type);
 
         d->emitter.setData(d->communicator);
     }

@@ -156,10 +156,10 @@ void dtkComposerNodeControlIf::begin(void)
 void dtkComposerNodeControlIf::end(void)
 {
     if (d->cond.isEmpty())
-    	return;
+        return;
 
-    bool value = *d->cond.data<bool>();
-    
+    // bool value = *d->cond.data<bool>();
+
     foreach(dtkComposerTransmitter *t, d->then_block.receivers())
         t->setReady(true);
 

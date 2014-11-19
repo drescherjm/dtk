@@ -53,35 +53,35 @@ public:
           QList<dtkAbstractData *> *vl;
 };
 
-dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(QVector<dtkAbstractData *> *ivector) : cv(0), cl(0), vl(0), const_vector(*new QVector<dtkAbstractData *>()), vector(*ivector), const_list(*new QList<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()), vv(ivector)
+dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(QVector<dtkAbstractData *> *ivector) : const_vector(*new QVector<dtkAbstractData *>()), vector(*ivector), const_list(*new QList<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()), cv(0), vv(ivector), cl(0), vl(0)
 {
     cv = &const_vector;
     cl = &const_list;
     vl = &list;
 }
 
-dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(const QVector<dtkAbstractData *>& ivector) : vector(*new QVector<dtkAbstractData *>()), const_list(*new QList<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()), const_vector(ivector), cv(&ivector)
+dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(const QVector<dtkAbstractData *>& ivector) : const_vector(ivector), vector(*new QVector<dtkAbstractData *>()), const_list(*new QList<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()), cv(&ivector)
 {
     vv= &vector;
     cl = &const_list;
     vl = &list;
 }
 
-dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(QVector<dtkAbstractData *>& ivector) : const_vector(*new QVector<dtkAbstractData *>()), const_list(*new QList<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()), vector(ivector), vv(&ivector)
+dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(QVector<dtkAbstractData *>& ivector) : const_vector(*new QVector<dtkAbstractData *>()), vector(ivector), const_list(*new QList<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()),  vv(&ivector)
 {
     cv = &const_vector;
     cl = &const_list;
     vl = &list;
 }
 
-dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(QList<dtkAbstractData *> *ilist) : const_vector(*new QVector<dtkAbstractData *>()), vector(*new QVector<dtkAbstractData *>()), const_list(*new QList<dtkAbstractData *>()), vl(ilist), list(*ilist)
+dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(QList<dtkAbstractData *> *ilist) : const_vector(*new QVector<dtkAbstractData *>()), vector(*new QVector<dtkAbstractData *>()), const_list(*new QList<dtkAbstractData *>()), list(*ilist), vl(ilist)
 {
     cv = &const_vector;
     vv = &vector;
     cl = &const_list;
 }
 
-dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(const QList<dtkAbstractData *>& ilist) : const_vector(*new QVector<dtkAbstractData *>()), vector(*new QVector<dtkAbstractData *>()), list(*new QList<dtkAbstractData *>()), const_list(ilist), cl(&ilist)
+dtkAbstractDataCompositePrivate::dtkAbstractDataCompositePrivate(const QList<dtkAbstractData *>& ilist) : const_vector(*new QVector<dtkAbstractData *>()), vector(*new QVector<dtkAbstractData *>()), const_list(ilist), list(*new QList<dtkAbstractData *>()), cl(&ilist)
 {
     cv = &const_vector;
     vv = &vector;

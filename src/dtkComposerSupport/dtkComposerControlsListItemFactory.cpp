@@ -50,22 +50,22 @@ dtkComposerControlsListItemFactory  *dtkComposerControlsListItemFactory::instanc
 
 dtkComposerControlsListItem *dtkComposerControlsListItemFactory::create(QListWidget *list, dtkComposerSceneNode *node)
 {
-    if (dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee()))
+    if (dynamic_cast<dtkComposerNodeInteger *>(node->wrapee()))
         return new dtkComposerControlsListItemInteger(list, node);
 
-    else if (dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee()))
+    else if (dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee()))
         return new dtkComposerControlsListItemBoolean(list, node);
 
-    else if (dtkComposerNodeReal *d_node = dynamic_cast<dtkComposerNodeReal *>(node->wrapee()))
+    else if (dynamic_cast<dtkComposerNodeReal *>(node->wrapee()))
         return new dtkComposerControlsListItemReal(list, node);
 
-    else if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(node->wrapee()))
+    else if (dynamic_cast<dtkComposerNodeString *>(node->wrapee()))
         return new dtkComposerControlsListItemString(list, node);
 
-    else if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(node->wrapee()))
+    else if (dynamic_cast<dtkComposerNodeFile *>(node->wrapee()))
         return new dtkComposerControlsListItemFile(list, node);
 
-    else if (dtkComposerNodeLeafProcess *p_node = dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee()))
+    else if (dynamic_cast<dtkComposerNodeLeafProcess *>(node->wrapee()))
         return new dtkComposerControlsListItemLeafProcess(list, node);
 
     else

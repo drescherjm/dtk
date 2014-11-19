@@ -12,10 +12,6 @@
 ##
 ### Code:
 
-configure_file(${CMAKE_SOURCE_DIR}/cmake/dtkSetTestEnvironment.cmake.in "${CMAKE_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
-
-set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${CMAKE_BINARY_DIR}/dtkSetTestEnvironment.cmake")
-
 if(DTK_BUILD_COMPOSER)
   add_subdirectory(dtkComposer)
 endif(DTK_BUILD_COMPOSER)

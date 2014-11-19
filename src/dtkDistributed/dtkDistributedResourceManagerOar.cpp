@@ -158,7 +158,6 @@ QString dtkDistributedResourceManagerOar::deljob(QString jobid)
 QByteArray dtkDistributedResourceManagerOar::status(void)
 {
     QProcess stat;
-    bool success;
     QString data;
     QVariantMap json;
     QVariantMap result;

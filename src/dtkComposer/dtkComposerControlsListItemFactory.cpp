@@ -82,19 +82,19 @@ dtkToolBoxItem *dtkComposerControlsListItemFactory::create(dtkComposerSceneNode 
     //         return dtkToolBoxItem::fromObject(object);
     // }
 
-    if (dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee()))
+    if (dynamic_cast<dtkComposerNodeInteger *>(node->wrapee()))
         return new dtkComposerControlsListItemInteger(0, node);
 
-    if (dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee()))
+    if (dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee()))
         return new dtkComposerControlsListItemBoolean(0, node);
 
-    if (dtkComposerNodeReal *d_node = dynamic_cast<dtkComposerNodeReal *>(node->wrapee()))
+    if (dynamic_cast<dtkComposerNodeReal *>(node->wrapee()))
         return new dtkComposerControlsListItemReal(0, node);
 
-    if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(node->wrapee()))
+    if (dynamic_cast<dtkComposerNodeString *>(node->wrapee()))
         return new dtkComposerControlsListItemString(0, node);
 
-    if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(node->wrapee()))
+    if (dynamic_cast<dtkComposerNodeFile *>(node->wrapee()))
         return new dtkComposerControlsListItemFile(0, node);
     
     return new dtkToolBoxItem();

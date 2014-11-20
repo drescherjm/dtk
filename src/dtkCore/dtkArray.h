@@ -332,7 +332,13 @@ private:
 // Helpers
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize> QDebug &operator<<(QDebug debug, const dtkArray<T, PreallocSize> &array);
+template <typename T, qlonglong PreallocSize> QDebug& operator << (QDebug debug, const dtkArray<T, PreallocSize>& array);
+
+template<typename T, qlonglong PreallocSize> QDataStream& operator << (QDataStream& s, const dtkArray<T, PreallocSize>& array);
+template<typename T, qlonglong PreallocSize> QDataStream& operator >> (QDataStream& s,       dtkArray<T, PreallocSize>& array);
+
+template<typename T, qlonglong PreallocSize> QDataStream& operator << (QDataStream& s, const dtkArray<T *, PreallocSize>& array);
+template<typename T, qlonglong PreallocSize> QDataStream& operator >> (QDataStream& s,       dtkArray<T *, PreallocSize>& array);
 
 // ///////////////////////////////////////////////////////////////////
 // Alias when c++1 is available

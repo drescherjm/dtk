@@ -57,6 +57,7 @@ private slots:
     void testZeroPrealloc(void);
     void testDataStream(void);
     void testDynamicArray(void);
+    void testMetaType(void);
 
 private slots:
     void cleanupTestCase(void);

@@ -112,8 +112,8 @@ template <typename T> struct QMetaTypeId< CONTAINER_ARG<T> *>                   
         QByteArray typeName;                                                      \
         typeName.reserve(int(sizeof(#CONTAINER_ARG)) + 1 + tNameLen + 1 + 1 + 1); \
         typeName.append(#CONTAINER_ARG, int(sizeof(#CONTAINER_ARG)) - 1)          \
-            .append('<').append(tName, tNameLen).append('*');                     \
-        typeName.append('>');                                                     \
+            .append('<').append(tName, tNameLen).append('>');                     \
+        typeName.append('*');                                                     \
         const int newId = qRegisterNormalizedMetaType< CONTAINER_ARG<T> *>(       \
                         typeName,                                                 \
                         reinterpret_cast< CONTAINER_ARG<T> **>(quintptr(-1)));    \

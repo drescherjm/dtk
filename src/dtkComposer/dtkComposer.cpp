@@ -18,11 +18,11 @@ namespace dtkComposer
     namespace node
     {
         namespace _private {
-            dtkComposerNodeFactory factory;
+            dtkComposerNodeFactory _factory;
         }
 
         DTKCOMPOSER_EXPORT dtkComposerNodeFactory& factory(void) {
-            return _private::factory;
+            return _private::_factory;
         }
     }
 }

@@ -35,7 +35,7 @@ public:
     void clear(void);
 
     const T& value(const qlonglong& entry_id);
-    const double hitrate(void);
+    double hitrate(void);
 
 private:     
     Array lines[Length];
@@ -101,7 +101,7 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
     return lines[line_id].at(entry_id - ids[line_id]);
 }
 
-template <typename T, int Prealloc, int Length> inline const double dtkDistributedArrayCache<T, Prealloc, Length>::hitrate()
+template <typename T, int Prealloc, int Length> inline double dtkDistributedArrayCache<T, Prealloc, Length>::hitrate()
 {
     qlonglong sum = miss+hit;
     qDebug() <<"misses:" << miss << "hits:" << hit ;

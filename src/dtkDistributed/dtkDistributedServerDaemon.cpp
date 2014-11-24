@@ -220,7 +220,7 @@ void dtkDistributedServerDaemon::read(void)
 
     default:
         dtkWarn() << "Unknown data";
-        resp.reset(new dtkDistributedMessage(dtkDistributedMessage::ERROR));
+        resp.reset(new dtkDistributedMessage(dtkDistributedMessage::ERROR_UNKNOWN));
         resp->send(socket);
     };
 

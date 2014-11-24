@@ -42,7 +42,7 @@ public:
         ENDJOB  ,
         DATA    ,
         SETRANK ,
-        ERROR   ,
+        ERROR_UNKNOWN,
         STOP
     };
 

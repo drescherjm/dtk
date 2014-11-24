@@ -8,8 +8,6 @@
  *
  */
 
-#include "dtkComposerExport.h"
-
 #include "dtkComposer.h"
 #include "dtkComposerNodeFactory.h"
 
@@ -21,7 +19,7 @@ namespace dtkComposer
             dtkComposerNodeFactory _factory;
         }
 
-        DTKCOMPOSER_EXPORT dtkComposerNodeFactory& factory(void) {
+        dtkComposerNodeFactory& factory(void) {
             return _private::_factory;
         }
     }

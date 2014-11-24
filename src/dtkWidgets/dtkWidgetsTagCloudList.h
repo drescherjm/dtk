@@ -1,26 +1,23 @@
 /* dtkWidgetsTagCloudList.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:12:29 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 14:14:54 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 10
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
 
+#include "dtkWidgetsExport.h"
 #include "dtkWidgetsTagCloudItem.h"
 
 #include <QtWidgets>
 
 class dtkWidgetsTagCloudListPrivate;
 
-class dtkWidgetsTagCloudList : public QListWidget
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloudList : public QListWidget
 {
     Q_OBJECT
 
@@ -44,14 +41,14 @@ signals:
 
 protected slots:
     void onItemClicked(QListWidgetItem *item);
-    
+
 protected:
      QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
     QStringList mimeTypes(void) const;
-    
+
 protected:
     dtkWidgetsTagCloudListPrivate *d;
-    
+
 protected:
     friend class dtkWidgetsTagCloudListLightDelegate;
     friend class dtkWidgetsTagCloudListDarkDelegate;

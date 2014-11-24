@@ -1,26 +1,23 @@
 /* dtkWidgetsTagCloud.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 11:58:05 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 12:04:40 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 21
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
 
+#include "dtkWidgetsExport.h"
 #include "dtkWidgetsTag.h"
 
 #include <QtWidgets>
 
 class dtkWidgetsTagCloudPrivate;
 
-class dtkWidgetsTagCloud : public QTextBrowser
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloud : public QTextBrowser
 {
     Q_OBJECT
 

@@ -1,18 +1,16 @@
 /* dtkWidgetsTagCloudController.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 12:14:03 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 14:46:06 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 21
- */
+/
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
+
+#include "dtkWidgetsExport.h"
 
 #include <QtCore>
 
@@ -21,7 +19,7 @@ class dtkWidgetsTagCloudView;
 class dtkWidgetsTagCloudScope;
 class dtkWidgetsTagCloudControllerPrivate;
 
-class dtkWidgetsTagCloudController : public QObject
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloudController : public QObject
 {
     Q_OBJECT
 

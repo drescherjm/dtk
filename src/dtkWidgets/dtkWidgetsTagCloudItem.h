@@ -1,24 +1,21 @@
 /* dtkWidgetsTagCloudItem.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:02:19 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 14:04:21 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 7
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
 
+#include "dtkWidgetsExport.h"
 #include <QtWidgets>
 
 class dtkWidgetsTagCloudItemPrivate;
 
-class dtkWidgetsTagCloudItem : public QListWidgetItem
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloudItem : public QListWidgetItem
 {
 public:
      dtkWidgetsTagCloudItem(QString name);

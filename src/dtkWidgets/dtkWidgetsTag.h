@@ -2,10 +2,6 @@
  * 
  * Author: Julien Wintz
  * Created: Mon Apr 15 11:51:10 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 11:56:48 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 10
  */
 
 /* Change Log:
@@ -14,11 +10,13 @@
 
 #pragma once
 
+#include "dtkWidgetsExport.h"
+
 #include <QtWidgets>
 
 class dtkWidgetsTagPrivate;
 
-class dtkWidgetsTag
+class DTKWIDGETS_EXPORT dtkWidgetsTag
 {
 public:
      dtkWidgetsTag(void);

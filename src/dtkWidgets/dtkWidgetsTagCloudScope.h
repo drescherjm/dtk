@@ -1,25 +1,23 @@
 /* dtkWidgetsTagCloudScope.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 12:38:14 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 14:50:57 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 11
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
+
+#include "dtkWidgetsExport.h"
 
 #include <QtCore>
 #include <QtWidgets>
 
 class dtkWidgetsTagCloudScopePrivate;
 
-class dtkWidgetsTagCloudScope : public QFrame
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloudScope : public QFrame
 {
     Q_OBJECT
 

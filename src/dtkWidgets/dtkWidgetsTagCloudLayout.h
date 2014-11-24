@@ -1,22 +1,20 @@
 /* dtkWidgetsTagCloudLayout.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 13:48:50 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 13:56:41 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 30
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
 
+#include "dtkWidgetsExport.h"
+
 #include <QtWidgets>
 
-class dtkWidgetsTagCloudLayout : public QLayout
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloudLayout : public QLayout
 {
 public:
      dtkWidgetsTagCloudLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);

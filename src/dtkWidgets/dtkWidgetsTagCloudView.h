@@ -1,18 +1,16 @@
 /* dtkWidgetsTagCloudView.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:33:29 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 14:44:29 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 8
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
+
+#include "dtkWidgetsExport.h"
 
 #include <QtWidgets>
 
@@ -20,7 +18,7 @@ class dtkWidgetsTagCloudDesc;
 class dtkWidgetsTagCloudList;
 class dtkWidgetsTagCloudViewPrivate;
 
-class dtkWidgetsTagCloudView : public QStackedWidget
+class DTKWIDGETS_EXPORT dtkWidgetsTagCloudView : public QStackedWidget
 {
     Q_OBJECT
 
@@ -32,7 +30,7 @@ public:
         Bottom2Top,
         Automatic
     };
-    
+
 public:
      dtkWidgetsTagCloudView(QWidget *parent = 0);
     ~dtkWidgetsTagCloudView(void);
@@ -43,7 +41,7 @@ public:
 
 public:
     void setDark(void);
-    
+
 protected slots:
     void onItemClicked(const QString& description);
 
@@ -57,7 +55,7 @@ protected slots:
     void slideInNext(void);
     void slideInPrev(void);
     void slideInIdx(int idx, Direction direction = Automatic);
-    
+
 signals:
     void animationFinished(void);
 

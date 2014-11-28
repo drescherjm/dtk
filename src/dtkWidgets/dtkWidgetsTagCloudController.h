@@ -1,12 +1,16 @@
-/* dtkWidgetsTagCloudController.h ---
- *
- * Author: Julien Wintz
- * Created: Mon Apr 15 12:14:03 2013 (+0200)
-/
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- *
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -51,3 +55,6 @@ protected slots:
 protected:
     dtkWidgetsTagCloudControllerPrivate *d;
 };
+
+// 
+// dtkWidgetsTagCloudController.h ends here

@@ -226,3 +226,38 @@ struct dtkMetaTypeHandler <dtkMetaContainerSequential>
 
 //
 // dtkMetaContainerSequential.h ends here
+
+/* class dtkMetaContainerHandler */
+/* { */
+/* public:   */
+/*     virtual ~dtkMetaContainerHandler(void) {} */
+
+/* public: */
+/*     virtual void setAt(int idx, const void *t) = 0; */
+/*     virtual const void *at(int idx) = 0; */
+/* }; */
+
+/* template <typename T> class dtkMetaContainerHandlerHelper : public dtkMetaContainerHandler */
+/* { */
+/*     T *c; */
+
+/* public: */
+/*     dtkMetaContainerHandlerHelper(T *container) : c(container) {}  */
+    
+/* public: */
+/*     void setAt(int idx, const void *t) { this->setAt(idx, *static_cast<const typename T::value_type *>(t)); } */
+/*     void setAt(int idx, const typename T::value_type& t)  */
+/*     {  */
+/*         typename T::iterator it(c->begin()); */
+/*         std::advance(it, idx); */
+/*         *it = t; */
+/*     } */
+
+/*     const void *at(int idx) { return &(this->atTemplate(idx)); } */
+/*     const typename T::value_type& atTemplate(int idx) */
+/*     { */
+/*         typename T::iterator it(c->begin()); */
+/*         std::advance(it, idx); */
+/*         return *it; */
+/*     } */
+/* }; */

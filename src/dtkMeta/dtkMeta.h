@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "dtkMetaTypeTraits.h"
+
 #include <type_traits>
 
 #include <QtCore>
@@ -69,6 +71,7 @@ public:
     template<typename T> static QVariant variantFromValue(const T& t);
     template<typename T> static QVariant variantFromValue(      T *t);
     template<typename T> static        T *clone(T *t);
+    template<typename T> static     bool registerContainerPointerConverter(int id);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -118,9 +121,13 @@ template <typename T> struct QMetaTypeId< CONTAINER_ARG<T> *>                   
                         typeName,                                                 \
                         reinterpret_cast< CONTAINER_ARG<T> **>(quintptr(-1)));    \
         metatype_id.storeRelease(newId);                                          \
+        if (newId > 0) {                                                          \
+            dtkMetaType::registerContainerPointerConverter< CONTAINER_ARG<T> * >(newId); \
+        }                                                                         \
         return newId;                                                             \
     }                                                                             \
 };                                                                                \
+template<typename T> struct dtkMetaTypeIsSequentialContainerPointer< CONTAINER_ARG<T> *> : std::true_type {}; \
 namespace QtPrivate {                                                             \
 template<typename T> struct IsSequentialContainer<CONTAINER_ARG<T> *>             \
 {                                                                                 \

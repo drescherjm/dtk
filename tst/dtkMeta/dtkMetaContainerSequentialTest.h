@@ -38,6 +38,8 @@ private slots:
     void testStdList(void);
     void testStdVector(void);
 
+    void testNew(void);
+
 private slots:
     void cleanupTestCase(void);
     void cleanup(void);

@@ -22,10 +22,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkMeta
   dtkMeta.h
   dtkMeta.tpp
+  dtkMetaTypeTraits.h
   dtkMetaContainerSequential_p.h
   dtkMetaContainerSequential_p.tpp
   dtkMetaContainerSequential.h
-  dtkMetaContainerSequential.tpp)
+  dtkMetaContainerSequential.tpp
+  dtkMetaContainerSequentialHandler.h
+  dtkMetaContainerSequentialHandler.tpp)
 
 set(${PROJECT_NAME}_SOURCES
   dtkMetaContainerSequential.cpp)

@@ -133,7 +133,7 @@ Q_DECLARE_METATYPE(dtkQuaternionReal *);
 // Credits
 // /////////////////////////////////////////////////////////////////
 
-// $Id: quatern.h 184 2008-05-10 19:43:17Z hkuiper $
+// $Id$
 
 // CwMtx matrix and vector math library
 // Copyright (C) 1999-2001  Harry Kuiper

@@ -70,18 +70,6 @@
     \sa dtkMetaContainerSequential, dtkMetaContainerSequential::iterator
 */
 
-/*! \fn const QVariant dtkMetaContainerSequential::item::operator * (void) const
-
-    Returns the element referred by the item converted to a QVariant.
-*/
-const QVariant dtkMetaContainerSequential::item::operator * (void) const
-{
-    const QtMetaTypePrivate::VariantData d = m_h.currentData();
-    if (d.metaTypeId == qMetaTypeId<QVariant>())
-        return *reinterpret_cast<const QVariant *>(d.data);
-    return QVariant(d.metaTypeId, d.data, d.flags);
-}
-
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential::iterator implementation
 // /////////////////////////////////////////////////////////////////
@@ -106,64 +94,24 @@ const QVariant dtkMetaContainerSequential::item::operator * (void) const
     \sa dtkMetaContainerSequential::item, dtkMetaContainerSequential
 */
 
-/*! \fn dtkMetaContainerSequential::iterator::iterator(const dtkMetaContainerSequential& container, QAtomicInt *ref)
+/*! \fn dtkMetaContainerSequential::iterator::iterator(dtkMetaContainerSequentialHandler::iterator *iterator)
     \internal
 */
-dtkMetaContainerSequential::iterator::iterator(const dtkMetaContainerSequential& container, QAtomicInt *ref) : m_h(container.m_handler), m_ref(ref)
-{
-    m_ref->ref();
-    m_item = new item(this);
-}
-
-/*! \fn dtkMetaContainerSequential::iterator::iterator(const dtkMetaContainerSequentialPrivate::handler& h, QAtomicInt *ref)
-    \internal
-*/
-dtkMetaContainerSequential::iterator::iterator(const dtkMetaContainerSequentialPrivate::handler& handler, QAtomicInt *ref) : m_h(handler), m_ref(ref)
-{
-    m_ref->ref();
-    m_item = new item(this);
-}
 
 /*! \fn dtkMetaContainerSequential::iterator::iterator(const iterator& o)
 
     Creates a copy of \a o.
 */
-dtkMetaContainerSequential::iterator::iterator(const iterator& o) : m_h(o.m_h), m_ref(o.m_ref)
-{
-    m_ref->ref();
-    m_item = new item(this);
-}
 
 /*! \fn dtkMetaContainerSequential::iterator::~iterator(void)
 
     Detroys the iterator and the related dtkMetaContainerSequential::item.
 */
-dtkMetaContainerSequential::iterator::~iterator(void)
-{
-    if(!m_ref->deref()) {
-        m_h.destroyIterator();
-        delete m_ref;
-    }
-    if (m_item) {
-        m_item->m_iterator = NULL;
-        delete m_item;
-    }
-}
 
 /*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (const iterator& o)
 
     Assigns \a o to \c this.
 */
-dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (const iterator& o)
-{
-    if(!m_h.equal(o.m_h)) {
-        m_h = o.m_h;
-        m_ref = o.m_ref;
-    }
-    m_ref->ref();
-
-    return *this;
-}
 
 /*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator [] (int j) const
 
@@ -171,12 +119,6 @@ dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::oper
     enables to modify the element at \c *this \c + \a j pointed by the
     iterator.
 */
-dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator [] (int j) const
-{
-    iterator *it = new iterator(*this);
-    *it += j;
-    return *(it->m_item);
-}
 
 /*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator ++ (int)
 
@@ -184,13 +126,6 @@ dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator
     next element in the container and returns an iterator to the
     previously current element.
 */
-dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator ++ (int)
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copy(m_h);
-    m_h.advance(1);
-    return iterator(h, new QAtomicInt(0));
-}
 
 /*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator -- (int)
 
@@ -202,13 +137,6 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::opera
 
     \sa hasBiDirectionalIterator()
 */
-dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator -- (int)
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copy(m_h);
-    m_h.advance(-1);
-    return iterator(h, new QAtomicInt(0));
-}
 
 /*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator + (int j) const
 
@@ -217,13 +145,6 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::opera
 
     \sa operator-(), operator+=()
 */
-dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator + (int j) const
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copy(m_h);
-    h.advance(j);
-    return iterator(h, new QAtomicInt(0));
-}
 
 /*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator - (int j) const
 
@@ -235,13 +156,6 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::opera
 
     \sa operator+(), operator-=(), hasBiDirectionalIterator()
 */
-dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator - (int j) const
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copy(m_h);
-    h.advance(-j);
-    return iterator(h, new QAtomicInt(0));
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential::const_iterator implementation
@@ -260,91 +174,39 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::opera
     \snippet dtkmeta_container_sequential.cpp 3
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const dtkMetaContainerSequential& container, QAtomicInt *ref)
+/*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(HandlerConstIterator *iterator)
     \internal
 */
-dtkMetaContainerSequential::const_iterator::const_iterator(const dtkMetaContainerSequential& container, QAtomicInt *ref) : m_h(container.m_handler), m_ref(ref)
-{
-    m_ref->ref();
-}
-
-/*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const dtkMetaContainerSequentialPrivate::handler& handler, QAtomicInt *ref)
-    \internal
-*/
-dtkMetaContainerSequential::const_iterator::const_iterator(const dtkMetaContainerSequentialPrivate::handler& handler, QAtomicInt *ref) : m_h(handler), m_ref(ref)
-{
-    m_ref->ref();
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const const_iterator& o)
 
     Creates a copy of \a o.
 */
-dtkMetaContainerSequential::const_iterator::const_iterator(const const_iterator& o) : m_h(o.m_h), m_ref(o.m_ref)
-{
-    m_ref->ref();
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const iterator& o)
 
     Creates a const_iterator that refers the same element than the iterator \a o.
 */
-dtkMetaContainerSequential::const_iterator::const_iterator(const iterator& o) : m_h(o.m_h), m_ref(new QAtomicInt(0))
-{
-    m_h.moveToCBegin();
-    m_h.advanceConst(o.m_h.indexOfIterator());
-    m_ref->ref();
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator::~const_iterator(void)
 
     Detroys the const_iterator.
 */
-dtkMetaContainerSequential::const_iterator::~const_iterator(void)
-{
-    if (!m_ref->deref()) {
-        m_h.destroyConstIterator();
-        delete m_ref;
-    }
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator = (const const_iterator& o)
 
     Assigns \a o to \c this.
 */
-dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator = (const const_iterator& o)
-{
-    if (!m_h.equalConst(o.m_h)) {
-        m_h = o.m_h;
-        m_ref = o.m_ref;
-    }
-    m_ref->ref();
-
-    return *this;
-}
 
 /*! \fn const QVariant dtkMetaContainerSequential::const_iterator::operator * (void) const
 
     Returns the current element, converted to a QVariant.
 */
-const QVariant dtkMetaContainerSequential::const_iterator::operator * (void) const
-{
-    const QtMetaTypePrivate::VariantData d = m_h.currentConstData();
-    if (d.metaTypeId == qMetaTypeId<QVariant>())
-        return *reinterpret_cast<const QVariant *>(d.data);
-    return QVariant(d.metaTypeId, d.data, d.flags);
-}
 
 /*! \fn const QVariant dtkMetaContainerSequential::const_iterator::operator [] (int j) const
 
     Returns the element at \c *this \c + \a j, converted to a QVariant.
 */
-const QVariant dtkMetaContainerSequential::const_iterator::operator [] (int j) const
-{
-    const_iterator cit(*this);
-    cit += j;
-    return *cit;
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator ++ (int)
 
@@ -352,13 +214,6 @@ const QVariant dtkMetaContainerSequential::const_iterator::operator [] (int j) c
     next element in the container and returns an iterator to the
     previously current element.
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator ++ (int)
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copyConst(m_h);
-    m_h.advanceConst(1);
-    return const_iterator(h, new QAtomicInt(0));
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator -- (int)
 
@@ -370,13 +225,6 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
 
     \sa hasBiDirectionalIterator()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator -- (int)
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copyConst(m_h);
-    m_h.advanceConst(-1);
-    return const_iterator(h, new QAtomicInt(0));
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (int j) const
 
@@ -385,13 +233,6 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
 
     \sa operator-(), operator+=()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (int j) const
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copyConst(m_h);
-    h.advanceConst(j);
-    return const_iterator(h, new QAtomicInt(0));
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (int j) const
 
@@ -403,13 +244,6 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
 
     \sa operator+(), operator+=()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (int j) const
-{
-    dtkMetaContainerSequentialPrivate::handler h;
-    h.copyConst(m_h);
-    h.advanceConst(-j);
-    return const_iterator(h, new QAtomicInt(0));
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential implementation
@@ -457,12 +291,6 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_ite
 
     \sa cbegin(), end()
 */
-dtkMetaContainerSequential::iterator dtkMetaContainerSequential::begin(void)
-{
-    iterator it(this->m_handler, new QAtomicInt(0));
-    it.m_h.moveToBegin();
-    return it;
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::begin(void) const
 
@@ -470,12 +298,6 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::begin(void)
 
     \sa cbegin()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::begin(void) const
-{
-    const_iterator it(this->m_handler, new QAtomicInt(0));
-    it.m_h.moveToCBegin();
-    return it;
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cbegin(void) const
 
@@ -484,12 +306,6 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::begin(voi
 
     \sa begin(), cend()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cbegin(void) const
-{
-    const_iterator it(this->m_handler, new QAtomicInt(0));
-    it.m_h.moveToCBegin();
-    return it;
-}
 
 /*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::end(void)
 
@@ -498,12 +314,6 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cbegin(vo
 
     \sa cend(), begin()
 */
-dtkMetaContainerSequential::iterator dtkMetaContainerSequential::end(void)
-{
-    iterator it(this->m_handler, new QAtomicInt(0));
-    it.m_h.moveToEnd();
-    return it;
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::end(void) const
 
@@ -511,12 +321,6 @@ dtkMetaContainerSequential::iterator dtkMetaContainerSequential::end(void)
 
     \sa cend()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::end(void) const
-{
-    const_iterator it(this->m_handler, new QAtomicInt(0));
-    it.m_h.moveToCEnd();
-    return it;
-}
 
 /*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cend(void) const
 
@@ -525,31 +329,25 @@ dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::end(void)
 
     \sa cbegin(), end()
 */
-dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cend(void) const
-{
-    const_iterator it(this->m_handler, new QAtomicInt(0));
-    it.m_h.moveToCEnd();
-    return it;
-}
 
-/*! \fn const QVariant dtkMetaContainerSequential::at(int idx) const
+/*! \fn void dtkMetaContainerSequential::insert(qlonglong idx, const QVariant& v)
 
-    Returns as a QVariant the item at position \a idx in the container.
+    Inserts the value wrapped into QVariant \a v at index position \a
+    idx in the container. If \a idx is 0, the value is prepended to
+    the container. If \a idx is size(), the value is appended to the
+    container.
 
-    \a idx must be a valid index position in the container (i.e., 0 <=
-    \a idx < size()).
-
-    \sa operator[]()
+    \sa append(), prepend(), removeAt()
 */
-const QVariant dtkMetaContainerSequential::at(int idx) const
+void dtkMetaContainerSequential::insert(qlonglong idx, const QVariant& v)
 {
-    const QtMetaTypePrivate::VariantData d = m_handler.at(idx);
-    if (d.metaTypeId == qMetaTypeId<QVariant>())
-        return *reinterpret_cast<const QVariant *>(d.data);
-    return QVariant(d.metaTypeId, d.data, d.flags);
+    if (h->value_type_id == QMetaType::QVariant)
+        h->insert(idx, &v);
+
+    h->insert(idx, v.constData());
 }
 
-/*! \fn void dtkMetaContainerSequential::setAt(int idx, const QVariant& v)
+/*! \fn void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
 
     Replaces the item at index position \a idx with the value wrapped
     into the QVariant \a v.
@@ -559,30 +357,23 @@ const QVariant dtkMetaContainerSequential::at(int idx) const
 
     \sa at(), operator[](), removeAt()
 */
-void dtkMetaContainerSequential::setAt(int idx, const QVariant& v)
+void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
 {
-    if (m_handler.m_metaType_id == QMetaType::QVariant)
-        m_handler.setAt(idx, &v);
+    if (h->value_type_id == QMetaType::QVariant)
+        h->setAt(idx, &v);
 
-    m_handler.setAt(idx, v.constData());
+    h->setAt(idx, v.constData());
 }
 
-/*! \fn void dtkMetaContainerSequential::insert(int idx, const QVariant& v)
+/*! \fn const QVariant& dtkMetaContainerSequential::at(qlonglong idx) const
 
-    Inserts the value wrapped into QVariant \a v at index position \a
-    idx in the container. If \a idx is 0, the value is prepended to
-    the container. If \a idx is size(), the value is appended to the
-    container.
+    Returns as a QVariant the item at position \a idx in the container.
 
-    \sa append(), prepend(), removeAt()
+    \a idx must be a valid index position in the container (i.e., 0 <=
+    \a idx < size()).
+
+    \sa operator[]()
 */
-void dtkMetaContainerSequential::insert(int idx, const QVariant& v)
-{
-    if (m_handler.m_metaType_id == QMetaType::QVariant)
-        m_handler.insert(idx, &v);
-
-    m_handler.insert(idx, v.constData());
-}
 
 // ///////////////////////////////////////////////////////////////////
 // Documentation of inline methods

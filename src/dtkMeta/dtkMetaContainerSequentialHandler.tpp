@@ -1,22 +1,170 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
 #pragma once
 
 // ///////////////////////////////////////////////////////////////////
+// dtkMetaContainerSequentialHandlerTemplate::iterator
+// ///////////////////////////////////////////////////////////////////
+
+template < typename T > inline dtkMetaContainerSequentialHandlerTemplate<T>::iterator::iterator(const Iterator& iterator) : it(iterator)
+{
+
+}
+
+template < typename T > inline dtkMetaContainerSequentialHandler::iterator *dtkMetaContainerSequentialHandlerTemplate<T>::iterator::clone(void) const
+{
+    return new iterator(it);
+}
+
+template < typename T > inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::copy(const dtkMetaContainerSequentialHandler::iterator& o)
+{
+    it = static_cast<const iterator&>(o).it;
+}
+
+template < typename T > inline bool dtkMetaContainerSequentialHandlerTemplate<T>::iterator::equal(const dtkMetaContainerSequentialHandler::iterator& o) const 
+{ 
+    return it == static_cast<const iterator&>(o).it;
+}
+
+template < typename T > inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::advance(void) 
+{ 
+    ++it; 
+}
+
+template < typename T > inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::moveForward(qlonglong step) 
+{ 
+    std::advance(it, step); 
+}
+
+template < typename T > inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::moveBackward(qlonglong step)
+{ 
+    std::advance(it, -step); 
+}
+
+template < typename T > inline void *dtkMetaContainerSequentialHandlerTemplate<T>::iterator::value(void) const 
+{ 
+    return &(*it);
+}
+
+template < typename T > inline QVariant dtkMetaContainerSequentialHandlerTemplate<T>::iterator::variant(void) const
+{ 
+    return QVariant(qMetaTypeId<ValueType>(), &(*it), QTypeInfo<ValueType>::isPointer);
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::assign(const void *t)
+{
+    dtkMetaContainerSequentialIteratorHelper<ValueType>::assign(*it, *static_cast<const ValueType *>(t));
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::addAssign(const void *t)
+{
+    dtkMetaContainerSequentialIteratorHelper<ValueType>::addAssign(*it, *static_cast<const ValueType *>(t));
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::subAssign(const void *t)
+{
+    dtkMetaContainerSequentialIteratorHelper<ValueType>::subAssign(*it, *static_cast<const ValueType *>(t));
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::mulAssign(const void *t)
+{
+    dtkMetaContainerSequentialIteratorHelper<ValueType>::mulAssign(*it, *static_cast<const ValueType *>(t));
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::iterator::divAssign(const void *t)
+{
+    dtkMetaContainerSequentialIteratorHelper<ValueType>::divAssign(*it, *static_cast<const ValueType *>(t));
+}
+
+template <typename T> inline bool dtkMetaContainerSequentialHandlerTemplate<T>::iterator::equalToValue(const void *t) const
+{
+    return (*it == *static_cast<const ValueType *>(t));
+}
+
+// ///////////////////////////////////////////////////////////////////
+// dtkMetaContainerSequentialHandlerTemplate::const_iterator
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T> inline dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::const_iterator(const ConstIterator& iterator) : it(iterator) 
+{
+
+}
+
+template <typename T> inline dtkMetaContainerSequentialHandler::const_iterator *dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::clone(void) const 
+{ 
+    return new const_iterator(it);
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::copy(const dtkMetaContainerSequentialHandler::const_iterator& o)
+{ 
+    it = static_cast<const const_iterator&>(o).it; 
+}
+
+template <typename T> inline bool dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::equal(const dtkMetaContainerSequentialHandler::const_iterator& o) const
+{ 
+    return it == static_cast<const const_iterator&>(o).it;
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::advance(void) 
+{ 
+    ++it;
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::moveForward(qlonglong step)
+{ 
+    std::advance(it, step);
+}
+
+template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::moveBackward(qlonglong step)
+{ 
+    std::advance(it, -step);
+}
+
+template < typename T > inline const void *dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::value(void) const 
+{ 
+    return &(*it);
+}
+
+template <typename T> inline QVariant dtkMetaContainerSequentialHandlerTemplate<T>::const_iterator::variant(void) const
+{ 
+    return QVariant(qMetaTypeId<ValueType>(), &(*it), QTypeInfo<ValueType>::isPointer);
+}
+
+// ///////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialHandlerTemplate
 // ///////////////////////////////////////////////////////////////////
+
+template <typename T> inline dtkMetaContainerSequentialHandler::iterator *dtkMetaContainerSequentialHandlerTemplate<T>::begin(void) 
+{ 
+    return new iterator(m_container->begin());
+}
+
+template <typename T> inline dtkMetaContainerSequentialHandler::const_iterator *dtkMetaContainerSequentialHandlerTemplate<T>::cbegin(void) const
+{
+    return new const_iterator(m_container->cbegin());
+}
+
+template <typename T> inline dtkMetaContainerSequentialHandler::iterator *dtkMetaContainerSequentialHandlerTemplate<T>::end(void)
+{
+    return new iterator(m_container->end());
+}
+
+template <typename T> inline dtkMetaContainerSequentialHandler::const_iterator *dtkMetaContainerSequentialHandlerTemplate<T>::cend(void) const
+{
+    return new const_iterator(m_container->cend());
+}
 
 template <typename T> inline dtkMetaContainerSequentialHandlerTemplate<T>::dtkMetaContainerSequentialHandlerTemplate(T *c) : m_container(c)
 {
@@ -64,22 +212,22 @@ template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::
 
 template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::append(const void *t)
 {
-    dtkMetaContainerSequentialHandlerHelper<T>::insert(m_container, this->size(), *(static_cast<const typename T::value_type *>(t)));
+    dtkMetaContainerSequentialHandlerHelper<T>::insert(m_container, this->size(), *(static_cast<const ValueType *>(t)));
 }
 
 template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::prepend(const void *t)
 {
-    dtkMetaContainerSequentialHandlerHelper<T>::insert(m_container, 0, *(static_cast<const typename T::value_type *>(t)));
+    dtkMetaContainerSequentialHandlerHelper<T>::insert(m_container, 0, *(static_cast<const ValueType *>(t)));
 }
 
 template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::insert(qlonglong idx, const void *t)
 {
-    dtkMetaContainerSequentialHandlerHelper<T>::insert(m_container, idx, *(static_cast<const typename T::value_type *>(t)));
+    dtkMetaContainerSequentialHandlerHelper<T>::insert(m_container, idx, *(static_cast<const ValueType *>(t)));
 }
 
 template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::setAt(qlonglong idx, const void *t)
 {
-    dtkMetaContainerSequentialHandlerHelper<T>::setAt(m_container, idx, *(static_cast<const typename T::value_type *>(t)));
+    dtkMetaContainerSequentialHandlerHelper<T>::setAt(m_container, idx, *(static_cast<const ValueType *>(t)));
 }
 
 template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::removeAt(qlonglong idx)
@@ -97,49 +245,17 @@ template <typename T> inline void *dtkMetaContainerSequentialHandlerTemplate<T>:
     return dtkMetaContainerSequentialHandlerHelper<T>::at(m_container, idx);
 }
 
-template <typename T> inline typename dtkMetaContainerSequentialHandlerTemplate<T>::item *dtkMetaContainerSequentialHandlerTemplate<T>::itemAt(qlonglong idx)
+template <typename T> inline dtkMetaContainerSequentialHandler::iterator *dtkMetaContainerSequentialHandlerTemplate<T>::iteratorAt(qlonglong idx, dtkMetaContainerSequentialHandler::iterator *it)
 {
-    return new item(dtkMetaContainerSequentialHandlerHelper<T>::at(m_container, idx));
+    dtkMetaContainerSequentialHandlerHelper<T>::iteratorAt(m_container, idx, static_cast<dtkMetaContainerSequentialHandlerTemplate<T>::iterator *>(it)->it);
+    return it;
 }
 
-template <typename T> inline QVariant dtkMetaContainerSequentialHandlerTemplate<T>::variantAt(qlonglong idx)
+template <typename T> inline QVariant& dtkMetaContainerSequentialHandlerTemplate<T>::variantAt(qlonglong idx, QVariant& var)
 {
-    return dtkMetaType::variantFromValue(*dtkMetaContainerSequentialHandlerHelper<T>::at(m_container, idx));
+    return dtkMetaContainerSequentialHandlerHelper<T>::variantAt(m_container, idx, var);
 }
 
-// ///////////////////////////////////////////////////////////////////
-// dtkMetaContainerSequentialHandlerTemplate item
-// ///////////////////////////////////////////////////////////////////
-
-template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::item::assign(const void *t)
-{
-    dtkMetaContainerSequentialItemHelper<ValueType>::assign(*ref, *static_cast<const ValueType *>(t));
-}
-
-template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::item::addAssign(const void *t)
-{
-    dtkMetaContainerSequentialItemHelper<ValueType>::addAssign(*ref, *static_cast<const ValueType *>(t));
-}
-
-template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::item::subAssign(const void *t)
-{
-    dtkMetaContainerSequentialItemHelper<ValueType>::subAssign(*ref, *static_cast<const ValueType *>(t));
-}
-
-template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::item::mulAssign(const void *t)
-{
-    dtkMetaContainerSequentialItemHelper<ValueType>::mulAssign(*ref, *static_cast<const ValueType *>(t));
-}
-
-template <typename T> inline void dtkMetaContainerSequentialHandlerTemplate<T>::item::divAssign(const void *t)
-{
-    dtkMetaContainerSequentialItemHelper<ValueType>::divAssign(*ref, *static_cast<const ValueType *>(t));
-}
-
-template <typename T> inline bool dtkMetaContainerSequentialHandlerTemplate<T>::item::equal(const void *t)
-{
-    return (*ref == *static_cast<const ValueType *>(t));
-}
 
 // ///////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialHandlerHelper
@@ -213,52 +329,66 @@ template <typename T> inline typename dtkMetaContainerSequentialHandlerHelper<T>
     return &(*it);
 }
 
+template <typename T> inline void dtkMetaContainerSequentialHandlerHelper<T>::iteratorAt(T *c, qlonglong idx, Iterator& it)
+{
+    it = c->begin();
+    std::advance(it, idx);
+}
+
+template <typename T> inline QVariant& dtkMetaContainerSequentialHandlerHelper<T>::variantAt(const T *c, qlonglong idx, QVariant& var)
+{
+    typename T::const_iterator it(c->cbegin());
+    std::advance(it, idx);
+    var.setValue(*it);
+    return var;
+}
+
 // ///////////////////////////////////////////////////////////////////
-// dtkMetaContainerSequentialItemHelper
+// dtkMetaContainerSequentialIteratorHelper
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::assign(T& lhs, const T& rhs)
+template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::assign(T& lhs, const T& rhs)
 { 
     lhs = rhs; 
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::assign(T&, const T&) 
+template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::assign(T&, const T&) 
 {
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsAddAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::addAssign(T& lhs, const T& rhs)
+template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsAddAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::addAssign(T& lhs, const T& rhs)
 { 
     lhs += rhs; 
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsAddAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::addAssign(T&, const T&) 
+template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsAddAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::addAssign(T&, const T&) 
 {
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsSubAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::subAssign(T& lhs, const T& rhs)
+template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsSubAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::subAssign(T& lhs, const T& rhs)
 { 
     lhs -= rhs; 
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsSubAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::subAssign(T&, const T&) 
+template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsSubAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::subAssign(T&, const T&) 
 {
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsMulAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::mulAssign(T& lhs, const T& rhs)
+template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsMulAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::mulAssign(T& lhs, const T& rhs)
 { 
     lhs *= rhs; 
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsMulAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::mulAssign(T&, const T&) 
+template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsMulAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::mulAssign(T&, const T&) 
 {
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsDivAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::divAssign(T& lhs, const T& rhs)
+template <typename T> template <typename U> inline typename std::enable_if<dtkMetaTypeIsDivAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::divAssign(T& lhs, const T& rhs)
 { 
     lhs /= rhs; 
 }
 
-template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsDivAssignable<U>::value>::type dtkMetaContainerSequentialItemHelper<T>::divAssign(T&, const T&) 
+template <typename T> template <typename U> inline typename std::enable_if<!dtkMetaTypeIsDivAssignable<U>::value>::type dtkMetaContainerSequentialIteratorHelper<T>::divAssign(T&, const T&) 
 {
 }
 
@@ -284,20 +414,18 @@ template <typename T> inline bool dtkMetaType::registerContainerPointerConverter
 // 
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, bool B> inline bool dtkMetaContainerSequentialRegisterConverter<T, B>::record(int id)
-{
-    return false;
-}
-
-template <typename T> inline bool dtkMetaContainerSequentialRegisterConverter<T, true>::record(int id)
+template <typename T> inline bool dtkContainerSequentialValueTypeIsMetaType<T, true>::record(int id)
 {
     const int toId = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
     if (!QMetaType::hasRegisteredConverterFunction(id, toId)) {
         dtkMetaContainerSequentialConvertFunctor<T> o;
-        return QMetaType::registerConverter<T ,dtkMetaContainerSequentialHandler *, dtkMetaContainerSequentialConvertFunctor<T> >(o);
+        return QMetaType::registerConverter<T, 
+                                            dtkMetaContainerSequentialHandler *,
+                                            dtkMetaContainerSequentialConvertFunctor<T> >(o);
     }
     return true;    
 }
 
-// 
+//
 // dtkMetaContainerSequentialHandler.tpp ends here
+

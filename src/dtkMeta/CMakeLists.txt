@@ -23,8 +23,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkMeta.h
   dtkMeta.tpp
   dtkMetaTypeTraits.h
-  dtkMetaContainerSequential_p.h
-  dtkMetaContainerSequential_p.tpp
   dtkMetaContainerSequential.h
   dtkMetaContainerSequential.tpp
   dtkMetaContainerSequentialHandler.h

@@ -18,305 +18,539 @@
 // dtkMetaContainerSequential::item implementation
 // /////////////////////////////////////////////////////////////////
 
-inline dtkMetaContainerSequential::item::item(dtkMetaContainerSequential::iterator *iter) : m_iterator(iter), m_h(iter->m_h)
+inline dtkMetaContainerSequential::item::item(HandlerIterator *iterator) : it(iterator)
 {
 
+}
+
+inline dtkMetaContainerSequential::item::item(item&& o) : it(NULL)
+{ 
+    std::swap(it, o.it);
+}
+
+inline dtkMetaContainerSequential::item::~item()
+{ 
+    if(it) 
+        delete it;
+
+    it = NULL;
 }
 
 inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (const item& o)
 {
-    m_h.setValueToIterator(o.m_h.iteratorValue());
-    return *this;
-}
-
-inline dtkMetaContainerSequential::item::~item()
-{
-    if (m_iterator) {
-        m_iterator->m_item = NULL;
-        delete m_iterator;
+    if (this != &o) {
+        it->copy(*(o.it));
     }
+    return *this;
+}
+inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (item&& o) 
+{ 
+    std::swap(it, o.it); 
+    return *this;
+}
+        
+inline bool dtkMetaContainerSequential::item::operator == (const item& o) const 
+{
+    return  it->equal(*(o.it));
 }
 
-template<typename T> inline T dtkMetaContainerSequential::item::value(void) const
+inline bool dtkMetaContainerSequential::item::operator != (const item& o) const
 {
-    return (*(*this)).value<T>();
+    return !it->equal(*(o.it));
 }
 
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (const T& value)
+inline const QVariant dtkMetaContainerSequential::item::value(void) const 
 {
-    m_h.setValueToIterator(&value);
+    return it->variant();
+}
+
+template<typename T> inline const T& dtkMetaContainerSequential::item::value(void) const
+{
+    return *static_cast<const T *>(it->value());
+}
+
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (const T& t)
+{
+    it->assign(&t);
     return *this;
 }
 
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator += (const T& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator += (const T& t)
 {
-    m_h.addValueToItem(&value);
+    it->addAssign(&t);
     return *this;
 }
 
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator -= (const T& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator -= (const T& t)
 {
-    m_h.subValueToItem(&value);
+    it->subAssign(&t);
     return *this;
 }
 
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator *= (const T& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator *= (const T& t)
 {
-    m_h.mulValueToItem(&value);
+    it->mulAssign(&t);
     return *this;
 }
 
-template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator /= (const T& value)
+template<typename T> inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator /= (const T& t)
 {
-    m_h.divValueToItem(&value);
+    it->divAssign(&t);
     return *this;
 }
 
-template<typename T> inline bool dtkMetaContainerSequential::item::operator == (const T& value)
+template<typename T> inline bool dtkMetaContainerSequential::item::operator == (const T& t) const
 {
-    return m_h.isItemEqualTo(&value);
+    return it->equalToValue(&t);
 }
 
-template<typename T> inline bool dtkMetaContainerSequential::item::operator != (const T& value)
+template<typename T> inline bool dtkMetaContainerSequential::item::operator != (const T& t) const
 {
-    return !(m_h.isItemEqualTo(&value));
+    return !it->equalToValue(&t);
+}
+
+// /////////////////////////////////////////////////////////////////
+
+inline QDebug& operator << (QDebug debug, const dtkMetaContainerSequential::item& item)
+{
+    const bool oldSetting = debug.autoInsertSpaces();
+    debug.nospace() << item.value();
+    debug.setAutoInsertSpaces(oldSetting);
+    return debug.maybeSpace();    
 }
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential::iterator implementation
 // /////////////////////////////////////////////////////////////////
 
+inline dtkMetaContainerSequential::iterator::iterator(HandlerIterator *iterator) : proxy(iterator)
+{
+}
+
+inline dtkMetaContainerSequential::iterator::iterator(const iterator& o) : proxy(o.proxy.it)
+{ 
+}
+         
+inline dtkMetaContainerSequential::iterator::iterator(iterator&& o) : proxy(o.proxy.it) 
+{ 
+    o.proxy.it = NULL;
+}
+
+inline dtkMetaContainerSequential::iterator::~iterator(void)
+{
+}
+
+inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (const iterator& o)
+{
+    proxy = o.proxy;
+    return *this;
+}
+
+inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (iterator&& o)
+{ 
+    std::swap(proxy.it, o.proxy.it);
+    return *this;
+}
+
 inline bool dtkMetaContainerSequential::iterator::operator == (const iterator& o) const
 {
-    return (m_h.equal(o.m_h));
+    return proxy == o.proxy;
 }
 
 inline bool dtkMetaContainerSequential::iterator::operator != (const iterator& o) const
 {
-    return !(m_h.equal(o.m_h));
+    return proxy != o.proxy;
 }
 
-inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator * (void) const
+inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator * (void)
 {
-    return *m_item;
+    return proxy;
+}
+
+inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator [] (qlonglong j)
+{
+    return *(*this + j);
+}
+
+template <typename T> inline T& dtkMetaContainerSequential::iterator::value(void)
+{ 
+    return *static_cast<T *>(proxy.it->value());
 }
 
 inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator ++ (void)
 {
-    m_h.advance(1);
+    proxy.it->advance();
     return *this;
+}
+
+inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator ++ (int)
+{
+    iterator o(*this); 
+    proxy.it->advance(); 
+    return o;
 }
 
 inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -- (void)
 {
-    m_h.advance(-1);
+    proxy.it->moveBackward(static_cast<qlonglong>(1)); 
     return *this;
 }
 
-inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator += (int j)
+inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator -- (int)
 {
-    m_h.advance(j);
+    iterator o(*this); 
+    proxy.it->moveBackward(static_cast<qlonglong>(1)); 
+    return o;
+}
+
+inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator += (qlonglong j)
+{
+    proxy.it->moveForward(j);
     return *this;
 }
 
-inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -= (int j)
+inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -= (qlonglong j)
 {
-    m_h.advance(-j);
+    proxy.it->moveBackward(j);
     return *this;
+}
+
+inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator + (qlonglong j) const
+{
+    iterator o(*this);
+    o += j;
+    return o;
+}
+
+inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator - (qlonglong j) const
+{
+    iterator o(*this);
+    o -= j;
+    return o;
 }
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential::const_iterator implementation
 // /////////////////////////////////////////////////////////////////
 
+inline dtkMetaContainerSequential::const_iterator::const_iterator(HandlerConstIterator *iterator) : it(iterator)
+{
+}
+
+inline dtkMetaContainerSequential::const_iterator::const_iterator(const const_iterator& o) : it(o.it->clone())
+{
+}
+
+inline dtkMetaContainerSequential::const_iterator::const_iterator(const_iterator&& o) : it(o.it)
+{
+    o.it = NULL;
+}
+
+inline dtkMetaContainerSequential::const_iterator::~const_iterator(void)
+{
+    if (it)
+        delete it;
+    it = NULL;
+}
+
+inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator = (const const_iterator& o)
+{
+    if (this != &o)
+        it->copy(*(o.it));
+    return *this;
+}
+
+inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator = (const_iterator&& o)
+{
+    std::swap(it, o.it);
+    return *this;
+}
+
 inline bool dtkMetaContainerSequential::const_iterator::operator == (const const_iterator& o) const
 {
-    return m_h.equalConst(o.m_h);
+    return it->equal(*(o.it));
 }
 
 inline bool dtkMetaContainerSequential::const_iterator::operator != (const const_iterator& o) const
 {
-    return !(m_h.equalConst(o.m_h));
+    return !it->equal(*(o.it));
+}
+
+inline QVariant dtkMetaContainerSequential::const_iterator::operator * (void) const
+{
+    return it->variant();
+}
+
+inline QVariant dtkMetaContainerSequential::const_iterator::operator [] (qlonglong j) const
+{
+    return *(*this + j);
 }
 
 inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator ++ (void)
 {
-    m_h.advanceConst(1);
+    it->advance(); return *this;
     return *this;
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator ++ (int)
+{
+    const_iterator o(*this);
+    it->advance();
+    return o;
 }
 
 inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -- (void)
 {
-    m_h.advanceConst(-1);
+    it->moveBackward(static_cast<qlonglong>(1));
     return *this;
 }
 
-inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator += (int j)
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator -- (int)
 {
-    m_h.advanceConst(j);
+    const_iterator o(*this); 
+    it->moveBackward(static_cast<qlonglong>(1));
+    return o;
+}
+
+inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator += (qlonglong j)
+{
+    it->moveForward(j);
     return *this;
 }
 
-inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -= (int j)
+inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -= (qlonglong j)
 {
-    m_h.advanceConst(-j);
+    it->moveBackward(j);
     return *this;
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (qlonglong j) const
+{
+    const_iterator o(*this);
+    o += j;
+    return o;
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (qlonglong j) const
+{
+    const_iterator o(*this);
+    o -= j;
+    return o;
 }
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequential implementation
 // /////////////////////////////////////////////////////////////////
 
-inline dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSequentialPrivate::handler h) : m_handler(h) 
-{
+inline dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSequentialHandler *handler) : h(handler), proxy(new item(NULL))
+{ 
+    if (handler) { 
+        proxy->it = handler->begin();
+    }
+}
 
+inline dtkMetaContainerSequential::~dtkMetaContainerSequential(void)
+{ 
+    if (h)
+        delete h;
+    h = NULL;
+}
+
+inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::begin(void)
+{
+    return iterator(h->begin());
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::begin(void) const
+{
+    return const_iterator(h->cbegin());
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cbegin(void) const
+{
+    return const_iterator(h->cbegin());
+}
+
+inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::end(void)
+{
+    return iterator(h->end());
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::end(void) const
+{
+    return const_iterator(h->cend());
+}
+
+inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cend(void) const
+{
+    return const_iterator(h->cend());
 }
 
 inline bool dtkMetaContainerSequential::hasBiDirectionalIterator(void) const 
 {
-    return m_handler.m_iterator_capabilities && dtkMetaContainerSequentialPrivate::BiDirectionalCapability;
+    return h->hasBiDirectionalIterator();
 }
 
 inline bool dtkMetaContainerSequential::hasRandomAccessIterator(void) const 
 {
-    return m_handler.m_iterator_capabilities && dtkMetaContainerSequentialPrivate::RandomAccessCapability;
-}
-
-inline void dtkMetaContainerSequential::clear(void)
-{
-    m_handler.clear();
-}
-
-inline void dtkMetaContainerSequential::reserve(int size)
-{
-    m_handler.reserve(size);
-}
-
-inline void dtkMetaContainerSequential::resize(int size)
-{
-    m_handler.resize(size);
+    return h->hasRandomAccessIterator();
 }
 
 inline bool dtkMetaContainerSequential::empty(void) const 
 {
-    return const_cast<dtkMetaContainerSequentialPrivate::handler&>(m_handler).empty();
+    return h->empty();
 }
 
-inline int dtkMetaContainerSequential::size(void) const 
+inline qlonglong dtkMetaContainerSequential::size(void) const 
 {
-    return const_cast<dtkMetaContainerSequentialPrivate::handler&>(m_handler).size();
+    return h->size();
 }
 
-template<typename T> inline void dtkMetaContainerSequential::setAt(int idx, const T& t) 
+inline void dtkMetaContainerSequential::clear(void)
 {
-    m_handler.setAt(idx, &t);
+    h->clear();
 }
 
-template<typename T> inline void dtkMetaContainerSequential::append(const T& t) 
+inline void dtkMetaContainerSequential::reserve(qlonglong size)
 {
-    m_handler.insert(this->size(), &t);
+    h->reserve(size);
 }
 
-inline void dtkMetaContainerSequential::append(const QVariant& v) 
+inline void dtkMetaContainerSequential::resize(qlonglong size)
 {
-    this->insert(this->size(), v);
+    h->resize(size);
 }
 
-template<typename T> inline void dtkMetaContainerSequential::prepend(const T& t) 
+template <typename T> inline void dtkMetaContainerSequential::append(const T& t)
+{ 
+    h->append(&t);
+}
+
+template <typename T> inline void dtkMetaContainerSequential::prepend(const T& t)
 {
-    m_handler.insert(0, &t);
+    h->prepend(&t);
 }
 
-inline void dtkMetaContainerSequential::prepend(const QVariant& v) 
+inline void dtkMetaContainerSequential::append(const QVariant& v)
+{
+    this->insert(h->size() - 1, v);
+}
+
+inline void dtkMetaContainerSequential::prepend(const QVariant& v)
 {
     this->insert(0, v);
 }
 
-template<typename T> inline void dtkMetaContainerSequential::insert(int idx, const T& t) 
+template <typename T> inline void dtkMetaContainerSequential::insert(qlonglong idx, const T& t)
 {
-    m_handler.insert(idx, &t);
+    h->insert(idx, &t);
 }
 
-inline void dtkMetaContainerSequential::removeAt(int idx) 
+template <typename T> inline void dtkMetaContainerSequential::setAt(qlonglong idx, const T& t)
 {
-    m_handler.remove(idx);
+    h->setAt(idx, &t);
 }
 
-inline const QVariant dtkMetaContainerSequential::first(void) const 
+template <typename T> inline const T& dtkMetaContainerSequential::at(qlonglong idx) const
 {
-    return this->at(0);
+    return *static_cast<const T *>(h->at(idx));
+}
+
+inline const QVariant& dtkMetaContainerSequential::at(qlonglong idx) const
+{
+    return h->variantAt(idx, var);
+}
+
+inline void dtkMetaContainerSequential::removeAt(qlonglong idx)
+{
+    h->removeAt(idx);
+}
+
+inline const QVariant& dtkMetaContainerSequential::first(void) const 
+{
+    return h->variantAt(0, var);
 }
 
 inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::first(void)
 {
-    iterator *it = new iterator(this->m_handler, new QAtomicInt(0));
-    it->m_h.moveToBegin();
-    return *(*it);
+    h->iteratorAt(0, proxy->it);
+    return *proxy;
 }
 
-inline const QVariant dtkMetaContainerSequential::last(void) const 
+inline const QVariant& dtkMetaContainerSequential::last(void) const 
 {
-    return this->at(this->size() - 1);
+    return h->variantAt(h->size() - 1, var);
 }
 
 inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::last(void)
 {
-    iterator *it = new iterator(this->m_handler, new QAtomicInt(0));
-    it->m_h.moveToEnd();
-    --(*it);
-    return *(*it);
+    h->iteratorAt(h->size()-1, proxy->it); 
+    return *proxy;
 }
 
-inline const QVariant dtkMetaContainerSequential::operator [] (int idx) const
+inline const QVariant& dtkMetaContainerSequential::operator [] (qlonglong idx) const
 {
-    return this->at(idx);
+    return h->variantAt(idx, var);
 }
 
-inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::operator [] (int idx)
+inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::operator [] (qlonglong idx)
 {
-    iterator *it = new iterator(this->m_handler, new QAtomicInt(0));
-    it->m_h.moveToBegin();
-    *it += idx;
-    return *(*it);
+    h->iteratorAt(idx, proxy->it);
+    return *proxy;
 }
 
 // /////////////////////////////////////////////////////////////////
 // Specialization of Qt internal struct to build QVariant of dtkMetaContainerSequential
 // /////////////////////////////////////////////////////////////////
 
-namespace QtPrivate {
-inline dtkMetaContainerSequential QVariantValueHelperInterface<dtkMetaContainerSequential>::invoke(const QVariant &v)
+namespace QtPrivate
 {
-    return dtkMetaContainerSequential(v.value<dtkMetaContainerSequentialPrivate::handler>());
-}
+    template <> struct QVariantValueHelperInterface<dtkMetaContainerSequential>
+    {
+        static dtkMetaContainerSequential invoke(const QVariant& v)
+        {
+            return dtkMetaContainerSequential(v.value<dtkMetaContainerSequentialHandler *>());
+        }
+    };
 }
 
-// ///////////////////////////////////////////////////////////////////
-// Implementation of canGetMetaContainerFromVariant avoiding recursive header inclusion
-// ///////////////////////////////////////////////////////////////////
+// // ///////////////////////////////////////////////////////////////////
+// // Implementation of canGetMetaContainerFromVariant avoiding recursive header inclusion
+// // ///////////////////////////////////////////////////////////////////
 
 inline bool dtkMetaType::canGetMetaContainerFromVariant(const QVariant& v)
 {
-    if (QMetaType::hasRegisteredConverterFunction(v.userType(), qMetaTypeId<dtkMetaContainerSequentialPrivate::handler>()))
-        return true;
-    return false;
+    int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    return QMetaType::hasRegisteredConverterFunction(v.userType(), to);
 }
 
 // /////////////////////////////////////////////////////////////////
 // Specialization of dtkMetaTypeHandler for dtkMetaContainerSequential
 // /////////////////////////////////////////////////////////////////
 
-inline bool dtkMetaTypeHandler<dtkMetaContainerSequential>::canConvert(const QList<int>& types)
+template <> struct dtkMetaTypeHandler <dtkMetaContainerSequential>
 {
-    int to = qMetaTypeId<dtkMetaContainerSequentialPrivate::handler>();
-
-    foreach(int from, types) {
-        if (!QMetaType::hasRegisteredConverterFunction(from, to)) {
-            return false;
+    static bool canConvert(const QList<int>& types) 
+    {
+        int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+        for(int from : types) {
+            if (!QMetaType::hasRegisteredConverterFunction(from, to)) {
+                return false;
+            }
         }
+        return true;
     }
-    
-    return true;
+};
+
+// /////////////////////////////////////////////////////////////////
+// Specialization of QVariant::canConvert<T>() method
+// /////////////////////////////////////////////////////////////////
+
+template <> inline bool QVariant::canConvert<dtkMetaContainerSequential>(void) const
+{
+    int from = d.type;
+    int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    return QMetaType::hasRegisteredConverterFunction(from, to);
 }
 
 //

@@ -1196,7 +1196,6 @@ template<typename T, qlonglong PreallocSize> inline QDataStream& operator >> (QD
 // Registering dtkArray to QMetaType system
 // ///////////////////////////////////////////////////////////////////
 
-QT_BEGIN_NAMESPACE
 template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> >
 {
     enum {
@@ -1257,19 +1256,17 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
         typeName.reserve(array_name.size() + 1 + type_length + 1 + array_size.size() + 1 + 1);
         typeName.append(array_name).append('<').append(array_type).append(',').append(array_size).append('>').append('*');
 
-        const int newId = qRegisterNormalizedMetaType< dtkArray<T, PreallocSize> *>(typeName, reinterpret_cast<dtkArray<T, PreallocSize>**>(quintptr(-1)));
+        const int newId = qRegisterNormalizedMetaType<dtkArray<T, PreallocSize> *>(typeName, reinterpret_cast<dtkArray<T, PreallocSize>**>(quintptr(-1)));
         metatype_id.storeRelease(newId);
+        if (newId > 0) {
+            dtkMetaType::registerContainerPointerConverter<dtkArray<T, PreallocSize> *>(newId);
+        }
 
         return newId;
     }
 };
-namespace QtPrivate {
-template<typename T, qlonglong PreallocSize> struct IsSequentialContainer< dtkArray<T, PreallocSize> *>
-{
-    enum { Value = true };
-};
-}
-QT_END_NAMESPACE
+
+template<typename T, qlonglong PreallocSize> struct dtkMetaTypeIsSequentialContainerPointer< dtkArray<T, PreallocSize> *> : std::true_type {};
 
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(dtkArray);
 

@@ -17,7 +17,6 @@
 #include <dtkMeta/dtkMeta>
 
 #include <QtCore>
-#include <QtGui>
 
 // ///////////////////////////////////////////////////////////////////
 // Data concrete class

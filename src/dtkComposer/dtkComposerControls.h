@@ -22,7 +22,6 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerControlsPrivate;

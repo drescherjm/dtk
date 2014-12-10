@@ -21,7 +21,7 @@
 
 #include "dtkComposerExport.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerSceneNode;
 class dtkComposerSceneNotePrivate;

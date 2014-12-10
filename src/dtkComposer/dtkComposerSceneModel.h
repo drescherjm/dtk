@@ -22,7 +22,7 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneModelPrivate;

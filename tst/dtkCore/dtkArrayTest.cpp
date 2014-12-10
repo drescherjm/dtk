@@ -14,7 +14,7 @@
 #include <dtkCore/dtkArray.h>
 
 #include <QtCore>
-#include <QtGui>
+#include <QVector3D>
 
 // /////////////////////////////////////////////////////////////////
 // Helper classes

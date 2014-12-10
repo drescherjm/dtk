@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerSceneEdgePrivate;

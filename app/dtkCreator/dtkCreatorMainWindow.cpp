@@ -59,7 +59,7 @@
 #include <dtkGuiSupport/dtkNotificationDisplay.h>
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
 // dtkCreatorMainWindowPrivate

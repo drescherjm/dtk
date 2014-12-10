@@ -18,7 +18,7 @@
 #include "dtkComposerExport.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerPathPrivate;
 class dtkComposerScene;

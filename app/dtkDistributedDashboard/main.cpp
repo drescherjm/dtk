@@ -23,7 +23,7 @@
 #include <QtQml>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQuick>
-#include <QtGui/QGuiApplication>
+#include <QGuiApplication>
 
 int main(int argc, char *argv[])
 {

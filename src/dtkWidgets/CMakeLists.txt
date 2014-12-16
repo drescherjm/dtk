@@ -59,6 +59,9 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
+target_link_libraries(${PROJECT_NAME}
+  dtkLog)
+
 ## ###################################################################
 ## Link rules
 ## ###################################################################

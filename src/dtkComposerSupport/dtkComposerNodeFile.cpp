@@ -1,15 +1,15 @@
-/* dtkComposerNodeFile.cpp --- 
- * 
+/* dtkComposerNodeFile.cpp ---
+ *
  * Author: Julien Wintz, INRIA
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeFile.h"
@@ -80,7 +80,7 @@ dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dt
 dtkComposerNodeFile::~dtkComposerNodeFile(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -236,28 +236,28 @@ dtkComposerNodeFileList::~dtkComposerNodeFileList(void)
 void dtkComposerNodeFileList::run(void)
 {
     if (!d->receiver_dir.isEmpty()) {
-      
+
         d->files.clear();
-      
+
 	if (d->receiver_dir.data()) {
-	  
+
             QString dirname = *(d->receiver_dir.data());
             QDir dir(dirname);
-	    
+
             if (!d->receiver_filters.isEmpty()) {
-	      
+
                 switch(d->receiver_filters.dataType()) {
-              
+
 		case QMetaType::QString: {
                     dir.setNameFilters(QStringList(*(d->receiver_filters.data<QString>())));
                     break;
                 }
-                
+
 		case QMetaType::QStringList: {
                     dir.setNameFilters(*(d->receiver_filters.data<QStringList>()));
                     break;
                 }
-                
+
 		default:
                     dtkWarn() << "Type" << d->receiver_filters.dataType() << "is not handled by the node. Only QString and QString List are supported";
                     break;
@@ -489,7 +489,7 @@ void dtkComposerNodeDirectory::run(void)
 
 QString dtkComposerNodeDirectory::type(void)
 {
-    return "fileDir";
+    return "directory";
 }
 
 QString dtkComposerNodeDirectory::titleHint(void)

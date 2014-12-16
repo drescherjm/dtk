@@ -15,6 +15,7 @@
 #include "dtkLogger.h"
 #include "dtkLogger_p.h"
 #include "dtkLogDestination.h"
+#include "dtkLogModel.h"
 
 dtkLogger& dtkLogger::instance(void)
 {
@@ -84,6 +85,26 @@ void dtkLogger::detachFile(const QString& path)
     d->destinations.removeOne(d->files[path]);
 
     d->files.remove(path);
+}
+
+void dtkLogger::attachModel(dtkLogModel *model)
+{
+    if(d->models.contains(model))
+        return;
+
+    d->models[model] = dtkLogDestinationPointer(new dtkLogDestinationModel(model));
+
+    d->destinations << d->models[model];
+}
+
+void dtkLogger::detachModel(dtkLogModel *model)
+{
+    if(!d->models.contains(model))
+        return;
+
+    d->destinations.removeOne(d->models[model]);
+
+    d->models.remove(model);
 }
 
 dtkLogger::dtkLogger(void) : d(new dtkLoggerPrivate)

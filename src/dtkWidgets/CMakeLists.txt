@@ -19,6 +19,8 @@ project(dtkWidgets)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkWidgetsLogView.h
+  dtkWidgetsLogView_p.h
   dtkWidgetsTag.h
   dtkWidgetsTagCloud.h
   dtkWidgetsTagCloudController.h
@@ -31,6 +33,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkWidgetsLogView.cpp
   dtkWidgetsTag.cpp
   dtkWidgetsTagCloud.cpp
   dtkWidgetsTagCloudController.cpp

@@ -19,6 +19,8 @@
 
 #include <QtCore>
 
+class dtkLogModel;
+
 class DTKLOG_EXPORT dtkLogger
 {
 public:
@@ -39,6 +41,10 @@ public:
 public:
     void attachFile(const QString& path);
     void detachFile(const QString& path);
+
+ public:
+    void attachModel(dtkLogModel *model);
+    void detachModel(dtkLogModel *model);
 
 private:
      dtkLogger(void);

@@ -13,6 +13,7 @@
 // Code:
 
 #include "dtkLogDestination.h"
+#include "dtkLogModel.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkLogDestination
@@ -76,6 +77,33 @@ void dtkLogDestinationFile::write(const QString& message)
 {
     d->stream << message << endl;
     d->stream.flush();
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkLogDestinationModel
+// /////////////////////////////////////////////////////////////////
+
+class dtkLogDestinationModelPrivate
+{
+public:
+    dtkLogModel *model;
+};
+
+dtkLogDestinationModel::dtkLogDestinationModel(dtkLogModel *model) : d(new dtkLogDestinationModelPrivate)
+{
+    d->model = model;
+}
+
+dtkLogDestinationModel::~dtkLogDestinationModel(void)
+{
+    delete d;
+
+    d = NULL;
+}
+
+void dtkLogDestinationModel::write(const QString& message)
+{
+    d->model->append(message);
 }
 
 //

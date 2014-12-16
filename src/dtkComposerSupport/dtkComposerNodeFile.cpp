@@ -450,3 +450,75 @@ QString dtkComposerNodeFileWrite::outputLabelHint(int port)
 
     return dtkComposerNode::inputLabelHint(port);
 }
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeDirectory implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeDirectory::dtkComposerNodeDirectory(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeDirectoryPrivate)
+{
+    this->appendReceiver(&(d->receiver_directory));
+
+    d->emitter_directory.setData(&(d->directory));
+    this->appendEmitter(&(d->emitter_directory));
+}
+
+dtkComposerNodeDirectory::~dtkComposerNodeDirectory(void)
+{
+    delete d;
+    d = NULL;
+}
+
+void dtkComposerNodeDirectory::run(void)
+{
+    QString directory;
+    if (!d->receiver_directory.isEmpty()) {
+        directory = *d->receiver_directory.data();
+    }
+    else {
+        directory = d->directory;
+    }
+
+    d->directory = directory;
+
+    if (!QDir(d->directory).exists()) {
+        QString msg = QString("Directory %1 does not exist! ").arg(d->directory);
+        dtkNotify(msg,30000);
+    }
+}
+
+QString dtkComposerNodeDirectory::type(void)
+{
+    return "fileDir";
+}
+
+QString dtkComposerNodeDirectory::titleHint(void)
+{
+    return "Directory";
+}
+
+QString dtkComposerNodeDirectory::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "dir";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeDirectory::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "dir";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeDirectory::value(void)
+{
+    return d->directory;
+}
+
+void dtkComposerNodeDirectory::setValue(QString value)
+{
+    d->directory = value;
+}

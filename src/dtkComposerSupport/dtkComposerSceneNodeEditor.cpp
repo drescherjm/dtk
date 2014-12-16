@@ -603,6 +603,19 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
             d->edit_s->setMaximumWidth(this->sizeHint().width() - d->butn_f->sizeHint().width());
 
+        } else if (dtkComposerNodeDirectory *f_node = dynamic_cast<dtkComposerNodeDirectory *>(node->wrapee())) {
+
+            d->butn_f->blockSignals(false);
+            d->butn_f->setEnabled(true);
+            d->butn_f->setVisible(true);
+
+            d->edit_s->blockSignals(false);
+            d->edit_s->setVisible(true);
+            d->edit_s->setEnabled(true);
+            d->edit_s->setText(f_node->value());
+
+            d->edit_s->setMaximumWidth(this->sizeHint().width() - d->butn_f->sizeHint().width());
+
         } else {
 
             QObject *object = NULL;
@@ -1222,6 +1235,9 @@ void dtkComposerSceneNodeEditor::onValueChanged(const QString& value)
         s_node->setValue(value);
 
     if (dtkComposerNodeFile *f_node = dynamic_cast<dtkComposerNodeFile *>(d->node->wrapee()))
+        f_node->setValue(value);
+
+    if (dtkComposerNodeDirectory *f_node = dynamic_cast<dtkComposerNodeDirectory *>(d->node->wrapee()))
         f_node->setValue(value);
 }
 

@@ -379,6 +379,16 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(value);
         }
 
+        if (dtkComposerNodeDirectory *f = dynamic_cast<dtkComposerNodeDirectory *>(node->wrapee())) {
+
+            QDomText text = document.createTextNode(f->value());
+
+            QDomElement value = document.createElement("value");
+            value.appendChild(text);
+
+            tag.appendChild(value);
+        }
+
         if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
             if (data_node->isAbstractData()) {

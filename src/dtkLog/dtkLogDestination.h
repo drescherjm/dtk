@@ -69,6 +69,25 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
+// dtkLogDestinationList
+// /////////////////////////////////////////////////////////////////
+
+class dtkLogDestinationModelPrivate;
+
+class DTKLOG_EXPORT dtkLogDestinationModel : public dtkLogDestination
+{
+ public:
+     dtkLogDestinationModel(dtkLogModel *model);
+    ~dtkLogDestinationModel(void);
+
+ public:
+    void write(const QString& message);
+
+ private:
+    dtkLogDestinationModelPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
 // dtkLogDestinationPointer
 // /////////////////////////////////////////////////////////////////
 

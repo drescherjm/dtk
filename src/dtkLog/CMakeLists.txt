@@ -24,13 +24,15 @@ set(${PROJECT_NAME}_HEADERS
   dtkLogger.h
   dtkLogger_p.h
   dtkLogEngine.h
-  dtkLogDestination.h)
+  dtkLogDestination.h
+  dtkLogModel.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkLog.cpp
   dtkLogger.cpp
   dtkLogEngine.cpp
-  dtkLogDestination.cpp)
+  dtkLogDestination.cpp
+  dtkLogModel.cpp)
 
 ## #################################################################
 ## Build rules

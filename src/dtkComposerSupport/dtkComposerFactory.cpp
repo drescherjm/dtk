@@ -204,6 +204,11 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     d->tags["File Write"] = QStringList() << "file" << "binary" << "qbytearray"<< "write";
     d->types["File Write"] = "fileWrite";
 
+    d->nodes << "Directory";
+    d->descriptions["Directory"] = "<p>Directory node</p>";
+    d->tags["Directory"] = QStringList() << "primitive" << "directory";
+    d->types["Directory"] = "directory";
+
     // Number operators
 
     this->initNodeNumberOperatorUnary();
@@ -1329,6 +1334,9 @@ dtkComposerNode *dtkComposerFactory::create(const QString& type)
 
     if(type == "fileWrite")
         return new dtkComposerNodeFileWrite;
+
+    if(type == "directory")
+        return new dtkComposerNodeDirectory;
 
     // container nodes
 

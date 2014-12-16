@@ -703,6 +703,15 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             }
         }
 
+        if(dtkComposerNodeDirectory *f = dynamic_cast<dtkComposerNodeDirectory *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "value") {
+                    f->setValue(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
         if(dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(leaf->wrapee())) {
 
             for(int i = 0; i < childNodes.count(); i++) {
@@ -744,16 +753,16 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
 {
     QDomElement source = node.firstChildElement("source");
     QDomElement destin = node.firstChildElement("destination");
-    
+
     int source_node = source.attribute("node").toInt();
     int destin_node = destin.attribute("node").toInt();
-    
+
     int source_id = source.attribute("id").toInt();
     int destin_id = destin.attribute("id").toInt();
 
     QString source_type = source.attribute("type");
     QString destin_type = destin.attribute("type");
-    
+
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
     if (source_type == "input")
         if (source_id >= d->node_map.value(source_node)->inputPorts().count())

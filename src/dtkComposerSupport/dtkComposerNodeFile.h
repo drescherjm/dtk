@@ -154,4 +154,37 @@ private:
     dtkComposerNodeFileWritePrivate *d;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeDirectory definition
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeDirectoryPrivate;
+
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeDirectory : public dtkComposerNodeLeaf
+{
+ public:
+    dtkComposerNodeDirectory(void);
+    ~dtkComposerNodeDirectory(void);
+
+ public:
+    void run(void);
+
+ public:
+    QString type(void);
+    QString titleHint(void);
+
+ public:
+    QString inputLabelHint(int);
+    QString outputLabelHint(int);
+
+ public:
+    QString value(void);
+
+ public:
+    void setValue(QString value);
+
+ private:
+    dtkComposerNodeDirectoryPrivate *d;
+};
+
 #endif

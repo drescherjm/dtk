@@ -1270,5 +1270,14 @@ template<typename T, qlonglong PreallocSize> struct dtkMetaTypeIsSequentialConta
 
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(dtkArray);
 
+// ///////////////////////////////////////////////////////////////////
+// Specialization of typetraits
+// ///////////////////////////////////////////////////////////////////
+
+#include <dtkMeta/dtkMetaTypeTraits.h>
+
+template< typename T, qlonglong PreallocSize > struct dtkMetaContainerIsReservable< dtkArray<T, PreallocSize> > : std::true_type {};
+template< typename T, qlonglong PreallocSize > struct  dtkMetaContainerIsResizable< dtkArray<T, PreallocSize> > : std::true_type {};
+
 //
 // dtkArray.tpp ends here

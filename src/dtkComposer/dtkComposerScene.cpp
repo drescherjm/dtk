@@ -557,23 +557,22 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
         QString name = event->mimeData()->text();
         QUrl url = event->mimeData()->urls().first();
-        
+
         if (url.scheme() == "note") {
-            
+
             dtkComposerStackCommandCreateNote *command = new dtkComposerStackCommandCreateNote;
             command->setScene(this);
             command->setParent(this->parentAt(event->scenePos()));
             command->setPosition(event->scenePos());
-            
+
             d->stack->push(command);
-            
+
             event->acceptProposedAction();
-            
+
             return;
-        }
-        
-        if (url.scheme() == "node") {
-            
+
+        } else if (!url.scheme().isEmpty()) {
+
             dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
             command->setFactory(d->factory);
             command->setScene(this);
@@ -582,11 +581,11 @@ void dtkComposerScene::dropEvent(QGraphicsSceneDragDropEvent *event)
             command->setPosition(event->scenePos());
             command->setType(url.path());
             command->setName(name);
-            
+
             d->stack->push(command);
-            
+
             event->acceptProposedAction();
-            
+
             return;
         }
     }

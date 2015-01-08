@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:38:29 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr 15 16:06:34 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 5
+ * Last-Updated: lun. janv.  5 13:48:34 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 7
  */
 
 /* Change Log:
@@ -19,7 +19,7 @@
 #include <QtCore>
 #include <QtWidgets>
 
-class dtkComposerNodeFactory;
+class dtkComposerFactory;
 class dtkComposerNodeFactoryViewPrivate;
 class dtkWidgetsItemView;
 class dtkWidgetsTagCloud;
@@ -35,7 +35,7 @@ public:
     ~dtkComposerNodeFactoryView(void);
 
 public:
-    void setFactory(dtkComposerNodeFactory *factory);
+    void setFactory(dtkComposerFactory *factory);
 
 public:
     void setDark(void);

@@ -22,6 +22,7 @@
 
 class dtkComposerNodePrivate;
 class dtkComposerTransmitter;
+class dtkComposerNodeMetaData;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNode
@@ -32,6 +33,21 @@ class DTKCOMPOSER_EXPORT dtkComposerNode
 public: 
              dtkComposerNode(void);
     virtual ~dtkComposerNode(void);
+
+public:
+    enum Kind {
+        Atomic = 1,
+        Composite = 2,
+        Control = 3,
+        Data = 4,
+        Process = 5,
+        View = 6,
+        Actor = 7
+    };
+
+public:
+    void setNodeMetaData(dtkComposerNodeMetaData *meta_data);
+    dtkComposerNodeMetaData *nodeMetaData(void) const;
 
 public:
     void appendEmitter(dtkComposerTransmitter *emitter);
@@ -48,7 +64,7 @@ public:
     QList<dtkComposerTransmitter *> receivers(void);
 
 public:
-    virtual QString type(void) = 0;
+    virtual QString type(void);
 
 public:
     virtual QString titleHint(void);

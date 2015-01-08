@@ -3,17 +3,18 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:39:25 2013 (+0200)
  * Version: 
- * Last-Updated: Mon Apr 15 16:09:35 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 55
+ * Last-Updated: jeu. janv.  8 16:46:50 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 99
  */
 
 /* Change Log:
  * 
  */
 
-#include "dtkComposerNodeFactory.h"
+#include "dtkComposerFactory.h"
 #include "dtkComposerNodeFactoryView.h"
+#include "dtkComposerNodeMetaData.h"
 
 #include <dtkWidgets/dtkWidgetsTagCloud>
 #include <dtkWidgets/dtkWidgetsTagCloudController>
@@ -23,7 +24,7 @@
 class dtkComposerNodeFactoryViewPrivate
 {
 public:
-    dtkComposerNodeFactory *factory;
+    dtkComposerFactory *factory;
 
 public:
     dtkWidgetsTagCloud *cloud;
@@ -74,12 +75,21 @@ dtkComposerNodeFactoryView::~dtkComposerNodeFactoryView(void)
     d = NULL;
 }
 
-void dtkComposerNodeFactoryView::setFactory(dtkComposerNodeFactory *factory)
+void dtkComposerNodeFactoryView::setFactory(dtkComposerFactory *factory)
 {
     d->factory = factory;
 
-    foreach(QString node, factory->keys())
-        d->controller->addItem(node, "description", QStringList() << node, "node", node);
+    const QHash<QString, dtkComposerNodeMetaData *>& meta_datas = factory->metaDatas();
+    QHash<QString, dtkComposerNodeMetaData *>::const_iterator cit = meta_datas.begin();
+    QHash<QString, dtkComposerNodeMetaData *>::const_iterator cend = meta_datas.end();
+    for(; cit != cend; ++cit) {
+        dtkComposerNodeMetaData *md = *cit;
+        qDebug() << cit.key() << md->description() << md->tags() << QString::number(md->kind()) << md->type();
+        d->controller->addItem(cit.key(), md->description(), md->tags(), "node", md->type());
+    }
+
+    // foreach(QString node, factory->keys())
+    //     d->controller->addItem(node, "description", QStringList() << node, "node", node);
 
     d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
 }

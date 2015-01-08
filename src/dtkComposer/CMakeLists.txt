@@ -36,6 +36,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerEvaluator_p.h
   dtkComposerEvaluatorProcess.h
   dtkComposerEvaluatorSlave.h
+  dtkComposerFactory.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h
   dtkComposerGraphLayouter.h
@@ -51,6 +52,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphView.h
   dtkComposerMetaType.h
   dtkComposerNode.h
+  dtkComposerNodeMetaData.h
   dtkComposerNodeDistributed.h
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
@@ -136,6 +138,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerEvaluator.cpp
   dtkComposerEvaluatorProcess.cpp
   dtkComposerEvaluatorSlave.cpp
+  dtkComposerFactory.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
   dtkComposerGraphLayouter.cpp
@@ -149,6 +152,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerGraphNodeSetVariables.cpp
   dtkComposerGraphView.cpp
   dtkComposerNode.cpp
+  dtkComposerNodeMetaData.cpp
   dtkComposerNodeFactory.cpp
   dtkComposerNodeFactoryView.cpp
   dtkComposerNodeBoolean.cpp
@@ -208,16 +212,16 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerWidget.cpp
   dtkComposerWriter.cpp)
 
-set(${PROJECT_NAME}_QRC dtkComposer.qrc)
+set(${PROJECT_NAME}_RCC dtkComposer.qrc)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
-qt5_add_resources(${PROJECT_NAME}_QRC ${PROJECT_NAME}_RCC)
+qt5_add_resources(${PROJECT_NAME}_QRC ${${PROJECT_NAME}_RCC})
 
 add_library(${PROJECT_NAME} SHARED
-  ${${PROJECT_NAME}_RCC}
+  ${${PROJECT_NAME}_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 

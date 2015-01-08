@@ -1,0 +1,9 @@
+{
+          "title" : "Boolean",
+           "kind" : "atomic",
+           "type" : "boolean",
+           "tags" : ["boolean", "atomic"],
+    "description" : "<p>Boolean node</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

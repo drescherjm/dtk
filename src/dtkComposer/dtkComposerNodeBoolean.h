@@ -30,13 +30,14 @@ public:
     void run(void);
 
 public:
-    inline QString type(void) {
-        return "boolean";
-    }
+    /* inline QString type(void) { */
+    /*     return this->nodeMetaData()->type(); */
+    /*     return "boolean"; */
+    /* } */
 
-    inline QString titleHint(void) {
-        return "Boolean";
-    }
+    /* inline QString titleHint(void) { */
+    /*     return "Boolean"; */
+    /* } */
 
     inline QString inputLabelHint(int) {
         return "value";

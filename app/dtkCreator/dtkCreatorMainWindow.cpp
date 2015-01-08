@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:40:34 2009 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jan 20 14:46:40 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 1845
+ * Last-Updated: lun. janv.  5 13:58:35 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 1851
  */
 
 /* Commentary:
@@ -27,6 +27,7 @@
 #include <dtkComposer/dtkComposerCompass.h>
 #include <dtkComposer/dtkComposerControls.h>
 #include <dtkComposer/dtkComposerEvaluator.h>
+#include <dtkComposer/dtkComposerFactory.h>
 #include <dtkComposer/dtkComposerNodeFactoryView.h>
 #include <dtkComposer/dtkComposerGraph.h>
 #include <dtkComposer/dtkComposerGraphView.h>

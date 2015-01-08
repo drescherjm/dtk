@@ -1,11 +1,14 @@
-<!DOCTYPE RCC><RCC version="1.0">
-  <qresource prefix="dtkComposer">
-    <file>dtkComposerNodeFlag-blue.png</file>
-    <file>dtkComposerNodeFlag-gray.png</file>
-    <file>dtkComposerNodeFlag-green.png</file>
-    <file>dtkComposerNodeFlag-orange.png</file>
-    <file>dtkComposerNodeFlag-pink.png</file>
-    <file>dtkComposerNodeFlag-red.png</file>
-    <file>dtkComposerNodeFlag-yellow.png</file>
-  </qresource>
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="dtkComposer">
+        <file>dtkComposerNodeBoolean.json</file>
+        
+        <file>dtkComposerNodeFlag-blue.png</file>
+        <file>dtkComposerNodeFlag-gray.png</file>
+        <file>dtkComposerNodeFlag-green.png</file>
+        <file>dtkComposerNodeFlag-orange.png</file>
+        <file>dtkComposerNodeFlag-pink.png</file>
+        <file>dtkComposerNodeFlag-red.png</file>
+        <file>dtkComposerNodeFlag-yellow.png</file>
+    </qresource>
 </RCC>

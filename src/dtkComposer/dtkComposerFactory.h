@@ -1,0 +1,34 @@
+// Version: $Id$
+// 
+// 
+
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
+#pragma once
+
+#include "dtkComposerExport.h"
+
+#include "dtkComposerNodeFactory.h"
+
+class DTKCOMPOSER_EXPORT dtkComposerFactory : public dtkComposerNodeFactory
+{
+public:
+     dtkComposerFactory(void);
+    ~dtkComposerFactory(void);
+
+public:
+    void initNodeBoolean(void);
+    void initNodeControl(void);
+    void initNodeNumber (void);
+    void initNodeString (void);
+};
+// 
+// dtkComposerFactory.h ends here

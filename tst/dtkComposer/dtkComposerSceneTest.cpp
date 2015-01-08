@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Apr 15 10:32:46 2013 (+0200)
  * Version: 
- * Last-Updated: Tue Apr 16 12:30:02 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 142
+ * Last-Updated: lun. janv.  5 13:52:47 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 147
  */
 
 /* Change Log:
@@ -40,7 +40,8 @@ void dtkComposerSceneTestCase::test(void)
     view->setScene(scene);
 
     dtkComposerNodeFactoryView *nodes = new dtkComposerNodeFactoryView;
-    nodes->setFactory(&(dtkComposer::node::factory()));
+    //nodes->setFactory(&(dtkComposer::node::factory()));
+    nodes->setFactory(new dtkComposerFactory);
 
     dtkComposerSceneModel *scene_model = new dtkComposerSceneModel;
     scene_model->setScene(scene);

@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  4 09:53:33 2013 (+0200)
+ * Last-Updated: mar. janv.  6 16:06:58 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 74
+ *     Update #: 95
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNode.h"
 #include "dtkComposerTransmitter.h"
+#include "dtkComposerNodeMetaData.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodePrivate definition
@@ -26,6 +27,9 @@
 
 class dtkComposerNodePrivate
 {
+public:
+    dtkComposerNodeMetaData *meta_data;
+
 public:
     QList<dtkComposerTransmitter *> emitters;
     QList<dtkComposerTransmitter *> receivers;
@@ -45,6 +49,7 @@ public:
 dtkComposerNode::dtkComposerNode(void) : d(new dtkComposerNodePrivate)
 {
     d->title_hint = "Node";
+    d->meta_data = 0;
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -52,6 +57,16 @@ dtkComposerNode::~dtkComposerNode(void)
     delete d;
 
     d = NULL;
+}
+
+void dtkComposerNode::setNodeMetaData(dtkComposerNodeMetaData *meta_data)
+{
+    d->meta_data = meta_data;
+}
+
+dtkComposerNodeMetaData *dtkComposerNode::nodeMetaData(void) const
+{
+    return d->meta_data;
 }
 
 void dtkComposerNode::appendEmitter(dtkComposerTransmitter *emitter)
@@ -100,8 +115,17 @@ QList<dtkComposerTransmitter *> dtkComposerNode::receivers(void)
     return d->receivers;
 }
 
+QString dtkComposerNode::type(void)
+{
+    if (d->meta_data)
+        return d->meta_data->type();
+
+    return QString();
+}
+
 QString dtkComposerNode::titleHint(void)
 {
+    return d->meta_data->title();
     return d->title_hint;
 }
 

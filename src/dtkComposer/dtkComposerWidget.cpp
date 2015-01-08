@@ -19,7 +19,7 @@
 #include "dtkComposerWidget_p.h"
 #include "dtkComposerCompass.h"
 #include "dtkComposerEvaluator.h"
-#include "dtkComposerNodeFactory.h"
+#include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerNodeRemote.h"
 #include "dtkComposerPath.h"
@@ -82,7 +82,7 @@ void dtkComposerWidgetPrivate::onRequestFinished(QNetworkReply *reply)
 
 dtkComposerWidget::dtkComposerWidget(QWidget *parent) : QWidget(parent), d(new dtkComposerWidgetPrivate)
 {
-    d->factory = new dtkComposerNodeFactory;
+    d->factory = new dtkComposerFactory;
     d->graph = new dtkComposerGraph;
     d->stack = new dtkComposerStack;
     d->scene = new dtkComposerScene;
@@ -135,7 +135,7 @@ dtkComposerWidget::~dtkComposerWidget(void)
     d = NULL;
 }
 
-void dtkComposerWidget::setFactory(dtkComposerNodeFactory *factory)
+void dtkComposerWidget::setFactory(dtkComposerFactory *factory)
 {
     delete d->factory;
 
@@ -295,7 +295,7 @@ dtkComposerEvaluator *dtkComposerWidget::evaluator(void)
     return d->evaluator;
 }
 
-dtkComposerNodeFactory *dtkComposerWidget::factory(void)
+dtkComposerFactory *dtkComposerWidget::factory(void)
 {
     return d->factory;
 }

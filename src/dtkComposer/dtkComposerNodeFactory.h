@@ -1,16 +1,16 @@
-/* dtkComposerNodeFactory.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Wed Apr 10 11:14:39 2013 (+0200)
- * Version: 
- * Last-Updated: Wed Apr 10 15:08:36 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 49
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -18,20 +18,29 @@
 
 #include "dtkComposerNode.h"
 
+class dtkComposerNodeFactoryPrivate;
+class dtkComposerNodeMetaData;
+
 class DTKCOMPOSER_EXPORT dtkComposerNodeFactory : public dtkCorePluginFactory<dtkComposerNode>
 {
+    Q_OBJECT
+
 public:
              dtkComposerNodeFactory(void);
     virtual ~dtkComposerNodeFactory(void);
 
-public:
-    virtual QStringList implementations(void);
+public slots:
+    dtkComposerNode *create(const QString& node);
 
 public:
-    void initNodeBoolean(void);
-    void initNodeControl(void);
-    void initNodeNumber (void);
-    void initNodeString (void);
+    void record(const QString& metadata_file_path, creator func);
+
+public:
+    const QStringList& nodes(void) const;
+    const QHash<QString, dtkComposerNodeMetaData *>& metaDatas(void) const;
+
+protected:
+    dtkComposerNodeFactoryPrivate *d;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -42,3 +51,6 @@ template <typename T> dtkComposerNode *dtkComposerNodeCreator(void)
 { 
     return new T; 
 };
+
+// 
+// dtkComposerNodeFactory.h ends here

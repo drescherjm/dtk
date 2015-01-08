@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource prefix="dtkComposer">
         <file>dtkComposerNodeBoolean.json</file>
+        <file>dtkComposerNodeInteger.json</file>
         
         <file>dtkComposerNodeFlag-blue.png</file>
         <file>dtkComposerNodeFlag-gray.png</file>

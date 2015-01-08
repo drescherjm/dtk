@@ -82,7 +82,7 @@ void dtkComposerFactory::initNodeControl(void)
 
 void dtkComposerFactory::initNodeNumber(void)
 {
-    this->record("integer", &dtkComposerNodeCreator<dtkComposerNodeInteger>);
+    this->record(":dtkComposer/dtkComposerNodeInteger.json", dtkComposerNodeCreator<dtkComposerNodeInteger>);
     this->record("real", &dtkComposerNodeCreator<dtkComposerNodeReal>);
 
     // -- Unary operators

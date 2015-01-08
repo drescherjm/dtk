@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:39:25 2013 (+0200)
  * Version: 
- * Last-Updated: jeu. janv.  8 16:46:50 2015 (+0100)
+ * Last-Updated: jeu. janv.  8 17:38:21 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 99
+ *     Update #: 101
  */
 
 /* Change Log:
@@ -84,12 +84,9 @@ void dtkComposerNodeFactoryView::setFactory(dtkComposerFactory *factory)
     QHash<QString, dtkComposerNodeMetaData *>::const_iterator cend = meta_datas.end();
     for(; cit != cend; ++cit) {
         dtkComposerNodeMetaData *md = *cit;
-        qDebug() << cit.key() << md->description() << md->tags() << QString::number(md->kind()) << md->type();
+        //qDebug() << cit.key() << md->description() << md->tags() << QString::number(md->kind()) << md->type();
         d->controller->addItem(cit.key(), md->description(), md->tags(), "node", md->type());
     }
-
-    // foreach(QString node, factory->keys())
-    //     d->controller->addItem(node, "description", QStringList() << node, "node", node);
 
     d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
 }

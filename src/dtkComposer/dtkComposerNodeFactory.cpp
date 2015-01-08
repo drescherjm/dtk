@@ -48,8 +48,6 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 
 dtkComposerNode *dtkComposerNodeFactory::create(const QString& node)
 {
-    qDebug() << Q_FUNC_INFO << node;
-
     dtkComposerNode *n = dtkCorePluginFactory<dtkComposerNode>::create(node);
     if (n)
         n->setNodeMetaData(d->meta_datas[node]);

@@ -1,20 +1,20 @@
-/* dtkComposerNode.h --- 
- * 
+/* dtkComposerNode.h ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:24:23 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. avril  1 22:32:13 2014 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 59
+ * Last-Updated: jeu. janv.  8 01:01:31 2015 (+0100)
+ *           By: etienne
+ *     Update #: 61
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -56,6 +56,7 @@ public:
 
 public:
     virtual QString titleHint(void);
+    QString title(void) const;
 
 public:
     virtual QString  inputLabelHint(int port);
@@ -63,6 +64,7 @@ public:
 
 public:
     void setTitleHint(const QString& hint);
+    void setTitle(const QString& title);
 
 public:
     void  setInputLabelHint(const QString& hint, int port);
@@ -71,4 +73,3 @@ public:
 private:
     dtkComposerNodePrivate *d;
 };
-

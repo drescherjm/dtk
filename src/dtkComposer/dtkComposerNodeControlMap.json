@@ -1,0 +1,9 @@
+{
+          "title" : "Map",
+           "kind" : "control",
+           "type" : "map",
+           "tags" : ["map", "control", "loop"],
+    "description" : "<p>High order function: takes a container and applies a set of functions to each of its element to generate a new container</p>",
+         "inputs" : [],
+        "outputs" : []
+}

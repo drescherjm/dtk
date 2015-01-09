@@ -47,12 +47,6 @@ public:
     void addBlock(dtkComposerNodeComposite *c);
     void removeBlock(int id);
 
-public:
-    QString type(void);
-
-public:
-    QString titleHint(void);
-
 private:
     dtkComposerNodeControlCasePrivate *d;
 };

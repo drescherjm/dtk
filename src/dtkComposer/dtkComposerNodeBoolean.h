@@ -30,15 +30,6 @@ public:
     void run(void);
 
 public:
-    inline QString inputLabelHint(int) {
-        return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-public:
     bool value(void);
 
 public:

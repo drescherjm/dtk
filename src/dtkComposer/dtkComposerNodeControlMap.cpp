@@ -188,13 +188,3 @@ void dtkComposerNodeControlMap::end(void)
 {
 
 }
-
-QString dtkComposerNodeControlMap::type(void)
-{
-    return "map";
-}
-
-QString dtkComposerNodeControlMap::titleHint(void)
-{
-    return "Map";
-}

@@ -1,21 +1,16 @@
-/* dtkComposerNode.cpp --- 
- * 
- * Author: David Rey
- * Copyright (C) 2008-2011 - David Rey, Inria.
- * Created: Tue Feb 14 14:25:11 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. janv.  6 16:06:58 2015 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 95
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNode.h"
 #include "dtkComposerTransmitter.h"
@@ -125,7 +120,8 @@ QString dtkComposerNode::type(void)
 
 QString dtkComposerNode::titleHint(void)
 {
-    return d->meta_data->title();
+    if (d->meta_data)
+        return d->meta_data->title();
     return d->title_hint;
 }
 
@@ -159,3 +155,6 @@ void dtkComposerNode::setOutputLabelHint(const QString& hint, int port)
 {
     d->output_label_hint[port] = hint;
 }
+
+// 
+// dtkComposerNode.cpp ends here

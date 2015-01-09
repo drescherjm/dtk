@@ -1,17 +1,16 @@
-/* dtkComposerNode.h --- 
- * 
- * Author: David Rey
- * Copyright (C) 2008-2011 - David Rey, Inria.
- * Created: Tue Feb 14 14:24:23 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -84,3 +83,6 @@ public:
 private:
     dtkComposerNodePrivate *d;
 };
+
+// 
+// dtkComposerNode.h ends here

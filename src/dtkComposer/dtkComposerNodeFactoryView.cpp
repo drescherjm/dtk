@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:39:25 2013 (+0200)
  * Version: 
- * Last-Updated: jeu. janv.  8 17:38:21 2015 (+0100)
+ * Last-Updated: ven. janv.  9 10:31:18 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 101
+ *     Update #: 140
  */
 
 /* Change Log:
@@ -65,6 +65,8 @@ dtkComposerNodeFactoryView::dtkComposerNodeFactoryView(QWidget *parent) : QWidge
     layout->setSpacing(0);
     layout->addWidget(d->scope);
     layout->addWidget(splitter);
+
+    this->addNote();
 }
 
 dtkComposerNodeFactoryView::~dtkComposerNodeFactoryView(void)
@@ -88,7 +90,16 @@ void dtkComposerNodeFactoryView::setFactory(dtkComposerFactory *factory)
         d->controller->addItem(cit.key(), md->description(), md->tags(), "node", md->type());
     }
 
-    d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
+    //d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
+}
+
+void dtkComposerNodeFactoryView::addNote(void)
+{  
+    dtkComposerNodeMetaData *note_md = new dtkComposerNodeMetaData;
+    if(note_md->setFromFile(":dtkComposer/dtkComposerNote.json")) {
+        d->controller->addItem(note_md->title(), note_md->description(), note_md->tags(), "note", note_md->type());
+    } 
+    delete note_md;
 }
 
 void dtkComposerNodeFactoryView::setDark(void)

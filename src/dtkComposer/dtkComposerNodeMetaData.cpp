@@ -32,7 +32,7 @@ public:
 
 dtkComposerNodeMetaData::dtkComposerNodeMetaData(void) : d(new dtkComposerNodeMetaDataPrivate)
 {
-    d->kind = dtkComposerNode::Atomic;
+    d->kind = dtkComposerNode::Unknown;
 }
 
 dtkComposerNodeMetaData::~dtkComposerNodeMetaData(void)
@@ -110,7 +110,7 @@ void dtkComposerNodeMetaData::setKind(const QString& kind)
         d->kind = dtkComposerNode::Actor;
 
     } else {
-        d->kind = dtkComposerNode::Atomic;
+        d->kind = dtkComposerNode::Unknown;
     }
 }
 

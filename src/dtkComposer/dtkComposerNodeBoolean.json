@@ -5,8 +5,8 @@
            "tags" : ["boolean", "atomic"],
     "description" : "<p>Boolean node</p>
                      <p>When used as a source node (ie without any edge at the input), one can set the boolean value through the node editor.</p>
-                     <p>Otherwise, one can feed its input either with a boolean, integer, double or string value. 
-                        When necessary, the node peform a conversion and returns the corresponding boolean value.</p>",
+                     <p>Otherwise, one can feed its input either with a boolean, integer, real or string value. 
+                        When necessary, the node performs a conversion and returns the corresponding boolean value.</p>",
          "inputs" : ["value"],
         "outputs" : ["value"]
 }

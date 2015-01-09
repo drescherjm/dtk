@@ -36,13 +36,14 @@ public:
 
 public:
     enum Kind {
-        Atomic = 1,
+          Unknown = 0,
+           Atomic = 1,
         Composite = 2,
-        Control = 3,
-        Data = 4,
-        Process = 5,
-        View = 6,
-        Actor = 7
+          Control = 3,
+             Data = 4,
+          Process = 5,
+             View = 6,
+            Actor = 7
     };
 
 public:

@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="dtkComposer">
+        <file>dtkComposerNote.json</file>
         <file>dtkComposerNodeBoolean.json</file>
         <file>dtkComposerNodeInteger.json</file>
         <file>dtkComposerNodeComposite.json</file>

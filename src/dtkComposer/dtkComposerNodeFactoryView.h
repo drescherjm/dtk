@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:38:29 2013 (+0200)
  * Version: 
- * Last-Updated: lun. janv.  5 13:48:34 2015 (+0100)
+ * Last-Updated: ven. janv.  9 10:13:20 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 7
+ *     Update #: 8
  */
 
 /* Change Log:
@@ -33,6 +33,9 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryView : public QWidget
 public:
      dtkComposerNodeFactoryView(QWidget *parent = 0);
     ~dtkComposerNodeFactoryView(void);
+
+public:
+    void addNote(void);
 
 public:
     void setFactory(dtkComposerFactory *factory);

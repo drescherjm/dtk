@@ -45,12 +45,6 @@ public:
     void begin(void);
     void end(void);
 
-public:
-    QString type(void);
-
-public:
-    QString titleHint(void);
-
 private:
     dtkComposerNodeControlForEachPrivate *d;
 };

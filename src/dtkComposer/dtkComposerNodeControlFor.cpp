@@ -188,13 +188,3 @@ void dtkComposerNodeControlFor::begin(void)
 void dtkComposerNodeControlFor::end(void)
 {
 }
-
-QString dtkComposerNodeControlFor::type(void)
-{
-    return "for";
-}
-
-QString dtkComposerNodeControlFor::titleHint(void)
-{
-    return "For";
-}

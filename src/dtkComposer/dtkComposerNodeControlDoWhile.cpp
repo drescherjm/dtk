@@ -110,10 +110,10 @@ void dtkComposerNodeControlDoWhile::setInputs(void)
 void dtkComposerNodeControlDoWhile::setOutputs(void)
 {
     if (d->first_iteration) {
-	for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
-	    t->twin()->enableLoopMode();
-	}
-	d->first_iteration = false;
+        for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+            t->twin()->enableLoopMode();
+        }
+        d->first_iteration = false;
     }
     for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
         t->twin()->setVariant(t->variant());
@@ -128,8 +128,8 @@ void dtkComposerNodeControlDoWhile::setVariables(void)
 int dtkComposerNodeControlDoWhile::selectBranch(void)
 {
     if (!d->cond.isEmpty())
-	return static_cast<int>(!(d->cond.data()));
-        
+        return static_cast<int>(!(d->cond.data()));
+
     return static_cast<int>(true);
 }
 
@@ -141,14 +141,4 @@ void dtkComposerNodeControlDoWhile::begin(void)
 void dtkComposerNodeControlDoWhile::end(void)
 {
 
-}
-
-QString dtkComposerNodeControlDoWhile::type(void)
-{
-    return "do while";
-}
-
-QString dtkComposerNodeControlDoWhile::titleHint(void)
-{
-    return "Do While";
 }

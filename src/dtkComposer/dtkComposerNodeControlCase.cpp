@@ -189,19 +189,9 @@ void dtkComposerNodeControlCase::end(void)
     int count = d->blocks.count();
     bool active;
     for (int i = 0; i < count; ++i) {
-	active = (i == d->block_id);
-	foreach(dtkComposerTransmitter *t, d->blocks.at(i)->emitters()) {
-	    t->setActive(active);
-	}	
-    }    
-}
-
-QString dtkComposerNodeControlCase::type(void)
-{
-    return "case";
-}
-
-QString dtkComposerNodeControlCase::titleHint(void)
-{
-    return "Case";
+        active = (i == d->block_id);
+        foreach(dtkComposerTransmitter *t, d->blocks.at(i)->emitters()) {
+            t->setActive(active);
+        }
+    }
 }

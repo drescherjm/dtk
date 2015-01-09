@@ -107,7 +107,7 @@ void dtkComposerNodeControlIf::setInputs(void)
 
 void dtkComposerNodeControlIf::setConditions(void)
 {
-    
+
 }
 
 void dtkComposerNodeControlIf::setOutputs(void)
@@ -116,39 +116,29 @@ void dtkComposerNodeControlIf::setOutputs(void)
 
 void dtkComposerNodeControlIf::setVariables(void)
 {
-    
+
 }
 
 int dtkComposerNodeControlIf::selectBranch(void)
 {
     if (!d->cond.isEmpty())
-	return static_cast<int>(!(d->cond.data()));
-        
+        return static_cast<int>(!(d->cond.data()));
+
     return static_cast<int>(false);
 }
 
 void dtkComposerNodeControlIf::begin(void)
 {
-    
+
 }
 
 void dtkComposerNodeControlIf::end(void)
 {
     bool value = d->cond.data();
-    
+
     foreach(dtkComposerTransmitter *t, d->then_block.emitters())
         t->setActive(value);
 
     foreach(dtkComposerTransmitter *t, d->else_block.emitters())
         t->setActive(!value);
-}
-
-QString dtkComposerNodeControlIf::type(void)
-{
-    return "if";
-}
-
-QString dtkComposerNodeControlIf::titleHint(void)
-{
-    return "If";
 }

@@ -121,7 +121,7 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 void dtkComposerNodeControlForEach::setInputs(void)
 {
     for(dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
-	t->disableLoopMode();
+        t->disableLoopMode();
     }
     d->first_iteration = true;
 }
@@ -129,10 +129,10 @@ void dtkComposerNodeControlForEach::setInputs(void)
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     if (d->first_iteration) {
-	for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
-	    t->twin()->enableLoopMode();
-	}
-	d->first_iteration = false;
+        for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+            t->twin()->enableLoopMode();
+        }
+        d->first_iteration = false;
     }
     for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
         t->twin()->setVariant(t->variant());
@@ -164,14 +164,4 @@ void dtkComposerNodeControlForEach::begin(void)
 void dtkComposerNodeControlForEach::end(void)
 {
 
-}
-
-QString dtkComposerNodeControlForEach::type(void)
-{
-    return "foreach";
-}
-
-QString dtkComposerNodeControlForEach::titleHint(void)
-{
-    return "For Each";
 }

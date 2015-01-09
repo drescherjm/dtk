@@ -1,0 +1,25 @@
+{
+          "title" : "While",
+           "kind" : "control",
+           "type" : "while",
+           "tags" : ["while", "control","loop"],
+    "description" : "<h3>Perform while loop</h3>
+<p>
+The <b>While</b> control node allows you to execute a subpart of the
+composition as long as a given condition is fullfilled. The condition
+is tested before the first step is executed.
+</p>
+<p>
+The node layout has two blocks:
+<ul>
+<li>The top one enables to define the loop criterion. The bottom block
+is executed if only this criterion is valid.</li>
+<li>The bottom block is actually the body of the while loop. It
+contains the subcomposition that is executed when the top criterion is
+valid.</li>
+</ul>
+</p>
+",
+         "inputs" : [],
+        "outputs" : []
+}

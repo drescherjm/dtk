@@ -6,6 +6,7 @@
         <file>dtkComposerNodeInteger.json</file>
         <file>dtkComposerNodeComposite.json</file>
         <file>dtkComposerNodeRemote.json</file>
+        <file>dtkComposerNodeRemoteSubmit.json</file>
         <file>dtkComposerNodeLogger.json</file>
         <file>dtkComposerNodePrint.json</file>
         <file>dtkComposerNodeBooleanOperatorUnaryNot.json</file>

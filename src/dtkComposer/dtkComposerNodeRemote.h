@@ -40,12 +40,6 @@ public:
              dtkComposerNodeRemote(void);
     virtual ~dtkComposerNodeRemote(void);
 
-public:
-    virtual QString type(void);
-
-public:
-    virtual QString titleHint(void);
-
 public slots:
     void onJobStarted(QString id);
 
@@ -91,37 +85,6 @@ public:
 
 public slots:
     void onJobQueued(const QString& job_id);
-
-public:
-    inline QString type(void) {
-        return "remoteSubmit";
-    }
-
-    inline QString titleHint(void) {
-        return "Remote Submit";
-    }
-
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "cluster";
-        else if (port == 1)
-            return "nodes";
-        else if (port == 2)
-            return "cores";
-        else if (port == 3)
-            return "walltime";
-        else if (port == 4)
-            return "queuename";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "jobid";
-    }
 
 public:
     void setSlaveName(QString);

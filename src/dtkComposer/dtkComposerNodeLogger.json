@@ -1,0 +1,9 @@
+{
+          "title" : "Logger",
+           "kind" : "atomic",
+           "type" : "logger",
+           "tags" : ["logger", "debug"],
+    "description" : "<p>Log message</p>",
+         "inputs" : ["value","header","level"],
+        "outputs" : []
+}

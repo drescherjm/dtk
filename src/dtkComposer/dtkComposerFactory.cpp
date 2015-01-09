@@ -42,6 +42,7 @@ dtkComposerFactory::dtkComposerFactory(void) : dtkComposerNodeFactory()
 
     this->record(":dtkComposer/dtkComposerNodeComposite.json", dtkComposerNodeCreator<dtkComposerNodeComposite>);
     this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
+    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",   dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
     this->record(":dtkComposer/dtkComposerNodeLogger.json",    dtkComposerNodeCreator<dtkComposerNodeLogger>);
     this->record(":dtkComposer/dtkComposerNodePrint.json",     dtkComposerNodeCreator<dtkComposerNodePrint>);
 }

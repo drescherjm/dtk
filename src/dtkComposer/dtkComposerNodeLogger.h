@@ -30,26 +30,6 @@ public:
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "logger";
-    }
-
-    inline QString titleHint(void) {
-        return "Logger";
-    }
-
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "value";
-        else if (port == 1)
-            return "header";
-        else if (port == 2)
-            return "level";
-        else
-            return "value";
-    }
-
 private:
     dtkComposerNodeLoggerPrivate *d;
 };

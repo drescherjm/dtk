@@ -1,0 +1,9 @@
+{
+          "title" : "Remote",
+           "kind" : "composite",
+           "type" : "remote",
+           "tags" : ["remote", "distributed","world","network"],
+    "description" : "<p>Execute a subcomposition on a remote node</p>",
+         "inputs" : [],
+        "outputs" : []
+}

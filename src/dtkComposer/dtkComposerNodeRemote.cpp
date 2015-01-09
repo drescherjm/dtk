@@ -58,16 +58,6 @@ dtkComposerNodeRemote::~dtkComposerNodeRemote(void)
     d = NULL;
 }
 
-QString dtkComposerNodeRemote::type(void)
-{
-    return "remote";
-}
-
-QString dtkComposerNodeRemote::titleHint(void)
-{
-    return d->title;
-}
-
 void dtkComposerNodeRemote::setComposition(QDomDocument document)
 {
     d->composition  = document;

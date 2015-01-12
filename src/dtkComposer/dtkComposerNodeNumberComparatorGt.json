@@ -1,0 +1,9 @@
+{
+          "title" : "Gt",
+           "kind" : "atomic",
+           "type" : "gt",
+           "tags" : ["number", "atomic", "binary", "gt", "greater"],
+    "description" : "<p>Returns true if <em>lhs</em> is strictly greater than <em>rhs</em>.</p>",
+         "inputs" : ["lhs", "rhs"],
+        "outputs" : ["value"]
+}

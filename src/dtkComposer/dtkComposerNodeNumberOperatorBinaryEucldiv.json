@@ -1,0 +1,9 @@
+{
+          "title" : "Eucldiv",
+           "kind" : "atomic",
+           "type" : "eucldiv",
+           "tags" : ["number", "atomic", "binary", "eucldiv"],
+    "description" : "<p>.Returns lhs div rhs where div is the Euclidean division.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

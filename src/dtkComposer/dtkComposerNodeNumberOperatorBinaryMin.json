@@ -1,0 +1,9 @@
+{
+          "title" : "Min",
+           "kind" : "atomic",
+           "type" : "min",
+           "tags" : ["number", "atomic", "binary", "min"],
+    "description" : "<p>Returns the minimum of two numbers.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["min"]
+}

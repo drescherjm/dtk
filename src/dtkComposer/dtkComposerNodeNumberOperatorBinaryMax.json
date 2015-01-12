@@ -1,0 +1,9 @@
+{
+          "title" : "Max",
+           "kind" : "atomic",
+           "type" : "max",
+           "tags" : ["number", "atomic", "binary", "max"],
+    "description" : "<p>Returns the maximum of two numbers.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["max"]
+}

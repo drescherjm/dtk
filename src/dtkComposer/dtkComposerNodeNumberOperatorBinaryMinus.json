@@ -1,0 +1,9 @@
+{
+          "title" : "Minus",
+           "kind" : "atomic",
+           "type" : "minus",
+           "tags" : ["number", "atomic", "binary", "minus"],
+    "description" : "<p>Returns a - b.</p>",
+         "inputs" : ["a","b"],
+        "outputs" : ["value"]
+}

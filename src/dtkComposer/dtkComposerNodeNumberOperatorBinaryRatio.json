@@ -1,0 +1,9 @@
+{
+          "title" : "Ratio",
+           "kind" : "atomic",
+           "type" : "ratio",
+           "tags" : ["number", "atomic", "binary", "ratio", "division"],
+    "description" : "<p>Compute lhs divided by rhs .</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

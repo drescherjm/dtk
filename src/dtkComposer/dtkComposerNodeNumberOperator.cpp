@@ -553,17 +553,6 @@ void dtkComposerNodeNumberOperatorBinaryEucldiv::run(void)
     d->emitter.setData<qlonglong>( d->receiver_lhs.data<qlonglong>() / d->receiver_rhs.data<qlonglong>() );
 }
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberOperatorBinary - LOGN
-// /////////////////////////////////////////////////////////////////
-
-void dtkComposerNodeNumberOperatorBinaryLogn::run(void)
-{
-    double lhs = d->receiver_lhs.data<double>();
-    double rhs = d->receiver_rhs.data<double>();
-    
-    d->emitter.setData<double>( qLn(lhs) / qLn(rhs) );
-}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeNumberOperatorBinary - MIN
@@ -629,7 +618,7 @@ void dtkComposerNodeNumberOperatorBinaryPlus::run(void)
 // dtkComposerNodeNumberOperatorBinary - POSNTHROOT
 // /////////////////////////////////////////////////////////////////
 
-void dtkComposerNodeNumberOperatorBinaryPosnthroot::run(void)
+void dtkComposerNodeNumberOperatorBinaryNthroot::run(void)
 {
     double lhs = d->receiver_lhs.data<double>();
     double rhs = d->receiver_rhs.data<double>();
@@ -656,18 +645,6 @@ void dtkComposerNodeNumberOperatorBinaryPower::run(void)
 void dtkComposerNodeNumberOperatorBinaryRatio::run(void)
 {
     d->emitter.setData<double>( d->receiver_lhs.data<double>() / d->receiver_rhs.data<double>() );
-}
-
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNodeNumberOperatorBinary - EXPN
-// /////////////////////////////////////////////////////////////////
-
-void dtkComposerNodeNumberOperatorBinaryExpn::run(void)
-{
-    double lhs = d->receiver_lhs.data<double>();
-    double rhs = d->receiver_rhs.data<double>();
-
-    d->emitter.setData<double>( qExp( lhs * qLn(rhs) ) );
 }
 
 // /////////////////////////////////////////////////////////////////

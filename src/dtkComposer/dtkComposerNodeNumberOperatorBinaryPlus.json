@@ -1,0 +1,9 @@
+{
+          "title" : "Plus",
+           "kind" : "atomic",
+           "type" : "plus",
+           "tags" : ["number", "atomic", "binary", "plus", "add", "sum"],
+    "description" : "<p>Compute the sum of two numbers.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

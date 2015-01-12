@@ -65,9 +65,10 @@
         <file>dtkComposerNodeNumberAlmosteq.json</file>
         <file>dtkComposerNodeNumberNotalmosteq.json</file>
         <file>dtkComposerNodeString.json</file>
+        <file>dtkComposerNodeStringReplace.json</file>
         <file>dtkComposerNodeStringOperatorBinaryAppend.json</file>
         <file>dtkComposerNodeStringOperatorBinaryLogicEquality.json</file>
-        
+
         <file>dtkComposerNodeFlag-blue.png</file>
         <file>dtkComposerNodeFlag-gray.png</file>
         <file>dtkComposerNodeFlag-green.png</file>

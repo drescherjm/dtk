@@ -32,14 +32,6 @@ public:
      dtkComposerNodeStringOperatorUnary(void);
     ~dtkComposerNodeStringOperatorUnary(void);
 
-    inline QString inputLabelHint(int) {
-        return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
 protected:
     dtkComposerNodeStringOperatorUnaryPrivate *d;
 };
@@ -55,19 +47,6 @@ class DTKCOMPOSER_EXPORT  dtkComposerNodeStringOperatorBinary : public dtkCompos
 public:
      dtkComposerNodeStringOperatorBinary(void);
     ~dtkComposerNodeStringOperatorBinary(void);
-
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "lhs";
-        else if (port == 1)
-            return "rhs";
-        else
-            return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
 
 protected:
     dtkComposerNodeStringOperatorBinaryPrivate *d;
@@ -85,19 +64,6 @@ public:
      dtkComposerNodeStringOperatorBinaryLogic(void);
     ~dtkComposerNodeStringOperatorBinaryLogic(void);
 
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "lhs";
-        else if (port == 1)
-            return "rhs";
-        else
-            return "port";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "boolean";
-    }
-
 protected:
     dtkComposerNodeStringOperatorBinaryLogicPrivate *d;
 };
@@ -111,14 +77,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryAppend : public dtkC
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "append";
-    }
-
-    inline QString titleHint(void) {
-        return "String Append";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -130,14 +88,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogicEquality : publ
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "string_equality";
-    }
-
-    inline QString titleHint(void) {
-        return "String equality";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -155,31 +105,6 @@ public:
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "string_replace";
-    }
-
-    inline QString titleHint(void) {
-        return "String replace";
-    }
-
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "string";
-        else if (port == 1)
-            return "regexp";
-        else if (port == 2)
-            return "after";
-        return "port";
-    }
-
-    inline QString outputLabelHint(int port) {
-        if (port == 0)
-            return "string";
-        return "port";
-    }
-
 protected:
     dtkComposerNodeStringReplacePrivate *d;
 
@@ -193,35 +118,16 @@ protected:
 
 class dtkComposerNodeStringListAppendPrivate;
 
+// FIXME: we should use a generic node for doing this
+
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringListAppend(void);
     ~dtkComposerNodeStringListAppend(void);
 
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "list";
-        else if (port == 1)
-            return "string";
-        return "port";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "list";
-    }
-
 public:
     void run(void);
-
-public:
-    inline QString type(void) {
-        return "appendStringList";
-    }
-
-    inline QString titleHint(void) {
-        return "Append to String List";
-    }
 
 protected:
     dtkComposerNodeStringListAppendPrivate *d;
@@ -233,35 +139,17 @@ protected:
 
 class dtkComposerNodeStringListExtractPrivate;
 
+// FIXME: we should use a generic node for doing this
+
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringListExtract(void);
     ~dtkComposerNodeStringListExtract(void);
 
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "list";
-        else if (port == 1)
-            return "index";
-        return "port";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "string";
-    }
-
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "extractStringList";
-    }
-
-    inline QString titleHint(void) {
-        return "Extract from String List";
-    }
 protected:
     dtkComposerNodeStringListExtractPrivate *d;
 };
@@ -272,37 +160,18 @@ protected:
 
 class dtkComposerNodeStringListSetPrivate;
 
+
+// FIXME: we should use a generic node for doing this
+
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringListSet(void);
     ~dtkComposerNodeStringListSet(void);
 
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "list";
-        else if (port == 1)
-            return "index";
-        else if (port == 2)
-            return "string";
-        return "port";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "list";
-    }
-
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "setStringList";
-    }
-
-    inline QString titleHint(void) {
-        return "Set String List item";
-    }
 protected:
     dtkComposerNodeStringListSetPrivate *d;
 };

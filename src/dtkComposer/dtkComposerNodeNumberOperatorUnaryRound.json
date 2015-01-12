@@ -1,0 +1,9 @@
+{
+          "title" : "Round",
+           "kind" : "atomic",
+           "type" : "round",
+           "tags" : ["number", "atomic", "unary", "round"],
+    "description" : "<p>Round the number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

@@ -1,0 +1,9 @@
+{
+          "title" : "Ceil",
+           "kind" : "atomic",
+           "type" : "ceil",
+           "tags" : ["number", "atomic", "unary", "ceil"],
+    "description" : "<p>Ceiling function  (smallest following integer)</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

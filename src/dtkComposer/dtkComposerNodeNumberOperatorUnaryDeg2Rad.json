@@ -1,0 +1,9 @@
+{
+          "title" : "Deg2rad",
+           "kind" : "atomic",
+           "type" : "deg2rad",
+           "tags" : ["number", "atomic", "unary", "deg2rad"],
+    "description" : "<p>Convert degree to radian value.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

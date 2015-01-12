@@ -1,0 +1,9 @@
+{
+          "title" : "Decr",
+           "kind" : "atomic",
+           "type" : "decr",
+           "tags" : ["number", "atomic", "unary", "decr", "minus"],
+    "description" : "<p>Decrease input value by one.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

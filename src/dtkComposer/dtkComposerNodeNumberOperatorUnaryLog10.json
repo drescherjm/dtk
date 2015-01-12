@@ -1,0 +1,9 @@
+{
+          "title" : "Log10",
+           "kind" : "atomic",
+           "type" : "log10",
+           "tags" : ["number", "atomic", "unary", "log10"],
+    "description" : "<p>Returns the binary logarithm in base 10 of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

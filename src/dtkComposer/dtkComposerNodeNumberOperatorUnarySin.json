@@ -1,0 +1,9 @@
+{
+          "title" : "Sin",
+           "kind" : "atomic",
+           "type" : "sin",
+           "tags" : ["number", "atomic", "unary", "sin"],
+    "description" : "<p>Returns the sine of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

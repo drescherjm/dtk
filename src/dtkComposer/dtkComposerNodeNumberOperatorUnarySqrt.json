@@ -1,0 +1,9 @@
+{
+          "title" : "Sqrt",
+           "kind" : "atomic",
+           "type" : "sqrt",
+           "tags" : ["number", "atomic", "unary", "sqrt"],
+    "description" : "<p>Returns the square root of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

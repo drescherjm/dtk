@@ -27,6 +27,7 @@
 
 class dtkComposerFactory;
 class dtkComposerFactoryViewPrivate;
+class dtkComposerSceneNode;
 class dtkItemView;
 class dtkTagScope;
 
@@ -40,6 +41,12 @@ public:
 
 public:
     void setFactory(dtkComposerFactory *factory);
+
+public slots:
+    void onShowNodeDocumentation(dtkComposerSceneNode *node);
+
+ public:
+    void showTagCloud(const bool show);
 
 public:
     void setBlue(void);

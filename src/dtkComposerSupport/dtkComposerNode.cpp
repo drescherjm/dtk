@@ -32,6 +32,7 @@ public:
 
 public:
     QString title_hint;
+    QString title;
 
 public:
     QHash<int, QString>  input_label_hint;
@@ -100,6 +101,11 @@ QList<dtkComposerTransmitter *> dtkComposerNode::receivers(void)
     return d->receivers;
 }
 
+QString dtkComposerNode::title(void) const
+{
+    return d->title;
+}
+
 QString dtkComposerNode::titleHint(void)
 {
     return d->title_hint;
@@ -119,6 +125,11 @@ QString dtkComposerNode::outputLabelHint(int port)
         return d->output_label_hint[port];
 
     return "port";
+}
+
+void dtkComposerNode::setTitle(const QString& title)
+{
+    d->title = title;
 }
 
 void dtkComposerNode::setTitleHint(const QString& hint)

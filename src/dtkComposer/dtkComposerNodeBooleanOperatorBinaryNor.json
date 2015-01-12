@@ -1,0 +1,9 @@
+{
+          "title" : "Nor",
+           "kind" : "atomic",
+           "type" : "nor",
+           "tags" : ["boolean", "atomic", "binary", "nor"],
+    "description" : "<p>Boolean NOT OR operator</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

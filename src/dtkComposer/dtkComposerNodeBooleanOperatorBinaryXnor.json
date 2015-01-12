@@ -1,0 +1,9 @@
+{
+          "title" : "Xnor",
+           "kind" : "atomic",
+           "type" : "xnor",
+           "tags" : ["boolean", "atomic", "binary", "xnor"],
+    "description" : "<p>Boolean NOT XOR operator</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

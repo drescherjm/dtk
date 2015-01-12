@@ -31,15 +31,6 @@ public:
      dtkComposerNodeBooleanOperatorUnary(void);
     ~dtkComposerNodeBooleanOperatorUnary(void);
 
-public:
-    inline QString inputLabelHint(int) {
-        return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
 protected:
     dtkComposerNodeBooleanOperatorUnaryPrivate *d;
 };
@@ -56,20 +47,6 @@ public:
      dtkComposerNodeBooleanOperatorBinary(void);
     ~dtkComposerNodeBooleanOperatorBinary(void);
 
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "lhs";
-        else if (port == 1)
-            return "rhs";
-        else
-            return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
 protected:
     dtkComposerNodeBooleanOperatorBinaryPrivate *d;
 };
@@ -83,14 +60,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorUnaryNot : public dtkComp
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "not";
-    }
-
-    inline QString titleHint(void) {
-        return "Not";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -102,14 +71,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryAnd : public dtkCom
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "and";
-    }
-
-    inline QString titleHint(void) {
-        return "And";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -121,14 +82,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryOr : public dtkComp
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "or";
-    }
-
-    inline QString titleHint(void) {
-        return "Or";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -140,14 +93,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryXor : public dtkCom
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "xor";
-    }
-
-    inline QString titleHint(void) {
-        return "Xor";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -159,14 +104,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNand : public dtkCo
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "nand";
-    }
-
-    inline QString titleHint(void) {
-        return "Nand";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -178,14 +115,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNor : public dtkCom
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "nor";
-    }
-
-    inline QString titleHint(void) {
-        return "Nor";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -197,14 +126,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryXnor : public dtkCo
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "xnor";
-    }
-
-    inline QString titleHint(void) {
-        return "Xnor";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -216,14 +137,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryImp : public dtkCom
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "imp";
-    }
-
-    inline QString titleHint(void) {
-        return "Imp";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -235,12 +148,4 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeBooleanOperatorBinaryNimp : public dtkCo
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "nimp";
-    }
-
-    inline QString titleHint(void) {
-        return "Nimp";
-    }
 };

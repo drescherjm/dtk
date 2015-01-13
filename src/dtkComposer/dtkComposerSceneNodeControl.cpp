@@ -212,9 +212,6 @@ void dtkComposerSceneNodeControl::layout(void)
     }
 
     if(d->sizes.empty() || d->sizes.count() != d->blocks.count()) {
-        
-        qDebug() << "     " << d->blocks.count() << d->sizes.count();
-
         d->sizes.clear();
         foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
             d->sizes.insert(block, QRectF(0, h, d->rect.size().width(), b));

@@ -30,24 +30,6 @@ public:
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "print";
-    }
-
-    inline QString titleHint(void) {
-        return "Print";
-    }
-
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "stdout";
-        else if (port == 1)
-            return "stderr";
-        else
-            return "value";
-    }
-
 private:
     dtkComposerNodePrintPrivate *d;
 };

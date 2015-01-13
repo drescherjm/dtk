@@ -1,0 +1,9 @@
+{
+          "title" : "Inv",
+           "kind" : "atomic",
+           "type" : "inv",
+           "tags" : ["number", "atomic", "unary", "inv"],
+    "description" : "<p>Returns inverse of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

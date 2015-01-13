@@ -1,0 +1,9 @@
+{
+          "title" : "Equal",
+           "kind" : "atomic",
+           "type" : "equal",
+           "tags" : ["number", "atomic", "binary", "equal"],
+    "description" : "<p>Returns true if lhs equals rhs.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

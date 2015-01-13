@@ -1,0 +1,9 @@
+{
+          "title" : "Floor",
+           "kind" : "atomic",
+           "type" : "floor",
+           "tags" : ["number", "atomic", "unary", "floor"],
+    "description" : "<p>Compute the largest previous integer.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

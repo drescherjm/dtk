@@ -1,0 +1,9 @@
+{
+          "title" : "Modulo",
+           "kind" : "atomic",
+           "type" : "modulo",
+           "tags" : ["number", "atomic", "binary", "modulo", "modulus"],
+    "description" : "<p>Returns the remainder of division of lhs by rhs.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["mod"]
+}

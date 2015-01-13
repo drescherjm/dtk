@@ -30,9 +30,6 @@ public:
     virtual ~dtkComposerNodeComposite(void);
 
 public:
-    QString type(void);
-
-public:
     virtual void begin(void);
     virtual void end(void);
 };

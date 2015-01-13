@@ -1,0 +1,9 @@
+{
+          "title" : "Asin",
+           "kind" : "atomic",
+           "type" : "asin",
+           "tags" : ["number", "atomic", "unary", "asin"],
+    "description" : "<p>Compute Arc Sine.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

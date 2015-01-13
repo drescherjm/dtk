@@ -627,26 +627,6 @@ void dtkComposerNodeTestCase::testNumberOperatorBinary(void)
 
     dtkComposerNodeReal n_rend;
 
-    // LOGN
-    dtkComposerNodeNumberOperatorBinaryLogn n_logn;
-    QVERIFY(n_logn.receivers().first()->connect(n_r0.emitters().first()));
-    QVERIFY(n_logn.receivers().last()->connect( n_r1.emitters().first()));
-    QVERIFY(n_rend.receivers().first()->connect(n_logn.emitters().first()));
-    n_logn.run();
-    n_rend.run();
-    QCOMPARE((qLn(v_r0) / qLn(v_r1)), n_rend.value());
-    QVERIFY(n_rend.receivers().first()->disconnect(n_logn.emitters().first()));
-
-    // EXPN
-    dtkComposerNodeNumberOperatorBinaryExpn n_expn;
-    QVERIFY(n_expn.receivers().first()->connect(n_r0.emitters().first()));
-    QVERIFY(n_expn.receivers().last()->connect( n_r1.emitters().first()));
-    QVERIFY(n_rend.receivers().first()->connect(n_expn.emitters().first()));
-    n_expn.run();
-    n_rend.run();
-    QCOMPARE((qExp(v_r0 * qLn(v_r1))), n_rend.value());
-    QVERIFY(n_rend.receivers().first()->disconnect(n_expn.emitters().first()));
-
     // MIN
     dtkComposerNodeNumberOperatorBinaryMin n_min;
     QVERIFY(n_min.receivers().first()->connect(n_r0.emitters().first()));
@@ -708,7 +688,7 @@ void dtkComposerNodeTestCase::testNumberOperatorBinary(void)
     QVERIFY(n_rend.receivers().first()->disconnect(n_ratio.emitters().first()));
 
     // Nth ROOT
-    dtkComposerNodeNumberOperatorBinaryPosnthroot n_root;
+    dtkComposerNodeNumberOperatorBinaryNthroot n_root;
     QVERIFY(n_root.receivers().first()->connect(n_r0.emitters().first()));
     QVERIFY(n_root.receivers().last()->connect( n_r1.emitters().first()));
     QVERIFY(n_rend.receivers().first()->connect(n_root.emitters().first()));

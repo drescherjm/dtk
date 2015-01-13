@@ -1,0 +1,9 @@
+{
+          "title" : "Gte",
+           "kind" : "atomic",
+           "type" : "gte",
+           "tags" : ["number", "atomic", "binary", "gte", "greater"],
+    "description" : "<p>Returns true if <em>lhs</em> is greater or equal than <em>rhs</em>.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

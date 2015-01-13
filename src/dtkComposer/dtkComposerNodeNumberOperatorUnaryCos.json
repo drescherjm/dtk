@@ -1,0 +1,9 @@
+{
+          "title" : "Cos",
+           "kind" : "atomic",
+           "type" : "cos",
+           "tags" : ["number", "atomic", "unary", "cos"],
+    "description" : "<p>Returns the cosine of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

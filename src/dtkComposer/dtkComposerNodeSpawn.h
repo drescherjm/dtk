@@ -1,20 +1,18 @@
-/* dtkComposerNodeSpawn.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2013/09/30 17:15:12
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODESPAWN_H
-#define DTKCOMPOSERNODESPAWN_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeComposite.h"
@@ -41,10 +39,6 @@ public:
     virtual ~dtkComposerNodeSpawn(void);
 
 public:
-    QString type(void);
-    QString titleHint(void);
-
-public:
     void setApplication(QString app);
     void setComposition(QDomDocument document);
     void setCommunicator(dtkDistributedCommunicator *comm);
@@ -61,5 +55,5 @@ private:
     dtkComposerNodeSpawnPrivate *d;
 };
 
-
-#endif /* DTKCOMPOSERNODEREMOTE_H */
+// 
+// dtkComposerNodeSpawn.h ends here

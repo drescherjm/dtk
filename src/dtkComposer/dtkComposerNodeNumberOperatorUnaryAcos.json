@@ -1,0 +1,9 @@
+{
+          "title" : "Acos",
+           "kind" : "atomic",
+           "type" : "acos",
+           "tags" : ["number", "atomic", "unary", "acos"],
+    "description" : "<p>Compute Arc Cosine.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

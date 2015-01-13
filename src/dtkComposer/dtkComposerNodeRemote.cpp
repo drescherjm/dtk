@@ -33,14 +33,11 @@
 dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
 {
     static qlonglong count = 0;
-    this->appendReceiver(&(d->jobid_receiver));
-    this->setInputLabelHint("jobid", 0);
 
+    this->appendReceiver(&(d->jobid_receiver));
     this->appendReceiver(&(d->socket_emitter));
-    this->setInputLabelHint("socket", 1);
 
     this->appendEmitter(&(d->socket_emitter));
-    this->setOutputLabelHint("socket", 0);
 
     d->communicator = NULL;
     d->socket     = NULL;
@@ -56,16 +53,6 @@ dtkComposerNodeRemote::~dtkComposerNodeRemote(void)
     delete d;
 
     d = NULL;
-}
-
-QString dtkComposerNodeRemote::type(void)
-{
-    return "remote";
-}
-
-QString dtkComposerNodeRemote::titleHint(void)
-{
-    return d->title;
 }
 
 void dtkComposerNodeRemote::setComposition(QDomDocument document)

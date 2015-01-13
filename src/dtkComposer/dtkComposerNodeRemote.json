@@ -1,0 +1,10 @@
+{
+          "title" : "Remote",
+           "kind" : "composite",
+           "type" : "remote",
+           "tags" : ["remote", "distributed", "world", "network"],
+    "description" : "<h3>Remote Node</h3>
+                     <p>The <strong>remote</strong> node executes a subcomposition on a remote device.</p>",
+         "inputs" : ["jobid", "socket"],
+        "outputs" : ["socket"]
+}

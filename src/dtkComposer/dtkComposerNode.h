@@ -75,7 +75,7 @@ public:
     QString outputLabelHint(int port);
 
 public:
-    void setTitleHint(const QString& hint);
+    [[deprecated]] void setTitleHint(const QString& hint);
 
 public:
     [[deprecated]] void  setInputLabelHint(const QString& hint, int port);

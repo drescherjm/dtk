@@ -1,17 +1,16 @@
-/* dtkComposerNodeSpawn.cpp ---
- *
- * Author: Nicolas Niclausse, Inria.
- * Created: 2013/09/30 17:15:12
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
 
+// Code:
 
 #include "dtkComposerNodeSpawn.h"
 #include "dtkComposerNodeSpawn_p.h"
@@ -19,13 +18,9 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerEvaluatorProcess.h"
 
-// #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 
-// #include <dtkMath/dtkMath.h>
-
 #include <dtkLog>
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeSpawn implementation
@@ -38,16 +33,10 @@ dtkComposerNodeSpawn::dtkComposerNodeSpawn(void) : dtkComposerNodeRemote(),  d(n
     this->removeEmitter(0);
 
     this->appendReceiver(&(d->size_receiver));
-    this->setInputLabelHint("np", 0);
-
     this->appendReceiver(&(d->internal_comm_emitter));
-    this->setInputLabelHint("internal communicator", 1);
-
     this->appendReceiver(&(d->rank_emitter));
-    this->setInputLabelHint("rank", 2);
 
     this->appendEmitter(&(d->communicator_emitter));
-    this->setOutputLabelHint("communicator", 0);
 
 
     d->is_parent    = true;
@@ -64,16 +53,6 @@ dtkComposerNodeSpawn::~dtkComposerNodeSpawn(void)
     delete d;
 
     d = NULL;
-}
-
-QString dtkComposerNodeSpawn::type(void)
-{
-    return "spawn";
-}
-
-QString dtkComposerNodeSpawn::titleHint(void)
-{
-    return "Spawn";
 }
 
 bool dtkComposerNodeSpawn::isSlave(void)
@@ -251,4 +230,5 @@ void dtkComposerNodeSpawn::end(void)
 
 }
 
-
+// 
+// dtkComposerNodeSpawn.cpp ends here

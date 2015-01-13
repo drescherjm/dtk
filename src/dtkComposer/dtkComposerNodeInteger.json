@@ -3,7 +3,7 @@
            "kind" : "atomic",
            "type" : "integer",
            "tags" : ["integer", "number", "long int", "int", "short int", "atomic"],
-    "description" : "<p>Integer node handles 64-bit int type.</p>
+    "description" : "<h3>Integer node handles 64-bit int type.</h3>
                      <p>When used as a source node (ie without any edge at the input), one can set the integer value through the node editor.</p>
                      <p>Otherwise, one can feed its input either with a boolean, integer, real or string value. 
                         When necessary, the node performs a conversion and returns the corresponding integer value.</p>",

@@ -1,0 +1,9 @@
+{
+          "title" : "Ln",
+           "kind" : "atomic",
+           "type" : "ln",
+           "tags" : ["number", "atomic", "unary", "ln"],
+    "description" : "<p>Returns the natural logarithm of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

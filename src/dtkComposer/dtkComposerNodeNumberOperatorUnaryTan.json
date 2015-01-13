@@ -1,0 +1,9 @@
+{
+          "title" : "Tan",
+           "kind" : "atomic",
+           "type" : "tan",
+           "tags" : ["number", "atomic", "unary", "tan"],
+    "description" : "<p>Returns the tangent of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

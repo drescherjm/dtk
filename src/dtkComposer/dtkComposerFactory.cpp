@@ -27,6 +27,7 @@
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeRemote.h"
+#include "dtkComposerNodeSpawn.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
 
@@ -42,6 +43,8 @@ dtkComposerFactory::dtkComposerFactory(void) : dtkComposerNodeFactory()
 
     this->record(":dtkComposer/dtkComposerNodeComposite.json", dtkComposerNodeCreator<dtkComposerNodeComposite>);
     this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
+    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",   dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
+    this->record(":dtkComposer/dtkComposerNodeSpawn.json",   dtkComposerNodeCreator<dtkComposerNodeSpawn>);
     this->record(":dtkComposer/dtkComposerNodeLogger.json",    dtkComposerNodeCreator<dtkComposerNodeLogger>);
     this->record(":dtkComposer/dtkComposerNodePrint.json",     dtkComposerNodeCreator<dtkComposerNodePrint>);
 }
@@ -126,11 +129,8 @@ void dtkComposerFactory::initNodeNumber(void)
     this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryMult.json",  dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryMult>);
     this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryRatio.json", dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryRatio>);
 
-    this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryLogn.json", dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryLogn>);
-    this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryExpn.json", dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryExpn>);
-
     this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryPower.json",      dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryPower>);
-    this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryPosnthroot.json", dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryPosnthroot>);
+    this->record(":dtkComposer/dtkComposerNodeNumberOperatorBinaryNthroot.json", dtkComposerNodeCreator<dtkComposerNodeNumberOperatorBinaryNthroot>);
 
     // -- Comparator operator
 
@@ -149,7 +149,7 @@ void dtkComposerFactory::initNodeNumber(void)
 void dtkComposerFactory::initNodeString(void)
 {
     this->record(":dtkComposer/dtkComposerNodeString.json", dtkComposerNodeCreator<dtkComposerNodeString>);
-
+    this->record(":dtkComposer/dtkComposerNodeStringReplace.json", dtkComposerNodeCreator<dtkComposerNodeStringReplace>);
     this->record(":dtkComposer/dtkComposerNodeStringOperatorBinaryAppend.json",   dtkComposerNodeCreator<dtkComposerNodeStringOperatorBinaryAppend>);
     this->record(":dtkComposer/dtkComposerNodeStringOperatorBinaryLogicEquality.json", dtkComposerNodeCreator<dtkComposerNodeStringOperatorBinaryLogicEquality>);
 }

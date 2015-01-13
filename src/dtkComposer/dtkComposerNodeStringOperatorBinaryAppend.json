@@ -1,0 +1,9 @@
+{
+          "title" : "Append",
+           "kind" : "atomic",
+           "type" : "append",
+           "tags" : ["string", "atomic", "concatenate", "append"],
+    "description" : "<p>Append two strings.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["string"]
+}

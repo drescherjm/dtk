@@ -1,0 +1,9 @@
+{
+          "title" : "Exp",
+           "kind" : "atomic",
+           "type" : "exp",
+           "tags" : ["number", "atomic", "unary", "exp"],
+    "description" : "<p>Returns the exponential value of the input number..</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

@@ -1,0 +1,9 @@
+{
+          "title" : "Almosteq",
+           "kind" : "atomic",
+           "type" : "almosteq",
+           "tags" : ["number", "atomic", "binary", "almosteq"],
+    "description" : "<p>Returns true if the absolute value of the difference of lhs and rhs is less than epsilon.</p>",
+         "inputs" : ["lhs","rhs","epsilon"],
+        "outputs" : ["value"]
+}

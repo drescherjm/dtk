@@ -1,0 +1,9 @@
+{
+          "title" : "Notalmosteq",
+           "kind" : "atomic",
+           "type" : "notalmosteq",
+           "tags" : ["number", "atomic", "binary", "notalmosteq"],
+    "description" : "<p>Returns true if the absolute value of the difference of lhs and rhs is more than epsilon.</p>",
+         "inputs" : ["lhs","rhs","epsilon"],
+        "outputs" : ["value"]
+}

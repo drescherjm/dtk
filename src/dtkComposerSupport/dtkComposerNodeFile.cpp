@@ -146,6 +146,7 @@ QString dtkComposerNodeFile::value(void)
 
 void dtkComposerNodeFile::setValue(QString value)
 {
+    value.replace("~",QDir::homePath());
     d->fileName = value;
 }
 
@@ -520,5 +521,6 @@ QString dtkComposerNodeDirectory::value(void)
 
 void dtkComposerNodeDirectory::setValue(QString value)
 {
+    value.replace("~",QDir::homePath());
     d->directory = value;
 }

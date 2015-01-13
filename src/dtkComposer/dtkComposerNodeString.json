@@ -1,0 +1,12 @@
+{
+          "title" : "String",
+           "kind" : "atomic",
+           "type" : "string",
+           "tags" : ["string", "atomic", "string"],
+    "description" : "<h3>String node</h3>
+                     <p>When used as a source node (ie without any edge at the input), one can set the string value through the node editor.</p>
+                     <p>Otherwise, one can feed its input with any value.
+                        When necessary, the node performs a conversion and returns the corresponding string value.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

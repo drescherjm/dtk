@@ -1,0 +1,9 @@
+{
+          "title" : "Incr",
+           "kind" : "atomic",
+           "type" : "incr",
+           "tags" : ["number", "atomic", "unary", "incr","plus"],
+    "description" : "<p>>Increments the input number of one (equivalent to the '++' operator).</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

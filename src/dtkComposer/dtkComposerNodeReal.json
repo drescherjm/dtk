@@ -3,7 +3,7 @@
            "kind" : "atomic",
            "type" : "real",
            "tags" : ["real", "number", "double", "float", "atomic"],
-    "description" : "<p>Real node handles 64-bit floating type (aka double).</p>
+    "description" : "<h3>Real node handles 64-bit floating type (aka double).</h3>
                      <p>When used as a source node (ie without any edge at the input), one can set the real value through the node editor.</p>
                      <p>Otherwise, one can feed its input either with a boolean, integer, double or string value. 
                         When necessary, the node performs a conversion and returns the corresponding real value.</p>",

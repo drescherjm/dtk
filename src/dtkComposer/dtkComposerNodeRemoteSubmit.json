@@ -1,0 +1,11 @@
+{
+          "title" : "Remote Submit",
+           "kind" : "atomic",
+           "type" : "remoteSubmit",
+           "tags" : ["remote", "distributed", "world", "network", "submit"],
+    "description" : "<h3>Remote Submit Node</h3>
+                     <p>The <strong>remote submit</strong> node enables to submit a job on a remote cluster/machine.</p>
+                     <p>The output is the jobid.</p>",
+         "inputs" : ["cluster", "nodes", "cores", "walltime", "queuename"],
+        "outputs" : ["jobid"]
+}

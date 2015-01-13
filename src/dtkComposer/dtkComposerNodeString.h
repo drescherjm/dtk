@@ -1,20 +1,18 @@
-/* dtkComposerNodeString.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Mon Feb 27 12:50:23 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODESTRING_H
-#define DTKCOMPOSERNODESTRING_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerExport.h"
 
@@ -32,27 +30,27 @@ public:
     void run(void);
 
 public:
-    inline QString type(void) {
-        return "string";
-    }
+    // inline QString type(void) {
+    //     return "string";
+    // }
 
-    inline QString titleHint(void) {
-        return "String";
-    }
+    // inline QString titleHint(void) {
+    //     return "String";
+    // }
 
-    inline QString inputLabelHint(int port) {
-        if(port == 0)
-            return "string";
+    // inline QString inputLabelHint(int port) {
+    //     if(port == 0)
+    //         return "string";
 
-        if(port == 1)
-            return "real";
+    //     if(port == 1)
+    //         return "real";
 
-        return dtkComposerNodeLeaf::inputLabelHint(port);
-    }
+    //     return "port";
+    // }
 
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
+    // inline QString outputLabelHint(int) {
+    //     return "value";
+    // }
 
 public:
     QString value(void);
@@ -93,7 +91,7 @@ public:
         if(port == 2)
             return "value";
 
-        return dtkComposerNodeLeaf::inputLabelHint(port);
+        return "port";
     }
 
     inline QString outputLabelHint(int) {
@@ -110,5 +108,5 @@ private:
     dtkComposerNodeStringListPrivate *d;
 };
 
-
-#endif
+// 
+// dtkComposerNodeString.h ends here

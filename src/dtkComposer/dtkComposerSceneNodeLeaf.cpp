@@ -1,21 +1,16 @@
-/* dtkComposerSceneNodeLeaf.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Feb  3 14:02:14 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Apr 10 16:50:38 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 444
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNode.h"
 #include "dtkComposerSceneNode.h"
@@ -119,8 +114,7 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
     for(int i = 0; i < node->receivers().count(); ++i) {        
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
-        this->addInputPort(port);
-        port->setLabel(node->inputLabelHint(this->inputPorts().indexOf(port)));        
+        port->setLabel(node->inputLabelHint(this->addInputPort(port)));
     }
 
     for(int i = 0; i < node->emitters().count(); ++i) {
@@ -358,3 +352,6 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     painter->setPen(QPen(QColor(Qt::white)));
     painter->drawText(title_pos, title_text);
 }
+
+// 
+// dtkComposerSceneNodeLeaf.cpp ends here

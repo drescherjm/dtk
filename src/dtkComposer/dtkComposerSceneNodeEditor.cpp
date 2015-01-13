@@ -1,17 +1,16 @@
-/* dtkComposerSceneNodeEditor.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Feb  8 10:10:15 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerGraph.h"
 #include "dtkComposerScene.h"
@@ -507,6 +506,8 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 if (port->loop() && !loop_ports.contains(port->loop())) {
                     d->loop_ports->addInputPort(port);
                     loop_ports << port->loop();
+                } else {
+                    d->input_ports->addInputPort(port);
                 }
             }
 
@@ -514,6 +515,8 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 if (port->loop() && !loop_ports.contains(port->loop())) {
                     d->loop_ports->addOutputPort(port);
                     loop_ports << port->loop();
+                } else {
+                    d->output_ports->addOutputPort(port);
                 }
             }
         }
@@ -1317,3 +1320,6 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
     }
 
 }
+
+// 
+// dtkComposerSceneNodeEditor.cpp ends here

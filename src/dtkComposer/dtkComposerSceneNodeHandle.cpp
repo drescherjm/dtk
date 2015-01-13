@@ -1,21 +1,16 @@
-/* dtkComposerSceneNodeHandle.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Sep 18 14:05:45 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Tue Sep 18 16:51:21 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 84
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerSceneNodeControl.h"
@@ -110,3 +105,6 @@ void dtkComposerSceneNodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     d->parent->layout();
 }
+
+// 
+// dtkComposerSceneNodeHandle.cpp ends here

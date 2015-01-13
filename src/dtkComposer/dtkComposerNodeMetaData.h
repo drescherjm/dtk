@@ -37,6 +37,8 @@ public:
     void setDescription(const QString& description);
     void appendInputLabel(const QString& label);
     void appendOutputLabel(const QString& label);
+    void setInputLabel(int i, const QString& label);
+    void setOutputLabel(int i, const QString& label);
 
 public:
     const QString& title(void) const;

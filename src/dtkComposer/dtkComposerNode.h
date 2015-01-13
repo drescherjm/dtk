@@ -39,10 +39,11 @@ public:
            Atomic = 1,
         Composite = 2,
           Control = 3,
-             Data = 4,
-          Process = 5,
-             View = 6,
-            Actor = 7
+            Proxy = 4,
+             Data = 5,
+          Process = 6,
+             View = 7,
+            Actor = 8
     };
 
 public:
@@ -70,15 +71,15 @@ public:
     virtual QString titleHint(void);
 
 public:
-    virtual QString  inputLabelHint(int port);
-    virtual QString outputLabelHint(int port);
+    QString  inputLabelHint(int port);
+    QString outputLabelHint(int port);
 
 public:
     void setTitleHint(const QString& hint);
 
 public:
-    void  setInputLabelHint(const QString& hint, int port);
-    void setOutputLabelHint(const QString& hint, int port);
+    [[deprecated]] void  setInputLabelHint(const QString& hint, int port);
+    [[deprecated]] void setOutputLabelHint(const QString& hint, int port);
 
 private:
     dtkComposerNodePrivate *d;

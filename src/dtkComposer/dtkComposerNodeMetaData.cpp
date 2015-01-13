@@ -97,6 +97,9 @@ void dtkComposerNodeMetaData::setKind(const QString& kind)
     } else if(kind_lower == QString("control")) {
         d->kind = dtkComposerNode::Control;
 
+    } else if(kind_lower == QString("proxy")) {
+        d->kind = dtkComposerNode::Proxy;
+
     } else if(kind_lower == QString("data")) {
         d->kind = dtkComposerNode::Data;
 
@@ -137,6 +140,16 @@ void dtkComposerNodeMetaData::appendInputLabel(const QString& label)
 void dtkComposerNodeMetaData::appendOutputLabel(const QString& label)
 {
     d->output_labels << label;
+}
+
+void dtkComposerNodeMetaData::setInputLabel(int i, const QString& label)
+{
+    d->input_labels.replace(i, label);
+}
+
+void dtkComposerNodeMetaData::setOutputLabel(int i, const QString& label)
+{
+    d->output_labels.replace(i, label);
 }
 
 const QString& dtkComposerNodeMetaData::title(void) const

@@ -69,7 +69,7 @@ public:
     dtkComposerSceneEdgeList outputEdges(void);
 
 public:
-    void  addInputPort(dtkComposerScenePort *port);
+    int  addInputPort(dtkComposerScenePort *port);
     void addOutputPort(dtkComposerScenePort *port);
 
     void  removeInputPort(dtkComposerScenePort *port);

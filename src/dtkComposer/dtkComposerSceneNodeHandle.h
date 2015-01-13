@@ -1,21 +1,16 @@
-/* dtkComposerSceneNodeHandle.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Sep 18 14:05:01 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Mon Mar 25 09:08:14 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 20
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -52,8 +47,9 @@ public:
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
-private:
+public:
     dtkComposerSceneNodeHandlePrivate *d;
 };
 
-
+// 
+// dtkComposerSceneNodeHandle.h ends here

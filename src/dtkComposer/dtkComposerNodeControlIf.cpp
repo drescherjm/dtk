@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr  4 15:39:53 2013 (+0200)
+ * Last-Updated: mar. janv. 13 08:49:53 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 71
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNodeControlIf.h"
 
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -31,11 +32,17 @@
 
 class dtkComposerNodeControlIfPrivate
 {
-public:    
+public:   
+    dtkComposerNodeMetaData header_md; 
     dtkComposerNodeProxy header;
+
+    dtkComposerNodeMetaData footer_md;
     dtkComposerNodeProxy footer;
 
+    dtkComposerNodeMetaData then_block_md;
     dtkComposerNodeComposite then_block;
+
+    dtkComposerNodeMetaData else_block_md;
     dtkComposerNodeComposite else_block;
 
 public:
@@ -48,23 +55,41 @@ public:
 
 dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlIfPrivate)
 {
+    d->header_md.setTitle("Header");
+    d->header_md.setKind("proxy");
+    d->header_md.setType("proxy");
+    d->header_md.appendInputLabel("cond");
+
     d->header.removeEmitter(0);
-    d->header.setInputLabelHint("cond", 0); 
     d->header.setAsHeader(true);
+    d->header.setNodeMetaData(&d->header_md);
 
     d->cond.appendPrevious(d->header.receivers().first());
     d->header.receivers().first()->appendNext(&(d->cond));
 
+    d->footer_md.setTitle("Footer");
+    d->footer_md.setKind("proxy");
+    d->footer_md.setType("proxy");
+    d->footer_md.appendOutputLabel("cond");
+
     d->footer.removeReceiver(0);
-    d->footer.setOutputLabelHint("cond", 0);
     d->footer.setAsFooter(true);
+    d->footer.setNodeMetaData(&d->footer_md);
 
     d->cond.appendNext(d->footer.emitters().first());
     d->footer.emitters().first()->appendPrevious(&(d->cond));
 
-    d->then_block.setTitleHint("Then");
+    d->then_block_md.setTitle("Then");
+    d->then_block_md.setKind("composite");
+    d->then_block_md.setType("composite");
 
-    d->else_block.setTitleHint("Else");
+    d->then_block.setNodeMetaData(&d->then_block_md);
+
+    d->else_block_md.setTitle("Else");
+    d->else_block_md.setKind("composite");
+    d->else_block_md.setType("composite");
+
+    d->else_block.setNodeMetaData(&d->else_block_md);
 }
 
 dtkComposerNodeControlIf::~dtkComposerNodeControlIf(void)

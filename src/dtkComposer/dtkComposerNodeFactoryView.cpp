@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: Thu Apr 11 10:39:25 2013 (+0200)
  * Version: 
- * Last-Updated: ven. janv.  9 10:31:18 2015 (+0100)
+ * Last-Updated: ven. janv.  9 10:50:29 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 140
+ *     Update #: 141
  */
 
 /* Change Log:
@@ -89,8 +89,6 @@ void dtkComposerNodeFactoryView::setFactory(dtkComposerFactory *factory)
         //qDebug() << cit.key() << md->description() << md->tags() << QString::number(md->kind()) << md->type();
         d->controller->addItem(cit.key(), md->description(), md->tags(), "node", md->type());
     }
-
-    //d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
 }
 
 void dtkComposerNodeFactoryView::addNote(void)

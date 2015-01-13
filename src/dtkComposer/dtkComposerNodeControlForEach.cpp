@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
- * Last-Updated: jeu. nov. 13 09:40:21 2014 (+0100)
+ * Last-Updated: mar. janv. 13 08:43:59 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 231
+ *     Update #: 286
  */
 
 /* Commentary: 
@@ -19,6 +19,7 @@
 
 #include "dtkComposerNodeControlForEach.h"
 
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -34,10 +35,14 @@
 
 class dtkComposerNodeControlForEachPrivate
 {
-public:    
+public:
+    dtkComposerNodeMetaData header_md;
     dtkComposerNodeProxy header;
+
+    dtkComposerNodeMetaData footer_md;
     dtkComposerNodeProxy footer;
 
+    dtkComposerNodeMetaData body_block_md;
     dtkComposerNodeComposite body_block;
 
 public:
@@ -61,25 +66,39 @@ public:
 
 dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForEachPrivate)
 {
+    d->header_md.setTitle("Header");
+    d->header_md.setKind("proxy");
+    d->header_md.setType("proxy");
+    d->header_md.appendInputLabel("container");
+
     d->header.removeEmitter(0);
     d->header.removeReceiver(0);
     d->header.appendReceiver(&(d->header_rcv));
-    d->header.setInputLabelHint("container", 0); 
     d->header.setAsHeader(true);
+    d->header.setNodeMetaData(&d->header_md);
+
+    d->footer_md.setTitle("Footer");
+    d->footer_md.setKind("proxy");
+    d->footer_md.setType("proxy");
 
     d->footer.removeReceiver(0);
     d->footer.removeEmitter(0);
     d->footer.setAsFooter(true);
+    d->footer.setNodeMetaData(&d->footer_md);
 
-    d->body_block.setTitleHint("Body");
-    d->body_block.setInputLabelHint("container", 0); 
+    d->body_block_md.setTitle("Body");
+    d->body_block_md.setKind("composite");
+    d->body_block_md.setType("composite");
+    d->body_block_md.appendInputLabel("container");
+    d->body_block_md.appendInputLabel("size");
+    d->body_block_md.appendInputLabel("index");
+    d->body_block_md.appendInputLabel("item");
+
     d->body_block.appendReceiver(&(d->block_container));
-    d->body_block.setInputLabelHint("size", 1); 
     d->body_block.appendReceiver(&(d->block_size));
-    d->body_block.setInputLabelHint("index", 2); 
     d->body_block.appendReceiver(&(d->block_index));
-    d->body_block.setInputLabelHint("item", 3); 
     d->body_block.appendReceiver(&(d->block_item));
+    d->body_block.setNodeMetaData(&d->body_block_md);
 
     d->block_container.appendPrevious(&d->header_rcv);
     d->header_rcv.appendNext(&d->block_container);

@@ -1,24 +1,20 @@
-/* dtkComposerNodeControlMap.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: lun. juin 18 16:08:06 2012 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. nov. 13 09:39:35 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 133
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeControlMap.h"
 
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -35,9 +31,13 @@
 class dtkComposerNodeControlMapPrivate
 {
 public:
+    dtkComposerNodeMetaData header_md;
     dtkComposerNodeProxy header;
+
+    dtkComposerNodeMetaData footer_md;
     dtkComposerNodeProxy footer;
 
+    dtkComposerNodeMetaData body_block_md;
     dtkComposerNodeComposite body_block;
 
 public:
@@ -67,30 +67,43 @@ public:
 
 dtkComposerNodeControlMap::dtkComposerNodeControlMap(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlMapPrivate)
 {
+    d->header_md.setTitle("Header");
+    d->header_md.setKind("proxy");
+    d->header_md.setType("proxy");
+    d->header_md.appendInputLabel("container");
+
     d->header.removeEmitter(0);
     d->header.removeReceiver(0);
     d->header.appendReceiver(&(d->header_rcv));
-    d->header.setInputLabelHint("container", 0);
     d->header.setAsHeader(true);
+    d->header.setNodeMetaData(&d->header_md);
+
+    d->footer_md.setTitle("Footer");
+    d->footer_md.setKind("proxy");
+    d->footer_md.setType("proxy");
+    d->footer_md.appendOutputLabel("container");
 
     d->footer.removeReceiver(0);
     d->footer.removeEmitter(0);
     d->footer.appendEmitter(&(d->footer_emit));
-    d->footer.setOutputLabelHint("container", 0);
     d->footer.setAsFooter(true);
+    d->footer.setNodeMetaData(&d->footer_md);
 
-    d->body_block.setTitleHint("Body");
-    d->body_block.setInputLabelHint("container", 0);
+    d->body_block_md.setTitle("Body");
+    d->body_block_md.setKind("composite");
+    d->body_block_md.setType("composite");
+    d->body_block_md.appendInputLabel("container");
+    d->body_block_md.appendInputLabel("size");
+    d->body_block_md.appendInputLabel("index");
+    d->body_block_md.appendInputLabel("item");
+    d->body_block_md.appendOutputLabel("newItem");
+
     d->body_block.appendReceiver(&(d->block_container));
-    d->body_block.setInputLabelHint("size", 1);
     d->body_block.appendReceiver(&(d->block_size));
-    d->body_block.setInputLabelHint("index", 2);
     d->body_block.appendReceiver(&(d->block_index));
-    d->body_block.setInputLabelHint("item", 3);
     d->body_block.appendReceiver(&(d->block_item));
-
-    d->body_block.setOutputLabelHint("newitem", 0);
     d->body_block.appendEmitter(&(d->block_newitem));
+    d->body_block.setNodeMetaData(&d->body_block_md);
 
     d->block_container.appendPrevious(&d->header_rcv);
     d->header_rcv.appendNext(&d->block_container);
@@ -188,3 +201,6 @@ void dtkComposerNodeControlMap::end(void)
 {
 
 }
+
+// 
+// dtkComposerNodeControlMap.cpp ends here

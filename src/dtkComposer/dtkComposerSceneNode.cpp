@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Mon Apr 15 11:37:04 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 97
+ * Last-Updated: ven. janv.  9 15:17:10 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 99
  */
 
 /* Commentary: 
@@ -87,9 +87,10 @@ dtkComposerSceneEdgeList dtkComposerSceneNode::outputEdges(void)
     return d->output_edges;
 }
 
-void dtkComposerSceneNode::addInputPort(dtkComposerScenePort *port)
+int dtkComposerSceneNode::addInputPort(dtkComposerScenePort *port)
 {
     d->input_ports << port;
+    return d->input_ports.size() - 1;
 }
 
 void dtkComposerSceneNode::addOutputPort(dtkComposerScenePort *port)

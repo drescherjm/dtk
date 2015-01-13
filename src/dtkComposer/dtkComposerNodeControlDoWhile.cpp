@@ -1,23 +1,22 @@
-/* dtkComposerNodeControlDoWhile.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Sat Feb 25 00:02:50 2012 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. nov. 13 09:36:53 2014 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 77
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
+
+
 
 #include "dtkComposerNodeControlDoWhile.h"
+
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -32,10 +31,16 @@
 class dtkComposerNodeControlDoWhilePrivate
 {
 public:
+    dtkComposerNodeMetaData header_md;
     dtkComposerNodeProxy header;
+
+    dtkComposerNodeMetaData footer_md;
     dtkComposerNodeProxy footer;
 
+    dtkComposerNodeMetaData cond_block_md;
     dtkComposerNodeComposite cond_block;
+
+    dtkComposerNodeMetaData body_block_md;
     dtkComposerNodeComposite body_block;
 
 public:
@@ -51,19 +56,37 @@ public:
 
 dtkComposerNodeControlDoWhile::dtkComposerNodeControlDoWhile(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlDoWhilePrivate)
 {
+    d->header_md.setTitle("Header");
+    d->header_md.setKind("proxy");
+    d->header_md.setType("proxy");
+
     d->header.removeReceiver(0);
     d->header.removeEmitter(0);
     d->header.setAsHeader(true);
+    d->header.setNodeMetaData(&d->header_md);
+
+    d->footer_md.setTitle("Footer");
+    d->footer_md.setKind("proxy");
+    d->footer_md.setType("proxy");
 
     d->footer.removeReceiver(0);
     d->footer.removeEmitter(0);
     d->footer.setAsFooter(true);
+    d->footer.setNodeMetaData(&d->footer_md);
 
-    d->cond_block.setTitleHint("Conditional");
+    d->cond_block_md.setTitle("Conditional");
+    d->cond_block_md.setKind("composite");
+    d->cond_block_md.setType("composite");
+    d->cond_block_md.appendOutputLabel("cond");
+
     d->cond_block.appendEmitter(&(d->cond));
-    d->cond_block.setOutputLabelHint("cond", 0);
+    d->cond_block.setNodeMetaData(&d->cond_block_md);
 
-    d->body_block.setTitleHint("Body");
+    d->body_block_md.setTitle("Body");
+    d->body_block_md.setKind("composite");
+    d->body_block_md.setType("composite");
+
+    d->body_block.setNodeMetaData(&d->body_block_md);
 }
 
 dtkComposerNodeControlDoWhile::~dtkComposerNodeControlDoWhile(void)
@@ -142,3 +165,6 @@ void dtkComposerNodeControlDoWhile::end(void)
 {
 
 }
+
+// 
+// dtkComposerNodeControlDoWhile.cpp ends here

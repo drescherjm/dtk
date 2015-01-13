@@ -171,7 +171,19 @@ void dtkComposerSceneNodeControl::addBlock(dtkComposerSceneNodeComposite *block)
 
 void dtkComposerSceneNodeControl::removeBlock(dtkComposerSceneNodeComposite *block)
 {
-    d->blocks.removeAll(block);
+    int block_id = d->blocks.indexOf(block);
+    d->blocks.removeAt(block_id);
+    delete d->handles.takeAt(block_id - 1);
+
+    if (d->blocks.count() > 1) {
+        if (block_id != d->blocks.count()) {
+            dtkComposerSceneNodeComposite *top = d->blocks.at(block_id - 1);
+            dtkComposerSceneNodeComposite *bot = d->blocks.at(block_id);
+            dtkComposerSceneNodeHandle *handle = d->handles.at(block_id - 1);
+            handle->setTopBlock(top);
+            handle->setBotBlock(bot);
+        }
+    }
 
     this->layout();
 }
@@ -198,34 +210,17 @@ void dtkComposerSceneNodeControl::layout(void)
         h = d->header->boundingRect().adjusted(2, 2, -2, -2).height();
         d->header->resize(d->rect.size().width(), h);
     }
-    
-    if(d->sizes.empty()) {
+
+    if(d->sizes.empty() || d->sizes.count() != d->blocks.count()) {
+        
+        qDebug() << "     " << d->blocks.count() << d->sizes.count();
+
+        d->sizes.clear();
         foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
             d->sizes.insert(block, QRectF(0, h, d->rect.size().width(), b));
             h += b;
         }
     }
-
-    // -- Don't look at that, it's ugly but it's okay ... used for backward compatibility ...
-
-    else {
-        qreal ref_h = d->sizes.values().first().height();
-
-        foreach(QRectF r, d->sizes) {
-            if(r.height() != ref_h) {
-                ref_h = -1.0;
-            }
-        }
-
-        if(ref_h != -1.0) {
-            foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-                d->sizes.insert(block, QRectF(0, h, d->rect.size().width(), b));
-                h += b;
-            }
-        }
-    }
-
-    // -- ... until here.
 
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
         block->layout();

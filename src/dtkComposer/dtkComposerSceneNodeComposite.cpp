@@ -4,9 +4,9 @@
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 11 10:06:07 2013 (+0200)
+ * Last-Updated: lun. janv. 12 14:59:21 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 943
+ *     Update #: 950
  */
 
 /* Commentary: 
@@ -101,8 +101,7 @@ void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
     for(int i = 0; i < composite->receivers().count(); ++i) {
         
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
-        this->addInputPort(port);
-        port->setLabel(composite->inputLabelHint(this->inputPorts().indexOf(port)));
+        port->setLabel(composite->inputLabelHint(this->addInputPort(port)));
         
     }
 

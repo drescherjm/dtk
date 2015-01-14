@@ -75,11 +75,11 @@ public:
     QString outputLabelHint(int port);
 
 public:
-    [[deprecated]] void setTitleHint(const QString& hint);
+    QT_DEPRECATED void setTitleHint(const QString& hint);
 
 public:
-    [[deprecated]] void  setInputLabelHint(const QString& hint, int port);
-    [[deprecated]] void setOutputLabelHint(const QString& hint, int port);
+    QT_DEPRECATED void  setInputLabelHint(const QString& hint, int port);
+    QT_DEPRECATED void setOutputLabelHint(const QString& hint, int port);
 
 private:
     dtkComposerNodePrivate *d;

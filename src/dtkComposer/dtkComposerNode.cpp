@@ -129,8 +129,6 @@ QString dtkComposerNode::inputLabelHint(int port)
 {
     if (d->meta_data)
         return d->meta_data->inputLabels().value(port, "port");
-    // if(d->input_label_hint.contains(port))
-    //     return d->input_label_hint[port];
 
     return "port";
 }
@@ -139,8 +137,6 @@ QString dtkComposerNode::outputLabelHint(int port)
 {
     if (d->meta_data)
         return d->meta_data->outputLabels().value(port, "port");
-    // if(d->output_label_hint.contains(port))
-    //     return d->output_label_hint[port];
 
     return "port";
 }

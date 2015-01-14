@@ -86,17 +86,17 @@ void dtkComposerNodeFactoryView::setFactory(dtkComposerFactory *factory)
     QHash<QString, dtkComposerNodeMetaData *>::const_iterator cend = meta_datas.end();
     for(; cit != cend; ++cit) {
         dtkComposerNodeMetaData *md = *cit;
-        //qDebug() << cit.key() << md->description() << md->tags() << QString::number(md->kind()) << md->type();
-        d->controller->addItem(cit.key(), md->description(), md->tags(), "node", md->type());
+//        qDebug() << md->title() << md->description() << md->tags() << QString::number(md->kind()) << md->type();
+        d->controller->addItem(md->title(), md->description(), md->tags(), "node", md->type());
     }
 }
 
 void dtkComposerNodeFactoryView::addNote(void)
-{  
+{
     dtkComposerNodeMetaData *note_md = new dtkComposerNodeMetaData;
     if(note_md->setFromFile(":dtkComposer/dtkComposerNote.json")) {
         d->controller->addItem(note_md->title(), note_md->description(), note_md->tags(), "note", note_md->type());
-    } 
+    }
     delete note_md;
 }
 

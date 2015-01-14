@@ -34,19 +34,6 @@ public:
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "pi";
-    }
-
-    inline QString titleHint(void) {
-        return "Pi";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
 private:
     dtkComposerNodePiPrivate *d;
 };
@@ -65,19 +52,6 @@ public:
 
 public:
     void run(void);
-
-public:
-    inline QString type(void) {
-        return "e";
-    }
-
-    inline QString titleHint(void) {
-        return "E";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
 
 private:
     dtkComposerNodeEPrivate *d;

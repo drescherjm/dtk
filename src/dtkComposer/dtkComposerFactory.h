@@ -27,6 +27,7 @@ public:
 public:
     void initNodeBoolean(void);
     void initNodeControl(void);
+    void initNodeConstants(void);
     void initNodeNumber (void);
     void initNodeString (void);
 };

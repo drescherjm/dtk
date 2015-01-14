@@ -132,32 +132,6 @@ void dtkComposerNodeFile::run(void)
     d->emitter.setData(d->fileName);
 }
 
-QString dtkComposerNodeFile::type(void)
-{
-    return "file";
-}
-
-QString dtkComposerNodeFile::titleHint(void)
-{
-    return "File";
-}
-
-QString dtkComposerNodeFile::inputLabelHint(int port)
-{
-    if(port == 0)
-        return "name";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
-QString dtkComposerNodeFile::outputLabelHint(int port)
-{
-    if(port == 0)
-        return "file";
-
-    return dtkComposerNode::outputLabelHint(port);
-}
-
 QString dtkComposerNodeFile::value(void)
 {
     return d->fileName;
@@ -197,35 +171,6 @@ void dtkComposerNodeFileExists::run(void)
         d->exists = QFile(filename).exists();
     }
 }
-
-QString dtkComposerNodeFileExists::type(void)
-{
-    return "fileExists";
-}
-
-QString dtkComposerNodeFileExists::titleHint(void)
-{
-    return "FileExists";
-}
-
-QString dtkComposerNodeFileExists::inputLabelHint(int port)
-{
-    if(port == 0)
-        return "file";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
-QString dtkComposerNodeFileExists::outputLabelHint(int port)
-{
-    if(port == 0)
-        return "exists";
-
-    return dtkComposerNode::outputLabelHint(port);
-}
-
-
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileList implementation
@@ -287,39 +232,6 @@ void dtkComposerNodeFileList::run(void)
     }
 }
 
-QString dtkComposerNodeFileList::type(void)
-{
-    return "fileList";
-}
-
-QString dtkComposerNodeFileList::titleHint(void)
-{
-    return "FileList";
-}
-
-QString dtkComposerNodeFileList::inputLabelHint(int port)
-{
-    if(port == 0)
-        return "directory";
-    if(port == 1)
-        return "pattern";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
-QString dtkComposerNodeFileList::outputLabelHint(int port)
-{
-    if(port == 0)
-        return "files";
-
-    return dtkComposerNode::outputLabelHint(port);
-}
-
-
-
-
-
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileRead implementation
 // /////////////////////////////////////////////////////////////////
@@ -353,34 +265,6 @@ void dtkComposerNodeFileRead::run(void)
         }
     }
 }
-
-QString dtkComposerNodeFileRead::type(void)
-{
-    return "fileRead";
-}
-
-QString dtkComposerNodeFileRead::titleHint(void)
-{
-    return "FileRead";
-}
-
-QString dtkComposerNodeFileRead::inputLabelHint(int port)
-{
-    if(port == 0)
-        return "file";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
-QString dtkComposerNodeFileRead::outputLabelHint(int port)
-{
-    if(port == 0)
-        return "bytes";
-
-    return dtkComposerNode::outputLabelHint(port);
-}
-
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileWrite implementation
@@ -436,36 +320,6 @@ void dtkComposerNodeFileWrite::run(void)
     }
 }
 
-QString dtkComposerNodeFileWrite::type(void)
-{
-    return "fileWrite";
-}
-
-QString dtkComposerNodeFileWrite::titleHint(void)
-{
-    return "FileWrite";
-}
-
-QString dtkComposerNodeFileWrite::inputLabelHint(int port)
-{
-    if(port == 0)
-        return "bytes";
-    if(port == 1)
-        return "file";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
-QString dtkComposerNodeFileWrite::outputLabelHint(int port)
-{
-    if(port == 0)
-        return "success";
-    if(port == 1)
-        return "file";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeDirectory implementation
 // /////////////////////////////////////////////////////////////////
@@ -502,32 +356,6 @@ void dtkComposerNodeDirectory::run(void)
         QString msg = QString("Directory %1 does not exist! ").arg(d->directory);
         dtkNotify(msg,30000);
     }
-}
-
-QString dtkComposerNodeDirectory::type(void)
-{
-    return "fileDir";
-}
-
-QString dtkComposerNodeDirectory::titleHint(void)
-{
-    return "Directory";
-}
-
-QString dtkComposerNodeDirectory::inputLabelHint(int port)
-{
-    if(port == 0)
-        return "dir";
-
-    return dtkComposerNode::inputLabelHint(port);
-}
-
-QString dtkComposerNodeDirectory::outputLabelHint(int port)
-{
-    if(port == 0)
-        return "dir";
-
-    return dtkComposerNode::inputLabelHint(port);
 }
 
 QString dtkComposerNodeDirectory::value(void)

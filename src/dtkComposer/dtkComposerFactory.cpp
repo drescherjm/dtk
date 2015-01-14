@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
@@ -37,23 +38,44 @@
 
 dtkComposerFactory::dtkComposerFactory(void) : dtkComposerNodeFactory()
 {
+    this->initNodeBase();
     this->initNodeBoolean();
     this->initNodeControl();
     this->initNodeConstants();
+    this->initNodeDistributed();
+    this->initNodeFile();
     this->initNodeNumber();
     this->initNodeString();
 
-    this->record(":dtkComposer/dtkComposerNodeComposite.json", dtkComposerNodeCreator<dtkComposerNodeComposite>);
-    this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
-    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",   dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
-    this->record(":dtkComposer/dtkComposerNodeSpawn.json",   dtkComposerNodeCreator<dtkComposerNodeSpawn>);
-    this->record(":dtkComposer/dtkComposerNodeLogger.json",    dtkComposerNodeCreator<dtkComposerNodeLogger>);
-    this->record(":dtkComposer/dtkComposerNodePrint.json",     dtkComposerNodeCreator<dtkComposerNodePrint>);
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
 {
 
+}
+
+void dtkComposerFactory::initNodeFile(void)
+{
+    this->record(":dtkComposer/dtkComposerNodeFile.json", dtkComposerNodeCreator<dtkComposerNodeFile>);
+    this->record(":dtkComposer/dtkComposerNodeFileExists.json", dtkComposerNodeCreator<dtkComposerNodeFileExists>);
+    this->record(":dtkComposer/dtkComposerNodeFileList.json", dtkComposerNodeCreator<dtkComposerNodeFileList>);
+    this->record(":dtkComposer/dtkComposerNodeFileRead.json", dtkComposerNodeCreator<dtkComposerNodeFileRead>);
+    this->record(":dtkComposer/dtkComposerNodeFileWrite.json", dtkComposerNodeCreator<dtkComposerNodeFileWrite>);
+    this->record(":dtkComposer/dtkComposerNodeDirectory.json", dtkComposerNodeCreator<dtkComposerNodeDirectory>);
+}
+
+void dtkComposerFactory::initNodeBase(void)
+{
+    this->record(":dtkComposer/dtkComposerNodeComposite.json", dtkComposerNodeCreator<dtkComposerNodeComposite>);
+    this->record(":dtkComposer/dtkComposerNodeLogger.json",    dtkComposerNodeCreator<dtkComposerNodeLogger>);
+    this->record(":dtkComposer/dtkComposerNodePrint.json",     dtkComposerNodeCreator<dtkComposerNodePrint>);
+}
+
+void dtkComposerFactory::initNodeDistributed(void)
+{
+    this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
+    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",   dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
+    this->record(":dtkComposer/dtkComposerNodeSpawn.json",   dtkComposerNodeCreator<dtkComposerNodeSpawn>);
 }
 
 void dtkComposerFactory::initNodeConstants(void)

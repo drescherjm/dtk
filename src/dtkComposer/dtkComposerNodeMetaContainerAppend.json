@@ -1,0 +1,10 @@
+{
+          "title" : "Container Append",
+           "kind" : "atomic",
+           "type" : "containerAppend",
+           "tags" : ["meta", "container","append"],
+    "description" : "<h3>Meta Container Append</h3>
+                     <p>Append an item in a container</p>",
+         "inputs" : ["container", "value"],
+        "outputs" : ["container"]
+}

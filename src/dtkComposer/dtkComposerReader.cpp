@@ -241,7 +241,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
         d->node = d->scene->current();
     } else {
         d->node = new dtkComposerSceneNodeComposite;
-        d->node->wrap(new dtkComposerNodeComposite);
+        d->node->wrap(d->factory->create("composite"));
         d->node->setParent(d->scene->current());
         d->scene->current()->addNode(d->node);
         d->graph->addNode(d->node);

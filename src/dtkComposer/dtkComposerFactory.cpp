@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeMetaContainer.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeRemote.h"
@@ -40,6 +41,7 @@ dtkComposerFactory::dtkComposerFactory(void) : dtkComposerNodeFactory()
     this->initNodeControl();
     this->initNodeNumber();
     this->initNodeString();
+    this->initNodeContainer();
 
     this->record(":dtkComposer/dtkComposerNodeComposite.json", dtkComposerNodeCreator<dtkComposerNodeComposite>);
     this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
@@ -152,6 +154,11 @@ void dtkComposerFactory::initNodeString(void)
     this->record(":dtkComposer/dtkComposerNodeStringReplace.json", dtkComposerNodeCreator<dtkComposerNodeStringReplace>);
     this->record(":dtkComposer/dtkComposerNodeStringOperatorBinaryAppend.json",   dtkComposerNodeCreator<dtkComposerNodeStringOperatorBinaryAppend>);
     this->record(":dtkComposer/dtkComposerNodeStringOperatorBinaryLogicEquality.json", dtkComposerNodeCreator<dtkComposerNodeStringOperatorBinaryLogicEquality>);
+}
+
+void dtkComposerFactory::initNodeContainer(void)
+{
+    this->record(":dtkComposer/dtkComposerNodeMetaContainer.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainer>);
 }
 
 

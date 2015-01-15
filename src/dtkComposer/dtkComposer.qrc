@@ -69,6 +69,7 @@
         <file>dtkComposerNodeStringReplace.json</file>
         <file>dtkComposerNodeStringOperatorBinaryAppend.json</file>
         <file>dtkComposerNodeStringOperatorBinaryLogicEquality.json</file>
+        <file>dtkComposerNodeMetaContainer.json</file>
 
         <file>dtkComposerNodeFlag-blue.png</file>
         <file>dtkComposerNodeFlag-gray.png</file>

@@ -151,6 +151,7 @@ public:
 
 public:
     dtkMetaContainerSequential(dtkMetaContainerSequentialHandler *handler);
+    dtkMetaContainerSequential(const dtkMetaContainerSequential& o);
 
 public:
     ~dtkMetaContainerSequential(void);
@@ -224,6 +225,37 @@ DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVector);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QVarLengthArray);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::list);
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
+
+// /////////////////////////////////////////////////////////////////
+// Register QStringList* as a sequential container pointer
+// /////////////////////////////////////////////////////////////////
+
+template <> struct QMetaTypeId<QStringList *>
+{
+    enum {
+        Defined = QMetaTypeId2<QString>::Defined
+    };
+
+    static int qt_metatype_id()
+    {
+        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
+        if (const int id = metatype_id.load())
+            return id;
+
+        QByteArray typeName("QStringList*", 12);
+
+        const int newId = qRegisterNormalizedMetaType<QStringList *>(typeName, reinterpret_cast<QStringList **>(quintptr(-1)));
+        metatype_id.storeRelease(newId);
+        if (newId > 0) {
+            dtkMetaType::registerContainerPointerConverter<QStringList *>(newId);
+        }
+
+        return newId;
+    }
+};
+
+template<> struct dtkMetaTypeIsSequentialContainerPointer<QStringList *> : std::true_type {};
+
 
 // /////////////////////////////////////////////////////////////////
 

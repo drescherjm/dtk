@@ -1,17 +1,16 @@
-/* dtkComposerNodeControlForEach.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Feb 24 16:52:08 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -48,3 +47,6 @@ public:
 private:
     dtkComposerNodeControlForEachPrivate *d;
 };
+
+// 
+// dtkComposerNodeControlForEach.h ends here

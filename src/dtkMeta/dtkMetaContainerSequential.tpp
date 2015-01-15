@@ -349,6 +349,13 @@ inline dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSe
     }
 }
 
+inline dtkMetaContainerSequential::dtkMetaContainerSequential(const dtkMetaContainerSequential& o) : h(o.h), proxy(new item(NULL))
+{ 
+    if (h) { 
+        proxy->it = h->begin();
+    }
+}
+
 inline dtkMetaContainerSequential::~dtkMetaContainerSequential(void)
 { 
     if (h)

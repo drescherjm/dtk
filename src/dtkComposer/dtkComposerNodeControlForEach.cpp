@@ -1,21 +1,16 @@
-/* dtkComposerNodeControlFor.cpp --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Wed Feb 15 09:14:22 2012 (+0100)
- * Version: $Id$
- * Last-Updated: mar. janv. 13 08:43:59 2015 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 286
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeControlForEach.h"
 
@@ -28,6 +23,8 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+
+#include <dtkMeta/dtkMetaContainerSequential.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlForEachPrivate interface
@@ -58,6 +55,8 @@ public:
     qlonglong size;
 
     bool first_iteration;
+
+    dtkMetaContainerSequential *container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -66,6 +65,10 @@ public:
 
 dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForEachPrivate)
 {
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->header_rcv.setTypeList(type_list);
+
     d->header_md.setTitle("Header");
     d->header_md.setKind("proxy");
     d->header_md.setType("proxy");
@@ -103,6 +106,7 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->block_container.appendPrevious(&d->header_rcv);
     d->header_rcv.appendNext(&d->block_container);
 
+    d->container = NULL;
     d->counter = 0;
     d->size = -1;
 }
@@ -160,8 +164,9 @@ void dtkComposerNodeControlForEach::setOutputs(void)
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    //d->block_item.setData(d->container->at(d->counter));
-    d->block_index.setData((d->counter)++);
+    d->block_item.setData(d->container->at(d->counter));
+    d->block_index.setData(d->counter);
+    ++(d->counter);
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)
@@ -174,13 +179,16 @@ void dtkComposerNodeControlForEach::begin(void)
     if (d->header_rcv.isEmpty())
         return;
 
-    //d->container = d->header_rcv.constContainer();
+    d->container = new dtkMetaContainerSequential(d->header_rcv.variant().value<dtkMetaContainerSequential>());
     d->counter = 0;
-    //d->size = d->container->count();
+    d->size = d->container->size();
     d->block_size.setData(d->size);
 }
 
 void dtkComposerNodeControlForEach::end(void)
 {
-
+    delete d->container;
 }
+
+// 
+// dtkComposerNodeControlForEach.cpp ends here

@@ -38,7 +38,7 @@ Q_DECLARE_METATYPE(QString*);
 
 Q_DECLARE_METATYPE(QImage*);
 
-Q_DECLARE_METATYPE(QStringList*);
+//Q_DECLARE_METATYPE(QStringList*);
 Q_DECLARE_METATYPE(QByteArray *);
 
 #endif

@@ -100,6 +100,10 @@ void dtkMetaContainerSequentialTestCase::testConversion(void)
 {
     QVariant var;
 
+    QStringList slist;
+    var = dtkMetaType::variantFromValue(&slist);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));
+
     QList<int> list;
     var = dtkMetaType::variantFromValue(&list);
     QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(var.userType()));

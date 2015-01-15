@@ -18,12 +18,13 @@
 #include <QtCore>
 #include <QImage>
 
+#include <dtkMeta/dtkMeta.h>
+
 // /////////////////////////////////////////////////////////////////
 //
 // /////////////////////////////////////////////////////////////////
 
 Q_DECLARE_METATYPE(QImage*);
 
-Q_DECLARE_METATYPE(QStringList*);
 Q_DECLARE_METATYPE(QByteArray *);
 

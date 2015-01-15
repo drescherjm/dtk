@@ -1,0 +1,9 @@
+{
+          "title" : "Directory",
+           "kind" : "atomic",
+           "type" : "fileDir",
+           "tags" : ["file", "atomic","directory"],
+    "description" : "<pDirectory node</p>",
+         "inputs" : ["dir"],
+        "outputs" : ["dir"]
+}

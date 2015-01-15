@@ -1,0 +1,9 @@
+{
+          "title" : "File Write",
+           "kind" : "atomic",
+           "type" : "fileWrite",
+           "tags" : ["file", "atomic","write","binary"],
+    "description" : "<p>Write a binary object (QByteArray) into a file</p>",
+         "inputs" : ["content" ,"filename"],
+        "outputs" : ["success","filename"]
+}

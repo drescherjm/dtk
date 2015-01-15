@@ -15,6 +15,7 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerNodeFactoryView.h"
 #include "dtkComposerNodeMetaData.h"
+#include "dtkComposerSceneNode.h"
 
 #include <dtkWidgets/dtkWidgetsTagCloud>
 #include <dtkWidgets/dtkWidgetsTagCloudController>
@@ -119,4 +120,17 @@ dtkWidgetsTagCloud *dtkComposerNodeFactoryView::cloudView(void) const
 dtkWidgetsTagCloudScope *dtkComposerNodeFactoryView::scopeView(void) const
 {
     return d->scope;
+}
+
+void dtkComposerNodeFactoryView::onShowNodeDocumentation(dtkComposerSceneNode *node)
+{
+    if(!node)
+        return;
+
+    dtkComposerNode* wrapee = node->wrapee();
+    if(!wrapee)
+        return;
+
+    if (wrapee->nodeMetaData())
+        d->view->onItemClicked(wrapee->nodeMetaData()->description());
 }

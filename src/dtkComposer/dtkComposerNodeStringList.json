@@ -1,0 +1,11 @@
+{
+          "title" : "Stringlist",
+           "kind" : "atomic",
+           "type" : "stringlist",
+           "tags" : ["string", "atomic", "list"],
+    "description" : "<p>If the Input list is not provided, create a string List of given size, and fill with identical string value.</p>",
+         "inputs" : ["list","size","value"],
+        "outputs" : ["list"]
+}
+
+

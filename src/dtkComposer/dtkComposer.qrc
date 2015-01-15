@@ -2,8 +2,11 @@
 <RCC version="1.0">
     <qresource prefix="dtkComposer">
         <file>dtkComposerNote.json</file>
+        <file>dtkComposerNodePi.json</file>
+        <file>dtkComposerNodeE.json</file>
         <file>dtkComposerNodeBoolean.json</file>
         <file>dtkComposerNodeInteger.json</file>
+        <file>dtkComposerNodeReal.json</file>
         <file>dtkComposerNodeComposite.json</file>
         <file>dtkComposerNodeRemote.json</file>
         <file>dtkComposerNodeRemoteSubmit.json</file>
@@ -25,7 +28,12 @@
         <file>dtkComposerNodeControlForEach.json</file>
         <file>dtkComposerNodeControlMap.json</file>
         <file>dtkComposerNodeControlWhile.json</file>
-        <file>dtkComposerNodeReal.json</file>
+        <file>dtkComposerNodeFile.json</file>
+        <file>dtkComposerNodeFileExists.json</file>
+        <file>dtkComposerNodeFileRead.json</file>
+        <file>dtkComposerNodeFileWrite.json</file>
+        <file>dtkComposerNodeDirectory.json</file>
+        <file>dtkComposerNodeFileList.json</file>
         <file>dtkComposerNodeNumberOperatorUnaryAbs.json</file>
         <file>dtkComposerNodeNumberOperatorUnarySqrt.json</file>
         <file>dtkComposerNodeNumberOperatorUnarySquare.json</file>

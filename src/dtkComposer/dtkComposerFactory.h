@@ -25,8 +25,12 @@ public:
     ~dtkComposerFactory(void);
 
 public:
+    void initNodeBase(void);
     void initNodeBoolean(void);
     void initNodeControl(void);
+    void initNodeConstants(void);
+    void initNodeDistributed(void);
+    void initNodeFile(void);
     void initNodeNumber (void);
     void initNodeString (void);
     void initNodeContainer(void);

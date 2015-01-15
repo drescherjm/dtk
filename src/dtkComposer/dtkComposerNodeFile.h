@@ -35,14 +35,6 @@ public:
     void run(void);
 
 public:
-    QString type(void);
-    QString titleHint(void);
-
-public:
-    QString inputLabelHint(int);
-    QString outputLabelHint(int);
-
-public:
     QString value(void);
 
 public:
@@ -63,14 +55,6 @@ public:
 
 public:
     void run(void);
-
-public:
-    QString type(void);
-    QString titleHint(void);
-
-public:
-    QString inputLabelHint(int);
-    QString outputLabelHint(int);
 
 private:
     dtkComposerNodeFileExistsPrivate *d;
@@ -93,14 +77,6 @@ public:
 public:
     void run(void);
 
-public:
-    QString type(void);
-    QString titleHint(void);
-
-public:
-    QString inputLabelHint(int);
-    QString outputLabelHint(int);
-
 private:
     dtkComposerNodeFileListPrivate *d;
 };
@@ -119,14 +95,6 @@ public:
 
 public:
     void run(void);
-
-public:
-    QString type(void);
-    QString titleHint(void);
-
-public:
-    QString inputLabelHint(int);
-    QString outputLabelHint(int);
 
 private:
     dtkComposerNodeFileReadPrivate *d;
@@ -147,14 +115,6 @@ public:
 public:
     void run(void);
 
-public:
-    QString type(void);
-    QString titleHint(void);
-
-public:
-    QString inputLabelHint(int);
-    QString outputLabelHint(int);
-
 private:
     dtkComposerNodeFileWritePrivate *d;
 };
@@ -174,14 +134,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeDirectory : public dtkComposerNodeLeaf
 
  public:
     void run(void);
-
- public:
-    QString type(void);
-    QString titleHint(void);
-
- public:
-    QString inputLabelHint(int);
-    QString outputLabelHint(int);
 
  public:
     QString value(void);

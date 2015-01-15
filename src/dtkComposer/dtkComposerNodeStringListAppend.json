@@ -1,0 +1,11 @@
+{
+          "title" : "String List Append",
+           "kind" : "atomic",
+           "type" : "appendStringList",
+           "tags" : ["string", "atomic", "list", "append"],
+    "description" : "<p>Append a String to a String list.</p>",
+         "inputs" : ["list","string"],
+        "outputs" : ["list"]
+}
+
+

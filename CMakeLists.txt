@@ -57,7 +57,7 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 
 if(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/lib/c++/v1")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -I/usr/lib/c++/v1")
 endif(APPLE)
 
 if(NOT APPLE AND NOT MSVC)

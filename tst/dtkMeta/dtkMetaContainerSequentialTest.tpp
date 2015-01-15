@@ -71,11 +71,27 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
         --count;
     }
     QCOMPARE((int)c.size(), 0);
+    QCOMPARE((int)m_c.size(), 0);
 
     for (int i = 0; i < size; ++i) {
         m_c.append(values[i]);
         QCOMPARE(m_c.at(i).value<Type>(), values[i]);
     }
+    count = size - 1;
+    while (count >= 0 ) {
+        m_c.removeAt(count);
+        --count;
+    }
+    QCOMPARE((int)m_c.size(), 0);
+
+    // test append a qvariant
+    QVariant val_v;
+    for (int i = 0; i < size; ++i) {
+        val_v = values[i];
+        m_c.append(val_v);
+        QCOMPARE(m_c.at(i).value<Type>(), values[i]);
+    }
+
     QCOMPARE(m_c.size(), size);
     QCOMPARE((int)std::distance(c.begin(), c.end()), size);
 

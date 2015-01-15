@@ -58,7 +58,7 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Test)
 
-target_link_libraries(${PROJECT_NAME} dtkMeta)
+target_link_libraries(${PROJECT_NAME} dtkMeta dtkCore)
 
 ## ###################################################################
 ## Test rules

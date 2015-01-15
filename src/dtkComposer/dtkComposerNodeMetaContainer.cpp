@@ -20,6 +20,7 @@
 #include <dtkMeta/dtkMetaContainerSequential.h>
 
 #include <dtkCore/dtkArray>
+#include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeMetaContainerPrivate interface
@@ -100,6 +101,154 @@ void dtkComposerNodeMetaContainer::run(void)
 
     qDebug() << d->emitter_container.variant();
 }
+
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerAppendPrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerAppendPrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+    dtkComposerTransmitterReceiverVariant receiver_value;
+
+public:
+    dtkComposerTransmitterEmitterVariant emitter_container;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainer implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerAppend::dtkComposerNodeMetaContainerAppend(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerAppendPrivate)
+{
+    this->appendReceiver(&d->receiver_container);
+    this->appendReceiver(&d->receiver_value);
+
+    this->appendEmitter(&d->emitter_container);
+}
+
+dtkComposerNodeMetaContainerAppend::~dtkComposerNodeMetaContainerAppend(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerAppend::run(void)
+{
+    QVariant var_container;
+
+    if (!d->receiver_container.isEmpty() && !d->receiver_value.isEmpty()) {
+        var_container = d->receiver_container.variant();
+        if (dtkMetaType::canConvert<dtkMetaContainerSequential>(var_container.userType())) {
+            dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+            m_c.append(d->receiver_value.variant());
+        } else {
+            dtkError()<< "input container is not a dtkMetaContainerSequential";
+        }
+
+    }
+    d->emitter_container.setData(var_container);
+}
+
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerSizePrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerSizePrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+
+public:
+    dtkComposerTransmitterEmitter<qlonglong> emitter_size;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerSize implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerSize::dtkComposerNodeMetaContainerSize(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerSizePrivate)
+{
+    this->appendReceiver(&d->receiver_container);
+
+    this->appendEmitter(&d->emitter_size);
+}
+
+dtkComposerNodeMetaContainerSize::~dtkComposerNodeMetaContainerSize(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerSize::run(void)
+{
+    QVariant var_container;
+    qlonglong size ;
+
+    if (!d->receiver_container.isEmpty()) {
+        var_container = d->receiver_container.variant();
+        if (dtkMetaType::canConvert<dtkMetaContainerSequential>(var_container.userType())) {
+            dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+            size = m_c.size();
+        } else {
+            dtkError()<< "input container is not a dtkMetaContainerSequential";
+        }
+
+    }
+    d->emitter_size.setData(size);
+}
+
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerSizePrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerAtPrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+
+public:
+    dtkComposerTransmitterEmitterVariant emitter_value;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerAt implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerAt::dtkComposerNodeMetaContainerAt(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerAtPrivate)
+{
+    this->appendReceiver(&d->receiver_container);
+    this->appendReceiver(&d->receiver_index);
+
+    this->appendEmitter(&d->emitter_value);
+}
+
+dtkComposerNodeMetaContainerAt::~dtkComposerNodeMetaContainerAt(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerAt::run(void)
+{
+    QVariant var_container;
+    QVariant v;
+
+    if (!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty()) {
+        var_container = d->receiver_container.variant();
+        if (dtkMetaType::canConvert<dtkMetaContainerSequential>(var_container.userType())) {
+            dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+            v = m_c.at(d->receiver_index.data());
+        } else {
+            dtkError()<< "input container is not a dtkMetaContainerSequential";
+        }
+
+        d->emitter_value.setData(v);
+    }
+}
+
 
 // 
 // dtkComposerNodeMetaContainer.cpp ends here

@@ -189,6 +189,9 @@ void dtkComposerFactory::initNodeString(void)
 void dtkComposerFactory::initNodeContainer(void)
 {
     this->record(":dtkComposer/dtkComposerNodeMetaContainer.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainer>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerAppend.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerAppend>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerSize.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSize>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerAt>);
 }
 
 

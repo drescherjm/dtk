@@ -718,6 +718,7 @@ void dtkComposerScene::keyPressEvent(QKeyEvent *event)
 
             dtkComposerStackCommandCreateGroup *command = new dtkComposerStackCommandCreateGroup;
             command->setScene(this);
+            command->setFactory(d->factory);
             command->setGraph(d->graph);
             command->setNodes(selected_nodes);
             command->setNotes(selected_notes);

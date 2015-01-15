@@ -1,0 +1,9 @@
+{
+          "title" : "Pi",
+           "kind" : "atomic",
+           "type" : "pi",
+           "tags" : ["constant", "pi"],
+    "description" : "<p>Pi</p>",
+         "inputs" : [],
+        "outputs" : ["value"]
+}

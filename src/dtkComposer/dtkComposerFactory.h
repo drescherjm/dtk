@@ -33,6 +33,7 @@ public:
     void initNodeFile(void);
     void initNodeNumber (void);
     void initNodeString (void);
+    void initNodeContainer(void);
 };
 // 
 // dtkComposerFactory.h ends here

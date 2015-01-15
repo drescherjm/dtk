@@ -21,6 +21,7 @@
 
 class dtkComposerFactory;
 class dtkComposerNodeFactoryViewPrivate;
+class dtkComposerSceneNode;
 class dtkWidgetsItemView;
 class dtkWidgetsTagCloud;
 class dtkWidgetsTagCloudScope;
@@ -33,6 +34,9 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryView : public QWidget
 public:
      dtkComposerNodeFactoryView(QWidget *parent = 0);
     ~dtkComposerNodeFactoryView(void);
+
+public slots:
+    void onShowNodeDocumentation(dtkComposerSceneNode *node);
 
 public:
     void addNote(void);

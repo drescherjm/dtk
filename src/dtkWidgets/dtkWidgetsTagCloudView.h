@@ -42,7 +42,7 @@ public:
 public:
     void setDark(void);
 
-protected slots:
+public slots:
     void onItemClicked(const QString& description);
 
 protected slots:

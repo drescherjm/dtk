@@ -1,7 +1,7 @@
 {
           "title" : "File List",
            "kind" : "atomic",
-           "type" : "fileExists",
+           "type" : "fileList",
            "tags" : ["file", "atomic","list", "directory", "ls"],
     "description" : "<p>Returns a list of the names of all the files and directories in the directory, according to the attribute filters. If no pattern is given, all the files in the directory are added to the list</p>",
          "inputs" : ["directory","pattern"],

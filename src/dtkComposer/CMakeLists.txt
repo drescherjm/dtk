@@ -77,6 +77,7 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeLeafProcess.h
   # dtkComposerNodeLeafView.h
   dtkComposerNodeLogger.h
+  dtkComposerNodeMetaContainer.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodePrint.h
   dtkComposerNodeProxy.h
@@ -176,6 +177,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeLeafProcess.cpp
   # dtkComposerNodeLeafView.cpp
   dtkComposerNodeLogger.cpp
+  dtkComposerNodeMetaContainer.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodePrint.cpp
   dtkComposerNodeProxy.cpp

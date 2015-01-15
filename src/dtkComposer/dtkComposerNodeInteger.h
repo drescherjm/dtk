@@ -35,23 +35,6 @@ public:
     void run(void);
 
 public:
-    /* inline QString type(void) { */
-    /*     return "integer"; */
-    /* } */
-
-    /* inline QString titleHint(void) { */
-    /*     return "Integer"; */
-    /* } */
-
-    inline QString inputLabelHint(int) {
-        return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-public:
     qlonglong value(void);
 
 public:

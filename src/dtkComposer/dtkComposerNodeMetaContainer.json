@@ -1,0 +1,10 @@
+{
+          "title" : "Container",
+           "kind" : "atomic",
+           "type" : "container",
+           "tags" : ["meta", "container"],
+    "description" : "<h3>Meta Container</h3>
+                     <p></p>",
+         "inputs" : ["size", "value"],
+        "outputs" : ["container"]
+}

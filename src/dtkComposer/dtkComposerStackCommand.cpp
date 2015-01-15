@@ -953,7 +953,7 @@ void dtkComposerStackCommandCreateGroup::setNodes(dtkComposerSceneNodeList nodes
 
     if(!e->node && e->parent) {
         e->node = new dtkComposerSceneNodeComposite;
-        e->node->wrap(new dtkComposerNodeComposite);
+        e->node->wrap(d->factory->create("composite"));
         e->node->setParent(e->parent);
     }
 
@@ -3035,10 +3035,11 @@ void dtkComposerStackCommandCopyNodes::redo(void)
             dtkComposerStackCommandCreateGroup *group = new dtkComposerStackCommandCreateGroup;
             group->setScene(d->scene);
             group->setGraph(d->graph);
+            group->setFactory(d->factory);
             group->setNodes(e->nodes);
             group->redo();
 
-            dtkComposerSceneNodeList dummylist ;
+            dtkComposerSceneNodeList dummylist;
 
             // get the composite pointer by calling parent on one of the nodes
             dtkComposerSceneNode *dummy_composite = e->nodes.at(0)->parent();

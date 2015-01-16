@@ -96,5 +96,122 @@ private:
     dtkComposerNodeMetaContainerAtPrivate *d;
 };
 
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerSetAt interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerSetAtPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerSetAt : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerSetAt(void);
+    ~dtkComposerNodeMetaContainerSetAt(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerSetAtPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerRemoveAt interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerRemoveAtPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerRemoveAt : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerRemoveAt(void);
+    ~dtkComposerNodeMetaContainerRemoveAt(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerRemoveAtPrivate *d;
+};
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerTakeAt interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerTakeAtPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerTakeAt : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerTakeAt(void);
+    ~dtkComposerNodeMetaContainerTakeAt(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerTakeAtPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerInsert interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerInsertPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerInsert : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerInsert(void);
+    ~dtkComposerNodeMetaContainerInsert(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerInsertPrivate *d;
+};
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerPrepend interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerPrependPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerPrepend : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerPrepend(void);
+    ~dtkComposerNodeMetaContainerPrepend(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerPrependPrivate *d;
+};
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerResize interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerResizePrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerResize : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerResize(void);
+    ~dtkComposerNodeMetaContainerResize(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerResizePrivate *d;
+};
 //
 // dtkComposerNodeMetaContainer.h ends here

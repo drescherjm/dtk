@@ -440,7 +440,7 @@ template <typename T> inline void dtkMetaContainerSequential::prepend(const T& t
 
 inline void dtkMetaContainerSequential::append(const QVariant& v)
 {
-    this->insert(h->size() - 1, v);
+    this->insert(h->size(), v);
 }
 
 inline void dtkMetaContainerSequential::prepend(const QVariant& v)

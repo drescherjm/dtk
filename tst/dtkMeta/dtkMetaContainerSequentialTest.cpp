@@ -16,6 +16,7 @@
 #include "dtkMetaContainerSequentialTest.tpp"
 
 #include <QtCore>
+#include <dtkCore/dtkArray.h>
 
 // ///////////////////////////////////////////////////////////////////
 // 
@@ -158,6 +159,28 @@ void dtkMetaContainerSequentialTestCase::testQVector(void)
     QCOMPARE(2 * size, c_i.size());
 
     typedef QVector<QString> ArrayString;
+    ArrayString c_s;
+    size = 4;
+    QString values_s[4] = {"toto", "allo", "ici", "bebe"};
+
+    testContainer<ArrayString>(c_s, values_s, size);
+
+    QCOMPARE(2 * size, c_s.size());
+}
+
+
+void dtkMetaContainerSequentialTestCase::testdtkArray(void)
+{
+    typedef dtkArray<int> ArrayInt;
+    ArrayInt c_i;
+    int size = 11;
+    int values_i[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+    testContainer<ArrayInt>(c_i, values_i, size);
+
+    QCOMPARE(2 * size, c_i.size());
+
+    typedef dtkArray<QString> ArrayString;
     ArrayString c_s;
     size = 4;
     QString values_s[4] = {"toto", "allo", "ici", "bebe"};

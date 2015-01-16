@@ -2,7 +2,7 @@
           "title" : "ForEach",
            "kind" : "control",
            "type" : "foreach",
-           "tags" : ["foreach", "control", "loop"],
+           "tags" : ["foreach", "control", "loop", "container"],
     "description" : "<h3>Perform foreach loop</h3>
 <p>
 The <b>Foreach</b> control node enable to iterate over all the items

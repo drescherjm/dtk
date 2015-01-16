@@ -5,6 +5,6 @@
            "tags" : ["meta", "container", "at"],
     "description" : "<h3>Meta Container At</h3>
                      <p>Get container value at given index</p>",
-         "inputs" : ["container"],
+         "inputs" : ["container", "index"],
         "outputs" : ["value"]
 }

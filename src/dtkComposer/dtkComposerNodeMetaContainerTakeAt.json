@@ -1,0 +1,10 @@
+{
+          "title" : "Container Take At",
+           "kind" : "atomic",
+           "type" : "containerTakeAt",
+           "tags" : ["meta", "container", "takeat"],
+    "description" : "<h3>Meta Container Take At</h3>
+                     <p>Remove container value at given index, the value is available as an output port</p>",
+         "inputs" : ["container", "index"],
+        "outputs" : ["container", "value"]
+}

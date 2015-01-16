@@ -1,0 +1,10 @@
+{
+          "title" : "Container Set At",
+           "kind" : "atomic",
+           "type" : "containerSetAt",
+           "tags" : ["meta", "container", "setat"],
+    "description" : "<h3>Meta Container Set At</h3>
+                     <p>Set container value at given index</p>",
+         "inputs" : ["container", "index", "value"],
+        "outputs" : ["container"]
+}

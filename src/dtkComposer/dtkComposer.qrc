@@ -80,7 +80,11 @@
         <file>dtkComposerNodeMetaContainer.json</file>
         <file>dtkComposerNodeMetaContainerAppend.json</file>
         <file>dtkComposerNodeMetaContainerAt.json</file>
+        <file>dtkComposerNodeMetaContainerInsert.json</file>
         <file>dtkComposerNodeMetaContainerSize.json</file>
+        <file>dtkComposerNodeMetaContainerSetAt.json</file>
+        <file>dtkComposerNodeMetaContainerTakeAt.json</file>
+        <file>dtkComposerNodeMetaContainerRemoveAt.json</file>
 
         <file>dtkComposerNodeFlag-blue.png</file>
         <file>dtkComposerNodeFlag-gray.png</file>

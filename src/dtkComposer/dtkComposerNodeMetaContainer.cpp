@@ -96,7 +96,7 @@ void dtkComposerNodeMetaContainer::run(void)
     } else {
         var_container = dtkMetaType::variantFromValue(new dtkArray<QVariant>(0));
     }
-    
+
     d->emitter_container.setData(var_container);
 
     qDebug() << d->emitter_container.variant();
@@ -140,8 +140,6 @@ dtkComposerNodeMetaContainerAppend::~dtkComposerNodeMetaContainerAppend(void)
 
 void dtkComposerNodeMetaContainerAppend::run(void)
 {
-    QVariant var_container;
-
     if(!d->receiver_container.isEmpty()) {
         QVariant var_container = d->receiver_container.variant();
 
@@ -208,7 +206,7 @@ void dtkComposerNodeMetaContainerSize::run(void)
 }
 
 ////////////////////////////////////////////////////////////////////
-// dtkComposerNodeMetaContainerSizePrivate interface
+// dtkComposerNodeMetaContainerAtPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeMetaContainerAtPrivate
@@ -246,7 +244,6 @@ void dtkComposerNodeMetaContainerAt::run(void)
 {
     if(!d->receiver_container.isEmpty()) {
         QVariant var_container = d->receiver_container.variant();
-        qDebug() << var_container;
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
         if(!d->receiver_index.isEmpty()) {
             d->emitter_value.setData(m_c.at(d->receiver_index.data()));
@@ -262,6 +259,230 @@ void dtkComposerNodeMetaContainerAt::run(void)
     }
 }
 
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerSetAtPrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerSetAtPrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+    dtkComposerTransmitterReceiverVariant receiver_value;
+
+public:
+    dtkComposerTransmitterEmitterVariant emitter_container;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerSetAt implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerSetAt::dtkComposerNodeMetaContainerSetAt(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerSetAtPrivate)
+{
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->receiver_container.setTypeList(type_list);
+
+    this->appendReceiver(&d->receiver_container);
+    this->appendReceiver(&d->receiver_index);
+    this->appendReceiver(&d->receiver_value);
+
+    this->appendEmitter(&d->emitter_container);
+}
+
+dtkComposerNodeMetaContainerSetAt::~dtkComposerNodeMetaContainerSetAt(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerSetAt::run(void)
+{
+    if(!d->receiver_container.isEmpty() && !d->receiver_value.isEmpty() && !d->receiver_index.isEmpty()) {
+        QVariant var_container = d->receiver_container.variant();
+        dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+
+        m_c.setAt(d->receiver_index.data(), d->receiver_value.variant());
+        d->emitter_container.setData(var_container);
+
+
+    } else {
+        dtkWarn() << "All input ports must be connected for set at operation. Nothing is emitted.";
+        d->emitter_container.clearData();
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerRemoveAtPrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerRemoveAtPrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+
+public:
+    dtkComposerTransmitterEmitterVariant emitter_container;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerRemoveAt implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerRemoveAt::dtkComposerNodeMetaContainerRemoveAt(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerRemoveAtPrivate)
+{
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->receiver_container.setTypeList(type_list);
+
+    this->appendReceiver(&d->receiver_container);
+    this->appendReceiver(&d->receiver_index);
+
+    this->appendEmitter(&d->emitter_container);
+}
+
+dtkComposerNodeMetaContainerRemoveAt::~dtkComposerNodeMetaContainerRemoveAt(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerRemoveAt::run(void)
+{
+    if(!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty()) {
+        QVariant var_container = d->receiver_container.variant();
+        dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+
+        m_c.removeAt(d->receiver_index.data());
+        d->emitter_container.setData(var_container);
+
+    } else {
+        dtkWarn() << "All input ports must be connected for remove at operation. Nothing is emitted.";
+        d->emitter_container.clearData();
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerTakeAtPrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerTakeAtPrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+
+public:
+    dtkComposerTransmitterEmitterVariant emitter_container;
+    dtkComposerTransmitterEmitterVariant emitter_value;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerTakeAt implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerTakeAt::dtkComposerNodeMetaContainerTakeAt(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerTakeAtPrivate)
+{
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->receiver_container.setTypeList(type_list);
+
+    this->appendReceiver(&d->receiver_container);
+    this->appendReceiver(&d->receiver_index);
+
+    this->appendEmitter(&d->emitter_container);
+    this->appendEmitter(&d->emitter_value);
+}
+
+dtkComposerNodeMetaContainerTakeAt::~dtkComposerNodeMetaContainerTakeAt(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerTakeAt::run(void)
+{
+    if(!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty()) {
+        QVariant var_container = d->receiver_container.variant();
+        dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+
+        QVariant v = m_c.at(d->receiver_index.data());
+        m_c.removeAt(d->receiver_index.data());
+        d->emitter_container.setData(var_container);
+        d->emitter_value.setData(v);
+
+    } else {
+        dtkWarn() << "All input ports must be connected for take at operation. Nothing is emitted.";
+        d->emitter_container.clearData();
+        d->emitter_value.clearData();
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerInsertPrivate interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerInsertPrivate
+{
+public:
+    dtkComposerTransmitterReceiverVariant receiver_container;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_index;
+    dtkComposerTransmitterReceiverVariant receiver_value;
+
+public:
+    dtkComposerTransmitterEmitterVariant emitter_container;
+};
+
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerInsert implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeMetaContainerInsert::dtkComposerNodeMetaContainerInsert(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMetaContainerInsertPrivate)
+{
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->receiver_container.setTypeList(type_list);
+
+    this->appendReceiver(&d->receiver_container);
+    this->appendReceiver(&d->receiver_index);
+    this->appendReceiver(&d->receiver_value);
+
+    this->appendEmitter(&d->emitter_container);
+}
+
+dtkComposerNodeMetaContainerInsert::~dtkComposerNodeMetaContainerInsert(void)
+{
+
+}
+
+void dtkComposerNodeMetaContainerInsert::run(void)
+{
+    if(!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty()) {
+        QVariant var_container = d->receiver_container.variant();
+        dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
+
+        m_c.insert(d->receiver_index.data(),d->receiver_value.variant());
+        d->emitter_container.setData(var_container);
+
+    } else {
+        dtkWarn() << "All input ports must be connected for insert operation. Nothing is emitted.";
+        d->emitter_container.clearData();
+    }
+}
 
 // 
 // dtkComposerNodeMetaContainer.cpp ends here

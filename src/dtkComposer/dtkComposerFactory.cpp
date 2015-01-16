@@ -190,8 +190,12 @@ void dtkComposerFactory::initNodeContainer(void)
 {
     this->record(":dtkComposer/dtkComposerNodeMetaContainer.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainer>);
     this->record(":dtkComposer/dtkComposerNodeMetaContainerAppend.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerAppend>);
-    this->record(":dtkComposer/dtkComposerNodeMetaContainerSize.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSize>);
     this->record(":dtkComposer/dtkComposerNodeMetaContainerAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerAt>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerInsert.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerInsert>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerRemoveAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerRemoveAt>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerSetAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSetAt>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerSize.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSize>);
+    this->record(":dtkComposer/dtkComposerNodeMetaContainerTakeAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerTakeAt>);
 }
 
 

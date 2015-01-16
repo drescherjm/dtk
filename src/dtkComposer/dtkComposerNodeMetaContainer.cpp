@@ -246,7 +246,6 @@ void dtkComposerNodeMetaContainerAt::run(void)
 {
     if(!d->receiver_container.isEmpty()) {
         QVariant var_container = d->receiver_container.variant();
-        qDebug() << var_container;
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
         if(!d->receiver_index.isEmpty()) {
             d->emitter_value.setData(m_c.at(d->receiver_index.data()));

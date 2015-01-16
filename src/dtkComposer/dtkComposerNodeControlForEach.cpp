@@ -45,7 +45,7 @@ public:
 public:
     dtkComposerTransmitterReceiverVariant header_rcv;
 
-    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterEmitterVariant     block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterEmitterVariant     block_item;
@@ -179,7 +179,10 @@ void dtkComposerNodeControlForEach::begin(void)
     if (d->header_rcv.isEmpty())
         return;
 
-    d->container = new dtkMetaContainerSequential(d->header_rcv.variant().value<dtkMetaContainerSequential>());
+    QVariant var_container = d->header_rcv.variant();
+    d->block_container.setData(var_container);
+
+    d->container = new dtkMetaContainerSequential(var_container.value<dtkMetaContainerSequential>());
     d->counter = 0;
     d->size = d->container->size();
     d->block_size.setData(d->size);

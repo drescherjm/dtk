@@ -1,0 +1,10 @@
+{
+          "title" : "Container Prepend",
+           "kind" : "atomic",
+           "type" : "containerprepend",
+           "tags" : ["meta", "container", "prepend"],
+    "description" : "<h3>Meta Container Prepend</h3>
+                     <p>Prepend value in container </p>",
+         "inputs" : ["container", "value"],
+        "outputs" : ["container"]
+}

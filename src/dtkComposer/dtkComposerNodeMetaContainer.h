@@ -174,5 +174,44 @@ private:
     dtkComposerNodeMetaContainerInsertPrivate *d;
 };
 
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerPrepend interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerPrependPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerPrepend : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerPrepend(void);
+    ~dtkComposerNodeMetaContainerPrepend(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerPrependPrivate *d;
+};
+
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeMetaContainerResize interface
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeMetaContainerResizePrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerResize : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeMetaContainerResize(void);
+    ~dtkComposerNodeMetaContainerResize(void);
+
+public:
+    void run(void);
+
+private:
+    dtkComposerNodeMetaContainerResizePrivate *d;
+};
 //
 // dtkComposerNodeMetaContainer.h ends here

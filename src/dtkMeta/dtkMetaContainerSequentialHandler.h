@@ -79,6 +79,9 @@ public:
     virtual ~dtkMetaContainerSequentialHandler(void) {}
 
 public:
+    virtual QString description(void) const = 0;
+
+public:
     virtual bool hasBiDirectionalIterator(void) const = 0;
     virtual bool  hasRandomAccessIterator(void) const = 0;
 
@@ -203,6 +206,9 @@ public:
 public:
     explicit dtkMetaContainerSequentialHandlerTemplate(T *c);
             ~dtkMetaContainerSequentialHandlerTemplate(void);
+
+public:
+    QString description(void) const;
 
 public:
     bool hasBiDirectionalIterator(void) const;

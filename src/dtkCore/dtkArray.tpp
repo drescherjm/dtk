@@ -1268,8 +1268,6 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
 
 template<typename T, qlonglong PreallocSize> struct dtkMetaTypeIsSequentialContainerPointer< dtkArray<T, PreallocSize> *> : std::true_type {};
 
-DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(dtkArray);
-
 // ///////////////////////////////////////////////////////////////////
 // Specialization of typetraits
 // ///////////////////////////////////////////////////////////////////

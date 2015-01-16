@@ -175,6 +175,23 @@ template <typename T> inline dtkMetaContainerSequentialHandlerTemplate<T>::~dtkM
     m_container = NULL; 
 }
 
+template <typename T> inline QString dtkMetaContainerSequentialHandlerTemplate<T>::description(void) const
+{
+    QString desc;
+    QDebug dbg(&desc);
+    dbg.nospace() << QMetaType::typeName(qMetaTypeId<T *>());
+    dbg.nospace() << ", size = ";
+    dbg.nospace() << this->size();
+    dbg.nospace() << ", (";
+    for (qlonglong i = 0; i < this->size(); ++i) {
+        if (i)
+            dbg << ", ";
+        dbg << *static_cast<const ValueType *>(this->at(i));
+    }
+    dbg << ')';
+    return desc;
+}
+
 template <typename T> inline bool dtkMetaContainerSequentialHandlerTemplate<T>::hasBiDirectionalIterator(void) const
 {
     return dtkMetaContainerSequentialHandlerHelper<T>::hasBidirectionalIterator();

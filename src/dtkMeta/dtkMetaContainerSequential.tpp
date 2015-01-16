@@ -506,6 +506,16 @@ inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::operator []
     return *proxy;
 }
 
+// ///////////////////////////////////////////////////////////////////
+// Debug operator
+// ///////////////////////////////////////////////////////////////////
+
+inline QDebug& operator << (QDebug debug, const dtkMetaContainerSequential& container)
+{
+    debug << container.h->description();
+    return debug.maybeSpace();
+}
+
 // /////////////////////////////////////////////////////////////////
 // Specialization of Qt internal struct to build QVariant of dtkMetaContainerSequential
 // /////////////////////////////////////////////////////////////////
@@ -521,9 +531,9 @@ namespace QtPrivate
     };
 }
 
-// // ///////////////////////////////////////////////////////////////////
-// // Implementation of canGetMetaContainerFromVariant avoiding recursive header inclusion
-// // ///////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////
+// Implementation of canGetMetaContainerFromVariant avoiding recursive header inclusion
+// ///////////////////////////////////////////////////////////////////
 
 inline bool dtkMetaType::canGetMetaContainerFromVariant(const QVariant& v)
 {
@@ -558,6 +568,28 @@ template <> inline bool QVariant::canConvert<dtkMetaContainerSequential>(void) c
     int from = d.type;
     int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
     return QMetaType::hasRegisteredConverterFunction(from, to);
+}
+
+// ///////////////////////////////////////////////////////////////////
+// Implementation of dtkMetaType::description avoiding recursive header inclusion
+// ///////////////////////////////////////////////////////////////////
+
+inline QString dtkMetaType::description(const QVariant& v)
+{
+    QString str;
+    QDebug dbg(&str);
+    if (v.canConvert<dtkMetaContainerSequential>()) {
+        dtkMetaContainerSequential mc = v.value<dtkMetaContainerSequential>();
+        dbg << mc;
+    } else {
+        dbg << v.typeName() << ", ";
+        if (v.canConvert<QString>()) {
+            dbg << v.value<QString>();
+        } else {
+            QMetaType::debugStream(dbg, v.constData(), v.userType());
+        }
+    }
+    return str;
 }
 
 //

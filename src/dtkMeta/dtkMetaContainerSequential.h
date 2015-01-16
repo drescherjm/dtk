@@ -213,11 +213,22 @@ public:
               item& operator [] (qlonglong idx);
 
 protected:
+    friend QDebug& operator << (QDebug debug, const dtkMetaContainerSequential& container);
+
+protected:
     dtkMetaContainerSequentialHandler *h;
     item *proxy;
     mutable QVariant var;
 };
 
+// ///////////////////////////////////////////////////////////////////
+// Debug operator
+// ///////////////////////////////////////////////////////////////////
+
+QDebug& operator << (QDebug debug, const dtkMetaContainerSequential& container);
+
+// /////////////////////////////////////////////////////////////////
+// Register standard containers as a sequential container pointer
 // /////////////////////////////////////////////////////////////////
 
 DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(QList);

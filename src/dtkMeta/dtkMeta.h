@@ -72,6 +72,7 @@ public:
     template <typename T> static QVariant variantFromValue(      T *t);
     template <typename T> static        T *clone(T *t);
     template <typename T> static     bool registerContainerPointerConverter(int id);
+                          static  QString description(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
 };
 
 // /////////////////////////////////////////////////////////////////

@@ -43,33 +43,12 @@ dtkComposerNodePrint::~dtkComposerNodePrint(void)
 
 void dtkComposerNodePrint::run(void)
 {
-    QStringList identifiers;
-    QString str;
-
     foreach (QVariant v, d->receiver_stdout.allData()) {
-        identifiers << v.typeName();
-        QDataStream ds;
-        ds << v;
-        ds >> str;
-        std::cout << v.typeName() << str.toUtf8().constData() <<  std::endl ;
-        str.clear();
+        std::cout << dtkMetaType::description(v).toUtf8().constData() << std::endl;
     }
 
     foreach (QVariant v, d->receiver_stderr.allData()) {
-        identifiers << v.typeName();
-        QDataStream ds;
-        ds << v;
-        ds >> str;
-        std::cerr << str.toUtf8().constData() <<  std::endl ;
-        str.clear();
+        std::cerr << dtkMetaType::description(v).toUtf8().constData() <<  std::endl ;
     }
-
-    // foreach (QString s, d->receiver_stdout.allDataDescription()) {
-    //     std::cout << s.toUtf8().constData() <<  std::endl ;
-    // }
-    // foreach (QString s, d->receiver_stderr.allDataDescription()) {
-    //     std::cerr << s.toUtf8().constData() <<  std::endl ;
-    // }
-
 }
 

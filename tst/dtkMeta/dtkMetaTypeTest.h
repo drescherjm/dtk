@@ -36,6 +36,7 @@ private slots:
     void testCanConvert(void);
     void testVariantFromValue(void);
     void testClone(void);
+    void testCloneContent(void);
 
 private slots:
     void cleanupTestCase(void);

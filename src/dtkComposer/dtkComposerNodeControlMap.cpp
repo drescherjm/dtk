@@ -44,7 +44,7 @@ public:
     dtkComposerTransmitterReceiverVariant header_rcv;
     dtkComposerTransmitterEmitterVariant footer_emit;
 
-    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterEmitterVariant     block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterEmitterVariant     block_item;
@@ -56,6 +56,8 @@ public:
 
     // dtkAbstractContainerWrapper *container;
     // dtkAbstractContainerWrapper *out_container;
+    dtkMetaContainerSequential *container;
+    dtkMetaContainerSequential *out_container;
 
 public:
     bool first_iteration;
@@ -67,6 +69,10 @@ public:
 
 dtkComposerNodeControlMap::dtkComposerNodeControlMap(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlMapPrivate)
 {
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->header_rcv.setTypeList(type_list);
+
     d->header_md.setTitle("Header");
     d->header_md.setKind("proxy");
     d->header_md.setType("proxy");
@@ -184,6 +190,9 @@ void dtkComposerNodeControlMap::begin(void)
 {
     if (d->header_rcv.isEmpty())
         return;
+
+    QVariant var_container = d->header_rcv.variant();
+    d->block_container.setData(var_container);
 
     // d->container = d->header_rcv.container();
 

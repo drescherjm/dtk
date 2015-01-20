@@ -83,7 +83,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(DeriveData);
-Q_DECLARE_METATYPE(DeriveData *);
+Q_DECLARE_METATYPE(DeriveData*);
 
 // ///////////////////////////////////////////////////////////////////
 // Abstract class 
@@ -462,7 +462,87 @@ void dtkMetaTypeTestCase::testClone(void)
         VirtualObject2 *c1 = dtkMetaType::clone(b1);
         QVERIFY(dynamic_cast<DeriveVirtualObject*>(c1));
         QCOMPARE(*c1, *b1);
-    }    
+    }
+}
+
+void dtkMetaTypeTestCase::testCloneContent(void)
+{
+    // Non QObject Data pointer
+    {
+        int a = 67;
+        QVariant v = dtkMetaType::variantFromValue(a);
+
+        QVariant vv = dtkMetaType::cloneContent(v);
+    }
+
+    {
+        // QObject *o = new QObject();
+        // QVariant v = QVariant::fromValue(o);
+        // qDebug() << v << QMetaType::TypeFlags(v.userType());
+        
+    }
+
+    // Non QObject Data pointer
+    {
+        Data *d0 = d->data;
+        QVariant v = dtkMetaType::variantFromValue(d0);
+        QVariant vv = dtkMetaType::cloneContent(v);
+        Data *c0 = vv.value<Data *>();
+        QVERIFY(static_cast<void *>(d0) != static_cast<void *>(c0));
+        QCOMPARE(*d0, *c0);
+
+        DeriveData *dd0 = d->derive_data;
+        v = dtkMetaType::variantFromValue(dd0);
+
+        if (QMetaType::type("DeriveData") == QMetaType::UnknownType)
+            qRegisterMetaType<DeriveData>();
+        vv = dtkMetaType::cloneContent(v);
+        DeriveData *cc0 = vv.value<DeriveData *>();
+        QVERIFY(static_cast<void *>(dd0) != static_cast<void *>(cc0));
+        QCOMPARE(*dd0, *cc0);
+        
+        // When cloning from parent class, slicing occurs.
+        Data *d1 = dd0;
+        v = dtkMetaType::variantFromValue(d1);
+        vv = dtkMetaType::cloneContent(v);
+        Data *c1 = vv.value<Data *>();
+        // The resulting copy is not a DeriveData object.
+        QVERIFY(!dynamic_cast<DeriveData*>(c1));
+    }
+
+    // // Non QObject Abstract class
+    // {
+    //     MyAbstract *a0 = d->abstract;
+    //     QVERIFY(dynamic_cast<DeriveMyAbstract*>(a0));
+
+    //     // Here again slicing occurs
+    //     QVariant v = dtkMetaType::variantFromValue(a0);
+    //     QVariant vv = dtkMetaType::cloneContent(v);
+    //     MyAbstract *c0 = vv.value<MyAbstract *>();
+    //     QVERIFY(!dynamic_cast<DeriveMyAbstract*>(c0));
+    // }
+
+    // QObject Abstract class
+    {
+        VirtualObject *a0 = d->virtual_object;
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(a0));
+
+        // To avoid slicing when copying, the deriveed class must be
+        // registered at runtime
+        qRegisterMetaType<DeriveVirtualObject>();
+        QVariant v = dtkMetaType::variantFromValue(a0);
+        QVariant vv = dtkMetaType::cloneContent(v);
+        VirtualObject *c0 = vv.value<VirtualObject *>();
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(c0));
+        QCOMPARE(*c0, *a0);
+
+        VirtualObject2 *b1 = d->virtual_object2;
+        v = dtkMetaType::variantFromValue(b1);
+        vv = dtkMetaType::cloneContent(v);
+        VirtualObject2 *c1 = vv.value<VirtualObject2 *>();
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(c1));
+        QCOMPARE(*c1, *b1);
+    }
 }
 
 DTKTEST_MAIN_NOGUI(dtkMetaTypeTest, dtkMetaTypeTestCase)

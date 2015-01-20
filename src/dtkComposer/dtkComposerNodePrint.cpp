@@ -44,11 +44,11 @@ dtkComposerNodePrint::~dtkComposerNodePrint(void)
 void dtkComposerNodePrint::run(void)
 {
     foreach (QVariant v, d->receiver_stdout.allData()) {
-        std::cout << dtkMetaType::description(v).toUtf8().constData() << std::endl;
+        std::cout << qPrintable(dtkMetaType::description(v)) << std::endl;
     }
 
     foreach (QVariant v, d->receiver_stderr.allData()) {
-        std::cerr << dtkMetaType::description(v).toUtf8().constData() <<  std::endl ;
+        std::cerr << qPrintable(dtkMetaType::description(v)) <<  std::endl ;
     }
 }
 

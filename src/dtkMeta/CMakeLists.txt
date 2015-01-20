@@ -29,6 +29,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkMetaContainerSequentialHandler.tpp)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkMeta.cpp
   dtkMetaContainerSequential.cpp)
 
 ## #################################################################

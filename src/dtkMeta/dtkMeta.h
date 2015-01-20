@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "dtkMetaExport.h"
+
 #include "dtkMetaTypeTraits.h"
 
 #include <type_traits>
@@ -65,14 +67,17 @@ template< typename T> struct dtkMetaTypeHandlerHelper<T *, true>
 class dtkMetaType
 {
 public:
-                          static     bool canGetMetaContainerFromVariant(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
     template <typename T> static     bool canConvert(int type);
     template <typename T> static     bool canConvert(const QList<int>& types);
     template <typename T> static QVariant variantFromValue(const T& t);
     template <typename T> static QVariant variantFromValue(      T *t);
     template <typename T> static        T *clone(T *t);
     template <typename T> static     bool registerContainerPointerConverter(int id);
-                          static  QString description(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
+
+public:
+    static DTKMETA_EXPORT     bool canGetMetaContainerFromVariant(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
+    static DTKMETA_EXPORT  QString description(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
+    static DTKMETA_EXPORT QVariant cloneContent(const QVariant& v);
 };
 
 // /////////////////////////////////////////////////////////////////

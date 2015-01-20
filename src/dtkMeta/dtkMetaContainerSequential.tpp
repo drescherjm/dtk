@@ -512,7 +512,7 @@ inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::operator []
 
 inline QDebug& operator << (QDebug debug, const dtkMetaContainerSequential& container)
 {
-    debug << container.h->description();
+    debug << qPrintable(container.h->description());
     return debug.maybeSpace();
 }
 
@@ -529,16 +529,6 @@ namespace QtPrivate
             return dtkMetaContainerSequential(v.value<dtkMetaContainerSequentialHandler *>());
         }
     };
-}
-
-// ///////////////////////////////////////////////////////////////////
-// Implementation of canGetMetaContainerFromVariant avoiding recursive header inclusion
-// ///////////////////////////////////////////////////////////////////
-
-inline bool dtkMetaType::canGetMetaContainerFromVariant(const QVariant& v)
-{
-    int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
-    return QMetaType::hasRegisteredConverterFunction(v.userType(), to);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -568,28 +558,6 @@ template <> inline bool QVariant::canConvert<dtkMetaContainerSequential>(void) c
     int from = d.type;
     int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
     return QMetaType::hasRegisteredConverterFunction(from, to);
-}
-
-// ///////////////////////////////////////////////////////////////////
-// Implementation of dtkMetaType::description avoiding recursive header inclusion
-// ///////////////////////////////////////////////////////////////////
-
-inline QString dtkMetaType::description(const QVariant& v)
-{
-    QString str;
-    QDebug dbg(&str);
-    if (v.canConvert<dtkMetaContainerSequential>()) {
-        dtkMetaContainerSequential mc = v.value<dtkMetaContainerSequential>();
-        dbg << mc;
-    } else {
-        dbg << v.typeName() << ", ";
-        if (v.canConvert<QString>()) {
-            dbg << v.value<QString>();
-        } else {
-            QMetaType::debugStream(dbg, v.constData(), v.userType());
-        }
-    }
-    return str;
 }
 
 //

@@ -61,6 +61,9 @@ public:
     ~dtkComposerTransmitterReceiverVariant(void);
 
 public:
+    QVariant data(void);
+
+public:
     template <typename T> T      data(void);
     template <typename T> T constData(void);
 };

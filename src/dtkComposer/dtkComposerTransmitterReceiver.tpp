@@ -52,6 +52,11 @@ inline QVariantList dtkComposerTransmitterReceiverBase::allData(void)
 // dtkComposerTransmitterReceiverVariant template implementation
 // /////////////////////////////////////////////////////////////////
 
+inline QVariant dtkComposerTransmitterReceiverVariant::data(void)
+{
+    return dtkComposerTransmitterHandlerVariant::data(*this);
+}
+
 template <typename T> inline T dtkComposerTransmitterReceiverVariant::data(void)
 {
     return dtkComposerTransmitterHandler<T>::data(*this);

@@ -150,6 +150,7 @@ public:
 
 public:
     template <typename T> friend class dtkComposerTransmitterHandler;
+                          friend class dtkComposerTransmitterHandlerVariant;
 
 private:
     friend QDebug operator << (QDebug debug, const dtkComposerTransmitter& transmitter);

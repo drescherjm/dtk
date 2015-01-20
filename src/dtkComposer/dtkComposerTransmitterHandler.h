@@ -25,14 +25,14 @@ class dtkComposerTransmitter;
 template <typename T> class dtkComposerTransmitterHandler
 {
 public:
-    static inline void init(dtkComposerTransmitter& t);
+    static void init(dtkComposerTransmitter& t);
 
 public:
-    static inline bool enableConnection(dtkComposerTransmitter& t);
+    static bool enableConnection(dtkComposerTransmitter& t);
 
 public:
-    static inline T      data(dtkComposerTransmitter& t);
-    static inline T constData(dtkComposerTransmitter& t);
+    static T      data(dtkComposerTransmitter& t);
+    static T constData(dtkComposerTransmitter& t);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -42,40 +42,33 @@ public:
 template <typename T> class dtkComposerTransmitterHandler<T *>
 {
 public:
-    static inline void init(dtkComposerTransmitter& t);
+    static void init(dtkComposerTransmitter& t);
 
 public:
-    static inline bool enableConnection(dtkComposerTransmitter& t);
+    static bool enableConnection(dtkComposerTransmitter& t);
 
 public:
-    static inline T      *data(dtkComposerTransmitter& t);
-    static inline T *constData(dtkComposerTransmitter& t);
+    static T      *data(dtkComposerTransmitter& t);
+    static T *constData(dtkComposerTransmitter& t);
 
 protected:
     static T *copy(T * source, QVariant& target, QVariant& swap);
 };
 
-/* // ///////////////////////////////////////////////////////////////// */
-/* // dtkComposerTransmitterHandler pointer specialization */
-/* // ///////////////////////////////////////////////////////////////// */
+// /////////////////////////////////////////////////////////////////
+// dtkComposerTransmitterHandlerVariant
+// /////////////////////////////////////////////////////////////////
 
-/* template <typename T, bool U> class dtkComposerTransmitterHandlerHelper {}; */
+class dtkComposerTransmitterHandlerVariant
+{
+public:
+    static QVariant data(dtkComposerTransmitter& t);
 
-/* template <typename T, bool U> class dtkComposerTransmitterHandlerHelper<T *, U> */
-/* { */
-/* public: */
-/*     static inline T *copy(T *source, QVariant& target); */
-/* }; */
-
-/* // ///////////////////////////////////////////////////////////////// */
-/* // dtkComposerTransmitterHandler specialization for dtkCoreObject */
-/* // ///////////////////////////////////////////////////////////////// */
-
-/* template <typename T> class dtkComposerTransmitterHandlerHelper<T *, true> */
-/* { */
-/* public: */
-/*     static inline T *copy(T *source, QVariant& target); */
-/* }; */
+protected:
+    static bool containSamePointer(const QVariant& v0, const QVariant& v1);
+    static void clearPointer(QVariant& v);
+    static void copy(const QVariant& source, QVariant& target);
+};
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterHandler implementation

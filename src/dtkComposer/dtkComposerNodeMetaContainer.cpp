@@ -60,7 +60,7 @@ void dtkComposerNodeMetaContainer::run(void)
     if (!d->receiver_size.isEmpty()) {
         qlonglong size = d->receiver_size.data();
         if (!d->receiver_value.isEmpty()) {
-            int type = d->receiver_value.variant().type();
+            int type = d->receiver_value.data().type();
             switch(type) {
             case QMetaType::Int:
                 var_container = dtkMetaType::variantFromValue(new dtkArray<int>(size, d->receiver_value.data<int>()));
@@ -87,7 +87,7 @@ void dtkComposerNodeMetaContainer::run(void)
                 var_container = dtkMetaType::variantFromValue(new dtkArray<double>(size, d->receiver_value.data<double>()));
                 break;
             default:
-                var_container = dtkMetaType::variantFromValue(new dtkArray<QVariant>(size, d->receiver_value.variant()));
+                var_container = dtkMetaType::variantFromValue(new dtkArray<QVariant>(size, d->receiver_value.data()));
                 break;
             }
         } else {
@@ -141,11 +141,11 @@ dtkComposerNodeMetaContainerAppend::~dtkComposerNodeMetaContainerAppend(void)
 void dtkComposerNodeMetaContainerAppend::run(void)
 {
     if(!d->receiver_container.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
 
         if(!d->receiver_value.isEmpty()) {
             dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
-            m_c.append(d->receiver_value.variant());
+            m_c.append(d->receiver_value.data());
 
         } else {
             dtkWarn() << "No input value to append to the container. The container is not modified.";
@@ -195,7 +195,7 @@ dtkComposerNodeMetaContainerSize::~dtkComposerNodeMetaContainerSize(void)
 void dtkComposerNodeMetaContainerSize::run(void)
 {
     if (!d->receiver_container.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
         d->emitter_size.setData(m_c.size());
 
@@ -243,7 +243,7 @@ dtkComposerNodeMetaContainerAt::~dtkComposerNodeMetaContainerAt(void)
 void dtkComposerNodeMetaContainerAt::run(void)
 {
     if(!d->receiver_container.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
         if(!d->receiver_index.isEmpty()) {
             d->emitter_value.setData(m_c.at(d->receiver_index.data()));
@@ -302,10 +302,10 @@ dtkComposerNodeMetaContainerSetAt::~dtkComposerNodeMetaContainerSetAt(void)
 void dtkComposerNodeMetaContainerSetAt::run(void)
 {
     if(!d->receiver_container.isEmpty() && !d->receiver_value.isEmpty() && !d->receiver_index.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
 
-        m_c.setAt(d->receiver_index.data(), d->receiver_value.variant());
+        m_c.setAt(d->receiver_index.data(), d->receiver_value.data());
         d->emitter_container.setData(var_container);
 
 
@@ -357,7 +357,7 @@ dtkComposerNodeMetaContainerRemoveAt::~dtkComposerNodeMetaContainerRemoveAt(void
 void dtkComposerNodeMetaContainerRemoveAt::run(void)
 {
     if(!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
 
         m_c.removeAt(d->receiver_index.data());
@@ -413,7 +413,7 @@ dtkComposerNodeMetaContainerTakeAt::~dtkComposerNodeMetaContainerTakeAt(void)
 void dtkComposerNodeMetaContainerTakeAt::run(void)
 {
     if(!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
 
         QVariant v = m_c.at(d->receiver_index.data());
@@ -472,10 +472,10 @@ dtkComposerNodeMetaContainerInsert::~dtkComposerNodeMetaContainerInsert(void)
 void dtkComposerNodeMetaContainerInsert::run(void)
 {
     if(!d->receiver_container.isEmpty() && !d->receiver_index.isEmpty() && !d->receiver_value.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
 
-        m_c.insert(d->receiver_index.data(),d->receiver_value.variant());
+        m_c.insert(d->receiver_index.data(),d->receiver_value.data());
         d->emitter_container.setData(var_container);
 
     } else {
@@ -525,7 +525,7 @@ dtkComposerNodeMetaContainerResize::~dtkComposerNodeMetaContainerResize(void)
 void dtkComposerNodeMetaContainerResize::run(void)
 {
     if(!d->receiver_container.isEmpty() && !d->receiver_size.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
 
         m_c.resize(d->receiver_size.data());
@@ -578,10 +578,10 @@ dtkComposerNodeMetaContainerPrepend::~dtkComposerNodeMetaContainerPrepend(void)
 void dtkComposerNodeMetaContainerPrepend::run(void)
 {
     if(!d->receiver_container.isEmpty()  && !d->receiver_value.isEmpty()) {
-        QVariant var_container = d->receiver_container.variant();
+        QVariant var_container = d->receiver_container.data();
         dtkMetaContainerSequential m_c = var_container.value<dtkMetaContainerSequential>();
 
-        m_c.prepend(d->receiver_value.variant());
+        m_c.prepend(d->receiver_value.data());
         d->emitter_container.setData(var_container);
 
     } else {

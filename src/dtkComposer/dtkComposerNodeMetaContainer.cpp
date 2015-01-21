@@ -99,7 +99,6 @@ void dtkComposerNodeMetaContainer::run(void)
 
     d->emitter_container.setData(var_container);
 
-    qDebug() << d->emitter_container.variant();
 }
 
 

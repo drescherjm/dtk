@@ -48,7 +48,7 @@ public:
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterEmitterVariant     block_item;
-    dtkComposerTransmitterEmitterVariant     block_newitem;
+    dtkComposerTransmitterReceiverVariant    block_newitem;
 
 public:
     qlonglong counter;
@@ -164,19 +164,20 @@ void dtkComposerNodeControlMap::setInputs(void)
 void dtkComposerNodeControlMap::setOutputs(void)
 {
     if (d->first_iteration) {
-	for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
-	    t->twin()->enableLoopMode();
-	}
-	d->first_iteration = false;
+        for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+            t->twin()->enableLoopMode();
+        }
+        d->first_iteration = false;
     }
     for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
         t->twin()->setVariant(t->variant());
     }
+
+    d->out_container->append(d->block_newitem.variant());
 }
 
 void dtkComposerNodeControlMap::setVariables(void)
 {
-    d->out_container->append(d->block_newitem.variant());
 
     d->block_item.setData(d->container->at(d->counter));
     d->block_index.setData(d->counter);

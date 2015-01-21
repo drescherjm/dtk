@@ -19,12 +19,6 @@
 // dtkMetaType implementation
 // /////////////////////////////////////////////////////////////////
 
-bool dtkMetaType::canGetMetaContainerFromVariant(const QVariant& v)
-{
-    int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
-    return QMetaType::hasRegisteredConverterFunction(v.userType(), to);
-}
-
 QString dtkMetaType::description(const QVariant& v)
 {
     QString str;
@@ -120,6 +114,55 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
     }
 
     return QVariant();
+}
+
+QVariant dtkMetaType::createEmptyContainer(const QVariant& v)
+{
+    if (v.canConvert<dtkMetaContainerSequential>()) {
+
+        QString type_name = v.typeName();
+        if (type_name.endsWith("*")) {
+            type_name.chop(1);
+        }
+        int c_id = QMetaType::type(qPrintable(type_name));
+        if (c_id != QMetaType::UnknownType) {
+            void *ptr = QMetaType::create(c_id);
+            c_id = QMetaType::type(qPrintable(type_name + "*"));
+            QVariant res = QVariant(c_id, &ptr, 1);
+
+            if (res.canConvert<dtkMetaContainerSequential>()) {
+                return res;
+            } else {
+                qDebug() << Q_FUNC_INFO << "Type" << res.typeName() << "is not compatible with dtkMetaContainer.";
+            }
+
+        } else {
+            qDebug() << Q_FUNC_INFO << "Type" << type_name << "has not be registered to QMetaType System.";
+        }
+    }
+
+    return QVariant();
+}
+
+bool dtkMetaType::destroyPointer(QVariant& v)
+{
+    QString type_name = QString(v.typeName());
+    bool ok = false;
+
+    if (type_name.endsWith("*")) {
+        void *ptr = *static_cast<void **>(v.data());
+        if (ptr) {
+            type_name.chop(1);
+            int type_id = QMetaType::type(qPrintable(type_name));
+            QMetaType::destroy(type_id, ptr);
+            v.clear();
+            ok = true;
+        }
+    } else {
+        qDebug() << Q_FUNC_INFO << "Type" << type_name << "is not of pointer type.";
+    }
+
+    return ok;
 }
 
 // 

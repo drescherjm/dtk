@@ -54,10 +54,10 @@ public:
     qlonglong counter;
     qlonglong size;
 
-    // dtkAbstractContainerWrapper *container;
-    // dtkAbstractContainerWrapper *out_container;
     dtkMetaContainerSequential *container;
     dtkMetaContainerSequential *out_container;
+
+    QVariant output_var;
 
 public:
     bool first_iteration;
@@ -116,6 +116,8 @@ dtkComposerNodeControlMap::dtkComposerNodeControlMap(void) : dtkComposerNodeCont
 
     d->footer.emitters().first()->appendNext(&(d->footer_emit));
 
+    d->container = NULL;
+    d->out_container = NULL;
     d->counter = 0;
     d->size = -1;
 }
@@ -174,11 +176,11 @@ void dtkComposerNodeControlMap::setOutputs(void)
 
 void dtkComposerNodeControlMap::setVariables(void)
 {
+    d->out_container->append(d->block_newitem.variant());
 
-    //d->out_container->append(d->block_newitem.variant());
-
-    d->block_index.setData((d->counter)++);
-    //d->block_item.setData(d->container->at(d->counter));
+    d->block_item.setData(d->container->at(d->counter));
+    d->block_index.setData(d->counter);
+    ++(d->counter);
 }
 
 int dtkComposerNodeControlMap::selectBranch(void)
@@ -194,21 +196,21 @@ void dtkComposerNodeControlMap::begin(void)
     QVariant var_container = d->header_rcv.variant();
     d->block_container.setData(var_container);
 
-    // d->container = d->header_rcv.container();
-
-    // if (d->out_container)
-    //     delete d->out_container;
-    // d->out_container = d->container->voidClone();    
-    // d->footer_emit.setData(d->out_container);
-
+    d->container = new dtkMetaContainerSequential(var_container.value<dtkMetaContainerSequential>());
     d->counter = 0;
-    // d->size = d->container->count();
+    d->size = d->container->size();
     d->block_size.setData(d->size);
+
+    dtkMetaType::destroyPointer(d->output_var);
+    d->output_var = dtkMetaType::createEmptyContainer(var_container);
+    d->footer_emit.setData(d->output_var);
+    d->out_container = new dtkMetaContainerSequential(d->output_var.value<dtkMetaContainerSequential>());
 }
 
 void dtkComposerNodeControlMap::end(void)
 {
-
+    delete d->container;
+    delete d->out_container;
 }
 
 // 

@@ -75,9 +75,10 @@ public:
     template <typename T> static     bool registerContainerPointerConverter(int id);
 
 public:
-    static DTKMETA_EXPORT     bool canGetMetaContainerFromVariant(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
-    static DTKMETA_EXPORT  QString description(const QVariant& v); // implemented in dtkMetaContainerSequential.tpp
+    static DTKMETA_EXPORT  QString description(const QVariant& v);
     static DTKMETA_EXPORT QVariant cloneContent(const QVariant& v);
+    static DTKMETA_EXPORT QVariant createEmptyContainer(const QVariant& v);
+    static DTKMETA_EXPORT     bool destroyPointer(QVariant& v);
 };
 
 // /////////////////////////////////////////////////////////////////

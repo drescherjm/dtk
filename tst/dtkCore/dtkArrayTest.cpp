@@ -1950,9 +1950,7 @@ void dtkArrayTestCase::testMetaType(void)
     }
 
     var = dtkMetaType::variantFromValue(&array);
-
-    qDebug() << dtkMetaType::canGetMetaContainerFromVariant(var) << var.typeName();
-
+    QVERIFY(var.canConvert<dtkMetaContainerSequential>());
     const dtkMetaContainerSequential container = var.value<dtkMetaContainerSequential>();
     count = 0;
     for (const QVariant &v: container) {

@@ -545,6 +545,57 @@ void dtkMetaTypeTestCase::testCloneContent(void)
     }
 }
 
+void dtkMetaTypeTestCase::testCreateEmptyContainer(void)
+{
+    {
+        QVector<double> vec(5, 3.14159);
+        QVariant var = dtkMetaType::variantFromValue(vec);
+        var.clear();
+        var = dtkMetaType::variantFromValue(&vec);
+        QVERIFY(var.canConvert<dtkMetaContainerSequential>());
+        
+        QVariant res = dtkMetaType::createEmptyContainer(var);
+        QVector<double> *v_res = res.value<QVector<double> *>();
+        QVERIFY(v_res);
+        QVERIFY(v_res->size() == 0);
+        delete v_res;
+    }
+
+    {
+        QList<double> list;
+        list << 3.14159;
+        list << 3.14159;
+        list << 3.14159;
+        list << 3.14159;
+        list << 3.14159;
+
+        QVariant var = dtkMetaType::variantFromValue(list);
+        var.clear();
+        var = dtkMetaType::variantFromValue(&list);
+        QVERIFY(var.canConvert<dtkMetaContainerSequential>());
+        
+        QVariant res = dtkMetaType::createEmptyContainer(var);
+        QList<double> *l_res = res.value<QList<double> *>();
+        QVERIFY(l_res);
+        QVERIFY(l_res->size() == 0);
+        delete l_res;
+    }
+}
+
+void dtkMetaTypeTestCase::testDestroyPointer(void)
+{
+    {
+        QVector<double> *vec = NULL;
+        QVariant var = dtkMetaType::variantFromValue(vec);
+        QVERIFY(var.canConvert<dtkMetaContainerSequential>());
+        QVERIFY(!dtkMetaType::destroyPointer(var));
+        
+        vec = new QVector<double>(5, 3.14159);
+        var = dtkMetaType::variantFromValue(vec);
+        QVERIFY(dtkMetaType::destroyPointer(var));
+    }
+}
+
 DTKTEST_MAIN_NOGUI(dtkMetaTypeTest, dtkMetaTypeTestCase)
 
 #include "dtkMetaTypeTest.moc"

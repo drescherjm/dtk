@@ -179,7 +179,7 @@ void dtkComposerNodeControlForEach::begin(void)
     if (d->header_rcv.isEmpty())
         return;
 
-    QVariant var_container = d->header_rcv.variant();
+    QVariant var_container = d->header_rcv.data();
     d->block_container.setData(var_container);
 
     d->container = new dtkMetaContainerSequential(var_container.value<dtkMetaContainerSequential>());

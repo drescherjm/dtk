@@ -206,6 +206,7 @@ void dtkComposerNodeControlMap::begin(void)
     d->output_var = dtkMetaType::createEmptyContainer(var_container);
     d->footer_emit.setData(d->output_var);
     d->out_container = new dtkMetaContainerSequential(d->output_var.value<dtkMetaContainerSequential>());
+    d->out_container->reserve(d->size);
 }
 
 void dtkComposerNodeControlMap::end(void)

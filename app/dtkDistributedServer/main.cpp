@@ -22,16 +22,33 @@
 int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
+    QCoreApplication::setApplicationName("dtkDistributedServer");
+    QCoreApplication::setApplicationVersion("1.0.0");
 
-    if(!dtkCoreApplicationArgumentsContain(&application, "-type")) {
-        qDebug() << "Usage:" << argv[0] << " [-p port] -type <Oar | Torque | Local |...>";
+    QCommandLineParser parser;
+    parser.setApplicationDescription("DTK distributed server application.");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    QCommandLineOption typeOption("type", QCoreApplication::translate("main", "type of server: Oar, Torque, Local, ..."));
+    parser.addOption(typeOption);
+    int port = 9999;
+    QCommandLineOption portOption("p", QCoreApplication::translate("main", "listen port"), QString::number(port));
+    parser.addOption(portOption);
+
+    if (!parser.parse(QCoreApplication::arguments())) {
+        qCritical() << "Command line error" ;
         return 1;
     }
-    int port;
-    if(dtkCoreApplicationArgumentsContain(&application, "-p"))
-        port = dtkCoreApplicationArgumentsValue(&application, "-p").toInt();
-    else
-        port = 9999;
+
+    parser.process(application);
+
+    if(!parser.isSet(typeOption)) {
+        qDebug() << "Error, no type set" ;
+        return 1;
+    }
+    if(parser.isSet(portOption)) {
+        port = parser.value(portOption).toInt();
+    }
 
     application.setApplicationName("dtkDistributedServer");
     application.setApplicationVersion("0.0.1");
@@ -46,7 +63,7 @@ int main(int argc, char **argv)
 
     dtkDistributedServerDaemon server(port);
 
-    server.setManager( dtkCoreApplicationArgumentsValue(&application, "-type"));
+    server.setManager( parser.value(typeOption));
     qDebug() << "server started";
 
     int status = application.exec();

@@ -39,6 +39,9 @@ public:
     simpleWork *clone(void) { return new simpleWork(*this); };
 
 public:
+    QString server;
+
+public:
     void run(void) {
 
         QTime time;
@@ -48,7 +51,7 @@ public:
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
 
-        QUrl url(dtkCoreApplicationArgumentsValue(qApp,"--server"));
+        QUrl url(server);
 
         qDebug() << "Running on master, connect to remote server" ;
         slave.connect(url);
@@ -79,11 +82,31 @@ public:
 int main(int argc, char **argv)
 {
     QCoreApplication application(argc, argv);
+    QCoreApplication::setApplicationName("dtkDistributedSlave");
+    QCoreApplication::setApplicationVersion("1.0.0");
 
-    if (!dtkCoreApplicationArgumentsContain(qApp,"--server")) {
-        qCritical() << "no server set! use --server <url> " ;
+    QString policyType = "qthread";
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("DTK distributed slave example application: it connect to the DTK distributed server and waits for 1 minute before exiting.");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    QCommandLineOption policyOption("policy", QCoreApplication::translate("main", "dtkDistributed policy"), policyType);
+    parser.addOption(policyOption);
+    QCommandLineOption serverOption("server", QCoreApplication::translate("main", "server URL"));
+    parser.addOption(serverOption);
+
+    if (!parser.parse(QCoreApplication::arguments())) {
+        qCritical() << "Command line error" ;
         return 1;
     }
+
+    parser.process(application);
+
+     if (!parser.isSet(serverOption)) {
+         qCritical() << "Error: no server set ! Use --server <url> " ;
+         return 1;
+     }
 
     // the server waits for the jobid in stdout
     std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
@@ -103,13 +126,13 @@ int main(int argc, char **argv)
     // work
 
     simpleWork *work = new simpleWork;
+    work->server = parser.value(serverOption);
 
     dtkDistributedPolicy policy;
 
-    QString policyType = "qthread";
-    if (dtkCoreApplicationArgumentsContain(qApp,"--policy")) {
-        policyType = dtkCoreApplicationArgumentsValue(qApp,"--policy");
-    }
+     if (parser.isSet(policyOption)) {
+         policyType = parser.value(policyOption);
+     }
     policy.setType(policyType);
 
     dtkDistributedWorkerManager manager;

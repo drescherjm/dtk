@@ -93,45 +93,6 @@ public:
 
 #include <fstream>
 
-inline bool dtkCoreApplicationArgumentsContain(int argc, char **argv, QString value)
-{
-    for(int i = 1; i < argc; i++)
-        if(QString(argv[i]) == value)
-            return true;
-
-    return false;
-}
-
-inline bool dtkCoreApplicationArgumentsContain(QCoreApplication *application, QString value)
-{
-    return application->arguments().contains(value);
-}
-
-inline QString dtkCoreApplicationArgumentsValue(int argc, char **argv, QString key)
-{
-    for(int i = 1; i < argc; i++) {
-        if(QString(argv[i]) == key) {
-            if(i+1 < argc)
-                return QString(argv[i+1]);
-            else
-                return QString();
-        }
-    }
-
-    return QString();
-}
-
-inline QString dtkCoreApplicationArgumentsValue(QCoreApplication *application, QString key)
-{
-    QStringList args = application->arguments();
-    int i = args.indexOf(key);
-    if ( i > -1 && i < args.count()) {
-        return args.at(i+1);
-    } else {
-        return QString();
-    }
-}
-
 inline bool dtkFileIsBinary(const QString& path)
 {
     int c; std::ifstream a(path.toUtf8().constData());

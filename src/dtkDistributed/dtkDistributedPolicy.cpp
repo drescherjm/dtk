@@ -18,6 +18,7 @@
 #include "dtkDistributedPolicy.h"
 
 #include <dtkDistributed>
+#include <QCommandLineParser>
 
 class dtkDistributedPolicyPrivate
 {
@@ -112,8 +113,14 @@ QStringList dtkDistributedPolicy::hosts(void)
             }
         }
         qDebug() << "No hostfile found, try qapp args";
-        if (dtkCoreApplicationArgumentsContain(qApp,"-np")) {
-             int np = dtkCoreApplicationArgumentsValue(qApp,"-np").toInt();
+        QCommandLineParser parser;
+        QCommandLineOption npOption("np","number of processes");
+        parser.addOption(npOption);
+        QCommandLineOption ntOption("nt","number of threads");
+        parser.addOption(ntOption);
+        parser.process(QCoreApplication::arguments());
+        if (parser.isSet(npOption)) {
+             int np = parser.value(npOption).toInt();
              for (int i = 0; i <  np; i++) {
                 d->hosts <<  "localhost";
              }
@@ -121,15 +128,15 @@ QStringList dtkDistributedPolicy::hosts(void)
             d->hosts <<  "localhost";
             d->nthreads = 1;
         }
-        if (dtkCoreApplicationArgumentsContain(qApp,"-nt")) { // number of threads
+        if (parser.isSet(ntOption)) {
                 if (d->type == "mpi") {
-                    int nt = dtkCoreApplicationArgumentsValue(qApp,"-nt").toInt();
+                    int nt = parser.value(ntOption).toInt();
                     int total = d->hosts.count() * nt;
                     for (int i = d->hosts.count(); i <  total; i++) {
                         d->hosts <<  "localhost";
                     }
                 } else {
-                    d->nthreads = dtkCoreApplicationArgumentsValue(qApp,"-nt").toInt();
+                    d->nthreads = parser.value(ntOption).toInt();
                 }
         }
         qDebug() << "policy updated, hosts:" << d->hosts.count() << "threads:" <<  d->nthreads;

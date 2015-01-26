@@ -20,6 +20,7 @@
 #include <dtkGuiSupport/dtkNotification.h>
 
 #include <dtkLog>
+#include <dtkMeta>
 
 #include <QtCore>
 #include <QtNetwork>

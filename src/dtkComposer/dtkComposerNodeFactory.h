@@ -16,6 +16,8 @@
 
 #include "dtkComposerExport.h"
 
+#include <dtkCore/dtkCorePluginFactory.h>
+
 #include "dtkComposerNode.h"
 
 class dtkComposerNodeFactoryPrivate;

@@ -16,7 +16,6 @@
 
 #include "dtkComposerExport.h"
 
-#include <dtkCore>
 #include <QtCore>
 
 class dtkComposerNodePrivate;

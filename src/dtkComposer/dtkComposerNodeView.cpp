@@ -25,8 +25,6 @@
 
 #include <dtkLog/dtkLog.h>
 
-#include <dtkCore>
-
 class dtkComposerNodeViewPrivate
 {
 public:

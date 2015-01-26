@@ -21,6 +21,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
+#include <dtkMeta>
 #include <dtkLog>
 
 // /////////////////////////////////////////////////////////////////

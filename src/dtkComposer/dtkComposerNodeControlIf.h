@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr  4 14:40:29 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 6
  */
 
 /* Commentary: 
@@ -19,11 +15,12 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
 #include "dtkComposerNodeControl.h"
 
 class dtkComposerNodeControlIfPrivate;
 
-class  dtkComposerNodeControlIf : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlIf : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlIf(void);
@@ -43,12 +40,6 @@ public:
      int selectBranch(void);
     void begin(void);
     void end(void);
-
-public:
-    QString type(void);
-
-public:
-    QString titleHint(void);
 
 private:
     dtkComposerNodeControlIfPrivate *d;

@@ -1,24 +1,20 @@
-/* dtkComposerNodeControlMap.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: lun. juin 18 16:08:06 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Apr  5 08:50:24 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 127
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeControlMap.h"
 
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -35,27 +31,33 @@
 class dtkComposerNodeControlMapPrivate
 {
 public:
+    dtkComposerNodeMetaData header_md;
     dtkComposerNodeProxy header;
+
+    dtkComposerNodeMetaData footer_md;
     dtkComposerNodeProxy footer;
 
+    dtkComposerNodeMetaData body_block_md;
     dtkComposerNodeComposite body_block;
 
 public:
     dtkComposerTransmitterReceiverVariant header_rcv;
     dtkComposerTransmitterEmitterVariant footer_emit;
 
-    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterEmitterVariant     block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterEmitterVariant     block_item;
-    dtkComposerTransmitterEmitterVariant     block_newitem;
+    dtkComposerTransmitterReceiverVariant    block_newitem;
 
 public:
     qlonglong counter;
     qlonglong size;
 
-    // dtkAbstractContainerWrapper *container;
-    // dtkAbstractContainerWrapper *out_container;
+    dtkMetaContainerSequential *container;
+    dtkMetaContainerSequential *out_container;
+
+    QVariant output_var;
 
 public:
     bool first_iteration;
@@ -67,36 +69,55 @@ public:
 
 dtkComposerNodeControlMap::dtkComposerNodeControlMap(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlMapPrivate)
 {
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->header_rcv.setTypeList(type_list);
+
+    d->header_md.setTitle("Header");
+    d->header_md.setKind("proxy");
+    d->header_md.setType("proxy");
+    d->header_md.appendInputLabel("container");
+
     d->header.removeEmitter(0);
     d->header.removeReceiver(0);
     d->header.appendReceiver(&(d->header_rcv));
-    d->header.setInputLabelHint("container", 0);
     d->header.setAsHeader(true);
+    d->header.setNodeMetaData(&d->header_md);
+
+    d->footer_md.setTitle("Footer");
+    d->footer_md.setKind("proxy");
+    d->footer_md.setType("proxy");
+    d->footer_md.appendOutputLabel("container");
 
     d->footer.removeReceiver(0);
     d->footer.removeEmitter(0);
     d->footer.appendEmitter(&(d->footer_emit));
-    d->footer.setOutputLabelHint("container", 0);
     d->footer.setAsFooter(true);
+    d->footer.setNodeMetaData(&d->footer_md);
 
-    d->body_block.setTitleHint("Body");
-    d->body_block.setInputLabelHint("container", 0);
+    d->body_block_md.setTitle("Body");
+    d->body_block_md.setKind("composite");
+    d->body_block_md.setType("composite");
+    d->body_block_md.appendInputLabel("container");
+    d->body_block_md.appendInputLabel("size");
+    d->body_block_md.appendInputLabel("index");
+    d->body_block_md.appendInputLabel("item");
+    d->body_block_md.appendOutputLabel("newItem");
+
     d->body_block.appendReceiver(&(d->block_container));
-    d->body_block.setInputLabelHint("size", 1);
     d->body_block.appendReceiver(&(d->block_size));
-    d->body_block.setInputLabelHint("index", 2);
     d->body_block.appendReceiver(&(d->block_index));
-    d->body_block.setInputLabelHint("item", 3);
     d->body_block.appendReceiver(&(d->block_item));
-
-    d->body_block.setOutputLabelHint("newitem", 0);
     d->body_block.appendEmitter(&(d->block_newitem));
+    d->body_block.setNodeMetaData(&d->body_block_md);
 
     d->block_container.appendPrevious(&d->header_rcv);
     d->header_rcv.appendNext(&d->block_container);
 
     d->footer.emitters().first()->appendNext(&(d->footer_emit));
 
+    d->container = NULL;
+    d->out_container = NULL;
     d->counter = 0;
     d->size = -1;
 }
@@ -133,7 +154,7 @@ dtkComposerNodeComposite *dtkComposerNodeControlMap::block(int id)
 
 void dtkComposerNodeControlMap::setInputs(void)
 {
-    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
+    for(dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
         t->disableLoopMode();
     }
     d->first_iteration = true;
@@ -143,20 +164,24 @@ void dtkComposerNodeControlMap::setInputs(void)
 void dtkComposerNodeControlMap::setOutputs(void)
 {
     if (d->first_iteration) {
-	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
-	    t->twin()->enableLoopMode();
-	}
-	d->first_iteration = false;
+        for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+            t->twin()->enableLoopMode();
+        }
+        d->first_iteration = false;
     }
+    for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+        t->twin()->setVariant(t->variant());
+    }
+
+    d->out_container->append(d->block_newitem.variant());
 }
 
 void dtkComposerNodeControlMap::setVariables(void)
 {
 
-    //d->out_container->append(d->block_newitem.variant());
-
-    d->block_index.setData((d->counter)++);
-    //d->block_item.setData(d->container->at(d->counter));
+    d->block_item.setData(d->container->at(d->counter));
+    d->block_index.setData(d->counter);
+    ++(d->counter);
 }
 
 int dtkComposerNodeControlMap::selectBranch(void)
@@ -169,29 +194,26 @@ void dtkComposerNodeControlMap::begin(void)
     if (d->header_rcv.isEmpty())
         return;
 
-    // d->container = d->header_rcv.container();
+    QVariant var_container = d->header_rcv.variant();
+    d->block_container.setData(var_container);
 
-    // if (d->out_container)
-    //     delete d->out_container;
-    // d->out_container = d->container->voidClone();    
-    // d->footer_emit.setData(d->out_container);
-
+    d->container = new dtkMetaContainerSequential(var_container.value<dtkMetaContainerSequential>());
     d->counter = 0;
-    // d->size = d->container->count();
+    d->size = d->container->size();
     d->block_size.setData(d->size);
+
+    dtkMetaType::destroyPointer(d->output_var);
+    d->output_var = dtkMetaType::createEmptyContainer(var_container);
+    d->footer_emit.setData(d->output_var);
+    d->out_container = new dtkMetaContainerSequential(d->output_var.value<dtkMetaContainerSequential>());
+    d->out_container->reserve(d->size);
 }
 
 void dtkComposerNodeControlMap::end(void)
 {
-
+    delete d->container;
+    delete d->out_container;
 }
 
-QString dtkComposerNodeControlMap::type(void)
-{
-    return "map";
-}
-
-QString dtkComposerNodeControlMap::titleHint(void)
-{
-    return "Map";
-}
+// 
+// dtkComposerNodeControlMap.cpp ends here

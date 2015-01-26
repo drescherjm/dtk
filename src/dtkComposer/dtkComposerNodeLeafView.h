@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:07 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Fri Nov 16 16:18:58 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 3
+ * Last-Updated: lun. oct. 14 12:27:20 2013 (+0200)
+ *           By: Nicolas Niclausse
+ *     Update #: 14
  */
 
 /* Commentary: 
@@ -53,9 +53,12 @@ public:
     QStringList implementations(void);
 
 public:
-    dtkAbstractView *createView(const QString& implementation);
+    QImage screenshot(void) const;
+    void setView(dtkAbstractView *view);
 
-    dtkAbstractView *view(void);
+public:
+    virtual dtkAbstractView *createView(const QString& implementation);
+    virtual dtkAbstractView *view(void);
 
 private:
     dtkComposerNodeLeafViewPrivate *d;

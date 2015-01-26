@@ -1,20 +1,20 @@
-/* dtkComposerSceneNode.cpp --- 
- * 
+/* dtkComposerSceneNode.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:09 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu May 10 12:06:21 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 93
+ * Last-Updated: jeu. janv.  8 01:03:13 2015 (+0100)
+ *           By: etienne
+ *     Update #: 95
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -130,6 +130,9 @@ const QString& dtkComposerSceneNode::title(void)
 void dtkComposerSceneNode::setTitle(const QString& title)
 {
     d->title = title;
+    if(d->wrapee) {
+        d->wrapee->setTitle(title);
+    }
 }
 
 bool dtkComposerSceneNode::embedded(void)

@@ -1,0 +1,9 @@
+{
+          "title" : "And",
+           "kind" : "atomic",
+           "type" : "and",
+           "tags" : ["boolean", "atomic", "binary", "and"],
+    "description" : "<p>Boolean AND operator</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

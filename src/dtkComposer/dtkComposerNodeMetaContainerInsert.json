@@ -1,0 +1,10 @@
+{
+          "title" : "Container Insert",
+           "kind" : "atomic",
+           "type" : "containerInsert",
+           "tags" : ["meta", "container", "insert"],
+    "description" : "<h3>Meta Container Insert</h3>
+                     <p>Insert value in container at given index</p>",
+         "inputs" : ["container", "index", "value"],
+        "outputs" : ["container"]
+}

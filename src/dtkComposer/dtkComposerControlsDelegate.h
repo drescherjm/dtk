@@ -19,20 +19,19 @@
 
 #pragma once
 
-#include <QtGui>
+#include "dtkComposerExport.h"
+
+#include <QtWidgets>
 
 class dtkComposerControlsDelegatePrivate;
 
-class  dtkComposerControlsDelegate : public QStyledItemDelegate
+class DTKCOMPOSER_EXPORT dtkComposerControlsDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
      dtkComposerControlsDelegate(QObject *parent = 0);
     ~dtkComposerControlsDelegate(void);
-
-public:
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;

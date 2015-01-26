@@ -3,6 +3,8 @@
 #include "dtkComposerControls.h"
 #include "dtkComposerControlsDelegate.h"
 #include "dtkComposerEvaluator.h"
+#include "dtkComposerEvaluatorProcess.h"
+#include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphLayouter.h"

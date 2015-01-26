@@ -3,10 +3,7 @@
  * Author: Nicolas Niclausse
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/04/20 14:34:00
- * Version: $Id$
- * Last-Updated: Tue Jun 26 17:31:44 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
+
  */
 
 /* Commentary:
@@ -17,9 +14,9 @@
  *
  */
 
-#ifndef DTKCOMPOSERNODESTRINGOPERATOR_H
-#define DTKCOMPOSERNODESTRINGOPERATOR_H
+#pragma once
 
+#include "dtkComposerExport.h"
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -29,19 +26,11 @@
 
 class dtkComposerNodeStringOperatorUnaryPrivate;
 
-class  dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorUnary(void);
     ~dtkComposerNodeStringOperatorUnary(void);
-
-    inline QString inputLabelHint(int) {
-        return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
 
 protected:
     dtkComposerNodeStringOperatorUnaryPrivate *d;
@@ -53,24 +42,11 @@ protected:
 
 class dtkComposerNodeStringOperatorBinaryPrivate;
 
-class  dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT  dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorBinary(void);
     ~dtkComposerNodeStringOperatorBinary(void);
-
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "lhs";
-        else if (port == 1)
-            return "rhs";
-        else
-            return "value";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
 
 protected:
     dtkComposerNodeStringOperatorBinaryPrivate *d;
@@ -82,24 +58,11 @@ protected:
 
 class dtkComposerNodeStringOperatorBinaryLogicPrivate;
 
-class  dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeStringOperatorBinaryLogic(void);
     ~dtkComposerNodeStringOperatorBinaryLogic(void);
-
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "lhs";
-        else if (port == 1)
-            return "rhs";
-        else
-            return "port";
-    }
-
-    inline QString outputLabelHint(int) {
-        return "boolean";
-    }
 
 protected:
     dtkComposerNodeStringOperatorBinaryLogicPrivate *d;
@@ -109,41 +72,106 @@ protected:
 // dtkComposerNodeStringOperatorBinary - Append
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryAppend : public dtkComposerNodeStringOperatorBinary
 {
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "append";
-    }
-
-    inline QString titleHint(void) {
-        return "Append";
-    }
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeStringOperatorBinaryLogic - Equality
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogicEquality : public dtkComposerNodeStringOperatorBinaryLogic
 {
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "string_equality";
-    }
+};
 
-    inline QString titleHint(void) {
-        return "String equality";
-    }
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringOperatorReplace
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringReplacePrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringReplace : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringReplace(void);
+    ~dtkComposerNodeStringReplace(void);
+
+public:
+    void run(void);
+
+protected:
+    dtkComposerNodeStringReplacePrivate *d;
+
 };
 
 
 
-#endif /* DTKCOMPOSERNODESTRINGOPERATOR_H */
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListAppend
+// /////////////////////////////////////////////////////////////////
 
+class dtkComposerNodeStringListAppendPrivate;
+
+// FIXME: we should use a generic node for doing this
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringListAppend(void);
+    ~dtkComposerNodeStringListAppend(void);
+
+public:
+    void run(void);
+
+protected:
+    dtkComposerNodeStringListAppendPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListExtract
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListExtractPrivate;
+
+// FIXME: we should use a generic node for doing this
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringListExtract(void);
+    ~dtkComposerNodeStringListExtract(void);
+
+public:
+    void run(void);
+
+protected:
+    dtkComposerNodeStringListExtractPrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeStringListSet
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeStringListSetPrivate;
+
+
+// FIXME: we should use a generic node for doing this
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
+{
+public:
+     dtkComposerNodeStringListSet(void);
+    ~dtkComposerNodeStringListSet(void);
+
+public:
+    void run(void);
+
+protected:
+    dtkComposerNodeStringListSetPrivate *d;
+};

@@ -1,0 +1,10 @@
+{
+          "title" : "Spawn",
+           "kind" : "composite",
+           "type" : "spawn",
+           "tags" : ["spawn", "remote", "distributed", "world", "network", "mpi", "communicator"],
+    "description" : "<h3>Spawn Node</h3>
+                     <p>The <strong>spawn</strong> node initiliazes an MPI context.</p>",
+         "inputs" : ["np", "internal communicator", "rank"],
+        "outputs" : ["communicator"]
+}

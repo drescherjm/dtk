@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <QtGui>
+#include <QtWidgets>
 
 class dtkComposerScenePortPrivate;
 class dtkComposerSceneNode;

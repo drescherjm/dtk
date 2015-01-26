@@ -58,16 +58,16 @@ namespace dtkDistributed
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DISTRIBUTED_BEGIN_GLOBAL \
-    barrier(); dtkDistributed::setMode(dtkDistributed::Global); dtkDistributedWork::worker()->setMode(dtkDistributed::mode()); if (dtkDistributedWork::worker()->master()) { time.restart();
+    barrier(); dtkDistributed::setMode(dtkDistributed::Global); dtkDistributedWork::worker()->setMode(dtkDistributed::mode()); if (dtkDistributedWork::worker()->master()) {
 
 #define DTK_DISTRIBUTED_END_GLOBAL \
-    qDebug() << "global section:" <<  time.elapsed() << "ms"; } ; barrier();
+    } ; barrier();
 
 #define DTK_DISTRIBUTED_BEGIN_LOCAL \
-    barrier(); dtkDistributed::setMode(dtkDistributed::Local); dtkDistributedWork::worker()->setMode(dtkDistributed::mode()); time.restart();
+    barrier(); dtkDistributed::setMode(dtkDistributed::Local); dtkDistributedWork::worker()->setMode(dtkDistributed::mode());
 
 #define DTK_DISTRIBUTED_END_LOCAL \
-    qDebug() << "local section:" <<  time.elapsed() << "ms";
+    ;
 
 //
 // dtkDistributed.h ends here

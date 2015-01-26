@@ -19,12 +19,14 @@
 
 #pragma once
 
-#include <QtGui>
+#include "dtkComposerExport.h"
+
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneViewPrivate;
 
-class  dtkComposerSceneView : public QTreeView
+class DTKCOMPOSER_EXPORT dtkComposerSceneView : public QTreeView
 {
     Q_OBJECT
 

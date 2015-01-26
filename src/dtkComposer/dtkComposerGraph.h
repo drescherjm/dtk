@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr 11 10:17:46 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 89
  */
 
 /* Commentary: 
@@ -19,7 +15,8 @@
 
 #pragma once
 
-#include <QtGui>
+#include "dtkComposerExport.h"
+
 #include <QtWidgets>
 
 class dtkComposerGraphEdge;
@@ -29,8 +26,9 @@ class dtkComposerGraphNodeList;
 class dtkComposerGraphPrivate;
 class dtkComposerSceneEdge;
 class dtkComposerSceneNode;
+class dtkGraph;
 
-class  dtkComposerGraph : public QGraphicsScene
+class DTKCOMPOSER_EXPORT dtkComposerGraph : public QGraphicsScene
 {
     Q_OBJECT
 
@@ -60,6 +58,8 @@ public:
 public:
     dtkComposerGraphEdgeList edges(void);
     dtkComposerGraphNodeList nodes(void);
+    dtkGraph graph(void);
+    dtkGraph subgraph(dtkComposerGraphNode *from, dtkComposerGraphNode *to);
 
 // --
 
@@ -74,6 +74,9 @@ public:
 
 public:
     QString toString(void);
+
+signals:
+    void cleared(void);
 
 protected slots:
     void onSelectionChanged(void);

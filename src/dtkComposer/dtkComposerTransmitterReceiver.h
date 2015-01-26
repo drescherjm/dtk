@@ -1,18 +1,20 @@
-/* dtkComposerTransmitterReceiver.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 10:41:02 2013 (+0100)
- * Version: 
- * Last-Updated: Thu Mar 28 17:10:34 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 93
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
+
+#include "dtkComposerExport.h"
 
 #include "dtkComposerTransmitter.h" 
 
@@ -20,7 +22,7 @@
 // dtkComposerTransmitterReceiverBase
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerTransmitterReceiverBase : public dtkComposerTransmitter
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverBase : public dtkComposerTransmitter
 {
 public:
              dtkComposerTransmitterReceiverBase(dtkComposerNode *parent = 0);
@@ -32,13 +34,13 @@ public:
     QString kindName(void) const;
 
 public:
-    inline bool enableCopy(void);
+    bool enableCopy(void);
 
 public:
-    inline QVariant variant(void);
+    QVariant variant(void);
 
 public:
-    inline QVariantList allData(void);
+    QVariantList allData(void);
 
 public:
     bool    connect(dtkComposerTransmitter *transmitter);
@@ -52,15 +54,18 @@ public:
 // dtkComposerTransmitterReceiverVariant 
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerTransmitterReceiverVariant : public dtkComposerTransmitterReceiverBase
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVariant : public dtkComposerTransmitterReceiverBase
 {
 public:
      dtkComposerTransmitterReceiverVariant(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterReceiverVariant(void);
 
 public:
-    template <typename T> inline T      data(void);
-    template <typename T> inline T constData(void);
+    QVariant data(void);
+
+public:
+    template <typename T> T      data(void);
+    template <typename T> T constData(void);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -74,14 +79,14 @@ public:
     ~dtkComposerTransmitterReceiver(void);
 
 public:
-    inline T      data(void);
-    inline T constData(void);
+    T      data(void);
+    T constData(void);
 
 public:
-    inline int type(void) const;
+    int type(void) const;
 
 private:
-    void setTypeList(const TypeList& list) {;}
+    void setTypeList(const TypeList&);
 
 private:
     using dtkComposerTransmitterReceiverBase::d;
@@ -92,3 +97,6 @@ private:
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkComposerTransmitterReceiver.tpp"
+
+// 
+// dtkComposerTransmitterReceiver.h ends here

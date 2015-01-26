@@ -69,6 +69,7 @@ protected slots:
 
 protected slots:
     void onBrowse(void);
+    void onBrowseDirectory(void);
     void onValueChanged(bool);
     void onValueChanged(int);
     void onValueChanged(double);

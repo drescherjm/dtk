@@ -14,23 +14,49 @@
 
 #pragma once
 
+#include "dtkMetaExport.h"
+
+#include "dtkMetaTypeTraits.h"
+
+#include <type_traits>
+
 #include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaTypeHandler definition
 // /////////////////////////////////////////////////////////////////
 
-template< typename T, bool = QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value > struct dtkMetaTypeHandler;
+template< typename T, bool = QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value > 
+struct dtkMetaTypeHandler
+{
+    static bool canConvert(const QList<int>& types);
+};
 
 template<typename T> struct dtkMetaTypeHandler<T *, false>
 {
+    static bool canConvert(const QList<int>& types);
     static QVariant  variantFromValue(T *t);
     static        T *clone(T *t);
 };
 
 template<typename T> struct dtkMetaTypeHandler<T *, true>
 {
+    static bool canConvert(const QList<int>& types);
     static QVariant variantFromValue(T *t);
+    static T *clone(T *t);
+};
+
+template< typename T, bool = std::is_abstract<T>::value> struct dtkMetaTypeHandlerHelper;
+
+template< typename T> struct dtkMetaTypeHandlerHelper<T *, false>
+{
+    static bool  canConvert(const QList<int>& types);
+    static T *clone(T *t);
+};
+
+template< typename T> struct dtkMetaTypeHandlerHelper<T *, true>
+{
+    static bool canConvert(const QList<int>& types);
     static T *clone(T *t);
 };
 
@@ -41,10 +67,18 @@ template<typename T> struct dtkMetaTypeHandler<T *, true>
 class dtkMetaType
 {
 public:
-                         static     bool canGetMetaContainerFromVariant(const QVariant& v);
-    template<typename T> static QVariant variantFromValue(const T& t);
-    template<typename T> static QVariant variantFromValue(      T *t);
-    template<typename T> static        T *clone(T *t);
+    template <typename T> static     bool canConvert(int type);
+    template <typename T> static     bool canConvert(const QList<int>& types);
+    template <typename T> static QVariant variantFromValue(const T& t);
+    template <typename T> static QVariant variantFromValue(      T *t);
+    template <typename T> static        T *clone(T *t);
+    template <typename T> static     bool registerContainerPointerConverter(int id);
+
+public:
+    static DTKMETA_EXPORT  QString description(const QVariant& v);
+    static DTKMETA_EXPORT QVariant cloneContent(const QVariant& v);
+    static DTKMETA_EXPORT QVariant createEmptyContainer(const QVariant& v);
+    static DTKMETA_EXPORT     bool destroyPointer(QVariant& v);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -71,7 +105,6 @@ template<typename T> QDataStream& operator >> (QDataStream& s,       std::vector
 // /////////////////////////////////////////////////////////////////
 
 #define DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(CONTAINER_ARG)                   \
-QT_BEGIN_NAMESPACE                                                                \
 template <typename T> struct QMetaTypeId< CONTAINER_ARG<T> *>                     \
 {                                                                                 \
     enum {                                                                        \
@@ -88,22 +121,19 @@ template <typename T> struct QMetaTypeId< CONTAINER_ARG<T> *>                   
         QByteArray typeName;                                                      \
         typeName.reserve(int(sizeof(#CONTAINER_ARG)) + 1 + tNameLen + 1 + 1 + 1); \
         typeName.append(#CONTAINER_ARG, int(sizeof(#CONTAINER_ARG)) - 1)          \
-            .append('<').append(tName, tNameLen).append('*');                     \
-        typeName.append('>');                                                     \
+            .append('<').append(tName, tNameLen).append('>');                     \
+        typeName.append('*');                                                     \
         const int newId = qRegisterNormalizedMetaType< CONTAINER_ARG<T> *>(       \
                         typeName,                                                 \
                         reinterpret_cast< CONTAINER_ARG<T> **>(quintptr(-1)));    \
         metatype_id.storeRelease(newId);                                          \
+        if (newId > 0) {                                                          \
+            dtkMetaType::registerContainerPointerConverter< CONTAINER_ARG<T> * >(newId); \
+        }                                                                         \
         return newId;                                                             \
     }                                                                             \
 };                                                                                \
-namespace QtPrivate {                                                             \
-template<typename T> struct IsSequentialContainer<CONTAINER_ARG<T> *>             \
-{                                                                                 \
-    enum { Value = true };                                                        \
-};                                                                                \
-}                                                                                 \
-QT_END_NAMESPACE
+template<typename T> struct dtkMetaTypeIsSequentialContainerPointer< CONTAINER_ARG<T> *> : std::true_type {};
 
 // /////////////////////////////////////////////////////////////////
 

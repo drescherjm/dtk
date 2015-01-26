@@ -215,13 +215,11 @@ dtkDistributedCommunicator *dtkDistributedCommunicatorMpi::spawn(QString cmd, ql
 
     this->initialize();
 
-    MPI_Comm parentcomm, intercomm;
     MPI_Comm_get_parent(&(d->comm));
     QStringList args = qApp->arguments();
 
     if (d->comm == MPI_COMM_NULL) {
         qDebug() << "I'm the parent";
-        int    argc = args.count();
         char **argv=(char**)malloc(sizeof(char*)*(2));
 
         argv[0] = const_cast<char*>("--spawn");

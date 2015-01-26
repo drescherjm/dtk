@@ -1,0 +1,10 @@
+{
+          "title" : "Container Size",
+           "kind" : "atomic",
+           "type" : "containerSize",
+           "tags" : ["meta", "container","size", "count", "length"],
+    "description" : "<h3>Meta Container Size</h3>
+                     <p>Get container size</p>",
+         "inputs" : ["container"],
+        "outputs" : ["size"]
+}

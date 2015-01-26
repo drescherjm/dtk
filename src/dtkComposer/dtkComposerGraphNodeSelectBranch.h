@@ -44,6 +44,7 @@ public:
 
 public:
      dtkComposerGraphNodeList successors();
+     dtkComposerGraphNode *firstSuccessor();
 
 public:
     void eval(void);

@@ -19,6 +19,7 @@ project(dtkMetaTest)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
+  dtkMetaTypeTest.h
   dtkMetaContainerSequentialTest.h
   dtkMetaContainerSequentialTest.tpp)
 
@@ -26,6 +27,7 @@ set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
+  dtkMetaTypeTest.cpp
   dtkMetaContainerSequentialTest.cpp)
 
 ## ###################################################################
@@ -56,12 +58,13 @@ qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Gui)
 qt5_use_modules(${PROJECT_NAME} Test)
 
-target_link_libraries(${PROJECT_NAME} dtkMeta)
+target_link_libraries(${PROJECT_NAME} dtkMeta dtkCore)
 
 ## ###################################################################
 ## Test rules
 ## ###################################################################
 
+add_test(dtkMetaTypeTest                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkMetaTest dtkMetaTypeTest)
 add_test(dtkMetaContainerSequentialTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkMetaTest dtkMetaContainerSequentialTest)
 
 ######################################################################

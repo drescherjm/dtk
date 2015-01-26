@@ -1,0 +1,9 @@
+{
+          "title" : "Imp",
+           "kind" : "atomic",
+           "type" : "imp",
+           "tags" : ["boolean", "atomic", "binary", "imp", "implication"],
+    "description" : "<p>Boolean IMP operator. Implication: The statement A IMP B is the equivalent of the logical statement \"If A Then B.\" A IMP B is False only if A is True and B is False. It is True in all other cases.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

@@ -26,10 +26,12 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_SOURCE_DIR@/src"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtk"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkLog"
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkCore"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkDistributed"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMath"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkTest"
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkWidgets"
   "@CMAKE_CURRENT_BINARY_DIR@")
 
 include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")

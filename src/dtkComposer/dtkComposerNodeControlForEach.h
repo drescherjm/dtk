@@ -1,25 +1,20 @@
-/* dtkComposerNodeControlForEach.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Feb 24 16:52:08 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Tue Jun 26 16:22:02 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODECONTROLFOREACH_H
-#define DTKCOMPOSERNODECONTROLFOREACH_H
+// Code:
 
+#pragma once
+
+#include "dtkComposerExport.h"
 
 #include "dtkComposerNodeControl.h"
 
@@ -29,7 +24,7 @@ class dtkComposerNodeControlForEachPrivate;
 // dtkComposerNodeControlForEach interface
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerNodeControlForEach : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlForEach : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlForEach(void);
@@ -49,14 +44,9 @@ public:
     void begin(void);
     void end(void);
 
-public:
-    QString type(void);
-
-public:
-    QString titleHint(void);
-
 private:
     dtkComposerNodeControlForEachPrivate *d;
 };
 
-#endif
+// 
+// dtkComposerNodeControlForEach.h ends here

@@ -1,0 +1,26 @@
+{
+          "title" : "ForEach",
+           "kind" : "control",
+           "type" : "foreach",
+           "tags" : ["foreach", "control", "loop", "container"],
+    "description" : "<h3>Perform foreach loop</h3>
+<p>
+The <b>Foreach</b> control node enable to iterate over all the items
+of a given input container in order.
+</p>
+<p>
+The node takes a container as input and executes the <em>body</em>
+blocks until reaching the end of this container. For each iteration, users can retrieve the container itself, its size, the current item and the index of the current iteration.
+</p>
+<p>
+During execution, the condition is firstly tested, then if it is valid
+then the body composition is executed and eventually, the incrmental
+process is performed.
+</p>
+<p>
+The las value of the loop counter can be used further in the composition thanks to <em>i_end</em> port.
+</p>
+",
+         "inputs" : [],
+        "outputs" : []
+}

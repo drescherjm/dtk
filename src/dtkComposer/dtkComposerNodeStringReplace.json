@@ -1,0 +1,11 @@
+{
+          "title" : "String List Replace",
+           "kind" : "atomic",
+           "type" : "string_replace",
+           "tags" : ["string", "atomic", "replace", "regexp"],
+    "description" : "<p>Apply the given regexp to a string and replace the matching substring with 'after'</p>",
+         "inputs" : ["string","regexp", "after"],
+        "outputs" : ["string"]
+}
+
+

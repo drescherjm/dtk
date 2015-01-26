@@ -14,11 +14,13 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 class dtkComposerNodeFactory;
 
 namespace dtkComposer
 {
     namespace node {
-	dtkComposerNodeFactory& factory(void);
+        DTKCOMPOSER_EXPORT dtkComposerNodeFactory& factory(void);
     }
 }

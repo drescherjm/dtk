@@ -1,0 +1,9 @@
+{
+          "title" : "Not",
+           "kind" : "atomic",
+           "type" : "not",
+           "tags" : ["boolean", "atomic", "unary", "not"],
+    "description" : "<p>Boolean NOT operator</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

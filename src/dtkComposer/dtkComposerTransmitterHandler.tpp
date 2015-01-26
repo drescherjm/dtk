@@ -1,50 +1,40 @@
-/* dtkComposerTransmitterHandler.tpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Mar 21 15:29:10 2013 (+0100)
- * Version: 
- * Last-Updated: Thu Jul 11 12:36:48 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 274
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
 
-#include <dtkCore/dtkCore.h>
+// Change Log:
+// 
+// 
+
+// Code:
+
+#include <dtkMeta/dtkMeta.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterHandler implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> void dtkComposerTransmitterHandler<T>::init(dtkComposerTransmitter& t)
+template <typename T> inline void dtkComposerTransmitterHandler<T>::init(dtkComposerTransmitter& t)
 {
     t.d->type_list << qMetaTypeId<T>(reinterpret_cast<T *>(0));
     t.d->variant = QVariant(t.d->type_list.first(), 0);
 }
 
-template <typename T> bool dtkComposerTransmitterHandler<T>::enableConnection(dtkComposerTransmitter& t)
+template <typename T> inline bool dtkComposerTransmitterHandler<T>::enableConnection(dtkComposerTransmitter& t)
 {
-    bool enable_connection = true;
-    QVariant var = QVariant(qMetaTypeId<T>(reinterpret_cast<T *>(0)), 0);
-
-    foreach(int t, t.d->type_list) {
-	if (!var.canConvert(t)) {
-	    enable_connection = false;
-	    break;
-	}
-    }
-
-    return enable_connection;
+    return dtkMetaType::canConvert<T>(t.d->type_list);
 }
 
-template <typename T> T dtkComposerTransmitterHandler<T>::data(dtkComposerTransmitter& t)
+template <typename T> inline T dtkComposerTransmitterHandler<T>::data(dtkComposerTransmitter& t)
 {
     return t.variant().value<T>();
 }
 
-template <typename T> T dtkComposerTransmitterHandler<T>::constData(dtkComposerTransmitter& t)
+template <typename T> inline T dtkComposerTransmitterHandler<T>::constData(dtkComposerTransmitter& t)
 {
     return t.variant().value<T>();
 }
@@ -53,32 +43,20 @@ template <typename T> T dtkComposerTransmitterHandler<T>::constData(dtkComposerT
 // dtkComposerTransmitterHandler pointer implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> void dtkComposerTransmitterHandler<T *>::init(dtkComposerTransmitter& t)
+template <typename T> inline void dtkComposerTransmitterHandler<T *>::init(dtkComposerTransmitter& t)
 {
     t.d->type_list << qMetaTypeId<T*>(reinterpret_cast<T **>(0));
     T *ptr = NULL;
     t.d->variant = QVariant::fromValue(ptr);
+    t.d->swap = QVariant::fromValue(ptr);
 }
 
-template <typename T> bool dtkComposerTransmitterHandler<T *>::enableConnection(dtkComposerTransmitter& t)
+template <typename T> inline bool dtkComposerTransmitterHandler<T *>::enableConnection(dtkComposerTransmitter& t)
 {
-    bool enable_connection = true;
-    T *ptr = new T();
-    QVariant var = QVariant::fromValue(ptr);
-
-    foreach(int t, t.d->type_list) {
-	if (!var.canConvert(t)) {
-	    enable_connection = false;
-	    break;
-	}
-    }
-
-    delete ptr;
-
-    return enable_connection;
+    return dtkMetaType::canConvert<T *>(t.d->type_list);
 }
 
-template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTransmitter& t)
+template <typename T> inline T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTransmitter& t)
 {
     T *source = t.variant().value<T *>();
 
@@ -87,61 +65,117 @@ template <typename T> T *dtkComposerTransmitterHandler<T *>::data(dtkComposerTra
 	if (!t.enableCopy()) {
 	    return source;
 	} else {
-	    return dtkComposerTransmitterHandlerHelper<T *, IsPointerToTypeDerivedFromCoreObject<T *>::Value>::copy(source, t.d->variant);
+            return copy(source, t.d->variant, t.d->swap);
 	}
     	break;
     case dtkComposerTransmitter::Reference:
-    	return source;
-    	break;
+        return source;
+        break;
     case dtkComposerTransmitter::Copy:
-    	return dtkComposerTransmitterHandlerHelper<T *, IsPointerToTypeDerivedFromCoreObject<T *>::Value>::copy(source, t.d->variant);
+        return copy(source, t.d->variant, t.d->swap);
     	break;
     default:
         return source;
     }
 }
 
-template <typename T> T *dtkComposerTransmitterHandler<T *>::constData(dtkComposerTransmitter& t)
+template <typename T> inline T *dtkComposerTransmitterHandler<T *>::constData(dtkComposerTransmitter& t)
 {
     return t.variant().value<T *>();
 }
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterCopier implementation
-// /////////////////////////////////////////////////////////////////
-
-template <typename T, bool U> T *dtkComposerTransmitterHandlerHelper<T *, U>::copy(T *source, QVariant& target)
+template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *source, QVariant& target, QVariant& swap)
 {
     if (!source)
         return source;
 
     T *copy = target.value<T *>();
     if (!copy) {
-	copy = new T(*source);
+	copy = dtkMetaType::clone(source);
 	target.setValue(copy);
     } else {
-	*copy = *source;
+        if (copy != source) {
+            *copy = *source;
+        } else {
+            copy = swap.value<T *>();
+            if (!copy) {
+                copy = dtkMetaType::clone(source);
+            } else {
+                *copy = *source;
+            }
+            swap.setValue(source);
+            target.setValue(copy);
+        }
     }
 
     return copy;
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterCopier implementation for dtkCoreObject
+// dtkComposerTransmitterHandlerVariant implementation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> T *dtkComposerTransmitterHandlerHelper<T *, true>::copy(T *source, QVariant& target)
+inline QVariant dtkComposerTransmitterHandlerVariant::data(dtkComposerTransmitter& t)
 {
-    if (!source)
-        return source;
+    QVariant source = t.variant();
 
-    T *copy = target.value<T*>();;
-    if (!copy) {
-	copy = reinterpret_cast<T *>(source->clone());
-	target.setValue(copy);
-    } else {
-	*copy = *source;
+    switch(t.dataTransmission()) {
+    case dtkComposerTransmitter::AutoCopy:
+	if (!t.enableCopy()) {
+	    return source;
+	} else {
+            copy(source, t.d->variant);
+            return t.d->variant;
+	}
+    	break;
+    case dtkComposerTransmitter::Reference:
+        return source;
+        break;
+    case dtkComposerTransmitter::Copy:
+        copy(source, t.d->variant);
+        return t.d->variant;
+    	break;
+    default:
+        return source;
+    }
+}
+    
+inline bool dtkComposerTransmitterHandlerVariant::containSamePointer(const QVariant& v0, const QVariant& v1)
+{
+    if (QString(v0.typeName()).endsWith("*") && QString(v1.typeName()).endsWith("*")) {
+        
+        const void *v0_ptr = *static_cast<const void * const *>(v0.data());
+        const void *v1_ptr = *static_cast<const void * const *>(v1.data());
+
+        return (v0_ptr && v1_ptr && (v0_ptr == v1_ptr));
     }
 
-    return copy;
+    return false;
 }
+    
+inline void dtkComposerTransmitterHandlerVariant::clearPointer(QVariant& v)
+{
+    void *ptr = *static_cast<void **>(v.data());
+    QString type_name = QString(v.typeName());
+    type_name.chop(1);
+    int type_id = QMetaType::type(qPrintable(type_name));
+    QMetaType::destroy(type_id, ptr);
+    v.clear();
+}
+
+inline void dtkComposerTransmitterHandlerVariant::copy(const QVariant& source, QVariant& target)
+{
+    if (!source.isValid()) {
+        target = source;
+        return;
+    }
+
+    if (containSamePointer(source, target))
+        clearPointer(target);
+
+    target = dtkMetaType::cloneContent(source);
+}
+
+
+// 
+// dtkComposerTransmitterHandler.tpp ends here

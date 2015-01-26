@@ -98,7 +98,7 @@ set(${PROJECT_NAME}_SOURCES
 else(WIN32)
 
 set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADER}
+  ${${PROJECT_NAME}_HEADERS}
   dtkDistributedServiceUnix_p.h
   dtkDistributedUnixServerSocket.h
   dtkDistributedUnixSocket.h)
@@ -175,12 +175,18 @@ foreach(header ${${PROJECT_NAME}_HEADERS})
   set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
 endforeach(header)
 
-install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
-install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
+install(FILES ${${PROJECT_NAME}_HEADERS}
+  DESTINATION include/${PROJECT_NAME}
+  COMPONENT distributedsupport)
+
+install(FILES ${${PROJECT_NAME}_HEADERS_QTS}
+  DESTINATION include/${PROJECT_NAME}
+  COMPONENT distributedsupport)
+
 install(TARGETS ${PROJECT_NAME}
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+      COMPONENT distributedsupport
+         EXPORT dtkDepends)
 
 ######################################################################
 ### CMakeLists.txt ends here

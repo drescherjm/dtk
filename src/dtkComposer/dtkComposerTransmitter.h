@@ -1,18 +1,24 @@
-/* dtkComposerTransmitter.h --- 
- * 
- * Author: Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 16:36:09 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
+
+
 
 #pragma once
+
+#include "dtkComposerExport.h"
+
+#include "dtkComposerMetaType.h"
 
 #include <QtCore>
 
@@ -26,7 +32,7 @@ class dtkComposerTransmitterVariant;
 // dtkComposerTransmitter interface
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerTransmitter
+class DTKCOMPOSER_EXPORT dtkComposerTransmitter
 {
 public:
     enum Kind {
@@ -144,6 +150,7 @@ public:
 
 public:
     template <typename T> friend class dtkComposerTransmitterHandler;
+                          friend class dtkComposerTransmitterHandlerVariant;
 
 private:
     friend QDebug operator << (QDebug debug, const dtkComposerTransmitter& transmitter);
@@ -166,7 +173,7 @@ QDebug operator << (QDebug debug,       dtkComposerTransmitter *transmitter);
 
 class dtkComposerTransmitterLinkPrivate;
 
-class  dtkComposerTransmitterLink
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterLink
 {
 public:
      dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
@@ -184,5 +191,7 @@ private:
 // dtkComposerTransmitterLinkList declaration
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
+// 
+// dtkComposerTransmitter.h ends here

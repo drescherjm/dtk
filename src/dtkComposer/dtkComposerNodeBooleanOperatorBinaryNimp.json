@@ -1,0 +1,9 @@
+{
+          "title" : "Nimp",
+           "kind" : "atomic",
+           "type" : "nimp",
+           "tags" : ["boolean", "atomic", "binary", "nimp", "implication"],
+    "description" : "<p>Boolean NIMP operator. Negation of IMP.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

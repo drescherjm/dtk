@@ -19,7 +19,7 @@
 
 #include "dtkComposerSceneEdge.h"
 
-//#include "dtkComposerScene.h"
+#include "dtkComposerScene.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNodeComposite.h"
 #include "dtkComposerScenePort.h"
@@ -28,7 +28,7 @@ class dtkComposerSceneEdgePrivate
 {
 public:
     dtkComposerSceneNode *parent;
-    //dtkComposerScene     *scene;
+    dtkComposerScene     *scene;
 
 public:
     dtkComposerScenePort *source;
@@ -47,7 +47,7 @@ dtkComposerSceneEdge::dtkComposerSceneEdge(void) : QGraphicsItem(), d(new dtkCom
 {
     d->source = NULL;
     d->destination = NULL;
-    //d->scene = NULL;
+    d->scene = NULL;
 
 
     d->parent = NULL;
@@ -82,11 +82,11 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     painter->setPen(QPen(Qt::black, 1));
 
     // if (!d->scene)
-    //     if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene * > ( this->scene()))
-    //         d->scene = scene;
+        if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene * > ( this->scene()))
+            d->scene = scene;
 
-    // if (d->scene && d->scene->maskedEdges())
-    //     this->setOpacity(0.05);
+    if (d->scene && d->scene->maskedEdges())
+        this->setOpacity(0.05);
 
     if (d->connected_to_selection) {
         painter->setBrush(Qt::yellow);

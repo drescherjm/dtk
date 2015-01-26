@@ -1131,52 +1131,9 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize> d
     return mid(size() - length, length);
 }
 
-template<typename T, qlonglong PreallocSize> inline QDataStream& operator<<(QDataStream& s, const dtkArray<T, PreallocSize>& a)
-{
-    s << quint64(a.size());
-    for (typename dtkArray<T, PreallocSize>::const_iterator it = a.begin(); it != a.end(); ++it)
-        s << *it;
-    return s;
-}
-
-template<typename T, qlonglong PreallocSize> inline QDataStream& operator>>(QDataStream& s, dtkArray<T, PreallocSize>& a)
-{
-    a.clear();
-    quint64 c; s >> c;
-    a.resize(c);
-    for(quint64 i = 0; i < c; ++i) {
-        T t;
-        s >> t;
-        a[i] = t;
-    }
-    return s;
-}
-
-template<typename T, qlonglong PreallocSize> inline QDataStream& operator<<(QDataStream& s, const dtkArray<T *, PreallocSize>& a)
-{
-    s << quint64(a.size());
-    for (typename dtkArray<T *, PreallocSize>::const_iterator it = a.begin(); it != a.end(); ++it)
-        s << dtkMetaType::variantFromValue(*it);
-    return s;
-}
-
-template<typename T, qlonglong PreallocSize> inline QDataStream& operator>>(QDataStream& s, dtkArray<T *, PreallocSize>& a)
-{
-    a.clear();
-    quint64 c; s >> c;
-    a.reserve(c);
-    for(quint64 i = 0; i < c; ++i) {
-        QVariant var;
-        s >> var;
-        a.append(var.value<T *>());
-    }
-
-    return s;
-}
-
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize> inline QDebug &operator<<(QDebug debug, const dtkArray<T, PreallocSize> &array)
+template <typename T, qlonglong PreallocSize> inline QDebug& operator << (QDebug debug, const dtkArray<T, PreallocSize>& array)
 {
     const bool oldSetting = debug.autoInsertSpaces();
     debug.nospace() << "dtkArray";
@@ -1190,6 +1147,136 @@ template <typename T, qlonglong PreallocSize> inline QDebug &operator<<(QDebug d
     debug.setAutoInsertSpaces(oldSetting);
     return debug.maybeSpace();
 }
+
+// ///////////////////////////////////////////////////////////////////
+
+
+template<typename T, qlonglong PreallocSize> inline QDataStream& operator << (QDataStream& s, const dtkArray<T, PreallocSize>& array)
+{
+    s << quint64(array.size());
+    for (const T& t : array)
+        s << t;
+    return s;
+}
+
+template<typename T, qlonglong PreallocSize> inline QDataStream& operator >> (QDataStream& s, dtkArray<T, PreallocSize>& array)
+{
+    array.clear();
+    quint64 size; s >> size;
+    array.resize(size);
+    for (T& t : array) {
+        s >> t;
+    }
+    return s;
+}
+
+template<typename T, qlonglong PreallocSize> inline QDataStream& operator << (QDataStream& s, const dtkArray<T *, PreallocSize>& array)
+{
+    s << quint64(array.size());
+    for (T *t : array) {
+        s << dtkMetaType::variantFromValue(t);
+    }
+    return s;
+}
+
+template<typename T, qlonglong PreallocSize> inline QDataStream& operator >> (QDataStream& s, dtkArray<T *, PreallocSize>& array)
+{
+    array.clear();
+    quint64 size; s >> size;
+    array.resize(size);
+    for (T *& t : array) {
+        QVariant var;
+        s >> var;
+        t = var.value<T *>();
+    }
+    return s;
+}
+
+// ///////////////////////////////////////////////////////////////////
+// Registering dtkArray to QMetaType system
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> >
+{
+    enum {
+        Defined = QMetaTypeId2<T>::Defined
+    };
+
+    static int qt_metatype_id() {
+        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
+        if (const int id = metatype_id.load())
+            return id;
+
+        const char *array_type = QMetaType::typeName(qMetaTypeId<T>());
+        Q_ASSERT(array_type);
+        int type_length = int(qstrlen(array_type));
+
+        QByteArray array_name("dtkArray", 8);
+        QByteArray array_size = QByteArray::number(PreallocSize);
+
+        QByteArray typeName;
+        typeName.reserve(array_name.size() + 1 + type_length + 1 + array_size.size() + 1);
+        typeName.append(array_name).append('<').append(array_type).append(',').append(array_size).append('>');
+
+        const int newId = qRegisterNormalizedMetaType< dtkArray<T, PreallocSize> >(typeName, reinterpret_cast<dtkArray<T, PreallocSize>*>(quintptr(-1)));
+        metatype_id.storeRelease(newId);
+
+        return newId;
+    }
+};
+namespace QtPrivate {
+template<typename T, qlonglong PreallocSize> struct IsSequentialContainer< dtkArray<T, PreallocSize> >
+{
+    enum { Value = true };
+};
+
+// Pointer version
+
+}
+template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> *>
+{
+    enum {
+        Defined = QMetaTypeId2<T>::Defined
+    };
+
+    static int qt_metatype_id()
+    {
+        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
+        if (const int id = metatype_id.load())
+            return id;
+
+        const char *array_type = QMetaType::typeName(qMetaTypeId<T>());
+        Q_ASSERT(array_type);
+        int type_length = int(qstrlen(array_type));
+
+        QByteArray array_name("dtkArray", 8);
+        QByteArray array_size = QByteArray::number(PreallocSize);
+
+        QByteArray typeName;
+        typeName.reserve(array_name.size() + 1 + type_length + 1 + array_size.size() + 1 + 1);
+        typeName.append(array_name).append('<').append(array_type).append(',').append(array_size).append('>').append('*');
+
+        const int newId = qRegisterNormalizedMetaType<dtkArray<T, PreallocSize> *>(typeName, reinterpret_cast<dtkArray<T, PreallocSize>**>(quintptr(-1)));
+        metatype_id.storeRelease(newId);
+        if (newId > 0) {
+            QMetaTypeId< dtkArray<T, PreallocSize> >::qt_metatype_id();
+            dtkMetaType::registerContainerPointerConverter<dtkArray<T, PreallocSize> *>(newId);
+        }
+
+        return newId;
+    }
+};
+
+template<typename T, qlonglong PreallocSize> struct dtkMetaTypeIsSequentialContainerPointer< dtkArray<T, PreallocSize> *> : std::true_type {};
+
+// ///////////////////////////////////////////////////////////////////
+// Specialization of typetraits
+// ///////////////////////////////////////////////////////////////////
+
+#include <dtkMeta/dtkMetaTypeTraits.h>
+
+template< typename T, qlonglong PreallocSize > struct dtkMetaContainerIsReservable< dtkArray<T, PreallocSize> > : std::true_type {};
+template< typename T, qlonglong PreallocSize > struct  dtkMetaContainerIsResizable< dtkArray<T, PreallocSize> > : std::true_type {};
 
 //
 // dtkArray.tpp ends here

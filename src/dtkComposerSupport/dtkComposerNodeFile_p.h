@@ -102,4 +102,16 @@ public:
     QString filename;
 };
 
+class dtkComposerNodeDirectoryPrivate
+{
+ public:
+    dtkComposerTransmitterReceiver<QString> receiver_directory;
+
+ public:
+    dtkComposerTransmitterEmitter<QString> emitter_directory;
+
+ public:
+    QString directory;
+};
+
 #endif

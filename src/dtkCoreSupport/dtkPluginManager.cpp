@@ -330,7 +330,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
         error += path;
         error += " - ";
         error += loader->errorString();
-        if(d->verboseLoading) { dtkDebug() << error; }
+        if(d->verboseLoading) { dtkWarn() << error; }
         emit loadError(error);
         delete loader;
         return;
@@ -341,7 +341,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
     if(!plugin) {
         QString error = "Unable to retrieve ";
         error += path;
-        if(d->verboseLoading) { dtkDebug() << error; }
+        if(d->verboseLoading) { dtkWarn() << error; }
         emit loadError(error);
         return;
     }
@@ -350,7 +350,7 @@ void dtkPluginManager::loadPlugin(const QString& path)
         QString error = "Unable to initialize ";
         error += plugin->name();
         error += " plugin";
-        if(d->verboseLoading) { dtkTrace() << error; }
+        if(d->verboseLoading) { dtkWarn() << error; }
         emit loadError(error);
         return;
     }

@@ -1,0 +1,9 @@
+{
+          "title" : "nthroot",
+           "kind" : "atomic",
+           "type" : "nthroot",
+           "tags" : ["number", "atomic", "binary", "nthroot"],
+    "description" : "<p> Returns nth root of x</p>",
+         "inputs" : ["x","n"],
+        "outputs" : ["value"]
+}

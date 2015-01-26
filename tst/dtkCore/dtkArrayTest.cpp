@@ -14,7 +14,7 @@
 #include <dtkCore/dtkArray.h>
 
 #include <QtCore>
-#include <QtGui>
+#include <QVector3D>
 
 // /////////////////////////////////////////////////////////////////
 // Helper classes
@@ -1821,46 +1821,45 @@ void dtkArrayTestCase::testDataStream(void)
     // This part requires to declare QString* to the metatype system
     // using Q_DECLARE_METATYPE(QString*) in a header.
 
-    // {
-    // qRegisterMetaType<QString*>("QString*");
-    // qRegisterMetaTypeStreamOperators<QString*>("QString*");
+    {
+        // qRegisterMetaType<QString*>("QString*");
+        // qRegisterMetaTypeStreamOperators<QString*>("QString*");
 
-    //     QString *s = new QString("s");
-    //     QVariant var = dtkMetaType::variantFromValue(s);
+        // QString *s = new QString("s");
+        // QVariant var = dtkMetaType::variantFromValue(s);
 
-    //     QByteArray ba;
-    //     {
-    //         QDataStream stream(&ba, QIODevice::WriteOnly);
-    //         stream << var;
-    //     }
+        // QByteArray ba;
+        // {
+        //     QDataStream stream(&ba, QIODevice::WriteOnly);
+        //     stream << var;
+        // }
 
-    //     QVariant vvar;
-    //     {
-    //         QDataStream stream2(ba);
-    //         stream2 >> vvar;
-    //     }
+        // QVariant vvar;
+        // {
+        //     QDataStream stream2(ba);
+        //     stream2 >> vvar;
+        // }
 
+        // dtkArray<QString *, 10> array;
+        // for (int index = 0; index < 10; ++index)
+        //     array.append(new QString(QString::number(index)));
 
-    //     dtkArray<QString *> array;
-    //     for (int index = 0; index < 10; ++index)
-    //         array.append(new QString(QString::number(index)));
+        // QByteArray data;
+        // {
+        //     QDataStream stream(&data, QIODevice::WriteOnly);
+        //     stream << array;
+        // }
 
-    //     QByteArray data;
-    //     {
-    //         QDataStream stream(&data, QIODevice::WriteOnly);
-    //         stream << array;
-    //     }
+        // dtkArray<QString *> array2;
+        // {
+        //     QDataStream stream2(data);
+        //     stream2 >> array2;
+        // }
 
-    //     dtkArray<QString *> array2;
-    //     {
-    //         QDataStream stream2(data);
-    //         stream2 >> array2;
-    //     }
-
-    //     for (int index = 0; index < 10; ++index) {
-    //         QCOMPARE(*(array2.at(index)), *(array.at(index)));
-    //     }
-    // }
+        // for (int index = 0; index < 10; ++index) {
+        //     QCOMPARE(*(array2.at(index)), *(array.at(index)));
+        // }
+    }
 
 #endif
 }
@@ -1935,6 +1934,28 @@ void dtkArrayTestCase::testDynamicArray(void)
     array2 = array1;
 
 #endif
+}
+
+void dtkArrayTestCase::testMetaType(void)
+{
+    dtkArray<double, 32> array;
+    for (int index = 0; index < 1024; ++index)
+        array.append(double(index));
+
+    QVariant var = dtkMetaType::variantFromValue(array);
+    QSequentialIterable iterable = var.value<QSequentialIterable>();
+    int count = 0;
+    for (const QVariant &v: iterable) {
+        QCOMPARE(v.value<double>(), array.at(count++));
+    }
+
+    var = dtkMetaType::variantFromValue(&array);
+    QVERIFY(var.canConvert<dtkMetaContainerSequential>());
+    const dtkMetaContainerSequential container = var.value<dtkMetaContainerSequential>();
+    count = 0;
+    for (const QVariant &v: container) {
+        QCOMPARE(v.value<double>(), array.at(count++));
+    }
 }
 
 DTKTEST_MAIN_NOGUI(dtkArrayTest, dtkArrayTestCase)

@@ -1,0 +1,9 @@
+{
+          "title" : "Lte",
+           "kind" : "atomic",
+           "type" : "lte",
+           "tags" : ["number", "atomic", "binary", "lte", "lesser"],
+    "description" : "<p>Returns true if <em>lhs</em> is lesser or equal than <em>rhs</em>.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

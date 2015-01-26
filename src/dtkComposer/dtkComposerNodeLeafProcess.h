@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:02 2012 (+0200)
  * Version: $Id$
- * Last-Updated: 2012 Fri Nov 16 16:17:30 (+0100)
- *           By: Thibaud Kloczko, Inria.
- *     Update #: 6
+ * Last-Updated: ven. nov.  8 16:17:25 2013 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 27
  */
 
 /* Commentary: 
@@ -46,7 +46,12 @@ public:
     virtual QString abstractProcessType(void) const = 0;
 
 public:
-    bool implementationHasChanged(void) const;
+    virtual void setProcess(dtkAbstractProcess *process) = 0;
+
+    virtual dtkAbstractProcess *process(void) const = 0;
+
+public:
+    bool implementationHasChanged(const QString& implementation) const;
 
     QString currentImplementation(void) const;
 
@@ -55,7 +60,8 @@ public:
 public:
     dtkAbstractProcess *createProcess(const QString& implementation);
 
-    dtkAbstractProcess *process(void);
+protected:
+    void clearProcess(void);
 
 private:
     dtkComposerNodeLeafProcessPrivate *d;

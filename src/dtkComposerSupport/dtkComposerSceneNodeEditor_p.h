@@ -113,6 +113,7 @@ public:
 public:
     QLineEdit *edit_s;
     QToolButton *butn_f;
+    QToolButton *butn_d;
 
 public:
     QHBoxLayout *layout;

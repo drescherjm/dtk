@@ -12,10 +12,6 @@
 ##
 ### Code:
 
-get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
-
-get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
-
 string(SUBSTRING ${Qt5Core_VERSION_STRING} 0 3 Qt5_VERSION)
 
 set(QT5_DOCUMENTATION_D "${QT5_BINARY_DIR}/../../../Docs/Qt-${Qt5_VERSION}")

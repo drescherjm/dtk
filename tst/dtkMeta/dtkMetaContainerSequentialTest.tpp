@@ -24,8 +24,8 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
         c.push_back(values[i]);
     }
 
-    QVariant v_c = QVariant::fromValue(&c);
-    QVERIFY(dtkMetaType::canGetMetaContainerFromVariant(v_c));
+    QVariant v_c = dtkMetaType::variantFromValue(&c);
+    QVERIFY(dtkMetaType::canConvert<dtkMetaContainerSequential>(v_c.userType()));
     dtkMetaContainerSequential m_c = v_c.value<dtkMetaContainerSequential>();
     QVERIFY(!m_c.empty());
     QCOMPARE(m_c.size(), (int)std::distance(c.begin(), c.end()));
@@ -33,6 +33,7 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
     typename T::const_iterator cit = c.cbegin();
     QCOMPARE(m_c.first().value<Type>(), *cit);
     for (int i = 0;  i < size; ++i, ++cit) {
+        QCOMPARE(m_c.at<Type>(i), *cit);
         QCOMPARE(m_c.at(i).value<Type>(), *cit);
         QCOMPARE(m_c[i].value<Type>(), *cit);
     }
@@ -54,6 +55,7 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
         val = *c_it + values[0];
         m_c.setAt(i, val);
         QCOMPARE((*m_c_it).value<Type>(), val);
+        QCOMPARE((m_c_it).value<Type>(), val);
         QCOMPARE(*c_it, val);
         QVERIFY((*m_c_it == *c_it));
     }
@@ -69,11 +71,27 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
         --count;
     }
     QCOMPARE((int)c.size(), 0);
+    QCOMPARE((int)m_c.size(), 0);
 
     for (int i = 0; i < size; ++i) {
         m_c.append(values[i]);
         QCOMPARE(m_c.at(i).value<Type>(), values[i]);
     }
+    count = size - 1;
+    while (count >= 0 ) {
+        m_c.removeAt(count);
+        --count;
+    }
+    QCOMPARE((int)m_c.size(), 0);
+
+    // test append a qvariant
+    QVariant val_v;
+    for (int i = 0; i < size; ++i) {
+        val_v = values[i];
+        m_c.append(val_v);
+        QCOMPARE(m_c.at(i).value<Type>(), values[i]);
+    }
+
     QCOMPARE(m_c.size(), size);
     QCOMPARE((int)std::distance(c.begin(), c.end()), size);
 
@@ -88,7 +106,7 @@ template <typename T> void testContainer(T& c, typename T::value_type *values, i
         m_c.append(values[i]);
     }
     count = size - 1;
-    for (dtkMetaContainerSequential::item &item : m_c) {
+    for (dtkMetaContainerSequential::item& item : m_c) {
         item += values[count]; --count;
     }
     const dtkMetaContainerSequential& const_m_c = m_c;

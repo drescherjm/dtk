@@ -1,0 +1,9 @@
+{
+          "title" : "Print",
+           "kind" : "atomic",
+           "type" : "print",
+           "tags" : ["logger", "stdout", "print", "debug"],
+    "description" : "<p>Print data to stout and/or stderr</p>",
+         "inputs" : ["stdout","stderr"],
+        "outputs" : []
+}

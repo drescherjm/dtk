@@ -353,7 +353,7 @@ void dtkDistributedController::disconnect(const QUrl& server)
     QTcpSocket *socket = d->sockets.value(server.toString());
     socket->disconnectFromHost();
 
-    int val = d->sockets.remove(server.toString());
+    d->sockets.remove(server.toString());
 
     emit disconnected(server);
 }

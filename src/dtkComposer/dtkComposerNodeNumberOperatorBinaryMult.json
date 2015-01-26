@@ -1,0 +1,9 @@
+{
+          "title" : "Mult",
+           "kind" : "atomic",
+           "type" : "mult",
+           "tags" : ["number", "atomic", "binary", "mult"],
+    "description" : "<p>Multiply two numbers.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

@@ -1,0 +1,8 @@
+{
+          "title" : "Note",
+           "kind" : "note",
+           "type" : "note",
+           "tags" : ["note"],
+    "description" : "<p>Note for annotate composition</p>
+                     <p>Notes help to identify and annotate some parts of a composition.</p>"
+}

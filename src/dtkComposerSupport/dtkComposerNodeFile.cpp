@@ -1,15 +1,15 @@
-/* dtkComposerNodeFile.cpp --- 
- * 
+/* dtkComposerNodeFile.cpp ---
+ *
  * Author: Julien Wintz, INRIA
  * Created: Thu Mar  1 11:45:03 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeFile.h"
@@ -80,7 +80,7 @@ dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dt
 dtkComposerNodeFile::~dtkComposerNodeFile(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -146,6 +146,7 @@ QString dtkComposerNodeFile::value(void)
 
 void dtkComposerNodeFile::setValue(QString value)
 {
+    value.replace("~",QDir::homePath());
     d->fileName = value;
 }
 
@@ -236,28 +237,28 @@ dtkComposerNodeFileList::~dtkComposerNodeFileList(void)
 void dtkComposerNodeFileList::run(void)
 {
     if (!d->receiver_dir.isEmpty()) {
-      
+
         d->files.clear();
-      
+
 	if (d->receiver_dir.data()) {
-	  
+
             QString dirname = *(d->receiver_dir.data());
             QDir dir(dirname);
-	    
+
             if (!d->receiver_filters.isEmpty()) {
-	      
+
                 switch(d->receiver_filters.dataType()) {
-              
+
 		case QMetaType::QString: {
                     dir.setNameFilters(QStringList(*(d->receiver_filters.data<QString>())));
                     break;
                 }
-                
+
 		case QMetaType::QStringList: {
                     dir.setNameFilters(*(d->receiver_filters.data<QStringList>()));
                     break;
                 }
-                
+
 		default:
                     dtkWarn() << "Type" << d->receiver_filters.dataType() << "is not handled by the node. Only QString and QString List are supported";
                     break;
@@ -449,4 +450,77 @@ QString dtkComposerNodeFileWrite::outputLabelHint(int port)
         return "file";
 
     return dtkComposerNode::inputLabelHint(port);
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeDirectory implementation
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeDirectory::dtkComposerNodeDirectory(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeDirectoryPrivate)
+{
+    this->appendReceiver(&(d->receiver_directory));
+
+    d->emitter_directory.setData(&(d->directory));
+    this->appendEmitter(&(d->emitter_directory));
+}
+
+dtkComposerNodeDirectory::~dtkComposerNodeDirectory(void)
+{
+    delete d;
+    d = NULL;
+}
+
+void dtkComposerNodeDirectory::run(void)
+{
+    QString directory;
+    if (!d->receiver_directory.isEmpty()) {
+        directory = *d->receiver_directory.data();
+    }
+    else {
+        directory = d->directory;
+    }
+
+    d->directory = directory;
+
+    if (!QDir(d->directory).exists()) {
+        QString msg = QString("Directory %1 does not exist! ").arg(d->directory);
+        dtkNotify(msg,30000);
+    }
+}
+
+QString dtkComposerNodeDirectory::type(void)
+{
+    return "directory";
+}
+
+QString dtkComposerNodeDirectory::titleHint(void)
+{
+    return "Directory";
+}
+
+QString dtkComposerNodeDirectory::inputLabelHint(int port)
+{
+    if(port == 0)
+        return "dir";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeDirectory::outputLabelHint(int port)
+{
+    if(port == 0)
+        return "dir";
+
+    return dtkComposerNode::inputLabelHint(port);
+}
+
+QString dtkComposerNodeDirectory::value(void)
+{
+    return d->directory;
+}
+
+void dtkComposerNodeDirectory::setValue(QString value)
+{
+    value.replace("~",QDir::homePath());
+    d->directory = value;
 }

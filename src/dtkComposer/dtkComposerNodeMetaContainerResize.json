@@ -1,0 +1,10 @@
+{
+          "title" : "Container Resize",
+           "kind" : "atomic",
+           "type" : "containerResize",
+           "tags" : ["meta", "container", "resize"],
+    "description" : "<h3>Meta Container Resize</h3>
+                     <p>Resize container </p>",
+         "inputs" : ["container", "size"],
+        "outputs" : ["container"]
+}

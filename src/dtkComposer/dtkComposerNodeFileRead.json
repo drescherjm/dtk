@@ -1,0 +1,9 @@
+{
+          "title" : "File Read",
+           "kind" : "atomic",
+           "type" : "fileRead",
+           "tags" : ["file", "atomic","read","binary"],
+    "description" : "<p>Read a file as a binary (QByteArray)</p>",
+         "inputs" : ["file"],
+        "outputs" : ["content"]
+}

@@ -3,10 +3,6 @@
  * Author: Julien Wintz
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: mar. mai 15 17:01:00 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Apr  4 14:56:13 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 12
  */
 
 /* Commentary:
@@ -19,11 +15,13 @@
 
 #pragma once
 
+#include "dtkComposerExport.h"
+
 #include "dtkComposerNodeControl.h"
 
 class dtkComposerNodeControlCasePrivate;
 
-class  dtkComposerNodeControlCase : public dtkComposerNodeControl
+class DTKCOMPOSER_EXPORT dtkComposerNodeControlCase : public dtkComposerNodeControl
 {
 public:
              dtkComposerNodeControlCase(void);
@@ -48,12 +46,6 @@ public:
     void addBlock(void);
     void addBlock(dtkComposerNodeComposite *c);
     void removeBlock(int id);
-
-public:
-    QString type(void);
-
-public:
-    QString titleHint(void);
 
 private:
     dtkComposerNodeControlCasePrivate *d;

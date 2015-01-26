@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:15:49
  * Version: $Id$
- * Last-Updated: Tue Jul  3 12:10:21 2012 (+0200)
- *           By: tkloczko
- *     Update #: 10
+ * Last-Updated: mar. nov.  5 17:21:26 2013 (+0100)
+ *           By: edelclau
+ *     Update #: 15
  */
 
 /* Commentary:
@@ -39,6 +39,11 @@ public:
     bool isAbstractProcess(void) const;
 
     QString abstractProcessType(void) const;
+
+ public:
+    void setProcess(dtkAbstractProcess *process);
+
+    dtkAbstractProcess *process(void) const;
 
 public:
     void run(void);

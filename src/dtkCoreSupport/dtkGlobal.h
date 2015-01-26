@@ -273,7 +273,7 @@ inline QString dtkApplicationArgumentsValue(QCoreApplication *application, QStri
 {
     QStringList args = application->arguments();
     int i = args.indexOf(key);
-    if ( i > -1 && i < args.count()) {
+    if ( i > -1 && ( (i+1) < args.count()) ) {
         return args.at(i+1);
     } else {
         return QString();

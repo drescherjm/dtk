@@ -266,7 +266,7 @@ dtkPropertyEditorEnum::~dtkPropertyEditorEnum(void)
 
 void dtkPropertyEditorEnum::setEditorData(const QVariant& data)
 {
-    int current_index;
+    int current_index = -1;
 
     switch (data.type()) {
 

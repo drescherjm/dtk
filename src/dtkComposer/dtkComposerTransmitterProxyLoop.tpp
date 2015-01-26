@@ -1,16 +1,17 @@
-/* dtkComposerTransmitterProxyLoop.tpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Fri Mar 29 15:46:58 2013 (+0100)
- * Version: 
- * Last-Updated: Tue Apr  2 10:21:44 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 47
- */
+// Version: $Id$
+// 
+// 
 
-/* Change Log:
- * 
- */
+// Commentary: 
+// 
+// 
+
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #include "dtkComposerTransmitter_p.h"
 
@@ -18,7 +19,7 @@
 // dtkComposerTransmitterProxyLoop inline implementations
 // ///////////////////////////////////////////////////////////////////
 
-bool dtkComposerTransmitterProxyLoop::enableCopy(void)
+inline bool dtkComposerTransmitterProxyLoop::enableCopy(void)
 {
     bool enable_copy = (d->receivers.count() > 1);
 
@@ -28,15 +29,20 @@ bool dtkComposerTransmitterProxyLoop::enableCopy(void)
     return enable_copy;
 }
 
-QVariant dtkComposerTransmitterProxyLoop::variant(void)
+inline QVariant dtkComposerTransmitterProxyLoop::variant(void)
 {
-    if (m_source)	
+    if (m_source == d->active_emitter)	
 	return m_source->variant();
 
     return d->variant;
 }
 
-QVariantList dtkComposerTransmitterProxyLoop::allData(void)
+inline void dtkComposerTransmitterProxyLoop::setVariant(const QVariant& v)
+{
+    d->variant = v;
+}
+
+inline QVariantList dtkComposerTransmitterProxyLoop::allData(void)
 {
     if (m_source)
 	m_source->allData();
@@ -44,22 +50,25 @@ QVariantList dtkComposerTransmitterProxyLoop::allData(void)
     return QVariantList();
 }
 
-void dtkComposerTransmitterProxyLoop::enableLoopMode(void)
+inline void dtkComposerTransmitterProxyLoop::enableLoopMode(void)
 {
     m_source = static_cast<dtkComposerTransmitter *>(m_twin);
 }
 
-void dtkComposerTransmitterProxyLoop::disableLoopMode(void)
+inline void dtkComposerTransmitterProxyLoop::disableLoopMode(void)
 {
     m_source = d->active_emitter;
 }
 
-void dtkComposerTransmitterProxyLoop::setTwin(dtkComposerTransmitterProxyLoop *twin)
+inline void dtkComposerTransmitterProxyLoop::setTwin(dtkComposerTransmitterProxyLoop *twin)
 {
     m_twin = twin;
 }
 
-dtkComposerTransmitterProxyLoop *dtkComposerTransmitterProxyLoop::twin(void) const
+inline dtkComposerTransmitterProxyLoop *dtkComposerTransmitterProxyLoop::twin(void) const
 {
     return m_twin;
 }
+
+// 
+// dtkComposerTransmitterProxyLoop.tpp ends here

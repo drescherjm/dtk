@@ -1,0 +1,9 @@
+{
+          "title" : "String Equality",
+           "kind" : "atomic",
+           "type" : "string_equality",
+           "tags" : ["string", "atomic", "equality", "comparison"],
+    "description" : "<p>Test the equality of two strings.</p>",
+         "inputs" : ["string","string"],
+        "outputs" : ["value"]
+}

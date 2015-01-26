@@ -1,0 +1,15 @@
+{
+          "title" : "Composite",
+           "kind" : "composite",
+           "type" : "composite",
+           "tags" : ["composite", "group"],
+    "description" : "<h3>Composite Node</h3>
+                     <p>The <strong>composite</strong> node enables to gather nodes in order to either hide part of a composition or create a reusable meta-component.</p>
+                     <p>A composite node can contain another composite nodes and can be contained by a composite.</p>
+                     <p>One can add or remove input and output ports. These ports enable to insert the composite node into the composition. They enable also to connect the contained nodes to the exterior.</p>
+                     <p>User can flatten the composite node to visualise its content using the combination <em>Ctrl</em> + <em>double clic</em>.</p>
+                     <p>User can also enter the composite node using <em>double clic</em>. In this case it can modify its content. To exit the node, another <em>double clic</em> on the opened composite node suffices.</p>
+                     <p>To add a node into a closed composite, user can move the node over it. When the composite is opened, one uses <em>drag and drop</em></p>",
+         "inputs" : [],
+        "outputs" : []
+}

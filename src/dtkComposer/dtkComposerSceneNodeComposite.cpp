@@ -1,20 +1,20 @@
 /* dtkComposerSceneNodeComposite.cpp --- 
- * 
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:01:41 2012 (+0100)
  * Version: $Id$
- * Last-Updated: Thu Apr 11 10:06:07 2013 (+0200)
+ * Last-Updated: lun. janv. 12 14:59:21 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 943
+ *     Update #: 950
  */
 
 /* Commentary: 
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeComposite.h"
@@ -24,16 +24,12 @@
 #include "dtkComposerSceneNodeControl.h"
 #include "dtkComposerSceneNote.h"
 #include "dtkComposerScenePort.h"
-// #if defined(DTK_BUILD_DISTRIBUTED)
-// #include "dtkComposerNodeRemote.h"
-// #endif
+#include "dtkComposerNodeRemote.h"
 
 #include <dtkLog/dtkLogger.h>
 
-// #if defined(DTK_BUILD_DISTRIBUTED)
-// #include <dtkDistributed/dtkDistributedController.h>
-// #include <dtkDistributed/dtkDistributedMimeData.h>
-// #endif
+#include <dtkDistributed/dtkDistributedController.h>
+// #include <dtkDistributedSupport/dtkDistributedMimeData.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeComposite
@@ -105,8 +101,7 @@ void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
     for(int i = 0; i < composite->receivers().count(); ++i) {
         
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
-        this->addInputPort(port);
-        port->setLabel(composite->inputLabelHint(this->inputPorts().indexOf(port)));
+        port->setLabel(composite->inputLabelHint(this->addInputPort(port)));
         
     }
 
@@ -259,8 +254,8 @@ void dtkComposerSceneNodeComposite::reveal(void)
 
     } else {
 
-        this->resetPos(d->unreveal_pos, d->unreveal_rect);        
-   
+        this->resetPos(d->unreveal_pos, d->unreveal_rect);
+
     }
 
     if (!this->embedded() && !d->entered && d->flattened) {
@@ -307,17 +302,17 @@ void dtkComposerSceneNodeComposite::resetPos(const QPointF& pos, const QRectF& r
         foreach(dtkComposerSceneNode *node, d->nodes)
             box |= node->sceneBoundingRect();
     }
-     
+
     foreach(dtkComposerSceneNode *node, d->nodes) {
         node->setPos(node->scenePos() + (center - box.center()));
         if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
             foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
                 block->resetPos(block->scenePos(), block->sceneBoundingRect());
-            }        
+            }
     }
-        
+
     foreach(dtkComposerSceneNote *note, d->notes)
-        note->setPos(note->scenePos() + (center - box.center())); 
+        note->setPos(note->scenePos() + (center - box.center()));
 }
 
 void dtkComposerSceneNodeComposite::setUnrevealPos(const QPointF& pos)
@@ -357,9 +352,9 @@ void dtkComposerSceneNodeComposite::layout(void)
     if (this->embedded() && !d->entered)
         goto port_location;
     
-// /////////////////////////////////////////////////////////////////
-// Rect calculation
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // Rect calculation
+    // /////////////////////////////////////////////////////////////////
 
     if(!d->revealed) {
 
@@ -384,9 +379,9 @@ void dtkComposerSceneNodeComposite::layout(void)
 
     }
     
-// /////////////////////////////////////////////////////////////////
-// Port location
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // Port location
+    // /////////////////////////////////////////////////////////////////
 
 port_location:
 
@@ -403,9 +398,9 @@ port_location:
     for(int i = 0; i < this->outputPorts().count(); i++)
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
 
-// /////////////////////////////////////////////////////////////////
-// Redraw parent
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // Redraw parent
+    // /////////////////////////////////////////////////////////////////
 
     if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent())) {
         if(!parent->root()) {
@@ -417,10 +412,10 @@ port_location:
 
     if(this->embedded())
         goto update;
-   
-// /////////////////////////////////////////////////////////////////
-// Height calculation
-// /////////////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////////////
+    // Height calculation
+    // /////////////////////////////////////////////////////////////////
 
     if(!d->revealed) {
 
@@ -428,14 +423,14 @@ port_location:
             if(this->inputPorts().count() >= this->outputPorts().count())
                 d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing + header));
             else
-                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));        
+                d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));
         }
     }
 
 update:
-// /////////////////////////////////////////////////////////////////
-// Update edges geometry
-// /////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////
+    // Update edges geometry
+    // /////////////////////////////////////////////////////////////////
     
     QRectF updateRect;
 
@@ -599,9 +594,9 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
         oFont.setPointSizeF(font.pointSizeF()-2);
 
         QString title = QString("Obfuscated content. (%1 notes, %2 nodes, %3 edges)")
-            .arg(d->notes.count())
-            .arg(d->nodes.count())
-            .arg(d->edges.count());
+                .arg(d->notes.count())
+                .arg(d->nodes.count())
+                .arg(d->edges.count());
 
         title_text = metrics.elidedText(title, Qt::ElideRight, this->boundingRect().width()-2-4*margin);
         title_pos = QPointF(d->rect.width()/2.0 - metrics.width(title_text)/2.0, d->rect.height()/2.0 + metrics.xHeight()/2.0 + metrics.height() * 1.5);
@@ -614,19 +609,22 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
-//     if(!remote) {
-//         event->ignore();
-//         return;
-//     }
-// #endif
+    if(!remote) {
+        event->ignore();
+        return;
+    }
 
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
     else
         event->ignore();
+
+#else
+        event->ignore();
+#endif
 }
 
 void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
@@ -636,15 +634,12 @@ void dtkComposerSceneNodeComposite::dragLeaveEvent(QGraphicsSceneDragDropEvent *
 
 void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
-//     if(!remote) {
-//         event->ignore();
-//         return;
-//     }
-// #endif
-
+     if(!remote) {
+         event->ignore();
+         return;
+     }
     if (event->mimeData()->hasText())
         event->acceptProposedAction();
     else
@@ -653,31 +648,28 @@ void dtkComposerSceneNodeComposite::dragMoveEvent(QGraphicsSceneDragDropEvent *e
 
 void dtkComposerSceneNodeComposite::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
+    dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
-//     if(!remote) {
-//         event->ignore();
-//         return;
-//     }
+    if(!remote) {
+        event->ignore();
+        return;
+    }
 
-//     const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
+    //FIXME
+    // const dtkDistributedMimeData *data = qobject_cast<const dtkDistributedMimeData *>(event->mimeData());
 
-//     if(!data) {
-//         dtkDebug() << "Unable to retrieve distributed mime data";
-//     }
+    // if(!data) {
+    //     dtkDebug() << "Unable to retrieve distributed mime data";
+    // }
 
-//     QString job = data->text();
+    // QString job = data->text();
 
-//     dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
+    // dtkDistributedController *controller = const_cast<dtkDistributedMimeData *>(data)->controller();
 
-//     remote->setJob(job);
-//     remote->setController(controller);
-//     this->setTitle("Remote on "+ job);
+    // remote->setJob(job);
+    // remote->setController(controller);
+    // this->setTitle("Remote on "+ job);
 
-//     event->acceptProposedAction();
-//     this->update();
-// #else
-    Q_UNUSED(event);
-//#endif
+    event->acceptProposedAction();
+    this->update();
 }

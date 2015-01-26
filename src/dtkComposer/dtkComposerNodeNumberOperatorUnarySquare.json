@@ -1,0 +1,9 @@
+{
+          "title" : "Square",
+           "kind" : "atomic",
+           "type" : "square",
+           "tags" : ["number", "atomic", "unary", "square"],
+    "description" : "<p>Returns the square of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

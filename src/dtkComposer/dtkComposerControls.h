@@ -19,21 +19,17 @@
 
 #pragma once
 
-#include <QtGui>
+
+#include "dtkComposerExport.h"
+
 #include <QtWidgets>
 
 class dtkComposerControlsPrivate;
 class dtkComposerScene;
 
-class  dtkComposerControls : public QFrame
+class DTKCOMPOSER_EXPORT  dtkComposerControls : public QFrame
 {
     Q_OBJECT
-
-public:
-    enum Type {
-        Integer,
-           None
-    };
 
 public:
      dtkComposerControls(QWidget *parent = 0);

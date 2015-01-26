@@ -10,7 +10,6 @@
  */
 
 #include "dtkMathArray.h"
-#include <limits.h>
 
 /*!
     \class dtkMathArray
@@ -987,17 +986,21 @@ qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong size
 {
     if (alloc == 0 && extra == 0)
         return 0;
+
+    // Set the maximum allocatable value (= LLONG_MAX)
+    qlonglong maximum = (quint64(1) << 63) - 1;
+
     const qlonglong page = 1 << 12;
     qlonglong nalloc;
     alloc += extra;
     alloc *= sizeOfT;
     // don't do anything if the loop will overflow signed int.
-    if (alloc >= LLONG_MAX/2)
-        return LLONG_MAX / sizeOfT;
+    if (alloc >= maximum/2)
+        return maximum / sizeOfT;
     nalloc = (alloc < page) ? 64 : page;
     while (nalloc < alloc) {
         if (nalloc <= 0)
-            return LLONG_MAX / sizeOfT;
+            return maximum / sizeOfT;
         nalloc *= 2;
     }
     return nalloc / sizeOfT;

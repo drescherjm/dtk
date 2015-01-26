@@ -1,0 +1,9 @@
+{
+          "title" : "File Exists",
+           "kind" : "atomic",
+           "type" : "fileExists",
+           "tags" : ["file", "atomic","exists"],
+    "description" : "<p>return true if the File exists</p>",
+         "inputs" : ["file"],
+        "outputs" : ["exists"]
+}

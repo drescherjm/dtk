@@ -1,0 +1,9 @@
+{
+          "title" : "Power",
+           "kind" : "atomic",
+           "type" : "power",
+           "tags" : ["number", "atomic", "binary", "power"],
+    "description" : "<p>Returns lhs^rhs .</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

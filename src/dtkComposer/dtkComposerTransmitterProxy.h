@@ -1,23 +1,21 @@
-/* dtkComposerTransmitterProxy.h --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Feb 20 11:17:31 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Mar 28 16:42:19 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 37
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
+
 
 #pragma once
+
+#include "dtkComposerExport.h"
 
 #include "dtkComposerTransmitter.h"
 
@@ -25,7 +23,7 @@
 // dtkComposerTransmitterProxy 
 // /////////////////////////////////////////////////////////////////
 
-class  dtkComposerTransmitterProxy : public dtkComposerTransmitter
+class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxy : public dtkComposerTransmitter
 {
 public:
      dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);
@@ -44,3 +42,5 @@ public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 };
 
+// 
+// dtkComposerTransmitterProxy.h ends here

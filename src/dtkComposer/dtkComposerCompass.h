@@ -19,13 +19,14 @@
 
 #pragma once
 
-#include <QtGui>
+#include "dtkComposerExport.h"
+
 #include <QtWidgets>
 
 class dtkComposerCompassPrivate;
 class dtkComposerView;
 
-class  dtkComposerCompass : public QGraphicsView
+class DTKCOMPOSER_EXPORT dtkComposerCompass : public QGraphicsView
 {
     Q_OBJECT
 

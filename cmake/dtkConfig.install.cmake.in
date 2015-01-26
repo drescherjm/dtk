@@ -30,7 +30,7 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
   "@CMAKE_INSTALL_PREFIX@/include/dtkTest")
 
-include("@CMAKE_INSTALL_PREFIX@/cmake/dtkDepends.cmake")
+include("@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/dtk/dtkDepends.cmake")
 
 ## ###################################################################
 ## Options

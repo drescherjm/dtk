@@ -1,0 +1,9 @@
+{
+          "title" : "Or",
+           "kind" : "atomic",
+           "type" : "or",
+           "tags" : ["boolean", "atomic", "binary", "or"],
+    "description" : "<p>Boolean OR operator</p>",
+         "inputs" : ["lhs", "rhs"],
+        "outputs" : ["value"]
+}

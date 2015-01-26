@@ -1,0 +1,9 @@
+{
+          "title" : "Notequal",
+           "kind" : "atomic",
+           "type" : "notequal",
+           "tags" : ["number", "atomic", "binary", "notequal"],
+    "description" : "<p>Returns true if <em>lhs</em> is not equal to <em>rhs</em>.</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

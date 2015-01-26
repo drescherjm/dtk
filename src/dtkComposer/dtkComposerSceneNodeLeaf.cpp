@@ -1,21 +1,16 @@
-/* dtkComposerSceneNodeLeaf.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Feb  3 14:02:14 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Apr 10 16:50:38 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 444
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNode.h"
 #include "dtkComposerSceneNode.h"
@@ -34,6 +29,9 @@ public:
 
 public:
     QRectF rect;
+
+public:
+    bool use_gui;
 
 public:
     QGraphicsPixmapItem *flag;
@@ -85,15 +83,24 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
 
     d->gradiant_defined = false;
 
-    d->flag = new QGraphicsPixmapItem(this);
-    d->flag->setVisible(false);
 
-    d->flag_color = Qt::transparent;
+    if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
+        d->use_gui = true;
+        d->flag = new QGraphicsPixmapItem(this);
+        d->flag->setVisible(false);
+
+        d->flag_color = Qt::transparent;
+    } else {
+        d->use_gui = false;
+        d->flag = NULL;
+    }
 }
 
 dtkComposerSceneNodeLeaf::~dtkComposerSceneNodeLeaf(void)
 {
-    delete d->flag;
+    if (d->flag)
+        delete d->flag;
+
     delete d;
 
     d = NULL;
@@ -107,8 +114,7 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
     for(int i = 0; i < node->receivers().count(); ++i) {        
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
-        this->addInputPort(port);
-        port->setLabel(node->inputLabelHint(this->inputPorts().indexOf(port)));        
+        port->setLabel(node->inputLabelHint(this->addInputPort(port)));
     }
 
     for(int i = 0; i < node->emitters().count(); ++i) {
@@ -122,12 +128,16 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
 void dtkComposerSceneNodeLeaf::flag(Qt::GlobalColor color, bool on)
 {
-    d->flagAs(color);
-    d->flag->setVisible(on);
+    if (d->flag) {
+        d->flagAs(color);
+        d->flag->setVisible(on);
+    }
 }
 
 void dtkComposerSceneNodeLeaf::flag(QColor color)
 {
+    if (!d->use_gui) { return; }
+
     if(color == Qt::blue)
         this->flag(Qt::blue, true);
     else if(color == Qt::gray)
@@ -146,6 +156,9 @@ void dtkComposerSceneNodeLeaf::flag(QColor color)
 
 bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
 {
+    if(!d->flag)
+        return false;
+
     if(!d->flag->isVisible())
         return false;
     else
@@ -154,16 +167,19 @@ bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
 
 bool dtkComposerSceneNodeLeaf::flagged(void)
 {
+    if(!d->flag)
+        return false;
+
     return d->flag->isVisible();
 }
 
 QString dtkComposerSceneNodeLeaf::flagColorName(void)
 {
-    if(!d->flag->isVisible())
+    if(!d->flag || !d->flag->isVisible())
         return QString();
 
     QColor color(d->flag_color);
-        
+
     return color.name();
 }
 
@@ -177,6 +193,9 @@ Qt::GlobalColor dtkComposerSceneNodeLeaf::flagColor(void)
 
 void dtkComposerSceneNodeLeaf::layout(void)
 {
+    if (!d->use_gui)
+        return;
+
     int header = this->embedded() ? 0 : 15;
 
     int port_margin_top = 10;
@@ -259,6 +278,10 @@ void dtkComposerSceneNodeLeaf::layout(void)
         //     d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
         //     d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
         //     d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
+        // } else if (dynamic_cast<dtkComposerNodeLeafActor*>(this->wrapee())) {
+        //     d->gradiant.setColorAt(0.0, QColor(255, 175, 0).lighter());
+        //     d->gradiant.setColorAt(stripe, QColor(155, 75, 0));
+        //     d->gradiant.setColorAt(1.0, QColor(155, 75, 0).darker());
         // } else {
             d->gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));
@@ -329,3 +352,6 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     painter->setPen(QPen(QColor(Qt::white)));
     painter->drawText(title_pos, title_text);
 }
+
+// 
+// dtkComposerSceneNodeLeaf.cpp ends here

@@ -1,0 +1,9 @@
+{
+          "title" : "Atan",
+           "kind" : "atomic",
+           "type" : "atan",
+           "tags" : ["number", "atomic", "unary", "atan"],
+    "description" : "<p>Compute Arc tangent.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

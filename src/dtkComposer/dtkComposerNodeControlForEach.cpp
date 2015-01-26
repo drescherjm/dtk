@@ -1,24 +1,20 @@
-/* dtkComposerNodeControlFor.cpp --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Wed Feb 15 09:14:22 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr  4 14:37:08 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 226
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeControlForEach.h"
 
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeProxy.h"
 
@@ -28,22 +24,28 @@
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
 
+#include <dtkMeta/dtkMetaContainerSequential.h>
+
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeControlForEachPrivate interface
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeControlForEachPrivate
 {
-public:    
+public:
+    dtkComposerNodeMetaData header_md;
     dtkComposerNodeProxy header;
+
+    dtkComposerNodeMetaData footer_md;
     dtkComposerNodeProxy footer;
 
+    dtkComposerNodeMetaData body_block_md;
     dtkComposerNodeComposite body_block;
 
 public:
     dtkComposerTransmitterReceiverVariant header_rcv;
 
-    dtkComposerTransmitterProxy              block_container;
+    dtkComposerTransmitterEmitterVariant     block_container;
     dtkComposerTransmitterEmitter<qlonglong> block_size;
     dtkComposerTransmitterEmitter<qlonglong> block_index;
     dtkComposerTransmitterEmitterVariant     block_item;
@@ -53,6 +55,8 @@ public:
     qlonglong size;
 
     bool first_iteration;
+
+    dtkMetaContainerSequential *container;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -61,29 +65,48 @@ public:
 
 dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposerNodeControl(), d(new dtkComposerNodeControlForEachPrivate)
 {
+    dtkComposerTransmitter::TypeList type_list;
+    type_list << qMetaTypeId<dtkMetaContainerSequentialHandler *>();
+    d->header_rcv.setTypeList(type_list);
+
+    d->header_md.setTitle("Header");
+    d->header_md.setKind("proxy");
+    d->header_md.setType("proxy");
+    d->header_md.appendInputLabel("container");
+
     d->header.removeEmitter(0);
     d->header.removeReceiver(0);
     d->header.appendReceiver(&(d->header_rcv));
-    d->header.setInputLabelHint("container", 0); 
     d->header.setAsHeader(true);
+    d->header.setNodeMetaData(&d->header_md);
+
+    d->footer_md.setTitle("Footer");
+    d->footer_md.setKind("proxy");
+    d->footer_md.setType("proxy");
 
     d->footer.removeReceiver(0);
     d->footer.removeEmitter(0);
     d->footer.setAsFooter(true);
+    d->footer.setNodeMetaData(&d->footer_md);
 
-    d->body_block.setTitleHint("Body");
-    d->body_block.setInputLabelHint("container", 0); 
+    d->body_block_md.setTitle("Body");
+    d->body_block_md.setKind("composite");
+    d->body_block_md.setType("composite");
+    d->body_block_md.appendInputLabel("container");
+    d->body_block_md.appendInputLabel("size");
+    d->body_block_md.appendInputLabel("index");
+    d->body_block_md.appendInputLabel("item");
+
     d->body_block.appendReceiver(&(d->block_container));
-    d->body_block.setInputLabelHint("size", 1); 
     d->body_block.appendReceiver(&(d->block_size));
-    d->body_block.setInputLabelHint("index", 2); 
     d->body_block.appendReceiver(&(d->block_index));
-    d->body_block.setInputLabelHint("item", 3); 
     d->body_block.appendReceiver(&(d->block_item));
+    d->body_block.setNodeMetaData(&d->body_block_md);
 
     d->block_container.appendPrevious(&d->header_rcv);
     d->header_rcv.appendNext(&d->block_container);
 
+    d->container = NULL;
     d->counter = 0;
     d->size = -1;
 }
@@ -120,8 +143,8 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 
 void dtkComposerNodeControlForEach::setInputs(void)
 {
-    foreach(dtkComposerTransmitterProxyLoop *t, this->inputTwins()) {
-	t->disableLoopMode();
+    for(dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
+        t->disableLoopMode();
     }
     d->first_iteration = true;
 }
@@ -129,17 +152,21 @@ void dtkComposerNodeControlForEach::setInputs(void)
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     if (d->first_iteration) {
-	foreach(dtkComposerTransmitterProxyLoop *t, this->outputTwins()) {
-	    t->twin()->enableLoopMode();
-	}
-	d->first_iteration = false;
+        for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+            t->twin()->enableLoopMode();
+        }
+        d->first_iteration = false;
+    }
+    for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+        t->twin()->setVariant(t->variant());
     }
 }
 
 void dtkComposerNodeControlForEach::setVariables(void)
 {
-    //d->block_item.setData(d->container->at(d->counter));
-    d->block_index.setData((d->counter)++);
+    d->block_item.setData(d->container->at(d->counter));
+    d->block_index.setData(d->counter);
+    ++(d->counter);
 }
 
 int dtkComposerNodeControlForEach::selectBranch(void)
@@ -152,23 +179,19 @@ void dtkComposerNodeControlForEach::begin(void)
     if (d->header_rcv.isEmpty())
         return;
 
-    //d->container = d->header_rcv.constContainer();
+    QVariant var_container = d->header_rcv.data();
+    d->block_container.setData(var_container);
+
+    d->container = new dtkMetaContainerSequential(var_container.value<dtkMetaContainerSequential>());
     d->counter = 0;
-    //d->size = d->container->count();
+    d->size = d->container->size();
     d->block_size.setData(d->size);
 }
 
 void dtkComposerNodeControlForEach::end(void)
 {
-
+    delete d->container;
 }
 
-QString dtkComposerNodeControlForEach::type(void)
-{
-    return "foreach";
-}
-
-QString dtkComposerNodeControlForEach::titleHint(void)
-{
-    return "For Each";
-}
+// 
+// dtkComposerNodeControlForEach.cpp ends here

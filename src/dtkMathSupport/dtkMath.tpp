@@ -238,7 +238,7 @@ template <class T> dtkMatrixSquared<T> dtkChangeOfBasis(dtkVector3D< dtkVector3D
 // Credits
 // /////////////////////////////////////////////////////////////////
 
-// $Id: coordsys.h 165 2008-01-19 19:53:19Z hkuiper $
+// $Id$
 
 // CwMtx matrix and vector math library
 // Copyright (C) 1999-2001  Harry Kuiper

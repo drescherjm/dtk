@@ -35,7 +35,6 @@ set(dtk_VERSION
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-set(CMAKE_CONFIGT_OUTPUT_FIRECTORY ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
@@ -58,7 +57,7 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 
 if(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/lib/c++/v1")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -I/usr/lib/c++/v1")
 endif(APPLE)
 
 if(NOT APPLE AND NOT MSVC)
@@ -95,6 +94,7 @@ enable_testing()
 ## Options
 ## #################################################################
 
+option(DTK_BUILD_COMPOSER           "Build composer layer" false)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)
@@ -113,6 +113,10 @@ find_package(Qt5Network     REQUIRED)
 find_package(Qt5Gui         REQUIRED)
 find_package(Qt5Xml         REQUIRED)
 find_package(Qt5Declarative REQUIRED)
+
+# variables used by doc and tst
+get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
+get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
 
 ## #################################################################
 ## Dependencies - Optional                           [TO BE REMOVED]
@@ -144,6 +148,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkCore)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkDistributed)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkLog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
 
 ## ###################################################################
@@ -151,7 +156,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
 ## ###################################################################
 
 add_subdirectory(src)
-add_subdirectory(qml)
 add_subdirectory(tst)
 add_subdirectory(app)
 add_subdirectory(doc)
@@ -171,12 +175,17 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfig.install.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake" @ONLY)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkSetTestEnvironment.cmake.in
+"${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
+
+set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake")
+
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
-  DESTINATION cmake)
+  DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
 
-install(EXPORT dtkDepends DESTINATION cmake)
+install(EXPORT dtkDepends DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
 
 ## ###################################################################
 ## Beautifying

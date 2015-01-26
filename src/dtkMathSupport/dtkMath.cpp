@@ -1,5 +1,5 @@
-/* dtkMath.cpp --- 
- * 
+/* dtkMath.cpp ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
@@ -9,19 +9,19 @@
  *     Update #: 261
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  * fabs - ok with doubles as well
- * 
+ *
  * Comparison between float and between double is derived from the
  * work of Bruce Dawson available here:
  *
  * http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
- * 
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <dtkConfig.h>
@@ -33,11 +33,11 @@
 #define abs qAbs
 #endif
 
-//! dtkBubbleSort(unsigned int indices[], int size) 
-/*! 
+//! dtkBubbleSort(unsigned int indices[], int size)
+/*!
  * Sorts the integer of an array by growing values.
  */
-void dtkBubbleSort(unsigned int indices[], int size) 
+void dtkBubbleSort(unsigned int indices[], int size)
 {
     bool ordered = false;
     int j = 0;
@@ -56,8 +56,8 @@ void dtkBubbleSort(unsigned int indices[], int size)
 }
 
 //! Sorts the integer of an array by growing values.
-/*! 
- * 
+/*!
+ *
  */
 void dtkBubbleSort(qint32 *indices, qint32 size)
 {
@@ -78,8 +78,8 @@ void dtkBubbleSort(qint32 *indices, qint32 size)
 }
 
 //! Sorts the integer of an array by growing values.
-/*! 
- * 
+/*!
+ *
  */
 void dtkBubbleSort(qint64 *indices, qint64 size)
 {
@@ -100,7 +100,7 @@ void dtkBubbleSort(qint64 *indices, qint64 size)
 }
 
 //! dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minValue, qint32* maxValue)
-/*! 
+/*!
  * Gives the minimum and maximum integer of an array.
  */
 void dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minValue, qint32* maxValue)
@@ -129,8 +129,8 @@ void dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minV
 }
 
 //! Gives the minimum and maximum integer of an array.
-/*! 
- * 
+/*!
+ *
  */
 void dtkMinMaxValueOfArray(const qint64* array, const qint64& size, qint64* minValue, qint64* maxValue)
 {
@@ -158,8 +158,8 @@ void dtkMinMaxValueOfArray(const qint64* array, const qint64& size, qint64* minV
 }
 
 //! Gives the minimum and maximum real of an array.
-/*! 
- * 
+/*!
+ *
  */
 void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* minValue, qreal* maxValue)
 {
@@ -187,8 +187,8 @@ void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* min
 }
 
 //! Non-optimal AlmostEqual function - not recommended.
-/*! 
- * 
+/*!
+ *
  */
 bool dtkAlmostEqualRelative(float A, float B, float maxRelativeError)
 {
@@ -217,8 +217,8 @@ bool dtkAlmostEqualRelative(double A, double B, double maxRelativeError)
 }
 
 //! Slightly better AlmostEqual function but still not recommended
-/*! 
- * 
+/*!
+ *
  */
 bool dtkAlmostEqualRelative2(float A, float B, float maxRelativeError)
 {
@@ -257,8 +257,8 @@ bool dtkAlmostEqualRelative2(double A, double B, double maxRelativeError)
 }
 
 //! Slightly better AlmostEqual function and still not recommended
-/*! 
- * 
+/*!
+ *
  */
 bool dtkAlmostEqualRelativeOrAbsolute(float A, float B, float maxRelativeError, float maxAbsoluteError)
 {
@@ -297,7 +297,7 @@ bool dtkAlmostEqualRelativeOrAbsolute(double A, double B, double maxRelativeErro
 }
 
 //! Initial AlmostEqualULPs version.
-/*! 
+/*!
  *  Fast and simple, but some limitations.
  */
 bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
@@ -319,7 +319,7 @@ bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
 bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
 {
     if (A == B)
-        return true; 
+        return true;
 
     int64_t *AA = reinterpret_cast<int64_t*>(&A);
     int64_t *BB = reinterpret_cast<int64_t*>(&B);
@@ -333,8 +333,8 @@ bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
 }
 
 //! Usable AlmostEqual function.
-/*! 
- * 
+/*!
+ *
  */
 bool dtkAlmostEqual2sComplement(float A, float B, int32_t maxUlps)
 {
@@ -382,6 +382,24 @@ bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps)
     return false;
 }
 
+//! Compares two numbers using mixed absolute and relative comparison.
+/*! The absolute tolerance test fails when a and b become large, and the
+ *  relative tolerance test fails when they become small.
+ *  This function combines these two tests together in a single test.
+ */
+bool dtkAlmostEqualMixedAbsoluteRelative(const double A, const double B,
+                                         const double tolerance)
+{
+    double diff = fabs(A - B);
+
+    double largest = qMax(fabs(A), fabs(B));
+
+    if (diff <= tolerance * qMax(1., largest))
+        return 1;
+
+    return 0;
+}
+
 // /////////////////////////////////////////////////////////////////
 // Support functions and conditional compilation directives for the
 // master AlmostEqual function.
@@ -392,7 +410,7 @@ bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps)
 #define SIGNCHECK
 
 //! Is \a A infinite.
-/*! 
+/*!
  *  An infinity has an exponent of 255 (shift left 23 positions) and a
  *  zero mantissa. There are two infinities - positive and negative.
  */
@@ -421,7 +439,7 @@ bool dtkIsInfinite(double A)
 }
 
 //! Is \a A NAN.
-/*! 
+/*!
  *  A NAN has an exponent of 255 (shifted left 23 positions) and a
  *  non-zero mantissa.
  */
@@ -452,7 +470,7 @@ bool dtkIsNan(double A)
 }
 
 //! Returns the sign of \a A.
-/*! 
+/*!
  *  The sign bit of a number is the high bit.
  */
 int32_t dtkSign(float A)
@@ -470,7 +488,7 @@ int64_t dtkSign(double A)
 }
 
 //! Final version of the AlmostEqualUlps function.
-/*! 
+/*!
  *  The optional checks are included for completeness, but in many
  *  cases they are not necessary, or even not desirable.
  *
@@ -573,8 +591,8 @@ bool dtkAlmostEqualUlps(double A, double B, int64_t maxUlps)
 // /////////////////////////////////////////////////////////////////
 
 //! Prints a number and its representation, in hex and decimal
-/*! 
- * 
+/*!
+ *
  */
 void dtkPrintNumber(float A, int32_t offset)
 {
@@ -606,8 +624,8 @@ void dtkPrintNumber(double A, int64_t offset)
 // /////////////////////////////////////////////////////////////////
 
 //! Returns true when \a A and \B are far apart and A smaller than B.
-/*! 
- * 
+/*!
+ *
  */
 bool dtkLesserThanUlps(float A, float B, int32_t maxUlps)
 {
@@ -644,7 +662,7 @@ bool dtkLesserThanUlps(float A, float B, int32_t maxUlps)
         return false;
 
     else
-        return true;    
+        return true;
 }
 
 bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
@@ -682,12 +700,12 @@ bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
         return false;
 
     else
-        return true;  
+        return true;
 }
 
 //! Returns true when \a A and \B are not too far apart or A smaller than B.
-/*! 
- * 
+/*!
+ *
  */
 bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int32_t maxUlps)
 {
@@ -724,7 +742,7 @@ bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int32_t maxUlps)
         return false;
 
     else
-        return true; 
+        return true;
 }
 
 bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
@@ -762,12 +780,12 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
         return false;
 
     else
-        return true; 
+        return true;
 }
 
 //! Returns true when \a A and \B are far apart and A greater than B.
-/*! 
- * 
+/*!
+ *
  */
 bool dtkGreaterThanUlps(float A,  float B, int32_t maxUlps)
 {
@@ -798,13 +816,13 @@ bool dtkGreaterThanUlps(float A,  float B, int32_t maxUlps)
 
     int32_t intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
-        return false; 
+        return false;
 
     else if (intDiff < 0)
         return false;
 
     else
-        return true; 
+        return true;
 }
 
 bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
@@ -846,8 +864,8 @@ bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
 }
 
 //! Returns true when \a A and \B are not too far apart or A greater than B.
-/*! 
- * 
+/*!
+ *
  */
 bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int32_t maxUlps)
 {

@@ -1,0 +1,9 @@
+{
+          "title" : "Xor",
+           "kind" : "atomic",
+           "type" : "xor",
+           "tags" : ["boolean", "atomic", "unary", "xor"],
+    "description" : "<p>Boolean XOR operator</p>",
+         "inputs" : ["lhs","rhs"],
+        "outputs" : ["value"]
+}

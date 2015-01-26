@@ -19,7 +19,9 @@
 
 #pragma once
 
-#include <QtGui>
+#include "dtkComposerExport.h"
+
+#include <QtWidgets>
 
 class dtkComposerScene;
 class dtkComposerSceneNode;
@@ -27,7 +29,7 @@ class dtkComposerSceneNodeEditorPrivate;
 class dtkComposerStack;
 class dtkComposerGraph;
 
-class  dtkComposerSceneNodeEditor : public QWidget
+class DTKCOMPOSER_EXPORT dtkComposerSceneNodeEditor : public QWidget
 {
     Q_OBJECT
 
@@ -36,13 +38,13 @@ public:
     ~dtkComposerSceneNodeEditor(void);
 
 public slots:
-    void setNode(dtkComposerSceneNode *node);
-    void setScene(dtkComposerScene *scene);
-    void setStack(dtkComposerStack *stack);
-    void setGraph(dtkComposerGraph *graph);
+    virtual void setNode(dtkComposerSceneNode *node);
+    virtual void setScene(dtkComposerScene *scene);
+    virtual void setStack(dtkComposerStack *stack);
+    virtual void setGraph(dtkComposerGraph *graph);
 
 public slots:
-    void clear(void);
+    virtual void clear(void);
 
 protected slots:
     void addLoopPort(void);
@@ -66,14 +68,14 @@ protected slots:
 
 protected slots:
     void onBrowse(void);
-    void onBrowse(const QString&);
+    void onBrowseDirectory(void);
     void onValueChanged(bool);
     void onValueChanged(int);
     void onValueChanged(double);
     void onValueChanged(const QString&);
     void onImplementationChanged(const QString&);
 
-private:
+protected:
     dtkComposerSceneNodeEditorPrivate *d;
 };
 

@@ -188,6 +188,12 @@ void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 t
     this->send(bytes, target, tag);
 }
 
+void dtkDistributedCommunicator::send(const QString& s, qint32 target, qint32 tag)
+{
+    QByteArray bytes = s.toUtf8();
+    this->send(bytes, target, tag);
+};
+
 void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)
 {
     return this->receive(data, size, Char, source, tag);
@@ -229,6 +235,13 @@ void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
     this->receive(bytes, target, tag);
     QDataStream stream(&bytes,QIODevice::ReadOnly);
     stream >> v;
+}
+
+void dtkDistributedCommunicator::receive(QString &s, qint32 target, qint32 tag)
+{
+    QByteArray bytes;
+    this->receive(bytes, target, tag);
+    s = QString(bytes);
 }
 
 void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all)

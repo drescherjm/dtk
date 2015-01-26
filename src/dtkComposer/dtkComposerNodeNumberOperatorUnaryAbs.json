@@ -1,0 +1,9 @@
+{
+          "title" : "Abs",
+           "kind" : "atomic",
+           "type" : "abs",
+           "tags" : ["number", "atomic", "unary", "abs"],
+    "description" : "<p>Returns the absolute value of the input number.</p>",
+         "inputs" : ["value"],
+        "outputs" : ["value"]
+}

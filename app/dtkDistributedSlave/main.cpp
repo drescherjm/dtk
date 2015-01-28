@@ -15,10 +15,10 @@
 
 
 
-#include <dtkCore/dtkCore.h>
 
 #include <dtkDistributed/dtkDistributed.h>
 #include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedCoreApplication.h>
 #include <dtkDistributed/dtkDistributedSettings.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 #include <dtkDistributed/dtkDistributedPolicy.h>
@@ -33,113 +33,82 @@
 
 #include <iostream>
 
-class simpleWork : public dtkDistributedWork
+class slaveWork : public dtkDistributedWork
 {
 public:
-    simpleWork *clone(void) { return new simpleWork(*this); };
+    slaveWork *clone(void) {
+        slaveWork *work = new slaveWork(*this);
+        work->server =server;
+        return work;
+    };
 
 public:
     QString server;
 
 public:
     void run(void) {
-
         QTime time;
         qDebug() << wid();
         qDebug() << wct();
         dtkDistributedSlave slave;
 
-        DTK_DISTRIBUTED_BEGIN_GLOBAL;
+        if (isMaster()) {
+            // the server waits for the jobid in stdout
+            std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
 
-        QUrl url(server);
+            QUrl url(server);
 
-        qDebug() << "Running on master, connect to remote server" ;
-        slave.connect(url);
-        qDebug() << "slave connected to server " << slave.isConnected();
+            qDebug() << "Running on master, connect to remote server" << server;
+            slave.connect(url);
+            qDebug() << "slave connected to server " << slave.isConnected();
 
-        if (slave.isConnected()) {
-            dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
-            msg.send(slave.socket());
+            if (slave.isConnected()) {
+                dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
+                msg.send(slave.socket());
+            }
+
         }
-
-        DTK_DISTRIBUTED_END_GLOBAL;
 
         qDebug() << "I'm the simple slave " << wid() ;
 
-        QThread::sleep(60);
+        QThread::sleep(5);
 
-        DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        if (slave.isConnected()) {
-           dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
-           msg.send(slave.socket());
+        if (isMaster()) {
+            if (slave.isConnected()) {
+                dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
+                msg.send(slave.socket());
+            }
         }
-
-        DTK_DISTRIBUTED_END_GLOBAL;
 
     }
 };
 
 int main(int argc, char **argv)
 {
-    QCoreApplication application(argc, argv);
-    QCoreApplication::setApplicationName("dtkDistributedSlave");
-    QCoreApplication::setApplicationVersion("1.0.0");
+    dtkDistributedCoreApplication application(argc, argv);
+    application.setApplicationName("dtkDistributedSlave");
+    application.setApplicationVersion("1.0.0");
 
-    QString policyType = "qthread";
 
-    QCommandLineParser parser;
-    parser.setApplicationDescription("DTK distributed slave example application: it connect to the DTK distributed server and waits for 1 minute before exiting.");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    QCommandLineOption policyOption("policy", QCoreApplication::translate("main", "dtkDistributed policy"), policyType);
-    parser.addOption(policyOption);
-    QCommandLineOption serverOption("server", QCoreApplication::translate("main", "server URL"));
-    parser.addOption(serverOption);
+    QCommandLineParser *parser = application.parser();
+    parser->setApplicationDescription("DTK distributed slave example application: it connect to the DTK distributed server and waits for 1 minute before exiting.");
 
-    if (!parser.parse(QCoreApplication::arguments())) {
-        qCritical() << "Command line error" ;
-        return 1;
-    }
+    QCommandLineOption serverOption("server", "DTK distributed server URL", "URL");
+    parser->addOption(serverOption);
 
-    parser.process(application);
+    application.initialize();
 
-     if (!parser.isSet(serverOption)) {
+     if (!parser->isSet(serverOption)) {
          qCritical() << "Error: no server set ! Use --server <url> " ;
          return 1;
      }
 
-    // the server waits for the jobid in stdout
-    std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
-
-    // plugins
-    dtkDistributedSettings settings;
-    settings.beginGroup("communicator");
-    qDebug() << "initialize plugin manager "<< settings.value("plugins").toString();
-    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
-    qDebug() << "initialization done ";
-    settings.endGroup();
-
-    qDebug() << dtkDistributed::communicator::pluginManager().plugins();
-    qDebug() << dtkDistributed::communicator::pluginFactory().keys();
-
 
     // work
+    slaveWork work;
+    work.server = parser->value(serverOption);
 
-    simpleWork *work = new simpleWork;
-    work->server = parser.value(serverOption);
-
-    dtkDistributedPolicy policy;
-
-     if (parser.isSet(policyOption)) {
-         policyType = parser.value(policyOption);
-     }
-    policy.setType(policyType);
-
-    dtkDistributedWorkerManager manager;
-
-    manager.setPolicy(&policy);
-    manager.spawn();
-    manager.exec(work);
+    application.exec(&work);
 
     return 0;
 }

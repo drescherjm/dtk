@@ -35,6 +35,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorStatus.h
   dtkDistributedContainer.h
   dtkDistributedController.h
+  dtkDistributedCoreApplication.h
   dtkDistributedGraph
   dtkDistributedGraph.h
   dtkDistributedGraph.tpp
@@ -65,6 +66,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
+  dtkDistributedCoreApplication.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedMessage.cpp

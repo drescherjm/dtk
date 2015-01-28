@@ -16,7 +16,7 @@
 // dtkDistributedGraph implementation
 // /////////////////////////////////////////////////////////////////
 
-inline dtkDistributedGraph::dtkDistributedGraph(dtkDistributedWorker *worker) : dtkDistributedContainer(worker)
+inline dtkDistributedGraph::dtkDistributedGraph(void) : dtkDistributedContainer()
 {
     m_edges      = NULL;
     m_vertices   = NULL;
@@ -24,7 +24,7 @@ inline dtkDistributedGraph::dtkDistributedGraph(dtkDistributedWorker *worker) : 
 
 }
 
-inline dtkDistributedGraph::dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker) : dtkDistributedContainer(vertex_count, worker)
+inline dtkDistributedGraph::dtkDistributedGraph(const qlonglong& vertex_count) : dtkDistributedContainer(vertex_count)
 {
     m_edges = NULL;
     this->initialize();
@@ -59,9 +59,9 @@ inline void dtkDistributedGraph::initialize(void)
     dtkDistributedMapper *mapper = new dtkDistributedMapper;
     mapper->setMapping(vertexCount(), m_comm->size());
     mapper->setMap(vertexCount() + 1, m_comm->size());
-    m_vertices = new dtkDistributedArray<qlonglong>(vertexCount() + 1, this->worker(), mapper);
+    m_vertices = new dtkDistributedArray<qlonglong>(vertexCount() + 1, mapper);
 
-    m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size(), this->worker());
+    m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size());
     for (qint32 i = 0; i< m_comm->size(); i++) {
         if (i == this->wid()) {
             m_edge_count->setAt(i,0);
@@ -87,7 +87,7 @@ inline void dtkDistributedGraph::build(void)
         offset += m_edge_count->at(i);
     }
 
-    m_edges = new dtkDistributedArray<qlonglong>(edge_count, this->worker(), mapper);
+    m_edges = new dtkDistributedArray<qlonglong>(edge_count, mapper);
 
     EdgeMap::const_iterator it  = m_map.cbegin();
     EdgeMap::const_iterator end = m_map.cend();
@@ -149,7 +149,7 @@ inline bool dtkDistributedGraph::read2(const QString& filename)
     this->initialize();
     m_comm->barrier();
 
-    m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
+    m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count);
 
     if (this->wid() == 0) {
 
@@ -278,7 +278,7 @@ inline bool dtkDistributedGraph::read(const QString& filename)
     this->initialize();
     m_comm->barrier();
 
-    m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count, this->worker());
+    m_edges = new dtkDistributedArray<qlonglong>(2 * edges_count);
 
     if (this->wid() == 0) {
 

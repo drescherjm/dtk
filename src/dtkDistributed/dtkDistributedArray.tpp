@@ -22,20 +22,20 @@
 // dtkDistributedArray implementation
 // ///////////////////////////////////////////////////////////////////
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker) : 
-    dtkDistributedContainer(size, worker), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size) : 
+    dtkDistributedContainer(size), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
 {
     this->initialize();
 }
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) : 
-    dtkDistributedContainer(size, worker, mapper), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size,  dtkDistributedMapper *mapper) : 
+    dtkDistributedContainer(size, mapper), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
 {
     this->initialize();
 }
 
-template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array, dtkDistributedWorker *worker) : 
-    dtkDistributedContainer(size, worker), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
+template<typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array) : 
+    dtkDistributedContainer(size), data(new Data), cache(new dtkDistributedArrayCache<T>(this))
 {
     this->initialize();
     

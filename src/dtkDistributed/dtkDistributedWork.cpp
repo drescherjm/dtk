@@ -76,6 +76,11 @@ dtkDistributedWorker *dtkDistributedWork::worker(void)
     return d->worker ;
 }
 
+dtkDistributedCommunicator *dtkDistributedWork::communicator(void)
+{
+    return d->worker->communicator() ;
+}
+
 void dtkDistributedWork::barrier(void)
 {
     d->worker->communicator()->barrier() ;
@@ -89,6 +94,11 @@ qlonglong dtkDistributedWork::wct(void)
 qlonglong dtkDistributedWork::wid(void)
 {
     return d->worker->wid() ;
+}
+
+bool dtkDistributedWork::isMaster(void)
+{
+    return (wid() == 0) ;
 }
 
 void dtkDistributedWork::run(void)

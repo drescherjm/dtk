@@ -16,9 +16,11 @@
 
 #include "dtkDistributedExport.h"
 
+class dtkDistributedCoreApplication;
 class dtkDistributedCommunicatorPlugin;
 class dtkDistributedCommunicatorPluginFactory;
 class dtkDistributedCommunicatorPluginManager;
+class dtkDistributedPolicy;
 
 // ///////////////////////////////////////////////////////////////////
 // Distribution layer attributes
@@ -43,6 +45,16 @@ namespace dtkDistributed
 #pragma mark Querying distribution mode
 
     DTKDISTRIBUTED_EXPORT dtkDistributed::Mode mode(void);
+
+#pragma mark -
+#pragma mark retrieve dtkDistributedCoreApplication global pointer
+
+    DTKDISTRIBUTED_EXPORT dtkDistributedCoreApplication *app(void);
+
+#pragma mark -
+#pragma mark retrieve current policy
+
+    DTKDISTRIBUTED_EXPORT dtkDistributedPolicy *policy(void);
 
 #pragma mark -
 #pragma mark Modular concepts

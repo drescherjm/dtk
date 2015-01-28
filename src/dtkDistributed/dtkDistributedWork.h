@@ -49,10 +49,14 @@ public:
     qlonglong wct(void);
 
 public:
+    bool isMaster(void);
+
+public:
     void setWorker(dtkDistributedWorker *worker);
 
 public:
     dtkDistributedWorker *worker(void);
+    dtkDistributedCommunicator *communicator(void);
 
 public:
     dtkDistributedWorkPrivate *d;

@@ -36,8 +36,7 @@ public:
     dtkDistributedWorkerManager& operator = (const dtkDistributedWorkerManager& other);
 
 public:
-    void setCommunicator(dtkDistributedCommunicator *comm);
-    void       setPolicy(dtkDistributedPolicy *policy);
+    void setPolicy(dtkDistributedPolicy *policy);
 
 public:
     void   spawn(void);

@@ -26,9 +26,9 @@
 template<typename T> class DTKDISTRIBUTED_EXPORT dtkDistributedArray : public dtkDistributedContainer
 {
 public:
-      dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker);
-      dtkDistributedArray(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper);
-      dtkDistributedArray(const qlonglong& size, const T *array, dtkDistributedWorker *worker);
+      dtkDistributedArray(const qlonglong& size);
+      dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
+      dtkDistributedArray(const qlonglong& size, const T *array);
       dtkDistributedArray(const dtkDistributedArray& other);
      ~dtkDistributedArray(void);
 

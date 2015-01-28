@@ -13,7 +13,9 @@
  */
 
 #include "dtkDistributed.h"
+#include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedCommunicator.h"
+#include "dtkDistributedPolicy.h"
 
 namespace dtkDistributed
 {
@@ -27,6 +29,18 @@ namespace dtkDistributed
 
     dtkDistributed::Mode mode(void) {
         return _private::mode;
+    }
+
+    dtkDistributedCoreApplication *app(void) {
+        return dynamic_cast<dtkDistributedCoreApplication *>(dtkDistributedCoreApplication::instance());
+    }
+
+    dtkDistributedPolicy *policy(void) {
+        dtkDistributedCoreApplication *dsapp = app();
+        if (!dsapp)
+            return NULL;
+
+        return dsapp->policy();
     }
 
     namespace communicator

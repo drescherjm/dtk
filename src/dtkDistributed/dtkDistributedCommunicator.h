@@ -136,6 +136,7 @@ public:
 public:
     virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker);
     virtual void  exec(dtkDistributedWork *work);
+    virtual dtkDistributedWorker *worker(void) = 0;
 
 public:
     virtual void unspawn(void);

@@ -55,11 +55,6 @@ dtkDistributedWorkerManager& dtkDistributedWorkerManager::operator = (const dtkD
     return (*this);
 }
 
-void dtkDistributedWorkerManager::setCommunicator(dtkDistributedCommunicator *comm)
-{
-    d->comm = comm;
-}
-
 void dtkDistributedWorkerManager::setPolicy(dtkDistributedPolicy *policy)
 {
     d->policy = policy;
@@ -85,6 +80,8 @@ void dtkDistributedWorkerManager::exec(dtkDistributedWork *work)
 
 void dtkDistributedWorkerManager::unspawn(void)
 {
+    if (!d->spawned)
+        return;
     d->comm->unspawn();
     d->spawned = false;
 }

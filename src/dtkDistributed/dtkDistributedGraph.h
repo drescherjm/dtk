@@ -26,8 +26,8 @@
 class DTKDISTRIBUTED_EXPORT dtkDistributedGraph : public dtkDistributedContainer
 {
 public:
-      dtkDistributedGraph(dtkDistributedWorker *worker);
-      dtkDistributedGraph(const qlonglong& vertex_count, dtkDistributedWorker *worker);
+      dtkDistributedGraph(void);
+      dtkDistributedGraph(const qlonglong& vertex_count);
      ~dtkDistributedGraph(void);
 
 private:

@@ -15,6 +15,7 @@
 #pragma once
 
 #include "dtkDistributedCommunicator.h"
+#include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedWorker.h"
 #include "dtkDistributedExport.h"
@@ -26,21 +27,21 @@
 class DTKDISTRIBUTED_EXPORT dtkDistributedContainer
 {
 public:
-    dtkDistributedContainer(dtkDistributedWorker *worker) :
+    dtkDistributedContainer(void) :
         m_size(0),
-        m_worker(worker),
+        m_worker(dtkDistributed::app()->worker()),
         m_mapper(new dtkDistributedMapper),
-        m_comm(worker->communicator())
+        m_comm(dtkDistributed::app()->worker()->communicator())
     {
         m_mapper->ref();
         m_worker->record(this);
     }
 
-    dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker) :
+    dtkDistributedContainer(const qlonglong& size) :
         m_size(size),
-        m_worker(worker),
+        m_worker(dtkDistributed::app()->worker()),
         m_mapper(new dtkDistributedMapper),
-        m_comm(worker->communicator())
+        m_comm(dtkDistributed::app()->worker()->communicator())
     {
         m_mapper->ref();
         m_worker->record(this);
@@ -49,11 +50,11 @@ public:
         }
     }
 
-    dtkDistributedContainer(const qlonglong& size, dtkDistributedWorker *worker, dtkDistributedMapper *mapper) :
+    dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) :
         m_size(size),
-        m_worker(worker),
+        m_worker(dtkDistributed::app()->worker()),
         m_mapper(mapper),
-        m_comm(worker->communicator())
+        m_comm(dtkDistributed::app()->worker()->communicator())
     {
         m_mapper->ref();
         m_worker->record(this);

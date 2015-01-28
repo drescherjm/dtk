@@ -25,7 +25,7 @@ class dtkDistributedWork;
 class dtkDistributedWorker;
 class dtkDistributedCoreApplicationPrivate;
 
-class DTKCORE_EXPORT dtkDistributedCoreApplication: public dtkCoreApplication
+class DTKDISTRIBUTED_EXPORT dtkDistributedCoreApplication: public dtkCoreApplication
 {
 public:
              dtkDistributedCoreApplication(int &argc, char **argv);

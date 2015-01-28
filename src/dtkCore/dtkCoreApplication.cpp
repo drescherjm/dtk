@@ -62,7 +62,7 @@ void dtkCoreApplication::initialize(void)
     qputenv("LC_ALL", "C");
     QLocale::setDefault(QLocale::c());
 
-#if defined (Q_OS_UNIX)
+#if defined (Q_OS_UNIX) && !defined(Q_OS_MAC)
     // to avoid troubles with floats separators ('.' and not ',')
     setlocale(LC_NUMERIC, "C");
 #endif

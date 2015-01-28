@@ -26,6 +26,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkArrayData.h
   dtkCore
   dtkCore.h
+  dtkCoreApplication.h
   dtkCorePlugin
   dtkCorePlugin.h
   dtkCorePluginFactory
@@ -41,6 +42,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkSpinLock.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkCoreApplication.cpp
   dtkCoreSettings.cpp
   dtkArrayData.cpp)
 
@@ -58,7 +60,7 @@ add_library(${PROJECT_NAME} SHARED
 
 qt5_use_modules(${PROJECT_NAME} Core)
 
-target_link_libraries(${PROJECT_NAME} dtkMeta)
+target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
 
 ## #################################################################
 ## Target properties

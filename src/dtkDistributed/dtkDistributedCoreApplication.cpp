@@ -57,10 +57,10 @@ dtkDistributedPolicy *dtkDistributedCoreApplication::policy(void)
      return &(d->policy);
 }
 
-dtkDistributedWorker *dtkDistributedCoreApplication::worker(void)
+dtkDistributedCommunicator *dtkDistributedCoreApplication::communicator(void)
 {
 
-    return d->policy.communicator()->worker();
+    return d->policy.communicator();
 }
 
 bool dtkDistributedCoreApplication::isMaster(void)

@@ -22,7 +22,7 @@
 
 class dtkDistributedPolicy;
 class dtkDistributedWork;
-class dtkDistributedWorker;
+class dtkDistributedCommunicator;
 class dtkDistributedCoreApplicationPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedCoreApplication: public dtkCoreApplication
@@ -37,7 +37,7 @@ public:
 
 public:
     bool isMaster(void);
-    dtkDistributedWorker *worker(void);
+    dtkDistributedCommunicator *communicator(void);
     dtkDistributedPolicy *policy(void);
 
 private:

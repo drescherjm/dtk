@@ -29,22 +29,20 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedContainer
 public:
     dtkDistributedContainer(void) :
         m_size(0),
-        m_worker(dtkDistributed::app()->worker()),
+        /* m_worker(dtkDistributed::app()->worker()), */
         m_mapper(new dtkDistributedMapper),
-        m_comm(dtkDistributed::app()->worker()->communicator())
+            m_comm(dtkDistributed::app()->communicator())
     {
         m_mapper->ref();
-        m_worker->record(this);
     }
 
     dtkDistributedContainer(const qlonglong& size) :
         m_size(size),
-        m_worker(dtkDistributed::app()->worker()),
+        /* m_worker(dtkDistributed::app()->worker()), */
         m_mapper(new dtkDistributedMapper),
-        m_comm(dtkDistributed::app()->worker()->communicator())
+        m_comm(dtkDistributed::app()->communicator())
     {
         m_mapper->ref();
-        m_worker->record(this);
         if (m_size > 0) {
             m_mapper->setMapping(m_size, m_comm->size());
         }
@@ -52,42 +50,36 @@ public:
 
     dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) :
         m_size(size),
-        m_worker(dtkDistributed::app()->worker()),
+        /* m_worker(dtkDistributed::app()->worker()), */
         m_mapper(mapper),
-        m_comm(dtkDistributed::app()->worker()->communicator())
+        m_comm(dtkDistributed::app()->communicator())
     {
         m_mapper->ref();
-        m_worker->record(this);
     }
 
 public:
     virtual ~dtkDistributedContainer(void)
     {
-        m_worker->unrecord(this);
         if (!m_mapper->deref())
             delete m_mapper;
     }
-
-public:
-    virtual void setMode(const dtkDistributed::Mode&) {}
 
 public:
     bool      empty(void) const { return !m_size; }
     qlonglong  size(void) const { return  m_size; }
 
 public:
-    dtkDistributedWorker             *worker(void) { return m_worker; }
+    /* dtkDistributedWorker             *worker(void) { return m_worker; } */
     dtkDistributedMapper             *mapper(void) { return m_mapper; }
     dtkDistributedCommunicator *communicator(void) { return m_comm; }
 
 public:
-    qlonglong wid(void) const { return m_worker->wid(); }
-    qlonglong cid(void) const { return m_worker->containerId(this); }
+    qlonglong wid(void) const { return m_comm->wid(); }
 
 protected:
     qlonglong m_size;
 
-    dtkDistributedWorker       *m_worker;
+    /* dtkDistributedWorker       *m_worker; */
     dtkDistributedMapper       *m_mapper;
     dtkDistributedCommunicator *m_comm;
 };

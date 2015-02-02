@@ -70,14 +70,13 @@ namespace dtkDistributed
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DISTRIBUTED_BEGIN_GLOBAL \
-    barrier(); dtkDistributed::setMode(dtkDistributed::Global); dtkDistributedWork::worker()->setMode(dtkDistributed::mode()); if (dtkDistributedWork::worker()->master()) {
+    barrier(); if (dtkDistributed::app()->isMaster()) {
 
 #define DTK_DISTRIBUTED_END_GLOBAL \
     } ; barrier();
 
 #define DTK_DISTRIBUTED_BEGIN_LOCAL \
-    barrier(); dtkDistributed::setMode(dtkDistributed::Local); dtkDistributedWork::worker()->setMode(dtkDistributed::mode());
-
+    barrier();
 #define DTK_DISTRIBUTED_END_LOCAL \
     ;
 

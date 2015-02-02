@@ -31,10 +31,6 @@ class dtkDistributedWorkerPrivate
 public:
     qlonglong wid;
     qlonglong wct;
-    qlonglong container_count;
-
-public:
-    QHash<dtkDistributedContainer*, qlonglong> containers;
 
 public:
     dtkDistributedCommunicator *comm;
@@ -52,15 +48,14 @@ dtkDistributedWorker::dtkDistributedWorker(void) : QRunnable(), d(new dtkDistrib
     d->work = NULL;
     d->wid  =   -1;
     d->wct  =    0;
-    d->container_count  = 0;
 
     this->setAutoDelete(false);
 }
 
 dtkDistributedWorker::~dtkDistributedWorker(void)
 {
-    if (d->work)
-        delete d->work;
+    // if (d->work)
+    //     delete d->work;
 
     delete d;
 
@@ -74,7 +69,6 @@ dtkDistributedWorker::dtkDistributedWorker(const dtkDistributedWorker& other): Q
     d->comm = other.d->comm;
     d->work = NULL;
     this->setAutoDelete(false);
-    d->container_count = 0; // do not share containers count
 }
 
 dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWorker& other)
@@ -82,18 +76,7 @@ dtkDistributedWorker& dtkDistributedWorker::operator = (const dtkDistributedWork
     d->wid  = other.d->wid;
     d->wct  = other.d->wct;
     d->comm = other.d->comm;
-    d->container_count = 0; // do not share containers count
     return (*this);
-}
-
-void dtkDistributedWorker::setMode(const dtkDistributed::Mode& mode)
-{	
-    QHashIterator<dtkDistributedContainer*, qlonglong> it(d->containers);
-
-    while( it.hasNext()) {
-        it.next();
-        it.key()->setMode(mode);
-    }
 }
 
 void dtkDistributedWorker::setWid(qlonglong wid)
@@ -121,30 +104,12 @@ qlonglong dtkDistributedWorker::wct(void)
     return d->wct;
 }
 
-qlonglong dtkDistributedWorker::record(dtkDistributedContainer *container)
-{
-    d->containers.insert(container, d->container_count);
-
-    return d->container_count++;
-}
-
-void dtkDistributedWorker::unrecord(dtkDistributedContainer *container)
-{
-    d->containers.remove(container);
-}
-
-qlonglong dtkDistributedWorker::containerId(const dtkDistributedContainer *container)
-{
-    return d->containers.value(const_cast<dtkDistributedContainer *>(container));
-}
-
 void dtkDistributedWorker::setWork(dtkDistributedWork *work)
 {
     if (!work)
         return;
 
-    d->work = work->clone();
-    d->work->setWorker(this);
+    d->work = work;
 }
 
 void dtkDistributedWorker::setCommunicator(dtkDistributedCommunicator *comm)
@@ -159,7 +124,6 @@ dtkDistributedCommunicator *dtkDistributedWorker::communicator(void)
 
 void dtkDistributedWorker::run(void)
 {
-    d->comm->setWid(d->wid);
     d->comm->barrier();
     d->work->run();
     d->comm->barrier();

@@ -35,8 +35,8 @@ public:
     dtkDistributedWork(const dtkDistributedWork& other);
     dtkDistributedWork& operator = (const dtkDistributedWork& other);
 
-public:
-    virtual dtkDistributedWork* clone(void);
+/* public: */
+/*     virtual dtkDistributedWork* clone(void); */
 
 public:
     virtual void run(void);
@@ -51,11 +51,11 @@ public:
 public:
     bool isMaster(void);
 
-public:
-    void setWorker(dtkDistributedWorker *worker);
+/* public: */
+/*     void setWorker(dtkDistributedWorker *worker); */
 
-public:
-    dtkDistributedWorker *worker(void);
+/* public: */
+/*     dtkDistributedWorker *worker(void); */
     dtkDistributedCommunicator *communicator(void);
 
 public:

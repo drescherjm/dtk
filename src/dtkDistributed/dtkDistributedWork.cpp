@@ -16,6 +16,7 @@
 
 #include "dtkDistributedWork.h"
 #include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedCoreApplication.h>
 #include <dtkDistributed/dtkDistributedWorker.h>
 
 #include <QtCore>
@@ -59,41 +60,24 @@ dtkDistributedWork& dtkDistributedWork::operator = (const dtkDistributedWork& ot
 
 }
 
-dtkDistributedWork *dtkDistributedWork::clone(void)
-{
-    return new dtkDistributedWork(*this);
-
-}
-
-
-void dtkDistributedWork::setWorker(dtkDistributedWorker *worker)
-{
-    d->worker = worker;
-}
-
-dtkDistributedWorker *dtkDistributedWork::worker(void)
-{
-    return d->worker ;
-}
-
 dtkDistributedCommunicator *dtkDistributedWork::communicator(void)
 {
-    return d->worker->communicator() ;
+    return  dtkDistributed::app()->communicator() ;
 }
 
 void dtkDistributedWork::barrier(void)
 {
-    d->worker->communicator()->barrier() ;
+    dtkDistributed::app()->communicator()->barrier() ;
 }
 
 qlonglong dtkDistributedWork::wct(void)
 {
-    return d->worker->wct() ;
+    return  dtkDistributed::app()->communicator()->size() ;
 }
 
 qlonglong dtkDistributedWork::wid(void)
 {
-    return d->worker->wid() ;
+    return  dtkDistributed::app()->communicator()->wid() ;
 }
 
 bool dtkDistributedWork::isMaster(void)

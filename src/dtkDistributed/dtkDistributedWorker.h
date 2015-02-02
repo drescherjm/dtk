@@ -38,8 +38,8 @@ public:
 public:
     void run(void);
 
-public:
-    void setMode(const dtkDistributed::Mode& mode);
+/* public: */
+/*     void setMode(const dtkDistributed::Mode& mode); */
 
 public:
     void setWid(qlonglong wid);
@@ -53,12 +53,12 @@ public:
     qlonglong wid(void);
     qlonglong wct(void);
 
-public:
-    qlonglong record(dtkDistributedContainer *container);
+/* public: */
+/*     qlonglong record(dtkDistributedContainer *container); */
 
-    void unrecord(dtkDistributedContainer *container);
+/*     void unrecord(dtkDistributedContainer *container); */
 
-    qlonglong containerId(const dtkDistributedContainer *container);
+/*     qlonglong containerId(const dtkDistributedContainer *container); */
 
 public:
     bool master(void);

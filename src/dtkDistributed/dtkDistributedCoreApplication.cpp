@@ -47,7 +47,7 @@ dtkDistributedCoreApplication::~dtkDistributedCoreApplication(void)
     d = NULL;
 }
 
-void dtkDistributedCoreApplication::exec(dtkDistributedWork *work)
+void dtkDistributedCoreApplication::exec(QRunnable *work)
 {
      d->manager.exec(work);
 }

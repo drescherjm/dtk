@@ -17,7 +17,6 @@
 
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedPolicy.h"
-#include "dtkDistributedWorker.h"
 
 class dtkDistributedWorkerManagerPrivate
 {
@@ -25,7 +24,6 @@ class dtkDistributedWorkerManagerPrivate
 public:
     dtkDistributedCommunicator *comm;
     dtkDistributedPolicy *policy;
-    dtkDistributedWorker worker;
 
 public:
     bool spawned;
@@ -66,14 +64,14 @@ void dtkDistributedWorkerManager::spawn(void)
     if (d->spawned)
         return;
 
-    d->worker.setCommunicator(d->comm);
+    // d->worker.setCommunicator(d->comm);
 
     QStringList hosts = d->policy->hosts();
-    d->comm->spawn(hosts, d->policy->nthreads(), d->worker);
+    d->comm->spawn(hosts, d->policy->nthreads());
     d->spawned = true;
 }
 
-void dtkDistributedWorkerManager::exec(dtkDistributedWork *work)
+void dtkDistributedWorkerManager::exec(QRunnable *work)
 {
     d->comm->exec( work );
 }

@@ -16,7 +16,6 @@
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedContainer.h"
 #include "dtkDistributedMapper.h"
-#include "dtkDistributedWorker.h"
 
 // ///////////////////////////////////////////////////////////////////
 // dtkDistributedArray implementation

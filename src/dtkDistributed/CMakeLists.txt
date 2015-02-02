@@ -54,10 +54,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedSettings
   dtkDistributedSettings.h
   dtkDistributedSlave.h
-  dtkDistributedWork
-  dtkDistributedWork.h
-  dtkDistributedWorker
-  dtkDistributedWorker.h
   dtkDistributedWorkerManager
   dtkDistributedWorkerManager.h)
 
@@ -78,8 +74,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedServerDaemon.cpp
   dtkDistributedSettings.cpp
   dtkDistributedSlave.cpp
-  dtkDistributedWork.cpp
-  dtkDistributedWorker.cpp
   dtkDistributedWorkerManager.cpp)
 
 ## #################################################################

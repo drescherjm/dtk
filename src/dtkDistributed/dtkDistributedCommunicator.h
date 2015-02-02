@@ -21,7 +21,6 @@
 #include <dtkCore/dtkCorePlugin.h>
 
 class dtkDistributedWork;
-class dtkDistributedWorker;
 class dtkDistributedCommunicatorPrivate;
 class dtkDistributedCommunicatorStatus;
 
@@ -134,9 +133,9 @@ public:
     virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
 
 public:
-    virtual void spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker);
-    virtual void  exec(dtkDistributedWork *work);
-    virtual dtkDistributedWorker *worker(void) = 0;
+    virtual void spawn(QStringList hostnames, qlonglong np);
+    virtual void  exec(QRunnable *work);
+    /* virtual dtkDistributedWorker *worker(void) = 0; */
 
 public:
     virtual void unspawn(void);

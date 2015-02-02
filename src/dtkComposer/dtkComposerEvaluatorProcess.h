@@ -17,24 +17,19 @@
 
 #include "dtkComposerExport.h"
 
-#include <dtkDistributed/dtkDistributedWork.h>
-
 #include <QtCore>
 
 class dtkComposerNodeFactory;
 class dtkDistributedCommunicator;
 class dtkComposerEvaluatorProcessPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluatorProcess : public dtkDistributedWork
+class DTKCOMPOSER_EXPORT dtkComposerEvaluatorProcess : public QObject, public QRunnable
 {
     Q_OBJECT
 
 public:
      dtkComposerEvaluatorProcess(void);
     ~dtkComposerEvaluatorProcess(void);
-
-public:
-    dtkComposerEvaluatorProcess *clone(void);
 
 public:
     void setApplication(QString app);

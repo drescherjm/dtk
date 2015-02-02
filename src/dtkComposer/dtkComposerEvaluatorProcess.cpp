@@ -49,7 +49,7 @@ public:
 
 };
 
-dtkComposerEvaluatorProcess::dtkComposerEvaluatorProcess(void) : dtkDistributedWork(), d(new dtkComposerEvaluatorProcessPrivate)
+dtkComposerEvaluatorProcess::dtkComposerEvaluatorProcess(void) : QRunnable(), d(new dtkComposerEvaluatorProcessPrivate)
 {
     d->scene     = new dtkComposerScene;
     d->stack     = new dtkComposerStack;
@@ -80,11 +80,6 @@ dtkComposerEvaluatorProcess::~dtkComposerEvaluatorProcess(void)
     delete d;
 
     d = NULL;
-}
-
-dtkComposerEvaluatorProcess *dtkComposerEvaluatorProcess::clone(void)
-{
-    return new dtkComposerEvaluatorProcess (*this);
 }
 
 void dtkComposerEvaluatorProcess::setFactory(dtkComposerNodeFactory *factory)

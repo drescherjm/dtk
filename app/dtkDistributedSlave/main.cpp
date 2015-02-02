@@ -16,43 +16,27 @@
 
 
 
-#include <dtkDistributed/dtkDistributed.h>
-#include <dtkDistributed/dtkDistributedCommunicator.h>
-#include <dtkDistributed/dtkDistributedCoreApplication.h>
-#include <dtkDistributed/dtkDistributedSettings.h>
-#include <dtkDistributed/dtkDistributedSlave.h>
-#include <dtkDistributed/dtkDistributedPolicy.h>
-#include <dtkDistributed/dtkDistributedMessage.h>
-#include <dtkDistributed/dtkDistributedWork.h>
-#include <dtkDistributed/dtkDistributedWorker.h>
-#include <dtkDistributed/dtkDistributedWorkerManager.h>
-
+#include <dtkDistributed>
 #include <dtkLog>
 
 #include <QtCore>
 
 #include <iostream>
 
-class slaveWork : public dtkDistributedWork
+class slaveWork : public QRunnable
 {
-public:
-    slaveWork *clone(void) {
-        slaveWork *work = new slaveWork(*this);
-        work->server =server;
-        return work;
-    };
-
 public:
     QString server;
 
 public:
     void run(void) {
         QTime time;
-        qDebug() << wid();
-        qDebug() << wct();
+        dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+        qDebug() << comm->wid();
+        qDebug() << comm->size();
         dtkDistributedSlave slave;
 
-        if (isMaster()) {
+        if (dtkDistributed::app()->isMaster()) {
             // the server waits for the jobid in stdout
             std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
 
@@ -69,11 +53,11 @@ public:
 
         }
 
-        qDebug() << "I'm the simple slave " << wid() ;
+        qDebug() << "I'm the simple slave " << comm->wid() ;
 
         QThread::sleep(5);
 
-        if (isMaster()) {
+        if (dtkDistributed::app()->isMaster()) {
             if (slave.isConnected()) {
                 dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
                 msg.send(slave.socket());

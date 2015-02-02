@@ -20,7 +20,6 @@
 
 class dtkDistributedCommunicator;
 class dtkDistributedPolicy;
-class dtkDistributedWork;
 class dtkDistributedWorkerManagerPrivate;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedWorkerManager: public QObject
@@ -40,7 +39,7 @@ public:
 
 public:
     void   spawn(void);
-    void    exec(dtkDistributedWork *work);
+    void    exec(QRunnable *work);
     void unspawn(void);
 
 public:

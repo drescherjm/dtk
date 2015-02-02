@@ -70,13 +70,13 @@ namespace dtkDistributed
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DISTRIBUTED_BEGIN_GLOBAL \
-    barrier(); if (dtkDistributed::app()->isMaster()) {
+    dtkDistributed::app()->communicator()->barrier(); if (dtkDistributed::app()->isMaster()) {
 
 #define DTK_DISTRIBUTED_END_GLOBAL \
-    } ; barrier();
+    } ; dtkDistributed::app()->communicator()->barrier();
 
 #define DTK_DISTRIBUTED_BEGIN_LOCAL \
-    barrier();
+    dtkDistributed::app()->communicator()->barrier();
 #define DTK_DISTRIBUTED_END_LOCAL \
     ;
 

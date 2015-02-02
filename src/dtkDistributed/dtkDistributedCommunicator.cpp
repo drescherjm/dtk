@@ -14,7 +14,6 @@
  */
 
 #include "dtkDistributedCommunicator.h"
-#include "dtkDistributedWorker.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedCommunicatorPrivate
@@ -90,15 +89,14 @@ void dtkDistributedCommunicator::setPolicy(QString type)
 {
 }
 
-/*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
+/*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, qlonglong np)
 
   Spawn a communicator on all hostnames, starting np threads on each
-  process. Once the processes and threads are started, use the worker
-  to do the work.
+  process.
 
 */
 
-void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np, dtkDistributedWorker& worker)
+void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np)
 {
     qDebug() << Q_FUNC_INFO;
 }
@@ -107,7 +105,7 @@ void dtkDistributedCommunicator::unspawn(void)
 {
 }
 
-void dtkDistributedCommunicator::exec(dtkDistributedWork *work)
+void dtkDistributedCommunicator::exec(QRunnable *work)
 {
 //   DTK_DEFAULT_IMPLEMENTATION;
 }

@@ -21,7 +21,6 @@
 
 
 class dtkDistributedPolicy;
-class dtkDistributedWork;
 class dtkDistributedCommunicator;
 class dtkDistributedCoreApplicationPrivate;
 
@@ -33,7 +32,7 @@ public:
 
 public:
     virtual void initialize(void);
-    virtual void exec(dtkDistributedWork *work);
+    virtual void exec(QRunnable *work);
 
 public:
     bool isMaster(void);

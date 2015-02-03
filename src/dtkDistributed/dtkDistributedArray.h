@@ -15,7 +15,6 @@
 #pragma once
 
 #include "dtkDistributedArrayCache.h"
-#include "dtkDistributedArrayData.h"
 #include "dtkDistributedContainer.h"
 #include "dtkDistributedExport.h"
 
@@ -31,9 +30,6 @@ public:
       dtkDistributedArray(const qlonglong& size, const T *array);
       dtkDistributedArray(const dtkDistributedArray& other);
      ~dtkDistributedArray(void);
-
-private:
-    void initialize(void);
 
 public:
     void remap(dtkDistributedMapper *remapper);
@@ -55,7 +51,7 @@ public:
     void unlock(qint32 owner);
 
 public:
-    typedef dtkDistributedArrayData<T>   Data;
+    typedef dtkTypedArrayData<T>        Data;
     typedef dtkDistributedArrayCache<T> Cache;
 
     typedef typename Data::const_iterator const_iterator;
@@ -73,9 +69,11 @@ public:
     void stats(void) const;
 
 private:
-    void freeData(Data *);
+    void allocate(Data *&, qint64&, qlonglong);
+    void freeData(Data *, qint64);
 
 private:
+            qint64 data_id;
             Data  *data;
     mutable Cache *cache;
 };

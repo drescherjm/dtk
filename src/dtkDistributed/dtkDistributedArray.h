@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <dtkCore/dtkArrayData.h>
+
 #include "dtkDistributedArrayCache.h"
 #include "dtkDistributedContainer.h"
 #include "dtkDistributedExport.h"

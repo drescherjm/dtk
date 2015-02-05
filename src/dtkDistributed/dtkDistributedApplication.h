@@ -29,6 +29,9 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public QApplication, publ
 {
 public:
              dtkDistributedApplication(int &argc, char **argv) : QApplication(argc,argv), dtkDistributedAbstractApplication() {};
+
+public:
+    bool noGui(void) { return false; };
 };
 
 

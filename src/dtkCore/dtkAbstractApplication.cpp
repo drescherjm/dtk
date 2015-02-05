@@ -15,7 +15,6 @@
 
 #include "dtkAbstractApplication.h"
 
-#include <QApplication>
 class dtkAbstractApplicationPrivate
 {
 public:
@@ -47,7 +46,7 @@ QSettings *dtkAbstractApplication::settings(void)
 }
 
 bool dtkAbstractApplication::noGui(void) {
-    return !qobject_cast<QApplication *>(qApp);
+    return true;
 }
 
 QCommandLineParser *dtkAbstractApplication::parser(void)

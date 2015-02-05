@@ -20,7 +20,6 @@ project(dtkCore)
 
 set(${PROJECT_NAME}_HEADERS
   dtkAbstractApplication.h
-  dtkApplication.h
   dtkArray
   dtkArray.h
   dtkArray.tpp
@@ -61,7 +60,6 @@ add_library(${PROJECT_NAME} SHARED
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Widgets)
 
 target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
 

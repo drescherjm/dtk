@@ -15,33 +15,24 @@
 
 #pragma once
 
-#include "dtkCoreExport.h"
+#include "dtkWidgetsExport.h"
 
-#include "dtkCoreApplication.h"
+#include <dtkCore/dtkAbstractApplication.h>
+#include <dtkCore/dtkCoreApplication.h>
 
 #include <QApplication>
-#include <QCommandLineParser>
-#include <QSettings>
 
-class dtkCoreApplicationPrivate;
-
-class DTKCORE_EXPORT dtkApplication: public QApplication
+class DTKWIDGETS_EXPORT dtkApplication: public QApplication, public dtkAbstractApplication
 {
 public:
-             dtkApplication(int &argc, char **argv);
+             dtkApplication(int &argc, char **argv): QApplication(argc, argv), dtkAbstractApplication() {};
     virtual ~dtkApplication(void);
 
 public:
-    virtual void initialize(void);
-
-    QCommandLineParser *parser(void) const ;
-    QSettings        *settings(void) const ;
-
-private:
-    class dtkCoreApplicationPrivate *d;
+    bool noGui(void) { return false; };
 };
 
-static QCoreApplication* create(int &argc, char *argv[])
+static dtkAbstractApplication* create(int &argc, char *argv[])
 {
     for (int i = 0; i < argc; i++)
         if(!qstrcmp(argv[i], "-nw") || !qstrcmp(argv[i], "-no-window"))

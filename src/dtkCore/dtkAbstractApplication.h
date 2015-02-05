@@ -32,7 +32,7 @@ public:
     virtual void initialize(void);
 
 public:
-    bool noGui(void);
+    virtual bool noGui(void);
 
 public:
     void setApplicationName(const QString& name);

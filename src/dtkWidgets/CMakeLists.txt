@@ -19,6 +19,7 @@ project(dtkWidgets)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkApplication.h
   dtkWidgetsLogView.h
   dtkWidgetsLogView_p.h
   dtkWidgetsTag.h

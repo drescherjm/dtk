@@ -16,6 +16,7 @@
 
 #include "dtkDistributedExport.h"
 
+class dtkDistributedAbstractApplication;
 class dtkDistributedCoreApplication;
 class dtkDistributedCommunicatorPlugin;
 class dtkDistributedCommunicatorPluginFactory;
@@ -49,7 +50,12 @@ namespace dtkDistributed
 #pragma mark -
 #pragma mark retrieve dtkDistributedCoreApplication global pointer
 
-    DTKDISTRIBUTED_EXPORT dtkDistributedCoreApplication *app(void);
+    DTKDISTRIBUTED_EXPORT dtkDistributedAbstractApplication *app(void);
+
+#pragma mark -
+#pragma mark create dtkDistributedAbstractApplication application
+
+    DTKDISTRIBUTED_EXPORT dtkDistributedAbstractApplication* create(int &argc, char *argv[]);
 
 #pragma mark -
 #pragma mark retrieve current policy

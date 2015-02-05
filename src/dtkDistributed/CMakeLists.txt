@@ -21,6 +21,8 @@ project(dtkDistributed)
 set(${PROJECT_NAME}_HEADERS
   dtkDistributed
   dtkDistributed.h
+  dtkDistributedAbstractApplication.h
+  dtkDistributedApplication.h
   dtkDistributedArray
   dtkDistributedArray.h
   dtkDistributedArray.tpp
@@ -57,10 +59,10 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
+  dtkDistributedAbstractApplication.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
-  dtkDistributedCoreApplication.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedMessage.cpp
@@ -92,6 +94,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 
 qt5_use_modules(${PROJECT_NAME} Core)
 qt5_use_modules(${PROJECT_NAME} Network)
+qt5_use_modules(${PROJECT_NAME} Widgets)
 qt5_use_modules(${PROJECT_NAME} Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkCore)

@@ -1,4 +1,4 @@
-/* @(#)dtkDistributedCoreApplication.h ---
+/* dtkDistributedCoreApplication.h ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2015 - Nicolas Niclausse, Inria.
@@ -17,29 +17,15 @@
 
 #include "dtkDistributedExport.h"
 
+#include "dtkDistributedAbstractApplication.h"
+
 #include <dtkCore/dtkCoreApplication.h>
 
 
-class dtkDistributedPolicy;
-class dtkDistributedCommunicator;
-class dtkDistributedCoreApplicationPrivate;
-
-class DTKDISTRIBUTED_EXPORT dtkDistributedCoreApplication: public dtkCoreApplication
+class DTKDISTRIBUTED_EXPORT dtkDistributedCoreApplication: public QCoreApplication, public dtkDistributedAbstractApplication
 {
 public:
-             dtkDistributedCoreApplication(int &argc, char **argv);
-    virtual ~dtkDistributedCoreApplication(void);
+    dtkDistributedCoreApplication(int &argc, char **argv): QCoreApplication(argc,argv), dtkDistributedAbstractApplication() {};
 
-public:
-    virtual void initialize(void);
-    virtual void exec(QRunnable *work);
-
-public:
-    bool isMaster(void);
-    dtkDistributedCommunicator *communicator(void);
-    dtkDistributedPolicy *policy(void);
-
-private:
-    dtkDistributedCoreApplicationPrivate *d;
 };
 

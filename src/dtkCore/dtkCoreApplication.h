@@ -17,25 +17,19 @@
 
 #include "dtkCoreExport.h"
 
+#include "dtkAbstractApplication.h"
+
 #include <QtCore>
 
 
 class dtkCoreApplicationPrivate;
 
-class DTKCORE_EXPORT dtkCoreApplication: public QCoreApplication
+class DTKCORE_EXPORT dtkCoreApplication: public QCoreApplication, public dtkAbstractApplication
 {
 public:
-             dtkCoreApplication(int &argc, char **argv);
-    virtual ~dtkCoreApplication(void);
+    dtkCoreApplication(int &argc, char **argv): QCoreApplication(argc, argv), dtkAbstractApplication() {};
+    virtual ~dtkCoreApplication(void) {};
 
-public:
-    virtual void initialize(void);
-
-    QCommandLineParser *parser(void) const ;
-    QSettings        *settings(void) const ;
-
-private:
-    class dtkCoreApplicationPrivate *d;
 };
 
 

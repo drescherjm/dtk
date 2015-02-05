@@ -13,6 +13,8 @@
  */
 
 #include "dtkDistributed.h"
+#include "dtkDistributedAbstractApplication.h"
+#include "dtkDistributedApplication.h"
 #include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedPolicy.h"
@@ -21,6 +23,7 @@ namespace dtkDistributed
 {
     namespace _private {
         dtkDistributed::Mode mode = dtkDistributed::Global;
+        dtkDistributedAbstractApplication *app = NULL;
     }
 
     void setMode(dtkDistributed::Mode mode) {
@@ -31,16 +34,30 @@ namespace dtkDistributed
         return _private::mode;
     }
 
-    dtkDistributedCoreApplication *app(void) {
-        return dynamic_cast<dtkDistributedCoreApplication *>(dtkDistributedCoreApplication::instance());
+    dtkDistributedAbstractApplication* create(int &argc, char *argv[])
+    {
+        for (int i = 0; i < argc; i++)
+            if(!qstrcmp(argv[i], "-nw") ||!qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window")|| !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help")|| !qstrcmp(argv[i], "--version")) {
+                _private::app = new dtkDistributedCoreApplication(argc, argv);
+                return _private::app;
+            }
+        _private::app = new dtkDistributedApplication(argc, argv);
+        return _private::app;
+    }
+
+    dtkDistributedAbstractApplication *app(void) {
+        if (!_private::app ) {
+            _private::app = dynamic_cast<dtkDistributedAbstractApplication *>(dtkDistributedCoreApplication::instance());
+            qDebug()<< _private::app;
+        }
+        return _private::app;
     }
 
     dtkDistributedPolicy *policy(void) {
-        dtkDistributedCoreApplication *dsapp = app();
-        if (!dsapp)
+        if (!app())
             return NULL;
 
-        return dsapp->policy();
+        return _private::app->policy();
     }
 
     namespace communicator

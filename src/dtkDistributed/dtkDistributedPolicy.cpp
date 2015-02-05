@@ -115,7 +115,7 @@ QStringList dtkDistributedPolicy::hosts(void)
         QCommandLineParser *parser = dtkDistributed::app()->parser();
         QCommandLineOption npOption("np","number of processes","int");
         QCommandLineOption ntOption("nt","number of threads","int");
-        parser->process(dtkDistributedCoreApplication::arguments());
+        parser->process(qApp->arguments());
         int np = 1;
         if (parser->isSet(npOption)) {
             dtkTrace() << "got np value from command line" ;

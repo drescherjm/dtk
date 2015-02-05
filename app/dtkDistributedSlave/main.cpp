@@ -69,18 +69,17 @@ public:
 
 int main(int argc, char **argv)
 {
-    dtkDistributedCoreApplication application(argc, argv);
-    application.setApplicationName("dtkDistributedSlave");
-    application.setApplicationVersion("1.0.0");
+    dtkDistributedAbstractApplication *app = dtkDistributed::create(argc, argv);
+    app->setApplicationName("dtkDistributedSlave");
+    app->setApplicationVersion("1.0.0");
 
-
-    QCommandLineParser *parser = application.parser();
+    QCommandLineParser *parser = app->parser();
     parser->setApplicationDescription("DTK distributed slave example application: it connect to the DTK distributed server and waits for 1 minute before exiting.");
 
     QCommandLineOption serverOption("server", "DTK distributed server URL", "URL");
     parser->addOption(serverOption);
 
-    application.initialize();
+    app->initialize();
 
      if (!parser->isSet(serverOption)) {
          qCritical() << "Error: no server set ! Use --server <url> " ;
@@ -92,7 +91,7 @@ int main(int argc, char **argv)
     slaveWork work;
     work.server = parser->value(serverOption);
 
-    application.exec(&work);
+    app->exec(&work);
 
     return 0;
 }

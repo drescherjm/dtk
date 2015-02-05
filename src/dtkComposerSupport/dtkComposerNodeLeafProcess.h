@@ -40,8 +40,10 @@ public:
 
 public:
     virtual bool enableDefaultImplementation(void) const;
-    
+
     virtual bool isAbstractProcess(void) const = 0;
+
+    virtual bool isInteractive(void);
 
     virtual QString abstractProcessType(void) const = 0;
 

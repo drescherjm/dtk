@@ -71,6 +71,11 @@ QString dtkComposerNodeLeafProcess::currentImplementation(void) const
     return QString();
 }
 
+bool dtkComposerNodeLeafProcess::isInteractive(void)
+{
+    return false;
+}
+
 QStringList dtkComposerNodeLeafProcess::implementations(void)
 {
     QStringList implementations;

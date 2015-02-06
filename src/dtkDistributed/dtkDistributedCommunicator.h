@@ -65,6 +65,11 @@ public:
         LogicalXor
     };
 
+    enum MessageTag {
+        TagSend    = 2001,
+        TagReceive = 2002
+    };
+
 public:
     dtkDistributedCommunicator(const dtkDistributedCommunicator& other);
     dtkDistributedCommunicator& operator = (const dtkDistributedCommunicator& other);

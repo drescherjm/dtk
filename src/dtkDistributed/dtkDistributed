@@ -2,6 +2,7 @@
 #include "dtkDistributedAbstractApplication.h"
 #include "dtkDistributedArray.h"
 #include "dtkDistributedApplication.h"
+#include "dtkDistributedBufferManager.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedCommunicatorStatus.h"
 #include "dtkDistributedCoreApplication.h"

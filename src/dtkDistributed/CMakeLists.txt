@@ -30,6 +30,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArrayCache.h
   dtkDistributedArrayNavigator
   dtkDistributedArrayNavigator.h
+  dtkDistributedBufferManager
+  dtkDistributedBufferManager.h
   dtkDistributedCommunicator
   dtkDistributedCommunicator.h
   dtkDistributedCommunicatorStatus.h

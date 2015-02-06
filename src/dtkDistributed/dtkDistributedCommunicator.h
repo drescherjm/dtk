@@ -23,6 +23,7 @@
 class dtkDistributedWork;
 class dtkDistributedCommunicatorPrivate;
 class dtkDistributedCommunicatorStatus;
+class dtkDistributedBufferManager;
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator : public QObject
 {
@@ -76,6 +77,10 @@ public:
 
 public:
     virtual void setPolicy(QString type);
+
+public:
+    virtual dtkDistributedBufferManager *createBufferManager(void) { return 0; } ;
+    virtual void destroyBufferManager(dtkDistributedBufferManager *) {;}
 
 public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);

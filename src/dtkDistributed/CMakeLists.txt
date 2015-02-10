@@ -48,6 +48,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedMessage.h
   dtkDistributedPolicy
   dtkDistributedPolicy.h
+  dtkDistributedRequest.h
   dtkDistributedResourceManager.h
   dtkDistributedResourceManagerLocal.h
   dtkDistributedResourceManagerOar.h

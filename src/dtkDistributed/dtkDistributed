@@ -9,6 +9,7 @@
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedMessage.h"
 #include "dtkDistributedPolicy.h"
+#include "dtkDistributedRequest.h"
 #include "dtkDistributedSettings.h"
 #include "dtkDistributedSlave.h"
 #include "dtkDistributedWorkerManager.h"

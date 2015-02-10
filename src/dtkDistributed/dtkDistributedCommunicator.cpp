@@ -243,37 +243,37 @@ void dtkDistributedCommunicator::receive(QString &s, qint32 target, qint32 tag)
     s = QString(bytes);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(bool *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(bool *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Bool, source, tag);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(char *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(char *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Char, source, tag);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(int *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(int *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Int, source, tag);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(long *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(long *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Long, source, tag);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(qint64 *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(qint64 *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Int64, source, tag);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(float *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(float *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Float, source, tag);
 }
 
-dtkDistributedRequest dtkDistributedCommunicator::ireceive(double *data, qint64 size, qint32 source, int tag)
+dtkDistributedRequest *dtkDistributedCommunicator::ireceive(double *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, Double, source, tag);
 }

@@ -134,17 +134,18 @@ public:
     virtual void receive(QString &s,   qint32 source, qint32 tag) ;
     /* virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0; */
 
-    virtual dtkDistributedRequest ireceive(void   *data, qint64 size, DataType dataType, qint32 source, int tag) = 0;
-    dtkDistributedRequest ireceive(bool   *data, qint64 size, qint32 source, int tag);
-    dtkDistributedRequest ireceive(char   *data, qint64 size, qint32 source, int tag);
-    dtkDistributedRequest ireceive(int    *data, qint64 size, qint32 source, int tag);
-    dtkDistributedRequest ireceive(long   *data, qint64 size, qint32 source, int tag);
-    dtkDistributedRequest ireceive(qint64 *data, qint64 size, qint32 source, int tag);
-    dtkDistributedRequest ireceive(float  *data, qint64 size, qint32 source, int tag);
-    dtkDistributedRequest ireceive(double *data, qint64 size, qint32 source, int tag);
+    virtual dtkDistributedRequest *ireceive(void   *data, qint64 size, DataType dataType, qint32 source, int tag) = 0;
+    dtkDistributedRequest *ireceive(bool   *data, qint64 size, qint32 source, int tag);
+    dtkDistributedRequest *ireceive(char   *data, qint64 size, qint32 source, int tag);
+    dtkDistributedRequest *ireceive(int    *data, qint64 size, qint32 source, int tag);
+    dtkDistributedRequest *ireceive(long   *data, qint64 size, qint32 source, int tag);
+    dtkDistributedRequest *ireceive(qint64 *data, qint64 size, qint32 source, int tag);
+    dtkDistributedRequest *ireceive(float  *data, qint64 size, qint32 source, int tag);
+    dtkDistributedRequest *ireceive(double *data, qint64 size, qint32 source, int tag);
     /* virtual void ireceive(QString &s,   qint32 source, int tag, dtkDistributedRequest *req) = 0; */
     /* virtual void ireceive(QVariant &v,  qint32 source, int tag, dtkDistributedRequest *req) = 0; */
 
+    virtual void wait(dtkDistributedRequest *req) = 0;
 
 public:
     virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all = false);

@@ -17,14 +17,11 @@
 
 #include "dtkDistributedExport.h"
 
-class dtkDistributedRequest
+class DTKDISTRIBUTED_EXPORT dtkDistributedRequest
 {
 
 public:
     virtual ~dtkDistributedRequest(void) {;}
-
-public:
-    virtual void wait(void) {;};
 
 };
 

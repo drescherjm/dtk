@@ -80,7 +80,7 @@ public:
 
 public:
     virtual dtkDistributedBufferManager *createBufferManager(void) { return 0; } ;
-    virtual void destroyBufferManager(dtkDistributedBufferManager *) {;}
+    virtual void destroyBufferManager(dtkDistributedBufferManager *&) {;}
 
 public:
     virtual void *allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id);

@@ -68,7 +68,8 @@ public:
 
     enum MessageTag {
         TagSend    = 2001,
-        TagReceive = 2002
+        TagReceive = 2002,
+        TagReduce = 2003
     };
 
 public:
@@ -142,13 +143,11 @@ public:
     dtkDistributedRequest *ireceive(qint64 *data, qint64 size, qint32 source, int tag);
     dtkDistributedRequest *ireceive(float  *data, qint64 size, qint32 source, int tag);
     dtkDistributedRequest *ireceive(double *data, qint64 size, qint32 source, int tag);
-    /* virtual void ireceive(QString &s,   qint32 source, int tag, dtkDistributedRequest *req) = 0; */
-    /* virtual void ireceive(QVariant &v,  qint32 source, int tag, dtkDistributedRequest *req) = 0; */
 
     virtual void wait(dtkDistributedRequest *req) = 0;
 
 public:
-    virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all = false);
+    virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all = false) = 0;
     virtual void reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
     virtual void reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
     virtual void reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
@@ -157,13 +156,12 @@ public:
     virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
 
 public:
-    virtual void spawn(QStringList hostnames, qlonglong np);
-    virtual void  exec(QRunnable *work);
-    /* virtual dtkDistributedWorker *worker(void) = 0; */
+    virtual void spawn(QStringList hostnames, qlonglong np) = 0;
+    virtual void  exec(QRunnable *work) = 0;
 
 public:
     virtual void unspawn(void);
-    virtual void barrier(void);
+    virtual void barrier(void) = 0;
 
 public:
     virtual qint32  wid(void);

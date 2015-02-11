@@ -106,16 +106,6 @@ void dtkDistributedCommunicator::unspawn(void)
 {
 }
 
-void dtkDistributedCommunicator::exec(QRunnable *work)
-{
-//   DTK_DEFAULT_IMPLEMENTATION;
-}
-
-void dtkDistributedCommunicator::barrier(void)
-{
-//   DTK_DEFAULT_IMPLEMENTATION;
-}
-
 qint32 dtkDistributedCommunicator::wid(void)
 {
    return 0;

@@ -112,7 +112,10 @@ public:
     virtual void send(char *data, qint64 size, qint32 target, qint32 tag);
     virtual void send(QByteArray& array, qint32 target, qint32 tag) = 0;
     virtual void send(const QVariant& v, qint32 target, qint32 tag);
-    virtual void send(const QString& s, qint32 target, qint32 tag);
+
+public:
+    template <typename T> void send(T data, qint32 target, qint32 tag);
+    template <typename T> void receive(T &data, qint32 source, qint32 tag);
 
 public:
     virtual void broadcast(qlonglong *data, qint64 size, qint32 source) = 0;
@@ -132,8 +135,6 @@ public:
     virtual void receive(QByteArray &v,qint32 source, qint32 tag) = 0 ;
     virtual void receive(QByteArray &v,qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
     virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
-    virtual void receive(QString &s,   qint32 source, qint32 tag) ;
-    /* virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0; */
 
     virtual dtkDistributedRequest *ireceive(void   *data, qint64 size, DataType dataType, qint32 source, int tag) = 0;
     dtkDistributedRequest *ireceive(bool   *data, qint64 size, qint32 source, int tag);
@@ -179,6 +180,20 @@ DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
 DTK_DECLARE_PLUGIN(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
+
+
+template <typename T> void dtkDistributedCommunicator::send(T data, qint32 target, qint32 tag)
+{
+    QVariant v;
+    v = QVariant::fromValue<T>(data);
+    send(v, target,tag);
+}
+
+template <typename T> void dtkDistributedCommunicator::receive(T &data, qint32 source, qint32 tag) {
+    QVariant v;
+    receive(v,source,tag);
+    data = v.value<T>();
+}
 
 //
 // dtkDistributedCommunicator.h ends here

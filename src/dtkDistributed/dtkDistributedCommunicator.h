@@ -26,6 +26,7 @@ class dtkDistributedCommunicatorStatus;
 class dtkDistributedBufferManager;
 class dtkDistributedRequest;
 
+
 class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator : public QObject
 {
     Q_OBJECT
@@ -117,6 +118,8 @@ public:
     template <typename T> void send(T data, qint32 target, qint32 tag);
     template <typename T> void receive(T &data, qint32 source, qint32 tag);
 
+    template <typename T, typename U> void run(T* t, U (T::*functionPointer)());
+
 public:
     virtual void broadcast(qlonglong *data, qint64 size, qint32 source) = 0;
     virtual void broadcast(double    *data, qint64 size, qint32 source) = 0;
@@ -189,11 +192,33 @@ template <typename T> void dtkDistributedCommunicator::send(T data, qint32 targe
     send(v, target,tag);
 }
 
-template <typename T> void dtkDistributedCommunicator::receive(T &data, qint32 source, qint32 tag) {
+template <typename T> void dtkDistributedCommunicator::receive(T &data, qint32 source, qint32 tag)
+{
     QVariant v;
     receive(v,source,tag);
     data = v.value<T>();
 }
+
+template <typename T, typename U> class runFunction: public QRunnable
+{
+public:
+    U (T::*func)();
+    T *object;
+
+public:
+    void run(void) {
+        (object->*func)();
+    }
+};
+
+template <typename T, typename U> void dtkDistributedCommunicator::run(T* t, U (T::*functionPointer)())
+{
+    runFunction<T,U> runner;
+    runner.func = functionPointer;
+    runner.object = t;
+    this->exec(&runner);
+}
+
 
 //
 // dtkDistributedCommunicator.h ends here

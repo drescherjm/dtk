@@ -15,6 +15,7 @@
 #pragma once
 
 #include "dtkDistributedExport.h"
+#include <QtCore>
 
 class dtkDistributedAbstractApplication;
 class dtkDistributedCoreApplication;
@@ -61,6 +62,21 @@ namespace dtkDistributed
 #pragma mark retrieve current policy
 
     DTKDISTRIBUTED_EXPORT dtkDistributedPolicy *policy(void);
+
+#pragma mark -
+#pragma mark spawn application
+
+    DTKDISTRIBUTED_EXPORT void spawn(void);
+
+#pragma mark -
+#pragma mark execute task
+
+    DTKDISTRIBUTED_EXPORT void exec(QRunnable *task);
+
+#pragma mark -
+#pragma mark unspawn application
+
+    DTKDISTRIBUTED_EXPORT void unspawn(void);
 
 #pragma mark -
 #pragma mark Modular concepts

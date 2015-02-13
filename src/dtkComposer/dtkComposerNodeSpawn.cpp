@@ -98,7 +98,6 @@ void dtkComposerNodeSpawn::begin(void)
         d->policy.setNThreads(d->np);
         // FIXME: don't use hardcoded plugin name
         d->policy.setType("qthreads");
-        d->manager.setPolicy(&d->policy);
         d->communicator  = d->policy.communicator();
         // d->internal_comm = d->manager.spawn();
         d->internal_comm_emitter.setData(d->internal_comm);
@@ -115,7 +114,8 @@ void dtkComposerNodeSpawn::begin(void)
         // p.setParentCommunicator(comm);
         // p.setFactory(factory);
 
-        d->manager.exec(&p);
+        //FIXME: don't use manager
+        // d->manager.exec(&p);
 
     } else {
         dtkTrace() << "communicator exists,  no spawn";

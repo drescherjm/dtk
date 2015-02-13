@@ -60,6 +60,27 @@ namespace dtkDistributed
         return _private::app->policy();
     }
 
+    void spawn(void) {
+        if (!app())
+            return;
+
+        _private::app->spawn();
+    }
+
+    void exec(QRunnable *task) {
+        if (!app())
+            return;
+
+        _private::app->exec(task);
+    }
+
+    void unspawn(void) {
+        if (!app())
+            return;
+
+        _private::app->unspawn();
+    }
+
     namespace communicator
     {
         namespace _private {

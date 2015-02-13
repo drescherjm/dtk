@@ -32,6 +32,8 @@ public:
 public:
     virtual void initialize(void);
     virtual void exec(QRunnable *task);
+    virtual void spawn(void);
+    virtual void unspawn(void);
 
 public:
     bool isMaster(void);

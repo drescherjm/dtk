@@ -19,7 +19,6 @@
 #include "dtkDistributedCommunicator"
 #include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedSettings.h"
-#include "dtkDistributedWorkerManager.h"
 #include "dtkDistributedPolicy.h"
 
 #include <dtkLog>
@@ -30,22 +29,22 @@ class dtkDistributedAbstractApplicationPrivate
 {
 
 public:
-    dtkDistributedWorkerManager manager;
     dtkDistributedPolicy policy;
-
+    bool spawned;
 };
 
 dtkDistributedAbstractApplication::dtkDistributedAbstractApplication(void)
 {
 
     d = new dtkDistributedAbstractApplicationPrivate;
+    d->spawned = false;
 
 }
 
 dtkDistributedAbstractApplication::~dtkDistributedAbstractApplication(void)
 {
-
-    d->manager.unspawn();
+    if (d->spawned)
+        this->unspawn();
 
     delete d;
     d = NULL;
@@ -81,14 +80,26 @@ void dtkDistributedAbstractApplication::initialize(void)
     }
     d->policy.setType(policyType);
 
-    d->manager.setPolicy(&(d->policy));
-    d->manager.spawn();
+    this->spawn();
 }
 
 
 void dtkDistributedAbstractApplication::exec(QRunnable *task)
 {
-    d->manager.exec(task);
+    d->policy.communicator()->exec(task);
+}
+
+void dtkDistributedAbstractApplication::spawn(void)
+{
+    QStringList hosts = d->policy.hosts();
+    d->spawned = true;
+    d->policy.communicator()->spawn(hosts, d->policy.nthreads());
+}
+
+void dtkDistributedAbstractApplication::unspawn(void)
+{
+    d->policy.communicator()->unspawn();
+    d->spawned = false;
 }
 
 dtkDistributedPolicy *dtkDistributedAbstractApplication::policy(void)

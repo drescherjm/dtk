@@ -12,4 +12,3 @@
 #include "dtkDistributedRequest.h"
 #include "dtkDistributedSettings.h"
 #include "dtkDistributedSlave.h"
-#include "dtkDistributedWorkerManager.h"

@@ -57,16 +57,17 @@ int main(int argc, char **argv)
 
         // FIXME: don't hardcode plugin
         dtkDistributedPolicy policy;
-        dtkDistributedWorkerManager manager;
-        policy.setType("mpi3");
-        manager.setPolicy(&policy);
+        //FIXME: don't use manager
+        // dtkDistributedWorkerManager manager;
+        // policy.setType("mpi3");
+        // manager.setPolicy(&policy);
 
         dtkComposerEvaluatorProcess p;
 
         QStringList hosts;
         // dtkDistributedCommunicator *comm = manager.spawn();
         dtkDistributedCommunicator *comm ;
-        manager.spawn();
+        //manager.spawn();
 
         p.setInternalCommunicator(comm);
         p.setParentCommunicator(policy.communicator());

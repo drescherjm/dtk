@@ -17,7 +17,6 @@
 
 #include "dtkComposerNodeRemote_p.h"
 
-#include <dtkDistributed/dtkDistributedWorkerManager.h>
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 
 
@@ -38,7 +37,6 @@ public:
 
 public:
     dtkDistributedCommunicator *internal_comm;
-    dtkDistributedWorkerManager manager;
     dtkDistributedPolicy policy;
 
 public:

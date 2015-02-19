@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: lun. déc. 16 20:48:35 2013 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 261
+ * Last-Updated: jeu. févr. 19 08:44:21 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 263
  */
 
 /* Commentary:
@@ -300,15 +300,15 @@ bool dtkAlmostEqualRelativeOrAbsolute(double A, double B, double maxRelativeErro
 /*!
  *  Fast and simple, but some limitations.
  */
-bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
+bool dtkAlmostEqualUlpsSimple(float A, float B, qint32 maxUlps)
 {
     if (A == B)
         return true;
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
 
-    int32_t intDiff = abs(*AA) - abs(*BB);
+    qint32 intDiff = abs(*AA) - abs(*BB);
 
     if (intDiff <= maxUlps)
         return true;
@@ -316,15 +316,15 @@ bool dtkAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
     return false;
 }
 
-bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
+bool dtkAlmostEqualUlpsSimple(double A, double B, qint64 maxUlps)
 {
     if (A == B)
         return true;
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
 
-    int64_t intDiff = labs(*AA - *BB);
+    qint64 intDiff = labs(*AA - *BB);
 
     if (intDiff <= maxUlps)
         return true;
@@ -336,46 +336,46 @@ bool dtkAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
 /*!
  *
  */
-bool dtkAlmostEqual2sComplement(float A, float B, int32_t maxUlps)
+bool dtkAlmostEqual2sComplement(float A, float B, qint32 maxUlps)
 {
     if (maxUlps < 0 || maxUlps > 4 * 1024 * 1024)
         return false;
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
 
-    int32_t aInt = *AA;
+    qint32 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_32 - aInt;
 
-    int32_t bInt = *BB;
+    qint32 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_32 - bInt;
 
-    int32_t intDiff = abs(aInt - bInt);
+    qint32 intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
     return false;
 }
 
-bool dtkAlmostEqual2sComplement(double A, double B, int64_t maxUlps)
+bool dtkAlmostEqual2sComplement(double A, double B, qint64 maxUlps)
 {
     if (maxUlps < 0 || maxUlps > 8 * 1024 * 1024)
         return false;
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
 
-    int64_t aInt = *AA;
+    qint64 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_64 - aInt;
 
-    int64_t bInt = *BB;
+    qint64 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = labs(aInt - bInt);
+    qint64 intDiff = labs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
@@ -416,11 +416,11 @@ bool dtkAlmostEqualMixedAbsoluteRelative(const double A, const double B,
  */
 bool dtkIsInfinite(float A)
 {
-    const int32_t kInfAsInt = EXP_255_BIT_32;
+    const qint32 kInfAsInt = EXP_255_BIT_32;
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
 
-    if ((int32_t)((*AA & (HIGH_BIT_32 - ONE_BIT_32))) == kInfAsInt)
+    if ((qint32)((*AA & (HIGH_BIT_32 - ONE_BIT_32))) == kInfAsInt)
         return true;
 
     return false;
@@ -428,11 +428,11 @@ bool dtkIsInfinite(float A)
 
 bool dtkIsInfinite(double A)
 {
-    const int64_t kInfAsInt = EXP_255_BIT_64;
+    const qint64 kInfAsInt = EXP_255_BIT_64;
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
 
-    if ((int64_t)((*AA & (HIGH_BIT_64 - ONE_BIT_64))) == kInfAsInt)
+    if ((qint64)((*AA & (HIGH_BIT_64 - ONE_BIT_64))) == kInfAsInt)
         return true;
 
     return false;
@@ -445,10 +445,10 @@ bool dtkIsInfinite(double A)
  */
 bool dtkIsNan(float A)
 {
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
 
-    int32_t exp = *AA & EXP_255_BIT_32;
-    int32_t mantissa = *AA & ((1u<<23)-1u); //0x007FFFFF
+    qint32 exp = *AA & EXP_255_BIT_32;
+    qint32 mantissa = *AA & ((1u<<23)-1u); //0x007FFFFF
 
     if (exp == EXP_255_BIT_32 && mantissa != 0)
         return true;
@@ -458,10 +458,10 @@ bool dtkIsNan(float A)
 
 bool dtkIsNan(double A)
 {
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
 
-    int64_t exp = *AA & EXP_255_BIT_64;
-    int64_t mantissa = *AA & ((1ull<<55)-1ull); //0x007FFFFFFFFFFFFF
+    qint64 exp = *AA & EXP_255_BIT_64;
+    qint64 mantissa = *AA & ((1ull<<55)-1ull); //0x007FFFFFFFFFFFFF
 
     if (exp == EXP_255_BIT_64 && mantissa != 0)
         return true;
@@ -473,16 +473,16 @@ bool dtkIsNan(double A)
 /*!
  *  The sign bit of a number is the high bit.
  */
-int32_t dtkSign(float A)
+qint32 dtkSign(float A)
 {
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
 
     return (*AA) & HIGH_BIT_32;
 }
 
-int64_t dtkSign(double A)
+qint64 dtkSign(double A)
 {
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
 
     return (*AA) & HIGH_BIT_64;
 }
@@ -513,7 +513,7 @@ int64_t dtkSign(double A)
  *  other.
  *
  */
-bool dtkAlmostEqualUlps(float A, float B, int32_t maxUlps)
+bool dtkAlmostEqualUlps(float A, float B, qint32 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -530,29 +530,29 @@ bool dtkAlmostEqualUlps(float A, float B, int32_t maxUlps)
         return A == B;
 #endif
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t aInt = *AA;
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 aInt = *AA;
 
     // Make aInt lexicographically ordered as a twos-complement int
     if (aInt < 0)
         aInt = HIGH_BIT_32 - aInt;
 
     // Make bInt lexicographically ordered as a twos-complement int
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
-    int32_t bInt = *BB;
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
+    qint32 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_32 - bInt;
 
     // Now we can compare aInt and bInt to find out how far apart A and B
     // are.
-    int32_t intDiff = abs(aInt - bInt);
+    qint32 intDiff = abs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
     return false;
 }
 
-bool dtkAlmostEqualUlps(double A, double B, int64_t maxUlps)
+bool dtkAlmostEqualUlps(double A, double B, qint64 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -569,17 +569,17 @@ bool dtkAlmostEqualUlps(double A, double B, int64_t maxUlps)
         return A == B;
 #endif
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t aInt = *AA;
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_64 - aInt;
 
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
-    int64_t bInt = *BB;
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
+    qint64 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = labs(aInt - bInt);
+    qint64 intDiff = labs(aInt - bInt);
     if (intDiff <= maxUlps)
         return true;
 
@@ -594,22 +594,22 @@ bool dtkAlmostEqualUlps(double A, double B, int64_t maxUlps)
 /*!
  *
  */
-void dtkPrintNumber(float A, int32_t offset)
+void dtkPrintNumber(float A, qint32 offset)
 {
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
 
     (*AA) += offset;
 
 #if !defined(__APPLE__)
-    printf("%+1.8g, 0x%08lx, %d\n", A, *AA, *AA);
+    printf("%+1.8g, 0x%08x, %d\n", A, *AA, *AA);
 #else
     printf("%+1.8g, %d, %d\n", A, *AA, *AA);
 #endif
 }
 
-void dtkPrintNumber(double A, int64_t offset)
+void dtkPrintNumber(double A, qint64 offset)
 {
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
     (*AA) += offset;
 
 #if !defined(__APPLE__)
@@ -627,7 +627,7 @@ void dtkPrintNumber(double A, int64_t offset)
 /*!
  *
  */
-bool dtkLesserThanUlps(float A, float B, int32_t maxUlps)
+bool dtkLesserThanUlps(float A, float B, qint32 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -644,17 +644,17 @@ bool dtkLesserThanUlps(float A, float B, int32_t maxUlps)
         return A < B;
 #endif
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t aInt = *AA;
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_32 - aInt;
 
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
-    int32_t bInt = *BB;
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
+    qint32 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_32 - bInt;
 
-    int32_t intDiff = aInt - bInt;
+    qint32 intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return false;
 
@@ -665,7 +665,7 @@ bool dtkLesserThanUlps(float A, float B, int32_t maxUlps)
         return true;
 }
 
-bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
+bool dtkLesserThanUlps(double A, double B, qint64 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -682,17 +682,17 @@ bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
         return A < B;
 #endif
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t aInt = *AA;
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_64 - aInt;
 
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
-    int64_t bInt = *BB;
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
+    qint64 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = aInt - bInt;
+    qint64 intDiff = aInt - bInt;
     if (labs(intDiff) <= maxUlps)
         return false;
 
@@ -707,7 +707,7 @@ bool dtkLesserThanUlps(double A, double B, int64_t maxUlps)
 /*!
  *
  */
-bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int32_t maxUlps)
+bool dtkLesserThanOrAlmostEqualUlps(float A, float B, qint32 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -724,17 +724,17 @@ bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int32_t maxUlps)
         return A <= B;
 #endif
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t aInt = *AA;
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_32 - aInt;
 
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
-    int32_t bInt = *BB;
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
+    qint32 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_32 - bInt;
 
-    int32_t intDiff = aInt - bInt;
+    qint32 intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return true;
 
@@ -745,7 +745,7 @@ bool dtkLesserThanOrAlmostEqualUlps(float A, float B, int32_t maxUlps)
         return true;
 }
 
-bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
+bool dtkLesserThanOrAlmostEqualUlps(double A, double B, qint64 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -762,17 +762,17 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
         return A <= B;
 #endif
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t aInt = *AA;
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_64 - aInt;
 
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
-    int64_t bInt = *BB;
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
+    qint64 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = aInt - bInt;
+    qint64 intDiff = aInt - bInt;
     if (labs(intDiff) <= maxUlps)
         return true;
 
@@ -787,7 +787,7 @@ bool dtkLesserThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
 /*!
  *
  */
-bool dtkGreaterThanUlps(float A,  float B, int32_t maxUlps)
+bool dtkGreaterThanUlps(float A,  float B, qint32 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -804,17 +804,17 @@ bool dtkGreaterThanUlps(float A,  float B, int32_t maxUlps)
         return A > B;
 #endif
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t aInt = *AA;
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_32 - aInt;
 
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
-    int32_t bInt = *BB;
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
+    qint32 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_32 - bInt;
 
-    int32_t intDiff = aInt - bInt;
+    qint32 intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return false;
 
@@ -825,7 +825,7 @@ bool dtkGreaterThanUlps(float A,  float B, int32_t maxUlps)
         return true;
 }
 
-bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
+bool dtkGreaterThanUlps(double A, double B, qint64 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -842,17 +842,17 @@ bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
         return A > B;
 #endif
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t aInt = *AA;
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_64 - aInt;
 
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
-    int64_t bInt = *BB;
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
+    qint64 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = aInt - bInt;
+    qint64 intDiff = aInt - bInt;
     if (labs(intDiff) <= maxUlps)
         return false;
 
@@ -867,7 +867,7 @@ bool dtkGreaterThanUlps(double A, double B, int64_t maxUlps)
 /*!
  *
  */
-bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int32_t maxUlps)
+bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, qint32 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -884,18 +884,18 @@ bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int32_t maxUlps)
         return A >= B;
 #endif
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t aInt = *AA;
+    qint32 *AA = reinterpret_cast<qint32*>(&A);
+    qint32 aInt = *AA;
 
     if (aInt < 0)
         aInt = HIGH_BIT_32 - aInt;
 
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
-    int32_t bInt = *BB;
+    qint32 *BB = reinterpret_cast<qint32*>(&B);
+    qint32 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_32 - bInt;
 
-    int32_t intDiff = aInt - bInt;
+    qint32 intDiff = aInt - bInt;
     if (abs(intDiff) <= maxUlps)
         return true;
 
@@ -906,7 +906,7 @@ bool dtkGreaterThanOrAlmostEqualUlps(float A,  float B, int32_t maxUlps)
         return true;
 }
 
-bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
+bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, qint64 maxUlps)
 {
 #ifdef  INFINITYCHECK
     if (dtkIsInfinite(A) || dtkIsInfinite(B))
@@ -923,17 +923,17 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, int64_t maxUlps)
         return A >= B;
 #endif
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t aInt = *AA;
+    qint64 *AA = reinterpret_cast<qint64*>(&A);
+    qint64 aInt = *AA;
     if (aInt < 0)
         aInt = HIGH_BIT_64 - aInt;
 
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
-    int64_t bInt = *BB;
+    qint64 *BB = reinterpret_cast<qint64*>(&B);
+    qint64 bInt = *BB;
     if (bInt < 0)
         bInt = HIGH_BIT_64 - bInt;
 
-    int64_t intDiff = aInt - bInt;
+    qint64 intDiff = aInt - bInt;
     if (labs(intDiff) <= maxUlps)
         return true;
 

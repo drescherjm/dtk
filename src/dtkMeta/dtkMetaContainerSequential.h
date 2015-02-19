@@ -194,10 +194,10 @@ public:
     void  setAt(qlonglong idx, const QVariant& v);
 
 public:
-    template <typename T> const T& at(qlonglong idx) const;
+    const QVariant& at(qlonglong idx) const;
 
 public:
-    const QVariant& at(qlonglong idx) const;
+    template <typename T> const T& at(qlonglong idx) const;
 
 public:
     void removeAt(qlonglong idx);

@@ -119,15 +119,13 @@ dtkWarn()  <<  "Warn messaage"; // will     output as dtkLog::Warn >= dtkLog::In
  * The output will be carried on depending on the dtkLogger instance log Level.
  */
 
-/*!
- * \fn QString DTKLOG_EXPORT dtkLogPath(QCoreApplication *application)
+/*! 
  * \relates dtkLog
  *
- * Convenience method to return the path to an application's log file
+ * Convenience method to return the path to an \a application's log file
  * using the standard data location path.
  */
-
-QString DTKLOG_EXPORT dtkLogPath(QCoreApplication *application)
+QString dtkLogPath(QCoreApplication *application)
 {
     return QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath(QString("%1.log").arg(application->applicationName()));
 }

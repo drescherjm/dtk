@@ -42,12 +42,48 @@ public:
   \brief ...
  */
 
+/*! \enum dtkDistributedCommunicator::DataType
+    \value Bool
+    \value Char
+    \value Int
+    \value Long
+    \value Int64
+    \value Float
+    \value Double
+ */
+ 
+/*! \enum dtkDistributedCommunicator::OperationType
+    \value None
+    \value Min
+    \value Max
+    \value Sum
+    \value Product
+    \value BitwiseAnd
+    \value BitwiseOr
+    \value BitwiseXor
+    \value LogicalAnd
+    \value LogicalOr
+    \value LogicalXor
+*/
+
+/*! \enum dtkDistributedCommunicator::MessageTag
+    \value TagSend
+    \value TagReceive
+    \value TagReduce
+*/
+
+/*!
+ *  Constructor
+ */
 dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject(), d(new dtkDistributedCommunicatorPrivate)
 {
     d->id = 0;
     d->initialized = false;
 }
 
+/*!
+ *  Destructor
+ */
 dtkDistributedCommunicator::~dtkDistributedCommunicator(void)
 {
     delete d;
@@ -55,11 +91,17 @@ dtkDistributedCommunicator::~dtkDistributedCommunicator(void)
     d = NULL;
 }
 
+/*!
+ *  Copy constructor
+ */
 dtkDistributedCommunicator::dtkDistributedCommunicator(const dtkDistributedCommunicator& other)
 {
 
 }
 
+/*!
+ *  Assignment operator
+ */
 dtkDistributedCommunicator& dtkDistributedCommunicator::operator = (const dtkDistributedCommunicator& other)
 {
     return *this;

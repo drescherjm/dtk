@@ -16,6 +16,10 @@
 
 #include "dtkDistributedExport.h"
 
+// ///////////////////////////////////////////////////////////////////
+// dtkDistributedBufferManager
+// ///////////////////////////////////////////////////////////////////
+
 class DTKDISTRIBUTED_EXPORT dtkDistributedBufferManager
 {
 public:
@@ -38,9 +42,13 @@ public:
     virtual bool locked(qlonglong wid) = 0;
 
 public:
-    virtual void get(qint32 from, qlonglong position, void *array, qlonglong nelements = 1) = 0;
-    virtual void put(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
+    virtual void get(qint32 from, qlonglong position, void *array, qlonglong count = 1) = 0;
+    virtual void put(qint32 dest, qlonglong position, void *array, qlonglong count = 1) = 0;
 };
+
+// ///////////////////////////////////////////////////////////////////
+// dtkDistributedBufferManager templated member functions
+// ///////////////////////////////////////////////////////////////////
 
 template <typename T> inline T *dtkDistributedBufferManager::allocate(qlonglong capacity)
 {

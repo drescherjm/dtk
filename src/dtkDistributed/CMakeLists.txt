@@ -62,6 +62,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedAbstractApplication.cpp
+  dtkDistributedBufferManager.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp

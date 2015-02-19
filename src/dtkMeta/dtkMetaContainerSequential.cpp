@@ -94,13 +94,18 @@
     \sa dtkMetaContainerSequential::item, dtkMetaContainerSequential
 */
 
-/*! \fn dtkMetaContainerSequential::iterator::iterator(dtkMetaContainerSequentialHandler::iterator *iterator)
+/*! \fn explicit dtkMetaContainerSequential::iterator::iterator(HandlerIterator *iterator)
     \internal
 */
 
 /*! \fn dtkMetaContainerSequential::iterator::iterator(const iterator& o)
 
     Creates a copy of \a o.
+*/
+
+/*! \fn dtkMetaContainerSequential::iterator::iterator(iterator&& o)
+
+    Move constructor from iterator \a o.
 */
 
 /*! \fn dtkMetaContainerSequential::iterator::~iterator(void)
@@ -113,7 +118,17 @@
     Assigns \a o to \c this.
 */
 
-/*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator [] (int j) const
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (iterator&& o)
+
+    Move assignement operator.
+*/
+
+/*! \fn T& dtkMetaContainerSequential::iterator::value(void)
+
+    Returns reference to the element referred by the current iterator.
+ */
+
+/*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator [] (qlonglong j)
 
     Returns a reference to the dtkMetaContainerSequential::item which
     enables to modify the element at \c *this \c + \a j pointed by the
@@ -138,7 +153,7 @@
     \sa hasBiDirectionalIterator()
 */
 
-/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator + (int j) const
+/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator + (qlonglong j) const
 
     Returns an iterator to the element at \a j positions forward from
     this iterator.
@@ -146,7 +161,7 @@
     \sa operator-(), operator+=()
 */
 
-/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator - (int j) const
+/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator - (qlonglong j) const
 
     Returns an iterator to the item at \a j positions backward from
     this iterator.
@@ -183,9 +198,9 @@
     Creates a copy of \a o.
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const iterator& o)
+/*! \fn dtkMetaContainerSequential::const_iterator::const_iterator(const_iterator&& o)
 
-    Creates a const_iterator that refers the same element than the iterator \a o.
+    Move constructor.
 */
 
 /*! \fn dtkMetaContainerSequential::const_iterator::~const_iterator(void)
@@ -198,12 +213,17 @@
     Assigns \a o to \c this.
 */
 
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator = (const_iterator&& o)
+
+    Move assignement operator.
+*/
+
 /*! \fn const QVariant dtkMetaContainerSequential::const_iterator::operator * (void) const
 
     Returns the current element, converted to a QVariant.
 */
 
-/*! \fn const QVariant dtkMetaContainerSequential::const_iterator::operator [] (int j) const
+/*! \fn const QVariant dtkMetaContainerSequential::const_iterator::operator [] (qlonglong j) const
 
     Returns the element at \c *this \c + \a j, converted to a QVariant.
 */
@@ -226,7 +246,7 @@
     \sa hasBiDirectionalIterator()
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (int j) const
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator + (qlonglong j) const
 
     Returns an iterator to the element at \a j positions forward from
     this iterator.
@@ -234,7 +254,7 @@
     \sa operator-(), operator+=()
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (int j) const
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator - (qlonglong j) const
 
     Returns an iterator to the element at \a j positions backward from
     this iterator.
@@ -284,50 +304,14 @@
     \sa QSequentialIterable, QVariant
 */
 
-/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::begin(void)
-
-    Returns a dtkMetaContainerSequential::iterator for the beginning
-    of the container. This can be used in stl-style iteration.
-
-    \sa cbegin(), end()
+/*! \typedef dtkMetaContainerSequential::HandlerIterator
+    \internal
+    Synonym for dtkMetaContainerSequentialHandler::iterator
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::begin(void) const
-
-    This is an overloaded function.
-
-    \sa cbegin()
-*/
-
-/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cbegin(void) const
-
-    Returns a dtkMetaContainerSequential::const_iterator for the beginning
-    of the container. This can be used in stl-style iteration.
-
-    \sa begin(), cend()
-*/
-
-/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::end(void)
-
-    Returns a dtkMetaContainerSequential::iterator for the end of the
-    container. This can be used in stl-style iteration.
-
-    \sa cend(), begin()
-*/
-
-/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::end(void) const
-
-    This is an overloaded function.
-
-    \sa cend()
-*/
-
-/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cend(void) const
-
-    Returns a dtkMetaContainerSequential::const_iterator for the end
-    of the container. This can be used in stl-style iteration.
-
-    \sa cbegin(), end()
+/*! \typedef dtkMetaContainerSequential::HandlerConstIterator
+    \internal    
+    Synonym for dtkMetaContainerSequentialHandler::const_iterator
 */
 
 /*! \fn void dtkMetaContainerSequential::insert(qlonglong idx, const QVariant& v)
@@ -365,25 +349,19 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     h->setAt(idx, v.constData());
 }
 
-/*! \fn const QVariant& dtkMetaContainerSequential::at(qlonglong idx) const
-
-    Returns as a QVariant the item at position \a idx in the container.
-
-    \a idx must be a valid index position in the container (i.e., 0 <=
-    \a idx < size()).
-
-    \sa operator[]()
-*/
-
 // ///////////////////////////////////////////////////////////////////
 // Documentation of inline methods
 // ///////////////////////////////////////////////////////////////////
 
-/*! \fn dtkMetaContainerSequential::item::item(iterator *iter)
+/*! \fn dtkMetaContainerSequential::item::item(HandlerIterator *iterator)
     \internal
 */
 
 /*! \fn dtkMetaContainerSequential::item::item(const item& o)
+    \internal
+*/
+
+/*! \fn dtkMetaContainerSequential::item::item(item&& o)
     \internal
 */
 
@@ -393,9 +371,14 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     dtkMetaContainerSequential::iterator to which it is related.
 */
 
-/*! \fn T dtkMetaContainerSequential::item::value(void) const
+/*! \fn const QVariant dtkMetaContainerSequential::item::value(void) const
+    \overload
+    Returns the element referred by the item as a QVariant.
+*/
 
-    Returns the value of the element referred by the item.
+/*! \fn const T& dtkMetaContainerSequential::item::value(void) const
+
+    Returns a const reference to the element referred by the item.
 */
 
 /*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (const item& o)
@@ -403,18 +386,33 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     Assigns \a o to \c this.
 */
 
+/*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (item&& o)
+
+    Move assignement operator.
+*/
+
+/*! \fn bool dtkMetaContainerSequential::item::operator == (const item& o) const
+
+    Return true if the element referred by the current item is equal to the element referred by item \a o.
+ */
+
+/*! \fn bool dtkMetaContainerSequential::item::operator != (const item& o) const
+
+    Return true if the element referred by the current item differs from the element referred by item \a o.
+ */
+
 /*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (const T& value)
 
     Assigns \a value to the element referred by the item.
 */
 
-/*! \fn bool dtkMetaContainerSequential::item::operator == (const T& value)
+/*! \fn bool dtkMetaContainerSequential::item::operator == (const T& value) const
 
     Returns \c true if the element referred by the item is equal to \a
     value. Otherwise returns \c false.
 */
 
-/*! \fn bool dtkMetaContainerSequential::item::operator != (const T& value)
+/*! \fn bool dtkMetaContainerSequential::item::operator != (const T& value) const
 
     Returns \c true if the element referred by the item differs from
     \a value. Otherwise returns \c false.
@@ -450,7 +448,7 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
 
 // ///////////////////////////////////////////////////////////////////
 
-/*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator * (void) const
+/*! \fn dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::operator * (void)
 
     Returns the current element, converted to a dtkMetaContainerSequential::item.
 */
@@ -496,14 +494,14 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     \sa operator++(), hasBiDirectionalIterator()
 */
 
-/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator += (int j)
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator += (qlonglong j)
 
     Advances the iterator by \a j elements.
 
     \sa operator-=(), operator+()
 */
 
-/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -= (int j)
+/*! \fn dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -= (qlonglong j)
 
     Makes the iterator go back by \a j elements.
 
@@ -556,14 +554,14 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     \sa operator++(), hasBiDirectionalIterator()
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator += (int j)
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator += (qlonglong j)
 
     Advances the iterator by \a j elements.
 
     \sa operator-=(), operator+()
 */
 
-/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -= (int j)
+/*! \fn dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::const_iterator::operator -= (qlonglong j)
 
     Makes the iterator go back by \a j elements.
 
@@ -575,51 +573,60 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
 
 // ///////////////////////////////////////////////////////////////////
 
-/*! \fn dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSequentialPrivate::handler h)
-    \internal
+/*! \fn dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSequentialHandler *handler)
+    Constructs the dtkMetaContainerSequential. User must supply a concrete \a handler.
 */
 
-/*! \fn void dtkMetaContainerSequential::append(const T& value)
+/*! \fn dtkMetaContainerSequential::dtkMetaContainerSequential(const dtkMetaContainerSequential& o)
+  
+    Constructs a copy of dtkMetaContainerSequential \a o.
+ */
+ 
+/*! \fn dtkMetaContainerSequential::~dtkMetaContainerSequential(void)
 
-    Inserts \a value at the end of the container.
+    Destructor.
+ */
 
-    \sa prepend(), insert()
+/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::begin(void)
+
+    Returns a dtkMetaContainerSequential::iterator for the beginning
+    of the container. This can be used in stl-style iteration.
+
+    \sa cbegin(), end()
 */
 
-/*! \fn void dtkMetaContainerSequential::append(const QVariant& v)
-
-    Inserts the value wrapped into QVariant \a v at the end of the
-    container.
-
-    \sa prepend(), insert()
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::begin(void) const
+    \overload
+    \sa cbegin()
 */
 
-/*! \fn void dtkMetaContainerSequential::clear(void)
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cbegin(void) const
 
-    Removes all the elements from the container.
+    Returns a dtkMetaContainerSequential::const_iterator for the beginning
+    of the container. This can be used in stl-style iteration.
+
+    \sa begin(), cend()
 */
 
-/*! \fn bool dtkMetaContainerSequential::empty(void) const
+/*! \fn dtkMetaContainerSequential::iterator dtkMetaContainerSequential::end(void)
 
-    Returns \c true if the container is empty; otherwise returns \c
-    false.
+    Returns a dtkMetaContainerSequential::iterator for the end of the
+    container. This can be used in stl-style iteration.
+
+    \sa cend(), begin()
 */
 
-/*! \fn dtkMetaContainerSequential::item dtkMetaContainerSequential::first(void)
-
-    Returns a the first element of the container as a
-    dtkMetaContainerSequential::item. This item can be used through
-    arithmetic operators such as \c += , \c *= , \c -= , \c /= , \c ==
-    or \c != provided that the type of the element supports them.
-
-    \sa last()
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::end(void) const
+    \overload
+    \sa cend()
 */
 
-/*! \fn const QVariant dtkMetaContainerSequential::first(void) const
+/*! \fn dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::cend(void) const
 
-    Returns a the first element of the container as a QVariant.
+    Returns a dtkMetaContainerSequential::const_iterator for the end
+    of the container. This can be used in stl-style iteration.
 
-    \sa last()
+    \sa cbegin(), end()
 */
 
 /*! \fn bool dtkMetaContainerSequential::hasBiDirectionalIterator(void) const
@@ -639,13 +646,135 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     \sa hasBiDirectionalIterator()
 */
 
-/*! \fn void dtkMetaContainerSequential::insert(int idx, const T& value)
+/*! \fn bool dtkMetaContainerSequential::empty(void) const
+
+    Returns \c true if the container is empty; otherwise returns \c
+    false.
+*/
+
+/*! \fn qlonglong dtkMetaContainerSequential::size(void) const
+
+    Returns the number of items in the container.
+
+    \sa resize(), empty()
+*/
+
+/*! \fn void dtkMetaContainerSequential::clear(void)
+
+    Removes all the elements from the container.
+*/
+
+/*! \fn void dtkMetaContainerSequential::reserve(qlonglong size)
+
+    With respect to the container, it enables to allocate memory for
+    at least \a size elements.
+
+    Be careful, since this method is not available for every
+    container. For instance, QList does not provide it. Using it will
+    prompt a warning.
+*/
+
+/*! \fn void dtkMetaContainerSequential::resize(qlonglong size)
+
+    Sets the size of the container to \a size. The growing policy
+    relies on the kind of container.
+
+    One must notice that this method is meaningless for std::list or
+    QLinkedList for instance. A warning is then prompt.
+
+    \sa size()
+*/
+
+/*! \fn void dtkMetaContainerSequential::append(const T& value)
+
+    Inserts \a value at the end of the container.
+
+    \sa prepend(), insert()
+*/
+
+/*! \fn void dtkMetaContainerSequential::prepend(const T& value)
+
+    Inserts \a value at the beginning of the container.
+
+    \sa append(), insert()
+*/
+
+/*! \fn void dtkMetaContainerSequential::append(const QVariant& v)
+    \overload
+    Inserts the value wrapped into QVariant \a v at the end of the
+    container.
+
+    \sa prepend(), insert()
+*/
+
+/*! \fn void dtkMetaContainerSequential::prepend(const QVariant& v)
+    \overload
+    Inserts the value wrapped into QVariant \a v at the beginning of the
+    container.
+
+    \sa append(), insert()
+*/
+
+/*! \fn void dtkMetaContainerSequential::insert(qlonglong idx, const T& value)
 
     Inserts \a value at index position \a idx in the container. If \a
     idx is 0, the value is prepended to the container. If \a idx is
     size(), the value is appended to the container.
 
     \sa append(), prepend(), removeAt()
+*/
+
+/*! \fn void dtkMetaContainerSequential::setAt(qlonglong idx, const T& value)
+
+    Replaces the item at index position \a idx with \a value.
+
+    \a idx must be a valid index position in the container (i.e., 0 <=
+    \a idx < size()).
+
+    \sa at(), operator[](), removeAt()
+*/
+
+/*! \fn const QVariant& dtkMetaContainerSequential::at(qlonglong idx) const
+    \overload
+    Returns as a QVariant the item at position \a idx in the container.
+
+    \a idx must be a valid index position in the container (i.e., 0 <=
+    \a idx < size()).
+
+    \sa operator[]()
+*/
+
+/*! \fn const T& dtkMetaContainerSequential::at(qlonglong idx) const
+    Returns const reference of the item at position \a idx in the container.
+
+    \a idx must be a valid index position in the container (i.e., 0 <=
+    \a idx < size()).
+
+    \sa operator[]()
+*/
+
+/*! \fn void dtkMetaContainerSequential::removeAt(qlonglong idx)
+
+    Removes the element at index position \a idx.
+
+    \sa insert(), setAt()
+*/
+
+/*! \fn dtkMetaContainerSequential::item dtkMetaContainerSequential::first(void)
+
+    Returns a the first element of the container as a
+    dtkMetaContainerSequential::item. This item can be used through
+    arithmetic operators such as \c += , \c *= , \c -= , \c /= , \c ==
+    or \c != provided that the type of the element supports them.
+
+    \sa last()
+*/
+
+/*! \fn const QVariant dtkMetaContainerSequential::first(void) const
+    \overload
+    Returns a the first element of the container as a QVariant.
+
+    \sa last()
 */
 
 /*! \fn dtkMetaContainerSequential::item dtkMetaContainerSequential::last(void)
@@ -659,73 +788,13 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
 */
 
 /*! \fn const QVariant dtkMetaContainerSequential::last(void) const
-
+    \overload
     Returns a the last element of the container as a QVariant.
 
     \sa first()
 */
 
-/*! \fn void dtkMetaContainerSequential::prepend(const T& value)
-
-    Inserts \a value at the beginning of the container.
-
-    \sa append(), insert()
-*/
-
-/*! \fn void dtkMetaContainerSequential::prepend(const QVariant& v)
-
-    Inserts the value wrapped into QVariant \a v at the beginning of the
-    container.
-
-    \sa append(), insert()
-*/
-
-/*! \fn void dtkMetaContainerSequential::removeAt(int idx)
-
-    Removes the element at index position \a idx.
-
-    \sa insert(), setAt()
-*/
-
-/*! \fn void dtkMetaContainerSequential::reserve(int size)
-
-    With respect to the container, it enables to allocate memory for
-    at least \a size elements.
-
-    Be careful, since this method is not available for every
-    container. For instance, QList does not provide it. Using it will
-    prompt a warning.
-*/
-
-/*! \fn void dtkMetaContainerSequential::resize(int size)
-
-    Sets the size of the container to \a size. The growing policy
-    relies on the kind of container.
-
-    One must notice that this method is meaningless for std::list or
-    QLinkedList for instance. A warning is then prompt.
-
-    \sa size()
-*/
-
-/*! \fn void dtkMetaContainerSequential::setAt(int idx, const T& value)
-
-    Replaces the item at index position \a idx with \a value.
-
-    \a idx must be a valid index position in the container (i.e., 0 <=
-    \a idx < size()).
-
-    \sa at(), operator[](), removeAt()
-*/
-
-/*! \fn int dtkMetaContainerSequential::size(void) const
-
-    Returns the number of items in the container.
-
-    \sa resize(), empty()
-*/
-
-/*! \fn dtkMetaContainerSequential::item dtkMetaContainerSequential::operator[](int idx)
+/*! \fn dtkMetaContainerSequential::item dtkMetaContainerSequential::operator[](qlonglong idx)
 
     Returns a the element at position \a idx of the container as a
     modifiable dtkMetaContainerSequential::item.
@@ -737,11 +806,24 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
     \sa first(), at(), last()
 */
 
-/*! \fn const QVariant dtkMetaContainerSequential::operator[](int idx) const
+/*! \fn const QVariant dtkMetaContainerSequential::operator[](qlonglong idx) const
 
     \overload
 
     Same as at(\a idx).
 
     \sa at()
+*/
+
+/*! \fn QDebug &operator<<(QDebug debug, const dtkMetaContainerSequential& container)
+    \relates dtkMetaContainerSequential
+
+    Writes the descriptions of \a container to the stream \a debug and returns a reference to the stream.
+
+    \code
+    QVector<int> vec(55, -1);
+    QVariant var = QVariant::fromValue(&vec);
+    dtkMetaContainerSequential c = var.value<dtkMetaContainerSequential>();
+    qDebug() << c;
+    \endcode
 */

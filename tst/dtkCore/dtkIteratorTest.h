@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -32,6 +32,24 @@ private slots:
 
 private slots:
     void testCreate(void);
+    void testCopyCreate(void);
+    void testCopy(void);
+    void testDereference(void);
+    void testBracket(void);
+    void testForward(void);
+    void testPreForward(void);
+    void testPreBackward(void);
+    void testBackward(void);
+    void testAffectAdd(void);
+    void testAffectSubstract(void);
+    void testAdd(void);
+    void testSubstract(void);
+    void testEquality(void);
+    void testInequality(void);
+    void testInferior(void);
+    void testInferiorEqual(void);
+    void testSuperior(void);
+    void testSuperiorEqual(void);
 
 private slots:
     void cleanupTestCase(void);
@@ -41,5 +59,5 @@ private:
     dtkIteratorTestCasePrivate *d;
 };
 
-// 
+//
 // dtkIteratorTest.h ends here

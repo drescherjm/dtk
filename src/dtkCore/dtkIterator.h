@@ -12,6 +12,8 @@
 
 // Code:
 
+#pragma once
+
 #include <QtCore>
 
 template <typename T> class dtkAbstractIterator;

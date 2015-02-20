@@ -40,6 +40,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager.tpp
   dtkCoreSettings
   dtkCoreSettings.h
+  dtkIterator.h
   dtkSpinLock.h)
 
 set(${PROJECT_NAME}_SOURCES

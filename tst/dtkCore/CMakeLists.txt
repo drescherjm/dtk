@@ -16,13 +16,15 @@ project(dtkCoreTest)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS_MOC
-  dtkArrayTest.h)
+  dtkArrayTest.h
+  dtkIteratorTest.h)
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS_MOC})
 
 set(${PROJECT_NAME}_SOURCES
-  dtkArrayTest.cpp)
+  dtkArrayTest.cpp
+  dtkIteratorTest.cpp)
 
 ## ###################################################################
 ## Input - introspected
@@ -59,3 +61,4 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 ## ###################################################################
 
 add_test(dtkArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
+add_test(dtkIteratorTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)

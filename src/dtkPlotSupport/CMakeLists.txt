@@ -15,8 +15,6 @@
 
 project(dtkPlotSupport)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
-
 find_package(Qwt 6 REQUIRED)
 
 if(QWT_FOUND)

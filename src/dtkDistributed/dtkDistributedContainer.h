@@ -65,8 +65,18 @@ public:
     qlonglong  size(void) const { return  m_size; }
 
 public:
-    dtkDistributedMapper             *mapper(void) { return m_mapper; }
-    dtkDistributedCommunicator *communicator(void) { return m_comm; }
+    void setMapper(dtkDistributedMapper *mapper) 
+    { 
+        if (!m_mapper->deref())
+            delete m_mapper;
+
+        m_mapper = mapper;
+        m_mapper->ref();
+    }
+
+public:
+    dtkDistributedMapper             *mapper(void) const { return m_mapper; }
+    dtkDistributedCommunicator *communicator(void) const { return m_comm; }
 
 public:
     qlonglong wid(void) const { return m_comm->wid(); }

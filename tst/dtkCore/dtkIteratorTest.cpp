@@ -169,7 +169,7 @@ void dtkIteratorTestCase::testBracket(void)
     dtkDummyIterator it = d->begin();
 
     for(int i = 0; i < 4; ++i)
-        QVERIFY((*it[i]).id() == i);
+        QVERIFY((it[i])->id() == i);
 }
 
 void dtkIteratorTestCase::testForward(void)
@@ -232,16 +232,16 @@ void dtkIteratorTestCase::testAdd(void)
 {
     dtkDummyIterator it = d->begin();
 
-    it = it + 3;
-    QVERIFY((*it)->id() == 3);
+    dtkDummyIterator o = it + 3;
+    QVERIFY((*o)->id() == 3);
 }
 
 void dtkIteratorTestCase::testSubstract(void)
 {
     dtkDummyIterator it = d->end();
 
-    it = it - 3;
-    QVERIFY((*it)->id() == 1);
+    dtkDummyIterator o  = it - 3;
+    QVERIFY((*o)->id() == 1);
 }
 
 void dtkIteratorTestCase::testEquality(void)

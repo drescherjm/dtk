@@ -159,7 +159,7 @@ QString  dtkPlotCurve::description(void)
     QString string;
 
     string = "[ " ;
-    for (unsigned i = 0; i < d->data->samples().count(); i++) {
+    for (int i = 0; i < d->data->samples().count(); i++) {
         if (i > 0)
             string.append("; ");
 

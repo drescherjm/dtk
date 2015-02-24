@@ -94,7 +94,6 @@ void dtkAbstractApplication::initialize(void)
     d->parser.addHelpOption();
     d->parser.addVersionOption();
 
-    bool opt;
     QCommandLineOption settingsOption("settings", "settings file", "filename");
     d->parser.addOption(settingsOption);
 

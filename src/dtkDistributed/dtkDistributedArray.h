@@ -24,7 +24,7 @@
 // dtkDistributedArray
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> class DTKDISTRIBUTED_EXPORT dtkDistributedArray : public dtkDistributedContainer
+template<typename T> class dtkDistributedArray : public dtkDistributedContainer
 {
 public:
       dtkDistributedArray(const qlonglong& size);

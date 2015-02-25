@@ -35,6 +35,10 @@
 template <typename T> class dtkContainerVector : public dtkAbstractContainerOrdered<T>
 {
 public:
+    typedef typename dtkArray<T>::iterator iterator;
+    typedef typename dtkArray<T>::const_iterator const_iterator;
+
+public:
              dtkContainerVector(void);
              dtkContainerVector(qlonglong size);
              dtkContainerVector(qlonglong size, const T& value);
@@ -145,6 +149,16 @@ public:
     template <typename U> friend QVector<U> dtkContainerVectorToQVector(const dtkContainerVector<U>& vector);
     template <typename U> friend dtkContainerVector<T> dtkContainerVectorFromDtkArray(const dtkArray<U>& vector);
     template <typename U> friend dtkArray<U> dtkContainerVectorToDtkArray(const dtkContainerVector<U>& vector);
+
+
+public:
+          iterator begin(iterator = iterator())                    { return m_vector.begin(); }
+    const_iterator begin(const_iterator = const_iterator()) const  { return m_vector.constBegin(); }
+    const_iterator cbegin(const_iterator = const_iterator()) const { return m_vector.constBegin(); }
+
+          iterator end(iterator = iterator())                        { return m_vector.end(); }
+    const_iterator end(const_iterator = const_iterator()) const      { return m_vector.constEnd(); }
+    const_iterator cend(const_iterator = const_iterator()) const     { return m_vector.constEnd(); }
 
 private:
     dtkArray<T> m_vector;

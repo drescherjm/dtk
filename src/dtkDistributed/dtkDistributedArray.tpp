@@ -145,6 +145,11 @@ template<typename T> inline T dtkDistributedArray<T>::last(void) const
     return this->at(this->size() - 1);
 }
 
+template<typename T> inline T dtkDistributedArray<T>::operator[](qlonglong index) const
+{
+    return this->at(index);
+}
+
 template<typename T> inline void dtkDistributedArray<T>::copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const
 {   
     qint32 owner = static_cast<qint32>(m_mapper->owner(from));

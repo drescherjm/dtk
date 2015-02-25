@@ -163,7 +163,6 @@ inline bool dtkDistributedGraph::read2(const QString& filename)
         qlonglong v_gid = 0;
 
         qlonglong e_local_count = 0;
-        qlonglong v_local_count = 0;
 
         qlonglong owner = 0;
         qlonglong v_first_gid = m_vertices->mapper()->firstIndex(owner);
@@ -406,27 +405,32 @@ inline dtkDistributedGraph::Neighbours dtkDistributedGraph::neighbours(const qlo
     qlonglong n_start = m_vertices->at(vertex_id);
     qlonglong size = m_vertices->at(vertex_id + 1) - n_start;
 
-    return Neighbours(m_edges, n_start, size);
+    return Neighbours(*m_edges, n_start, size);
+}
+
+inline dtkDistributedGraph::Neighbours dtkDistributedGraph::operator[](qlonglong vertex_id) const
+{
+    return this->neighbours(vertex_id);
 }
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::cbegin(void) const
 {
-    return const_iterator(this, this->m_mapper->firstIndex(this->wid())); 
+    return const_iterator(*this, this->m_mapper->firstIndex(this->wid())); 
 }
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::cend(void) const 
 { 
-    return const_iterator(this, this->m_mapper->lastIndex(this->wid()) + 1); 
+    return const_iterator(*this, this->m_mapper->lastIndex(this->wid()) + 1); 
 }
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::begin(void) const 
 { 
-    return const_iterator(this, this->m_mapper->firstIndex(this->wid())); 
+    return const_iterator(*this, this->m_mapper->firstIndex(this->wid())); 
 }
 
 dtkDistributedGraph::const_iterator dtkDistributedGraph::end(void) const 
 {
-    return const_iterator(this, this->m_mapper->lastIndex(this->wid()) + 1); 
+    return const_iterator(*this, this->m_mapper->lastIndex(this->wid()) + 1); 
 }
 
 //

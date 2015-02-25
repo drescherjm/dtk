@@ -44,6 +44,10 @@ public:
     T first(void) const;
     T  last(void) const;
 
+public:
+    T operator[](qlonglong index) const;
+
+public:
     void copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const;
 
 public:
@@ -57,6 +61,15 @@ public:
 
     typedef typename Data::const_iterator const_iterator;
     typedef typename Data::iterator             iterator;
+
+public:
+    typedef T value_type;
+    typedef value_type* pointer;
+    typedef const value_type* const_pointer;
+    typedef value_type& reference;
+    typedef const value_type& const_reference;
+    typedef qptrdiff difference_type;
+    typedef qlonglong size_type;
 
 public:
           iterator  begin(iterator = iterator());

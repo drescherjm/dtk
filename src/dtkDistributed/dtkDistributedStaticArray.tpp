@@ -67,6 +67,7 @@ template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticA
     this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
 
     this->fill(init_value);
+    m_comm->barrier();
 }
 
 template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticArray(const qlonglong& size, const T *array) : dtkDistributedContainer(size),
@@ -79,6 +80,7 @@ template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticA
             data->begin()[i] = array[m_mapper->localToGlobal(i, m_comm->wid())];
         }
     }
+    m_comm->barrier();
 }
 
 template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticArray(const dtkDistributedStaticArray& o) : dtkDistributedContainer(o.size(), o.mapper()),
@@ -89,6 +91,7 @@ template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticA
     for (qlonglong i = 0; i < data->size; ++i) {
         data->begin()[i] = o.data->begin()[i];
     }
+    m_comm->barrier();
 }
 
 template <typename T> inline dtkDistributedStaticArray<T>::~dtkDistributedStaticArray(void)

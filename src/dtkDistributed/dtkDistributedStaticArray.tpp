@@ -96,6 +96,7 @@ template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticA
 
 template <typename T> inline dtkDistributedStaticArray<T>::~dtkDistributedStaticArray(void)
 {
+    m_comm->barrier();
     this->deallocate(m_buffer_manager, data);
     data = 0;
     m_buffer_manager = 0;

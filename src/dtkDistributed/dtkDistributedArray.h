@@ -18,13 +18,12 @@
 
 #include "dtkDistributedArrayCache.h"
 #include "dtkDistributedContainer.h"
-#include "dtkDistributedExport.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedArray
 // /////////////////////////////////////////////////////////////////
 
-template<typename T> class dtkDistributedArray : public dtkDistributedContainer
+template <typename T> class dtkDistributedArray : public dtkDistributedContainer
 {
 public:
       dtkDistributedArray(const qlonglong& size);

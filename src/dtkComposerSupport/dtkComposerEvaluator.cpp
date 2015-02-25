@@ -102,8 +102,6 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
     qlonglong current = 0;
 
     QElapsedTimer *timer = NULL;
-    qint64 nanoSec;
-
 
     dtkComposerGraphNode::Kind kind;
     while (current < nodeCount &&  !d->should_stop) {
@@ -218,7 +216,6 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
 void  dtkComposerEvaluator::printProfiling(qlonglong level)
 {
     dtkComposerGraphNodeBegin *begin = static_cast<dtkComposerGraphNodeBegin *>(d->start_node);
-    bool is_if  = (begin->kind() ==  dtkComposerGraphNode::BeginIf );
 
     dtkComposerGraphNodeList L= begin->evaluableChilds();
     qlonglong nodeCount = L.count();

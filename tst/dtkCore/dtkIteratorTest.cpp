@@ -25,18 +25,18 @@
 
 class Dummy
 {
-    int m_id;
-    dtkArray<int> m_elts;
+    qlonglong m_id;
+    dtkArray<qlonglong> m_elts;
 
 public:
-    Dummy(int id, int e0, int e1, int e2, int e3) : m_id(id) { m_elts.append(e0, e1, e2, e3); }
+    Dummy(qlonglong id, qlonglong e0, qlonglong e1, qlonglong e2, qlonglong e3) : m_id(id) { m_elts.append(e0, e1, e2, e3); }
 
 public:
     bool operator == (const Dummy& o) const { return (m_id == o.m_id && m_elts == o.m_elts); }
 
 public:
-    int id() const { return m_id; }
-    dtkArray<int> elts() { return m_elts; }
+    qlonglong id() const { return m_id; }
+    dtkArray<qlonglong> elts() { return m_elts; }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ void dtkIteratorTestCase::testCopyCreate(void)
     dtkDummyIterator it = d->begin();
     dtkDummyIterator it_copy(it);
 
-    QVERIFY(it == it_copy);
+    QCOMPARE(*it, *it_copy);
 }
 
 void dtkIteratorTestCase::testCopy(void)
@@ -150,34 +150,34 @@ void dtkIteratorTestCase::testCopy(void)
     dtkDummyIterator it = d->begin();
     dtkDummyIterator it_copy = it;
 
-    QVERIFY(it == it_copy);
+    QCOMPARE(*it, *it_copy);
 }
 
 void dtkIteratorTestCase::testDereference(void)
 {
     dtkDummyIterator it = d->begin();
 
-    dtkArray<int> ref_elts;
+    dtkArray<qlonglong> ref_elts;
     ref_elts << 0 << 1 << 2 << 3;
 
-    QVERIFY((*it)->id() == 0);
-    QVERIFY((*it)->elts() == ref_elts);
+    QCOMPARE((*it)->id(), (qlonglong)(0));
+    QCOMPARE((*it)->elts(), ref_elts);
 }
 
 void dtkIteratorTestCase::testBracket(void)
 {
     dtkDummyIterator it = d->begin();
 
-    for(int i = 0; i < 4; ++i)
-        QVERIFY((*it[i]).id() == i);
+    for(qlonglong i = 0; i < 4; ++i)
+        QCOMPARE((it[i])->id(), i);
 }
 
 void dtkIteratorTestCase::testForward(void)
 {
     dtkDummyIterator it = d->begin();
 
-    for(int i = 0; i < 4; ++i) {
-        QVERIFY((*it)->id() == i);
+    for(qlonglong i = 0; i < 4; ++i) {
+        QCOMPARE((*it)->id(), i);
         it++;
     }
 }
@@ -186,29 +186,26 @@ void dtkIteratorTestCase::testPreForward(void)
 {
     dtkDummyIterator it = d->begin();
 
-    for(int i = 0; i < 4; ++i) {
-        QVERIFY((*it)->id() == i);
-        ++it;
+    for(qlonglong i = 0; i < 4; ++i, ++it) {
+        QCOMPARE((*it)->id(), i);
     }
 }
 
 void dtkIteratorTestCase::testBackward(void)
 {
-    dtkDummyIterator it = d->end();
+    dtkDummyIterator it = --d->end();
 
-    for(int i = 3; i >= 0; --i) {
-        it--;
-        QVERIFY((*it)->id() == i);
+    for(qlonglong i = 3; i >= 0; --i, --it) {
+        QCOMPARE((*it)->id(), i);
     }
 }
 
 void dtkIteratorTestCase::testPreBackward(void)
 {
-    dtkDummyIterator it = d->end();
+    dtkDummyIterator it = --d->end();
 
-    for(int i = 3; i >= 0; --i) {
-        --it;
-        QVERIFY((*it)->id() == i);
+    for(qlonglong i = 3; i >= 0; --i, --it) {
+        QCOMPARE((*it)->id(), i);
     }
 }
 
@@ -217,7 +214,7 @@ void dtkIteratorTestCase::testAffectAdd(void)
     dtkDummyIterator it = d->begin();
 
     it += 3;
-    QVERIFY((*it)->id() == 3);
+    QCOMPARE((*it)->id(), (qlonglong)(3));
 }
 
 void dtkIteratorTestCase::testAffectSubstract(void)
@@ -225,23 +222,23 @@ void dtkIteratorTestCase::testAffectSubstract(void)
     dtkDummyIterator it = d->end();
 
     it -= 2;
-    QVERIFY((*it)->id() == 2);
+    QCOMPARE((*it)->id(), (qlonglong)(2));
 }
 
 void dtkIteratorTestCase::testAdd(void)
 {
     dtkDummyIterator it = d->begin();
 
-    it = it + 3;
-    QVERIFY((*it)->id() == 3);
+    dtkDummyIterator o = (it + (qlonglong)(3));
+    QCOMPARE((*o)->id(), (qlonglong)(3));
 }
 
 void dtkIteratorTestCase::testSubstract(void)
 {
     dtkDummyIterator it = d->end();
 
-    it = it - 3;
-    QVERIFY((*it)->id() == 1);
+    dtkDummyIterator o = (it - (qlonglong)(3));
+    QCOMPARE((*o)->id(), (qlonglong)(1));
 }
 
 void dtkIteratorTestCase::testEquality(void)

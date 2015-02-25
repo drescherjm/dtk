@@ -74,10 +74,6 @@ public:
     };
 
 public:
-    dtkDistributedCommunicator(const dtkDistributedCommunicator& other);
-    dtkDistributedCommunicator& operator = (const dtkDistributedCommunicator& other);
-
-public:
     virtual void  initialize(void);
     virtual bool  initialized(void);
     virtual void uninitialize(void);

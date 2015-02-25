@@ -42,10 +42,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedGraph.h
   dtkDistributedGraph.tpp
   dtkDistributedItem.h
+  dtkDistributedIterator
+  dtkDistributedIterator.h
   dtkDistributedLocalMessage.h
   dtkDistributedMapper
   dtkDistributedMapper.h
   dtkDistributedMessage.h
+  dtkDistributedNavigator
+  dtkDistributedNavigator.h
   dtkDistributedPolicy
   dtkDistributedPolicy.h
   dtkDistributedRequest.h
@@ -53,6 +57,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedResourceManagerLocal.h
   dtkDistributedResourceManagerOar.h
   dtkDistributedResourceManagerTorque.h
+  dtkDistributedStaticArray
+  dtkDistributedStaticArray.h
+  dtkDistributedStaticArray.tpp
   dtkDistributedServerDaemon.h
   dtkDistributedSettings
   dtkDistributedSettings.h

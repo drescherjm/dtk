@@ -91,23 +91,6 @@ dtkDistributedCommunicator::~dtkDistributedCommunicator(void)
     d = NULL;
 }
 
-/*!
- *  Copy constructor
- */
-dtkDistributedCommunicator::dtkDistributedCommunicator(const dtkDistributedCommunicator& other)
-{
-
-}
-
-/*!
- *  Assignment operator
- */
-dtkDistributedCommunicator& dtkDistributedCommunicator::operator = (const dtkDistributedCommunicator& other)
-{
-    return *this;
-
-}
-
 void dtkDistributedCommunicator::initialize(void)
 {
     d->initialized = true;

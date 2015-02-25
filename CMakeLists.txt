@@ -72,6 +72,12 @@ if(NOT APPLE AND NOT MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
     message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
   endif()
+  if(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+  endif(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
+
 else(NOT APPLE AND NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif(NOT APPLE AND NOT MSVC)
@@ -84,15 +90,24 @@ else(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_64 0)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
 ## ###################################################################
 ## Test setup
 ## ###################################################################
 
 enable_testing()
+if(DTK_ENABLE_COVERAGE)
+  include(CodeCoverage)
+  include(FindPythonInterp)
+  SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
+endif(DTK_ENABLE_COVERAGE)
 
 ## #################################################################
 ## Options
 ## #################################################################
+
+option(DTK_ENABLE_COVERAGE        "enable coverage report" false)
 
 option(DTK_BUILD_COMPOSER           "Build composer layer" false)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
@@ -178,11 +193,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkSetTestEnvironment.cmake.in
 "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CodeCoverage.cmake
+"${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake" @ONLY)
+
 set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake")
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake"
   DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
 
 install(EXPORT dtkDepends DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
@@ -215,8 +234,7 @@ mark_as_advanced(CMAKE_OSX_ARCHITECTURES)
 mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
 mark_as_advanced(CMAKE_OSX_SYSROOT)
 
-mark_as_advanced(MPI_EXTRA_LIBRARY)
-mark_as_advanced(MPI_LIBRARY)
+mark_as_advanced(DTK_ENABLE_COVERAGE)
 
 ## ###################################################################
 ## Packaging

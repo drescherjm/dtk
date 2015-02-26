@@ -14,4 +14,3 @@
 #include "dtkDistributedRequest.h"
 #include "dtkDistributedSettings.h"
 #include "dtkDistributedSlave.h"
-#include "dtkDistributedStaticArray.h"

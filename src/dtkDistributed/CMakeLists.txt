@@ -57,9 +57,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedResourceManagerLocal.h
   dtkDistributedResourceManagerOar.h
   dtkDistributedResourceManagerTorque.h
-  dtkDistributedStaticArray
-  dtkDistributedStaticArray.h
-  dtkDistributedStaticArray.tpp
   dtkDistributedServerDaemon.h
   dtkDistributedSettings
   dtkDistributedSettings.h

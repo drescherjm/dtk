@@ -24,12 +24,17 @@
 
 template <typename T> inline void dtkDistributedStaticArray<T>::allocate(dtkDistributedBufferManager *& manager, Data *& x, qlonglong size)
 {
-    manager = m_comm->createBufferManager();
-    x = dtkTypedArrayData<T>::fromRawData(manager->allocate<T>(size), size, dtkArrayData::RawData);
+    if (size > 0) {
+        manager = m_comm->createBufferManager();
+        x = dtkTypedArrayData<T>::fromRawData(manager->allocate<T>(size), size, dtkArrayData::RawData);
+    }
 }
 
 template <typename T> inline void dtkDistributedStaticArray<T>::deallocate(dtkDistributedBufferManager *manager, Data *x)
 {
+    if (!x)
+        return;
+
     if (!x->ref.deref()) {
         if (QTypeInfo<T>::isComplex) {
             T *from = x->begin();
@@ -87,9 +92,11 @@ template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticA
     data(0), m_cache(new dtkDistributedArrayCache<T, dtkDistributedStaticArray<T> >(this)), m_buffer_manager(0)
 {
     this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
-    
-    for (qlonglong i = 0; i < data->size; ++i) {
-        data->begin()[i] = o.data->begin()[i];
+
+    if (data) {
+        for (qlonglong i = 0; i < data->size; ++i) {
+            data->begin()[i] = o.data->begin()[i];
+        }
     }
     m_comm->barrier();
 }

@@ -63,6 +63,8 @@ template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticA
 template <typename T> inline dtkDistributedStaticArray<T>::dtkDistributedStaticArray(const qlonglong& size, dtkDistributedMapper *mapper) : dtkDistributedContainer(size, mapper),
     data(0), m_cache(new dtkDistributedArrayCache<T, dtkDistributedStaticArray<T> >(this)), m_buffer_manager(0)
 {
+    if (m_mapper->count() == 0)
+        m_mapper->setMapping(size, m_comm->size());
     this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
 }
 

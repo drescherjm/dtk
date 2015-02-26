@@ -13,4 +13,5 @@
 #include "dtkDistributedPolicy.h"
 #include "dtkDistributedRequest.h"
 #include "dtkDistributedSettings.h"
+#include "dtkDistributedServerDaemon.h"
 #include "dtkDistributedSlave.h"

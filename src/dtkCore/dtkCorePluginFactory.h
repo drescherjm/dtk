@@ -26,24 +26,16 @@ public:
      dtkCorePluginFactory(void);
     ~dtkCorePluginFactory(void);
 
-#pragma mark -
-#pragma mark Type creator definition
-
+public:
     typedef T *(*creator) ();
 
-#pragma mark -
-#pragma mark Type creator registration
-
+public:
     void record(const QString& key, creator func);
 
-#pragma mark -
-#pragma mark Type creator invokation
-
+public:
     T *create(const QString& key);
 
-#pragma mark -
-#pragma mark Type creator inspection
-
+public:
     QStringList keys(void);
 
 private:

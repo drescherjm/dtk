@@ -28,22 +28,16 @@ public:
      dtkCorePluginManager(void);
     ~dtkCorePluginManager(void);
 
-#pragma mark -
-#pragma Manager Management
-
+public:
     virtual void   initialize(const QString& path);
     virtual void uninitialize(void);
 
-#pragma mark -
-#pragma Plugin Management
-
+public:
     virtual void   scan(const QString& path);
     virtual void   load(const QString& path);
     virtual void unload(const QString& path);
 
-#pragma mark -
-#pragma Plugin Queries
-
+public:
     QStringList plugins(void);
 
 protected:

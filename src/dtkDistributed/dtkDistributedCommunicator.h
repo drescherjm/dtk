@@ -100,13 +100,13 @@ public:
 
 public:
     virtual void send(void   *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;
-    virtual void send(bool   *data, qint64 size, qint32 target, int tag);
-    virtual void send(int    *data, qint64 size, qint32 target, int tag);
-    virtual void send(long   *data, qint64 size, qint32 target, int tag);
-    virtual void send(qint64 *data, qint64 size, qint32 target, int tag);
-    virtual void send(float  *data, qint64 size, qint32 target, int tag);
-    virtual void send(double *data, qint64 size, qint32 target, int tag);
-    virtual void send(char *data, qint64 size, qint32 target, qint32 tag);
+    void send(bool   *data, qint64 size, qint32 target, int tag);
+    void send(int    *data, qint64 size, qint32 target, int tag);
+    void send(long   *data, qint64 size, qint32 target, int tag);
+    void send(qint64 *data, qint64 size, qint32 target, int tag);
+    void send(float  *data, qint64 size, qint32 target, int tag);
+    void send(double *data, qint64 size, qint32 target, int tag);
+    void send(char *data, qint64 size, qint32 target, qint32 tag);
     virtual void send(QByteArray& array, qint32 target, qint32 tag) = 0;
     virtual void send(const QVariant& v, qint32 target, qint32 tag);
 
@@ -117,20 +117,26 @@ public:
     template <typename T, typename U> void run(T* t, U (T::*functionPointer)());
 
 public:
-    virtual void broadcast(qlonglong *data, qint64 size, qint32 source) = 0;
-    virtual void broadcast(double    *data, qint64 size, qint32 source) = 0;
+    virtual void broadcast(void *data, qint64 size, DataType dataType, qint32 source) = 0;
+    void broadcast(bool      *data, qint64 size, qint32 source);
+    void broadcast(int       *data, qint64 size, qint32 source);
+    void broadcast(long      *data, qint64 size, qint32 source);
+    void broadcast(qlonglong *data, qint64 size, qint32 source);
+    void broadcast(float     *data, qint64 size, qint32 source);
+    void broadcast(double    *data, qint64 size, qint32 source);
+    void broadcast(char      *data, qint64 size, qint32 source);
     virtual void broadcast(QByteArray& array, qint32 source) = 0;
     virtual void broadcast(QVariant& v, qint32 source) = 0;
 
 public:
     virtual void receive(void   *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;
-    virtual void receive(bool   *data, qint64 size, qint32 source, int tag);
-    virtual void receive(int    *data, qint64 size, qint32 source, int tag);
-    virtual void receive(long   *data, qint64 size, qint32 source, int tag);
-    virtual void receive(qint64 *data, qint64 size, qint32 source, int tag);
-    virtual void receive(float  *data, qint64 size, qint32 source, int tag);
-    virtual void receive(double *data, qint64 size, qint32 source, int tag);
-    virtual void receive(char   *data, qint64 size, qint32 source, qint32 tag);
+    void receive(bool   *data, qint64 size, qint32 source, int tag);
+    void receive(int    *data, qint64 size, qint32 source, int tag);
+    void receive(long   *data, qint64 size, qint32 source, int tag);
+    void receive(qint64 *data, qint64 size, qint32 source, int tag);
+    void receive(float  *data, qint64 size, qint32 source, int tag);
+    void receive(double *data, qint64 size, qint32 source, int tag);
+    void receive(char   *data, qint64 size, qint32 source, qint32 tag);
     virtual void receive(QByteArray &v,qint32 source, qint32 tag) = 0 ;
     virtual void receive(QByteArray &v,qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
     virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;

@@ -202,6 +202,41 @@ void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 t
     this->send(bytes, target, tag);
 }
 
+void dtkDistributedCommunicator::broadcast(bool      *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Bool, source);
+}
+
+void dtkDistributedCommunicator::broadcast(int       *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Int, source);
+}
+
+void dtkDistributedCommunicator::broadcast(long      *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Long, source);
+}
+
+void dtkDistributedCommunicator::broadcast(qlonglong *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Int64, source);
+}
+
+void dtkDistributedCommunicator::broadcast(float     *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Float, source);
+}
+
+void dtkDistributedCommunicator::broadcast(double    *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Double, source);
+}
+
+void dtkDistributedCommunicator::broadcast(char      *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Char, source);
+}
+
 void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)
 {
     return this->receive(data, size, Char, source, tag);

@@ -100,14 +100,19 @@ enable_testing()
 if(DTK_ENABLE_COVERAGE)
   include(CodeCoverage)
   include(FindPythonInterp)
-  SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
+  if(DTK_COVERAGE_USE_COBERTURA)
+    SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
+  else(DTK_COVERAGE_USE_COBERTURA)
+    SETUP_TARGET_FOR_COVERAGE(cov ctest coverage)
+  endif(DTK_COVERAGE_USE_COBERTURA)
 endif(DTK_ENABLE_COVERAGE)
 
 ## #################################################################
 ## Options
 ## #################################################################
 
-option(DTK_ENABLE_COVERAGE        "enable coverage report" false)
+option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
+option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
 
 option(DTK_BUILD_COMPOSER           "Build composer layer" false)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
@@ -235,6 +240,7 @@ mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
 mark_as_advanced(CMAKE_OSX_SYSROOT)
 
 mark_as_advanced(DTK_ENABLE_COVERAGE)
+mark_as_advanced(DTK_COVERAGE_USE_COBERTURA)
 
 ## ###################################################################
 ## Packaging

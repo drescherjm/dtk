@@ -14,13 +14,15 @@
 
 #pragma once
 
+#include "dtkDistributedExport.h"
+
 #include <QtCore>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkDistributedIterator
 // ///////////////////////////////////////////////////////////////////
 
-template <typename Container> class dtkDistributedIterator
+template <typename Container> class DTKDISTRIBUTED_EXPORT dtkDistributedIterator
 {
     const Container& c;
     qlonglong gid;

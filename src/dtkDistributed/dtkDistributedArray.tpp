@@ -91,6 +91,17 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
     m_comm->barrier();
 }
 
+template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkArray<T>& array) : dtkDistributedContainer(array.size()),
+    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+{
+    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+
+    for (qlonglong i = 0; i < data->size; ++i) {
+        data->begin()[i] = array[m_mapper->localToGlobal(i, m_comm->wid())];
+    }
+    m_comm->barrier();
+}
+
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkDistributedArray& o) : dtkDistributedContainer(o.size(), o.mapper()),
     data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {

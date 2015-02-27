@@ -18,6 +18,7 @@
 #include "dtkDistributedContainer.h"
 #include "dtkDistributedNavigator.h"
 
+#include <dtkCore/dtkArray.h>
 #include <dtkCore/dtkArrayData.h>
 
 class dtkDistributedCommunicator;
@@ -56,6 +57,7 @@ public:
      dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
      dtkDistributedArray(const qlonglong& size, const T& init_value);
      dtkDistributedArray(const qlonglong& size, const T *array);
+     dtkDistributedArray(const dtkArray<T> &array);
      dtkDistributedArray(const dtkDistributedArray& other);
     ~dtkDistributedArray(void);
 

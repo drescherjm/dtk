@@ -92,21 +92,6 @@ endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-## ###################################################################
-## Test setup
-## ###################################################################
-
-enable_testing()
-if(DTK_ENABLE_COVERAGE)
-  include(CodeCoverage)
-  include(FindPythonInterp)
-  if(DTK_COVERAGE_USE_COBERTURA)
-    SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
-  else(DTK_COVERAGE_USE_COBERTURA)
-    SETUP_TARGET_FOR_COVERAGE(cov ctest coverage)
-  endif(DTK_COVERAGE_USE_COBERTURA)
-endif(DTK_ENABLE_COVERAGE)
-
 ## #################################################################
 ## Options
 ## #################################################################
@@ -122,6 +107,21 @@ option(DTK_BUILD_SUPPORT_DISTRIBUTED "Build support layer" false)
 option(DTK_BUILD_SUPPORT_GUI         "Build support layer" false)
 option(DTK_BUILD_SUPPORT_MATH        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
+
+## ###################################################################
+## Test setup
+## ###################################################################
+
+enable_testing()
+if(DTK_ENABLE_COVERAGE)
+  include(CodeCoverage)
+  include(FindPythonInterp)
+  if(DTK_COVERAGE_USE_COBERTURA)
+    SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
+  else(DTK_COVERAGE_USE_COBERTURA)
+    SETUP_TARGET_FOR_COVERAGE(cov ctest coverage)
+  endif(DTK_COVERAGE_USE_COBERTURA)
+endif(DTK_ENABLE_COVERAGE)
 
 ## #################################################################
 ## Dependencies

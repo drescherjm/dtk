@@ -795,6 +795,6 @@ void dtkComposerNodeTestCase::cleanup(void)
 
 }
 
-DTKTEST_MAIN(dtkComposerNodeTest, dtkComposerNodeTestCase)
+DTKTEST_MAIN_NOGUI(dtkComposerNodeTest, dtkComposerNodeTestCase)
 
 //#include "dtkComposerNodeTest.moc"

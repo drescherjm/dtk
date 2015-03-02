@@ -46,6 +46,7 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractApplication.cpp
+  dtkCoreApplication.cpp
   dtkCoreSettings.cpp
   dtkArrayData.cpp)
 

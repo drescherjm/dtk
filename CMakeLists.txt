@@ -100,6 +100,7 @@ option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
 option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
 
 option(DTK_BUILD_COMPOSER           "Build composer layer" false)
+option(DTK_BUILD_DISTRIBUTED        "Build distributed layer" true)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)

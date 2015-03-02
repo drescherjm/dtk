@@ -28,10 +28,10 @@ class dtkDistributedCoreApplicationPrivate;
 class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public QApplication, public dtkDistributedAbstractApplication
 {
 public:
-             dtkDistributedApplication(int &argc, char **argv) : QApplication(argc,argv), dtkDistributedAbstractApplication() {};
+    dtkDistributedApplication(int &argc, char **argv) ;
 
 public:
-    bool noGui(void) { return false; };
+    bool noGui(void);
 };
 
 

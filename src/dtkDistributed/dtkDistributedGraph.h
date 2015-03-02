@@ -19,13 +19,11 @@
 #include "dtkDistributedContainer.h"
 #include "dtkDistributedIterator.h"
 
-#include "dtkDistributedExport.h"
-
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraph declaration
 // /////////////////////////////////////////////////////////////////
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedGraph : public dtkDistributedContainer
+class  dtkDistributedGraph : public dtkDistributedContainer
 {
 public:
       dtkDistributedGraph(void);

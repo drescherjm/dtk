@@ -99,8 +99,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
 option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
 
-option(DTK_BUILD_COMPOSER           "Build composer layer" false)
-option(DTK_BUILD_DISTRIBUTED        "Build distributed layer" true)
+option(DTK_BUILD_COMPOSER            "Build composer layer" false)
+option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
+option(DTK_BUILD_SCRIPT              "Build script layer"  false)
+option(DTK_BUILD_WRAPPERS            "Build wrappers"      false)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)
@@ -140,6 +142,101 @@ get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
 get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
 
 ## #################################################################
+## Wrapping
+## #################################################################
+
+if(DTK_BUILD_WRAPPERS)
+
+## #################################################################
+## Swig
+## #################################################################
+
+mark_as_advanced(SWIG_DIR)
+mark_as_advanced(SWIG_EXECUTABLE)
+mark_as_advanced(SWIG_VERSION)
+
+find_package(SWIG REQUIRED)
+
+if(SWIG_FOUND)
+  include(${SWIG_USE_FILE})
+  set(CMAKE_SWIG_FLAGS "")
+
+  macro(dtk_wrap project target name language input deps)
+
+    set(wrap_output ${project}_wrap_${language}.cpp)
+
+    add_custom_command(
+      OUTPUT ${wrap_output}
+      COMMAND ${SWIG_EXECUTABLE}
+      ARGS
+      "-${language}"
+      "-c++"
+      "-module" ${name}
+      "-I${PROJECT_SOURCE_DIR}/.."
+      "-I${PROJECT_SOURCE_DIR}/"
+      "-I${dtk_SOURCE_DIR}/"
+      "-I${dtk_SOURCE_DIR}/src"
+      "-I${dtk_SOURCE_DIR}/src/dtkCoreSupport"
+      "-outdir" ${CMAKE_CURRENT_BINARY_DIR}
+      "-o" ${wrap_output}
+      ${input}
+      MAIN_DEPENDENCY ${input}
+      COMMENT "Wrapping ${input} to ${language}")
+
+    set(${target} ${${target}} ${wrap_output})
+
+  endmacro(dtk_wrap)
+
+else(SWIG_FOUND)
+
+  message("DTK_BUILD_WRAPPERS options requires SWIG.")
+
+endif(SWIG_FOUND)
+
+if(SWIG_FOUND)
+  add_definitions(-DHAVE_SWIG)
+endif(SWIG_FOUND)
+
+## #################################################################
+## Tcl
+## #################################################################
+
+find_package(TCL QUIET)
+
+if(TCL_FOUND)
+  include_directories(${TCL_INCLUDE_PATH})
+endif(TCL_FOUND)
+
+if(TCL_FOUND)
+  add_definitions(-DHAVE_TCL) # Towards deprecation
+  set(DTK_HAVE_TCL 1)
+else(TCL_FOUND)
+  set(DTK_HAVE_TCL 0)
+endif(TCL_FOUND)
+
+## #################################################################
+## Python
+## #################################################################
+
+find_package(PythonLibs QUIET)
+
+if(PYTHONLIBS_FOUND)
+  include_directories(${PYTHON_INCLUDE_DIRS})
+  get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
+  link_directories(${PYTHON_PATH})
+  add_definitions(-DHAVE_PYTHON) # Towards deprecation
+  set(DTK_HAVE_PYTHON 1)
+else(PYTHONLIBS_FOUND)
+  set(DTK_HAVE_PYTHON 0)
+endif(PYTHONLIBS_FOUND)
+
+## #################################################################
+## Build wrappers (end)
+## #################################################################
+
+endif(DTK_BUILD_WRAPPERS)
+
+## #################################################################
 ## Dependencies - Optional                           [TO BE REMOVED]
 ## #################################################################
 
@@ -170,6 +267,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkDistributed)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkLog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkScript)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
 
 ## ###################################################################

@@ -27,6 +27,11 @@ endif(DTK_BUILD_COMPOSER)
 if(DTK_BUILD_DISTRIBUTED)
   add_subdirectory(dtkDistributed)
 endif(DTK_BUILD_DISTRIBUTED)
+
+if(DTK_BUILD_SCRIPT)
+  add_subdirectory(dtkScript)
+endif(DTK_BUILD_SCRIPT)
+
 add_subdirectory(dtkLog)
 add_subdirectory(dtkMath)
 add_subdirectory(dtkMeta)
@@ -47,6 +52,11 @@ endif(DTK_BUILD_COMPOSER)
 if(DTK_BUILD_DISTRIBUTED)
   set(DTK_TARGETS ${DTK_TARGETS} dtkDistributed)
 endif(DTK_BUILD_DISTRIBUTED)
+
+if(DTK_BUILD_SCRIPT)
+  set(DTK_TARGETS ${DTK_TARGETS} dtkScript)
+endif(DTK_BUILD_SCRIPT)
+
 set(DTK_TARGETS ${DTK_TARGETS} dtkLog)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMath)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMeta)

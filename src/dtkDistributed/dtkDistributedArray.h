@@ -70,6 +70,11 @@ public:
     void unlock(qint32 owner);
 
 public:
+    void  rlock(void);
+    void  wlock(void);
+    void unlock(void);
+
+public:
      bool empty(void) const;
      qlonglong size(void) const;
 

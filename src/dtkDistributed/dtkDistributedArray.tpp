@@ -163,6 +163,21 @@ template<typename T> inline void dtkDistributedArray<T>::unlock(qint32 owner)
     m_buffer_manager->unlock(owner);
 }
 
+template<typename T> inline void dtkDistributedArray<T>::rlock(void)
+{
+    m_buffer_manager->rlock();
+}
+
+template<typename T> inline void dtkDistributedArray<T>::wlock(void)
+{
+    m_buffer_manager->wlock();
+}
+
+template<typename T> inline void dtkDistributedArray<T>::unlock(void)
+{
+    m_buffer_manager->unlock();
+}
+
 template<typename T> inline bool dtkDistributedArray<T>::empty(void) const
 {
     return !m_size;

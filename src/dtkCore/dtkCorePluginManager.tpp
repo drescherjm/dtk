@@ -15,6 +15,7 @@
 #pragma once
 
 #include <QtDebug>
+#include <dtkLog>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkCorePluginManagerPrivate
@@ -24,6 +25,9 @@ template <typename T> class dtkCorePluginManagerPrivate
 {
 public:
     bool check(const QString& path);
+
+public:
+    bool verboseLoading;
 
 public:
     QHash<QString, QVariant> names;
@@ -77,7 +81,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
 
 template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate<T>)
 {
-
+    d->verboseLoading = false;
 }
 
 template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
@@ -86,6 +90,22 @@ template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
 
     d = NULL;
 }
+
+// /////////////////////////////////////////////////////////////////
+// Logging
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> void dtkCorePluginManager<T>::setVerboseLoading(bool value)
+{
+    qDebug() << Q_FUNC_INFO << "set verbose load to" << value;
+    d->verboseLoading = value;
+}
+
+template <typename T> bool dtkCorePluginManager<T>::verboseLoading(void) const
+{
+    return d->verboseLoading;
+}
+
 
 // /////////////////////////////////////////////////////////////////
 // Manager Management
@@ -141,9 +161,23 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
 
     loader->setLoadHints(QLibrary::ExportExternalSymbolsHint);
 
+    if(!loader->load()) {
+        QString error = "Unable to load ";
+        error += path;
+        error += " - ";
+        error += loader->errorString();
+        if(d->verboseLoading) { dtkWarn() << error; }
+        delete loader;
+        return;
+    }
+
     T *plugin = qobject_cast<T *>(loader->instance());
 
     if(!plugin) {
+        QString error = "Unable to retrieve ";
+        error += path;
+        if(d->verboseLoading) { dtkWarn() << error; }
+
         delete loader;
         return;
     }
@@ -151,6 +185,11 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
     plugin->initialize();
 
     d->loaders.insert(path, loader);
+
+    if(d->verboseLoading) {
+        QString name =  loader->metaData().value("MetaData").toObject().value("name").toString();
+        dtkTrace() << "Loaded plugin " <<  name  << " from " << path;
+    }
 }
 
 template <typename T> void dtkCorePluginManager<T>::unload(const QString& path)
@@ -166,7 +205,7 @@ template <typename T> void dtkCorePluginManager<T>::unload(const QString& path)
         d->loaders.remove(path);
         delete loader;
     } else {
-        qDebug() << Q_FUNC_INFO << loader->errorString();
+        dtkWarn() << Q_FUNC_INFO << loader->errorString();
     }
 }
 

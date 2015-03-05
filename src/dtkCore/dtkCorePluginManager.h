@@ -33,6 +33,10 @@ public:
     virtual void uninitialize(void);
 
 public:
+    void setVerboseLoading(bool value);
+    bool verboseLoading(void) const;
+
+public:
     virtual void   scan(const QString& path);
     virtual void   load(const QString& path);
     virtual void unload(const QString& path);

@@ -208,7 +208,6 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
         COMMAND ln -sf ../lib/libdtkCoreSupport.dylib _dtkcoresupport.so
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
         )
-      add_custom_target(run ALL DEPENDS ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(APPLE)
 
@@ -218,7 +217,6 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
         COMMAND ln -fs ../${CMAKE_INSTALL_LIBDIR}/libdtkCoreSupport.so _dtkcoresupport.so
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
         )
-      add_custom_target(run ALL DEPENDS ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(UNIX AND NOT APPLE)
 

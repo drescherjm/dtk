@@ -145,20 +145,6 @@ qint32 dtkDistributedCommunicator::size(void)
    return 1;
 }
 
-void *dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id)
-{
-    void *buffer = malloc(size*count);
-    d->buffer_map.insert(d->id, buffer);
-    buffer_id = (d->id)++;
-    return buffer;
-}
-
-void dtkDistributedCommunicator::deallocate(qlonglong wid, const qlonglong& buffer_id)
-{
-    void *buffer = d->buffer_map.take(buffer_id);
-    free (buffer);
-}
-
 void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qint32 tag)
 {
     return this->send(data, size, Char, target, tag);

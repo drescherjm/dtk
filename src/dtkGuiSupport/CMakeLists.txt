@@ -116,8 +116,13 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   dtkCoreSupport)
 
+if(DTK_BUILD_SCRIPT)
+  target_link_libraries(${PROJECT_NAME}
+    dtkScript)
+endif(DTK_BUILD_SCRIPT)
+
 if(APPLE)
-target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+  target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
 endif(APPLE)
 
 ## ###################################################################

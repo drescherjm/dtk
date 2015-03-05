@@ -203,7 +203,8 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
     set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/dtkcoresupport.py)
     if(APPLE)
-      add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so
+      add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
         COMMAND ln -sf ../lib/libdtkCoreSupport.dylib _dtkcoresupport.so
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
         )
@@ -212,7 +213,8 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
     endif(APPLE)
 
     if(UNIX AND NOT APPLE)
-      add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so
+      add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
         COMMAND ln -fs ../${CMAKE_INSTALL_LIBDIR}/libdtkCoreSupport.so _dtkcoresupport.so
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
         )

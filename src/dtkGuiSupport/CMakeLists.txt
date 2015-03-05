@@ -15,7 +15,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
-  dtkInterpreter.h
   dtkNotifiable.h
   dtkNotification.h
   dtkNotificationDisplay.h
@@ -43,6 +42,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkViewList.h
   dtkViewListControl.h)
 
+if(DTK_BUILD_SCRIPT)
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+    dtkInterpreter.h)
+endif(DTK_BUILD_SCRIPT)
+
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAboutPlugin.cpp
@@ -51,7 +55,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkColorGrid.cpp
   dtkFlowLayout.cpp
   dtkFinder.cpp
-  dtkInterpreter.cpp
   dtkObjectEditor.cpp
   dtkNotification.cpp
   dtkNotificationDisplay.cpp
@@ -76,6 +79,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkViewLayoutItem.cpp
   dtkViewList.cpp
   dtkViewListControl.cpp)
+
+if(DTK_BUILD_SCRIPT)
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+    dtkInterpreter.cpp)
+endif(DTK_BUILD_SCRIPT)
+
 
 if(APPLE)
 set(${PROJECT_NAME}_SOURCES

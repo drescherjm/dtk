@@ -25,9 +25,6 @@
 
 #include <dtkConfig.h>
 
-#include <dtkLog/dtkLog.h>
-#include <dtkLog/dtkLogger.h>
-
 #include <dtkScript/dtkScriptInterpreter.h>
 #if defined(DTK_BUILD_WRAPPERS) && defined(DTK_HAVE_PYTHON)
 #include <dtkScript/dtkScriptInterpreterPython.h>
@@ -47,7 +44,7 @@ class dtkInterpreterPrivate
 public:
     dtkScriptInterpreter *interpreter;
 
-public:    
+public:
     QTextCursor cursor;
 
 public:
@@ -70,15 +67,11 @@ dtkInterpreter::dtkInterpreter(QWidget *parent) : QPlainTextEdit(parent), d(new 
     d->history_dirty = false;
     d->prompt = "$ ";
 
-    dtkLogger::instance().attachText(this);
-
     this->setReadOnly(true);
 }
 
 dtkInterpreter::~dtkInterpreter(void)
 {
-    dtkLogger::instance().detachText(this);
-
     delete d;
 }
 

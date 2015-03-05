@@ -15,6 +15,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
+  dtkInterpreter.h
   dtkNotifiable.h
   dtkNotification.h
   dtkNotificationDisplay.h
@@ -50,6 +51,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkColorGrid.cpp
   dtkFlowLayout.cpp
   dtkFinder.cpp
+  dtkInterpreter.cpp
   dtkObjectEditor.cpp
   dtkNotification.cpp
   dtkNotificationDisplay.cpp

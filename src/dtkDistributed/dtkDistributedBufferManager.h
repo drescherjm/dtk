@@ -35,9 +35,12 @@ protected:
 
 public:
     virtual void rlock(qlonglong wid)  = 0;
+    virtual void rlock(void)  = 0;
     virtual void wlock(qlonglong wid)  = 0;
+    virtual void wlock(void)  = 0;
 
     virtual void unlock(qlonglong wid) = 0;
+    virtual void unlock(void) = 0;
 
     virtual bool locked(qlonglong wid) = 0;
 

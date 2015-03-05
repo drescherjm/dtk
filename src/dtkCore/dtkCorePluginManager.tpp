@@ -97,7 +97,6 @@ template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
 
 template <typename T> void dtkCorePluginManager<T>::setVerboseLoading(bool value)
 {
-    qDebug() << Q_FUNC_INFO << "set verbose load to" << value;
     d->verboseLoading = value;
 }
 

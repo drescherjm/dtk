@@ -116,6 +116,7 @@ QStringList dtkDistributedPolicy::hosts(void)
 // skip this part on windows with qt < 5.5 because of QTBUG-30330
 #if QT_VERSION < 0x050500 && defined Q_OS_WIN32
         dtkWarn() << "skip running parser on windows";
+        d->hosts <<  "localhost";
 #else
         QCommandLineParser *parser = dtkDistributed::app()->parser();
         QCommandLineOption npOption("np","number of processes","int");

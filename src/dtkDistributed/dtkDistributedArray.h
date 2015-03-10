@@ -75,11 +75,11 @@ public:
     void unlock(void);
 
 public:
-     bool empty(void) const;
-     qlonglong size(void) const;
+    bool empty(void) const;
+    qlonglong size(void) const;
 
 public:
-     void fill(const T& value);
+    void fill(const T& value);
 
 public:
     void setAt(const qlonglong& index, const T& value);

@@ -41,6 +41,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedGraph
   dtkDistributedGraph.h
   dtkDistributedGraph.tpp
+  dtkDistributedGraphTopology
+  dtkDistributedGraphTopology.h
+  dtkDistributedGraphTopology.tpp
   dtkDistributedItem.h
   dtkDistributedIterator
   dtkDistributedIterator.h
@@ -72,6 +75,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
   dtkDistributedCoreApplication.cpp
+  dtkDistributedGraphTopology.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedMessage.cpp

@@ -6,6 +6,7 @@
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedCommunicatorStatus.h"
 #include "dtkDistributedCoreApplication.h"
+#include "dtkDistributedGraphTopology.h"
 #include "dtkDistributedIterator.h"
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedMessage.h"

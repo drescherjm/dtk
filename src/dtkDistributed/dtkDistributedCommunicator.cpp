@@ -36,11 +36,25 @@ public:
 // dtkDistributedCommunicator
 // /////////////////////////////////////////////////////////////////
 
+
 /*!
   \class dtkDistributedCommunicator
   \inmodule dtkDistributed
-  \brief ...
- */
+  \brief dtkDistributedCommunicator is the interface for distributed computing.
+
+  It can be used to spawn processes/threads on one or several hosts (depending on the implementation), execute code on each processes, and gives access to communications and synchronisations methods.
+
+  The communication API is very similar to the MPI API (send, receive, broadcast, barrier, ...), but can be used without MPI ( a plugin based on qthreads is provided).
+
+  \code
+  dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+  PingPongWork *runnable = new PingPongWork();
+  comm->spawn();
+  comm->exec(runnable);
+  comm->unspawn();
+  \endcode
+
+*/
 
 /*! \enum dtkDistributedCommunicator::DataType
     \value Bool
@@ -111,10 +125,6 @@ bool dtkDistributedCommunicator::active(void)
     return false;
 }
 
-void dtkDistributedCommunicator::setPolicy(QString type)
-{
-}
-
 /*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, qlonglong np)
 
   Spawn a communicator on all hostnames, starting np threads on each
@@ -130,6 +140,19 @@ void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np)
 void dtkDistributedCommunicator::unspawn(void)
 {
 }
+
+
+/*! \fn dtkDistributedCommunicator::barrier (void)
+
+  Blocks until all processes in the communicator have reached this method. Use it to synchronize all the processes.
+
+*/
+
+/*! \fn dtkDistributedCommunicator::exec (QRunnable *runnable)
+
+  Execute the given \a runnable: each process in the communicator will call the run method of the given object.
+
+*/
 
 qint32 dtkDistributedCommunicator::wid(void)
 {

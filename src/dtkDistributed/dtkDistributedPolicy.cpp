@@ -36,6 +36,17 @@ public:
     dtkDistributedCommunicator *comm;
 };
 
+/*!
+  \class dtkDistributedPolicy
+  \inmodule dtkDistributed
+  \brief dtkDistributedPolicy is used to setup the communicator  (plugin, hostnames, number of processes)
+
+
+  The policy can be set directly (using dtkDistributedPolicy::addHosts) or can be discover from the environments.
+  OAR and Torque resources can be discover automatically; you can also use the DTK_NUM_THREADS variable.
+
+*/
+
 dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistributedPolicyPrivate)
 {
     d->comm = NULL;

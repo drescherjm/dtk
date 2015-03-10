@@ -15,6 +15,12 @@
 
 #include "dtkDistributedApplication.h"
 
+/*!
+  \class dtkDistributedApplication
+  \inmodule dtkDistributed
+  \brief dtkDistributedApplication ...
+
+*/
 
 dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv) : QApplication(argc,argv), dtkDistributedAbstractApplication()
 {

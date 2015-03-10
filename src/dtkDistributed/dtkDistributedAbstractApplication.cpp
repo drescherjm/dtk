@@ -33,6 +33,15 @@ public:
     bool spawned;
 };
 
+
+
+/*!
+  \class dtkDistributedAbstractApplication
+  \inmodule dtkDistributed
+  \brief dtkDistributedAbstractApplication ...
+
+*/
+
 dtkDistributedAbstractApplication::dtkDistributedAbstractApplication(void)
 {
 

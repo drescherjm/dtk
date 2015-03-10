@@ -47,6 +47,18 @@
     \sa initialize(), load()
 */
 
+/*! \fn void dtkCorePluginManager::setVerboseLoading(bool value)
+    Set verbose loading to \a value. If true, the plugin manager will log (using dtkLog) failures at the warn level and normal loading at the trace level
+
+    \sa verboseLoading()
+*/
+
+/*! \fn bool dtkCorePluginManager::verboseLoading(void) const
+    return current status of verbose loading.
+
+    \sa setVerboseLoading()
+*/
+
 /*! \fn void dtkCorePluginManager::load(const QString& path)
     Checks the validity of the plugin library \a path, and if so creates the plugin.
 

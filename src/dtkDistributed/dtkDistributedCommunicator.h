@@ -80,9 +80,6 @@ public:
     virtual bool       active(void);
 
 public:
-    virtual void setPolicy(QString type);
-
-public:
     virtual dtkDistributedBufferManager *createBufferManager(void) { return 0; } ;
     virtual void destroyBufferManager(dtkDistributedBufferManager *&) {;}
 

@@ -36,7 +36,7 @@ public:
 /*! \class dtkDistributedServerDaemon
     \inmodule dtkDistributed
 
-    \brief ...
+    \brief dtkDistributedServerDaemon is the base class to build an application that will act as a proxy between your frontend application and the dtkDistributedResourceManager
 */
 
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)

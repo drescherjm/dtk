@@ -38,9 +38,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedContainer.h
   dtkDistributedController.h
   dtkDistributedCoreApplication.h
-  dtkDistributedGraph
-  dtkDistributedGraph.h
-  dtkDistributedGraph.tpp
   dtkDistributedGraphTopology
   dtkDistributedGraphTopology.h
   dtkDistributedGraphTopology.tpp

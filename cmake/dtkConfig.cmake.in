@@ -55,6 +55,7 @@ set(DTK_ENABLE_COVERAGE @ENABLE_COVERAGE@)
 set(DTK_COVERAGE_USE_COBERTURA @DTK_COVERAGE_USE_COBERTURA@)
 
 set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
+set(DTK_HAVE_ZLIB @DTK_HAVE_ZLIB@)
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

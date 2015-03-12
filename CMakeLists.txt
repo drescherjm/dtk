@@ -254,6 +254,15 @@ endif(MPI_FOUND)
 
 endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
+set(DTK_HAVE_ZLIB "NO")
+
+find_package(ZLIB QUIET)
+if (ZLIB_FOUND)
+  include_directories( ${ZLIB_INCLUDE_DIRS} )
+  set(DTK_HAVE_ZLIB "YES")
+endif (ZLIB_FOUND)
+
+
 ## #################################################################
 ## Dependencies - internal
 ## #################################################################

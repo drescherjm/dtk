@@ -55,16 +55,16 @@ set(${PROJECT_NAME}_SOURCES
 ## Deps
 ## #################################################################
 
-find_package( ZLIB REQUIRED )
+find_package(ZLIB QUIET)
 
-if ( ZLIB_FOUND )
+if (DTK_HAVE_ZLIB)
   set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-  dtkIOCompressor
-  dtkIOCompressor.h)
+    dtkIOCompressor
+    dtkIOCompressor.h)
 
   set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-  dtkIOCompressor.cpp)
-endif ( ZLIB_FOUND )
+    dtkIOCompressor.cpp)
+endif (DTK_HAVE_ZLIB)
 
 ## #################################################################
 ## Build rules
@@ -80,10 +80,9 @@ add_library(${PROJECT_NAME} SHARED
 
 qt5_use_modules(${PROJECT_NAME} Core)
 
-if ( ZLIB_FOUND )
-  include_directories( ${ZLIB_INCLUDE_DIRS} )
+if (DTK_HAVE_ZLIB)
   target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} )
-endif( ZLIB_FOUND )
+endif (DTK_HAVE_ZLIB)
 
 target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
 

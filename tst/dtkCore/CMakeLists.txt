@@ -15,18 +15,26 @@ project(dtkCoreTest)
 ## Input
 ## #################################################################
 
-set(${PROJECT_NAME}_HEADERS_MOC
+set(${PROJECT_NAME}_HEADERS
   dtkArrayTest.h
-  dtkCompressIOTest.h
   dtkIteratorTest.h)
 
-set(${PROJECT_NAME}_HEADERS
-  ${${PROJECT_NAME}_HEADERS_MOC})
+if(DTK_HAVE_ZLIB)
+  set(${PROJECT_NAME}_HEADERS
+    ${${PROJECT_NAME}_HEADERS}
+    dtkCompressIOTest.h)
+endif(DTK_HAVE_ZLIB)
+
 
 set(${PROJECT_NAME}_SOURCES
   dtkArrayTest.cpp
-  dtkCompressIOTest.cpp
   dtkIteratorTest.cpp)
+
+if(DTK_HAVE_ZLIB)
+  set(${PROJECT_NAME}_SOURCES
+    ${${PROJECT_NAME}_SOURCES}
+    dtkCompressIOTest.cpp)
+endif(DTK_HAVE_ZLIB)
 
 ## ###################################################################
 ## Input - introspected
@@ -64,4 +72,7 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 
 add_test(dtkArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
 add_test(dtkIteratorTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)
-add_test(dtkCompressIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkCompressIOTest)
+
+if(DTK_HAVE_ZLIB)
+  add_test(dtkCompressIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkCompressIOTest)
+endif(DTK_HAVE_ZLIB)

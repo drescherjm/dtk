@@ -14,7 +14,7 @@
 
 #include "dtkCompressIOTest.h"
 
-#include <dtkCore>
+#include <dtkCore/dtkIOCompressor.h>
 #include <QtCore>
 
 

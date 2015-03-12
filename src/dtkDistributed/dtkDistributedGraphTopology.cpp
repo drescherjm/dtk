@@ -14,7 +14,9 @@
 
 #include "dtkDistributedGraphTopology.h"
 
+#if defined(DTK_HAVE_ZLIB)
 #include <dtkCore/dtkIOCompressor>
+#endif
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraphTopology implementation
@@ -130,12 +132,17 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
 
         QIODevice::OpenMode mode = QIODevice::ReadOnly;
         QFileInfo info = QFileInfo(filename);
+#if defined(DTK_HAVE_ZLIB)
         if (info.suffix() == "gz") {
             in = new dtkIOCompressor(&file);
         } else {
             in = &file;
             mode |= QIODevice::Text;
         }
+#else
+        in = &file;
+        mode |= QIODevice::Text;
+#endif
         if (!in->open(mode))
             return false;
 

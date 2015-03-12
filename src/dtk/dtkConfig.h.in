@@ -17,6 +17,7 @@
 #define dtk_VERSION_PATCH @dtk_VERSION_PATCH@
 
 #cmakedefine DTK_HAVE_MPI
+#cmakedefine DTK_HAVE_ZLIB
 #cmakedefine DTK_HAVE_PLOT
 
 #cmakedefine DTK_BUILD_SUPPORT_DISTRIBUTED

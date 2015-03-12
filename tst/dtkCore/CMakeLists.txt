@@ -17,6 +17,7 @@ project(dtkCoreTest)
 
 set(${PROJECT_NAME}_HEADERS_MOC
   dtkArrayTest.h
+  dtkCompressIOTest.h
   dtkIteratorTest.h)
 
 set(${PROJECT_NAME}_HEADERS
@@ -24,6 +25,7 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_SOURCES
   dtkArrayTest.cpp
+  dtkCompressIOTest.cpp
   dtkIteratorTest.cpp)
 
 ## ###################################################################
@@ -62,3 +64,4 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 
 add_test(dtkArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
 add_test(dtkIteratorTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)
+add_test(dtkCompressIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkCompressIOTest)

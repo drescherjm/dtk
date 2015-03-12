@@ -14,6 +14,8 @@
 
 #include "dtkDistributedGraphTopology.h"
 
+#include <dtkCore/dtkIOCompressor>
+
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraphTopology implementation
 // /////////////////////////////////////////////////////////////////
@@ -114,9 +116,9 @@ void dtkDistributedGraphTopology::build(void)
 bool dtkDistributedGraphTopology::read(const QString& filename)
 {
     QFile file(filename);
-    QTextStream in(&file);
     qlonglong edges_count = 0;
     QTime time;
+    QIODevice *in;
 
     if (this->wid() == 0) {
         time.start();
@@ -125,10 +127,19 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
             qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
             return false;
         }
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+
+        QIODevice::OpenMode mode = QIODevice::ReadOnly;
+        QFileInfo info = QFileInfo(filename);
+        if (info.suffix() == "gz") {
+            in = new dtkIOCompressor(&file);
+        } else {
+            in = &file;
+            mode |= QIODevice::Text;
+        }
+        if (!in->open(mode))
             return false;
 
-        QStringList header = in.readLine().split(' ');
+        QStringList header = QString(in->readLine()).split(' ');
         m_size = header.first().toLongLong();
         if (m_size  == 0) {
             qWarning() << "Can't parse size of the graph" << filename;
@@ -167,8 +178,8 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
         qlonglong v_last_gid  = m_vertex_to_edge->mapper()->lastIndex(owner);
         qlonglong e_first_gid = 0;
 
-        while (!in.atEnd()) {
-            line = in.readLine().trimmed();
+        while (!in->atEnd()) {
+            line = in->readLine().trimmed();
             edges = line.split(' ');
             if (line.isEmpty() || line.at(0) == '#'){
                 qDebug() << "skip line" << line;
@@ -186,7 +197,7 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
                 ++e_local_count;
             }
             ++v_gid;
-            if(in.atEnd()) {
+            if(in->atEnd()) {
                 v_vec << e_gid;
                 m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
                 m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());

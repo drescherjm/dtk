@@ -42,13 +42,29 @@ set(${PROJECT_NAME}_HEADERS
   dtkCoreSettings.h
   dtkIterator
   dtkIterator.h
-  dtkSpinLock.h)
+  dtkSpinLock.h
+)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractApplication.cpp
   dtkCoreApplication.cpp
   dtkCoreSettings.cpp
   dtkArrayData.cpp)
+
+## #################################################################
+## Deps
+## #################################################################
+
+find_package( ZLIB REQUIRED )
+
+if ( ZLIB_FOUND )
+  set(${PROJECT_NAME}_INCLUDE ${${PROJECT_NAME}_INCLUDE}
+  dtkIOCompressor
+  dtkIOCompressor.h)
+
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkIOCompressor.cpp)
+endif ( ZLIB_FOUND )
 
 ## #################################################################
 ## Build rules
@@ -63,6 +79,11 @@ add_library(${PROJECT_NAME} SHARED
 ## ###################################################################
 
 qt5_use_modules(${PROJECT_NAME} Core)
+
+if ( ZLIB_FOUND )
+  include_directories( ${ZLIB_INCLUDE_DIRS} )
+  target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} )
+endif( ZLIB_FOUND )
 
 target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
 

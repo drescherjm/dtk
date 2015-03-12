@@ -58,7 +58,7 @@ set(${PROJECT_NAME}_SOURCES
 find_package( ZLIB REQUIRED )
 
 if ( ZLIB_FOUND )
-  set(${PROJECT_NAME}_INCLUDE ${${PROJECT_NAME}_INCLUDE}
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
   dtkIOCompressor
   dtkIOCompressor.h)
 

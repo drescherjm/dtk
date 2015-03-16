@@ -34,6 +34,10 @@ public:
     virtual void   initialize(const QString& path);
     virtual void uninitialize(void);
 
+public:
+    void setVerboseLoading(bool value);
+    bool verboseLoading(void) const;
+
 #pragma mark -
 #pragma mark Plugin Management
 

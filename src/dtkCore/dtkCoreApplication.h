@@ -27,8 +27,8 @@ class dtkCoreApplicationPrivate;
 class DTKCORE_EXPORT dtkCoreApplication: public QCoreApplication, public dtkAbstractApplication
 {
 public:
-    dtkCoreApplication(int &argc, char **argv): QCoreApplication(argc, argv), dtkAbstractApplication() {};
-    virtual ~dtkCoreApplication(void) {};
+    dtkCoreApplication(int &argc, char **argv);
+    virtual ~dtkCoreApplication(void);
 
 };
 

@@ -33,6 +33,15 @@ public:
     bool spawned;
 };
 
+
+
+/*!
+  \class dtkDistributedAbstractApplication
+  \inmodule dtkDistributed
+  \brief dtkDistributedAbstractApplication ...
+
+*/
+
 dtkDistributedAbstractApplication::dtkDistributedAbstractApplication(void)
 {
 
@@ -68,11 +77,15 @@ void dtkDistributedAbstractApplication::initialize(void)
     // plugins
     dtkDistributedSettings settings;
     settings.beginGroup("communicator");
-    qDebug() << "initialize plugin manager "<< settings.value("plugins").toString();
+    dtkDebug() << "initialize plugin manager "<< settings.value("plugins").toString();
+
+    QCommandLineOption verboseOption("verbose", QCoreApplication::translate("main", "verbose plugin initialization"));
+    if (parser->isSet(verboseOption)) {
+        dtkDistributed::communicator::pluginManager().setVerboseLoading(true);
+    }
     dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
     settings.endGroup();
 
-    qDebug() << dtkDistributed::communicator::pluginManager().plugins();
     qDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();
 
     if (parser->isSet(policyOption)) {

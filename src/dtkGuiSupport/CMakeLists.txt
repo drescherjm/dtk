@@ -42,6 +42,11 @@ set(${PROJECT_NAME}_HEADERS
   dtkViewList.h
   dtkViewListControl.h)
 
+if(DTK_BUILD_SCRIPT)
+  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+    dtkInterpreter.h)
+endif(DTK_BUILD_SCRIPT)
+
 set(${PROJECT_NAME}_SOURCES
   dtkAboutBox.cpp
   dtkAboutPlugin.cpp
@@ -75,6 +80,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkViewList.cpp
   dtkViewListControl.cpp)
 
+if(DTK_BUILD_SCRIPT)
+  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+    dtkInterpreter.cpp)
+endif(DTK_BUILD_SCRIPT)
+
+
 if(APPLE)
 set(${PROJECT_NAME}_SOURCES
   ${${PROJECT_NAME}_SOURCES}
@@ -105,8 +116,13 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   dtkCoreSupport)
 
+if(DTK_BUILD_SCRIPT)
+  target_link_libraries(${PROJECT_NAME}
+    dtkScript)
+endif(DTK_BUILD_SCRIPT)
+
 if(APPLE)
-target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+  target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
 endif(APPLE)
 
 ## ###################################################################

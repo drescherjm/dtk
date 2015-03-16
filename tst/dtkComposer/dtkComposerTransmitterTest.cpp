@@ -608,7 +608,7 @@ void dtkComposerTransmitterTestCase::cleanup(void)
 {
 }
 
-DTKTEST_MAIN(dtkComposerTransmitterTest, dtkComposerTransmitterTestCase)
+DTKTEST_MAIN_NOGUI(dtkComposerTransmitterTest, dtkComposerTransmitterTestCase)
 
 #include "dtkComposerTransmitterTest.moc"
 

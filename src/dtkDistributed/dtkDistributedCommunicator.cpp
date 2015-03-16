@@ -36,11 +36,25 @@ public:
 // dtkDistributedCommunicator
 // /////////////////////////////////////////////////////////////////
 
+
 /*!
   \class dtkDistributedCommunicator
   \inmodule dtkDistributed
-  \brief ...
- */
+  \brief dtkDistributedCommunicator is the interface for distributed computing.
+
+  It can be used to spawn processes/threads on one or several hosts (depending on the implementation), execute code on each processes, and gives access to communications and synchronisations methods.
+
+  The communication API is very similar to the MPI API (send, receive, broadcast, barrier, ...), but can be used without MPI ( a plugin based on qthreads is provided).
+
+  \code
+  dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+  PingPongWork *runnable = new PingPongWork();
+  comm->spawn();
+  comm->exec(runnable);
+  comm->unspawn();
+  \endcode
+
+*/
 
 /*! \enum dtkDistributedCommunicator::DataType
     \value Bool
@@ -111,10 +125,6 @@ bool dtkDistributedCommunicator::active(void)
     return false;
 }
 
-void dtkDistributedCommunicator::setPolicy(QString type)
-{
-}
-
 /*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, qlonglong np)
 
   Spawn a communicator on all hostnames, starting np threads on each
@@ -131,6 +141,19 @@ void dtkDistributedCommunicator::unspawn(void)
 {
 }
 
+
+/*! \fn dtkDistributedCommunicator::barrier (void)
+
+  Blocks until all processes in the communicator have reached this method. Use it to synchronize all the processes.
+
+*/
+
+/*! \fn dtkDistributedCommunicator::exec (QRunnable *runnable)
+
+  Execute the given \a runnable: each process in the communicator will call the run method of the given object.
+
+*/
+
 qint32 dtkDistributedCommunicator::wid(void)
 {
    return 0;
@@ -143,20 +166,6 @@ void dtkDistributedCommunicator::setWid(qint32 id)
 qint32 dtkDistributedCommunicator::size(void)
 {
    return 1;
-}
-
-void *dtkDistributedCommunicator::allocate(qlonglong count, qlonglong size, qlonglong wid, qlonglong& buffer_id)
-{
-    void *buffer = malloc(size*count);
-    d->buffer_map.insert(d->id, buffer);
-    buffer_id = (d->id)++;
-    return buffer;
-}
-
-void dtkDistributedCommunicator::deallocate(qlonglong wid, const qlonglong& buffer_id)
-{
-    void *buffer = d->buffer_map.take(buffer_id);
-    free (buffer);
 }
 
 void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qint32 tag)
@@ -200,6 +209,41 @@ void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 t
     QDataStream stream(&bytes,QIODevice::WriteOnly);
     stream << v;
     this->send(bytes, target, tag);
+}
+
+void dtkDistributedCommunicator::broadcast(bool      *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Bool, source);
+}
+
+void dtkDistributedCommunicator::broadcast(int       *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Int, source);
+}
+
+void dtkDistributedCommunicator::broadcast(long      *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Long, source);
+}
+
+void dtkDistributedCommunicator::broadcast(qlonglong *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Int64, source);
+}
+
+void dtkDistributedCommunicator::broadcast(float     *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Float, source);
+}
+
+void dtkDistributedCommunicator::broadcast(double    *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Double, source);
+}
+
+void dtkDistributedCommunicator::broadcast(char      *data, qint64 size, qint32 source)
+{
+    this->broadcast(data, size, Char, source);
 }
 
 void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)

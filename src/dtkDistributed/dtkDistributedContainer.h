@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "dtkDistributed.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedMapper.h"

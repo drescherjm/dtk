@@ -22,8 +22,10 @@ template<typename T> class dtkDistributedArray;
 // dtkDistributedArrayCache
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, typename DSArray = dtkDistributedArray<T>, int Prealloc = 128, int Length = 32> class dtkDistributedArrayCache
+template <typename T, int Prealloc = 128, int Length = 32> class dtkDistributedArrayCache
 {
+    typedef dtkDistributedArray<T> DSArray;
+
 public:
     typedef QVarLengthArray<T, Prealloc> Array;
 
@@ -54,7 +56,7 @@ private:
 #include "dtkDistributedMapper.h"
 #include "dtkDistributedCommunicator.h"
 
-template <typename T, typename DSArray, int Prealloc, int Length> inline dtkDistributedArrayCache<T, DSArray, Prealloc, Length>::dtkDistributedArrayCache(DSArray *array) : m_array(array)
+template <typename T, int Prealloc, int Length> inline dtkDistributedArrayCache<T, Prealloc, Length>::dtkDistributedArrayCache(DSArray *array) : m_array(array)
 { 
     for (int i = 0; i < Length; ++i) { 
         ids[i] = - Prealloc - 1; 
@@ -65,7 +67,7 @@ template <typename T, typename DSArray, int Prealloc, int Length> inline dtkDist
     last = -1;
 }
 
-template <typename T, typename DSArray, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, DSArray, Prealloc, Length>::clear(void)
+template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::clear(void)
 {
     for (int i = 0; i < Length; ++i) { 
         ids[i] = - Prealloc - 1; 
@@ -74,7 +76,7 @@ template <typename T, typename DSArray, int Prealloc, int Length> inline void dt
     }    
 }
 
-template <typename T, typename DSArray, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, DSArray, Prealloc, Length>::value(const qlonglong& entry_id)
+template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id)
 {
     // Check if entry_id is already in the Cache
     int line_id = -1;
@@ -102,7 +104,7 @@ template <typename T, typename DSArray, int Prealloc, int Length> inline const T
     return lines[line_id].at(entry_id - ids[line_id]);
 }
 
-template <typename T, typename DSArray, int Prealloc, int Length> inline double dtkDistributedArrayCache<T, DSArray, Prealloc, Length>::hitrate()
+template <typename T, int Prealloc, int Length> inline double dtkDistributedArrayCache<T, Prealloc, Length>::hitrate()
 {
     qlonglong sum = miss+hit;
     qDebug() <<"misses:" << miss << "hits:" << hit ;

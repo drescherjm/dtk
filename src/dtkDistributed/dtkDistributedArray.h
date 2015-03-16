@@ -1,23 +1,29 @@
 // Version: $Id$
-//
-//
+// 
+// 
 
-// Commentary:
-//
-//
+// Commentary: 
+// 
+// 
 
 // Change Log:
-//
-//
+// 
+// 
 
 // Code:
 
 #pragma once
 
-#include <dtkCore/dtkArrayData.h>
-
 #include "dtkDistributedArrayCache.h"
 #include "dtkDistributedContainer.h"
+#include "dtkDistributedNavigator.h"
+
+#include <dtkCore/dtkArray.h>
+#include <dtkCore/dtkArrayData.h>
+
+class dtkDistributedCommunicator;
+class dtkDistributedMapper;
+class dtkDistributedBufferManager;
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedArray
@@ -25,15 +31,55 @@
 
 template <typename T> class dtkDistributedArray : public dtkDistributedContainer
 {
+    typedef dtkTypedArrayData<T> Data;
+    typedef dtkDistributedArrayCache<T> Cache;
+
 public:
-      dtkDistributedArray(const qlonglong& size);
-      dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
-      dtkDistributedArray(const qlonglong& size, const T *array);
-      dtkDistributedArray(const dtkDistributedArray& other);
-     ~dtkDistributedArray(void);
+    typedef dtkDistributedNavigator< dtkDistributedArray<T> > navigator;
+
+public:
+    typedef typename Data::const_iterator const_iterator;
+    typedef typename Data::iterator             iterator;
+    typedef iterator Iterator;
+    typedef const_iterator ConstIterator;
+
+public:
+    typedef T value_type;
+    typedef value_type* pointer;
+    typedef const value_type* const_pointer;
+    typedef value_type& reference;
+    typedef const value_type& const_reference;
+    typedef qptrdiff difference_type;
+    typedef qlonglong size_type;
+
+public:
+     dtkDistributedArray(const qlonglong& size);
+     dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
+     dtkDistributedArray(const qlonglong& size, const T& init_value);
+     dtkDistributedArray(const qlonglong& size, const T *array);
+     dtkDistributedArray(const dtkArray<T> &array);
+     dtkDistributedArray(const dtkDistributedArray& other);
+    ~dtkDistributedArray(void);
 
 public:
     void remap(dtkDistributedMapper *remapper);
+
+public:
+    void  rlock(qint32 owner);
+    void  wlock(qint32 owner);
+    void unlock(qint32 owner);
+
+public:
+    void  rlock(void);
+    void  wlock(void);
+    void unlock(void);
+
+public:
+    bool empty(void) const;
+    qlonglong size(void) const;
+
+public:
+    void fill(const T& value);
 
 public:
     void setAt(const qlonglong& index, const T& value);
@@ -51,27 +97,6 @@ public:
     void copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const;
 
 public:
-    void  rlock(qint32 owner);
-    void  wlock(qint32 owner);
-    void unlock(qint32 owner);
-
-public:
-    typedef dtkTypedArrayData<T>        Data;
-    typedef dtkDistributedArrayCache<T> Cache;
-
-    typedef typename Data::const_iterator const_iterator;
-    typedef typename Data::iterator             iterator;
-
-public:
-    typedef T value_type;
-    typedef value_type* pointer;
-    typedef const value_type* const_pointer;
-    typedef value_type& reference;
-    typedef const value_type& const_reference;
-    typedef qptrdiff difference_type;
-    typedef qlonglong size_type;
-
-public:
           iterator  begin(iterator = iterator());
           iterator    end(iterator = iterator());
     const_iterator  begin(const_iterator = const_iterator()) const;
@@ -80,21 +105,24 @@ public:
     const_iterator   cend(const_iterator = const_iterator()) const;
 
 public:
+    navigator toNavigator(void) const;
+
+public:
     void stats(void) const;
 
 private:
-    void allocate(Data *&, qint64&, qlonglong);
-    void freeData(Data *, qint64);
+    void allocate(dtkDistributedBufferManager *&, Data *&, qlonglong);
+    void deallocate(dtkDistributedBufferManager *, Data *);
 
 private:
-            qint64 data_id;
-            Data  *data;
-    mutable Cache *cache;
+    Data  *data;
+    mutable Cache *m_cache;
+    dtkDistributedBufferManager *m_buffer_manager;
 };
 
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkDistributedArray.tpp"
 
-//
+// 
 // dtkDistributedArray.h ends here

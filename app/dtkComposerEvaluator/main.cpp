@@ -66,10 +66,10 @@ int main(int argc, char **argv)
 
         QStringList hosts;
         // dtkDistributedCommunicator *comm = manager.spawn();
-        dtkDistributedCommunicator *comm ;
+//        dtkDistributedCommunicator *comm ;
         //manager.spawn();
 
-        p.setInternalCommunicator(comm);
+//        p.setInternalCommunicator(comm);
         p.setParentCommunicator(policy.communicator());
         p.setFactory(factory);
         p.setApplication("dtkComposerEvaluator");

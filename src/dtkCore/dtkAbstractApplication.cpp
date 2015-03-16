@@ -132,6 +132,8 @@ void dtkAbstractApplication::initialize(void)
         } else {
             dtkLogger::instance().attachFile(d->parser.value(logfileOption));
         }
+    } else {
+        dtkLogger::instance().attachFile(dtkLogPath(q));
     }
 }
 

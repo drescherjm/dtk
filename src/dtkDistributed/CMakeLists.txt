@@ -38,9 +38,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedContainer.h
   dtkDistributedController.h
   dtkDistributedCoreApplication.h
-  dtkDistributedGraph
-  dtkDistributedGraph.h
-  dtkDistributedGraph.tpp
+  dtkDistributedGraphTopology
+  dtkDistributedGraphTopology.h
+  dtkDistributedGraphTopology.tpp
   dtkDistributedItem.h
   dtkDistributedIterator
   dtkDistributedIterator.h
@@ -57,9 +57,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedResourceManagerLocal.h
   dtkDistributedResourceManagerOar.h
   dtkDistributedResourceManagerTorque.h
-  dtkDistributedStaticArray
-  dtkDistributedStaticArray.h
-  dtkDistributedStaticArray.tpp
   dtkDistributedServerDaemon.h
   dtkDistributedSettings
   dtkDistributedSettings.h
@@ -69,10 +66,13 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedAbstractApplication.cpp
+  dtkDistributedApplication.cpp
   dtkDistributedBufferManager.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
+  dtkDistributedCoreApplication.cpp
+  dtkDistributedGraphTopology.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp
   dtkDistributedMessage.cpp

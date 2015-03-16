@@ -118,10 +118,24 @@
 
     \sa wlock(), unlock(), locked()
  */
-   
+
+/*! \fn void dtkDistributedBufferManager::rlock(void)
+
+    Locks for read the buffer managed by all processes.
+
+    \sa wlock(), unlock(), locked()
+ */
+
 /*! \fn void dtkDistributedBufferManager::wlock(qlonglong wid)
 
     Locks for write the buffer managed by process \a wid.
+
+    \sa rlock(), unlock(), locked()
+*/
+
+/*! \fn void dtkDistributedBufferManager::wlock(void)
+
+    Locks for write the buffer managed by all processes.
 
     \sa rlock(), unlock(), locked()
 */
@@ -132,7 +146,14 @@
 
     \sa rlock(), wlock(), locked()
  */
-   
+
+/*! \fn void dtkDistributedBufferManager::unlock(void)
+
+    Unlocks all the buffers.
+
+    \sa rlock(), wlock(), locked()
+ */
+
 /*! \fn bool dtkDistributedBufferManager::locked(qlonglong wid)
 
     Returns true if the buffer of process \a wid has been previously locked.

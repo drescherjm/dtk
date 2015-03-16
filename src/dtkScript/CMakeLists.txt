@@ -1,70 +1,53 @@
+### CMakeLists.txt --- 
+## 
+## Author: Julien Wintz
+## Copyright (C) 2008-2009 - Julien Wintz, Inria.
+## Created: Tue Mar 10 15:12:38 2009 (+0100)
 ## Version: $Id$
-##
+## Last-Updated: Thu Jan 10 11:33:06 2013 (+0100)
+##           By: Julien Wintz
+##     Update #: 102
 ######################################################################
-##
-### Commentary:
-##
+## 
+### Commentary: 
+## 
 ######################################################################
-##
-### Change Log:
-##
+## 
+### Change log:
+## 
 ######################################################################
-##
-### Code:
 
-project(dtkCore)
+project(dtkScript)
 
 ## #################################################################
-## Input
+## Sources
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkAbstractApplication.h
-  dtkArray
-  dtkArray.h
-  dtkArray.tpp
-  dtkArrayData
-  dtkArrayData.h
-  dtkCore
-  dtkCore.h
-  dtkCoreApplication.h
-  dtkCorePlugin
-  dtkCorePlugin.h
-  dtkCorePluginFactory
-  dtkCorePluginFactory.h
-  dtkCorePluginFactory.tpp
-  dtkCorePluginFactoryTemplate
-  dtkCorePluginFactoryTemplate.h
-  dtkCorePluginManager
-  dtkCorePluginManager.h
-  dtkCorePluginManager.tpp
-  dtkCoreSettings
-  dtkCoreSettings.h
-  dtkIterator
-  dtkIterator.h
-  dtkSpinLock.h
-)
+  dtkScriptInterpreter.h)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkAbstractApplication.cpp
-  dtkCoreApplication.cpp
-  dtkCoreSettings.cpp
-  dtkArrayData.cpp)
+  dtkScriptInterpreter.cpp)
 
-## #################################################################
-## Deps
-## #################################################################
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
 
-find_package(ZLIB QUIET)
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkScriptInterpreterPython.h)
 
-if (DTK_HAVE_ZLIB)
-  set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
-    dtkIOCompressor
-    dtkIOCompressor.h)
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkScriptInterpreterPython.cpp)
 
-  set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
-    dtkIOCompressor.cpp)
-endif (DTK_HAVE_ZLIB)
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
+
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
+
+set(${PROJECT_NAME}_HEADERS ${${PROJECT_NAME}_HEADERS}
+  dtkScriptInterpreterTcl.h)
+
+set(${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_SOURCES}
+  dtkScriptInterpreterTcl.cpp)
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
 
 ## #################################################################
 ## Build rules
@@ -72,19 +55,26 @@ endif (DTK_HAVE_ZLIB)
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS})
-
-## ###################################################################
-## Link rules
-## ###################################################################
+  ${${PROJECT_NAME}_HEADERS}
+  )
 
 qt5_use_modules(${PROJECT_NAME} Core)
 
-if (DTK_HAVE_ZLIB)
-  target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} )
-endif (DTK_HAVE_ZLIB)
+target_link_libraries(${PROJECT_NAME}
+  dtkCore
+  dtkLog)
 
-target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
+
+target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_TCL)
+
+if(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
+
+target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+
+endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
 
 ## #################################################################
 ## Target properties
@@ -112,13 +102,15 @@ set(${PROJECT_NAME}_HEADERS
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export"
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
-## ###################################################################
-## Install rules - files
-## ###################################################################
+
+## #################################################################
+## Installation
+## #################################################################
 
 install(FILES ${${PROJECT_NAME}_HEADERS}
   DESTINATION include/${PROJECT_NAME}
-    COMPONENT core)
+    COMPONENT script)
+
 
 ## ###################################################################
 ## Install rules - targets
@@ -126,8 +118,6 @@ install(FILES ${${PROJECT_NAME}_HEADERS}
 
 install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      COMPONENT core
+      COMPONENT script
          EXPORT dtkDepends)
 
-######################################################################
-### CMakeLists.txt ends here

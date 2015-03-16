@@ -36,6 +36,17 @@ public:
     dtkDistributedCommunicator *comm;
 };
 
+/*!
+  \class dtkDistributedPolicy
+  \inmodule dtkDistributed
+  \brief dtkDistributedPolicy is used to setup the communicator  (plugin, hostnames, number of processes)
+
+
+  The policy can be set directly (using dtkDistributedPolicy::addHosts) or can be discover from the environments.
+  OAR and Torque resources can be discover automatically; you can also use the DTK_NUM_THREADS variable.
+
+*/
+
 dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistributedPolicyPrivate)
 {
     d->comm = NULL;
@@ -112,6 +123,12 @@ QStringList dtkDistributedPolicy::hosts(void)
             }
         }
         dtkDebug() << "No hostfile found, try qapp args";
+        d->nthreads = 1;
+// skip this part on windows with qt < 5.5 because of QTBUG-30330
+#if QT_VERSION < 0x050500 && defined Q_OS_WIN32
+        dtkWarn() << "skip running parser on windows";
+        d->hosts <<  "localhost";
+#else
         QCommandLineParser *parser = dtkDistributed::app()->parser();
         QCommandLineOption npOption("np","number of processes","int");
         QCommandLineOption ntOption("nt","number of threads","int");
@@ -130,7 +147,6 @@ QStringList dtkDistributedPolicy::hosts(void)
         for (int i = 0; i <  np; i++) {
             d->hosts <<  "localhost";
         }
-        d->nthreads = 1;
         //FIXME: rework hybrid case
         if (parser->isSet(ntOption)) {
                 if (d->type == "mpi") {
@@ -143,6 +159,7 @@ QStringList dtkDistributedPolicy::hosts(void)
                     d->nthreads = parser->value(ntOption).toInt();
                 }
         }
+#endif
         dtkDebug() << "policy updated, hosts:" << d->hosts.count() << "threads:" <<  d->nthreads;
     }
     return d->hosts;

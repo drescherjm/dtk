@@ -68,7 +68,7 @@ function submit(nodes, cores, walltime)
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     var resources = {  "resources": {"nodes": nodes, "cores": cores },
                        "walltime": walltime,
-                       "application": slavePath.text +" --server " + url(false) + " --policy " + policy()
+                       "application": slavePath.text +" --nw --server " + url(false) + " --policy " + policy()
                     }
     xhr.send(JSON.stringify(resources))
 }

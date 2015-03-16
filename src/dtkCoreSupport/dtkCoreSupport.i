@@ -1,4 +1,4 @@
-/* dtkCore.i --- Core layer swig interface definition
+/* dtkCoreSupport.i --- Core layer swig interface definition
  *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
@@ -17,10 +17,10 @@
  *
  */
 
-#ifndef DTKCORE_I
-#define DTKCORE_I
+#ifndef DTKCORESUPPORT_I
+#define DTKCORESUPPORT_I
 
-%module core
+%module coresupport
 %include "carrays.i"
 %array_class(double, doubleArray);
 %{
@@ -28,23 +28,23 @@
 #include <QtDebug>
 #include <QtCore>
 
-#include <dtkCore/dtkAbstractData.h>
-#include <dtkCore/dtkAbstractDataFactory.h>
-#include <dtkCore/dtkAbstractDataReader.h>
-#include <dtkCore/dtkAbstractDataWriter.h>
-#include <dtkCore/dtkAbstractDataConverter.h>
-#include <dtkCore/dtkAbstractDataSerializer.h>
-#include <dtkCore/dtkAbstractObject.h>
-#include <dtkCore/dtkAbstractProcess.h>
-#include <dtkCore/dtkAbstractProcessFactory.h>
-#include <dtkCore/dtkAbstractView.h>
-#include <dtkCore/dtkAbstractViewAnimator.h>
-#include <dtkCore/dtkAbstractViewFactory.h>
-#include <dtkCore/dtkAbstractViewInteractor.h>
-#include <dtkCore/dtkAbstractViewNavigator.h>
-#include <dtkCore/dtkPlugin.h>
-#include <dtkCore/dtkPluginManager.h>
-#include <dtkCore/dtkSmartPointer.h>
+#include <dtkCoreSupport/dtkAbstractData.h>
+#include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkCoreSupport/dtkAbstractDataReader.h>
+#include <dtkCoreSupport/dtkAbstractDataWriter.h>
+#include <dtkCoreSupport/dtkAbstractDataConverter.h>
+#include <dtkCoreSupport/dtkAbstractDataSerializer.h>
+#include <dtkCoreSupport/dtkAbstractObject.h>
+#include <dtkCoreSupport/dtkAbstractProcess.h>
+#include <dtkCoreSupport/dtkAbstractProcessFactory.h>
+#include <dtkCoreSupport/dtkAbstractView.h>
+#include <dtkCoreSupport/dtkAbstractViewAnimator.h>
+#include <dtkCoreSupport/dtkAbstractViewFactory.h>
+#include <dtkCoreSupport/dtkAbstractViewInteractor.h>
+#include <dtkCoreSupport/dtkAbstractViewNavigator.h>
+#include <dtkCoreSupport/dtkPlugin.h>
+#include <dtkCoreSupport/dtkPluginManager.h>
+#include <dtkCoreSupport/dtkSmartPointer.h>
 
 #include <string>
 %}
@@ -76,8 +76,8 @@
 #undef  Q_DECLARE_METATYPE(Type type)
 #define Q_DECLARE_METATYPE(Type type)
 
-#undef  DTKCORE_EXPORT
-#define DTKCORE_EXPORT
+#undef  DTKCORESUPPORT_EXPORT
+#define DTKCORESUPPORT_EXPORT
 
 #undef  DTK_DEPRECATED
 #define DTK_DEPRECATED
@@ -224,11 +224,11 @@
 // C++ -> Python
 
 %typemap(out) QString {
-    $result = PyString_FromString($1.toAscii().constData());
+    $result = PyString_FromString($1.toUtf8().constData());
 }
 
 %typemap(out) const QString& {
-    $result = PyString_FromString($1.toAscii().constData());
+    $result = PyString_FromString($1.toUtf8().constData());
 }
 
 %define %QList_typemapsPtr(DATA_TYPE)
@@ -270,7 +270,7 @@
     QStringList::iterator it = $1.begin();
     QStringList::iterator end = $1.end();
     for(;it!=end; ++it, ++i) {
-        PyObject* st = PyString_FromString((*it).toAscii().constData());
+        PyObject* st = PyString_FromString((*it).toUtf8().constData());
         PyList_SET_ITEM($result, i, st);
   }
 }
@@ -281,7 +281,7 @@
     QStringList::iterator it = $1.begin();
     QStringList::iterator end = $1.end();
     for(;it!=end; ++it, ++i) {
-        PyObject* st = PyString_FromString((*it).toAscii().constData());
+        PyObject* st = PyString_FromString((*it).toUtf8().constData());
         PyList_SET_ITEM($result, i, st);
   }
 }
@@ -328,11 +328,11 @@ public:
 // C++ -> Tcl
 
 %typemap(out) QString {
-    Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
+    Tcl_SetStringObj($result, $1.toUtf8().constData(), $1.size());
 }
 
 %typemap(out) const QString& {
-    Tcl_SetStringObj($result, $1.toAscii().constData(), $1.size());
+    Tcl_SetStringObj($result, $1.toUtf8().constData(), $1.size());
 }
 
 #elif SWIGCSHARP
@@ -360,11 +360,11 @@ public:
 // // C++ -> C#
 
 // %typemap(out) QString {
-//     $result = SWIG_csharp_string_callback($1.toAscii().constData());
+//     $result = SWIG_csharp_string_callback($1.toUtf8().constData());
 // }
 
 // %typemap(out) const QString & {
-//     $result = SWIG_csharp_string_callback($1.toAscii().constData());
+//     $result = SWIG_csharp_string_callback($1.toUtf8().constData());
 // }
 
 %typemap(ctype) QString "char *"
@@ -384,7 +384,7 @@ public:
 
 %typemap(out) QString
 %{ 
-    $result = SWIG_csharp_string_callback($1.toAscii().constData());
+    $result = SWIG_csharp_string_callback($1.toUtf8().constData());
 %}
 
 %typemap(directorout, canthrow=1) QString 
@@ -394,7 +394,7 @@ public:
    }
    $result = string($input); %}
 
-%typemap(directorin) QString %{ $input = SWIG_csharp_string_callback($1.toAscii().constData()); %}
+%typemap(directorin) QString %{ $input = SWIG_csharp_string_callback($1.toUtf8().constData()); %}
 
 %typemap(csin) QString "$csinput"
 %typemap(csout, excode=SWIGEXCODE) QString {
@@ -432,7 +432,7 @@ public:
    }
    QString $1_str($input);
    $1 = &$1_str; %}
-%typemap(out) const QString & %{ $result = SWIG_csharp_string_callback($1->toAscii().constData()); %}
+%typemap(out) const QString & %{ $result = SWIG_csharp_string_callback($1->toUtf8().constData()); %}
 
 %typemap(csin) const QString & "$csinput"
 %typemap(csout, excode=SWIGEXCODE) const QString & {
@@ -450,7 +450,7 @@ public:
    $1_str = $input;
    $result = &$1_str; %}
 
-%typemap(directorin) const QString & %{ $input = SWIG_csharp_string_callback($1.toAscii().constData()); %}
+%typemap(directorin) const QString & %{ $input = SWIG_csharp_string_callback($1.toUtf8().constData()); %}
 
 %typemap(csvarin, excode=SWIGEXCODE2) const QString & %{
     set {

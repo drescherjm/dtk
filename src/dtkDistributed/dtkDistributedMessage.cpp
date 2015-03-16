@@ -40,7 +40,7 @@ public:
 /*! \class dtkDistributedMessage
     \inmodule dtkDistributed
 
-    \brief ...
+    \brief dtkDistributedMessage encapsulate the JSON based protocol used between the client and the resource manager in a high level C++ API.
 */
 
 dtkDistributedMessage::dtkDistributedMessage(void) :  d(new dtkDistributedMessagePrivate)

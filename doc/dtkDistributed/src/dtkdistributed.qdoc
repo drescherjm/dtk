@@ -10,23 +10,20 @@
     introspection, but also end-user ready components that can be
     integrated directly into a platform.
 
-    A communication manager is provided with a fallback mechanism: mpi
-    (message passing interface) library is used by default if
-    available, a socket backend is used otherwise or if instructed. It
+    A communication class is provided with several implementations,
+    such as MPI (message passing interface) library , MPI3, and Qthreads. It
     features a dtk styled interface around methods of the fundamental
-    distributed computing idom: send, receive, broadcast, barrier,
-    etc.
+    distributed computing idiom: send, receive, broadcast, barrier,
+    etc. On top of the communicator, a distributed buffer
+    implementation gives access to distributed shared memory,
+    allowing high level distributed arrays and graphs.
 
     Second, it is possible to query a computing cluster to introspect
-    its sate, and ultimately dialog with its job queues to deploy a
+    its state, and ultimately dialog with its job queues to deploy a
     given series of processes and run them in a distributed fashion. A
-    high level component is provided, and will in term, support both
-    torque and oar schedulers.
+    high level component is provided, and currently support both
+    torque and OAR schedulers.
 
-    This layer is still work in progress but its next feature will
-    concern the use of a cluster to achieve distributed render of
-    complex scenes. This work will make the connection between the
-    communication and clustering interfaces feature of dtkDistributed.
 
     The distribution layer is the connection with INRIA's CRISAM
     computing platform.

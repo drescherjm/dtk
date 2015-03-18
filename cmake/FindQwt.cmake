@@ -40,13 +40,14 @@ find_path(QWT_INCLUDE_DIR
   /usr/local/qwt/include
   /usr/local/include
   /opt/qwt/include
+  /opt/qwt-qt5/include
   /usr/include/qwt
   /usr/include/qt5/qwt
   /usr/include)
 
 find_library(QWT_LIBRARY
   NAMES ${QWT_NAMES}
-  PATHS /opt/qwt/lib /usr/local/qwt/lib /usr/local/lib /usr/lib)
+  PATHS /opt/qwt/lib /opt/qwt-qt5/lib /usr/local/qwt/lib /usr/local/lib /usr/lib)
 
 if(QWT_INCLUDE_DIR AND QWT_LIBRARY)
   set(QWT_LIBRARIES ${QWT_LIBRARY})

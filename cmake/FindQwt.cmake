@@ -7,7 +7,7 @@
 
 set(QWT_FOUND "NO")
 
-set(QWT_NAMES ${QWT_NAMES} qwt libqwt)
+set(QWT_NAMES ${QWT_NAMES} qwt libqwt qwt-qt5)
 
 if(QWT_DIR)
   find_path(QWT_INCLUDE_DIR
@@ -41,6 +41,7 @@ find_path(QWT_INCLUDE_DIR
   /usr/local/include
   /opt/qwt/include
   /usr/include/qwt
+  /usr/include/qt5/qwt
   /usr/include)
 
 find_library(QWT_LIBRARY

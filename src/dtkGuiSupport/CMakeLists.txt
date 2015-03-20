@@ -129,11 +129,11 @@ endif(APPLE)
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Declarative)
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Quick)
-qt5_use_modules(${PROJECT_NAME} Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Declarative)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Quick)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 ## #################################################################
 ## Target properties

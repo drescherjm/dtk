@@ -220,10 +220,10 @@ set(${PROJECT_NAME}_RCC dtkComposer.qrc)
 ## Build rules
 ## #################################################################
 
-qt5_add_resources(${PROJECT_NAME}_QRC ${${PROJECT_NAME}_RCC})
+qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RCC})
 
 add_library(${PROJECT_NAME} SHARED
-  ${${PROJECT_NAME}_QRC}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
@@ -235,12 +235,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Concurrent)
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Network)
-qt5_use_modules(${PROJECT_NAME} Widgets)
-qt5_use_modules(${PROJECT_NAME} Xml)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Concurrent)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkLog)
 target_link_libraries(${PROJECT_NAME} dtkCore)

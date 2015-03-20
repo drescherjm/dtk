@@ -32,8 +32,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArrayNavigator.h
   dtkDistributedBufferManager
   dtkDistributedBufferManager.h
+  dtkDistributedBufferManagerSequential.h
   dtkDistributedCommunicator
   dtkDistributedCommunicator.h
+  dtkDistributedCommunicatorSequential.h
   dtkDistributedCommunicatorStatus.h
   dtkDistributedContainer.h
   dtkDistributedController.h
@@ -69,6 +71,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedApplication.cpp
   dtkDistributedBufferManager.cpp
   dtkDistributedCommunicator.cpp
+  dtkDistributedCommunicatorSequential.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
   dtkDistributedCoreApplication.cpp
@@ -102,10 +105,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Network)
-qt5_use_modules(${PROJECT_NAME} Widgets)
-qt5_use_modules(${PROJECT_NAME} Xml)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkCore)
 target_link_libraries(${PROJECT_NAME} dtkLog)

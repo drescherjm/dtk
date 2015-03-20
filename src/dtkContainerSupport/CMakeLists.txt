@@ -54,8 +54,8 @@ target_link_libraries(${PROJECT_NAME}
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 ## #################################################################
 ## Target properties

@@ -37,7 +37,7 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkLog)
 
-qt5_use_modules(${PROJECT_NAME} Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

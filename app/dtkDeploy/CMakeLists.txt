@@ -32,7 +32,7 @@ set(${PROJECT_NAME}_SOURCES
 add_executable(${PROJECT_NAME}
   ${${PROJECT_NAME}_SOURCES})
 
-qt5_use_modules(${PROJECT_NAME} Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
 
 ## #################################################################
 ## Installation

@@ -44,7 +44,7 @@ add_library(${PROJECT_NAME} SHARED
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
 
 ## ###################################################################
 ## Target properties

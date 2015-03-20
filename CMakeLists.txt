@@ -38,6 +38,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
+
 ## #################################################################
 ## Install prefix
 ## #################################################################
@@ -114,6 +115,8 @@ option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
 ## ###################################################################
 ## Test setup
 ## ###################################################################
+find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
+set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
 
 enable_testing()
 if(DTK_ENABLE_COVERAGE)
@@ -131,9 +134,11 @@ endif(DTK_ENABLE_COVERAGE)
 ## #################################################################
 
 find_package(Qt5Core        REQUIRED)
+find_package(Qt5Concurrent  REQUIRED)
 find_package(Qt5Quick       REQUIRED)
 find_package(Qt5Network     REQUIRED)
 find_package(Qt5Gui         REQUIRED)
+find_package(Qt5Test        REQUIRED)
 find_package(Qt5Xml         REQUIRED)
 find_package(Qt5Declarative REQUIRED)
 

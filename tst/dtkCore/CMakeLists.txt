@@ -60,9 +60,9 @@ add_executable(${PROJECT_NAME}
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Test)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Test)
 
 target_link_libraries(${PROJECT_NAME} dtkCore)
 

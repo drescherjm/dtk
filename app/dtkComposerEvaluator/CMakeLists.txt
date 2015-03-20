@@ -26,9 +26,9 @@ target_link_libraries(${PROJECT_NAME}
   dtkLog
  )
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Concurrent)
-qt5_use_modules(${PROJECT_NAME} Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Network)
+
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

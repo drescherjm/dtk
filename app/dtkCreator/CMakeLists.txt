@@ -23,7 +23,7 @@ project(dtkCreator)
 ## Sources
 ## #################################################################
 
-set(${PROJECT_NAME}_HEADERS_MOC
+set(${PROJECT_NAME}_HEADERS
   dtkCreatorMainWindow.h
   dtkCreatorMainWindow_p.h)
 
@@ -51,7 +51,6 @@ endif(NOT MSVC)
 qt5_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
-  ${${PROJECT_NAME}_SOURCES_WRAP}
   ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
@@ -73,9 +72,9 @@ target_link_libraries(${PROJECT_NAME}
   "-framework Cocoa")
 endif(APPLE)
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

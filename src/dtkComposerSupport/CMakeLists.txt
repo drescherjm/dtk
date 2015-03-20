@@ -413,10 +413,10 @@ if(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
   target_link_libraries(${PROJECT_NAME} dtkVideo)
 endif(DTK_HAVE_FFMPEG AND DTK_BUILD_VIDEO)
 
-qt5_use_modules(${PROJECT_NAME} Concurrent)
-qt5_use_modules(${PROJECT_NAME} Network)
-qt5_use_modules(${PROJECT_NAME} Widgets)
-qt5_use_modules(${PROJECT_NAME} Xml)
+target_link_libraries(${PROJECT_NAME} Qt5::Concurrent)
+target_link_libraries(${PROJECT_NAME} Qt5::Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
 ## #################################################################
 ## Target properties

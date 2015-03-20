@@ -26,10 +26,10 @@ target_link_libraries(${PROJECT_NAME}
   dtkLog
  )
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Network)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Quick)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Quick)
 
 ## #################################################################
 ## Source file layout in development environments like Visual Studio

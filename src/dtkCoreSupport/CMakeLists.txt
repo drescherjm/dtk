@@ -142,10 +142,10 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_HEADERS}
 )
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Network)
-qt5_use_modules(${PROJECT_NAME} Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 target_link_libraries(${PROJECT_NAME}
   dtkLog

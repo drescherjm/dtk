@@ -49,11 +49,11 @@ add_executable(${PROJECT_NAME}
 ## Link rules
 ## ###################################################################
 
-qt5_use_modules(${PROJECT_NAME} Core)
-qt5_use_modules(${PROJECT_NAME} Test)
-qt5_use_modules(${PROJECT_NAME} Xml)
-qt5_use_modules(${PROJECT_NAME} Gui)
-qt5_use_modules(${PROJECT_NAME} Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
+target_link_libraries(${PROJECT_NAME} Qt5::Test)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkComposer)
 target_link_libraries(${PROJECT_NAME} dtkLog)

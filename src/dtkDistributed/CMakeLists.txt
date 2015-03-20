@@ -32,10 +32,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArrayNavigator.h
   dtkDistributedBufferManager
   dtkDistributedBufferManager.h
-  dtkDistributedBufferManagerSequential.h
   dtkDistributedCommunicator
   dtkDistributedCommunicator.h
-  dtkDistributedCommunicatorSequential.h
   dtkDistributedCommunicatorStatus.h
   dtkDistributedContainer.h
   dtkDistributedController.h
@@ -71,7 +69,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedApplication.cpp
   dtkDistributedBufferManager.cpp
   dtkDistributedCommunicator.cpp
-  dtkDistributedCommunicatorSequential.cpp
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedController.cpp
   dtkDistributedCoreApplication.cpp

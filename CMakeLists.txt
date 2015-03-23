@@ -99,6 +99,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
 option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
+option(DTK_ENABLE_MEMCHECK              "enable valgrind memcheck report" false)
 
 option(DTK_BUILD_COMPOSER            "Build composer layer" false)
 option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
@@ -115,11 +116,28 @@ option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
 ## ###################################################################
 ## Test setup
 ## ###################################################################
-find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
-set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+
+if(DTK_ENABLE_MEMCHECK)
+
+  find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
+  set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --xml-file=valgrind-%p.xml" )
+
+  function(add_test name binary)
+    set(memcheck_command "${CTEST_MEMORYCHECK_COMMAND} ${CTEST_MEMORYCHECK_COMMAND_OPTIONS}")
+    separate_arguments(memcheck_command)
+    _add_test(${name}_memcheck ${memcheck_command} ${binary} ${ARGN})
+  endfunction(add_test)
+
+  function(set_memcheck_test_properties name)
+    set_tests_properties(${name}_memcheck ${ARGN})
+  endfunction(set_memcheck_test_properties)
+
+endif(DTK_ENABLE_MEMCHECK)
 
 enable_testing()
+
 if(DTK_ENABLE_COVERAGE)
+
   include(CodeCoverage)
   include(FindPythonInterp)
   if(DTK_COVERAGE_USE_COBERTURA)
@@ -127,6 +145,7 @@ if(DTK_ENABLE_COVERAGE)
   else(DTK_COVERAGE_USE_COBERTURA)
     SETUP_TARGET_FOR_COVERAGE(cov ctest coverage)
   endif(DTK_COVERAGE_USE_COBERTURA)
+
 endif(DTK_ENABLE_COVERAGE)
 
 ## #################################################################
@@ -353,6 +372,7 @@ mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
 mark_as_advanced(CMAKE_OSX_SYSROOT)
 
 mark_as_advanced(DTK_ENABLE_COVERAGE)
+mark_as_advanced(DTK_ENABLE_MEMCHECK)
 mark_as_advanced(DTK_COVERAGE_USE_COBERTURA)
 
 ## ###################################################################

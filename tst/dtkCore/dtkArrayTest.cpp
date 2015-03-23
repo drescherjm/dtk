@@ -1886,7 +1886,7 @@ void dtkArrayTestCase::testDynamicArray(void)
     QVERIFY(!array.usePreallocation());
     QCOMPARE(array.count(), 1LL);
     QCOMPARE(array.size(), 1LL);
-    QVERIFY(array.capacity() > 1);
+    QVERIFY(array.capacity() >= 1);
     QVERIFY(array.constData() != 0);
     QVERIFY(array.data() == array.constData());
 

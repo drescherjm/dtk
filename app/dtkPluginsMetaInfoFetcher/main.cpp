@@ -20,11 +20,15 @@ int main(int argc, char **argv)
     application.setApplicationName("dtkPluginsMetaInfoFetcher");
     application.setApplicationVersion("1.0");
 
+    QCommandLineOption version_option(QStringList() << "v" << "version", "Prints the version of the plugin.");
+    QCommandLineOption depende_option(QStringList() << "d" << "dependencies", "Prints the dependencies of the plugin.");
+
     QCommandLineParser parser;
-    parser.setApplicationDescription("Fetches meta information from a plugin");
+    parser.setApplicationDescription("Fetches meta information from a plugin.");
     parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addPositionalArgument("plugin", "The plugin from which information is fetched");
+    parser.addOption(version_option);
+    parser.addOption(depende_option);
+    parser.addPositionalArgument("plugin", "The plugin from which information is fetched.");
     parser.process(application);
 
     if(!parser.positionalArguments().count())
@@ -39,7 +43,12 @@ int main(int argc, char **argv)
 
     QPluginLoader *loader = new QPluginLoader(plugin);
 
-    qDebug() << loader->metaData().toVariantMap();
+    if (parser.isSet("version"))
+        qDebug() << loader->metaData().toVariantMap().value("MetaData").toMap().value("version");
+    else if (parser.isSet("dependencies"))
+        qDebug() << loader->metaData().toVariantMap().value("MetaData").toMap().value("dependencies");
+    else
+        qDebug() << loader->metaData().toVariantMap();
 
     delete loader;
 

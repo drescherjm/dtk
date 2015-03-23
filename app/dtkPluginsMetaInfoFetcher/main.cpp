@@ -43,9 +43,9 @@ int main(int argc, char **argv)
 
     QPluginLoader *loader = new QPluginLoader(plugin);
 
-    if (parser.isSet("version"))
+    if (parser.isSet(version_option))
         qDebug() << loader->metaData().toVariantMap().value("MetaData").toMap().value("version");
-    else if (parser.isSet("dependencies"))
+    else if (parser.isSet(depende_option))
         qDebug() << loader->metaData().toVariantMap().value("MetaData").toMap().value("dependencies");
     else
         qDebug() << loader->metaData().toVariantMap();

@@ -17,10 +17,9 @@
  * 
  */
 
-#ifndef DTKVRTRACKERKINECT_H
-#define DTKVRTRACKERKINECT_H
+#pragma once
 
-#include "dtkVrExport.h"
+#include "dtkVrSupportExport.h"
 #include "dtkVrTracker.h"
 
 class dtkVrTrackerKinectPrivate;
@@ -48,4 +47,3 @@ private:
     dtkVrTrackerKinectPrivate *d;
 };
 
-#endif

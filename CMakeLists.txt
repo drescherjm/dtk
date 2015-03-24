@@ -112,6 +112,7 @@ option(DTK_BUILD_SUPPORT_DISTRIBUTED "Build support layer" false)
 option(DTK_BUILD_SUPPORT_GUI         "Build support layer" false)
 option(DTK_BUILD_SUPPORT_MATH        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_PLOT        "Build support layer" false)
+option(DTK_BUILD_SUPPORT_VR          "Build support layer" false)
 
 ## ###################################################################
 ## Test setup
@@ -286,6 +287,68 @@ if (ZLIB_FOUND)
   set(DTK_HAVE_ZLIB "YES")
 endif (ZLIB_FOUND)
 
+
+set(DTK_HAVE_VRPN "NO")
+set(DTK_HAVE_NITE "NO")
+
+if(DTK_BUILD_SUPPORT_VR)
+
+## #################################################################
+## OpenNI / Nite && VRPN
+## #################################################################
+
+find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
+find_path(  NITE_INCLUDES XnVNite.h  /usr/include/nite)
+
+if(OPENNI_INCLUDES AND NITE_INCLUDES)
+  include_directories(/usr/include/ni)
+  include_directories(/usr/include/nite)
+endif(OPENNI_INCLUDES AND NITE_INCLUDES)
+
+find_library(OPENNI_LIBRARY NAMES OpenNI  PATHS /usr/lib)
+find_library(  NITE_LIBRARY NAMES XnVNite PATHS /usr/lib)
+
+if(OPENNI_LIBRARY AND NITE_LIBRARY)
+  link_directories(/usr/lib)
+endif(OPENNI_LIBRARY AND NITE_LIBRARY)
+
+if(OPENNI_INCLUDES AND NITE_INCLUDES AND NOT DEFINED DTK_HAVE_NITE)
+  set(DTK_HAVE_NITE "YES")
+endif(OPENNI_INCLUDES AND NITE_INCLUDES AND NOT DEFINED DTK_HAVE_NITE)
+
+mark_as_advanced(OPENNI_INCLUDES)
+mark_as_advanced(NITE_INCLUDES)
+
+mark_as_advanced(OPENNI_LIBRARY)
+mark_as_advanced(NITE_LIBRARY)
+
+## #################################################################
+## Vrpn
+## #################################################################
+
+find_path(QUAT_INCLUDES           quat.h /usr/include /usr/local/include)
+find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
+
+if(QUAT_INCLUDES AND VRPN_INCLUDES)
+include_directories(${QUAT_INCLUDES})
+include_directories(${VRPN_INCLUDES})
+endif(QUAT_INCLUDES AND VRPN_INCLUDES)
+
+mark_as_advanced(VRPN_INCLUDES)
+mark_as_advanced(QUAT_INCLUDES)
+
+find_library(QUAT_LIBRARY NAMES quat PATHS /usr/lib /usr/local/lib)
+find_library(VRPN_LIBRARY NAMES vrpn PATHS /usr/lib /usr/local/lib)
+
+if(QUAT_LIBRARY AND VRPN_LIBRARY)
+  add_definitions(-DHAVE_VRPN)
+  set(DTK_HAVE_VRPN "YES")
+endif(QUAT_LIBRARY AND VRPN_LIBRARY)
+
+mark_as_advanced(QUAT_LIBRARY)
+mark_as_advanced(VRPN_LIBRARY)
+
+endif(DTK_BUILD_SUPPORT_VR)
 
 ## #################################################################
 ## Dependencies - internal

@@ -94,6 +94,10 @@ if(DTK_BUILD_SUPPORT_PLOT)
 add_subdirectory(dtkPlotSupport)
 endif(DTK_BUILD_SUPPORT_PLOT)
 
+if(DTK_BUILD_SUPPORT_VR)
+add_subdirectory(dtkVrSupport)
+endif(DTK_BUILD_SUPPORT_VR)
+
 ## #################################################################
 ## Support targets
 ## #################################################################
@@ -125,6 +129,10 @@ endif(DTK_BUILD_SUPPORT_MATH)
 if(DTK_BUILD_SUPPORT_PLOT)
 set(DTK_TARGETS ${DTK_TARGETS} dtkPlotSupport)
 endif(DTK_BUILD_SUPPORT_PLOT)
+
+if(DTK_BUILD_SUPPORT_VR)
+set(DTK_TARGETS ${DTK_TARGETS} dtkVrSupport)
+endif(DTK_BUILD_SUPPORT_VR)
 
 ## #################################################################
 ## Target export

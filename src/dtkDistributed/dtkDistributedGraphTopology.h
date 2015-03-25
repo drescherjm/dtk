@@ -58,10 +58,11 @@ public:
     void unlock(void);
 
 public:
-    void addEdge(qlonglong from, qlonglong to);
+    void addEdge(qlonglong from, qlonglong to, bool oriented = false);
 
 public:
     void build(void);
+    void resize(qlonglong vertexCount);
 
 public:
     bool read(const QString& filename);
@@ -78,6 +79,9 @@ public:
     qlonglong neighbourCount(qlonglong vertex_id) const;
 
     Neighbours operator[](qlonglong vertex_id) const;
+
+public:
+    dtkDistributedMapper *edge_mapper(void) const;
 
 public:
     iterator cbegin(void) const;

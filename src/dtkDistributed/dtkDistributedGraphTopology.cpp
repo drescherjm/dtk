@@ -53,9 +53,21 @@ dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
         delete m_edge_to_vertex;
 }
 
+void dtkDistributedGraphTopology::resize(qlonglong vertex_count)
+{
+    m_size = vertex_count;
+//    m_edge_to_vertex = new dtkDistributedArray<qlonglong>( edges_count);
+    initialize();
+}
+
+dtkDistributedMapper *dtkDistributedGraphTopology::edge_mapper(void) const
+{
+    return m_edge_to_vertex->mapper();
+}
+
 void dtkDistributedGraphTopology::initialize(void)
 {
-    qDebug() << "initialize graph with " << vertexCount() << "vertexes" << this->wid();
+    qDebug() << "initialize graph with " << vertexCount() << "vertexes, rank=" << this->wid();
 
     m_mapper->setMapping(vertexCount(), m_comm->size());
 
@@ -87,6 +99,9 @@ void dtkDistributedGraphTopology::build(void)
         offset += m_edge_count->at(i);
     }
 
+    if (m_edge_to_vertex) {
+        delete m_edge_to_vertex;
+    }
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edge_count, mapper);
 
     EdgeMap::const_iterator it  = m_map.cbegin();
@@ -252,26 +267,21 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
     return true;
 }
 
-void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to)
+void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool oriented)
 {
     qint32 wid = this->wid();
     qint32 from_owner = static_cast<qint32>(m_mapper->owner(from, wid));
-    qint32 to_owner = static_cast<qint32>(m_mapper->owner(to, wid));
-
-    if ((wid != from_owner) && (wid != to_owner))
-        return;
-
-    qlonglong edge_counter = m_edge_count->at(wid);
 
     if (wid == from_owner) {
+        qlonglong edge_counter = m_edge_count->at(wid);
         m_map[from].append(to);
         ++edge_counter;
+        m_edge_count->setAt(wid, edge_counter);
     }
-    if (wid == to_owner) {
-        m_map[to].append(from);
-        ++edge_counter;
+
+    if (!oriented) {
+        addEdge(to, from, true);
     }
-    m_edge_count->setAt(wid, edge_counter);
 }
 
 // 

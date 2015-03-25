@@ -66,24 +66,24 @@ template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistr
 {
 }
 
-template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(const dtkDistributedNavigator& o) : c(o.c), m_start_id(o.m_start_id), m_size(o.m_size)
+template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(const dtkDistributedNavigator<Container>& o) : c(o.c), m_start_id(o.m_start_id), m_size(o.m_size)
 {
 
 }
 
-template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(dtkDistributedNavigator&& o) : c(o.c), m_start_id(o.m_start_id), m_size(o.m_size)
+template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(dtkDistributedNavigator<Container>&& o) : c(o.c), m_start_id(o.m_start_id), m_size(o.m_size)
 {
 
 }
 
-template<typename Container> inline dtkDistributedNavigator& dtkDistributedNavigator<Container>::operator = (const dtkDistributedNavigator& other)
+template<typename Container> inline dtkDistributedNavigator<Container>& dtkDistributedNavigator<Container>::operator = (const dtkDistributedNavigator<Container>& o)
 {
     c = o.c;
     m_start_id = o.m_start_id;
     m_size = o.m_size;
 }
 
-template<typename Container> inline dtkDistributedNavigator& dtkDistributedNavigator<Container>::operator = (dtkDistributedNavigator&& other)
+template<typename Container> inline dtkDistributedNavigator<Container>& dtkDistributedNavigator<Container>::operator = (dtkDistributedNavigator<Container>&& o)
 {
     c = o.c;
     m_start_id = o.m_start_id;

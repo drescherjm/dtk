@@ -18,6 +18,7 @@
 #include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedPolicy.h"
+#include "dtkDistributedSettings.h"
 
 namespace dtkDistributed
 {
@@ -48,7 +49,6 @@ namespace dtkDistributed
     dtkDistributedAbstractApplication *app(void) {
         if (!_private::app ) {
             _private::app = dynamic_cast<dtkDistributedAbstractApplication *>(dtkDistributedCoreApplication::instance());
-            qDebug()<< _private::app;
         }
         return _private::app;
     }
@@ -86,6 +86,7 @@ namespace dtkDistributed
         namespace _private {
             dtkDistributedCommunicatorPluginFactory factory;
             dtkDistributedCommunicatorPluginManager manager;
+            dtkDistributedCommunicator *communicator = NULL;
         }
 
         dtkDistributedCommunicatorPluginFactory& pluginFactory(void) {
@@ -94,6 +95,21 @@ namespace dtkDistributed
 
         dtkDistributedCommunicatorPluginManager& pluginManager(void) {
             return _private::manager;
+        }
+
+        dtkDistributedCommunicator *instance(void) {
+            dtkDistributedAbstractApplication *app = dtkDistributed::app();
+            if (_private::communicator) {
+                return _private::communicator;
+            } else if (app) {
+                _private::communicator = app->communicator();
+            } else {
+                dtkDistributedSettings settings;
+                settings.beginGroup("communicator");
+                dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+                _private::communicator = dtkDistributed::communicator::pluginFactory().create("qthread");
+            }
+            return _private::communicator;
         }
     }
 }

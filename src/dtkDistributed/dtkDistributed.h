@@ -18,6 +18,7 @@
 #include <QtCore>
 
 class dtkDistributedAbstractApplication;
+class dtkDistributedCommunicator;
 class dtkDistributedCoreApplication;
 class dtkDistributedCommunicatorPlugin;
 class dtkDistributedCommunicatorPluginFactory;
@@ -84,6 +85,7 @@ namespace dtkDistributed
     namespace communicator {
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginFactory& pluginFactory(void);
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginManager& pluginManager(void);
+        DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator *instance(void);
     }
 }
 
@@ -92,7 +94,7 @@ namespace dtkDistributed
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DISTRIBUTED_BEGIN_GLOBAL \
-    dtkDistributed::app()->communicator()->barrier(); if (dtkDistributed::app()->isMaster()) {
+    dtkDistributed::app()->communicator()->barrier(); if (dtkDistributed::communicator::instance()->rank() == 0) {
 
 #define DTK_DISTRIBUTED_END_GLOBAL \
     } ; dtkDistributed::app()->communicator()->barrier();

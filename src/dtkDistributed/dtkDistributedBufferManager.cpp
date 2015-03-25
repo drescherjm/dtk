@@ -26,7 +26,7 @@
   creating and destroying the manager:
 
   \code
-  dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+  dtkDistributedCommunicator *comm = dtkDistributed::communicator()::instance();
   dtkDistributedBufferManager *buffer_manager = comm->createBufferManager();
   comm->destroyBufferManager(buffer_manager);
   \endcode
@@ -42,7 +42,7 @@
   Here is an example showing how to use the buffer manager:
 
   \code
-  dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();   
+  dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();   
   qlonglong pu_count = comm->size();
   qlonglong wid = comm->wid();
   

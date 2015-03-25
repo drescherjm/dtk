@@ -30,7 +30,7 @@ public:
     dtkDistributedContainer(void) :
         m_size(0),
         m_mapper(new dtkDistributedMapper),
-            m_comm(dtkDistributed::app()->communicator())
+            m_comm(dtkDistributed::communicator::instance())
     {
         m_mapper->ref();
     }
@@ -38,7 +38,7 @@ public:
     dtkDistributedContainer(const qlonglong& size) :
         m_size(size),
         m_mapper(new dtkDistributedMapper),
-        m_comm(dtkDistributed::app()->communicator())
+            m_comm(dtkDistributed::communicator::instance())
     {
         m_mapper->ref();
         if (m_size > 0) {
@@ -49,7 +49,7 @@ public:
     dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) :
         m_size(size),
         m_mapper(mapper),
-        m_comm(dtkDistributed::app()->communicator())
+            m_comm(dtkDistributed::communicator::instance())
     {
         m_mapper->ref();
     }

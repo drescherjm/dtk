@@ -36,6 +36,14 @@ public:
     explicit dtkDistributedIterator(const Container& container, qlonglong index);
 
 public:
+    dtkDistributedIterator(const dtkDistributedIterator& other);
+    dtkDistributedIterator(dtkDistributedIterator&& other);
+
+public:
+    dtkDistributedIterator& operator = (const dtkDistributedIterator& other);
+    dtkDistributedIterator& operator = (dtkDistributedIterator&& other);
+
+public:
     qlonglong id(void) const;
 
 public:
@@ -68,6 +76,24 @@ public:
 
 template <typename Container> inline dtkDistributedIterator<Container>::dtkDistributedIterator(const Container& container, qlonglong index) : c(container), gid(index)
 {
+}
+
+template <typename Container> inline dtkDistributedIterator<Container>::dtkDistributedIterator(const dtkDistributedIterator<Container>& o) : c(o.c), gid(o.gid)
+{
+}
+
+template <typename Container> inline dtkDistributedIterator<Container>::dtkDistributedIterator(dtkDistributedIterator<Container>&& o) : c(o.c), gid(o.gid)
+{
+}
+
+template <typename Container> inline dtkDistributedIterator<Container>& dtkDistributedIterator<Container>::operator = (const dtkDistributedIterator<Container>& o)
+{
+    gid = o.gid;
+}
+
+template <typename Container> inline dtkDistributedIterator<Container>& dtkDistributedIterator<Container>::operator = ( dtkDistributedIterator<Container>&& o)
+{
+    gid = o.gid;
 }
 
 template <typename Container> inline qlonglong dtkDistributedIterator<Container>::id(void) const

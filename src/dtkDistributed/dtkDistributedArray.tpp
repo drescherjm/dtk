@@ -46,7 +46,7 @@ template <typename T> inline void dtkDistributedArray<T>::deallocate(dtkDistribu
         }
         T *buffer = static_cast<T *>(x->data());
         manager->deallocate(buffer);
-        delete x;
+        free(x);
         m_comm->destroyBufferManager(manager);
     }
 }
@@ -108,8 +108,13 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
     this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
 
     if (data) {
-        for (qlonglong i = 0; i < data->size; ++i) {
-            data->begin()[i] = o.data->begin()[i];
+
+        typename Data::iterator oit  = o.data->begin();
+        typename Data::iterator oend = o.data->end();
+        typename Data::iterator it  = o.data->begin();
+        for(; oit != oend; ++oit) {
+            *it = *oit;
+            it++;
         }
     }
     m_comm->barrier();

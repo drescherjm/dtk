@@ -183,6 +183,11 @@ template<typename T> inline bool dtkDistributedArray<T>::empty(void) const
     return !m_size;
 }
 
+template<typename T> inline void dtkDistributedArray<T>::clearCache(void) const
+{
+    m_cache->clear();
+}
+
 template<typename T> inline qlonglong dtkDistributedArray<T>::size(void) const
 {
     return m_size;

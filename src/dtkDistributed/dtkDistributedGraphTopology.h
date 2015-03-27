@@ -94,7 +94,7 @@ public:
     void stats(void) const;
 
 protected:
-    typedef QVarLengthArray<qlonglong, 32> EdgeList;
+    typedef QList<qlonglong> EdgeList;
     typedef QMap<qlonglong, EdgeList> EdgeMap;
 
     dtkDistributedArray<qlonglong> *m_edge_count;

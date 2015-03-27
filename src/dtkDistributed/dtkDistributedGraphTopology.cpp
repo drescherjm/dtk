@@ -274,7 +274,24 @@ void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool ori
 
     if (wid == from_owner) {
         qlonglong edge_counter = m_edge_count->at(wid);
-        m_map[from].append(to);
+
+        typename EdgeList::iterator it  = m_map[from].begin();
+        typename EdgeList::iterator end = m_map[from].end();
+
+        if (it == end) {
+            m_map[from].insert(it, to);
+        } else if (to > m_map[from].last()) {
+            // tuning: usually, we append at the end, so check this case
+            m_map[from].insert(end, to);
+        } else {
+            for(; it != end; ++it) {
+                if (to < (*it))
+                    break;
+            }
+            m_map[from].insert(it, to);
+        }
+
+        // m_map[from].append(to);
         ++edge_counter;
         m_edge_count->setAt(wid, edge_counter);
     }

@@ -434,6 +434,7 @@ mark_as_advanced(CMAKE_INSTALL_PREFIX)
 mark_as_advanced(CMAKE_OSX_ARCHITECTURES)
 mark_as_advanced(CMAKE_OSX_DEPLOYMENT_TARGET)
 mark_as_advanced(CMAKE_OSX_SYSROOT)
+mark_as_advanced(CTEST_MEMORYCHECK_COMMAND)
 
 mark_as_advanced(DTK_ENABLE_COVERAGE)
 mark_as_advanced(DTK_ENABLE_MEMCHECK)

@@ -27,6 +27,8 @@
 
 enum { N_NOTALLOCATED, N_ALLOCATED, N_MAPPED };
 
+namespace dtkDeprecated {
+
 // /////////////////////////////////////////////////////////////////
 // Template specializations forward declarations
 // /////////////////////////////////////////////////////////////////
@@ -514,5 +516,7 @@ template <typename T>  void dtkMatrix<T>::deserialize(const QByteArray& array)
 {
     
 };
+
+} // end namespace
 
 #endif

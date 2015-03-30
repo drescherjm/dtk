@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:26:31 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Mon Jul 22 14:38:38 2013 (+0200)
+ * Last-Updated: jeu. mars 26 11:21:41 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 56
+ *     Update #: 75
  */
 
 /* Commentary: 
@@ -27,6 +27,8 @@
 // /////////////////////////////////////////////////////////////////
 // dtkVector interface
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <class T = double> class dtkVector : public dtkMatrix<T>
 {
@@ -113,6 +115,8 @@ public:
     dtkZero(void) { fill(dtkZero<T>()); }
 };
 
+} // end of namespace
+
 // /////////////////////////////////////////////////////////////////
 // Implementation of the template class dtkVector's methods
 // /////////////////////////////////////////////////////////////////
@@ -125,12 +129,13 @@ public:
 
 #include <QtCore>
 
-typedef dtkVector<qlonglong> dtkVectorInteger;
+
+typedef dtkDeprecated::dtkVector<qlonglong> dtkVectorInteger;
 
 Q_DECLARE_METATYPE(dtkVectorInteger);
 Q_DECLARE_METATYPE(dtkVectorInteger *);
 
-typedef dtkVector<qreal> dtkVectorReal;
+typedef dtkDeprecated::dtkVector<qreal> dtkVectorReal;
 
 Q_DECLARE_METATYPE(dtkVectorReal);
 Q_DECLARE_METATYPE(dtkVectorReal *);

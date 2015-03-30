@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Jun  8 13:10:13 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 18 11:22:16 2013 (+0200)
+ * Last-Updated: jeu. mars 26 16:39:16 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 207
+ *     Update #: 227
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKMATRIX_H
 
 #include <QtCore>
+
+namespace dtkDeprecated {
 
 //! Template class dtkZero 
 /*! 
@@ -174,6 +176,8 @@ public:
     dtkZero(void) { fill(dtkZero<T>()); }
 };
 
+} // end namespace
+
 // /////////////////////////////////////////////////////////////////
 // Implementation of the template class dtkMatrix's methods
 // /////////////////////////////////////////////////////////////////
@@ -186,7 +190,10 @@ public:
 
 #include <QtCore>
 
-typedef dtkMatrix<qreal> dtkMatrixReal;
+
+typedef dtkDeprecated::dtkMatrix<qlonglong> dtkMatrixInteger;
+typedef dtkDeprecated::dtkMatrix<qreal> dtkMatrixReal;
+
 
 Q_DECLARE_METATYPE(dtkMatrixReal);
 Q_DECLARE_METATYPE(dtkMatrixReal *);

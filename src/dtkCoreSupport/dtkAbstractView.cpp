@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 17:58:48 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 354
+ * Last-Updated: jeu. mars 26 11:34:11 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 356
  */
 
 /* Commentary:
@@ -493,35 +493,35 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
     return ret;
 }
 
-void dtkAbstractView::setHeadPosition(dtkVector3D<double> position)
+void dtkAbstractView::setHeadPosition(dtkVector3DReal position)
 {
     Q_UNUSED(position);
 
     //DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::setHeadOrientation(dtkQuaternion<double> orientation)
+void dtkAbstractView::setHeadOrientation(dtkQuaternionReal orientation)
 {
     Q_UNUSED(orientation);
 
     //DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::setUpperLeft(dtkVector3D<double> position)
+void dtkAbstractView::setUpperLeft(dtkVector3DReal position)
 {
     Q_UNUSED(position);
 
     //DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::setLowerLeft(dtkVector3D<double> position)
+void dtkAbstractView::setLowerLeft(dtkVector3DReal position)
 {
     Q_UNUSED(position);
 
     //DTK_DEFAULT_IMPLEMENTATION;
 }
 
-void dtkAbstractView::setLowerRight(dtkVector3D<double> position)
+void dtkAbstractView::setLowerRight(dtkVector3DReal position)
 {
     Q_UNUSED(position);
 

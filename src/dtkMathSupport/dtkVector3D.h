@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
  * Version: $Id$
- * Last-Updated: mar. avril  8 18:13:57 2014 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 68
+ * Last-Updated: jeu. mars 26 16:24:42 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 77
  */
 
 /* Commentary: 
@@ -26,6 +26,8 @@
 // /////////////////////////////////////////////////////////////////
 // dtkVector3D interface
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <class T = double> class dtkVector3D: public dtkVector<T>
 {
@@ -110,6 +112,8 @@ public:
     const dtkVector3D<T>& k(void) { return (*this)[2]; }
 };
 
+} // end of namespace
+
 // /////////////////////////////////////////////////////////////////
 // Implementation of the template class dtkVector3D's methods
 // /////////////////////////////////////////////////////////////////
@@ -122,7 +126,7 @@ public:
 
 #include <QtCore>
 
-typedef dtkVector3D<qreal>  dtkVector3DReal;
+typedef dtkDeprecated::dtkVector3D<qreal> dtkVector3DReal;
 
 Q_DECLARE_METATYPE(dtkVector3DReal);
 Q_DECLARE_METATYPE(dtkVector3DReal *);

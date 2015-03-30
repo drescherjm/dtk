@@ -4,9 +4,9 @@
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
  * Version: $Id$
- * Last-Updated: mar. sept. 17 14:27:14 2013 (+0200)
+ * Last-Updated: jeu. mars 26 15:44:08 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 52
+ *     Update #: 55
  */
 
 /* Commentary: 
@@ -27,7 +27,9 @@
 class dtkComposerNode;
 class dtkAbstractObject;
 class dtkAbstractContainerWrapper;
-template <typename T> class dtkMatrix;
+namespace dtkDeprecated{
+    template <typename T> class dtkMatrix;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterPrivate declaration
@@ -59,7 +61,7 @@ public:
     dtkAbstractObject *object;
 
 public:
-    dtkMatrix<double> *matrix;
+    dtkDeprecated::dtkMatrix<double> *matrix;
 
 public:
     dtkAbstractContainerWrapper *container;

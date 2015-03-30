@@ -422,11 +422,11 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
 
             if (self) {
                 if (!d->matrix)
-                    d->matrix = new dtkVector3D<double>();
+                    d->matrix = new dtkVector3DReal();
                 d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-                this->setData<dtkVector3DReal>(reinterpret_cast<dtkVector3DReal*>(d->matrix));
+                this->setData<dtkVector3DReal>(reinterpret_cast<dtkVector3DReal *>(d->matrix));
             } else {
-                dtkVector3D<double> *v = new dtkVector3D<double>();
+                dtkVector3DReal *v = new dtkVector3DReal();
                 v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
                 return QVariant::fromValue(v);
             }
@@ -435,11 +435,11 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
 
             if (self) {
                 if (!d->matrix)
-                    d->matrix = new dtkVector<double>();
+                    d->matrix = new dtkVectorReal();
                 d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-                this->setData<dtkVectorReal>(reinterpret_cast<dtkVectorReal*>(d->matrix));
+                this->setData<dtkVectorReal>(reinterpret_cast<dtkVectorReal *>(d->matrix));
             } else {
-                dtkVector<double> *v = new dtkVector<double>();
+                dtkVectorReal *v = new dtkVectorReal();
                 v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
                 return QVariant::fromValue(v);
             }
@@ -448,11 +448,11 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
 
             if (self) {
                 if (!d->matrix)
-                    d->matrix = new dtkQuaternion<double>();
+                    d->matrix = new dtkQuaternionReal();
                 d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
-                this->setData<dtkQuaternionReal>(reinterpret_cast<dtkQuaternionReal*>(d->matrix));
+                this->setData<dtkQuaternionReal>(reinterpret_cast<dtkQuaternionReal *>(d->matrix));
             } else {
-                dtkQuaternion<double> *v = new dtkQuaternion<double>();
+                dtkQuaternionReal *v = new dtkQuaternionReal();
                 v->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
                 return QVariant::fromValue(v);
             }
@@ -461,7 +461,7 @@ QVariant dtkComposerTransmitterVariant::setVariantFrom(QByteArray& array, bool s
 
             if (self) {
                 if (!d->matrix)
-                    d->matrix = new dtkMatrix<double>();
+                    d->matrix = new dtkMatrixReal();
                 d->matrix->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length));
                 this->setData<dtkMatrixReal>(d->matrix);
             } else {
@@ -836,7 +836,7 @@ dtkAbstractObject *dtkComposerTransmitterVariant::object(void)
     return d->object;
 }
 
-dtkMatrix<double> *dtkComposerTransmitterVariant::matrix(void)
+dtkMatrixReal *dtkComposerTransmitterVariant::matrix(void)
 {
     if (e->twinned)
         return d->matrix;

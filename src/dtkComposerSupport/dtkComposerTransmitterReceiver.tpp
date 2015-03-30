@@ -174,12 +174,12 @@ template <typename T> dtkAbstractObject *dtkComposerTransmitterReceiver<T>::obje
 /*! 
  *  
  */
-template <typename T> dtkMatrix<double> *dtkComposerTransmitterReceiver<T>::matrix(void)
+template <typename T> dtkMatrixReal *dtkComposerTransmitterReceiver<T>::matrix(void)
 {
     T* data = this->data();
     
     if (data && dtkTypeInfo<T*>::dtkMatrixRealPointer)
-        return reinterpret_cast<dtkMatrix<double>*>(data);
+        return reinterpret_cast<dtkMatrixReal *>(data);
 
     return NULL;
 };

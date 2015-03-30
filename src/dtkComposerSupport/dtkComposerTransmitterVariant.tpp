@@ -51,7 +51,7 @@ template <typename T> void dtkComposerTransmitterVariant::setData(T *data)
 
     } else if (dtkTypeInfo<T*>::dtkMatrixRealPointer) {
         d->object = NULL;
-        d->matrix = reinterpret_cast<dtkMatrix<double>*>(data);
+        d->matrix = reinterpret_cast<dtkMatrixReal *>(data);
 
     } else {
         d->object = NULL;

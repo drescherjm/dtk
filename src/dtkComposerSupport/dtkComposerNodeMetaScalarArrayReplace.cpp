@@ -32,7 +32,7 @@ class dtkComposerNodeMetaScalarArrayReplacePrivate
 {
 public:
     dtkComposerTransmitterReceiverVector< dtkContainerVector<qreal> *> receiver_arrays;
-    dtkComposerTransmitterReceiver< dtkVector<qreal> > receiver_vector;
+    dtkComposerTransmitterReceiver< dtkVectorReal > receiver_vector;
     dtkComposerTransmitterReceiver<qlonglong> receiver_index;
 
     dtkComposerTransmitterEmitterVector< dtkContainerVector<qreal> *> emitter_arrays;

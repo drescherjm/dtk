@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:15:10 2010 (+0200)
  * Version: $Id$
- * Last-Updated: ven. févr. 21 09:22:41 2014 (+0100)
+ * Last-Updated: jeu. mars 26 11:15:26 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 15
+ *     Update #: 17
  */
 
 /* Commentary: 
@@ -26,6 +26,8 @@
 // /////////////////////////////////////////////////////////////////
 // dtkVector3D implementation
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <class T> inline dtkVector3D<T>::dtkVector3D(const dtkMatrix<T>& mat,
                                                       unsigned irowStart,
@@ -175,5 +177,7 @@ template <class T> inline dtkVector3D<T> dtkDirection(const dtkVector3D<T>& vec3
 {
     return vec3D.unit();
 }
+
+} // end of namespace
 
 #endif

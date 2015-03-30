@@ -107,10 +107,10 @@ template <typename T> dtkAbstractObject *dtkComposerTransmitterEmitter<T>::objec
     return NULL;
 };
 
-template <typename T> dtkMatrix<double> *dtkComposerTransmitterEmitter<T>::matrix(void)
+template <typename T> dtkMatrixReal *dtkComposerTransmitterEmitter<T>::matrix(void)
 {
     if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
-        return reinterpret_cast<dtkMatrix<double>*>(m_data);
+        return reinterpret_cast<dtkMatrixReal *>(m_data);
     
     return NULL;
 };
@@ -126,7 +126,7 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::dataIdentifier(v
         return reinterpret_cast<dtkAbstractObject*>(m_data)->identifier();
 
     if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
-        return reinterpret_cast<dtkMatrix<qreal>*>(m_data)->identifier();
+        return reinterpret_cast<dtkMatrixReal*>(m_data)->identifier();
 
     return QString(QMetaType::typeName(d->data_type));
 };
@@ -137,7 +137,7 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(
         return reinterpret_cast<dtkAbstractObject*>(m_data)->description();
 
     if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
-        return reinterpret_cast<dtkMatrix<qreal>*>(m_data)->description();
+        return reinterpret_cast<dtkMatrixReal*>(m_data)->description();
 
 // #if defined(DTK_BUILD_PLOT_SUPPORT)
 //     if (dtkPlotCurve *curve = dynamic_cast<dtkPlotCurve*>(m_data))

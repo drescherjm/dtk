@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
  * Version: $Id$
- * Last-Updated: mar. févr.  4 17:58:31 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 342
+ * Last-Updated: jeu. mars 26 11:33:52 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 344
  */
 
 /* Commentary:
@@ -147,13 +147,13 @@ public:
 // /////////////////////////////////////////////////////////////////
 
 public:
-    virtual void setHeadPosition(dtkVector3D<double> position);
-    virtual void setHeadOrientation(dtkQuaternion<double> orientation);
+    virtual void setHeadPosition(dtkVector3DReal position);
+    virtual void setHeadOrientation(dtkQuaternionReal orientation);
 
 public:
-    virtual void setUpperLeft(dtkVector3D<double> position);
-    virtual void setLowerLeft(dtkVector3D<double> position);
-    virtual void setLowerRight(dtkVector3D<double> position);
+    virtual void setUpperLeft(dtkVector3DReal position);
+    virtual void setLowerLeft(dtkVector3DReal position);
+    virtual void setLowerRight(dtkVector3DReal position);
 
 // /////////////////////////////////////////////////////////////////
 

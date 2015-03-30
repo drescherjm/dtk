@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:00:12 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 18 11:28:02 2013 (+0200)
+ * Last-Updated: jeu. mars 26 11:22:43 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 58
+ *     Update #: 67
  */
 
 /* Commentary: 
@@ -24,10 +24,11 @@
 #include "dtkVector.h"
 #include "dtkVector3D.h"
 
-
 // /////////////////////////////////////////////////////////////////
 // dtkQuaternion interface
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <class T = double> class dtkQuaternion : public dtkVector<T>
 {
@@ -110,6 +111,8 @@ public:
     dtkZero(void) { fill(dtkZero<T>()); }
 };
 
+} // end of namespace
+
 // /////////////////////////////////////////////////////////////////
 // Implementation of the template class dtkQuaternion's methods
 // /////////////////////////////////////////////////////////////////
@@ -122,7 +125,7 @@ public:
 
 #include <QtCore>
 
-typedef dtkQuaternion<qreal> dtkQuaternionReal;
+typedef dtkDeprecated::dtkQuaternion<double> dtkQuaternionReal;
 
 Q_DECLARE_METATYPE(dtkQuaternionReal);
 Q_DECLARE_METATYPE(dtkQuaternionReal *);

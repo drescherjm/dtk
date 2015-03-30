@@ -21,6 +21,9 @@
 #include <dtkCoreSupport/dtkGlobal>
 
 template <typename T> class dtkContainerVector;
+namespace dtkDeprecated{
+    template <typename T> class dtkMatrix;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterVariant declaration
@@ -74,7 +77,7 @@ public:
     dtkAbstractObject *object(void);
 
 public:
-    dtkMatrix<double> *matrix(void);
+    dtkDeprecated::dtkMatrix<double> *matrix(void);
 
 public:
     int dataType(void);

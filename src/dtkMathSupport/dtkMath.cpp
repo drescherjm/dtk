@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jul  6 16:57:24 2010 (+0200)
  * Version: $Id$
- * Last-Updated: jeu. févr. 19 08:44:21 2015 (+0100)
+ * Last-Updated: jeu. mars 26 11:19:47 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 263
+ *     Update #: 266
  */
 
 /* Commentary:
@@ -945,7 +945,7 @@ bool dtkGreaterThanOrAlmostEqualUlps(double A, double B, qint64 maxUlps)
 }
 
 
-template <> long double norm_func(const dtkVector<long double> & val)
+template <> long double dtkDeprecated::norm_func(const dtkVector<long double> & val)
 {
     long double elemResult = dtkZero<long double>();
 
@@ -954,7 +954,7 @@ template <> long double norm_func(const dtkVector<long double> & val)
     return sqrt( elemResult );
 }
 
-template <> inline float norm_func(const dtkVector<float> & val)
+template <> inline float dtkDeprecated::norm_func(const dtkVector<float> & val)
 {
     float elemResult = dtkZero<float>();
 

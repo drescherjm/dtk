@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Tue Jun 18 11:24:36 2013 (+0200)
+ * Last-Updated: jeu. mars 26 11:21:14 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 62
+ *     Update #: 73
  */
 
 /* Commentary: 
@@ -25,6 +25,8 @@
 // /////////////////////////////////////////////////////////////////
 // dtkMatrixSquared interface
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <typename T = double> class dtkMatrixSquared : public dtkMatrix<T>
 {
@@ -116,6 +118,8 @@ public:
     dtkZero(void) { fill(dtkZero<T>()); }
 };
 
+} // end of namespace
+
 // /////////////////////////////////////////////////////////////////
 // Implementation of the template class dtkMatrixSquared's methods
 // /////////////////////////////////////////////////////////////////
@@ -128,7 +132,7 @@ public:
 
 #include <QtCore>
 
-typedef dtkMatrixSquared<qreal> dtkMatrixSquareReal;
+typedef dtkDeprecated::dtkMatrixSquared<qreal> dtkMatrixSquareReal;
 
 Q_DECLARE_METATYPE(dtkMatrixSquareReal);
 Q_DECLARE_METATYPE(dtkMatrixSquareReal *);

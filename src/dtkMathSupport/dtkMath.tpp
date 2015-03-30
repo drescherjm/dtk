@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Mar  9 11:05:40 2011 (+0100)
  * Version: $Id$
- * Last-Updated: mer. févr. 19 10:02:15 2014 (+0100)
+ * Last-Updated: lun. mars 30 10:21:16 2015 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 108
+ *     Update #: 131
  */
 
 /* Commentary: 
@@ -36,10 +36,10 @@ template<class T> T dtkRad2Deg(const T& value)
     return 180. * value / M_PI;    
 }
 
-template <class T> dtkVector3D<T> dtkRotate(const dtkQuaternion<T>& quaternion, const dtkVector3D<T>& vector)
+template <class T> dtkDeprecated::dtkVector3D<T> dtkRotate(const dtkDeprecated::dtkQuaternion<T>& quaternion, const dtkDeprecated::dtkVector3D<T>& vector)
 {
-    dtkQuaternion<T> q(quaternion*dtkQuaternion<T>(vector[0], vector[1], vector[2], 0)*dtkInverse<T>(quaternion));
-    return dtkVector3D<T>(q[0], q[1], q[2]);
+    dtkDeprecated::dtkQuaternion<T> q(quaternion * dtkDeprecated::dtkQuaternion<T>(vector[0], vector[1], vector[2], 0) * dtkDeprecated::dtkInverse<T>(quaternion));
+    return dtkDeprecated::dtkVector3D<T>(q[0], q[1], q[2]);
 }
 
 //! dtkMixedProduct(const dtkVector3D &v0, const dtkVector3D &v1, const dtkVector3D &v2)
@@ -47,11 +47,11 @@ template <class T> dtkVector3D<T> dtkRotate(const dtkQuaternion<T>& quaternion, 
  * This function calculates the mixed product (also called triple scalar product)
  * formed by three dtkVector3D.
  */
-template <class T>  T dtkMixedProduct(const dtkVector3D<T> &v0, 
-                                      const dtkVector3D<T> &v1, 
-                                      const dtkVector3D<T> &v2)
+template <class T>  T dtkMixedProduct(const dtkDeprecated::dtkVector3D<T> &v0, 
+                                      const dtkDeprecated::dtkVector3D<T> &v1, 
+                                      const dtkDeprecated::dtkVector3D<T> &v2)
 {
-    dtkVector3D<T> v;
+    dtkDeprecated::dtkVector3D<T> v;
     v.storeOuterProduct(v1, v2);
     return (v0*v);
 }
@@ -75,14 +75,14 @@ template <class T>  inline T dtkMixedProduct(const T v0[3],
  * attitude from its Euler axis and angle. 
  * NOTE: Argument vector dtkVecEulerAxis MUST be a unit vector.
  */
-template <class T> dtkQuaternion<T> dtkQuaternionFromAxisAngle(const dtkVector3D<T> &axis, const T &angle)
+template <class T> dtkDeprecated::dtkQuaternion<T> dtkQuaternionFromAxisAngle(const dtkDeprecated::dtkVector3D<T> &axis, const T &angle)
 {
-    dtkVector3D<T> v = axis.unit();
+    dtkDeprecated::dtkVector3D<T> v = axis.unit();
 
-    return dtkQuaternion<T>(1.0, dtkVector3D<T>(axis[0], axis[1], axis[2]), dtkDeg2Rad(angle/(T)2));
+    return dtkDeprecated::dtkQuaternion<T>(1.0, dtkDeprecated::dtkVector3D<T>(axis[0], axis[1], axis[2]), dtkDeg2Rad(angle/(T)2));
 }
 
-template <class T> dtkQuaternion<T> dtkQuaternionFromHPR(T h, T p, T r)
+template <class T> dtkDeprecated::dtkQuaternion<T> dtkQuaternionFromHPR(T h, T p, T r)
 {
     T  cosH, sinH, cosP, sinP, cosR, sinR;
     T  half_r, half_p, half_h;
@@ -104,7 +104,7 @@ template <class T> dtkQuaternion<T> dtkQuaternionFromHPR(T h, T p, T r)
    cosR = cos(half_r);
    sinR = sin(half_r);
 
-   return dtkQuaternion<T>(
+   return dtkDeprecated::dtkQuaternion<T>(
         sinR * cosP * cosH - cosR * sinP * sinH,
         cosR * sinP * cosH + sinR * cosP * sinH,
         cosR * cosP * sinH - sinR * sinP * cosH,
@@ -116,9 +116,9 @@ template <class T> dtkQuaternion<T> dtkQuaternionFromHPR(T h, T p, T r)
  * This function returns Euler axis from a quaternion representing a rigid body's
  * attitude.
  */
-template <class T> dtkVector3D<T> dtkAxisFromQuaternion(const dtkQuaternion<T> &qtn)
+template <class T> dtkDeprecated::dtkVector3D<T> dtkAxisFromQuaternion(const dtkDeprecated::dtkQuaternion<T> &qtn)
 {
-    dtkVector3D<T> axis(qtn[0], qtn[1], qtn[2]);
+    dtkDeprecated::dtkVector3D<T> axis(qtn[0], qtn[1], qtn[2]);
 
     return axis.unit();
 }
@@ -128,11 +128,11 @@ template <class T> dtkVector3D<T> dtkAxisFromQuaternion(const dtkQuaternion<T> &
  * This function returns the quaternion corresponding to a
  * transformation matrix.
 */
-template <class T> dtkQuaternion<T> dtkQuaternionFromMatSquared(const dtkMatrixSquared<T> &mat)
+template <class T> dtkDeprecated::dtkQuaternion<T> dtkQuaternionFromMatSquared(const dtkDeprecated::dtkMatrixSquared<T> &mat)
 {
-    T sclrTmp = dtkMatrixSquaredTrace(mat);
+    T sclrTmp = dtkDeprecated::dtkMatrixSquaredTrace(mat);
 
-    dtkQuaternion<T> qtn;
+    dtkDeprecated::dtkQuaternion<T> qtn;
 
     if(sclrTmp > 0) {
 	sclrTmp = 0.5*sqrt(1 + sclrTmp);
@@ -185,7 +185,7 @@ template <class T> dtkQuaternion<T> dtkQuaternionFromMatSquared(const dtkMatrixS
  * This function returns Euler angle from a quaternion representing a rigid body's
  * attitude.
  */
-template <class T> T dtkAngleFromQuaternion(const dtkQuaternion<T> &qtn)
+template <class T> T dtkAngleFromQuaternion(const dtkDeprecated::dtkQuaternion<T> &qtn)
 {
     return 2*dtkRad2Deg(acos(qtn[3]));
 }
@@ -197,10 +197,10 @@ template <class T> T dtkAngleFromQuaternion(const dtkQuaternion<T> &qtn)
  * The "from" is a frame that represents the current orientation
  * of the object in the shape of an orthonormal tripod.
 */
-template <class T> dtkMatrixSquared<T> dtkChangeOfBasis(dtkVector3D< dtkVector3D<T> >&from, 
-                                                        dtkVector3D< dtkVector3D<T> >&to)
+template <class T> dtkDeprecated::dtkMatrixSquared<T> dtkChangeOfBasis(dtkDeprecated::dtkVector3D< dtkDeprecated::dtkVector3D<T> >&from, 
+                                                          dtkDeprecated::dtkVector3D< dtkDeprecated::dtkVector3D<T> >&to)
 {
-    dtkMatrixSquared<T> A( 3 );
+    dtkDeprecated::dtkMatrixSquared<T> A( 3 );
     enum { x , y , z };
 
     // _X,_Y,_Z is typically the standard basis frame.

@@ -121,15 +121,15 @@ void dtkComposerNodeVectorRealExtractor::run(void)
 class dtkComposerNodeVectorRealExtractorSubVectorPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkVector<qreal> > receiver_vector;
+    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
     dtkComposerTransmitterReceiver<qlonglong>         receiver_from;
     dtkComposerTransmitterReceiver<qlonglong>         receiver_length;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVector<qreal> > emitter_subvector;
+    dtkComposerTransmitterEmitter<dtkVectorReal> emitter_subvector;
 
 public:
-    dtkVector<qreal> *subvector;
+    dtkVectorReal *subvector;
 };
 
 // /////////////////////////////////////////////////////////////////

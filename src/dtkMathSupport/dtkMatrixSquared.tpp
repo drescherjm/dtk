@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 15:58:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:12:42 2012 (+0200)
- *           By: tkloczko
- *     Update #: 20
+ * Last-Updated: jeu. mars 26 11:13:04 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 22
  */
 
 /* Commentary: 
@@ -21,6 +21,8 @@
 #define DTKMATRIXSQUARED_TPP
 
 #include "dtkMatrix.h"
+
+namespace dtkDeprecated {
 
 // /////////////////////////////////////////////////////////////////
 // dtkMatrixSquared implementation
@@ -346,5 +348,7 @@ template <typename T> T dtkMatrixSquaredTrace(const dtkMatrixSquared<T>& matSqua
 
     return elemTmp;
 }
+
+} // end of namespace
 
 #endif

@@ -105,7 +105,7 @@ dtkAbstractObject *dtkComposerTransmitter::object(void)
 /*!  
  *  
  */
-dtkMatrix<double> *dtkComposerTransmitter::matrix(void)
+dtkMatrixReal *dtkComposerTransmitter::matrix(void)
 {
     return d->matrix;
 }

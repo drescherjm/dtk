@@ -27,7 +27,9 @@ class dtkComposerTransmitterPrivate;
 class dtkComposerTransmitterLink;
 class dtkComposerTransmitterLinkList;
 class dtkComposerTransmitterVariant;
-template <typename T> class dtkMatrix;
+namespace dtkDeprecated{
+    template <typename T> class dtkMatrix;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitter interface
@@ -71,7 +73,7 @@ public:
     virtual dtkAbstractObject *object(void);
 
 public:
-    virtual dtkMatrix<double> *matrix(void);
+    virtual dtkDeprecated::dtkMatrix<double> *matrix(void);
 
 public:
     virtual dtkAbstractContainerWrapper *container(void);

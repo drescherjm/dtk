@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:04:26 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:09:50 2012 (+0200)
- *           By: tkloczko
- *     Update #: 8
+ * Last-Updated: jeu. mars 26 11:14:34 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 10
  */
 
 /* Commentary: 
@@ -28,6 +28,8 @@
 // /////////////////////////////////////////////////////////////////
 // dtkVector implementation
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <class T> inline dtkVector<T>::dtkVector(const dtkVector<T>& vec,
                                                   unsigned irowStart,
@@ -169,5 +171,7 @@ template <class T> inline dtkVector<T> dtkDirection(const dtkVector<T>& vec)
 {
     return vec.unit();
 }
+
+} // end of namespace
 
 #endif

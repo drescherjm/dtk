@@ -23,6 +23,9 @@
 template <typename T> class dtkComposerTransmitterEmitter;
 
 class dtkComposerTransmitterVariant;
+namespace dtkDeprecated{
+    template <typename T> class dtkMatrix;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiver interface
@@ -47,7 +50,7 @@ public:
 public:
     dtkAbstractObject *object(void);
 
-    dtkMatrix<double> *matrix(void);
+    dtkDeprecated::dtkMatrix<double> *matrix(void);
 
     QVariant& variant(void);
           

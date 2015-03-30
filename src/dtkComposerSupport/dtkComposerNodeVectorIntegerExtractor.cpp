@@ -121,15 +121,15 @@ void dtkComposerNodeVectorIntegerExtractor::run(void)
 class dtkComposerNodeVectorIntegerExtractorSubVectorPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<dtkVector<qlonglong> > receiver_vector;
+    dtkComposerTransmitterReceiver<dtkVectorInteger> receiver_vector;
     dtkComposerTransmitterReceiver<qlonglong>         receiver_from;
     dtkComposerTransmitterReceiver<qlonglong>         receiver_length;
 
 public:
-    dtkComposerTransmitterEmitter<dtkVector<qlonglong> > emitter_subvector;
+    dtkComposerTransmitterEmitter<dtkVectorInteger> emitter_subvector;
 
 public:
-    dtkVector<qlonglong> *subvector;
+    dtkVectorInteger *subvector;
 };
 
 // /////////////////////////////////////////////////////////////////

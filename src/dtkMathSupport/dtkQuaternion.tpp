@@ -4,9 +4,9 @@
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Mon Jul 12 16:18:19 2010 (+0200)
  * Version: $Id$
- * Last-Updated: Thu Sep 20 10:15:29 2012 (+0200)
- *           By: tkloczko
- *     Update #: 3
+ * Last-Updated: jeu. mars 26 11:16:30 2015 (+0100)
+ *           By: Thibaud Kloczko
+ *     Update #: 6
  */
 
 /* Commentary: 
@@ -30,6 +30,8 @@ using std::log;
 // /////////////////////////////////////////////////////////////////
 // dtkQuaternion implementation
 // /////////////////////////////////////////////////////////////////
+
+namespace dtkDeprecated {
 
 template <class T> inline dtkQuaternion<T>::dtkQuaternion(const T& elemIm0,
                                                           const T& elemIm1,
@@ -301,5 +303,7 @@ template <class T> inline dtkQuaternion<T> dtkPowQ(const dtkQuaternion<T>& qtn1,
 {
     return dtkExp(qtn2*dtkLogQ(qtn1));
 }
+
+} // end of namespace
 
 #endif

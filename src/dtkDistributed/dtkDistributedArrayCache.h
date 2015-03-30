@@ -72,8 +72,9 @@ template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayC
     for (int i = 0; i < Length; ++i) { 
         ids[i] = - Prealloc - 1; 
         lines[i].resize(0);
+        last = -1;
         lines[i].resize(Prealloc);
-    }    
+    }
 }
 
 template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id)

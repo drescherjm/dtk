@@ -58,7 +58,7 @@ template <typename T> inline void dtkDistributedArray<T>::deallocate(dtkDistribu
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size) : dtkDistributedContainer(size),
     data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper) : dtkDistributedContainer(size, mapper),
@@ -66,13 +66,13 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 {
     if (m_mapper->count() == 0)
         m_mapper->setMapping(size, m_comm->size());
-    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T& init_value) : dtkDistributedContainer(size),
     data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 
     this->fill(init_value);
     m_comm->barrier();
@@ -81,11 +81,11 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array) : dtkDistributedContainer(size),
     data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 
     if (array) {
         for (qlonglong i = 0; i < data->size; ++i) {
-            data->begin()[i] = array[m_mapper->localToGlobal(i, m_comm->wid())];
+            data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
         }
     }
     m_comm->barrier();
@@ -94,10 +94,10 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkArray<T>& array) : dtkDistributedContainer(array.size()),
     data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 
     for (qlonglong i = 0; i < data->size; ++i) {
-        data->begin()[i] = array[m_mapper->localToGlobal(i, m_comm->wid())];
+        data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
     }
     m_comm->barrier();
 }
@@ -105,7 +105,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkDistributedArray& o) : dtkDistributedContainer(o.size(), o.mapper()),
     data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(m_comm->wid()));
+    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 
     if (data) {
 
@@ -209,7 +209,7 @@ template <typename T> inline void dtkDistributedArray<T>::fill(const T& value)
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
 {
-    qint32 owner = static_cast<qint32>(m_mapper->owner(index, m_comm->wid()));
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
     qlonglong pos = m_mapper->globalToLocal(index);
     m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
 }
@@ -232,9 +232,9 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
 
 template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index) const
 {
-    qint32 owner = static_cast<qint32>(m_mapper->owner(index, m_comm->wid()));
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
 
-    if (m_comm->wid() == owner) {
+    if (this->wid() == owner) {
         qlonglong pos = m_mapper->globalToLocal(index, owner);
         T temp;
         m_buffer_manager->get(owner, pos, &temp);

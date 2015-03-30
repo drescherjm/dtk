@@ -30,7 +30,8 @@ public:
     dtkDistributedContainer(void) :
         m_size(0),
         m_mapper(new dtkDistributedMapper),
-            m_comm(dtkDistributed::communicator::instance())
+        m_comm(dtkDistributed::communicator::instance()),
+            m_wid(m_comm->wid())
     {
         m_mapper->ref();
     }
@@ -38,7 +39,8 @@ public:
     dtkDistributedContainer(const qlonglong& size) :
         m_size(size),
         m_mapper(new dtkDistributedMapper),
-            m_comm(dtkDistributed::communicator::instance())
+            m_comm(dtkDistributed::communicator::instance()),
+            m_wid(m_comm->wid())
     {
         m_mapper->ref();
         if (m_size > 0) {
@@ -49,7 +51,8 @@ public:
     dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) :
         m_size(size),
         m_mapper(mapper),
-            m_comm(dtkDistributed::communicator::instance())
+            m_comm(dtkDistributed::communicator::instance()),
+            m_wid(m_comm->wid())
     {
         m_mapper->ref();
     }
@@ -80,13 +83,14 @@ public:
     dtkDistributedCommunicator *communicator(void) const { return m_comm; }
 
 public:
-    qlonglong wid(void) const { return m_comm->wid(); }
+    inline qlonglong wid(void) const {  return m_wid; }
 
 protected:
     qlonglong m_size;
 
     dtkDistributedMapper       *m_mapper;
     dtkDistributedCommunicator *m_comm;
+    qint32                     m_wid;
 };
 
 //

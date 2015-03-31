@@ -53,7 +53,7 @@ public:
     qlonglong pu_count;
     qlonglong last_pu_id;
 
-    QVector<qlonglong> map;
+    QVarLengthArray<qlonglong> map;
 };
 
 // /////////////////////////////////////////////////////////////////

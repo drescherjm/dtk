@@ -23,7 +23,7 @@ inline void dtkDistributedGraphTopologyVertex::init(void)
     qlonglong l_id = g->m_neighbour_count->mapper()->globalToLocal(m_id, g->wid());
     c_it = g->m_neighbour_count->cbegin();
     c_it += l_id;
-    dtkDistributedArray<qlonglong>::const_iterator v_it = g->m_vertex_to_edge->cbegin();
+    v_it = g->m_vertex_to_edge->cbegin();
     v_it += l_id;
     l_id = g->m_edge_to_vertex->mapper()->globalToLocal(*v_it, g->wid());
     n_it = g->m_edge_to_vertex->cbegin();
@@ -35,6 +35,7 @@ inline void dtkDistributedGraphTopologyVertex::advance(void)
     Q_ASSERT(c_it < g->m_neighbour_count->end());
     n_it += *c_it;
     ++c_it;
+    ++v_it;
 }
         
 inline void dtkDistributedGraphTopologyVertex::advance(qlonglong j)
@@ -43,12 +44,14 @@ inline void dtkDistributedGraphTopologyVertex::advance(qlonglong j)
     for(qlonglong i = 0; i < j; ++i) {
         n_it += *c_it;
         ++c_it;
+        ++v_it;
     }            
 }
 
 inline void dtkDistributedGraphTopologyVertex::rewind(void)
 {
     Q_ASSERT(c_it > g->m_neighbour_count->begin());
+    --v_it;
     --c_it;
     n_it -= *c_it;
 }
@@ -57,6 +60,7 @@ inline void dtkDistributedGraphTopologyVertex::rewind(qlonglong j)
 { 
     Q_ASSERT(c_it - j >= g->m_neighbour_count->begin());
     for(qlonglong i = j; i >= 0; --i) {
+        --v_it;
         --c_it;
         n_it -= *c_it;
     }

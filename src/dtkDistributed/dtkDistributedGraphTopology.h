@@ -34,6 +34,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopologyVertex
     const dtkDistributedGraphTopology *g;
     qlonglong m_id;
     dtkDistributedArray<qlonglong>::const_iterator c_it;
+    dtkDistributedArray<qlonglong>::const_iterator v_it;
     dtkDistributedArray<qlonglong>::const_iterator n_it;
 
 public:
@@ -48,6 +49,7 @@ public:
 
 public:
     qlonglong neighbourCount(void) const { return *c_it; }
+    qlonglong neighbourPos(qlonglong j) const { return *v_it + j; }
 
 public:
     dtkDistributedArray<qlonglong>::const_iterator begin(void) const { return n_it; }

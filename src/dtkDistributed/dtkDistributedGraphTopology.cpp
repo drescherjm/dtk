@@ -24,6 +24,7 @@
 
 dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedContainer()
 {
+    m_neighbour_count = NULL;
     m_edge_to_vertex  = NULL;
     m_vertex_to_edge  = NULL;
     m_edge_count = NULL;
@@ -33,6 +34,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedC
 
 dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count) : dtkDistributedContainer(vertex_count)
 {
+    m_neighbour_count = NULL;
     m_edge_to_vertex  = NULL;
     m_vertex_to_edge  = NULL;
     m_edge_count = NULL;
@@ -45,6 +47,8 @@ dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
 {
     m_comm->barrier();
 
+    if (m_neighbour_count)
+        delete m_neighbour_count;
     if (m_vertex_to_edge)
         delete m_vertex_to_edge;
     if (m_edge_count)
@@ -76,6 +80,9 @@ void dtkDistributedGraphTopology::initialize(void)
     mapper->setMap(vertexCount() + 1, m_comm->size());
     m_vertex_to_edge = new dtkDistributedArray<qlonglong>(vertexCount() + 1, mapper);
     m_vertex_to_edge->fill(0);
+
+    m_neighbour_count = new dtkDistributedArray<qlonglong>(vertexCount() + 1, mapper);
+    m_neighbour_count->fill(0);
 
     m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size());
     m_edge_count->fill(0);
@@ -118,6 +125,7 @@ void dtkDistributedGraphTopology::build(void)
         for(;nit != nend; ++nit, ++index) {
             m_edge_to_vertex->begin()[index] = *nit;
         }
+        m_neighbour_count->setAt(it.key(), edge_list.count());
     }
 
     this->m_comm->barrier();
@@ -187,6 +195,7 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
         QString line;
         QStringList edges;
 
+        QVector<qlonglong> n_vec; n_vec.reserve(2 * m_neighbour_count->mapper()->countMax());
         QVector<qlonglong> v_vec; v_vec.reserve(2 * m_vertex_to_edge->mapper()->countMax());
         QVector<qlonglong> e_vec; e_vec.reserve(2 * m_edge_to_vertex->mapper()->countMax());
 
@@ -208,6 +217,7 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
                 continue;
             }
             v_vec << e_gid;
+            n_vec << edges.size();
             for (qlonglong i = 0; i < edges.size(); ++i) {
                 qlonglong val = edges.at(i).toLongLong();
                 if (val < 1 || val > m_size ) {
@@ -221,11 +231,13 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
             ++v_gid;
             if(in->atEnd()) {
                 v_vec << e_gid;
+                m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
                 m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
                 m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
                 m_edge_count->setAt(owner, e_local_count);
                 
             } else if(v_gid > v_last_gid) {
+                m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
                 m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
                 m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
                 m_edge_count->setAt(owner, e_local_count);
@@ -235,6 +247,8 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
                 v_first_gid = v_gid;
                 v_last_gid  = m_vertex_to_edge->mapper()->lastIndex(owner);
                 e_first_gid = e_gid;
+                n_vec.clear();
+                n_vec.reserve(2 * m_neighbour_count->mapper()->countMax());
                 v_vec.clear();
                 v_vec.reserve(2 * m_vertex_to_edge->mapper()->countMax());
                 e_vec.clear();

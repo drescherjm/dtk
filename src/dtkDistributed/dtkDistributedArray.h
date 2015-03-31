@@ -92,7 +92,7 @@ public:
     T  last(void) const;
 
 public:
-    T operator[](qlonglong index) const;
+    T operator[](const qlonglong& index) const;
 
 public:
     void copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const;
@@ -117,8 +117,10 @@ private:
 
 private:
     Data  *data;
+    mutable T val;
     mutable Cache *m_cache;
     dtkDistributedBufferManager *m_buffer_manager;
+    bool locked = false;
 };
 
 // ///////////////////////////////////////////////////////////////////

@@ -171,16 +171,19 @@ template<typename T> inline void dtkDistributedArray<T>::unlock(qint32 owner)
 template<typename T> inline void dtkDistributedArray<T>::rlock(void)
 {
     m_buffer_manager->rlock();
+    locked = true;
 }
 
 template<typename T> inline void dtkDistributedArray<T>::wlock(void)
 {
     m_buffer_manager->wlock();
+    locked = true;
 }
 
 template<typename T> inline void dtkDistributedArray<T>::unlock(void)
 {
     m_buffer_manager->unlock();
+    locked = false;
 }
 
 template<typename T> inline bool dtkDistributedArray<T>::empty(void) const
@@ -236,9 +239,12 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
 
     if (this->wid() == owner) {
         qlonglong pos = m_mapper->globalToLocal(index, owner);
-        T temp;
-        m_buffer_manager->get(owner, pos, &temp);
-        return temp;
+        if (locked){
+            return data->data()[pos];
+        } else {
+            m_buffer_manager->get(owner, pos, &val);
+            return val;
+        }
 
     } else {
         return m_cache->value(index);
@@ -255,7 +261,7 @@ template<typename T> inline T dtkDistributedArray<T>::last(void) const
     return this->at(this->size() - 1);
 }
 
-template<typename T> inline T dtkDistributedArray<T>::operator[](qlonglong index) const
+template<typename T> inline T dtkDistributedArray<T>::operator[](const qlonglong& index) const
 {
     return this->at(index);
 }

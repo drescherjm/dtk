@@ -121,6 +121,7 @@ private:
     mutable Cache *m_cache;
     dtkDistributedBufferManager *m_buffer_manager;
     bool locked = false;
+    qlonglong firstIndex = 0;
 };
 
 // ///////////////////////////////////////////////////////////////////

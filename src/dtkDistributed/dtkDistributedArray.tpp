@@ -56,8 +56,9 @@ template <typename T> inline void dtkDistributedArray<T>::deallocate(dtkDistribu
 // ///////////////////////////////////////////////////////////////////
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size) : dtkDistributedContainer(size),
-    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+                                                                                                  data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
+    firstIndex = m_mapper->firstIndex(this->wid());
     this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 }
 
@@ -66,6 +67,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 {
     if (m_mapper->count() == 0)
         m_mapper->setMapping(size, m_comm->size());
+    firstIndex = m_mapper->firstIndex(this->wid());
     this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 }
 
@@ -74,6 +76,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 {
     this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
 
+    firstIndex = m_mapper->firstIndex(this->wid());
     this->fill(init_value);
     m_comm->barrier();
 }
@@ -88,6 +91,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
             data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
         }
     }
+    firstIndex = m_mapper->firstIndex(this->wid());
     m_comm->barrier();
 }
 
@@ -99,6 +103,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
     for (qlonglong i = 0; i < data->size; ++i) {
         data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
     }
+    firstIndex = m_mapper->firstIndex(this->wid());
     m_comm->barrier();
 }
 
@@ -117,6 +122,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
             it++;
         }
     }
+    firstIndex = m_mapper->firstIndex(this->wid());
     m_comm->barrier();
 }
 
@@ -150,6 +156,7 @@ template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMa
     this->m_buffer_manager = new_buffer_manager;
     this->data = new_data;
 
+    firstIndex = m_mapper->firstIndex(this->wid());
     m_comm->barrier();
 }
 
@@ -213,8 +220,17 @@ template <typename T> inline void dtkDistributedArray<T>::fill(const T& value)
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-    qlonglong pos = m_mapper->globalToLocal(index);
-    m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
+    if (this->wid() == owner) {
+        qlonglong pos = index-firstIndex;
+        if (locked){
+            data->data()[pos] = value;
+        } else {
+            m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
+        }
+    } else {
+        qlonglong pos = m_mapper->globalToLocal(index);
+        m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
+    }
 }
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, T *array, const qlonglong& size)
@@ -226,7 +242,7 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
 
     if (size <= owner_capacity) {
         m_buffer_manager->put(owner, pos, array, size);
-    
+
     } else {
         m_buffer_manager->put(owner, pos, array, owner_capacity);
         this->setAt(index + owner_capacity, array + owner_capacity, size - owner_capacity);
@@ -238,7 +254,7 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
 
     if (this->wid() == owner) {
-        qlonglong pos = m_mapper->globalToLocal(index, owner);
+        qlonglong pos = index-firstIndex;
         if (locked){
             return data->data()[pos];
         } else {

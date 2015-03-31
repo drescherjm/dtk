@@ -270,7 +270,7 @@ bool dtkDistributedGraphTopology::read(const QString& filename)
 void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool oriented)
 {
     qint32 wid = this->wid();
-    qint32 from_owner = static_cast<qint32>(m_mapper->owner(from, wid));
+    qint32 from_owner = static_cast<qint32>(m_mapper->owner(from));
 
     if (wid == from_owner) {
         qlonglong edge_counter = m_edge_count->at(wid);

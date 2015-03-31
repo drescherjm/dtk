@@ -34,22 +34,24 @@ public:
 public:
     qlonglong localToGlobal(const qlonglong&  local_id, const qlonglong& pu_id) const;
 
-    qlonglong globalToLocal(const qlonglong& global_id) const;
-    qlonglong globalToLocal(const qlonglong& global_id, const qlonglong& owner) const;
+    qlonglong globalToLocal(const qlonglong& global_id) ;
+    qlonglong globalToLocal(const qlonglong& global_id, const qlonglong& owner) ;
 
     qlonglong count(void) const;
     qlonglong count(const qlonglong& pu_id) const;
     qlonglong countMax(void) const;
 
-    qlonglong owner(const qlonglong& global_id, qlonglong pu_id = -1) const;
+    qlonglong owner(const qlonglong& global_id);
 
     QVector<qlonglong> readers(const qlonglong& global_id) const;
 
 public:
     QAtomicInt ref;
 
+public:
     qlonglong id_count;
     qlonglong pu_count;
+    qlonglong last_pu_id;
 
     QVector<qlonglong> map;
 };
@@ -108,14 +110,14 @@ qlonglong dtkDistributedMapperPrivate::localToGlobal(const qlonglong& local_id, 
     return ( local_id + this->map.at(pu_id) );
 }
 
-qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id) const
+qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id)
 {
-    qlonglong pu_id = this->owner(global_id);
+    qlonglong owner = this->owner(global_id);
 
-    return ( global_id - this->map.at(pu_id) );
+    return ( global_id - this->map.at(owner) );
 }
 
-qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id, const qlonglong& owner) const
+qlonglong dtkDistributedMapperPrivate::globalToLocal(const qlonglong& global_id, const qlonglong& owner)
 {
     return ( global_id - this->map.at(owner) );
 }
@@ -139,32 +141,21 @@ qlonglong dtkDistributedMapperPrivate::countMax(void) const
     return count_max;
 }
 
-qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id, qlonglong pu_id) const
+qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id)
 {
-    // qlonglong current_id = this->map[this->map.count() - 2];
-    // qlonglong pid = this->pu_count-1;
-    // while (global_id < current_id) {
-    //     current_id = this->map.at(--pid);
-    // }
-    // return pid;
-
-    if (pu_id < 0) {
-        pu_id =  qFloor((global_id * this->pu_count) / this->map.last());
+    if (global_id >= this->map.at(last_pu_id + 1)) {
+        ++last_pu_id;
+        while(global_id >= this->map.at(last_pu_id + 1))
+            ++last_pu_id;
     }
-
-    if (global_id >= this->map.at(pu_id + 1)) {
-        ++pu_id;
-        while(global_id >= this->map.at(pu_id + 1))
-            ++pu_id;
-    }
-    else if (global_id  < this->map.at(pu_id)) {
-        --pu_id;
-        while(global_id < this->map.at(pu_id))
-            --pu_id;
+    else if (global_id  < this->map.at(last_pu_id)) {
+        --last_pu_id;
+        while(global_id < this->map.at(last_pu_id))
+            --last_pu_id;
 
     }
 
-    return pu_id;
+    return last_pu_id;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -173,7 +164,7 @@ qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id, qlonglo
 
 dtkDistributedMapper::dtkDistributedMapper(void) : QObject(), d(new dtkDistributedMapperPrivate)
 {
-
+    d->last_pu_id = 0;
 }
 
 dtkDistributedMapper::~dtkDistributedMapper(void)
@@ -243,11 +234,11 @@ qlonglong dtkDistributedMapper::firstIndex(const qlonglong& pu_id) const
 
 qlonglong dtkDistributedMapper::lastIndex(const qlonglong& pu_id) const
 {
-    return d->map[pu_id + 1] - 1;    
+    return d->map[pu_id + 1] - 1;
 }
 
-qlonglong dtkDistributedMapper::owner(const qlonglong& global_id, qlonglong pu_id) const
+qlonglong dtkDistributedMapper::owner(const qlonglong& global_id)
 {
-    return d->owner(global_id, pu_id);
+    return d->owner(global_id);
 }
 

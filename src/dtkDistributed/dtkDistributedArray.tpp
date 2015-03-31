@@ -209,7 +209,7 @@ template <typename T> inline void dtkDistributedArray<T>::fill(const T& value)
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
 {
-    qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
     qlonglong pos = m_mapper->globalToLocal(index);
     m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
 }
@@ -232,7 +232,7 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
 
 template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index) const
 {
-    qint32 owner = static_cast<qint32>(m_mapper->owner(index, this->wid()));
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
 
     if (this->wid() == owner) {
         qlonglong pos = m_mapper->globalToLocal(index, owner);

@@ -28,6 +28,7 @@ inline void dtkDistributedGraphTopologyVertex::init(void)
     l_id = g->m_edge_to_vertex->mapper()->globalToLocal(*v_it, g->wid());
     n_it = g->m_edge_to_vertex->cbegin();
     n_it += l_id;
+    first_pos = g->m_edge_to_vertex->mapper()->firstIndex(g->wid());
 }
 
 inline void dtkDistributedGraphTopologyVertex::advance(void)

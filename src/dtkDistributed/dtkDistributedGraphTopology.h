@@ -36,6 +36,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopologyVertex
     dtkDistributedArray<qlonglong>::const_iterator c_it;
     dtkDistributedArray<qlonglong>::const_iterator v_it;
     dtkDistributedArray<qlonglong>::const_iterator n_it;
+    qlonglong first_pos;
 
 public:
     dtkDistributedGraphTopologyVertex(const dtkDistributedGraphTopology *graph, qlonglong id) : g(graph), m_id(id) { init(); }
@@ -50,6 +51,7 @@ public:
 public:
     qlonglong neighbourCount(void) const { return *c_it; }
     qlonglong neighbourPos(qlonglong j) const { return *v_it + j; }
+    qlonglong neighbourLocalPos(qlonglong j) const { return *v_it + j - first_pos; }
 
 public:
     dtkDistributedArray<qlonglong>::const_iterator begin(void) const { return n_it; }

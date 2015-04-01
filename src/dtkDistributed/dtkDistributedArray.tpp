@@ -152,6 +152,7 @@ template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::ope
     if (m_size == other.m_size) {
         copyConstruct(other.data->begin(), other.data->end(), data->begin());
     }
+    return *this;
 }
 
 template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)

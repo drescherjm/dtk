@@ -51,6 +51,16 @@ template <typename T> inline void dtkDistributedArray<T>::deallocate(dtkDistribu
     }
 }
 
+template <typename T> inline void dtkDistributedArray<T>::copyConstruct(const T *srcFrom, const T *srcTo, T *dstFrom)
+{
+    if (QTypeInfo<T>::isComplex) {
+        while (srcFrom != srcTo)
+            new (dstFrom++) T(*srcFrom++);
+    } else {
+        ::memcpy(static_cast<void *>(dstFrom), static_cast<const void *>(srcFrom), (srcTo - srcFrom) * sizeof(T));
+    }
+}
+
 // ///////////////////////////////////////////////////////////////////
 // dtkDistributedArray implementation
 // ///////////////////////////////////////////////////////////////////
@@ -135,6 +145,13 @@ template <typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 
     delete m_cache;
     m_cache = 0;
+}
+
+template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::operator = (const dtkDistributedArray<T>& other)
+{
+    if (m_size == other.m_size) {
+        copyConstruct(other.data->begin(), other.data->end(), data->begin());
+    }
 }
 
 template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)

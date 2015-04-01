@@ -62,6 +62,9 @@ public:
     ~dtkDistributedArray(void);
 
 public:
+    dtkDistributedArray& operator = (const dtkDistributedArray& other);
+
+public:
     void remap(dtkDistributedMapper *remapper);
 
 public:
@@ -114,6 +117,7 @@ public:
 private:
     void allocate(dtkDistributedBufferManager *&, Data *&, qlonglong);
     void deallocate(dtkDistributedBufferManager *, Data *);
+    void copyConstruct(const T *srcFrom, const T *srcTo, T *dstFrom);
 
 private:
     Data  *data;

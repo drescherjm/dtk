@@ -86,7 +86,7 @@ void dtkDistributedAbstractApplication::initialize(void)
     dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
     settings.endGroup();
 
-    qDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();
+    dtkDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();
 
     if (parser->isSet(policyOption)) {
         policyType = parser->value(policyOption);

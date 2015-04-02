@@ -84,9 +84,11 @@ dtkDistributedCommunicator *dtkDistributedPolicy::communicator(void)
 
 void dtkDistributedPolicy::setType(const QString& type)
 {
-    qDebug() << "create" << type << "communicator";
+    dtkDebug() << "create" << type << "communicator";
     d->type = type;
     d->comm = dtkDistributed::communicator::pluginFactory().create(type);
+    if (!d->comm)
+        qWarning() << "NULL communicator !!" << type;
 }
 
 QStringList dtkDistributedPolicy::types(void)

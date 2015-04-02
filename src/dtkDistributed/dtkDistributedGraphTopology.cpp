@@ -71,7 +71,7 @@ dtkDistributedMapper *dtkDistributedGraphTopology::edge_mapper(void) const
 
 void dtkDistributedGraphTopology::initialize(void)
 {
-    qDebug() << "initialize graph with " << vertexCount() << "vertexes, rank=" << this->wid();
+    dtkDebug() << "initialize graph with" << vertexCount() << "vertexes, rank =" << this->wid();
 
     m_mapper->setMapping(vertexCount(), m_comm->size());
 

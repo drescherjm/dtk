@@ -66,25 +66,25 @@ template <typename T> inline void dtkDistributedArray<T>::copyConstruct(const T 
 // ///////////////////////////////////////////////////////////////////
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size) : dtkDistributedContainer(size),
-                                                                                                  data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+                                                                                                  d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
     firstIndex = m_mapper->firstIndex(this->wid());
-    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
+    this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper) : dtkDistributedContainer(size, mapper),
-    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
     if (m_mapper->count() == 0)
         m_mapper->setMapping(size, m_comm->size());
     firstIndex = m_mapper->firstIndex(this->wid());
-    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
+    this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T& init_value) : dtkDistributedContainer(size),
-    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
+    this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
     firstIndex = m_mapper->firstIndex(this->wid());
     this->fill(init_value);
@@ -92,13 +92,13 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array) : dtkDistributedContainer(size),
-    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
+    this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
     if (array) {
-        for (qlonglong i = 0; i < data->size; ++i) {
-            data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
+        for (qlonglong i = 0; i < d->size; ++i) {
+            d->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
         }
     }
     firstIndex = m_mapper->firstIndex(this->wid());
@@ -106,27 +106,27 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkArray<T>& array) : dtkDistributedContainer(array.size()),
-    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
+    this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
-    for (qlonglong i = 0; i < data->size; ++i) {
-        data->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
+    for (qlonglong i = 0; i < d->size; ++i) {
+        d->begin()[i] = array[m_mapper->localToGlobal(i, this->wid())];
     }
     firstIndex = m_mapper->firstIndex(this->wid());
     m_comm->barrier();
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkDistributedArray& o) : dtkDistributedContainer(o.size(), o.mapper()),
-    data(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
 {
-    this->allocate(m_buffer_manager, data, m_mapper->count(this->wid()));
+    this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
-    if (data) {
+    if (d) {
 
-        typename Data::iterator oit  = o.data->begin();
-        typename Data::iterator oend = o.data->end();
-        typename Data::iterator it  = o.data->begin();
+        typename Data::iterator oit  = o.d->begin();
+        typename Data::iterator oend = o.d->end();
+        typename Data::iterator it  = o.d->begin();
         for(; oit != oend; ++oit) {
             *it = *oit;
             it++;
@@ -139,8 +139,8 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
 template <typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 {
     m_comm->barrier();
-    this->deallocate(m_buffer_manager, data);
-    data = 0;
+    this->deallocate(m_buffer_manager, d);
+    d = 0;
     m_buffer_manager = 0;
 
     delete m_cache;
@@ -150,7 +150,7 @@ template <typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
 template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::operator = (const dtkDistributedArray<T>& other)
 {
     if (m_size == other.m_size) {
-        copyConstruct(other.data->begin(), other.data->end(), data->begin());
+        copyConstruct(other.d->begin(), other.d->end(), d->begin());
     }
     return *this;
 }
@@ -158,21 +158,21 @@ template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::ope
 template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)
 {
     dtkDistributedBufferManager *new_buffer_manager = 0;
-    Data *new_data = 0;
+    Data *new_d = 0;
 
-    this->allocate(new_buffer_manager, new_data, remapper->count(this->wid()));
+    this->allocate(new_buffer_manager, new_d, remapper->count(this->wid()));
     
-    for (qlonglong i = 0; i < new_data->size; ++i) {
-        new_data->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));
+    for (qlonglong i = 0; i < new_d->size; ++i) {
+        new_d->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));
     }
 
     m_comm->barrier();
 
     this->setMapper(remapper);
     m_cache->clear();
-    this->deallocate(m_buffer_manager, data);
+    this->deallocate(m_buffer_manager, d);
     this->m_buffer_manager = new_buffer_manager;
-    this->data = new_data;
+    this->d = new_d;
 
     firstIndex = m_mapper->firstIndex(this->wid());
     m_comm->barrier();
@@ -228,8 +228,8 @@ template<typename T> inline qlonglong dtkDistributedArray<T>::size(void) const
 
 template <typename T> inline void dtkDistributedArray<T>::fill(const T& value)
 {
-    typename Data::iterator it  = data->begin();
-    typename Data::iterator end = data->end();
+    typename Data::iterator it  = d->begin();
+    typename Data::iterator end = d->end();
     for(; it != end; ++it) {
         *it = value;
     }
@@ -241,7 +241,7 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
     if (this->wid() == owner) {
         qlonglong pos = index-firstIndex;
         if (locked){
-            data->data()[pos] = value;
+            d->data()[pos] = value;
         } else {
             m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
         }
@@ -274,7 +274,7 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
     if (this->wid() == owner) {
         qlonglong pos = index-firstIndex;
         if (locked){
-            return data->data()[pos];
+            return d->data()[pos];
         } else {
             m_buffer_manager->get(owner, pos, &val);
             return val;
@@ -311,32 +311,47 @@ template<typename T> inline void dtkDistributedArray<T>::copyIntoArray(const qlo
 
 template<typename T> inline typename dtkDistributedArray<T>::iterator dtkDistributedArray<T>::begin(iterator)
 { 
-    return data->begin(); 
+    return d->begin(); 
 }
 
 template<typename T> inline typename dtkDistributedArray<T>::iterator dtkDistributedArray<T>::end(iterator)
 { 
-    return data->end(); 
+    return d->end(); 
 }
 
 template<typename T> inline typename dtkDistributedArray<T>::const_iterator dtkDistributedArray<T>::begin(const_iterator) const
 { 
-    return data->begin();
+    return d->begin();
 }
 
 template<typename T> inline typename dtkDistributedArray<T>::const_iterator dtkDistributedArray<T>::end(const_iterator) const
 { 
-    return data->end();
+    return d->end();
 }
 
 template<typename T> inline typename dtkDistributedArray<T>::const_iterator dtkDistributedArray<T>::cbegin(const_iterator) const
 {
-    return data->constBegin();
+    return d->constBegin();
 }
 
 template<typename T> inline typename dtkDistributedArray<T>::const_iterator dtkDistributedArray<T>::cend(const_iterator) const
 { 
-    return data->constEnd();
+    return d->constEnd();
+}
+
+template<typename T> inline const T *dtkDistributedArray<T>::data(void) const
+{
+    return d->data();
+}
+
+template<typename T> inline T *dtkDistributedArray<T>::data(void)
+{
+    return d->data();
+}
+
+template<typename T> inline const T *dtkDistributedArray<T>::constData(void) const
+{
+    return d->data();
 }
 
 template<typename T> inline typename dtkDistributedArray<T>::navigator dtkDistributedArray<T>::toNavigator(void) const

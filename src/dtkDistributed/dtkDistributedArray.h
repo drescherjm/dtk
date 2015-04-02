@@ -109,6 +109,12 @@ public:
     const_iterator   cend(const_iterator = const_iterator()) const;
 
 public:
+    const T *data(void) const;
+          T *data(void);
+
+    const T *constData(void) const;
+
+public:
     navigator toNavigator(void) const;
 
 public:
@@ -120,7 +126,7 @@ private:
     void copyConstruct(const T *srcFrom, const T *srcTo, T *dstFrom);
 
 private:
-    Data  *data;
+    Data  *d;
     mutable T val;
     mutable Cache *m_cache;
     dtkDistributedBufferManager *m_buffer_manager;

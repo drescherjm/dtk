@@ -92,8 +92,6 @@ void dtkDistributedAbstractApplication::initialize(void)
         policyType = parser->value(policyOption);
     }
     d->policy.setType(policyType);
-
-    this->spawn();
 }
 
 

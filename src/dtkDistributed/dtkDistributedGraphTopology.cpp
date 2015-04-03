@@ -87,6 +87,8 @@ dtkDistributedGraphTopology& dtkDistributedGraphTopology::operator = (const dtkD
         *m_vertex_to_edge  = *(o.m_vertex_to_edge);
 
     m_mapper->setMapping(vertexCount(), m_comm->size());
+
+    return *this;
 }
 
 void dtkDistributedGraphTopology::resize(qlonglong vertex_count)

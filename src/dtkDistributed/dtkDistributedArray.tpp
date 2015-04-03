@@ -151,6 +151,8 @@ template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::ope
 {
     if (m_size == other.m_size) {
         copyConstruct(other.d->begin(), other.d->end(), d->begin());
+    } else {
+        qCritical() << "can't copy: not the same size!"<<  m_size << other.m_size;
     }
     return *this;
 }

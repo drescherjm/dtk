@@ -107,9 +107,13 @@ public:
 public:
     dtkDistributedGraphTopology(void);
     dtkDistributedGraphTopology(const qlonglong& vertex_count);
+    dtkDistributedGraphTopology(const dtkDistributedGraphTopology& other);
 
 public:
     ~dtkDistributedGraphTopology(void);
+
+public:
+    dtkDistributedGraphTopology& operator = (const dtkDistributedGraphTopology& o);
 
 private:
     void initialize(void);

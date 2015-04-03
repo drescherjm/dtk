@@ -43,6 +43,24 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex
     m_comm->barrier();
 }
 
+dtkDistributedGraphTopology::dtkDistributedGraphTopology(const dtkDistributedGraphTopology& o) : dtkDistributedContainer(o.m_size)
+{
+    m_map = o.m_map;
+
+    m_edge_count      = NULL;
+    m_neighbour_count = NULL;
+    m_vertex_to_edge  = NULL;
+
+    if (o.m_edge_count)
+        m_edge_count = new dtkDistributedArray<qlonglong>(*(o.m_edge_count));
+    if (o.m_neighbour_count)
+        m_neighbour_count = new dtkDistributedArray<qlonglong>(*(o.m_neighbour_count));
+    if (o.m_vertex_to_edge)
+        m_vertex_to_edge  = new dtkDistributedArray<qlonglong>(*(o.m_vertex_to_edge));
+
+    m_mapper->setMapping(vertexCount(), m_comm->size());
+}
+
 dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
 {
     m_comm->barrier();
@@ -55,6 +73,20 @@ dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
         delete m_edge_count;
     if (m_edge_to_vertex)
         delete m_edge_to_vertex;
+}
+
+dtkDistributedGraphTopology& dtkDistributedGraphTopology::operator = (const dtkDistributedGraphTopology& o)
+{
+    m_map = o.m_map;
+    
+    if (o.m_edge_count)
+        *m_edge_count = *(o.m_edge_count);
+    if (o.m_neighbour_count)
+        *m_neighbour_count = *(o.m_neighbour_count);
+    if (o.m_vertex_to_edge)
+        *m_vertex_to_edge  = *(o.m_vertex_to_edge);
+
+    m_mapper->setMapping(vertexCount(), m_comm->size());
 }
 
 void dtkDistributedGraphTopology::resize(qlonglong vertex_count)

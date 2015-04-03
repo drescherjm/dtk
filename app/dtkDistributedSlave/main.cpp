@@ -91,7 +91,9 @@ int main(int argc, char **argv)
     slaveWork work;
     work.server = parser->value(serverOption);
 
+    app->spawn();
     app->exec(&work);
+    app->unspawn();
 
     return 0;
 }

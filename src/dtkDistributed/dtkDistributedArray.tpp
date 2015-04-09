@@ -77,6 +77,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 {
     if (m_mapper->count() == 0)
         m_mapper->setMapping(size, m_comm->size());
+
     firstIndex = m_mapper->firstIndex(this->wid());
     this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 }

@@ -176,9 +176,15 @@ inline void dtkDistributedGraphTopology::stats(void) const
     qDebug() << "m_edge_to_vertex stats:"; m_edge_to_vertex->stats();
 }
 
+inline bool dtkDistributedGraphTopology::read(const QString& filename, GraphFile format)
+{
+    dtkDistributedArray<qlonglong> *empty = NULL;
+    return readWithValues(filename, format, empty );
+}
+
 // read graph from file as described in
 // http://people.sc.fsu.edu/~jburkardt/data/metis_graph/metis_graph.html
-template <class T> bool dtkDistributedGraphTopology::read(const QString& filename, GraphFile format, dtkDistributedArray<T> *values )
+template <class T> bool dtkDistributedGraphTopology::readWithValues(const QString& filename, GraphFile format, dtkDistributedArray<T> *& values )
 {
     QFile file(filename);
     qlonglong edges_count = 0;
@@ -394,6 +400,9 @@ template <class T> bool dtkDistributedGraphTopology::read(const QString& filenam
 
                         }
 
+                    } else if (v_gid < v_last_line) {
+                        qCritical() << "i values should be sorted !, aborting reading of "<< filename;
+                        return false;
                     } else { // new vertex
 
                         //  first, handle  the previous vertex:
@@ -435,7 +444,6 @@ template <class T> bool dtkDistributedGraphTopology::read(const QString& filenam
                             v_first_gid = v_gid;
                             v_last_gid  = m_vertex_to_edge->mapper()->lastIndex(owner);
                             e_first_gid = e_gid -1;
-                            qDebug() << "last gid" <<  v_first_gid <<  v_last_gid ;
 
                             n_vec.clear();
                             n_vec.reserve(2 * m_neighbour_count->mapper()->countMax());
@@ -534,7 +542,6 @@ template <class T> bool dtkDistributedGraphTopology::read(const QString& filenam
         time.restart();
     }
     if (m_comm->size() > 1) {
-    // if (false) {
         dtkDistributedMapper *mapper = new dtkDistributedMapper;
         mapper->initMap(edges_count, m_comm->size());
 

@@ -167,7 +167,9 @@ public:
     void stats(void) const;
 
 public:
-    template <class T = double> bool read(const QString& filename, GraphFile format = MetisFormat, dtkDistributedArray<T> *values = NULL );
+    bool read(const QString& filename, GraphFile format = MetisFormat);
+
+    template <class T = double> bool readWithValues(const QString& filename, GraphFile format, dtkDistributedArray<T> *&values );
 
 protected:
     typedef QList<qlonglong> EdgeList;

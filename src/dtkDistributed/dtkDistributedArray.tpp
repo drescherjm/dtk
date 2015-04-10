@@ -28,6 +28,8 @@ template <typename T> inline void dtkDistributedArray<T>::allocate(dtkDistribute
     if (size > 0) {
         manager = m_comm->createBufferManager();
         x = dtkTypedArrayData<T>::fromRawData(manager->allocate<T>(size), size, dtkArrayData::RawData);
+    } else {
+        qWarning() << "allocation with size =0!" << m_comm->wid();
     }
 }
 
@@ -127,7 +129,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
 
         typename Data::iterator oit  = o.d->begin();
         typename Data::iterator oend = o.d->end();
-        typename Data::iterator it  = o.d->begin();
+        typename Data::iterator it   = d->begin();
         for(; oit != oend; ++oit) {
             *it = *oit;
             it++;

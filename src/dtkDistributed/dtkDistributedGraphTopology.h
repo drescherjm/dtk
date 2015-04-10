@@ -89,6 +89,13 @@ private:
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopology : public dtkDistributedContainer
 {
+
+public:
+    enum GraphFile {
+        MetisFormat,
+        MatrixMarketFormat
+    };
+
 public:
     typedef dtkDistributedNavigator<dtkDistributedArray<qlonglong> > Neighbours;
     typedef dtkDistributedIterator<dtkDistributedGraphTopology> iterator;
@@ -131,9 +138,6 @@ public:
     void resize(qlonglong vertexCount);
 
 public:
-    bool read(const QString& filename);
-
-public:
     qlonglong vertexCount(void) const;
     qlonglong   edgeCount(void) const;
 
@@ -161,6 +165,9 @@ public:
 
 public:
     void stats(void) const;
+
+public:
+    template <class T = double> bool read(const QString& filename, GraphFile format = MetisFormat, dtkDistributedArray<T> *values = NULL );
 
 protected:
     typedef QList<qlonglong> EdgeList;

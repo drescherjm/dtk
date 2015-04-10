@@ -14,6 +14,10 @@
 
 #include <QtCore>
 
+#if defined(DTK_HAVE_ZLIB)
+#include <dtkCore/dtkIOCompressor>
+#endif
+
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedGraphTopologyVertex inline methods
 // /////////////////////////////////////////////////////////////////
@@ -170,6 +174,385 @@ inline void dtkDistributedGraphTopology::stats(void) const
 {
     qDebug() << "m_vertex_to_edge stats:"; m_vertex_to_edge->stats();
     qDebug() << "m_edge_to_vertex stats:"; m_edge_to_vertex->stats();
+}
+
+// read graph from file as described in
+// http://people.sc.fsu.edu/~jburkardt/data/metis_graph/metis_graph.html
+template <class T> bool dtkDistributedGraphTopology::read(const QString& filename, GraphFile format, dtkDistributedArray<T> *values )
+{
+    QFile file(filename);
+    qlonglong edges_count = 0;
+    QTime time;
+    QIODevice *in;
+
+    if (this->wid() == 0) {
+        time.start();
+
+        if(filename.isEmpty() || (!file.exists())) {
+            qWarning() << "input file is empty/does not exist" << filename << "Current dir is" << QDir::currentPath();
+            return false;
+        }
+
+        QIODevice::OpenMode mode = QIODevice::ReadOnly;
+        QFileInfo info = QFileInfo(filename);
+#if defined(DTK_HAVE_ZLIB)
+        if (info.suffix() == "gz") {
+            in = new dtkIOCompressor(&file);
+        } else {
+            in = &file;
+            mode |= QIODevice::Text;
+        }
+#else
+        in = &file;
+        mode |= QIODevice::Text;
+#endif
+        if (!in->open(mode))
+            return false;
+
+        QStringList header;
+        QString datatype;
+        QString format_str;
+        bool is_double;
+        QRegExp re = QRegExp("\\s+");
+        QString line;
+        QStringList data;
+
+        is_double = false; //FIXME
+        switch (format) {
+        case  MetisFormat:
+            dtkTrace() << "reading metis file header";
+            header = QString(in->readLine()).split(re);
+            m_size = header.first().toLongLong();
+            if (m_size  == 0) {
+                qWarning() << "Can't parse size of the graph" << filename;
+                return false;
+            }
+            edges_count = header.at(1).toLongLong();
+            if (edges_count  == 0) {
+                qWarning() << "Can't parse the number of edges" << filename;
+                return false;
+            }
+            edges_count *= 2;
+            break;
+        case MatrixMarketFormat:
+            dtkTrace() << "reading matrix market file header";
+            header = QString(in->readLine()).split(' ');
+            // %%MatrixMarket matrix coordinate real general
+            if (header.at(1) != "matrix" && header.at(2) != "coordinate")  {
+                in->close();
+                qWarning() << "not a matrix coordinate format, can't read" << filename;
+                return false;
+            }
+            datatype = header.at(3);
+            format_str = header.at(4).trimmed();
+
+            is_double = true;
+            if (datatype  == "integer") {
+                is_double = false;
+            } else if ((datatype == "complex") || (datatype  == "pattern")) {
+                qWarning() << datatype << "Format not supported, can't read matrix" << filename;
+                return false;
+            }
+
+            if (format_str != "general") {
+                qWarning()<< format_str << "Only general format supported, can't read matrix from file" << filename;
+                return false;
+            }
+
+            while (m_size == 0) {
+                line = in->readLine().trimmed();
+
+                if (line.startsWith("%"))
+                    continue;
+                data = line.split(re);
+                m_size   = data[0].toLongLong();
+                if (m_size != data[1].toLongLong()) {
+                    dtkError() << "non symetric matrix not supported";
+                    return false;
+                }
+                edges_count = data[2].toLongLong();
+            }
+            break;
+        default:
+            dtkError() << "format unknown";
+        }
+    }
+    m_comm->broadcast(&m_size, 1, 0);
+    m_comm->broadcast(&edges_count, 1, 0);
+    dtkTrace() << "Matrix size"<< m_size << "edges count" << edges_count << m_comm->wid();
+
+    this->initialize();
+    m_comm->barrier();
+
+    m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edges_count);
+
+    if (values) {
+        dtkTrace() << "init values vector";
+        delete values;
+        values = new dtkDistributedArray<T>(edges_count, this->edge_mapper());
+    }
+
+    if (this->wid() == 0) {
+
+        qlonglong i,end;
+        T value;
+
+        std::string linestd;
+        std::string linestd2;
+        std::string::size_type sz;
+
+        QString line;
+        QStringList edges;
+
+        QVector<qlonglong> n_vec; n_vec.reserve(2 * m_neighbour_count->mapper()->countMax());
+        QVector<qlonglong> v_vec; v_vec.reserve(2 * m_vertex_to_edge->mapper()->countMax());
+        QVector<qlonglong> e_vec; e_vec.reserve(2 * m_edge_to_vertex->mapper()->countMax());
+        QVector<T>         e_val; e_val.reserve(2 * m_edge_to_vertex->mapper()->countMax());
+
+        QVector<qlonglong> e_line_vec;
+        QVector<T>         e_line_val;
+
+        qlonglong e_gid = 0;
+        qlonglong v_gid = 0;
+
+        qlonglong e_local_count = 0;
+        qlonglong edges_size = 0;
+        qlonglong val = 0;
+        qlonglong owner = 0;
+        qlonglong v_first_gid = m_vertex_to_edge->mapper()->firstIndex(owner);
+        qlonglong v_last_gid  = m_vertex_to_edge->mapper()->lastIndex(owner);
+
+        qlonglong v_last_line  = 0;
+
+        qlonglong e_first_gid = 0;
+
+        switch (format) {
+
+        case  MatrixMarketFormat:
+            dtkTrace() << "read matrix data";
+            v_vec << 0;
+            while (!in->atEnd()) {
+                //linestd = in->readLine().toStdString(); // Works only with Qt5.4
+                const QByteArray array = in->readLine();
+                linestd = std::string(array.constData(), array.length());
+                try {
+                    v_gid = std::stoi (linestd, &sz) -1;
+                    linestd2 = linestd.substr(sz);
+                    val = std::stoi (linestd2, &sz) -1;
+                    value = std::stod (linestd2.substr(sz));
+                    ++e_local_count;
+                    ++edges_size;
+                    ++e_gid;
+
+                    if(v_gid == v_last_line) {
+
+                       i = 0;
+                       end = e_line_vec.size();
+
+                        // sorted insert in e_vec
+                        if (i == end) {
+                            e_line_vec.prepend(val);
+                            if (values) {
+                                e_line_val.prepend(value);
+                            }
+                        } else if (val > e_line_vec.last()) {
+                            // tuning: usually, we append at the end, so check this case
+                            e_line_vec.append(val);
+                            if (values) {
+                                e_line_val.append(value);
+                            }
+                        } else {
+                            for(i=0 ; i < end; ++i) {
+                                if (val < e_line_vec[i])
+                                    break;
+                            }
+                            e_line_vec.insert(i, val);
+                            if (values) {
+                                e_line_val.insert(i, value);
+                            }
+                        }
+
+                        if(in->atEnd()) {
+                            e_vec << e_line_vec;
+                            e_val << e_line_val;
+                            e_line_val.clear();
+                            e_line_vec.clear();
+                            n_vec << edges_size;
+
+                            m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
+                            m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                            m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                            if (values) {
+                                values->setAt(e_first_gid, e_val.data(), e_val.size());
+                            }
+                            m_edge_count->setAt(owner, e_local_count);
+                            // qDebug() << owner << v_first_gid << v_last_gid ;
+                            // qDebug() << "n_vec" << n_vec  ;
+                            // qDebug() << "v_vec" << v_vec  ;
+                            // qDebug() << "e_vec" << e_vec  ;
+                            // qDebug() << "e_val" << e_val  ;
+
+                        }
+
+                    } else { // new vertex
+
+                        //  first, handle  the previous vertex:
+                        n_vec << edges_size-1;
+                        e_vec << e_line_vec;
+                        if (values) {
+                            e_val << e_line_val;
+                        }
+
+                        // then, handle the first edge of this new vertex:
+                        edges_size = 1;
+                        e_line_vec.clear();
+                        if (values) {
+                            e_line_val.clear();
+                        }
+                        e_line_vec.prepend(val);
+                        if (values) {
+                            e_line_val.prepend(value);
+                        }
+
+                        if(v_gid > v_last_gid) {
+
+                            m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
+                            m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                            m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                            m_edge_count->setAt(owner, e_local_count-1);
+                            if (values) {
+                                values->setAt(e_first_gid, e_val.data(), e_val.size());
+                            }
+
+                            // qDebug() << owner << v_first_gid << v_last_gid  ;
+                            // qDebug() << "n_vec" << n_vec  ;
+                            // qDebug() << "v_vec" << v_vec  ;
+                            // qDebug() << "e_vec" << e_vec  ;
+                            // qDebug() << "e_val" << e_val  ;
+
+                            ++owner;
+                            e_local_count = 1;
+                            v_first_gid = v_gid;
+                            v_last_gid  = m_vertex_to_edge->mapper()->lastIndex(owner);
+                            e_first_gid = e_gid -1;
+                            qDebug() << "last gid" <<  v_first_gid <<  v_last_gid ;
+
+                            n_vec.clear();
+                            n_vec.reserve(2 * m_neighbour_count->mapper()->countMax());
+                            v_vec.clear();
+                            v_vec.reserve(2 * m_vertex_to_edge->mapper()->countMax());
+                            e_vec.clear();
+                            e_vec.reserve(2 * m_edge_to_vertex->mapper()->countMax());
+                            e_val.clear();
+                            e_val.reserve(2 * m_edge_to_vertex->mapper()->countMax());
+                            v_vec << e_gid-1;
+                        } else {
+                            v_vec << e_gid-1;
+                        }
+                        if(in->atEnd()) {
+
+                            e_vec << e_line_vec;
+                            e_val << e_line_val;
+                            n_vec << 1;
+                            m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
+                            m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                            m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                            m_edge_count->setAt(owner, e_local_count);
+                            // qDebug() << owner  << v_first_gid << v_last_gid  ;
+                            // qDebug() << "n_vec" << n_vec  ;
+                            // qDebug() << "v_vec" << v_vec  ;
+                            // qDebug() << "e_vec" << e_vec  ;
+                            // qDebug() << "e_val" << e_val  ;
+                            if (values) {
+                                values->setAt(e_first_gid, e_val.data(), e_val.size());
+                            }
+
+                        }
+
+
+                    }
+                    v_last_line = v_gid;
+                } catch (...) {
+                    // qDebug()<< "skip line";
+                }
+            }
+            break;
+        case  MetisFormat:
+            while (!in->atEnd()) {
+                line = in->readLine().trimmed();
+                edges = line.split(' ');
+                if (line.isEmpty() || line.at(0) == '#'){
+                    continue;
+                }
+                v_vec << e_gid;
+                n_vec << edges.size();
+                for (qlonglong i = 0; i < edges.size(); ++i) {
+                    val = edges.at(i).toLongLong();
+                    if (val < 1 || val > m_size ) {
+                        qWarning() << "bad vertice id in graph for edge" << val << v_gid;
+                        continue;
+                    }
+                    e_vec << val-1;
+                    ++e_gid;
+                    ++e_local_count;
+                }
+                ++v_gid;
+                if(in->atEnd()) {
+                    v_vec << e_gid;
+                    m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
+                    m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                    m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                    m_edge_count->setAt(owner, e_local_count);
+
+                } else if(v_gid > v_last_gid) {
+                    m_neighbour_count->setAt(v_first_gid, n_vec.data(), n_vec.size());
+                    m_vertex_to_edge->setAt(v_first_gid, v_vec.data(), v_vec.size());
+                    m_edge_to_vertex->setAt(e_first_gid, e_vec.data(), e_vec.size());
+                    m_edge_count->setAt(owner, e_local_count);
+
+                    ++owner;
+                    e_local_count = 0;
+                    v_first_gid = v_gid;
+                    v_last_gid  = m_vertex_to_edge->mapper()->lastIndex(owner);
+                    e_first_gid = e_gid;
+                    n_vec.clear();
+                    n_vec.reserve(2 * m_neighbour_count->mapper()->countMax());
+                    v_vec.clear();
+                    v_vec.reserve(2 * m_vertex_to_edge->mapper()->countMax());
+                    e_vec.clear();
+                    e_vec.reserve(2 * m_edge_to_vertex->mapper()->countMax());
+                }
+            }
+            break;
+        }
+        in->close();
+    }
+    m_comm->barrier();
+
+    if (this->wid() == 0) {
+        qDebug() << "read done in "<< time.elapsed() << "ms";
+        time.restart();
+    }
+    if (m_comm->size() > 1) {
+    // if (false) {
+        dtkDistributedMapper *mapper = new dtkDistributedMapper;
+        mapper->initMap(edges_count, m_comm->size());
+
+        qlonglong offset = 0;
+        for (qlonglong i = 0; i < m_comm->size(); ++i) {
+            mapper->setMap(offset ,i);
+            offset += m_edge_count->at(i);
+        }
+        m_edge_to_vertex->remap(mapper);
+        if (values) {
+            values->remap(mapper);
+        }
+        if (this->wid() == 0) {
+            qDebug() << "remap done in "<< time.elapsed() << "ms";
+        }
+    }
+
+    return true;
 }
 
 // 

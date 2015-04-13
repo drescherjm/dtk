@@ -47,6 +47,8 @@ public:
 public:
     virtual void get(qint32 from, qlonglong position, void *array, qlonglong count = 1) = 0;
     virtual void put(qint32 dest, qlonglong position, void *array, qlonglong count = 1) = 0;
+    virtual void addAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
+
 };
 
 // ///////////////////////////////////////////////////////////////////

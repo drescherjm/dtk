@@ -190,6 +190,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     qlonglong edges_count = 0;
     QTime time;
     QIODevice *in;
+    bool is_double;
 
     if (this->wid() == 0) {
         time.start();
@@ -218,7 +219,6 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         QStringList header;
         QString datatype;
         QString format_str;
-        bool is_double;
         QRegExp re = QRegExp("\\s+");
         QString line;
         QStringList data;
@@ -345,7 +345,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
                     v_gid = std::stoi (linestd, &sz) -1;
                     linestd2 = linestd.substr(sz);
                     val = std::stoi (linestd2, &sz) -1;
-                    value = std::stod (linestd2.substr(sz));
+                    value = (is_double) ? std::stod (linestd2.substr(sz)) : std::stoi (linestd2.substr(sz));
                     ++e_local_count;
                     ++edges_size;
                     ++e_gid;

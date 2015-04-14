@@ -95,7 +95,7 @@ void dtkComposerNodeSpawn::begin(void)
         } else {
             d->np = d->size_receiver.data();
         }
-        d->policy.setNThreads(d->np);
+        d->policy.setNWorkers(d->np);
         // FIXME: don't use hardcoded plugin name
         d->policy.setType("qthreads");
         d->communicator  = d->policy.communicator();

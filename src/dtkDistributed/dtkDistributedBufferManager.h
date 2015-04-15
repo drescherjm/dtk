@@ -16,6 +16,8 @@
 
 #include <dtkCore>
 
+#include <functional>
+
 #include "dtkDistributedExport.h"
 
 // ///////////////////////////////////////////////////////////////////

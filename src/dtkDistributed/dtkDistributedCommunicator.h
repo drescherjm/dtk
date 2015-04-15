@@ -43,16 +43,6 @@ public:
     static const qint16 ROOT       = -4;
     static const qint16 PROC_NULL  = -2;
 
-    enum DataType {
-        Bool,
-        Char,
-        Int,
-        Long,
-        Int64,
-        Float,
-        Double
-    };
-
     enum OperationType {
         None,
         Min,
@@ -84,7 +74,7 @@ public:
     virtual void destroyBufferManager(dtkDistributedBufferManager *&) {;}
 
 public:
-    virtual void send(void   *data, qint64 size, DataType dataType, qint32 target, qint32 tag) = 0;
+    virtual void send(void   *data, qint64 size, QMetaType::Type dataType, qint32 target, qint32 tag) = 0;
     void send(bool   *data, qint64 size, qint32 target, int tag);
     void send(int    *data, qint64 size, qint32 target, int tag);
     void send(long   *data, qint64 size, qint32 target, int tag);
@@ -102,7 +92,7 @@ public:
     template <typename T, typename U> void run(T* t, U (T::*functionPointer)());
 
 public:
-    virtual void broadcast(void *data, qint64 size, DataType dataType, qint32 source) = 0;
+    virtual void broadcast(void *data, qint64 size, QMetaType::Type dataType, qint32 source) = 0;
     void broadcast(bool      *data, qint64 size, qint32 source);
     void broadcast(int       *data, qint64 size, qint32 source);
     void broadcast(long      *data, qint64 size, qint32 source);
@@ -114,7 +104,7 @@ public:
     virtual void broadcast(QVariant& v, qint32 source) = 0;
 
 public:
-    virtual void receive(void   *data, qint64 size, DataType dataType, qint32 source, qint32 tag) = 0;
+    virtual void receive(void   *data, qint64 size, QMetaType::Type dataType, qint32 source, qint32 tag) = 0;
     void receive(bool   *data, qint64 size, qint32 source, int tag);
     void receive(int    *data, qint64 size, qint32 source, int tag);
     void receive(long   *data, qint64 size, qint32 source, int tag);
@@ -126,7 +116,7 @@ public:
     virtual void receive(QByteArray &v,qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
     virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
 
-    virtual dtkDistributedRequest *ireceive(void   *data, qint64 size, DataType dataType, qint32 source, int tag) = 0;
+    virtual dtkDistributedRequest *ireceive(void   *data, qint64 size, QMetaType::Type dataType, qint32 source, int tag) = 0;
     dtkDistributedRequest *ireceive(bool   *data, qint64 size, qint32 source, int tag);
     dtkDistributedRequest *ireceive(char   *data, qint64 size, qint32 source, int tag);
     dtkDistributedRequest *ireceive(int    *data, qint64 size, qint32 source, int tag);
@@ -138,7 +128,7 @@ public:
     virtual void wait(dtkDistributedRequest *req) = 0;
 
 public:
-    virtual void reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all = false) = 0;
+    virtual void reduce(void   *send, void   *recv, qint64 size, QMetaType::Type dataType, OperationType operationType, qint32 target, bool all = false) = 0;
     virtual void reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
     virtual void reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
     virtual void reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);

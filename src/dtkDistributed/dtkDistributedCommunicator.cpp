@@ -170,37 +170,37 @@ qint32 dtkDistributedCommunicator::size(void)
 
 void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Char, target, tag);
+    return this->send(data, size, QMetaType::Char, target, tag);
 }
 
 void dtkDistributedCommunicator::send(bool *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Bool, target, tag);
+    return this->send(data, size, QMetaType::Bool, target, tag);
 }
 
 void dtkDistributedCommunicator::send(int *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Int, target, tag);
+    return this->send(data, size, QMetaType::Int, target, tag);
 }
 
 void dtkDistributedCommunicator::send(long *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Long, target, tag);
+    return this->send(data, size, QMetaType::Long, target, tag);
 }
 
 void dtkDistributedCommunicator::send(qlonglong *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Int64, target, tag);
+    return this->send(data, size, QMetaType::LongLong, target, tag);
 }
 
 void dtkDistributedCommunicator::send(float *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Float, target, tag);
+    return this->send(data, size, QMetaType::Float, target, tag);
 }
 
 void dtkDistributedCommunicator::send(double *data, qint64 size, qint32 target, qint32 tag)
 {
-    return this->send(data, size, Double, target, tag);
+    return this->send(data, size, QMetaType::Double, target, tag);
 }
 
 void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 tag)
@@ -213,72 +213,72 @@ void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 t
 
 void dtkDistributedCommunicator::broadcast(bool      *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Bool, source);
+    this->broadcast(data, size, QMetaType::Bool, source);
 }
 
 void dtkDistributedCommunicator::broadcast(int       *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Int, source);
+    this->broadcast(data, size, QMetaType::Int, source);
 }
 
 void dtkDistributedCommunicator::broadcast(long      *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Long, source);
+    this->broadcast(data, size, QMetaType::Long, source);
 }
 
 void dtkDistributedCommunicator::broadcast(qlonglong *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Int64, source);
+    this->broadcast(data, size, QMetaType::LongLong, source);
 }
 
 void dtkDistributedCommunicator::broadcast(float     *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Float, source);
+    this->broadcast(data, size, QMetaType::Float, source);
 }
 
 void dtkDistributedCommunicator::broadcast(double    *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Double, source);
+    this->broadcast(data, size, QMetaType::Double, source);
 }
 
 void dtkDistributedCommunicator::broadcast(char      *data, qint64 size, qint32 source)
 {
-    this->broadcast(data, size, Char, source);
+    this->broadcast(data, size, QMetaType::Char, source);
 }
 
 void dtkDistributedCommunicator::receive(char *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Char, source, tag);
+    return this->receive(data, size, QMetaType::Char, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(bool *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Bool, source, tag);
+    return this->receive(data, size, QMetaType::Bool, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(int *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Int, source, tag);
+    return this->receive(data, size, QMetaType::Int, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(long *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Long, source, tag);
+    return this->receive(data, size, QMetaType::Long, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(qlonglong *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Int64, source, tag);
+    return this->receive(data, size, QMetaType::LongLong, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(float *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Float, source, tag);
+    return this->receive(data, size, QMetaType::Float, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(double *data, qint64 size, qint32 source, qint32 tag)
 {
-    return this->receive(data, size, Double, source, tag);
+    return this->receive(data, size, QMetaType::Double, source, tag);
 }
 
 void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
@@ -291,70 +291,70 @@ void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(bool *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Bool, source, tag);
+    return this->ireceive(data, size, QMetaType::Bool, source, tag);
 }
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(char *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Char, source, tag);
+    return this->ireceive(data, size, QMetaType::Char, source, tag);
 }
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(int *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Int, source, tag);
+    return this->ireceive(data, size, QMetaType::Int, source, tag);
 }
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(long *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Long, source, tag);
+    return this->ireceive(data, size, QMetaType::Long, source, tag);
 }
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(qint64 *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Int64, source, tag);
+    return this->ireceive(data, size, QMetaType::LongLong, source, tag);
 }
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(float *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Float, source, tag);
+    return this->ireceive(data, size, QMetaType::Float, source, tag);
 }
 
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(double *data, qint64 size, qint32 source, int tag)
 {
-    return this->ireceive(data, size, Double, source, tag);
+    return this->ireceive(data, size, QMetaType::Double, source, tag);
 }
 
-void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint32 target, bool all)
+void dtkDistributedCommunicator::reduce(void   *send, void   *recv, qint64 size, QMetaType::Type dataType, OperationType operationType, qint32 target, bool all)
 {
     qCritical() << "Default operator for reduce, not implemented";
 }
 
 void dtkDistributedCommunicator::reduce(bool *send, bool *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
-    return this->reduce(send, recv, size, Bool, operationType, target, all);
+    return this->reduce(send, recv, size, QMetaType::Bool, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(char *send, char *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
-    return this->reduce(send, recv, size, Char, operationType, target, all);
+    return this->reduce(send, recv, size, QMetaType::Char, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(int *send, int *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
-    return this->reduce(send, recv, size, Int, operationType, target, all);
+    return this->reduce(send, recv, size, QMetaType::Int, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
-    return this->reduce(send, recv, size, Int64, operationType, target, all);
+    return this->reduce(send, recv, size, QMetaType::LongLong, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(float *send, float *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
-    return this->reduce(send, recv, size, Float, operationType, target, all);
+    return this->reduce(send, recv, size, QMetaType::Float, operationType, target, all);
 }
 
 void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all)
 {
-    return this->reduce(send, recv, size, Double, operationType, target, all);
+    return this->reduce(send, recv, size, QMetaType::Double, operationType, target, all);
 }

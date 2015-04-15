@@ -21,6 +21,32 @@
 #include "dtkDistributedExport.h"
 
 // ///////////////////////////////////////////////////////////////////
+// Helpers
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T> struct dtkNegate
+{
+    T operator() (const T& lhs, const T& rhs) const
+    {
+        Q_UNUSED(lhs);
+        return -rhs;
+    }
+};
+
+template <typename T> struct dtkInvert
+{
+    T operator() (const T& lhs, const T& rhs) const
+    {
+        Q_UNUSED(lhs);
+        return 1 / rhs;
+    }
+};
+
+template <> struct dtkInvert<void>
+{
+};
+
+// ///////////////////////////////////////////////////////////////////
 // dtkDistributedBufferOperationManager
 // ///////////////////////////////////////////////////////////////////
 
@@ -34,6 +60,10 @@ public:
     virtual void subAssign(char *result, void *source, qlonglong count) = 0;
     virtual void mulAssign(char *result, void *source, qlonglong count) = 0;
     virtual void divAssign(char *result, void *source, qlonglong count) = 0;
+
+public:
+    virtual void negate(void *result, void *source, qlonglong count) = 0;
+    virtual void invert(void *result, void *source, qlonglong count) = 0;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -47,6 +77,10 @@ public:
     void subAssign(char *result, void *source, qlonglong count);
     void mulAssign(char *result, void *source, qlonglong count);
     void divAssign(char *result, void *source, qlonglong count);
+
+public:
+    void negate(void *result, void *source, qlonglong count);
+    void invert(void *result, void *source, qlonglong count);
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -77,6 +111,20 @@ template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::
     dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
     const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
     std::transform(r.begin(), r.end(), s.begin(), r.begin(), std::divides<T>());
+}
+
+template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::negate(void *result, void *source, qlonglong count)
+{
+    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
+    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
+    std::transform(r.begin(), r.end(), s.begin(), r.begin(), dtkNegate<T>());
+}
+
+template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::invert(void *result, void *source, qlonglong count)
+{
+    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
+    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
+    std::transform(r.begin(), r.end(), s.begin(), r.begin(), dtkInvert<T>());
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -112,7 +160,9 @@ public:
     virtual void get(qint32 from, qlonglong position, void *array, qlonglong count = 1) = 0;
     virtual void put(qint32 dest, qlonglong position, void *array, qlonglong count = 1) = 0;
     virtual void addAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
+    virtual void subAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
     virtual void mulAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
+    virtual void divAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
 
 protected:
     virtual bool canHandleOperationManager(void);

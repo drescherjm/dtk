@@ -190,7 +190,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     qlonglong edges_count = 0;
     QTime time;
     QIODevice *in;
-    bool is_double;
+    bool is_double = true;
 
     if (this->wid() == 0) {
         time.start();
@@ -213,6 +213,13 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         in = &file;
         mode |= QIODevice::Text;
 #endif
+
+        // to avoid troubles with floats separators ('.' and not ',')
+        QLocale::setDefault(QLocale::c());
+#if defined (Q_OS_UNIX) && !defined(Q_OS_MAC)
+        setlocale(LC_NUMERIC, "C");
+#endif
+
         if (!in->open(mode))
             return false;
 
@@ -223,7 +230,6 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         QString line;
         QStringList data;
 
-        is_double = false; //FIXME
         switch (format) {
         case  MetisFormat:
             dtkTrace() << "reading metis file header";
@@ -252,7 +258,6 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
             datatype = header.at(3);
             format_str = header.at(4).trimmed();
 
-            is_double = true;
             if (datatype  == "integer") {
                 is_double = false;
             } else if ((datatype == "complex") || (datatype  == "pattern")) {

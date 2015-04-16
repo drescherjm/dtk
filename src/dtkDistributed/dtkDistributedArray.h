@@ -98,6 +98,12 @@ public:
     T operator[](const qlonglong& index) const;
 
 public:
+    void addAssign(const qlonglong& index, const T& value);
+    void subAssign(const qlonglong& index, const T& value);
+    void mulAssign(const qlonglong& index, const T& value);
+    void divAssign(const qlonglong& index, const T& value);
+
+public:
     void copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const;
 
 public:

@@ -305,6 +305,70 @@ template<typename T> inline T dtkDistributedArray<T>::operator[](const qlonglong
     return this->at(index);
 }
 
+template<typename T> inline void dtkDistributedArray<T>::addAssign(const qlonglong& index, const T& value)
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    if (this->wid() == owner) {
+        qlonglong pos = index - firstIndex;
+        if (locked){
+            d->data()[pos] += value;
+        } else {
+            m_buffer_manager->addAssign(owner, pos, &(const_cast<T&>(value)));
+        }
+    } else {
+        qlonglong pos = m_mapper->globalToLocal(index);
+        m_buffer_manager->addAssign(owner, pos, &(const_cast<T&>(value)));
+    }
+}
+
+template<typename T> inline void dtkDistributedArray<T>::subAssign(const qlonglong& index, const T& value)
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    if (this->wid() == owner) {
+        qlonglong pos = index - firstIndex;
+        if (locked){
+            d->data()[pos] -= value;
+        } else {
+            m_buffer_manager->subAssign(owner, pos, &(const_cast<T&>(value)));
+        }
+    } else {
+        qlonglong pos = m_mapper->globalToLocal(index);
+        m_buffer_manager->subAssign(owner, pos, &(const_cast<T&>(value)));
+    }
+}
+
+template<typename T> inline void dtkDistributedArray<T>::mulAssign(const qlonglong& index, const T& value)
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    if (this->wid() == owner) {
+        qlonglong pos = index - firstIndex;
+        if (locked){
+            d->data()[pos] *= value;
+        } else {
+            m_buffer_manager->mulAssign(owner, pos, &(const_cast<T&>(value)));
+        }
+    } else {
+        qlonglong pos = m_mapper->globalToLocal(index);
+        m_buffer_manager->mulAssign(owner, pos, &(const_cast<T&>(value)));
+    }
+}
+
+template<typename T> inline void dtkDistributedArray<T>::divAssign(const qlonglong& index, const T& value)
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    if (this->wid() == owner) {
+        qlonglong pos = index - firstIndex;
+        if (locked){
+            d->data()[pos] /= value;
+        } else {
+            m_buffer_manager->divAssign(owner, pos, &(const_cast<T&>(value)));
+        }
+    } else {
+        qlonglong pos = m_mapper->globalToLocal(index);
+        m_buffer_manager->divAssign(owner, pos, &(const_cast<T&>(value)));
+    }
+}
+
 template<typename T> inline void dtkDistributedArray<T>::copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const
 {   
     qint32 owner = static_cast<qint32>(m_mapper->owner(from));

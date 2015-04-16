@@ -35,6 +35,9 @@ public:
     ~dtkDistributedMapper(void);
 
 public:
+    dtkDistributedMapper *scaledClone(qlonglong factor) const;
+
+public:
     bool deref(void);
     bool   ref(void);
 

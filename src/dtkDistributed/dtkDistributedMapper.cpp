@@ -1,15 +1,15 @@
-/* dtkDistributedMapper.cpp --- 
- * 
+/* dtkDistributedMapper.cpp ---
+ *
  * Author: Thibaud Kloczko
  * Created: 2013 Thu Feb  7 10:55:57 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedMapper.h"
@@ -23,7 +23,7 @@
 class dtkDistributedMapperPrivate
 {
 public:
-    dtkDistributedMapperPrivate(void) : ref(0), id_count(0) {;}
+     dtkDistributedMapperPrivate(void) : ref(0), id_count(0) {;}
     ~dtkDistributedMapperPrivate(void) {;}
 
 public:
@@ -172,6 +172,18 @@ dtkDistributedMapper::~dtkDistributedMapper(void)
     delete d;
 }
 
+dtkDistributedMapper *dtkDistributedMapper::scaledClone(qlonglong factor) const
+{
+    dtkDistributedMapper *mapper = new dtkDistributedMapper;
+
+    mapper->initMap(d->id_count * factor, d->pu_count);
+    for (qlonglong i = 0; i < d->pu_count; ++i) {
+        mapper->setMap(d->map[i] * factor, i);
+    }
+
+    return mapper;
+}
+
 bool dtkDistributedMapper::deref(void)
 {
     return d->ref.deref();
@@ -241,4 +253,3 @@ qlonglong dtkDistributedMapper::owner(const qlonglong& global_id)
 {
     return d->owner(global_id);
 }
-

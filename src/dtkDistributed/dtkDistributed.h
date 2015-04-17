@@ -85,7 +85,8 @@ namespace dtkDistributed
     namespace communicator {
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginFactory& pluginFactory(void);
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginManager& pluginManager(void);
-        DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator *instance(void);
+        DTKDISTRIBUTED_EXPORT void                                     initialize(const QString& path);
+        DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator              *instance(void);
     }
 }
 

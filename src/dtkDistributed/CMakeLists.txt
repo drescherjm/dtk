@@ -61,6 +61,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedSettings
   dtkDistributedSettings.h
   dtkDistributedSlave.h
+  qthDistributedBufferManager.h
+  qthDistributedCommunicator.h
 )
 
 set(${PROJECT_NAME}_SOURCES
@@ -84,6 +86,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedServerDaemon.cpp
   dtkDistributedSettings.cpp
   dtkDistributedSlave.cpp
+  qthDistributedCommunicator.cpp
 )
 
 ## #################################################################

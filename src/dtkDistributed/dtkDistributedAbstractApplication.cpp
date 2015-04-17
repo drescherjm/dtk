@@ -85,7 +85,7 @@ void dtkDistributedAbstractApplication::initialize(void)
     if (parser->isSet(verboseOption)) {
         dtkDistributed::communicator::pluginManager().setVerboseLoading(true);
     }
-    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+    dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
 
     dtkDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();

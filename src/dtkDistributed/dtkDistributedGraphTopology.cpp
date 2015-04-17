@@ -189,6 +189,8 @@ void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool ori
             m_map[from].insert(end, to);
         } else {
             for(; it != end; ++it) {
+                if (to == (*it))
+                    return;
                 if (to < (*it))
                     break;
             }

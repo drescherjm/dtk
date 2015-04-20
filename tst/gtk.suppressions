@@ -1,7 +1,6 @@
 {
    gtk1
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -19,7 +18,6 @@
 {
    gtk2
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -37,7 +35,6 @@
 {
    gtk3
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_set_qdata_W
@@ -56,7 +53,6 @@
 {
    gtk4
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -75,7 +71,6 @@
 {
    gtk5
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_set_qdata_W
@@ -94,7 +89,6 @@
 {
    gtk6
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -113,7 +107,6 @@
 {
    gtk7
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_set_qdata_W
@@ -132,7 +125,6 @@
 {
    gtk8
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -151,7 +143,6 @@
 {
    gtk9
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_set_qdata_W
@@ -170,7 +161,6 @@
 {
    gtk11
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -189,7 +179,6 @@
 {
    gtk12
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_set_qdata_W
@@ -208,7 +197,6 @@
 {
    gtk13
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:malloc
    fun:realloc
    fun:g_realloc
@@ -227,7 +215,6 @@
 {
    gtk17
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -245,7 +232,6 @@
 {
    gtk18
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -263,7 +249,6 @@
 {
    gtk20
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_node_any_new_W
@@ -280,7 +265,6 @@
 {
    gtk26
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_node_any_new_W
@@ -298,7 +282,6 @@
 {
    gtk25
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_node_any_new_W
@@ -316,7 +299,6 @@
 {
    gtk24
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_node_any_new_W
@@ -334,7 +316,6 @@
 {
    gtk23
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_node_any_new_W
@@ -352,7 +333,6 @@
 {
    gtk22
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_node_any_new_W
@@ -370,7 +350,6 @@
 {
    gtk21
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -386,7 +365,6 @@
 {
    gtk19
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -404,7 +382,6 @@
 {
    gtk16
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -422,7 +399,6 @@
 {
    gtk15
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -440,7 +416,6 @@
 {
    gtk14
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:calloc
    fun:g_malloc0
    fun:type_data_make_W
@@ -458,7 +433,6 @@
 {
    gtk10
    Memcheck:Leak
-   match-leak-kinds: possible
    fun:realloc
    fun:g_realloc
    fun:type_node_any_new_W

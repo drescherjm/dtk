@@ -26,7 +26,7 @@
   creating and destroying the manager:
 
   \code
-  dtkDistributedCommunicator *comm = dtkDistributed::communicator()::instance();
+  dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
   dtkDistributedBufferManager *buffer_manager = comm->createBufferManager();
   comm->destroyBufferManager(buffer_manager);
   \endcode

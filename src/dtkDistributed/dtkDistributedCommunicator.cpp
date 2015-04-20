@@ -47,25 +47,18 @@ public:
   The communication API is very similar to the MPI API (send, receive, broadcast, barrier, ...), but can be used without MPI ( a plugin based on qthreads is provided).
 
   \code
-  dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+  dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
   PingPongWork *runnable = new PingPongWork();
-  comm->spawn();
+  QStringList hosts;
+  // run ping pong on 2 process on localhost
+  hosts << "localhost" << "localhost";
+  comm->spawn(hosts,1);
   comm->exec(runnable);
   comm->unspawn();
   \endcode
 
 */
 
-/*! \enum dtkDistributedCommunicator::DataType
-    \value Bool
-    \value Char
-    \value Int
-    \value Long
-    \value Int64
-    \value Float
-    \value Double
- */
- 
 /*! \enum dtkDistributedCommunicator::OperationType
     \value None
     \value Min
@@ -154,6 +147,20 @@ void dtkDistributedCommunicator::unspawn(void)
 
 */
 
+/*! \fn qint32 dtkDistributedCommunicator::rank (void)
+
+  alias to wid()
+
+  \sa wid()
+*/
+
+/*! \fn qint32 dtkDistributedCommunicator::wid (void)
+
+  Return the worker id (aka rank) of the current process
+
+  \sa rank()
+*/
+
 qint32 dtkDistributedCommunicator::wid(void)
 {
    return 0;
@@ -162,6 +169,12 @@ qint32 dtkDistributedCommunicator::wid(void)
 void dtkDistributedCommunicator::setWid(qint32 id)
 {
 }
+
+/*! \fn qint32 dtkDistributedCommunicator::size (void)
+
+  Return the size of the communicator (number of processes spawned).
+
+*/
 
 qint32 dtkDistributedCommunicator::size(void)
 {

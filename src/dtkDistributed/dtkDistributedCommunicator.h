@@ -137,7 +137,7 @@ public:
     virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
 
 public:
-    virtual void spawn(QStringList hostnames, qlonglong np) = 0;
+    virtual void spawn(QStringList hostnames, qlonglong np = 1) = 0;
     virtual void  exec(QRunnable *work) = 0;
 
 public:

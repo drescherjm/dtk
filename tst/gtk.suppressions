@@ -1,0 +1,475 @@
+{
+   gtk1
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_node_any_new_W
+   fun:g_type_register_static
+   fun:g_type_plugin_get_type
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk2
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_node_any_new_W
+   fun:g_type_register_static
+   fun:*
+   fun:*
+   fun:_g_param_spec_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+}
+{
+   gtk3
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_value_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk4
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_value_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk5
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_enum_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk6
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_enum_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk7
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_boxed_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk8
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_boxed_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk9
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_param_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk11
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_param_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk12
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_object_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk13
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:type_set_qdata_W
+   fun:type_add_flags_W
+   fun:g_type_register_fundamental
+   fun:_g_object_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk17
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:g_type_register_fundamental
+   fun:_g_value_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk18
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:g_type_register_fundamental
+   fun:_g_boxed_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk20
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_node_any_new_W
+   fun:type_node_fundamental_new_W
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk26
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_node_any_new_W
+   fun:type_node_fundamental_new_W
+   fun:g_type_register_fundamental
+   fun:_g_value_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk25
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_node_any_new_W
+   fun:type_node_fundamental_new_W
+   fun:g_type_register_fundamental
+   fun:_g_enum_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk24
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_node_any_new_W
+   fun:type_node_fundamental_new_W
+   fun:g_type_register_fundamental
+   fun:_g_boxed_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk23
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_node_any_new_W
+   fun:type_node_fundamental_new_W
+   fun:g_type_register_fundamental
+   fun:_g_param_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk22
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_node_any_new_W
+   fun:type_node_fundamental_new_W
+   fun:g_type_register_fundamental
+   fun:_g_object_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}
+{
+   gtk21
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk19
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:g_type_register_fundamental
+   fun:_g_enum_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk16
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:g_type_register_fundamental
+   fun:_g_enum_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk15
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:g_type_register_fundamental
+   fun:_g_param_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk14
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:g_malloc0
+   fun:type_data_make_W
+   fun:g_type_register_fundamental
+   fun:_g_object_type_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   gtk10
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:realloc
+   fun:g_realloc
+   fun:type_node_any_new_W
+   fun:g_type_register_static
+   fun:g_param_type_register_static
+   fun:_g_param_spec_types_init
+   fun:gobject_init_ctor
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-2.20.so
+   obj:*
+   obj:*
+}

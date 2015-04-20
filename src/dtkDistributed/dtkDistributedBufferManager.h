@@ -87,44 +87,44 @@ public:
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::addAssign(char *result, void *source, qlonglong count)
 {
-    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
-    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
-    std::transform(r.begin(), r.end(), s.begin(), r.begin(), std::plus<T>());
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::plus<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::subAssign(char *result, void *source, qlonglong count)
 {
-    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
-    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
-    std::transform(r.begin(), r.end(), s.begin(), r.begin(), std::minus<T>());
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::minus<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::mulAssign(char *result, void *source, qlonglong count)
 {
-    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
-    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
-    std::transform(r.begin(), r.end(), s.begin(), r.begin(), std::multiplies<T>());
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::multiplies<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::divAssign(char *result, void *source, qlonglong count)
 {
-    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
-    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
-    std::transform(r.begin(), r.end(), s.begin(), r.begin(), std::divides<T>());
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::divides<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::negate(void *result, void *source, qlonglong count)
 {
-    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
-    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
-    std::transform(r.begin(), r.end(), s.begin(), r.begin(), dtkNegate<T>());
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult+count, Tsource, Tresult, dtkNegate<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::invert(void *result, void *source, qlonglong count)
 {
-    dtkArray<T> r = dtkArray<T>::fromWritableRawData(reinterpret_cast<T *>(result), count);
-    const dtkArray<T> s = dtkArray<T>::fromRawData(reinterpret_cast<T *>(source), count);
-    std::transform(r.begin(), r.end(), s.begin(), r.begin(), dtkInvert<T>());
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult+count, Tsource, Tresult, dtkInvert<T>());
 }
 
 // ///////////////////////////////////////////////////////////////////

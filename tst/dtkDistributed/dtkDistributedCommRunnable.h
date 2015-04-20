@@ -327,18 +327,18 @@ namespace communicator_send_test
         if (hosts.size() < 2)
             dtkDistributed::policy()->addHost("localhost");
 
-        PingPongWork       *work = new PingPongWork();
-        BroadcastWork *bcastwork = new BroadcastWork();
-        iReceiveWork *ireceiveWork = new iReceiveWork();
-        SendVariantWork *variantWork = new SendVariantWork();
-        ReduceWork *reduceWork = new ReduceWork();
+        PingPongWork           work;
+        BroadcastWork     bcastwork;
+        iReceiveWork   ireceiveWork;
+        SendVariantWork variantWork;
+        ReduceWork       reduceWork;
 
         dtkDistributed::spawn();
-        dtkDistributed::exec(work);
-        dtkDistributed::exec(bcastwork);
-        dtkDistributed::exec(ireceiveWork);
-        dtkDistributed::exec(variantWork);
-        dtkDistributed::exec(reduceWork);
+        dtkDistributed::exec(&work);
+        dtkDistributed::exec(&bcastwork);
+        dtkDistributed::exec(&ireceiveWork);
+        dtkDistributed::exec(&variantWork);
+        dtkDistributed::exec(&reduceWork);
         /* dtkDistributed::policy()->communicator()->run(reduceWork, &ReduceWork::run); */
         dtkDistributed::unspawn();
 

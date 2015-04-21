@@ -47,6 +47,10 @@ public slots:
     void disconnect(const QUrl& server);
 
 public:
+    void    connectFromJob(const QUrl& server);
+    void disconnectFromJob(const QUrl& server);
+
+public:
     QTcpSocket *socket();
 
 protected slots:

@@ -21,8 +21,6 @@
 
 #include <QtCore>
 
-#include <iostream>
-
 class slaveWork : public QRunnable
 {
 public:
@@ -31,39 +29,17 @@ public:
 public:
     void run(void) {
         QTime time;
-        dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+        dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
         qDebug() << comm->wid();
         qDebug() << comm->size();
         dtkDistributedSlave slave;
 
-        if (dtkDistributed::app()->isMaster()) {
-            // the server waits for the jobid in stdout
-            std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
-
-            QUrl url(server);
-
-            qDebug() << "Running on master, connect to remote server" << server;
-            slave.connect(url);
-            qDebug() << "slave connected to server " << slave.isConnected();
-
-            if (slave.isConnected()) {
-                dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
-                msg.send(slave.socket());
-            }
-
-        }
-
+        slave.connectFromJob(server);
         qDebug() << "I'm the simple slave " << comm->wid() ;
 
         QThread::sleep(5);
 
-        if (dtkDistributed::app()->isMaster()) {
-            if (slave.isConnected()) {
-                dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
-                msg.send(slave.socket());
-            }
-        }
-
+        slave.disconnectFromJob(server);
     }
 };
 

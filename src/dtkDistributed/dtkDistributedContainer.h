@@ -27,63 +27,26 @@
 class DTKDISTRIBUTED_EXPORT dtkDistributedContainer
 {
 public:
-    dtkDistributedContainer(void) :
-        m_size(0),
-        m_mapper(new dtkDistributedMapper),
-        m_comm(dtkDistributed::communicator::instance()),
-            m_wid(m_comm->wid())
-    {
-        m_mapper->ref();
-    }
-
-    dtkDistributedContainer(const qlonglong& size) :
-        m_size(size),
-        m_mapper(new dtkDistributedMapper),
-            m_comm(dtkDistributed::communicator::instance()),
-            m_wid(m_comm->wid())
-    {
-        m_mapper->ref();
-        if (m_size > 0) {
-            m_mapper->setMapping(m_size, m_comm->size());
-        }
-    }
-
-    dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) :
-        m_size(size),
-        m_mapper(mapper),
-            m_comm(dtkDistributed::communicator::instance()),
-            m_wid(m_comm->wid())
-    {
-        m_mapper->ref();
-    }
+    dtkDistributedContainer(void);
+    dtkDistributedContainer(const qlonglong& size);
+    dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper);
 
 public:
-    virtual ~dtkDistributedContainer(void)
-    {
-        if (!m_mapper->deref())
-            delete m_mapper;
-    }
+    virtual ~dtkDistributedContainer(void);
 
 public:
-    bool      empty(void) const { return !m_size; }
-    qlonglong  size(void) const { return  m_size; }
+    bool      empty(void) const;
+    qlonglong  size(void) const;
 
 public:
-    void setMapper(dtkDistributedMapper *mapper) 
-    { 
-        if (!m_mapper->deref())
-            delete m_mapper;
-
-        m_mapper = mapper;
-        m_mapper->ref();
-    }
+    void setMapper(dtkDistributedMapper *mapper);
 
 public:
-    dtkDistributedMapper             *mapper(void) const { return m_mapper; }
-    dtkDistributedCommunicator *communicator(void) const { return m_comm; }
+    dtkDistributedMapper             *mapper(void) const;
+    dtkDistributedCommunicator *communicator(void) const;
 
 public:
-    inline qlonglong wid(void) const {  return m_wid; }
+    inline qlonglong wid(void) const;
 
 protected:
     qlonglong m_size;
@@ -92,6 +55,67 @@ protected:
     dtkDistributedCommunicator *m_comm;
     qint32                     m_wid;
 };
+
+// /////////////////////////////////////////////////////////////////
+
+inline dtkDistributedContainer::dtkDistributedContainer(void) : m_size(0), m_mapper(new dtkDistributedMapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
+{
+    m_mapper->ref();
+}
+
+
+inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size) : m_size(size), m_mapper(new dtkDistributedMapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
+{
+    m_mapper->ref();
+    if (m_size > 0) {
+        m_mapper->setMapping(m_size, m_comm->size());
+    }
+}
+
+inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) : m_size(size), m_mapper(mapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
+{
+    m_mapper->ref();
+}
+
+inline dtkDistributedContainer::~dtkDistributedContainer(void)
+{
+    if (!m_mapper->deref())
+        delete m_mapper;
+}
+
+inline bool dtkDistributedContainer::empty(void) const
+{
+    return !m_size;
+}
+
+inline qlonglong dtkDistributedContainer::size(void) const
+{ 
+    return  m_size;
+}
+
+inline void dtkDistributedContainer::setMapper(dtkDistributedMapper *mapper) 
+{ 
+    if (!m_mapper->deref())
+        delete m_mapper;
+    
+    m_mapper = mapper;
+    m_mapper->ref();
+}
+
+inline dtkDistributedMapper *dtkDistributedContainer::mapper(void) const
+{
+    return m_mapper;
+}
+
+inline dtkDistributedCommunicator *dtkDistributedContainer::communicator(void) const
+{ 
+    return m_comm;
+}
+
+inline qlonglong dtkDistributedContainer::wid(void) const
+{
+    return m_wid;
+}
 
 //
 // dtkDistributedContainer.h ends here

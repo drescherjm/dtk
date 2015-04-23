@@ -114,6 +114,7 @@ public:
 public:
     dtkDistributedGraphTopology(void);
     dtkDistributedGraphTopology(const qlonglong& vertex_count);
+    dtkDistributedGraphTopology(const qlonglong& vertex_count, dtkDistributedMapper *mapper);
     dtkDistributedGraphTopology(const dtkDistributedGraphTopology& other);
 
 public:
@@ -123,7 +124,7 @@ public:
     dtkDistributedGraphTopology& operator = (const dtkDistributedGraphTopology& o);
 
 private:
-    void initialize(void);
+    void initialize(bool has_custom_mapper = false);
 
 public:
     void  rlock(void);

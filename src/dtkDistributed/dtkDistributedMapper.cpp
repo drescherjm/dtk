@@ -167,6 +167,14 @@ dtkDistributedMapper::dtkDistributedMapper(void) : QObject(), d(new dtkDistribut
     d->last_pu_id = 0;
 }
 
+dtkDistributedMapper::dtkDistributedMapper(const dtkDistributedMapper& o) : QObject(), d(new dtkDistributedMapperPrivate)
+{
+    d->id_count = o.d->id_count;
+    d->pu_count = o.d->pu_count;
+    d->last_pu_id = o.d->last_pu_id;
+    d->map = o.d->map;
+}
+
 dtkDistributedMapper::~dtkDistributedMapper(void)
 {
     delete d;

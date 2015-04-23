@@ -369,14 +369,13 @@ void dtkDistributedController::read(void)
 
     QString server = d->sockets.key(socket);
     QScopedPointer< dtkDistributedMessage> msg(new dtkDistributedMessage);
-    QByteArray result;
+    QVariant result;
 
     msg->parse(socket);
 
     dtkDistributedMessage::Method method = msg->method();
     switch (method) {
     case dtkDistributedMessage::OKSTATUS:
-        result = msg->content();
         emit updated();
         break;
     case dtkDistributedMessage::OKJOB:
@@ -400,8 +399,12 @@ void dtkDistributedController::read(void)
         emit jobEnded(msg->jobid());
         break;
     case dtkDistributedMessage::DATA:
-        result = msg->content();
-        dtkDebug() << "Result size: " << result.size();
+        if (msg->header("content-type") == "qvariant") {
+            result = msg->variant();
+        } else {
+            dtkWarn() << "Data received, but not a variant: " << msg->header("content-type");
+            result = QVariant::fromValue(msg->content());
+        }
         emit dataPosted(result);
         break;
     default:

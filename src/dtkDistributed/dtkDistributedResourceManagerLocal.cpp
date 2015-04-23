@@ -187,10 +187,11 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
 
             args += app.join(" ");
 
-            if (nodes > 1)
-                args += " -np "+ QString::number(nodes)+ " ";
-            if (threads > 1)
-                args += " -nt "+ res["cores"].toString();
+            if (nodes > 1) {
+                args += " -np "+ QString::number(nodes*threads)+ " ";
+            } else if (threads > 1) {
+                args += " -np "+ res["cores"].toString();
+            }
         }
 
     } else {
@@ -227,12 +228,17 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
     loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
     loop.exec();
 
-    QString tmp = stat->readLine();
-    if (tmp.isEmpty()) {
-        dtkError() << "empty output file";
+    QString jobid;
+    while (jobid.isEmpty() && !(stat->atEnd())) {
+        QString tmp = stat->readLine();
+        if (tmp.startsWith("DTK_JOBID")) {
+            jobid = tmp.simplified().split("=").at(1);
+        }
+    }
+    if (jobid.isEmpty()) {
+        dtkError() << "bad output file";
         return QString("ERROR");
     }
-    QString jobid = tmp.simplified().split("=").at(1);
 
     d->slaves.insert(jobid,stat);
     dtkDebug() << jobid;

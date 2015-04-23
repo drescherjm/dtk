@@ -35,7 +35,18 @@ public:
         dtkDistributedSlave slave;
 
         slave.connectFromJob(server);
-        qDebug() << "I'm the simple slave " << comm->wid() ;
+
+        QThread::sleep(5);
+
+        if (comm->rank() == 0) {
+            QString hello = "I'm the master slave, we are " + QString::number(comm->size())+ " slaves";
+            QVariant v(hello);
+            dtkDistributedMessage msg(dtkDistributedMessage::DATA,slave.jobId(),dtkDistributedMessage::CONTROLLER_RANK, v);
+
+            msg.send(slave.socket());
+            slave.socket()->flush();
+            qDebug() << "message sent to controller";
+        }
 
         QThread::sleep(5);
 
@@ -48,6 +59,7 @@ int main(int argc, char **argv)
     dtkDistributedAbstractApplication *app = dtkDistributed::create(argc, argv);
     app->setApplicationName("dtkDistributedSlave");
     app->setApplicationVersion("1.0.0");
+    app->setOrganizationName("inria");
 
     QCommandLineParser *parser = app->parser();
     parser->setApplicationDescription("DTK distributed slave example application: it connect to the DTK distributed server and waits for 1 minute before exiting.");

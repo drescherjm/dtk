@@ -212,6 +212,9 @@ void dtkDistributedServerDaemon::read(void)
         pair = qMakePair(msg->rank(),msg->jobid());
         if (d->sockets.contains(pair )) {
             msg->send(d->sockets[pair]);
+        } else if (msg->rank() == controller_rank) {
+            dtkTrace() << "forwarding to controller";
+            msg->send(d->sockets[controller]);
         } else {
             dtkWarn() << "unknown socket for rank, store message" <<  msg->rank() << msg->jobid();
         }

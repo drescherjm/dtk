@@ -54,7 +54,7 @@ signals:
     void updated(const QUrl& server);
 
 signals:
-    void dataPosted(const QByteArray& data);
+    void dataPosted(QVariant data);
     void jobEnded(QString jobid);
     void jobStarted(QString jobid);
     void jobQueued(QString jobid);

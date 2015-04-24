@@ -23,6 +23,8 @@ message(STATUS "Using Qt5 binary dir: ${QT5_BINARY_DIR}")
 message(STATUS "Using dtk binary doc: ${DTK_QDOC_EXECUTABLE}")
 message(STATUS "Using Qt5 binary qhg: ${QT5_QDOC_EXECUTABLE}")
 
+add_subdirectory("slides")
+
 ## ###################################################################
 ## dtk
 ## ###################################################################

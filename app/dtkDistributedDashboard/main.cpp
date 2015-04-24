@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
     settings.endGroup();
 
-    QQmlApplicationEngine engine(QUrl::fromLocalFile("dash.qml"));
+    QQmlApplicationEngine engine(QUrl("qrc:/dashmain.qml"));
     return app.exec();
 
 }

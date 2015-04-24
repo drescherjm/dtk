@@ -13,12 +13,17 @@ project(dtkDistributedDashboard)
 set(${PROJECT_NAME}_SOURCES
           main.cpp)
 
+set(${PROJECT_NAME}_RESOURCES
+  dtkDashboard.qrc)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
 
+qt5_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
 
 add_executable(${PROJECT_NAME}
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES})
 
 target_link_libraries(${PROJECT_NAME}

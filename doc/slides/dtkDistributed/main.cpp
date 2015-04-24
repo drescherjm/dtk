@@ -43,10 +43,7 @@ int main(int argc, char *argv[])
     dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
 
-    // QQmlApplicationEngine engine(QUrl::fromLocalFile("dash.qml"));
     QQmlApplicationEngine engine(QUrl("qrc:/SlideDeck.qml"));
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
-    window->showFullScreen();
     return app.exec();
 
 }

@@ -1,30 +1,34 @@
 import Qt.labs.presentation 1.0
 import QtQuick 2.3
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.3
 
 import QtMultimedia 5.3
 import QtWebKit 3.0
 
 ApplicationWindow {
+    id: window
     title: "DTK Distributed"
     visible: true
+    /* visibility: "FullScreen" */
+    width: 1280
+    height: 720
 
 OpacityTransitionPresentation
     /* Presentation */
     {
         id: presentation
-
         width: parent.width
         height: parent.height
 
-        /* width: 1280 */
-        /* height: 720 */
-
         showNotes: true
-        Keys.forwardTo: [video]
-
+        Keys.forwardTo: [video, elapsed]
+        // FIXME: how can i get QWindow::FullScreen in QML ? (using hardcoded 5 is ugly)
+        Keys.onPressed: { if (event.key == Qt.Key_F11)  { (window.visibility == 5) ? window.visibility = "Windowed" : window.visibility = "FullScreen"} }
         SlideCounter {}
-        /* Clock {} */
+        Elapsed {
+            id: elapsed
+            duration: 15 * 60 // 15 mn
+        }
 
         Image {
             id: background
@@ -57,9 +61,10 @@ OpacityTransitionPresentation
 
         Slide {
             title: "DREAM-Tech - DTK Distributed"
-            centeredText: "Nicolas Niclausse / Thibaud Kloczko"
+            centeredText: "Nicolas Niclausse / Thibaud Kloczko / Julien Wintz"
 
         }
+
         Slide {
             title: "Plan"
             content: [

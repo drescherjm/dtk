@@ -4,6 +4,7 @@
         <file alias="Background.qml">qml/Background.qml</file>
         <file alias="OpacityTransitionPresentation.qml">qml/OpacityTransitionPresentation.qml</file>
         <file alias="CodeSection.qml">qml/CodeSection.qml</file>
+        <file alias="Elapsed.qml">qml/Elapsed.qml</file>
         <file>images/dtk-logo.png</file>
         <file>images/Arc-Brave.png</file>
         <file>images/inria-transparent.png</file>

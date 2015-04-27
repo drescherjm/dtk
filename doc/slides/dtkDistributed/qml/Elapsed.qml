@@ -13,7 +13,7 @@ Text {
     property color textColor: parent.textColor != undefined ? parent.textColor : "black"
     property string fontFamily: parent.fontFamily != undefined ? parent.fontFamily : "Helvetica"
 
-    text: elapsedTime();
+    text: "00:00";
     function numToString(num, length) {
         var r = "" + num;
         while (r.length < length) {
@@ -25,10 +25,10 @@ Text {
         return numToString(Math.floor(val / 60),2) + ":" + numToString(Math.floor(val % 60),2);
     }
     function elapsedTime() {
-        var elapsed = times * interval /1000
+        var elapsed = clock.times * interval /1000
         if (elapsed > duration * 0.7 && textColor != "red") { textColor = "orange" }
         if (elapsed > duration && textColor != "red") { textColor = "red" }
-        times++
+        clock.times++
         return printElapsed(elapsed);
     }
 
@@ -47,7 +47,7 @@ Text {
         running: false
         onTriggered: clock.text = clock.elapsedTime();
     }
-    Keys.onPressed:  {timer.start()}
+    Keys.onPressed:  {if (!timer.running) { timer.start() }}
 }
 
 

@@ -76,7 +76,8 @@ OpacityTransitionPresentation
 
         }
         Slide {
-           title: "Contexte"
+            title: "Contexte"
+            textFormat: Text.RichText
             content: [
             "ADT DTK (depuis 2012) ",
             " architecture modulaire, plugins",
@@ -87,7 +88,7 @@ OpacityTransitionPresentation
             " dtkComposer",
             " dtkPlot",
             " dtkLinearAlgebraSparse",
-            " <b>dtkDistributed</b>",
+            " <i><b>dtkDistributed</b></i>",
             ]
         }
 
@@ -259,25 +260,36 @@ OpacityTransitionPresentation
             title: "Controlleur intégré dans numComposer"
 
             Rectangle {
-                width:  height * 1.61
+                id: videorect
+                width:  height * 1.59
                 height: parent.height
                 anchors.centerIn: parent
-                border.color : "black"
+                /* border.color : "black" */
                 color: "transparent"
 
                 Video {
                     id: video
-                    height: parent.height
                     width:  parent.width
+                    height: parent.height-8
 
-                    anchors.centerIn: parent
-                    source: "sampling-aero-nef.mp4"
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    source: "http://num3sis.inria.fr/blog/wp-content/uploads/sampling-aero-nef.mp4"
+                    /* source: "file:///tmp/sampling-aero-nef.mp4" */
                     autoPlay: false
-                    Keys.onSpacePressed: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
+                    Keys.onSpacePressed: {
+                        video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
+                        event.accepted = true;
+                    }
                     Keys.onDownPressed: video.seek(video.position - 5000)
                     Keys.onUpPressed: video.seek(video.position + 5000)
-              }
-
+                }
+                ProgressBar {
+                    width:  parent.width
+                    anchors.bottom: parent.bottom
+                    height:  8
+                    value: video.position/ video.duration
+                }
             }
         }
 

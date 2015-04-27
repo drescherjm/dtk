@@ -365,7 +365,7 @@ DistributedController {
     property var jobs: { }
     onJobQueued: {
         console.debug("a job is queued");
-        myjobModel.append({"id": jobid,"nodes" : NaN, "cores" : NaN, "state": "Queued"})
+        myjobModel.append({"id": jobid,"nodes" : "", "cores" : "", "state": "Queued"})
     }
     onJobStarted: {
         console.debug("a job is started");

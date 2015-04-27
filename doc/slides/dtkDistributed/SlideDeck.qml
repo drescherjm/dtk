@@ -52,15 +52,15 @@ OpacityTransitionPresentation
             id: inriaLogo
             mipmap: true
             source: "images/inria-transparent.png"
-            width: 404 / 1.5
-            height: 145 / 1.5
+            width: 404 / 1.7
+            height: 145 / 1.7
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.margins: 0
         }
 
         Slide {
-            title: "DREAM-Tech - DTK Distributed"
+            title: "DREAMtech - DTK Distributed"
             centeredText: "Nicolas Niclausse / Thibaud Kloczko / Julien Wintz"
 
         }
@@ -68,7 +68,7 @@ OpacityTransitionPresentation
         Slide {
             title: "Plan"
             content: [
-            "Motivations",
+            "Contexte & Motivations",
             "Management des ressources",
             "Application distribuées",
             "Conteneurs distribués"
@@ -83,7 +83,7 @@ OpacityTransitionPresentation
             " architecture modulaire, plugins",
             " Multi Plateforme, C++, Qt",
             " num3sis, axel, medInria, enas, carbonQuant, pib, inalgae",
-            "Layers:",
+            "DTK Layers:",
             " dtkCore",
             " dtkComposer",
             " dtkPlot",
@@ -93,9 +93,9 @@ OpacityTransitionPresentation
         }
 
         Slide {
-           title: "Motivations"
+           title: "dtkDistributed: Motivations"
             content: [
-            "Faciliter l\'utilisation des ressources de calcul ",
+            "Faciliter l\'utilisation des ressources de calcul dans le code",
             " indépendances vis à vis des gestionnaires de ressources (oar, torque, accès direct)",
             " déploiement automatique",
             "  ssh (tunnelling si besoin),  MPI_comm_spawn ",
@@ -108,7 +108,7 @@ OpacityTransitionPresentation
         }
 
         Slide {
-           title: "Historique"
+           title: "dtkDistributed: Historique"
             content: [
             "fin 2011: premier prototype du resource manager",
             "2012: intégration dans le composer dtk",
@@ -152,26 +152,130 @@ OpacityTransitionPresentation
             }
         }
 
+
         Slide {
-            title: "Management de ressources via dtkDistributed"
+            title: "Application distribuées"
             content: [
-            "Exemple: Dashboard QML",
-            " Object dtkDistributedControlleur instancié en QML",
-            " Serveur sur la frontale choisie",
-            " Lance un job Slave via le serveur",
+            "Distributed application",
+            "Communicator",
+            "Policy",
+            "Settings",
+            ]
+
+        }
+
+        Slide {
+            title: "dtkDistributedApplication"
+            content: [
+            "simplifie l\'invocation d\'une application distribuée",
+            "options en lignes de commande par défaut",
+            ]
+        }
+        Slide {
+            title: "Distributed application"
+            CodeSection {
+
+                text: '# myappli --help
+Usage: myappli [options]
+<myappli description>.
+Options:
+  --policy <qthread|mpi|mpi3>                     dtkDistributed policy
+                                                  (default is qthread)
+  --np <int>                                      number of processes
+  --hosts <hostname>                              hosts (multiple hosts can be specified)
+  -h, --help                                      Displays this help.
+  -v, --version                                   Displays version information.
+  --settings <filename>                           settings file
+  --verbose                                       verbose plugin initialization
+  --nw, --no-window                               non GUI application (no window)
+  --loglevel <trace|debug|info|warn|error|fatal>  log level used by dtkLog
+                                                  (default is info)
+  --logfile <filename | console>                  log file used by dtkLog; default is:
+                                                  /home/nniclaus/.local/share/inria/dtk
+                                                  DistributedSlave/dtkDistributedSlave.log'
+            }
+  /* --nt <int>                                      number of threads (for hybrid plugins) */
+
+        }
+        Slide {
+            title: "Communicator"
+            content: [
+            "TODO"
+            ]
+        }
+        Slide {
+            title: "Policy"
+            content: [
+            "permet de choisir l\'implémentation (qthread, mpi, mpi3)",
+            "permet de spécifier les machines sur lequel l\'application tourne",
+            ]
+        }
+        Slide {
+            title: "Settings"
+            content: [
+            "chemin vers le plugins",
             ]
         }
 
+        CodeSlide {
+            title: "Example de slave"
+            code: 'int main(int argc, char **argv) {
+   dtkDistributedAbstractApplication *app=dtkDistributed::create(argc,argv);
+   QCommandLineParser *parser = app->parser();
+   parser->setApplicationDescription("DTK distributed slave application.");
+   QCommandLineOption serverOption("server", "Server URL", "URL");
+   parser->addOption(serverOption);
+   app->initialize();
+   if (!parser->isSet(serverOption)) {
+     qCritical() << "Error: no server set ! Use --server <url> " ;
+     return 1;
+   }
+   slaveWork work;
+   work.server = parser->value(serverOption);
+   app->spawn();
+   app->exec(&work);
+   app->unspawn();
+   return 0;
+}'
+        }
 
+        CodeSlide {
+            title: "Example de slave (suite) "
+            code: 'class slaveWork : public QRunnable {
+ public:
+   QString server;
+ public:
+  void run(void) {
+     dtkDistributedCommunicator *c=dtkDistributed::communicator::instance();
+     dtkDistributedSlave slave;
+     slave.connectFromJob(server);
+     QThread::sleep(5);
+     if (c->rank() == 0) {
+         QString s = QString::number(c->size());
+         QString hello = "I\'m the master slave, we are "+s+" slaves";
+         QVariant v(hello);
+         dtkDistributedMessage m(dtkDistributedMessage::DATA,slave.jobId(),
+                                 dtkDistributedMessage::CONTROLLER_RANK, v);
+         m.send(slave.socket());
+     }
+     QThread::sleep(5); slave.disconnectFromJob(server); }};'
+        }
 
 
         Slide {
-            id: interactiveSlide
-            title: "DTK Distributed Dashboard"
+            title: "Examples d\'application"
+            content: [
+            "Dashboard QML",
+            " Objet 'dtkDistributedController' instancié en QML",
+            " Serveur sur la frontale choisie",
+            " Lance un job Slave via le serveur",
+            " Affiche les données envoyées par le slave",
+            ]
+        }
 
-            /* Background { */
-            /*     id: backgroundb */
-            /* } */
+        Slide {
+            id: dashboardSlide
+            title: "DTK Distributed Dashboard"
 
             Background {
                 id: backgroundb
@@ -183,80 +287,6 @@ OpacityTransitionPresentation
         }
 
         Slide {
-            title: "Application distribuées"
-            content: [
-            "distributed application",
-            "communicator",
-            "policy",
-            "settings",
-            ]
-
-        }
-
-        Slide {
-            title: "Example de slave"
-
-            CodeSection {
-                text: "int main(int argc, char **argv)
- {
-   dtkDistributedAbstractApplication *app = dtkDistributed::create(argc, argv);
-
-   QCommandLineParser *parser = app->parser();
-   parser->setApplicationDescription(\"DTK distributed slave example application.\");
-   QCommandLineOption serverOption(\"server\", \"DTK distributed server URL\", \"URL\");
-   parser->addOption(serverOption);
-
-   app->initialize();
-   if (!parser->isSet(serverOption)) {
-     qCritical() << \"Error: no server set ! Use --server <url> \" ;
-     return 1;
-   }
-   slaveWork work;
-   work.server = parser->value(serverOption);
-   app->spawn();
-   app->exec(&work);
-   app->unspawn();
-
-   return 0;
-}"
-            }
-        }
-
-
-        Slide {
-            title: "Example de slave (suite) "
-
-        CodeSection {
-            text: "class slaveWork : public QRunnable {
- public:
-   QString server;
-
- public:
-  void run(void) {
-     dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
-     dtkDistributedSlave slave;
-
-     slave.connectFromJob(server);
-     QThread::sleep(5);
-     if (comm->rank() == 0) {
-         QString hello = \"I'm the master slave, we are \" + QString::number(comm->size())+ \" slaves\";
-         QVariant v(hello);
-         dtkDistributedMessage msg(dtkDistributedMessage::DATA,slave.jobId(),
-                                   dtkDistributedMessage::CONTROLLER_RANK, v);
-
-         msg.send(slave.socket());
-     }
-     QThread::sleep(5);
-     slave.disconnectFromJob(server);
-    }
-};"
-        }
-        }
-
-/* ' */
-
-
-        Slide {
             title: "Controlleur intégré dans numComposer"
 
             Rectangle {
@@ -264,14 +294,13 @@ OpacityTransitionPresentation
                 width:  height * 1.59
                 height: parent.height
                 anchors.centerIn: parent
-                /* border.color : "black" */
+                border.color : "black"
                 color: "transparent"
 
                 Video {
                     id: video
                     width:  parent.width
                     height: parent.height-8
-
                     anchors.top: parent.top
                     anchors.left: parent.left
                     source: "http://num3sis.inria.fr/blog/wp-content/uploads/sampling-aero-nef.mp4"
@@ -283,11 +312,14 @@ OpacityTransitionPresentation
                     }
                     Keys.onDownPressed: video.seek(video.position - 5000)
                     Keys.onUpPressed: video.seek(video.position + 5000)
+
                 }
                 ProgressBar {
+                    id: slider
                     width:  parent.width
-                    anchors.bottom: parent.bottom
                     height:  8
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
                     value: video.position/ video.duration
                 }
             }

@@ -101,15 +101,23 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
 
-  if(PYTHONLIBS_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport python ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  option(DTK_WRAPPING_PYTHON    "Build python wrapper" OFF)
+  option(DTK_WRAPPING_TCL       "Build TCL wrapper" OFF)
+  option(DTK_WRAPPING_CSHARP    "Build C# wrapper" OFF)
+
+  if (DTK_WRAPPING_PYTHON)
+    if (PYTHONLIBS_FOUND)
+      dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport python ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+    endif()
   endif()
 
-  if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport tcl ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  if (DTK_WRAPPING_TCL)
+    if (TCL_FOUND)
+      dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport tcl ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+    endif()
   endif()
 
-  if(TRUE)
+  if (DTK_WRAPPING_CSHARP)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport csharp ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif()
 endif()

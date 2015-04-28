@@ -135,16 +135,17 @@ OpacityTransitionPresentation
         Slide {
             title: "Management de ressources via dtkDistributed"
             Rectangle {
-                width:  parent.width * 0.8
+                width:  parent.width * 0.6
                 height: parent.height
                 anchors.centerIn: parent
-                /* color : "black" */
+                //opacity: 0.0
+                color : "lightgrey"
                 radius: 10
                 Image {
                     width:  parent.width
                     height: parent.height
                     id: dtkdistributed
-                    source: "images/distributed.png"
+                    source: "images/dtkDistributed_controller.png"
                     /* mipmap: true */
                     anchors.margins: 10
                 }

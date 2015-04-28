@@ -197,7 +197,7 @@ OpacityTransitionPresentation
             "primitives de communications compatibles avec:",
             " tableau de type simple",
             " QVariant",
-            "Sérialisation via le QVariant: ",
+            "sérialisation via le QVariant: ",
             ]
             CodeSection {
                 height: parent.height * 0.45
@@ -250,12 +250,25 @@ if (d->communicator->rank() == 0) {
         }
 
         Slide {
+            title: "Communicator: spawn"
+            textFormat: Text.RichText
+            content: [
+            "déploiement du communicateur: <code>spawn()</code>",
+            " <i>qthread</i> : instanciation d\'une pool de thread (QThreadPool)",
+            " <i>mpi</i> : <code>MPI_Comm_Spawn</code>",
+            "  Pas besoin de mpirun (avec openmpi)",
+            "exécution du code parallèle: <code>exec(QRunnable)</code>",
+            " QRunnable: méthode virtuelle <code>run()</code> à implémenter",
+            ]
+        }
+
+        Slide {
             title: "Messages"
             textFormat: Text.RichText
             content: [
             "échange de messages entre contrôleur, serveur et slave",
             "protocole basé sur JSON et du pseudo HTTP",
-            "interface C++: <b>dtkDistributedMessage</b>",
+            "interface C++: <code>dtkDistributedMessage</code>",
             " Plusieurs méthodes:",
             "  STATUS: demande d\'état du cluster",
             "  OKSTATUS: état du cluster",
@@ -272,8 +285,8 @@ if (d->communicator->rank() == 0) {
             "policy:",
             " permet de choisir l\'implémentation (qthread, mpi, mpi3)",
             " permet de spécifier les machines sur lequel l\'application tourne",
-            "   s\'interface avec Torque, OAR",
-            "   variable d\'environnement DTK_NUM_PROCS",
+            "  s\'interface avec Torque, OAR",
+            "  variable d\'environnement DTK_NUM_PROCS",
             "Settings:",
             " fichier ini",
             "  défini vers le plugins path",
@@ -291,13 +304,13 @@ if (d->communicator->rank() == 0) {
             "options en ligne de commande",
             " nombre de procs, policy, etc.",
             " ajout d\'option spécifiques.",
-            "déploiement de l\'application (<i>spawn</i>)",
-            "exécution des taches de calcul (<i>exec</i>)"
+            "déploiement de l\'application (<code>spawn</code>)",
+            "exécution des taches de calcul (<code>exec</code>)"
             ]
             CodeSection {
                 width: parent.width / 2.4
                 anchors.right: parent.right
-                text:"dtkDistributed::create(argc,argv);
+                text:'dtkDistributed::create(argc,argv);
 
 QCommandLineParser *parser=app->parser();
 
@@ -308,11 +321,9 @@ app.spawn();
 app.exec(work);
 
 app.unspawn();
-"
+'
             }
-         }
-
-
+        }
 
         Slide {
             title: "Distributed application"
@@ -339,8 +350,6 @@ Options:
                                                   /home/nniclaus/.local/share/inria/dtk
                                                   DistributedSlave/dtkDistributedSlave.log'
             }
-  /* --nt <int>                                      number of threads (for hybrid plugins) */
-
         }
 
         CodeSlide {
@@ -386,7 +395,6 @@ Options:
      }
      QThread::sleep(5); slave.disconnectFromJob(server); }};'
         }
-
 
         Slide {
             title: "Examples d\'application avec contrôleur/slave"
@@ -497,7 +505,7 @@ Options:
 }'
             }
             content: [
-            ,,
+            "","",
             "Structure de graphe simple",
             "Algorithme simple"
             ]
@@ -528,7 +536,7 @@ Options:
             CodeSection {
                 anchors.top: parent.top
                 height : parent.height * 0.75
-                text: 
+                text:
 '// Local Computation
 Foreach vertex in subGraph {
     Foreach neighbour of vertex {
@@ -549,7 +557,7 @@ Foreach boundary in subGraph {
 }'
             }
             content: [
-            ,,,,,
+            "","","","","",
             "Complexité accrue en terme de structure et d'algorithme"
             ]
         }
@@ -557,18 +565,18 @@ Foreach boundary in subGraph {
         Slide {
             title: "Calcul du maximum sur les voisins des voisins"
             content: [
-            ":-/", 
+            ":-/",
             "Refaire les structures",
             "Repenser l'algorithmie",
             "...",
-            "Tout compte fait, on va s'en passer..."
+            "Tout compte fait, on va s\'en passer..."
             ]
         }
 
         Slide {
             title: "Bibliothèques existantes"
             content: [
-            "Parallel Standard Library (PSTL) -> plus maintenu", 
+            "Parallel Standard Library (PSTL) -> plus maintenu",
             "Intel Threadings Building Blocks (TBB) -> seulement multithread",
             "Parallel Object-Oriented Methods and Applications (POOMA) -> pas de structure de graphe",
             "Standard Template Adaptive Parallel Library (STAPL) -> ni sources ni binaires",
@@ -577,7 +585,7 @@ Foreach boundary in subGraph {
         }
 
         Slide {
-            title: "dtkDistibuted Containers"
+            title: "dtkDistributed Containers"
             Rectangle {
                 width:  parent.width * 0.6
                 height: parent.height
@@ -598,7 +606,7 @@ Foreach boundary in subGraph {
         }
 
         Slide {
-            title: "dtkDistibutedArray<T>"
+            title: "dtkDistributedArray<T>"
             Rectangle {
                 width:  parent.width * 0.4
                 height: parent.height
@@ -618,11 +626,11 @@ Foreach boundary in subGraph {
             CodeSection {
                 width: parent.width * 0.55
                 anchors.right: parent.right
-                text: "// SEQUENTIAL INITIALIZATION
+                text: '// SEQUENTIAL INITIALIZATION
 
 qlonglong N = 16257;
-dtkDistributedCommunicator *comm = 
-dtkDistributed::app()->communicator();
+dtkDistributedCommunicator *comm =
+dtkDistributed::communicator::instance();
 
 qlonglong *input = new qlonglong[N];
 for (int i = 0; i < N; ++i) {
@@ -641,19 +649,19 @@ if (comm->wid() == 0) {
         }
     }
 }
-comm->barrier();"
+comm->barrier();'
             }
         }
 
         Slide {
-            title: "dtkDistibutedArray<T>"
+            title: "dtkDistributedArray<T>"
             CodeSection {
                 width: parent.width
                 anchors.centerIn: parent.centerIn
-                text: "// PARALLEL INITIALIZATION
+                text: '// PARALLEL INITIALIZATION
 
 qlonglong N = 16257;
-dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
 
 qlonglong *input = new qlonglong[N];
 for (int i = 0; i < N; ++i) {
@@ -669,12 +677,12 @@ for(int i = 0; ite != end; ++ite, ++i) {
     *ite = input[array.mapper()->localToGlobal(i, comm->wid())]);
 }
 
-comm->barrier();"
+comm->barrier();'
             }
         }
 
         Slide {
-            title: "dtkDistibutedArray<T>"
+            title: "dtkDistributedArray<T>"
             Rectangle {
                 width:  parent.width * 0.45
                 height: parent.height * 0.8
@@ -723,7 +731,7 @@ comm->barrier();"
         }
 
         Slide {
-            title: "dtkDistibutedArray<T> architecture"
+            title: "dtkDistributedArray<T> architecture"
             Rectangle {
                 property real fontSize: parent.height * 0.05
                 property string fontFamily: parent.fontFamily;
@@ -742,7 +750,7 @@ comm->barrier();"
                     font.family: parent.fontFamily
                     font.pixelSize: parent.fontSize
                     color: "white"
-                    horizontalAlignment: Text.AlignHCenter                    
+                    horizontalAlignment: Text.AlignHCenter
                 }
                 Text {
                     id: array_top_txt1
@@ -752,9 +760,8 @@ comm->barrier();"
                     font.family: parent.fontFamily
                     font.pixelSize: parent.fontSize
                     color: "white"
-                    horizontalAlignment: Text.AlignHCenter                    
+                    horizontalAlignment: Text.AlignHCenter
                 }
-                
             }
             Rectangle {
                 property real fontSize: parent.height * 0.05
@@ -834,161 +841,6 @@ comm->barrier();"
         }
 
         Slide {
-            title: "Calcul de maximum sur un graphe"
-            Rectangle {
-                width:  parent.width * 0.8
-                height: parent.height
-                anchors.centerIn: parent
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                width:  parent.width
-                height: parent.height
-                    id: graph_sequential
-                    source: "images/graph.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-        }
-
-        Slide {
-            title: "Calcul de maximum sur un graphe"
-            CodeSection {
-                anchors.top: parent.top
-                height : parent.height * 0.25
-                text: 'Foreach vertex in graph {
-   Foreach neighbour of vertex {
-       max_values[vertex_id] = Max(max_values[vertex_id], values[neighbour_id]);
-   }
-}'
-            }
-            content: [
-            ,,
-            "Structure de graphe simple",
-            "Algorithme simple"
-            ]
-        }
-
-        Slide {
-            title: "Calcul de maximum sur un graphe partitionné"
-            Rectangle {
-                width:  parent.width * 0.8
-                height: parent.height
-                anchors.centerIn: parent
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                width:  parent.width
-                height: parent.height
-                    id: graph_part
-                    source: "images/graph_part.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-        }
-
-        Slide {
-            title: "Calcul de maximum sur un graphe partitionné"
-            CodeSection {
-                anchors.top: parent.top
-                height : parent.height * 0.75
-                text: 
-'// Local Computation
-Foreach vertex in subGraph {
-    Foreach neighbour of vertex {
-        max_values[vertex_id] = Max(max_values[vertex_id], values[neighbour_id]);
-    }
-
-// Boundary computation
-Foreach boundary in subGraph {
-    Foreach vertex of Boundary {
-        local_max_values[local_id] = max_values[vertex_id];
-    }
-    Send(local_max_values);
-
-    Receive(extern_max_values);
-    Foreach vertex of Boundary {
-        max_values[vertex_id] = Max(max_values[vertex_id], extern_max_values[ext_id]);
-    }
-}'
-            }
-            content: [
-            ,,,,,
-            "Complexité accrue en terme de structure et d'algorithme"
-            ]
-        }
-
-        Slide {
-            title: "Calcul du maximum sur les voisins des voisins"
-            content: [
-            ":-/", 
-            "Refaire les structures",
-            "Repenser l'algorithmie",
-            "...",
-            "Tout compte fait, on va s'en passer..."
-            ]
-        }
-
-        Slide {
-            title: "Bibliothèques existantes"
-            content: [
-            "Parallel Standard Library (PSTL) -> plus maintenu", 
-            "Intel Threadings Building Blocks (TBB) -> seulement multithread",
-            "Parallel Object-Oriented Methods and Applications (POOMA) -> pas de structure de graphe",
-            "Standard Template Adaptive Parallel Library (STAPL) -> ni sources ni binaires",
-            "Fortran Coarray (OpenCorrays) -> code C qui génère du Fortran!"
-            ]
-        }
-
-        Slide {
-            title: "dtkDistibuted Containers"
-            Rectangle {
-                width:  parent.width * 0.6
-                height: parent.height
-                anchors.centerIn: parent
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                anchors.centerIn: parent
-                width:  parent.width
-                height: parent.height
-                    id: dtkDistributedContainers
-                    source: "images/dtkDistributed.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-        }
-
-        Slide {
-            title: "dtkDistibutedArray<T>"
-            Rectangle {
-                width:  parent.width * 0.4
-                height: parent.height
-                anchors.centerIn: parent
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                anchors.centerIn: parent
-                width:  parent.width
-                height: parent.height
-                    id: dtkDistributedArrayAPI
-                    source: "images/dtkDistributedArrayAPI.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-        }
-
-        
-
-        Slide {
             title: "Algèbre Linéaire Creuse"
             content: [
             "dtkDistributedSparseMatrix",
@@ -996,6 +848,146 @@ Foreach boundary in subGraph {
             ]
 
         }
+        Slide {
+            title: "dtkSparseMatrix"
+            textFormat: Text.RichText
+            content: [
+            "<code>dtkSparseMatrix</code>: Abstraction de Sparse Matrix",
+            " itérateur de lignes: <br><code>dtkSparseMatrixLine dtkSparseMatrix::begin()/end()</code>",
+            " itérateur sur les éléments de lignes:<br><code>dtkSparseMatrixLineElement dtkSparseMatrixLine::begin()/end()</code>",
+            "<code>dtkSparseMatrixData:</code> implémentation séquentielle",
+            "<code>dtkDistributedSparseMatrixData:</code> implémentation parallèle:",
+            " <code>dtkDistributedGraphTopology</code>",
+            " <code>dtkDistributedArray</code> (valeurs)",
+            ]
+        }
+        Slide {
+            title: "dtkSparseSolver"
+            content: [
+            "API générique (séquentielle/parallèle)",
+            "implémentations sous forme de plugins",
+            " dtkSparseSolverJacobi (générique)",
+            " hypreDistributedSparseSolver",
+            "  utilisation de la dtkDistributedSparseMatrixData",
+            "  accès direct aux buffers locaux ",
+            " à venir: mumps, MaPHyS, ...",
+            ]
+        }
+
+        CodeSlide {
+            title: "dtkSparseSolver<T> API"
+            code:'template < typename T > class dtkSparseSolver : public QRunnable
+{
+public:
+             dtkSparseSolver(void) {;}
+    virtual ~dtkSparseSolver(void) {;}
+
+public:
+  virtual void setMatrix(dtkSparseMatrix<T> *matrix) = 0;
+  virtual void setRHSVector(dtkVector<T> *rhs_vector) = 0;
+  virtual void setSolutionVector(dtkVector<T> *sol_vector) = 0;
+
+  virtual void setOptionalParameters(const QHash<QString,int>& parameters);
+  virtual void setOptionalParameters(const QHash<QString,double>& parameters);
+
+public:
+    virtual void run(void) = 0;
+public:
+    virtual dtkVector<T> *solutionVector(void) const = 0;'
+        }
+
+        CodeSlide {
+            title: "dtkSparseSolverJacobi: implémentation générique"
+            code: 'while(!stop_criterion) {
+    line_it = mat.begin(); line_end = mat.end(); tmp=sol; d->variation=0;
+    for (; line_it != line_end; ++line_it) {
+        dtkSparseMatrixLineElement<double> elt_it  = line_it.begin();
+        dtkSparseMatrixLineElement<double> elt_end = line_it.end();
+        neighbour = 0; diag = 0; qlonglong i = line_it.id();
+        for(;elt_it != elt_end; ++elt_it) {
+            qlonglong j = elt_it.id();
+            if (j != i) { neighbour += (*elt_it) * tmp[j];}
+            else        { diag = (*elt_it); }}
+        sol[i] = (rhs.at(i) - neighbour) / diag ;}
+    tmp -= sol;
+    d->variation = tmp.asum();
+    if(iteration_count == 0) { variation_ini = d->variation;}
+    if(iteration_count == d->number_of_iterations ||
+         d->variation/variation_ini < d->residual_reduction_order)
+         stop_criterion = true;
+    ++iteration_count;  sol.clearCache(); tmp.clearCache();}'
+        }
+        Slide {
+            title: "dtkSparseMatrixSolverApp"
+            CodeSection {
+                text: '>./bin/dtkSparseMatrixSolverApp --help
+Usage: ./bin/dtkSparseMatrixSolverApp [options]
+DTK sparse matrix solver.
+Options:
+  --matrix <file>                                 matrix (matrixmarket format)
+  --rhs <file>                                    rhs vector (matrixmarket format)
+  --sol <file>                                    solution vector to be written
+  --refsol <file>                                 reference solution
+  --impl <sequential|distributed>                 implementation
+  --solver <jacobi|SGS|...>                       solver implementation.
+  --iterations <integer>                          number of iterations
+  --rro <double>                                  residual reduction order
+  --policy <qthread|mpi|mpi3>                     dtkDistributed policy
+  --np <int>                                      number of processes
+  --hosts <hostname>                              hosts (multiple hosts can be specified)
+  -h, --help                                      Displays this help.
+  -v, --version                                   Displays version information.
+  --settings <filename>                           settings file
+  --verbose                                       verbose plugin initialization
+  --nw, --no-window                               non GUI application (no window)
+  --loglevel <trace|debug|info|warn|error|fatal>  log level used by dtkLog
+  --logfile <filename | console>                  log file used by dtkLog;'
+            }
+        }
+
+    Slide {
+        title: "Jacobi générique vs Hypre"
+        fontFamily: 'Courier New'
+        content: [
+        "matrice 13k x 13k, nnz: 365k,  jacobi: 1512 iter.",
+        "cluster nef, nœuds Xeon 20 cœurs, infiniband 40G",
+        "openmpi-1.8.5.rc1",
+        " jacobi sequentiel:   5.3  sec",
+        " jacobi   20 procs:   1.1  sec",
+        " jacobi 2x20 procs:  13.4  sec",
+        " jacobi 10x4 procs:   7.3  sec",
+        " hypre     1  proc:   0.7  sec",
+        " hypre   4x4 procs:   0.14 sec",
+        ]
+    }
+    Slide {
+        title: "solveur Jacobi, résultats préliminaires"
+        fontFamily: 'Courier New'
+        content: [
+        "matrix  2M x 2M, nnz: 138M",
+        "jacobi: 100 iterations",
+        "cluster nef, nœuds Xeon 20 cœurs, infiniband 40G",
+        "mvapich 2.1",
+        " jacobi   1   proc: 188 sec",
+        " jacobi  20  procs:  30 sec",
+        " jacobi 4x20 procs: 101 sec",
+        ]
+    }
+
+    Slide {
+        title: "plugin MPI3: Retour d\'expérience"
+        textFormat: Text.RichText
+        content: [
+        "optimisations en mémoire partagés",
+        " <code> MPI_Win_allocate_shared</code>",
+        " <code>MPI_Comm_split_type</code> avec MPI_COMM_TYPE_SHARED",
+        "communications RMA (One Sided) with Passive target",
+        "implémentations MPI3 encore peu matures: ",
+        " bugs remontés à openmpi, mvapich (corrigés)",
+        " mais: <i>An important part of MPI-3 deals with improved semantics and features for MPI RMA to address some of these criticisms and make MPI RMA a portable runtime system that can provide high-performance and feature-rich one-sided communication support to applications.</i> Jeff Squyres"
+
+        ]
+    }
 
          Slide {
              title: "API documentation"

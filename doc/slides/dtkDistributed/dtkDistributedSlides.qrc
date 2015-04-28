@@ -9,6 +9,8 @@
         <file>images/Arc-Brave.png</file>
         <file>images/inria-transparent.png</file>
         <file>images/distributed.png</file>
+        <file>images/dtkDistributed.png</file>
+        <file>images/dtkDistributed_controller.png</file>
         <file alias="Dashboard.qml">../../../app/dtkDistributedDashboard/Dashboard.qml</file>
         <file alias="TextBox.qml">../../../app/dtkDistributedDashboard/TextBox.qml</file>
         <file alias="status.js">../../../app/dtkDistributedDashboard/status.js</file>

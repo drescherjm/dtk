@@ -21,8 +21,6 @@
 
 #include <QtCore>
 
-#include <iostream>
-
 class slaveWork : public QRunnable
 {
 public:
@@ -31,39 +29,28 @@ public:
 public:
     void run(void) {
         QTime time;
-        dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+        dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
         qDebug() << comm->wid();
         qDebug() << comm->size();
         dtkDistributedSlave slave;
 
-        if (dtkDistributed::app()->isMaster()) {
-            // the server waits for the jobid in stdout
-            std::cout << QString("DTK_JOBID="+dtkDistributedSlave::jobId()).toStdString() << std::endl << std::flush;
-
-            QUrl url(server);
-
-            qDebug() << "Running on master, connect to remote server" << server;
-            slave.connect(url);
-            qDebug() << "slave connected to server " << slave.isConnected();
-
-            if (slave.isConnected()) {
-                dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
-                msg.send(slave.socket());
-            }
-
-        }
-
-        qDebug() << "I'm the simple slave " << comm->wid() ;
+        slave.connectFromJob(server);
 
         QThread::sleep(5);
 
-        if (dtkDistributed::app()->isMaster()) {
-            if (slave.isConnected()) {
-                dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,slave.jobId(),dtkDistributedMessage::SLAVE_RANK);
-                msg.send(slave.socket());
-            }
+        if (comm->rank() == 0) {
+            QString hello = "I'm the master slave, we are " + QString::number(comm->size())+ " slaves";
+            QVariant v(hello);
+            dtkDistributedMessage msg(dtkDistributedMessage::DATA,slave.jobId(),dtkDistributedMessage::CONTROLLER_RANK, v);
+
+            msg.send(slave.socket());
+            slave.socket()->flush();
+            qDebug() << "message sent to controller";
         }
 
+        QThread::sleep(5);
+
+        slave.disconnectFromJob(server);
     }
 };
 
@@ -72,6 +59,7 @@ int main(int argc, char **argv)
     dtkDistributedAbstractApplication *app = dtkDistributed::create(argc, argv);
     app->setApplicationName("dtkDistributedSlave");
     app->setApplicationVersion("1.0.0");
+    app->setOrganizationName("inria");
 
     QCommandLineParser *parser = app->parser();
     parser->setApplicationDescription("DTK distributed slave example application: it connect to the DTK distributed server and waits for 1 minute before exiting.");

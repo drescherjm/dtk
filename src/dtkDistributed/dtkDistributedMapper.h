@@ -32,7 +32,11 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedMapper : public QObject
 
 public:
      dtkDistributedMapper(void);
+     dtkDistributedMapper(const dtkDistributedMapper& o);
     ~dtkDistributedMapper(void);
+
+public:
+    dtkDistributedMapper *scaledClone(qlonglong factor) const;
 
 public:
     bool deref(void);

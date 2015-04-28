@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     application->initialize();
 
     if(!parser->isSet(typeOption)) {
-        qDebug() << "Error, no type set" ;
+        qCritical() << "Error, no type set" ;
         return 1;
     }
     if(parser->isSet(portOption)) {
@@ -51,6 +51,9 @@ int main(int argc, char **argv)
 
     QSettings settings("inria", "dtk");
     settings.beginGroup("server");
+    if (settings.contains("log_level"))
+        dtkLogger::instance().setLevel(settings.value("log_level").toString());
+     settings.endGroup();
 
     dtkDistributedServerDaemon server(port);
     server.setManager( parser->value(typeOption));

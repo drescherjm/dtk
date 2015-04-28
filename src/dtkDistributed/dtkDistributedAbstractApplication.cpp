@@ -71,6 +71,8 @@ void dtkDistributedAbstractApplication::initialize(void)
     parser->addOption(npOption);
     QCommandLineOption ntOption("nt","number of threads (for hybrid plugins)","int", "1");
     parser->addOption(ntOption);
+    QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
+    parser->addOption(hostsOption);
 
     dtkAbstractApplication::initialize();
 
@@ -83,13 +85,24 @@ void dtkDistributedAbstractApplication::initialize(void)
     if (parser->isSet(verboseOption)) {
         dtkDistributed::communicator::pluginManager().setVerboseLoading(true);
     }
-    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+    dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
 
     dtkDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();
 
     if (parser->isSet(policyOption)) {
         policyType = parser->value(policyOption);
+    }
+    if (parser->isSet(hostsOption)) {
+        foreach(QString s, parser->values(hostsOption)) {
+            d->policy.addHost(s);
+        }
+    }
+    qlonglong np = 0;
+    if (parser->isSet(npOption)) {
+            np = parser->value(npOption).toLongLong();
+            dtkTrace() << "got np value from command line:"<< np ;
+            d->policy.setNWorkers(np);
     }
     d->policy.setType(policyType);
 }
@@ -104,7 +117,7 @@ void dtkDistributedAbstractApplication::spawn(void)
 {
     QStringList hosts = d->policy.hosts();
     d->spawned = true;
-    d->policy.communicator()->spawn(hosts, d->policy.nthreads());
+    d->policy.communicator()->spawn(hosts, 1);
 }
 
 void dtkDistributedAbstractApplication::unspawn(void)

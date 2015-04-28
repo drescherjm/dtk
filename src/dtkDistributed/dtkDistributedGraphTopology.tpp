@@ -190,6 +190,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     qlonglong edges_count = 0;
     QTime time;
     QIODevice *in;
+    bool is_double = true;
 
     if (this->wid() == 0) {
         time.start();
@@ -212,18 +213,23 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         in = &file;
         mode |= QIODevice::Text;
 #endif
+
+        // to avoid troubles with floats separators ('.' and not ',')
+        QLocale::setDefault(QLocale::c());
+#if defined (Q_OS_UNIX) && !defined(Q_OS_MAC)
+        setlocale(LC_NUMERIC, "C");
+#endif
+
         if (!in->open(mode))
             return false;
 
         QStringList header;
         QString datatype;
         QString format_str;
-        bool is_double;
         QRegExp re = QRegExp("\\s+");
         QString line;
         QStringList data;
 
-        is_double = false; //FIXME
         switch (format) {
         case  MetisFormat:
             dtkTrace() << "reading metis file header";
@@ -252,7 +258,6 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
             datatype = header.at(3);
             format_str = header.at(4).trimmed();
 
-            is_double = true;
             if (datatype  == "integer") {
                 is_double = false;
             } else if ((datatype == "complex") || (datatype  == "pattern")) {
@@ -345,7 +350,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
                     v_gid = std::stoi (linestd, &sz) -1;
                     linestd2 = linestd.substr(sz);
                     val = std::stoi (linestd2, &sz) -1;
-                    value = std::stod (linestd2.substr(sz));
+                    value = (is_double) ? std::stod (linestd2.substr(sz)) : std::stoi (linestd2.substr(sz));
                     ++e_local_count;
                     ++edges_size;
                     ++e_gid;

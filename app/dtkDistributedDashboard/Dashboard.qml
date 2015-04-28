@@ -1,22 +1,16 @@
-
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs 1.2
 
 import dtkDistributed 1.0
 
 import "status.js" as Status
+import "qrc:/Charts" 1.0
 
-import jbQuick.Charts 1.0
 
-
-ApplicationWindow {
-    title: "DTK Distributed Dashboard"
-    visible: true
-
-    minimumHeight: 400
-    minimumWidth: 600
+Item {
+    anchors.fill: parent
 
     ListModel {
         id: servers
@@ -102,10 +96,10 @@ ApplicationWindow {
                 id: actionrow
 
                 CheckBox {
-                        id: tunnel
-                        text: "SSH Tunnel"
-                        checked: false
-                    }
+                    id: tunnel
+                    text: "SSH Tunnel"
+                    checked: false
+                }
                 Button {
                     id: connectBotton
                     text: "Connect"
@@ -219,7 +213,6 @@ ApplicationWindow {
                     TableView{
                         model: jobModel
                         anchors.fill: parent
-
                         TableViewColumn {
                             role: "id"
                             title: "jobid"
@@ -293,50 +286,115 @@ ApplicationWindow {
                     }
                 }
             }
-
         }
         RowLayout {
             id: chartrow
-            Chart {
-                id: cores_pie;
-                width: 200;
-                height: 200;
-                chartAnimated: true;
-                chartAnimationEasing: Easing.InOutElastic;
-                chartAnimationDuration: 2000;
-                chartType: Charts.ChartType.PIE;
-                chartData:  [];
+
+            ColumnLayout {
+                id: coresColumn
+                Layout.minimumWidth: 400
+
+                TextBox {
+                    id: coresTotal
+                    color: "#000000"
+                    text: "Number of cores: unknown"
+                }
+                TextBox {
+                    id: coresFree
+                    color: "#008800"
+                    text: "Free cores: "
+                }
+                TextBox {
+                    id: coresBusy
+                    color: "orange"
+                    text: "Busy cores: "
+                }
+
+                Chart {
+                    id: cores_pie;
+                    width: 200;
+                    height: 200;
+                    chartAnimated: true;
+                    chartAnimationEasing: Easing.InOutElastic;
+                    chartAnimationDuration: 2000;
+                    chartType: Charts.ChartType.PIE;
+                    chartData:  [];
+                }
             }
-            Chart {
-                id: nodes_pie;
-                width: 200;
-                height: 200;
-                chartAnimated: true;
-                chartAnimationEasing: Easing.InOutElastic;
-                chartAnimationDuration: 2000;
-                chartType: Charts.ChartType.DOUGHNUT;
-                chartData:  [];
+            ColumnLayout {
+                id: nodesColumn
+                Layout.minimumWidth: 400
+
+                TextBox {
+                    id: nodesTotal
+                    /* anchors.fill: parent */
+                    color: "#000000"
+                    text: "Number of nodes: unknown"
+                }
+                TextBox {
+                    id: nodesFree
+                    color: "#008800"
+                    text: "Free nodes: "
+                }
+                TextBox {
+                    id: nodesBusy
+                    color: "orange"
+                    text: "Busy nodes: "
+                }
+                TextBox {
+                    id: nodesDead
+                    color: "#880000"
+                    text: "Dead nodes: "
+                }
+                Chart {
+                    id: nodes_pie;
+                    width: 200;
+                    height: 200;
+                    chartAnimated: true;
+                    chartAnimationEasing: Easing.InOutElastic;
+                    chartAnimationDuration: 2000;
+                    chartType: Charts.ChartType.DOUGHNUT;
+                    chartData:  [];
+                }
             }
         }
     }
 
-    DistributedController {
-        id: controller
-        property var jobs: { }
-        onJobQueued: {
-            console.debug("a job is queued");
-            myjobModel.append({"id": jobid,"nodes" : NaN, "cores" : NaN, "state": "Queued"})
-        }
-        onJobStarted: {
-            console.debug("a job is started");
-            myjobModel.setProperty(Status.getJobIndex(jobid), "state", "Running")
-        }
-        onJobEnded: {
-            console.debug("a job has ended");
-            myjobModel.remove(Status.getJobIndex(jobid))
-        }
+DistributedController {
+    id: controller
+    property var jobs: { }
+    onJobQueued: {
+        console.debug("a job is queued");
+        myjobModel.append({"id": jobid,"nodes" : "", "cores" : "", "state": "Queued"})
     }
+    onJobStarted: {
+        console.debug("a job is started");
+        myjobModel.setProperty(Status.getJobIndex(jobid), "state", "Running")
+    }
+    onJobEnded: {
+        console.debug("a job has ended");
+        myjobModel.remove(Status.getJobIndex(jobid))
+    }
+    onDataPosted: {
+        console.debug("a job has send us some data!")
+        console.debug("recevied:" +data),
+        messageDialog.text=data
+        messageDialog.visible=true
+
+    }
+}
+
+    MessageDialog {
+        id: messageDialog
+        title: "Data received from slave"
+        onAccepted: {
+            console.log("And of course you could only agree.")
+        }
+        Component.onCompleted: visible = false
+    }
+
     DistributedPolicy {
         id: policy
     }
+
 }

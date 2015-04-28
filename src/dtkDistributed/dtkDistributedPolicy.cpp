@@ -21,15 +21,13 @@
 #include <dtkDistributed>
 #include <dtkLog>
 
-#include <QCommandLineParser>
-
 class dtkDistributedPolicyPrivate
 {
 public:
     QStringList hosts;
 
 public:
-    qlonglong nthreads;
+    qlonglong np;
     QString type;
 
 public:
@@ -43,14 +41,14 @@ public:
 
 
   The policy can be set directly (using dtkDistributedPolicy::addHosts) or can be discover from the environments.
-  OAR and Torque resources can be discover automatically; you can also use the DTK_NUM_THREADS variable.
+  OAR and Torque resources can be discover automatically; you can also use the DTK_NUM_PROCS variable.
 
 */
 
 dtkDistributedPolicy::dtkDistributedPolicy(void) : QObject(), d(new dtkDistributedPolicyPrivate)
 {
     d->comm = NULL;
-    d->nthreads = 1;
+    d->np       = 0;
     d->type = "qthread";
 }
 
@@ -72,9 +70,11 @@ dtkDistributedPolicy& dtkDistributedPolicy::operator = (const dtkDistributedPoli
 
 void dtkDistributedPolicy::addHost(QString host)
 {
-    dtkTrace() << "add host " << host;
-
-    d->hosts.append(host);
+    if (d->np == 0 || d->np > d->hosts.count()) {
+        d->hosts.append(host);
+    } else {
+        dtkTrace() << "np reached, don't add host " << host;
+    }
 }
 
 dtkDistributedCommunicator *dtkDistributedPolicy::communicator(void)
@@ -113,67 +113,50 @@ QStringList dtkDistributedPolicy::hosts(void)
                     return d->hosts;
                 }
                 QTextStream in(&file);
+                qlonglong np = 0;
                 while (!in.atEnd()) {
-                    d->hosts <<  in.readLine();
+                    this->addHost(in.readLine());
+                    np ++;
                 }
-                if (d->type == "hybrid") {
-                    d->nthreads = d->hosts.count();
-                    d->hosts.removeDuplicates();
-                    d->nthreads /= d->hosts.count();
+                if (d->np > 0) {
+                    // will add extra hosts if d->np is > number of hosts in file
+                    this->setNWorkers(d->np);
                 }
                 return d->hosts;
             }
         }
-        dtkDebug() << "No hostfile found, try qapp args";
-        d->nthreads = 1;
-// skip this part on windows with qt < 5.5 because of QTBUG-30330
-#if QT_VERSION < 0x050500 && defined Q_OS_WIN32
-        dtkWarn() << "skip running parser on windows";
-        d->hosts <<  "localhost";
-#else
-        QCommandLineParser *parser = dtkDistributed::app()->parser();
-        QCommandLineOption npOption("np","number of processes","int");
-        QCommandLineOption ntOption("nt","number of threads","int");
-        parser->process(qApp->arguments());
-        int np = 1;
-        if (parser->isSet(npOption)) {
-            dtkTrace() << "got np value from command line" ;
-            np = parser->value(npOption).toInt();
-        } else {
-            QByteArray numprocs = qgetenv("DTK_NUM_THREADS");
+        dtkDebug() << "No hostfile found, try DTK envs";
+        if (d->np == 0) {
+            QByteArray numprocs = qgetenv("DTK_NUM_PROCS");
             if (!numprocs.isEmpty()) {
-                np = numprocs.toInt();
-                dtkDebug() << "got num procs from env" << np;
+                d->np = numprocs.toInt();
+                dtkDebug() << "got num procs from env" << d->np;
+            } else {
+                d->np = 1;
             }
         }
-        for (int i = 0; i <  np; i++) {
+        for (int i = 0; i <  d->np; i++) {
             d->hosts <<  "localhost";
         }
-        //FIXME: rework hybrid case
-        if (parser->isSet(ntOption)) {
-                if (d->type == "mpi") {
-                    int nt = parser->value(ntOption).toInt();
-                    int total = d->hosts.count() * nt;
-                    for (int i = d->hosts.count(); i <  total; i++) {
-                        d->hosts <<  "localhost";
-                    }
-                } else {
-                    d->nthreads = parser->value(ntOption).toInt();
-                }
-        }
-#endif
-        dtkDebug() << "policy updated, hosts:" << d->hosts.count() << "threads:" <<  d->nthreads;
+        dtkDebug() << "policy updated, hosts:" << d->hosts.count() ;
     }
     return d->hosts;
 }
 
-void dtkDistributedPolicy::setNThreads(qlonglong nthreads)
+void dtkDistributedPolicy::setNWorkers(qlonglong np)
 {
-    d->nthreads = nthreads;
-}
-
-qlonglong dtkDistributedPolicy::nthreads(void)
-{
-    return d->nthreads;
+    d->np = np;
+    if (d->hosts.count() > 0) {
+        if (d->np > d->hosts.count()) {
+            qlonglong i = 0;
+            while (d->hosts.count() < d->np) {
+                d->hosts << d->hosts.at(i);
+                ++i;
+            }
+        } else {
+            while (d->np < d->hosts.count())
+                d->hosts.removeLast();
+        }
+    }
 }
 

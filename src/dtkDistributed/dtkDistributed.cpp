@@ -12,6 +12,8 @@
  * 
  */
 
+#include "qthDistributedCommunicator.h"
+
 #include "dtkDistributed.h"
 #include "dtkDistributedAbstractApplication.h"
 #include "dtkDistributedApplication.h"
@@ -96,6 +98,10 @@ namespace dtkDistributed
         dtkDistributedCommunicatorPluginManager& pluginManager(void) {
             return _private::manager;
         }
+        void initialize(const QString& path) {
+            pluginFactory().record("qthread", qthDistributedCommunicatorCreator);
+            pluginManager().initialize(path);
+        }
 
         dtkDistributedCommunicator *instance(void) {
             dtkDistributedAbstractApplication *app = dtkDistributed::app();
@@ -106,7 +112,7 @@ namespace dtkDistributed
             } else {
                 dtkDistributedSettings settings;
                 settings.beginGroup("communicator");
-                dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+                pluginManager().initialize(settings.value("plugins").toString());
                 _private::communicator = dtkDistributed::communicator::pluginFactory().create("qthread");
             }
             return _private::communicator;

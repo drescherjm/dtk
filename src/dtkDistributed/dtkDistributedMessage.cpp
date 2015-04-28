@@ -268,12 +268,14 @@ qlonglong dtkDistributedMessage::send(QTcpSocket *socket)
         socket->flush();
         return ret;
     } else if (d->size > 0) {
-        buffer += "Content-Length: "+ QString::number(d->size) +"\n";
+            buffer += "Content-Length: "+ QString::number(d->size) +"\n";
         if (!d->type.isEmpty() && !d->type.isNull())
             buffer += "Content-Type: " +d->type +"\n";
 
         foreach (const QString &key, d->headers.keys() ) {
-            buffer += key +": " + d->headers[key] +"\n";
+            if ((key != "content-length") && (key != "content-type" )) {
+                buffer += key +": " + d->headers[key] +"\n";
+            }
         }
         buffer += "\n";
     }
@@ -292,12 +294,15 @@ qlonglong dtkDistributedMessage::send(QTcpSocket *socket)
 qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
 {
     QString resp = socket->readLine();
+    dtkTrace() << "parse first line" <<resp;
 
     // read optional headers
     QByteArray line = socket->readLine();
+    dtkTrace() << "parse second line" <<line;
     while (!QString(line).trimmed().isEmpty()) {// empty line after last header
         this->setHeader(QString(line));
         line=socket->readLine();
+        dtkTrace() << "parse: line" <<line;
     }
 
     this->setMethod(resp);
@@ -306,11 +311,13 @@ qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
     if (d->headers.contains("x-dtk-jobid")) {
         d->jobid = d->headers["x-dtk-jobid"].trimmed();;
     }
+    dtkTrace() << "parse: jobid is" <<d->jobid;
 
     if (d->size > 0) {
         //read content-type
         this->setType();
 
+        dtkTrace() << "parse: read content"<< d->size ;
         // read content
         QByteArray buffer;
         buffer.append(socket->read(d->size));
@@ -324,6 +331,7 @@ qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
                 break;
             }
         }
+        dtkTrace() << "parse: set content" << buffer.size() ;
         this->setContent(buffer);
     } else {
         // end of request == empty line

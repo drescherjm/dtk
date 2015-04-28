@@ -14,11 +14,14 @@
 
 #include "dtkDistributedMessage.h"
 #include "dtkDistributedSlave.h"
+#include "dtkDistributedCommunicator.h"
+#include "dtkDistributed.h"
 
 #include <dtkCore>
 #include <dtkLog>
 
 #include <QtNetwork>
+#include <iostream>
 
 class dtkDistributedSlavePrivate
 {
@@ -68,6 +71,27 @@ bool dtkDistributedSlave::isDisconnected(void)
     return (d->socket->state() == QAbstractSocket::UnconnectedState);
 }
 
+void dtkDistributedSlave::connectFromJob(const QUrl& server)
+{
+    dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
+
+    if (comm->rank() == 0) {
+        // the server waits for the jobid in stdout
+        std::cout << QString("DTK_JOBID="+jobId()).toStdString() << std::endl << std::flush;
+
+        QUrl url(server);
+
+        dtkDebug() << "Running on master, connect to remote server" << server;
+        connect(url);
+        dtkDebug() << "slave connected to server " << isConnected();
+
+        if (isConnected()) {
+            dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,jobId(),dtkDistributedMessage::SLAVE_RANK);
+            msg.send(socket());
+        }
+    }
+}
+
 void dtkDistributedSlave::connect(const QUrl& server)
 {
     d->socket->connectToHost(server.host(), server.port());
@@ -80,6 +104,19 @@ void dtkDistributedSlave::connect(const QUrl& server)
 
     } else {
         dtkWarn() << "Unable to connect to" << server.toString();
+    }
+}
+
+void dtkDistributedSlave::disconnectFromJob(const QUrl& server)
+{
+    dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
+
+    if (comm->rank() == 0) {
+        if (isConnected()) {
+            dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,jobId(),dtkDistributedMessage::SLAVE_RANK);
+            msg.send(socket());
+        }
+        disconnect(server);
     }
 }
 

@@ -1,15 +1,15 @@
-/* dtkDistributedMapper.cpp --- 
- * 
+/* dtkDistributedMapper.cpp ---
+ *
  * Author: Thibaud Kloczko
  * Created: 2013 Thu Feb  7 10:55:57 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedMapper.h"
@@ -23,7 +23,7 @@
 class dtkDistributedMapperPrivate
 {
 public:
-    dtkDistributedMapperPrivate(void) : ref(0), id_count(0) {;}
+     dtkDistributedMapperPrivate(void) : ref(0), id_count(0) {;}
     ~dtkDistributedMapperPrivate(void) {;}
 
 public:
@@ -167,9 +167,29 @@ dtkDistributedMapper::dtkDistributedMapper(void) : QObject(), d(new dtkDistribut
     d->last_pu_id = 0;
 }
 
+dtkDistributedMapper::dtkDistributedMapper(const dtkDistributedMapper& o) : QObject(), d(new dtkDistributedMapperPrivate)
+{
+    d->id_count = o.d->id_count;
+    d->pu_count = o.d->pu_count;
+    d->last_pu_id = o.d->last_pu_id;
+    d->map = o.d->map;
+}
+
 dtkDistributedMapper::~dtkDistributedMapper(void)
 {
     delete d;
+}
+
+dtkDistributedMapper *dtkDistributedMapper::scaledClone(qlonglong factor) const
+{
+    dtkDistributedMapper *mapper = new dtkDistributedMapper;
+
+    mapper->initMap(d->id_count * factor, d->pu_count);
+    for (qlonglong i = 0; i < d->pu_count; ++i) {
+        mapper->setMap(d->map[i] * factor, i);
+    }
+
+    return mapper;
 }
 
 bool dtkDistributedMapper::deref(void)
@@ -241,4 +261,3 @@ qlonglong dtkDistributedMapper::owner(const qlonglong& global_id)
 {
     return d->owner(global_id);
 }
-

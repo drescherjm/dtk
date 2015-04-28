@@ -39,11 +39,10 @@ public:
 public:
     void addHost(QString host);
     void setType(const QString& type);
-    void setNThreads(qlonglong nthreads);
+    void setNWorkers(qlonglong nworkers);
 
 public:
     QStringList    hosts(void);
-    qlonglong   nthreads(void);
 
 public:
     dtkDistributedCommunicator *communicator(void);

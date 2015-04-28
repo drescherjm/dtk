@@ -121,7 +121,7 @@ option(DTK_BUILD_SUPPORT_VR          "Build support layer" false)
 if(DTK_ENABLE_MEMCHECK)
 
   find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
-  set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --xml-file=valgrind-%p.xml" )
+  set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml" )
 
   function(add_test name binary)
     set(memcheck_command "${CTEST_MEMORYCHECK_COMMAND} ${CTEST_MEMORYCHECK_COMMAND_OPTIONS}")

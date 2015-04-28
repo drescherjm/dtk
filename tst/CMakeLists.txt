@@ -17,6 +17,7 @@ if(DTK_BUILD_COMPOSER)
 endif(DTK_BUILD_COMPOSER)
 
 add_subdirectory(dtkCore)
+add_subdirectory(dtkDistributed)
 add_subdirectory(dtkLog)
 add_subdirectory(dtkMeta)
 add_subdirectory(dtkMath)

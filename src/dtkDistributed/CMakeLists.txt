@@ -28,8 +28,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedArray.tpp
   dtkDistributedArrayCache
   dtkDistributedArrayCache.h
-  dtkDistributedArrayNavigator
-  dtkDistributedArrayNavigator.h
   dtkDistributedBufferManager
   dtkDistributedBufferManager.h
   dtkDistributedCommunicator
@@ -61,6 +59,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedSettings
   dtkDistributedSettings.h
   dtkDistributedSlave.h
+  qthDistributedBufferManager.h
+  qthDistributedCommunicator.h
 )
 
 set(${PROJECT_NAME}_SOURCES
@@ -70,6 +70,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedBufferManager.cpp
   dtkDistributedCommunicator.cpp
   dtkDistributedCommunicatorStatus.cpp
+  dtkDistributedContainer.cpp
   dtkDistributedController.cpp
   dtkDistributedCoreApplication.cpp
   dtkDistributedGraphTopology.cpp
@@ -84,6 +85,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedServerDaemon.cpp
   dtkDistributedSettings.cpp
   dtkDistributedSlave.cpp
+  qthDistributedCommunicator.cpp
 )
 
 ## #################################################################

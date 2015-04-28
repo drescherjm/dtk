@@ -88,6 +88,7 @@ function show()
                 var jsonObject = JSON.parse(xhr.responseText);
                 var cores = 0
                 var cores_busy = 0
+                var cores_free = 0
                 var nodes_free = 0
                 var nodes_busy = 0
                 var nodes_down = 0
@@ -102,8 +103,15 @@ function show()
                         nodes_busy ++;
                     }
                 }
-                cores -= cores_busy
-                cores_pie.chartData = [{value: cores, color: "green"}, {value: cores_busy, color: "orange"}];
+                cores_free = cores - cores_busy
+                cores_pie.chartData = [{value: cores_free, color: "green"}, {value: cores_busy, color: "orange"}];
+                coresFree.text = "Free cores: " + cores_free
+                coresTotal.text = "Total cores: " + cores
+                coresBusy.text = "Busy cores: " + cores_busy
+                nodesFree.text = "Free nodes: " + nodes_free
+                nodesDead.text = "Dead nodes: " + nodes_down
+                nodesBusy.text = "Busy nodes: " + nodes_busy
+                nodesTotal.text = "Total nodes: " + (nodes_free+nodes_busy+nodes_down)
                 cores_pie.repaint();
                 nodes_pie.chartData = [{value: nodes_free, color: "green"},
                                        {value: nodes_busy, color: "orange"},

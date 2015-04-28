@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>SlideDeck.qml</file>
+        <file alias="Background.qml">qml/Background.qml</file>
+        <file alias="OpacityTransitionPresentation.qml">qml/OpacityTransitionPresentation.qml</file>
+        <file alias="CodeSection.qml">qml/CodeSection.qml</file>
+        <file alias="Elapsed.qml">qml/Elapsed.qml</file>
+        <file>images/dtk-logo.png</file>
+        <file>images/Arc-Brave.png</file>
+        <file>images/inria-transparent.png</file>
+        <file>images/distributed.png</file>
+        <file>images/dtkDistributed.png</file>
+        <file>images/dtkDistributed_controller.png</file>
+        <file alias="Dashboard.qml">../../../app/dtkDistributedDashboard/Dashboard.qml</file>
+        <file alias="TextBox.qml">../../../app/dtkDistributedDashboard/TextBox.qml</file>
+        <file alias="status.js">../../../app/dtkDistributedDashboard/status.js</file>
+        <file alias="Charts">../../../app/dtkDistributedDashboard/jbQuick/Charts</file>
+        <file alias="QChart.qml">../../../app/dtkDistributedDashboard/jbQuick/Charts/QChart.qml</file>
+        <file alias="QChart.js">../../../app/dtkDistributedDashboard/jbQuick/Charts/QChart.js</file>
+    </qresource>
+</RCC>

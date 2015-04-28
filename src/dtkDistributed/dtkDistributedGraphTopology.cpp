@@ -38,7 +38,20 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex
     m_edge_to_vertex  = NULL;
     m_vertex_to_edge  = NULL;
     m_edge_count = NULL;
+
     this->initialize();
+
+    m_comm->barrier();
+}
+
+dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count, dtkDistributedMapper *mapper) : dtkDistributedContainer(vertex_count, mapper)
+{
+    m_neighbour_count = NULL;
+    m_edge_to_vertex  = NULL;
+    m_vertex_to_edge  = NULL;
+    m_edge_count = NULL;
+
+    this->initialize(true);
 
     m_comm->barrier();
 }
@@ -103,14 +116,15 @@ dtkDistributedMapper *dtkDistributedGraphTopology::edge_mapper(void) const
     return m_edge_to_vertex->mapper();
 }
 
-void dtkDistributedGraphTopology::initialize(void)
+void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
 {
     dtkDebug() << "initialize graph with" << vertexCount() << "vertexes, rank =" << this->wid();
 
-    m_mapper->setMapping(vertexCount(), m_comm->size());
+    if (!has_custom_mapper) {
+        m_mapper->setMapping(vertexCount(), m_comm->size());
+    }
 
-    dtkDistributedMapper *mapper = new dtkDistributedMapper;
-    mapper->setMapping(vertexCount(), m_comm->size());
+    dtkDistributedMapper *mapper = new dtkDistributedMapper(*m_mapper);
     mapper->setMap(vertexCount() + 1, m_comm->size());
     m_vertex_to_edge = new dtkDistributedArray<qlonglong>(vertexCount() + 1, mapper);
     m_vertex_to_edge->fill(0);
@@ -189,6 +203,8 @@ void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool ori
             m_map[from].insert(end, to);
         } else {
             for(; it != end; ++it) {
+                if (to == (*it))
+                    return;
                 if (to < (*it))
                     break;
             }

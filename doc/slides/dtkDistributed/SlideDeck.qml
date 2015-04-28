@@ -27,7 +27,7 @@ OpacityTransitionPresentation
         SlideCounter {}
         Elapsed {
             id: elapsed
-            duration: 15 * 60 // 15 mn
+            duration: 90 * 60 // 90 mn
         }
 
         Image {
@@ -121,16 +121,17 @@ OpacityTransitionPresentation
 
         Slide {
             title: "Management de ressources via dtkDistributed"
+            textFormat: Text.RichText
             content: [
             "3 composants:",
-            " 1 contrôleur: dtkDistributedController (sur la machine cliente (laptop par ex.))",
-            " 1 serveur dtkDistributedServer (sur la frontale du cluster), qui instancie un ressource manager",
+            " 1 contrôleur: <b>dtkDistributedController</b> (sur la machine cliente (laptop par ex.))",
+            " 1 serveur <b>dtkDistributedServer</b> (sur la frontale du cluster), qui instancie un ressource manager",
             "  OAR",
             "  Torque",
             "  SSH",
-            " N slaves dtkDistributedSlave (sur un(des) noeud(s) d\'un cluster)",
+            " N slaves <b>dtkDistributedSlave</b> (sur un(des) noeud(s) d\'un cluster)",
             ]
-            notes: "Le controlleur et le serveur sont optionnels, on peut lancer aussi une application distribuées manuellement sur le cluster ou via kali"
+            notes: "Le contrôleur et le serveur sont optionnels, on peut lancer aussi une application distribuées manuellement sur le cluster ou via kali"
         }
         Slide {
             title: "Management de ressources via dtkDistributed"
@@ -157,8 +158,8 @@ OpacityTransitionPresentation
             title: "Application distribuées"
             content: [
             "Communicator",
-            "Policy",
-            "Settings",
+            "Messages",
+            "Policy, Settings",
             "Distributed application",
             ]
 
@@ -167,7 +168,13 @@ OpacityTransitionPresentation
         Slide {
             title: "Communicator"
             content: [
-            "permet aux différents processus"
+            "dtkDistributedCommunicator",
+            " interface pour le calcul parallèle",
+            " paradigme de programmation inspiré de MPI",
+            " inclus des primitives de:",
+            "  déploiement",
+            "  communication",
+            "  synchronisation"
             ]
         }
         Slide {
@@ -178,25 +185,99 @@ OpacityTransitionPresentation
             " MPI",
             " MPI3",
             "primitives de communication",
-            " send/receive/broadcast/reduce",
+            " send/receive/ireceive/broadcast/reduce",
             " barrier/wait",
             "buffers distribués",
             " get/put/accumulate",
             ]
         }
         Slide {
-            title: "Policy"
+            title: "Communicator: sérialisation"
             content: [
-            "permet de choisir l\'implémentation (qthread, mpi, mpi3)",
-            "permet de spécifier les machines sur lequel l\'application tourne",
+            "primitives de communications compatibles avec:",
+            " tableau de type simple",
+            " QVariant",
+            "Sérialisation via le QVariant: ",
+            ]
+            CodeSection {
+                height: parent.height * 0.45
+                anchors.bottom: parent.bottom
+                text: 'Q_DECLARE_METATYPE(monType)
+qRegisterMetaTypeStreamOperators<monType>("monType");
+qRegisterMetaTypeStreamOperators<monType*>("monType*");
+
+// handle the pointer version of qdatastream operators << and >>
+#include <dtkMeta/dtkMeta.h>;
+
+QDataStream& operator<<(QDataStream& s, const monType& data);
+QDataStream& operator>>(QDataStream& s, monType& data);'
+            }
+        }
+
+        CodeSlide {
+            title: "Communicator: sérialisation"
+            code:'// rank 0 is sending each slave it\'s mesh
+
+if (d->communicator->rank() == 0) {
+  dtkContainerVector<numMesh*> *meshes = d->partitioner->meshes();
+  for(qlonglong i = 1; i < meshes->count(); ++i) {
+     QVariant v = QVariant::fromValue(meshes->at(i));
+     d->communicator->send(v, i, tagSend);
+     delete meshes->at(i);
+  }
+} else {
+  // each slave received it\'s mesh
+  QVariant v;
+  d->communicator->receive(v, 0, tagSend);
+  d->mesh = v.value<numMesh*>();
+}'
+        }
+        CodeSlide {
+            title: "Communicator: sérialisation, vraie version"
+            code:'// rank 0 is sending each slave it\'s mesh
+
+if (d->communicator->rank() == 0) {
+  dtkContainerVector<numMesh*> *meshes = d->partitioner->meshes();
+  for(qlonglong i = 1; i < meshes->count(); ++i) {
+     d->communicator->send(meshes->at(i), i, tagSend);
+     delete meshes->at(i);
+  }
+} else {
+  // each slave received it\'s mesh
+  d->communicator->receive(d->mesh, 0, tagSend);
+}
+'
+        }
+
+        Slide {
+            title: "Messages"
+            textFormat: Text.RichText
+            content: [
+            "échange de messages entre contrôleur, serveur et slave",
+            "protocole basé sur JSON et du pseudo HTTP",
+            "interface C++: <b>dtkDistributedMessage</b>",
+            " Plusieurs méthodes:",
+            "  STATUS: demande d\'état du cluster",
+            "  OKSTATUS: état du cluster",
+            "  NEWJOB: création d\'un job",
+            "  DELJOB: suppression d\'un job",
+            "  DATA: échange de données (QVariant)",
+            "  ...",
             ]
         }
+
         Slide {
-            title: "Settings"
+            title: "Policy & Settings"
             content: [
-            "fichier ini",
-            " défini vers le plugins path",
-            " autres options ...",
+            "policy:",
+            " permet de choisir l\'implémentation (qthread, mpi, mpi3)",
+            " permet de spécifier les machines sur lequel l\'application tourne",
+            "   s\'interface avec Torque, OAR",
+            "   variable d\'environnement DTK_NUM_PROCS",
+            "Settings:",
+            " fichier ini",
+            "  défini vers le plugins path",
+            "  autres options ...",
             ]
         }
 
@@ -205,6 +286,8 @@ OpacityTransitionPresentation
             textFormat: Text.RichText
             content: [
             "simplifie l\'invocation d\'une application",
+            " configure automatiquement la policy",
+            " initialise le plugin manager du communicator",
             "options en ligne de commande",
             " nombre de procs, policy, etc.",
             " ajout d\'option spécifiques.",
@@ -217,6 +300,8 @@ OpacityTransitionPresentation
                 text:"dtkDistributed::create(argc,argv);
 
 QCommandLineParser *parser=app->parser();
+
+app.initialize();
 
 app.spawn();
 
@@ -304,7 +389,7 @@ Options:
 
 
         Slide {
-            title: "Examples d\'application avec controlleur/slave"
+            title: "Examples d\'application avec contrôleur/slave"
             content: [
             "Dashboard QML",
             " Objet 'dtkDistributedController' instancié en QML",
@@ -328,7 +413,7 @@ Options:
         }
 
         Slide {
-            title: "Controlleur intégré dans numComposer"
+            title: "Contrôleur intégré dans numComposer"
 
             Rectangle {
                 id: videorect

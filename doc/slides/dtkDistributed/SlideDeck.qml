@@ -123,12 +123,12 @@ OpacityTransitionPresentation
             title: "Management de ressources via dtkDistributed"
             content: [
             "3 composants:",
-            " 1 contrôleur: dtkDistributedController (tourne sur la machine cliente (laptop par ex.))",
-            " 1 serveur dtkDistributedServer (tourne sur la frontale du cluster), qui instancie un ressource manager",
+            " 1 contrôleur: dtkDistributedController (sur la machine cliente (laptop par ex.))",
+            " 1 serveur dtkDistributedServer (sur la frontale du cluster), qui instancie un ressource manager",
             "  OAR",
             "  Torque",
             "  SSH",
-            " N slaves dtkDistributedSlave (exécution sur un/des noeuds d\'un cluster)",
+            " N slaves dtkDistributedSlave (sur un(des) noeud(s) d\'un cluster)",
             ]
             notes: "Le controlleur et le serveur sont optionnels, on peut lancer aussi une application distribuées manuellement sur le cluster ou via kali"
         }
@@ -138,12 +138,11 @@ OpacityTransitionPresentation
                 width:  parent.width * 0.8
                 height: parent.height
                 anchors.centerIn: parent
-                opacity: 0.9
-                color : "black"
+                /* color : "black" */
                 radius: 10
                 Image {
-                width:  parent.width
-                height: parent.height
+                    width:  parent.width
+                    height: parent.height
                     id: dtkdistributed
                     source: "images/distributed.png"
                     /* mipmap: true */
@@ -156,29 +155,89 @@ OpacityTransitionPresentation
         Slide {
             title: "Application distribuées"
             content: [
-            "Distributed application",
             "Communicator",
             "Policy",
             "Settings",
+            "Distributed application",
             ]
 
         }
 
         Slide {
-            title: "dtkDistributedApplication"
+            title: "Communicator"
             content: [
-            "simplifie l\'invocation d\'une application distribuée",
-            "options en lignes de commande par défaut",
+            "permet aux différents processus"
             ]
         }
+        Slide {
+            title: "Communicator"
+            content: [
+            "implémenté sour forme de plugins",
+            " qthread (par défaut)",
+            " MPI",
+            " MPI3",
+            "primitives de communication",
+            " send/receive/broadcast/reduce",
+            " barrier/wait",
+            "buffers distribués",
+            " get/put/accumulate",
+            ]
+        }
+        Slide {
+            title: "Policy"
+            content: [
+            "permet de choisir l\'implémentation (qthread, mpi, mpi3)",
+            "permet de spécifier les machines sur lequel l\'application tourne",
+            ]
+        }
+        Slide {
+            title: "Settings"
+            content: [
+            "fichier ini",
+            " défini vers le plugins path",
+            " autres options ...",
+            ]
+        }
+
+        Slide {
+            title: "dtkDistributedApplication"
+            textFormat: Text.RichText
+            content: [
+            "simplifie l\'invocation d\'une application",
+            "options en ligne de commande",
+            " nombre de procs, policy, etc.",
+            " ajout d\'option spécifiques.",
+            "déploiement de l\'application (<i>spawn</i>)",
+            "exécution des taches de calcul (<i>exec</i>)"
+            ]
+            CodeSection {
+                width: parent.width / 2.4
+                anchors.right: parent.right
+                text:"dtkDistributed::create(argc,argv);
+
+QCommandLineParser *parser=app->parser();
+
+app.spawn();
+
+app.exec(work);
+
+app.unspawn();
+"
+            }
+         }
+
+
+
         Slide {
             title: "Distributed application"
             CodeSection {
 
                 text: '# myappli --help
 Usage: myappli [options]
-<myappli description>.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit
 Options:
+  --myoption <foo|bar>                            myappli option(s)
+
   --policy <qthread|mpi|mpi3>                     dtkDistributed policy
                                                   (default is qthread)
   --np <int>                                      number of processes
@@ -196,25 +255,6 @@ Options:
             }
   /* --nt <int>                                      number of threads (for hybrid plugins) */
 
-        }
-        Slide {
-            title: "Communicator"
-            content: [
-            "TODO"
-            ]
-        }
-        Slide {
-            title: "Policy"
-            content: [
-            "permet de choisir l\'implémentation (qthread, mpi, mpi3)",
-            "permet de spécifier les machines sur lequel l\'application tourne",
-            ]
-        }
-        Slide {
-            title: "Settings"
-            content: [
-            "chemin vers le plugins",
-            ]
         }
 
         CodeSlide {
@@ -263,7 +303,7 @@ Options:
 
 
         Slide {
-            title: "Examples d\'application"
+            title: "Examples d\'application avec controlleur/slave"
             content: [
             "Dashboard QML",
             " Objet 'dtkDistributedController' instancié en QML",

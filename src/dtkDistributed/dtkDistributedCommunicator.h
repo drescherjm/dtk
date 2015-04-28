@@ -158,7 +158,7 @@ public:
     virtual qint32  wid(void);
     inline  qint32 rank(void) {return wid();};
     virtual qint32 size(void);
-
+    virtual void*  data(void) { return NULL;}; 
 public:
     virtual void setWid(qint32 id);
 
@@ -171,6 +171,8 @@ DTK_DECLARE_PLUGIN(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 
+//for numComposer
+Q_DECLARE_METATYPE(dtkDistributedCommunicator **);
 
 template <typename T> void dtkDistributedCommunicator::send(T data, qint32 target, qint32 tag)
 {

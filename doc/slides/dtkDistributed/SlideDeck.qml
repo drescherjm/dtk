@@ -80,10 +80,10 @@ OpacityTransitionPresentation
             textFormat: Text.RichText
             content: [
             "ADT DTK (depuis 2012) ",
-            " architecture modulaire, plugins",
-            " Multi Plateforme, C++, Qt",
+            " méta plateforme, pour développer des plateformes modulaires (plugins)",
+            " multi Plateforme, C++, Qt",
             " num3sis, axel, medInria, enas, carbonQuant, pib, inalgae",
-            "DTK Layers:",
+            "layers DTK:",
             " dtkCore",
             " dtkComposer",
             " dtkPlot",
@@ -111,7 +111,7 @@ OpacityTransitionPresentation
            title: "dtkDistributed: Historique"
             content: [
             "fin 2011: premier prototype du resource manager",
-            "2012: intégration dans le composer dtk",
+            "2012: communicateur v0, intégration dans le composer dtk",
             "fin 2012: visu intéractive de simulation distante dans le composer num3sis",
             "2013: refonte du communicator sous forme de plugins",
             "mi 2014: vecteur et graphe distribués",

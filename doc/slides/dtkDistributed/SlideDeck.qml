@@ -455,21 +455,544 @@ Options:
         Slide {
             title: "Conteneurs distribués"
             content: [
-            "container",
-            "mapper",
-            "array",
-            "buffer manager",
-            "cache",
-            "navigator, iterator"
+            "étude d'un cas a priori simple",
+            "état de l'art",
+            "organisation des classes",
+            "dtkDistributedArray",
+            "dtkDistributedGraphTopology",
+            "retour sur le cas initial."
             ]
 
         }
 
         Slide {
+            title: "Calcul de maximum sur un graphe"
+            Rectangle {
+                width:  parent.width * 0.8
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: graph_sequential
+                    source: "images/graph.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe"
+            CodeSection {
+                anchors.top: parent.top
+                height : parent.height * 0.25
+                text: 'Foreach vertex in graph {
+   Foreach neighbour of vertex {
+       max_values[vertex_id] = Max(max_values[vertex_id], values[neighbour_id]);
+   }
+}'
+            }
+            content: [
+            ,,
+            "Structure de graphe simple",
+            "Algorithme simple"
+            ]
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe partitionné"
+            Rectangle {
+                width:  parent.width * 0.8
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: graph_part
+                    source: "images/graph_part.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe partitionné"
+            CodeSection {
+                anchors.top: parent.top
+                height : parent.height * 0.75
+                text: 
+'// Local Computation
+Foreach vertex in subGraph {
+    Foreach neighbour of vertex {
+        max_values[vertex_id] = Max(max_values[vertex_id], values[neighbour_id]);
+    }
+
+// Boundary computation
+Foreach boundary in subGraph {
+    Foreach vertex of Boundary {
+        local_max_values[local_id] = max_values[vertex_id];
+    }
+    Send(local_max_values);
+
+    Receive(extern_max_values);
+    Foreach vertex of Boundary {
+        max_values[vertex_id] = Max(max_values[vertex_id], extern_max_values[ext_id]);
+    }
+}'
+            }
+            content: [
+            ,,,,,
+            "Complexité accrue en terme de structure et d'algorithme"
+            ]
+        }
+
+        Slide {
+            title: "Calcul du maximum sur les voisins des voisins"
+            content: [
+            ":-/", 
+            "Refaire les structures",
+            "Repenser l'algorithmie",
+            "...",
+            "Tout compte fait, on va s'en passer..."
+            ]
+        }
+
+        Slide {
+            title: "Bibliothèques existantes"
+            content: [
+            "Parallel Standard Library (PSTL) -> plus maintenu", 
+            "Intel Threadings Building Blocks (TBB) -> seulement multithread",
+            "Parallel Object-Oriented Methods and Applications (POOMA) -> pas de structure de graphe",
+            "Standard Template Adaptive Parallel Library (STAPL) -> ni sources ni binaires",
+            "Fortran Coarray (OpenCorrays) -> code C qui génère du Fortran!"
+            ]
+        }
+
+        Slide {
+            title: "dtkDistibuted Containers"
+            Rectangle {
+                width:  parent.width * 0.6
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                anchors.centerIn: parent
+                width:  parent.width
+                height: parent.height
+                    id: dtkDistributedContainers
+                    source: "images/dtkDistributed.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        Slide {
+            title: "dtkDistibutedArray<T>"
+            Rectangle {
+                width:  parent.width * 0.4
+                height: parent.height
+                anchors.left: parent.left
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: dtkDistributedArrayAPI
+                    source: "images/dtkDistributedArrayAPI.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+            CodeSection {
+                width: parent.width * 0.55
+                anchors.right: parent.right
+                text: "// SEQUENTIAL INITIALIZATION
+
+qlonglong N = 16257;
+dtkDistributedCommunicator *comm = 
+dtkDistributed::app()->communicator();
+
+qlonglong *input = new qlonglong[N];
+for (int i = 0; i < N; ++i) {
+    input[i] = i;
+}
+
+dtkDistributedArray<qlonglong> array(N);
+
+if (comm->wid() == 0) {
+    for (int j = 0; j < N; ++j) {
+        array.setAt(j, input[j]);
+    }
+    for (int j = 0; j < N; ++j) {
+        if(array.at(j) != input[j]) {
+            return false;
+        }
+    }
+}
+comm->barrier();"
+            }
+        }
+
+        Slide {
+            title: "dtkDistibutedArray<T>"
+            CodeSection {
+                width: parent.width
+                anchors.centerIn: parent.centerIn
+                text: "// PARALLEL INITIALIZATION
+
+qlonglong N = 16257;
+dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+
+qlonglong *input = new qlonglong[N];
+for (int i = 0; i < N; ++i) {
+    input[i] = i;
+}
+
+dtkDistributedArray<qlonglong> array(N);
+
+dtkDistributedArray<qlonglong>::iterator ite = array.begin();
+dtkDistributedArray<qlonglong>::iterator end = array.end();
+
+for(int i = 0; ite != end; ++ite, ++i) {
+    *ite = input[array.mapper()->localToGlobal(i, comm->wid())]);
+}
+
+comm->barrier();"
+            }
+        }
+
+        Slide {
+            title: "dtkDistibutedArray<T>"
+            Rectangle {
+                width:  parent.width * 0.45
+                height: parent.height * 0.8
+                anchors.left: parent.left
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: dtkDistributedArrayAPI_global
+                    source: "images/dtkDistributedArrayAPI_global.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+            Rectangle {
+                width:  parent.width * 0.45
+                height: parent.height * 0.8
+                anchors.right: parent.right
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: dtkDistributedArrayAPI_local
+                    source: "images/dtkDistributedArrayAPI_local.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+            Text {
+                property real fontSize: parent.height * 0.05
+                property string fontFamily: parent.fontFamily;
+                id : apitext
+                width:  parent.width
+                height: parent.height * 0.1
+                text : "API globale vs API locale"
+                anchors.bottom: parent.bottom
+                font.family: fontFamily
+                font.pixelSize: fontSize
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+
+        Slide {
+            title: "dtkDistibutedArray<T> architecture"
+            Rectangle {
+                property real fontSize: parent.height * 0.05
+                property string fontFamily: parent.fontFamily;
+                id: array_top
+                width:  parent.width * 0.8
+                height: parent.height * 0.2
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                color : "darkgrey"
+                radius: 10
+                Text {
+                    id: array_top_txt0
+                    width:  parent.width
+                    text : "<p>dtkDistributedArray<T></p>"
+                    font.bold: true
+                    font.family: parent.fontFamily
+                    font.pixelSize: parent.fontSize
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter                    
+                }
+                Text {
+                    id: array_top_txt1
+                    anchors.top: array_top_txt0.bottom
+                    width:  parent.width
+                    text : "dtkDistributedMapper"
+                    font.family: parent.fontFamily
+                    font.pixelSize: parent.fontSize
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter                    
+                }
+                
+            }
+            Rectangle {
+                property real fontSize: parent.height * 0.05
+                property string fontFamily: parent.fontFamily;
+                id: array_left
+                width:  parent.width * 0.3
+                height: parent.height * 0.5
+                anchors.top: array_top.bottom
+                anchors.left: parent.left
+                anchors.topMargin: parent.height * 0.1
+                color : "darkgrey"
+                radius: 10
+                Text {
+                    anchors.centerIn: parent
+                    id: array_left_txt
+                    width:  parent.width
+                    text : "<p><strong>unit process #0</strong></p>
+                    <p>dtkArrayData *data;</p>
+                    <p>dtkDSBufferManager *bm;</p>
+                    <p>dtkDSArrayCache *cache;</p>"
+                    font.family: parent.fontFamily
+                    font.pixelSize: parent.fontSize
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+            Rectangle {
+                property real fontSize: parent.height * 0.05
+                property string fontFamily: parent.fontFamily;
+                id: array_center
+                width:  parent.width * 0.3
+                height: parent.height * 0.5
+                anchors.top: array_top.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.topMargin: parent.height * 0.1
+                color : "darkgrey"
+                radius: 10
+                Text {
+                    anchors.centerIn: parent
+                    id: array_center_txt
+                    width:  parent.width
+                    text : "<p><strong>unit process #1</strong></p>
+                    <p>dtkArrayData *data;</p>
+                    <p>dtkDSBufferManager *bm;</p>
+                    <p>dtkDSArrayCache *cache;</p>"
+                    font.family: parent.fontFamily
+                    font.pixelSize: parent.fontSize
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+            Rectangle {
+                property real fontSize: parent.height * 0.05
+                property string fontFamily: parent.fontFamily;
+                id: array_right
+                width:  parent.width * 0.3
+                height: parent.height * 0.5
+                anchors.top: array_top.bottom
+                anchors.right: parent.right
+                anchors.topMargin: parent.height * 0.1
+                color : "darkgrey"
+                radius: 10
+                Text {
+                    anchors.centerIn: parent
+                    id: array_right_txt
+                    width:  parent.width
+                    text : "<p><strong>unit process #2</strong></p>
+                    <p>dtkArrayData *data;</p>
+                    <p>dtkDSBufferManager *bm;</p>
+                    <p>dtkDSArrayCache *cache;</p>"
+                    font.family: parent.fontFamily
+                    font.pixelSize: parent.fontSize
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe"
+            Rectangle {
+                width:  parent.width * 0.8
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: graph_sequential
+                    source: "images/graph.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe"
+            CodeSection {
+                anchors.top: parent.top
+                height : parent.height * 0.25
+                text: 'Foreach vertex in graph {
+   Foreach neighbour of vertex {
+       max_values[vertex_id] = Max(max_values[vertex_id], values[neighbour_id]);
+   }
+}'
+            }
+            content: [
+            ,,
+            "Structure de graphe simple",
+            "Algorithme simple"
+            ]
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe partitionné"
+            Rectangle {
+                width:  parent.width * 0.8
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                width:  parent.width
+                height: parent.height
+                    id: graph_part
+                    source: "images/graph_part.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        Slide {
+            title: "Calcul de maximum sur un graphe partitionné"
+            CodeSection {
+                anchors.top: parent.top
+                height : parent.height * 0.75
+                text: 
+'// Local Computation
+Foreach vertex in subGraph {
+    Foreach neighbour of vertex {
+        max_values[vertex_id] = Max(max_values[vertex_id], values[neighbour_id]);
+    }
+
+// Boundary computation
+Foreach boundary in subGraph {
+    Foreach vertex of Boundary {
+        local_max_values[local_id] = max_values[vertex_id];
+    }
+    Send(local_max_values);
+
+    Receive(extern_max_values);
+    Foreach vertex of Boundary {
+        max_values[vertex_id] = Max(max_values[vertex_id], extern_max_values[ext_id]);
+    }
+}'
+            }
+            content: [
+            ,,,,,
+            "Complexité accrue en terme de structure et d'algorithme"
+            ]
+        }
+
+        Slide {
+            title: "Calcul du maximum sur les voisins des voisins"
+            content: [
+            ":-/", 
+            "Refaire les structures",
+            "Repenser l'algorithmie",
+            "...",
+            "Tout compte fait, on va s'en passer..."
+            ]
+        }
+
+        Slide {
+            title: "Bibliothèques existantes"
+            content: [
+            "Parallel Standard Library (PSTL) -> plus maintenu", 
+            "Intel Threadings Building Blocks (TBB) -> seulement multithread",
+            "Parallel Object-Oriented Methods and Applications (POOMA) -> pas de structure de graphe",
+            "Standard Template Adaptive Parallel Library (STAPL) -> ni sources ni binaires",
+            "Fortran Coarray (OpenCorrays) -> code C qui génère du Fortran!"
+            ]
+        }
+
+        Slide {
+            title: "dtkDistibuted Containers"
+            Rectangle {
+                width:  parent.width * 0.6
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                anchors.centerIn: parent
+                width:  parent.width
+                height: parent.height
+                    id: dtkDistributedContainers
+                    source: "images/dtkDistributed.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        Slide {
+            title: "dtkDistibutedArray<T>"
+            Rectangle {
+                width:  parent.width * 0.4
+                height: parent.height
+                anchors.centerIn: parent
+                //opacity: 0.0
+                color : "lightgrey"
+                radius: 10
+                Image {
+                anchors.centerIn: parent
+                width:  parent.width
+                height: parent.height
+                    id: dtkDistributedArrayAPI
+                    source: "images/dtkDistributedArrayAPI.png"
+                    /* mipmap: true */
+                    anchors.margins: 10
+                }
+            }
+        }
+
+        
+
+        Slide {
             title: "Algèbre Linéaire Creuse"
             content: [
             "dtkDistributedSparseMatrix",
-            "dtkLinearSolverSparse",
+            "dtkLinearSolverSparse"
             ]
 
         }

@@ -11,6 +11,11 @@
         <file>images/distributed.png</file>
         <file>images/dtkDistributed.png</file>
         <file>images/dtkDistributed_controller.png</file>
+        <file>images/dtkDistributedArrayAPI.png</file>
+        <file>images/dtkDistributedArrayAPI_global.png</file>
+        <file>images/dtkDistributedArrayAPI_local.png</file>
+        <file>images/graph.png</file>
+        <file>images/graph_part.png</file>
         <file alias="Dashboard.qml">../../../app/dtkDistributedDashboard/Dashboard.qml</file>
         <file alias="TextBox.qml">../../../app/dtkDistributedDashboard/TextBox.qml</file>
         <file alias="status.js">../../../app/dtkDistributedDashboard/status.js</file>

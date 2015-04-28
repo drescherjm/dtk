@@ -224,7 +224,7 @@ public:
         }
 
         delete[] input;
-            comm->barrier();
+        comm->barrier();
     }
 };
 

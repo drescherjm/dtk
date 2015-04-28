@@ -10,6 +10,9 @@ import "qrc:/Charts" 1.0
 
 
 Item {
+
+
+    property string path: "."
     anchors.fill: parent
 
     ListModel {
@@ -51,8 +54,9 @@ Item {
                     Layout.fillWidth: true
                     onCurrentIndexChanged: {
                         if (combotypes) {
-                            /* console.log("index changed " + currentText +" " + combotypes.find(Status.guess_type(currentText))) */
+                            var newType = Status.guess_type(currentText)
                             combotypes.currentIndex = combotypes.find(Status.guess_type(currentText))
+                            tunnel.checked = (newType != "local")
                         }
                     }
                 }
@@ -77,7 +81,7 @@ Item {
                 TextEdit {
                     id: serverPath
                     Layout.fillWidth: true
-                    text: "/home/nniclaus/git/dtk-github/build/bin/dtkDistributedServer"
+                    text: path + "/dtkDistributedServer"
                 }
             }
             RowLayout {

@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
     settings.beginGroup("communicator");
     dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
-
     QQmlApplicationEngine engine(QUrl("qrc:/SlideDeck.qml"));
+    engine.rootContext()->setContextProperty("workingDirectory", app.applicationDirPath());
     return app.exec();
 
 }

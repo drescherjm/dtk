@@ -409,6 +409,7 @@ Options:
 
             Dashboard {
                 id: dashboard
+                path: workingDirectory
             }
         }
 

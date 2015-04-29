@@ -82,7 +82,7 @@ OpacityTransitionPresentation
             "ADT DTK (depuis 2012) ",
             " méta plateforme, pour développer des plateformes modulaires (plugins)",
             " multi Plateforme, C++, Qt",
-            " num3sis, axel, medInria, enas, carbonQuant, pib, inalgae",
+            " num3sis, axel, medInria, enas, carbonQuant, pib, inalgae, bolis, winpos",
             "layers DTK:",
             " dtkCore",
             " dtkComposer",
@@ -512,7 +512,7 @@ Options:
         }
 
         Slide {
-            title: "Calcul de maximum sur un graphe partitionné"
+            title: "Calcul de maximum sur un graphe distribué"
             Rectangle {
                 width:  parent.width * 0.8
                 height: parent.height
@@ -532,7 +532,7 @@ Options:
         }
 
         Slide {
-            title: "Calcul de maximum sur un graphe partitionné"
+            title: "Calcul de maximum sur un graphe distribué"
             CodeSection {
                 anchors.top: parent.top
                 height : parent.height * 0.75
@@ -586,59 +586,61 @@ Foreach boundary in subGraph {
 
         Slide {
             title: "dtkDistributed Containers"
-            Rectangle {
-                width:  parent.width * 0.6
-                height: parent.height
-                anchors.centerIn: parent
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
+            // Rectangle {
+            //     width:  parent.width
+            //     height: parent.height
+            //     anchors.centerIn: parent
+            //     opacity: 0.8
+            //     color : "lightgrey"
+            //     radius: 10
                 Image {
                 anchors.centerIn: parent
-                width:  parent.width
+                width:  parent.width * 0.9
                 height: parent.height
                     id: dtkDistributedContainers
                     source: "images/dtkDistributed.png"
                     /* mipmap: true */
                     anchors.margins: 10
                 }
-            }
+            //}
         }
 
-        Slide {
-            title: "dtkDistributedArray<T>"
-            Rectangle {
-                width:  parent.width * 0.4
-                height: parent.height
-                anchors.left: parent.left
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                width:  parent.width
-                height: parent.height
-                    id: dtkDistributedArrayAPI
-                    source: "images/dtkDistributedArrayAPI.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-            CodeSection {
-                width: parent.width * 0.55
-                anchors.right: parent.right
-                text: '// SEQUENTIAL INITIALIZATION
+        CodeSlide {
+            title: "dtkDistributedArray : API"
+            code:
+'template < typename T > class dtkDistributedArray : 
+                                     public dtkDistributedContainer
+{
+public:
+  dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
+ ~dtkDistributedArray(void);
 
-qlonglong N = 16257;
-dtkDistributedCommunicator *comm =
-dtkDistributed::communicator::instance();
+public:
+  bool empty(void) const;
+  qlonglong size(void) const;
+  void fill(const T& value);
+  void setAt(const qlonglong& index, const T& value);
+  T at(const qlonglong& index) const;
+  T operator[](const qlonglong& index) const;
 
+public:
+  iterator  begin(void);
+  iterator    end(void);
+  const T *data(void) const;
+        T *data(void);'
+        }
+
+        CodeSlide {
+            title: "dtkDistributedArray : Sequential initialization" 
+            code:
+'qlonglong N = 16257;
+dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
 qlonglong *input = new qlonglong[N];
 for (int i = 0; i < N; ++i) {
     input[i] = i;
 }
 
 dtkDistributedArray<qlonglong> array(N);
-
 if (comm->wid() == 0) {
     for (int j = 0; j < N; ++j) {
         array.setAt(j, input[j]);
@@ -650,19 +652,13 @@ if (comm->wid() == 0) {
     }
 }
 comm->barrier();'
-            }
         }
-
-        Slide {
-            title: "dtkDistributedArray<T>"
-            CodeSection {
-                width: parent.width
-                anchors.centerIn: parent.centerIn
-                text: '// PARALLEL INITIALIZATION
-
-qlonglong N = 16257;
+        
+        CodeSlide {
+            title: "dtkDistributedArray : Parallel initialization"
+            code:
+'qlonglong N = 16257;
 dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
-
 qlonglong *input = new qlonglong[N];
 for (int i = 0; i < N; ++i) {
     input[i] = i;
@@ -676,168 +672,377 @@ dtkDistributedArray<qlonglong>::iterator end = array.end();
 for(int i = 0; ite != end; ++ite, ++i) {
     *ite = input[array.mapper()->localToGlobal(i, comm->wid())]);
 }
-
 comm->barrier();'
+        }
+
+        Slide {
+            title: "dtkDistributedArray : globale vs locale"
+            CodeSection {
+                id : globaleapi
+                width:  parent.width * 0.475
+                height: parent.height * 0.5
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                }
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Qt.rgba(0.9, 0.9, 0.9, 0.5); }
+                    GradientStop { position: 1; color: Qt.rgba(0.6, 0.6, 0.6, 0.5); }
+                }
+                border.color: parent.textColor;
+                antialiasing: true
+                text:
+'
+bool empty(void) const;
+qlonglong size(void) const;
+
+void fill(const T& value);
+
+void setAt(const qlonglong& id, const T& val);
+
+T at(const qlonglong& id) const;
+T operator[](const qlonglong& id) const;'
+            }
+            
+            CodeSection {
+                width:  parent.width * 0.475
+                height: parent.height * 0.5
+                anchors {
+                    right: parent.right
+                    verticalCenter: parent.verticalCenter
+                }
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Qt.rgba(0.9, 0.9, 0.9, 0.5); }
+                    GradientStop { position: 1; color: Qt.rgba(0.6, 0.6, 0.6, 0.5); }
+                }
+                border.color: parent.textColor;
+                antialiasing: true
+                text:
+'
+
+
+iterator  begin(void);
+iterator    end(void);
+
+const T *data(void) const;
+      T *data(void);'
             }
         }
 
         Slide {
-            title: "dtkDistributedArray<T>"
-            Rectangle {
-                width:  parent.width * 0.45
-                height: parent.height * 0.8
-                anchors.left: parent.left
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                width:  parent.width
-                height: parent.height
-                    id: dtkDistributedArrayAPI_global
-                    source: "images/dtkDistributedArrayAPI_global.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-            Rectangle {
-                width:  parent.width * 0.45
-                height: parent.height * 0.8
-                anchors.right: parent.right
-                //opacity: 0.0
-                color : "lightgrey"
-                radius: 10
-                Image {
-                width:  parent.width
-                height: parent.height
-                    id: dtkDistributedArrayAPI_local
-                    source: "images/dtkDistributedArrayAPI_local.png"
-                    /* mipmap: true */
-                    anchors.margins: 10
-                }
-            }
-            Text {
-                property real fontSize: parent.height * 0.05
-                property string fontFamily: parent.fontFamily;
-                id : apitext
-                width:  parent.width
-                height: parent.height * 0.1
-                text : "API globale vs API locale"
-                anchors.bottom: parent.bottom
-                font.family: fontFamily
-                font.pixelSize: fontSize
-                color: "white"
-                horizontalAlignment: Text.AlignHCenter
-            }
-        }
-
-        Slide {
-            title: "dtkDistributedArray<T> architecture"
-            Rectangle {
-                property real fontSize: parent.height * 0.05
-                property string fontFamily: parent.fontFamily;
+            title: "dtkDistributedArray : architecture"
+            CodeSection {
                 id: array_top
-                width:  parent.width * 0.8
-                height: parent.height * 0.2
+                width:  parent.width
+                height: parent.height * 0.35
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
-                color : "darkgrey"
-                radius: 10
-                Text {
-                    id: array_top_txt0
-                    width:  parent.width
-                    text : "<p>dtkDistributedArray<T></p>"
-                    font.bold: true
-                    font.family: parent.fontFamily
-                    font.pixelSize: parent.fontSize
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Qt.rgba(0.9, 0.9, 0.9, 0.5); }
+                    GradientStop { position: 1; color: Qt.rgba(0.6, 0.6, 0.6, 0.5); }
                 }
-                Text {
-                    id: array_top_txt1
-                    anchors.top: array_top_txt0.bottom
-                    width:  parent.width
-                    text : "dtkDistributedMapper"
-                    font.family: parent.fontFamily
-                    font.pixelSize: parent.fontSize
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                }
+                border.color: parent.textColor;
+                antialiasing: true
+                text:
+'// all processes duplicate the mapper
+
+dtkDistributedCommunicator *comm;
+
+dtkDistributedMapper *mapper;'
             }
-            Rectangle {
-                property real fontSize: parent.height * 0.05
-                property string fontFamily: parent.fontFamily;
+            CodeSection {
                 id: array_left
                 width:  parent.width * 0.3
                 height: parent.height * 0.5
                 anchors.top: array_top.bottom
                 anchors.left: parent.left
                 anchors.topMargin: parent.height * 0.1
-                color : "darkgrey"
-                radius: 10
-                Text {
-                    anchors.centerIn: parent
-                    id: array_left_txt
-                    width:  parent.width
-                    text : "<p><strong>unit process #0</strong></p>
-                    <p>dtkArrayData *data;</p>
-                    <p>dtkDSBufferManager *bm;</p>
-                    <p>dtkDSArrayCache *cache;</p>"
-                    font.family: parent.fontFamily
-                    font.pixelSize: parent.fontSize
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Qt.rgba(0.9, 0.9, 0.9, 0.5); }
+                    GradientStop { position: 1; color: Qt.rgba(0.6, 0.6, 0.6, 0.5); }
                 }
+                border.color: parent.textColor;
+                antialiasing: true
+                text:
+'// unit process #0
+
+dtkArrayData *data;
+
+dtkDSBufferManager *bm;
+
+dtkDSArrayCache *cache;'
             }
-            Rectangle {
-                property real fontSize: parent.height * 0.05
-                property string fontFamily: parent.fontFamily;
+            CodeSection {
                 id: array_center
                 width:  parent.width * 0.3
                 height: parent.height * 0.5
                 anchors.top: array_top.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.topMargin: parent.height * 0.1
-                color : "darkgrey"
-                radius: 10
-                Text {
-                    anchors.centerIn: parent
-                    id: array_center_txt
-                    width:  parent.width
-                    text : "<p><strong>unit process #1</strong></p>
-                    <p>dtkArrayData *data;</p>
-                    <p>dtkDSBufferManager *bm;</p>
-                    <p>dtkDSArrayCache *cache;</p>"
-                    font.family: parent.fontFamily
-                    font.pixelSize: parent.fontSize
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Qt.rgba(0.9, 0.9, 0.9, 0.5); }
+                    GradientStop { position: 1; color: Qt.rgba(0.6, 0.6, 0.6, 0.5); }
                 }
+                border.color: parent.textColor;
+                antialiasing: true
+                text:
+'// unit process #1
+
+dtkArrayData *data;
+
+dtkDSBufferManager *bm;
+
+dtkDSArrayCache *cache;'
             }
-            Rectangle {
-                property real fontSize: parent.height * 0.05
-                property string fontFamily: parent.fontFamily;
+            CodeSection {
                 id: array_right
                 width:  parent.width * 0.3
                 height: parent.height * 0.5
                 anchors.top: array_top.bottom
                 anchors.right: parent.right
                 anchors.topMargin: parent.height * 0.1
-                color : "darkgrey"
-                radius: 10
-                Text {
-                    anchors.centerIn: parent
-                    id: array_right_txt
-                    width:  parent.width
-                    text : "<p><strong>unit process #2</strong></p>
-                    <p>dtkArrayData *data;</p>
-                    <p>dtkDSBufferManager *bm;</p>
-                    <p>dtkDSArrayCache *cache;</p>"
-                    font.family: parent.fontFamily
-                    font.pixelSize: parent.fontSize
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Qt.rgba(0.9, 0.9, 0.9, 0.5); }
+                    GradientStop { position: 1; color: Qt.rgba(0.6, 0.6, 0.6, 0.5); }
                 }
+                border.color: parent.textColor;
+                antialiasing: true
+                text:
+'// unit process #2
+
+dtkArrayData *data;
+
+dtkDSBufferManager *bm;
+
+dtkDSArrayCache *cache;'
             }
+        }
+
+        CodeSlide {
+            title: "dtkDistributedArray : allocation mémoire"
+            code:
+'template <typename T> inline void dtkDistributedArray<T>::allocate(void) 
+{
+    // Communicator creates the buffer manager matching its
+    // implementation (Qthread, MPI, MPI3)
+
+    bm = comm->createBufferManager();
+
+    // Buffer manager allocates the memory according to size given by
+    // the mapper
+
+    void *local_buffer = bm->allocate<T>(mapper->localSize());
+
+    // This buffer initializes the local container
+
+    data = dtkArrayData<T>::fromRawData(buffer, mapper->localSize());
+}'
+        }
+
+        CodeSlide {
+            title: "dtkDistributedArray : accès aux valeurs"
+            code:
+'template <typename T> inline T dtkDistributedArray<T>::at(qlonglong id) const
+{
+    // Identifies the unit process that has the value
+    qint32 owner = mapper->owner(id);
+    // Identifies the local position of the value on the owner
+    qlonglong pos = id - mapper->firstId(owner);
+
+    // If the owner is the local process the access is direct    
+    if (this->wid() == owner) {
+        return data[pos];
+    // Else the remote value is asked by the buffer manager
+    } else {
+        T val;
+        bm->get(owner, pos, &val);
+        return val;
+    }
+}'
+        }
+
+        CodeSlide {
+            title: "Buffer Manager : accès aux valeurs en Qthread"
+            height: parent.height * 0.55
+            content: [,,,,,"Accès direct au buffer cible"]
+            code:
+'void qthDistributedBufferManager::get(qint32 owner, qlonglong pos, 
+                                                     void *array,
+                                                     qlonglong nelement = 1)
+{
+    // Owner id enables to get the right shared buffer
+
+    char *buffer = d->buffers[owner];
+
+
+    // Copy into array is done from pos to pos + nelement
+
+    memcpy(array, buffer + pos * d->object_size, d->object_size * nelement);
+}'
+        }
+
+        CodeSlide {
+            title: "Buffer Manager : accès aux valeurs en MPI"
+            height: parent.height * 0.4
+            code:
+'void mpiDistributedBufferManager::get(qint32 owner, qlonglong pos, 
+                                       void *array, qlonglong nelement = 1)
+{
+    // Size of the memory to get
+    qlonglong array_size = d->object_size * nelements;
+
+    // Copy into array from the memory of the owner at position pos
+    MPI_Get(array, array_size, MPI_BYTE, 
+            owner, pos, array_size, MPI_BYTE, d->win);
+}'
+            textFormat: Text.RichText
+            content: [
+            ,,,,
+            "Utilisation de MPI One-Sided Communication",
+            " permet à un processus d'accéder à un espace d'adresse d'un autre processus sans la participation explicite de celui-ci.",
+            " permet de simplifier le programme et de coder comme en mémoire partagée"
+            ]
+        }
+
+        Slide {
+            title: "MPI One-Sided Communication"
+            textFormat: Text.RichText
+            content: [
+            "<code>MPI_Win_Create</code>",
+            " crée une fenêtre pour l'accès par d'autres processus à une zone mémoire",
+            "<code>MPI_Win_Free</code>",
+            " détruit la fenêtre",
+            "<code>MPI_Get / MPI_Put</code>",
+            " lecture/écriture asynchrone sur une zone mémoire exposée par une fenêtre",
+            "Bibliothèques utilisant MPI One-Sided Communication :",
+            " <em>OpenCoarrays</em> pour les Coarrays en Fortran 2008",
+            " <em>OpenShmem</em> implémentation de PGAS (Partitioned Global Address Space)"
+            ]
+        }
+
+        CodeSlide {
+            title: "dtkDistributedGraphTopology : API"
+            code:
+'class dtkDistributedGraphTopology : public dtkDistributedContainer
+{
+public:
+  dtkDistributedArray(qlonglong vertex_count, dtkDistributedMapper *mapper);
+ ~dtkDistributedArray(void);
+
+  void addEdge(qlonglong from, qlonglong to, bool oriented = false);
+  void build(void);
+
+  qlonglong vertexCount(void) const;
+  qlonglong   edgeCount(void) const;
+
+  qlonglong neighbourCount(qlonglong vertex_id) const;
+  Neighbours operator[](qlonglong vertex_id) const;
+
+  iterator begin(void) const;
+  iterator   end(void) const;
+};'
+        }
+
+        CodeSlide {
+            title: "dtkDistributedGraphTopology : Construction"
+            height: parent.height * 0.4
+            textFormat: Text.RichText
+            content: [,,,,"Structure type ParCSR mais avec des dtkDistributedArray",
+            " <code>Vertex_to_FirstEdge</code> : index de la première arête de chaque sommet",
+            " <code>Edge_to_Vertex</code> : index du sommet cible de chaque arête"]
+            code:
+'dtkDistributedGraphTopology graph(18);
+
+// Add edges into provisionnal local data structure of the graph
+graph.addEdge(0, 1);
+graph.addEdge(1, 2);
+...
+graph.addEdge(16, 17);
+
+// Build the true structures of the graph
+graph.build();'
+        }
+
+        CodeSlide {
+            title: "dtkDistributedGraphTopology : API globale"
+            height: parent.height * 0.56
+            textFormat: Text.RichText
+            content: [,,,,,"<code>dtkDistributedNavigator</code> interroge le graphe via l'API globale.",]
+            code:
+'typedef dtkDistributedNavigator<dtkDistributedArray<qlonglong> > Neighbours;
+
+// Gets a navigator for neighbours of a vertex
+Neighbours n = graph[i];
+qlonglong n_count = n.size();
+
+// Can iterate over all the neighbours of the vertex
+Neighbours::iterator nit  = n.begin();
+Neighbours::iterator nend = n.end();
+
+for(; nit != nend; ++nit) {
+    // Access to id of each neighbour
+    qDebug() << *nit;
+}'
+        }
+
+        CodeSlide {
+            title: "dtkDistributedGraphTopology : API locale"
+            height: parent.height * 0.4
+            textFormat: Text.RichText
+            content: [,,,,"En combinant <code>iterator</code> local et <code>navigator</code> global, on peut:",
+            " accéder aux sommets voisins non-locaux",
+            " accéder aux voisins des voisins non-locaux",
+            " accéder aux voisins des voisins non-locaux des voisins non-locaux ;-)"]
+            code:
+'typedef dtkDistributedIterator<dtkDistributedGraphTopology > iterator;
+
+// Iterates over all local vertices
+iterator vit  = graph.begin();
+iterator vend = graph.end();
+
+for(; vit != vend; ++vit) {
+    // Access to all the neighbours of the local vertex
+    Neighbours n = *vit;
+}'
+        }
+
+        CodeSlide {
+            title: "Calcul du maximum sur les voisins des voisins"
+            code:
+'dtkDistributedGraphTopology::iterator it  = graph.begin();
+dtkDistributedGraphTopology::iterator end = graph.end();
+
+for(;it != end; ++it) {
+    dtkDistributedGraphTopology::Neighbours n = *it;
+    dtkDistributedGraphTopology::Neighbours::iterator nit  = n.begin();
+    dtkDistributedGraphTopology::Neighbours::iterator nend = n.end();
+
+    for(;nit != nend; ++nit) {
+        dtkDistributedGraphTopology::Neighbours nn = graph[*nit];
+        dtkDistributedGraphTopology::Neighbours::iterator nnit  = nn.begin();
+        dtkDistributedGraphTopology::Neighbours::iterator nnend = nn.end();
+
+        for(;nnit != nnend; ++nnit) {
+            max_values[it.id()] = qMax(max_values[it.id()], values[*nnit]);
+        }
+    }
+}'
+        }
+
+        Slide {
+            title: "En résumé, ..."
+            textFormat: Text.RichText
+            content: [
+            "Avec :",
+            " une structure fondamentale :",
+            "  <code>dtkDistributedArray</code>",
+            " une structure aggrégatrice :",
+            "  <code>dtkDistributedGraphTopology</code>",
+            " et des structures périphériques d'accès :",
+            "  <code>dtkDistributedIterator</code>",
+            "  <code>dtkDistributedNavigator</code>",
+            "le code utilisateur parallèle s'écrit comme en séquentiel",
+            "YES, WE CAN !"]
         }
 
         Slide {

@@ -1062,6 +1062,27 @@ for(;it != end; ++it) {
             " <code>dtkDistributedArray</code> (valeurs)",
             ]
         }
+
+            CodeSlide {
+                title: "dtkSparseMatrix"
+                code: 'dtkSparseMatrixLine<double> line_it = mat.begin();
+dtkSparseMatrixLine<double> line_end = mat.end();
+
+for (; line_it != line_end; ++line_it) {
+    dtkSparseMatrixLineElement<double> elt_it  = line_it.begin();
+    dtkSparseMatrixLineElement<double> elt_end = line_it.end();
+    qlonglong i = line_it.id();
+    for(;elt_it != elt_end; ++elt_it) {
+        qlonglong j = elt_it.id();
+        // accès à value via l\'iterateur:
+        value =  (*elt_it);
+        // modification via i,j (numérotation globale)
+        mat(i,j) += coef;
+        // en MPI, \'+=\' implémenté via MPI_Accumulate()
+    }
+}
+'
+        }
         Slide {
             title: "dtkSparseSolver"
             content: [
@@ -1199,6 +1220,7 @@ Options:
         " refonte de numWindSimulator basé sur dtkMesh distribué",
         " plugins MaPHyS",
         "optimisations ",
+        "intégration dans le composer des structures distribuées de haut niveau",
         ]
 
     }

@@ -609,12 +609,10 @@ Foreach boundary in subGraph {
             title: "dtkDistributedArray : API"
             code:
 'template < typename T > class dtkDistributedArray : 
-                                     public dtkDistributedContainer
-{
+                                     public dtkDistributedContainer {
 public:
   dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
  ~dtkDistributedArray(void);
-
 public:
   bool empty(void) const;
   qlonglong size(void) const;
@@ -622,7 +620,6 @@ public:
   void setAt(const qlonglong& index, const T& value);
   T at(const qlonglong& index) const;
   T operator[](const qlonglong& index) const;
-
 public:
   iterator  begin(void);
   iterator    end(void);
@@ -639,7 +636,6 @@ qlonglong *input = new qlonglong[N];
 for (int i = 0; i < N; ++i) {
     input[i] = i;
 }
-
 dtkDistributedArray<qlonglong> array(N);
 if (comm->wid() == 0) {
     for (int j = 0; j < N; ++j) {
@@ -653,7 +649,7 @@ if (comm->wid() == 0) {
 }
 comm->barrier();'
         }
-        
+
         CodeSlide {
             title: "dtkDistributedArray : Parallel initialization"
             code:
@@ -864,7 +860,7 @@ dtkDSArrayCache *cache;'
         CodeSlide {
             title: "Buffer Manager : accès aux valeurs en Qthread"
             height: parent.height * 0.55
-            content: [,,,,,"Accès direct au buffer cible"]
+            content: ["","","","","","Accès direct au buffer cible"]
             code:
 'void qthDistributedBufferManager::get(qint32 owner, qlonglong pos, 
                                                      void *array,
@@ -897,7 +893,7 @@ dtkDSArrayCache *cache;'
 }'
             textFormat: Text.RichText
             content: [
-            ,,,,
+            "","","","",
             "Utilisation de MPI One-Sided Communication",
             " permet à un processus d'accéder à un espace d'adresse d'un autre processus sans la participation explicite de celui-ci.",
             " permet de simplifier le programme et de coder comme en mémoire partagée"
@@ -947,7 +943,7 @@ public:
             title: "dtkDistributedGraphTopology : Construction"
             height: parent.height * 0.4
             textFormat: Text.RichText
-            content: [,,,,"Structure type ParCSR mais avec des dtkDistributedArray",
+            content: ["","","","","Structure type ParCSR mais avec des dtkDistributedArray",
             " <code>Vertex_to_FirstEdge</code> : index de la première arête de chaque sommet",
             " <code>Edge_to_Vertex</code> : index du sommet cible de chaque arête"]
             code:
@@ -967,7 +963,7 @@ graph.build();'
             title: "dtkDistributedGraphTopology : API globale"
             height: parent.height * 0.56
             textFormat: Text.RichText
-            content: [,,,,,"<code>dtkDistributedNavigator</code> interroge le graphe via l'API globale.",]
+            content: ["","","","","","<code>dtkDistributedNavigator</code> interroge le graphe via l'API globale.",]
             code:
 'typedef dtkDistributedNavigator<dtkDistributedArray<qlonglong> > Neighbours;
 
@@ -989,7 +985,7 @@ for(; nit != nend; ++nit) {
             title: "dtkDistributedGraphTopology : API locale"
             height: parent.height * 0.4
             textFormat: Text.RichText
-            content: [,,,,"En combinant <code>iterator</code> local et <code>navigator</code> global, on peut:",
+            content: ["","","","","En combinant <code>iterator</code> local et <code>navigator</code> global, on peut:",
             " accéder aux sommets voisins non-locaux",
             " accéder aux voisins des voisins non-locaux",
             " accéder aux voisins des voisins non-locaux des voisins non-locaux ;-)"]
@@ -1169,7 +1165,7 @@ Options:
         title: "solveur Jacobi, résultats préliminaires"
         fontFamily: 'Courier New'
         content: [
-        "matrix  2M x 2M, nnz: 138M",
+        "matrice  2M x 2M, nnz: 138M",
         "jacobi: 100 iterations",
         "cluster nef, nœuds Xeon 20 cœurs, infiniband 40G",
         "mvapich 2.1",
@@ -1193,7 +1189,19 @@ Options:
 
         ]
     }
+    Slide {
+        title: "Perspectives"
+        textFormat: Text.RichText
+        content: [
+        "ADT SIMON (Jérémie Labroquère et Tristan Cabel)",
+        " intégration de dtkSparseMatrix et dtkSparseSolver dans numWindSimulator (presque fait)",
+        " dtkMesh basé sur dtkDistributedGraphTopology",
+        " refonte de numWindSimulator basé sur dtkMesh distribué",
+        " plugins MaPHyS",
+        "optimisations ",
+        ]
 
+    }
          Slide {
              title: "API documentation"
              ScrollView {

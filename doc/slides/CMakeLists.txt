@@ -1,1 +1,3 @@
+if(DTK_BUILD_DISTRIBUTED)
 add_subdirectory(dtkDistributed)
+endif(DTK_BUILD_DISTRIBUTED)

@@ -137,11 +137,11 @@ public:
     virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
 
 public:
-    virtual void spawn(QStringList hostnames, qlonglong np = 1) = 0;
+    virtual void spawn(QStringList hostnames, QString wrapper = "") = 0;
     virtual void  exec(QRunnable *work) = 0;
 
 public:
-    virtual void unspawn(void);
+    virtual void unspawn(void) = 0;
     virtual void barrier(void) = 0;
 
 public:

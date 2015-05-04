@@ -35,7 +35,7 @@ public:
     bool       active(void);
 
 public:
-    void   spawn(QStringList hostnames, qlonglong np);
+    void   spawn(QStringList hostnames, QString wrapper);
     void    exec(QRunnable *work);
 
 public:

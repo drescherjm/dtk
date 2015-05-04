@@ -296,9 +296,11 @@ qthDistributedCommunicator::~qthDistributedCommunicator(void)
     d = NULL;
 }
 
-void qthDistributedCommunicator::spawn(QStringList hostnames, qlonglong nthreads)
+void qthDistributedCommunicator::spawn(QStringList hostnames, QString wrapper)
 {
-    qlonglong np = nthreads * hostnames.count();
+    Q_UNUSED(wrapper);
+
+    qlonglong np = hostnames.count();
 
     dtkDebug() << "spawning" << np << "qthreads on "<< hostnames;
 
@@ -446,9 +448,9 @@ void qthDistributedCommunicator::send(void *data, qint64 size, QMetaType::Type d
     qthDistributedLocalMessage *msg;
 
     dtkSpinLock *mutex = d->msg_mutex[target];
+    qlonglong bytesize = size * QMetaType::sizeOf(dataType);
 
     mutex->lock();
-    qlonglong bytesize = size * QMetaType::sizeOf(dataType);
 
     if (d->freelist[target].isEmpty()) {
         msg = new qthDistributedLocalMessage(data, bytesize , source, tag);

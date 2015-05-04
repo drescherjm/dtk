@@ -118,22 +118,11 @@ bool dtkDistributedCommunicator::active(void)
     return false;
 }
 
-/*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, qlonglong np)
+/*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, QString wrapper)
 
-  Spawn a communicator on all hostnames, starting np threads on each
-  process.
+  Spawn a communicator on all hostnames. Optionnaly use a wrapper to spawn slaves
 
 */
-
-void dtkDistributedCommunicator::spawn(QStringList hostnames, qlonglong np)
-{
-    qDebug() << Q_FUNC_INFO;
-}
-
-void dtkDistributedCommunicator::unspawn(void)
-{
-}
-
 
 /*! \fn dtkDistributedCommunicator::barrier (void)
 

@@ -31,6 +31,7 @@ class dtkDistributedAbstractApplicationPrivate
 public:
     dtkDistributedPolicy policy;
     bool spawned;
+    QString wrapper;
 };
 
 
@@ -71,6 +72,8 @@ void dtkDistributedAbstractApplication::initialize(void)
     parser->addOption(npOption);
     QCommandLineOption ntOption("nt","number of threads (for hybrid plugins)","int", "1");
     parser->addOption(ntOption);
+    QCommandLineOption wrapperOption("wrapper","use wrapper command when spawning processes","command", "");
+    parser->addOption(wrapperOption);
     QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
     parser->addOption(hostsOption);
 
@@ -98,6 +101,9 @@ void dtkDistributedAbstractApplication::initialize(void)
             d->policy.addHost(s);
         }
     }
+    if (parser->isSet(wrapperOption)) {
+        d->wrapper = parser->value(wrapperOption);
+    }
     qlonglong np = 0;
     if (parser->isSet(npOption)) {
             np = parser->value(npOption).toLongLong();
@@ -117,7 +123,7 @@ void dtkDistributedAbstractApplication::spawn(void)
 {
     QStringList hosts = d->policy.hosts();
     d->spawned = true;
-    d->policy.communicator()->spawn(hosts, 1);
+    d->policy.communicator()->spawn(hosts, d->wrapper);
 }
 
 void dtkDistributedAbstractApplication::unspawn(void)

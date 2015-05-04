@@ -275,7 +275,8 @@ public:
                 qlonglong fid = array.mapper()->firstIndex(i);
 
                 qlonglong *output = new qlonglong[size];
-                array.copyIntoArray(fid, output, size);
+                qint32 owner = array.mapper()->owner(fid);
+                array.copyIntoArray(fid, owner, output, size);
                 for (int j = 0; j < size; ++j) {
                     QCOMPARE(array[fid + j], output[j]);
                 }

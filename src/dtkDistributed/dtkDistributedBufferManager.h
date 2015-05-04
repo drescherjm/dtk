@@ -140,7 +140,10 @@ public:
 public:
     template <typename T>    T *allocate(qlonglong capacity);
     template <typename T> void  deallocate(T *& buffer);
-    
+
+public:
+    virtual bool shouldCache(const qint32& owner) = 0;
+
 protected:
     virtual void *allocate(qlonglong objectSize, qlonglong capacity, int metatype_id) = 0;
     virtual void  deallocate(void *buffer, qlonglong objectSize) = 0;

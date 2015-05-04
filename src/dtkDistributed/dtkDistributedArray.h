@@ -110,7 +110,7 @@ public:
     void divAssign(const qlonglong& index, T* array, const qlonglong& count);
 
 public:
-    void copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const;
+    void copyIntoArray(const qlonglong& from, const qint32& owner, T *array, qlonglong& size) const;
 
 public:
           iterator  begin(iterator = iterator());

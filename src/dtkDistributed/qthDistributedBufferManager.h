@@ -52,6 +52,9 @@ protected:
     void  deallocate(void *buffer, qlonglong objectSize);
 
 public:
+    bool shouldCache(const qint32& owner);
+
+public:
     void rlock(qlonglong wid);
     void rlock(void);
     void wlock(qlonglong wid);
@@ -136,6 +139,11 @@ inline void qthDistributedBufferManager::deallocate(void *buffer, qlonglong obje
         d->object_size = 0;
     }
     d->comm->barrier();
+}
+
+inline bool qthDistributedBufferManager::shouldCache(const qint32& owner)
+{
+    return false;
 }
 
 inline void qthDistributedBufferManager::rlock(void)

@@ -27,6 +27,7 @@ template <typename T> inline void dtkDistributedArray<T>::allocate(dtkDistribute
 {
     if (size > 0) {
         manager = m_comm->createBufferManager();
+        m_cache = new dtkDistributedArrayCache<T>(this);
         x = dtkTypedArrayData<T>::fromRawData(manager->allocate<T>(size), size, dtkArrayData::RawData);
     } else {
         qWarning() << "allocation with size =0!" << m_comm->wid();
@@ -68,14 +69,14 @@ template <typename T> inline void dtkDistributedArray<T>::copyConstruct(const T 
 // ///////////////////////////////////////////////////////////////////
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size) : dtkDistributedContainer(size),
-                                                                                                  d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+                                                                                                  d(0), m_cache(0), m_buffer_manager(0)
 {
     firstIndex = m_mapper->firstIndex(this->wid());
     this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper) : dtkDistributedContainer(size, mapper),
-    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(0), m_buffer_manager(0)
 {
     if (m_mapper->count() == 0)
         m_mapper->setMapping(size, m_comm->size());
@@ -85,7 +86,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T& init_value) : dtkDistributedContainer(size),
-    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(0), m_buffer_manager(0)
 {
     this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
@@ -95,7 +96,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array) : dtkDistributedContainer(size),
-    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(0), m_buffer_manager(0)
 {
     this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
@@ -109,7 +110,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkArray<T>& array) : dtkDistributedContainer(array.size()),
-    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(0), m_buffer_manager(0)
 {
     this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
@@ -121,7 +122,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const dtkDistributedArray& o) : dtkDistributedContainer(o.size(), o.mapper()),
-    d(0), m_cache(new dtkDistributedArrayCache<T>(this)), m_buffer_manager(0)
+    d(0), m_cache(0), m_buffer_manager(0)
 {
     this->allocate(m_buffer_manager, d, m_mapper->count(this->wid()));
 
@@ -164,9 +165,10 @@ template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMa
 {
     dtkDistributedBufferManager *new_buffer_manager = 0;
     Data *new_d = 0;
-
+    if (m_cache)
+        delete m_cache;
     this->allocate(new_buffer_manager, new_d, remapper->count(this->wid()));
-    
+
     for (qlonglong i = 0; i < new_d->size; ++i) {
         new_d->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));
     }
@@ -251,7 +253,7 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
             m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
         }
     } else {
-        qlonglong pos = m_mapper->globalToLocal(index);
+        qlonglong pos = m_mapper->globalToLocal(index, owner);
         m_buffer_manager->put(owner, pos, &(const_cast<T&>(value)));
     }
 }
@@ -259,7 +261,7 @@ template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, T *array, const qlonglong& size)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-    qlonglong pos = m_mapper->globalToLocal(index);
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
 
     qlonglong owner_capacity = m_mapper->lastIndex(owner) - index + 1;
 
@@ -285,8 +287,12 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
             return val;
         }
 
+    } else if (m_buffer_manager->shouldCache(owner)) {
+        return m_cache->value(index, owner);
     } else {
-        return m_cache->value(index);
+        qlonglong pos = m_mapper->globalToLocal(index, owner);
+        m_buffer_manager->get(owner, pos, &val);
+        return val;
     }
 }
 
@@ -433,11 +439,10 @@ template<typename T> inline void dtkDistributedArray<T>::divAssign(const qlonglo
     }
 }
 
-template<typename T> inline void dtkDistributedArray<T>::copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const
-{   
-    qint32 owner = static_cast<qint32>(m_mapper->owner(from));
-    size = qMin(size, m_mapper->lastIndex(owner) - from + 1);
-    qlonglong pos = m_mapper->globalToLocal(from);
+template<typename T> inline void dtkDistributedArray<T>::copyIntoArray(const qlonglong& index, const qint32& owner, T *array, qlonglong& size) const
+{
+    size = qMin(size, m_mapper->lastIndex(owner) - index + 1);
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
 
     m_buffer_manager->get(owner, pos, array, size);
 }
@@ -494,7 +499,7 @@ template<typename T> inline typename dtkDistributedArray<T>::navigator dtkDistri
 
 template<typename T> inline void dtkDistributedArray<T>::stats(void) const
 {
-    qDebug() << "cache hitrate:" << m_cache->hitrate();
+    qDebug() << m_comm->rank() << "cache hitrate:" << m_cache->hitrate();
 }
 
 // 

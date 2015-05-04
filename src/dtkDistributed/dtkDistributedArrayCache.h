@@ -36,7 +36,7 @@ public:
 public:
     void clear(void);
 
-    const T& value(const qlonglong& entry_id);
+    const T& value(const qlonglong& entry_id, const qint32& owner);
     double hitrate(void);
 
 private:     
@@ -77,7 +77,7 @@ template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayC
     }
 }
 
-template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id)
+template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id, const qint32& owner)
 {
     // Check if entry_id is already in the Cache
     int line_id = -1;
@@ -95,7 +95,7 @@ template <typename T, int Prealloc, int Length> inline const T& dtkDistributedAr
         ids[line_id] = entry_id;
 
         qlonglong size = Prealloc;
-        m_array->copyIntoArray(entry_id, lines[line_id].data(), size);
+        m_array->copyIntoArray(entry_id, owner, lines[line_id].data(), size);
         lines[line_id].resize(size);
     } else {
         hit ++;

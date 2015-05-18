@@ -93,6 +93,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopology : public dtkDistributedC
 public:
     enum GraphFile {
         MetisFormat,
+        MetisDirectedFormat,
         MatrixMarketFormat
     };
 

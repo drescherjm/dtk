@@ -27,7 +27,8 @@ template <typename T> inline void dtkDistributedArray<T>::allocate(dtkDistribute
 {
     if (size > 0) {
         manager = m_comm->createBufferManager();
-        m_cache = new dtkDistributedArrayCache<T>(this);
+        if (!m_cache)
+            m_cache = new dtkDistributedArrayCache<T>(this);
         x = dtkTypedArrayData<T>::fromRawData(manager->allocate<T>(size), size, dtkArrayData::RawData);
     } else {
         qWarning() << "allocation with size =0!" << m_comm->wid();
@@ -165,8 +166,6 @@ template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMa
 {
     dtkDistributedBufferManager *new_buffer_manager = 0;
     Data *new_d = 0;
-    if (m_cache)
-        delete m_cache;
     this->allocate(new_buffer_manager, new_d, remapper->count(this->wid()));
 
     for (qlonglong i = 0; i < new_d->size; ++i) {

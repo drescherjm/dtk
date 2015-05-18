@@ -179,8 +179,8 @@ inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::end(vo
 
 inline void dtkDistributedGraphTopology::stats(void) const
 {
-    qDebug() << "m_vertex_to_edge stats:"; m_vertex_to_edge->stats();
-    qDebug() << "m_edge_to_vertex stats:"; m_edge_to_vertex->stats();
+    qDebug() << m_comm->rank() << "m_vertex_to_edge stats:"; m_vertex_to_edge->stats();
+    qDebug() << m_comm->rank() << "m_edge_to_vertex stats:"; m_edge_to_vertex->stats();
 }
 
 inline bool dtkDistributedGraphTopology::read(const QString& filename, GraphFile format)
@@ -239,6 +239,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
 
         switch (format) {
         case  MetisFormat:
+        case  MetisDirectedFormat:
             dtkTrace() << "reading metis file header";
             header = QString(in->readLine()).split(re);
             m_size = header.first().toLongLong();
@@ -251,7 +252,8 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
                 qWarning() << "Can't parse the number of edges" << filename;
                 return false;
             }
-            edges_count *= 2;
+            if (format == MetisFormat)
+                edges_count *= 2;
             break;
         case MatrixMarketFormat:
             dtkTrace() << "reading matrix market file header";
@@ -498,6 +500,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
             }
             break;
         case  MetisFormat:
+        case  MetisDirectedFormat:
             while (!in->atEnd()) {
                 line = in->readLine().trimmed();
                 edges = line.split(' ');

@@ -112,15 +112,17 @@ inline void *qthDistributedBufferManager::allocate(qlonglong objectSize, qlonglo
     if (capacity == 0)
         return NULL;
 
+    char *buffer;
     d->comm->barrier();
     d->object_size = objectSize;
     qlonglong wid = d->comm->wid();
     d->locks[wid]->lockForWrite();
     d->buffers[wid] = static_cast<char*>(::malloc(objectSize * capacity));
+    buffer = d->buffers[wid];
     d->locks[wid]->unlock();
     d->comm->barrier();
 
-    return d->buffers[wid];
+    return buffer;
 }
 
 inline void qthDistributedBufferManager::deallocate(void *buffer, qlonglong objectSize)

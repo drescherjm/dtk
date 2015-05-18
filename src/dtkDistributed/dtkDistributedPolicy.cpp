@@ -103,6 +103,13 @@ QStringList dtkDistributedPolicy::hosts(void)
         QStringList schedulers;
         schedulers << "PBS_NODEFILE";
         schedulers << "OAR_NODEFILE";
+        if (d->np == 0) {
+            QByteArray numprocs = qgetenv("DTK_NUM_PROCS");
+            if (!numprocs.isEmpty()) {
+                d->np = numprocs.toInt();
+                dtkDebug() << "got num procs from env" << d->np;
+            }
+        }
         foreach (QString envname, schedulers) {
             QString nodefile =  QString::fromUtf8(qgetenv(qPrintable(envname)));
             if (!nodefile.isEmpty()) {

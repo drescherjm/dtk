@@ -1168,6 +1168,23 @@ Options:
         }
 
     Slide {
+        title: "Max des voisins des voisins"
+        fontFamily: 'Courier New'
+        content: [
+        "graphe, noeuds: 10M arcs: 75M ",
+        "cluster nef, nœuds Xeon 20 cœurs, infiniband 40G",
+        "openmpi-1.8.5.rc2",
+        " mpi3  1  thread:   30.0  sec",
+        " mpi3  2 threads:   15.4  sec",
+        " mpi3 10 threads:    3.4  sec",
+        " mpi3 20 threads:    2.0  sec",
+        " mpi3 2x20 threads:  7.7  sec",
+        " mpi3 4x20 threads: 13.6  sec",
+        " mpi3 8x20 threads: 21.5  sec",
+        ]
+    }
+
+    Slide {
         title: "Jacobi générique vs Hypre"
         fontFamily: 'Courier New'
         content: [

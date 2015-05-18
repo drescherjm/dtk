@@ -1,5 +1,5 @@
-/* dtkVrScreen.h --- 
- * 
+/* dtkVrScreen.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 18:56:02 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 32
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -30,25 +30,25 @@ class dtkVrScreenPrivate;
 class  DTKVRSUPPORT_EXPORT dtkVrScreen
 {
 public:
-     dtkVrScreen(const dtkVector3D<double>& lowerLeft, const dtkVector3D<double>& lowerRight, const dtkVector3D<double>& upperLeft);
+     dtkVrScreen(const dtkDeprecated::dtkVector3D<double>& lowerLeft, const dtkDeprecated::dtkVector3D<double>& lowerRight, const dtkDeprecated::dtkVector3D<double>& upperLeft);
      dtkVrScreen(const dtkVrScreen& other);
     ~dtkVrScreen(void);
 
     void   initialize(void);
     void uninitialize(void);
 
-    const dtkVector3D<double>& lowerLeft(void) const;
-    const dtkVector3D<double>& upperLeft(void) const;
-    const dtkVector3D<double>& lowerRight(void) const;
-    const dtkVector3D<double>& upperRight(void) const;
+    const dtkDeprecated::dtkVector3D<double>& lowerLeft(void) const;
+    const dtkDeprecated::dtkVector3D<double>& upperLeft(void) const;
+    const dtkDeprecated::dtkVector3D<double>& lowerRight(void) const;
+    const dtkDeprecated::dtkVector3D<double>& upperRight(void) const;
 
-    const dtkVector3D<double>& up(void) const;
-    const dtkVector3D<double>& right(void) const;
+    const dtkDeprecated::dtkVector3D<double>& up(void) const;
+    const dtkDeprecated::dtkVector3D<double>& right(void) const;
 
     double width(void) const;
     double height(void) const;
 
-    static const dtkVector3D<double> screens[5][3];
+    static const dtkDeprecated::dtkVector3D<double> screens[5][3];
 
 private:
     dtkVrScreenPrivate *d;

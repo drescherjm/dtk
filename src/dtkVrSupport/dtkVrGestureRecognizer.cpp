@@ -1,5 +1,5 @@
-/* dtkVrGestureRecognizer.cpp --- 
- * 
+/* dtkVrGestureRecognizer.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:40 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 696
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVrGestureRecognizer.h"
@@ -190,13 +190,13 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
             if(this->left_major_interaction && this->right_major_interaction) {
 
                 state = Pinch;
-                
+
                 emit postPinchEvent(Qt::GestureStarted);
 
             } else {
 
                 state = Pan;
-                
+
                 emit postPanEvent(Qt::GestureStarted);
             }
         }
@@ -239,9 +239,9 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
         }
 
     } else {
-            
+
         if(state == Pinch) {
-            
+
             state = End;
 
             this->mutex.lock();
@@ -250,9 +250,9 @@ void dtkVrGestureRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback
 
             emit postPinchEvent(Qt::GestureFinished);
         }
-        
+
         if(state == Pan) {
-            
+
             state = End;
 
             this->mutex.lock();
@@ -327,21 +327,21 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
         d->mutex.unlock();
     }
 
-    static dtkVector3D<double> lastPosition;
+    static dtkDeprecated::dtkVector3D<double> lastPosition;
 
-    dtkVector3D<double> position;
+    dtkDeprecated::dtkVector3D<double> position;
 
     if(d->left_major_interaction && !d->right_major_interaction) {
-        
-        position = dtkVector3D<double>(
+
+        position = dtkDeprecated::dtkVector3D<double>(
             d->left_index_position[0],
             d->left_index_position[2],
           - d->left_index_position[1]);
 
     }
-        
+
     else if(!d->left_major_interaction && d->right_major_interaction) {
-        position = dtkVector3D<double>(
+        position = dtkDeprecated::dtkVector3D<double>(
             d->right_index_position[0],
             d->right_index_position[2],
           - d->right_index_position[1]);
@@ -356,7 +356,7 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
     if(state == Qt::GestureStarted)
         lastPosition = position;
 
-    dtkVector3D<double> offset = position-lastPosition;
+    dtkDeprecated::dtkVector3D<double> offset = position-lastPosition;
 
     float xmin = 0, xmax = 0;
     float ymin = 0, ymax = 0;
@@ -371,39 +371,39 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
 //    d->view->cameraPosition(camera_position);
 //    d->view->cameraFocalPoint(camera_focalpnt);
 
-    dtkVector3D<double> a = dtkVector3D<double>(xmin, ymin, zmin);
-    dtkVector3D<double> b = dtkVector3D<double>(xmax, ymax, zmax);
+    dtkDeprecated::dtkVector3D<double> a = dtkDeprecated::dtkVector3D<double>(xmin, ymin, zmin);
+    dtkDeprecated::dtkVector3D<double> b = dtkDeprecated::dtkVector3D<double>(xmax, ymax, zmax);
 
     double dg = (b-a).norm(); Q_UNUSED(dg);
 
-    dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
-    dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
-    dtkVector3D<double> f_xtk = dtkVector3D<double>(camera_focalpnt[0], camera_focalpnt[1], camera_focalpnt[2]);
+    dtkDeprecated::dtkVector3D<double> u_xtk = dtkDeprecated::dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
+    dtkDeprecated::dtkVector3D<double> p_xtk = dtkDeprecated::dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
+    dtkDeprecated::dtkVector3D<double> f_xtk = dtkDeprecated::dtkVector3D<double>(camera_focalpnt[0], camera_focalpnt[1], camera_focalpnt[2]);
 
-    dtkVector3D<double> l = dtkVector3D<double>(1.0, 0.0, 0.0);
-    dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0);
-    dtkVector3D<double> n = dtkVector3D<double>(0.0, 0.0, 1.0);
-    dtkVector3D<dtkVector3D<double> > xtk_in_xtk = dtkVector3D<dtkVector3D<double> >(l, m, n);
-    
-    dtkVector3D<double> j = u_xtk;
-    dtkVector3D<double> k = p_xtk-f_xtk;
-    dtkVector3D<double> i = j%k;
-    dtkVector3D<dtkVector3D<double> > cam_in_xtk = dtkVector3D<dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
-    
-    dtkMatrixSquared<double> cam_to_xtk = dtkChangeOfBasis(cam_in_xtk, xtk_in_xtk);
+    dtkDeprecated::dtkVector3D<double> l = dtkDeprecated::dtkVector3D<double>(1.0, 0.0, 0.0);
+    dtkDeprecated::dtkVector3D<double> m = dtkDeprecated::dtkVector3D<double>(0.0, 1.0, 0.0);
+    dtkDeprecated::dtkVector3D<double> n = dtkDeprecated::dtkVector3D<double>(0.0, 0.0, 1.0);
+    dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > xtk_in_xtk = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(l, m, n);
 
-    dtkVector3D<double> f_art = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> j = u_xtk;
+    dtkDeprecated::dtkVector3D<double> k = p_xtk-f_xtk;
+    dtkDeprecated::dtkVector3D<double> i = j%k;
+    dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > cam_in_xtk = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
+
+    dtkDeprecated::dtkMatrixSquared<double> cam_to_xtk = dtkChangeOfBasis(cam_in_xtk, xtk_in_xtk);
+
+    dtkDeprecated::dtkVector3D<double> f_art = dtkDeprecated::dtkVector3D<double>(
         (   dtkVrScreen::screens[4][1][0] +    dtkVrScreen::screens[4][0][0]) / 2,
         (-1*dtkVrScreen::screens[4][2][2] + -1*dtkVrScreen::screens[4][1][2]) / 2,
             dtkVrScreen::screens[4][0][1]);
-    dtkVector3D<double> z_art = dtkVector3D<double>(0, f_art[1], 0);
-    dtkVector3D<double> p_art = position;
-    dtkVector3D<double> d_art = offset;
+    dtkDeprecated::dtkVector3D<double> z_art = dtkDeprecated::dtkVector3D<double>(0, f_art[1], 0);
+    dtkDeprecated::dtkVector3D<double> p_art = position;
+    dtkDeprecated::dtkVector3D<double> d_art = offset;
 
-    dtkVector3D<double> o_xtk = cam_to_xtk*offset;
+    dtkDeprecated::dtkVector3D<double> o_xtk = cam_to_xtk*offset;
 
 //    if(d->view->cameraProjectionMode() == "Parallel") {
-//        
+//
 //        o_xtk *= dg/d->view->cameraZoom();
 //        o_xtk *= -1;
 //
@@ -435,8 +435,8 @@ void dtkVrGestureRecognizer::postPanEvent(Qt::GestureState state)
        ||  state == Qt::GestureFinished
        || (state == Qt::GestureUpdated && (offset.norm() > 0.003))) {
 
-        QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);        
-        QCoreApplication::postEvent(d->receiver, event);   
+        QGestureEvent *event = new QGestureEvent(QList<QGesture *>() << gesture);
+        QCoreApplication::postEvent(d->receiver, event);
     }
 
     lastPosition = position;
@@ -471,30 +471,30 @@ void dtkVrGestureRecognizer::postPinchEvent(Qt::GestureState state)
         d->mutex.unlock();
     }
 
-    dtkVector3D<double> s = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> s = dtkDeprecated::dtkVector3D<double>(
         d->right_index_start_position[0] - d->left_index_start_position[0],
         d->right_index_start_position[2] - d->left_index_start_position[2],
       - d->right_index_start_position[1] + d->left_index_start_position[1]);
 
-    dtkVector3D<double> u = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> u = dtkDeprecated::dtkVector3D<double>(
         d->right_index_position[0] - d->left_index_position[0],
         d->right_index_position[2] - d->left_index_position[2],
       - d->right_index_position[1] + d->left_index_position[1]);
 
-    dtkVector3D<double> i = dtkVector3D<double>(1.0, 0.0, 0.0);
-    dtkVector3D<double> j = dtkVector3D<double>(0.0, 1.0, 0.0);
-    dtkVector3D<double> k = dtkVector3D<double>(0.0, 0.0, 1.0);
-    dtkVector3D<dtkVector3D<double> > from = dtkVector3D<dtkVector3D<double> >(i, j, k);
+    dtkDeprecated::dtkVector3D<double> i = dtkDeprecated::dtkVector3D<double>(1.0, 0.0, 0.0);
+    dtkDeprecated::dtkVector3D<double> j = dtkDeprecated::dtkVector3D<double>(0.0, 1.0, 0.0);
+    dtkDeprecated::dtkVector3D<double> k = dtkDeprecated::dtkVector3D<double>(0.0, 0.0, 1.0);
+    dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > from = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(i, j, k);
 
-    dtkVector3D<double> l = dtkVector3D<double>(s[0], 0.0, s[2]).unit();
-    dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0).unit();
-    dtkVector3D<double> n = (l%m).unit();
-    dtkVector3D<dtkVector3D<double> > to = dtkVector3D<dtkVector3D<double> >(l, m, n);
+    dtkDeprecated::dtkVector3D<double> l = dtkDeprecated::dtkVector3D<double>(s[0], 0.0, s[2]).unit();
+    dtkDeprecated::dtkVector3D<double> m = dtkDeprecated::dtkVector3D<double>(0.0, 1.0, 0.0).unit();
+    dtkDeprecated::dtkVector3D<double> n = (l%m).unit();
+    dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > to = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(l, m, n);
 
-    dtkMatrixSquared<double> t = dtkChangeOfBasis(from, to);
+    dtkDeprecated::dtkMatrixSquared<double> t = dtkChangeOfBasis(from, to);
 
-    dtkVector3D<double> ns = t*s; ns[2] = 0;
-    dtkVector3D<double> nu = t*u; nu[2] = 0;
+     dtkDeprecated::dtkVector3D<double> ns = t*s; ns[2] = 0;
+    dtkDeprecated::dtkVector3D<double> nu = t*u; nu[2] = 0;
 
     // -- Computing scale factor --
 
@@ -551,29 +551,29 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
         d->mutex.unlock();
     }
 
-    dtkVector3D<double> nis = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> nis = dtkDeprecated::dtkVector3D<double>(
         d->left_thumb_start_position[0] - d->left_index_start_position[0],
         d->left_thumb_start_position[2] - d->left_index_start_position[2],
       - d->left_thumb_start_position[1] + d->left_index_start_position[1]);
 
-    dtkVector3D<double> njs = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> njs = dtkDeprecated::dtkVector3D<double>(
         d->right_index_start_position[0] - d->left_index_start_position[0],
         d->right_index_start_position[2] - d->left_index_start_position[2],
       - d->right_index_start_position[1] + d->left_index_start_position[1]);
 
-    dtkVector3D<double> nks = nis%njs;
+    dtkDeprecated::dtkVector3D<double> nks = nis%njs;
 
-    dtkVector3D<double> niu = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> niu = dtkDeprecated::dtkVector3D<double>(
         d->left_thumb_position[0] - d->left_index_position[0],
         d->left_thumb_position[2] - d->left_index_position[2],
       - d->left_thumb_position[1] + d->left_index_position[1]);
 
-    dtkVector3D<double> nju = dtkVector3D<double>(
+    dtkDeprecated::dtkVector3D<double> nju = dtkDeprecated::dtkVector3D<double>(
         d->right_index_position[0] - d->left_index_position[0],
         d->right_index_position[2] - d->left_index_position[2],
       - d->right_index_position[1] + d->left_index_position[1]);
 
-    dtkVector3D<double> nku = niu%nju;
+    dtkDeprecated::dtkVector3D<double> nku = niu%nju;
 
     // double camera_up[3];
     // double camera_position[3];
@@ -583,42 +583,42 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
     // d->view->cameraPosition(camera_position);
     // d->view->cameraFocalPoint(camera_focalpnt);
 
-    // dtkVector3D<double> u_xtk = dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
-    // dtkVector3D<double> p_xtk = dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
-    // dtkVector3D<double> f_xtk = dtkVector3D<double>(camera_focalpnt[0], camera_focalpnt[1], camera_focalpnt[2]);
+    // dtkDeprecated::dtkVector3D<double> u_xtk = dtkDeprecated::dtkVector3D<double>(camera_up[0], camera_up[1], camera_up[2]);
+    // dtkDeprecated::dtkVector3D<double> p_xtk = dtkDeprecated::dtkVector3D<double>(camera_position[0], camera_position[1], camera_position[2]);
+    // dtkDeprecated::dtkVector3D<double> f_xtk = dtkDeprecated::dtkVector3D<double>(camera_focalpnt[0], camera_focalpnt[1], camera_focalpnt[2]);
 
-    // dtkVector3D<double> l = dtkVector3D<double>(1.0, 0.0, 0.0);
-    // dtkVector3D<double> m = dtkVector3D<double>(0.0, 1.0, 0.0);
-    // dtkVector3D<double> n = dtkVector3D<double>(0.0, 0.0, 1.0);
-    // dtkVector3D<dtkVector3D<double> > xtk_in_xtk = dtkVector3D<dtkVector3D<double> >(l, m, n);
-    
-    // dtkVector3D<double> j = u_xtk;
-    // dtkVector3D<double> k = p_xtk-f_xtk;
-    // dtkVector3D<double> i = j%k;
-    // dtkVector3D<dtkVector3D<double> > cam_in_xtk = dtkVector3D<dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
-    
+    // dtkDeprecated::dtkVector3D<double> l = dtkDeprecated::dtkVector3D<double>(1.0, 0.0, 0.0);
+    // dtkDeprecated::dtkVector3D<double> m = dtkDeprecated::dtkVector3D<double>(0.0, 1.0, 0.0);
+    // dtkDeprecated::dtkVector3D<double> n = dtkDeprecated::dtkVector3D<double>(0.0, 0.0, 1.0);
+    // dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > xtk_in_xtk = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(l, m, n);
+
+    // dtkDeprecated::dtkVector3D<double> j = u_xtk;
+    // dtkDeprecated::dtkVector3D<double> k = p_xtk-f_xtk;
+    // dtkDeprecated::dtkVector3D<double> i = j%k;
+    // dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > cam_in_xtk = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
+
     // dtkMatrixSquared<double> t = dtkChangeOfBasis(cam_in_xtk, xtk_in_xtk);
 
-    // dtkVector3D<double> nnjs = t*njs;
-    // dtkVector3D<double> nnju = t*nju;
-    // dtkVector3D<double> nnks = t*nks;
-    // dtkVector3D<double> nnku = t*nku;
+    // dtkDeprecated::dtkVector3D<double> nnjs = t*njs;
+    // dtkDeprecated::dtkVector3D<double> nnju = t*nju;
+    // dtkDeprecated::dtkVector3D<double> nnks = t*nks;
+    // dtkDeprecated::dtkVector3D<double> nnku = t*nku;
 
-    // dtkVector3D<double> nnjs_mn = nnjs; nnjs_mn[0] = 0; 
-    // dtkVector3D<double> nnjs_nl = nnjs; nnjs_nl[1] = 0; 
-    // dtkVector3D<double> nnjs_lm = nnjs; nnjs_lm[2] = 0; 
+    // dtkDeprecated::dtkVector3D<double> nnjs_mn = nnjs; nnjs_mn[0] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnjs_nl = nnjs; nnjs_nl[1] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnjs_lm = nnjs; nnjs_lm[2] = 0;
 
-    // dtkVector3D<double> nnju_mn = nnju; nnju_mn[0] = 0; 
-    // dtkVector3D<double> nnju_nl = nnju; nnju_nl[1] = 0; 
-    // dtkVector3D<double> nnju_lm = nnju; nnju_lm[2] = 0; 
+    // dtkDeprecated::dtkVector3D<double> nnju_mn = nnju; nnju_mn[0] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnju_nl = nnju; nnju_nl[1] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnju_lm = nnju; nnju_lm[2] = 0;
 
-    // dtkVector3D<double> nnks_mn = nnks; nnks_mn[0] = 0; 
-    // dtkVector3D<double> nnks_nl = nnks; nnks_nl[1] = 0; 
-    // dtkVector3D<double> nnks_lm = nnks; nnks_lm[2] = 0; 
+    // dtkDeprecated::dtkVector3D<double> nnks_mn = nnks; nnks_mn[0] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnks_nl = nnks; nnks_nl[1] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnks_lm = nnks; nnks_lm[2] = 0;
 
-    // dtkVector3D<double> nnku_mn = nnku; nnku_mn[0] = 0; 
-    // dtkVector3D<double> nnku_nl = nnku; nnku_nl[1] = 0; 
-    // dtkVector3D<double> nnku_lm = nnku; nnku_lm[2] = 0; 
+    // dtkDeprecated::dtkVector3D<double> nnku_mn = nnku; nnku_mn[0] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnku_nl = nnku; nnku_nl[1] = 0;
+    // dtkDeprecated::dtkVector3D<double> nnku_lm = nnku; nnku_lm[2] = 0;
 
     // // -- Computing rotation angle --
 
@@ -640,18 +640,18 @@ void dtkVrGestureRecognizer::postCustomEvent(Qt::GestureState state)
 
     // -- Computing rotation angle --
 
-    dtkVector3D<double> i = dtkVector3D<double>(1.0, 0.0, 0.0);
-    dtkVector3D<double> j = dtkVector3D<double>(0.0, 1.0, 0.0);
-    dtkVector3D<double> k = dtkVector3D<double>(0.0, 0.0, 1.0);
+    dtkDeprecated::dtkVector3D<double> i = dtkDeprecated::dtkVector3D<double>(1.0, 0.0, 0.0);
+    dtkDeprecated::dtkVector3D<double> j = dtkDeprecated::dtkVector3D<double>(0.0, 1.0, 0.0);
+    dtkDeprecated::dtkVector3D<double> k = dtkDeprecated::dtkVector3D<double>(0.0, 0.0, 1.0);
 
-    dtkVector3D<double> njs_ki = njs; njs_ki[1] = 0; 
-    dtkVector3D<double> nju_ki = nju; nju_ki[1] = 0; 
+    dtkDeprecated::dtkVector3D<double> njs_ki = njs; njs_ki[1] = 0;
+    dtkDeprecated::dtkVector3D<double> nju_ki = nju; nju_ki[1] = 0;
 
-    dtkVector3D<double> njs_ij = njs; njs_ij[2] = 0; 
-    dtkVector3D<double> nju_ij = nju; nju_ij[2] = 0; 
+    dtkDeprecated::dtkVector3D<double> njs_ij = njs; njs_ij[2] = 0;
+    dtkDeprecated::dtkVector3D<double> nju_ij = nju; nju_ij[2] = 0;
 
-    dtkVector3D<double> nks_jk = nks; nks_jk[0] = 0; 
-    dtkVector3D<double> nku_jk = nku; nku_jk[0] = 0; 
+    dtkDeprecated::dtkVector3D<double> nks_jk = nks; nks_jk[0] = 0;
+    dtkDeprecated::dtkVector3D<double> nku_jk = nku; nku_jk[0] = 0;
 
     static qreal lastAzAngle;
     static qreal lastElAngle;

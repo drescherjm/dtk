@@ -1,5 +1,5 @@
-/* dtkVrTracker.h --- 
- * 
+/* dtkVrTracker.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:30:26 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 9
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -45,14 +45,12 @@ public:
     virtual void setUrl(const QUrl& url);
 
 public:
-    virtual dtkVector3D<double> headPosition(void);
-    virtual dtkVector3D<double> handPosition(void);
+    virtual dtkDeprecated::dtkVector3D<double> headPosition(void);
+    virtual dtkDeprecated::dtkVector3D<double> handPosition(void);
 
 public:
-    virtual dtkQuaternion<double> headOrientation(void);
+    virtual dtkDeprecated::dtkQuaternion<double> headOrientation(void);
 
 private:
     dtkVrTrackerPrivate *d;
 };
-
-

@@ -1,5 +1,5 @@
-/* dtkVrTracker.cpp --- 
- * 
+/* dtkVrTracker.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:32:08 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 16
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVrTracker.h"
@@ -55,23 +55,23 @@ void dtkVrTracker::setUrl(const QUrl& url)
     DTK_DEFAULT_IMPLEMENTATION;
 }
 
-dtkVector3D<double> dtkVrTracker::headPosition(void)
+dtkDeprecated::dtkVector3D<double> dtkVrTracker::headPosition(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
-    return dtkVector3D<double>();
+    return dtkDeprecated::dtkVector3D<double>();
 }
 
-dtkVector3D<double> dtkVrTracker::handPosition(void)
+dtkDeprecated::dtkVector3D<double> dtkVrTracker::handPosition(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
-    return dtkVector3D<double>();
+    return dtkDeprecated::dtkVector3D<double>();
 }
 
-dtkQuaternion<double> dtkVrTracker::headOrientation(void)
+dtkDeprecated::dtkQuaternion<double> dtkVrTracker::headOrientation(void)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 
-    return dtkQuaternion<double>();
+    return dtkDeprecated::dtkQuaternion<double>();
 }

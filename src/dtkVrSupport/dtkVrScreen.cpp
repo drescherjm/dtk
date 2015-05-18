@@ -1,5 +1,5 @@
-/* dtkVrScreen.cpp --- 
- * 
+/* dtkVrScreen.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Feb 12 21:10:30 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 76
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVrScreen.h"
@@ -22,19 +22,19 @@
 class dtkVrScreenPrivate
 {
 public:
-    dtkVector3D<double> x;
-    dtkVector3D<double> y;
+    dtkDeprecated::dtkVector3D<double> x;
+    dtkDeprecated::dtkVector3D<double> y;
 
-    dtkVector3D<double> lowerLeft;
-    dtkVector3D<double> upperLeft;
-    dtkVector3D<double> lowerRight;
-    dtkVector3D<double> upperRight;
+    dtkDeprecated::dtkVector3D<double> lowerLeft;
+    dtkDeprecated::dtkVector3D<double> upperLeft;
+    dtkDeprecated::dtkVector3D<double> lowerRight;
+    dtkDeprecated::dtkVector3D<double> upperRight;
 
     double width;
     double height;
 };
 
-dtkVrScreen::dtkVrScreen(const dtkVector3D<double>& lowerLeft, const dtkVector3D<double>& lowerRight, const dtkVector3D<double>& upperLeft) : d(new dtkVrScreenPrivate)
+dtkVrScreen::dtkVrScreen(const dtkDeprecated::dtkVector3D<double>& lowerLeft, const dtkDeprecated::dtkVector3D<double>& lowerRight, const dtkDeprecated::dtkVector3D<double>& upperLeft) : d(new dtkVrScreenPrivate)
 {
     d->lowerLeft = lowerLeft;
     d->upperLeft = upperLeft;
@@ -48,7 +48,7 @@ dtkVrScreen::dtkVrScreen(const dtkVrScreen& other)
     d->lowerLeft = other.d->lowerLeft;
     d->upperLeft = other.d->upperLeft;
     d->lowerRight = other.d->lowerRight;
-    
+
     this->initialize();
 }
 
@@ -74,32 +74,32 @@ void dtkVrScreen::uninitialize(void)
 
 }
 
-const dtkVector3D<double>& dtkVrScreen::lowerLeft(void) const
+const dtkDeprecated::dtkVector3D<double>& dtkVrScreen::lowerLeft(void) const
 {
     return d->lowerLeft;
 }
 
-const dtkVector3D<double>& dtkVrScreen::upperLeft(void) const
+const dtkDeprecated::dtkVector3D<double>& dtkVrScreen::upperLeft(void) const
 {
     return d->upperLeft;
 }
 
-const dtkVector3D<double>& dtkVrScreen::lowerRight(void) const
+const dtkDeprecated::dtkVector3D<double>& dtkVrScreen::lowerRight(void) const
 {
     return d->lowerRight;
 }
 
-const dtkVector3D<double>& dtkVrScreen::upperRight(void) const
+const dtkDeprecated::dtkVector3D<double>& dtkVrScreen::upperRight(void) const
 {
     return d->upperRight;
 }
 
-const dtkVector3D<double>& dtkVrScreen::up(void) const
+const dtkDeprecated::dtkVector3D<double>& dtkVrScreen::up(void) const
 {
     return d->y;
 }
 
-const dtkVector3D<double>& dtkVrScreen::right(void) const
+const dtkDeprecated::dtkVector3D<double>& dtkVrScreen::right(void) const
 {
     return d->x;
 }
@@ -114,10 +114,10 @@ double dtkVrScreen::height(void) const
     return d->height;
 }
 
-const dtkVector3D<double> dtkVrScreen::screens[5][3] = {
-    { dtkVector3D<double>(-1.6, -0.8, -0.05), dtkVector3D<double>(-1.6, 2.4, -0.05), dtkVector3D<double>(-1.6, -0.8,  2.35)}, // left
-    { dtkVector3D<double>(-1.6,  2.4, -0.05), dtkVector3D<double>( 1.6, 2.4, -0.05), dtkVector3D<double>(-1.6,  2.4,  2.35)}, // front
-    { dtkVector3D<double>( 1.6,  2.4, -0.05), dtkVector3D<double>( 1.6,-0.8, -0.05), dtkVector3D<double>( 1.6,  2.4,  2.35)}, // right
-    { dtkVector3D<double>(-1.6,  0.0, -0.05), dtkVector3D<double>( 1.6, 0.0, -0.05), dtkVector3D<double>(-1.6,  2.4, -0.05)}, // bottom
-    { dtkVector3D<double>(-2.05, 1.5,  0.76), dtkVector3D<double>( 2.05, 1.5, 0.76), dtkVector3D<double>(-2.05, 1.5,  2.16)}  // wall
+const dtkDeprecated::dtkVector3D<double> dtkVrScreen::screens[5][3] = {
+    { dtkDeprecated::dtkVector3D<double>(-1.6, -0.8, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6, 2.4, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6, -0.8,  2.35)}, // left
+    { dtkDeprecated::dtkVector3D<double>(-1.6,  2.4, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6, 2.4, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6,  2.4,  2.35)}, // front
+    { dtkDeprecated::dtkVector3D<double>( 1.6,  2.4, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6,-0.8, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6,  2.4,  2.35)}, // right
+    { dtkDeprecated::dtkVector3D<double>(-1.6,  0.0, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6, 0.0, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6,  2.4, -0.05)}, // bottom
+    { dtkDeprecated::dtkVector3D<double>(-2.05, 1.5,  0.76), dtkDeprecated::dtkVector3D<double>( 2.05, 1.5, 0.76), dtkDeprecated::dtkVector3D<double>(-2.05, 1.5,  2.16)}  // wall
 };

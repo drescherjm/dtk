@@ -1,5 +1,5 @@
-/* dtkVrFlystickRecognizer.cpp --- 
- * 
+/* dtkVrFlystickRecognizer.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:04:45 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 39
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVrFlystickRecognizer.h"
@@ -136,8 +136,8 @@ dtkVrFlystickRecognizer::dtkVrFlystickRecognizer(void) : QObject(), d(new dtkVrF
     d->running = false;
     d->activated = true;
 
-    d->last_position = dtkVector3D<double>(0.0, 0.0, 0.0);
-    d->last_orientation = dtkQuaternion<double>(0.0, 0.0, 0.0, 1.0);
+    d->last_position = dtkDeprecated::dtkVector3D<double>(0.0, 0.0, 0.0);
+    d->last_orientation = dtkDeprecated::dtkQuaternion<double>(0.0, 0.0, 0.0, 1.0);
 
     connect(d, SIGNAL(moved()), this, SLOT(onMoved()));
     connect(d, SIGNAL(rotated()), this, SLOT(onRotated()));
@@ -170,7 +170,7 @@ void dtkVrFlystickRecognizer::onMoved(void)
     double x =  d->flystick_position[0];
     double y =  d->flystick_position[2];
     double z = -d->flystick_position[1];
-    
+
     qDebug() << DTK_PRETTY_FUNCTION << x << y << z;
 }
 
@@ -180,7 +180,7 @@ void dtkVrFlystickRecognizer::onRotated(void)
     double q1 = d->flystick_orientation[1];
     double q2 = d->flystick_orientation[2];
     double q3 = d->flystick_orientation[3];
-    
+
     qDebug() << DTK_PRETTY_FUNCTION << q0 << q1 << q2 << q3;
 }
 

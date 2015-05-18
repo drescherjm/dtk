@@ -1,5 +1,5 @@
-/* dtkVrHeadRecognizer_p.h --- 
- * 
+/* dtkVrHeadRecognizer_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:39:24 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 25
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <QtCore>
@@ -53,7 +53,7 @@ public:
 
     bool activated;
 
-    dtkVector3D<double> last;
+    dtkDeprecated::dtkVector3D<double> last;
 
 public:
     bool running;

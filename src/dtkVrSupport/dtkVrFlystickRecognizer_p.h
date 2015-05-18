@@ -1,5 +1,5 @@
-/* dtkVrFlystickRecognizer_p.h --- 
- * 
+/* dtkVrFlystickRecognizer_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:09:35 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 13
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <QtCore>
@@ -55,8 +55,8 @@ public:
 
     bool activated;
 
-    dtkVector3D<double> last_position;
-    dtkQuaternion<double> last_orientation;
+    dtkDeprecated::dtkVector3D<double> last_position;
+    dtkDeprecated::dtkQuaternion<double> last_orientation;
 
 public:
     bool running;

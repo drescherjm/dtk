@@ -151,6 +151,11 @@ public:
 
     Neighbours operator[](qlonglong vertex_id) const;
 
+public:
+    qlonglong firstNeighbourPos(qlonglong vertex_id) const;
+    qlonglong  firstNeighbourId(qlonglong vertex_id) const;
+
+public:
     vertex beginVertex() const { return vertex(this, this->m_mapper->firstIndex(this->wid())); }
     vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid())); }
 

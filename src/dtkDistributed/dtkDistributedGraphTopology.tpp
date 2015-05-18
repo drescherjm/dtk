@@ -136,18 +136,25 @@ inline qlonglong dtkDistributedGraphTopology::edgeCount(const qlonglong& wid) co
 
 inline qlonglong dtkDistributedGraphTopology::neighbourCount(qlonglong vertex_id) const
 {
-    // qlonglong start = m_vertex_to_edge->at(vertex_id);
-    // return (m_vertex_to_edge->at(vertex_id + 1) - start);
     return m_neighbour_count->at(vertex_id);
 }
 
 inline dtkDistributedGraphTopology::Neighbours dtkDistributedGraphTopology::operator[](qlonglong vertex_id) const
 {
     qlonglong n_start = m_vertex_to_edge->at(vertex_id);
-    // qlonglong size = m_vertex_to_edge->at(vertex_id + 1) - n_start;
     qlonglong size = m_neighbour_count->at(vertex_id);
 
     return Neighbours(*m_edge_to_vertex, n_start, size);
+}
+
+inline qlonglong dtkDistributedGraphTopology::firstNeighbourPos(qlonglong vertex_id) const
+{
+    return m_vertex_to_edge->at(vertex_id);
+}
+
+inline qlonglong dtkDistributedGraphTopology::firstNeighbourId(qlonglong vertex_id) const
+{
+    return m_edge_to_vertex->at(m_vertex_to_edge->at(vertex_id));
 }
 
 inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::cbegin(void) const

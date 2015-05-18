@@ -39,6 +39,7 @@ public:
     void uninitialize(void);
     void uninitializeApplication(void);
 
+    virtual void   scan(const QString& path);
     virtual void   load(const QString& name);
     virtual void unload(const QString& name);
 

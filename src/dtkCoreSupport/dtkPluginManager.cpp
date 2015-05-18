@@ -62,6 +62,14 @@ QStringList dtkPluginManagerPathSplitter(QString path)
 class dtkPluginManagerPrivate
 {
 public:
+    bool check(const QString& path);
+
+public:
+    QHash<QString, QVariant> names;
+    QHash<QString, QVariant> versions;
+    QHash<QString, QVariantList> dependencies;
+
+public:
     QString path;
 
     QHash<QString, QPluginLoader *> loaders;
@@ -97,6 +105,39 @@ dtkPluginManager *dtkPluginManager::instance(void)
     return s_instance;
 }
 
+bool dtkPluginManagerPrivate::check(const QString& path)
+{
+    bool status = true;
+
+    foreach(QVariant item, this->dependencies.value(path)) {
+
+        QVariantMap mitem = item.toMap();
+        QVariant na_mitem = mitem.value("name");
+        QVariant ve_mitem = mitem.value("version");
+        QString key = this->names.key(na_mitem);
+
+        if(!this->names.values().contains(na_mitem)) {
+            dtkWarn() << "  Missing dependency:" << na_mitem.toString() << "for plugin" << path;
+            status = false;
+            continue;
+        }
+
+        if (this->versions.value(key) != ve_mitem) {
+            dtkWarn() << "    Version mismatch:" << na_mitem.toString() << "version" << this->versions.value(this->names.key(na_mitem)).toString() << "but" << ve_mitem.toString() << "required for plugin" << path;
+            status = false;
+            continue;
+        }
+
+        if(!check(key)) {
+            dtkWarn() << "Corrupted dependency:" << na_mitem.toString() << "for plugin" << path;
+            status = false;
+            continue;
+        }
+    }
+
+    return status;
+}
+
 // /////////////////////////////////////////////////////////////////
 // dtkPluginManager
 // /////////////////////////////////////////////////////////////////
@@ -127,6 +168,9 @@ void dtkPluginManager::initialize(void)
             dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
 
             foreach (QFileInfo entry, dir.entryInfoList())
+                scan(entry.absoluteFilePath());
+
+            foreach (QFileInfo entry, dir.entryInfoList())
                 loadPlugin(entry.absoluteFilePath());
         } else {
             dtkWarn() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
@@ -145,6 +189,21 @@ void dtkPluginManager::uninitialize(void)
 void dtkPluginManager::uninitializeApplication(void)
 {
     delete qApp;
+}
+
+
+void dtkPluginManager::scan(const QString& path)
+{
+    if(!QLibrary::isLibrary(path))
+        return;
+
+    QPluginLoader *loader = new QPluginLoader(path);
+
+           d->names.insert(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
+        d->versions.insert(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
+    d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
+
+    delete loader;
 }
 
 //! Load a specific plugin designated by its name.
@@ -321,6 +380,12 @@ dtkPluginManager::~dtkPluginManager(void)
 
 void dtkPluginManager::loadPlugin(const QString& path)
 {
+    if(!d->check(path)) {
+        QString error = "check failure for plugin file " + path;
+        if(d->verboseLoading) { dtkWarn() << error; }
+        return;
+    }
+
     QPluginLoader *loader = new QPluginLoader(path);
 
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -94,6 +94,8 @@ template <typename Container> inline dtkDistributedIterator<Container>& dtkDistr
 template <typename Container> inline dtkDistributedIterator<Container>& dtkDistributedIterator<Container>::operator = ( dtkDistributedIterator<Container>&& o)
 {
     gid = o.gid;
+
+    return *this;
 }
 
 template <typename Container> inline qlonglong dtkDistributedIterator<Container>::id(void) const
@@ -187,5 +189,5 @@ template <typename Container> inline qlonglong dtkDistributedIterator<Container>
 }
 
 
-// 
+//
 // dtkDistributedIterator.h ends here

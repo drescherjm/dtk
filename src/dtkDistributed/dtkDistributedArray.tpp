@@ -93,7 +93,6 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const q
 
     firstIndex = m_mapper->firstIndex(this->wid());
     this->fill(init_value);
-    m_comm->barrier();
 }
 
 template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const qlonglong& size, const T *array) : dtkDistributedContainer(size),
@@ -239,6 +238,7 @@ template <typename T> inline void dtkDistributedArray<T>::fill(const T& value)
     for(; it != end; ++it) {
         *it = value;
     }
+    m_comm->barrier();
 }
 
 template<typename T> inline void dtkDistributedArray<T>::setAt(const qlonglong& index, const T& value)
@@ -321,7 +321,7 @@ template<typename T> inline void dtkDistributedArray<T>::addAssign(const qlonglo
             m_buffer_manager->addAssign(owner, pos, &(const_cast<T&>(value)));
         }
     } else {
-        qlonglong pos = m_mapper->globalToLocal(index);
+        qlonglong pos = m_mapper->globalToLocal(index,owner);
         m_buffer_manager->addAssign(owner, pos, &(const_cast<T&>(value)));
     }
 }
@@ -337,7 +337,7 @@ template<typename T> inline void dtkDistributedArray<T>::subAssign(const qlonglo
             m_buffer_manager->subAssign(owner, pos, &(const_cast<T&>(value)));
         }
     } else {
-        qlonglong pos = m_mapper->globalToLocal(index);
+        qlonglong pos = m_mapper->globalToLocal(index, owner);
         m_buffer_manager->subAssign(owner, pos, &(const_cast<T&>(value)));
     }
 }
@@ -353,7 +353,7 @@ template<typename T> inline void dtkDistributedArray<T>::mulAssign(const qlonglo
             m_buffer_manager->mulAssign(owner, pos, &(const_cast<T&>(value)));
         }
     } else {
-        qlonglong pos = m_mapper->globalToLocal(index);
+        qlonglong pos = m_mapper->globalToLocal(index,owner);
         m_buffer_manager->mulAssign(owner, pos, &(const_cast<T&>(value)));
     }
 }
@@ -369,7 +369,7 @@ template<typename T> inline void dtkDistributedArray<T>::divAssign(const qlonglo
             m_buffer_manager->divAssign(owner, pos, &(const_cast<T&>(value)));
         }
     } else {
-        qlonglong pos = m_mapper->globalToLocal(index);
+        qlonglong pos = m_mapper->globalToLocal(index, owner);
         m_buffer_manager->divAssign(owner, pos, &(const_cast<T&>(value)));
     }
 }
@@ -377,7 +377,7 @@ template<typename T> inline void dtkDistributedArray<T>::divAssign(const qlonglo
 template<typename T> inline void dtkDistributedArray<T>::addAssign(const qlonglong& index, T* array, const qlonglong& count)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-    qlonglong pos = m_mapper->globalToLocal(index);
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
 
     qlonglong owner_capacity = m_mapper->lastIndex(owner) - index + 1;
 
@@ -393,7 +393,7 @@ template<typename T> inline void dtkDistributedArray<T>::addAssign(const qlonglo
 template<typename T> inline void dtkDistributedArray<T>::subAssign(const qlonglong& index, T* array, const qlonglong& count)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-    qlonglong pos = m_mapper->globalToLocal(index);
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
 
     qlonglong owner_capacity = m_mapper->lastIndex(owner) - index + 1;
 
@@ -409,7 +409,7 @@ template<typename T> inline void dtkDistributedArray<T>::subAssign(const qlonglo
 template<typename T> inline void dtkDistributedArray<T>::mulAssign(const qlonglong& index, T* array, const qlonglong& count)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-    qlonglong pos = m_mapper->globalToLocal(index);
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
 
     qlonglong owner_capacity = m_mapper->lastIndex(owner) - index + 1;
 
@@ -425,7 +425,7 @@ template<typename T> inline void dtkDistributedArray<T>::mulAssign(const qlonglo
 template<typename T> inline void dtkDistributedArray<T>::divAssign(const qlonglong& index, T* array, const qlonglong& count)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));
-    qlonglong pos = m_mapper->globalToLocal(index);
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
 
     qlonglong owner_capacity = m_mapper->lastIndex(owner) - index + 1;
 

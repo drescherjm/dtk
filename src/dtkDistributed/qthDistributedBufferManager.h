@@ -150,11 +150,12 @@ inline bool qthDistributedBufferManager::shouldCache(const qint32& owner)
 
 inline void qthDistributedBufferManager::rlock(void)
 {
-    for (qlonglong i = 0; i < d->size; ++i) {
-        if (d->locked[i].testAndSetRelaxed(0,1)) {
-            d->locks[i]->lockForRead();
-        }
+    d->comm->barrier();
+    qlonglong wid = d->comm->wid();
+    if (d->locked[wid].testAndSetRelaxed(0,1)) {
+        d->locks[wid]->lockForRead();
     }
+    d->comm->barrier();
 }
 
 inline void qthDistributedBufferManager::rlock(qlonglong wid)
@@ -167,33 +168,34 @@ inline void qthDistributedBufferManager::rlock(qlonglong wid)
 
 inline void qthDistributedBufferManager::wlock(void)
 {
-    for (qlonglong i =0; i < d->size; ++i) {
-        if (d->locked[i].testAndSetRelaxed(0,1)) {
-            d->locks[i]->lockForWrite();
-        }
+    d->comm->barrier();
+    qlonglong wid = d->comm->wid();
+    if (d->locked[wid].testAndSetRelaxed(0,1)) {
+        d->locks[wid]->lockForWrite();
     }
+    d->comm->barrier();
 }
 
 inline void qthDistributedBufferManager::wlock(qlonglong wid)
 {
-    d->locked[wid] = true;
+    d->locked[wid] = 1;
     d->locks[wid]->lockForWrite();
 }
 
 inline void qthDistributedBufferManager::unlock(qlonglong wid)
 {
-    if (d->locked[wid].testAndSetRelaxed(1,0)) {
-        d->locks[wid]->unlock();
-    }
+    d->locks[wid]->unlock();
+    d->locked[wid] = 0;
 }
 
 inline void qthDistributedBufferManager::unlock(void)
 {
-    for (qlonglong i =0; i < d->size; ++i) {
-        if (d->locked[i].testAndSetRelaxed(1,0)) {
-            d->locks[i]->unlock();
-        }
+    d->comm->barrier();
+    qlonglong wid = d->comm->wid();
+    if (d->locked[wid].testAndSetRelaxed(1,0)) {
+        d->locks[wid]->unlock();
     }
+    d->comm->barrier();
 }
 
 inline bool qthDistributedBufferManager::locked(qlonglong wid)

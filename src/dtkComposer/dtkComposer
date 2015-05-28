@@ -19,6 +19,7 @@
 #include "dtkComposerGraphNodeSetVariables.h"
 #include "dtkComposerGraphView.h"
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeObject.h"
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFactoryView.h"
 #include "dtkComposerNodeBoolean.h"

@@ -22,6 +22,11 @@
 
 class dtkComposerNodeFactoryPrivate;
 class dtkComposerNodeMetaData;
+class dtkComposerNodeFactoryExtension;
+
+// ///////////////////////////////////////////////////////////////////
+// dtkComposerNodeFactory definition
+// ///////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeFactory : public dtkCorePluginFactory<dtkComposerNode>
 {
@@ -32,10 +37,13 @@ public:
     virtual ~dtkComposerNodeFactory(void);
 
 public slots:
-    dtkComposerNode *create(const QString& node);
+    dtkComposerNode *create(const QString& node) const;
 
 public:
     void record(const QString& metadata_file_path, creator func);
+
+public:
+    void extend(dtkComposerNodeFactoryExtension *extension);
 
 public:
     const QStringList& nodes(void) const;
@@ -52,6 +60,20 @@ protected:
 template <typename T> dtkComposerNode *dtkComposerNodeCreator(void) 
 { 
     return new T; 
+};
+
+// ///////////////////////////////////////////////////////////////////
+// 
+// ///////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryExtension
+{
+public:
+             dtkComposerNodeFactoryExtension(void) {}
+    virtual ~dtkComposerNodeFactoryExtension(void) {}
+
+public:
+    virtual void extend(dtkComposerNodeFactory *factory) = 0;
 };
 
 // 

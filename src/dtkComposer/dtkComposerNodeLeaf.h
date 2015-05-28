@@ -47,3 +47,24 @@ private:
     dtkComposerNodeLeafPrivate *d;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeLeafObject declaration
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSER_EXPORT dtkComposerNodeLeafObject : public dtkComposerNodeLeaf
+{
+public:
+             dtkComposerNodeLeafObject(void) {}
+    virtual ~dtkComposerNodeLeafObject(void) {}
+
+public:
+    virtual bool createObject(const QString& implementation) = 0;
+
+public:
+    virtual QStringList implementations(void) const = 0;
+
+    virtual QString currentImplementation(void) const = 0;
+
+    virtual bool implementationHasChanged(const QString& implementation) const = 0;
+};
+

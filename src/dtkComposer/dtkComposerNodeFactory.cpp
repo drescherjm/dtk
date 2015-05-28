@@ -16,6 +16,7 @@
 #include "dtkComposerNodeMetaData.h"
 
 #include <dtkMeta>
+
 // ///////////////////////////////////////////////////////////////////
 // 
 // ///////////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
     d->meta_datas.clear();
 }
 
-dtkComposerNode *dtkComposerNodeFactory::create(const QString& node)
+dtkComposerNode *dtkComposerNodeFactory::create(const QString& node) const
 {
     dtkComposerNode *n = dtkCorePluginFactory<dtkComposerNode>::create(node);
     if (n)
@@ -68,6 +69,11 @@ void dtkComposerNodeFactory::record(const QString& metadata_file_path, creator f
     } else {
         delete meta_data;
     }
+}
+
+void dtkComposerNodeFactory::extend(dtkComposerNodeFactoryExtension *extension)
+{
+    extension->extend(this);
 }
 
 const QStringList& dtkComposerNodeFactory::nodes(void) const

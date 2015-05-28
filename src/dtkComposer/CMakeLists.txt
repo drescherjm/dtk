@@ -52,6 +52,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerGraphView.h
   dtkComposerMetaType.h
   dtkComposerNode.h
+  dtkComposerNodeObject
+  dtkComposerNodeObject.h
+  dtkComposerNodeObject.tpp
   dtkComposerNodeMetaData.h
   dtkComposerNodeDistributed.h
   dtkComposerNodeFactory.h

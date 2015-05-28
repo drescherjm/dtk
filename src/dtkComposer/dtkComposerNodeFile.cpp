@@ -1,16 +1,16 @@
-/* dtkComposerNodeFile.cpp --- 
- * 
- * Author: Julien Wintz, INRIA
- * Created: Thu Mar  1 11:45:03 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeFile_p.h"
@@ -31,57 +31,38 @@
 
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
-    Q_UNUSED(url);
+    this->file.setAutoRemove(false);
 
-    // QFileInfo file_template_info = QFileInfo(url.path());
+    if (!this->file.open()) {
+        qDebug() << Q_FUNC_INFO << "Unable to file for saving";
+        return;
+    }
 
-    // QTemporaryFile file;
-    // if(!file_template_info.completeSuffix().isEmpty())
-    //     file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
-    // file.setAutoRemove(false);
-    
-    // if (!file.open()) {
-    //     qDebug() << Q_FUNC_INFO << "Unable to file for saving";
-    //     return;
-    // }
-        
-    // this->dwnl_ok = 0;
-    
-    // QHttp http;
-    
-    // connect(&http, SIGNAL(requestFinished(int, bool)), this, SLOT(onRequestFinished(int, bool)));
+    this->dwnl_ok = 0;
 
-    // http.setHost(url.host(), url.scheme().toLower() == "https" ? QHttp::ConnectionModeHttps : QHttp::ConnectionModeHttp, url.port() == -1 ? 0 : url.port());
-        
-    // if (!url.userName().isEmpty())
-    //     http.setUser(url.userName(), url.password());
-        
-    // QByteArray path = QUrl::toPercentEncoding(url.path(), "!$&'()*+,;=:@/");
-    
-    // if (path.isEmpty()) {
-    //     qDebug() << Q_FUNC_INFO << "Invalid path" << url.path();
-    //     return;
-    // }
-    
-    // this->dwnl_id = http.get(path, &file);
-    
-    // while(!this->dwnl_ok)
-    //     qApp->processEvents();
+    QNetworkAccessManager http;
 
-    // file.close();
+    connect(&http, SIGNAL(finished(QNetworkReply *)), this, SLOT(onRequestFinished(QNetworkReply *)));
 
-    // QFileInfo info(file);
-    
-    // this->tempName = info.absoluteFilePath();
+    http.get(QNetworkRequest(url));
+
+    while(!this->dwnl_ok)
+        qApp->processEvents();
+
+    this->file.close();
+
+    QFileInfo info(this->file);
+
+    this->tempName = info.absoluteFilePath();
 }
 
-void dtkComposerNodeFilePrivate::onRequestFinished(int id, bool error)
+void dtkComposerNodeFilePrivate::onRequestFinished(QNetworkReply *reply)
 {
-    Q_UNUSED(error);
-
-    if(id == this->dwnl_id)
-        this->dwnl_ok = 1;
+    this->file.write(reply->readAll());
+    this->file.flush();
+    this->dwnl_ok = 1;
 }
+
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFile implementation
@@ -154,7 +135,7 @@ dtkComposerNodeFileExists::dtkComposerNodeFileExists(void) : dtkComposerNodeLeaf
     this->appendReceiver(&(d->receiver));
 
     d->exists = false;
-    d->emitter.setData(&d->exists);
+    d->emitter.setData(&(d->exists));
     this->appendEmitter(&(d->emitter));
 }
 
@@ -368,3 +349,6 @@ void dtkComposerNodeDirectory::setValue(QString value)
 {
     d->directory = value;
 }
+
+//
+// dtkComposerNodeFile.cpp ends here

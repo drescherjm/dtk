@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -83,8 +83,8 @@ dtkComposerTransmitter *dtkComposerNode::removeEmitter(int index)
 }
 
 void dtkComposerNode::appendReceiver(dtkComposerTransmitter *receiver)
-{ 
-    if (!d->receivers.contains(receiver)) {
+{
+    if(!d->receivers.contains(receiver)) {
         d->receivers << receiver;
         receiver->setParentNode(this);
     }
@@ -122,6 +122,7 @@ QString dtkComposerNode::titleHint(void)
 {
     if (d->meta_data)
         return d->meta_data->title();
+
     return d->title_hint;
 }
 
@@ -156,5 +157,5 @@ void dtkComposerNode::setOutputLabelHint(const QString& hint, int port)
     d->output_label_hint[port] = hint;
 }
 
-// 
+//
 // dtkComposerNode.cpp ends here

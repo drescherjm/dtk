@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -53,5 +53,5 @@ public:
     dtkComposerNodeMetaDataPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeMetaData.h ends here

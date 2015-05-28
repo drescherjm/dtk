@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -48,7 +48,6 @@ dtkComposerFactory::dtkComposerFactory(void) : dtkComposerNodeFactory()
     this->initNodeNumber();
     this->initNodeString();
     this->initNodeContainer();
-
 }
 
 dtkComposerFactory::~dtkComposerFactory(void)
@@ -106,7 +105,6 @@ void dtkComposerFactory::initNodeControl(void)
 {
     this->record(":dtkComposer/dtkComposerNodeControlCase.json", dtkComposerNodeCreator<dtkComposerNodeControlCase>);
     this->record(":dtkComposer/dtkComposerNodeControlIf.json",   dtkComposerNodeCreator<dtkComposerNodeControlIf>);
-
     this->record(":dtkComposer/dtkComposerNodeControlDoWhile.json", dtkComposerNodeCreator<dtkComposerNodeControlDoWhile>);
     this->record(":dtkComposer/dtkComposerNodeControlFor.json",     dtkComposerNodeCreator<dtkComposerNodeControlFor>);
     this->record(":dtkComposer/dtkComposerNodeControlForEach.json", dtkComposerNodeCreator<dtkComposerNodeControlForEach>);
@@ -200,6 +198,5 @@ void dtkComposerFactory::initNodeContainer(void)
     this->record(":dtkComposer/dtkComposerNodeMetaContainerTakeAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerTakeAt>);
 }
 
-
-// 
+//
 // dtkComposerFactory.cpp ends here

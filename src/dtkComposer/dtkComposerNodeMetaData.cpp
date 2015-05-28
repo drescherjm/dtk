@@ -1,18 +1,22 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
 #include "dtkComposerNodeMetaData.h"
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeMetaDataPrivate
 {
@@ -27,7 +31,7 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 dtkComposerNodeMetaData::dtkComposerNodeMetaData(void) : d(new dtkComposerNodeMetaDataPrivate)
@@ -50,11 +54,11 @@ bool dtkComposerNodeMetaData::setFromFile(const QString& file_path)
     }
 
     QJsonDocument json_doc = QJsonDocument::fromJson(file.readAll());
-    if (json_doc.isEmpty()) {        
+    if (json_doc.isEmpty()) {
         qDebug() << Q_FUNC_INFO << "Json document" << file_path << "is empty. Unable to create json object.";
         return false;
     }
-    
+
     QJsonObject json = json_doc.object();
 
     d->title = json.value(QString("title")).toString();
@@ -76,6 +80,7 @@ bool dtkComposerNodeMetaData::setFromFile(const QString& file_path)
         d->output_labels << v.toString();
 
     file.close();
+
     return true;
 }
 
@@ -187,5 +192,5 @@ const QStringList& dtkComposerNodeMetaData::outputLabels(void) const
     return d->output_labels;
 }
 
-// 
+//
 // dtkComposerNodeMetaData.cpp ends here

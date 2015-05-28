@@ -33,10 +33,10 @@ public:
     void record(const QString& key, creator func);
 
 public:
-    T *create(const QString& key);
+    T *create(const QString& key) const;
 
 public:
-    QStringList keys(void);
+    QStringList keys(void) const;
 
 private:
     QHash<QString, creator> creators;

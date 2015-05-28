@@ -42,7 +42,7 @@ template <typename T> void dtkCorePluginFactory<T>::record(const QString& key, c
 // Type creator invokation
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
+template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key) const
 {
     if(!this->creators.contains(key))
         return NULL;
@@ -54,7 +54,7 @@ template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key)
 // Type creator inspection
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> QStringList dtkCorePluginFactory<T>::keys(void)
+template <typename T> QStringList dtkCorePluginFactory<T>::keys(void) const
 {
     return this->creators.keys();
 }

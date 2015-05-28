@@ -1,17 +1,16 @@
-/* dtkComposerNodeLeaf.h --- 
- * 
- * Author: David Rey
- * Copyright (C) 2008-2011 - David Rey, Inria.
- * Created: Tue Feb 14 15:40:03 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -47,3 +46,5 @@ private:
     dtkComposerNodeLeafPrivate *d;
 };
 
+//
+// dtkComposerNodeLeaf.h ends here

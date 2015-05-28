@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -22,13 +22,9 @@ class dtkComposerNodePrivate;
 class dtkComposerTransmitter;
 class dtkComposerNodeMetaData;
 
-// /////////////////////////////////////////////////////////////////
-// dtkComposerNode
-// /////////////////////////////////////////////////////////////////
-
 class DTKCOMPOSER_EXPORT dtkComposerNode
 {
-public: 
+public:
              dtkComposerNode(void);
     virtual ~dtkComposerNode(void);
 
@@ -84,5 +80,5 @@ private:
     dtkComposerNodePrivate *d;
 };
 
-// 
+//
 // dtkComposerNode.h ends here

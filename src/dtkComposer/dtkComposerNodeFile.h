@@ -1,21 +1,16 @@
-/* dtkComposerNodeFile.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Thu Mar  1 11:44:04 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Fri Apr  5 09:17:23 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 19
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -144,3 +139,6 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeDirectory : public dtkComposerNodeLeaf
  private:
     dtkComposerNodeDirectoryPrivate *d;
 };
+
+//
+// dtkComposerNodeFile.h ends here

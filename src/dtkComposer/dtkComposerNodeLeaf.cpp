@@ -1,21 +1,16 @@
-/* dtkComposerNodeLeaf.cpp --- 
- * 
- * Author: David Rey
- * Copyright (C) 2008-2011 - David Rey, Inria.
- * Created: Tue Feb 14 15:40:50 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar 25 08:45:40 2013 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 30
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -25,7 +20,7 @@
 
 class dtkComposerNodeLeafPrivate
 {
-public:    
+public:
     bool header;
     bool footer;
 };
@@ -76,3 +71,6 @@ bool dtkComposerNodeLeaf::isFooter(void)
 {
     return d->footer;
 }
+
+//
+// dtkComposerNodeLeaf.cpp ends here

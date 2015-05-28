@@ -61,4 +61,3 @@ public:
     QTemporaryFile file;
     int dwnl_ok;
 };
-

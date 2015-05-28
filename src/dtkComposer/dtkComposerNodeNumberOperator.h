@@ -1,24 +1,18 @@
-/* dtkComposerNodeNumberOperator.h --- 
- * 
- * Author: David Rey
- * Copyright (C) 2008-2011 - David Rey, Inria.
- * Created: Mon Feb 27 14:19:28 2012 (+0100)
- * Version: $Id$
- * Last-Updated: jeu. oct. 23 15:27:49 2014 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 109
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
 
-#ifndef DTKCOMPOSERNODENUMBEROPERATOR_H
-#define DTKCOMPOSERNODENUMBEROPERATOR_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerExport.h"
 
@@ -517,4 +511,5 @@ public:
 
 };
 
-#endif
+//
+// dtkComposerNodeNumberOperator.h ends here

@@ -1,21 +1,16 @@
-/* dtkComposerNodeNumberOperator.cpp ---
- *
- * Author: David Rey
- * Copyright (C) 2008-2011 - David Rey, Inria.
- * Created: Mon Feb 27 14:28:20 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Wed Apr  3 10:17:09 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 742
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerTransmitterEmitter.h"
@@ -25,7 +20,7 @@
 #include <math.h>
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 #if !defined(Q_OS_WIN)
@@ -54,7 +49,7 @@ bool dtkComposerAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
 bool dtkComposerAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
 {
     if (A == B)
-        return true; 
+        return true;
 
     int64_t *AA = reinterpret_cast<int64_t*>(&A);
     int64_t *BB = reinterpret_cast<int64_t*>(&B);
@@ -331,7 +326,7 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
     } else {
         d->emitter.setData<qlonglong>(var.value<qlonglong>() - 1);
 
-    } 
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -339,7 +334,7 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
-{ 
+{
     d->value_r = qSqrt(d->receiver.data<double>());
     d->emitter.setData<double>(d->value_r);
 }
@@ -583,7 +578,7 @@ void dtkComposerNodeNumberOperatorBinaryMax::run(void)
 {
     double lhs = d->receiver_lhs.data<double>();
     double rhs = d->receiver_rhs.data<double>();
-    
+
     d->emitter.setData<double>( lhs > rhs ? lhs : rhs );
 }
 
@@ -691,7 +686,7 @@ void dtkComposerNodeNumberComparatorLt::run(void)
 {
     double lhs = d->receiver_lhs.data<double>();
     double rhs = d->receiver_rhs.data<double>();
-    
+
     d->emitter.setData( lhs < rhs );
 }
 
@@ -718,3 +713,6 @@ void dtkComposerNodeNumberComparatorLte::run(void)
 
     d->emitter.setData( lhs <= rhs );
 }
+
+//
+// dtkComposerNodeNumberOperator.cpp ends here

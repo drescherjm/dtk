@@ -1,21 +1,16 @@
-/* dtkComposerNodeFile_p.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Sep 21 16:12:57 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Fri Apr  5 09:17:48 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 8
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -23,7 +18,9 @@
 #include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkMeta>
+
 #include <QtCore>
+#include <QtNetwork>
 
 class dtkComposerNodeFilePrivate : public QObject
 {
@@ -33,19 +30,19 @@ public:
     void download(const QUrl& url);
 
 public slots:
-    void onRequestFinished(int id, bool error);
+    void onRequestFinished(QNetworkReply *reply);
 
 public:
     QString fileName;
     QString tempName;
 
-    int dwnl_id;
+    QTemporaryFile file;
     int dwnl_ok;
 
 public:
     dtkComposerTransmitterReceiver<QString> receiver;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<QString> emitter;
 };
 
@@ -117,3 +114,6 @@ class dtkComposerNodeDirectoryPrivate
  public:
     QString directory;
 };
+
+//
+// dtkComposerNodeFile_p.h ends here

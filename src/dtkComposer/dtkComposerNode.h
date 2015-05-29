@@ -18,9 +18,14 @@
 
 #include <QtCore>
 
+class QWidget;
 class dtkComposerNodePrivate;
 class dtkComposerTransmitter;
 class dtkComposerNodeMetaData;
+
+// ///////////////////////////////////////////////////////////////////
+// dtkComposerNode declaration
+// ///////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNode
 {
@@ -68,6 +73,9 @@ public:
 public:
     QString  inputLabelHint(int port);
     QString outputLabelHint(int port);
+
+public:
+    virtual QWidget *widget(void);
 
 public:
     QT_DEPRECATED void setTitleHint(const QString& hint);

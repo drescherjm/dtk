@@ -142,6 +142,11 @@ QString dtkComposerNode::outputLabelHint(int port)
     return "port";
 }
 
+QWidget *dtkComposerNode::widget(void)
+{
+    return NULL;
+}
+
 void dtkComposerNode::setTitleHint(const QString& hint)
 {
     d->title_hint = hint;

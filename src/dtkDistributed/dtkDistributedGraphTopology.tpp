@@ -359,7 +359,9 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
                     v_gid = std::stoi (linestd, &sz) -1;
                     linestd2 = linestd.substr(sz);
                     val = std::stoi (linestd2, &sz) -1;
-                    value = (is_double) ? std::stod (linestd2.substr(sz)) : std::stoi (linestd2.substr(sz));
+                    if (values) {
+                        value = (is_double) ? std::stod (linestd2.substr(sz)) : std::stoi (linestd2.substr(sz));
+                    }
                     ++e_local_count;
                     ++edges_size;
                     ++e_gid;
@@ -415,7 +417,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
                         }
 
                     } else if (v_gid < v_last_line) {
-                        qCritical() << "i values should be sorted !, aborting reading of "<< filename;
+                        qCritical() << "i values should be sorted !, aborting reading of "<< filename <<v_gid << v_last_line;
                         return false;
                     } else { // new vertex
 

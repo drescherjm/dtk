@@ -1,0 +1,9 @@
+{
+          "title" : "Generic Process",
+           "kind" : "process",
+           "type" : "process",
+           "tags" : ["process", "generic"],
+    "description" : "<p>Generic process</p>",
+         "inputs" : ["string", "integer", "integer", "real", "data", "lhs", "rhs"],
+        "outputs" : ["integer", "real", "data"]
+}

@@ -95,5 +95,11 @@ public:
 
 #include "dtkComposerTransmitterEmitter.tpp"
 
+// ///////////////////////////////////////////////////////////////////
+// Alias for support layer
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T> using dtkComposerTransmitterEmitterSupport = dtkComposerTransmitterEmitter<T*>;
+
 // 
 // dtkComposerTransmitterEmitter.h ends here

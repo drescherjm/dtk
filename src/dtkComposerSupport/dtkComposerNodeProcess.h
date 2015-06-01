@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:15:49
  * Version: $Id$
- * Last-Updated: mar. nov.  5 17:21:26 2013 (+0100)
- *           By: edelclau
- *     Update #: 15
+ * Last-Updated: lun. juin  1 15:12:07 2015 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 17
  */
 
 /* Commentary:
@@ -21,7 +21,7 @@
 #define DTKCOMPOSERNODEPROCESS_H
 
 #include "dtkComposerSupportExport.h"
-#include "dtkComposerNodeLeafProcess.h"
+#include "dtkComposerNodeLeafProcessSupport.h"
 
 class dtkComposerNodeProcessPrivate;
 
@@ -29,7 +29,7 @@ class dtkComposerNodeProcessPrivate;
 // dtkComposerNodeProcess interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcess
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcessSupport
 {
 public:
      dtkComposerNodeProcess(void);

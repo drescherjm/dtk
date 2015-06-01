@@ -98,5 +98,11 @@ private:
 
 #include "dtkComposerTransmitterReceiver.tpp"
 
+// ///////////////////////////////////////////////////////////////////
+// Alias for support layer
+// ///////////////////////////////////////////////////////////////////
+
+template <typename T> using dtkComposerTransmitterReceiverSupport = dtkComposerTransmitterReceiver<T*>;
+
 // 
 // dtkComposerTransmitterReceiver.h ends here

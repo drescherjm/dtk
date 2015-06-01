@@ -1,21 +1,20 @@
 // Version: $Id$
-//
-//
+// 
+// 
 
-// Commentary:
-//
-//
+// Commentary: 
+// 
+// 
 
 // Change Log:
-//
-//
+// 
+// 
 
 // Code:
 
 #pragma once
 
 #include <QString>
-#include <QStringList>
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -53,9 +52,5 @@ protected:
     const dtkCorePluginFactory<T> *m_factory;
 };
 
-// ///////////////////////////////////////////////////////////////////
-
-#include "dtkComposerNodeObject.tpp"
-
-//
-// dtkComposerNodeObject.h ends here
+// 
+// dtkComposerNodeObjectSupport.h ends here

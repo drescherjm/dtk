@@ -636,7 +636,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             QObject *object = NULL;
             dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(node->wrapee());
 
-            if (object_node && object_node->nodeMetaData()->kind() == dtkComposerNode::Data) {
+            if (object_node && (object_node->nodeMetaData()->kind() == dtkComposerNode::Data || object_node->nodeMetaData()->kind() == dtkComposerNode::Process)) {
             // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
             //     if (data_node->isAbstractData()) {

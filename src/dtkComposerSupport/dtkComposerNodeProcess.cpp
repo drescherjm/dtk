@@ -4,9 +4,9 @@
  * Copyright (C) 2012 - Nicolas Niclausse, Inria.
  * Created: 2012/03/29 11:17:21
  * Version: $Id$
- * Last-Updated: mar. févr.  4 17:47:07 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 311
+ * Last-Updated: lun. juin  1 15:19:56 2015 (+0200)
+ *           By: Thibaud Kloczko
+ *     Update #: 327
  */
 
 /* Commentary:
@@ -18,13 +18,17 @@
  */
 
 #include "dtkComposerNodeProcess.h"
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerMetatype.h"
+// #include "dtkComposerTransmitterEmitter.h"
+// #include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkLog/dtkLog>
 
 #include <dtkCoreSupport/dtkAbstractData.h>
 #include <dtkCoreSupport/dtkAbstractProcess.h>
+
+#include <dtkComposer/dtkComposerTransmitterEmitter.h>
+#include <dtkComposer/dtkComposerTransmitterReceiver.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeProcessPrivate interface
@@ -33,18 +37,18 @@
 class dtkComposerNodeProcessPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_0;
-    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
-    dtkComposerTransmitterReceiver<double> receiver_real;
-    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
-    dtkComposerTransmitterReceiver<QString> receiver_string;
-    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_lhs;
-    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_rhs;
+    dtkComposerTransmitterReceiverSupport<qlonglong> receiver_integer_0;
+    dtkComposerTransmitterReceiverSupport<qlonglong> receiver_integer_1;
+    dtkComposerTransmitterReceiverSupport<double> receiver_real;
+    dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_data;
+    dtkComposerTransmitterReceiverSupport<QString> receiver_string;
+    dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_lhs;
+    dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_rhs;
 
 public:
-    dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
-    dtkComposerTransmitterEmitter<double> emitter_real;
-    dtkComposerTransmitterEmitter<dtkAbstractData> emitter_data;
+    dtkComposerTransmitterEmitterSupport<qlonglong> emitter_integer;
+    dtkComposerTransmitterEmitterSupport<double> emitter_real;
+    dtkComposerTransmitterEmitterSupport<dtkAbstractData> emitter_data;
 
 public:
     dtkAbstractProcess *process;
@@ -61,7 +65,7 @@ public:
 // dtkComposerNodeProcess implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProcess(), d(new dtkComposerNodeProcessPrivate)
+dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProcessSupport(), d(new dtkComposerNodeProcessPrivate)
 {
     this->appendReceiver(&(d->receiver_string));
     this->appendReceiver(&(d->receiver_integer_0));

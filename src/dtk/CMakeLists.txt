@@ -14,7 +14,7 @@
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/dtkConfig.h.in"
-  "${CMAKE_CURRENT_SOURCE_DIR}/dtkConfig.h")
+  "${PROJECT_BINARY_DIR}/dtkConfig.h")
 
 ## ###################################################################
 ## Install rules

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -56,5 +56,5 @@ protected:
 
 #include "dtkComposerNodeObject.tpp"
 
-// 
+//
 // dtkComposerNodeObject.h ends here

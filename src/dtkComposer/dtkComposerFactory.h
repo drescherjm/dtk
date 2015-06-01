@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -35,5 +35,6 @@ public:
     void initNodeString (void);
     void initNodeContainer(void);
 };
-// 
+
+//
 // dtkComposerFactory.h ends here

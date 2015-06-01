@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -57,13 +57,13 @@ protected:
 // Helper function for node creation
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> dtkComposerNode *dtkComposerNodeCreator(void) 
-{ 
-    return new T; 
+template <typename T> dtkComposerNode *dtkComposerNodeCreator(void)
+{
+    return new T;
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryExtension
@@ -76,5 +76,5 @@ public:
     virtual void extend(dtkComposerNodeFactory *factory) = 0;
 };
 
-// 
+//
 // dtkComposerNodeFactory.h ends here

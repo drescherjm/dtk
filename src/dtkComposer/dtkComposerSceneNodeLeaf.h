@@ -1,17 +1,16 @@
-/* dtkComposerSceneNodeLeaf.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Feb  3 12:34:45 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -57,3 +56,5 @@ private:
     dtkComposerSceneNodeLeafPrivate *d;
 };
 
+//
+// dtkComposerSceneNodeLeaf.h ends here

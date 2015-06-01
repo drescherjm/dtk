@@ -1,18 +1,19 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
 #include "dtkComposerNode.h"
+#include "dtkComposerNodeMetaData.h"
 #include "dtkComposerSceneNode.h"
 #include "dtkComposerSceneNode_p.h"
 #include "dtkComposerSceneNodeLeaf.h"
@@ -112,7 +113,7 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
     this->setToolTip(node->type());
 
-    for(int i = 0; i < node->receivers().count(); ++i) {        
+    for(int i = 0; i < node->receivers().count(); ++i) {
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         port->setLabel(node->inputLabelHint(this->addInputPort(port)));
     }
@@ -204,7 +205,7 @@ void dtkComposerSceneNodeLeaf::layout(void)
     int port_spacing = 10;
 
 // /////////////////////////////////////////////////////////////////
-// Setting up port position 
+// Setting up port position
 // /////////////////////////////////////////////////////////////////
 
     for(int i = 0; i < this->inputPorts().count(); i++)
@@ -237,23 +238,23 @@ void dtkComposerSceneNodeLeaf::layout(void)
             }
         }
     }
-    
+
 // /////////////////////////////////////////////////////////////////
 // Update edges geometry
 // /////////////////////////////////////////////////////////////////
 
     QRectF updateRect;
-    
+
     foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
     }
-    
+
     foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
     }
-    
+
     this->update(updateRect);
 
 // /////////////////////////////////////////////////////////////////
@@ -261,33 +262,33 @@ void dtkComposerSceneNodeLeaf::layout(void)
 // /////////////////////////////////////////////////////////////////
 
     if (!d->gradiant_defined) {
-        
+
         d->gradiant = QLinearGradient(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
-        
+
         qreal stripe = 10. / d->rect.height();
-        
-        // if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
-        //     d->gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
-        //     d->gradiant.setColorAt(stripe, QColor(Qt::darkRed));
-        //     d->gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
-        // } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
-        //     d->gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
-        //     d->gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
-        //     d->gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
-        // } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
-        //     d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
-        //     d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
-        //     d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
-        // } else if (dynamic_cast<dtkComposerNodeLeafActor*>(this->wrapee())) {
-        //     d->gradiant.setColorAt(0.0, QColor(255, 175, 0).lighter());
-        //     d->gradiant.setColorAt(stripe, QColor(155, 75, 0));
-        //     d->gradiant.setColorAt(1.0, QColor(155, 75, 0).darker());
-        // } else {
+
+        if (this->wrapee()->nodeMetaData()->kind() == dtkComposerNode::Process) {
+            d->gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkRed));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
+        } else if (this->wrapee()->nodeMetaData()->kind() == dtkComposerNode::Data) {
+            d->gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
+        } else if (this->wrapee()->nodeMetaData()->kind() == dtkComposerNode::View) {
+            d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
+            d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
+            d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
+        } else if (this->wrapee()->nodeMetaData()->kind() == dtkComposerNode::Actor) {
+            d->gradiant.setColorAt(0.0, QColor(255, 175, 0).lighter());
+            d->gradiant.setColorAt(stripe, QColor(155, 75, 0));
+            d->gradiant.setColorAt(1.0, QColor(155, 75, 0).darker());
+        } else {
             d->gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker());
-	// }
-        
+        }
+
         d->gradiant_defined = true;
 
     }
@@ -353,5 +354,5 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
     painter->drawText(title_pos, title_text);
 }
 
-// 
+//
 // dtkComposerSceneNodeLeaf.cpp ends here

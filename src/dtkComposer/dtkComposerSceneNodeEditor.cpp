@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -40,6 +40,8 @@
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
+
+#include <dtkConfig>
 
 #if defined(DTK_BUILD_DISTRIBUTED)
 #include "dtkComposerNodeRemote.h"
@@ -661,7 +663,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 d->select_implementation->setEnabled(true);
 
             //         object = reinterpret_cast<QObject *>(data_node->data());
-                    
+
             //     }
             }
 
@@ -671,7 +673,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
             //         int current_index = 0;
             //         d->select_implementation->addItem("Choose implementation");
-                    
+
             //         for(int i = 0; i < process_node->implementations().count(); ++i) {
             //             if (process_node->implementations().at(i) == process_node->currentImplementation())
             //                 current_index = i+1;
@@ -680,23 +682,23 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
             //        d->select_implementation->setMaximumWidth(this->size().width() - 10);
             //         d->select_implementation->setCurrentIndex(current_index);
-                    
+
             //         d->select_implementation->blockSignals(false);
             //         d->select_implementation->setVisible(true);
             //         d->select_implementation->setEnabled(true);
 
             //         object = reinterpret_cast<QObject *>(process_node->process());
-                    
+
             //     }
             // }
 
             // else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(node->wrapee())) {
 
             //     if (view_node->isAbstractView()) {
-                    
+
             //         int current_index = 0;
             //         d->select_implementation->addItem("Choose implementation");
-                    
+
             //         for(int i = 0; i < view_node->implementations().count(); ++i) {
             //             if (view_node->implementations().at(i) == view_node->currentImplementation())
             //                 current_index = i+1;
@@ -705,13 +707,13 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
             //         d->select_implementation->setMaximumWidth(this->size().width() - 10);
             //         d->select_implementation->setCurrentIndex(current_index);
-                    
+
             //         d->select_implementation->blockSignals(false);
             //         d->select_implementation->setVisible(true);
             //         d->select_implementation->setEnabled(true);
 
             //         object = reinterpret_cast<QObject *>(view_node->view());
-                   
+
             //     }
             // }
 
@@ -1063,10 +1065,10 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Input);
 
-#if defined(DTK_BUILD_DISTRIBUTED)
-        if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-             command->setKind(dtkComposerTransmitter::Variant);
-#endif
+// #if defined(DTK_BUILD_DISTRIBUTED)
+//         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
+//              command->setKind(dtkComposerTransmitter::Variant);
+// #endif
     }
 
     d->stack->push(command);
@@ -1139,10 +1141,10 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Output);
 
-#if defined(DTK_BUILD_DISTRIBUTED)
-        if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-            command->setKind(dtkComposerTransmitter::Variant);
-#endif
+// #if defined(DTK_BUILD_DISTRIBUTED)
+//         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
+//             command->setKind(dtkComposerTransmitter::Variant);
+// #endif
     }
 
     d->stack->push(command);
@@ -1338,5 +1340,5 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
 
 }
 
-// 
+//
 // dtkComposerSceneNodeEditor.cpp ends here

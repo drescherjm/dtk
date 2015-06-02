@@ -15,7 +15,6 @@
 #pragma once
 
 #include "dtkComposerExport.h"
-
 #include "dtkComposerNode.h"
 
 // /////////////////////////////////////////////////////////////////

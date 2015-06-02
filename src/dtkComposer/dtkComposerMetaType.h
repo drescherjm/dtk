@@ -1,30 +1,24 @@
-/* dtkComposerMetaType.h --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Sat Aug  4 00:26:47 2012 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include <QtCore>
-#include <QImage>
-
-#include <dtkMeta/dtkMeta.h>
-
-// /////////////////////////////////////////////////////////////////
-//
-// /////////////////////////////////////////////////////////////////
+#include <QtGui>
 
 Q_DECLARE_METATYPE(QImage*);
-
 Q_DECLARE_METATYPE(QByteArray *);
 
+//
+// dtkComposerMetaType.h ends here

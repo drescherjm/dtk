@@ -84,7 +84,6 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
 
     d->gradiant_defined = false;
 
-
     if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
         d->use_gui = true;
         d->flag = new QGraphicsPixmapItem(this);
@@ -137,7 +136,8 @@ void dtkComposerSceneNodeLeaf::flag(Qt::GlobalColor color, bool on)
 
 void dtkComposerSceneNodeLeaf::flag(QColor color)
 {
-    if (!d->use_gui) { return; }
+    if (!d->use_gui)
+        return;
 
     if(color == Qt::blue)
         this->flag(Qt::blue, true);

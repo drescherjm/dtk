@@ -153,7 +153,6 @@ void dtkComposerNodeView::run(void)
         d->view->setLowerRight(*d->receiver_screen_lower_right.data());
 
     if(!d->receiver_data.isEmpty())
-        //foreach (dtkAbstractData *data, d->receiver_data.allData())
         foreach (QVariant var, d->receiver_data.allData())
             d->view->setData(var.value<dtkAbstractData*>());
 }

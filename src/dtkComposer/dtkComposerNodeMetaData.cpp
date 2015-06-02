@@ -63,8 +63,6 @@ bool dtkComposerNodeMetaData::setFromFile(const QString& file_path)
 
     QJsonObject json = json_doc.object();
 
-    qDebug() << json.keys();
-
     d->title = json.value(QString("title")).toString();
     this->setKind(json.value(QString("kind")).toString());
     d->type = json.value(QString("type")).toString();

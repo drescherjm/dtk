@@ -1,21 +1,16 @@
-/* dtkComposerSceneNode.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Fri Feb  3 14:01:09 2012 (+0100)
- * Version: $Id$
- * Last-Updated: ven. janv.  9 15:17:10 2015 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 99
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNode.h"
 #include "dtkComposerSceneNode.h"
@@ -151,3 +146,6 @@ void dtkComposerSceneNode::setEmbedded(bool embedded)
 //
 //     return QGraphicsItem::itemChange(change, value);
 // }
+
+//
+// dtkComposerSceneNode.cpp ends here

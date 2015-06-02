@@ -392,7 +392,8 @@ target_link_libraries(${PROJECT_NAME}
   dtkContainerSupport
   dtkCoreSupport
   dtkGuiSupport
-  dtkLog)
+  dtkLog
+  dtkWidgets)
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore)

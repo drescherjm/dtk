@@ -22,7 +22,7 @@
 
 #include "dtkPlotSupportExport.h"
 
-#include <dtkGuiSupport/dtkToolBox.h>
+#include <dtkWidgets/dtkToolBox.h>
 
 class dtkPlotView;
 class dtkPlotViewSettingsPrivate;

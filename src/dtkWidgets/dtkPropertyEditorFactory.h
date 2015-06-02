@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QObject>
 #include <QList>
@@ -26,7 +26,7 @@ class dtkPropertyEditorFactoryPrivate;
 // dtkPropertyEditorFactory declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUISUPPORT_EXPORT dtkPropertyEditorFactory : public QObject
+class DTKWIDGETS_EXPORT dtkPropertyEditorFactory : public QObject
 {
     Q_OBJECT
 

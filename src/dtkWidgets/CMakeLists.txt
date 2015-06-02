@@ -20,6 +20,9 @@ project(dtkWidgets)
 
 set(${PROJECT_NAME}_HEADERS
   dtkApplication.h
+  dtkPropertyEditor.h
+  dtkPropertyEditorFactory.h
+  dtkToolBox.h
   dtkWidgetsLogView.h
   dtkWidgetsLogView_p.h
   dtkWidgetsTag.h
@@ -34,6 +37,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkPropertyEditor.cpp
+  dtkPropertyEditorFactory.cpp
+  dtkToolBox.cpp
   dtkWidgetsLogView.cpp
   dtkWidgetsTag.cpp
   dtkWidgetsTagCloud.cpp

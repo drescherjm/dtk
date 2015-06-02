@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QFrame>
 #include <QVariant>
@@ -25,7 +25,7 @@ class dtkPropertyEditorPrivate;
 // dtkPropertyEditor declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUISUPPORT_EXPORT dtkPropertyEditor : public QFrame
+class DTKWIDGETS_EXPORT dtkPropertyEditor : public QFrame
 {
     Q_OBJECT
 
@@ -52,7 +52,7 @@ protected:
 // dtkPropertyEditorDouble declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUISUPPORT_EXPORT dtkPropertyEditorDouble : public dtkPropertyEditor
+class DTKWIDGETS_EXPORT dtkPropertyEditorDouble : public dtkPropertyEditor
 {
     Q_OBJECT
 
@@ -72,7 +72,7 @@ public slots:
 // dtkPropertyEditorInteger declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUISUPPORT_EXPORT dtkPropertyEditorInteger : public dtkPropertyEditor
+class DTKWIDGETS_EXPORT dtkPropertyEditorInteger : public dtkPropertyEditor
 {
     Q_OBJECT
 
@@ -92,7 +92,7 @@ public slots:
 // dtkPropertyEditorString declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUISUPPORT_EXPORT dtkPropertyEditorString : public dtkPropertyEditor
+class DTKWIDGETS_EXPORT dtkPropertyEditorString : public dtkPropertyEditor
 {
     Q_OBJECT
 
@@ -112,7 +112,7 @@ public slots:
 // dtkPropertyEditorEnum declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKGUISUPPORT_EXPORT dtkPropertyEditorEnum : public dtkPropertyEditor
+class DTKWIDGETS_EXPORT dtkPropertyEditorEnum : public dtkPropertyEditor
 {
     Q_OBJECT
 

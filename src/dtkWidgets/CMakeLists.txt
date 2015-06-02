@@ -20,6 +20,11 @@ project(dtkWidgets)
 
 set(${PROJECT_NAME}_HEADERS
   dtkApplication.h
+  dtkNotifiable.h
+  dtkNotification.h
+  dtkNotificationDisplay.h
+  dtkNotificationEvent.h
+  dtkNotificationQueue.h
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
   dtkToolBox.h
@@ -37,6 +42,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkNotification.cpp
+  dtkNotificationDisplay.cpp
+  dtkNotificationEvent.cpp
+  dtkNotificationQueue.cpp
   dtkPropertyEditor.cpp
   dtkPropertyEditorFactory.cpp
   dtkToolBox.cpp
@@ -53,6 +62,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkWidgetsTagCloudView.cpp)
 
 set(${PROJECT_NAME}_SOURCES_RCC
+  dtkNotification.qrc
   dtkWidgetsTagCloud.qrc)
 
 ## #################################################################

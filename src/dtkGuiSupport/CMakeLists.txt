@@ -15,11 +15,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
-  dtkNotifiable.h
-  dtkNotification.h
-  dtkNotificationDisplay.h
-  dtkNotificationEvent.h
-  dtkNotificationQueue.h
   dtkObjectEditor.h
   dtkPieChart.h
   dtkPluginsEditor.h
@@ -53,10 +48,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkFlowLayout.cpp
   dtkFinder.cpp
   dtkObjectEditor.cpp
-  dtkNotification.cpp
-  dtkNotificationDisplay.cpp
-  dtkNotificationEvent.cpp
-  dtkNotificationQueue.cpp
   dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp
@@ -91,8 +82,7 @@ set(${PROJECT_NAME}_SOURCES
 endif(APPLE)
 
 set(${PROJECT_NAME}_SOURCES_RCC
-  dtkGui.qrc
-  dtkNotification.qrc)
+  dtkGui.qrc)
 
 ## #################################################################
 ## Build rules

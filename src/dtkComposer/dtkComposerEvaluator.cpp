@@ -27,7 +27,7 @@
 
 #include <dtkLog/dtkLogger.h>
 #include <dtkMathSupport/dtkGraph.h>
-#include <dtkGuiSupport/dtkNotification.h>
+#include <dtkWidgets/dtkNotification.h>
 
 #include <QtCore>
 #include <QtConcurrent>

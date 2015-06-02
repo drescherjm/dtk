@@ -20,7 +20,7 @@
 #ifndef DTKNOTIFICATION_H
 #define DTKNOTIFICATION_H
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 #include "dtkNotificationEvent.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -33,9 +33,9 @@ static const int dtkNotificationEventType = QEvent::User + 1003;
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-DTKGUISUPPORT_EXPORT void dtkNotify(const QString& message);
-DTKGUISUPPORT_EXPORT void dtkNotify(const QString& message, int duration);
-DTKGUISUPPORT_EXPORT void dtkNotify(dtkNotificationEvent *event);
-DTKGUISUPPORT_EXPORT void dtkClearNotifications(void);
+DTKWIDGETS_EXPORT void dtkNotify(const QString& message);
+DTKWIDGETS_EXPORT void dtkNotify(const QString& message, int duration);
+DTKWIDGETS_EXPORT void dtkNotify(dtkNotificationEvent *event);
+DTKWIDGETS_EXPORT void dtkClearNotifications(void);
 
 #endif

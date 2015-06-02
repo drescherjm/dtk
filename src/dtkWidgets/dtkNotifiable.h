@@ -20,11 +20,11 @@
 #ifndef DTKNOTIFIABLE_H
 #define DTKNOTIFIABLE_H
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QtCore>
 
-class DTKGUISUPPORT_EXPORT dtkNotifiable
+class DTKWIDGETS_EXPORT dtkNotifiable
 {
 public:
     virtual void clear(void) = 0;

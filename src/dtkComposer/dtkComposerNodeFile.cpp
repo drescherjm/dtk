@@ -17,7 +17,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <dtkGuiSupport/dtkNotification.h>
+#include <dtkWidgets/dtkNotification.h>
 
 #include <dtkLog>
 #include <dtkMeta>

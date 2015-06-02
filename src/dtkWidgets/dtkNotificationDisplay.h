@@ -21,13 +21,13 @@
 #define DTKNOTIFICATIONDISPLAY_H
 
 #include "dtkNotifiable.h"
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QtWidgets>
 
 class dtkNotificationDisplayPrivate;
 
-class DTKGUISUPPORT_EXPORT dtkNotificationDisplay : public QFrame, public dtkNotifiable
+class DTKWIDGETS_EXPORT dtkNotificationDisplay : public QFrame, public dtkNotifiable
 {
     Q_OBJECT    
 

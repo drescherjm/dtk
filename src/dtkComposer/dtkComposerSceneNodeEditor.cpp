@@ -47,7 +47,7 @@
 
 #include "dtkComposerTransmitterProxyLoop.h"
 
-#include <dtkGuiSupport/dtkToolBox.h>
+#include <dtkWidgets/dtkToolBox.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList

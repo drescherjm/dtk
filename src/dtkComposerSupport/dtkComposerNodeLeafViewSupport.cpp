@@ -15,6 +15,7 @@
 #include "dtkComposerNodeLeafViewSupport.h"
 
 #include <dtkCoreSupport/dtkAbstractViewFactory.h>
+#include <dtkMeta>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafViewSupport implementation
@@ -31,6 +32,18 @@ dtkComposerNodeObject<dtkAbstractView>::~dtkComposerNodeObject(void)
         delete m_view;
 
     m_view = 0;
+}
+QVariant dtkComposerNodeObject<dtkAbstractView>::variant(void) const
+{
+    if (this->object())
+        return dtkMetaType::variantFromValue(this->object());
+    else
+        return QVariant();
+}
+
+dtkAbstractView *dtkComposerNodeObject<dtkAbstractView>::object(void) const
+{
+    return const_cast<dtkComposerNodeObject<dtkAbstractView> *>(this)->view();
 }
 
 bool dtkComposerNodeObject<dtkAbstractView>::createObject(const QString& implementation)

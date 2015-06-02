@@ -636,26 +636,29 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             QObject *object = NULL;
             dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(node->wrapee());
 
-            if (object_node && (object_node->nodeMetaData()->kind() == dtkComposerNode::Data || object_node->nodeMetaData()->kind() == dtkComposerNode::Process)) {
+            if (object_node) {
+
+                object = object_node->variant().value<QObject*>();
+
             // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
 
             //     if (data_node->isAbstractData()) {
 
-                    int current_index = 0;
-                    d->select_implementation->addItem("Choose implementation");
-                    
-                    for(int i = 0; i < object_node->implementations().count(); ++i) {
-                        if (object_node->implementations().at(i) == object_node->currentImplementation())
-                            current_index = i+1;
-                        d->select_implementation->addItem(object_node->implementations().at(i));
-                    }
-
-                    d->select_implementation->setMaximumWidth(this->size().width() - 10);
-                    d->select_implementation->setCurrentIndex(current_index);
-                    
-                    d->select_implementation->blockSignals(false);
-                    d->select_implementation->setVisible(true);
-                    d->select_implementation->setEnabled(true);
+                int current_index = 0;
+                d->select_implementation->addItem("Choose implementation");
+                
+                for(int i = 0; i < object_node->implementations().count(); ++i) {
+                    if (object_node->implementations().at(i) == object_node->currentImplementation())
+                        current_index = i+1;
+                    d->select_implementation->addItem(object_node->implementations().at(i));
+                }
+                
+                d->select_implementation->setMaximumWidth(this->size().width() - 10);
+                d->select_implementation->setCurrentIndex(current_index);
+                
+                d->select_implementation->blockSignals(false);
+                d->select_implementation->setVisible(true);
+                d->select_implementation->setEnabled(true);
 
             //         object = reinterpret_cast<QObject *>(data_node->data());
                     
@@ -714,16 +717,18 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
             if (object) {
                 dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
-                item->setContentsMargins(0, 0, 0, 0);
-                item->hideButton();
-                qreal height = item->size().height();
-                d->node_toolbox->resize(this->size().width(), height);
-                d->node_toolbox->setMinimumHeight(height);
-                d->node_toolbox->setMaximumHeight(height);
-                d->node_toolbox->addItem(item);
-                d->node_toolbox->blockSignals(false);
-                d->node_toolbox->setVisible(true);
-                d->node_toolbox->setEnabled(true);
+                if (item) {
+                    item->setContentsMargins(0, 0, 0, 0);
+                    item->hideButton();
+                    qreal height = item->size().height();
+                    d->node_toolbox->resize(this->size().width(), height);
+                    d->node_toolbox->setMinimumHeight(height);
+                    d->node_toolbox->setMaximumHeight(height);
+                    d->node_toolbox->addItem(item);
+                    d->node_toolbox->blockSignals(false);
+                    d->node_toolbox->setVisible(true);
+                    d->node_toolbox->setEnabled(true);
+                }
             }
         }
     }
@@ -1300,6 +1305,7 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
 
     if (object_node) {
         object_node->createObject(implementation);
+        object = object_node->variant().value<QObject*>();
     }
 
     // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(d->node->wrapee())) {

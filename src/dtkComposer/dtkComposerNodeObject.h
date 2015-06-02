@@ -38,6 +38,7 @@ public:
     bool createObject(const QString& implementation);
 
 public:
+    QVariant variant(void) const;
     T *object(void) const;
 
 public:

@@ -15,6 +15,7 @@
 #include "dtkComposerNodeLeafProcessSupport.h"
 
 #include <dtkCoreSupport/dtkAbstractProcessFactory.h>
+#include <dtkMeta>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafProcessSupport implementation
@@ -31,6 +32,19 @@ dtkComposerNodeObject<dtkAbstractProcess>::~dtkComposerNodeObject(void)
         delete m_process;
 
     m_process = 0;
+}
+
+QVariant dtkComposerNodeObject<dtkAbstractProcess>::variant(void) const
+{
+    if (this->object())
+        return dtkMetaType::variantFromValue(this->object());
+    else
+        return QVariant();
+}
+
+dtkAbstractProcess *dtkComposerNodeObject<dtkAbstractProcess>::object(void) const 
+{ 
+    return this->process(); 
 }
 
 bool dtkComposerNodeObject<dtkAbstractProcess>::createObject(const QString& implementation)

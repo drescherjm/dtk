@@ -409,7 +409,8 @@ target_link_libraries(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore
-  dtkComposer)
+  dtkComposer
+  dtkMeta)
 
 # if(DTK_BUILD_SUPPORT_DISTRIBUTED)
 #   target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)

@@ -15,6 +15,7 @@
 #include "dtkComposerNodeLeafDataSupport.h"
 
 #include <dtkCoreSupport/dtkAbstractDataFactory.h>
+#include <dtkMeta>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerNodeLeafDataSupport implementation
@@ -31,6 +32,19 @@ dtkComposerNodeObject<dtkAbstractData>::~dtkComposerNodeObject(void)
         delete m_data;
 
     m_data = 0;
+}
+    
+QVariant dtkComposerNodeObject<dtkAbstractData>::variant(void) const
+{
+    if (this->object())
+        return dtkMetaType::variantFromValue(this->object());
+    else
+        return QVariant();
+}
+
+dtkAbstractData *dtkComposerNodeObject<dtkAbstractData>::object(void) const
+{
+    return this->data();
 }
 
 bool dtkComposerNodeObject<dtkAbstractData>::createObject(const QString& implementation)

@@ -32,7 +32,7 @@ class dtkComposerNodeDataPrivate
 {
 public:
     dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_data;
-    dtkComposerTransmitterReceiverSupport<QString> receiver_string;
+    dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiverSupport<dtkVectorReal> receiver_vector;
 
 public:
@@ -88,7 +88,7 @@ void dtkComposerNodeData::run(void)
     }
 
     if (!d->receiver_string.isEmpty())
-        d->data->setParameter(*d->receiver_string.data());
+        d->data->setParameter(d->receiver_string.data());
 
     if(!d->receiver_vector.isEmpty())
         d->data->setParameter(*d->receiver_vector.data());

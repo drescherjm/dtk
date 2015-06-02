@@ -55,6 +55,10 @@ public:
 
     virtual dtkAbstractView *view(void);
 
+public:
+    QVariant variant(void) const;
+    dtkAbstractView *object(void) const;
+
 protected:
     void clearView(void);
 
@@ -64,10 +68,6 @@ protected:
 };
 
 typedef dtkComposerNodeObject<dtkAbstractView> dtkComposerNodeLeafViewSupport;
-
-// 
-// dtkComposerNodeLeafViewSupport.h ends here
-
 
 // 
 // dtkComposerNodeLeafViewSupport.h ends here

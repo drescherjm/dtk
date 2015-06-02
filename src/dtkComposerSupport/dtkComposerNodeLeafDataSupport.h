@@ -38,6 +38,10 @@ public:
     dtkAbstractData *data(void) const;
 
 public:
+    QVariant variant(void) const;
+    dtkAbstractData *object(void) const;
+
+public:
     QStringList implementations(void) const;
 
     QString currentImplementation(void) const;

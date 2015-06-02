@@ -13,6 +13,7 @@
 // Code:
 
 #include <dtkCore/dtkCorePluginFactory>
+#include <dtkMeta/dtkMeta>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerNodeObject implementation
@@ -35,6 +36,14 @@ template <typename T> inline dtkComposerNodeObject<T>::~dtkComposerNodeObject(vo
 template <typename T> inline void dtkComposerNodeObject<T>::setFactory(const dtkCorePluginFactory<T>& factory)
 {
     m_factory = &factory;
+}
+
+template <typename T> inline QVariant dtkComposerNodeObject<T>::variant(void) const
+{
+    if (this->object())
+        return dtkMetaType::variantFromValue(this->object());
+    else
+        return QVariant();
 }
 
 template <typename T> inline T *dtkComposerNodeObject<T>::object(void) const

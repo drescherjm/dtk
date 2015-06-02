@@ -30,17 +30,17 @@
 class dtkComposerNodeProcessPrivate
 {
 public:
-    dtkComposerTransmitterReceiverSupport<qlonglong> receiver_integer_0;
-    dtkComposerTransmitterReceiverSupport<qlonglong> receiver_integer_1;
-    dtkComposerTransmitterReceiverSupport<double> receiver_real;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_0;
+    dtkComposerTransmitterReceiver<qlonglong> receiver_integer_1;
+    dtkComposerTransmitterReceiver<double> receiver_real;
     dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_data;
-    dtkComposerTransmitterReceiverSupport<QString> receiver_string;
+    dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_lhs;
     dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_rhs;
 
 public:
-    dtkComposerTransmitterEmitterSupport<qlonglong> emitter_integer;
-    dtkComposerTransmitterEmitterSupport<double> emitter_real;
+    dtkComposerTransmitterEmitter<qlonglong> emitter_integer;
+    dtkComposerTransmitterEmitter<double> emitter_real;
     dtkComposerTransmitterEmitterSupport<dtkAbstractData> emitter_data;
 
 public:
@@ -69,11 +69,9 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProces
     this->appendReceiver(&(d->receiver_rhs));
 
     d->index = -1;
-    d->emitter_integer.setData(&d->index);
     this->appendEmitter(&(d->emitter_integer));
 
     d->value = 0.;
-    d->emitter_real.setData(&d->value);
     this->appendEmitter(&(d->emitter_real));
 
     this->appendEmitter(&(d->emitter_data));
@@ -119,16 +117,16 @@ void dtkComposerNodeProcess::run(void)
     }
 
     if (!d->receiver_string.isEmpty())
-        d->process->read(*d->receiver_string.data());
+        d->process->read(d->receiver_string.data());
 
     if (!d->receiver_integer_0.isEmpty())
-        d->process->setParameter(static_cast<int>(*d->receiver_integer_0.data()), 0);
+        d->process->setParameter(static_cast<int>(d->receiver_integer_0.data()), 0);
     
     if (!d->receiver_integer_1.isEmpty())
-        d->process->setParameter(static_cast<int>(*d->receiver_integer_1.data()), 1);
+        d->process->setParameter(static_cast<int>(d->receiver_integer_1.data()), 1);
     
     if (!d->receiver_real.isEmpty())
-        d->process->setParameter(*d->receiver_real.data());
+        d->process->setParameter(d->receiver_real.data());
     
     if (!d->receiver_data.isEmpty()) {
         dtkAbstractData *data = d->receiver_data.data();
@@ -143,9 +141,12 @@ void dtkComposerNodeProcess::run(void)
 
     d->index = d->process->run();
 
+    d->emitter_integer.setData(d->index);
 
     if (d->process->data(0))
         d->value = *(static_cast<qreal *>(d->process->data(0)));
+
+    d->emitter_real.setData(d->value);
 
     if (d->process->output())
         d->emitter_data.setData(d->process->output());

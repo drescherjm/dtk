@@ -55,6 +55,10 @@ public:
 
     virtual dtkAbstractProcess *process(void) const = 0;
 
+public:
+    QVariant variant(void) const;
+    dtkAbstractProcess *object(void) const;
+
 protected:
     void clearProcess(void);
 

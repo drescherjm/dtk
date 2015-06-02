@@ -15,7 +15,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkColorGrid.h
   dtkFlowLayout.h
   dtkFinder.h
-  dtkObjectEditor.h
   dtkPieChart.h
   dtkPluginsEditor.h
   dtkPopup.h
@@ -47,7 +46,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkColorGrid.cpp
   dtkFlowLayout.cpp
   dtkFinder.cpp
-  dtkObjectEditor.cpp
   dtkPieChart.cpp
   dtkPluginsEditor.cpp
   dtkPopup.cpp

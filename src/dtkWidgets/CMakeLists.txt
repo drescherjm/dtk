@@ -25,6 +25,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkNotificationDisplay.h
   dtkNotificationEvent.h
   dtkNotificationQueue.h
+  dtkObjectEditor.h
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
   dtkToolBox.h
@@ -46,6 +47,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkNotificationDisplay.cpp
   dtkNotificationEvent.cpp
   dtkNotificationQueue.cpp
+  dtkObjectEditor.cpp
   dtkPropertyEditor.cpp
   dtkPropertyEditorFactory.cpp
   dtkToolBox.cpp

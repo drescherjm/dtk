@@ -1,34 +1,27 @@
-/* dtkComposerNodeProcess.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/03/29 11:17:21
- * Version: $Id$
- * Last-Updated: lun. juin  1 15:19:56 2015 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 327
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeProcess.h"
 #include "dtkComposerMetatype.h"
-// #include "dtkComposerTransmitterEmitter.h"
-// #include "dtkComposerTransmitterReceiver.h"
+
+#include <dtkComposer/dtkComposerTransmitterEmitter.h>
+#include <dtkComposer/dtkComposerTransmitterReceiver.h>
 
 #include <dtkLog/dtkLog>
 
 #include <dtkCoreSupport/dtkAbstractData.h>
 #include <dtkCoreSupport/dtkAbstractProcess.h>
-
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeProcessPrivate interface
@@ -207,3 +200,6 @@ QString dtkComposerNodeProcess::outputLabelHint(int port)
 
     return dtkComposerNodeLeaf::outputLabelHint(port);
 }
+
+// 
+// dtkComposerNodeProcess.cpp ends here

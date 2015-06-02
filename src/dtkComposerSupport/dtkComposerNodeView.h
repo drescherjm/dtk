@@ -1,33 +1,31 @@
-/* dtkComposerNodeView.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Apr 24 23:27:14 2012 (+0200)
- * Version: $Id$
- * Last-Updated: jeu. sept. 20 23:46:30 2012 (+0200)
- *           By: Nicolas Niclausse
- *     Update #: 15
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODEVIEW_H
-#define DTKCOMPOSERNODEVIEW_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerSupportExport.h"
-#include "dtkComposerNodeLeafView.h"
+#include "dtkComposerNodeLeafViewSupport.h"
 
 #include <QtCore>
 
 class dtkComposerNodeViewPrivate;
 
-class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeafView
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeView declaration
+// /////////////////////////////////////////////////////////////////
+
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeafViewSupport
 {
     Q_OBJECT
 
@@ -39,9 +37,9 @@ public:
     void run(void);
 
 public:
-    inline bool isAbstractView(void) const {return true;} ;
+    bool isAbstractView(void) const { return true; }
 
-    inline QString abstractViewType(void) const {return "dtkAbstractView";};
+    QString abstractViewType(void) const { return "dtkAbstractView"; }
 
 public:
     QString type(void);
@@ -55,4 +53,5 @@ private:
     dtkComposerNodeViewPrivate *d;
 };
 
-#endif
+// 
+// dtkComposerNodeView.h ends here

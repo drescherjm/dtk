@@ -96,7 +96,9 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerNodeMetaVector3DArrayExtractor.h
   # dtkComposerNodeNumberOperator.h
   # dtkComposerNodePrint.h
+  dtkComposerNodeData.h
   dtkComposerNodeProcess.h
+  dtkComposerNodeView.h
   # dtkComposerNodeProxy.h
   # dtkComposerNodeQuaternion.h
   # dtkComposerNodeQuaternionOperatorUnary.h
@@ -153,7 +155,9 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerView.h
   # dtkComposerReader.h
   # dtkComposerWriter.h
-  dtkComposerNodeLeafProcessSupport.h)
+  dtkComposerNodeLeafDataSupport.h
+  dtkComposerNodeLeafProcessSupport.h
+  dtkComposerNodeLeafViewSupport.h)
 
 
 set(${PROJECT_NAME}_SOURCES
@@ -228,7 +232,9 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeMetaVector3DArrayExtractor.cpp
   # dtkComposerNodeNumberOperator.cpp
   # dtkComposerNodePrint.cpp
+  dtkComposerNodeData.cpp
   dtkComposerNodeProcess.cpp
+  dtkComposerNodeView.cpp
   # dtkComposerNodeProxy.cpp
   # dtkComposerNodeQuaternion.cpp
   # dtkComposerNodeQuaternionOperatorUnary.cpp
@@ -279,7 +285,9 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerView.cpp
   # dtkComposerReader.cpp
   # dtkComposerWriter.cpp
-  dtkComposerNodeLeafProcessSupport.cpp)
+  dtkComposerNodeLeafDataSupport.cpp
+  dtkComposerNodeLeafProcessSupport.cpp
+  dtkComposerNodeLeafViewSupport.cpp)
 
 set(${PROJECT_NAME}_RESOURCES dtkComposerSupport.qrc)
 

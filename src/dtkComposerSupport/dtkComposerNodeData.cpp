@@ -1,25 +1,22 @@
-/* dtkComposerNodeData.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/03/29 11:17:21
- * Version: $Id$
- * Last-Updated: mar. févr.  4 17:24:31 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 301
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeData.h"
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerMetatype.h"
+
+#include <dtkComposer/dtkComposerTransmitterEmitter.h>
+#include <dtkComposer/dtkComposerTransmitterReceiver.h>
 
 #include <dtkCoreSupport/dtkAbstractData>
 
@@ -34,12 +31,12 @@
 class dtkComposerNodeDataPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData> receiver_data;
-    dtkComposerTransmitterReceiver<QString> receiver_string;
-    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
+    dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_data;
+    dtkComposerTransmitterReceiverSupport<QString> receiver_string;
+    dtkComposerTransmitterReceiverSupport<dtkVectorReal> receiver_vector;
 
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData> emitter_data;
+    dtkComposerTransmitterEmitterSupport<dtkAbstractData> emitter_data;
 
 public:
     dtkAbstractData *data;
@@ -49,7 +46,7 @@ public:
 // dtkComposerNodeData implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeafData(), d(new dtkComposerNodeDataPrivate)
+dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeafDataSupport(), d(new dtkComposerNodeDataPrivate)
 {
     this->appendReceiver(&(d->receiver_string));
     this->appendReceiver(&(d->receiver_data));
@@ -134,3 +131,6 @@ QString dtkComposerNodeData::outputLabelHint(int port)
         return dtkComposerNodeLeaf::outputLabelHint(port);
     }
 }
+
+// 
+// dtkComposerNodeData.cpp ends here

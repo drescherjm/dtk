@@ -135,7 +135,8 @@ target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 target_link_libraries(${PROJECT_NAME}
   dtkCoreSupport
   dtkGuiSupport
-  dtkLog)
+  dtkLog
+  dtkWidgets)
 
 if(DTK_HAVE_MPI)
 target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES})

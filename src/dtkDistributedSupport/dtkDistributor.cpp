@@ -28,7 +28,7 @@
 #include "dtkDistributedControllerTargetView.h"
 #include "dtkDistributor.h"
 
-#include <dtkGuiSupport/dtkToolBox.h>
+#include <dtkWidgets/dtkToolBox.h>
 
 class dtkDistributorPrivate
 {

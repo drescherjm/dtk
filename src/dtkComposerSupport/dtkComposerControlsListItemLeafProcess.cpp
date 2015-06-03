@@ -20,8 +20,8 @@
 #include <dtkCoreSupport/dtkGlobal.h>
 #include <dtkCoreSupport/dtkAbstractProcess.h>
 
-#include <dtkGuiSupport/dtkObjectEditor.h>
-#include <dtkGuiSupport/dtkToolBox.h>
+#include <dtkWidgets/dtkObjectEditor.h>
+#include <dtkWidgets/dtkToolBox.h>
 
 #include <QObject>
 #include <QVariant>

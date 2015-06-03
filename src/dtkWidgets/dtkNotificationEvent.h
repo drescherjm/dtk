@@ -20,13 +20,13 @@
 #ifndef DTKNOTIFICATIONEVENT_H
 #define DTKNOTIFICATIONEVENT_H
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QtCore>
 
 class dtkNotificationEventPrivate;
 
-class DTKGUISUPPORT_EXPORT dtkNotificationEvent : public QEvent
+class DTKWIDGETS_EXPORT dtkNotificationEvent : public QEvent
 {
 public:
     enum Type {

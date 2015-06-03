@@ -251,7 +251,6 @@ target_link_libraries(${PROJECT_NAME} dtkMeta)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
-target_link_libraries(${PROJECT_NAME} dtkGuiSupport)
 target_link_libraries(${PROJECT_NAME} dtkMathSupport)
 
 ## #################################################################

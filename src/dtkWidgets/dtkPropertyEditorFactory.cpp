@@ -33,16 +33,16 @@ public:
 // Forward declarations of creators (see dtkPropertyEditor.cpp for implementations).
 // ///////////////////////////////////////////////////////////////////
 
-dtkPropertyEditor DTKGUISUPPORT_EXPORT  *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor DTKGUISUPPORT_EXPORT *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor DTKGUISUPPORT_EXPORT  *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent = 0);
-dtkPropertyEditor DTKGUISUPPORT_EXPORT    *createDtkPropertyEditorEnum(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKWIDGETS_EXPORT  *createDtkPropertyEditorDouble(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKWIDGETS_EXPORT *createDtkPropertyEditorInteger(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKWIDGETS_EXPORT  *createDtkPropertyEditorString(const QString& property_name, QObject *object, QWidget *parent = 0);
+dtkPropertyEditor DTKWIDGETS_EXPORT    *createDtkPropertyEditorEnum(const QString& property_name, QObject *object, QWidget *parent = 0);
 
 // ///////////////////////////////////////////////////////////////////
 // dtkPropertyEditorFactory implementation
 // ///////////////////////////////////////////////////////////////////
 
-DTKGUISUPPORT_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(void)
+DTKWIDGETS_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(void)
 {
     if(!s_instance) {
         s_instance = new dtkPropertyEditorFactory;
@@ -131,4 +131,4 @@ dtkPropertyEditorFactory::~dtkPropertyEditorFactory(void)
     d = NULL;
 }
 
-DTKGUISUPPORT_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::s_instance = NULL;
+DTKWIDGETS_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::s_instance = NULL;

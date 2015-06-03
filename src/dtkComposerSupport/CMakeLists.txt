@@ -401,11 +401,12 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
-  # dtkMathSupport
-  # dtkContainerSupport
+  dtkMathSupport
+  dtkContainerSupport
   dtkCoreSupport
-  # dtkGuiSupport
-  dtkLog)
+  dtkGuiSupport
+  dtkLog
+  dtkWidgets)
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore

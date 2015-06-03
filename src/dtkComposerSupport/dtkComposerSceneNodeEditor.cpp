@@ -45,7 +45,7 @@
 
 #include "dtkComposerTransmitterVariant.h"
 
-#include <dtkGuiSupport/dtkToolBox.h>
+#include <dtkWidgets/dtkToolBox.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerSceneNodeEditorList

@@ -20,7 +20,7 @@
 #ifndef DTKNOTIFICATIONQUEUE_H
 #define DTKNOTIFICATIONQUEUE_H
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QtCore>
 
@@ -28,7 +28,7 @@ class dtkNotifiable;
 class dtkNotificationEvent;
 class dtkNotificationQueuePrivate;
 
-class DTKGUISUPPORT_EXPORT dtkNotificationQueue : public QObject
+class DTKWIDGETS_EXPORT dtkNotificationQueue : public QObject
 {
     Q_OBJECT
 

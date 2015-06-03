@@ -43,7 +43,9 @@
 #define DTKDISTRIBUTEDTEST_MAIN_NOGUI(TestMain, TestObject)	\
     int TestMain(int argc, char *argv[])			\
     {                                               \
-        dtkDistributedApplication app(argc, argv);           \
+        dtkDistributedApplication *app;             \
+        qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("minimal")); \
+        app = dtkDistributed::create(argc,argv);    \
         TestObject tc;                              \
         return QTest::qExec(&tc, argc, argv);       \
     }

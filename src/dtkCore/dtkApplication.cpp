@@ -47,7 +47,7 @@ QSettings *dtkApplication::settings(void)
 
 bool dtkApplication::noGui(void)
 {
-    return (qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
+    return !(qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
 }
 
 QCommandLineParser *dtkApplication::parser(void)

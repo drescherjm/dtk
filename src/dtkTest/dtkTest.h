@@ -43,7 +43,7 @@
 #define DTKDISTRIBUTEDTEST_MAIN_NOGUI(TestMain, TestObject)	\
     int TestMain(int argc, char *argv[])			\
     {                                               \
-        dtkDistributedCoreApplication app(argc, argv);           \
+        dtkDistributedApplication app(argc, argv);           \
         TestObject tc;                              \
         return QTest::qExec(&tc, argc, argv);       \
     }

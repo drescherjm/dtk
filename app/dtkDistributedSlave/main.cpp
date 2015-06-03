@@ -56,7 +56,7 @@ public:
 
 int main(int argc, char **argv)
 {
-    dtkDistributedAbstractApplication *app = dtkDistributed::create(argc, argv);
+    dtkDistributedApplication *app = dtkDistributed::create(argc, argv);
     app->setApplicationName("dtkDistributedSlave");
     app->setApplicationVersion("1.0.0");
     app->setOrganizationName("inria");

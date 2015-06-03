@@ -2,7 +2,7 @@
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2015 - Nicolas Niclausse, Inria.
- * Created: 2015/02/03 15:51:51
+ * Created: 2015/02/04 12:28:51
  */
 
 /* Commentary:
@@ -16,22 +16,33 @@
 #pragma once
 
 #include "dtkDistributedExport.h"
-#include "dtkDistributedAbstractApplication.h"
-#include "dtkDistributedCoreApplication.h"
 
-#include <QApplication>
+#include <dtkCore/dtkApplication.h>
 
-class dtkDistributedPolicy;
 class dtkDistributedCommunicator;
-class dtkDistributedCoreApplicationPrivate;
+class dtkDistributedPolicy;
+class dtkDistributedApplicationPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public QApplication, public dtkDistributedAbstractApplication
+class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public dtkApplication
 {
 public:
-    dtkDistributedApplication(int &argc, char **argv) ;
+             dtkDistributedApplication(int &argc, char **argv);
+    virtual ~dtkDistributedApplication(void);
 
 public:
-    bool noGui(void);
+    virtual void initialize(void);
+    virtual void exec(QRunnable *task);
+    virtual void spawn(void);
+    virtual void unspawn(void);
+
+public:
+    bool isMaster(void);
+    dtkDistributedCommunicator *communicator(void);
+    dtkDistributedPolicy *policy(void);
+
+private:
+    dtkDistributedApplicationPrivate *d;
+
 };
 
 

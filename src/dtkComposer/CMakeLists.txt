@@ -119,6 +119,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterProxy.h
   dtkComposerTransmitterProxyLoop.h
   dtkComposerTransmitterProxyLoop.tpp
+  dtkComposerTransmitterProxyVariant.h
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
   dtkComposerView.h
@@ -212,6 +213,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterReceiver.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterProxyLoop.cpp
+  dtkComposerTransmitterProxyVariant.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp
   dtkComposerWidget.cpp

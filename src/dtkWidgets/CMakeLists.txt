@@ -1,15 +1,15 @@
 ### CMakeLists.txt ---
-## 
+##
 ## Author: Julien Wintz
 ## Created: Mon Apr 15 11:46:27 2013 (+0200)
-## Version: 
+## Version:
 ## Last-Updated: lun. avril  7 11:13:47 2014 (+0200)
 ##           By: Nicolas Niclausse
 ##     Update #: 58
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
 
 project(dtkWidgets)
@@ -39,7 +39,19 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudList.h
   dtkWidgetsTagCloudScope.h
   dtkWidgetsTagCloudScopeItem.h
-  dtkWidgetsTagCloudView.h)
+  dtkWidgetsTagCloudView.h
+  dtkWidgetsViewController
+  dtkWidgetsViewController.h
+  dtkWidgetsViewLayout
+  dtkWidgetsViewLayout.h
+  dtkWidgetsViewLayoutItem
+  dtkWidgetsViewLayoutItem.h
+  dtkWidgetsViewList
+  dtkWidgetsViewList.h
+  dtkWidgetsViewListControl
+  dtkWidgetsViewListControl.h
+  dtkWidgetsViewManager
+  dtkWidgetsViewManager.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkNotification.cpp
@@ -60,7 +72,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkWidgetsTagCloudList.cpp
   dtkWidgetsTagCloudScope.cpp
   dtkWidgetsTagCloudScopeItem.cpp
-  dtkWidgetsTagCloudView.cpp)
+  dtkWidgetsTagCloudView.cpp
+  dtkWidgetsViewController.cpp
+  dtkWidgetsViewLayout.cpp
+  dtkWidgetsViewLayoutItem.cpp
+  dtkWidgetsViewList.cpp
+  dtkWidgetsViewListControl.cpp
+  dtkWidgetsViewManager.cpp)
 
 set(${PROJECT_NAME}_SOURCES_RCC
   dtkNotification.qrc

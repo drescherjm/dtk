@@ -1,23 +1,20 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
-
-
 
 #pragma once
 
 #include "dtkComposerExport.h"
-
 #include "dtkComposerMetaType.h"
 
 #include <QtCore>
@@ -44,7 +41,7 @@ public:
     };
 
 public:
-    enum DataTransmission { 
+    enum DataTransmission {
         AutoCopy,
         Copy,
         Reference
@@ -75,7 +72,7 @@ public:
 
 public:
     void setDataTransmission(DataTransmission value);
-    
+
     DataTransmission dataTransmission(void) const;
 
 public:
@@ -104,7 +101,7 @@ public:
 
 public:
     void setTypeList(const TypeList& list);
-    
+
     TypeList typeList(void) const;
 
 public:
@@ -118,7 +115,7 @@ public:
 public:
     void appendNext(dtkComposerTransmitter *transmitter);
     void removeNext(dtkComposerTransmitter *transmitter);
-    
+
     void appendPrevious(dtkComposerTransmitter *transmitter);
     void removePrevious(dtkComposerTransmitter *transmitter);
 
@@ -194,5 +191,5 @@ private:
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
-// 
+//
 // dtkComposerTransmitter.h ends here

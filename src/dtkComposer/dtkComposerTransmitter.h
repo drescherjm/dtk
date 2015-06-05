@@ -36,7 +36,8 @@ public:
         Emitter,
         Receiver,
         Proxy,
-        ProxyLoop
+        ProxyLoop,
+        ProxyVariant
     };
 
 public:

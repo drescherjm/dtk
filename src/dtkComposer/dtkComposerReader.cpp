@@ -21,6 +21,7 @@
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLeaf.h"
 // #include "dtkComposerNodeLeafData.h"
 // #include "dtkComposerNodeLeafProcess.h"
 // #include "dtkComposerNodeLeafView.h"
@@ -712,6 +713,15 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             for(int i = 0; i < childNodes.count(); i++) {
                 if(childNodes.at(i).toElement().tagName() == "value") {
                     f->setValue(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
+
+        if(dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(leaf->wrapee())) {
+
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    object_node->createObject(childNodes.at(i).childNodes().at(0).toText().data());
                 }
             }
         }

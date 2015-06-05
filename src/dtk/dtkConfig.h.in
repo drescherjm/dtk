@@ -12,6 +12,8 @@
 
 // Code:
 
+#pragma once
+
 #define dtk_VERSION_MAJOR @dtk_VERSION_MAJOR@
 #define dtk_VERSION_MINOR @dtk_VERSION_MINOR@
 #define dtk_VERSION_PATCH @dtk_VERSION_PATCH@

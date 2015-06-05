@@ -12,19 +12,19 @@
 
 // Code:
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QtWidgets>
 
-class dtkViewListPrivate;
+class dtkWidgetsViewListPrivate;
 
-class DTKGUISUPPORT_EXPORT dtkViewList : public QListWidget
+class DTKWIDGETS_EXPORT dtkWidgetsViewList : public QListWidget
 {
     Q_OBJECT
 
 public:
-     dtkViewList(QWidget *parent = 0);
-    ~dtkViewList(void);
+     dtkWidgetsViewList(QWidget *parent = 0);
+    ~dtkWidgetsViewList(void);
 
 public slots:
     void clear(void);
@@ -37,8 +37,8 @@ protected:
     QStringList mimeTypes(void) const;
 
 private:
-    dtkViewListPrivate *d;
+    dtkWidgetsViewListPrivate *d;
 };
 
 //
-// dtkViewList.h ends here
+// dtkWidgetsViewList.h ends here

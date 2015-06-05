@@ -1,31 +1,31 @@
-/* dtkViewListControl.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Oct 31 12:51:29 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
 
-#include "dtkViewLayout.h"
-#include "dtkViewLayoutItem.h"
-#include "dtkViewList.h"
-#include "dtkViewListControl.h"
+// Code:
+
+#include "dtkWidgetsViewController.h"
+#include "dtkWidgetsViewLayout.h"
+#include "dtkWidgetsViewLayoutItem.h"
+#include "dtkWidgetsViewList.h"
+#include "dtkWidgetsViewListControl.h"
 
 #include <dtkCoreSupport/dtkAbstractView.h>
 #include <dtkCoreSupport/dtkAbstractViewFactory.h>
 
-class dtkViewListControlPrivate
+class dtkWidgetsViewListControlPrivate
 {
 public:
-    dtkViewLayout *layout;
-    dtkViewList *list;
+    dtkWidgetsViewLayout *layout;
+    dtkWidgetsViewList *list;
 
 public:
     QPushButton *hor;
@@ -34,7 +34,7 @@ public:
     QPushButton *cls;
 };
 
-dtkViewListControl::dtkViewListControl(QWidget *parent) : QFrame(parent), d(new dtkViewListControlPrivate)
+dtkWidgetsViewListControl::dtkWidgetsViewListControl(QWidget *parent) : QFrame(parent), d(new dtkWidgetsViewListControlPrivate)
 {
     d->layout = NULL;
     d->list = NULL;
@@ -56,24 +56,24 @@ dtkViewListControl::dtkViewListControl(QWidget *parent) : QFrame(parent), d(new 
     connect(d->cls, SIGNAL(clicked()), this, SLOT(onLayoutCloseAll()));
 }
 
-dtkViewListControl::~dtkViewListControl(void)
+dtkWidgetsViewListControl::~dtkWidgetsViewListControl(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkViewListControl::setLayout(dtkViewLayout *layout)
+void dtkWidgetsViewListControl::setLayout(dtkWidgetsViewLayout *layout)
 {
     d->layout = layout;
 }
 
-void dtkViewListControl::setList(dtkViewList *list)
+void dtkWidgetsViewListControl::setList(dtkWidgetsViewList *list)
 {
     d->list = list;
 }
 
-bool dtkViewListControl::isEmpty(void) const
+bool dtkWidgetsViewListControl::isEmpty(void) const
 {
     if (!d->list)
         return true;
@@ -87,18 +87,18 @@ bool dtkViewListControl::isEmpty(void) const
     return false;
 }
 
-void dtkViewListControl::onActorStarted(QString view_name)
+void dtkWidgetsViewListControl::onActorStarted(QString view_name)
 {
     if (!d->layout)
         return;
 
-    dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(view_name);
+    QWidget *view = dtkWidgetsViewController::instance()->view(view_name);
 
     if (view && !d->layout->current()->proxy()->view())
         d->layout->current()->proxy()->setView(view);
 }
 
-void dtkViewListControl::layoutHorizontally(void)
+void dtkWidgetsViewListControl::layoutHorizontally(void)
 {
     if (this->isEmpty())
         return;
@@ -114,11 +114,11 @@ void dtkViewListControl::layoutHorizontally(void)
 
     for(int i = 1; i <= n; i++) {
 
-        dtkViewLayoutItem *current = d->layout->current();
+        dtkWidgetsViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Horizontal);
-        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text().split(" ").first()));
-        if(i != n) {
+        current->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i-1)->text().split(" ").first()));
 
+        if(i != n) {
             QList<int> sizes = QList<int>() << v << current->width()-s-v;
             current->split();
             current->setSizes(sizes);
@@ -128,12 +128,12 @@ void dtkViewListControl::layoutHorizontally(void)
     }
 }
 
-void dtkViewListControl::onLayoutHorizontally(void)
+void dtkWidgetsViewListControl::onLayoutHorizontally(void)
 {
     this->layoutHorizontally();
 }
 
-void dtkViewListControl::layoutVertically(void)
+void dtkWidgetsViewListControl::layoutVertically(void)
 {
     if (this->isEmpty())
         return;
@@ -150,11 +150,11 @@ void dtkViewListControl::layoutVertically(void)
 
     for(int i = 1; i <= n; i++) {
 
-        dtkViewLayoutItem *current = d->layout->current();
+        dtkWidgetsViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Vertical);
-        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text().split(" ").first()));
-        if(i != n) {
+        current->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i-1)->text().split(" ").first()));
 
+        if(i != n) {
             QList<int> sizes = QList<int>() << v+f << current->height()-s-v-f;
             current->split();
             current->setSizes(sizes);
@@ -164,12 +164,12 @@ void dtkViewListControl::layoutVertically(void)
     }
 }
 
-void dtkViewListControl::onLayoutVertically(void)
+void dtkWidgetsViewListControl::onLayoutVertically(void)
 {
     this->layoutVertically();
 }
 
-void dtkViewListControl::layoutGrid(void)
+void dtkWidgetsViewListControl::layoutGrid(void)
 {
     if (this->isEmpty())
         return;
@@ -177,11 +177,11 @@ void dtkViewListControl::layoutGrid(void)
     int n = d->list->count();
     int i = 0;
 
-    typedef QPair<dtkViewLayoutItem *, Qt::Orientation> item_t;
+    typedef QPair<dtkWidgetsViewLayoutItem *, Qt::Orientation> item_t;
 
     d->layout->clear();
     d->layout->setCurrent(d->layout->root());
-    d->layout->current()->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i)->text().split(" ").first()));
+    d->layout->current()->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i)->text().split(" ").first()));
 
     QList<item_t> items; items << qMakePair(d->layout->current(), Qt::Horizontal);
 
@@ -191,22 +191,22 @@ void dtkViewListControl::layoutGrid(void)
 
         d->layout->setCurrent(item.first);
 
-        dtkViewLayoutItem *current = item.first;
+        dtkWidgetsViewLayoutItem *current = item.first;
         current->setOrientation(item.second);
         current->split();
-        current->second()->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i)->text().split(" ").first()));
+        current->second()->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i)->text().split(" ").first()));
 
         items << qMakePair(current->first(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
     }
 }
 
-void dtkViewListControl::onLayoutGrid(void)
+void dtkWidgetsViewListControl::onLayoutGrid(void)
 {
     this->layoutGrid();
 }
 
-void dtkViewListControl::closeAllLayout(void)
+void dtkWidgetsViewListControl::closeAllLayout(void)
 {
     if (this->isEmpty())
         return;
@@ -215,7 +215,10 @@ void dtkViewListControl::closeAllLayout(void)
     d->layout->setCurrent(d->layout->root());
 }
 
-void dtkViewListControl::onLayoutCloseAll(void)
+void dtkWidgetsViewListControl::onLayoutCloseAll(void)
 {
     this->closeAllLayout();
 }
+
+//
+// dtkWidgetsViewListControl.cpp ends here

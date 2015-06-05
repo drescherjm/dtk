@@ -14,35 +14,34 @@
 
 #pragma once
 
-#include "dtkGuiSupportExport.h"
+#include "dtkWidgetsExport.h"
 
 #include <QtWidgets/QFrame>
 
-class dtkAbstractView;
-class dtkViewManagerPrivate;
+class dtkWidgetsViewManagerPrivate;
 
-class DTKGUISUPPORT_EXPORT dtkViewManager : public QFrame
+class DTKWIDGETS_EXPORT dtkWidgetsViewManager : public QFrame
 {
     Q_OBJECT
 
 public:
-     dtkViewManager(QWidget *parent = 0);
-    ~dtkViewManager(void);
+     dtkWidgetsViewManager(QWidget *parent = 0);
+    ~dtkWidgetsViewManager(void);
 
 public:
     void addWidget(QWidget *widget);
     void setCurrentWidget(QWidget *widget);
 
 signals:
-    void focused(dtkAbstractView *view);
+    void focused(QWidget *view);
 
 public slots:
     void clear(void);
     void hideCurrentWidget(void);
 
 private:
-    dtkViewManagerPrivate *d;
+    dtkWidgetsViewManagerPrivate *d;
 };
 
 //
-// dtkViewManager.h ends here
+// dtkWidgetsViewManager.h ends here

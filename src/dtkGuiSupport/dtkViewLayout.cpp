@@ -1,21 +1,16 @@
-/* dtkViewLayout.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed May 16 09:38:22 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Jan 16 16:39:20 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 22
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkViewLayout.h"
 #include "dtkViewLayoutItem.h"
@@ -74,3 +69,6 @@ void dtkViewLayout::clear(void)
 {
     d->root->clear();
 }
+
+//
+// dtkViewLayout.cpp ends here

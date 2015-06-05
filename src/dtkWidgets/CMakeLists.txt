@@ -19,7 +19,6 @@ project(dtkWidgets)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkApplication.h
   dtkNotifiable.h
   dtkNotification.h
   dtkNotificationDisplay.h

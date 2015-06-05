@@ -1,5 +1,5 @@
+#include "dtkApplication.h"
 #include "dtkCore.h"
-#include "dtkCoreApplication.h"
 #include "dtkCorePlugin.h"
 #include "dtkCorePluginFactory.h"
 #include "dtkCorePluginFactory.tpp"

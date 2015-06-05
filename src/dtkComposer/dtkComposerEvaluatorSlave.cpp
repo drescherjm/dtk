@@ -52,6 +52,7 @@ public:
     QUrl server;
     int  count;
     int  last_controller_rank;
+    int  status;
 
 public:
     QMap<int, QString> composition_cache;
@@ -76,7 +77,8 @@ dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave
 
     d->reader->setScene(d->scene);
     d->reader->setGraph(d->graph);
-    d->count = 0;
+    d->count  = 0;
+    d->status = 0;
 }
 
 dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
@@ -119,12 +121,19 @@ void dtkComposerEvaluatorSlave::setInternalCommunicator(dtkDistributedCommunicat
     }
 }
 
-int dtkComposerEvaluatorSlave::exec(void)
+int dtkComposerEvaluatorSlave::status(void)
 {
+    return d->status;
+}
+
+void dtkComposerEvaluatorSlave::run(void)
+{
+    d->status = 0;
 
     if (!d->factory) {
         dtkFatal() << "No factory set ! abort slave execution";
-        return 1;
+        d->status = 1;
+        return;
     }
 
     int rank = d->communicator_i->rank();
@@ -150,7 +159,8 @@ int dtkComposerEvaluatorSlave::exec(void)
                          msg->send(d->composition_socket);
                      } else {
                          dtkError() << "Can't connect to server";
-                         return 1;
+                         d->status = 1;
+                         return;
                      }
                 }
 
@@ -161,7 +171,8 @@ int dtkComposerEvaluatorSlave::exec(void)
                 this->socket()->setParent(0);
             } else  {
                 dtkFatal() << "Can't connect to server" << d->server;
-                return 1;
+                d->status = 1;
+                return;
             }
         }
 
@@ -173,7 +184,8 @@ int dtkComposerEvaluatorSlave::exec(void)
             dtkInfo() << "data already available, try to parse composition " << d->composition_socket->bytesAvailable();
         } else if (!d->composition_socket->waitForReadyRead(600000)) {
             dtkFatal() << "No data received from server after 10mn, abort " ;
-            return 1;
+            d->status = 1;
+            return;
         } else
             dtkDebug() << "Ok, data received, parse" ;
 
@@ -195,12 +207,14 @@ int dtkComposerEvaluatorSlave::exec(void)
             }
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
-            return 1;
+            d->status = 1;
+            return;
         }
 
         if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;
-            return 1;
+            d->status = 1;
+            return;
         }
 
         dtkDebug() << "got composition from controller:" << composition;
@@ -228,7 +242,8 @@ int dtkComposerEvaluatorSlave::exec(void)
                 remote->setCommunicator(d->communicator_i);
             } else {
                 dtkFatal() <<  "Can't find remote node in composition, abort";
-                return 1;
+                d->status = 1;
+                return;
             }
         }
         dtkDebug() << "run composition" ;
@@ -248,6 +263,7 @@ int dtkComposerEvaluatorSlave::exec(void)
 
         workerThread->wait();
         workerThread->deleteLater();
+        // d->evaluator->run_static();
         dtkDebug() << "finished" ;
 
     } else {
@@ -278,12 +294,12 @@ int dtkComposerEvaluatorSlave::exec(void)
 
             workerThread->wait();
             workerThread->deleteLater();
+            // d->evaluator->run_static();
             dtkDebug() << "finished" ;
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";
-            return 1;
+            d->status = 1;
+            return;
         }
     }
-
-    return 0;
 }

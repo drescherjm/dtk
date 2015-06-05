@@ -41,6 +41,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterProxyVariant.h"
 
 #include <dtkCore/dtkCore.h>
 // #include <dtkCore/dtkAbstractDataFactory.h>
@@ -587,6 +588,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendReceiver(proxyloop);
                 }
+                if (ports.at(i).toElement().attribute("kind") == "proxyvariant") {
+                    dtkComposerTransmitter *proxyvariant = new dtkComposerTransmitterProxyVariant(composite->wrapee());
+                    proxyvariant->setRequired(false);
+                    composite->wrapee()->appendReceiver(proxyvariant);
+                }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
             } else {
@@ -605,6 +611,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendEmitter(proxyloop);
+                }
+                if (ports.at(i).toElement().attribute("kind") == "proxyvariant") {
+                    dtkComposerTransmitter *proxyvariant = new dtkComposerTransmitterProxyVariant(composite->wrapee());
+                    proxyvariant->setRequired(false);
+                    composite->wrapee()->appendEmitter(proxyvariant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());

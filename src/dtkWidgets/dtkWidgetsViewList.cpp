@@ -29,7 +29,7 @@ dtkWidgetsViewList::dtkWidgetsViewList(QWidget *parent) : QListWidget(parent), d
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     this->setFixedHeight(100);
 
-    connect(dtkWidgetsViewController::instance(), SIGNAL(inserted(dtkAbstractView *, const QString&)), this, SLOT(update()));
+    connect(dtkWidgetsViewController::instance(), SIGNAL(inserted(QWidget *, const QString&)), this, SLOT(update()));
 
     this->update();
 }

@@ -33,7 +33,7 @@ public:
     QStringList viewNames(void);
 
 signals:
-    void inserted(QWidget *, const QString& name);
+    void inserted(QWidget *, const QString&);
 
 protected:
      dtkWidgetsViewController(void);

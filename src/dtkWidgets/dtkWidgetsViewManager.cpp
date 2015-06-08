@@ -89,6 +89,7 @@ void dtkWidgetsViewManager::setCurrentWidget(QWidget *widget)
 void dtkWidgetsViewManager::hideCurrentWidget(void)
 {
     QWidget *widget = d->view_inspector->currentWidget();
+
     if (widget)
         widget->setVisible(false);
 }

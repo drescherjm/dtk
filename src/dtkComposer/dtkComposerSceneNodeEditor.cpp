@@ -1065,10 +1065,10 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Input);
 
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-//              command->setKind(dtkComposerTransmitter::Variant);
-// #endif
+#if defined(DTK_BUILD_DISTRIBUTED)
+        if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
+             command->setKind(dtkComposerTransmitter::ProxyVariant);
+#endif
     }
 
     d->stack->push(command);
@@ -1141,10 +1141,10 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
         command->setNode(dynamic_cast<dtkComposerSceneNodeComposite *>(d->node));
         command->setType(dtkComposerScenePort::Output);
 
-// #if defined(DTK_BUILD_DISTRIBUTED)
-//         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-//             command->setKind(dtkComposerTransmitter::Variant);
-// #endif
+#if defined(DTK_BUILD_DISTRIBUTED)
+        if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
+            command->setKind(dtkComposerTransmitter::ProxyVariant);
+#endif
     }
 
     d->stack->push(command);

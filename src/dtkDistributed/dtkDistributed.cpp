@@ -15,9 +15,7 @@
 #include "qthDistributedCommunicator.h"
 
 #include "dtkDistributed.h"
-#include "dtkDistributedAbstractApplication.h"
 #include "dtkDistributedApplication.h"
-#include "dtkDistributedCoreApplication.h"
 #include "dtkDistributedCommunicator.h"
 #include "dtkDistributedPolicy.h"
 #include "dtkDistributedSettings.h"
@@ -26,7 +24,7 @@ namespace dtkDistributed
 {
     namespace _private {
         dtkDistributed::Mode mode = dtkDistributed::Global;
-        dtkDistributedAbstractApplication *app = NULL;
+        dtkDistributedApplication *app = NULL;
     }
 
     void setMode(dtkDistributed::Mode mode) {
@@ -37,20 +35,19 @@ namespace dtkDistributed
         return _private::mode;
     }
 
-    dtkDistributedAbstractApplication* create(int &argc, char *argv[])
+    dtkDistributedApplication* create(int &argc, char *argv[])
     {
         for (int i = 0; i < argc; i++)
             if(!qstrcmp(argv[i], "-nw") ||!qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window")|| !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help")|| !qstrcmp(argv[i], "--version")) {
-                _private::app = new dtkDistributedCoreApplication(argc, argv);
-                return _private::app;
+                qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("minimal"));
             }
         _private::app = new dtkDistributedApplication(argc, argv);
         return _private::app;
     }
 
-    dtkDistributedAbstractApplication *app(void) {
+    dtkDistributedApplication *app(void) {
         if (!_private::app ) {
-            _private::app = dynamic_cast<dtkDistributedAbstractApplication *>(dtkDistributedCoreApplication::instance());
+            _private::app = dynamic_cast<dtkDistributedApplication *>(qApp);
         }
         return _private::app;
     }
@@ -104,7 +101,7 @@ namespace dtkDistributed
         }
 
         dtkDistributedCommunicator *instance(void) {
-            dtkDistributedAbstractApplication *app = dtkDistributed::app();
+            dtkDistributedApplication *app = dtkDistributed::app();
             if (_private::communicator) {
                 return _private::communicator;
             } else if (app) {

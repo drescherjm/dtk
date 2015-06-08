@@ -609,7 +609,7 @@ void dtkComposerSceneNodeComposite::paint(QPainter *painter, const QStyleOptionG
 
 void dtkComposerSceneNodeComposite::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+#if defined(DTK_BUILD_SUPPORT)
     dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(this->wrapee());
 
     if(!remote) {

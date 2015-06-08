@@ -21,7 +21,6 @@ project(dtkDistributed)
 set(${PROJECT_NAME}_HEADERS
   dtkDistributed
   dtkDistributed.h
-  dtkDistributedAbstractApplication.h
   dtkDistributedApplication.h
   dtkDistributedArray
   dtkDistributedArray.h
@@ -35,7 +34,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedCommunicatorStatus.h
   dtkDistributedContainer.h
   dtkDistributedController.h
-  dtkDistributedCoreApplication.h
   dtkDistributedGraphTopology
   dtkDistributedGraphTopology.h
   dtkDistributedGraphTopology.tpp
@@ -65,7 +63,6 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
-  dtkDistributedAbstractApplication.cpp
   dtkDistributedApplication.cpp
   dtkDistributedArray.cpp
   dtkDistributedBufferManager.cpp
@@ -73,7 +70,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedCommunicatorStatus.cpp
   dtkDistributedContainer.cpp
   dtkDistributedController.cpp
-  dtkDistributedCoreApplication.cpp
   dtkDistributedGraphTopology.cpp
   dtkDistributedLocalMessage.cpp
   dtkDistributedMapper.cpp

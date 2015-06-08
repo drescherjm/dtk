@@ -17,7 +17,7 @@
 #include "dtkDistributedExport.h"
 #include <QtCore>
 
-class dtkDistributedAbstractApplication;
+class dtkDistributedApplication;
 class dtkDistributedCommunicator;
 class dtkDistributedCoreApplication;
 class dtkDistributedCommunicatorPlugin;
@@ -50,14 +50,14 @@ namespace dtkDistributed
     DTKDISTRIBUTED_EXPORT dtkDistributed::Mode mode(void);
 
 #pragma mark -
-#pragma mark retrieve dtkDistributedCoreApplication global pointer
+#pragma mark retrieve dtkDistributedApplication global pointer
 
-    DTKDISTRIBUTED_EXPORT dtkDistributedAbstractApplication *app(void);
+    DTKDISTRIBUTED_EXPORT dtkDistributedApplication *app(void);
 
 #pragma mark -
-#pragma mark create dtkDistributedAbstractApplication application
+#pragma mark create dtkDistributedApplication application
 
-    DTKDISTRIBUTED_EXPORT dtkDistributedAbstractApplication* create(int &argc, char *argv[]);
+    DTKDISTRIBUTED_EXPORT dtkDistributedApplication* create(int &argc, char *argv[]);
 
 #pragma mark -
 #pragma mark retrieve current policy

@@ -15,7 +15,7 @@
 
 #include <dtkCore/dtkCore.h>
 
-#include "dtkDistributedCoreApplication.h"
+#include "dtkDistributedApplication.h"
 #include "dtkDistributedPolicy.h"
 
 #include <dtkDistributed>

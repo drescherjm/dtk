@@ -223,7 +223,7 @@ bool dtkComposerWidget::insert(QString file)
 
 void dtkComposerWidget::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
-#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED)
     foreach(dtkComposerSceneNode *node, composite->nodes()) {
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
             remote->setComposition(d->writer->toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));

@@ -1,4 +1,4 @@
-/* dtkAbstractApplication.cpp ---
+/* dtkApplication.cpp ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2015 - Nicolas Niclausse, Inria.
@@ -13,9 +13,9 @@
  *
  */
 
-#include "dtkAbstractApplication.h"
+#include "dtkApplication.h"
 
-class dtkAbstractApplicationPrivate
+class dtkApplicationPrivate
 {
 public:
     QSettings *settings;
@@ -23,15 +23,15 @@ public:
 
 };
 
-dtkAbstractApplication::dtkAbstractApplication(void)
+dtkApplication::dtkApplication(int &argc, char **argv): QApplication(argc, argv)
 {
-    d = new dtkAbstractApplicationPrivate;
+    d = new dtkApplicationPrivate;
     d->settings = NULL;
     d->parser.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
 }
 
-dtkAbstractApplication::~dtkAbstractApplication(void)
+dtkApplication::~dtkApplication(void)
 {
     if (d->settings)
         delete d->settings;
@@ -40,46 +40,22 @@ dtkAbstractApplication::~dtkAbstractApplication(void)
     d = NULL;
 }
 
-QSettings *dtkAbstractApplication::settings(void)
+QSettings *dtkApplication::settings(void)
 {
     return d->settings;
 }
 
-bool dtkAbstractApplication::noGui(void) {
-    return true;
+bool dtkApplication::noGui(void)
+{
+    return !(qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
 }
 
-QCommandLineParser *dtkAbstractApplication::parser(void)
+QCommandLineParser *dtkApplication::parser(void)
 {
     return &(d->parser);
 }
 
-void dtkAbstractApplication::setApplicationName(const QString& name)
-{
-    qApp->setApplicationName(name);
-}
-
-QString dtkAbstractApplication::applicationName(void)
-{
-    return qApp->applicationName();
-}
-
-void dtkAbstractApplication::setOrganizationName(const QString& name)
-{
-    qApp->setOrganizationName(name);
-}
-
-void dtkAbstractApplication::setOrganizationDomain(const QString& name)
-{
-    qApp->setOrganizationDomain(name);
-}
-
-void dtkAbstractApplication::setApplicationVersion(const QString& version)
-{
-    qApp->setApplicationVersion(version);
-}
-
-void dtkAbstractApplication::initialize(void)
+void dtkApplication::initialize(void)
 {
     // unset QT_PLUGIN_PATH, otherwise, kde plugins can change the qmetatype ids
     qputenv("QT_PLUGIN_PATH", "1");

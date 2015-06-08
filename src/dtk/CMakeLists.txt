@@ -21,7 +21,7 @@ configure_file(
 ## ###################################################################
 
 install(FILES dtkConfig   DESTINATION include/dtk/)
-install(FILES dtkConfig.h DESTINATION include/dtk/)
+install(FILES "${PROJECT_BINARY_DIR}/dtkConfig.h" DESTINATION include/dtk/)
 
 ######################################################################
 ### CMakeLists.txt ends here

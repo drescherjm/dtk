@@ -221,6 +221,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 property.setAttribute("kind", "proxy");
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
                 property.setAttribute("kind", "proxyloop");
+            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyVariant)
+                property.setAttribute("kind", "proxyvariant");
             tag.appendChild(property);
         }
 
@@ -242,6 +244,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 property.setAttribute("kind", "proxy");
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
                 property.setAttribute("kind", "proxyloop");
+            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyVariant)
+                property.setAttribute("kind", "proxyvariant");
 
 // --- twin ports
 

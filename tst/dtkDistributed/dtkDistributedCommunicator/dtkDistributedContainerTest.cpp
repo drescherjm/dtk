@@ -16,7 +16,7 @@
 #include "../dtkDistributedContainerRunnable.h"
 
 #include <dtkDistributed>
-#include <dtkDistributed/dtkDistributedCoreApplication.h>
+#include <dtkDistributed/dtkDistributedApplication.h>
 
 
 void dtkDistributedContainerTestCase::initTestCase(void)

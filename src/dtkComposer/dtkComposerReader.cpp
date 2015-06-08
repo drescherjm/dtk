@@ -41,6 +41,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterProxyVariant.h"
 
 #include <dtkCore/dtkCore.h>
 // #include <dtkCore/dtkAbstractDataFactory.h>
@@ -85,6 +86,9 @@ public:
 public:
     QStringList missing_implementation;
     QStringList default_implementation;
+
+public:
+    bool use_gui;
 };
 
 bool dtkComposerReaderPrivate::check(const QDomDocument& document)
@@ -130,6 +134,7 @@ dtkComposerReader::dtkComposerReader(void) : d(new dtkComposerReaderPrivate)
     d->graph = NULL;
 
     d->control = NULL;
+    d->use_gui = true;
 }
 
 dtkComposerReader::~dtkComposerReader(void)
@@ -156,6 +161,8 @@ void dtkComposerReader::setGraph(dtkComposerGraph *graph)
 
 bool dtkComposerReader::read(const QString& fileName, bool append)
 {
+
+    d->use_gui = (qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
 
     QString content;
 
@@ -192,7 +199,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!d->check(document)) {
         if(d->missing_implementation.count() > 0) {
-            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
+            if (d->use_gui) {
                 QMessageBox msgBox;
 
                 msgBox.setText("Node implementations are missing. Load anyway?");
@@ -282,7 +289,9 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     else if(!paste)
         d->scene->addItem(d->node);
 
-    d->graph->layout();
+    if (d->use_gui) {
+        d->graph->layout();
+    }
 
     // --
 
@@ -410,7 +419,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 d->scene->addItem(n);
         } else {
 
-            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
+            if (d->use_gui) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create node " + type_n);
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -435,7 +444,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         dtkComposerNode *new_node = d->factory->create(node.toElement().attribute("type"));
         if (!new_node) {
 
-            if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
+            if (d->use_gui) {
                 QMessageBox msgBox;
                 msgBox.setText("Can't create core node.");
                 msgBox.setInformativeText("You are not be able to load the composition.");
@@ -458,7 +467,6 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         d->graph->addNode(n);
 
     }
-
     QPointF position;
 
     if(node.toElement().hasAttribute("x"))
@@ -580,6 +588,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendReceiver(proxyloop);
                 }
+                if (ports.at(i).toElement().attribute("kind") == "proxyvariant") {
+                    dtkComposerTransmitter *proxyvariant = new dtkComposerTransmitterProxyVariant(composite->wrapee());
+                    proxyvariant->setRequired(false);
+                    composite->wrapee()->appendReceiver(proxyvariant);
+                }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
             } else {
@@ -598,6 +611,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendEmitter(proxyloop);
+                }
+                if (ports.at(i).toElement().attribute("kind") == "proxyvariant") {
+                    dtkComposerTransmitter *proxyvariant = new dtkComposerTransmitterProxyVariant(composite->wrapee());
+                    proxyvariant->setRequired(false);
+                    composite->wrapee()->appendEmitter(proxyvariant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());

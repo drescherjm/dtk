@@ -40,6 +40,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterProxyVariant.h"
 #include "dtkComposerWriter.h"
 
 #include <dtkLog/dtkLogger.h>
@@ -1567,6 +1568,9 @@ void dtkComposerStackCommandCreatePort::redo(void)
             case dtkComposerTransmitter::ProxyLoop:
                 e->transmitter = new dtkComposerTransmitterProxyLoop(e->node->wrapee());
                 break;
+            case dtkComposerTransmitter::ProxyVariant:
+                e->transmitter = new dtkComposerTransmitterProxyVariant(e->node->wrapee());
+                break;
             default:
                 e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
                 break;
@@ -1584,6 +1588,9 @@ void dtkComposerStackCommandCreatePort::redo(void)
             switch(e->kind) {
             case dtkComposerTransmitter::ProxyLoop:
                 e->transmitter = new dtkComposerTransmitterProxyLoop(e->node->wrapee());
+                break;
+            case dtkComposerTransmitter::ProxyVariant:
+                e->transmitter = new dtkComposerTransmitterProxyVariant(e->node->wrapee());
                 break;
             default:
                 e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
@@ -2428,14 +2435,14 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(source);
                     }
@@ -2534,14 +2541,14 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(source);
                     }

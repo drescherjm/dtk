@@ -24,6 +24,7 @@
 
 dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedContainer()
 {
+    m_builded=false;
     m_neighbour_count = NULL;
     m_edge_to_vertex  = NULL;
     m_vertex_to_edge  = NULL;
@@ -34,6 +35,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedC
 
 dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count) : dtkDistributedContainer(vertex_count)
 {
+    m_builded=false;
     m_neighbour_count = NULL;
     m_edge_to_vertex  = NULL;
     m_vertex_to_edge  = NULL;
@@ -46,6 +48,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex
 
 dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count, dtkDistributedMapper *mapper) : dtkDistributedContainer(vertex_count, mapper)
 {
+    m_builded=false;
     m_neighbour_count = NULL;
     m_edge_to_vertex  = NULL;
     m_vertex_to_edge  = NULL;
@@ -59,7 +62,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex
 dtkDistributedGraphTopology::dtkDistributedGraphTopology(const dtkDistributedGraphTopology& o) : dtkDistributedContainer(o.m_size)
 {
     m_map = o.m_map;
-
+    m_builded=o.m_builded;
     m_edge_count      = NULL;
     m_neighbour_count = NULL;
     m_vertex_to_edge  = NULL;
@@ -111,6 +114,7 @@ void dtkDistributedGraphTopology::resize(qlonglong vertex_count)
     initialize();
 }
 
+// if the graph is not builded, it will do a segfault
 dtkDistributedMapper *dtkDistributedGraphTopology::edge_mapper(void) const
 {
     return m_edge_to_vertex->mapper();
@@ -139,6 +143,7 @@ void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
 void dtkDistributedGraphTopology::build(void)
 {
     this->m_comm->barrier();
+    m_builded = true;
 
     qlonglong edge_count = 0;
     for (qlonglong i = 0; i < m_comm->size(); ++i) {
@@ -184,6 +189,10 @@ void dtkDistributedGraphTopology::build(void)
     this->m_comm->barrier();
 }
 
+bool dtkDistributedGraphTopology::builded(void)
+{
+    return m_builded;
+}
 
 void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool oriented)
 {

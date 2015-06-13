@@ -12,6 +12,7 @@
 
 // Code:
 
+#include <dtkLog>
 #include "dtkDistributedGraphTopology.h"
 
 #if defined(DTK_HAVE_ZLIB)
@@ -117,6 +118,9 @@ void dtkDistributedGraphTopology::resize(qlonglong vertex_count)
 // if the graph is not builded, it will do a segfault
 dtkDistributedMapper *dtkDistributedGraphTopology::edge_mapper(void) const
 {
+    if(!m_builded) {
+        dtkError() << "calling edge_mapper while the dtkDistributedgraphTopology is not builded! ";
+    }
     return m_edge_to_vertex->mapper();
 }
 
@@ -140,7 +144,7 @@ void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
     m_edge_count->fill(0);
 }
 
-void dtkDistributedGraphTopology::build(void)
+Void dtkDistributedGraphTopology::build(void)
 {
     this->m_comm->barrier();
     m_builded = true;
@@ -224,6 +228,8 @@ void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool ori
         ++edge_counter;
         m_edge_count->setAt(wid, edge_counter);
     }
+    else
+        dtkWarn() << "dtkDistributedGraphTopology try to addEdge(" << from << "," << to << ") with wid=" << wid << " but the owner is " << from_owner  << " . Nothing will be done !!!";
 
     if (!oriented) {
         addEdge(to, from, true);

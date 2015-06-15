@@ -22,6 +22,7 @@ class QWidget;
 class dtkComposerNodePrivate;
 class dtkComposerTransmitter;
 class dtkComposerNodeMetaData;
+class dtkComposerViewWidget;
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerNode declaration
@@ -75,7 +76,7 @@ public:
     QString outputLabelHint(int port);
 
 public:
-    virtual QWidget *widget(void);
+    virtual dtkComposerViewWidget *widget(void);
 
 public:
     QT_DEPRECATED void setTitleHint(const QString& hint);

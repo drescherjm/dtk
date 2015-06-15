@@ -142,7 +142,7 @@ QString dtkComposerNode::outputLabelHint(int port)
     return "port";
 }
 
-QWidget *dtkComposerNode::widget(void)
+dtkComposerViewWidget *dtkComposerNode::widget(void)
 {
     return NULL;
 }

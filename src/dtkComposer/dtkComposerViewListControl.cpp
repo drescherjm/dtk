@@ -18,9 +18,6 @@
 #include "dtkComposerViewList.h"
 #include "dtkComposerViewListControl.h"
 
-#include <dtkCoreSupport/dtkAbstractView.h>
-#include <dtkCoreSupport/dtkAbstractViewFactory.h>
-
 class dtkComposerViewListControlPrivate
 {
 public:
@@ -92,7 +89,7 @@ void dtkComposerViewListControl::onActorStarted(QString view_name)
     if (!d->layout)
         return;
 
-    QWidget *view = dtkComposerViewController::instance()->view(view_name);
+    dtkComposerViewWidget *view = dtkComposerViewController::instance()->view(view_name);
 
     if (view && !d->layout->current()->proxy()->view())
         d->layout->current()->proxy()->setView(view);

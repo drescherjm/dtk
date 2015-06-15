@@ -137,7 +137,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerViewListControl
   dtkComposerViewListControl.h
   dtkComposerViewManager
-  dtkComposerViewManager.h)
+  dtkComposerViewManager.h
+  dtkComposerViewWidget.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -235,7 +236,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerViewLayoutItem.cpp
   dtkComposerViewList.cpp
   dtkComposerViewListControl.cpp
-  dtkComposerViewManager.cpp)
+  dtkComposerViewManager.cpp
+  dtkComposerViewWidget.cpp)
 
 set(${PROJECT_NAME}_RCC dtkComposer.qrc)
 

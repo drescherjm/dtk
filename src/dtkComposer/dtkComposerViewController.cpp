@@ -17,7 +17,7 @@
 class dtkComposerViewControllerPrivate
 {
 public:
-    QHash<QString, QWidget *> views;
+    QHash<QString, dtkComposerViewWidget *> views;
 };
 
 dtkComposerViewController *dtkComposerViewController::instance(void)
@@ -28,14 +28,14 @@ dtkComposerViewController *dtkComposerViewController::instance(void)
     return s_instance;
 }
 
-void dtkComposerViewController::insert(const QString& name, QWidget *view)
+void dtkComposerViewController::insert(const QString& name, dtkComposerViewWidget *view)
 {
     d->views.insert(name, view);
 
     emit inserted(view, name);
 }
 
-QWidget *dtkComposerViewController::view(const QString& name)
+dtkComposerViewWidget *dtkComposerViewController::view(const QString& name)
 {
     return d->views.value(name);
 }

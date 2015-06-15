@@ -18,6 +18,7 @@
 
 class dtkComposerViewLayoutItem;
 class dtkComposerViewLayoutPrivate;
+class dtkComposerViewWidget;
 
 class DTKCOMPOSER_EXPORT dtkComposerViewLayout : public QFrame
 {
@@ -35,8 +36,8 @@ public:
     void setCurrent(dtkComposerViewLayoutItem *item);
 
 signals:
-    void focused(QWidget *view);
-    void unfocused(QWidget *view);
+    void focused(dtkComposerViewWidget *view);
+    void unfocused(dtkComposerViewWidget *view);
 
 public slots:
     void clear(void);

@@ -16,6 +16,7 @@
 #include "dtkComposerViewList.h"
 #include "dtkComposerViewLayout.h"
 #include "dtkComposerViewListControl.h"
+#include "dtkComposerViewWidget.h"
 
 #include <QtWidgets>
 
@@ -56,8 +57,8 @@ dtkComposerViewManager::dtkComposerViewManager(QWidget *parent) : QFrame(parent)
 
     // Behaviour
 
-    connect(d->view_layout, SIGNAL(focused(QWidget *)), this, SIGNAL(focused(QWidget *)));
-    connect(d->view_layout, SIGNAL(unfocused(QWidget *)), this, SLOT(hideCurrentWidget()));
+    connect(d->view_layout, SIGNAL(focused(dtkComposerViewWidget *)), this, SIGNAL(focused(dtkComposerViewWidget *)));
+    // connect(d->view_layout, SIGNAL(unfocused(dtkComposerViewWidget *)), this, SLOT());
 }
 
 dtkComposerViewManager::~dtkComposerViewManager(void)
@@ -69,29 +70,17 @@ dtkComposerViewManager::~dtkComposerViewManager(void)
 
 void dtkComposerViewManager::clear(void)
 {
-    this->hideCurrentWidget();
     d->view_list->clear();
     d->view_layout->clear();
 }
 
-void dtkComposerViewManager::addWidget(QWidget *widget)
+void dtkComposerViewManager::onViewFocused(dtkComposerViewWidget *widget)
 {
-    d->view_inspector->addWidget(widget);
-    widget->setVisible(false);
-}
+    if(!widget->inspector())
+        return;
 
-void dtkComposerViewManager::setCurrentWidget(QWidget *widget)
-{
-    widget->setVisible(true);
-    d->view_inspector->setCurrentWidget(widget);
-}
-
-void dtkComposerViewManager::hideCurrentWidget(void)
-{
-    QWidget *widget = d->view_inspector->currentWidget();
-
-    if (widget)
-        widget->setVisible(false);
+    d->view_inspector->addWidget(widget->inspector());
+    d->view_inspector->setCurrentWidget(widget->inspector());
 }
 
 //

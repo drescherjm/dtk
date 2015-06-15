@@ -35,8 +35,8 @@ dtkComposerViewLayout::dtkComposerViewLayout(QWidget *parent) : QFrame(parent), 
     layout->setSpacing(0);
     layout->addWidget(d->root);
 
-    connect(d->root, SIGNAL(focused(QWidget *)), this, SIGNAL(focused(QWidget *)));
-    connect(d->root, SIGNAL(unfocused(QWidget *)), this, SIGNAL(unfocused(QWidget *)));
+    connect(d->root, SIGNAL(focused(dtkComposerViewWidget *)), this, SIGNAL(focused(dtkComposerViewWidget *)));
+    connect(d->root, SIGNAL(unfocused(dtkComposerViewWidget *)), this, SIGNAL(unfocused(dtkComposerViewWidget *)));
 }
 
 dtkComposerViewLayout::~dtkComposerViewLayout(void)

@@ -23,6 +23,7 @@
 
 #include <QtWidgets>
 
+class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerGraph;
 class dtkComposerSceneEdge;
@@ -86,7 +87,7 @@ public:
     QAction *flagAsYellowAction(void);
 
 public:
-    QAction *maskEdgesAction(void);
+    QAction   *maskEdgesAction(void);
     QAction *unmaskEdgesAction(void);
 
 public:
@@ -107,7 +108,7 @@ public slots:
 signals:
     void changed(void);
     void modified(bool);
-    void flagged(void);
+    void flagged(dtkComposerNode *);
 
 signals:
     void selectedNode(dtkComposerSceneNode *node);
@@ -179,4 +180,3 @@ protected slots:
 private:
     dtkComposerScenePrivate *d;
 };
-

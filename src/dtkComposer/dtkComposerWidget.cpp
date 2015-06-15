@@ -1,17 +1,16 @@
-/* dtkComposerWidget.cpp ---
- *
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 10:34:49 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include <dtkConfig.h>
 
@@ -333,3 +332,6 @@ dtkComposerWriter *dtkComposerWidget::writer(void)
 {
     return d->writer;
 }
+
+//
+// dtkComposerWidget.cpp ends here

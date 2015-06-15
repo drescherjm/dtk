@@ -14,6 +14,7 @@
 
 #include "dtkComposerViewLayout.h"
 #include "dtkComposerViewLayoutItem.h"
+#include "dtkComposerViewWidget.h"
 
 #include <dtkCoreSupport/dtkAbstractView.h>
 #include <dtkCoreSupport/dtkAbstractViewFactory.h>
@@ -27,7 +28,7 @@
 class dtkComposerViewLayoutItemProxyPrivate
 {
 public:
-    QWidget *view;
+    dtkComposerViewWidget *view;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -94,15 +95,15 @@ dtkComposerViewLayoutItemProxy::~dtkComposerViewLayoutItemProxy(void)
     if(!d->view)
         goto finalize;
 
-    if(!d->view)
+    if(!d->view->widget())
         goto finalize;
 
-    if(!d->view->parentWidget())
+    if(!d->view->widget()->parentWidget())
         goto finalize;
 
 //    qDebug() << __func__ << 2;
 
-    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(d->view->parentWidget())) {
+    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
 
 //        qDebug() << __func__ << 3;
 
@@ -114,7 +115,7 @@ dtkComposerViewLayoutItemProxy::~dtkComposerViewLayoutItemProxy(void)
 
 //            qDebug() << __func__ << 5;
 
-            d->view->setParent(0);
+            d->view->widget()->setParent(0);
 
 //            qDebug() << __func__ << 6;
 
@@ -133,20 +134,20 @@ finalize:
     d = NULL;
 }
 
-QWidget *dtkComposerViewLayoutItemProxy::view(void)
+dtkComposerViewWidget *dtkComposerViewLayoutItemProxy::view(void)
 {
     return d->view;
 }
 
-void dtkComposerViewLayoutItemProxy::setView(QWidget *view)
+void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
 {
     // qDebug() << __func__ << 1;
 
     if(!view)
         return;
 
-    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(view->parentWidget())) {
-        proxy->layout()->removeWidget(view);
+    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(view->widget()->parentWidget())) {
+        proxy->layout()->removeWidget(view->widget());
         proxy->d->view = NULL;
 
         if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
@@ -157,10 +158,11 @@ void dtkComposerViewLayoutItemProxy::setView(QWidget *view)
         disconnect(view, SIGNAL(focused()), proxy, SIGNAL(focusedIn()));
     }
 
-    this->layout()->addWidget(view);
+    this->layout()->addWidget(view->widget());
 
     d->view = view;
     d->view->show();
+
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
     if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(this->parentWidget()->parentWidget())) {
@@ -284,7 +286,7 @@ dtkComposerViewLayoutItem::~dtkComposerViewLayoutItem(void)
     d = NULL;
 }
 
-QWidget *dtkComposerViewLayoutItem::view(void)
+dtkComposerViewWidget *dtkComposerViewLayoutItem::view(void)
 {
     if(this->proxy())
         return proxy()->view();
@@ -705,7 +707,7 @@ void dtkComposerViewLayoutItem::dropEvent(QDropEvent *event)
 // ///////////////////////////////////////////////////////////
 }
 
-void dtkComposerViewLayoutItem::notify(QWidget *view)
+void dtkComposerViewLayoutItem::notify(dtkComposerViewWidget *view)
 {
     if(d->root == this)
         emit focused(view);

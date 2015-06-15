@@ -14,6 +14,7 @@
 
 #include "dtkComposerViewController.h"
 #include "dtkComposerViewList.h"
+#include "dtkComposerViewWidget.h"
 
 class dtkComposerViewListPrivate
 {
@@ -29,7 +30,7 @@ dtkComposerViewList::dtkComposerViewList(QWidget *parent) : QListWidget(parent),
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     this->setFixedHeight(100);
 
-    connect(dtkComposerViewController::instance(), SIGNAL(inserted(QWidget *, const QString&)), this, SLOT(update()));
+    connect(dtkComposerViewController::instance(), SIGNAL(inserted(dtkComposerViewWidget *, const QString&)), this, SLOT(update()));
 
     this->update();
 }
@@ -39,7 +40,7 @@ dtkComposerViewList::~dtkComposerViewList(void)
     delete d;
 
     d = NULL;
-};
+}
 
 void dtkComposerViewList::update(void)
 {

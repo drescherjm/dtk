@@ -15,6 +15,7 @@
 #pragma once
 
 #include "dtkComposerExport.h"
+#include "dtkComposerViewWidget.h"
 
 #include <QtCore>
 
@@ -26,14 +27,14 @@ public:
     static dtkComposerViewController *instance(void);
 
 public:
-    void insert(const QString& name, QWidget *view);
+    void insert(const QString& name, dtkComposerViewWidget *view);
 
 public:
-    QWidget *view(const QString& name);
+    dtkComposerViewWidget *view(const QString& name);
     QStringList viewNames(void);
 
 signals:
-    void inserted(QWidget *, const QString&);
+    void inserted(dtkComposerViewWidget *, const QString&);
 
 protected:
      dtkComposerViewController(void);

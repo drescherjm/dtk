@@ -20,6 +20,7 @@
 
 class dtkComposerViewLayout;
 class dtkComposerViewLayoutItemPrivate;
+class dtkComposerViewWidget;
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerViewLayoutItemProxy
@@ -36,10 +37,10 @@ public:
     ~dtkComposerViewLayoutItemProxy(void);
 
 public:
-    QWidget *view(void);
+    dtkComposerViewWidget *view(void);
 
 public:
-    void setView(QWidget *view);
+    void setView(dtkComposerViewWidget *view);
 
 signals:
     void focusedIn(void);
@@ -66,7 +67,7 @@ public:
     ~dtkComposerViewLayoutItem(void);
 
 public:
-    QWidget *view(void);
+    dtkComposerViewWidget *view(void);
 
 public:
     dtkComposerViewLayoutItem *parent(void);
@@ -99,8 +100,8 @@ public slots:
     void maximize(void);
 
 signals:
-    void focused(QWidget *view);
-    void unfocused(QWidget *view);
+    void focused(dtkComposerViewWidget *view);
+    void unfocused(dtkComposerViewWidget *view);
 
 protected slots:
     void close(void);
@@ -119,7 +120,7 @@ protected:
     void dropEvent(QDropEvent *);
 
 private:
-    void notify(QWidget *view);
+    void notify(dtkComposerViewWidget *view);
 
 private:
      dtkComposerViewLayoutItemPrivate *d;

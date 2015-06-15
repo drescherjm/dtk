@@ -19,6 +19,7 @@
 #include <QtWidgets/QFrame>
 
 class dtkComposerViewManagerPrivate;
+class dtkComposerViewWidget;
 
 class DTKCOMPOSER_EXPORT dtkComposerViewManager : public QFrame
 {
@@ -28,16 +29,14 @@ public:
      dtkComposerViewManager(QWidget *parent = 0);
     ~dtkComposerViewManager(void);
 
-public:
-    void addWidget(QWidget *widget);
-    void setCurrentWidget(QWidget *widget);
-
 signals:
-    void focused(QWidget *view);
+    void focused(dtkComposerViewWidget *view);
 
 public slots:
     void clear(void);
-    void hideCurrentWidget(void);
+
+public slots:
+    void onViewFocused(dtkComposerViewWidget *widget);
 
 private:
     dtkComposerViewManagerPrivate *d;

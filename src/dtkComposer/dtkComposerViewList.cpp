@@ -12,16 +12,16 @@
 
 // Code:
 
-#include "dtkWidgetsViewController.h"
-#include "dtkWidgetsViewList.h"
+#include "dtkComposerViewController.h"
+#include "dtkComposerViewList.h"
 
-class dtkWidgetsViewListPrivate
+class dtkComposerViewListPrivate
 {
 public:
     QList<QWidget *> connected_views;
 };
 
-dtkWidgetsViewList::dtkWidgetsViewList(QWidget *parent) : QListWidget(parent), d(new dtkWidgetsViewListPrivate)
+dtkComposerViewList::dtkComposerViewList(QWidget *parent) : QListWidget(parent), d(new dtkComposerViewListPrivate)
 {
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setDragEnabled(true);
@@ -29,24 +29,24 @@ dtkWidgetsViewList::dtkWidgetsViewList(QWidget *parent) : QListWidget(parent), d
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     this->setFixedHeight(100);
 
-    connect(dtkWidgetsViewController::instance(), SIGNAL(inserted(QWidget *, const QString&)), this, SLOT(update()));
+    connect(dtkComposerViewController::instance(), SIGNAL(inserted(QWidget *, const QString&)), this, SLOT(update()));
 
     this->update();
 }
 
-dtkWidgetsViewList::~dtkWidgetsViewList(void)
+dtkComposerViewList::~dtkComposerViewList(void)
 {
     delete d;
 
     d = NULL;
 };
 
-void dtkWidgetsViewList::update(void)
+void dtkComposerViewList::update(void)
 {
     this->clear();
 
-    foreach(QString objectName, dtkWidgetsViewController::instance()->viewNames()) {
-        QWidget *view = dtkWidgetsViewController::instance()->view(objectName);
+    foreach(QString objectName, dtkComposerViewController::instance()->viewNames()) {
+        QWidget *view = dtkComposerViewController::instance()->view(objectName);
         QListWidgetItem *item = new QListWidgetItem;
         QString text = objectName;
         item->setText(text);
@@ -58,12 +58,12 @@ void dtkWidgetsViewList::update(void)
     }
 }
 
-void dtkWidgetsViewList::clear(void)
+void dtkComposerViewList::clear(void)
 {
     QListWidget::clear();
 }
 
-QMimeData *dtkWidgetsViewList::mimeData(const QList<QListWidgetItem *> items) const
+QMimeData *dtkComposerViewList::mimeData(const QList<QListWidgetItem *> items) const
 {
     QMimeData *mimeData = new QMimeData;
     mimeData->setText(items.first()->text().split(" ").first());
@@ -71,10 +71,10 @@ QMimeData *dtkWidgetsViewList::mimeData(const QList<QListWidgetItem *> items) co
     return mimeData;
 }
 
-QStringList dtkWidgetsViewList::mimeTypes(void) const
+QStringList dtkComposerViewList::mimeTypes(void) const
 {
     return QStringList() << "text/plain";
 }
 
 //
-// dtkWidgetsViewList.cpp ends here
+// dtkComposerViewList.cpp ends here

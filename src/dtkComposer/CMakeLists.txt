@@ -125,7 +125,19 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWidget.h
-  dtkComposerWriter.h)
+  dtkComposerWriter.h
+  dtkComposerViewController
+  dtkComposerViewController.h
+  dtkComposerViewLayout
+  dtkComposerViewLayout.h
+  dtkComposerViewLayoutItem
+  dtkComposerViewLayoutItem.h
+  dtkComposerViewList
+  dtkComposerViewList.h
+  dtkComposerViewListControl
+  dtkComposerViewListControl.h
+  dtkComposerViewManager
+  dtkComposerViewManager.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -217,7 +229,13 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerView.cpp
   dtkComposerReader.cpp
   dtkComposerWidget.cpp
-  dtkComposerWriter.cpp)
+  dtkComposerWriter.cpp
+  dtkComposerViewController.cpp
+  dtkComposerViewLayout.cpp
+  dtkComposerViewLayoutItem.cpp
+  dtkComposerViewList.cpp
+  dtkComposerViewListControl.cpp
+  dtkComposerViewManager.cpp)
 
 set(${PROJECT_NAME}_RCC dtkComposer.qrc)
 

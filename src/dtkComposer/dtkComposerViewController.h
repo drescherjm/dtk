@@ -14,16 +14,16 @@
 
 #pragma once
 
-#include "dtkWidgetsExport.h"
+#include "dtkComposerExport.h"
 
 #include <QtCore>
 
-class DTKWIDGETS_EXPORT dtkWidgetsViewController : public QObject
+class DTKCOMPOSER_EXPORT dtkComposerViewController : public QObject
 {
     Q_OBJECT
 
 public:
-    static dtkWidgetsViewController *instance(void);
+    static dtkComposerViewController *instance(void);
 
 public:
     void insert(const QString& name, QWidget *view);
@@ -36,15 +36,15 @@ signals:
     void inserted(QWidget *, const QString&);
 
 protected:
-     dtkWidgetsViewController(void);
-    ~dtkWidgetsViewController(void);
+     dtkComposerViewController(void);
+    ~dtkComposerViewController(void);
 
 private:
-    static dtkWidgetsViewController *s_instance;
+    static dtkComposerViewController *s_instance;
 
 private:
-    class dtkWidgetsViewControllerPrivate *d;
+    class dtkComposerViewControllerPrivate *d;
 };
 
 //
-// dtkWidgetsViewController.h ends here
+// dtkComposerViewController.h ends here

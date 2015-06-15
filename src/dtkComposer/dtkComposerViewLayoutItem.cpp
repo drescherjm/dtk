@@ -12,8 +12,8 @@
 
 // Code:
 
-#include "dtkWidgetsViewLayout.h"
-#include "dtkWidgetsViewLayoutItem.h"
+#include "dtkComposerViewLayout.h"
+#include "dtkComposerViewLayoutItem.h"
 
 #include <dtkCoreSupport/dtkAbstractView.h>
 #include <dtkCoreSupport/dtkAbstractViewFactory.h>
@@ -21,37 +21,37 @@
 #include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItemProxyPrivate
+// dtkComposerViewLayoutItemProxyPrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkWidgetsViewLayoutItemProxyPrivate
+class dtkComposerViewLayoutItemProxyPrivate
 {
 public:
     QWidget *view;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItemPrivate
+// dtkComposerViewLayoutItemPrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkWidgetsViewLayoutItemPrivate
+class dtkComposerViewLayoutItemPrivate
 {
 public:
-    static dtkWidgetsViewLayoutItemProxy *firstViewChild(dtkWidgetsViewLayoutItem *item);
+    static dtkComposerViewLayoutItemProxy *firstViewChild(dtkComposerViewLayoutItem *item);
 
 public:
-    dtkWidgetsViewLayoutItem *root;
-    dtkWidgetsViewLayoutItem *parent;
+    dtkComposerViewLayoutItem *root;
+    dtkComposerViewLayoutItem *parent;
 
 public:
-    dtkWidgetsViewLayoutItem *a;
-    dtkWidgetsViewLayoutItem *b;
+    dtkComposerViewLayoutItem *a;
+    dtkComposerViewLayoutItem *b;
 
 public:
-    dtkWidgetsViewLayout *layout;
+    dtkComposerViewLayout *layout;
 
 public:
-    dtkWidgetsViewLayoutItemProxy *proxy;
+    dtkComposerViewLayoutItemProxy *proxy;
 
 public:
     QSplitter *splitter;
@@ -69,14 +69,14 @@ public:
     QFrame *footer;
 
 public:
-    dtkWidgetsViewLayoutItem *q;
+    dtkComposerViewLayoutItem *q;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItemProxy
+// dtkComposerViewLayoutItemProxy
 // /////////////////////////////////////////////////////////////////
 
-dtkWidgetsViewLayoutItemProxy::dtkWidgetsViewLayoutItemProxy(QWidget *parent) : QFrame(parent), d(new dtkWidgetsViewLayoutItemProxyPrivate)
+dtkComposerViewLayoutItemProxy::dtkComposerViewLayoutItemProxy(QWidget *parent) : QFrame(parent), d(new dtkComposerViewLayoutItemProxyPrivate)
 {
     d->view = NULL;
 
@@ -87,7 +87,7 @@ dtkWidgetsViewLayoutItemProxy::dtkWidgetsViewLayoutItemProxy(QWidget *parent) : 
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
-dtkWidgetsViewLayoutItemProxy::~dtkWidgetsViewLayoutItemProxy(void)
+dtkComposerViewLayoutItemProxy::~dtkComposerViewLayoutItemProxy(void)
 {
 //    qDebug() << __func__ << 1;
 
@@ -102,7 +102,7 @@ dtkWidgetsViewLayoutItemProxy::~dtkWidgetsViewLayoutItemProxy(void)
 
 //    qDebug() << __func__ << 2;
 
-    if(dtkWidgetsViewLayoutItemProxy *proxy = dynamic_cast<dtkWidgetsViewLayoutItemProxy *>(d->view->parentWidget())) {
+    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(d->view->parentWidget())) {
 
 //        qDebug() << __func__ << 3;
 
@@ -133,23 +133,23 @@ finalize:
     d = NULL;
 }
 
-QWidget *dtkWidgetsViewLayoutItemProxy::view(void)
+QWidget *dtkComposerViewLayoutItemProxy::view(void)
 {
     return d->view;
 }
 
-void dtkWidgetsViewLayoutItemProxy::setView(QWidget *view)
+void dtkComposerViewLayoutItemProxy::setView(QWidget *view)
 {
     // qDebug() << __func__ << 1;
 
     if(!view)
         return;
 
-    if(dtkWidgetsViewLayoutItemProxy *proxy = dynamic_cast<dtkWidgetsViewLayoutItemProxy *>(view->parentWidget())) {
+    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(view->parentWidget())) {
         proxy->layout()->removeWidget(view);
         proxy->d->view = NULL;
 
-        if(dtkWidgetsViewLayoutItem *item = dynamic_cast<dtkWidgetsViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
+        if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
             // qDebug() << "Got parent ! - clearing name";
             item->d->label->clear();
         }
@@ -163,7 +163,7 @@ void dtkWidgetsViewLayoutItemProxy::setView(QWidget *view)
     d->view->show();
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
-    if(dtkWidgetsViewLayoutItem *item = dynamic_cast<dtkWidgetsViewLayoutItem *>(this->parentWidget()->parentWidget())) {
+    if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(this->parentWidget()->parentWidget())) {
 
         // qDebug() << "Got parent ! - setting name";
 
@@ -177,14 +177,14 @@ void dtkWidgetsViewLayoutItemProxy::setView(QWidget *view)
     // qDebug() << __func__ << 2 << this->parentWidget()->objectName() << this->parentWidget()->metaObject()->className();
 }
 
-void dtkWidgetsViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
+void dtkComposerViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
 {
     QFrame::focusInEvent(event);
 
     emit focusedIn();
 }
 
-void dtkWidgetsViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
+void dtkComposerViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
 {
     QFrame::focusOutEvent(event);
 
@@ -192,10 +192,10 @@ void dtkWidgetsViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItemPrivate
+// dtkComposerViewLayoutItemPrivate
 // /////////////////////////////////////////////////////////////////
 
-dtkWidgetsViewLayoutItemProxy *dtkWidgetsViewLayoutItemPrivate::firstViewChild(dtkWidgetsViewLayoutItem *item)
+dtkComposerViewLayoutItemProxy *dtkComposerViewLayoutItemPrivate::firstViewChild(dtkComposerViewLayoutItem *item)
 {
     if(item->d->proxy)
         return item->d->proxy;
@@ -210,10 +210,10 @@ dtkWidgetsViewLayoutItemProxy *dtkWidgetsViewLayoutItemPrivate::firstViewChild(d
 }
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItem
+// dtkComposerViewLayoutItem
 // /////////////////////////////////////////////////////////////////
 
-dtkWidgetsViewLayoutItem::dtkWidgetsViewLayoutItem(dtkWidgetsViewLayoutItem *parent) : QFrame(parent), d(new dtkWidgetsViewLayoutItemPrivate)
+dtkComposerViewLayoutItem::dtkComposerViewLayoutItem(dtkComposerViewLayoutItem *parent) : QFrame(parent), d(new dtkComposerViewLayoutItemPrivate)
 {
     d->a = NULL;
     d->b = NULL;
@@ -228,7 +228,7 @@ dtkWidgetsViewLayoutItem::dtkWidgetsViewLayoutItem(dtkWidgetsViewLayoutItem *par
         d->root = this;
     }
 
-    d->proxy = new dtkWidgetsViewLayoutItemProxy(this);
+    d->proxy = new dtkComposerViewLayoutItemProxy(this);
 
     d->splitter = new QSplitter(this);
     d->splitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -251,7 +251,7 @@ dtkWidgetsViewLayoutItem::dtkWidgetsViewLayoutItem(dtkWidgetsViewLayoutItem *par
 
     d->footer = new QFrame(this);
     d->footer->setLayout(footer_layout);
-    d->footer->setObjectName("dtkWidgetsViewLayoutItemFooterUnfocused");
+    d->footer->setObjectName("dtkComposerViewLayoutItemFooterUnfocused");
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -277,14 +277,14 @@ dtkWidgetsViewLayoutItem::dtkWidgetsViewLayoutItem(dtkWidgetsViewLayoutItem *par
     d->maxmz->setEnabled(false);
 }
 
-dtkWidgetsViewLayoutItem::~dtkWidgetsViewLayoutItem(void)
+dtkComposerViewLayoutItem::~dtkComposerViewLayoutItem(void)
 {
     delete d;
 
     d = NULL;
 }
 
-QWidget *dtkWidgetsViewLayoutItem::view(void)
+QWidget *dtkComposerViewLayoutItem::view(void)
 {
     if(this->proxy())
         return proxy()->view();
@@ -292,67 +292,67 @@ QWidget *dtkWidgetsViewLayoutItem::view(void)
         return NULL;
 }
 
-dtkWidgetsViewLayoutItem *dtkWidgetsViewLayoutItem::parent(void)
+dtkComposerViewLayoutItem *dtkComposerViewLayoutItem::parent(void)
 {
     return d->parent;
 }
 
-dtkWidgetsViewLayoutItem *dtkWidgetsViewLayoutItem::first(void)
+dtkComposerViewLayoutItem *dtkComposerViewLayoutItem::first(void)
 {
     return d->a;
 }
 
-dtkWidgetsViewLayoutItem *dtkWidgetsViewLayoutItem::second(void)
+dtkComposerViewLayoutItem *dtkComposerViewLayoutItem::second(void)
 {
     return d->b;
 }
 
-void dtkWidgetsViewLayoutItem::setOrientation(Qt::Orientation orientation)
+void dtkComposerViewLayoutItem::setOrientation(Qt::Orientation orientation)
 {
     d->splitter->setOrientation(orientation);
 }
 
-void dtkWidgetsViewLayoutItem::setSizes(QList<int> sizes)
+void dtkComposerViewLayoutItem::setSizes(QList<int> sizes)
 {
     d->splitter->setSizes(sizes);
 }
 
-int dtkWidgetsViewLayoutItem::canvasHeight(void)
+int dtkComposerViewLayoutItem::canvasHeight(void)
 {
     return d->splitter->sizes().first();
 }
 
-int dtkWidgetsViewLayoutItem::footerHeight(void)
+int dtkComposerViewLayoutItem::footerHeight(void)
 {
     return d->footer->height();
 }
 
-int dtkWidgetsViewLayoutItem::handleHeight(void)
+int dtkComposerViewLayoutItem::handleHeight(void)
 {
     return 7;
 }
 
-int dtkWidgetsViewLayoutItem::handleWidth(void)
+int dtkComposerViewLayoutItem::handleWidth(void)
 {
     return 7;
 }
 
-dtkWidgetsViewLayout *dtkWidgetsViewLayoutItem::layout(void)
+dtkComposerViewLayout *dtkComposerViewLayoutItem::layout(void)
 {
     return d->layout;
 }
 
-dtkWidgetsViewLayoutItemProxy *dtkWidgetsViewLayoutItem::proxy(void)
+dtkComposerViewLayoutItemProxy *dtkComposerViewLayoutItem::proxy(void)
 {
     return d->proxy;
 }
 
-void dtkWidgetsViewLayoutItem::setLayout(dtkWidgetsViewLayout *layout)
+void dtkComposerViewLayoutItem::setLayout(dtkComposerViewLayout *layout)
 {
     d->layout = layout;
 }
 
-void dtkWidgetsViewLayoutItem::clear(void)
+void dtkComposerViewLayoutItem::clear(void)
 {
     if (d->proxy && d->proxy->view()){
         d->proxy->view()->hide();
@@ -360,7 +360,7 @@ void dtkWidgetsViewLayoutItem::clear(void)
     }
     delete d->proxy;
 
-    d->proxy = new dtkWidgetsViewLayoutItemProxy(d->root);
+    d->proxy = new dtkComposerViewLayoutItemProxy(d->root);
 
     connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
     connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
@@ -389,15 +389,15 @@ void dtkWidgetsViewLayoutItem::clear(void)
     d->maxmz->setEnabled(false);
 }
 
-void dtkWidgetsViewLayoutItem::split(void)
+void dtkComposerViewLayoutItem::split(void)
 {
     if(!d->proxy->view())
         return;
 
     QSize size = this->size();
 
-    d->a = new dtkWidgetsViewLayoutItem(this);
-    d->b = new dtkWidgetsViewLayoutItem(this);
+    d->a = new dtkComposerViewLayoutItem(this);
+    d->b = new dtkComposerViewLayoutItem(this);
 
     d->splitter->addWidget(d->a);
     d->splitter->addWidget(d->b);
@@ -417,7 +417,7 @@ void dtkWidgetsViewLayoutItem::split(void)
     d->splitter->resize(size);
 }
 
-void dtkWidgetsViewLayoutItem::unsplit(void)
+void dtkComposerViewLayoutItem::unsplit(void)
 {
     if(!d->a && !d->b)
         return;
@@ -436,8 +436,8 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
 
             // qDebug() << __func__ << "Current item is a, b has children, reparenting";
 
-            dtkWidgetsViewLayoutItem *a = d->b->d->a; a->d->parent = this;
-            dtkWidgetsViewLayoutItem *b = d->b->d->b; b->d->parent = this;
+            dtkComposerViewLayoutItem *a = d->b->d->a; a->d->parent = this;
+            dtkComposerViewLayoutItem *b = d->b->d->b; b->d->parent = this;
 
             a->setParent(this);
             b->setParent(this);
@@ -454,10 +454,10 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
             d->splitter->addWidget(d->a);
             d->splitter->addWidget(d->b);
 
-            dtkWidgetsViewLayoutItemProxy *child = NULL;
+            dtkComposerViewLayoutItemProxy *child = NULL;
 
-            if(!(child = dtkWidgetsViewLayoutItemPrivate::firstViewChild(d->a)))
-                 child = dtkWidgetsViewLayoutItemPrivate::firstViewChild(d->b);
+            if(!(child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->a)))
+                 child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->b);
 
             if (child)
                 child->setFocus(Qt::OtherFocusReason);
@@ -466,7 +466,7 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
 
             // qDebug() << __func__ << "Current item is a, b has no children, creating a proxy.";
 
-            d->proxy = new dtkWidgetsViewLayoutItemProxy(this);
+            d->proxy = new dtkComposerViewLayoutItemProxy(this);
 
             // qDebug() << __func__ << "Current item is a, b has no children, proxy created.";
 
@@ -523,8 +523,8 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
 
             // qDebug() << __func__ << "Current item is b, a has children, reparenting";
 
-            dtkWidgetsViewLayoutItem *a = d->a->d->a; a->d->parent = this;
-            dtkWidgetsViewLayoutItem *b = d->a->d->b; b->d->parent = this;
+            dtkComposerViewLayoutItem *a = d->a->d->a; a->d->parent = this;
+            dtkComposerViewLayoutItem *b = d->a->d->b; b->d->parent = this;
 
             a->setParent(this);
             b->setParent(this);
@@ -541,10 +541,10 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
             d->splitter->addWidget(d->a);
             d->splitter->addWidget(d->b);
 
-            dtkWidgetsViewLayoutItemProxy *child = NULL;
+            dtkComposerViewLayoutItemProxy *child = NULL;
 
-            if(!(child = dtkWidgetsViewLayoutItemPrivate::firstViewChild(d->a)))
-                 child = dtkWidgetsViewLayoutItemPrivate::firstViewChild(d->b);
+            if(!(child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->a)))
+                 child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->b);
 
             if (child)
                 child->setFocus(Qt::OtherFocusReason);
@@ -553,7 +553,7 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
 
             // qDebug() << __func__ << "Current item is b, a has no children, creating a proxy.";
 
-            d->proxy = new dtkWidgetsViewLayoutItemProxy(this);
+            d->proxy = new dtkComposerViewLayoutItemProxy(this);
 
             connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
             connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
@@ -579,7 +579,7 @@ void dtkWidgetsViewLayoutItem::unsplit(void)
     d->root->setUpdatesEnabled(true);
 }
 
-void dtkWidgetsViewLayoutItem::maximize(void)
+void dtkComposerViewLayoutItem::maximize(void)
 {
     if(d->a && d->b)
         return;
@@ -589,7 +589,7 @@ void dtkWidgetsViewLayoutItem::maximize(void)
 
     d->root->setUpdatesEnabled(false);
 
-    d->root->d->proxy = new dtkWidgetsViewLayoutItemProxy(d->root);
+    d->root->d->proxy = new dtkComposerViewLayoutItemProxy(d->root);
 
     d->root->connect(d->root->d->proxy, SIGNAL(focusedIn()), d->root, SLOT(onFocusedIn()));
     d->root->connect(d->root->d->proxy, SIGNAL(focusedOut()), d->root, SLOT(onFocusedOut()));
@@ -610,14 +610,14 @@ void dtkWidgetsViewLayoutItem::maximize(void)
     d->root->d->b = NULL;
 }
 
-void dtkWidgetsViewLayoutItem::onFocusedIn(void)
+void dtkComposerViewLayoutItem::onFocusedIn(void)
 {
     if (d->layout->current())
         d->layout->current()->onFocusedOut();
 
     d->layout->setCurrent(this);
 
-    d->footer->setObjectName("dtkWidgetsViewLayoutItemFooterFocused");
+    d->footer->setObjectName("dtkComposerViewLayoutItemFooterFocused");
     d->footer->style()->unpolish(d->footer);
     d->footer->style()->polish(d->footer);
     d->footer->update();
@@ -626,15 +626,15 @@ void dtkWidgetsViewLayoutItem::onFocusedIn(void)
         d->root->notify(d->proxy->view());
 }
 
-void dtkWidgetsViewLayoutItem::onFocusedOut(void)
+void dtkComposerViewLayoutItem::onFocusedOut(void)
 {
-    d->footer->setObjectName("dtkWidgetsViewLayoutItemFooterUnfocused");
+    d->footer->setObjectName("dtkComposerViewLayoutItemFooterUnfocused");
     d->footer->style()->unpolish(d->footer);
     d->footer->style()->polish(d->footer);
     d->footer->update();
 }
 
-void dtkWidgetsViewLayoutItem::close(void)
+void dtkComposerViewLayoutItem::close(void)
 {
     this->onFocusedIn();
 
@@ -644,7 +644,7 @@ void dtkWidgetsViewLayoutItem::close(void)
         clear();
 }
 
-void dtkWidgetsViewLayoutItem::horzt(void)
+void dtkComposerViewLayoutItem::horzt(void)
 {
     this->onFocusedIn();
 
@@ -653,7 +653,7 @@ void dtkWidgetsViewLayoutItem::horzt(void)
     this->split();
 }
 
-void dtkWidgetsViewLayoutItem::vertc(void)
+void dtkComposerViewLayoutItem::vertc(void)
 {
     this->onFocusedIn();
 
@@ -662,29 +662,29 @@ void dtkWidgetsViewLayoutItem::vertc(void)
     this->split();
 }
 
-void dtkWidgetsViewLayoutItem::maxmz(void)
+void dtkComposerViewLayoutItem::maxmz(void)
 {
     this->onFocusedIn();
 
     this->maximize();
 }
 
-void dtkWidgetsViewLayoutItem::dragEnterEvent(QDragEnterEvent *event)
+void dtkComposerViewLayoutItem::dragEnterEvent(QDragEnterEvent *event)
 {
     event->acceptProposedAction();
 }
 
-void dtkWidgetsViewLayoutItem::dragMoveEvent(QDragMoveEvent *event)
+void dtkComposerViewLayoutItem::dragMoveEvent(QDragMoveEvent *event)
 {
     event->acceptProposedAction();
 }
 
-void dtkWidgetsViewLayoutItem::dragLeaveEvent(QDragLeaveEvent *event)
+void dtkComposerViewLayoutItem::dragLeaveEvent(QDragLeaveEvent *event)
 {
     event->accept();
 }
 
-void dtkWidgetsViewLayoutItem::dropEvent(QDropEvent *event)
+void dtkComposerViewLayoutItem::dropEvent(QDropEvent *event)
 {
     Q_UNUSED(event);
 
@@ -705,11 +705,11 @@ void dtkWidgetsViewLayoutItem::dropEvent(QDropEvent *event)
 // ///////////////////////////////////////////////////////////
 }
 
-void dtkWidgetsViewLayoutItem::notify(QWidget *view)
+void dtkComposerViewLayoutItem::notify(QWidget *view)
 {
     if(d->root == this)
         emit focused(view);
 }
 
 //
-// dtkWidgetsViewLayoutItem.cpp ends here
+// dtkComposerViewLayoutItem.cpp ends here

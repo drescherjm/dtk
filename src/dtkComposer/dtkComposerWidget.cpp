@@ -287,7 +287,6 @@ void dtkComposerWidget::reset(void)
     d->reader->readString(data);
 
     d->evaluator->reset();
-
 }
 
 dtkComposerEvaluator *dtkComposerWidget::evaluator(void)

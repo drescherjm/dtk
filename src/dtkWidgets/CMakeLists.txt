@@ -39,19 +39,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudList.h
   dtkWidgetsTagCloudScope.h
   dtkWidgetsTagCloudScopeItem.h
-  dtkWidgetsTagCloudView.h
-  dtkWidgetsViewController
-  dtkWidgetsViewController.h
-  dtkWidgetsViewLayout
-  dtkWidgetsViewLayout.h
-  dtkWidgetsViewLayoutItem
-  dtkWidgetsViewLayoutItem.h
-  dtkWidgetsViewList
-  dtkWidgetsViewList.h
-  dtkWidgetsViewListControl
-  dtkWidgetsViewListControl.h
-  dtkWidgetsViewManager
-  dtkWidgetsViewManager.h)
+  dtkWidgetsTagCloudView.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkNotification.cpp
@@ -72,13 +60,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkWidgetsTagCloudList.cpp
   dtkWidgetsTagCloudScope.cpp
   dtkWidgetsTagCloudScopeItem.cpp
-  dtkWidgetsTagCloudView.cpp
-  dtkWidgetsViewController.cpp
-  dtkWidgetsViewLayout.cpp
-  dtkWidgetsViewLayoutItem.cpp
-  dtkWidgetsViewList.cpp
-  dtkWidgetsViewListControl.cpp
-  dtkWidgetsViewManager.cpp)
+  dtkWidgetsTagCloudView.cpp)
 
 set(${PROJECT_NAME}_SOURCES_RCC
   dtkNotification.qrc

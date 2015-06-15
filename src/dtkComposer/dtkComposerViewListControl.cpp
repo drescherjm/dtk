@@ -12,20 +12,20 @@
 
 // Code:
 
-#include "dtkWidgetsViewController.h"
-#include "dtkWidgetsViewLayout.h"
-#include "dtkWidgetsViewLayoutItem.h"
-#include "dtkWidgetsViewList.h"
-#include "dtkWidgetsViewListControl.h"
+#include "dtkComposerViewController.h"
+#include "dtkComposerViewLayout.h"
+#include "dtkComposerViewLayoutItem.h"
+#include "dtkComposerViewList.h"
+#include "dtkComposerViewListControl.h"
 
 #include <dtkCoreSupport/dtkAbstractView.h>
 #include <dtkCoreSupport/dtkAbstractViewFactory.h>
 
-class dtkWidgetsViewListControlPrivate
+class dtkComposerViewListControlPrivate
 {
 public:
-    dtkWidgetsViewLayout *layout;
-    dtkWidgetsViewList *list;
+    dtkComposerViewLayout *layout;
+    dtkComposerViewList *list;
 
 public:
     QPushButton *hor;
@@ -34,7 +34,7 @@ public:
     QPushButton *cls;
 };
 
-dtkWidgetsViewListControl::dtkWidgetsViewListControl(QWidget *parent) : QFrame(parent), d(new dtkWidgetsViewListControlPrivate)
+dtkComposerViewListControl::dtkComposerViewListControl(QWidget *parent) : QFrame(parent), d(new dtkComposerViewListControlPrivate)
 {
     d->layout = NULL;
     d->list = NULL;
@@ -56,24 +56,24 @@ dtkWidgetsViewListControl::dtkWidgetsViewListControl(QWidget *parent) : QFrame(p
     connect(d->cls, SIGNAL(clicked()), this, SLOT(onLayoutCloseAll()));
 }
 
-dtkWidgetsViewListControl::~dtkWidgetsViewListControl(void)
+dtkComposerViewListControl::~dtkComposerViewListControl(void)
 {
     delete d;
 
     d = NULL;
 }
 
-void dtkWidgetsViewListControl::setLayout(dtkWidgetsViewLayout *layout)
+void dtkComposerViewListControl::setLayout(dtkComposerViewLayout *layout)
 {
     d->layout = layout;
 }
 
-void dtkWidgetsViewListControl::setList(dtkWidgetsViewList *list)
+void dtkComposerViewListControl::setList(dtkComposerViewList *list)
 {
     d->list = list;
 }
 
-bool dtkWidgetsViewListControl::isEmpty(void) const
+bool dtkComposerViewListControl::isEmpty(void) const
 {
     if (!d->list)
         return true;
@@ -87,18 +87,18 @@ bool dtkWidgetsViewListControl::isEmpty(void) const
     return false;
 }
 
-void dtkWidgetsViewListControl::onActorStarted(QString view_name)
+void dtkComposerViewListControl::onActorStarted(QString view_name)
 {
     if (!d->layout)
         return;
 
-    QWidget *view = dtkWidgetsViewController::instance()->view(view_name);
+    QWidget *view = dtkComposerViewController::instance()->view(view_name);
 
     if (view && !d->layout->current()->proxy()->view())
         d->layout->current()->proxy()->setView(view);
 }
 
-void dtkWidgetsViewListControl::layoutHorizontally(void)
+void dtkComposerViewListControl::layoutHorizontally(void)
 {
     if (this->isEmpty())
         return;
@@ -114,9 +114,9 @@ void dtkWidgetsViewListControl::layoutHorizontally(void)
 
     for(int i = 1; i <= n; i++) {
 
-        dtkWidgetsViewLayoutItem *current = d->layout->current();
+        dtkComposerViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Horizontal);
-        current->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i-1)->text().split(" ").first()));
+        current->proxy()->setView(dtkComposerViewController::instance()->view(d->list->item(i-1)->text().split(" ").first()));
 
         if(i != n) {
             QList<int> sizes = QList<int>() << v << current->width()-s-v;
@@ -128,12 +128,12 @@ void dtkWidgetsViewListControl::layoutHorizontally(void)
     }
 }
 
-void dtkWidgetsViewListControl::onLayoutHorizontally(void)
+void dtkComposerViewListControl::onLayoutHorizontally(void)
 {
     this->layoutHorizontally();
 }
 
-void dtkWidgetsViewListControl::layoutVertically(void)
+void dtkComposerViewListControl::layoutVertically(void)
 {
     if (this->isEmpty())
         return;
@@ -150,9 +150,9 @@ void dtkWidgetsViewListControl::layoutVertically(void)
 
     for(int i = 1; i <= n; i++) {
 
-        dtkWidgetsViewLayoutItem *current = d->layout->current();
+        dtkComposerViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Vertical);
-        current->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i-1)->text().split(" ").first()));
+        current->proxy()->setView(dtkComposerViewController::instance()->view(d->list->item(i-1)->text().split(" ").first()));
 
         if(i != n) {
             QList<int> sizes = QList<int>() << v+f << current->height()-s-v-f;
@@ -164,12 +164,12 @@ void dtkWidgetsViewListControl::layoutVertically(void)
     }
 }
 
-void dtkWidgetsViewListControl::onLayoutVertically(void)
+void dtkComposerViewListControl::onLayoutVertically(void)
 {
     this->layoutVertically();
 }
 
-void dtkWidgetsViewListControl::layoutGrid(void)
+void dtkComposerViewListControl::layoutGrid(void)
 {
     if (this->isEmpty())
         return;
@@ -177,11 +177,11 @@ void dtkWidgetsViewListControl::layoutGrid(void)
     int n = d->list->count();
     int i = 0;
 
-    typedef QPair<dtkWidgetsViewLayoutItem *, Qt::Orientation> item_t;
+    typedef QPair<dtkComposerViewLayoutItem *, Qt::Orientation> item_t;
 
     d->layout->clear();
     d->layout->setCurrent(d->layout->root());
-    d->layout->current()->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i)->text().split(" ").first()));
+    d->layout->current()->proxy()->setView(dtkComposerViewController::instance()->view(d->list->item(i)->text().split(" ").first()));
 
     QList<item_t> items; items << qMakePair(d->layout->current(), Qt::Horizontal);
 
@@ -191,22 +191,22 @@ void dtkWidgetsViewListControl::layoutGrid(void)
 
         d->layout->setCurrent(item.first);
 
-        dtkWidgetsViewLayoutItem *current = item.first;
+        dtkComposerViewLayoutItem *current = item.first;
         current->setOrientation(item.second);
         current->split();
-        current->second()->proxy()->setView(dtkWidgetsViewController::instance()->view(d->list->item(i)->text().split(" ").first()));
+        current->second()->proxy()->setView(dtkComposerViewController::instance()->view(d->list->item(i)->text().split(" ").first()));
 
         items << qMakePair(current->first(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
     }
 }
 
-void dtkWidgetsViewListControl::onLayoutGrid(void)
+void dtkComposerViewListControl::onLayoutGrid(void)
 {
     this->layoutGrid();
 }
 
-void dtkWidgetsViewListControl::closeAllLayout(void)
+void dtkComposerViewListControl::closeAllLayout(void)
 {
     if (this->isEmpty())
         return;
@@ -215,10 +215,10 @@ void dtkWidgetsViewListControl::closeAllLayout(void)
     d->layout->setCurrent(d->layout->root());
 }
 
-void dtkWidgetsViewListControl::onLayoutCloseAll(void)
+void dtkComposerViewListControl::onLayoutCloseAll(void)
 {
     this->closeAllLayout();
 }
 
 //
-// dtkWidgetsViewListControl.cpp ends here
+// dtkComposerViewListControl.cpp ends here

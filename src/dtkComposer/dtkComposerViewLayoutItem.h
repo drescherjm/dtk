@@ -14,26 +14,26 @@
 
 #pragma once
 
-#include "dtkWidgetsExport.h"
+#include "dtkComposerExport.h"
 
 #include <QtWidgets/QFrame>
 
-class dtkWidgetsViewLayout;
-class dtkWidgetsViewLayoutItemPrivate;
+class dtkComposerViewLayout;
+class dtkComposerViewLayoutItemPrivate;
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItemProxy
+// dtkComposerViewLayoutItemProxy
 // /////////////////////////////////////////////////////////////////
 
-class dtkWidgetsViewLayoutItemProxyPrivate;
+class dtkComposerViewLayoutItemProxyPrivate;
 
-class DTKWIDGETS_EXPORT dtkWidgetsViewLayoutItemProxy : public QFrame
+class DTKCOMPOSER_EXPORT dtkComposerViewLayoutItemProxy : public QFrame
 {
     Q_OBJECT
 
 public:
-     dtkWidgetsViewLayoutItemProxy(QWidget *parent = 0);
-    ~dtkWidgetsViewLayoutItemProxy(void);
+     dtkComposerViewLayoutItemProxy(QWidget *parent = 0);
+    ~dtkComposerViewLayoutItemProxy(void);
 
 public:
     QWidget *view(void);
@@ -50,28 +50,28 @@ protected:
     void focusOutEvent(QFocusEvent *event);
 
 private:
-    dtkWidgetsViewLayoutItemProxyPrivate *d;
+    dtkComposerViewLayoutItemProxyPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkWidgetsViewLayoutItem
+// dtkComposerViewLayoutItem
 // /////////////////////////////////////////////////////////////////
 
-class DTKWIDGETS_EXPORT dtkWidgetsViewLayoutItem : public QFrame
+class DTKCOMPOSER_EXPORT dtkComposerViewLayoutItem : public QFrame
 {
     Q_OBJECT
 
 public:
-     dtkWidgetsViewLayoutItem(dtkWidgetsViewLayoutItem *parent = 0);
-    ~dtkWidgetsViewLayoutItem(void);
+     dtkComposerViewLayoutItem(dtkComposerViewLayoutItem *parent = 0);
+    ~dtkComposerViewLayoutItem(void);
 
 public:
     QWidget *view(void);
 
 public:
-    dtkWidgetsViewLayoutItem *parent(void);
-    dtkWidgetsViewLayoutItem *first(void);
-    dtkWidgetsViewLayoutItem *second(void);
+    dtkComposerViewLayoutItem *parent(void);
+    dtkComposerViewLayoutItem *first(void);
+    dtkComposerViewLayoutItem *second(void);
 
 public:
     void setOrientation(Qt::Orientation orientation);
@@ -84,13 +84,13 @@ public:
     int handleWidth(void);
 
 public:
-    dtkWidgetsViewLayout *layout(void);
+    dtkComposerViewLayout *layout(void);
 
 public:
-    dtkWidgetsViewLayoutItemProxy *proxy(void);
+    dtkComposerViewLayoutItemProxy *proxy(void);
 
 public:
-    void setLayout(dtkWidgetsViewLayout *layout);
+    void setLayout(dtkComposerViewLayout *layout);
 
 public slots:
     void   clear(void);
@@ -122,12 +122,12 @@ private:
     void notify(QWidget *view);
 
 private:
-     dtkWidgetsViewLayoutItemPrivate *d;
+     dtkComposerViewLayoutItemPrivate *d;
 
 private:
-     friend class dtkWidgetsViewLayoutItemPrivate;
-     friend class dtkWidgetsViewLayoutItemProxy;
+     friend class dtkComposerViewLayoutItemPrivate;
+     friend class dtkComposerViewLayoutItemProxy;
 };
 
 //
-// dtkWidgetsViewLayoutItem.h ends here
+// dtkComposerViewLayoutItem.h ends here

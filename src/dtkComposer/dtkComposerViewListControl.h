@@ -14,25 +14,25 @@
 
 #pragma once
 
-#include "dtkWidgetsExport.h"
+#include "dtkComposerExport.h"
 
 #include <QtWidgets>
 
-class dtkWidgetsViewLayout;
-class dtkWidgetsViewList;
-class dtkWidgetsViewListControlPrivate;
+class dtkComposerViewLayout;
+class dtkComposerViewList;
+class dtkComposerViewListControlPrivate;
 
-class DTKWIDGETS_EXPORT dtkWidgetsViewListControl : public QFrame
+class DTKCOMPOSER_EXPORT dtkComposerViewListControl : public QFrame
 {
     Q_OBJECT
 
 public:
-     dtkWidgetsViewListControl(QWidget *parent = 0);
-    ~dtkWidgetsViewListControl(void);
+     dtkComposerViewListControl(QWidget *parent = 0);
+    ~dtkComposerViewListControl(void);
 
 public:
-    void setLayout(dtkWidgetsViewLayout *layout);
-    void setList(dtkWidgetsViewList *list);
+    void setLayout(dtkComposerViewLayout *layout);
+    void setList(dtkComposerViewList *list);
 
 public:
     bool isEmpty(void) const;
@@ -53,8 +53,8 @@ protected slots:
     void onLayoutCloseAll(void);
 
 private:
-    dtkWidgetsViewListControlPrivate *d;
+    dtkComposerViewListControlPrivate *d;
 };
 
 //
-// dtkWidgetsViewListControl.h ends here
+// dtkComposerViewListControl.h ends here

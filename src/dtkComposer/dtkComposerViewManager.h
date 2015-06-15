@@ -14,19 +14,19 @@
 
 #pragma once
 
-#include "dtkWidgetsExport.h"
+#include "dtkComposerExport.h"
 
 #include <QtWidgets/QFrame>
 
-class dtkWidgetsViewManagerPrivate;
+class dtkComposerViewManagerPrivate;
 
-class DTKWIDGETS_EXPORT dtkWidgetsViewManager : public QFrame
+class DTKCOMPOSER_EXPORT dtkComposerViewManager : public QFrame
 {
     Q_OBJECT
 
 public:
-     dtkWidgetsViewManager(QWidget *parent = 0);
-    ~dtkWidgetsViewManager(void);
+     dtkComposerViewManager(QWidget *parent = 0);
+    ~dtkComposerViewManager(void);
 
 public:
     void addWidget(QWidget *widget);
@@ -40,8 +40,8 @@ public slots:
     void hideCurrentWidget(void);
 
 private:
-    dtkWidgetsViewManagerPrivate *d;
+    dtkComposerViewManagerPrivate *d;
 };
 
 //
-// dtkWidgetsViewManager.h ends here
+// dtkComposerViewManager.h ends here

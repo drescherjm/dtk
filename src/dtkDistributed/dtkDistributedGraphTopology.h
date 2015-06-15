@@ -137,6 +137,7 @@ public:
 
 public:
     void build(void);
+    bool builded(void);
     void resize(qlonglong vertexCount);
 
 public:
@@ -188,6 +189,7 @@ protected:
     dtkDistributedArray<qlonglong> *m_neighbour_count;
     dtkDistributedArray<qlonglong> *m_vertex_to_edge;
     dtkDistributedArray<qlonglong> *m_edge_to_vertex;
+    bool m_builded;
 };
 
 // /////////////////////////////////////////////////////////////////

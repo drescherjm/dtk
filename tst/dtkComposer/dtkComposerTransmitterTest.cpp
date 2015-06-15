@@ -553,6 +553,32 @@ void dtkComposerTransmitterTestCase::testProxyLoop(void)
     QCOMPARE(i, r_1.data());
 }
 
+void dtkComposerTransmitterTestCase::testProxyVariant(void)
+{
+    dtkComposerTransmitterEmitter<qlonglong>  e_0;
+    dtkComposerTransmitterProxyVariant        p_0;
+    dtkComposerTransmitterReceiver<qlonglong> r_0;
+    dtkComposerTransmitterProxyVariant        p_1;
+    dtkComposerTransmitterEmitter<qlonglong>  e_1;
+    dtkComposerTransmitterReceiver<qlonglong> r_1;
+
+    QVERIFY(p_0.connect(&e_0));
+    QVERIFY(r_0.connect(&p_0));
+
+    qlonglong i = 359;
+    e_0.setData(i);
+    
+    // By default proxy variant enables receiver mode.
+    p_0.enableReceiver();
+    QCOMPARE(i, p_0.data<qlonglong>());
+
+    // We simulate that the data comes from a remote node
+    // The proxy switch to emitter mode and one should set the data.
+    p_0.enableEmitter();
+    p_0.setData(i);
+    QCOMPARE(i, r_0.data());
+}
+
 void dtkComposerTransmitterTestCase::testSwapPointer(void)
 {
     // VirtualObject data pointer

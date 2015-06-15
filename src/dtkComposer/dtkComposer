@@ -66,6 +66,7 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterProxyVariant.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerView.h"
 #include "dtkComposerReader.h"

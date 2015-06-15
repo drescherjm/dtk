@@ -29,6 +29,7 @@ private slots:
     void testComplexType(void);
     void testLinks(void);
     void testProxyLoop(void);
+    void testProxyVariant(void);
     void testSwapPointer(void);
 
 private slots:

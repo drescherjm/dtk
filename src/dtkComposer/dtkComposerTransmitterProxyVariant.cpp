@@ -51,27 +51,27 @@ QString dtkComposerTransmitterProxyVariant::kindName(void) const
 
 bool dtkComposerTransmitterProxyVariant::connect(dtkComposerTransmitter *transmitter)
 {
-    return m_transmitter->connect(transmitter);
+    return m_receiver.connect(transmitter);
 }
 
 bool dtkComposerTransmitterProxyVariant::disconnect(dtkComposerTransmitter *transmitter)
 {
-    return m_transmitter->disconnect(transmitter);
+    return m_receiver.disconnect(transmitter);
 }
 
 bool dtkComposerTransmitterProxyVariant::enableConnection(dtkComposerTransmitter *transmitter)
 {
-    return m_transmitter->enableConnection(transmitter);
+    return m_emitter.enableConnection(transmitter);
 }
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxyVariant::leftLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    return m_transmitter->leftLinks(transmitter, list);
+    return m_emitter.leftLinks(transmitter, list);
 }
 
 dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxyVariant::rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list)
 {
-    return m_transmitter->rightLinks(transmitter, list);
+    return m_receiver.rightLinks(transmitter, list);
 }
 
 bool dtkComposerTransmitterProxyVariant::enableCopy(void)

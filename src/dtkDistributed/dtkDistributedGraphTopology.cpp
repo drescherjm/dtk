@@ -144,7 +144,7 @@ void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
     m_edge_count->fill(0);
 }
 
-Void dtkDistributedGraphTopology::build(void)
+void dtkDistributedGraphTopology::build(void)
 {
     this->m_comm->barrier();
     m_builded = true;

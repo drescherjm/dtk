@@ -39,6 +39,11 @@ void dtkComposerTransmitterProxyVariant::enableEmitter(void)
     m_transmitter = &m_emitter;
 }
 
+void dtkComposerTransmitterProxyVariant::clearData(void)
+{
+    m_emitter.clearData();
+}
+
 dtkComposerTransmitter::Kind dtkComposerTransmitterProxyVariant::kind(void) const
 {
     return dtkComposerTransmitter::ProxyVariant;

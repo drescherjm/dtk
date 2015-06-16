@@ -21,6 +21,7 @@
 
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedSettings.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 
 #include <dtkLog/dtkLog.h>
@@ -194,14 +195,14 @@ void dtkComposerNodeRemote::begin(void)
                         dtkError() << "No data received from server after 1mn, abort " ;
                         return;
                     } else
-                        dtkDebug() << "Ok, data received, parse" ;
+                        dtkDebug() << "BEGIN: Ok, data received, parse" ;
                 }
-                msg.reset();
+                msg.reset(new dtkDistributedMessage);
                 msg->parse(d->slave->socket());
-                t->clearData();
+                t->clearData()
+                t->enableEmitter();
                 t->setVariant(msg->variant());
 
-                dtkDebug() << "send data to slaves";
                 d->communicator->broadcast(msg->variant(), 0);
 
             } else {
@@ -209,6 +210,7 @@ void dtkComposerNodeRemote::begin(void)
                 dtkDebug() << "receive data from rank 0";
                 d->communicator->broadcast(variant, 0);
                 dtkDebug() << "data received, set";
+                t->enableEmitter();
                 t->setVariant(variant);
             }
         }
@@ -219,7 +221,7 @@ void dtkComposerNodeRemote::begin(void)
 
 void dtkComposerNodeRemote::end(void)
 {
-    QScopedPointer<dtkDistributedMessage> msg;
+    QScopedPointer<dtkDistributedMessage> msg(new dtkDistributedMessage);
 
     if (!d->slave && d->jobid.isEmpty()) { // on controller but no job !
         dtkError() << "No Job, skip end remote node " ;
@@ -241,10 +243,10 @@ void dtkComposerNodeRemote::end(void)
                     dtkError() << "No data received from slave after 1mn, abort " ;
                     return;
                 } else
-                    dtkDebug() << "Ok, data received, parse" ;
+                    dtkDebug() << "Ok, data received for transmitter, parse" ;
             }
             msg->parse(d->socket);
-            t->clearData();
+            t->enableEmitter();
             t->setVariant(msg->variant());
         }
     } else if (d->communicator) {
@@ -275,8 +277,7 @@ void dtkComposerNodeRemote::end(void)
             }
         }
         if (d->communicator->rank() == 0) {
-//            d->slave->socket()->fflush();
-            d->slave->socket()->moveToThread(QApplication::instance()->thread());
+            d->slave->socket()->waitForBytesWritten();
         }
     } else {
         dtkError() << "No communicator and no controller on remote node: can't run end node";
@@ -300,6 +301,7 @@ public:
     dtkComposerTransmitterReceiver<QString> walltime;
     dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;
+    dtkComposerTransmitterReceiver<QString> options;
 
 public:
     QString slaveName;
@@ -312,6 +314,7 @@ dtkComposerNodeRemoteSubmit::dtkComposerNodeRemoteSubmit(void) : dtkComposerNode
     this->appendReceiver(&(d->cores));
     this->appendReceiver(&(d->walltime));
     this->appendReceiver(&(d->queuename));
+    this->appendReceiver(&(d->options));
 
     d->slaveName = "dtkComposerEvaluator --slave";
     this->appendEmitter(&(d->id));
@@ -371,7 +374,7 @@ void dtkComposerNodeRemoteSubmit::run(void)
         job.insert("queue", d->queuename.data());
 
     job.insert("properties", QVariantMap());
-    job.insert("application", d->slaveName+" --server "+cluster.toString());
+    job.insert("application", d->slaveName+" --logfile console --loglevel trace --server "+cluster.toString());
 
     QByteArray job_data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
     dtkTrace() << " submit job with parameters: "<< job_data;
@@ -380,9 +383,15 @@ void dtkComposerNodeRemoteSubmit::run(void)
     dtkDistributedController *controller = dtkDistributedController::instance();
     if (!controller->isConnected(cluster)) {
         dtkInfo() <<  "Not yet connected to " << cluster << ",try to connect";
-        controller->deploy(cluster);
-        controller->connect(cluster);
+        dtkDistributedSettings settings;
+        bool use_tunnel = settings.use_ssh_tunnel(cluster);
+        bool register_rank = true;
+        controller->deploy(cluster, settings.server_type(cluster), use_tunnel , settings.path(cluster) );
+        controller->connect(cluster, use_tunnel, register_rank);
+    } else {
+        dtkInfo() <<  "Controller is already connection to server " << cluster;
     }
+
     if (controller->submit(cluster, job_data)) {
         QEventLoop loop;
         this->connect(controller, SIGNAL(jobQueued(QString)), this, SLOT(onJobQueued(QString)),Qt::DirectConnection);

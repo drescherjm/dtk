@@ -187,9 +187,9 @@ void dtkComposerEvaluatorSlave::run(void)
             d->status = 1;
             return;
         } else
-            dtkDebug() << "Ok, data received, parse" ;
+            dtkDebug() << "Ok, data received on composition socket, parse" ;
 
-        msg.reset();
+        msg.reset(new dtkDistributedMessage);
         msg->parse(d->composition_socket);
         if (msg->type() == "xml") {
             new_composition = true;
@@ -247,23 +247,28 @@ void dtkComposerEvaluatorSlave::run(void)
             }
         }
         dtkDebug() << "run composition" ;
+        if (QThread::currentThread() == qApp->thread()) {
+            dtkTrace() << "running on main thread, create a thread for the evaluator"  ;
+            QThread *workerThread = new QThread(this);
+            QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
+            QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
 
-        QThread *workerThread = new QThread(this);
-        QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
-        QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
+            QEventLoop loop;
+            loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
+            loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
 
-        QEventLoop loop;
-        loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
-        loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+            this->socket()->moveToThread(workerThread);
+            workerThread->start();
 
-        this->socket()->moveToThread(workerThread);
-        workerThread->start();
+            loop.exec();
 
-        loop.exec();
+            workerThread->wait();
+            workerThread->deleteLater();
+        } else {
+            dtkTrace() << "running on dedicated thread,run the evaluator" ;
+            d->evaluator->run_static();
+        }
 
-        workerThread->wait();
-        workerThread->deleteLater();
-        // d->evaluator->run_static();
         dtkDebug() << "finished" ;
 
     } else {

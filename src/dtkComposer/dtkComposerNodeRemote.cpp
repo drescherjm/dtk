@@ -199,7 +199,7 @@ void dtkComposerNodeRemote::begin(void)
                 }
                 msg.reset(new dtkDistributedMessage);
                 msg->parse(d->slave->socket());
-                t->clearData()
+                t->clearData();
                 t->enableEmitter();
                 t->setVariant(msg->variant());
 
@@ -210,6 +210,7 @@ void dtkComposerNodeRemote::begin(void)
                 dtkDebug() << "receive data from rank 0";
                 d->communicator->broadcast(variant, 0);
                 dtkDebug() << "data received, set";
+                t->clearData();
                 t->enableEmitter();
                 t->setVariant(variant);
             }
@@ -246,6 +247,7 @@ void dtkComposerNodeRemote::end(void)
                     dtkDebug() << "Ok, data received for transmitter, parse" ;
             }
             msg->parse(d->socket);
+            t->clearData();
             t->enableEmitter();
             t->setVariant(msg->variant());
         }

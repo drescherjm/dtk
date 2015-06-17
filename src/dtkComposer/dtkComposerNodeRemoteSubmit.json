@@ -5,7 +5,18 @@
            "tags" : ["remote", "distributed", "world", "network", "submit"],
     "description" : "<h3>Remote Submit Node</h3>
                      <p>The <strong>remote submit</strong> node enables to submit a job on a remote cluster/machine.</p>
+                     <p>The inputs are:
+                     <dl>
+                       <dt>cluster:</dt><dd> url of the cluster (e.g. http://nef-devel.inria.fr/)</dd>
+                       <dt>nodes:</dt><dd> number of nodes (default: 1)</dd>
+                       <dt>cores:</dt><dd> number of cores (default: 1)</dd>
+                       <dt>walltime:</dt><dd> walltime of job, HH:MM:SS (optionnal) </dd>
+                       <dt>queuename:</dt><dd> scheduler queue (optionnal)</dd>
+                       <dt>options:</dt><dd> scheduler specific options </dd>
+                       <dt>policy:</dt><dd> dtkDistributed policy qthread, mpi or mpi3 (defaut:qthread) </dd>
+                     </dl>
+                     </p>
                      <p>The output is the jobid.</p>",
-         "inputs" : ["cluster", "nodes", "cores", "walltime", "queuename"],
+         "inputs" : ["cluster", "nodes", "cores", "walltime", "queuename","options" ,"policy"],
         "outputs" : ["jobid"]
 }

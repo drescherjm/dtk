@@ -34,7 +34,6 @@ public:
     void setCount(int count);
     void setServer(QUrl server);
     void setFactory(dtkComposerNodeFactory *factory);
-    void setInternalCommunicator(dtkDistributedCommunicator *communicator);
 
 public:
     void    run(void);

@@ -84,7 +84,7 @@ public:
 #pragma mark Dynamic behaviour
 
 public:
-    void clearData(void);
+    virtual void clearData(void);
 
 public:
     bool isEmpty(void) const;

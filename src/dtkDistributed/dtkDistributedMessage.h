@@ -76,6 +76,7 @@ public:
     qint64         size(void);
     QByteArray &content(void);
     QVariant   &variant(void);
+    QString methodString(void);
 
 public:
     dtkDistributedHeaders headers();

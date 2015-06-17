@@ -1,20 +1,20 @@
-/* dtkComposerNodeLog.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2008-2011 -Nicolas Niclausse , Inria.
- * Created: Mon Feb 27 12:38:46 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerMetaType.h"
 
 #include <dtkLog/dtkLogger.h>
 
@@ -57,14 +57,9 @@ void dtkComposerNodeLogger::run(void)
 
     QStringList identifiers;
     QStringList descriptions;
-    QString str;
     foreach (QVariant v, list) {
         identifiers << v.typeName();
-        QDataStream ds;
-        ds << v;
-        ds >> str;
-        descriptions << str;
-        str.clear();
+        descriptions << qPrintable(dtkMetaType::description(v));
     }
 
     for(int i = 0; i < descriptions.count(); ++i) {
@@ -98,3 +93,5 @@ void dtkComposerNodeLogger::run(void)
     }
 }
 
+// 
+// dtkComposerNodeLogger.cpp ends here

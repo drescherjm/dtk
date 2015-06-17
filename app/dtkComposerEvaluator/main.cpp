@@ -96,7 +96,6 @@ int main(int argc, char **argv)
 
     if (parser->isSet(slaveOption)) {
         dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
-        slave->setInternalCommunicator(dtkDistributed::communicator::instance());
         if (!parser->isSet(serverOption)) {
             qCritical() << "Error: no server set when running as slave! Use --server <url> " ;
             return 1;

@@ -1,21 +1,18 @@
-/* dtkComposerNodeLogger.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: Mon Mar 26 12:40:45 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODELOGGER_H
-#define DTKCOMPOSERNODELOGGER_H
+// Code:
 
+#pragma once
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -34,4 +31,5 @@ private:
     dtkComposerNodeLoggerPrivate *d;
 };
 
-#endif
+// 
+// dtkComposerNodeLogger.h ends here

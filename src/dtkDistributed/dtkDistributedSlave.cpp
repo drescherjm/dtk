@@ -31,7 +31,7 @@ public:
 
 dtkDistributedSlave::dtkDistributedSlave(void) : d(new dtkDistributedSlavePrivate)
 {
-    d->socket = new QTcpSocket;
+    d->socket = NULL;
 }
 
 dtkDistributedSlave::dtkDistributedSlave(QTcpSocket *socket) : d(new dtkDistributedSlavePrivate)
@@ -94,6 +94,9 @@ void dtkDistributedSlave::connectFromJob(const QUrl& server)
 
 void dtkDistributedSlave::connect(const QUrl& server)
 {
+    if (!d->socket) {
+        d->socket = new QTcpSocket;
+    }
     d->socket->connectToHost(server.host(), server.port());
 
     if(d->socket->waitForConnected()) {

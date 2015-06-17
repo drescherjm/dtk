@@ -214,9 +214,11 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
         }
 
         args << path;
+        args << "-nw";
         args << "-p";
         args << QString::number(port);
-        args << "-type "+ type;
+        args << "-type ";
+        args << type;
 
         serverProc->start("ssh", args);
 
@@ -300,6 +302,7 @@ QTcpSocket *dtkDistributedController::socket(const QString& jobid)
 
 bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool set_rank)
 {
+
     if(!d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = new QTcpSocket(this);
@@ -308,7 +311,11 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool
 
         key = server.host();
 
-        int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
+
+        if (server.port() == -1) {
+            const_cast<QUrl&>(server).setPort(dtkDistributedController::defaultPort());
+        }
+        int port = server.port();
 
         if (ssh_tunnel)
             socket->connectToHost("localhost", port);

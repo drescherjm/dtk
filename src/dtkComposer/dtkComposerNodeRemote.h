@@ -72,7 +72,7 @@ private:
 
 class dtkComposerNodeRemoteSubmitPrivate;
 
-class  dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
 {
     Q_OBJECT
 

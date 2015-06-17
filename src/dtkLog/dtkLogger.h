@@ -27,7 +27,8 @@ public:
     static dtkLogger& instance(void);
 
 public:
-    dtkLog::Level level(void) const;
+    dtkLog::Level       level(void) const;
+    QString       levelString(void) const;
 
 public:
     void setLevel(dtkLog::Level level);

@@ -29,6 +29,19 @@ dtkLog::Level dtkLogger::level(void) const
     return d->level;
 }
 
+QString dtkLogger::levelString(void) const
+{
+    switch (d->level) {
+    case dtkLog::Trace: return "trace";
+    case dtkLog::Debug: return "debug";
+    case dtkLog::Info:  return "info";
+    case dtkLog::Warn:  return "warn";
+    case dtkLog::Error: return "error";
+    case dtkLog::Fatal: return "fatal";
+    default:            return "info";
+    };
+}
+
 void dtkLogger::setLevel(dtkLog::Level level)
 {
     d->level = level;

@@ -371,10 +371,6 @@ void dtkComposerNodeRemoteSubmit::run(void)
     else
         resources.insert("nodes", nodes);
 
-    if (nodes * cores > 1){
-        slaveOptions += " -np " + QString::number(nodes * cores);
-    }
-
     if (!d->policy.isEmpty()) {
         slaveOptions += " --policy " + d->policy.data();
     }
@@ -389,7 +385,7 @@ void dtkComposerNodeRemoteSubmit::run(void)
     if (!d->queuename.isEmpty())
         job.insert("queue", d->queuename.data());
 
-    job.insert("application", d->slaveName+" --logfile console --loglevel trace " + slaveOptions);
+    job.insert("application", d->slaveName+" --loglevel "+ dtkLogger::instance().levelString()+ slaveOptions);
 
     QByteArray job_data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
     dtkTrace() << " submit job with parameters: "<< job_data;

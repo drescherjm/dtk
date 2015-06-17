@@ -1,22 +1,22 @@
-/* dtkComposerNodeLog.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2008-2011 -Nicolas Niclausse , Inria.
- * Created: Mon Feb 27 12:38:46 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
-#include "dtkComposerMetaType.h"
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodePrint.h"
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
+
+#include "dtkComposerMetaType.h"
 
 #include <iostream>
 
@@ -52,3 +52,6 @@ void dtkComposerNodePrint::run(void)
     }
 }
 
+
+// 
+// dtkComposerNodePrint.cpp ends here

@@ -1,20 +1,18 @@
-/* dtkComposerNodePrint.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: Mon Mar 26 12:40:45 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODEPRINT_H
-#define DTKCOMPOSERNODEPRINT_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerExport.h"
 #include "dtkComposerNodeLeaf.h"
@@ -34,4 +32,5 @@ private:
     dtkComposerNodePrintPrivate *d;
 };
 
-#endif
+// 
+// dtkComposerNodePrint.h ends here

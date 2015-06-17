@@ -20,6 +20,24 @@
 #include "dtkCoreExport.h"
 
 // ///////////////////////////////////////////////////////////////////
+// DTK_OBJECT_TEMPLATE
+// ///////////////////////////////////////////////////////////////////
+
+#define DTK_OBJECT_TEMPLATE                                                     \
+    public:                                                                     \
+        template <typename ThisObject>                                          \
+        void qt_check_for_QOBJECT_macro(const ThisObject &_q_argument) const    \
+        { int i = qYouForgotTheQ_OBJECT_Macro(this, &_q_argument); i = i + 1; } \
+                                                                                \
+        template <typename ThisObject>                                          \
+        int qYouForgotTheQ_OBJECT_Macro(ThisObject, ThisObject) { return 0; }   \
+                                                                                \
+        template <typename ThisObject1, typename ThisObject2>                   \
+        void qYouForgotTheQ_OBJECT_Macro(ThisObject1, ThisObject2) {}           \
+                                                                                \
+        virtual int qt_metacall(QMetaObject::Call, int, void **) { return 0; }
+
+// ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_OBJECT
 // ///////////////////////////////////////////////////////////////////
 

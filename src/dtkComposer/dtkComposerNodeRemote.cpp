@@ -304,6 +304,7 @@ public:
     dtkComposerTransmitterReceiver<QString> queuename;
     dtkComposerTransmitterReceiver<QString> application;
     dtkComposerTransmitterReceiver<QString> options;
+    dtkComposerTransmitterReceiver<QString> policy;
 
 public:
     QString slaveName;
@@ -317,6 +318,7 @@ dtkComposerNodeRemoteSubmit::dtkComposerNodeRemoteSubmit(void) : dtkComposerNode
     this->appendReceiver(&(d->walltime));
     this->appendReceiver(&(d->queuename));
     this->appendReceiver(&(d->options));
+    this->appendReceiver(&(d->policy));
 
     d->slaveName = "dtkComposerEvaluator --slave";
     this->appendEmitter(&(d->id));
@@ -354,16 +356,28 @@ void dtkComposerNodeRemoteSubmit::run(void)
         dtkDebug() << "new cluster url" << cluster.toString() ;
     }
 
+    qlonglong nodes = d->nodes.data();
+    qlonglong cores = d->cores.data();
+
+    QString slaveOptions = " --server "+cluster.toString();
 
     if (d->cores.isEmpty())
         resources.insert("cores", 1);
     else
-        resources.insert("cores", d->cores.data());
+        resources.insert("cores", cores);
 
     if (d->nodes.isEmpty())
         resources.insert("nodes", 1);
     else
-        resources.insert("nodes", d->nodes.data());
+        resources.insert("nodes", nodes);
+
+    if (nodes * cores > 1){
+        slaveOptions += " -np " + QString::number(nodes * cores);
+    }
+
+    if (!d->policy.isEmpty()) {
+        slaveOptions += " --policy " + d->policy.data();
+    }
 
     job.insert("resources", resources);
 
@@ -375,8 +389,7 @@ void dtkComposerNodeRemoteSubmit::run(void)
     if (!d->queuename.isEmpty())
         job.insert("queue", d->queuename.data());
 
-    job.insert("properties", QVariantMap());
-    job.insert("application", d->slaveName+" --logfile console --loglevel trace --server "+cluster.toString());
+    job.insert("application", d->slaveName+" --logfile console --loglevel trace " + slaveOptions);
 
     QByteArray job_data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
     dtkTrace() << " submit job with parameters: "<< job_data;

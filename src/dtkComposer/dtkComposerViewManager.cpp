@@ -58,7 +58,8 @@ dtkComposerViewManager::dtkComposerViewManager(QWidget *parent) : QFrame(parent)
     // Behaviour
 
     connect(d->view_layout, SIGNAL(focused(dtkComposerViewWidget *)), this, SIGNAL(focused(dtkComposerViewWidget *)));
-    // connect(d->view_layout, SIGNAL(unfocused(dtkComposerViewWidget *)), this, SLOT());
+    connect(d->view_layout, SIGNAL(focused(dtkComposerViewWidget *)), this, SLOT(onViewFocused(dtkComposerViewWidget *)));
+    connect(d->view_layout, SIGNAL(unfocused(dtkComposerViewWidget *)), this, SLOT(onViewUnfocused(dtkComposerViewWidget *)));
 }
 
 dtkComposerViewManager::~dtkComposerViewManager(void)
@@ -81,6 +82,14 @@ void dtkComposerViewManager::onViewFocused(dtkComposerViewWidget *widget)
 
     d->view_inspector->addWidget(widget->inspector());
     d->view_inspector->setCurrentWidget(widget->inspector());
+}
+
+void dtkComposerViewManager::onViewUnfocused(dtkComposerViewWidget *widget)
+{
+    if(!widget->inspector())
+        return;
+
+    d->view_inspector->removeWidget(widget->inspector());
 }
 
 //

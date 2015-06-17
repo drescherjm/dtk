@@ -1,21 +1,16 @@
-/* dtkComposerNodeView.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Apr 24 23:27:14 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Apr 11 10:57:42 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 17
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -52,3 +47,6 @@ public:
 private:
     dtkComposerNodeViewPrivate *d;
 };
+
+//
+// dtkComposerNodeView.h ends here

@@ -1,21 +1,16 @@
-/* dtkComposerScene.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/01/30 10:11:39
- * Version: $Id$
- * Last-Updated: Thu Apr 11 09:09:29 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 254
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -180,3 +175,6 @@ protected slots:
 private:
     dtkComposerScenePrivate *d;
 };
+
+//
+// dtkComposerScene.h ends here

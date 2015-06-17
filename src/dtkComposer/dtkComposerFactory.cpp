@@ -26,6 +26,7 @@
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeRange.h"
 #include "dtkComposerNodeMetaContainer.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
@@ -116,6 +117,7 @@ void dtkComposerFactory::initNodeNumber(void)
 {
     this->record(":dtkComposer/dtkComposerNodeInteger.json", dtkComposerNodeCreator<dtkComposerNodeInteger>);
     this->record(":dtkComposer/dtkComposerNodeReal.json", dtkComposerNodeCreator<dtkComposerNodeReal>);
+    this->record(":dtkComposer/dtkComposerNodeRange.json", dtkComposerNodeCreator<dtkComposerNodeRange>);
 
     // -- Unary operators
 

@@ -37,6 +37,7 @@ public slots:
 
 public slots:
     void onViewFocused(dtkComposerViewWidget *widget);
+    void onViewUnfocused(dtkComposerViewWidget *widget);
 
 private:
     dtkComposerViewManagerPrivate *d;

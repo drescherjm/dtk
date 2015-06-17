@@ -1,16 +1,16 @@
-/* dtkComposerNodeBoolean.h --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -38,3 +38,6 @@ public:
 private:
     dtkComposerNodeBooleanPrivate *d;
 };
+
+//
+// dtkComposerNodeBoolean.h ends here

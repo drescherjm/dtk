@@ -15,10 +15,9 @@
 #pragma once
 
 #include "dtkComposerExport.h"
+#include "dtkComposerNode.h"
 
 #include <dtkCore/dtkCorePluginFactory.h>
-
-#include "dtkComposerNode.h"
 
 class dtkComposerNodeFactoryPrivate;
 class dtkComposerNodeMetaData;

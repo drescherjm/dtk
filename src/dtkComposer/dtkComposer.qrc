@@ -34,6 +34,7 @@
         <file>dtkComposerNodeFileWrite.json</file>
         <file>dtkComposerNodeDirectory.json</file>
         <file>dtkComposerNodeFileList.json</file>
+        <file>dtkComposerNodeRange.json</file>
         <file>dtkComposerNodeNumberOperatorUnaryAbs.json</file>
         <file>dtkComposerNodeNumberOperatorUnarySqrt.json</file>
         <file>dtkComposerNodeNumberOperatorUnarySquare.json</file>

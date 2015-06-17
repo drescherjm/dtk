@@ -12,6 +12,7 @@
 
 // Code:
 
+#include "dtkComposerViewController.h"
 #include "dtkComposerViewLayout.h"
 #include "dtkComposerViewLayoutItem.h"
 #include "dtkComposerViewWidget.h"
@@ -161,7 +162,7 @@ void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
     this->layout()->addWidget(view->widget());
 
     d->view = view;
-    d->view->show();
+    // d->view->show();
 
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
@@ -696,15 +697,8 @@ void dtkComposerViewLayoutItem::dropEvent(QDropEvent *event)
     if(d->proxy->view())
         return;
 
-// /////////////////////////////////////////////////////////////////
-//
-// /////////////////////////////////////////////////////////////////
-
-    // dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text());
-
-    // d->proxy->setView(view);
-
-// ///////////////////////////////////////////////////////////
+    dtkComposerViewWidget *view = dtkComposerViewController::instance()->view(event->mimeData()->text());
+    d->proxy->setView(view);
 }
 
 void dtkComposerViewLayoutItem::notify(dtkComposerViewWidget *view)

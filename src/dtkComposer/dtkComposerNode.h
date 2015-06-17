@@ -18,7 +18,6 @@
 
 #include <QtCore>
 
-class QWidget;
 class dtkComposerNodePrivate;
 class dtkComposerTransmitter;
 class dtkComposerNodeMetaData;

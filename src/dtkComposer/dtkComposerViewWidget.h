@@ -26,6 +26,10 @@ public:
      dtkComposerViewWidget(void);
     ~dtkComposerViewWidget(void);
 
+signals:
+    void   focused(void);
+    void unfocused(void);
+
 public:
     virtual QWidget *widget(void);
     virtual QWidget *inspector(void);

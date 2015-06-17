@@ -291,6 +291,14 @@ void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
     stream >> v;
 }
 
+void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag, dtkDistributedCommunicatorStatus &status)
+{
+    QByteArray bytes;
+    this->receive(bytes, target, tag, status);
+    QDataStream stream(&bytes,QIODevice::ReadOnly);
+    stream >> v;
+}
+
 dtkDistributedRequest *dtkDistributedCommunicator::ireceive(bool *data, qint64 size, qint32 source, int tag)
 {
     return this->ireceive(data, size, QMetaType::Bool, source, tag);

@@ -114,6 +114,7 @@ public:
     void receive(char   *data, qint64 size, qint32 source, qint32 tag);
     virtual void receive(QByteArray &v,qint32 source, qint32 tag) = 0 ;
     virtual void receive(QByteArray &v,qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
+    virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status);
     virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
 
     virtual dtkDistributedRequest *ireceive(void   *data, qint64 size, QMetaType::Type dataType, qint32 source, int tag) = 0;

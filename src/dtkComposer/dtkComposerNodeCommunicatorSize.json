@@ -1,0 +1,11 @@
+{
+          "title" : "Comm Size",
+           "kind" : "atomic",
+           "type" : "communicatorSize",
+           "tags" : ["remote", "distributed", "communicator", "network", "size"],
+    "description" : "<h3>Communicator Size Node</h3>
+                     <p>This node should be put in a Remote or Spawn node only.</p>
+                     <p>The output is the size of the communicator.</p>",
+         "inputs" : [],
+        "outputs" : ["size"]
+}

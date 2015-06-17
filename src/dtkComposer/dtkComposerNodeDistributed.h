@@ -17,81 +17,11 @@
  *
  */
 
-#ifndef DTKCOMPOSERNODEDISTRIBUTED_H
-#define DTKCOMPOSERNODEDISTRIBUTED_H
-
+#pragma once
 
 #include "dtkComposerExport.h"
 
 #include "dtkComposerNodeLeaf.h"
-
-// /////////////////////////////////////////////////////////////////
-// Distributed communicator init
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeCommunicatorInitPrivate;
-
-class DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorInit : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeCommunicatorInit(void);
-    ~dtkComposerNodeCommunicatorInit(void);
-
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorInit";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator Init";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-protected:
-    dtkComposerNodeCommunicatorInitPrivate *d;
-};
-
-// /////////////////////////////////////////////////////////////////
-// Distributed communicator uninitialize
-// /////////////////////////////////////////////////////////////////
-
-class dtkComposerNodeCommunicatorUninitializePrivate;
-
-class  DTKCOMPOSER_EXPORT dtkComposerNodeCommunicatorUninitialize : public dtkComposerNodeLeaf
-{
-public:
-     dtkComposerNodeCommunicatorUninitialize(void);
-    ~dtkComposerNodeCommunicatorUninitialize(void);
-
-public:
-    void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorUninitialize";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator Uninitialize";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
-protected:
-    dtkComposerNodeCommunicatorUninitializePrivate *d;
-};
-
-
 
 // /////////////////////////////////////////////////////////////////
 // Distributed communicator rank
@@ -107,20 +37,6 @@ public:
 
 public:
     void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorRank";
-    }
-
-    inline QString titleHint(void) {
-        return "CommunicatorRank";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
 
 protected:
     dtkComposerNodeCommunicatorRankPrivate *d;
@@ -142,20 +58,6 @@ public:
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "communicatorSize";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator Size";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "value";
-    }
-
 protected:
     dtkComposerNodeCommunicatorSizePrivate *d;
 };
@@ -175,34 +77,6 @@ public:
 
 public:
     void run(void);
-
-public:
-    inline QString type(void) {
-        return "communicatorSend";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator Send";
-    }
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "communicator";
-        else if (port == 1)
-            return "data";
-        else if (port == 2)
-            return "target rank";
-        else if (port == 3)
-            return "tag";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int) {
-        return "communicator";
-    }
 
 protected:
     dtkComposerNodeCommunicatorSendPrivate *d;
@@ -226,47 +100,7 @@ public:
 public:
     void run(void);
 
-public:
-    inline QString type(void) {
-        return "communicatorReceive";
-    }
-
-    inline QString titleHint(void) {
-        return "Communicator Receive";
-    }
-
-
-public:
-    inline QString inputLabelHint(int port) {
-        if (port == 0)
-            return "communicator";
-        else if (port == 1)
-            return "source rank";
-        else if (port == 2)
-            return "tag";
-        else if (port == 3)
-            return "data";
-        else
-            return "value";
-    }
-
-public:
-    inline QString outputLabelHint(int port) {
-        if (port == 0)
-            return "data";
-        else if (port == 1)
-            return "source";
-        else if (port == 2)
-            return "tag";
-        else
-            return "value";
-    }
-
 protected:
     dtkComposerNodeCommunicatorReceivePrivate *d;
 };
-
-
-
-#endif /* DTKCOMPOSERNODEDISTRIBUTED_H */
 

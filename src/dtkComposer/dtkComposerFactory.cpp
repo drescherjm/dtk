@@ -24,6 +24,7 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeRange.h"
@@ -75,9 +76,13 @@ void dtkComposerFactory::initNodeBase(void)
 
 void dtkComposerFactory::initNodeDistributed(void)
 {
-    this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
-    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",   dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
-    this->record(":dtkComposer/dtkComposerNodeSpawn.json",   dtkComposerNodeCreator<dtkComposerNodeSpawn>);
+    this->record(":dtkComposer/dtkComposerNodeRemote.json",             dtkComposerNodeCreator<dtkComposerNodeRemote>);
+    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",       dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
+    this->record(":dtkComposer/dtkComposerNodeSpawn.json",              dtkComposerNodeCreator<dtkComposerNodeSpawn>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorRank.json",   dtkComposerNodeCreator<dtkComposerNodeCommunicatorRank>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorSize.json",   dtkComposerNodeCreator<dtkComposerNodeCommunicatorSize>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorSend.json",   dtkComposerNodeCreator<dtkComposerNodeCommunicatorSend>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorReceive.json",dtkComposerNodeCreator<dtkComposerNodeCommunicatorReceive>);
 }
 
 void dtkComposerFactory::initNodeConstants(void)

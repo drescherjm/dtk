@@ -1,0 +1,19 @@
+{
+          "title" : "Send",
+           "kind" : "atomic",
+           "type" : "communicatorSend",
+           "tags" : ["remote", "distributed", "communicator", "network", "send"],
+    "description" : "<h3>Communicator Send Node</h3>
+                     <p>This node should be put in a Remote or Spawn node only.</p>
+                     <p>The inputs are
+                     <dl>
+                       <dt><b>data</b></dt><dd> data to be sent</dd>
+                       <dt><b>target rank<b></dt><dd> Rank of the target (receiver)</dd>
+                       <dt><i>tag</i></dt><dd> message tag (optionnal)</dd>
+                       <dt><i>socket</i></dt><dd> send message in given socket instead of communicator (optionnal)</dd>
+                     </dl>
+                     </p>
+                     <p>The output is the status of the send execution (true if successful).</p>",
+         "inputs" : ["data","target rank", "tag","socket"],
+        "outputs" : ["status"]
+}

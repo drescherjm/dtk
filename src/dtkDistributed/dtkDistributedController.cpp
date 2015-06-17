@@ -193,6 +193,15 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
 {
     dtkDebug() << "deploy" << server << type << ssh_tunnel << path;
 
+    // test if we can connect to server, if true, it means the server is deployed: do nothing and disconnect
+    if (connect(server, false, false, false)) {
+        // can connect, server already deployed
+        QTcpSocket *socket = d->sockets.value(server.toString());
+        socket->disconnectFromHost();
+        dtkDebug() << "server" << server << "is already deployed, skip";
+        return true;
+   }
+
     if(!d->servers.keys().contains(server.toString())) {
         int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
         QProcess *serverProc = new QProcess (this);
@@ -300,7 +309,7 @@ QTcpSocket *dtkDistributedController::socket(const QString& jobid)
     return NULL;
 }
 
-bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool set_rank)
+bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool set_rank, bool emit_connected)
 {
 
     if(!d->sockets.keys().contains(server.toString())) {
@@ -329,7 +338,8 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool
 
             d->sockets.insert(server.toString(), socket);
 
-            emit connected(server);
+            if (emit_connected)
+                emit connected(server);
 
             if (set_rank) {
                 dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,"",dtkDistributedMessage::CONTROLLER_RANK);

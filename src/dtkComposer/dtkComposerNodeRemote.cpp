@@ -397,8 +397,12 @@ void dtkComposerNodeRemoteSubmit::run(void)
         dtkDistributedSettings settings;
         bool use_tunnel = settings.use_ssh_tunnel(cluster);
         bool register_rank = true;
-        controller->deploy(cluster, settings.server_type(cluster), use_tunnel , settings.path(cluster) );
-        controller->connect(cluster, use_tunnel, register_rank);
+        if (controller->deploy(cluster, settings.server_type(cluster), use_tunnel , settings.path(cluster) )) {
+            controller->connect(cluster, use_tunnel, register_rank);
+        } else {
+            dtkError() <<  "Unable to deploy server" << cluster;
+            return;
+        }
     } else {
         dtkInfo() <<  "Controller is already connection to server " << cluster;
     }
@@ -413,7 +417,7 @@ void dtkComposerNodeRemoteSubmit::run(void)
         dtkTrace() <<  "event loop ended, job is queued";
 
     } else
-        dtkWarn() <<  "failed to submit ";
+        dtkError() <<  "failed to submit ";
 }
 
 void dtkComposerNodeRemoteSubmit::onJobQueued(const QString& job_id)

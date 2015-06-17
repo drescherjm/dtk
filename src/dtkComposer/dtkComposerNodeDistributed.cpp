@@ -130,11 +130,10 @@ dtkComposerNodeCommunicatorSend::dtkComposerNodeCommunicatorSend(void) : dtkComp
     d->communicator = NULL;
     d->socket       = NULL;
     d->receiver_socket.setDataTransmission(dtkComposerTransmitter::Reference);
-    this->appendReceiver(&(d->receiver_socket));
     this->appendReceiver(&(d->receiver_data));
-
     this->appendReceiver(&(d->receiver_target));
     this->appendReceiver(&(d->receiver_tag));
+    this->appendReceiver(&(d->receiver_socket));
 
     this->appendEmitter(&(d->emitter));
 }

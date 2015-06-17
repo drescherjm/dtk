@@ -17,6 +17,7 @@
  *
  */
 
+#include <dtkConfig.h>
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNode.h"
@@ -146,6 +147,7 @@ dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
         return dtkComposerGraphNode::successors();
     }
 #else
+    dtkInfo() << "Remote node without distributed support !" ;
     return dtkComposerGraphNode::successors();
 #endif
 }

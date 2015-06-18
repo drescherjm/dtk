@@ -23,6 +23,9 @@ public:
      dtkComposerNodeRange(void);
     ~dtkComposerNodeRange(void);
 
+public slots:
+    void setValue(int);
+
 public:
     void run(void);
 

@@ -17,23 +17,33 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
-#include <QtWidgets>
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRangeWidget
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeRangeWidget::dtkComposerNodeRangeWidget(QWidget *parent) : QWidget(parent)
 {
-    QDial *dial = new QDial(this);
+    m_dial = new QDial(this);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(dial);
+    layout->addWidget(m_dial);
+
+    connect(m_dial, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
 }
 
 dtkComposerNodeRangeWidget::~dtkComposerNodeRangeWidget(void)
 {
 
+}
+
+void dtkComposerNodeRangeWidget::setMinValue(int value)
+{
+    m_dial->setMinimum(value);
+}
+
+void dtkComposerNodeRangeWidget::setMaxValue(int value)
+{
+    m_dial->setMaximum(value);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -49,6 +59,9 @@ dtkComposerNodeRangeInspector::dtkComposerNodeRangeInspector(QWidget *parent) : 
     layout->addWidget(min);
     layout->addWidget(max);
     layout->addStretch();
+
+    connect(min, SIGNAL(valueChanged(int)), this, SIGNAL(minValueChanged(int)));
+    connect(max, SIGNAL(valueChanged(int)), this, SIGNAL(maxValueChanged(int)));
 }
 
 dtkComposerNodeRangeInspector::~dtkComposerNodeRangeInspector(void)
@@ -64,6 +77,9 @@ dtkComposerNodeRangeViewWidget::dtkComposerNodeRangeViewWidget(void)
 {
     m_widget = new dtkComposerNodeRangeWidget;
     m_inspector = new dtkComposerNodeRangeInspector;
+
+    connect(m_inspector, SIGNAL(minValueChanged(int)), m_widget, SLOT(setMinValue(int)));
+    connect(m_inspector, SIGNAL(maxValueChanged(int)), m_widget, SLOT(setMaxValue(int)));
 }
 
 dtkComposerNodeRangeViewWidget::~dtkComposerNodeRangeViewWidget(void)
@@ -115,6 +131,11 @@ dtkComposerNodeRange::dtkComposerNodeRange(void)
 dtkComposerNodeRange::~dtkComposerNodeRange(void)
 {
     delete d;
+}
+
+void dtkComposerNodeRange::setValue(int value)
+{
+    d->val = value;
 }
 
 void dtkComposerNodeRange::run(void)

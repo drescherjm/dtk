@@ -16,6 +16,8 @@
 
 #include "dtkComposerViewWidget.h"
 
+#include <QtWidgets>
+
 class dtkComposerNodeRangeWidget : public QWidget
 {
     Q_OBJECT
@@ -23,6 +25,16 @@ class dtkComposerNodeRangeWidget : public QWidget
 public:
      dtkComposerNodeRangeWidget(QWidget *parent = 0);
     ~dtkComposerNodeRangeWidget(void);
+
+signals:
+    void valueChanged(int);
+
+public slots:
+    void setMinValue(int);
+    void setMaxValue(int);
+
+private:
+    QDial *m_dial;
 };
 
 class dtkComposerNodeRangeInspector : public QWidget
@@ -32,6 +44,10 @@ class dtkComposerNodeRangeInspector : public QWidget
 public:
      dtkComposerNodeRangeInspector(QWidget *parent = 0);
     ~dtkComposerNodeRangeInspector(void);
+
+signals:
+    void minValueChanged(int);
+    void maxValueChanged(int);
 };
 
 class dtkComposerNodeRangeViewWidget : public dtkComposerViewWidget

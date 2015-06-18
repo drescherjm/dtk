@@ -222,6 +222,7 @@ dtkComposerNodeCommunicatorReceive::dtkComposerNodeCommunicatorReceive(void) : d
 
     d->source = 0;
     d->tag    = 0;
+    d->communicator = NULL;
 
 }
 

@@ -195,11 +195,9 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
 
     // test if we can connect to server, if true, it means the server is deployed: do nothing and disconnect
     if (connect(server, false, false, false)) {
-        // can connect, server already deployed
-        QTcpSocket *socket = d->sockets.value(server.toString());
-        socket->disconnectFromHost();
-        dtkDebug() << "server" << server << "is already deployed, skip";
-        return true;
+        // can connect, server already deployed by someone else
+        dtkInfo() << "server" << server << "is already deployed, restart server";
+        stop(server);
    }
 
     if(!d->servers.keys().contains(server.toString())) {

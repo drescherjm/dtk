@@ -1,0 +1,9 @@
+{
+          "title" : "Any Source",
+           "kind" : "atomic",
+           "type" : "anySource",
+           "tags" : ["constant", "distributed", "remote", "network", "any" , "message"],
+    "description" : "<p>Rank of ANY source (like MPI_ANY_SOURCE ). Can be used to receive a message from any source.</p>",
+         "inputs" : [],
+        "outputs" : ["value"]
+}

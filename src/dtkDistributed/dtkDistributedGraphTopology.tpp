@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -22,13 +22,15 @@
 // dtkDistributedGraphTopologyVertex inline methods
 // /////////////////////////////////////////////////////////////////
 
-inline void dtkDistributedGraphTopologyVertex::init(void) 
-{ 
+inline void dtkDistributedGraphTopologyVertex::init(void)
+{
     qlonglong l_id = g->m_neighbour_count->mapper()->globalToLocal(m_id, g->wid());
+
     c_it = g->m_neighbour_count->cbegin();
     c_it += l_id;
     v_it = g->m_vertex_to_edge->cbegin();
     v_it += l_id;
+
     if (v_it !=  g->m_vertex_to_edge->cend()) {
         l_id = g->m_edge_to_vertex->mapper()->globalToLocal(*v_it, g->wid());
         n_it = g->m_edge_to_vertex->cbegin();
@@ -46,15 +48,15 @@ inline void dtkDistributedGraphTopologyVertex::advance(void)
     ++c_it;
     ++v_it;
 }
-        
+
 inline void dtkDistributedGraphTopologyVertex::advance(qlonglong j)
-{ 
+{
     Q_ASSERT(c_it + j <= g->m_neighbour_count->end());
     for(qlonglong i = 0; i < j; ++i) {
         n_it += *c_it;
         ++c_it;
         ++v_it;
-    }            
+    }
 }
 
 inline void dtkDistributedGraphTopologyVertex::rewind(void)
@@ -64,9 +66,9 @@ inline void dtkDistributedGraphTopologyVertex::rewind(void)
     --c_it;
     n_it -= *c_it;
 }
-        
+
 inline void dtkDistributedGraphTopologyVertex::rewind(qlonglong j)
-{ 
+{
     Q_ASSERT(c_it - j >= g->m_neighbour_count->begin());
     for(qlonglong i = j; i >= 0; --i) {
         --v_it;
@@ -162,19 +164,19 @@ inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::cbegin
     return iterator(*this, this->m_mapper->firstIndex(this->wid()));
 }
 
-inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::cend(void) const 
-{ 
-    return iterator(*this, this->m_mapper->lastIndex(this->wid()) + 1); 
-}
-
-inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::begin(void) const 
-{ 
-    return iterator(*this, this->m_mapper->firstIndex(this->wid())); 
-}
-
-inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::end(void) const 
+inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::cend(void) const
 {
-    return iterator(*this, this->m_mapper->lastIndex(this->wid()) + 1); 
+    return iterator(*this, this->m_mapper->lastIndex(this->wid()) + 1);
+}
+
+inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::begin(void) const
+{
+    return iterator(*this, this->m_mapper->firstIndex(this->wid()));
+}
+
+inline dtkDistributedGraphTopology::iterator dtkDistributedGraphTopology::end(void) const
+{
+    return iterator(*this, this->m_mapper->lastIndex(this->wid()) + 1);
 }
 
 inline void dtkDistributedGraphTopology::stats(void) const
@@ -305,6 +307,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     m_comm->barrier();
 
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edges_count);
+    m_vertex_to_edge->setAt(m_vertex_to_edge->size() - 1, edges_count);
 
     if (values) {
         dtkTrace() << "init values vector";
@@ -579,5 +582,5 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     return true;
 }
 
-// 
+//
 // dtkDistributedGraphTopology.tpp ends here

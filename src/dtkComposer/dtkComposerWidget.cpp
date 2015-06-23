@@ -81,7 +81,7 @@ void dtkComposerWidgetPrivate::onRequestFinished(QNetworkReply *reply)
 
 dtkComposerWidget::dtkComposerWidget(QWidget *parent) : QWidget(parent), d(new dtkComposerWidgetPrivate)
 {
-    d->factory = new dtkComposerFactory;
+    d->factory = dtkComposerFactory::instance();
     d->graph = new dtkComposerGraph;
     d->stack = new dtkComposerStack;
     d->scene = new dtkComposerScene;

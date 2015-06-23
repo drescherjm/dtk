@@ -320,7 +320,11 @@ dtkComposerNodeRemoteSubmit::dtkComposerNodeRemoteSubmit(void) : dtkComposerNode
     this->appendReceiver(&(d->options));
     this->appendReceiver(&(d->policy));
 
-    d->slaveName = "dtkComposerEvaluator --slave";
+    dtkDistributedSettings settings;
+    settings.beginGroup("slave");
+    d->slaveName =  settings.value("path").toString();
+    settings.endGroup();
+
     this->appendEmitter(&(d->id));
 
 }
@@ -385,7 +389,7 @@ void dtkComposerNodeRemoteSubmit::run(void)
     if (!d->queuename.isEmpty())
         job.insert("queue", d->queuename.data());
 
-    job.insert("application", d->slaveName+" --loglevel "+ dtkLogger::instance().levelString()+ slaveOptions);
+    job.insert("application", d->slaveName+" --slave --loglevel "+ dtkLogger::instance().levelString()+ slaveOptions);
 
     QByteArray job_data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
     dtkTrace() << " submit job with parameters: "<< job_data;

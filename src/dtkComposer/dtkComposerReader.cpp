@@ -134,7 +134,7 @@ dtkComposerReader::dtkComposerReader(void) : d(new dtkComposerReaderPrivate)
     d->graph = NULL;
 
     d->control = NULL;
-    d->use_gui = true;
+    d->use_gui = (qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
 }
 
 dtkComposerReader::~dtkComposerReader(void)
@@ -161,8 +161,6 @@ void dtkComposerReader::setGraph(dtkComposerGraph *graph)
 
 bool dtkComposerReader::read(const QString& fileName, bool append)
 {
-
-    d->use_gui = (qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
 
     QString content;
 
@@ -193,7 +191,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     QDomDocument document("dtk");
 
     if (!document.setContent(data)) {
-        qDebug()<< "reader: no content"<< data.size();
+        dtkDebug()<< "reader: no content"<< data.size();
         return false;
     }
 

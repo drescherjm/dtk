@@ -34,6 +34,13 @@ public:
     void initNodeNumber (void);
     void initNodeString (void);
     void initNodeContainer(void);
+
+public:
+    static dtkComposerFactory *instance(void);
+
+private:
+    static dtkComposerFactory *s_instance;
+
 };
 
 //

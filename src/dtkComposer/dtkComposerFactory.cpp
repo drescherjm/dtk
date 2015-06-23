@@ -57,6 +57,14 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 }
 
+DTKCOMPOSER_EXPORT dtkComposerFactory *dtkComposerFactory::instance(void)
+{
+    if(!s_instance)
+        s_instance = new dtkComposerFactory;
+
+    return s_instance;
+}
+
 void dtkComposerFactory::initNodeFile(void)
 {
     this->record(":dtkComposer/dtkComposerNodeFile.json", dtkComposerNodeCreator<dtkComposerNodeFile>);
@@ -207,6 +215,8 @@ void dtkComposerFactory::initNodeContainer(void)
     this->record(":dtkComposer/dtkComposerNodeMetaContainerSize.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSize>);
     this->record(":dtkComposer/dtkComposerNodeMetaContainerTakeAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerTakeAt>);
 }
+
+dtkComposerFactory *dtkComposerFactory::s_instance = NULL;
 
 //
 // dtkComposerFactory.cpp ends here

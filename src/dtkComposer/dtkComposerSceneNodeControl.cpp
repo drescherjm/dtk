@@ -212,11 +212,27 @@ void dtkComposerSceneNodeControl::layout(void)
         if (d->header)
             h -= d->header->boundingRect().adjusted(2, 2, -2, -2).height();
 
+    } else {
+        // In case of corrupted former layout, the following code
+        // enables to retrieve a nice layout.
+        h = 0;
+        for(const QRectF& rec : d->sizes) {
+            h += rec.height();
+        }
+        if ( qAbs(h - b * d->sizes.count()) > 0.9) {
+            qreal delta_h = b - h / d->sizes.count();
+            for(QRectF& rec : d->sizes) {
+                rec.setWidth(d->rect.size().width());
+                rec.setHeight(rec.height() + delta_h);
+            }
+        }
     }
-
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-        block->setPos(d->sizes.value(block).topLeft());
-        block->resize(d->sizes.value(block).size());
+    
+    for (auto it = d->sizes.begin(); it != d->sizes.end(); ++it) {
+        const QRectF& rec = *it;
+        dtkComposerSceneNodeComposite *block = it.key();
+        block->setPos(rec.topLeft());
+        block->resize(rec.size());
         block->obfuscate();
         block->layout();
     }
@@ -262,11 +278,9 @@ void dtkComposerSceneNodeControl::resizeBlock(dtkComposerSceneNodeComposite *blo
     if(!d->sizes.keys().contains(block))
         return;
 
-    QRectF rect = d->sizes.value(block);
-    rect.setWidth(rect.width()+dx);
-    rect.setHeight(rect.height()+dy);
-
-    d->sizes[block] = rect;
+    QRectF& rect = d->sizes[block];
+    rect.setWidth( rect.width()  + dx);
+    rect.setHeight(rect.height() + dy);
 }
 
 void dtkComposerSceneNodeControl::moveBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy)
@@ -274,13 +288,17 @@ void dtkComposerSceneNodeControl::moveBlock(dtkComposerSceneNodeComposite *block
     if(!d->sizes.keys().contains(block))
         return;
 
-    QRectF rect = d->sizes.value(block);
-    qreal x = rect.x()+dx;
-    qreal y = rect.y()+dy;
-    qreal w = rect.width()-dx;
-    qreal h = rect.height()-dy;
+    QRectF& rect = d->sizes[block];
 
-    d->sizes[block] = QRectF(x, y, w, h);
+    qreal x = rect.x() + dx;
+    qreal y = rect.y() + dy;
+    qreal w = rect.width()  - dx;
+    qreal h = rect.height() - dy;
+
+    rect.setX(x);
+    rect.setY(y);
+    rect.setWidth(w);
+    rect.setHeight(h);
 }
 
 void dtkComposerSceneNodeControl::resize(qreal width, qreal height)

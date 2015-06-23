@@ -255,10 +255,13 @@ int dtkComposerEvaluatorSlave::exec(void)
         d->communicator_i->receive(composition,0,0);
 
         if (composition != "rerun") {
-            dtkDebug() << "new/changed composition, read" ;
+            dtkDebug() << "new/changed composition, read"  ;
+            dtkDebug() << " composition is " << composition ;
             d->reader->readString(composition);
-        } else
+            dtkDebug() << "read done" ;
+        } else {
             dtkDebug() << "reuse composition" ;
+        }
 
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);

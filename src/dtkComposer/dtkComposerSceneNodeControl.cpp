@@ -1,17 +1,16 @@
-/* dtkComposerSceneNodeControl.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Feb  8 15:53:59 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeControl.h"
@@ -492,3 +491,6 @@ void dtkComposerSceneNodeControl::mouseReleaseEvent(QGraphicsSceneMouseEvent *ev
 
     QGraphicsItem::mouseReleaseEvent(event);
 }
+
+// 
+// dtkComposerSceneNodeControl.cpp ends here

@@ -1,17 +1,16 @@
-/* dtkComposerSceneNodeControl.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Feb  8 15:43:44 2012 (+0100)
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #pragma once
 
@@ -80,3 +79,6 @@ protected:
 private:
     dtkComposerSceneNodeControlPrivate *d;
 };
+
+// 
+// dtkComposerSceneNodeControl.h ends here

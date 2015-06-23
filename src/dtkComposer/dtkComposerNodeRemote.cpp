@@ -388,7 +388,8 @@ void dtkComposerNodeRemoteSubmit::run(void)
     if (!d->queuename.isEmpty())
         job.insert("queue", d->queuename.data());
 
-    job.insert("application", d->slaveName+" --slave --loglevel "+ dtkLogger::instance().levelString()+ slaveOptions);
+//    job.insert("application", d->slaveName+" --slave --loglevel "+ dtkLogger::instance().levelString()+ slaveOptions);
+    job.insert("application", d->slaveName+" --slave --loglevel info ");
 
     QByteArray job_data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
     dtkTrace() << " submit job with parameters: "<< job_data;

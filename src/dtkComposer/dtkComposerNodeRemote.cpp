@@ -20,6 +20,7 @@
 
 #include <dtkDistributed/dtkDistributedController.h>
 #include <dtkDistributed/dtkDistributedCommunicator.h>
+#include <dtkDistributed/dtkDistributedSettings.h>
 #include <dtkDistributed/dtkDistributedSlave.h>
 
 #include <dtkLog/dtkLog.h>

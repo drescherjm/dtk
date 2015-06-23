@@ -126,8 +126,6 @@ void dtkComposerSceneNodeControl::setHeader(dtkComposerSceneNodeLeaf *header)
     d->header->setFlag(QGraphicsItem::ItemIsMovable, false);
     d->header->setFlag(QGraphicsItem::ItemIsSelectable, false);
     d->header->layout();
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeControl::setFooter(dtkComposerSceneNodeLeaf *footer)
@@ -139,8 +137,6 @@ void dtkComposerSceneNodeControl::setFooter(dtkComposerSceneNodeLeaf *footer)
     d->footer->setFlag(QGraphicsItem::ItemIsMovable, false);
     d->footer->setFlag(QGraphicsItem::ItemIsSelectable, false);
     d->footer->layout();
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeControl::addBlock(dtkComposerSceneNodeComposite *block)
@@ -165,8 +161,6 @@ void dtkComposerSceneNodeControl::addBlock(dtkComposerSceneNodeComposite *block)
 
         d->handles << handle;
     }
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeControl::removeBlock(dtkComposerSceneNodeComposite *block)
@@ -184,8 +178,6 @@ void dtkComposerSceneNodeControl::removeBlock(dtkComposerSceneNodeComposite *blo
             handle->setBotBlock(bot);
         }
     }
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeControl::layout(void)
@@ -201,9 +193,9 @@ void dtkComposerSceneNodeControl::layout(void)
 
     qreal h = 0;
     qreal b = (d->rect.size().height()
-              -d->header->boundingRect().adjusted(2, 2, -2, -2).size().height()
-              -d->footer->boundingRect().adjusted(2, 2, -2, -2).size().height())
-              /d->blocks.count();
+               -d->header->boundingRect().adjusted(2, 2, -2, -2).size().height()
+               -d->footer->boundingRect().adjusted(2, 2, -2, -2).size().height())
+              / d->blocks.count();
 
     if (d->header) {
         d->header->setPos(0, 0);
@@ -211,16 +203,18 @@ void dtkComposerSceneNodeControl::layout(void)
         d->header->resize(d->rect.size().width(), h);
     }
 
-    if(d->sizes.empty() || d->sizes.count() != d->blocks.count()) {
+    if (d->sizes.empty() || d->sizes.count() != d->blocks.count()) {
         d->sizes.clear();
         foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
             d->sizes.insert(block, QRectF(0, h, d->rect.size().width(), b));
             h += b;
         }
+        if (d->header)
+            h -= d->header->boundingRect().adjusted(2, 2, -2, -2).height();
+
     }
 
     foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
-        block->layout();
         block->setPos(d->sizes.value(block).topLeft());
         block->resize(d->sizes.value(block).size());
         block->obfuscate();
@@ -230,12 +224,9 @@ void dtkComposerSceneNodeControl::layout(void)
     foreach(dtkComposerSceneNodeHandle *handle, d->handles)
         handle->layout();
 
-    if(d->blocks.count())
-        h = d->blocks.last()->boundingRect().top() + d->blocks.last()->boundingRect().height();
-
     if (d->footer) {
         h = d->footer->boundingRect().adjusted(2, 2, -2, -2).height();
-        d->footer->setPos(0, this->boundingRect().bottom()-h-2);
+        d->footer->setPos(0, this->boundingRect().bottom() - h - 2);
         d->footer->resize(d->rect.size().width(), h);
     }
 
@@ -264,8 +255,6 @@ void dtkComposerSceneNodeControl::setBlockSize(dtkComposerSceneNodeComposite *bl
         return;
 
     d->sizes[block] = QRectF(x, y, w, h);
-
-    // this->layout(); // <- Not a mistake, do not uncomment!
 }
 
 void dtkComposerSceneNodeControl::resizeBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy)
@@ -278,8 +267,6 @@ void dtkComposerSceneNodeControl::resizeBlock(dtkComposerSceneNodeComposite *blo
     rect.setHeight(rect.height()+dy);
 
     d->sizes[block] = rect;
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeControl::moveBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy)
@@ -294,8 +281,6 @@ void dtkComposerSceneNodeControl::moveBlock(dtkComposerSceneNodeComposite *block
     qreal h = rect.height()-dy;
 
     d->sizes[block] = QRectF(x, y, w, h);
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeControl::resize(qreal width, qreal height)

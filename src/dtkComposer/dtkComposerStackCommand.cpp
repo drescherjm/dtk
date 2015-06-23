@@ -2852,6 +2852,7 @@ void dtkComposerStackCommandCreateBlock::redo(void)
 
     e->block->wrap(control->block(e->id));
     e->node->addBlock(e->block);
+    e->node->layout();
 
     d->graph->addBlock(e->node);
 
@@ -2874,6 +2875,7 @@ void dtkComposerStackCommandCreateBlock::undo(void)
     d->graph->removeBlock(e->block);
     control->removeBlock(e->id);
     e->node->removeBlock(e->block);
+    e->node->layout();
 
     d->scene->removeItem(e->block);
 
@@ -2942,6 +2944,7 @@ void dtkComposerStackCommandDestroyBlock::redo(void)
 
     d->graph->removeBlock(e->block);
     e->node->removeBlock(e->block);
+    e->node->layout();
     control->removeBlock(e->id);
 
     d->scene->removeItem(e->block);
@@ -2967,15 +2970,13 @@ void dtkComposerStackCommandDestroyBlock::undo(void)
 
     control->addBlock(dynamic_cast<dtkComposerNodeComposite *>(e->block->wrapee()));
     e->node->addBlock(e->block);
+    e->node->layout();
 
     d->graph->addBlock(e->block);
 
 
     d->scene->modify(true);
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////
 // Copy Nodes Command

@@ -15,6 +15,7 @@
 #pragma once
 
 #include "dtkComposerViewWidget.h"
+#include "dtkComposerTransmitterEmitter.h"
 
 #include <QtWidgets>
 
@@ -28,6 +29,7 @@ public:
 
 signals:
     void valueChanged(int);
+    void rangeChanged(int, int);
 
 public slots:
     void setMinValue(int);
@@ -48,6 +50,13 @@ public:
 signals:
     void minValueChanged(int);
     void maxValueChanged(int);
+
+public slots:
+    void setRange(int, int);
+
+public:
+    QSpinBox *m_min;
+    QSpinBox *m_max;
 };
 
 class dtkComposerNodeRangeViewWidget : public dtkComposerViewWidget
@@ -63,6 +72,32 @@ public:
 public:
     dtkComposerNodeRangeWidget *m_widget;
     dtkComposerNodeRangeInspector *m_inspector;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeRangePrivate
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeRangePrivate : public QObject
+{
+    Q_OBJECT
+
+public:
+     dtkComposerNodeRangePrivate(void);
+
+public:
+    dtkComposerTransmitterEmitter<qlonglong> emt_val;
+
+public:
+    qlonglong min;
+    qlonglong max;
+    qlonglong val;
+
+public:
+    dtkComposerNodeRangeViewWidget *widget;
+
+public slots:
+    void setValue(int);
 };
 
 //

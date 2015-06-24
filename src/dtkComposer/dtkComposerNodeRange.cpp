@@ -24,11 +24,13 @@
 dtkComposerNodeRangeWidget::dtkComposerNodeRangeWidget(QWidget *parent) : QWidget(parent)
 {
     m_dial = new QDial(this);
+    m_dial->setTracking(false);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_dial);
 
     connect(m_dial, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
+    connect(m_dial, SIGNAL(rangeChanged(int, int)), this, SIGNAL(rangeChanged(int, int)));
 }
 
 dtkComposerNodeRangeWidget::~dtkComposerNodeRangeWidget(void)
@@ -52,21 +54,35 @@ void dtkComposerNodeRangeWidget::setMaxValue(int value)
 
 dtkComposerNodeRangeInspector::dtkComposerNodeRangeInspector(QWidget *parent) : QWidget(parent)
 {
-    QSpinBox *min = new QSpinBox(this);
-    QSpinBox *max = new QSpinBox(this);
+    m_min = new QSpinBox(this); m_min->setKeyboardTracking(false);
+    m_max = new QSpinBox(this); m_max->setKeyboardTracking(false);
+
+    m_min->setRange(std::numeric_limits<int>::lowest(), std::numeric_limits<int>::max());
+    m_max->setRange(std::numeric_limits<int>::lowest(), std::numeric_limits<int>::max());
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(min);
-    layout->addWidget(max);
+    layout->addWidget(m_min);
+    layout->addWidget(m_max);
     layout->addStretch();
 
-    connect(min, SIGNAL(valueChanged(int)), this, SIGNAL(minValueChanged(int)));
-    connect(max, SIGNAL(valueChanged(int)), this, SIGNAL(maxValueChanged(int)));
+    connect(m_min, SIGNAL(valueChanged(int)), this, SIGNAL(minValueChanged(int)));
+    connect(m_max, SIGNAL(valueChanged(int)), this, SIGNAL(maxValueChanged(int)));
 }
 
 dtkComposerNodeRangeInspector::~dtkComposerNodeRangeInspector(void)
 {
 
+}
+
+void dtkComposerNodeRangeInspector::setRange(int min, int max)
+{
+    m_min->blockSignals(true);
+    m_min->setValue(min);
+    m_min->blockSignals(false);
+
+    m_min->blockSignals(true);
+    m_max->setValue(max);
+    m_min->blockSignals(false);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -80,6 +96,10 @@ dtkComposerNodeRangeViewWidget::dtkComposerNodeRangeViewWidget(void)
 
     connect(m_inspector, SIGNAL(minValueChanged(int)), m_widget, SLOT(setMinValue(int)));
     connect(m_inspector, SIGNAL(maxValueChanged(int)), m_widget, SLOT(setMaxValue(int)));
+    connect(m_widget, SIGNAL(rangeChanged(int, int)), m_inspector, SLOT(setRange(int, int)));
+
+    m_widget->setMinValue(-10);
+    m_widget->setMaxValue(10);
 }
 
 dtkComposerNodeRangeViewWidget::~dtkComposerNodeRangeViewWidget(void)
@@ -102,29 +122,22 @@ QWidget *dtkComposerNodeRangeViewWidget::inspector(void)
 // dtkComposerNodeRangePrivate
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeRangePrivate
-{
-public:
-    dtkComposerTransmitterEmitter<qlonglong> emt_val;
+dtkComposerNodeRangePrivate::dtkComposerNodeRangePrivate(void) : widget(new dtkComposerNodeRangeViewWidget)
+{ 
+    connect(widget->widget(), SIGNAL(valueChanged(int)), this, SLOT(setValue(int))); 
+}
 
-public:
-    qlonglong min;
-    qlonglong max;
-    qlonglong val;
-
-public:
-    dtkComposerNodeRangeViewWidget *widget;
-};
+void dtkComposerNodeRangePrivate::setValue(int v) 
+{ 
+    val = v; 
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeRange
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeRange::dtkComposerNodeRange(void)
+dtkComposerNodeRange::dtkComposerNodeRange(void) : d(new dtkComposerNodeRangePrivate)
 {
-    d = new dtkComposerNodeRangePrivate;
-    d->widget = new dtkComposerNodeRangeViewWidget;
-
     this->appendEmitter(&d->emt_val);
 }
 

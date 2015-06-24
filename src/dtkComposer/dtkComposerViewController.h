@@ -19,6 +19,8 @@
 
 #include <QtCore>
 
+class dtkComposerSceneNode;
+
 class DTKCOMPOSER_EXPORT dtkComposerViewController : public QObject
 {
     Q_OBJECT
@@ -27,7 +29,7 @@ public:
     static dtkComposerViewController *instance(void);
 
 public:
-    void insert(const QString& name, dtkComposerViewWidget *view);
+    void insert(dtkComposerSceneNode *);
 
 public:
     dtkComposerViewWidget *view(const QString& name);

@@ -1,17 +1,16 @@
-/* dtkComposerScene.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/01/30 10:13:25
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
@@ -517,7 +516,7 @@ void dtkComposerScene::onFlagAs(Qt::GlobalColor color)
             if(node->flagged(color))
                 d->flagged_nodes[color] << node;
 
-            emit flagged(node->wrapee());
+            emit flagged(node);
         }
     }
 }
@@ -1099,7 +1098,6 @@ void dtkComposerScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
         }
     }
-
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1240,5 +1238,7 @@ void dtkComposerScene::populateEdges(dtkComposerSceneNode *node)
         foreach(dtkComposerSceneNodeComposite *block, control->blocks())
             this->populateEdges(block);
     }
-
 }
+
+//
+// dtkComposerScene.cpp ends here

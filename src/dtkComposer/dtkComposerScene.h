@@ -103,7 +103,7 @@ public slots:
 signals:
     void changed(void);
     void modified(bool);
-    void flagged(dtkComposerNode *);
+    void flagged(dtkComposerSceneNode *);
 
 signals:
     void selectedNode(dtkComposerSceneNode *node);

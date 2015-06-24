@@ -13,6 +13,8 @@
 // Code:
 
 #include "dtkComposerViewController.h"
+#include "dtkComposerSceneNode.h"
+#include "dtkComposerNode.h"
 
 class dtkComposerViewControllerPrivate
 {
@@ -28,11 +30,11 @@ dtkComposerViewController *dtkComposerViewController::instance(void)
     return s_instance;
 }
 
-void dtkComposerViewController::insert(const QString& name, dtkComposerViewWidget *view)
+void dtkComposerViewController::insert(dtkComposerSceneNode *node)
 {
-    d->views.insert(name, view);
+    d->views.insert(node->title(), node->wrapee()->widget());
 
-    emit inserted(view, name);
+    emit inserted(node->wrapee()->widget(), node->title());
 }
 
 dtkComposerViewWidget *dtkComposerViewController::view(const QString& name)

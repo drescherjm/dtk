@@ -21,8 +21,11 @@
 
 #include "dtkVrSupportExport.h"
 #include "dtkVrTracker.h"
+#include <dtkMathSupport/dtkVector3D.h>
 
 #include <QtCore>
+
+using namespace dtkDeprecated;
 
 class dtkVrTrackerVrpnPrivate;
 

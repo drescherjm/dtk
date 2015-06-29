@@ -182,6 +182,7 @@ private:
     T *d;
 };
 
+
 template <class T> inline uint qHash(const dtkSmartPointer<T> &key) {
     return qHash(key.constData());
 }

@@ -72,7 +72,6 @@ dtkAbstractData *dtkAbstractDataReader::data(void) const
 
 /**
  * Set the data that has been read.
- * The reader will increase the reference count of the data.
  */
 void dtkAbstractDataReader::setData(dtkAbstractData *data)
 {

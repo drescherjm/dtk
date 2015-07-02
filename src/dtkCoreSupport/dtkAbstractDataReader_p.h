@@ -34,7 +34,7 @@ class dtkAbstractData;
 class DTKCORESUPPORT_EXPORT dtkAbstractDataReaderPrivate : public dtkAbstractObjectPrivate
 {
 public:
-    dtkAbstractDataReaderPrivate(dtkAbstractDataReader *q = 0) : dtkAbstractObjectPrivate(q) {}
+    dtkAbstractDataReaderPrivate(dtkAbstractDataReader *q = 0) : dtkAbstractObjectPrivate(q), data(NULL) {}
     dtkAbstractDataReaderPrivate(const dtkAbstractDataReaderPrivate& other) : dtkAbstractObjectPrivate(other),
                                                                               enabled(false),
                                                                               data(other.data),
@@ -48,7 +48,7 @@ public:
     bool enabled;
 
 public:
-    dtkSmartPointer<dtkAbstractData> data;
+    dtkAbstractData *data;
 
 public:
     QString file;

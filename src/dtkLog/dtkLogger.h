@@ -18,6 +18,7 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
+#include <iostream>
 
 class dtkLogModel;
 
@@ -46,6 +47,10 @@ public:
  public:
     void attachModel(dtkLogModel *model);
     void detachModel(dtkLogModel *model);
+
+public:
+    void redirectCout(dtkLog::Level level = dtkLog::Info);
+    void redirectCerr(dtkLog::Level level = dtkLog::Error);
 
 private:
      dtkLogger(void);

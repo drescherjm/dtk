@@ -123,12 +123,18 @@ void dtkLogger::detachModel(dtkLogModel *model)
 dtkLogger::dtkLogger(void) : d(new dtkLoggerPrivate)
 {
     d->level = dtkLog::Info;
-
+    d->cerr_stream = NULL;
+    d->cout_stream = NULL;
     d->console = dtkLogDestinationPointer(new dtkLogDestinationConsole);
 }
 
 dtkLogger::~dtkLogger(void)
 {
+    if (d->cerr_stream)
+        delete d->cerr_stream;
+    if (d->cout_stream)
+        delete d->cout_stream;
+
     delete d;
 
     d = NULL;
@@ -152,6 +158,14 @@ void dtkLogger::write(const QString& message, dtkLog::Level level)
             d->destinations.at(i)->write(message);
         }
     }
+}
+
+void dtkLogger::redirectCout(dtkLog::Level level) {
+    d->cout_stream =  new redirectStream(std::cout, level);
+}
+
+void dtkLogger::redirectCerr(dtkLog::Level level) {
+    d->cerr_stream =  new redirectStream(std::cerr, level);
 }
 
 //

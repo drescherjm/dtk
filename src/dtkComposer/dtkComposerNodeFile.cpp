@@ -32,9 +32,13 @@
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
     this->file.setAutoRemove(false);
+    if (QFileInfo(url.fileName()).suffix() == "gz") {
+        QString Tpl = QDir::tempPath() + QLatin1Char('/') + QCoreApplication::applicationName() + QString(".XXXXXX.gz");
+        this->file.setFileTemplate(Tpl);
+    }
 
     if (!this->file.open()) {
-        qDebug() << Q_FUNC_INFO << "Unable to file for saving";
+        dtkWarn() << Q_FUNC_INFO << "Unable to file for saving";
         return;
     }
 

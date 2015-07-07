@@ -417,9 +417,9 @@ target_link_libraries(${PROJECT_NAME}
 #   target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
 # endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
-# if(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
-#   target_link_libraries(${PROJECT_NAME} dtkVr)
-# endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
+if(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
+  target_link_libraries(${PROJECT_NAME} dtkVrSupport)
+endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
 
 # if(DTK_BUILD_SUPPORT_PLOT)
 #   target_link_libraries(${PROJECT_NAME} dtkPlotSupport)

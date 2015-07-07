@@ -26,7 +26,7 @@
 #include <dtkMathSupport/dtkVector3D.h>
 #include <dtkMathSupport/dtkQuaternion.h>
 
-#include <dtkVr/dtkVrTrackerVrpn.h>
+#include <dtkVrSupport/dtkVrTrackerVrpn.h>
 
 class dtkComposerNodeTrackerVrpnPrivate
 {

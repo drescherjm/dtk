@@ -76,6 +76,7 @@ public:
 
 public:
     virtual dtkComposerViewWidget *widget(void);
+    virtual QWidget *editor(void);
 
 public:
     QT_DEPRECATED void setTitleHint(const QString& hint);

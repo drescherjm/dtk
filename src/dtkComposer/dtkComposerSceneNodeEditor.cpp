@@ -40,6 +40,7 @@
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
+#include "dtkComposerViewWidget.h"
 
 #include <dtkConfig>
 
@@ -280,14 +281,14 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->spin_d->setVisible(false);
     d->spin_d->blockSignals(true);
 
-    d->spin_f = new QDoubleSpinBox(this);
-    d->spin_f->setMinimum(-9999999);
-    d->spin_f->setMaximum(+9999999);
-    d->spin_f->setDecimals(15);
-    d->spin_f->setSingleStep(1.0);
-    d->spin_f->setEnabled(false);
-    d->spin_f->setVisible(false);
-    d->spin_f->blockSignals(true);
+    // d->spin_f = new QDoubleSpinBox(this);
+    // d->spin_f->setMinimum(-9999999);
+    // d->spin_f->setMaximum(+9999999);
+    // d->spin_f->setDecimals(15);
+    // d->spin_f->setSingleStep(1.0);
+    // d->spin_f->setEnabled(false);
+    // d->spin_f->setVisible(false);
+    // d->spin_f->blockSignals(true);
 
     d->edit_s = new QLineEdit(this);
     d->edit_s->setEnabled(false);
@@ -296,25 +297,27 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     // --
 
-    d->bool_widget = new QWidget(this);
+    d->current_widget = NULL;
 
-    d->f_b = new QRadioButton("false", d->bool_widget);
-    d->t_b = new QRadioButton("true", d->bool_widget);
-    d->t_b->blockSignals(true);
+    // d->bool_widget = new QWidget(this);
 
-    d->g_b = new QButtonGroup(this);
-    d->g_b->setExclusive(true);
-    d->g_b->addButton(d->t_b);
-    d->g_b->addButton(d->f_b);
+    // d->f_b = new QRadioButton("false", d->bool_widget);
+    // d->t_b = new QRadioButton("true", d->bool_widget);
+    // d->t_b->blockSignals(true);
 
-    QHBoxLayout *bool_layout = new QHBoxLayout;
-    bool_layout->setContentsMargins(0, 0, 0, 0);
-    bool_layout->addWidget(d->t_b);
-    bool_layout->addWidget(d->f_b);
+    // d->g_b = new QButtonGroup(this);
+    // d->g_b->setExclusive(true);
+    // d->g_b->addButton(d->t_b);
+    // d->g_b->addButton(d->f_b);
 
-    d->bool_widget->setLayout(bool_layout);
-    d->bool_widget->setEnabled(false);
-    d->bool_widget->setVisible(false);
+    // QHBoxLayout *bool_layout = new QHBoxLayout;
+    // bool_layout->setContentsMargins(0, 0, 0, 0);
+    // bool_layout->addWidget(d->t_b);
+    // bool_layout->addWidget(d->f_b);
+
+    // d->bool_widget->setLayout(bool_layout);
+    // d->bool_widget->setEnabled(false);
+    // d->bool_widget->setVisible(false);
 
     // --
 
@@ -422,11 +425,11 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->layout_widg_edit->setContentsMargins(5, 0, 5, 0);
     d->layout_widg_edit->setSpacing(0);
     d->layout_widg_edit->addWidget(d->spin_d);
-    d->layout_widg_edit->addWidget(d->spin_f);
+    // d->layout_widg_edit->addWidget(d->spin_f);
     d->layout_widg_edit->addWidget(d->edit_s);
     d->layout_widg_edit->addWidget(d->butn_f);
     d->layout_widg_edit->addWidget(d->butn_d);
-    d->layout_widg_edit->addWidget(d->bool_widget);
+    // d->layout_widg_edit->addWidget(d->bool_widget);
 
     d->layout = new QVBoxLayout(this);
     d->layout->setContentsMargins(5, 0, 5, 0);
@@ -457,12 +460,12 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     connect(d->selector, SIGNAL(currentIndexChanged(int)), this, SLOT(onBlockChanged(int)));
 
     connect(d->spin_d, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
-    connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
+    // connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
     connect(d->edit_s, SIGNAL(textChanged(const QString&)), this, SLOT(onValueChanged(const QString &)));
     connect(d->butn_f, SIGNAL(clicked()), this, SLOT(onBrowse()));
     connect(d->butn_d, SIGNAL(clicked()), this, SLOT(onBrowseDirectory()));
 
-    connect(d->t_b, SIGNAL(toggled(bool)), this, SLOT(onValueChanged(bool)));
+    // connect(d->t_b, SIGNAL(toggled(bool)), this, SLOT(onValueChanged(bool)));
 
     connect(d->select_implementation, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onImplementationChanged(const QString&)));
 }
@@ -572,17 +575,17 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
         if (dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee())) {
 
-            if (b_node->value()) {
-                d->t_b->setChecked(true);
-                d->f_b->setChecked(false);
-            } else {
-                d->t_b->setChecked(false);
-                d->f_b->setChecked(true);
-            }
+            // if (b_node->value()) {
+            //     d->t_b->setChecked(true);
+            //     d->f_b->setChecked(false);
+            // } else {
+            //     d->t_b->setChecked(false);
+            //     d->f_b->setChecked(true);
+            // }
 
-            d->t_b->blockSignals(false);
-            d->bool_widget->setVisible(true);
-            d->bool_widget->setEnabled(true);
+            // d->t_b->blockSignals(false);
+            // d->bool_widget->setVisible(true);
+            // d->bool_widget->setEnabled(true);
 
         } else if (dtkComposerNodeInteger *i_node = dynamic_cast<dtkComposerNodeInteger *>(node->wrapee())) {
 
@@ -593,10 +596,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
         } else if (dtkComposerNodeReal *r_node = dynamic_cast<dtkComposerNodeReal *>(node->wrapee())) {
 
-            d->spin_f->blockSignals(false);
-            d->spin_f->setVisible(true);
-            d->spin_f->setEnabled(true);
-            d->spin_f->setValue(r_node->value());
+            // d->spin_f->blockSignals(false);
+            // d->spin_f->setVisible(true);
+            // d->spin_f->setEnabled(true);
+            // d->spin_f->setValue(r_node->value());
 
 
         } else if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(node->wrapee())) {
@@ -733,6 +736,22 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 }
             }
         }
+
+        if (d->node->wrapee()->editor()) {
+            if (d->current_widget) {
+                d->current_widget->blockSignals(true);
+                d->current_widget->setVisible(false);
+                d->current_widget->setEnabled(false);
+                d->layout_widg_edit->removeWidget(d->current_widget);
+                qDebug() << Q_FUNC_INFO << d->current_widget;
+            }
+            d->current_widget = d->node->wrapee()->editor();
+            d->current_widget->blockSignals(false);
+            d->current_widget->setVisible(true);
+            d->current_widget->setEnabled(true);
+            qDebug() << Q_FUNC_INFO << d->current_widget;
+            d->layout_widg_edit->addWidget(d->current_widget);
+        }
     }
 
     d->edit->setText(d->node->title());
@@ -800,17 +819,17 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->selector->setEnabled(false);
     d->selector->setVisible(false);
 
-    d->t_b->blockSignals(true);
-    d->bool_widget->setVisible(false);
-    d->bool_widget->setEnabled(false);
+    // d->t_b->blockSignals(true);
+    // d->bool_widget->setVisible(false);
+    // d->bool_widget->setEnabled(false);
 
     d->spin_d->blockSignals(true);
     d->spin_d->setVisible(false);
     d->spin_d->setEnabled(false);
 
-    d->spin_f->blockSignals(true);
-    d->spin_f->setVisible(false);
-    d->spin_f->setEnabled(false);
+    // d->spin_f->blockSignals(true);
+    // d->spin_f->setVisible(false);
+    // d->spin_f->setEnabled(false);
 
     d->edit_s->blockSignals(true);
     d->edit_s->setVisible(false);
@@ -833,6 +852,15 @@ void dtkComposerSceneNodeEditor::clear(void)
     d->node_toolbox->setVisible(false);
     d->node_toolbox->setEnabled(false);
     d->node_toolbox->clear();
+
+    if (d->current_widget) {
+        d->current_widget->blockSignals(true);
+        d->current_widget->setVisible(false);
+        d->current_widget->setEnabled(false);
+        d->layout_widg_edit->removeWidget(d->current_widget);
+        qDebug() << Q_FUNC_INFO << d->current_widget;
+    }
+    d->current_widget = NULL;
 }
 
 void dtkComposerSceneNodeEditor::addBlock(void)

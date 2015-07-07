@@ -163,6 +163,7 @@ protected:
 
 // #pragma mark -
 // #pragma mark - Helper function
+
 protected:
     void populateEdges(dtkComposerSceneNode *root = NULL);
 

@@ -13,24 +13,68 @@
 // Code:
 
 #include "dtkComposerNodeBoolean.h"
-#include "dtkComposerTransmitterEmitter.h"
-#include "dtkComposerTransmitterReceiver.h"
+#include "dtkComposerNodeBoolean_p.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeBooleanPrivate declaration
+// dtkComposerNodeBooleanEditor implementation
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerNodeBooleanPrivate
+dtkComposerNodeBooleanEditor::dtkComposerNodeBooleanEditor(dtkComposerNodeBooleanPrivate *d_ptr) : QFrame(), d(d_ptr)
 {
-public:
-    dtkComposerTransmitterReceiver<bool> receiver;
+    f_b = new QRadioButton("false", this);
+    t_b = new QRadioButton( "true", this);
 
-public:
-    dtkComposerTransmitterEmitter<bool> emitter;
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(t_b);
+    layout->addWidget(f_b);
 
-public:
-    bool value;
-};
+    this->setLayout(layout);
+
+    QButtonGroup *g_b = new QButtonGroup(this);
+    g_b->setExclusive(true);
+    g_b->addButton(t_b);
+    g_b->addButton(f_b);
+
+    connect(t_b, SIGNAL(toggled(bool)), this, SLOT(onValueChanged(bool)));
+}
+
+void dtkComposerNodeBooleanEditor::refresh(void)
+{
+    t_b->blockSignals(true);
+    f_b->blockSignals(true);
+
+    if (d->value) {
+        t_b->setChecked(true);
+        f_b->setChecked(false);
+
+    } else {
+        t_b->setChecked(false);
+        f_b->setChecked(true);
+    }
+
+    t_b->blockSignals(false);
+    f_b->blockSignals(false);
+}
+
+void dtkComposerNodeBooleanEditor::onValueChanged(bool val)
+{
+    d->value = val;
+}
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeBooleanPrivate implementation
+// /////////////////////////////////////////////////////////////////
+
+QWidget *dtkComposerNodeBooleanPrivate::editor(void)
+{
+    if(!m_editor)
+        m_editor = new dtkComposerNodeBooleanEditor(this);
+
+    m_editor->refresh();
+    
+    return m_editor;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeBoolean implementation
@@ -42,6 +86,7 @@ dtkComposerNodeBoolean::dtkComposerNodeBoolean(void) : dtkComposerNodeLeaf(), d(
     this->appendEmitter(&d->emitter);
 
     d->value = false;
+    d->m_editor = NULL;
 }
 
 dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
@@ -67,6 +112,11 @@ bool dtkComposerNodeBoolean::value(void)
 void dtkComposerNodeBoolean::setValue(bool value)
 {
     d->value = value;
+}
+
+QWidget *dtkComposerNodeBoolean::editor(void)
+{
+    return d->editor();
 }
 
 //

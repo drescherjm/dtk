@@ -123,13 +123,13 @@ QWidget *dtkComposerNodeRangeViewWidget::inspector(void)
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeRangePrivate::dtkComposerNodeRangePrivate(void) : widget(new dtkComposerNodeRangeViewWidget)
-{ 
-    connect(widget->widget(), SIGNAL(valueChanged(int)), this, SLOT(setValue(int))); 
+{
+    connect(widget->widget(), SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
 }
 
-void dtkComposerNodeRangePrivate::setValue(int v) 
-{ 
-    val = v; 
+void dtkComposerNodeRangePrivate::setValue(int v)
+{
+    val = v;
 }
 
 // /////////////////////////////////////////////////////////////////

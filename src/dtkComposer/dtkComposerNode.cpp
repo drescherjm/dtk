@@ -147,6 +147,11 @@ dtkComposerViewWidget *dtkComposerNode::widget(void)
     return NULL;
 }
 
+QWidget *dtkComposerNode::editor(void)
+{
+    return NULL;
+}
+
 void dtkComposerNode::setTitleHint(const QString& hint)
 {
     d->title_hint = hint;

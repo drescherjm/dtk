@@ -35,6 +35,9 @@ public:
 public:
     void setValue(bool value);
 
+public:
+    QWidget *editor(void);
+
 private:
     dtkComposerNodeBooleanPrivate *d;
 };

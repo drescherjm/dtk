@@ -60,6 +60,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
   dtkComposerNodeBoolean.h
+  dtkComposerNodeBoolean_p.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h

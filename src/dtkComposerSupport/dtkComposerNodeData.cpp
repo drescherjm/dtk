@@ -15,8 +15,8 @@
 #include "dtkComposerNodeData.h"
 #include "dtkComposerMetatype.h"
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkCoreSupport/dtkAbstractData>
 
@@ -31,12 +31,12 @@
 class dtkComposerNodeDataPrivate
 {
 public:
-    dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_data;
+    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_string;
-    dtkComposerTransmitterReceiverSupport<dtkVectorReal> receiver_vector;
+    dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
 
 public:
-    dtkComposerTransmitterEmitterSupport<dtkAbstractData> emitter_data;
+    dtkComposerTransmitterEmitter<dtkAbstractData> emitter_data;
 
 public:
     dtkAbstractData *data;
@@ -46,7 +46,7 @@ public:
 // dtkComposerNodeData implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeafDataSupport(), d(new dtkComposerNodeDataPrivate)
+dtkComposerNodeData::dtkComposerNodeData(void) : dtkComposerNodeLeafData(), d(new dtkComposerNodeDataPrivate)
 {
     this->appendReceiver(&(d->receiver_string));
     this->appendReceiver(&(d->receiver_data));
@@ -88,7 +88,7 @@ void dtkComposerNodeData::run(void)
     }
 
     if (!d->receiver_string.isEmpty())
-        d->data->setParameter(d->receiver_string.data());
+        d->data->setParameter(*d->receiver_string.data());
 
     if(!d->receiver_vector.isEmpty())
         d->data->setParameter(*d->receiver_vector.data());

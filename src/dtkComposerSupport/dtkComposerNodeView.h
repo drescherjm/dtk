@@ -15,7 +15,7 @@
 #pragma once
 
 #include "dtkComposerSupportExport.h"
-#include "dtkComposerNodeLeafViewSupport.h"
+#include "dtkComposerNodeLeafView.h"
 
 #include <QtCore>
 
@@ -25,7 +25,7 @@ class dtkComposerNodeViewPrivate;
 // dtkComposerNodeView declaration
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeafViewSupport
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeView : public QObject, public dtkComposerNodeLeafView
 {
     Q_OBJECT
 

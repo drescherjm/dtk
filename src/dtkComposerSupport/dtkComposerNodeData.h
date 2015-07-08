@@ -15,7 +15,7 @@
 #pragma once
 
 #include "dtkComposerSupportExport.h"
-#include "dtkComposerNodeLeafDataSupport.h"
+#include "dtkComposerNodeLeafData.h"
 
 class dtkComposerNodeDataPrivate;
 
@@ -23,7 +23,7 @@ class dtkComposerNodeDataPrivate;
 // dtkComposerNodeData interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeData : public dtkComposerNodeLeafDataSupport
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeData : public dtkComposerNodeLeafData
 {
 public:
      dtkComposerNodeData(void);

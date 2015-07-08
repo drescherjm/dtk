@@ -15,7 +15,7 @@
 #pragma once
 
 #include "dtkComposerSupportExport.h"
-#include "dtkComposerNodeLeafProcessSupport.h"
+#include "dtkComposerNodeLeafProcess.h"
 
 class dtkComposerNodeProcessPrivate;
 
@@ -23,7 +23,7 @@ class dtkComposerNodeProcessPrivate;
 // dtkComposerNodeProcess interface
 // /////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcessSupport
+class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcess
 {
 public:
      dtkComposerNodeProcess(void);

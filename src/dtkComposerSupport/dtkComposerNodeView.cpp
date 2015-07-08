@@ -14,12 +14,12 @@
 
 #include "dtkComposerMetatype.h"
 
-//#include "dtkComposerNodeVector3D.h"
-//#include "dtkComposerNodeQuaternion.h"
+#include "dtkComposerNodeVector3D.h"
+#include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerNodeView.h"
 
-#include <dtkComposer/dtkComposerTransmitterEmitter.h>
-#include <dtkComposer/dtkComposerTransmitterReceiver.h>
+#include "dtkComposerTransmitterEmitter.h"
+#include "dtkComposerTransmitterReceiver.h"
 
 #include <dtkLog/dtkLog>
 
@@ -33,14 +33,14 @@
 class dtkComposerNodeViewPrivate
 {
 public:
-    dtkComposerTransmitterReceiverSupport<QString> receiver_type;
-    dtkComposerTransmitterReceiverSupport<bool> receiver_fullscreen;
-    dtkComposerTransmitterReceiverSupport<dtkVector3DReal> receiver_head_position;
-    dtkComposerTransmitterReceiverSupport<dtkQuaternionReal> receiver_head_orientation;
-    dtkComposerTransmitterReceiverSupport<dtkVector3DReal> receiver_screen_upper_left;
-    dtkComposerTransmitterReceiverSupport<dtkVector3DReal> receiver_screen_lower_left;
-    dtkComposerTransmitterReceiverSupport<dtkVector3DReal> receiver_screen_lower_right;
-    dtkComposerTransmitterReceiverSupport<dtkAbstractData> receiver_data;
+    dtkComposerTransmitterReceiver<QString> receiver_type;
+    dtkComposerTransmitterReceiver<bool> receiver_fullscreen;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_head_position;
+    dtkComposerTransmitterReceiver<dtkQuaternionReal> receiver_head_orientation;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_upper_left;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_left;
+    dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
+    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
 
 public:
     dtkAbstractView *view;
@@ -50,7 +50,7 @@ public:
 // dtkComposerNodeView implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeafViewSupport(), d(new dtkComposerNodeViewPrivate)
+dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodeViewPrivate)
 {
     d->view = NULL;
 
@@ -153,8 +153,8 @@ void dtkComposerNodeView::run(void)
         d->view->setLowerRight(*d->receiver_screen_lower_right.data());
 
     if(!d->receiver_data.isEmpty())
-        foreach (QVariant var, d->receiver_data.allData())
-            d->view->setData(var.value<dtkAbstractData*>());
+        foreach (dtkAbstractData *data, d->receiver_data.allData())
+            d->view->setData(data);
 }
 
 // 

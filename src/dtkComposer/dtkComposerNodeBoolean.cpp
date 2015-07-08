@@ -66,13 +66,13 @@ void dtkComposerNodeBooleanEditor::onValueChanged(bool val)
 // dtkComposerNodeBooleanPrivate implementation
 // /////////////////////////////////////////////////////////////////
 
-QWidget *dtkComposerNodeBooleanPrivate::editor(void)
+dtkComposerNodeBooleanEditor *dtkComposerNodeBooleanPrivate::editor(void)
 {
     if(!m_editor)
         m_editor = new dtkComposerNodeBooleanEditor(this);
 
     m_editor->refresh();
-    
+
     return m_editor;
 }
 
@@ -114,7 +114,7 @@ void dtkComposerNodeBoolean::setValue(bool value)
     d->value = value;
 }
 
-QWidget *dtkComposerNodeBoolean::editor(void)
+dtkComposerNodeBooleanEditor *dtkComposerNodeBoolean::editor(void)
 {
     return d->editor();
 }

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -22,7 +22,7 @@
 class dtkComposerNodeBooleanPrivate;
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeBooleanEditor : public QFrame
@@ -65,8 +65,8 @@ public:
     dtkComposerNodeBooleanEditor *m_editor;
 
 public:
-    QWidget *editor(void);
+    dtkComposerNodeBooleanEditor *editor(void);
 };
 
-// 
+//
 // dtkComposerNodeBoolean_p.h ends here

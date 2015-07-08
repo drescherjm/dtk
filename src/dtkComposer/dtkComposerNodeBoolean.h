@@ -15,7 +15,7 @@
 #pragma once
 
 #include "dtkComposerExport.h"
-
+#include "dtkComposerNodeBoolean_p.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeBooleanPrivate;
@@ -36,7 +36,7 @@ public:
     void setValue(bool value);
 
 public:
-    QWidget *editor(void);
+    dtkComposerNodeBooleanEditor *editor(void);
 
 private:
     dtkComposerNodeBooleanPrivate *d;

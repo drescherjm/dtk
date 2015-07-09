@@ -60,6 +60,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFactory.h
   dtkComposerNodeFactoryView.h
   dtkComposerNodeBoolean.h
+  dtkComposerNodeBoolean_p.h
   dtkComposerNodeBooleanOperator.h
   dtkComposerNodeComposite.h
   dtkComposerNodeConstants.h
@@ -75,6 +76,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeFile_p.h
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
+  dtkComposerNodeRange.h
   # dtkComposerNodeLeafActor.h
   # dtkComposerNodeLeafData.h
   # dtkComposerNodeLeafProcess.h
@@ -119,12 +121,26 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterProxy.h
   dtkComposerTransmitterProxyLoop.h
   dtkComposerTransmitterProxyLoop.tpp
+  dtkComposerTransmitterProxyVariant.h
   dtkComposerTransmitterReceiver.h
   dtkComposerTransmitterReceiver.tpp
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWidget.h
-  dtkComposerWriter.h)
+  dtkComposerWriter.h
+  dtkComposerViewController
+  dtkComposerViewController.h
+  dtkComposerViewLayout
+  dtkComposerViewLayout.h
+  dtkComposerViewLayoutItem
+  dtkComposerViewLayoutItem.h
+  dtkComposerViewList
+  dtkComposerViewList.h
+  dtkComposerViewListControl
+  dtkComposerViewListControl.h
+  dtkComposerViewManager
+  dtkComposerViewManager.h
+  dtkComposerViewWidget.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
@@ -175,6 +191,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
+  dtkComposerNodeRange.cpp
   # dtkComposerNodeLeafActor.cpp
   # dtkComposerNodeLeafData.cpp
   # dtkComposerNodeLeafProcess.cpp
@@ -212,10 +229,18 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterReceiver.cpp
   dtkComposerTransmitterProxy.cpp
   dtkComposerTransmitterProxyLoop.cpp
+  dtkComposerTransmitterProxyVariant.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp
   dtkComposerWidget.cpp
-  dtkComposerWriter.cpp)
+  dtkComposerWriter.cpp
+  dtkComposerViewController.cpp
+  dtkComposerViewLayout.cpp
+  dtkComposerViewLayoutItem.cpp
+  dtkComposerViewList.cpp
+  dtkComposerViewListControl.cpp
+  dtkComposerViewManager.cpp
+  dtkComposerViewWidget.cpp)
 
 set(${PROJECT_NAME}_RCC dtkComposer.qrc)
 
@@ -252,6 +277,7 @@ target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
 target_link_libraries(${PROJECT_NAME} dtkMathSupport)
+target_link_libraries(${PROJECT_NAME} dtkCoreSupport)
 
 ## #################################################################
 ## Export header file

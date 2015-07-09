@@ -1,24 +1,18 @@
-/* @(#)dtkComposerNodeProcess.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/03/29 11:15:49
- * Version: $Id$
- * Last-Updated: mar. nov.  5 17:21:26 2013 (+0100)
- *           By: edelclau
- *     Update #: 15
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODEPROCESS_H
-#define DTKCOMPOSERNODEPROCESS_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeafProcess.h"
@@ -60,4 +54,5 @@ private:
     dtkComposerNodeProcessPrivate *d;
 };
 
-#endif
+// 
+// dtkComposerNodeProcess.h ends here

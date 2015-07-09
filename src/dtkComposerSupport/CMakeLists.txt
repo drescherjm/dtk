@@ -19,6 +19,8 @@ project(dtkComposerSupport)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  # dtkComposerSupport
+  # dtkComposerSupportFactoryExtension.h
   dtkComposer.h
   dtkComposer_p.h
   dtkComposerCompass.h
@@ -94,7 +96,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeMetaVector3DArrayExtractor.h
   dtkComposerNodeNumberOperator.h
   dtkComposerNodePrint.h
+  dtkComposerNodeData.h
   dtkComposerNodeProcess.h
+  dtkComposerNodeView.h
   dtkComposerNodeProxy.h
   dtkComposerNodeQuaternion.h
   dtkComposerNodeQuaternionOperatorUnary.h
@@ -151,9 +155,13 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerView.h
   dtkComposerReader.h
   dtkComposerWriter.h)
+  # dtkComposerNodeLeafDataSupport.h
+  # dtkComposerNodeLeafProcessSupport.h
+  # dtkComposerNodeLeafViewSupport.h)
 
 
 set(${PROJECT_NAME}_SOURCES
+  #dtkComposerSupportFactoryExtension.cpp
   dtkComposer.cpp
   dtkComposerCompass.cpp
   dtkComposerControls.cpp
@@ -224,7 +232,9 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeMetaVector3DArrayExtractor.cpp
   dtkComposerNodeNumberOperator.cpp
   dtkComposerNodePrint.cpp
+  dtkComposerNodeData.cpp
   dtkComposerNodeProcess.cpp
+  dtkComposerNodeView.cpp
   dtkComposerNodeProxy.cpp
   dtkComposerNodeQuaternion.cpp
   dtkComposerNodeQuaternionOperatorUnary.cpp
@@ -275,8 +285,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerView.cpp
   dtkComposerReader.cpp
   dtkComposerWriter.cpp)
+  # dtkComposerNodeLeafDataSupport.cpp
+  # dtkComposerNodeLeafProcessSupport.cpp
+  # dtkComposerNodeLeafViewSupport.cpp)
 
-set(${PROJECT_NAME}_RESOURCES dtkComposer.qrc)
+# set(${PROJECT_NAME}_RESOURCES dtkComposerSupport.qrc)
 
 ## #################################################################
 ##
@@ -397,13 +410,15 @@ target_link_libraries(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   dtkCore)
+  # dtkComposer
+  # dtkMeta)
 
 if(DTK_BUILD_SUPPORT_DISTRIBUTED)
   target_link_libraries(${PROJECT_NAME} dtkDistributedSupport)
 endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 
 if(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
-  target_link_libraries(${PROJECT_NAME} dtkVr)
+  target_link_libraries(${PROJECT_NAME} dtkVrSupport)
 endif(DTK_HAVE_NITE OR DTK_HAVE_VRPN AND DTK_BUILD_VR)
 
 if(DTK_BUILD_SUPPORT_PLOT)

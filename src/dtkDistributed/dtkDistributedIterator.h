@@ -22,7 +22,7 @@
 
 template <typename Container> class dtkDistributedIterator
 {
-    const Container& c;
+    const Container *c;
     qlonglong gid;
 
 public:
@@ -33,6 +33,7 @@ public:
     typedef value_type&                         reference;
 
 public:
+             dtkDistributedIterator(void);
     explicit dtkDistributedIterator(const Container& container, qlonglong index);
 
 public:
@@ -74,7 +75,11 @@ public:
 
 // ///////////////////////////////////////////////////////////////////
 
-template <typename Container> inline dtkDistributedIterator<Container>::dtkDistributedIterator(const Container& container, qlonglong index) : c(container), gid(index)
+template <typename Container> inline dtkDistributedIterator<Container>::dtkDistributedIterator(void) : c(NULL), gid(0)
+{
+}
+
+template <typename Container> inline dtkDistributedIterator<Container>::dtkDistributedIterator(const Container& container, qlonglong index) : c(&container), gid(index)
 {
 }
 
@@ -88,11 +93,15 @@ template <typename Container> inline dtkDistributedIterator<Container>::dtkDistr
 
 template <typename Container> inline dtkDistributedIterator<Container>& dtkDistributedIterator<Container>::operator = (const dtkDistributedIterator<Container>& o)
 {
+    c = o.c;
     gid = o.gid;
+
+    return *this;
 }
 
 template <typename Container> inline dtkDistributedIterator<Container>& dtkDistributedIterator<Container>::operator = ( dtkDistributedIterator<Container>&& o)
 {
+    c = o.c;
     gid = o.gid;
 
     return *this;
@@ -105,12 +114,12 @@ template <typename Container> inline qlonglong dtkDistributedIterator<Container>
 
 template <typename Container> inline typename dtkDistributedIterator<Container>::value_type dtkDistributedIterator<Container>::operator * (void) const
 {
-    return c[gid];
+    return (*c)[gid];
 }
 
 template <typename Container> inline typename dtkDistributedIterator<Container>::value_type dtkDistributedIterator<Container>::operator [] (qlonglong j) const
 {
-    return c[gid + j];
+    return (*c)[gid + j];
 }
 
 template <typename Container> inline bool dtkDistributedIterator<Container>::operator == (const dtkDistributedIterator& o) const
@@ -175,12 +184,12 @@ template <typename Container> inline dtkDistributedIterator<Container>& dtkDistr
 
 template <typename Container> inline dtkDistributedIterator<Container> dtkDistributedIterator<Container>::operator + (qlonglong j) const
 {
-    return dtkDistributedIterator(c, gid + j);
+    return dtkDistributedIterator(*c, gid + j);
 }
 
 template <typename Container> inline dtkDistributedIterator<Container> dtkDistributedIterator<Container>::operator - (qlonglong j) const
 {
-    return dtkDistributedIterator(c, gid - j);
+    return dtkDistributedIterator(*c, gid - j);
 }
 
 template <typename Container> inline qlonglong dtkDistributedIterator<Container>::operator - (const dtkDistributedIterator& o) const

@@ -1,0 +1,9 @@
+{
+          "title" : "Generic View",
+           "kind" : "view",
+           "type" : "view",
+           "tags" : ["view", "generic"],
+    "description" : "<p>Generic view</p>",
+         "inputs" : ["type", "fullscreen", "head pos", "head orientation", "screen upper left", "screen lower left", "screen lower right", "data"],
+        "outputs" : []
+}

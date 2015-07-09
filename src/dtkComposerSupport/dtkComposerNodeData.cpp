@@ -1,23 +1,20 @@
-/* dtkComposerNodeData.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/03/29 11:17:21
- * Version: $Id$
- * Last-Updated: mar. févr.  4 17:24:31 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 301
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeData.h"
+#include "dtkComposerMetatype.h"
+
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
@@ -34,7 +31,7 @@
 class dtkComposerNodeDataPrivate
 {
 public:
-    dtkComposerTransmitterEmitter<dtkAbstractData> receiver_data;
+    dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
     dtkComposerTransmitterReceiver<QString> receiver_string;
     dtkComposerTransmitterReceiver<dtkVectorReal> receiver_vector;
 
@@ -134,3 +131,6 @@ QString dtkComposerNodeData::outputLabelHint(int port)
         return dtkComposerNodeLeaf::outputLabelHint(port);
     }
 }
+
+// 
+// dtkComposerNodeData.cpp ends here

@@ -15,7 +15,6 @@
 #pragma once
 
 #include "dtkComposerExport.h"
-
 #include "dtkComposerNode.h"
 
 // /////////////////////////////////////////////////////////////////
@@ -58,6 +57,9 @@ public:
 
 public:
     virtual bool createObject(const QString& implementation) = 0;
+
+public:
+    virtual QVariant variant(void) const { return QVariant(); }
 
 public:
     virtual QStringList implementations(void) const = 0;

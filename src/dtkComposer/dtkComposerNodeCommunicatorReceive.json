@@ -1,0 +1,24 @@
+{
+          "title" : "Receive",
+           "kind" : "atomic",
+           "type" : "communicatorReceive",
+           "tags" : ["remote", "distributed", "communicator", "network", "receive"],
+    "description" : "<h3>Communicator Receive Node</h3>
+                     <p>This node should be put in a Remote or Spawn node only.</p>
+                     <p>The inputs are:
+                     <dl>
+                       <dt><b>source rank<b></dt><dd> Rank of the source (sender)</dd>
+                       <dt><i>tag</i></dt><dd> message tag (optionnal)</dd>
+                       <dt><i>data</i></dt><dd> (FIXME)</dd>
+                       <dt><i>socket</i></dt><dd> receive message from given socket instead of communicator (optionnal)</dd>
+                     </dl>
+                     <p>The outputs are:
+                     <dl>
+                       <dt><b>data<b></dt><dd> data received (as a variant)</dd>
+                       <dt><i>source</i></dt><dd> source rank</dd>
+                       <dt>tag</dt><dd> message tag</dd>
+                     </dl>
+                     .</p>",
+         "inputs" : ["source rank", "tag", "data","socket"],
+        "outputs" : ["data","source","tag"]
+}

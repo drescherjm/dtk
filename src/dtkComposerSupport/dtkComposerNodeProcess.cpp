@@ -1,23 +1,20 @@
-/* dtkComposerNodeProcess.cpp ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/03/29 11:17:21
- * Version: $Id$
- * Last-Updated: mar. févr.  4 17:47:07 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 311
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerNodeProcess.h"
+#include "dtkComposerMetatype.h"
+
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
@@ -72,11 +69,9 @@ dtkComposerNodeProcess::dtkComposerNodeProcess(void) : dtkComposerNodeLeafProces
     this->appendReceiver(&(d->receiver_rhs));
 
     d->index = -1;
-    d->emitter_integer.setData(&d->index);
     this->appendEmitter(&(d->emitter_integer));
 
     d->value = 0.;
-    d->emitter_real.setData(&d->value);
     this->appendEmitter(&(d->emitter_real));
 
     this->appendEmitter(&(d->emitter_data));
@@ -146,9 +141,12 @@ void dtkComposerNodeProcess::run(void)
 
     d->index = d->process->run();
 
+    d->emitter_integer.setData(&d->index);
 
     if (d->process->data(0))
         d->value = *(static_cast<qreal *>(d->process->data(0)));
+
+    d->emitter_real.setData(&d->value);
 
     if (d->process->output())
         d->emitter_data.setData(d->process->output());
@@ -203,3 +201,6 @@ QString dtkComposerNodeProcess::outputLabelHint(int port)
 
     return dtkComposerNodeLeaf::outputLabelHint(port);
 }
+
+// 
+// dtkComposerNodeProcess.cpp ends here

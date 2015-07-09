@@ -27,6 +27,7 @@
 
 #include <dtkDistributed/dtkDistributedCommunicator.h>
 #include <dtkDistributed/dtkDistributedMessage.h>
+#include <dtkDistributed/dtkDistributed.h>
 
 #include <dtkLog/dtkLog.h>
 
@@ -52,6 +53,7 @@ public:
     QUrl server;
     int  count;
     int  last_controller_rank;
+    int  status;
 
 public:
     QMap<int, QString> composition_cache;
@@ -67,6 +69,7 @@ dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave
 
     d->factory   = NULL;
     d->composition_socket = NULL;
+    d->communicator_i = NULL;
 
     d->scene->setStack(d->stack);
     d->scene->setGraph(d->graph);
@@ -76,7 +79,8 @@ dtkComposerEvaluatorSlave::dtkComposerEvaluatorSlave(void) : dtkDistributedSlave
 
     d->reader->setScene(d->scene);
     d->reader->setGraph(d->graph);
-    d->count = 0;
+    d->count  = 0;
+    d->status = 0;
 }
 
 dtkComposerEvaluatorSlave::~dtkComposerEvaluatorSlave(void)
@@ -111,20 +115,26 @@ void dtkComposerEvaluatorSlave::setServer(QUrl server)
     d->server = server;
 }
 
-void dtkComposerEvaluatorSlave::setInternalCommunicator(dtkDistributedCommunicator *communicator)
+int dtkComposerEvaluatorSlave::status(void)
 {
-    d->communicator_i = communicator;
-    if (communicator->rank() == 0) {
-        std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
-    }
+    return d->status;
 }
 
-int dtkComposerEvaluatorSlave::exec(void)
+void dtkComposerEvaluatorSlave::run(void)
 {
+    d->status = 0;
+
+    if ( !d->communicator_i) {
+        d->communicator_i = dtkDistributed::communicator::instance();
+        if (d->communicator_i->rank() == 0) {
+            std::cout << QString("DTK_JOBID="+this->jobId()).toStdString() << std::endl << std::flush;
+        }
+    }
 
     if (!d->factory) {
         dtkFatal() << "No factory set ! abort slave execution";
-        return 1;
+        d->status = 1;
+        return;
     }
 
     int rank = d->communicator_i->rank();
@@ -132,6 +142,8 @@ int dtkComposerEvaluatorSlave::exec(void)
     dtkDebug() << "communicator size is" << size;
     dtkDebug() << "our rank is" << rank;
     bool new_composition;
+
+
 
     if ( rank == 0) {
 
@@ -150,7 +162,8 @@ int dtkComposerEvaluatorSlave::exec(void)
                          msg->send(d->composition_socket);
                      } else {
                          dtkError() << "Can't connect to server";
-                         return 1;
+                         d->status = 1;
+                         return;
                      }
                 }
 
@@ -161,7 +174,8 @@ int dtkComposerEvaluatorSlave::exec(void)
                 this->socket()->setParent(0);
             } else  {
                 dtkFatal() << "Can't connect to server" << d->server;
-                return 1;
+                d->status = 1;
+                return;
             }
         }
 
@@ -173,11 +187,13 @@ int dtkComposerEvaluatorSlave::exec(void)
             dtkInfo() << "data already available, try to parse composition " << d->composition_socket->bytesAvailable();
         } else if (!d->composition_socket->waitForReadyRead(600000)) {
             dtkFatal() << "No data received from server after 10mn, abort " ;
-            return 1;
-        } else
-            dtkDebug() << "Ok, data received, parse" ;
+            d->status = 1;
+            return;
+        } else {
+            dtkDebug() << "Ok, data received on composition socket, parse" ;
+        }
 
-        msg.reset();
+        msg.reset(new dtkDistributedMessage);
         msg->parse(d->composition_socket);
         if (msg->type() == "xml") {
             new_composition = true;
@@ -195,12 +211,14 @@ int dtkComposerEvaluatorSlave::exec(void)
             }
         } else {
             dtkFatal() << "Bad composition type, abort" << msg->type() << msg->content();
-            return 1;
+            d->status = 1;
+            return;
         }
 
         if (new_composition && composition.isEmpty()) {
             dtkFatal() << "Empty composition, abort" ;
-            return 1;
+            d->status = 1;
+            return;
         }
 
         dtkDebug() << "got composition from controller:" << composition;
@@ -228,26 +246,33 @@ int dtkComposerEvaluatorSlave::exec(void)
                 remote->setCommunicator(d->communicator_i);
             } else {
                 dtkFatal() <<  "Can't find remote node in composition, abort";
-                return 1;
+                d->status = 1;
+                return;
             }
         }
         dtkDebug() << "run composition" ;
+        if (QThread::currentThread() == qApp->thread()) {
+            dtkTrace() << "running on main thread, create a thread for the evaluator"  ;
+            QThread *workerThread = new QThread(this);
+            QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
+            QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
 
-        QThread *workerThread = new QThread(this);
-        QObject::connect(workerThread, SIGNAL(started()),  d->evaluator, SLOT(run()), Qt::DirectConnection);
-        QObject::connect(d->evaluator, SIGNAL(evaluationStopped()), workerThread, SLOT(quit()));
+            QEventLoop loop;
+            loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
+            loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
 
-        QEventLoop loop;
-        loop.connect(d->evaluator, SIGNAL(evaluationStopped()), &loop, SLOT(quit()));
-        loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
+            this->socket()->moveToThread(workerThread);
+            workerThread->start();
 
-        this->socket()->moveToThread(workerThread);
-        workerThread->start();
+            loop.exec();
 
-        loop.exec();
+            workerThread->wait();
+            workerThread->deleteLater();
+        } else {
+            dtkTrace() << "running on dedicated thread,run the evaluator" ;
+            d->evaluator->run_static();
+        }
 
-        workerThread->wait();
-        workerThread->deleteLater();
         dtkDebug() << "finished" ;
 
     } else {
@@ -255,10 +280,13 @@ int dtkComposerEvaluatorSlave::exec(void)
         d->communicator_i->receive(composition,0,0);
 
         if (composition != "rerun") {
-            dtkDebug() << "new/changed composition, read" ;
+            dtkDebug() << "new/changed composition, read"  ;
+            dtkDebug() << " composition is " << composition ;
             d->reader->readString(composition);
-        } else
+            dtkDebug() << "read done" ;
+        } else {
             dtkDebug() << "reuse composition" ;
+        }
 
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(d->scene->root()->nodes().first()->wrapee())) {
             remote->setSlave(this);
@@ -278,12 +306,12 @@ int dtkComposerEvaluatorSlave::exec(void)
 
             workerThread->wait();
             workerThread->deleteLater();
+            // d->evaluator->run_static();
             dtkDebug() << "finished" ;
         } else {
             dtkFatal() <<  "Can't find remote node in composition, abort";
-            return 1;
+            d->status = 1;
+            return;
         }
     }
-
-    return 0;
 }

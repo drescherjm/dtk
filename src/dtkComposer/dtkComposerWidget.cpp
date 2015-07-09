@@ -1,17 +1,16 @@
-/* dtkComposerWidget.cpp ---
- *
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- * Created: Mon Jan 30 10:34:49 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include <dtkConfig.h>
 
@@ -82,7 +81,7 @@ void dtkComposerWidgetPrivate::onRequestFinished(QNetworkReply *reply)
 
 dtkComposerWidget::dtkComposerWidget(QWidget *parent) : QWidget(parent), d(new dtkComposerWidgetPrivate)
 {
-    d->factory = new dtkComposerFactory;
+    d->factory = dtkComposerFactory::instance();
     d->graph = new dtkComposerGraph;
     d->stack = new dtkComposerStack;
     d->scene = new dtkComposerScene;
@@ -223,7 +222,7 @@ bool dtkComposerWidget::insert(QString file)
 
 void dtkComposerWidget::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
-#if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+#if defined(DTK_BUILD_DISTRIBUTED)
     foreach(dtkComposerSceneNode *node, composite->nodes()) {
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
             remote->setComposition(d->writer->toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
@@ -287,7 +286,6 @@ void dtkComposerWidget::reset(void)
     d->reader->readString(data);
 
     d->evaluator->reset();
-
 }
 
 dtkComposerEvaluator *dtkComposerWidget::evaluator(void)
@@ -334,3 +332,6 @@ dtkComposerWriter *dtkComposerWidget::writer(void)
 {
     return d->writer;
 }
+
+//
+// dtkComposerWidget.cpp ends here

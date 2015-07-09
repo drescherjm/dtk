@@ -33,6 +33,7 @@ public:
     void setTitle(const QString& title);
     void setKind(const QString& kind);
     void setType(const QString& type);
+    void setColor(const QString& color);
     void setTags(const QStringList& tags);
     void setDescription(const QString& description);
     void appendInputLabel(const QString& label);
@@ -43,6 +44,7 @@ public:
 public:
     const QString& title(void) const;
     dtkComposerNode::Kind kind(void) const;
+    const QString& color(void) const;
     const QString& type(void) const;
     const QStringList& tags(void) const;
     const QString& description(void) const;

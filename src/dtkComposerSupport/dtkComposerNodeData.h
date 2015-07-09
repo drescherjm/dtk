@@ -1,29 +1,27 @@
-/* @(#)dtkComposerNodeData.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/03/29 11:15:49
- * Version: $Id$
- * Last-Updated: Tue Jul  3 12:39:07 2012 (+0200)
- *           By: tkloczko
- *     Update #: 12
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary:
- *
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- *
- */
+// Change Log:
+// 
+// 
 
-#ifndef DTKCOMPOSERNODEDATA_H
-#define DTKCOMPOSERNODEDATA_H
+// Code:
+
+#pragma once
 
 #include "dtkComposerSupportExport.h"
 #include "dtkComposerNodeLeafData.h"
 
 class dtkComposerNodeDataPrivate;
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeData interface
+// /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeData : public dtkComposerNodeLeafData
 {
@@ -51,4 +49,5 @@ private:
     dtkComposerNodeDataPrivate *d;
 };
 
-#endif
+// 
+// dtkComposerNodeData.h ends here

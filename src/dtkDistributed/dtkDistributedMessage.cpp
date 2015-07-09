@@ -164,6 +164,26 @@ dtkDistributedMessage::Method dtkDistributedMessage::method(void)
     return d->method;
 }
 
+QString dtkDistributedMessage::methodString(void)
+{
+    switch (d->method) {
+        case STATUS:   return "STATUS";
+        case OKSTATUS: return "OKSTATUS";
+        case NEWJOB:   return "NEWJOB";
+        case OKJOB:    return "OKJOB";
+        case ERRORJOB: return "ERRORJOB";
+        case DELJOB:   return "DELJOB";
+        case OKDEL:    return "OKDEL";
+        case ERRORDEL: return "ERRORDEL";
+        case ENDJOB:   return "ENDJOB";
+        case DATA:     return "DATA";
+        case SETRANK:  return "SETRANK";
+        case STOP:     return "STOP";
+        case ERROR_UNKNOWN:return "ERROR_UNKNOWN";
+        default: return "Unsupported method";
+        };
+}
+
 QString dtkDistributedMessage::req(void)
 {
     QString req;
@@ -311,7 +331,7 @@ qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
     if (d->headers.contains("x-dtk-jobid")) {
         d->jobid = d->headers["x-dtk-jobid"].trimmed();;
     }
-    dtkTrace() << "parse: jobid is" <<d->jobid;
+    dtkTrace() << "parse: jobid is" <<d->jobid << "size:" << d->size << "method:" << this->methodString();
 
     if (d->size > 0) {
         //read content-type
@@ -333,9 +353,6 @@ qlonglong dtkDistributedMessage::parse(QTcpSocket *socket)
         }
         dtkTrace() << "parse: set content" << buffer.size() ;
         this->setContent(buffer);
-    } else {
-        // end of request == empty line
-        socket->readLine();
     }
 
     return 0;

@@ -24,8 +24,10 @@
 #include "dtkComposerNodeControlIf.h"
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
+#include "dtkComposerNodeDistributed.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeRange.h"
 #include "dtkComposerNodeMetaContainer.h"
 #include "dtkComposerNodeNumberOperator.h"
 #include "dtkComposerNodeReal.h"
@@ -55,6 +57,14 @@ dtkComposerFactory::~dtkComposerFactory(void)
 
 }
 
+DTKCOMPOSER_EXPORT dtkComposerFactory *dtkComposerFactory::instance(void)
+{
+    if(!s_instance)
+        s_instance = new dtkComposerFactory;
+
+    return s_instance;
+}
+
 void dtkComposerFactory::initNodeFile(void)
 {
     this->record(":dtkComposer/dtkComposerNodeFile.json", dtkComposerNodeCreator<dtkComposerNodeFile>);
@@ -74,9 +84,16 @@ void dtkComposerFactory::initNodeBase(void)
 
 void dtkComposerFactory::initNodeDistributed(void)
 {
-    this->record(":dtkComposer/dtkComposerNodeRemote.json",   dtkComposerNodeCreator<dtkComposerNodeRemote>);
-    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",   dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
-    this->record(":dtkComposer/dtkComposerNodeSpawn.json",   dtkComposerNodeCreator<dtkComposerNodeSpawn>);
+    this->record(":dtkComposer/dtkComposerNodeRemote.json",             dtkComposerNodeCreator<dtkComposerNodeRemote>);
+    this->record(":dtkComposer/dtkComposerNodeRemoteSubmit.json",       dtkComposerNodeCreator<dtkComposerNodeRemoteSubmit>);
+    this->record(":dtkComposer/dtkComposerNodeSpawn.json",              dtkComposerNodeCreator<dtkComposerNodeSpawn>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorRank.json",   dtkComposerNodeCreator<dtkComposerNodeCommunicatorRank>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorSize.json",   dtkComposerNodeCreator<dtkComposerNodeCommunicatorSize>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorSend.json",   dtkComposerNodeCreator<dtkComposerNodeCommunicatorSend>);
+    this->record(":dtkComposer/dtkComposerNodeCommunicatorReceive.json",dtkComposerNodeCreator<dtkComposerNodeCommunicatorReceive>);
+    this->record(":dtkComposer/dtkComposerNodeAnySource.json",          dtkComposerNodeCreator<dtkComposerNodeAnySource>);
+    this->record(":dtkComposer/dtkComposerNodeAnyTag.json",             dtkComposerNodeCreator<dtkComposerNodeAnyTag>);
+    this->record(":dtkComposer/dtkComposerNodeControllerRank.json",     dtkComposerNodeCreator<dtkComposerNodeControllerRank>);
 }
 
 void dtkComposerFactory::initNodeConstants(void)
@@ -116,6 +133,7 @@ void dtkComposerFactory::initNodeNumber(void)
 {
     this->record(":dtkComposer/dtkComposerNodeInteger.json", dtkComposerNodeCreator<dtkComposerNodeInteger>);
     this->record(":dtkComposer/dtkComposerNodeReal.json", dtkComposerNodeCreator<dtkComposerNodeReal>);
+    this->record(":dtkComposer/dtkComposerNodeRange.json", dtkComposerNodeCreator<dtkComposerNodeRange>);
 
     // -- Unary operators
 
@@ -197,6 +215,8 @@ void dtkComposerFactory::initNodeContainer(void)
     this->record(":dtkComposer/dtkComposerNodeMetaContainerSize.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSize>);
     this->record(":dtkComposer/dtkComposerNodeMetaContainerTakeAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerTakeAt>);
 }
+
+dtkComposerFactory *dtkComposerFactory::s_instance = NULL;
 
 //
 // dtkComposerFactory.cpp ends here

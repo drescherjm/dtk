@@ -1,0 +1,9 @@
+{
+          "title" : "Controller Rank",
+           "kind" : "atomic",
+           "type" : "controllerRank",
+           "tags" : ["constant", "controller", "rank"],
+    "description" : "<p>Rank of the controller. Can be used to send a message to the controller using send in a remote node.</p>",
+         "inputs" : [],
+        "outputs" : ["value"]
+}

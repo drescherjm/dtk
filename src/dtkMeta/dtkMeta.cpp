@@ -23,6 +23,7 @@ QString dtkMetaType::description(const QVariant& v)
 {
     QString str;
     QDebug dbg(&str);
+    dbg.setAutoInsertSpaces(false);
     if (v.canConvert<dtkMetaContainerSequential>()) {
         dtkMetaContainerSequential mc = v.value<dtkMetaContainerSequential>();
         dbg << mc;

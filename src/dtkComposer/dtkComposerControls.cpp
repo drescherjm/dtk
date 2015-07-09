@@ -1,16 +1,16 @@
-/* dtkComposerControls.cpp --- 
- * 
+/* dtkComposerControls.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerControls.h"
@@ -164,4 +164,3 @@ void dtkComposerControls::setup(int index)
 // /////////////////////////////////////////////////////////////////
 // Helper functions
 // /////////////////////////////////////////////////////////////////
-

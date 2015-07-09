@@ -107,9 +107,9 @@ namespace dtkDistributed
             } else if (app) {
                 _private::communicator = app->communicator();
             } else {
+                dtkInfo() << "no communicator, no application: create a default qthread communicator";
                 dtkDistributedSettings settings;
-                settings.beginGroup("communicator");
-                pluginManager().initialize(settings.value("plugins").toString());
+                dtkDistributed::communicator::initialize(settings.value("plugins").toString());
                 _private::communicator = dtkDistributed::communicator::pluginFactory().create("qthread");
             }
             return _private::communicator;

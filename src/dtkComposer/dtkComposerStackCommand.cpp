@@ -40,6 +40,7 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterProxyVariant.h"
 #include "dtkComposerWriter.h"
 
 #include <dtkLog/dtkLogger.h>
@@ -1567,6 +1568,9 @@ void dtkComposerStackCommandCreatePort::redo(void)
             case dtkComposerTransmitter::ProxyLoop:
                 e->transmitter = new dtkComposerTransmitterProxyLoop(e->node->wrapee());
                 break;
+            case dtkComposerTransmitter::ProxyVariant:
+                e->transmitter = new dtkComposerTransmitterProxyVariant(e->node->wrapee());
+                break;
             default:
                 e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
                 break;
@@ -1584,6 +1588,9 @@ void dtkComposerStackCommandCreatePort::redo(void)
             switch(e->kind) {
             case dtkComposerTransmitter::ProxyLoop:
                 e->transmitter = new dtkComposerTransmitterProxyLoop(e->node->wrapee());
+                break;
+            case dtkComposerTransmitter::ProxyVariant:
+                e->transmitter = new dtkComposerTransmitterProxyVariant(e->node->wrapee());
                 break;
             default:
                 e->transmitter = new dtkComposerTransmitterProxy(e->node->wrapee());
@@ -2428,14 +2435,14 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(source);
                     }
@@ -2534,14 +2541,14 @@ void dtkComposerStackCommandReparentNode::redo(void)
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Down) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(target->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(target);
                     }
                     if(e->direction == dtkComposerStackCommandReparentNodePrivate::Up) {
 #if defined(DTK_BUILD_DISTRIBUTED)
                         if (dynamic_cast<dtkComposerNodeRemote *>(source->wrapee()))
-                            command->setKind(dtkComposerTransmitter::ProxyLoop);
+                            command->setKind(dtkComposerTransmitter::ProxyVariant);
 #endif
                         command->setNode(source);
                     }
@@ -2845,6 +2852,7 @@ void dtkComposerStackCommandCreateBlock::redo(void)
 
     e->block->wrap(control->block(e->id));
     e->node->addBlock(e->block);
+    e->node->layout();
 
     d->graph->addBlock(e->node);
 
@@ -2867,6 +2875,7 @@ void dtkComposerStackCommandCreateBlock::undo(void)
     d->graph->removeBlock(e->block);
     control->removeBlock(e->id);
     e->node->removeBlock(e->block);
+    e->node->layout();
 
     d->scene->removeItem(e->block);
 
@@ -2935,6 +2944,7 @@ void dtkComposerStackCommandDestroyBlock::redo(void)
 
     d->graph->removeBlock(e->block);
     e->node->removeBlock(e->block);
+    e->node->layout();
     control->removeBlock(e->id);
 
     d->scene->removeItem(e->block);
@@ -2960,15 +2970,13 @@ void dtkComposerStackCommandDestroyBlock::undo(void)
 
     control->addBlock(dynamic_cast<dtkComposerNodeComposite *>(e->block->wrapee()));
     e->node->addBlock(e->block);
+    e->node->layout();
 
     d->graph->addBlock(e->block);
 
 
     d->scene->modify(true);
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////
 // Copy Nodes Command

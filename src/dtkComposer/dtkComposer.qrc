@@ -8,8 +8,17 @@
         <file>dtkComposerNodeInteger.json</file>
         <file>dtkComposerNodeReal.json</file>
         <file>dtkComposerNodeComposite.json</file>
+
         <file>dtkComposerNodeRemote.json</file>
         <file>dtkComposerNodeRemoteSubmit.json</file>
+        <file>dtkComposerNodeCommunicatorRank.json</file>
+        <file>dtkComposerNodeCommunicatorSize.json</file>
+        <file>dtkComposerNodeCommunicatorSend.json</file>
+        <file>dtkComposerNodeCommunicatorReceive.json</file>
+        <file>dtkComposerNodeAnySource.json</file>
+        <file>dtkComposerNodeAnyTag.json</file>
+        <file>dtkComposerNodeControllerRank.json</file>
+
         <file>dtkComposerNodeLogger.json</file>
         <file>dtkComposerNodePrint.json</file>
         <file>dtkComposerNodeBooleanOperatorUnaryNot.json</file>
@@ -34,6 +43,7 @@
         <file>dtkComposerNodeFileWrite.json</file>
         <file>dtkComposerNodeDirectory.json</file>
         <file>dtkComposerNodeFileList.json</file>
+        <file>dtkComposerNodeRange.json</file>
         <file>dtkComposerNodeNumberOperatorUnaryAbs.json</file>
         <file>dtkComposerNodeNumberOperatorUnarySqrt.json</file>
         <file>dtkComposerNodeNumberOperatorUnarySquare.json</file>

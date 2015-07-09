@@ -15,6 +15,7 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 
 #include "dtkComposerNodeLeaf.h"
 
@@ -37,6 +38,7 @@ public:
     bool createObject(const QString& implementation);
 
 public:
+    QVariant variant(void) const;
     T *object(void) const;
 
 public:

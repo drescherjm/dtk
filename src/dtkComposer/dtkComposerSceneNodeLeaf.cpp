@@ -47,25 +47,25 @@ void dtkComposerSceneNodeLeafPrivate::flagAs(Qt::GlobalColor color)
 {
     switch(color) {
     case Qt::blue:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-blue.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-blue.png"));
         break;
     case Qt::gray:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-gray.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-gray.png"));
         break;
     case Qt::green:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-green.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-green.png"));
         break;
     case Qt::darkYellow:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-orange.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-orange.png"));
         break;
     case Qt::red:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-red.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-red.png"));
         break;
     case Qt::magenta:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-pink.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-pink.png"));
         break;
     case Qt::yellow:
-        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-yellow.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
         break;
     default:
         break;
@@ -84,12 +84,10 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
 
     d->gradiant_defined = false;
 
-
     if (qApp && qobject_cast<QGuiApplication *>(qApp)) {
         d->use_gui = true;
         d->flag = new QGraphicsPixmapItem(this);
         d->flag->setVisible(false);
-
         d->flag_color = Qt::transparent;
     } else {
         d->use_gui = false;
@@ -137,7 +135,8 @@ void dtkComposerSceneNodeLeaf::flag(Qt::GlobalColor color, bool on)
 
 void dtkComposerSceneNodeLeaf::flag(QColor color)
 {
-    if (!d->use_gui) { return; }
+    if (!d->use_gui)
+        return;
 
     if(color == Qt::blue)
         this->flag(Qt::blue, true);
@@ -284,9 +283,10 @@ void dtkComposerSceneNodeLeaf::layout(void)
             d->gradiant.setColorAt(stripe, QColor(155, 75, 0));
             d->gradiant.setColorAt(1.0, QColor(155, 75, 0).darker());
         } else {
-            d->gradiant.setColorAt(0.0, QColor(Qt::gray).lighter());
-            d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));
-            d->gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker());
+            QColor color = QColor(this->wrapee()->nodeMetaData()->color());
+            d->gradiant.setColorAt(0.0, color.lighter());
+            d->gradiant.setColorAt(stripe, color);
+            d->gradiant.setColorAt(1.0, color.darker());
         }
 
         d->gradiant_defined = true;

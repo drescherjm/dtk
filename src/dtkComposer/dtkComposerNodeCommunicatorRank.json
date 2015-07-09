@@ -1,0 +1,11 @@
+{
+          "title" : "Comm Rank",
+           "kind" : "atomic",
+           "type" : "communicatorRank",
+           "tags" : ["remote", "distributed", "communicator", "network", "rank", "wid"],
+    "description" : "<h3>Communicator Rank Node</h3>
+                     <p>This node should be put in a Remote or Spawn node only.</p>
+                     <p>The output is the rank (or wid, as <i>worker id</i>).</p>",
+         "inputs" : [],
+        "outputs" : ["rank"]
+}

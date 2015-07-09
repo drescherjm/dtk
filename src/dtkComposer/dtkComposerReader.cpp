@@ -1,17 +1,16 @@
-/* dtkComposerReader.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Mon Jan 30 23:41:08 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerGraph.h"
@@ -21,6 +20,7 @@
 #include "dtkComposerNodeControlCase.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLeaf.h"
 // #include "dtkComposerNodeLeafData.h"
 // #include "dtkComposerNodeLeafProcess.h"
 // #include "dtkComposerNodeLeafView.h"
@@ -40,11 +40,9 @@
 #include "dtkComposerTransmitter.h"
 #include "dtkComposerTransmitterProxy.h"
 #include "dtkComposerTransmitterProxyLoop.h"
+#include "dtkComposerTransmitterProxyVariant.h"
 
 #include <dtkCore/dtkCore.h>
-// #include <dtkCore/dtkAbstractDataFactory.h>
-// #include <dtkCore/dtkAbstractProcessFactory.h>
-// #include <dtkCore/dtkAbstractViewFactory.h>
 
 #include <QtCore>
 #include <QtXml>
@@ -132,7 +130,7 @@ dtkComposerReader::dtkComposerReader(void) : d(new dtkComposerReaderPrivate)
     d->graph = NULL;
 
     d->control = NULL;
-    d->use_gui = true;
+    d->use_gui = (qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
 }
 
 dtkComposerReader::~dtkComposerReader(void)
@@ -160,8 +158,6 @@ void dtkComposerReader::setGraph(dtkComposerGraph *graph)
 bool dtkComposerReader::read(const QString& fileName, bool append)
 {
 
-    d->use_gui = (qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
-
     QString content;
 
     QFile file(fileName);
@@ -183,6 +179,7 @@ bool dtkComposerReader::read(const QString& fileName, bool append)
     }
 
     file.close();
+
     return this->readString(content,append);
 }
 
@@ -191,7 +188,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
     QDomDocument document("dtk");
 
     if (!document.setContent(data)) {
-        qDebug()<< "reader: no content"<< data.size();
+        dtkDebug()<< "reader: no content"<< data.size();
         return false;
     }
 
@@ -586,6 +583,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendReceiver(proxyloop);
                 }
+                if (ports.at(i).toElement().attribute("kind") == "proxyvariant") {
+                    dtkComposerTransmitter *proxyvariant = new dtkComposerTransmitterProxyVariant(composite->wrapee());
+                    proxyvariant->setRequired(false);
+                    composite->wrapee()->appendReceiver(proxyvariant);
+                }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
             } else {
@@ -604,6 +606,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                     dtkComposerTransmitter *proxyloop = new dtkComposerTransmitterProxyLoop(composite->wrapee());
                     proxyloop->setRequired(false);
                     composite->wrapee()->appendEmitter(proxyloop);
+                }
+                if (ports.at(i).toElement().attribute("kind") == "proxyvariant") {
+                    dtkComposerTransmitter *proxyvariant = new dtkComposerTransmitterProxyVariant(composite->wrapee());
+                    proxyvariant->setRequired(false);
+                    composite->wrapee()->appendEmitter(proxyvariant);
                 }
                 if (ports.at(i).toElement().hasAttribute("loop"))
                     port->setLoop(ports.at(i).toElement().attribute("loop").toInt());
@@ -723,39 +730,19 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             }
         }
 
-        // if(dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(leaf->wrapee())) {
+        if(dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(leaf->wrapee())) {
 
-        //     for(int i = 0; i < childNodes.count(); i++) {
-        //         if(childNodes.at(i).toElement().tagName() == "implementation") {
-        //             data_node->createData(childNodes.at(i).childNodes().at(0).toText().data());
-        //         }
-        //     }
-        // }
-
-        // if(dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(leaf->wrapee())) {
-
-        //     for(int i = 0; i < childNodes.count(); i++) {
-        //         if(childNodes.at(i).toElement().tagName() == "implementation") {
-        //             process_node->createProcess(childNodes.at(i).childNodes().at(0).toText().data());
-        //         }
-        //     }
-        // }
-
-        // if(dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(leaf->wrapee())) {
-
-        //     for(int i = 0; i < childNodes.count(); i++) {
-        //         if(childNodes.at(i).toElement().tagName() == "implementation") {
-        //             view_node->createView(childNodes.at(i).childNodes().at(0).toText().data());
-        //         }
-        //     }
-        // }
+            for(int i = 0; i < childNodes.count(); i++) {
+                if(childNodes.at(i).toElement().tagName() == "implementation") {
+                    object_node->createObject(childNodes.at(i).childNodes().at(0).toText().data());
+                }
+            }
+        }
 
         this->extend(node,leaf);
     }
 
     d->node = t;
-
-    // --
 
     return n;
 }
@@ -795,8 +782,10 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
             goto handle_failure;
         else
             edge->setDestination(d->node_map.value(destin_node)->outputPorts().at(destin_id));
+
     edge->link();
     edge->adjust();
+
     d->node->addEdge(edge);
 
     edge->setParent(d->node);
@@ -816,20 +805,18 @@ handle_failure:
 
 void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf)
 {
-  Q_UNUSED(node);
-  Q_UNUSED(leaf);
+    Q_UNUSED(node);
+    Q_UNUSED(leaf);
 }
 
 void dtkComposerReader::clear(void)
 {
-    // Composer
-
     if (d->scene)
         d->scene->clear();
+
     if (d->graph)
         d->graph->clear();
-
-    // Factory
-
-    //dtkAbstractViewFactory::instance()->clear();
 }
+
+//
+// dtkComposerReader.cpp ends here

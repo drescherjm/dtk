@@ -1,21 +1,16 @@
-/* dtkComposerScene.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2012 - Nicolas Niclausse, Inria.
- * Created: 2012/01/30 10:11:39
- * Version: $Id$
- * Last-Updated: Thu Apr 11 09:09:29 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 254
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -23,6 +18,7 @@
 
 #include <QtWidgets>
 
+class dtkComposerNode;
 class dtkComposerNodeFactory;
 class dtkComposerGraph;
 class dtkComposerSceneEdge;
@@ -86,7 +82,7 @@ public:
     QAction *flagAsYellowAction(void);
 
 public:
-    QAction *maskEdgesAction(void);
+    QAction   *maskEdgesAction(void);
     QAction *unmaskEdgesAction(void);
 
 public:
@@ -107,7 +103,7 @@ public slots:
 signals:
     void changed(void);
     void modified(bool);
-    void flagged(void);
+    void flagged(dtkComposerSceneNode *);
 
 signals:
     void selectedNode(dtkComposerSceneNode *node);
@@ -167,6 +163,7 @@ protected:
 
 // #pragma mark -
 // #pragma mark - Helper function
+
 protected:
     void populateEdges(dtkComposerSceneNode *root = NULL);
 
@@ -180,3 +177,5 @@ private:
     dtkComposerScenePrivate *d;
 };
 
+//
+// dtkComposerScene.h ends here

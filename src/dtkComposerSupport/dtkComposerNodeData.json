@@ -1,0 +1,9 @@
+{
+          "title" : "Generic Data",
+           "kind" : "data",
+           "type" : "data",
+           "tags" : ["data", "generic"],
+    "description" : "<p>Generic data</p>",
+         "inputs" : ["string", "data", "vector"],
+        "outputs" : ["data"]
+}

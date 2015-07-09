@@ -17,6 +17,7 @@
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
+#include "dtkComposerNodeLeaf.h"
 // #include "dtkComposerNodeLeafData.h"
 // #include "dtkComposerNodeLeafProcess.h"
 // #include "dtkComposerNodeLeafView.h"
@@ -220,6 +221,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 property.setAttribute("kind", "proxy");
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
                 property.setAttribute("kind", "proxyloop");
+            if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyVariant)
+                property.setAttribute("kind", "proxyvariant");
             tag.appendChild(property);
         }
 
@@ -241,6 +244,8 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
                 property.setAttribute("kind", "proxy");
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
                 property.setAttribute("kind", "proxyloop");
+            if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyVariant)
+                property.setAttribute("kind", "proxyvariant");
 
 // --- twin ports
 
@@ -377,6 +382,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             value.appendChild(text);
 
             tag.appendChild(value);
+        }
+
+        if (dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(node->wrapee())) {
+            
+            QDomText text = document.createTextNode(object_node->currentImplementation());
+            QDomElement implementation = document.createElement("implementation");
+            implementation.appendChild(text);
+            tag.appendChild(implementation);
         }
 
         // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {

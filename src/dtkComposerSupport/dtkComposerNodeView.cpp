@@ -1,27 +1,23 @@
-/* dtkComposerNodeView.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Apr 24 23:29:24 2012 (+0200)
- * Version: $Id$
- * Last-Updated: mar. févr.  4 17:57:59 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 177
- */
+// Version: $Id$
+// 
+// 
 
-/* Commentary: 
- * 
- */
+// Commentary: 
+// 
+// 
 
-/* Change log:
- * 
- */
+// Change Log:
+// 
+// 
+
+// Code:
 
 #include "dtkComposerMetatype.h"
 
 #include "dtkComposerNodeVector3D.h"
 #include "dtkComposerNodeQuaternion.h"
 #include "dtkComposerNodeView.h"
+
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 
@@ -30,31 +26,29 @@
 #include <dtkCoreSupport/dtkAbstractData>
 #include <dtkCoreSupport/dtkAbstractView>
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeViewPrivate declaration
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerNodeViewPrivate
 {
 public:
     dtkComposerTransmitterReceiver<QString> receiver_type;
-
-public:
     dtkComposerTransmitterReceiver<bool> receiver_fullscreen;
-
-public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_head_position;
-
-public:
     dtkComposerTransmitterReceiver<dtkQuaternionReal> receiver_head_orientation;
-
-public:
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_upper_left;
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_left;
     dtkComposerTransmitterReceiver<dtkVector3DReal> receiver_screen_lower_right;
-
-public:
     dtkComposerTransmitterReceiver<dtkAbstractData> receiver_data;
 
 public:
     dtkAbstractView *view;
 };
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeView implementation
+// /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeView::dtkComposerNodeView(void) : QObject(), dtkComposerNodeLeafView(), d(new dtkComposerNodeViewPrivate)
 {
@@ -162,3 +156,6 @@ void dtkComposerNodeView::run(void)
         foreach (dtkAbstractData *data, d->receiver_data.allData())
             d->view->setData(data);
 }
+
+// 
+// dtkComposerNodeView.cpp ends here

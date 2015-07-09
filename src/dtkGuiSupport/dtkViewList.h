@@ -1,24 +1,16 @@
-/* dtkViewList.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed May 16 09:38:55 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Fri May 18 15:58:52 2012 (+0200)
- *           By: Julien Wintz
- *     Update #: 8
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
 
-#ifndef DTKVIEWLIST_H
-#define DTKVIEWLIST_H
+// Code:
 
 #include "dtkGuiSupportExport.h"
 
@@ -36,10 +28,10 @@ public:
 
 public slots:
     void clear(void);
-    
+
 protected slots:
     void update(void);
-    
+
 protected:
     QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
     QStringList mimeTypes(void) const;
@@ -48,4 +40,5 @@ private:
     dtkViewListPrivate *d;
 };
 
-#endif // DTKVIEWLIST_H
+//
+// dtkViewList.h ends here

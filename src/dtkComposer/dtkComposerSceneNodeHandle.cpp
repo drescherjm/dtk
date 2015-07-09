@@ -59,26 +59,19 @@ dtkComposerSceneNodeHandle::~dtkComposerSceneNodeHandle(void)
 void dtkComposerSceneNodeHandle::setTopBlock(dtkComposerSceneNodeComposite *block)
 {
     d->top = block;
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeHandle::setBotBlock(dtkComposerSceneNodeComposite *block)
 {
     d->bot = block;
-
-    this->layout();
 }
 
 void dtkComposerSceneNodeHandle::layout(void)
 {
-    if(!d->top)
-        return;
-
-    if(!d->bot)
-        return;
-
-    this->setPos(d->top->boundingRect().width()/2, d->top->pos().y() + d->top->boundingRect().bottom() - 2);
+    if (d->top && d->bot) {
+        QRectF top_rec = d->top->boundingRect();
+        this->setPos(top_rec.width() / 2, d->top->pos().y() + top_rec.bottom() - 2);
+    }
 }
 
 QRectF dtkComposerSceneNodeHandle::boundingRect(void) const

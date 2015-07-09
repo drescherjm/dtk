@@ -1,15 +1,15 @@
 /* dtkPropertyEditorFactory.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 10:30:09 2013 (+0200)
- * Version: 
- * Last-Updated: lun. févr.  3 14:33:32 2014 (+0100)
+ * Version:
+ * Last-Updated: lun. juin 22 09:10:33 2015 (+0200)
  *           By: Thibaud Kloczko
- *     Update #: 256
+ *     Update #: 275
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkPropertyEditorFactory.h"
@@ -46,7 +46,7 @@ DTKWIDGETS_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(v
 {
     if(!s_instance) {
         s_instance = new dtkPropertyEditorFactory;
-        
+
         s_instance->registerCreator(QMetaType::Double, createDtkPropertyEditorDouble);
         s_instance->registerCreator(QMetaType::Int, createDtkPropertyEditorInteger);
         s_instance->registerCreator(QMetaType::QString, createDtkPropertyEditorString);
@@ -77,7 +77,7 @@ dtkPropertyEditor *dtkPropertyEditorFactory::create(const QString& property_name
 }
 
 QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *object, int hierarchy_level)
-{    
+{
     QList<QWidget *> list;
 
     if (!object) {
@@ -86,21 +86,24 @@ QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *objec
     }
 
     const QMetaObject *meta_object = object->metaObject();
+    if (meta_object) {
+        int limit_level = 0;
+        int offset = 0;
+        while(meta_object && limit_level <= hierarchy_level) {
+            meta_object = meta_object->superClass();
+            if(meta_object) {
+                ++limit_level;
+                offset = meta_object->propertyCount();
+            }
+        }
 
-    int limit_level = 0;
-    int offset = 0;
-    while(meta_object && limit_level <= hierarchy_level) {
-        meta_object = meta_object->superClass();
-        ++limit_level;
-        offset = meta_object->propertyCount();
-    }
-
-    meta_object = object->metaObject();
-    int count = meta_object->propertyCount();
-    QString name;
-    for (int i = offset; i < count; ++i) {
-        name = QString(meta_object->property(i).name());
-        list << reinterpret_cast<QWidget *>(dtkPropertyEditorFactory::instance()->create(name, object, NULL));
+        meta_object = object->metaObject();
+        int count = meta_object->propertyCount();
+        QString name;
+        for (int i = offset; i < count; ++i) {
+            name = QString(meta_object->property(i).name());
+            list << reinterpret_cast<QWidget *>(dtkPropertyEditorFactory::instance()->create(name, object, NULL));
+        }
     }
 
     return list;

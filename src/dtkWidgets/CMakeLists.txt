@@ -1,15 +1,15 @@
 ### CMakeLists.txt ---
-## 
+##
 ## Author: Julien Wintz
 ## Created: Mon Apr 15 11:46:27 2013 (+0200)
-## Version: 
+## Version:
 ## Last-Updated: lun. avril  7 11:13:47 2014 (+0200)
 ##           By: Nicolas Niclausse
 ##     Update #: 58
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
 
 project(dtkWidgets)

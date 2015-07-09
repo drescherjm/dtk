@@ -113,8 +113,15 @@ bool dtkComposerTransmitter::required(void)
 
 void dtkComposerTransmitter::clearData(void)
 {
-    d->variant.clear(); d->variant = QVariant(d->type_list.first(), 0);
-    d->swap.clear();    d->swap    = QVariant(d->type_list.first(), 0);
+    d->variant.clear(); 
+    d->swap.clear();  
+    
+    int type = QMetaType::UnknownType;
+    if (!d->type_list.isEmpty())
+        type = d->type_list.first();
+
+    d->variant = QVariant(type, 0);
+    d->swap    = QVariant(type, 0);
 }
 
 bool dtkComposerTransmitter::isEmpty(void) const

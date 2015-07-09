@@ -356,7 +356,7 @@ void qthDistributedCommunicator::exec(QRunnable *work)
             d->pool.start(task);
         }
     } else {
-        qDebug() << "GUI application, run rank 0 in main thread";
+        dtkDebug() << "GUI application, run rank 0 in main thread";
         for (int i = 1; i< d->size; ++i) {
             qthTask *task = new qthTask;
             task->m_wid  = i;
@@ -365,13 +365,13 @@ void qthDistributedCommunicator::exec(QRunnable *work)
             task->setAutoDelete(true);
             d->pool.start(task);
         }
-        qDebug() << "GUI application, run main thread code";
+        dtkDebug() << "GUI application, run main thread code";
         qthTask task;
         task.m_wid  = 0;
         task.m_comm = this;
         task.m_task = work;
         task.run();
-        qDebug() << "GUI application, done, wait for other threads";
+        dtkDebug() << "GUI application, done, wait for other threads";
     }
     d->pool.waitForDone();
     d->active = false;

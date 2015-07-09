@@ -29,6 +29,19 @@ dtkLog::Level dtkLogger::level(void) const
     return d->level;
 }
 
+QString dtkLogger::levelString(void) const
+{
+    switch (d->level) {
+    case dtkLog::Trace: return "trace";
+    case dtkLog::Debug: return "debug";
+    case dtkLog::Info:  return "info";
+    case dtkLog::Warn:  return "warn";
+    case dtkLog::Error: return "error";
+    case dtkLog::Fatal: return "fatal";
+    default:            return "info";
+    };
+}
+
 void dtkLogger::setLevel(dtkLog::Level level)
 {
     d->level = level;
@@ -67,12 +80,12 @@ void dtkLogger::detachConsole(void)
     d->destinations.removeOne(d->console);
 }
 
-void dtkLogger::attachFile(const QString& path)
+void dtkLogger::attachFile(const QString& path, qlonglong max_file_size)
 {
     if(d->files.contains(path))
         return;
 
-    d->files[path] = dtkLogDestinationPointer(new dtkLogDestinationFile(path));
+    d->files[path] = dtkLogDestinationPointer(new dtkLogDestinationFile(path, max_file_size));
 
     d->destinations << d->files[path];
 }
@@ -110,12 +123,18 @@ void dtkLogger::detachModel(dtkLogModel *model)
 dtkLogger::dtkLogger(void) : d(new dtkLoggerPrivate)
 {
     d->level = dtkLog::Info;
-
+    d->cerr_stream = NULL;
+    d->cout_stream = NULL;
     d->console = dtkLogDestinationPointer(new dtkLogDestinationConsole);
 }
 
 dtkLogger::~dtkLogger(void)
 {
+    if (d->cerr_stream)
+        delete d->cerr_stream;
+    if (d->cout_stream)
+        delete d->cout_stream;
+
     delete d;
 
     d = NULL;
@@ -139,6 +158,14 @@ void dtkLogger::write(const QString& message, dtkLog::Level level)
             d->destinations.at(i)->write(message);
         }
     }
+}
+
+void dtkLogger::redirectCout(dtkLog::Level level) {
+    d->cout_stream =  new redirectStream(std::cout, level);
+}
+
+void dtkLogger::redirectCerr(dtkLog::Level level) {
+    d->cerr_stream =  new redirectStream(std::cerr, level);
 }
 
 //

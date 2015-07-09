@@ -1,23 +1,20 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
-
-
 
 #pragma once
 
 #include "dtkComposerExport.h"
-
 #include "dtkComposerMetaType.h"
 
 #include <QtCore>
@@ -39,11 +36,12 @@ public:
         Emitter,
         Receiver,
         Proxy,
-        ProxyLoop
+        ProxyLoop,
+        ProxyVariant
     };
 
 public:
-    enum DataTransmission { 
+    enum DataTransmission {
         AutoCopy,
         Copy,
         Reference
@@ -74,7 +72,7 @@ public:
 
 public:
     void setDataTransmission(DataTransmission value);
-    
+
     DataTransmission dataTransmission(void) const;
 
 public:
@@ -86,7 +84,7 @@ public:
 #pragma mark Dynamic behaviour
 
 public:
-    void clearData(void);
+    virtual void clearData(void);
 
 public:
     bool isEmpty(void) const;
@@ -103,7 +101,7 @@ public:
 
 public:
     void setTypeList(const TypeList& list);
-    
+
     TypeList typeList(void) const;
 
 public:
@@ -117,7 +115,7 @@ public:
 public:
     void appendNext(dtkComposerTransmitter *transmitter);
     void removeNext(dtkComposerTransmitter *transmitter);
-    
+
     void appendPrevious(dtkComposerTransmitter *transmitter);
     void removePrevious(dtkComposerTransmitter *transmitter);
 
@@ -193,5 +191,5 @@ private:
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterLinkList : public QList<dtkComposerTransmitterLink *> {};
 
-// 
+//
 // dtkComposerTransmitter.h ends here

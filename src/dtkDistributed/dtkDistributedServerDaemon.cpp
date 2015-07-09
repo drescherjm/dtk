@@ -139,7 +139,7 @@ void dtkDistributedServerDaemon::read(void)
     QScopedPointer<dtkDistributedMessage> msg(new dtkDistributedMessage);
     QScopedPointer<dtkDistributedMessage> resp(new dtkDistributedMessage);
 
-    dtkDebug() << "Data received ,parse";
+    dtkDebug() << "****** Data received ,parse ****";
 
     msg.data()->parse(socket);
 
@@ -150,7 +150,7 @@ void dtkDistributedServerDaemon::read(void)
     QPair<int, QString> controller = qMakePair(controller_rank, controller_jobid);
     QPair<int, QString> pair;
 
-    dtkDebug() << "read message of type" << msg->method();
+    dtkDebug() << "****** read message of type" << msg->methodString();
 
     switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
@@ -173,6 +173,7 @@ void dtkDistributedServerDaemon::read(void)
         }
         resp->send(socket);
         if (d->sockets[controller] != socket) {
+            dtkDebug() << "send newjob ack to controller" << d->sockets[controller];
             resp->send(d->sockets[controller]);
         }
         break;
@@ -208,7 +209,7 @@ void dtkDistributedServerDaemon::read(void)
     case dtkDistributedMessage::DATA:
         pair = d->sockets.key(socket);
         msg->addHeader("x-forwarded-for", QString::number(pair.first));
-        dtkDebug() << "forwarding data of type" << msg->type() << "and size" << msg->content().size() << "from" << pair.first << "to" << msg->rank();
+        dtkTrace() << "forwarding data of type" << msg->type() << "and size" << msg->content().size() << "from" << pair.first << "to" << msg->rank();
         pair = qMakePair(msg->rank(),msg->jobid());
         if (d->sockets.contains(pair )) {
             msg->send(d->sockets[pair]);

@@ -1,0 +1,9 @@
+{
+          "title" : "Range",
+           "kind" : "atomic",
+           "type" : "range",
+           "tags" : ["range", "number"],
+    "description" : "<h3>Range node</h3>
+                     <p>Provides a value contained within a range.</p>",
+        "outputs" : ["value"]
+}

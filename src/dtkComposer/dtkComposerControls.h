@@ -1,24 +1,18 @@
-/* dtkComposerControls.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Tue Nov 20 16:16:42 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr 11 10:33:24 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 30
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
-
 
 #include "dtkComposerExport.h"
 
@@ -46,3 +40,5 @@ private:
     dtkComposerControlsPrivate *d;
 };
 
+//
+// dtkComposerControls.h ends here

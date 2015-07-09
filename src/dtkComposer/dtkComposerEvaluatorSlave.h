@@ -23,7 +23,7 @@ class dtkComposerNodeFactory;
 class dtkDistributedCommunicator;
 class dtkComposerEvaluatorSlavePrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave
+class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave, public QRunnable
 {
 
 public:
@@ -34,10 +34,10 @@ public:
     void setCount(int count);
     void setServer(QUrl server);
     void setFactory(dtkComposerNodeFactory *factory);
-    void setInternalCommunicator(dtkDistributedCommunicator *communicator);
 
 public:
-    int exec(void);
+    void    run(void);
+    int  status(void);
 
 private:
     dtkComposerEvaluatorSlavePrivate *d;

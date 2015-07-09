@@ -1,20 +1,18 @@
-/* dtkViewListControl.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Oct 31 12:49:39 2012 (+0100)
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
 
-#ifndef DTKVIEWLISTCONTROL_H
-#define DTKVIEWLISTCONTROL_H
+// Code:
+
+#pragma once
 
 #include "dtkGuiSupportExport.h"
 
@@ -58,4 +56,5 @@ private:
     dtkViewListControlPrivate *d;
 };
 
-#endif
+//
+// dtkViewListControl.h ends here

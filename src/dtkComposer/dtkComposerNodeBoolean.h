@@ -1,21 +1,21 @@
-/* dtkComposerNodeBoolean.h --- 
- * 
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
-
+#include "dtkComposerNodeBoolean_p.h"
 #include "dtkComposerNodeLeaf.h"
 
 class dtkComposerNodeBooleanPrivate;
@@ -35,6 +35,12 @@ public:
 public:
     void setValue(bool value);
 
+public:
+    dtkComposerNodeBooleanEditor *editor(void);
+
 private:
     dtkComposerNodeBooleanPrivate *d;
 };
+
+//
+// dtkComposerNodeBoolean.h ends here

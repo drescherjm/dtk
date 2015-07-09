@@ -1,24 +1,18 @@
-/* dtkAbstractViewFactory.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Nov  7 15:48:10 2008 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Jan 20 13:26:19 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 121
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
 
-#ifndef DTKABSTRACTVIEWERFACTORY_H
-#define DTKABSTRACTVIEWERFACTORY_H
+// Code:
+
+#pragma once
 
 #include "dtkAbstractFactory.h"
 
@@ -93,11 +87,12 @@ protected:
      dtkAbstractViewFactory(void);
     ~dtkAbstractViewFactory(void);
 
-private:    
+private:
     static dtkAbstractViewFactory *s_instance;
 
 private:
     dtkAbstractViewFactoryPrivate *d;
 };
 
-#endif
+//
+// dtkAbstractViewFactory.h ends here

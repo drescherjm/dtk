@@ -93,6 +93,7 @@ void dtkViewListControl::onActorStarted(QString view_name)
         return;
 
     dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(view_name);
+
     if (view && !d->layout->current()->proxy()->view())
         d->layout->current()->proxy()->setView(view);
 }
@@ -124,7 +125,7 @@ void dtkViewListControl::layoutHorizontally(void)
         }
 
         d->layout->setCurrent(current->second());
-    }    
+    }
 }
 
 void dtkViewListControl::onLayoutHorizontally(void)
@@ -197,7 +198,7 @@ void dtkViewListControl::layoutGrid(void)
 
         items << qMakePair(current->first(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
         items << qMakePair(current->second(), item.second == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
-    }    
+    }
 }
 
 void dtkViewListControl::onLayoutGrid(void)

@@ -1,0 +1,9 @@
+{
+          "title" : "Any Tag",
+           "kind" : "atomic",
+           "type" : "anyTag",
+           "tags" : ["constant", "distributed", "remote", "network", "any", "tag", "message"],
+    "description" : "<p>Can be used to receive a message with any tag (like MPI_ANY_TAG ).</p>",
+         "inputs" : [],
+        "outputs" : ["value"]
+}

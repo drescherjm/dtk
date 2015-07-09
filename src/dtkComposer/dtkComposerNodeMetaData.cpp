@@ -21,6 +21,7 @@
 class dtkComposerNodeMetaDataPrivate
 {
 public:
+    QString color;
     QString title;
     dtkComposerNode::Kind kind;
     QString type;
@@ -36,6 +37,7 @@ public:
 
 dtkComposerNodeMetaData::dtkComposerNodeMetaData(void) : d(new dtkComposerNodeMetaDataPrivate)
 {
+    d->color = "darkGray";
     d->kind = dtkComposerNode::Unknown;
 }
 
@@ -79,9 +81,17 @@ bool dtkComposerNodeMetaData::setFromFile(const QString& file_path)
     for(const QVariant& v : output_list)
         d->output_labels << v.toString();
 
+    if(json.keys().contains("color"))
+        this->setColor(json.value("color").toString());
+
     file.close();
 
     return true;
+}
+
+void dtkComposerNodeMetaData::setColor(const QString& color)
+{
+    d->color = color;
 }
 
 void dtkComposerNodeMetaData::setTitle(const QString& title)
@@ -160,6 +170,11 @@ void dtkComposerNodeMetaData::setOutputLabel(int i, const QString& label)
 const QString& dtkComposerNodeMetaData::title(void) const
 {
     return d->title;
+}
+
+const QString& dtkComposerNodeMetaData::color(void) const
+{
+    return d->color;
 }
 
 dtkComposerNode::Kind dtkComposerNodeMetaData::kind(void) const

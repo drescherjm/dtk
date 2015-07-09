@@ -1,24 +1,18 @@
-/* dtkViewManager.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed May 16 09:37:32 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Jan 16 17:22:17 2014 (+0100)
- *           By: Selim Kraria
- *     Update #: 14
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
 
-#ifndef DTKVIEWMANAGER_H
-#define DTKVIEWMANAGER_H
+// Code:
+
+#pragma once
 
 #include "dtkGuiSupportExport.h"
 
@@ -45,9 +39,10 @@ signals:
 public slots:
     void clear(void);
     void hideCurrentWidget(void);
-    
+
 private:
     dtkViewManagerPrivate *d;
 };
 
-#endif
+//
+// dtkViewManager.h ends here

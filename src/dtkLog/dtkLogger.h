@@ -18,6 +18,10 @@
 #include "dtkLogExport.h"
 
 #include <QtCore>
+#include <iostream>
+
+// 1GB max log file size by default
+#define DEFAULT_MAX_FILE_SIZE 1073741824L
 
 class dtkLogModel;
 
@@ -27,7 +31,8 @@ public:
     static dtkLogger& instance(void);
 
 public:
-    dtkLog::Level level(void) const;
+    dtkLog::Level       level(void) const;
+    QString       levelString(void) const;
 
 public:
     void setLevel(dtkLog::Level level);
@@ -39,12 +44,16 @@ public:
     void detachConsole(void);
 
 public:
-    void attachFile(const QString& path);
+    void attachFile(const QString& path, qlonglong max_file_size = DEFAULT_MAX_FILE_SIZE);
     void detachFile(const QString& path);
 
  public:
     void attachModel(dtkLogModel *model);
     void detachModel(dtkLogModel *model);
+
+public:
+    void redirectCout(dtkLog::Level level = dtkLog::Info);
+    void redirectCerr(dtkLog::Level level = dtkLog::Error);
 
 private:
      dtkLogger(void);

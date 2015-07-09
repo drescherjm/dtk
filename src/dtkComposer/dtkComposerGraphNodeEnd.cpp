@@ -17,6 +17,7 @@
  *
  */
 
+#include <dtkConfig.h>
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"

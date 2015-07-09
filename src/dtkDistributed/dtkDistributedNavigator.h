@@ -25,11 +25,12 @@
 
 template<typename Container> class dtkDistributedNavigator
 {
-    const Container& c;
+    const Container *c;
     qlonglong m_start_id;
     qlonglong m_size;
 
 public:
+    dtkDistributedNavigator(void);
     dtkDistributedNavigator(const Container& container);
     dtkDistributedNavigator(const Container& container, qlonglong start, qlonglong size);
 
@@ -58,11 +59,15 @@ public:
 
 // ///////////////////////////////////////////////////////////////////
 
-template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(const Container& container) : c(container), m_start_id(0), m_size(0)
+template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(void) : c(NULL), m_start_id(0), m_size(0)
 {
 }
 
-template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(const Container& container, qlonglong start, qlonglong size) : c(container), m_start_id(start), m_size(size)
+template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(const Container& container) : c(&container), m_start_id(0), m_size(0)
+{
+}
+
+template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistributedNavigator(const Container& container, qlonglong start, qlonglong size) : c(&container), m_start_id(start), m_size(size)
 {
 }
 
@@ -78,14 +83,20 @@ template<typename Container> inline dtkDistributedNavigator<Container>::dtkDistr
 
 template<typename Container> inline dtkDistributedNavigator<Container>& dtkDistributedNavigator<Container>::operator = (const dtkDistributedNavigator<Container>& o)
 {
+    c = o.c;
     m_start_id = o.m_start_id;
     m_size = o.m_size;
+
+    return *this;
 }
 
 template<typename Container> inline dtkDistributedNavigator<Container>& dtkDistributedNavigator<Container>::operator = (dtkDistributedNavigator<Container>&& o)
 {
+    c = o.c;
     m_start_id = o.m_start_id;
     m_size = o.m_size;
+
+    return *this;
 }
 
 template<typename Container> inline void dtkDistributedNavigator<Container>::setRange(qlonglong start, qlonglong size)
@@ -106,12 +117,12 @@ template<typename Container> inline qlonglong dtkDistributedNavigator<Container>
 
 template<typename Container> inline typename dtkDistributedNavigator<Container>::iterator dtkDistributedNavigator<Container>::begin(void) const
 {
-    return iterator(c, m_start_id);
+    return iterator(*c, m_start_id);
 }
 
 template<typename Container> inline typename dtkDistributedNavigator<Container>::iterator dtkDistributedNavigator<Container>::end(void) const
 {
-    return iterator(c, m_start_id + m_size);
+    return iterator(*c, m_start_id + m_size);
 }
 
 // 

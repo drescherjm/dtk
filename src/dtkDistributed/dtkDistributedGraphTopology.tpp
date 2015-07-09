@@ -112,11 +112,16 @@ inline qlonglong dtkDistributedGraphTopology::edgeCount(void) const
     if (!m_edge_count)
         return 0;
 
+    if (!m_builded)
+        m_edge_count->unlock(this->wid());
+
     qlonglong size = m_edge_count->size();
     qlonglong count = 0;
     for (qlonglong i = 0; i < size; ++i)
         count += m_edge_count->at(i);
 
+    if (!m_builded)
+        m_edge_count->wlock(this->wid());
     return count;
 }
 
@@ -304,6 +309,8 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     dtkTrace() << "Matrix size"<< m_size << "edges count" << edges_count << m_comm->wid();
 
     this->initialize();
+    m_edge_count->unlock(this->wid());
+
     m_comm->barrier();
 
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edges_count);
@@ -579,6 +586,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         }
     }
 
+    m_builded = true;
     return true;
 }
 

@@ -82,6 +82,9 @@ dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
 {
     m_comm->barrier();
 
+    if (!m_builded && m_edge_count)
+        m_edge_count->unlock(this->wid());
+
     if (m_neighbour_count)
         delete m_neighbour_count;
     if (m_vertex_to_edge)
@@ -142,6 +145,9 @@ void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
 
     m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size());
     m_edge_count->fill(0);
+    // If the graph is build with addEdge, m_edge_count is written
+    // locally and the locks can be a bottleneck, so set a wlock here.
+    // This will be unlocked after the build (or read )
     m_edge_count->wlock(this->wid());
 }
 
@@ -150,7 +156,7 @@ void dtkDistributedGraphTopology::build(void)
     m_edge_count->unlock(this->wid());
     this->m_comm->barrier();
     m_builded = true;
-    
+
     qlonglong edge_count = 0;
     for (qlonglong i = 0; i < m_comm->size(); ++i) {
         edge_count += m_edge_count->at(i);

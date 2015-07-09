@@ -112,8 +112,10 @@ inline qlonglong dtkDistributedGraphTopology::edgeCount(void) const
     if (!m_edge_count)
         return 0;
 
-    if (!m_builded)
+    if (!m_builded) {
         m_edge_count->unlock(this->wid());
+        m_comm->barrier();
+    }
 
     qlonglong size = m_edge_count->size();
     qlonglong count = 0;

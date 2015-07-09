@@ -80,10 +80,10 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const dtkDistributedGra
 
 dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
 {
-    m_comm->barrier();
-
     if (!m_builded && m_edge_count)
         m_edge_count->unlock(this->wid());
+
+    m_comm->barrier();
 
     if (m_neighbour_count)
         delete m_neighbour_count;

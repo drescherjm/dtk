@@ -58,11 +58,12 @@ class dtkLogDestinationFilePrivate;
 class DTKLOG_EXPORT dtkLogDestinationFile : public dtkLogDestination
 {
 public:
-     dtkLogDestinationFile(const QString& path);
+     dtkLogDestinationFile(const QString& path, qlonglong max_file_size);
     ~dtkLogDestinationFile(void);
 
 public:
     void write(const QString& message);
+    void setMaxFileSize(qlonglong size);
 
 private:
     dtkLogDestinationFilePrivate *d;

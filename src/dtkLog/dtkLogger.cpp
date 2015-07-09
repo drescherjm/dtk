@@ -80,12 +80,12 @@ void dtkLogger::detachConsole(void)
     d->destinations.removeOne(d->console);
 }
 
-void dtkLogger::attachFile(const QString& path)
+void dtkLogger::attachFile(const QString& path, qlonglong max_file_size)
 {
     if(d->files.contains(path))
         return;
 
-    d->files[path] = dtkLogDestinationPointer(new dtkLogDestinationFile(path));
+    d->files[path] = dtkLogDestinationPointer(new dtkLogDestinationFile(path, max_file_size));
 
     d->destinations << d->files[path];
 }

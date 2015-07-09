@@ -20,6 +20,9 @@
 #include <QtCore>
 #include <iostream>
 
+// 1GB max log file size by default
+#define DEFAULT_MAX_FILE_SIZE 1073741824L
+
 class dtkLogModel;
 
 class DTKLOG_EXPORT dtkLogger
@@ -41,7 +44,7 @@ public:
     void detachConsole(void);
 
 public:
-    void attachFile(const QString& path);
+    void attachFile(const QString& path, qlonglong max_file_size = DEFAULT_MAX_FILE_SIZE);
     void detachFile(const QString& path);
 
  public:

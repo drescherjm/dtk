@@ -87,6 +87,9 @@ void dtkApplication::initialize(void)
     QCommandLineOption logfileOption("logfile", qPrintable(QString("log file used by dtkLog; default is: ").append(dtkLogPath(q))),"filename | console",dtkLogPath(q));
     d->parser.addOption(logfileOption);
 
+    QCommandLineOption logfileMaxSizeOption("logfilemax", "log file max size  (in MB); default is: 3072 (3GB)","size");
+    d->parser.addOption(logfileMaxSizeOption);
+
     d->parser.process(*q);
 
     if(d->parser.isSet(settingsOption)) {
@@ -102,14 +105,18 @@ void dtkApplication::initialize(void)
         }
         dtkLogger::instance().setLevel(verbosity);
     }
+    qlonglong max_size = 1024L*1024L*1024L;
+    if (d->parser.isSet(logfileMaxSizeOption)) {
+        max_size = d->parser.value(logfileMaxSizeOption).toLongLong() * 1024 * 1024;
+    }
     if (d->parser.isSet(logfileOption)) {
         if (d->parser.value(logfileOption) == "console") {
             dtkLogger::instance().attachConsole();
         } else {
-            dtkLogger::instance().attachFile(d->parser.value(logfileOption));
+            dtkLogger::instance().attachFile(d->parser.value(logfileOption), max_size);
         }
     } else {
-        dtkLogger::instance().attachFile(dtkLogPath(q));
+        dtkLogger::instance().attachFile(dtkLogPath(q), max_size);
     }
 }
 

@@ -42,14 +42,16 @@ class dtkLogDestinationFilePrivate
 {
 public:
     QFile file;
+    qlonglong max_file_size;
 
 public:
     QTextStream stream;
 };
 
-dtkLogDestinationFile::dtkLogDestinationFile(const QString& path) : d(new dtkLogDestinationFilePrivate)
+dtkLogDestinationFile::dtkLogDestinationFile(const QString& path, qlonglong max_file_size) : d(new dtkLogDestinationFilePrivate)
 {
     d->file.setFileName(path);
+    d->max_file_size = max_file_size;
 
     QFileInfo info(path);
 
@@ -73,8 +75,28 @@ dtkLogDestinationFile::~dtkLogDestinationFile(void)
     d = NULL;
 }
 
+void dtkLogDestinationFile::setMaxFileSize(qlonglong size)
+{
+    d->max_file_size = size;
+}
+
 void dtkLogDestinationFile::write(const QString& message)
 {
+    if (d->file.size() + message.size() > d->max_file_size) {
+        qDebug() << "Max log file size reached" << d->max_file_size << ", rotate log file";
+        d->file.flush();
+        d->file.close();
+        QString path = d->file.fileName();
+        QString backup = path + ".old";
+        // remove old backup
+        if (QFile::exists(backup))
+            QFile::remove(backup);
+
+        QFile::rename( path, backup);
+        if(!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
+            qDebug() << "Unable to open" <<  path << "for writing";
+
+    }
     d->stream << message << endl;
     d->stream.flush();
 }

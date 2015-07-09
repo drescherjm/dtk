@@ -142,13 +142,15 @@ void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
 
     m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size());
     m_edge_count->fill(0);
+    m_edge_count->wlock(this->wid());
 }
 
 void dtkDistributedGraphTopology::build(void)
 {
+    m_edge_count->unlock(this->wid());
     this->m_comm->barrier();
     m_builded = true;
-
+    
     qlonglong edge_count = 0;
     for (qlonglong i = 0; i < m_comm->size(); ++i) {
         edge_count += m_edge_count->at(i);

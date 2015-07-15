@@ -74,19 +74,31 @@ void dtkDistributedApplication::initialize(void)
     QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
     parser->addOption(hostsOption);
 
+
+    QCommandLineOption DSsettingsOption("distributed-settings", "dtkDistributed settings file", "filename");
+    parser->addOption(DSsettingsOption);
+
     dtkApplication::initialize();
 
+    QSettings *settings;
+    if(parser->isSet(DSsettingsOption)) {
+        settings = new QSettings(parser->value(DSsettingsOption), QSettings::IniFormat);
+    } else {
+        settings =  new dtkDistributedSettings;
+    }
+
     // plugins
-    dtkDistributedSettings settings;
-    settings.beginGroup("communicator");
-    dtkDebug() << "initialize plugin manager "<< settings.value("plugins").toString();
+    settings->beginGroup("communicator");
+    dtkDebug() << "initialize plugin manager "<< settings->value("plugins").toString();
 
     QCommandLineOption verboseOption("verbose", QCoreApplication::translate("main", "verbose plugin initialization"));
     if (parser->isSet(verboseOption)) {
         dtkDistributed::communicator::pluginManager().setVerboseLoading(true);
     }
-    dtkDistributed::communicator::initialize(settings.value("plugins").toString());
-    settings.endGroup();
+    dtkDistributed::communicator::initialize(settings->value("plugins").toString());
+    settings->endGroup();
+
+    delete settings;
 
     dtkDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();
 

@@ -70,7 +70,7 @@ void dtkApplication::initialize(void)
     d->parser.addHelpOption();
     d->parser.addVersionOption();
 
-    QCommandLineOption settingsOption("settings", "settings file", "filename");
+    QCommandLineOption settingsOption("settings", "main settings file", "filename");
     d->parser.addOption(settingsOption);
 
     QCommandLineOption verboseOption("verbose", QCoreApplication::translate("main", "verbose plugin initialization"));
@@ -80,7 +80,7 @@ void dtkApplication::initialize(void)
     d->parser.addOption(nonguiOption);
 
     QString verbosity = "info";
-    QCommandLineOption loglevelOption("loglevel", "log level used by dtkLog (default is info)", "trace|debug|info|warn|error|fatal", verbosity);
+    QCommandLineOption loglevelOption("loglevel", "log level used by dtkLog (default is info), available: trace|debug|info|warn|error|fatal", "level", verbosity);
     d->parser.addOption(loglevelOption);
 
     QCoreApplication *q = dynamic_cast<QCoreApplication *>(this);

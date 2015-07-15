@@ -61,7 +61,7 @@ inline void dtkDistributedGraphTopologyVertex::advance(qlonglong j)
 
 inline void dtkDistributedGraphTopologyVertex::rewind(void)
 {
-    Q_ASSERT(c_it > g->m_neighbour_count->begin());
+    Q_ASSERT(c_it >= g->m_neighbour_count->begin());
     --v_it;
     --c_it;
     n_it -= *c_it;

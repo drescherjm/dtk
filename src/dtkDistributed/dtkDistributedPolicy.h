@@ -1,16 +1,6 @@
-// Version: $Id$
 //
+// Copyright (C) 2013 - Nicolas Niclausse, Inria.
 //
-
-// Commentary:
-//
-//
-
-// Change Log:
-//
-//
-
-// Code:
 
 #pragma once
 
@@ -34,18 +24,19 @@ public:
     dtkDistributedPolicy& operator = (const dtkDistributedPolicy& other);
 
 public:
-    Q_INVOKABLE QStringList types(void);
+    Q_INVOKABLE QStringList types(void) const;
 
 public:
-    void addHost(QString host);
+    void addHost(const QString& host);
     void setType(const QString& type);
     void setNWorkers(qlonglong nworkers);
+    void setHostsFromEnvironment(void);
 
 public:
-    QStringList    hosts(void);
+    QStringList    hosts(void) const;
 
 public:
-    dtkDistributedCommunicator *communicator(void);
+    dtkDistributedCommunicator *communicator(void) const;
 
 public:
     dtkDistributedPolicyPrivate *d;

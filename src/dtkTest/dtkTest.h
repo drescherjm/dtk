@@ -44,7 +44,8 @@
     int TestMain(int argc, char *argv[])			\
     {                                               \
         qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("minimal")); \
-        dtkDistributed::create(argc,argv);    \
+        dtkDistributedApplication *app = dtkDistributed::create(argc,argv);    \
+        app->initialize();    \
         TestObject tc;                              \
         return QTest::qExec(&tc, argc, argv);       \
     }

@@ -97,7 +97,10 @@ void dtkDistributedApplication::initialize(void)
         foreach(QString s, parser->values(hostsOption)) {
             d->policy.addHost(s);
         }
+    } else {
+        d->policy.setHostsFromEnvironment();
     }
+
     if (parser->isSet(wrapperOption)) {
         d->wrapper = parser->value(wrapperOption);
     }

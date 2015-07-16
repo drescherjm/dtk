@@ -18,6 +18,7 @@
  */
 
 #pragma once
+#include "dtkComposerExport.h"
 
 #include <QtCore>
 
@@ -30,7 +31,7 @@ class dtkComposerSceneNodeComposite;
 class dtkComposerSceneNote;
 class dtkComposerWriterPrivate;
 
-class  dtkComposerWriter
+class  DTKCOMPOSER_EXPORT dtkComposerWriter
 {
 public:
              dtkComposerWriter(void);

@@ -178,14 +178,14 @@ inline void qthDistributedBufferManager::wlock(void)
 
 inline void qthDistributedBufferManager::wlock(qlonglong wid)
 {
-    d->locked[wid] = 1;
+    d->locked[wid].store(1);
     d->locks[wid]->lockForWrite();
 }
 
 inline void qthDistributedBufferManager::unlock(qlonglong wid)
 {
     d->locks[wid]->unlock();
-    d->locked[wid] = 0;
+    d->locked[wid].store(0);
 }
 
 inline void qthDistributedBufferManager::unlock(void)
@@ -200,7 +200,7 @@ inline void qthDistributedBufferManager::unlock(void)
 
 inline bool qthDistributedBufferManager::locked(qlonglong wid)
 {
-    return d->locked[wid];
+    return (d->locked[wid].load() == 1);
 }
 
 inline void qthDistributedBufferManager::get(qint32 from, qlonglong position, void *array, qlonglong nelements)

@@ -34,6 +34,8 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkWidgets"
   "@CMAKE_CURRENT_BINARY_DIR@")
 
+include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
+
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5Declarative REQUIRED)

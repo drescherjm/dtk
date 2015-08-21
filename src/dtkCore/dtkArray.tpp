@@ -260,6 +260,21 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         new (--i) T(*(--value));
 }
 
+template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(std::initializer_list<T> args) : isRawData(false)
+{
+    Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
+    Q_ASSERT_X(args.size() >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
+    if (args.size() > PreallocSize) {
+        d = Data::allocate(args.size());
+        d->size = int(args.size());
+    } else {
+        d = Data::fromRawData(this->preallocData(), args.size(), dtkArrayData::Unsharable);
+        d->capacityReserved = bool(PreallocSize);
+        d->alloc = PreallocSize;
+    }
+    copyConstruct(args.begin(), args.end(), d->begin());
+}
+
 template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(const dtkArray& other) : isRawData(false)
 {
     this->copyData(other.d);
@@ -606,6 +621,24 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
                 *--w = *--i;
         }
         d->size = newSize;
+    }
+}
+
+template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::append(std::initializer_list<T> args)
+{
+    qlonglong size = args.size();
+    if (size != 0) {
+        quintptr newSize = d->size + size;
+        const bool isTooSmall = newSize > d->alloc;
+        if (!isDetached() || isTooSmall) {
+            dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
+            reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
+        }
+
+        if (d->alloc) {
+            copyConstruct(args.begin(), args.end(), d->begin() + d->size);
+            d->size = newSize;
+        }
     }
 }
 

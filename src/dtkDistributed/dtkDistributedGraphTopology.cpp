@@ -230,9 +230,10 @@ void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool ori
         ++edge_counter;
         m_edge_count->setAt(wid, edge_counter);
     }
-    else
+    else {
         dtkWarn() << "dtkDistributedGraphTopology try to addEdge(" << from << "," << to << ") with wid=" << wid << " but the owner is " << from_owner  << " . Nothing will be done !!!";
-
+    }
+    
     if (!oriented) {
         addEdge(to, from, true);
     }

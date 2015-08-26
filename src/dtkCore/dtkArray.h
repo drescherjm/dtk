@@ -141,6 +141,7 @@ public:
     explicit dtkArray(qlonglong size);
              dtkArray(qlonglong size, const T& value);
              dtkArray(const T *values, qlonglong size);
+             dtkArray(std::initializer_list<T> args);
              dtkArray(const dtkArray& other);
 #ifdef Q_COMPILER_RVALUE_REFS
              dtkArray(dtkArray&& other);
@@ -203,6 +204,7 @@ public:
     void append(const T& v1, const T& v2, const T& v3);
     void append(const T& v1, const T& v2, const T& v3, const T& v4);
     void append(const T *values, qlonglong size);
+    void append(std::initializer_list<T> args);
     void append(const dtkArray& other);
 
     void prepend(const T& value);

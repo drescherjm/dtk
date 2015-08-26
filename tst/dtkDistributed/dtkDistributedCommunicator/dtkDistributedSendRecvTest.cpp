@@ -26,6 +26,8 @@ void dtkDistributedSendRecvTestCase::initTestCase(void)
     settings.beginGroup("communicator");
     dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
+    dtkLogger::instance().attachConsole();
+    dtkLogger::instance().setLevel("trace");
 }
 
 void dtkDistributedSendRecvTestCase::init(void)

@@ -64,10 +64,10 @@ public:
     };
 
 public:
-    virtual void  initialize(void);
-    virtual bool  initialized(void);
-    virtual void uninitialize(void);
-    virtual bool       active(void);
+    virtual void  initialize(void)  = 0;
+    virtual bool  initialized(void) = 0;
+    virtual void uninitialize(void) = 0;
+    virtual bool       active(void) = 0;
 
 public:
     virtual dtkDistributedBufferManager *createBufferManager(void) { return 0; } ;
@@ -146,15 +146,13 @@ public:
     virtual void barrier(void) = 0;
 
 public:
-    virtual qint32  wid(void);
+    virtual qint32  wid(void) = 0;
     inline  qint32 rank(void) {return wid();};
-    virtual qint32 size(void);
+    virtual qint32 size(void) = 0;
     virtual void*  data(void) { return NULL;}; 
 public:
-    virtual void setWid(qint32 id);
+    virtual void setWid(qint32 id) ;
 
-public:
-    dtkDistributedCommunicatorPrivate *d;
 };
 
 DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)

@@ -442,8 +442,7 @@ namespace communicator_container_test
     {
         dtkDistributed::policy()->setType(type);
 
-        QStringList hosts = dtkDistributed::policy()->hosts();
-        if (hosts.size() < 2)
+        while (dtkDistributed::policy()->hosts().size() < 2)
             dtkDistributed::policy()->addHost("localhost");
 
         containerWork work3;

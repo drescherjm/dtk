@@ -17,22 +17,6 @@
 #include "dtkDistributedRequest.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkDistributedCommunicatorPrivate
-// /////////////////////////////////////////////////////////////////
-
-class dtkDistributedCommunicatorPrivate
-{
-public:
-    QMap<qlonglong, void *> buffer_map;
-
-public:
-    qlonglong id;
-
-public:
-    bool initialized;
-};
-
-// /////////////////////////////////////////////////////////////////
 // dtkDistributedCommunicator
 // /////////////////////////////////////////////////////////////////
 
@@ -82,10 +66,8 @@ public:
 /*!
  *  Constructor
  */
-dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject(), d(new dtkDistributedCommunicatorPrivate)
+dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject()
 {
-    d->id = 0;
-    d->initialized = false;
 }
 
 /*!
@@ -93,24 +75,10 @@ dtkDistributedCommunicator::dtkDistributedCommunicator(void) : QObject(), d(new 
  */
 dtkDistributedCommunicator::~dtkDistributedCommunicator(void)
 {
-    delete d;
-
-    d = NULL;
 }
 
-void dtkDistributedCommunicator::initialize(void)
+void dtkDistributedCommunicator::setWid(qint32)
 {
-    d->initialized = true;
-}
-
-bool dtkDistributedCommunicator::initialized(void)
-{
-    return d->initialized;
-}
-
-void dtkDistributedCommunicator::uninitialize(void)
-{
-    d->initialized = false;
 }
 
 bool dtkDistributedCommunicator::active(void)
@@ -150,25 +118,12 @@ bool dtkDistributedCommunicator::active(void)
   \sa rank()
 */
 
-qint32 dtkDistributedCommunicator::wid(void)
-{
-   return 0;
-}
-
-void dtkDistributedCommunicator::setWid(qint32 id)
-{
-}
-
 /*! \fn qint32 dtkDistributedCommunicator::size (void)
 
   Return the size of the communicator (number of processes spawned).
 
 */
 
-qint32 dtkDistributedCommunicator::size(void)
-{
-   return 1;
-}
 
 void dtkDistributedCommunicator::send(char *data, qint64 size, qint32 target, qint32 tag)
 {

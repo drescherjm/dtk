@@ -33,6 +33,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopologyVertex
 {    
     const dtkDistributedGraphTopology *g;
     qlonglong m_id;
+    dtkDistributedArray<qlonglong>::const_iterator c_beg;
     dtkDistributedArray<qlonglong>::const_iterator c_it;
     dtkDistributedArray<qlonglong>::const_iterator v_it;
     dtkDistributedArray<qlonglong>::const_iterator n_it;

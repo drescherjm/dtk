@@ -26,7 +26,8 @@ inline void dtkDistributedGraphTopologyVertex::init(void)
 {
     qlonglong l_id = g->m_neighbour_count->mapper()->globalToLocal(m_id, g->wid());
 
-    c_it = g->m_neighbour_count->cbegin();
+    c_beg = g->m_neighbour_count->cbegin();
+    c_it = c_beg;
     c_it += l_id;
     v_it = g->m_vertex_to_edge->cbegin();
     v_it += l_id;
@@ -61,19 +62,21 @@ inline void dtkDistributedGraphTopologyVertex::advance(qlonglong j)
 
 inline void dtkDistributedGraphTopologyVertex::rewind(void)
 {
-    Q_ASSERT(c_it > g->m_neighbour_count->begin());
-    --v_it;
-    --c_it;
-    n_it -= *c_it;
+    if (c_it != c_beg) {
+        --v_it;
+        --c_it;
+        n_it -= *c_it;
+    } else {
+        --v_it;
+        --c_it;
+    }
 }
 
 inline void dtkDistributedGraphTopologyVertex::rewind(qlonglong j)
 {
     Q_ASSERT(c_it - j >= g->m_neighbour_count->begin());
     for(qlonglong i = j; i >= 0; --i) {
-        --v_it;
-        --c_it;
-        n_it -= *c_it;
+        this->rewind();
     }
 }
 
@@ -112,11 +115,18 @@ inline qlonglong dtkDistributedGraphTopology::edgeCount(void) const
     if (!m_edge_count)
         return 0;
 
+    if (!m_builded) {
+        m_edge_count->unlock(this->wid());
+        m_comm->barrier();
+    }
+
     qlonglong size = m_edge_count->size();
     qlonglong count = 0;
     for (qlonglong i = 0; i < size; ++i)
         count += m_edge_count->at(i);
 
+    if (!m_builded)
+        m_edge_count->wlock(this->wid());
     return count;
 }
 
@@ -304,6 +314,8 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     dtkTrace() << "Matrix size"<< m_size << "edges count" << edges_count << m_comm->wid();
 
     this->initialize();
+    m_edge_count->unlock(this->wid());
+
     m_comm->barrier();
 
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edges_count);
@@ -579,6 +591,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         }
     }
 
+    m_builded = true;
     return true;
 }
 

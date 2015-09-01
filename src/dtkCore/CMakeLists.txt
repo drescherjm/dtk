@@ -42,6 +42,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkIterator
   dtkIterator.h
   dtkSpinLock.h
+  dtkStaticArray
+  dtkStaticArray.h
 )
 
 set(${PROJECT_NAME}_SOURCES

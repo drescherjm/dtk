@@ -289,7 +289,7 @@ set(${PROJECT_NAME}_SOURCES
   # dtkComposerNodeLeafProcessSupport.cpp
   # dtkComposerNodeLeafViewSupport.cpp)
 
-# set(${PROJECT_NAME}_RESOURCES dtkComposerSupport.qrc)
+set(${PROJECT_NAME}_RESOURCES dtkComposerSupport.qrc)
 
 ## #################################################################
 ##

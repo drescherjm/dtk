@@ -176,24 +176,24 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
                 args += settings.value(server +"_server_mpirun_args").toString();
             }
 
-            if (!app_path.startsWith("/")) {
+            if (QFileInfo(app_path).isAbsolute()) {
+                args += app_path;
+            } else {
                 //relative PATH, append our application path
                 args += qApp->applicationDirPath()
                     + "/"
                     + app_path;
-            } else {
-                args += app_path;
             }
 
         } else {
             QStringList app = json["application"].toString().split(" ");
             app_path = app.takeFirst();
-            if (!app_path.startsWith("/")) {
+            if (QFileInfo(app_path).isAbsolute()) {
+                qsub = app_path;
+            } else {
                 qsub = qApp->applicationDirPath()
                     + "/"
                     + app_path;
-            } else {
-                qsub = app_path;
             }
 
             args += app.join(" ");

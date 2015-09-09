@@ -163,6 +163,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
             threads = res["cores"].toInt();
         }
 
+        QString app_path = json["application"].toString();
         if (settings.contains(server +"_server_mpirun_path")) {
             dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
             qsub = settings.value(server +"_server_mpirun_path").toString();
@@ -175,15 +176,25 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
                 args += settings.value(server +"_server_mpirun_args").toString();
             }
 
-            args += qApp->applicationDirPath()
-                  + "/"
-                  + json["application"].toString();
+            if (!app_path.startsWith("/")) {
+                //relative PATH, append our application path
+                args += qApp->applicationDirPath()
+                    + "/"
+                    + app_path;
+            } else {
+                args += app_path;
+            }
 
         } else {
             QStringList app = json["application"].toString().split(" ");
-            qsub = qApp->applicationDirPath()
-                + "/"
-                + app.takeFirst();
+            app_path = app.takeFirst();
+            if (!app_path.startsWith("/")) {
+                qsub = qApp->applicationDirPath()
+                    + "/"
+                    + app_path;
+            } else {
+                qsub = app_path;
+            }
 
             args += app.join(" ");
 

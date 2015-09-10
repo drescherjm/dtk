@@ -195,7 +195,7 @@ template<typename T> inline QDataStream& operator << (QDataStream& s, const QLis
     return s;
 }
 
-template<typename T> inline QDataStream& operator >> (QDataStream& s, const QList<T *>& l)
+template<typename T> inline QDataStream& operator >> (QDataStream& s, QList<T *>& l)
 {
     l.clear();
     quint32 c; s >> c;
@@ -238,7 +238,7 @@ template<typename T> inline QDataStream& operator << (QDataStream& s, const std:
     return s;
 }
 
-template<typename T> inline QDataStream& operator >> (QDataStream& s, const std::list<T *>& l)
+template<typename T> inline QDataStream& operator >> (QDataStream& s, std::list<T *>& l)
 {
     l.clear();
     quint32 c; s >> c;
@@ -260,7 +260,7 @@ template<typename T> inline QDataStream& operator << (QDataStream& s, const std:
     return s;
 }
 
-template<typename T> inline QDataStream& operator >> (QDataStream& s, const std::vector<T *>& v)
+template<typename T> inline QDataStream& operator >> (QDataStream& s, std::vector<T *>& v)
 {
     v.clear();
     quint32 c; s >> c;

@@ -20,6 +20,7 @@
 #include "dtkDistributedMessage.h"
 
 #include <dtkCore/dtkCore.h>
+#include <dtkMeta/dtkMeta.h>
 
 #include <dtkLog>
 

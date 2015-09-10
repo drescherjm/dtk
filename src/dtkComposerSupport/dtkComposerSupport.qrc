@@ -4,5 +4,20 @@
         <file>dtkComposerNodeData.json</file>
         <file>dtkComposerNodeProcess.json</file>
         <file>dtkComposerNodeView.json</file>
+
+        <!-- Descriptions -->
+        <file>dtkComposerNodePi.html</file>
+        <file>dtkComposerNodeE.html</file>
+        <file>dtkComposerNodeControlCase.html</file>
+        <file>dtkComposerNodeControlIf.html</file>
+        <file>dtkComposerNodeControlDoWhile.html</file>
+        <file>dtkComposerNodeControlFor.html</file>
+        <file>dtkComposerNodeControlForEach.html</file>
+        <file>dtkComposerNodeControlWhile.html</file>
+        <file>dtkComposerNodePlotCurve.html</file>
+        <file>dtkComposerNodePlotCurveFile.html</file>
+        <file>dtkComposerNodePlotCurveAppendPoint.html</file>
+
     </qresource>
+
 </RCC>

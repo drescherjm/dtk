@@ -107,6 +107,7 @@ target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
 target_link_libraries(${PROJECT_NAME} dtkCore)
+target_link_libraries(${PROJECT_NAME} dtkMeta)
 target_link_libraries(${PROJECT_NAME} dtkLog)
 
 ## #################################################################

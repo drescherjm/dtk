@@ -125,12 +125,12 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
     // constant nodes
 
     d->nodes << "Pi";
-    d->descriptions["Pi"] = dtkReadFile(":dtkComposer/dtkComposerNodePi.html");
+    d->descriptions["Pi"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodePi.html");
     d->tags["Pi"] = QStringList() << "constant" << "pi";
     d->types["Pi"] = "pi";
 
     d->nodes << "E";
-    d->descriptions["E"] = dtkReadFile(":dtkComposer/dtkComposerNodeE.html");
+    d->descriptions["E"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeE.html");
     d->tags["E"] = QStringList() << "constant" << "e";
     d->types["E"] = "e";
 
@@ -319,17 +319,17 @@ dtkComposerFactory::dtkComposerFactory(void) : d(new dtkComposerFactoryPrivate)
 
 #if defined(DTK_BUILD_SUPPORT_PLOT)
     d->nodes << "Plot Curve";
-    d->descriptions["Plot Curve"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurve.html");
+    d->descriptions["Plot Curve"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodePlotCurve.html");
     d->tags["Plot Curve"] = QStringList() <<  "curve" << "plot";
     d->types["Plot Curve"] = "dtkPlotCurve";
 
     d->nodes << "Plot Curve File";
-    d->descriptions["Plot Curve File"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurveFile.html");
+    d->descriptions["Plot Curve File"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodePlotCurveFile.html");
     d->tags["Plot Curve File"] = QStringList() <<  "curve" << "plot" << "file";
     d->types["Plot Curve File"] = "dtkPlotCurveFile";
 
     d->nodes << "Plot Curve Append Point";
-    d->descriptions["Plot Curve Append Point"] = dtkReadFile(":dtkComposer/dtkComposerNodePlotCurveAppendPoint.html");
+    d->descriptions["Plot Curve Append Point"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodePlotCurveAppendPoint.html");
     d->tags["Plot Curve Append Point"] = QStringList() <<  "curve" << "plot" << "append" << "point";
     d->types["Plot Curve Append Point"] = "dtkPlotCurveAppendPoint";
 
@@ -1234,27 +1234,27 @@ void dtkComposerFactory::initNodeContainerData(void)
 void dtkComposerFactory::initNodeControl(void)
 {
     d->nodes << "Case";
-    d->descriptions["Case"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlCase.html");
+    d->descriptions["Case"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeControlCase.html");
     d->tags["Case"] = QStringList() << "control" << "case";
     d->types["Case"] = "case";
 
     d->nodes << "Do While";
-    d->descriptions["Do While"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlDoWhile.html");
+    d->descriptions["Do While"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeControlDoWhile.html");
     d->tags["Do While"] = QStringList() << "control" << "do" << "while" << "do while" << "loop";
     d->types["Do While"] = "do while";
 
     d->nodes << "If";
-    d->descriptions["If"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlIf.html");
+    d->descriptions["If"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeControlIf.html");
     d->tags["If"] = QStringList() << "control" << "if";
     d->types["If"] = "if";
 
     d->nodes << "For";
-    d->descriptions["For"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlFor.html");
+    d->descriptions["For"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeControlFor.html");
     d->tags["For"] = QStringList() << "control" << "for" << "loop";
     d->types["For"] = "for";
 
     d->nodes << "Foreach";
-    d->descriptions["Foreach"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlForEach.html");
+    d->descriptions["Foreach"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeControlForEach.html");
     d->tags["Foreach"] = QStringList() << "control" << "foreach" << "loop";
     d->types["Foreach"] = "foreach";
 
@@ -1264,7 +1264,7 @@ void dtkComposerFactory::initNodeControl(void)
     d->types["Map"] = "map";
 
     d->nodes << "While";
-    d->descriptions["While"] = dtkReadFile(":dtkComposer/dtkComposerNodeControlWhile.html");
+    d->descriptions["While"] = dtkReadFile(":dtkComposerSupport/dtkComposerNodeControlWhile.html");
     d->tags["While"] = QStringList() << "control" << "while" << "loop";
     d->types["While"] = "while";
 }

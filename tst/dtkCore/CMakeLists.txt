@@ -17,7 +17,8 @@ project(dtkCoreTest)
 
 set(${PROJECT_NAME}_HEADERS
   dtkArrayTest.h
-  dtkIteratorTest.h)
+  dtkIteratorTest.h
+  dtkStaticArrayTest.h)
 
 if(DTK_HAVE_ZLIB)
   set(${PROJECT_NAME}_HEADERS
@@ -28,7 +29,8 @@ endif(DTK_HAVE_ZLIB)
 
 set(${PROJECT_NAME}_SOURCES
   dtkArrayTest.cpp
-  dtkIteratorTest.cpp)
+  dtkIteratorTest.cpp
+  dtkStaticArrayTest.cpp)
 
 if(DTK_HAVE_ZLIB)
   set(${PROJECT_NAME}_SOURCES
@@ -70,8 +72,9 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 ## Test rules
 ## ###################################################################
 
-add_test(dtkArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
-add_test(dtkIteratorTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)
+add_test(dtkArrayTest       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
+add_test(dtkIteratorTest    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)
+add_test(dtkStaticArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkStaticArrayTest)
 
 if(DTK_HAVE_ZLIB)
   add_test(dtkCompressIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkCompressIOTest)

@@ -10,3 +10,4 @@
 #include "dtkArray.h"
 #include "dtkArray.tpp"
 #include "dtkIterator.h"
+#include "dtkStaticArray.h"

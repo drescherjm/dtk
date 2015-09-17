@@ -11,3 +11,4 @@
 #include "dtkArray.tpp"
 #include "dtkIterator.h"
 #include "dtkStaticArray.h"
+#include "dtkCoreWidgetFactory.h"

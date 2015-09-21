@@ -31,7 +31,7 @@ template <typename T> inline void dtkDistributedArray<T>::allocate(dtkDistribute
             m_cache = new dtkDistributedArrayCache<T>(this);
         x = dtkTypedArrayData<T>::fromRawData(manager->allocate<T>(size), size, dtkArrayData::RawData);
     } else {
-        qWarning() << "allocation with size =0!" << m_comm->wid();
+        qWarning() << "allocation with size == 0 !" << m_comm->wid();
     }
 }
 

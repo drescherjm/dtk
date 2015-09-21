@@ -12,8 +12,6 @@
 
 // Code:
 
-#pragma once
-
 #include "dtkCoreWidgetFactory.h"
 
 dtkCoreWidgetFactory::dtkCoreWidgetFactory(void)

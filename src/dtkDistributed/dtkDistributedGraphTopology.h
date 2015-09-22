@@ -161,6 +161,7 @@ public:
 public:
     vertex beginVertex() const { return vertex(this, this->m_mapper->firstIndex(this->wid())); }
     vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid())); }
+    qlonglong globalToLocal(const qlonglong& global_id, const qlonglong& owner) { return this->m_mapper->globalToLocal(global_id, owner); }
 
 public:
     dtkDistributedMapper *edge_mapper(void) const;
@@ -191,6 +192,9 @@ protected:
     dtkDistributedArray<qlonglong> *m_vertex_to_edge;
     dtkDistributedArray<qlonglong> *m_edge_to_vertex;
     bool m_builded;
+
+public:
+    dtkArray<dtkArray < qlonglong> > m_interfaces;
 };
 
 // /////////////////////////////////////////////////////////////////

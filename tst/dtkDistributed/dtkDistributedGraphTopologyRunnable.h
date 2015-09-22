@@ -25,6 +25,7 @@
 class neighboursForTest
 {
     QMap<qlonglong, QVector<qlonglong> > m_neighbours;
+    QMap<qlonglong, QVector<qlonglong> > m_neighbours2;
     qlonglong m_count;
 
 public:
@@ -42,6 +43,29 @@ public:
 
 public:
     void addEdgeToGraph(dtkDistributedGraphTopology& topo) const;
+    void addEdgeToGraphRemote(dtkDistributedGraphTopology& topo) const;
+};
+
+class neighboursRemoteForTest
+{
+    QMap<qlonglong, QVector<qlonglong> > m_neighbours;
+    qlonglong m_count;
+
+public:
+    neighboursRemoteForTest(void);
+
+public:
+    qlonglong size(void) const { return m_neighbours.count(); }
+    qlonglong edgeCount(void) const { return m_count; }
+    
+public:
+    qlonglong count(qlonglong v_id) const { return m_neighbours[v_id].count(); }
+
+public:
+    QVector<qlonglong> operator[] (qlonglong v_id) const { return m_neighbours[v_id]; }
+
+public:
+    void addEdgeToGraphRemote(dtkDistributedGraphTopology& topo) ;
 };
 
 inline neighboursForTest::neighboursForTest(void) : m_count(0)
@@ -126,6 +150,158 @@ inline neighboursForTest::neighboursForTest(void) : m_count(0)
         m_count += m_neighbours[i].count();
 }
 
+inline neighboursRemoteForTest::neighboursRemoteForTest(void) : m_count(0)
+{
+
+    m_neighbours[0 ] << 1 ;
+    m_neighbours[0 ] << 3 ;
+    m_neighbours[0 ] << 8 ;
+    m_neighbours[1 ] << 0 ;
+    m_neighbours[1 ] << 2 ;
+    m_neighbours[1 ] << 3 ;
+    m_neighbours[1 ] << 4 ;
+    m_neighbours[2 ] << 1 ;
+    m_neighbours[2 ] << 3 ;
+    m_neighbours[2 ] << 4 ;
+    m_neighbours[2 ] << 5 ;
+    m_neighbours[2 ] << 6 ;
+    m_neighbours[3 ] << 0 ;
+    m_neighbours[3 ] << 1 ;
+    m_neighbours[3 ] << 2 ;
+    m_neighbours[3 ] << 6 ;
+    m_neighbours[3 ] << 7 ;
+    m_neighbours[3 ] << 8 ;
+    m_neighbours[4 ] << 1 ;
+    m_neighbours[4 ] << 2 ;
+    m_neighbours[4 ] << 5 ;
+    m_neighbours[4 ] << 9 ;
+    m_neighbours[5 ] << 2 ;
+    m_neighbours[5 ] << 4 ;
+    m_neighbours[5 ] << 6 ;
+    m_neighbours[5 ] << 9 ;
+    m_neighbours[5 ] << 10;
+    m_neighbours[6 ] << 2 ;
+    m_neighbours[6 ] << 3 ;
+    m_neighbours[6 ] << 5 ;
+    m_neighbours[6 ] << 7 ;
+    m_neighbours[6 ] << 10;
+    m_neighbours[6 ] << 14;
+    m_neighbours[7 ] << 3 ;
+    m_neighbours[7 ] << 6 ;
+    m_neighbours[7 ] << 8 ;
+    /* m_neighbours[7 ] << 14; */
+    m_neighbours[7 ] << 20;
+    m_neighbours[7 ] << 21;
+    m_neighbours[7 ] << 22;
+    m_neighbours[8 ] << 0 ;
+    m_neighbours[8 ] << 3 ;
+    m_neighbours[8 ] << 7 ;
+    m_neighbours[8 ] << 22;
+    m_neighbours[9 ] << 4 ;
+    m_neighbours[9 ] << 5 ;
+    m_neighbours[9 ] << 10;
+    m_neighbours[9 ] << 11;
+    m_neighbours[10] << 5 ;
+    m_neighbours[10] << 6 ;
+    m_neighbours[10] << 9 ;
+    m_neighbours[10] << 11;
+    m_neighbours[10] << 13;
+    m_neighbours[10] << 14;
+    m_neighbours[11] << 9 ;
+    m_neighbours[11] << 10;
+    m_neighbours[11] << 12;
+    m_neighbours[11] << 13;
+    m_neighbours[12] << 11;
+    m_neighbours[12] << 13;
+    m_neighbours[12] << 15;
+    m_neighbours[13] << 10;
+    m_neighbours[13] << 11;
+    m_neighbours[13] << 12;
+    m_neighbours[13] << 14;
+    m_neighbours[13] << 15;
+    m_neighbours[13] << 17;
+    m_neighbours[14] << 6 ;
+    /* m_neighbours[14] << 7 ; */
+    m_neighbours[14] << 10;
+    m_neighbours[14] << 13;
+    m_neighbours[14] << 17;
+    m_neighbours[14] << 18;
+    m_neighbours[14] << 20;
+    m_neighbours[15] << 12;
+    m_neighbours[15] << 13;
+    m_neighbours[15] << 16;
+    m_neighbours[15] << 17;
+    m_neighbours[16] << 15;
+    m_neighbours[16] << 17;
+    m_neighbours[16] << 19;
+    m_neighbours[17] << 13;
+    m_neighbours[17] << 14;
+    m_neighbours[17] << 15;
+    m_neighbours[17] << 16;
+    m_neighbours[17] << 18;
+    m_neighbours[17] << 19;
+    m_neighbours[18] << 14;
+    m_neighbours[18] << 17;
+    m_neighbours[18] << 19;
+    m_neighbours[18] << 20;
+    m_neighbours[19] << 16;
+    m_neighbours[19] << 17;
+    m_neighbours[19] << 18;
+    m_neighbours[19] << 20;
+    m_neighbours[19] << 21;
+    m_neighbours[20] << 7 ;
+    m_neighbours[20] << 14;
+    m_neighbours[20] << 18;
+    m_neighbours[20] << 19;
+    m_neighbours[20] << 21;
+    m_neighbours[21] << 7 ;
+    m_neighbours[21] << 19;
+    m_neighbours[21] << 20;
+    m_neighbours[21] << 22;
+    m_neighbours[22] << 7 ;
+    m_neighbours[22] << 8 ;
+    m_neighbours[22] << 21;
+
+    for(int i = 0; i < m_neighbours.count(); ++i)
+        m_count += m_neighbours[i].count();
+
+}
+
+inline void neighboursRemoteForTest::addEdgeToGraphRemote(dtkDistributedGraphTopology& topo)
+{
+    dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+    if (comm->size() != 4 ) {
+        qWarning() << "bad communicator size, should be equal to 4"  ;
+        return;
+    }
+    qlonglong start = 0;
+    qlonglong end   = 9;
+    if (comm->wid() == 1 ) {
+        start = 9;
+        end   = 15;
+    } else if (comm->wid() == 2 ) {
+        start = 15;
+        end   = 20;
+    } else if (comm->wid() == 3 ) {
+        start = 20;
+        end   = 23;
+        topo.addGlobalEdge(7, 14);
+        topo.addGlobalEdge(14, 7);
+    }
+
+    for (qlonglong i = start; i < end; ++i) {
+        const QVector<qlonglong>& n = m_neighbours[i];
+        for (int j = 0; j < n.count(); ++j) {
+            topo.addGlobalEdge(i, n[j]);
+        }
+    }
+     m_neighbours[7] << 14;
+     m_neighbours[14] << 7;
+     m_count += 2;
+
+}
+
+
 inline void neighboursForTest::addEdgeToGraph(dtkDistributedGraphTopology& topo) const
 {
     for (qlonglong i = 0; i < m_neighbours.count(); ++i) {
@@ -192,6 +368,44 @@ public:
     }
 };
 
+class testGraphTopologyAddEdgeRemote: public QRunnable
+{
+public:
+    void run(void)
+    {
+        dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+        qlonglong wid = comm->wid();
+        qlonglong N = 23;
+
+        dtkDistributedMapper *m = new dtkDistributedMapper;
+        m->initMap(N, comm->size());
+        m->setMap( 0, 0);
+        m->setMap( 9, 1);
+        m->setMap(15, 2);
+        m->setMap(20, 3);
+
+        dtkDistributedGraphTopology topo(N, m);
+
+        neighboursRemoteForTest neighbours;
+        neighbours.addEdgeToGraphRemote(topo);
+
+        topo.build();
+
+        if (dtkDistributed::app()->communicator()->wid() == 0) {
+            for(qlonglong i = 0; i < topo.size(); ++i) {
+                QCOMPARE(topo.neighbourCount(i), neighbours.count(i));
+            }
+            qlonglong count = 0;
+            for(qlonglong i = 0; i < topo.size(); ++i) {
+                dtkDistributedGraphTopology::Neighbours n = topo[i];
+                QCOMPARE(n.size(), neighbours.count(i));
+                QCOMPARE(n.startIndex(), count);
+                count += n.size();
+            }
+        }
+    }
+};
+
 class testGraphTopologyBuild: public QRunnable
 {
 public:
@@ -204,6 +418,7 @@ public:
         neighbours.addEdgeToGraph(topo);
 
         topo.build();
+
     }
 };
 

@@ -44,12 +44,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkSpinLock.h
   dtkStaticArray
   dtkStaticArray.h
+  dtkCoreWidgetFactory.h
 )
 
 set(${PROJECT_NAME}_SOURCES
   dtkApplication.cpp
   dtkCoreSettings.cpp
-  dtkArrayData.cpp)
+  dtkArrayData.cpp
+  dtkCoreWidgetFactory.cpp)
 
 ## #################################################################
 ## Deps

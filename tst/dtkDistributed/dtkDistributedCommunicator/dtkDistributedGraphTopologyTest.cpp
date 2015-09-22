@@ -27,7 +27,7 @@ void dtkDistributedGraphTopologyTestCase::initTestCase(void)
 
     dtkDistributed::policy()->setType("qthread");
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 3; ++i) {
         dtkDistributed::policy()->addHost("localhost");
     }
 
@@ -49,6 +49,13 @@ void dtkDistributedGraphTopologyTestCase::testCreateDestroy(void)
 void dtkDistributedGraphTopologyTestCase::testAddEdge(void)
 {
     QRunnable *test = new testGraphTopologyAddEdge();
+    dtkDistributed::exec(test);
+    delete test;
+}
+
+void dtkDistributedGraphTopologyTestCase::testAddEdgeRemote(void)
+{
+    QRunnable *test = new testGraphTopologyAddEdgeRemote();
     dtkDistributed::exec(test);
     delete test;
 }

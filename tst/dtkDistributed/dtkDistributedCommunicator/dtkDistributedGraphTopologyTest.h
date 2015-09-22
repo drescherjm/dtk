@@ -27,6 +27,7 @@ private slots:
 private slots:
     void testCreateDestroy(void);
     void testAddEdge(void);
+    void testAddEdgeRemote(void);
     void testBuild(void);
     void testNeighbours(void);
     void testIterator(void);

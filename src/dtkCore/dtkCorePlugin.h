@@ -17,6 +17,7 @@
 
 #include "dtkCorePluginManager"
 #include "dtkCorePluginFactory"
+#include "dtkCoreWidgetFactory.h"
 #include "dtkCoreExport.h"
 
 // ///////////////////////////////////////////////////////////////////
@@ -69,6 +70,14 @@
 
 #define DTK_DECLARE_PLUGIN_MANAGER(type,Export)                              \
     class Export type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
+
+// ///////////////////////////////////////////////////////////////////
+// DTK_DECLARE_WIDGET_FACTORY
+// ///////////////////////////////////////////////////////////////////
+
+#define DTK_DECLARE_WIDGET_FACTORY(type,Export)                              \
+    class Export type##WidgetFactory : public dtkCoreWidgetFactory{}; \
+    template <typename T> QWidget *type##WidgetCreator() { return new T; };
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DEFINE_PLUGIN

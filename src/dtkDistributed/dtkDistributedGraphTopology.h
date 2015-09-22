@@ -135,6 +135,7 @@ public:
 
 public:
     void addEdge(qlonglong from, qlonglong to, bool oriented = false);
+    void addGlobalEdge(qlonglong from, qlonglong to);
 
 public:
     void build(void);
@@ -187,10 +188,13 @@ protected:
 
     dtkDistributedArray<qlonglong> *m_edge_count;
     EdgeMap m_map;
+    EdgeMap m_map_remote;
 
     dtkDistributedArray<qlonglong> *m_neighbour_count;
     dtkDistributedArray<qlonglong> *m_vertex_to_edge;
     dtkDistributedArray<qlonglong> *m_edge_to_vertex;
+    dtkDistributedArray<qlonglong> *m_remote_edges_count;
+    dtkDistributedArray<qlonglong> *m_remote_edges;
     bool m_builded;
 
 public:

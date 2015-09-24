@@ -75,10 +75,15 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
         } else {
             script.setPermissions(QFile::ExeOwner|QFile::ReadOwner|QFile::WriteOwner);
             QTextStream out(&script);
+            QString app_path = json["application"].toString();
             out << "#!/bin/bash\n";
-            out <<  qApp->applicationDirPath()
+            if (QFileInfo(app_path).isAbsolute()) {
+                out << json["application"].toString();
+            } else {
+                out <<  qApp->applicationDirPath()
                     + "/"
-                    + json["application"].toString();
+                    + app_path;
+            }
         }
 
         script.close();
@@ -285,6 +290,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             QVariantMap core;
             QVariantMap node = nodes[jcore["host"].toString()].toMap();
             QVariantList cores = node["cores"].toList();
+            QVariantList cpuids = node["cpuids"].toList();
 
             core.insert("id",jcore["resource_id"].toString());
             if (!activecores[core["id"].toString()].isEmpty()) {
@@ -292,11 +298,17 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
                 int current_busy_cores = node["cores_busy"].toInt();
                 node.insert("cores_busy", current_busy_cores+1);
             }
+            qlonglong cpuid =  jcore["cpu"].toLongLong();
+            if (!cpuids.contains(cpuid)) {
+                cpuids <<  cpuid;
+            }
             cores.append(core);
             node["cores"] = cores;
+            node["cpuids"] = cpuids;
             nodes[jcore["host"].toString()] = node;
         } else { // new node
             QVariantList cores;
+            QVariantList cpuids;
             QVariantList props;
             QVariantMap prop;
             QVariantMap core;
@@ -326,7 +338,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
                     state = "busy";
             }
             node.insert("state", state);
-            node.insert("corespercpu",jcore["cpucore"]); // temporary
+            cpuids << jcore["cpu"].toLongLong();
+            node.insert("cpuids",cpuids);
             core.insert("id",jcore["resource_id"]);
             if (!activecores[core["id"].toString()].isEmpty()) {
                 core.insert("job",activecores[core["id"].toString()]);
@@ -346,10 +359,10 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
     // now we can compute the number of cpus per node
     foreach(QVariant qv, nodes) {
         QVariantMap map = qv.toMap();
-        qlonglong corespercpu = map["corespercpu"].toInt();
+        qlonglong cpus  = map["cpuids"].toList().count();
         qlonglong cores = map["cores"].toList().count();
-        map.insert("cpus", cores/corespercpu);
-        map.remove("corespercpu");
+        map.insert("cpus", cpus);
+        map.remove("cpuids");
         realnodes << map;
     }
     result.insert("nodes", realnodes);

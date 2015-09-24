@@ -224,7 +224,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             activecores[coreid.toString()] = id;
         }
 
-        QRegExp rx("/host=(\\d+|ALL|BEST)(?:/core=)?(\\d+)?.*(?:walltime=)?(\\d+:\\d+:\\d+)");
+        QRegExp rx("/network_address=(\\d+|ALL|BEST)(?:/core=)?(\\d+)?.*(?:walltime=)?(\\d+:\\d+:\\d+)");
 
         int pos = rx.indexIn(job["wanted_resources"].toString());
 
@@ -233,6 +233,9 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         QStringList resources_list = rx.capturedTexts();
         qlonglong nodes = resources_list.at(1).toInt();
         qlonglong cores = resources_list.at(2).toInt();
+        if (cores == 0) {// all resources reserved
+            cores = job["assigned_resources"].toList().count();
+        }
         if (resources_list.count() > 3) {
             walltime = resources_list.at(3);
         } else {

@@ -256,10 +256,15 @@ QString dtkDistributedResourceManagerTorque::submit(QString input)
             dtkWarn() << "unable to open script for writing";
         } else {
             QTextStream out(&script);
+            QString app_path = json["application"].toString();
             out << "#!/bin/bash\n";
-            out << qApp->applicationDirPath()
+            if (QFileInfo(app_path).isAbsolute()) {
+                out << json["application"].toString();
+            } else {
+                out << qApp->applicationDirPath()
                     + "/"
-                    + json["application"].toString();
+                    + app_path;
+            }
         }
 
         script.close();

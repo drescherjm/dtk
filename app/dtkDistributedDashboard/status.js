@@ -23,7 +23,9 @@ function policy()
 
 function guess_type(server)
 {
-    if (/nef/.test(server)) {
+    if (/nef-devel2/.test(server)) {
+        return "oar"
+    } else if (/nef/.test(server)) {
         return "torque"
     } else if (/grid5000/.test(server)) {
         return "oar"

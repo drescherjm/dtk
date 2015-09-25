@@ -19,6 +19,7 @@ Item {
         id: servers
         ListElement { text: "localhost" }
         ListElement { text: "nef-devel.inria.fr" }
+        ListElement { text: "nef-devel2.inria.fr" }
         ListElement { text: "fsophia.sophia.grid5000.fr" }
     }
 

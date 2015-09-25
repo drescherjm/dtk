@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -56,6 +56,13 @@ void dtkDistributedGraphTopologyTestCase::testAddEdge(void)
 void dtkDistributedGraphTopologyTestCase::testAddEdgeRemote(void)
 {
     QRunnable *test = new testGraphTopologyAddEdgeRemote();
+    dtkDistributed::exec(test);
+    delete test;
+}
+
+void dtkDistributedGraphTopologyTestCase::testAddEdgeFEM(void)
+{
+    QRunnable *test = new testGraphTopologyAddEdgeFEM();
     dtkDistributed::exec(test);
     delete test;
 }
@@ -110,10 +117,10 @@ void dtkDistributedGraphTopologyTestCase::cleanupTestCase(void)
 
 void dtkDistributedGraphTopologyTestCase::cleanup(void)
 {
-    
+
 }
 
 DTKDISTRIBUTEDTEST_MAIN_NOGUI(dtkDistributedGraphTopologyTest, dtkDistributedGraphTopologyTestCase)
 
-// 
+//
 // dtkDistributedGraphTopologyTest.cpp ends here

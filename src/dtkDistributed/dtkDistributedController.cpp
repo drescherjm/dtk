@@ -446,6 +446,7 @@ void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitSta
         dtkInfo() <<  "remote server deployment failure" << exitStatus ;
     else
         dtkInfo() <<  "remote server stopped";
+    this->disconnect(d->servers.keys().first());
 }
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)

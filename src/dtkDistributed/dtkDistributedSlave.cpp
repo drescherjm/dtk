@@ -136,6 +136,14 @@ QTcpSocket *dtkDistributedSlave::socket(void)
     return d->socket;
 }
 
+void dtkDistributedSlave::flush(void)
+{
+    while (d->socket->bytesToWrite() > 0) {
+        d->socket->flush();
+        d->socket->waitForBytesWritten();
+    }
+}
+
 
 void dtkDistributedSlave::error(QAbstractSocket::SocketError error)
 {

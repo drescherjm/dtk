@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,6 +28,7 @@ private slots:
     void testCreateDestroy(void);
     void testAddEdge(void);
     void testAddEdgeRemote(void);
+    void testAddEdgeFEM(void);
     void testBuild(void);
     void testNeighbours(void);
     void testIterator(void);
@@ -41,5 +42,5 @@ private slots:
 
 };
 
-// 
+//
 // dtkDistributedGraphTopologyTest.h ends here

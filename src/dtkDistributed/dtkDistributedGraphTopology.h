@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -30,7 +30,7 @@ class dtkDistributedGraphTopology;
 // /////////////////////////////////////////////////////////////////
 
 class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopologyVertex
-{    
+{
     const dtkDistributedGraphTopology *g;
     qlonglong m_id;
     dtkDistributedArray<qlonglong>::const_iterator c_beg;
@@ -65,7 +65,7 @@ public:
     bool operator <= (const dtkDistributedGraphTopologyVertex& o) const { return (m_id <= o.m_id); }
     bool operator >  (const dtkDistributedGraphTopologyVertex& o) const { return (m_id >  o.m_id); }
     bool operator >= (const dtkDistributedGraphTopologyVertex& o) const { return (m_id >= o.m_id); }
-        
+
 public:
     dtkDistributedGraphTopologyVertex& operator ++ (void) { ++m_id; advance(); return *this; }
     dtkDistributedGraphTopologyVertex  operator ++ (int)  { dtkDistributedGraphTopologyVertex o(*this); ++m_id; advance(); return o; }
@@ -135,12 +135,15 @@ public:
 
 public:
     void addEdge(qlonglong from, qlonglong to, bool oriented = false);
-    void addGlobalEdge(qlonglong from, qlonglong to);
 
 public:
     void build(void);
     bool builded(void);
     void resize(qlonglong vertexCount);
+
+public:
+    void addEdgeFEM(qlonglong from, qlonglong to);
+    void buildFEM(void);
 
 public:
     qlonglong vertexCount(void) const;
@@ -186,8 +189,6 @@ protected:
     typedef QMap<qlonglong, EdgeList> EdgeMap;
 
     dtkDistributedArray<qlonglong> *m_edge_count;
-    EdgeMap m_map;
-    EdgeMap m_map_remote;
 
     dtkDistributedArray<qlonglong> *m_neighbour_count;
     dtkDistributedArray<qlonglong> *m_vertex_to_edge;
@@ -195,11 +196,25 @@ protected:
     dtkDistributedArray<qlonglong> *m_remote_edges_count;
     dtkDistributedArray<qlonglong> *m_remote_edges;
     bool m_builded;
+
+public:
+    EdgeMap m_map;
+    EdgeMap m_map_hybrid;
+    EdgeMap m_map_remote;
+
+    dtkDistributedMapper *m_fe_mapper;
+    dtkDistributedArray<qlonglong> *m_positions;
+
+    dtkArray<qlonglong, 0> m_local_vertex_to_edge;
+    dtkArray<qlonglong, 0> m_local_edge_to_vertex;
+
+    QMap<qlonglong, qlonglong> m_glob_to_loc;
+    dtkArray<qlonglong, 0> m_loc_to_glob;
 };
 
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkDistributedGraphTopology.tpp"
 
-// 
+//
 // dtkDistributedGraphTopology.h ends here

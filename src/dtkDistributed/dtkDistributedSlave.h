@@ -52,6 +52,7 @@ public:
 
 public:
     QTcpSocket *socket();
+    void flush();
 
 protected slots:
     void error(QAbstractSocket::SocketError error);

@@ -40,6 +40,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedC
     m_edge_count      = NULL;
     m_remote_edges_count = NULL;
     m_remote_edges       = NULL;
+    m_positions          = NULL;
 
     m_comm->barrier();
 }
@@ -53,6 +54,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex
     m_edge_count      = NULL;
     m_remote_edges_count = NULL;
     m_remote_edges       = NULL;
+    m_positions          = NULL;
 
     this->initialize();
 
@@ -68,6 +70,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex
     m_edge_count = NULL;
     m_remote_edges_count = NULL;
     m_remote_edges       = NULL;
+    m_positions          = NULL;
 
     this->initialize(true);
 
@@ -83,6 +86,7 @@ dtkDistributedGraphTopology::dtkDistributedGraphTopology(const dtkDistributedGra
     m_vertex_to_edge  = NULL;
     m_remote_edges_count = NULL;
     m_remote_edges       = NULL;
+    m_positions          = NULL;
 
     if (o.m_edge_count)
         m_edge_count = new dtkDistributedArray<qlonglong>(*(o.m_edge_count));
@@ -117,6 +121,8 @@ dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
         delete m_remote_edges;
     if (m_remote_edges_count)
         delete m_remote_edges_count;
+    if (m_positions)
+        delete m_positions;
 }
 
 dtkDistributedGraphTopology& dtkDistributedGraphTopology::operator = (const dtkDistributedGraphTopology& o)
@@ -362,6 +368,8 @@ void dtkDistributedGraphTopology::addEdgeFEM(qlonglong from, qlonglong to)
 
 void dtkDistributedGraphTopology::buildFEM(void)
 {
+    m_edge_count->unlock(this->wid());
+    this->m_comm->barrier();
     // ---------------------------
     // First stage: interface vertex counting
     // ---------------------------
@@ -915,7 +923,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
                     // if (m_comm->wid() == 3) {
                     //     qDebug() << "intern fill" << it.key() << id << m_glob_to_loc[it.key()] << m_glob_to_loc[id];
                     // }
-                    (*local_it) = m_glob_to_loc[id];
+                    //(*local_it) = m_glob_to_loc[id];
+                    (*local_it) = id;
                     ++local_it;
                 }
             }
@@ -932,7 +941,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
                     // if (m_comm->wid() == 3) {
                     //     qDebug() << "hybrid fill" << it.key() << id << m_glob_to_loc[it.key()] << m_glob_to_loc[id];
                     // }
-                    (*local_it) = m_glob_to_loc[id];
+                    //(*local_it) = m_glob_to_loc[id];
+                    (*local_it) = id;
                     ++local_it;
                 }
 
@@ -951,7 +961,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
                     //     qDebug() << "remote fill" << it.key() << id << m_glob_to_loc[it.key()] << m_glob_to_loc[id];
 
                     // }
-                    (*local_it) = m_glob_to_loc[id];
+                    //(*local_it) = m_glob_to_loc[id];
+                    (*local_it) = id;
                     ++local_it;
                 }
             }
@@ -960,6 +971,9 @@ void dtkDistributedGraphTopology::buildFEM(void)
         // ----------------
 
         qlonglong local_pos = m_fe_mapper->firstIndex(this->wid());
+
+        if(m_positions)
+            delete m_positions;
         m_positions = new dtkDistributedArray<qlonglong>(m_edge_to_vertex->size(), m_edge_to_vertex->mapper());
         m_positions->fill(-1);
 

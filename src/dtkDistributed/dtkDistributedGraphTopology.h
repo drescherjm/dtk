@@ -164,7 +164,7 @@ public:
 
 public:
     vertex beginVertex() const { return vertex(this, this->m_mapper->firstIndex(this->wid())); }
-    vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid())); }
+    vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid()) + 1); }
 
 public:
     dtkDistributedMapper *edge_mapper(void) const;

@@ -988,7 +988,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
             qlonglong n_count = m_neighbour_count->at(gi);
 
             for (qlonglong j = 0; j < nnz; ++j) {
-                qlonglong gj = m_loc_to_glob[m_local_edge_to_vertex[j + local_start]];
+                qlonglong gj = m_local_edge_to_vertex[j + local_start];
                 for (qlonglong k = 0; k < n_count; ++k) {
                     qlonglong global_pos = k + first_n_pos;
                     // if (m_comm->wid() == 3 && gi == 7)

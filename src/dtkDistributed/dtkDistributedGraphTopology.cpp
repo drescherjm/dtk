@@ -370,6 +370,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
 {
     m_edge_count->unlock(this->wid());
     this->m_comm->barrier();
+    m_builded = true;
     // ---------------------------
     // First stage: interface vertex counting
     // ---------------------------
@@ -845,7 +846,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
 
         dtkArray<qlonglong, 0> local_neighbour_count;
 
-        m_local_vertex_to_edge.reserve(m_map.size() + m_map_hybrid.size() + 1);
+        m_local_vertex_to_edge.reserve(m_map.size() + m_map_hybrid.size() + m_map_remote.size());
 
         {
             auto it  = m_map.cbegin();
@@ -886,6 +887,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
                     m_loc_to_glob << it.key();
                     local_neighbour_count << (*it).size();
                     e_count += (*it).size();
+                    m_local_vertex_to_edge << m_local_vertex_to_edge.last();
                 } else {
                     local_neighbour_count[m_glob_to_loc[it.key()]] += (*it).size();
                     e_count += (*it).size();

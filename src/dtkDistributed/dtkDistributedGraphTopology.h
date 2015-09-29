@@ -164,8 +164,7 @@ public:
 
 public:
     vertex beginVertex() const { return vertex(this, this->m_mapper->firstIndex(this->wid())); }
-    vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid())); }
-    qlonglong globalToLocal(const qlonglong& global_id, const qlonglong& owner) { return this->m_mapper->globalToLocal(global_id, owner); }
+    vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid()) + 1); }
 
 public:
     dtkDistributedMapper *edge_mapper(void) const;

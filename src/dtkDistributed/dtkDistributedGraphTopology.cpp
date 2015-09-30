@@ -500,7 +500,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
     }
 
     // if(wid() == 0) {
-    //     for (int i = 0; i < m_vertex_to_edge->size(); ++i) {
+    //     for (int i = 0; i < m_vertex_to_edge->size() - 1; ++i) {
     //         qDebug() << "v_to_itf_e" << i << m_vertex_to_edge->at(i) << m_neighbour_count->at(i);
     //     }
     // }
@@ -542,19 +542,46 @@ void dtkDistributedGraphTopology::buildFEM(void)
         auto ite = m_map_hybrid.cend();
 
         for(; it != ite; ++it) {
-            qlonglong start_pos = m_vertex_to_edge->at(it.key());
-            qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
-            const EdgeList& l = *it;
-            for (qlonglong nid : l) {
-                for (qlonglong j = start_pos; j < end_pos; ++j) {
-                    qlonglong tmp = m_edge_to_vertex->at(j);
-                    if (tmp < 0) {
-                        m_edge_to_vertex->setAt(j, nid);
-                        start_pos = j + 1;
-                        break;
+            if (m_vertex_to_edge->mapper()->owner(it.key()) == wid()) {
+                qlonglong start_pos = m_vertex_to_edge->at(it.key());
+                qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
+                const EdgeList& l = *it;
+                for (qlonglong nid : l) {
+                    for (qlonglong j = start_pos; j < end_pos; ++j) {
+                        qlonglong tmp = m_edge_to_vertex->at(j);
+                        if (tmp < 0) {
+                            m_edge_to_vertex->setAt(j, nid);
+                            start_pos = j + 1;
+                            break;
+                        }
                     }
                 }
             }
+        }
+        this->m_comm->barrier();
+
+        for (int i = 0; i < m_comm->size(); ++i) {
+            if (wid() == i) {
+                it  = m_map_hybrid.cbegin();
+                for(; it != ite; ++it) {
+                    if (m_vertex_to_edge->mapper()->owner(it.key()) != wid()) {
+                        qlonglong start_pos = m_vertex_to_edge->at(it.key());
+                        qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
+                        const EdgeList& l = *it;
+                        for (qlonglong nid : l) {
+                            for (qlonglong j = start_pos; j < end_pos; ++j) {
+                                qlonglong tmp = m_edge_to_vertex->at(j);
+                                if (tmp < 0) {
+                                    m_edge_to_vertex->setAt(j, nid);
+                                    start_pos = j + 1;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            m_comm->barrier();
         }
     }
     this->m_comm->barrier();
@@ -565,15 +592,15 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // edges that connect two interface vertices but that does not
     // stand on an interface.
 
-    /*if(wid() == 0) {
-        for (qlonglong i = 0; i < m_vertex_to_edge->size(); ++i) {
-            qlonglong start_pos = m_vertex_to_edge->at(i);
-            qlonglong end_pos = start_pos + m_neighbour_count->at(i);
-            for (qlonglong j = start_pos; j < end_pos; ++j) {
-                qDebug() << i << m_edge_to_vertex->at(j);
-            }
-        }
-    }*/
+    // if(wid() == 0) {
+    //     for (qlonglong i = 0; i < m_vertex_to_edge->size(); ++i) {
+    //         qlonglong start_pos = m_vertex_to_edge->at(i);
+    //         qlonglong end_pos = start_pos + m_neighbour_count->at(i);
+    //         for (qlonglong j = start_pos; j < end_pos; ++j) {
+    //             qDebug() << i << m_edge_to_vertex->at(j);
+    //         }
+    //     }
+    // }
 
     // Such edges will be moved from m_map_remote to m_map_hybrid and
     // also stored into a dedicated map.
@@ -657,6 +684,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
     }
     m_comm->barrier();
 
+    qDebug() << Q_FUNC_INFO << this->wid() << itf_edges_to_vertex;
+
     // Resets the mapping.
     m_vertex_to_edge->fill(0);
 
@@ -727,6 +756,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
     delete m_edge_to_vertex;
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edge_count, e_mapper);
     m_edge_to_vertex->fill(-1);
+    m_comm->barrier();
 
     // Firstly, each partition add the odd edges stored in its
     // remote_edge_to_add map.
@@ -788,6 +818,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
             // edges for each vertex.
             qlonglong end_pos = start_pos + itf_neightbour_count.at(i) - l.size();
             for (qlonglong j = start_pos; j < end_pos; ++j) {
+                //if (itf_edges_to_vertex.at(j) < 0)
+                    //qDebug() << Q_FUNC_INFO << this->wid() << gid << itf_edges_to_vertex.at(j);
                 dtkDistributedOrderingListInsertion(l, itf_edges_to_vertex.at(j));
             }
 
@@ -801,6 +833,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
             // Clear the list before tackling next vertex.
             l.clear();
         }
+        this->m_comm->barrier();
 
         // Secondly, we scan the edges of the intern vertices and we
         // add them directly into the m_edge_to_vertex DSarray at the
@@ -979,7 +1012,6 @@ void dtkDistributedGraphTopology::buildFEM(void)
             delete m_positions;
         m_positions = new dtkDistributedArray<qlonglong>(m_edge_to_vertex->size(), m_edge_to_vertex->mapper());
         m_positions->fill(-1);
-
         m_positions->wlock();
         for (qlonglong i = 0; i < m_local_vertex_to_edge.size() - 1; ++i) {
             qlonglong gi = m_loc_to_glob[i];
@@ -1025,7 +1057,7 @@ void dtkDistributedOrderingListInsertion(QList<qlonglong>& l, qlonglong id)
 
     for(; it != end; ++it) {
         if (id == (*it)) {
-            qDebug() << Q_FUNC_INFO << "Index already added in the list: id =" << id;
+            qDebug() << Q_FUNC_INFO << "Index already added in the list: id =" << id << l;
             return;
         } else if(id < *(it)) {
             break;

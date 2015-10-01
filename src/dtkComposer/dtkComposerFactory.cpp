@@ -25,6 +25,7 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeControlWhile.h"
 #include "dtkComposerNodeDistributed.h"
+#include "dtkComposerNodeExec.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
 #include "dtkComposerNodeRange.h"
@@ -73,6 +74,7 @@ void dtkComposerFactory::initNodeFile(void)
     this->record(":dtkComposer/dtkComposerNodeFileRead.json", dtkComposerNodeCreator<dtkComposerNodeFileRead>);
     this->record(":dtkComposer/dtkComposerNodeFileWrite.json", dtkComposerNodeCreator<dtkComposerNodeFileWrite>);
     this->record(":dtkComposer/dtkComposerNodeDirectory.json", dtkComposerNodeCreator<dtkComposerNodeDirectory>);
+    this->record(":dtkComposer/dtkComposerNodeExec.json", dtkComposerNodeCreator<dtkComposerNodeExec>);
 }
 
 void dtkComposerFactory::initNodeBase(void)

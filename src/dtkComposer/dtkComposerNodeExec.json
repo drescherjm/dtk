@@ -1,0 +1,9 @@
+{
+          "title" : "Exec",
+           "kind" : "process",
+           "type" : "exec",
+           "tags" : ["exec", "command", "shell"],
+    "description" : "<h3>Exec node</h3>Execute a command. Inputs:<ul><li> <p><b>command</b>: command name (with PATH if needed), </li><li><b>args</b> (optionnal) can be a single string or a list of strings</li><li> <b>timeout</b> (optionnal) can be specified to abort the command arter an given amount of seconds</li></ul> The outputs are the standard output and error, and the return code of the command</p>",
+         "inputs" : ["command","args","timeout"],
+        "outputs" : ["stdout","stderr","exit code"]
+}

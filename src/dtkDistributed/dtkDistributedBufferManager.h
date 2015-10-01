@@ -60,6 +60,7 @@ public:
     virtual void subAssign(char *result, void *source, qlonglong count) = 0;
     virtual void mulAssign(char *result, void *source, qlonglong count) = 0;
     virtual void divAssign(char *result, void *source, qlonglong count) = 0;
+    virtual bool compareAndSwap(char *result, void *source, void *compare) = 0;
 
 public:
     virtual void negate(void *result, void *source, qlonglong count) = 0;
@@ -77,10 +78,14 @@ public:
     void subAssign(char *result, void *source, qlonglong count);
     void mulAssign(char *result, void *source, qlonglong count);
     void divAssign(char *result, void *source, qlonglong count);
+    bool compareAndSwap(char *result, void *source, void *compare);
 
 public:
     void negate(void *result, void *source, qlonglong count);
     void invert(void *result, void *source, qlonglong count);
+
+private:
+   QMutex mutex;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -111,6 +116,26 @@ template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::
     T * Tresult = reinterpret_cast<T *>(result);
     T * Tsource = reinterpret_cast<T *>(source);
     std::transform(Tresult, Tresult+count, Tsource, Tresult, std::divides<T>());
+}
+
+template <typename T> inline bool dtkDistributedBufferOperationManagerTyped<T>::compareAndSwap(char *result, void *source,  void *compare)
+{
+    T * Tresult = reinterpret_cast<T *>(result);
+    T * Tsource = reinterpret_cast<T *>(source);
+    T * Tcompare = reinterpret_cast<T *>(compare);
+
+    mutex.lock();
+    if (*Tresult == *Tcompare) {
+        *Tresult = *Tsource ;
+        mutex.unlock();
+        return true;
+    } else {
+        mutex.unlock();
+        return false;
+    }
+    /*  m_atomic_value.store(Tresult) */
+    /* if ( std::atomic_compare_exchange_strong( &m_atomic_value, Tcompare , *Tsource  ) ) { */
+    /*     *Tresult = m_atomic_value.load(); */
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::negate(void *result, void *source, qlonglong count)
@@ -166,6 +191,7 @@ public:
     virtual void subAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
     virtual void mulAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
     virtual void divAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1) = 0;
+    virtual bool compareAndSwap(qint32 dest, qlonglong position, void *array, void *compare) = 0;
 
 protected:
     virtual bool canHandleOperationManager(void);

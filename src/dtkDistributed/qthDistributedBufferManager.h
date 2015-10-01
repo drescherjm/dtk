@@ -72,6 +72,7 @@ public:
     void subAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1);
     void mulAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1);
     void divAssign(qint32 dest, qlonglong position, void *array, qlonglong nelements = 1);
+    bool compareAndSwap(qint32 dest, qlonglong position, void *array, void *compare);
 
 public:
     bool canHandleOperationManager(void);
@@ -300,8 +301,19 @@ inline void qthDistributedBufferManager::divAssign(qint32 dest, qlonglong positi
     }
 }
 
+inline bool qthDistributedBufferManager::compareAndSwap(qint32 dest, qlonglong position, void *array, void *compare)
+{
+    Q_ASSERT((dest >= 0 || dest < d->comm->size()));
+    char *buffer = d->buffers[dest];
+    int locked = d->locked[dest].load();
+
+    // should we lock ?
+    this->operation_manager->compareAndSwap(buffer + position * d->object_size, array, compare);
+}
+
+
 inline bool qthDistributedBufferManager::canHandleOperationManager(void)
-{    
+{
     return (d->comm->wid() == 0);
 }
 

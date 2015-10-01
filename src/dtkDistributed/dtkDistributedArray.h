@@ -108,6 +108,7 @@ public:
     void subAssign(const qlonglong& index, T* array, const qlonglong& count);
     void mulAssign(const qlonglong& index, T* array, const qlonglong& count);
     void divAssign(const qlonglong& index, T* array, const qlonglong& count);
+    bool compareAndSwap(const qlonglong& index, T& value, T& compare);
 
 public:
     void copyIntoArray(const qlonglong& from, const qint32& owner, T *array, qlonglong& size) const;

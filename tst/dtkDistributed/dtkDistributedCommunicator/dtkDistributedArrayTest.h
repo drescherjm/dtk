@@ -28,6 +28,7 @@ private slots:
     void testCreateDestroy(void);
     void testAtFirstLast(void);
     void testFill(void);
+    void testSwap(void);
     void testOperatorGet(void);
     void testSetAt(void);
     void testIterator(void);

@@ -29,13 +29,16 @@ int main(int argc, char *argv[])
 {
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("inria");
+    app.setOrganizationDomain("fr");
+    app.setApplicationName("dtkDistributedDashboard");
 
     qmlRegisterType<dtkDistributedController>("dtkDistributed", 1, 0, "DistributedController");
     qmlRegisterType<dtkDistributedPolicy>("dtkDistributed", 1, 0, "DistributedPolicy");
 
     dtkDistributedSettings settings;
     settings.beginGroup("communicator");
-    dtkDistributed::communicator::pluginManager().initialize(settings.value("plugins").toString());
+    dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
 
     QQmlApplicationEngine engine(QUrl("qrc:/dashmain.qml"));

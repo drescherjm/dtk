@@ -189,7 +189,7 @@ void dtkDistributedController::refresh(const QUrl& server)
 }
 
 // deploy a server instance on remote host (to be executed before connect)
-bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh_tunnel, QString path)
+bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh_tunnel, QString path, QString loglevel)
 {
     dtkDebug() << "deploy" << server << type << ssh_tunnel << path;
 
@@ -222,6 +222,10 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
 
         args << path;
         args << "-nw";
+        if (loglevel != "info") {
+            args << "--loglevel";
+            args << loglevel;
+        }
         args << "-p";
         args << QString::number(port);
         args << "-type ";

@@ -67,7 +67,7 @@ public slots:
     void    killjob(const QUrl& server, QString jobid);
     void       send(dtkDistributedMessage *msg);
     void       send(QVariant v, QString jobid, qint16 destrank);
-    bool     deploy(const QUrl& server, QString type = "local", bool ssh_tunnel = false, QString path = "./dtkDistributedServer");
+    bool     deploy(const QUrl& server, QString type = "local", bool ssh_tunnel = false, QString path = "./dtkDistributedServer", QString loglevel = "info");
     bool     submit(const QUrl& server, QByteArray& resources);
 
 public:

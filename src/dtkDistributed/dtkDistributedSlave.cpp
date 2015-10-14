@@ -48,11 +48,14 @@ dtkDistributedSlave::~dtkDistributedSlave(void)
 
 QString dtkDistributedSlave::jobId(void)
 {
-    if(!(QString(getenv("PBS_JOBID")).isEmpty()))
+    if (qEnvironmentVariableIsSet("PBS_JOBID"))
         return QString(getenv("PBS_JOBID")).split(".").first();
 
-    if(!(QString(getenv("OAR_JOBID")).isEmpty()))
+    if (qEnvironmentVariableIsSet("OAR_JOBID"))
         return QString(getenv("OAR_JOBID"));
+
+    if (qEnvironmentVariableIsSet("SLURM_JOB_ID"))
+        return QString(getenv("SLURM_JOB_ID"));
 
     return QString::number(QCoreApplication::applicationPid());
 }

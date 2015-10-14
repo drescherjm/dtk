@@ -28,6 +28,7 @@ class dtkDistributedApplicationPrivate
 public:
     dtkDistributedPolicy policy;
     bool spawned;
+    bool nospawn;
     QString wrapper;
 };
 
@@ -45,6 +46,7 @@ dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv): dt
 
     d = new dtkDistributedApplicationPrivate;
     d->spawned = false;
+    d->nospawn = false;
 
 }
 
@@ -67,6 +69,8 @@ void dtkDistributedApplication::initialize(void)
 
     QCommandLineOption npOption("np","number of processes","int","1");
     parser->addOption(npOption);
+    QCommandLineOption nsOption("no-spawn","disable spawning");
+    parser->addOption(nsOption);
     QCommandLineOption ntOption("nt","number of threads (for hybrid plugins)","int", "1");
     parser->addOption(ntOption);
     QCommandLineOption wrapperOption("wrapper","use wrapper command when spawning processes","command", "");
@@ -85,6 +89,10 @@ void dtkDistributedApplication::initialize(void)
         settings = new QSettings(parser->value(DSsettingsOption), QSettings::IniFormat);
     } else {
         settings =  new dtkDistributedSettings;
+    }
+
+    if(parser->isSet(nsOption)) {
+        d->nospawn = true;
     }
 
     // plugins
@@ -133,9 +141,13 @@ void dtkDistributedApplication::exec(QRunnable *task)
 
 void dtkDistributedApplication::spawn(void)
 {
-    QStringList hosts = d->policy.hosts();
-    d->spawned = true;
-    d->policy.communicator()->spawn(hosts, d->wrapper);
+    if (d->nospawn) {
+        d->policy.communicator()->spawn(QStringList(), d->wrapper);
+    } else {
+        QStringList hosts = d->policy.hosts();
+        d->spawned = true;
+        d->policy.communicator()->spawn(hosts, d->wrapper);
+    }
 }
 
 void dtkDistributedApplication::unspawn(void)

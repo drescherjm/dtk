@@ -35,6 +35,8 @@ public:
 
 public:
     void clear(void);
+    void enable(void);
+    void disable(void);
 
     const T& value(const qlonglong& entry_id, const qint32& owner);
     double hitrate(void);
@@ -45,6 +47,7 @@ private:
     qlonglong hit;
     qlonglong miss;
     int       last;
+    bool      enabled;
 
 //dtkDistributedArray<T> *m_array;
     DSArray *m_array;
@@ -65,6 +68,7 @@ template <typename T, int Prealloc, int Length> inline dtkDistributedArrayCache<
     hit  = 0;
     miss = 0;
     last = -1;
+    enabled = true;
 }
 
 template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::clear(void)
@@ -77,17 +81,28 @@ template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayC
     }
 }
 
+template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::disable(void)
+{
+    enabled = false;
+}
+
+template <typename T, int Prealloc, int Length> inline void dtkDistributedArrayCache<T, Prealloc, Length>::enable(void)
+{
+    enabled = true;
+}
+
 template <typename T, int Prealloc, int Length> inline const T& dtkDistributedArrayCache<T, Prealloc, Length>::value(const qlonglong& entry_id, const qint32& owner)
 {
     // Check if entry_id is already in the Cache
     int line_id = -1;
-    for (int i = 0; i < Length; ++i) {
-        if (entry_id >= ids[i] && entry_id < ids[i] + lines[i].size()) {
-            line_id = i;
-            break;
+    if (enabled) {
+        for (int i = 0; i < Length; ++i) {
+            if (entry_id >= ids[i] && entry_id < ids[i] + lines[i].size()) {
+                line_id = i;
+                break;
+            }
         }
     }
-
     // If not then find an available cache line and store remote values into it
     if (line_id < 0) {
         miss++;

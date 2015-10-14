@@ -81,6 +81,8 @@ public:
     bool empty(void) const;
     qlonglong size(void) const;
     void clearCache(void) const;
+    void disableCache(void) const;
+    void enableCache(void) const;
 
 public:
     void fill(const T& value);

@@ -22,24 +22,28 @@
 
 #include <QtCore>
 
+Q_DECLARE_METATYPE(QProcessEnvironment);
+
 class dtkComposerNodeExecPrivate
 {
 public:
     QString command;
     QString stdout_data;
     QString stderr_data;
+    QProcessEnvironment processEnv;
     qlonglong timeout;
     qlonglong exit_code;
 
 public:
-    dtkComposerTransmitterReceiver<QString>   receiver_command;
-    dtkComposerTransmitterReceiverVariant        receiver_args;
-    dtkComposerTransmitterReceiver<qlonglong> receiver_timeout;
+    dtkComposerTransmitterReceiver<QString>             receiver_command;
+    dtkComposerTransmitterReceiverVariant                  receiver_args;
+    dtkComposerTransmitterReceiver<qlonglong>           receiver_timeout;
+    dtkComposerTransmitterReceiver<QProcessEnvironment>     receiver_env;
 
 public:
-    dtkComposerTransmitterEmitter<QString>      emitter_stdout;
-    dtkComposerTransmitterEmitter<QString>      emitter_stderr;
-    dtkComposerTransmitterEmitter<qlonglong> emitter_exit_code;
+    dtkComposerTransmitterEmitter<QString>                emitter_stdout;
+    dtkComposerTransmitterEmitter<QString>                emitter_stderr;
+    dtkComposerTransmitterEmitter<qlonglong>           emitter_exit_code;
 };
 
 
@@ -52,6 +56,7 @@ dtkComposerNodeExec::dtkComposerNodeExec(void) : dtkComposerNodeLeaf(), d(new dt
     this->appendReceiver(&(d->receiver_command));
     this->appendReceiver(&(d->receiver_args));
     this->appendReceiver(&(d->receiver_timeout));
+    this->appendReceiver(&(d->receiver_env));
 
     // wait forever by default
     d->timeout = -1;
@@ -59,7 +64,6 @@ dtkComposerNodeExec::dtkComposerNodeExec(void) : dtkComposerNodeLeaf(), d(new dt
     this->appendEmitter(&(d->emitter_stdout));
     this->appendEmitter(&(d->emitter_stderr));
     this->appendEmitter(&(d->emitter_exit_code));
-
 }
 
 dtkComposerNodeExec::~dtkComposerNodeExec(void)
@@ -95,8 +99,12 @@ void dtkComposerNodeExec::run(void)
         if (!d->receiver_timeout.isEmpty() ) {
             d->timeout = d->receiver_timeout.data();
         }
+        if(!d->receiver_env.isEmpty()){
+            d->processEnv=d->receiver_env.data();
+        }
+        
         QProcess cmd;
-
+        cmd.setProcessEnvironment(d->processEnv);
         cmd.start(d->command, arglist);
 
         if (cmd.waitForFinished(d->timeout)) {
@@ -113,6 +121,7 @@ void dtkComposerNodeExec::run(void)
         } else {
             dtkWarn() << "Timeout while running command " << d->command;
         }
+        
         d->exit_code = cmd.exitCode();
         d->emitter_exit_code.setData(d->exit_code);
         d->emitter_stdout.setData(d->stdout_data);
@@ -121,6 +130,5 @@ void dtkComposerNodeExec::run(void)
     } else {
          dtkWarn() << Q_FUNC_INFO << "The input command path is not set. Nothing is done.";
     }
-
 }
 

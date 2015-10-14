@@ -60,6 +60,13 @@ void dtkDistributedArrayTestCase::testFill(void)
     delete test;
 }
 
+void dtkDistributedArrayTestCase::testSwap(void)
+{
+    QRunnable *test = new testArraySwap();
+    dtkDistributed::exec(test);
+    delete test;
+}
+
 void dtkDistributedArrayTestCase::testOperatorGet(void)
 {
     QRunnable *test = new testArrayOperatorGet();

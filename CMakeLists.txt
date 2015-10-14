@@ -153,14 +153,15 @@ endif(DTK_ENABLE_COVERAGE)
 ## Dependencies
 ## #################################################################
 
-find_package(Qt5Core        REQUIRED)
-find_package(Qt5Concurrent  REQUIRED)
-find_package(Qt5Quick       REQUIRED)
-find_package(Qt5Network     REQUIRED)
-find_package(Qt5Gui         REQUIRED)
-find_package(Qt5Test        REQUIRED)
-find_package(Qt5Xml         REQUIRED)
-find_package(Qt5Declarative REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS
+  Core
+  Concurrent
+  Quick
+  Network
+  Gui
+  Test
+  Xml
+  Declarative)
 
 # variables used by doc and tst
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)

@@ -120,6 +120,40 @@ public:
     }
 };
 
+
+class testArraySwap : public QRunnable
+{
+public:
+    void run(void)
+    {
+        dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+        qlonglong N = 4;
+
+        qlonglong input = -1;
+
+        dtkDistributedArray<qlonglong> array(N *comm->size(), input);
+        comm->barrier();
+        qDebug() << "compare and swap"  << N *comm->size();
+        qlonglong index = 0;
+        for(int i = 0; i < N; ++i) {
+            qlonglong value = comm->wid()+42;
+            while (!array.compareAndSwap(index, value, input) && index < N * comm->size()) {
+                index ++;
+            }
+            QVERIFY(index < N *comm->size());
+            index ++;
+        }
+        comm->barrier();
+
+        if (comm->wid() == 0) {
+            for(int i = 0; i < N *comm->size(); ++i) {
+                qDebug() << i << array.at(i);
+                QVERIFY(array.at(i)!= input);
+            }
+        }
+    }
+};
+
 class testArrayOperatorGet : public QRunnable
 {
 public:

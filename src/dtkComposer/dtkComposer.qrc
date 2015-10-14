@@ -37,6 +37,7 @@
         <file>dtkComposerNodeControlForEach.json</file>
         <file>dtkComposerNodeControlMap.json</file>
         <file>dtkComposerNodeControlWhile.json</file>
+        <file>dtkComposerNodeExec.json</file>
         <file>dtkComposerNodeFile.json</file>
         <file>dtkComposerNodeFileExists.json</file>
         <file>dtkComposerNodeFileRead.json</file>

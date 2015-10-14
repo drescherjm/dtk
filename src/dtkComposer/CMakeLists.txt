@@ -72,6 +72,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeControlForEach.h
   dtkComposerNodeControlMap.h
   dtkComposerNodeControlWhile.h
+  dtkComposerNodeExec.h
   dtkComposerNodeFile.h
   dtkComposerNodeFile_p.h
   dtkComposerNodeInteger.h
@@ -188,6 +189,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeControlMap.cpp
   dtkComposerNodeControlWhile.cpp
   dtkComposerNodeDistributed.cpp
+  dtkComposerNodeExec.cpp
   dtkComposerNodeFile.cpp
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp

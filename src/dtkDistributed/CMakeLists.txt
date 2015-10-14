@@ -52,6 +52,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributedResourceManager.h
   dtkDistributedResourceManagerLocal.h
   dtkDistributedResourceManagerOar.h
+  dtkDistributedResourceManagerSlurm.h
   dtkDistributedResourceManagerTorque.h
   dtkDistributedServerDaemon.h
   dtkDistributedSettings
@@ -78,6 +79,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkDistributedResourceManager.cpp
   dtkDistributedResourceManagerLocal.cpp
   dtkDistributedResourceManagerOar.cpp
+  dtkDistributedResourceManagerSlurm.cpp
   dtkDistributedResourceManagerTorque.cpp
   dtkDistributedServerDaemon.cpp
   dtkDistributedSettings.cpp

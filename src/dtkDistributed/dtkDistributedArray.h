@@ -102,6 +102,7 @@ public:
     void subAssign(const qlonglong& index, const T& value);
     void mulAssign(const qlonglong& index, const T& value);
     void divAssign(const qlonglong& index, const T& value);
+    bool compareAndSwap(const qlonglong& index, T& value, T& compare);
 
 public:
     void addAssign(const qlonglong& index, T* array, const qlonglong& count);

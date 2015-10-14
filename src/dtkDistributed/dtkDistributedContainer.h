@@ -47,6 +47,13 @@ public:
 public:
     qlonglong wid(void) const;
 
+public:
+    bool deref(void);
+    bool   ref(void);
+
+protected:
+    QAtomicInt m_ref;
+
 protected:
     qlonglong m_size;
 
@@ -57,13 +64,13 @@ protected:
 
 // /////////////////////////////////////////////////////////////////
 
-inline dtkDistributedContainer::dtkDistributedContainer(void) : m_size(0), m_mapper(new dtkDistributedMapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
+inline dtkDistributedContainer::dtkDistributedContainer(void) : m_ref(1), m_size(0), m_mapper(new dtkDistributedMapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
 {
     m_mapper->ref();
 }
 
 
-inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size) : m_size(size), m_mapper(new dtkDistributedMapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
+inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size) : m_ref(1), m_size(size), m_mapper(new dtkDistributedMapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
 {
     m_mapper->ref();
     if (m_size > 0) {
@@ -71,7 +78,7 @@ inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size) :
     }
 }
 
-inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) : m_size(size), m_mapper(mapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
+inline dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper) : m_ref(1), m_size(size), m_mapper(mapper), m_comm(dtkDistributed::communicator::instance()), m_wid(m_comm->wid())
 {
     m_mapper->ref();
 }
@@ -114,6 +121,16 @@ inline dtkDistributedCommunicator *dtkDistributedContainer::communicator(void) c
 inline qlonglong dtkDistributedContainer::wid(void) const
 {
     return m_wid;
+}
+    
+inline bool dtkDistributedContainer::deref(void)
+{
+    return m_ref.deref();
+}
+
+inline bool dtkDistributedContainer::ref(void)
+{
+    return m_ref.ref();
 }
 
 //

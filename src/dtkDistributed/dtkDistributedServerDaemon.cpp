@@ -18,6 +18,7 @@
 #include "dtkDistributedResourceManagerOar.h"
 #include "dtkDistributedResourceManagerLocal.h"
 #include "dtkDistributedResourceManagerTorque.h"
+#include "dtkDistributedResourceManagerSlurm.h"
 
 #include <dtkLog>
 
@@ -74,8 +75,11 @@ void dtkDistributedServerDaemon::setManager(QString name)
         d->manager = new dtkDistributedResourceManagerOar;
     } else if (name =="local") {
         d->manager = new dtkDistributedResourceManagerLocal;
+    } else if (name =="slurm") {
+        d->manager = new dtkDistributedResourceManagerSlurm;
     } else {
-        dtkError() << "unknown resource manager type" << name;
+        qCritical() << "unknown resource manager type" << name;
+        exit(1);
     }
 }
 

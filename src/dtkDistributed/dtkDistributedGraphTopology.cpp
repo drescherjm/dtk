@@ -541,47 +541,18 @@ void dtkDistributedGraphTopology::buildFEM(void)
         auto it  = m_map_hybrid.cbegin();
         auto ite = m_map_hybrid.cend();
 
-        for(; it != ite; ++it) {
-            if (m_vertex_to_edge->mapper()->owner(it.key()) == wid()) {
-                qlonglong start_pos = m_vertex_to_edge->at(it.key());
-                qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
-                const EdgeList& l = *it;
-                for (qlonglong nid : l) {
-                    for (qlonglong j = start_pos; j < end_pos; ++j) {
-                        qlonglong tmp = m_edge_to_vertex->at(j);
-                        if (tmp < 0) {
-                            m_edge_to_vertex->setAt(j, nid);
-                            start_pos = j + 1;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        this->m_comm->barrier();
+        qlonglong minusOne = -1;
 
-        for (int i = 0; i < m_comm->size(); ++i) {
-            if (wid() == i) {
-                it  = m_map_hybrid.cbegin();
-                for(; it != ite; ++it) {
-                    if (m_vertex_to_edge->mapper()->owner(it.key()) != wid()) {
-                        qlonglong start_pos = m_vertex_to_edge->at(it.key());
-                        qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
-                        const EdgeList& l = *it;
-                        for (qlonglong nid : l) {
-                            for (qlonglong j = start_pos; j < end_pos; ++j) {
-                                qlonglong tmp = m_edge_to_vertex->at(j);
-                                if (tmp < 0) {
-                                    m_edge_to_vertex->setAt(j, nid);
-                                    start_pos = j + 1;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+        for(; it != ite; ++it) {
+            qlonglong start_pos = m_vertex_to_edge->at(it.key());
+            qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
+            const EdgeList& l = *it;
+            for (qlonglong nid : l) {
+                for (qlonglong j = start_pos; j < end_pos; ++j) {
+                    if (m_edge_to_vertex->compareAndSwap(j, nid, minusOne))
+                        break;
                 }
             }
-            m_comm->barrier();
         }
     }
     this->m_comm->barrier();
@@ -684,7 +655,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
     }
     m_comm->barrier();
 
-    qDebug() << Q_FUNC_INFO << this->wid() << itf_edges_to_vertex;
+    // qDebug() << Q_FUNC_INFO << this->wid() << itf_edges_to_vertex;
 
     // Resets the mapping.
     m_vertex_to_edge->fill(0);

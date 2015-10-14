@@ -374,6 +374,15 @@ template<typename T> inline void dtkDistributedArray<T>::divAssign(const qlonglo
     }
 }
 
+
+template<typename T> inline bool dtkDistributedArray<T>::compareAndSwap(const qlonglong& index, T& array, T& compare)
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
+
+    return m_buffer_manager->compareAndSwap(owner, pos, &array, &compare);
+}
+
 template<typename T> inline void dtkDistributedArray<T>::addAssign(const qlonglong& index, T* array, const qlonglong& count)
 {
     qint32 owner = static_cast<qint32>(m_mapper->owner(index));

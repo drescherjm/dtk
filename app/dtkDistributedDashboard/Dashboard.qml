@@ -3,6 +3,8 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
+import Qt.labs.settings 1.0
+
 import dtkDistributed 1.0
 
 import "status.js" as Status
@@ -21,6 +23,7 @@ Item {
         ListElement { text: "nef-devel.inria.fr" }
         ListElement { text: "nef-devel2.inria.fr" }
         ListElement { text: "fsophia.sophia.grid5000.fr" }
+        ListElement { text: "controller.vg" }
     }
 
     ListModel {
@@ -28,6 +31,12 @@ Item {
         ListElement { text: "local" }
         ListElement { text: "torque" }
         ListElement { text: "oar" }
+        ListElement { text: "slurm" }
+    }
+
+    Settings {
+        id: settings
+        property alias server_path: serverPath.text
     }
 
     RowLayout {
@@ -110,7 +119,7 @@ Item {
                     text: "Connect"
                     tooltip: "Deploy resource manager daemon on remote host"
                     onClicked: {
-                        controller.deploy( Status.url(false),combotypes.currentText, tunnel.checked, serverPath.text);
+                        controller.deploy( Status.url(false),combotypes.currentText, tunnel.checked, serverPath.text, "trace");
                         controller.connect( Status.url(false), tunnel.checked, true);
                         Status.show()
                     }

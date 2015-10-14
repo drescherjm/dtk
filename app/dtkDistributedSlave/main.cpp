@@ -30,8 +30,8 @@ public:
     void run(void) {
         QTime time;
         dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
-        qDebug() << comm->wid();
-        qDebug() << comm->size();
+        dtkDebug() << comm->wid();
+        dtkDebug() << comm->size();
         dtkDistributedSlave slave;
 
         if (comm->rank() == 0) {

@@ -404,7 +404,7 @@ void dtkDistributedController::read(void)
         break;
     case dtkDistributedMessage::SETRANK:
         dtkDebug() << "set rank received";
-        if (msg->rank() ==  dtkDistributedMessage::SLAVE_RANK ) {
+        if (msg->rank() ==  dtkDistributedMessage::SLAVE_RANK ||  msg->rank() ==  0 ) {
             dtkDebug() << "job started";
             d->running_jobs[msg->jobid()] = server;
             emit jobStarted(msg->jobid());

@@ -34,7 +34,9 @@ public:
         qDebug() << comm->size();
         dtkDistributedSlave slave;
 
-        slave.connectFromJob(server);
+        if (comm->rank() == 0) {
+            slave.connectFromJob(server);
+        }
 
         QThread::sleep(5);
 

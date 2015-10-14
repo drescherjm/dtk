@@ -75,20 +75,18 @@ void dtkDistributedSlave::connectFromJob(const QUrl& server)
 {
     dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
 
-    if (comm->rank() == 0) {
-        // the server waits for the jobid in stdout
-        std::cout << QString("DTK_JOBID="+jobId()).toStdString() << std::endl << std::flush;
+    // the server waits for the jobid in stdout
+    std::cout << QString("DTK_JOBID="+jobId()).toStdString() << std::endl << std::flush;
 
-        QUrl url(server);
+    QUrl url(server);
 
-        dtkDebug() << "Running on master, connect to remote server" << server;
-        connect(url);
-        dtkDebug() << "slave connected to server " << isConnected();
+    dtkDebug() << "Running on master, connect to remote server" << server;
+    connect(url);
+    dtkDebug() << "slave connected to server " << isConnected();
 
-        if (isConnected()) {
-            dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,jobId(),dtkDistributedMessage::SLAVE_RANK);
-            msg.send(socket());
-        }
+    if (isConnected()) {
+        dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,jobId(), comm->rank());
+        msg.send(socket());
     }
 }
 
@@ -114,13 +112,11 @@ void dtkDistributedSlave::disconnectFromJob(const QUrl& server)
 {
     dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
 
-    if (comm->rank() == 0) {
-        if (isConnected()) {
-            dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,jobId(),dtkDistributedMessage::SLAVE_RANK);
-            msg.send(socket());
-        }
-        disconnect(server);
+    if (isConnected()) {
+        dtkDistributedMessage msg(dtkDistributedMessage::ENDJOB,jobId(),comm->rank());
+        msg.send(socket());
     }
+    disconnect(server);
 }
 
 void dtkDistributedSlave::disconnect(const QUrl& server)

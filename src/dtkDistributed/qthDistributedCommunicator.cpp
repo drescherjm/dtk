@@ -123,23 +123,23 @@ public:
 class BarrierPrivate
 {
 public:
-    BarrierPrivate(int count) : count(count), initial_count(count) {}
+    BarrierPrivate(int count) : m_count(count), initial_count(count) {}
 
     void wait() {
         mutex.lock();
-        --count;
-        if (count > 0) {
+        --m_count;
+        if (m_count > 0) {
             condition.wait(&mutex);
             mutex.unlock();
         } else {
-            count=initial_count;
+            m_count=initial_count;
             mutex.unlock();
             condition.wakeAll();
         }
     }
 private:
     Q_DISABLE_COPY(BarrierPrivate)
-    int count;
+    int m_count;
     int initial_count;
     QMutex mutex;
     QWaitCondition condition;
@@ -171,7 +171,8 @@ public:
     qthDistributedLocalMessage(void);
     qthDistributedLocalMessage(QVariant v, qint32 source, qint32 tag);
     qthDistributedLocalMessage(QByteArray a, qint32 source, qint32 tag);
-    qthDistributedLocalMessage(void *buffer, qlonglong bytesize, qint32 source, qint32 tag);
+    qthDistributedLocalMessage(void *buf, qlonglong bytesize, qint32 source, qint32 tag);
+    virtual ~qthDistributedLocalMessage();
 
 public:
     qint32 tag;
@@ -217,6 +218,12 @@ qthDistributedLocalMessage::qthDistributedLocalMessage(void *b, qlonglong bytesi
     this->source = source;
     this->buffer = malloc(bytesize);
     memcpy(this->buffer, b, bytesize);
+}
+
+qthDistributedLocalMessage::~qthDistributedLocalMessage(void)
+{
+    if (buffer)
+        free(buffer);
 }
 
 // /////////////////////////////////////////////////////////////////

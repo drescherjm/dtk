@@ -25,7 +25,7 @@ void dtkDistributedGraphTopologyTestCase::initTestCase(void)
     dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
 
-    dtkDistributed::policy()->setType("mpi");
+    dtkDistributed::policy()->setType("qthread");
 
     for (int i = 0; i < 3; ++i) {
         dtkDistributed::policy()->addHost("localhost");

@@ -105,6 +105,11 @@ inline void dtkDistributedGraphTopology::unlock(void)
     m_edge_to_vertex->unlock();
 }
 
+inline bool dtkDistributedGraphTopology::isAssembled(void) const
+{
+    return m_is_assembled;
+}
+
 inline qlonglong dtkDistributedGraphTopology::vertexCount(void) const
 {
     return this->size();
@@ -112,47 +117,40 @@ inline qlonglong dtkDistributedGraphTopology::vertexCount(void) const
 
 inline qlonglong dtkDistributedGraphTopology::edgeCount(void) const
 {
-    if (!m_edge_count)
-        return 0;
-
-    if (!m_builded) {
-        m_edge_count->unlock(this->wid());
-        m_comm->barrier();
+    if (!m_is_assembled) {
+        return 0LL;
     }
-
-    qlonglong size = m_edge_count->size();
-    qlonglong count = 0;
-    for (qlonglong i = 0; i < size; ++i)
-        count += m_edge_count->at(i);
-
-    if (!m_builded)
-        m_edge_count->wlock(this->wid());
-    return count;
+    return m_edge_to_vertex->size();
 }
 
 inline qlonglong dtkDistributedGraphTopology::vertexCount(const qlonglong& wid) const
 {
-    if (!m_vertex_to_edge)
-        return 0;
-
+    if (!m_is_assembled) {
+        return 0LL;
+    }
     return m_vertex_to_edge->mapper()->count(wid);
 }
 
 inline qlonglong dtkDistributedGraphTopology::edgeCount(const qlonglong& wid) const
 {
-    if (!m_edge_count)
-        return 0;
+    if (!m_is_assembled) {
+        return 0LL;
+    }
 
     return m_edge_count->at(wid);
 }
 
 inline qlonglong dtkDistributedGraphTopology::neighbourCount(qlonglong vertex_id) const
 {
+    Q_ASSERT_X(m_is_assembled && vertex_id < m_size, "neighbourCount", "graph is not assembled or 'vertex_id' is not valid.");
+
     return m_neighbour_count->at(vertex_id);
 }
 
 inline dtkDistributedGraphTopology::Neighbours dtkDistributedGraphTopology::operator[](qlonglong vertex_id) const
 {
+    Q_ASSERT_X(m_is_assembled && vertex_id < m_size, "operator[]", "graph is not assembled or 'vertex_id' is not valid.");
+
     qlonglong n_start = m_vertex_to_edge->at(vertex_id);
     qlonglong size = m_neighbour_count->at(vertex_id);
 
@@ -161,11 +159,15 @@ inline dtkDistributedGraphTopology::Neighbours dtkDistributedGraphTopology::oper
 
 inline qlonglong dtkDistributedGraphTopology::firstNeighbourPos(qlonglong vertex_id) const
 {
+    Q_ASSERT_X(m_is_assembled && vertex_id < m_size, "firstNeighbourPos", "graph is not assembled or 'vertex_id' is not valid.");
+
     return m_vertex_to_edge->at(vertex_id);
 }
 
 inline qlonglong dtkDistributedGraphTopology::firstNeighbourId(qlonglong vertex_id) const
 {
+    Q_ASSERT_X(m_is_assembled && vertex_id < m_size, "firstNeighbourId", "graph is not assembled or 'vertex_id' is not valid.");
+
     return m_edge_to_vertex->at(m_vertex_to_edge->at(vertex_id));
 }
 
@@ -195,6 +197,13 @@ inline void dtkDistributedGraphTopology::stats(void) const
     qDebug() << m_comm->rank() << "m_edge_to_vertex stats:"; m_edge_to_vertex->stats();
 }
 
+inline dtkDistributedMapper *dtkDistributedGraphTopology::edgeMapper(void) const
+{
+    Q_ASSERT_X(m_is_assembled, "edgeMapper", "graph is not yet assembled.");
+
+    return m_edge_to_vertex->mapper();
+}
+
 inline bool dtkDistributedGraphTopology::read(const QString& filename, GraphFile format)
 {
     dtkDistributedArray<qlonglong> *empty = NULL;
@@ -205,6 +214,10 @@ inline bool dtkDistributedGraphTopology::read(const QString& filename, GraphFile
 // http://people.sc.fsu.edu/~jburkardt/data/metis_graph/metis_graph.html
 template <class T> bool dtkDistributedGraphTopology::readWithValues(const QString& filename, GraphFile format, dtkDistributedArray<T> *& values )
 {
+    this->clear();
+
+    qlonglong vertex_count = 0;
+
     QFile file(filename);
     qlonglong edges_count = 0;
     QTime time;
@@ -254,8 +267,10 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         case  MetisDirectedFormat:
             dtkTrace() << "reading metis file header";
             header = QString(in->readLine()).split(re);
-            m_size = header.first().toLongLong();
-            if (m_size  == 0) {
+            //m_size = header.first().toLongLong();
+            vertex_count = header.first().toLongLong();
+            //if (m_size  == 0) {
+            if (vertex_count  == 0) {
                 qWarning() << "Can't parse size of the graph" << filename;
                 return false;
             }
@@ -291,14 +306,17 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
                 return false;
             }
 
-            while (m_size == 0) {
+            //while (m_size == 0) {
+            while (vertex_count == 0) {
                 line = in->readLine().trimmed();
 
                 if (line.startsWith("%"))
                     continue;
                 data = line.split(re);
-                m_size   = data[0].toLongLong();
-                if (m_size != data[1].toLongLong()) {
+                //m_size   = data[0].toLongLong();
+                vertex_count   = data[0].toLongLong();
+                //if (m_size != data[1].toLongLong()) {
+                if (vertex_count != data[1].toLongLong()) {
                     dtkError() << "non symetric matrix not supported";
                     return false;
                 }
@@ -309,13 +327,14 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
             dtkError() << "format unknown";
         }
     }
-    m_comm->broadcast(&m_size, 1, 0);
+
+    m_comm->broadcast(&vertex_count, 1, 0);
     m_comm->broadcast(&edges_count, 1, 0);
-    dtkTrace() << "Matrix size"<< m_size << "edges count" << edges_count << m_comm->wid();
+    dtkTrace() << "Matrix size"<< vertex_count << "edges count" << edges_count << m_comm->wid();
 
-    this->initialize();
-    m_edge_count->unlock(this->wid());
-
+    // Resizing and initialization
+    this->resize(vertex_count);
+    
     m_comm->barrier();
 
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edges_count);
@@ -324,7 +343,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     if (values) {
         dtkTrace() << "init values vector";
         delete values;
-        values = new dtkDistributedArray<T>(edges_count, this->edge_mapper());
+        values = new dtkDistributedArray<T>(edges_count, this->edgeMapper());
     }
 
     if (this->wid() == 0) {
@@ -591,7 +610,11 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         }
     }
 
-    m_builded = true;
+    m_is_assembled = true;
+    m_comm->barrier();
+
+    this->assembleDomainDecompositionFeatures();
+
     return true;
 }
 

@@ -31,143 +31,110 @@ bool dtkDistributedGraphTopologyPopulateMap(QMap<qlonglong, QList<qlonglong> >& 
 // dtkDistributedGraphTopology implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedContainer()
+dtkDistributedGraphTopology::dtkDistributedGraphTopology(void) : dtkDistributedContainer(), m_is_assembled(false), m_edge_count(NULL), m_neighbour_count(NULL), m_vertex_to_edge(NULL), m_edge_to_vertex(NULL)
 {
-    m_builded=false;
-    m_neighbour_count = NULL;
-    m_edge_to_vertex  = NULL;
-    m_vertex_to_edge  = NULL;
-    m_edge_count      = NULL;
-    m_remote_edges_count = NULL;
-    m_remote_edges       = NULL;
-    m_positions          = NULL;
+    m_dd.mapper = NULL;
+    m_dd.positions = NULL;
 
     m_comm->barrier();
 }
 
-dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count) : dtkDistributedContainer(vertex_count)
+dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count) : dtkDistributedContainer(vertex_count), m_is_assembled(false), m_edge_count(NULL), m_neighbour_count(NULL), m_vertex_to_edge(NULL), m_edge_to_vertex(NULL)
 {
-    m_builded=false;
-    m_neighbour_count = NULL;
-    m_edge_to_vertex  = NULL;
-    m_vertex_to_edge  = NULL;
-    m_edge_count      = NULL;
-    m_remote_edges_count = NULL;
-    m_remote_edges       = NULL;
-    m_positions          = NULL;
+    m_dd.mapper = NULL;
+    m_dd.positions = NULL;
 
     this->initialize();
 
     m_comm->barrier();
 }
 
-dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count, dtkDistributedMapper *mapper) : dtkDistributedContainer(vertex_count, mapper)
+dtkDistributedGraphTopology::dtkDistributedGraphTopology(const qlonglong& vertex_count, dtkDistributedMapper *mapper) : dtkDistributedContainer(vertex_count, mapper), m_is_assembled(false), m_edge_count(NULL), m_neighbour_count(NULL), m_vertex_to_edge(NULL), m_edge_to_vertex(NULL)
 {
-    m_builded=false;
-    m_neighbour_count = NULL;
-    m_edge_to_vertex  = NULL;
-    m_vertex_to_edge  = NULL;
-    m_edge_count = NULL;
-    m_remote_edges_count = NULL;
-    m_remote_edges       = NULL;
-    m_positions          = NULL;
+    m_dd.mapper = NULL;
+    m_dd.positions = NULL;
 
-    this->initialize(true);
+    this->initialize();
 
     m_comm->barrier();
 }
 
-dtkDistributedGraphTopology::dtkDistributedGraphTopology(const dtkDistributedGraphTopology& o) : dtkDistributedContainer(o.m_size)
+dtkDistributedGraphTopology::dtkDistributedGraphTopology(const dtkDistributedGraphTopology& o) : dtkDistributedContainer(o.m_size), m_is_assembled(o.m_is_assembled), m_edge_count(NULL), m_neighbour_count(NULL), m_vertex_to_edge(NULL), m_edge_to_vertex(NULL)
 {
-    m_map = o.m_map;
-    m_builded=o.m_builded;
-    m_edge_count      = NULL;
-    m_neighbour_count = NULL;
-    m_vertex_to_edge  = NULL;
-    m_remote_edges_count = NULL;
-    m_remote_edges       = NULL;
-    m_positions          = NULL;
+    m_dd.mapper = NULL;
+    m_dd.positions = NULL;
 
-    if (o.m_edge_count)
-        m_edge_count = new dtkDistributedArray<qlonglong>(*(o.m_edge_count));
-    if (o.m_neighbour_count)
-        m_neighbour_count = new dtkDistributedArray<qlonglong>(*(o.m_neighbour_count));
-    if (o.m_vertex_to_edge)
-        m_vertex_to_edge  = new dtkDistributedArray<qlonglong>(*(o.m_vertex_to_edge));
-    if (o.m_remote_edges)
-        m_remote_edges  = new dtkDistributedArray<qlonglong>(*(o.m_remote_edges));
-    if (o.m_remote_edges_count)
-        m_remote_edges_count  = new dtkDistributedArray<qlonglong>(*(o.m_remote_edges_count));
-
-    m_mapper->setMapping(vertexCount(), m_comm->size());
+    m_comm->barrier();
+    dtkWarn() << Q_FUNC_INFO << "Copy ctor not implemented. It is not clear it is necessary.";
 }
 
 dtkDistributedGraphTopology::~dtkDistributedGraphTopology(void)
 {
-    if (!m_builded && m_edge_count)
-        m_edge_count->unlock(this->wid());
+    // if (!m_is_assembled && m_edge_count)
+    //     m_edge_count->unlock(this->wid());
 
-    m_comm->barrier();
-
-    if (m_neighbour_count)
-        delete m_neighbour_count;
-    if (m_vertex_to_edge)
-        delete m_vertex_to_edge;
-    if (m_edge_count)
-        delete m_edge_count;
-    if (m_edge_to_vertex)
-        delete m_edge_to_vertex;
-    if (m_remote_edges)
-        delete m_remote_edges;
-    if (m_remote_edges_count)
-        delete m_remote_edges_count;
-    if (m_positions)
-        delete m_positions;
+    this->clear();
 }
 
-dtkDistributedGraphTopology& dtkDistributedGraphTopology::operator = (const dtkDistributedGraphTopology& o)
+dtkDistributedGraphTopology& dtkDistributedGraphTopology::operator = (const dtkDistributedGraphTopology&)
 {
-    m_map = o.m_map;
-
-    if (o.m_edge_count)
-        *m_edge_count = *(o.m_edge_count);
-    if (o.m_neighbour_count)
-        *m_neighbour_count = *(o.m_neighbour_count);
-    if (o.m_vertex_to_edge)
-        *m_vertex_to_edge  = *(o.m_vertex_to_edge);
-    if (o.m_remote_edges)
-        *m_remote_edges  = *(o.m_remote_edges);
-    if (o.m_remote_edges_count)
-        *m_remote_edges_count  = *(o.m_remote_edges_count);
-
-    m_mapper->setMapping(vertexCount(), m_comm->size());
-
+    dtkWarn() << Q_FUNC_INFO << "Copy assignment not implemented. It is not clear it is necessary.";
     return *this;
+}
+
+void dtkDistributedGraphTopology::clear(void)
+{
+    m_comm->barrier();
+
+    m_size = 0LL;
+
+    m_is_assembled = false;
+
+    m_mapper->clear();
+
+    if (m_neighbour_count) {
+        delete m_neighbour_count;
+    }
+
+    if (m_edge_count)
+        delete m_edge_count;
+
+    if (m_vertex_to_edge)
+        delete m_vertex_to_edge;
+    if (m_edge_to_vertex)
+        delete m_edge_to_vertex;
+
+
+    if (m_dd.mapper && !m_dd.mapper->deref())
+        delete m_dd.mapper;
+    if (m_dd.positions)
+        delete m_dd.positions;
+
+    m_edge_count      = NULL;
+    m_neighbour_count = NULL;
+    m_vertex_to_edge  = NULL;
+    m_edge_to_vertex  = NULL;
+
+    m_dd.mapper    = NULL;
+    m_dd.positions = NULL;
+
+    m_comm->barrier();    
 }
 
 void dtkDistributedGraphTopology::resize(qlonglong vertex_count)
 {
+    if (m_size == vertex_count)
+        return;
+
+    this->clear();
     m_size = vertex_count;
-//    m_edge_to_vertex = new dtkDistributedArray<qlonglong>( edges_count);
-    initialize();
+    m_mapper->setMapping(vertexCount(), m_comm->size());
+    this->initialize();
 }
 
-// if the graph is not builded, it will do a segfault
-dtkDistributedMapper *dtkDistributedGraphTopology::edge_mapper(void) const
-{
-    if(!m_builded) {
-        dtkError() << "calling edge_mapper while the dtkDistributedgraphTopology is not builded! ";
-    }
-    return m_edge_to_vertex->mapper();
-}
-
-void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
+void dtkDistributedGraphTopology::initialize(void)
 {
     dtkDebug() << "initialize graph with" << vertexCount() << "vertexes, rank =" << this->wid();
-
-    if (!has_custom_mapper) {
-        m_mapper->setMapping(vertexCount(), m_comm->size());
-    }
 
     dtkDistributedMapper *mapper = new dtkDistributedMapper(*m_mapper);
     mapper->setMap(vertexCount() + 1, m_comm->size());
@@ -179,198 +146,329 @@ void dtkDistributedGraphTopology::initialize(bool has_custom_mapper)
 
     m_edge_count = new dtkDistributedArray<qlonglong>(m_comm->size());
     m_edge_count->fill(0);
-    // If the graph is build with addEdge, m_edge_count is written
-    // locally and the locks can be a bottleneck, so set a wlock here.
-    // This will be unlocked after the build (or read )
-    m_edge_count->wlock(this->wid());
-
-    m_remote_edges_count = new dtkDistributedArray<qlonglong>(m_comm->size());
-    m_remote_edges_count->fill(0);
-
 }
 
-void dtkDistributedGraphTopology::build(void)
-{
-    m_edge_count->unlock(this->wid());
-    this->m_comm->barrier();
-    m_builded = true;
-    qlonglong wid = this->wid();
-
-    // handle remote edges
-    qlonglong remote_edge_count = 0;
-    for (qlonglong i = 0; i < m_comm->size(); ++i) {
-        remote_edge_count += 3 * m_remote_edges_count->at(i);
-    }
-
-
-    qlonglong offset = 0;
-
-    if (remote_edge_count == 0) {
-        dtkDebug() << "No remote edges in graph, build";
-    } else  {
-        dtkDebug() << "Add remotes edges ! " << remote_edge_count/3;
-        dtkDistributedMapper *rmapper = new dtkDistributedMapper();
-        // We don't know yet the final edge_count (see fake one later), use a size >= comm->size
-        rmapper->initMap(remote_edge_count  + m_comm->size() , m_comm->size());
-        for (qlonglong i = 0; i < m_comm->size(); ++i) {
-            rmapper->setMap(offset , i);
-            qlonglong count =  m_remote_edges_count->at(i);
-            if (count == 0) {
-                // need to add fake entry because empty local array is not supported
-                offset += 3 ;
-                remote_edge_count+= 3;
-             } else {
-                offset += 3 * count;
-            }
-        }
-        rmapper->setMap(remote_edge_count , m_comm->size());
-
-        m_remote_edges = new dtkDistributedArray<qlonglong>(remote_edge_count, rmapper);
-        m_remote_edges->fill(-1);
-
-        EdgeMap::const_iterator it  = m_map_hybrid.cbegin();
-        EdgeMap::const_iterator end = m_map_hybrid.cend();
-
-        qlonglong index = rmapper->firstIndex(wid);
-        for (; it != end; ++it) {
-            const EdgeList& edge_list = *it;
-            EdgeList::const_iterator nit  = edge_list.begin();
-            EdgeList::const_iterator nend = edge_list.end();
-            for(;nit != nend; ++nit) {
-                qlonglong owner = m_mapper->owner(it.key());
-                m_remote_edges->setAt(index,   owner);
-                m_remote_edges->setAt(index+1, it.key());
-                m_remote_edges->setAt(index+2, *nit);
-                index += 3;
-            }
-        }
-
-        QMap<qlonglong, qlonglong> map_remote_owner;
-        it  = m_map_remote.cbegin();
-        end = m_map_remote.cend();
-        for (; it != end; ++it) {
-            const EdgeList& edge_list = *it;
-            EdgeList::const_iterator nit  = edge_list.begin();
-            EdgeList::const_iterator nend = edge_list.end();
-            for(;nit != nend; ++nit) {
-                qlonglong owner = m_mapper->owner(it.key());
-                m_remote_edges->setAt(index,   owner);
-                m_remote_edges->setAt(index+1, it.key());
-                m_remote_edges->setAt(index+2, *nit);
-                map_remote_owner.insert(index, it.key());
-                index += 3;
-            }
-        }
-
-        m_comm->barrier();
-
-        // scan the whole remote_edges DSarray to find our edges added by other procs
-        for (qlonglong i = 0 ; i < m_remote_edges->size(); i += 3){
-            if  (m_remote_edges->at(i) == wid) {
-                this->addEdge(m_remote_edges->at(i+1), m_remote_edges->at(i+2), true);
-            }
-        }
-        m_comm->barrier();
-        delete m_remote_edges;
-        m_remote_edges = NULL;
-    }
-
-    // handle our edges
-    qlonglong edge_count = 0;
-    for (qlonglong i = 0; i < m_comm->size(); ++i) {
-        edge_count += m_edge_count->at(i);
-    }
-
-    dtkDistributedMapper *mapper = new dtkDistributedMapper;
-    mapper->initMap(edge_count, m_comm->size());
-
-    offset = 0;
-    for (qlonglong i = 0; i < m_comm->size(); ++i) {
-        mapper->setMap(offset ,i);
-        offset += m_edge_count->at(i);
-    }
-
-    if (m_edge_to_vertex) {
-        delete m_edge_to_vertex;
-    }
-    m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edge_count, mapper);
-
-    EdgeMap::const_iterator it  = m_map.cbegin();
-    EdgeMap::const_iterator end = m_map.cend();
-
-    offset = mapper->firstIndex(this->wid());
-    qlonglong index = 0;
-    for (; it != end; ++it) {
-        m_vertex_to_edge->setAt(it.key(), offset);
-        const EdgeList& edge_list = *it;
-        offset += edge_list.count();
-        EdgeList::const_iterator nit  = edge_list.begin();
-        EdgeList::const_iterator nend = edge_list.end();
-        for(;nit != nend; ++nit, ++index) {
-            m_edge_to_vertex->begin()[index] = *nit;
-        }
-        m_neighbour_count->setAt(it.key(), edge_list.count());
-    }
-
-    this->m_comm->barrier();
-    if (this->wid() == this->m_comm->size() - 1) {
-        m_vertex_to_edge->setAt(m_vertex_to_edge->size() - 1, offset);
-    }
-
-    this->m_comm->barrier();
-}
-
-bool dtkDistributedGraphTopology::builded(void)
-{
-    return m_builded;
-}
-
-void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to, bool oriented)
+void dtkDistributedGraphTopology::addEdge(qlonglong from, qlonglong to)
 {
     qint32 wid = this->wid();
     qint32 from_owner = static_cast<qint32>(m_mapper->owner(from));
 
     if (wid == from_owner) {
-        if (dtkDistributedGraphTopologyPopulateMap(m_map, from, to)) {
-            m_edge_count->addAssign(wid, 1);
-        }
-    }
-    else {
-        dtkWarn() << "dtkDistributedGraphTopology try to addEdge(" << from << "," << to << ") with wid=" << wid << " but the owner is " << from_owner  << " . Nothing will be done !!!";
-    }
+        dtkDistributedGraphTopologyPopulateMap(m_dd.map, from, to);
+        *(m_edge_count->begin()) += 1;
 
-    if (!oriented) {
-        addEdge(to, from, true);
-    }
-}
-
-void dtkDistributedGraphTopology::addEdgeFEM(qlonglong from, qlonglong to)
-{
-    qint32 wid = this->wid();
-    qint32 from_owner = static_cast<qint32>(m_mapper->owner(from));
-    if (wid == from_owner) {
-        dtkDistributedGraphTopologyPopulateMap(m_map, from, to);
-        m_edge_count->addAssign(wid, 1);
     } else {
-
-        m_remote_edges_count->addAssign(wid, 1);
 
         qint32 to_owner = static_cast<qint32>(m_mapper->owner(to));
 
         if (wid == to_owner) {
-            dtkDistributedGraphTopologyPopulateMap(m_map_hybrid, from, to);
+            dtkDistributedGraphTopologyPopulateMap(m_dd.map_hybrid, from, to);
 
         } else {
-            dtkDistributedGraphTopologyPopulateMap(m_map_remote, from, to);
+            dtkDistributedGraphTopologyPopulateMap(m_dd.map_remote, from, to);
         }
     }
 }
 
-void dtkDistributedGraphTopology::buildFEM(void)
+void dtkDistributedGraphTopology::buildDomainDecompositionMaps(void)
 {
-    m_edge_count->unlock(this->wid());
+    if (!m_is_assembled)
+        return;
+
+    qlonglong wid = this->wid();
+
+    m_dd.map.clear();
+    m_dd.map_hybrid.clear();
+    m_dd.map_remote.clear();
+
+    // List of boundary nodes owned by a lower id partition.
+    QList<qlonglong> be_nodes;
+
+    qlonglong first_id = this->mapper()->firstIndex(wid);
+    qlonglong  last_id = this->mapper()->lastIndex(wid);
+    qlonglong v_count = this->mapper()->count(wid);
+    qlonglong loc_size = this->mapper()->count(wid);
+    qlonglong v_id = first_id;
+    
+    auto vit  = m_vertex_to_edge->begin();
+    auto vend = vit + v_count; 
+    
+    auto n_count = m_neighbour_count->begin();
+    auto nit = m_edge_to_vertex->begin();    
+
+    // Lookup over interior nodes to detect:
+    // - whether the current intern node is on a boundary
+    // - boundary nodes owned by a lower partition
+    // - populate pure intern edges into m_dd.map
+    // - populate hybrid edges into m_dd.map_hybrid
+    for (; vit != vend; ++vit, ++n_count, ++v_id) {
+        auto nbeg = nit;
+        auto nend = (nit + *n_count);
+        bool current_node_is_on_boundary = false;
+
+        // Lookup over interior nodes to detect whether the current
+        // intern node is on a boundary
+        for (; nit != nend; ++nit) {
+            if (*nit > last_id) {
+                current_node_is_on_boundary = true;
+                break;
+            }
+        }
+        nit = nbeg;
+
+        // When the current node is on a boundary, all outcoming edges
+        // are hybrid. Moreover, when target node is on a partition
+        // with a lower id, the incoming edge is also hybrid.
+        if (current_node_is_on_boundary) {
+            for (; nit != nend; ++nit) {
+                if (*nit < first_id) {
+                    dtkDistributedGraphTopologyPopulateMap(m_dd.map_hybrid, v_id, *nit);
+                    dtkDistributedGraphTopologyPopulateMap(m_dd.map_hybrid, *nit, v_id);
+                    dtkDistributedOrderingListInsertion(be_nodes, *nit);
+                } else if (*nit <= last_id) {
+                    dtkDistributedGraphTopologyPopulateMap(m_dd.map_hybrid, v_id, *nit);
+                }
+            }
+        // When the current node is interior, outcoming edges are
+        // interior. When the target node is on a partition with a
+        // lower id, the incoming edge is hybrid.
+        } else {
+            for (; nit != nend; ++nit) {
+                if (*nit < first_id) {
+                    dtkDistributedGraphTopologyPopulateMap(m_dd.map, v_id, *nit);
+                    dtkDistributedGraphTopologyPopulateMap(m_dd.map_hybrid, *nit, v_id);
+                    dtkDistributedOrderingListInsertion(be_nodes, *nit);
+                } else if (*nit <= last_id) {
+                    dtkDistributedGraphTopologyPopulateMap(m_dd.map, v_id, *nit);
+                }
+            }
+        }
+    }
+    
+    // Now we populate the m_dd.map_remote that contains all the edges
+    // connecting boundary nodes of lower id partitions.
+    this->rlock();
+    for (qlonglong ve_id : be_nodes) {
+        qlonglong n_start = m_vertex_to_edge->at(ve_id);
+        qlonglong n_end = n_start + m_neighbour_count->at(ve_id);
+        for (qlonglong ne_id = n_start; ne_id < n_end; ++ne_id) {
+            qlonglong vn_id = m_edge_to_vertex->at(ne_id);
+            if (be_nodes.contains(vn_id)) {
+                dtkDistributedGraphTopologyPopulateMap(m_dd.map_remote, ve_id, vn_id); 
+            }
+        }
+    }
+    this->unlock();
+
+    //qDebug() << wid << mapper()->firstIndex(wid) << mapper()->lastIndex(wid) << m_dd.map;// << m_dd.map_hybrid << m_dd.map_remote;
+
     this->m_comm->barrier();
-    m_builded = true;
+}
+
+void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
+{
+    if (!m_is_assembled)
+        return;
+
+    qlonglong local_internal_nnz = 0;
+    qlonglong local_hybrid_nnz = 0;
+    qlonglong local_remote_nnz = 0;
+    qlonglong v_count = 0;
+    qlonglong e_count = 0;
+    
+    dtkArray<qlonglong, 0> local_neighbour_count;
+    
+    // Build the local CSR structures that organize data according to
+    // domain decomposition paradigm.
+
+    // Fills the local_vertex_to_edge array that maps each vertex to
+    // its first local edge. The vertices are sorted as follows:
+    // - first, the pure interior ones
+    // - second, the boundary vertices owned by the current partition 
+    // - third, the boundary vertices owned by lower id partitions
+
+    m_dd.local_vertex_to_edge.reserve(m_dd.map.size() + m_dd.map_hybrid.size() + m_dd.map_remote.size());
+    
+    // At the same time, we make the mapping that enable to find local
+    // id to global id and conversely.
+    {
+        auto it  = m_dd.map.cbegin();
+        auto ite = m_dd.map.cend();
+        
+        for(; it != ite; ++it) {
+            local_internal_nnz += (*it).size();
+            m_dd.glob_to_loc.insert(it.key(), v_count++);
+            m_dd.loc_to_glob << it.key();
+            local_neighbour_count << (*it).size();
+            m_dd.local_vertex_to_edge << e_count;
+            e_count += (*it).size();
+        }
+    }
+    {
+        auto it  = m_dd.map_hybrid.cbegin();
+        auto ite = m_dd.map_hybrid.cend();
+        
+        for(; it != ite; ++it) {
+            local_hybrid_nnz += (*it).size();
+            m_dd.glob_to_loc.insert(it.key(), v_count++);
+            m_dd.loc_to_glob << it.key();
+            local_neighbour_count << (*it).size();
+            m_dd.local_vertex_to_edge << e_count;
+            e_count += (*it).size();
+        }
+    }
+    m_dd.local_vertex_to_edge << e_count;
+    
+    // The remote edges are not handled by the current partition so
+    // they are registered at the end of the local_edge_to_vertex
+    // array and they are not referenced by the local_vertex_to_edge
+    // array.
+    {
+        auto it  = m_dd.map_remote.cbegin();
+        auto ite = m_dd.map_remote.cend();
+        
+        for(; it != ite; ++it) {
+            local_remote_nnz += (*it).size();
+            if(!m_dd.glob_to_loc.contains(it.key())) {
+                m_dd.glob_to_loc.insert(it.key(), v_count++);
+                m_dd.loc_to_glob << it.key();
+                local_neighbour_count << (*it).size();
+                e_count += (*it).size();
+                m_dd.local_vertex_to_edge << m_dd.local_vertex_to_edge.last();
+            } else {
+                local_neighbour_count[m_dd.glob_to_loc[it.key()]] += (*it).size();
+                e_count += (*it).size();
+            }
+        }
+    }
+    
+    // Now we can build the mapper that describe how the edges are
+    // distributed according to domain decomposition paradigm.
+    qlonglong local_nnz = local_internal_nnz + local_hybrid_nnz + local_remote_nnz;
+    m_dd.local_edge_to_vertex.resize(local_nnz);
+    
+    dtkDistributedArray<qlonglong> local_edge_count(m_comm->size());
+    auto loc_it = local_edge_count.begin();
+    *loc_it = local_nnz;
+
+    this->m_comm->barrier();
+    
+    qlonglong total_local_nnz = 0;
+    m_comm->reduce(&local_nnz, &total_local_nnz, 1, dtkDistributedCommunicator::Sum, 0, true);
+    
+    m_dd.mapper = new dtkDistributedMapper;
+    m_dd.mapper->ref();
+    m_dd.mapper->initMap(total_local_nnz, m_comm->size());
+    
+    qlonglong offset = 0;
+    for (qlonglong i = 0; i < m_comm->size(); ++i) {
+        m_dd.mapper->setMap(offset, i);
+        offset += local_edge_count.at(i);
+    }
+    
+    // We now fill the local CSR edge_to_vertex array. The global ids
+    // are sorted according to their local ids. This operation is
+    // purely local.
+    auto local_it = m_dd.local_edge_to_vertex.begin();
+    QList<qlonglong> vertex_sorted_according_local_id;
+    {
+        auto it  = m_dd.map.cbegin();
+        auto ite = m_dd.map.cend();
+        
+        for(; it != ite; ++it) {
+            dtkDistributedSortListUsingMap(*it, m_dd.glob_to_loc, vertex_sorted_according_local_id);
+            for (qlonglong id : vertex_sorted_according_local_id) {
+                (*local_it) = id;
+                ++local_it;
+            }
+        }
+    }
+    
+    {
+        auto it  = m_dd.map_hybrid.cbegin();
+        auto ite = m_dd.map_hybrid.cend();
+        
+        for(; it != ite; ++it) {
+            dtkDistributedSortListUsingMap(*it, m_dd.glob_to_loc, vertex_sorted_according_local_id);
+            for (qlonglong id : vertex_sorted_according_local_id) {
+                (*local_it) = id;
+                ++local_it;
+            }
+            
+        }
+    }
+    
+    {
+        auto it  = m_dd.map_remote.cbegin();
+        auto ite = m_dd.map_remote.cend();
+        
+        for(; it != ite; ++it) {
+            dtkDistributedSortListUsingMap(*it, m_dd.glob_to_loc, vertex_sorted_according_local_id);
+            for (qlonglong id : vertex_sorted_according_local_id) {
+                (*local_it) = id;
+                ++local_it;
+            }
+        }
+    }
+    
+    // Now we fill the m_dd.position DSarray that tells for each edge
+    // in the graph structure where it can be found in the domain
+    // decomposition organization.
+    
+    qlonglong local_pos = m_dd.mapper->firstIndex(this->wid());
+    
+    if (m_dd.positions)
+        delete m_dd.positions;
+
+    m_dd.positions = new dtkDistributedArray<qlonglong>(m_edge_to_vertex->size(), m_edge_to_vertex->mapper());
+    m_dd.positions->fill(-1);
+
+
+    // We scan the local vertices of the DD structure.
+    this->rlock();
+    for (qlonglong i = 0; i < m_dd.local_vertex_to_edge.size() - 1; ++i) {
+
+        qlonglong gi = m_dd.loc_to_glob[i];
+        qlonglong nnz = m_dd.local_vertex_to_edge[i+1] - m_dd.local_vertex_to_edge[i];
+        qlonglong local_start = m_dd.local_vertex_to_edge[i];
+        
+        qlonglong first_n_pos = m_vertex_to_edge->at(gi);
+        qlonglong n_count = m_neighbour_count->at(gi);
+        
+        // For each local edge we search for its pos into the graph at
+        // the same place we set its local pos into the m_dd.positions
+        // DS array.
+        for (qlonglong j = 0; j < nnz; ++j) {
+            qlonglong gj = m_dd.local_edge_to_vertex[j + local_start];
+            for (qlonglong k = 0; k < n_count; ++k) {
+                qlonglong global_pos = k + first_n_pos;
+                
+                if (gj == m_edge_to_vertex->at(global_pos)) {
+                    m_dd.positions->setAt(global_pos, local_pos);
+                    ++local_pos;
+                    break;
+                }
+            }
+        }
+    }
+    this->unlock();
+
+    // We only keep the remote map for referencing remote edges.
+    m_dd.map.clear();
+    m_dd.map_hybrid.clear();
+
+    this->m_comm->barrier();    
+}
+
+void dtkDistributedGraphTopology::assembleDomainDecompositionFeatures(void)
+{
+    this->buildDomainDecompositionMaps();
+    this->buildDomainDecompositionData();
+}
+
+void dtkDistributedGraphTopology::assemble(void)
+{
+    this->m_comm->barrier();
     // ---------------------------
     // First stage: interface vertex counting
     // ---------------------------
@@ -388,18 +486,18 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // m_neighbour_count DSarray, we add the number of edges that
     // connect these vertices to interior vertices.
     {
-        auto it  = m_map_hybrid.cbegin();
-        auto ite = m_map_hybrid.cend();
+        auto it  = m_dd.map_hybrid.cbegin();
+        auto ite = m_dd.map_hybrid.cend();
 
         for(; it != ite; ++it) {
             m_neighbour_count->addAssign(it.key(), (*it).size());
         }
     }
     this->m_comm->barrier();
-
+    
     // After the previous scan, each partition can identify among its
     // interior vertices those that have connections with vertices on
-    // other partitions. Tecognize new interface vertices provided by
+    // other partitions. Recognize new interface vertices provided by
     // other partitions. These vertices were added into the m_map. So,
     // we can now move them into the m_map_hybrid and increment for
     // each of them the number of connected edges into the
@@ -419,15 +517,16 @@ void dtkDistributedGraphTopology::buildFEM(void)
         for(; it != ite; ++it, ++id) {
             if (*it != 0) {
                 gid = m_neighbour_count->mapper()->localToGlobal(id, this->wid());
-                EdgeList l = m_map.take(gid);
+                EdgeList l = m_dd.map.take(gid);
                 if (!l.empty()) {
-                    m_map_hybrid.insert(gid, l);
+                    m_dd.map_hybrid.insert(gid, l);
                     *it += l.size();
                 }
             }
         }
     }
     m_comm->barrier();
+    m_neighbour_count->clearCache();
 
     // ---------------------------
     // Second stage: odd edge counting
@@ -448,14 +547,14 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // treated or not. If not, these edges are moved from the
     // m_map_remote to the m_map_hybrid.
 
-    /* if (wid() == 3) {
-        qDebug() << m_map_hybrid << m_map;
-        auto it  = m_neighbour_count->begin();
-        auto ite = m_neighbour_count->end();
-        for(; it != ite; ++it) {
-            qDebug() << *it;
-        }
-    }*/
+    // if (wid() == 3) {
+    //     qDebug() << m_dd.map_hybrid << m_dd.map;
+    //     auto it  = m_neighbour_count->begin();
+    //     auto ite = m_neighbour_count->end();
+    //     for(; it != ite; ++it) {
+    //         qDebug() << *it;
+    //     }
+    // }
 
     // The following step is therefore to assemble into a DSarray all
     // the edges from the local m_map_hybrid. These edges will be
@@ -478,6 +577,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
             offset += m_neighbour_count->at(i);
         }
         offset += this->wid();
+        
 
         auto it  = m_neighbour_count->begin();
         auto ite = m_neighbour_count->end();
@@ -498,10 +598,13 @@ void dtkDistributedGraphTopology::buildFEM(void)
         // the last partition), we enforce a minimal size of one.
         local_itf_edges += 1;
     }
+    m_comm->barrier();
+    m_vertex_to_edge->clearCache();
 
     // if(wid() == 0) {
+    //     //m_vertex_to_edge->clearCache();m_neighbour_count->clearCache();
     //     for (int i = 0; i < m_vertex_to_edge->size() - 1; ++i) {
-    //         qDebug() << "v_to_itf_e" << i << m_vertex_to_edge->at(i) << m_neighbour_count->at(i);
+    //         qDebug() << "v_to_itf_e" << i << m_vertex_to_edge->at(i);// << m_neighbour_count->at(i);
     //     }
     // }
 
@@ -513,6 +616,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // number of interface edges for each partitions.
     (*m_edge_count->begin()) = local_itf_edges;
     m_comm->barrier();
+    m_edge_count->clearCache();
 
     // Builds the mapper for m_edge_to_vertex DSarray.
     dtkDistributedMapper *itf_edges_mapper = new dtkDistributedMapper();
@@ -531,15 +635,14 @@ void dtkDistributedGraphTopology::buildFEM(void)
     }
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(itf_edges_count, itf_edges_mapper);
     m_edge_to_vertex->fill(-1);
-    this->m_comm->barrier();
 
     // We scan the interface vertices of the local m_hybrid_map. For
     // each of them we find using the m_vertex_to_edge DSarray the
     // position into the m_edge_to_vertex DSarray where we can set the
     // value of all its neighbours.
     {
-        auto it  = m_map_hybrid.cbegin();
-        auto ite = m_map_hybrid.cend();
+        auto it  = m_dd.map_hybrid.cbegin();
+        auto ite = m_dd.map_hybrid.cend();
 
         qlonglong minusOne = -1;
 
@@ -549,8 +652,9 @@ void dtkDistributedGraphTopology::buildFEM(void)
             const EdgeList& l = *it;
             for (qlonglong nid : l) {
                 for (qlonglong j = start_pos; j < end_pos; ++j) {
-                    if (m_edge_to_vertex->compareAndSwap(j, nid, minusOne))
+                    if (m_edge_to_vertex->compareAndSwap(j, nid, minusOne)) {
                         break;
+                    }
                 }
             }
         }
@@ -563,27 +667,29 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // edges that connect two interface vertices but that does not
     // stand on an interface.
 
-    // if(wid() == 0) {
+    // if(wid() == 1) {
     //     for (qlonglong i = 0; i < m_vertex_to_edge->size(); ++i) {
     //         qlonglong start_pos = m_vertex_to_edge->at(i);
+    //         qlonglong nc = m_neighbour_count->at(i);
     //         qlonglong end_pos = start_pos + m_neighbour_count->at(i);
-    //         for (qlonglong j = start_pos; j < end_pos; ++j) {
+    //          for (qlonglong j = start_pos; j < end_pos; ++j) {
     //             qDebug() << i << m_edge_to_vertex->at(j);
     //         }
     //     }
     // }
+    // this->m_comm->barrier();
 
     // Such edges will be moved from m_map_remote to m_map_hybrid and
     // also stored into a dedicated map.
     QMap<qlonglong, QList<qlonglong> > remote_edge_to_add;
 
-    // For each edge of the m_map_remote, we search into the
+    // For each edge of the m_dd.map_remote, we search into the
     // m_edge_to_vertex whether it is found or not. If the edge is not
     // found, it means that it is an edge that connects two interface
     // vertices but that it does not stand on an interface.
     {
-        auto it  = m_map_remote.begin();
-        auto ite = m_map_remote.end();
+        auto it  = m_dd.map_remote.begin();
+        auto ite = m_dd.map_remote.end();
 
         QList<qlonglong> edges_to_move;
 
@@ -607,7 +713,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
             }
             if (!edges_to_move.empty()) {
                 EdgeList& rl = remote_edge_to_add[it.key()];
-                EdgeList& hl = m_map_hybrid[it.key()];
+                EdgeList& hl = m_dd.map_hybrid[it.key()];
                 for (int i = 0; i < edges_to_move.size(); ++i) {
                     qlonglong e_id = l.at(edges_to_move.at(i));
                     rl << e_id;
@@ -625,6 +731,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
         }
     }
     m_comm->barrier();
+    m_neighbour_count->clearCache();
 
     // At the end of this stage, the local hybrid map contains all the
     // edges that connect an interior vertex to an interface vertex
@@ -656,6 +763,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
     m_comm->barrier();
 
     // qDebug() << Q_FUNC_INFO << this->wid() << itf_edges_to_vertex;
+    // m_comm->barrier();
 
     // Resets the mapping.
     m_vertex_to_edge->fill(0);
@@ -664,8 +772,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // vertices. This step is purely local.
     m_neighbour_count->wlock(this->wid());
     {
-        auto it  = m_map.cbegin();
-        auto ite = m_map.cend();
+        auto it  = m_dd.map.cbegin();
+        auto ite = m_dd.map.cend();
         for (; it != ite; ++it) {
             const EdgeList& l = *it;
             m_neighbour_count->setAt(it.key(), l.size());
@@ -689,6 +797,8 @@ void dtkDistributedGraphTopology::buildFEM(void)
     // Reduction to compute global edge count
     qlonglong edge_count;
     m_comm->reduce(&local_edge_count, &edge_count, 1, dtkDistributedCommunicator::Sum, 0, true);
+    m_neighbour_count->clearCache();
+    m_edge_count->clearCache();
 
     // We are now able to populate the mapper.
     dtkDistributedMapper *e_mapper = new dtkDistributedMapper;
@@ -721,13 +831,13 @@ void dtkDistributedGraphTopology::buildFEM(void)
         m_vertex_to_edge->unlock(this->wid());
     }
     m_comm->barrier();
+    m_vertex_to_edge->clearCache();
 
     // We destroy the former DSarray to create a new one with the
     // total number of edges.
     delete m_edge_to_vertex;
     m_edge_to_vertex = new dtkDistributedArray<qlonglong>(edge_count, e_mapper);
     m_edge_to_vertex->fill(-1);
-    m_comm->barrier();
 
     // Firstly, each partition add the odd edges stored in its
     // remote_edge_to_add map.
@@ -735,16 +845,15 @@ void dtkDistributedGraphTopology::buildFEM(void)
         auto it  = remote_edge_to_add.cbegin();
         auto ite = remote_edge_to_add.cend();
 
+        qlonglong minusOne = -1;
+
         for(; it != ite; ++it) {
             qlonglong start_pos = m_vertex_to_edge->at(it.key());
             qlonglong end_pos = start_pos + m_neighbour_count->at(it.key());
             const EdgeList& l = *it;
             for (qlonglong nid : l) {
                 for (qlonglong j = start_pos; j < end_pos; ++j) {
-                    qlonglong tmp = m_edge_to_vertex->at(j);
-                    if (tmp < 0) {
-                        m_edge_to_vertex->setAt(j, nid);
-                        start_pos = j + 1;
+                    if (m_edge_to_vertex->compareAndSwap(j, nid, minusOne)) {
                         break;
                     }
                 }
@@ -752,6 +861,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
         }
     }
     this->m_comm->barrier();
+    m_edge_to_vertex->clearCache();
 
     // Populate the m_edge_to_vertex DSarray
     m_vertex_to_edge->rlock(this->wid());
@@ -774,7 +884,7 @@ void dtkDistributedGraphTopology::buildFEM(void)
 
             // We start by the edges having two vertices on an
             // interface but that do not belong to an interface.
-            auto e_it  = m_edge_to_vertex->begin() + m_vertex_to_edge->at(gid) - e_offset;
+            auto e_it  = m_edge_to_vertex->begin() + (m_vertex_to_edge->at(gid) - e_offset);
             auto e_end =  e_it + m_neighbour_count->at(gid);
             for(; e_it != e_end; ++e_it) {
                 if ((*e_it) < 0)
@@ -805,12 +915,13 @@ void dtkDistributedGraphTopology::buildFEM(void)
             l.clear();
         }
         this->m_comm->barrier();
+        m_edge_to_vertex->clearCache();
 
         // Secondly, we scan the edges of the intern vertices and we
         // add them directly into the m_edge_to_vertex DSarray at the
         // right position.
-        auto it  = m_map.cbegin();
-        auto end = m_map.cend();
+        auto it  = m_dd.map.cbegin();
+        auto end = m_dd.map.cend();
 
         for (; it != end; ++it) {
             const EdgeList& edge_list = *it;
@@ -826,8 +937,6 @@ void dtkDistributedGraphTopology::buildFEM(void)
     m_neighbour_count->unlock(this->wid());
     m_vertex_to_edge->unlock(this->wid());
 
-    this->m_comm->barrier();
-
     // if (this->wid() == 0) {
     //     for (qlonglong i = 0; i < m_vertex_to_edge->size(); ++i) {
     //         qlonglong start_pos = m_vertex_to_edge->at(i);
@@ -838,182 +947,13 @@ void dtkDistributedGraphTopology::buildFEM(void)
     //     }
     // }
 
+    m_is_assembled = true;
+
+    m_comm->barrier();    
+    m_edge_to_vertex->clearCache();
 
     // ------------------------
-    {
-        qlonglong local_internal_nnz = 0;
-        qlonglong local_hybrid_nnz = 0;
-        qlonglong local_remote_nnz = 0;
-        qlonglong v_count = 0;
-        qlonglong e_count = 0;
-
-        dtkArray<qlonglong, 0> local_neighbour_count;
-
-        m_local_vertex_to_edge.reserve(m_map.size() + m_map_hybrid.size() + m_map_remote.size());
-
-        {
-            auto it  = m_map.cbegin();
-            auto ite = m_map.cend();
-
-            for(; it != ite; ++it) {
-                local_internal_nnz += (*it).size();
-                m_glob_to_loc.insert(it.key(), v_count++);
-                m_loc_to_glob << it.key();
-                local_neighbour_count << (*it).size();
-                m_local_vertex_to_edge << e_count;
-                e_count += (*it).size();
-            }
-        }
-        {
-            auto it  = m_map_hybrid.cbegin();
-            auto ite = m_map_hybrid.cend();
-
-            for(; it != ite; ++it) {
-                local_hybrid_nnz += (*it).size();
-                m_glob_to_loc.insert(it.key(), v_count++);
-                m_loc_to_glob << it.key();
-                local_neighbour_count << (*it).size();
-                m_local_vertex_to_edge << e_count;
-                e_count += (*it).size();
-            }
-        }
-        m_local_vertex_to_edge << e_count;
-
-        {
-            auto it  = m_map_remote.cbegin();
-            auto ite = m_map_remote.cend();
-
-            for(; it != ite; ++it) {
-                local_remote_nnz += (*it).size();
-                if(!m_glob_to_loc.contains(it.key())) {
-                    m_glob_to_loc.insert(it.key(), v_count++);
-                    m_loc_to_glob << it.key();
-                    local_neighbour_count << (*it).size();
-                    e_count += (*it).size();
-                    m_local_vertex_to_edge << m_local_vertex_to_edge.last();
-                } else {
-                    local_neighbour_count[m_glob_to_loc[it.key()]] += (*it).size();
-                    e_count += (*it).size();
-                }
-            }
-        }
-
-        qlonglong local_nnz = local_internal_nnz + local_hybrid_nnz + local_remote_nnz;
-        m_local_edge_to_vertex.resize(local_nnz);
-
-        dtkDistributedArray<qlonglong> local_edge_count(m_comm->size());
-        auto loc_it = local_edge_count.begin();
-        *loc_it = local_nnz;
-
-        qlonglong total_local_nnz = 0;
-        m_comm->reduce(&local_nnz, &total_local_nnz, 1, dtkDistributedCommunicator::Sum, 0, true);
-
-        m_fe_mapper = new dtkDistributedMapper;
-        m_fe_mapper->initMap(total_local_nnz, m_comm->size());
-
-        qlonglong offset = 0;
-        for (qlonglong i = 0; i < m_comm->size(); ++i) {
-            m_fe_mapper->setMap(offset, i);
-            offset += local_edge_count.at(i);
-        }
-
-        auto local_it = m_local_edge_to_vertex.begin();
-        {
-            auto it  = m_map.cbegin();
-            auto ite = m_map.cend();
-
-            QList<qlonglong> vertex_sorted_according_local_id;
-            for(; it != ite; ++it) {
-                dtkDistributedSortListUsingMap(*it, m_glob_to_loc, vertex_sorted_according_local_id);
-                for (qlonglong id : vertex_sorted_according_local_id) {
-                    // if (m_comm->wid() == 3) {
-                    //     qDebug() << "intern fill" << it.key() << id << m_glob_to_loc[it.key()] << m_glob_to_loc[id];
-                    // }
-                    //(*local_it) = m_glob_to_loc[id];
-                    (*local_it) = id;
-                    ++local_it;
-                }
-            }
-        }
-
-        {
-            auto it  = m_map_hybrid.cbegin();
-            auto ite = m_map_hybrid.cend();
-
-            QList<qlonglong> vertex_sorted_according_local_id;
-            for(; it != ite; ++it) {
-                dtkDistributedSortListUsingMap(*it, m_glob_to_loc, vertex_sorted_according_local_id);
-                for (qlonglong id : vertex_sorted_according_local_id) {
-                    // if (m_comm->wid() == 3) {
-                    //     qDebug() << "hybrid fill" << it.key() << id << m_glob_to_loc[it.key()] << m_glob_to_loc[id];
-                    // }
-                    //(*local_it) = m_glob_to_loc[id];
-                    (*local_it) = id;
-                    ++local_it;
-                }
-
-            }
-        }
-
-        {
-            auto it  = m_map_remote.cbegin();
-            auto ite = m_map_remote.cend();
-
-            QList<qlonglong> vertex_sorted_according_local_id;
-            for(; it != ite; ++it) {
-                dtkDistributedSortListUsingMap(*it, m_glob_to_loc, vertex_sorted_according_local_id);
-                for (qlonglong id : vertex_sorted_according_local_id) {
-                    // if (m_comm->wid() == 3) {
-                    //     qDebug() << "remote fill" << it.key() << id << m_glob_to_loc[it.key()] << m_glob_to_loc[id];
-
-                    // }
-                    //(*local_it) = m_glob_to_loc[id];
-                    (*local_it) = id;
-                    ++local_it;
-                }
-            }
-        }
-
-        // ----------------
-
-        qlonglong local_pos = m_fe_mapper->firstIndex(this->wid());
-
-        if(m_positions)
-            delete m_positions;
-        m_positions = new dtkDistributedArray<qlonglong>(m_edge_to_vertex->size(), m_edge_to_vertex->mapper());
-        m_positions->fill(-1);
-        m_positions->wlock();
-        for (qlonglong i = 0; i < m_local_vertex_to_edge.size() - 1; ++i) {
-            qlonglong gi = m_loc_to_glob[i];
-            qlonglong nnz = m_local_vertex_to_edge[i+1] - m_local_vertex_to_edge[i];
-            qlonglong local_start = m_local_vertex_to_edge[i];
-
-            qlonglong first_n_pos = m_vertex_to_edge->at(gi);
-            qlonglong n_count = m_neighbour_count->at(gi);
-
-            for (qlonglong j = 0; j < nnz; ++j) {
-                qlonglong gj = m_local_edge_to_vertex[j + local_start];
-                for (qlonglong k = 0; k < n_count; ++k) {
-                    qlonglong global_pos = k + first_n_pos;
-                    // if (m_comm->wid() == 3 && gi == 7)
-                    //     qDebug() << global_pos << local_pos << gi << gj;
-
-                    if (gj == m_edge_to_vertex->at(global_pos)) {
-                         // if (m_comm->wid() == 3 && gi == 7)
-                         //     qDebug() << global_pos << local_pos << gi << gj;
-                        m_positions->setAt(global_pos, local_pos);
-                        ++local_pos;
-                        break;
-                    }
-                }
-            }
-        }
-        m_positions->unlock();
-    }
-
-    // ------------------------
-
-    this->m_comm->barrier();
+    this->buildDomainDecompositionData();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1027,7 +967,7 @@ void dtkDistributedOrderingListInsertion(QList<qlonglong>& l, qlonglong id)
 
     for(; it != end; ++it) {
         if (id == (*it)) {
-            qDebug() << Q_FUNC_INFO << "Index already added in the list: id =" << id << l;
+            //qDebug() << Q_FUNC_INFO << "Index already added in the list: id =" << id << l;
             return;
         } else if(id < *(it)) {
             break;

@@ -26,10 +26,8 @@ private slots:
 
 private slots:
     void testCreateDestroy(void);
-    void testAddEdge(void);
-    void testAddEdgeRemote(void);
-    void testAddEdgeFEM(void);
-    void testBuild(void);
+    void testClearResize(void);
+    void testAssemble(void);
     void testNeighbours(void);
     void testIterator(void);
     void testRead(void);

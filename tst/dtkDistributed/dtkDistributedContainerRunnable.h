@@ -225,128 +225,128 @@ public:
 
 void graphWork::run(void)
 {
-    QTime time;
+    // QTime time;
 
-    int N = 31;
-    dtkDistributedGraphTopology graph(N);
+//     int N = 31;
+//     dtkDistributedGraphTopology graph(N);
 
-    QVector<qlonglong> myvector(N);
+//     QVector<qlonglong> myvector(N);
 
-    for (qlonglong i = 0; i < N; ++i) {
-        myvector[i] = i;
-    }
+//     for (qlonglong i = 0; i < N; ++i) {
+//         myvector[i] = i;
+//     }
 
-    dtkDistributedArray<qlonglong> array(myvector.size(), myvector.data());
-    dtkDistributedArray<qlonglong> max_array(myvector.size(), myvector.data());
+//     dtkDistributedArray<qlonglong> array(myvector.size(), myvector.data());
+//     dtkDistributedArray<qlonglong> max_array(myvector.size(), myvector.data());
 
-    graph.addEdge(0,1);
-    graph.addEdge(0,12);
-    graph.addEdge(0,13);
-    graph.addEdge(1,2);
-    graph.addEdge(1,12);
-    graph.addEdge(2,12);
-    graph.addEdge(2,11);
-    graph.addEdge(2,10);
-    graph.addEdge(2,3);
-    graph.addEdge(3,10);
-    graph.addEdge(3,4);
-    graph.addEdge(4,10);
-    graph.addEdge(4,9);
-    graph.addEdge(4,8);
-    graph.addEdge(4,5);
-    graph.addEdge(5,8);
-    graph.addEdge(5,6);
-    graph.addEdge(6,8);
-    graph.addEdge(6,7);
-    graph.addEdge(7,8);
-    graph.addEdge(7,20);
-    graph.addEdge(8,9);
-    graph.addEdge(8,19);
-    graph.addEdge(8,20);
-    graph.addEdge(9,10);
-    graph.addEdge(9,18);
-    graph.addEdge(9,19);
-    graph.addEdge(10,11);
-    graph.addEdge(10,17);
-    graph.addEdge(10,18);
-    graph.addEdge(11,12);
-    graph.addEdge(11,16);
-    graph.addEdge(11,17);
-    graph.addEdge(12,13);
-    graph.addEdge(12,15);
-    graph.addEdge(12,16);
-    graph.addEdge(13,14);
-    graph.addEdge(13,15);
-    graph.addEdge(14,15);
-    graph.addEdge(14,26);
-    graph.addEdge(14,27);
-    graph.addEdge(15,16);
-    graph.addEdge(15,25);
-    graph.addEdge(15,26);
-    graph.addEdge(15,28);
-    graph.addEdge(16,17);
-    graph.addEdge(16,23);
-    graph.addEdge(16,24);
-    graph.addEdge(16,25);
-    graph.addEdge(17,18);
-    graph.addEdge(17,22);
-    graph.addEdge(17,23);
-    graph.addEdge(18,19);
-    graph.addEdge(18,21);
-    graph.addEdge(18,22);
-    graph.addEdge(19,20);
-    graph.addEdge(19,21);
-    graph.addEdge(20,21);
-    graph.addEdge(20,30);
-    graph.addEdge(21,22);
-    graph.addEdge(21,30);
-    graph.addEdge(22,23);
-    graph.addEdge(22,24);
-    graph.addEdge(22,29);
-    graph.addEdge(22,30);
-    graph.addEdge(23,24);
-    graph.addEdge(24,25);
-    graph.addEdge(24,28);
-    graph.addEdge(24,29);
-    graph.addEdge(25,28);
-    graph.addEdge(26,27);
-    graph.addEdge(26,28);
-    graph.addEdge(27,28);
-    graph.addEdge(28,29);
-    graph.addEdge(29,30);
+//     graph.addEdge(0,1);
+//     graph.addEdge(0,12);
+//     graph.addEdge(0,13);
+//     graph.addEdge(1,2);
+//     graph.addEdge(1,12);
+//     graph.addEdge(2,12);
+//     graph.addEdge(2,11);
+//     graph.addEdge(2,10);
+//     graph.addEdge(2,3);
+//     graph.addEdge(3,10);
+//     graph.addEdge(3,4);
+//     graph.addEdge(4,10);
+//     graph.addEdge(4,9);
+//     graph.addEdge(4,8);
+//     graph.addEdge(4,5);
+//     graph.addEdge(5,8);
+//     graph.addEdge(5,6);
+//     graph.addEdge(6,8);
+//     graph.addEdge(6,7);
+//     graph.addEdge(7,8);
+//     graph.addEdge(7,20);
+//     graph.addEdge(8,9);
+//     graph.addEdge(8,19);
+//     graph.addEdge(8,20);
+//     graph.addEdge(9,10);
+//     graph.addEdge(9,18);
+//     graph.addEdge(9,19);
+//     graph.addEdge(10,11);
+//     graph.addEdge(10,17);
+//     graph.addEdge(10,18);
+//     graph.addEdge(11,12);
+//     graph.addEdge(11,16);
+//     graph.addEdge(11,17);
+//     graph.addEdge(12,13);
+//     graph.addEdge(12,15);
+//     graph.addEdge(12,16);
+//     graph.addEdge(13,14);
+//     graph.addEdge(13,15);
+//     graph.addEdge(14,15);
+//     graph.addEdge(14,26);
+//     graph.addEdge(14,27);
+//     graph.addEdge(15,16);
+//     graph.addEdge(15,25);
+//     graph.addEdge(15,26);
+//     graph.addEdge(15,28);
+//     graph.addEdge(16,17);
+//     graph.addEdge(16,23);
+//     graph.addEdge(16,24);
+//     graph.addEdge(16,25);
+//     graph.addEdge(17,18);
+//     graph.addEdge(17,22);
+//     graph.addEdge(17,23);
+//     graph.addEdge(18,19);
+//     graph.addEdge(18,21);
+//     graph.addEdge(18,22);
+//     graph.addEdge(19,20);
+//     graph.addEdge(19,21);
+//     graph.addEdge(20,21);
+//     graph.addEdge(20,30);
+//     graph.addEdge(21,22);
+//     graph.addEdge(21,30);
+//     graph.addEdge(22,23);
+//     graph.addEdge(22,24);
+//     graph.addEdge(22,29);
+//     graph.addEdge(22,30);
+//     graph.addEdge(23,24);
+//     graph.addEdge(24,25);
+//     graph.addEdge(24,28);
+//     graph.addEdge(24,29);
+//     graph.addEdge(25,28);
+//     graph.addEdge(26,27);
+//     graph.addEdge(26,28);
+//     graph.addEdge(27,28);
+//     graph.addEdge(28,29);
+//     graph.addEdge(29,30);
 
-    graph.build();
+//     graph.build();
 
-    dtkDistributedGraphTopology::iterator it  = graph.begin();
-    dtkDistributedGraphTopology::iterator end = graph.end();
+//     dtkDistributedGraphTopology::iterator it  = graph.begin();
+//     dtkDistributedGraphTopology::iterator end = graph.end();
 
-    qDebug() << "compute max";
-    for(;it != end; ++it) {
+//     qDebug() << "compute max";
+//     for(;it != end; ++it) {
 
-        dtkDistributedGraphTopology::Neighbours n = *it;
-        dtkDistributedGraphTopology::Neighbours::iterator nit  = n.begin();
-        dtkDistributedGraphTopology::Neighbours::iterator nend = n.end();
+//         dtkDistributedGraphTopology::Neighbours n = *it;
+//         dtkDistributedGraphTopology::Neighbours::iterator nit  = n.begin();
+//         dtkDistributedGraphTopology::Neighbours::iterator nend = n.end();
 
-        for(;nit != nend; ++nit) {
+//         for(;nit != nend; ++nit) {
 
-            dtkDistributedGraphTopology::Neighbours nn = graph[*nit];
-            dtkDistributedGraphTopology::Neighbours::iterator nnit  = nn.begin();
-            dtkDistributedGraphTopology::Neighbours::iterator nnend = nn.end();
+//             dtkDistributedGraphTopology::Neighbours nn = graph[*nit];
+//             dtkDistributedGraphTopology::Neighbours::iterator nnit  = nn.begin();
+//             dtkDistributedGraphTopology::Neighbours::iterator nnend = nn.end();
 
-            for(;nnit != nnend; ++nnit) {
-                max_array.setAt(it.id(), qMax(max_array.at(it.id()), array.at(*nnit)));
-            }
-        }
-    }
+//             for(;nnit != nnend; ++nnit) {
+//                 max_array.setAt(it.id(), qMax(max_array.at(it.id()), array.at(*nnit)));
+//             }
+//         }
+//     }
 
-    if (N < 100) {
-        DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        for (qlonglong i = 0; i < N; ++i) {
-            qDebug() << i << max_array.at(i);
-        }
+//     if (N < 100) {
+//         DTK_DISTRIBUTED_BEGIN_GLOBAL;
+//         for (qlonglong i = 0; i < N; ++i) {
+//             qDebug() << i << max_array.at(i);
+//         }
 
-        DTK_DISTRIBUTED_END_GLOBAL;
-}
+//         DTK_DISTRIBUTED_END_GLOBAL;
+// }
     /* qDebug() << " done"; */
 }
 

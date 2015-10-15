@@ -14,6 +14,7 @@
 
 #include "dtkDistributedMapper.h"
 
+#include <dtkCore>
 #include <QtCore>
 
 // /////////////////////////////////////////////////////////////////
@@ -23,8 +24,11 @@
 class dtkDistributedMapperPrivate
 {
 public:
-     dtkDistributedMapperPrivate(void) : ref(0), id_count(0) {;}
-    ~dtkDistributedMapperPrivate(void) {;}
+    dtkDistributedMapperPrivate(void) : ref(0), id_count(0) { clear();}
+    ~dtkDistributedMapperPrivate(void) { clear(); }
+
+public:
+    void clear(void);
 
 public:
     void setMapping(const qlonglong& id_number, const qlonglong& pu_number);
@@ -43,8 +47,6 @@ public:
 
     qlonglong owner(const qlonglong& global_id);
 
-    QVector<qlonglong> readers(const qlonglong& global_id) const;
-
 public:
     QAtomicInt ref;
 
@@ -53,19 +55,27 @@ public:
     qlonglong pu_count;
     qlonglong last_pu_id;
 
-    QVarLengthArray<qlonglong> map;
+    dtkArray<qlonglong> map;
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkDistributedMapperPrivate implementation
 // /////////////////////////////////////////////////////////////////
 
+void dtkDistributedMapperPrivate::clear(void)
+{
+    id_count = 0;
+    pu_count = 0;
+    last_pu_id = 0;
+    this->map.clear();
+}
+
 void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const qlonglong& pu_number)
 {
+    this->map.clear();
     this->id_count = id_number;
     this->pu_count = pu_number;
     this->map.reserve(this->pu_count + 1);
-    this->map.clear();
 
     if (this->pu_count == 1) {
         this->map << 0;
@@ -164,7 +174,6 @@ qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id)
 
 dtkDistributedMapper::dtkDistributedMapper(void) : QObject(), d(new dtkDistributedMapperPrivate)
 {
-    d->last_pu_id = 0;
 }
 
 dtkDistributedMapper::dtkDistributedMapper(const dtkDistributedMapper& o) : QObject(), d(new dtkDistributedMapperPrivate)
@@ -178,6 +187,7 @@ dtkDistributedMapper::dtkDistributedMapper(const dtkDistributedMapper& o) : QObj
 dtkDistributedMapper::~dtkDistributedMapper(void)
 {
     delete d;
+    d = NULL;
 }
 
 dtkDistributedMapper *dtkDistributedMapper::scaledClone(qlonglong factor) const
@@ -200,6 +210,11 @@ bool dtkDistributedMapper::deref(void)
 bool dtkDistributedMapper::ref(void)
 {
     return d->ref.ref();
+}
+
+void dtkDistributedMapper::clear(void)
+{
+    d->clear();
 }
 
 void dtkDistributedMapper::setMapping(const qlonglong& id_count, const qlonglong& pu_count)
@@ -239,6 +254,7 @@ qlonglong dtkDistributedMapper::count(void) const
 
 qlonglong dtkDistributedMapper::count(const qlonglong& pu_id) const
 {
+    Q_ASSERT(pu_id >= d->pu_count);
     return d->count(pu_id);
 }
 
@@ -249,11 +265,13 @@ qlonglong dtkDistributedMapper::countMax(void) const
 
 qlonglong dtkDistributedMapper::firstIndex(const qlonglong& pu_id) const
 {
+    Q_ASSERT(pu_id >= d->pu_count);
     return d->map[pu_id];
 }
 
 qlonglong dtkDistributedMapper::lastIndex(const qlonglong& pu_id) const
 {
+    Q_ASSERT(pu_id >= d->pu_count);
     return d->map[pu_id + 1] - 1;
 }
 

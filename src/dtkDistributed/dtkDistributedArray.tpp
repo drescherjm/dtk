@@ -248,6 +248,7 @@ template <typename T> inline void dtkDistributedArray<T>::fill(const T& value)
     for(; it != end; ++it) {
         *it = value;
     }
+    m_cache->clear();
     m_comm->barrier();
 }
 

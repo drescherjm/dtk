@@ -17,6 +17,7 @@
 #include "dtkComposerGraphNodeLeaf.h"
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeLeaf.h"
+#include "dtkComposerNodeMetaData.h"
 // #include "dtkComposerNodeLeafData.h"
 // #include "dtkComposerNodeLeafProcess.h"
 // #include "dtkComposerNodeLeafView.h"
@@ -35,7 +36,14 @@ public:
 
 dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeLeafPrivate)
 {
+    dtkComposerNodeMetaData* metaData =cnode->nodeMetaData();
+    
+    if(metaData!=NULL && metaData->kind()==dtkComposerNode::View)
+        d->kind = dtkComposerGraphNode::View;
+    else
+        d->kind = dtkComposerGraphNode::Leaf;
     d->composer_node = dynamic_cast<dtkComposerNodeLeaf *>(cnode);
+    
     // if (dynamic_cast<dtkComposerNodeLeafProcess *>(cnode))
     //     d->kind = dtkComposerGraphNode::Process;
     // else if (dynamic_cast<dtkComposerNodeLeafView *>(cnode))
@@ -45,7 +53,7 @@ dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const
     // else if (dynamic_cast<dtkComposerNodeLeafActor *>(cnode))
     //     d->kind = dtkComposerGraphNode::Actor;
     // else
-        d->kind = dtkComposerGraphNode::Leaf;
+        //d->kind = dtkComposerGraphNode::Leaf;
 
     this->setTitle(title);
 }

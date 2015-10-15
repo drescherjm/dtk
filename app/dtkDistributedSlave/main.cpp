@@ -30,11 +30,13 @@ public:
     void run(void) {
         QTime time;
         dtkDistributedCommunicator *comm = dtkDistributed::communicator::instance();
-        qDebug() << comm->wid();
-        qDebug() << comm->size();
+        dtkDebug() << comm->wid();
+        dtkDebug() << comm->size();
         dtkDistributedSlave slave;
 
-        slave.connectFromJob(server);
+        if (comm->rank() == 0) {
+            slave.connectFromJob(server);
+        }
 
         QThread::sleep(5);
 

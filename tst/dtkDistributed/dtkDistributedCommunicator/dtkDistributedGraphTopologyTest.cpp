@@ -25,7 +25,7 @@ void dtkDistributedGraphTopologyTestCase::initTestCase(void)
     dtkDistributed::communicator::initialize(settings.value("plugins").toString());
     settings.endGroup();
 
-    dtkDistributed::policy()->setType("qthread");
+    dtkDistributed::policy()->setType("mpi");
 
     for (int i = 0; i < 3; ++i) {
         dtkDistributed::policy()->addHost("localhost");
@@ -46,30 +46,16 @@ void dtkDistributedGraphTopologyTestCase::testCreateDestroy(void)
     delete test;
 }
 
-void dtkDistributedGraphTopologyTestCase::testAddEdge(void)
+void dtkDistributedGraphTopologyTestCase::testClearResize(void)
 {
-    QRunnable *test = new testGraphTopologyAddEdge();
+    QRunnable *test = new testGraphTopologyClearResize();
     dtkDistributed::exec(test);
     delete test;
 }
 
-void dtkDistributedGraphTopologyTestCase::testAddEdgeRemote(void)
+void dtkDistributedGraphTopologyTestCase::testAssemble(void)
 {
-    QRunnable *test = new testGraphTopologyAddEdgeRemote();
-    dtkDistributed::exec(test);
-    delete test;
-}
-
-void dtkDistributedGraphTopologyTestCase::testAddEdgeFEM(void)
-{
-    QRunnable *test = new testGraphTopologyAddEdgeFEM();
-    dtkDistributed::exec(test);
-    delete test;
-}
-
-void dtkDistributedGraphTopologyTestCase::testBuild(void)
-{
-    QRunnable *test = new testGraphTopologyBuild();
+    QRunnable *test = new testGraphTopologyAssemble();
     dtkDistributed::exec(test);
     delete test;
 }

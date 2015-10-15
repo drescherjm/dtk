@@ -87,6 +87,8 @@ inline dtkDistributedContainer::~dtkDistributedContainer(void)
 {
     if (!m_mapper->deref())
         delete m_mapper;
+
+    m_mapper = NULL;
 }
 
 inline void dtkDistributedContainer::setMapper(dtkDistributedMapper *mapper) 

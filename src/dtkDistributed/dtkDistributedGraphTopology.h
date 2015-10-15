@@ -126,7 +126,7 @@ public:
     dtkDistributedGraphTopology& operator = (const dtkDistributedGraphTopology& o);
 
 private:
-    void initialize(bool has_custom_mapper = false);
+    void initialize(void);
 
 public:
     void  rlock(void);
@@ -134,16 +134,22 @@ public:
     void unlock(void);
 
 public:
-    void addEdge(qlonglong from, qlonglong to, bool oriented = false);
-
-public:
-    void build(void);
-    bool builded(void);
+    void clear(void);
     void resize(qlonglong vertexCount);
 
 public:
-    void addEdgeFEM(qlonglong from, qlonglong to);
-    void buildFEM(void);
+    void addEdge(qlonglong from, qlonglong to);
+
+public:
+    void assemble(void);
+    void assembleDomainDecompositionFeatures(void);
+
+protected:
+    void buildDomainDecompositionMaps(void);
+    void buildDomainDecompositionData(void);
+
+public:
+    bool isAssembled(void) const;
 
 public:
     qlonglong vertexCount(void) const;
@@ -167,9 +173,6 @@ public:
     vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid()) + 1); }
 
 public:
-    dtkDistributedMapper *edge_mapper(void) const;
-
-public:
     iterator cbegin(void) const;
     iterator   cend(void) const;
 
@@ -180,11 +183,16 @@ public:
     void stats(void) const;
 
 public:
+    dtkDistributedMapper *edgeMapper(void) const;
+
+public:
     bool read(const QString& filename, GraphFile format = MetisFormat);
 
     template <class T = double> bool readWithValues(const QString& filename, GraphFile format, dtkDistributedArray<T> *&values );
 
 protected:
+    bool m_is_assembled;
+
     typedef QList<qlonglong> EdgeList;
     typedef QMap<qlonglong, EdgeList> EdgeMap;
 
@@ -198,19 +206,29 @@ protected:
     bool m_builded;
 
 public:
-    //dtkArray<dtkArray < qlonglong> > m_interfaces;
     EdgeMap m_map;
     EdgeMap m_map_hybrid;
     EdgeMap m_map_remote;
 
     dtkDistributedMapper *m_fe_mapper;
     dtkDistributedArray<qlonglong> *m_positions;
+    
+public:
+    struct DDData {
+    
+        EdgeMap map;
+        EdgeMap map_hybrid;
+        EdgeMap map_remote;
 
-    dtkArray<qlonglong, 0> m_local_vertex_to_edge;
-    dtkArray<qlonglong, 0> m_local_edge_to_vertex;
-
-    QMap<qlonglong, qlonglong> m_glob_to_loc;
-    dtkArray<qlonglong, 0> m_loc_to_glob;
+        dtkDistributedMapper *mapper;
+        dtkDistributedArray<qlonglong> *positions;
+        
+        dtkArray<qlonglong, 0> local_vertex_to_edge;
+        dtkArray<qlonglong, 0> local_edge_to_vertex;
+        
+        QMap<qlonglong, qlonglong> glob_to_loc;
+        dtkArray<qlonglong, 0> loc_to_glob;
+    } m_dd;
 };
 
 // /////////////////////////////////////////////////////////////////

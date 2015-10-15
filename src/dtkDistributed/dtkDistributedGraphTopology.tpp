@@ -343,7 +343,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     if (values) {
         dtkTrace() << "init values vector";
         delete values;
-        values = new dtkDistributedArray<T>(edges_count, this->edgeMapper());
+        values = new dtkDistributedArray<T>(edges_count, m_edge_to_vertex->mapper());
     }
 
     if (this->wid() == 0) {

@@ -254,7 +254,7 @@ qlonglong dtkDistributedMapper::count(void) const
 
 qlonglong dtkDistributedMapper::count(const qlonglong& pu_id) const
 {
-    Q_ASSERT(pu_id >= d->pu_count);
+    Q_ASSERT(pu_id <= d->pu_count);
     return d->count(pu_id);
 }
 
@@ -265,13 +265,13 @@ qlonglong dtkDistributedMapper::countMax(void) const
 
 qlonglong dtkDistributedMapper::firstIndex(const qlonglong& pu_id) const
 {
-    Q_ASSERT(pu_id >= d->pu_count);
+    Q_ASSERT(pu_id <= d->pu_count);
     return d->map[pu_id];
 }
 
 qlonglong dtkDistributedMapper::lastIndex(const qlonglong& pu_id) const
 {
-    Q_ASSERT(pu_id >= d->pu_count);
+    Q_ASSERT(pu_id <= d->pu_count);
     return d->map[pu_id + 1] - 1;
 }
 

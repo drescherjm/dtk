@@ -694,8 +694,6 @@ void dtkDistributedGraphTopology::assemble(void)
                 }
             }
         }
-
-        qDebug() << wid() << m_dd.local_intern_size;
     }
     // Furthermore, we can now compute the total number of vertices on
     // all the interfaces.

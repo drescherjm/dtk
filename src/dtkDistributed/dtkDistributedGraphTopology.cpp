@@ -670,6 +670,7 @@ void dtkDistributedGraphTopology::assemble(void)
     // each partition is responsible for. This infcormation is gather
     // into m_dd.map_itf.
     {
+        m_dd.local_intern_size = m_dd.map.size();
         m_dd.local_itf_size = m_dd.map_hybrid.size();
 
         auto it = m_dd.map_hybrid.cbegin();
@@ -693,6 +694,8 @@ void dtkDistributedGraphTopology::assemble(void)
                 }
             }
         }
+
+        qDebug() << wid() << m_dd.local_intern_size;
     }
     // Furthermore, we can now compute the total number of vertices on
     // all the interfaces.

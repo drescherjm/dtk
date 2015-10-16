@@ -281,6 +281,41 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
     // Build the local CSR structures that organize data according to
     // domain decomposition paradigm.
 
+    // First, we clean map_remote to extract vertices that are not
+    // shared with other partitions. It means that vertices taht do
+    // not appear into map_hybrid are removed from the map_remote.
+    {
+        auto it  = m_dd.map_remote.begin();
+        auto ite = m_dd.map_remote.end();
+        dtkArray<qlonglong> vert_to_remove; vert_to_remove.reserve(m_dd.map_remote.size());
+
+        for (; it != ite; ++it) {
+            if (!m_dd.map_hybrid.contains(it.key())) {
+                vert_to_remove << it.key();
+            } else {
+                QList<qlonglong>& l = *it;
+                auto lit = l.begin();
+                auto lend = l.end();
+                for (; lit != lend; ++lit) {
+                    auto pos = lit;
+                    if (!m_dd.map_hybrid.contains(*lit)) {
+                        lit = l.erase(pos);
+                        --lit;
+                    }
+                }
+                qlonglong id = l.indexOf(it.key());
+                if (id > -1) {
+                    l.removeAt(id);
+                }
+            }
+        }
+
+        for (qlonglong vid : vert_to_remove) {
+            m_dd.map_remote.remove(vid);
+        }
+
+    }
+
     // Fills the local_vertex_to_edge array that maps each vertex to
     // its first local edge. The vertices are sorted as follows:
     // - first, the pure interior ones

@@ -210,6 +210,10 @@ public:
         EdgeMap map_hybrid;
         EdgeMap map_remote;
 
+        EdgeMap map_itf;
+        qlonglong local_itf_size;
+        qlonglong global_itf_size;
+
         dtkDistributedMapper *mapper;
         dtkDistributedArray<qlonglong> *positions;
         

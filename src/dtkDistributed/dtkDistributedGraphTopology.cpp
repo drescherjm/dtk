@@ -785,13 +785,13 @@ void dtkDistributedGraphTopology::assemble(void)
                     edges_to_move << i;
                 }
             }
+
             if (!edges_to_move.empty()) {
                 EdgeList& rl = remote_edge_to_add[it.key()];
                 EdgeList& hl = m_dd.map_hybrid[it.key()];
                 for (int i = 0; i < edges_to_move.size(); ++i) {
                     qlonglong e_id = l.at(edges_to_move.at(i));
                     rl << e_id;
-                    l.removeAt(edges_to_move.at(i));
                     auto it = hl.begin();
                     for(; it != hl.end(); ++it) {
                         if (e_id < (*it)) {
@@ -800,6 +800,7 @@ void dtkDistributedGraphTopology::assemble(void)
                     }
                     hl.insert(it, e_id);
                 }
+                l.clear();
                 m_neighbour_count->addAssign(it.key(), edges_to_move.size());
             }
         }

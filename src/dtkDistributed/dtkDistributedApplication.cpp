@@ -142,7 +142,9 @@ void dtkDistributedApplication::exec(QRunnable *task)
 void dtkDistributedApplication::spawn(void)
 {
     if (d->nospawn) {
-        d->policy.communicator()->spawn(QStringList(), d->wrapper);
+        QStringList nospawn;
+        nospawn << "nospawn";
+        d->policy.communicator()->spawn(nospawn, d->wrapper);
     } else {
         QStringList hosts = d->policy.hosts();
         d->spawned = true;

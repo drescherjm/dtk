@@ -194,7 +194,7 @@ void dtkDistributedServerDaemon::read(void)
 
         d->sockets.insert(qMakePair(msg->rank(),msg->jobid()), socket);
         // rank 0 is alive, warn the controller
-        if (msg->rank() == dtkDistributedMessage::SLAVE_RANK && d->sockets.contains(controller)) {
+        if ((msg->rank() == dtkDistributedMessage::SLAVE_RANK || msg->rank() == 0 ) && d->sockets.contains(controller)) {
             msg->send(d->sockets[controller]);
         }
         break;

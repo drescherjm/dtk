@@ -43,6 +43,7 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
         properties +=  " -p \"cluster='"+jprops["cluster"].toString()+"'\"";
     }
     // TODO:handle other properties
+    oarsub += properties;
 
     QVariantMap res = json["resources"].toMap();
 

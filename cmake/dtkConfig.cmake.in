@@ -40,7 +40,6 @@ include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
 find_package(Qt5 REQUIRED COMPONENTS
   Core
   Concurrent
-  Declarative
   Network
   Quick
   Widgets

@@ -36,7 +36,6 @@ include("@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/dtk/dtkDepends.cmak
 find_package(Qt5 REQUIRED COMPONENTS
   Core
   Concurrent
-  Declarative
   Network
   Quick
   Widgets

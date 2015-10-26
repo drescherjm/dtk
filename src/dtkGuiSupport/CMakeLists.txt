@@ -86,13 +86,11 @@ set(${PROJECT_NAME}_SOURCES_RCC
 ## Build rules
 ## #################################################################
 
-qt5_wrap_ui(${PROJECT_NAME}_SOURCES_UIC ${${PROJECT_NAME}_FORMS})
 qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_SOURCES_RCC})
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS}
-  ${${PROJECT_NAME}_SOURCES_UIC}
   ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
@@ -112,7 +110,6 @@ endif(APPLE)
 ## ###################################################################
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
-target_link_libraries(${PROJECT_NAME} Qt5::Declarative)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Quick)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)

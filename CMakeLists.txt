@@ -14,6 +14,10 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+if(${CMAKE_MAJOR_VERSION} GREATER 2)
+  cmake_policy(SET CMP0028 NEW)
+endif(${CMAKE_MAJOR_VERSION} GREATER 2)
+
 ######################################################################
 
 project(dtk)
@@ -160,8 +164,9 @@ find_package(Qt5 REQUIRED COMPONENTS
   Network
   Gui
   Test
+  Widgets
   Xml
-  Declarative)
+  )
 
 # variables used by doc and tst
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
@@ -418,7 +423,6 @@ mark_as_advanced(dtk_VERSION_BUILD)
 
 mark_as_advanced(Qt5Concurrent_DIR)
 mark_as_advanced(Qt5Core_DIR)
-mark_as_advanced(Qt5Declarative_DIR)
 mark_as_advanced(Qt5Gui_DIR)
 mark_as_advanced(Qt5Network_DIR)
 mark_as_advanced(Qt5Qml_DIR)

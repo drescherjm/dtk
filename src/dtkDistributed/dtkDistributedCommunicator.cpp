@@ -88,7 +88,7 @@ bool dtkDistributedCommunicator::active(void)
 
 /*! \fn dtkDistributedCommunicator::spawn (QStringList hostnames, QString wrapper)
 
-  Spawn a communicator on all hostnames. Optionnaly use a wrapper to spawn slaves
+  Spawn a communicator on all hostnames. Optionnaly use a wrapper to spawn slaves. Special case: if the string list has only one value equal to "nospawn", then spawning is disabled. This can be useful if MPI spawning is not working well with others tools (debugguer or batch schedulers). This is used by the --no-spawn option of dtkDistributedApplication.
 
 */
 

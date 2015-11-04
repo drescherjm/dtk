@@ -39,10 +39,15 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
     QString properties ;
     if (jprops.contains("cpu_model")) {
         properties +=  " -p \"cputype='"+jprops["cpu_model"].toString()+"'\"";
-    } else if (jprops.contains("cluster")) {
-        properties +=  " -p \"cluster='"+jprops["cluster"].toString()+"'\"";
+    } else if (jprops.count() > 0 ) {
+        QVariantMap::const_iterator iter = jprops.begin();
+        properties +=  " -p \""+iter.key()+"='"+iter.value().toString()+"'";
+        iter++;
+        for(;iter != jprops.end(); ++iter) {
+            properties +=  " and "+iter.key()+"='"+iter.value().toString()+"'";
+        }
+        properties +=  "\"";
     }
-    // TODO:handle other properties
     oarsub += properties;
 
     QVariantMap res = json["resources"].toMap();

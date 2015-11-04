@@ -245,6 +245,37 @@ void dtkDistributedGraphTopology::buildDomainDecompositionMaps(void)
         }
     }
 
+    // At this stage, it is possible to know which vertex each
+    // partition shares with another one and which interface vertices
+    // each partition is responsible for. This information is gather
+    // into m_dd.map_itf. (Same piece of code in assemble method!!!)
+    {
+        m_dd.local_intern_size = m_dd.map.size();
+        m_dd.local_itf_size = m_dd.map_hybrid.size();
+
+        auto it = m_dd.map_hybrid.cbegin();
+        auto end = m_dd.map_hybrid.cend();
+
+        for(; it != end; ++it) {
+
+            qlonglong gid = it.key();
+            qlonglong owner_gid = this->mapper()->owner(gid);
+            if(wid == owner_gid) {
+                dtkDistributedOrderingListInsertion(m_dd.map_itf[owner_gid], gid);
+            }
+
+            qlonglong j = m_vertex_to_edge->at(gid);
+            qlonglong jend = j + m_neighbour_count->at(gid);
+            for(; j < jend; ++j) {
+                qlonglong jid = m_edge_to_vertex->at(j);
+                qlonglong owner_jid = this->mapper()->owner(jid);
+                if (wid != owner_jid && owner_gid <= owner_jid) {
+                    dtkDistributedOrderingListInsertion(m_dd.map_itf[owner_jid], gid);
+                }
+            }
+        }
+    }
+
     // Now we populate the m_dd.map_remote that contains all the edges
     // connecting boundary nodes of lower id partitions.
     this->rlock();
@@ -264,6 +295,7 @@ void dtkDistributedGraphTopology::buildDomainDecompositionMaps(void)
 
     this->m_comm->barrier();
 }
+
 
 void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
 {

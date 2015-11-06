@@ -31,6 +31,8 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
   "@CMAKE_INSTALL_PREFIX@/include/dtkTest")
 
+set(DTK_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
+
 include("@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/dtk/dtkDepends.cmake")
 
 find_package(Qt5 REQUIRED COMPONENTS

@@ -221,7 +221,7 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
     QFile file(filename);
     qlonglong edges_count = 0;
     QTime time;
-    QIODevice *in;
+    QIODevice *in = &file;
     bool is_double = true;
 
     if (this->wid() == 0) {
@@ -238,11 +238,9 @@ template <class T> bool dtkDistributedGraphTopology::readWithValues(const QStrin
         if (info.suffix() == "gz") {
             in = new dtkIOCompressor(&file);
         } else {
-            in = &file;
             mode |= QIODevice::Text;
         }
 #else
-        in = &file;
         mode |= QIODevice::Text;
 #endif
 

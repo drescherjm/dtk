@@ -18,6 +18,9 @@
 #define dtk_VERSION_MINOR @dtk_VERSION_MINOR@
 #define dtk_VERSION_PATCH @dtk_VERSION_PATCH@
 
+#include <QString>
+static const QString DTK_INSTALL_PREFIX = "@CMAKE_INSTALL_PREFIX@";
+
 #cmakedefine DTK_HAVE_MPI
 #cmakedefine DTK_HAVE_ZLIB
 #cmakedefine DTK_HAVE_PLOT
@@ -39,6 +42,9 @@
 #cmakedefine DTK_BUILD_32
 #cmakedefine DTK_BUILD_64
 
+#cmakedefine COMPILER_SUPPORTS_CXX11
+
+#cmakedefine COMPILER_SUPPORTS_CXX11
 #cmakedefine COMPILER_SUPPORTS_CXX11
 
 //

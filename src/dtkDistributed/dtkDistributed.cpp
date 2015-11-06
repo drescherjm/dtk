@@ -14,6 +14,8 @@
 
 #include "qthDistributedCommunicator.h"
 
+#include <dtkConfig.h>
+
 #include "dtkDistributed.h"
 #include "dtkDistributedApplication.h"
 #include "dtkDistributedCommunicator.h"
@@ -97,7 +99,13 @@ namespace dtkDistributed
         }
         void initialize(const QString& path) {
             pluginFactory().record("qthread", qthDistributedCommunicatorCreator);
-            pluginManager().initialize(path);
+            if (path.isEmpty()) {
+                QString default_path = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkDistributed");
+                dtkDebug() << "no plugin path configured, use default:" << default_path ;
+                pluginManager().initialize(default_path);
+            } else {
+                pluginManager().initialize(path);
+            }
         }
 
         dtkDistributedCommunicator *instance(void) {

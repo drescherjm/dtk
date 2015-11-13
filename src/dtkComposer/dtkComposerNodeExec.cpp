@@ -19,20 +19,15 @@
 #include "dtkComposerTransmitterEmitter.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include <dtkLog/dtkLogger.h>
-
 #include <QtCore>
-
 Q_DECLARE_METATYPE(QProcessEnvironment);
 
 class dtkComposerNodeExecPrivate
 {
 public:
     QString command;
-    QString stdout_data;
-    QString stderr_data;
     QProcessEnvironment processEnv;
     qlonglong timeout;
-    qlonglong exit_code;
 
 public:
     dtkComposerTransmitterReceiver<QString>             receiver_command;
@@ -77,9 +72,24 @@ void dtkComposerNodeExec::run(void)
 {
     if (!d->receiver_command.isEmpty() ) {
         d->command = d->receiver_command.data();
-        QFile file(d->command);
-        if (!file.exists()) {
-            dtkWarn() << "Command does not exists! "<< d->command;
+
+        QFileInfo file(d->command);
+        bool exists = false;
+        if (file.isRelative()) {
+
+            QStringList PATH =  QProcessEnvironment::systemEnvironment().value("PATH").split(":") ;
+            QDir::setSearchPaths("bin",PATH);
+            exists = QFile("bin:"+d->command).exists();
+            dtkTrace() << d->command << " is relative, check if exists:" << exists;
+        } else {
+            exists = file.exists();
+            dtkTrace() << d->command <<" is absolute, check if exists:" << exists;
+        }
+        if (!exists) {
+            dtkWarn() << "Command not found in PATH "<< d->command;
+            d->emitter_exit_code.setData(127);
+            d->emitter_stdout.clearData();
+            d->emitter_stderr.clearData();
             return;
         }
 
@@ -102,30 +112,31 @@ void dtkComposerNodeExec::run(void)
         if(!d->receiver_env.isEmpty()){
             d->processEnv=d->receiver_env.data();
         }
-        
+
         QProcess cmd;
         cmd.setProcessEnvironment(d->processEnv);
         cmd.start(d->command, arglist);
+        QString stdout_data;
+        QString stderr_data;
 
         if (cmd.waitForFinished(d->timeout)) {
             if (d->emitter_stdout.receiverCount()) {
                 QByteArray a = cmd.readAllStandardOutput();
-                d->stdout_data = QString::fromLocal8Bit(a.data());
+                stdout_data = QString::fromLocal8Bit(a.data());
             } else {
                 dtkInfo() << "no output from command " << d->command;
             }
             if (d->emitter_stderr.receiverCount()) {
                 QByteArray a = cmd.readAllStandardError();
-                d->stderr_data = QString::fromLocal8Bit(a.data());
+                stderr_data = QString::fromLocal8Bit(a.data());
             }
         } else {
             dtkWarn() << "Timeout while running command " << d->command;
         }
-        
-        d->exit_code = cmd.exitCode();
-        d->emitter_exit_code.setData(d->exit_code);
-        d->emitter_stdout.setData(d->stdout_data);
-        d->emitter_stderr.setData(d->stderr_data);
+        int exit_code = cmd.exitCode();
+        d->emitter_exit_code.setData(exit_code);
+        d->emitter_stdout.setData(stdout_data);
+        d->emitter_stderr.setData(stderr_data);
 
     } else {
          dtkWarn() << Q_FUNC_INFO << "The input command path is not set. Nothing is done.";

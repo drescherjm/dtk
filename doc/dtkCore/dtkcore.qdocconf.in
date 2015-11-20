@@ -5,14 +5,14 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 58
+##     Update #: 66
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkCore
 description  = dtkCore Reference Documentation
@@ -36,13 +36,13 @@ qhp.dtkCore.subprojects.classes.indexTitle = dtkCore C++ Classes
 qhp.dtkCore.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkCore.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkCore
-sourcedirs  += ../../src/dtkCore \
-               ../../doc/dtkCore/src
+headerdirs  += ../../../../src/dtkCore
+sourcedirs  += ../../../src/dtkCore \
+               ../../../doc/dtkCore/src
               
-exampledirs += ../../doc/dtkCore/snp
-imagedirs   += ../../doc/dtkCore/img
-excludedirs += ../../doc/dtkCore/snp
+exampledirs += ../../../doc/dtkCore/snp
+imagedirs   += ../../../doc/dtkCore/img
+excludedirs += ../../../doc/dtkCore/snp
 
 navigation.landingpage    = "Core Module"
 navigation.cppclassespage = "Core C++ Classes"

@@ -12,11 +12,11 @@
 ##
 ### Code:
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkDistributed
 description  = dtkDistributed Reference Documentation
-url          = ../dtkdistributed
+url          = @CMAKE_BINARY_DIR@/html/dtkdistributed
 
 qhp.projects = dtkDistributed
 
@@ -36,13 +36,13 @@ qhp.dtkDistributed.subprojects.classes.indexTitle = dtkDistributed C++ Classes
 qhp.dtkDistributed.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDistributed.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkDistributed
-sourcedirs  += ../../src/dtkDistributed \
-               ../../doc/dtkDistributed/src
+headerdirs  += ../../../src/dtkDistributed
+sourcedirs  += ../../../src/dtkDistributed \
+               ../../../doc/dtkDistributed/src
 
-exampledirs += ../../doc/dtkDistributed/snp
-imagedirs   += ../../doc/dtkDistributed/img
-excludedirs += ../../doc/dtkDistributed/snp
+exampledirs += ../../../doc/dtkDistributed/snp
+imagedirs   += ../../../doc/dtkDistributed/img
+excludedirs += ../../../doc/dtkDistributed/snp
 
 navigation.landingpage    = "Distributed Module"
 navigation.cppclassespage = "Distributed C++ Classes"

@@ -5,14 +5,14 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 55
+##     Update #: 93
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkDoc
 description  = dtk Reference Documentation
@@ -36,13 +36,13 @@ qhp.dtkDoc.subprojects.classes.indexTitle = All Classes
 qhp.dtkDoc.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDoc.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtk
-sourcedirs  += ../../src/dtk \
-               ../../doc/dtk/src
+headerdirs  += ../../../src/dtk
+sourcedirs  += ../../../src/dtk \
+               ../../../doc/dtk/src
 
-exampledirs += ../../doc/dtk/snp
-imagedirs   += ../../doc/dtk/img
-excludedirs += ../../doc/dtk/snp
+exampledirs += ../../../doc/dtk/snp
+imagedirs   += ../../../doc/dtk/img
+excludedirs += ../../../doc/dtk/snp
 
 outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc
 

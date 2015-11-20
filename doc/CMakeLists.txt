@@ -12,6 +12,10 @@
 ##
 ### Code:
 
+## #################################################################
+## Config
+## #################################################################
+
 string(SUBSTRING ${Qt5Core_VERSION_STRING} 0 3 Qt5_VERSION)
 
 set(QT5_DOCUMENTATION_D "${QT5_BINARY_DIR}/../../../Docs/Qt-${Qt5_VERSION}")
@@ -23,17 +27,27 @@ message(STATUS "Using Qt5 binary dir: ${QT5_BINARY_DIR}")
 message(STATUS "Using dtk binary doc: ${DTK_QDOC_EXECUTABLE}")
 message(STATUS "Using Qt5 binary qhg: ${QT5_QDOC_EXECUTABLE}")
 
+## #################################################################
+## Subdirs
+## #################################################################
+
 add_subdirectory("slides")
+
+## ###################################################################
+## Build tree setup
+## ###################################################################
+
+file(COPY cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 
 ## ###################################################################
 ## dtk
 ## ###################################################################
 
-configure_file(dtk/dtk.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkdoc.qdocconf IMMEDIATE @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtk/dtk.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtk.qdocconf IMMEDIATE @ONLY)
 
 add_custom_target(dtk-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${DTK_QDOC_EXECUTABLE} -no-link-errors dtkdoc.qdocconf)
+  COMMAND ${DTK_QDOC_EXECUTABLE} -no-link-errors dtk.qdocconf)
 
 ## ###################################################################
 ## dtkMeta
@@ -75,7 +89,7 @@ add_custom_target(dtkCore-doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp -o ${CMAKE_BINARY_DIR}/html/dtkcore.qch
   COMMENT "-- Generating dtkCore documentation")
 
-add_dependencies(dtkCore-doc dtkMeta dtk-doc)
+add_dependencies(dtkCore-doc dtkMeta-doc dtk-doc)
 
 ## ###################################################################
 ## dtkDistributed
@@ -97,7 +111,7 @@ add_dependencies(dtkDistributed-doc dtkCore-doc)
 
 add_custom_target(doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMAND ${DTK_QDOC_EXECUTABLE} dtkdoc.qdocconf
+  COMMAND ${DTK_QDOC_EXECUTABLE} dtk.qdocconf
   COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp -o ${CMAKE_BINARY_DIR}/html/dtkdoc.qch
   COMMENT "-- Generating dtk documentation")
 

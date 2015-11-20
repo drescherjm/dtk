@@ -12,7 +12,7 @@
 ##
 ### Code:
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkLog
 description  = dtkLog  Reference Documentation
@@ -36,13 +36,13 @@ qhp.dtkLog.subprojects.classes.indexTitle = dtkLog C++ Classes
 qhp.dtkLog.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkLog.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkLog
-sourcedirs  += ../../src/dtkLog \
-               ../../doc/dtkLog/src
+headerdirs  += ../../../src/dtkLog
+sourcedirs  += ../../../src/dtkLog \
+               ../../../doc/dtkLog/src
 
-exampledirs += ../../doc/dtkLog/snp
-imagedirs   += ../../doc/dtkLog/img
-excludedirs += ../../doc/dtkLog/snp
+exampledirs += ../../../doc/dtkLog/snp
+imagedirs   += ../../../doc/dtkLog/img
+excludedirs += ../../../doc/dtkLog/snp
 
 navigation.landingpage    = "Log Module"
 navigation.cppclassespage = "Log C++ Classes"

@@ -12,7 +12,7 @@
 ## 
 ### Code:
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkMeta
 description  = dtkMeta Reference Documentation
@@ -36,13 +36,13 @@ qhp.dtkMeta.subprojects.classes.indexTitle = dtkMeta C++ Classes
 qhp.dtkMeta.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkMeta.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkMeta
-sourcedirs  += ../../src/dtkMeta \
-               ../../doc/dtkMeta/src
+headerdirs  += ../../../src/dtkMeta
+sourcedirs  += ../../../src/dtkMeta \
+               ../../../doc/dtkMeta/src
               
-exampledirs += ../../doc/dtkMeta/snp
-imagedirs   += ../../doc/dtkMeta/img
-excludedirs += ../../doc/dtkMeta/snp
+exampledirs += ../../../doc/dtkMeta/snp
+imagedirs   += ../../../doc/dtkMeta/img
+excludedirs += ../../../doc/dtkMeta/snp
 
 navigation.landingpage    = "Meta Module"
 navigation.cppclassespage = "Meta C++ Classes"

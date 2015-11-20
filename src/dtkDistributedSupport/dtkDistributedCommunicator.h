@@ -206,12 +206,13 @@ public:
     virtual void   scatter(float  *send, float  *recv, qint64 size, qint16 source);
     virtual void   scatter(double *send, double *recv, qint64 size, qint16 source);
 
-    virtual void    reduce(void   *send, void   *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
-    virtual void    reduce(bool   *send, bool   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void    reduce(char   *send, char   *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void    reduce(int    *send, int    *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void    reduce(float  *send, float  *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
-    virtual void    reduce(double *send, double *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(void      *send, void      *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(bool      *send, bool      *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(char      *send, char      *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(int       *send, int       *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(qlonglong *send, qlonglong *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(float     *send, float     *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
+    virtual void    reduce(double    *send, double    *recv, qint64 size, OperationType operationType, qint16 target, bool all = false);
 
 public:
     QMap<qlonglong, dtkDistributedMessage *> *msgBuffer(void);

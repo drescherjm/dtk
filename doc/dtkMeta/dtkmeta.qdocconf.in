@@ -23,7 +23,7 @@ qhp.projects = dtkMeta
 qhp.dtkMeta.file             = dtkmeta.qhp
 qhp.dtkMeta.namespace        = fr.inria.dtk.dtkmeta
 qhp.dtkMeta.virtualFolder    = dtkmeta
-qhp.dtkMeta.indexTitle       = dtkMeta
+qhp.dtkMeta.indexTitle       = Meta Module
 qhp.dtkMeta.indexRoot        =
 qhp.dtkMeta.filterAttributes = dtkmeta
 
@@ -32,7 +32,7 @@ qhp.dtkMeta.customFilters.dtk.filterAttributes = dtkmeta
 
 qhp.dtkMeta.subprojects                    = classes
 qhp.dtkMeta.subprojects.classes.title      = C++ Classes
-qhp.dtkMeta.subprojects.classes.indexTitle = dtkMeta C++ Classes
+qhp.dtkMeta.subprojects.classes.indexTitle = Meta C++ Classes
 qhp.dtkMeta.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkMeta.subprojects.classes.sortPages  = true
 

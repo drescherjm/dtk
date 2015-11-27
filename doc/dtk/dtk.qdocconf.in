@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 93
+##     Update #: 108
 ######################################################################
 ##
 ### Change Log:
@@ -23,7 +23,7 @@ qhp.projects = dtkDoc
 qhp.dtkDoc.file             = dtkdoc.qhp
 qhp.dtkDoc.namespace        = fr.inria.dtk.dtkdoc
 qhp.dtkDoc.virtualFolder    = dtkdoc
-qhp.dtkDoc.indexTitle       = dtkDoc
+qhp.dtkDoc.indexTitle       = dtk
 qhp.dtkDoc.indexRoot        =
 qhp.dtkDoc.filterAttributes = dtkdoc
 
@@ -32,7 +32,7 @@ qhp.dtkDoc.customFilters.dtk.filterAttributes = dtkdoc
 
 qhp.dtkDoc.subprojects                    = classes
 qhp.dtkDoc.subprojects.classes.title      = Classes
-qhp.dtkDoc.subprojects.classes.indexTitle = All Classes
+qhp.dtkDoc.subprojects.classes.indexTitle = All dtk Classes
 qhp.dtkDoc.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDoc.subprojects.classes.sortPages  = true
 

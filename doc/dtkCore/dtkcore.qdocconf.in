@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 66
+##     Update #: 77
 ######################################################################
 ##
 ### Change Log:
@@ -23,7 +23,7 @@ qhp.projects = dtkCore
 qhp.dtkCore.file             = dtkcore.qhp
 qhp.dtkCore.namespace        = fr.inria.dtk.dtkcore
 qhp.dtkCore.virtualFolder    = dtkcore
-qhp.dtkCore.indexTitle       = dtkCore
+qhp.dtkCore.indexTitle       = Core Module
 qhp.dtkCore.indexRoot        =
 qhp.dtkCore.filterAttributes = dtkcore
 
@@ -32,7 +32,7 @@ qhp.dtkCore.customFilters.dtk.filterAttributes = dtkcore
 
 qhp.dtkCore.subprojects                    = classes
 qhp.dtkCore.subprojects.classes.title      = C++ Classes
-qhp.dtkCore.subprojects.classes.indexTitle = dtkCore C++ Classes
+qhp.dtkCore.subprojects.classes.indexTitle = Core C++ Classes
 qhp.dtkCore.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkCore.subprojects.classes.sortPages  = true
 

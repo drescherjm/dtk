@@ -3,9 +3,9 @@
  * Author: Thibaud Kloczko
  * Created: mer. avril  9 10:30:12 2014 (+0200)
  * Version: 
- * Last-Updated: mer. avril  9 15:08:30 2014 (+0200)
+ * Last-Updated: lun. nov. 23 16:59:06 2015 (+0100)
  *           By: Thibaud Kloczko
- *     Update #: 79
+ *     Update #: 80
  */
 
 /* Change Log:
@@ -14,7 +14,7 @@
 
 /*!
     \page dtk-allClasses.html
-    \title All Classes
+    \title All dtk Classes
     \ingroup dtk-classlists
 
     \brief If you know the name of the class you want, find it here.

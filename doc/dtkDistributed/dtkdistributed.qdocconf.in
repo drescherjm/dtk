@@ -16,14 +16,14 @@ include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkDistributed
 description  = dtkDistributed Reference Documentation
-url          = @CMAKE_BINARY_DIR@/html/dtkdistributed
+url          = ../dtkdistributed
 
 qhp.projects = dtkDistributed
 
 qhp.dtkDistributed.file             = dtkdistributed.qhp
 qhp.dtkDistributed.namespace        = fr.inria.dtk.dtkdistributed
 qhp.dtkDistributed.virtualFolder    = dtkdistributed
-qhp.dtkDistributed.indexTitle       = dtkDistributed
+qhp.dtkDistributed.indexTitle       = Distributed Module
 qhp.dtkDistributed.indexRoot        =
 qhp.dtkDistributed.filterAttributes = dtkdistributed
 
@@ -32,7 +32,7 @@ qhp.dtkDistributed.customFilters.dtk.filterAttributes = dtkdistributed
 
 qhp.dtkDistributed.subprojects                    = classes
 qhp.dtkDistributed.subprojects.classes.title      = C++ Classes
-qhp.dtkDistributed.subprojects.classes.indexTitle = dtkDistributed C++ Classes
+qhp.dtkDistributed.subprojects.classes.indexTitle = Distributed C++ Classes
 qhp.dtkDistributed.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDistributed.subprojects.classes.sortPages  = true
 

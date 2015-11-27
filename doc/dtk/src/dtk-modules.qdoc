@@ -51,6 +51,9 @@
   \row
      \li \l{Distributed Module} {Distributed}
      \li Mechanisms to perform distributed calculations.
+  \row
+     \li \l{dtkLinearAlgebraDense Module} {Dense Linear Algebra}
+     \li High level C++ API to deal with dense linear algebra.
   \endtable
 
   \section1 dtk Applications

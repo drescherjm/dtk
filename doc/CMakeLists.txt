@@ -21,7 +21,7 @@ string(SUBSTRING ${Qt5Core_VERSION_STRING} 0 3 Qt5_VERSION)
 set(QT5_DOCUMENTATION_D "${QT5_BINARY_DIR}/../../../Docs/Qt-${Qt5_VERSION}")
 set(QT5_QDOC_EXECUTABLE "${QT5_BINARY_DIR}/qdoc")
 set(QT5_QHGN_EXECUTABLE "${QT5_BINARY_DIR}/qhelpgenerator")
-set(DTK_QDOC_EXECUTABLE "${CMAKE_BINARY_DIR}/bin/dtkDoc")
+set(DTK_QDOC_EXECUTABLE "${QT5_BINARY_DIR}/qdoc")
 
 message(STATUS "Using Qt5 binary dir: ${QT5_BINARY_DIR}")
 message(STATUS "Using dtk binary doc: ${DTK_QDOC_EXECUTABLE}")

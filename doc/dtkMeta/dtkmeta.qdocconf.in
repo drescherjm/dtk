@@ -47,11 +47,11 @@ excludedirs += ../../../doc/dtkMeta/snp
 navigation.landingpage    = "Meta Module"
 navigation.cppclassespage = "Meta C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtkmeta
+outputdir = @dtk_INSTALL_DOCS@/dtkmeta
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
 
 ######################################################################
 ### dtkmeta.qdocconf.in ends here

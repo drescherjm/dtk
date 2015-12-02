@@ -173,6 +173,13 @@ find_package(Qt5 REQUIRED COMPONENTS
   Xml
   )
 
+
+## ###################################################################
+## Doc setup
+## ###################################################################
+
+set(dtk_INSTALL_DOCS ${CMAKE_BINARY_DIR}/html)
+
 # variables used by doc and tst
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
 get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)

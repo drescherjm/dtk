@@ -58,7 +58,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkMeta/dtkmeta.qdocconf.in ${CMAKE_C
 add_custom_target(dtkMeta-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${DTK_QDOC_EXECUTABLE} dtkmeta.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkmeta/dtkmeta.qhp -o ${CMAKE_BINARY_DIR}/html/dtkmeta.qch
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkmeta/dtkmeta.qhp -o ${dtk_INSTALL_DOCS}/dtkmeta.qch
   COMMENT "-- Generating dtkMeta documentation")
 
 add_dependencies(dtkMeta-doc dtk-doc)
@@ -72,7 +72,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkLog/dtklog.qdocconf.in ${CMAKE_CUR
 add_custom_target(dtkLog-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${DTK_QDOC_EXECUTABLE} dtklog.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtklog/dtklog.qhp -o ${CMAKE_BINARY_DIR}/html/dtklog.qch
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtklog/dtklog.qhp -o ${dtk_INSTALL_DOCS}/dtklog.qch
   COMMENT "-- Generating dtkLog documentation")
 
 add_dependencies(dtkLog-doc dtk-doc)
@@ -86,7 +86,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkCore/dtkcore.qdocconf.in ${CMAKE_C
 add_custom_target(dtkCore-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${DTK_QDOC_EXECUTABLE} dtkcore.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkcore/dtkcore.qhp -o ${CMAKE_BINARY_DIR}/html/dtkcore.qch
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkcore/dtkcore.qhp -o ${dtk_INSTALL_DOCS}/dtkcore.qch
   COMMENT "-- Generating dtkCore documentation")
 
 add_dependencies(dtkCore-doc dtkMeta-doc dtk-doc)
@@ -100,7 +100,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkDistributed/dtkdistributed.qdoccon
 add_custom_target(dtkDistributed-doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${DTK_QDOC_EXECUTABLE} dtkdistributed.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdistributed/dtkdistributed.qhp -o ${CMAKE_BINARY_DIR}/html/dtkdistributed.qch
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkdistributed/dtkdistributed.qhp -o ${dtk_INSTALL_DOCS}/dtkdistributed.qch
   COMMENT "-- Generating dtkDistributed documentation")
 
 add_dependencies(dtkDistributed-doc dtkCore-doc)
@@ -112,7 +112,7 @@ add_dependencies(dtkDistributed-doc dtkCore-doc)
 add_custom_target(doc
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMAND ${DTK_QDOC_EXECUTABLE} dtk.qdocconf
-  COMMAND ${QT5_QHGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/html/dtkdoc/dtkdoc.qhp -o ${CMAKE_BINARY_DIR}/html/dtkdoc.qch
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkdoc/dtkdoc.qhp -o ${dtk_INSTALL_DOCS}/dtkdoc.qch
   COMMENT "-- Generating dtk documentation")
 
 add_dependencies(doc dtkMeta-doc dtkLog-doc dtkCore-doc dtkDistributed-doc)

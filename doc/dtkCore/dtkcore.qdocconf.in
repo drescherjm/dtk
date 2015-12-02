@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 77
+##     Update #: 81
 ######################################################################
 ##
 ### Change Log:
@@ -47,8 +47,8 @@ excludedirs += ../../../doc/dtkCore/snp
 navigation.landingpage    = "Core Module"
 navigation.cppclassespage = "Core C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtkcore
+outputdir = @dtk_INSTALL_DOCS@/dtkcore
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index

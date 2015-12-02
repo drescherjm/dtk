@@ -47,12 +47,12 @@ excludedirs += ../../../doc/dtkDistributed/snp
 navigation.landingpage    = "Distributed Module"
 navigation.cppclassespage = "Distributed C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtkdistributed
+outputdir = @dtk_INSTALL_DOCS@/dtkdistributed
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
 
 ######################################################################
 ### dtkdistributed.qdocconf.in ends here

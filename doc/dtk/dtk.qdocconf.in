@@ -5,7 +5,7 @@
 ## Version:
 ## Last-Updated:
 ##           By:
-##     Update #: 108
+##     Update #: 119
 ######################################################################
 ##
 ### Change Log:
@@ -44,10 +44,11 @@ exampledirs += ../../../doc/dtk/snp
 imagedirs   += ../../../doc/dtk/img
 excludedirs += ../../../doc/dtk/snp
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtkdoc
+outputdir = @dtk_INSTALL_DOCS@/dtkdoc
 
 indexes = \
-  @CMAKE_BINARY_DIR@/html/dtklog/dtklog.index \
-  @CMAKE_BINARY_DIR@/html/dtkmeta/dtkmeta.index \
-  @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdistributed/dtkdistributed.index
+  @dtk_INSTALL_DOCS@/dtklog/dtklog.index \
+  @dtk_INSTALL_DOCS@/dtkmeta/dtkmeta.index \
+  @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
+  @dtk_INSTALL_DOCS@/dtkdistributed/dtkdistributed.index \
+  @dtk_INSTALL_DOCS@/dtkio/dtkio.index

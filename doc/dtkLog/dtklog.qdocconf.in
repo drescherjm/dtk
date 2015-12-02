@@ -47,11 +47,11 @@ excludedirs += ../../../doc/dtkLog/snp
 navigation.landingpage    = "Log Module"
 navigation.cppclassespage = "Log C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtklog
+outputdir = @dtk_INSTALL_DOCS@/dtklog
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
 
 ######################################################################
 ### dtklog.qdocconf.in ends here

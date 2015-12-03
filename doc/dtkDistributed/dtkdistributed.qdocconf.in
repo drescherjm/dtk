@@ -12,7 +12,7 @@
 ##
 ### Code:
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkDistributed
 description  = dtkDistributed Reference Documentation
@@ -23,7 +23,7 @@ qhp.projects = dtkDistributed
 qhp.dtkDistributed.file             = dtkdistributed.qhp
 qhp.dtkDistributed.namespace        = fr.inria.dtk.dtkdistributed
 qhp.dtkDistributed.virtualFolder    = dtkdistributed
-qhp.dtkDistributed.indexTitle       = dtkDistributed
+qhp.dtkDistributed.indexTitle       = Distributed Module
 qhp.dtkDistributed.indexRoot        =
 qhp.dtkDistributed.filterAttributes = dtkdistributed
 
@@ -32,27 +32,27 @@ qhp.dtkDistributed.customFilters.dtk.filterAttributes = dtkdistributed
 
 qhp.dtkDistributed.subprojects                    = classes
 qhp.dtkDistributed.subprojects.classes.title      = C++ Classes
-qhp.dtkDistributed.subprojects.classes.indexTitle = dtkDistributed C++ Classes
+qhp.dtkDistributed.subprojects.classes.indexTitle = Distributed C++ Classes
 qhp.dtkDistributed.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkDistributed.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkDistributed
-sourcedirs  += ../../src/dtkDistributed \
-               ../../doc/dtkDistributed/src
+headerdirs  += ../../../src/dtkDistributed
+sourcedirs  += ../../../src/dtkDistributed \
+               ../../../doc/dtkDistributed/src
 
-exampledirs += ../../doc/dtkDistributed/snp
-imagedirs   += ../../doc/dtkDistributed/img
-excludedirs += ../../doc/dtkDistributed/snp
+exampledirs += ../../../doc/dtkDistributed/snp
+imagedirs   += ../../../doc/dtkDistributed/img
+excludedirs += ../../../doc/dtkDistributed/snp
 
 navigation.landingpage    = "Distributed Module"
 navigation.cppclassespage = "Distributed C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtkdistributed
+outputdir = @dtk_INSTALL_DOCS@/dtkdistributed
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkcore/dtkcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
 
 ######################################################################
 ### dtkdistributed.qdocconf.in ends here

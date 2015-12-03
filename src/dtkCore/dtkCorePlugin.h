@@ -40,21 +40,22 @@
 #define DTK_DECLARE_PLUGIN_INTERFACE(type)      \
     DTK_DECLARE_PLUGIN_INTERFACE_NAME_STRINGIFIED(DTK_DECLARE_PLUGIN_INTERFACE_NAME(type))
 
-#define DTK_DECLARE_PLUGIN(type, Export)                       \
-    class Export type##Plugin : public QObject                 \
-    {                                                          \
-        Q_OBJECT                                               \
-                                                               \
-    public:                                                    \
-                 type##Plugin(void) {}                         \
-        virtual ~type##Plugin(void) {}                         \
-                                                               \
-    public:                                                    \
-        virtual void   initialize(void) = 0;                   \
-        virtual void uninitialize(void) = 0;                   \
-    };                                                         \
-                                                               \
-    Q_DECLARE_INTERFACE(type##Plugin, DTK_DECLARE_PLUGIN_INTERFACE(type))
+class DTKCORE_EXPORT dtkCorePluginBase : public QObject
+{
+    Q_OBJECT
+
+public:
+    virtual ~dtkCorePluginBase(void) {}
+
+public:
+    virtual void   initialize(void) = 0;
+    virtual void uninitialize(void) = 0;
+};
+
+#define DTK_DECLARE_PLUGIN(type, Export)                                \
+    class Export type##Plugin : public dtkCorePluginBase{};             \
+                                                                        \
+    Q_DECLARE_INTERFACE(type##Plugin, DTK_DECLARE_PLUGIN_INTERFACE(type));
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_PLUGIN_FACTORY

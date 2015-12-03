@@ -12,7 +12,7 @@
 ## 
 ### Code:
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkMeta
 description  = dtkMeta Reference Documentation
@@ -23,7 +23,7 @@ qhp.projects = dtkMeta
 qhp.dtkMeta.file             = dtkmeta.qhp
 qhp.dtkMeta.namespace        = fr.inria.dtk.dtkmeta
 qhp.dtkMeta.virtualFolder    = dtkmeta
-qhp.dtkMeta.indexTitle       = dtkMeta
+qhp.dtkMeta.indexTitle       = Meta Module
 qhp.dtkMeta.indexRoot        =
 qhp.dtkMeta.filterAttributes = dtkmeta
 
@@ -32,26 +32,26 @@ qhp.dtkMeta.customFilters.dtk.filterAttributes = dtkmeta
 
 qhp.dtkMeta.subprojects                    = classes
 qhp.dtkMeta.subprojects.classes.title      = C++ Classes
-qhp.dtkMeta.subprojects.classes.indexTitle = dtkMeta C++ Classes
+qhp.dtkMeta.subprojects.classes.indexTitle = Meta C++ Classes
 qhp.dtkMeta.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkMeta.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkMeta
-sourcedirs  += ../../src/dtkMeta \
-               ../../doc/dtkMeta/src
+headerdirs  += ../../../src/dtkMeta
+sourcedirs  += ../../../src/dtkMeta \
+               ../../../doc/dtkMeta/src
               
-exampledirs += ../../doc/dtkMeta/snp
-imagedirs   += ../../doc/dtkMeta/img
-excludedirs += ../../doc/dtkMeta/snp
+exampledirs += ../../../doc/dtkMeta/snp
+imagedirs   += ../../../doc/dtkMeta/img
+excludedirs += ../../../doc/dtkMeta/snp
 
 navigation.landingpage    = "Meta Module"
 navigation.cppclassespage = "Meta C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtkmeta
+outputdir = @dtk_INSTALL_DOCS@/dtkmeta
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
 
 ######################################################################
 ### dtkmeta.qdocconf.in ends here

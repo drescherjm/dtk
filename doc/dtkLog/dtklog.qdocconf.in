@@ -12,10 +12,10 @@
 ##
 ### Code:
 
-include(@CMAKE_SOURCE_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
 
 project      = dtkLog
-description  = dtkLog  Reference Documentation
+description  = dtkLog Reference Documentation
 url          = ../dtklog
 
 qhp.projects = dtkLog
@@ -23,7 +23,7 @@ qhp.projects = dtkLog
 qhp.dtkLog.file             = dtklog.qhp
 qhp.dtkLog.namespace        = fr.inria.dtk.dtklog
 qhp.dtkLog.virtualFolder    = dtklog
-qhp.dtkLog.indexTitle       = dtkLog
+qhp.dtkLog.indexTitle       = Log Module
 qhp.dtkLog.indexRoot        =
 qhp.dtkLog.filterAttributes = dtklog
 
@@ -32,26 +32,26 @@ qhp.dtkLog.customFilters.dtk.filterAttributes = dtklog
 
 qhp.dtkLog.subprojects                    = classes
 qhp.dtkLog.subprojects.classes.title      = C++ Classes
-qhp.dtkLog.subprojects.classes.indexTitle = dtkLog C++ Classes
+qhp.dtkLog.subprojects.classes.indexTitle = Log C++ Classes
 qhp.dtkLog.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkLog.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../src/dtkLog
-sourcedirs  += ../../src/dtkLog \
-               ../../doc/dtkLog/src
+headerdirs  += ../../../src/dtkLog
+sourcedirs  += ../../../src/dtkLog \
+               ../../../doc/dtkLog/src
 
-exampledirs += ../../doc/dtkLog/snp
-imagedirs   += ../../doc/dtkLog/img
-excludedirs += ../../doc/dtkLog/snp
+exampledirs += ../../../doc/dtkLog/snp
+imagedirs   += ../../../doc/dtkLog/img
+excludedirs += ../../../doc/dtkLog/snp
 
 navigation.landingpage    = "Log Module"
 navigation.cppclassespage = "Log C++ Classes"
 
-outputdir = @CMAKE_BINARY_DIR@/html/dtklog
+outputdir = @dtk_INSTALL_DOCS@/dtklog
 
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
-  @CMAKE_BINARY_DIR@/html/dtkdoc/dtkdoc.index
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
 
 ######################################################################
 ### dtklog.qdocconf.in ends here

@@ -14,8 +14,8 @@
 
 /*!
 
-\page index.html
 
+\page index
 \keyword dtk Reference Documentation
 
 \div {class="landing"}
@@ -41,7 +41,7 @@
    \div {class="indexboxcont indexboxbar"}
     \list
     \li \l{All Modules}{All dtk Modules}
-    \li \l{All Classes}{All dtk Classes}
+    \li \l{All dtk Classes}{All dtk Classes}
     \endlist
    \enddiv
   \enddiv

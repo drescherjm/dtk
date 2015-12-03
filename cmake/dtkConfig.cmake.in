@@ -47,6 +47,7 @@ find_package(Qt5 REQUIRED COMPONENTS
   Xml)
 
 set(dtk_INSTALL_DOCS @dtk_INSTALL_DOCS@)
+set(dtk_CONFIG_DOCS  @dtk_CONFIG_DOCS@)
 
 ## ###################################################################
 ## Options

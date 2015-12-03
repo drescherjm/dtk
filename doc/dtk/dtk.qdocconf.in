@@ -1,18 +1,18 @@
-### dtk.qdocconf.in ---
-##
-## Author: Thibaud Kloczko
-## Created: lun. avril  7 18:21:17 2014 (+0200)
-## Version:
-## Last-Updated:
-##           By:
-##     Update #: 119
+## Version: $Id$
+## 
 ######################################################################
-##
+## 
+### Commentary: 
+## 
+######################################################################
+## 
 ### Change Log:
-##
+## 
 ######################################################################
+## 
+### Code:
 
-include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
 
 project      = dtkDoc
 description  = dtk Reference Documentation
@@ -51,4 +51,8 @@ indexes = \
   @dtk_INSTALL_DOCS@/dtkmeta/dtkmeta.index \
   @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
   @dtk_INSTALL_DOCS@/dtkdistributed/dtkdistributed.index \
-  @dtk_INSTALL_DOCS@/dtkio/dtkio.index
+  @dtk_INSTALL_DOCS@/dtkio/dtkio.index \
+  @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index
+
+######################################################################
+### dtk.qdocconf.in ends here

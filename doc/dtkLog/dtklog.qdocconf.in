@@ -12,7 +12,7 @@
 ##
 ### Code:
 
-include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
 
 project      = dtkLog
 description  = dtkLog Reference Documentation

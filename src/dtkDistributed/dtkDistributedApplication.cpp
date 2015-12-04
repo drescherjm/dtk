@@ -30,6 +30,7 @@ public:
     bool spawned;
     bool nospawn;
     QString wrapper;
+    QString smp;
 };
 
 
@@ -75,6 +76,8 @@ void dtkDistributedApplication::initialize(void)
     parser->addOption(ntOption);
     QCommandLineOption wrapperOption("wrapper","use wrapper command when spawning processes","command", "");
     parser->addOption(wrapperOption);
+    QCommandLineOption smpOption("smp", "smp option (disabled by default)", "single|funnuled|serialized|multiple","");
+    parser->addOption(smpOption);
     QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
     parser->addOption(hostsOption);
 
@@ -130,6 +133,9 @@ void dtkDistributedApplication::initialize(void)
             dtkTrace() << "got np value from command line:"<< np ;
             d->policy.setNWorkers(np);
     }
+    if (parser->isSet(smpOption)) {
+        d->smp = parser->value(smpOption);
+    }
     d->policy.setType(policyType);
 }
 
@@ -139,16 +145,19 @@ void dtkDistributedApplication::exec(QRunnable *task)
     d->policy.communicator()->exec(task);
 }
 
-void dtkDistributedApplication::spawn(void)
+void dtkDistributedApplication::spawn(QMap<QString,QString> options)
 {
+    if (!d->smp.isEmpty()) {
+        options.insert("smp", d->smp);
+    }
     if (d->nospawn) {
         QStringList nospawn;
         nospawn << "nospawn";
-        d->policy.communicator()->spawn(nospawn, d->wrapper);
+        d->policy.communicator()->spawn(nospawn, d->wrapper, options);
     } else {
         QStringList hosts = d->policy.hosts();
         d->spawned = true;
-        d->policy.communicator()->spawn(hosts, d->wrapper);
+        d->policy.communicator()->spawn(hosts, d->wrapper, options);
     }
 }
 

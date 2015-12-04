@@ -303,9 +303,10 @@ qthDistributedCommunicator::~qthDistributedCommunicator(void)
     d = NULL;
 }
 
-void qthDistributedCommunicator::spawn(QStringList hostnames, QString wrapper)
+void qthDistributedCommunicator::spawn(QStringList hostnames, QString wrapper, QMap<QString, QString> options)
 {
     Q_UNUSED(wrapper);
+    Q_UNUSED(options);
 
     qlonglong np = hostnames.count();
 

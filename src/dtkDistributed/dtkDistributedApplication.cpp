@@ -76,7 +76,7 @@ void dtkDistributedApplication::initialize(void)
     parser->addOption(ntOption);
     QCommandLineOption wrapperOption("wrapper","use wrapper command when spawning processes","command", "");
     parser->addOption(wrapperOption);
-    QCommandLineOption smpOption("smp", "smp option (disabled by default)", "single|funnuled|serialized|multiple","");
+    QCommandLineOption smpOption("smp", "smp option (disabled by default)", "single|funneled|serialized|multiple","");
     parser->addOption(smpOption);
     QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
     parser->addOption(hostsOption);

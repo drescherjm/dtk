@@ -32,7 +32,7 @@ public:
 public:
     virtual void initialize(void);
     virtual void exec(QRunnable *task);
-    virtual void spawn(void);
+    virtual void spawn(QMap<QString, QString> options = QMap<QString, QString>() );
     virtual void unspawn(void);
 
 public:

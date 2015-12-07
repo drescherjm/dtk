@@ -1,18 +1,18 @@
-### dtkcore.qdocconf.in ---
-##
-## Author: Thibaud Kloczko
-## Created: lun. avril  7 18:38:20 2014 (+0200)
-## Version:
-## Last-Updated:
-##           By:
-##     Update #: 81
+## Version: $Id$
+## 
 ######################################################################
-##
+## 
+### Commentary: 
+## 
+######################################################################
+## 
 ### Change Log:
-##
+## 
 ######################################################################
+## 
+### Code:
 
-include(@CMAKE_BINARY_DIR@/doc/cfg/dtk-config.qdocconf)
+include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
 
 project      = dtkCore
 description  = dtkCore Reference Documentation
@@ -52,3 +52,6 @@ outputdir = @dtk_INSTALL_DOCS@/dtkcore
 indexes = \
   @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
   @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
+
+######################################################################
+### dtkcore.qdocconf.in ends here

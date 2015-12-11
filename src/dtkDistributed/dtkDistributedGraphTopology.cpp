@@ -414,14 +414,12 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
     qlonglong local_nnz = local_internal_nnz + local_hybrid_nnz + local_remote_nnz;
     m_dd.local_edge_to_vertex.resize(local_nnz);
 
-    dtkDistributedArray<qlonglong> local_edge_count(m_comm->size());
-    auto loc_it = local_edge_count.begin();
-    *loc_it = local_nnz;
-
-    this->m_comm->barrier();
+    qlonglong local_edge_count[m_comm->size()];
+    m_comm->gather(&local_nnz, local_edge_count, 1, 0, true);
 
     qlonglong total_local_nnz = 0;
-    m_comm->reduce(&local_nnz, &total_local_nnz, 1, dtkDistributedCommunicator::Sum, 0, true);
+    for(qlonglong i=0; i<m_comm->size(); ++i)
+        total_local_nnz += local_edge_count[i];
 
     m_dd.mapper = new dtkDistributedMapper;
     m_dd.mapper->ref();
@@ -430,7 +428,7 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
     qlonglong offset = 0;
     for (qlonglong i = 0; i < m_comm->size(); ++i) {
         m_dd.mapper->setMap(offset, i);
-        offset += local_edge_count.at(i);
+        offset += local_edge_count[i];
     }
 
     // We now fill the local CSR edge_to_vertex array. The global ids
@@ -643,12 +641,30 @@ void dtkDistributedGraphTopology::assemble(void)
     {
         m_vertex_to_edge->fill(-1);
         qlonglong first_id = m_vertex_to_edge->mapper()->firstIndex(this->wid());
+        qlonglong last_id =  m_vertex_to_edge->mapper()->lastIndex(this->wid());
         qlonglong offset = 0;
-        for(qlonglong i = 0; i < first_id; ++i) {
-            offset += m_neighbour_count->at(i);
+
+        //calculation of offset
+        //1 each proc sum it's local offset
+        qlonglong local_offset=0;
+        m_neighbour_count->rlock(this->wid());
+        for(qlonglong i=first_id; i<=last_id; ++i)
+        {
+            local_offset += m_neighbour_count->at(i);
+        }
+        m_neighbour_count->unlock();
+        m_comm->barrier();
+
+        //2 we do a all gather to avoid reading data of other processes 
+        qlonglong offset_per_proc[m_comm->size()] ;
+        m_comm->gather(&local_offset, offset_per_proc, 1, 0, true); 
+
+        //3 do a reduction
+        for(qlonglong i=0; i<this->wid(); ++i)
+        {
+            offset += offset_per_proc[i];
         }
         offset += this->wid();
-
 
         auto it  = m_neighbour_count->begin();
         auto ite = m_neighbour_count->end();

@@ -60,7 +60,8 @@ public:
     enum MessageTag {
         TagSend    = 2001,
         TagReceive = 2002,
-        TagReduce = 2003
+        TagReduce  = 2003,
+        TagGather  = 2004
     };
 
 public:

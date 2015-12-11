@@ -323,3 +323,39 @@ void dtkDistributedCommunicator::reduce(double *send, double *recv, qint64 size,
 {
     return this->reduce(send, recv, size, QMetaType::Double, operationType, target, all);
 }
+
+void dtkDistributedCommunicator::gather(void   *send, void   *recv, qint64 size, QMetaType::Type dataType, qint32 target, bool all)
+{
+    qCritical() << "Default operator for gather, not implemented";
+}
+
+void dtkDistributedCommunicator::gather(bool *send, bool *recv, qint64 size, qint32 target, bool all)
+{
+    return this->gather(send, recv, size, QMetaType::Bool, target, all);
+}
+
+void dtkDistributedCommunicator::gather(char *send, char *recv, qint64 size, qint32 target, bool all)
+{
+    return this->gather(send, recv, size, QMetaType::Char, target, all);
+}
+
+void dtkDistributedCommunicator::gather(int *send, int *recv, qint64 size, qint32 target, bool all)
+{
+    return this->gather(send, recv, size, QMetaType::Int, target, all);
+}
+
+void dtkDistributedCommunicator::gather(qlonglong *send, qlonglong *recv, qint64 size, qint32 target, bool all)
+{
+    return this->gather(send, recv, size, QMetaType::LongLong, target, all);
+}
+
+void dtkDistributedCommunicator::gather(float *send, float *recv, qint64 size, qint32 target, bool all)
+{
+    return this->gather(send, recv, size, QMetaType::Float, target, all);
+}
+
+void dtkDistributedCommunicator::gather(double *send, double *recv, qint64 size, qint32 target, bool all)
+{
+    return this->gather(send, recv, size, QMetaType::Double, target, all);
+}
+

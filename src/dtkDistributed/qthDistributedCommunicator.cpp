@@ -680,6 +680,13 @@ dtkDistributedRequest *qthDistributedCommunicator::ireceive(void *data, qint64 s
     return new qthDistributedRequest(data, size, dataType, source, tag);
 }
 
+void qthDistributedCommunicator::gather(void *send, void *recv, qint64 size, QMetaType::Type dataType, qint32 root, bool all)
+{
+    QString msg = "gather not implemented in qthread plugin";
+    dtkFatal() << msg ;
+    qCritical() << msg ;
+}
+
 void qthDistributedCommunicator::reduce(void *send, void *recv, qint64 size, QMetaType::Type dataType, OperationType operationType, qint32 root, bool all)
 {
     qint32 wid = this->wid();

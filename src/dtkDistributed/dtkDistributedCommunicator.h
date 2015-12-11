@@ -138,6 +138,15 @@ public:
     virtual void reduce(double *send, double *recv, qint64 size, OperationType operationType, qint32 target, bool all = false);
 
 public:
+    virtual void gather(void   *send, void   *recv, qint64 size, QMetaType::Type dataType, qint32 target, bool all = false) = 0;
+    virtual void gather(bool   *send, bool   *recv, qint64 size, qint32 target, bool all = false);
+    virtual void gather(char   *send, char   *recv, qint64 size, qint32 target, bool all = false);
+    virtual void gather(int    *send, int    *recv, qint64 size, qint32 target, bool all = false);
+    virtual void gather(qlonglong *send, qlonglong *recv, qint64 size, qint32 target, bool all = false);
+    virtual void gather(float  *send, float  *recv, qint64 size, qint32 target, bool all = false);
+    virtual void gather(double *send, double *recv, qint64 size, qint32 target, bool all = false);
+
+public:
     virtual void spawn(QStringList hostnames, QString wrapper = "", QMap<QString,QString> options = QMap<QString,QString>() ) = 0;
     virtual void  exec(QRunnable *work) = 0;
 

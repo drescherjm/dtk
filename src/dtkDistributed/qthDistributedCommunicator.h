@@ -64,6 +64,7 @@ public:
 
 public:
     void reduce(void *send, void *recv, qint64 size, QMetaType::Type dataType, OperationType operationType, qint32 root, bool all);
+    void gather(void *send, void *recv, qint64 size, QMetaType::Type dataType, qint32 root, bool all);
 
 public:
     dtkDistributedRequest *ireceive(void *data, qint64 size, QMetaType::Type dataType, qint32 source, qint32 tag);

@@ -1103,9 +1103,8 @@ void dtkDistributedSortListUsingMap(const QList<qlonglong>& l, const QMap<qlongl
 {
     res.clear();
     res.reserve(l.size());
-    qlonglong lid;
     for(const qlonglong& id : l) {
-        lid = m[id];
+        const qlonglong& lid = m[id];
 
         auto it  = res.begin();
         auto end = res.end();
@@ -1121,14 +1120,15 @@ void dtkDistributedSortListUsingMap(const QList<qlonglong>& l, const QMap<qlongl
 
 bool dtkDistributedGraphTopologyPopulateMap(QMap<qlonglong, QList<qlonglong> >& map, qlonglong from, qlonglong to)
 {
-    auto it  = map[from].begin();
-    auto end = map[from].end();
+    QList<qlonglong> *list = &map[from];
+    auto it  = list->begin();
+    auto end = list->end();
 
     if (it == end) {
-        map[from].insert(it, to);
-    } else if (to > map[from].last()) {
+        list->insert(it, to);
+    } else if (to > list->last()) {
         // tuning: usually, we append at the end, so check this case
-        map[from].insert(end, to);
+        list->insert(end, to);
     } else {
         for(; it != end; ++it) {
             if (to == (*it))
@@ -1136,7 +1136,7 @@ bool dtkDistributedGraphTopologyPopulateMap(QMap<qlonglong, QList<qlonglong> >& 
             if (to < (*it))
                 break;
         }
-        map[from].insert(it, to);
+        list->insert(it, to);
     }
 
     return true;

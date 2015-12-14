@@ -340,6 +340,8 @@ public:
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         int iter = 10000;
+        if (QThread::idealThreadCount() == 1)
+            iter = 10;
         if (comm->size() <2 ) {
             qWarning() << "only one thread/process, skip broadcast test";
             return;

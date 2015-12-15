@@ -14,6 +14,12 @@ class dtkPluginGeneratorPage : public QWizardPage
 public:
     explicit dtkPluginGeneratorPage(QWidget *parent = 0);
     ~dtkPluginGeneratorPage();
+protected:
+    void initializePage();
+
+public slots:
+    void refresh();
+
 
 private:
     Ui::dtkPluginGeneratorPage *ui;

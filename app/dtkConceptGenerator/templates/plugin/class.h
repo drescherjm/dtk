@@ -6,13 +6,13 @@
 #include <${ABSTRACTION}.h>
 
 
-class ${CLASS_NAME} : public ${ABSTRACTION}
+class ${PLUGIN_CLASS_NAME} : public ${ABSTRACTION}
 {
     Q_OBJECT
 
 public:
-     ${CLASS_NAME}(void);
-    ~${CLASS_NAME}(void);
+     ${PLUGIN_CLASS_NAME}(void);
+    ~${PLUGIN_CLASS_NAME}(void);
 
 public:
     void run();
@@ -20,7 +20,7 @@ public:
 };
 
 
-inline ${ABSTRACTION} *${CLASS_NAME}Creator(void)
+inline ${ABSTRACTION} *${PLUGIN_CLASS_NAME}Creator(void)
 {
-    return new ${CLASS_NAME}();
+    return new ${PLUGIN_CLASS_NAME}();
 }

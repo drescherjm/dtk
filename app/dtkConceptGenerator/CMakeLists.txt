@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
     dtkConceptDefinitionPage.h
     dtkConceptGenerator.h
     dtkNewConceptPage.h
+    dtkIntroPage.h
     generator.h
     )
 
@@ -38,6 +39,7 @@ set(${PROJECT_NAME}_SOURCES
     dtkConceptDefinitionPage.cpp
     dtkConceptGenerator.cpp
     dtkNewConceptPage.cpp
+    dtkIntroPage.cpp
     generator.cpp
     main.cpp
   )
@@ -46,6 +48,7 @@ set(${PROJECT_NAME}_UI
     dtkPluginGeneratorPage.ui
     dtkConceptDefinitionPage.ui
     dtkNewConceptPage.ui
+    dtkIntroPage.ui
 )
 
 

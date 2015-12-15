@@ -5,21 +5,21 @@
 #include <dtkComposer>
 #include "${ABSTRACTION}.h"
 
-class ${CLASS_NAME}Private;
+class ${NODE_CLASS_NAME}Private;
 
 // ///////////////////////////////////////////////////////////////////
-// ${CLASS_NAME}
+// ${NODE_CLASS_NAME}
 // ///////////////////////////////////////////////////////////////////
 
-class ${CLASS_NAME} : public dtkComposerNodeObject<${ABSTRACTION}>
+class ${NODE_CLASS_NAME} : public dtkComposerNodeObject<${ABSTRACTION}>
 {
 public:
-     ${CLASS_NAME}(void);
-    ~${CLASS_NAME}(void);
+     ${NODE_CLASS_NAME}(void);
+    ~${NODE_CLASS_NAME}(void);
 
 public:
     void run(void);
 
 private:
-    ${CLASS_NAME}Private *d;
+    ${NODE_CLASS_NAME}Private *d;
 };

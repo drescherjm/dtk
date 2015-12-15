@@ -1,21 +1,21 @@
-#include "${CLASS_NAME}.h"
+#include "${PLUGIN_CLASS_NAME}.h"
 #include <iostream>
 
 // ///////////////////////////////////////////////////////////////////
 //
 // ///////////////////////////////////////////////////////////////////
 
-${CLASS_NAME}::${CLASS_NAME}(void)
+${PLUGIN_CLASS_NAME}::${PLUGIN_CLASS_NAME}(void)
 {
 
 }
 
-${CLASS_NAME}::~${CLASS_NAME}(void)
+${PLUGIN_CLASS_NAME}::~${PLUGIN_CLASS_NAME}(void)
 {
 
 }
 
-void ${CLASS_NAME}::run(void)
+void ${PLUGIN_CLASS_NAME}::run(void)
 {
 
 }

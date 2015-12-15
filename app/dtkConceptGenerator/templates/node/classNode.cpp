@@ -2,26 +2,26 @@
 
 #include <dtkComposer>
 
-#include "${CLASS_NAME}.h"
+#include "${NODE_CLASS_NAME}.h"
 
-class ${CLASS_NAME}Private
+class ${NODE_CLASS_NAME}Private
 {
 public:
 
 };
 
-${CLASS_NAME}::${CLASS_NAME}(void) : dtkComposerNodeObject<${ABSTRACTION}>(), d(new ${CLASS_NAME}Private())
+${NODE_CLASS_NAME}::${NODE_CLASS_NAME}(void) : dtkComposerNodeObject<${ABSTRACTION}>(), d(new ${NODE_CLASS_NAME}Private())
 {
     this->setFactory(${LAYER_NAME}::${NAMESPACE}::pluginFactory());
 
 }
 
-${CLASS_NAME}::~${CLASS_NAME}Node(void)
+${NODE_CLASS_NAME}::~${NODE_CLASS_NAME}Node(void)
 {
     delete d;
 }
 
-void ${CLASS_NAME}::run(void)
+void ${NODE_CLASS_NAME}::run(void)
 {
     
 }

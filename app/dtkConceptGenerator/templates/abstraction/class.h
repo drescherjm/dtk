@@ -2,21 +2,21 @@
 
 #include <dtkCore>
 
-#include <QObject>
-#include <QRunnable>
-
+${QOBJECT_INCLUDE}
+${QRUNNABLE_INCLUDE}
+${CUSTOM_ANCESTOR_INCLUDE}
 
 // ///////////////////////////////////////////////////////////////////
-// ${CLASS_NAME} process interface
+// ${ABSTRACTION} process interface
 // ///////////////////////////////////////////////////////////////////
 
-class ${_LAYER_NAME}_EXPORT ${CLASS_NAME} : public QObject, public QRunnable
+class ${_LAYER_NAME}_EXPORT ${ABSTRACTION} : ${QOBJECT} ${QRUNNABLE} ${CUSTOM_ANCESTOR}
 {
-    Q_OBJECT
+    ${Q_OBJECT_MACRO}
 
 public:
-             ${CLASS_NAME}(QObject *parent = NULL) : QObject(parent), QRunnable() {}
-    virtual ~${CLASS_NAME}(void) {}
+             ${ABSTRACTION}(${QOBJECT_CTR_PARAM}) : ${QOBJECT_CTR} ${QRUNNABLE_CTR} ${CUSTOM_ANCESTOR_CTR}{}
+    virtual ~${ABSTRACTION}(void) {}
     
 public:
 //insert inputs here
@@ -29,8 +29,6 @@ public:
 // ///////////////////////////////////////////////////////////////////
 // 
 // ///////////////////////////////////////////////////////////////////
-DTK_DECLARE_OBJECT        (${CLASS_NAME}*)
-DTK_DECLARE_PLUGIN        (${CLASS_NAME}, ${_LAYER_NAME}_EXPORT)
-DTK_DECLARE_PLUGIN_FACTORY(${CLASS_NAME}, ${_LAYER_NAME}_EXPORT)
-DTK_DECLARE_PLUGIN_MANAGER(${CLASS_NAME}, ${_LAYER_NAME}_EXPORT)
+DTK_DECLARE_OBJECT        (${ABSTRACTION}*)
+${PLUGIN_SYSTEM}
 

@@ -11,13 +11,12 @@ void generate(QString target, QMap<QString,QString> pairs, QString path)
     for(QString file:files)
     {
         QString inFilePath=dirIn.absoluteFilePath(file);
-        QString fileOutPath=dirOut.absolutePath()+"/"+file.replace("class",pairs["${CLASS_NAME}"]);
+        QString fileOutPath=dirOut.absolutePath()+"/"+file.replace("class",pairs["${PLUGIN_CLASS_NAME}"]);
         QFile fileOut(fileOutPath);
         if (!fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
                return;
 
         QTextStream out(&fileOut);
-        qDebug()<<inFilePath;
         qDebug()<<readAndReplace(inFilePath,pairs)<<"\n";
         out << readAndReplace(inFilePath,pairs);
     }

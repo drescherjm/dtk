@@ -1,7 +1,6 @@
 #pragma once
 
 #include <dtkCore>
-#include <medCore.h>
 
 #include <${ABSTRACTION}.h>
 

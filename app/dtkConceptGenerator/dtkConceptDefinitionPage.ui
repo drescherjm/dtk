@@ -17,7 +17,10 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Concept Definition</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline;&quot;&gt;Concept Definition:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select the ancestor(s) of your class. &lt;/p&gt;&lt;p&gt;Additionally if this concept is designed to be implemented in plugins, checfk the &amp;quot;Plugin system&amp;quot; box.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

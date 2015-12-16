@@ -51,7 +51,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Plugin configuration</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline;&quot;&gt;Plugin configuration:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Use these fields to change the prefix/suffix of your plugin. The generated name is indicated below. &lt;/p&gt;&lt;p&gt;Alternatively you can use the default values and skip this page. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>

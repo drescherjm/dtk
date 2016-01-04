@@ -152,6 +152,63 @@ public:
     }
 };
 
+
+class GatherWork : public QRunnable
+{
+public:
+    void run(void)
+    {
+        dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+
+        int iter = 10000;
+        if (QThread::idealThreadCount() == 1)
+            iter = 10;
+        qlonglong input  = comm->rank()+1;
+        qlonglong * result;
+        qlonglong pu_count = comm->size();
+        result = static_cast<qlonglong*>(calloc(pu_count,sizeof(qlonglong)));
+
+        if (comm->size() <2 ) {
+            qWarning() << "only one thread/process, skip GATHER variant test";
+            return;
+        }
+
+        DTK_DISTRIBUTED_BEGIN_GLOBAL;
+        qDebug() << "****** Gather  TEST ******" << iter;
+        DTK_DISTRIBUTED_END_GLOBAL;
+
+        QTime time2; time2.start();
+
+        qlonglong sum = comm->size() * (comm->size()+1) / 2;
+
+        for (int i =0; i< iter; ++i) {
+
+            comm->gather(&input,result, 1, 0, false);
+
+            DTK_DISTRIBUTED_BEGIN_GLOBAL;
+            for (int i = 0; i< comm->size(); ++i) {
+                QVERIFY(result[i] == i+1);
+            }
+            DTK_DISTRIBUTED_END_GLOBAL;
+
+            //ALL GATHER
+            comm->gather(&input,result, 1, 0, true);
+            for (int i = 0; i< comm->size(); ++i) {
+                QVERIFY(result[i] == i+1);
+            }
+
+        }
+        double elapsed = time2.elapsed();
+
+        DTK_DISTRIBUTED_BEGIN_GLOBAL;
+        qDebug() << "GATHER latency"    << 1000.0 * elapsed / (pu_count *iter *4) << "microsec";
+        DTK_DISTRIBUTED_END_GLOBAL;
+
+    }
+};
+
+
+
 class SendVariantWork : public QRunnable
 {
 public:
@@ -283,6 +340,8 @@ public:
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         int iter = 10000;
+        if (QThread::idealThreadCount() == 1)
+            iter = 10;
         if (comm->size() <2 ) {
             qWarning() << "only one thread/process, skip broadcast test";
             return;
@@ -331,6 +390,7 @@ namespace communicator_send_test
         iReceiveWork   ireceiveWork;
         SendVariantWork variantWork;
         ReduceWork       reduceWork;
+        GatherWork       gatherWork;
 
         dtkDistributed::spawn();
         dtkDistributed::exec(&work);
@@ -338,6 +398,7 @@ namespace communicator_send_test
         dtkDistributed::exec(&ireceiveWork);
         dtkDistributed::exec(&variantWork);
         dtkDistributed::exec(&reduceWork);
+        dtkDistributed::exec(&gatherWork);
         /* dtkDistributed::policy()->communicator()->run(reduceWork, &ReduceWork::run); */
         dtkDistributed::unspawn();
 

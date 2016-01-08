@@ -322,6 +322,7 @@ public:
         qlonglong N = 23;
 
         dtkDistributedMapper *m = new dtkDistributedMapper;
+        QCOMPARE(comm->size(), 4);
         m->initMap(N, comm->size());
         m->setMap( 0, 0);
         m->setMap( 9, 1);

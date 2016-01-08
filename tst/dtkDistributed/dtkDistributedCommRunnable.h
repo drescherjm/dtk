@@ -114,25 +114,25 @@ public:
 
 
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
-            QVERIFY(result == sum);
+            QCOMPARE(result , sum);
             DTK_DISTRIBUTED_END_GLOBAL;
 
             comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Max,0, false);
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
-            QVERIFY(result == comm->size());
+            QCOMPARE(result , comm->size());
             DTK_DISTRIBUTED_END_GLOBAL;
 
             comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Min,0, false);
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
-            QVERIFY(result == 1);
+            QCOMPARE(result, 1);
             DTK_DISTRIBUTED_END_GLOBAL;
 
             //ALL REDUCE
             comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Sum,0, true);
-            QVERIFY(result == sum);
+            QCOMPARE(result , sum);
 
             comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Product,0, true);
-            QVERIFY(result == product);
+            QCOMPARE(result , product);
 
             double a;
             double b;

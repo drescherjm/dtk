@@ -36,10 +36,10 @@ template < typename T, size_t Alignment > struct dtkStaticArrayData <T, Alignmen
 
 template < typename T, size_t Alignment, qlonglong Size > struct dtkStaticArrayData<T, Alignment, Size, true>
 {
-#ifndef Q_CC_MSVC
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
     alignas(Alignment) T _data[Size];
 #else
-    __declspec(align(Alignment)) T _data[Size];
+    T _data[Size];
 #endif
     const T *data(void) const { return _data; }
           T *data(void)       { return _data; }

@@ -39,7 +39,7 @@ template < typename T, size_t Alignment, qlonglong Size > struct dtkStaticArrayD
 #ifndef Q_CC_MSVC
     alignas(Alignment) T _data[Size];
 #else
-    _declspec(align(Alignment)) T _data[Size];
+    __declspec(align(Alignment)) T _data[Size];
 #endif
     const T *data(void) const { return _data; }
           T *data(void)       { return _data; }

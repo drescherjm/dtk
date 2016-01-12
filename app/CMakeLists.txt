@@ -25,6 +25,7 @@ endif(DTK_BUILD_DISTRIBUTED)
 add_subdirectory(dtkDoc)
 add_subdirectory(dtkPluginsMetaInfoFetcher)
 add_subdirectory(dtkDeploy)
+add_subdirectory(dtkConceptGenerator)
 
 ######################################################################
 ### CMakeLists.txt ends here

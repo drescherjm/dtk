@@ -20,12 +20,15 @@ project(dtkMonitoring)
 
 set(${PROJECT_NAME}_HEADERS
   dtkMonitoring
+  dtkMonitoringList
+  dtkMonitoringList.h
   dtkMonitoringScene
   dtkMonitoringScene.h
   dtkMonitoringView
   dtkMonitoringView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkMonitoringList.cpp
   dtkMonitoringScene.cpp
   dtkMonitoringView.cpp)
 

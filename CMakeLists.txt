@@ -176,9 +176,7 @@ find_package(Qt5 REQUIRED COMPONENTS
   Gui
   Test
   Widgets
-  Xml
-  XmlPatterns)
-
+  Xml)
 
 ## ###################################################################
 ## Doc setup

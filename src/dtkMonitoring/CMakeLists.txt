@@ -49,7 +49,6 @@ target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Xml)
-target_link_libraries(${PROJECT_NAME} Qt5::XmlPatterns)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 ## #################################################################

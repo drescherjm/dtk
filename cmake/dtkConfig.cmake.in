@@ -27,6 +27,7 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtk"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkLog"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer"
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMonitoring"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkCore"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkDistributed"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMath"

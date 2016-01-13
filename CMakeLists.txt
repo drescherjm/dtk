@@ -32,6 +32,12 @@ set(dtk_VERSION_PATCH 0)
 set(dtk_VERSION
   ${dtk_VERSION_MAJOR}.${dtk_VERSION_PATCH}.${dtk_VERSION_PATCH})
 
+## #################################################################
+## Generate compilation database
+## #################################################################
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
 ## ###################################################################
 ## Path setup
 ## ###################################################################

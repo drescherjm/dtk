@@ -171,7 +171,7 @@ find_package(Qt5 REQUIRED COMPONENTS
   Test
   Widgets
   Xml
-  )
+  XmlPatterns)
 
 
 ## ###################################################################

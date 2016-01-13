@@ -21,6 +21,7 @@ add_subdirectory(dtkCore)
 
 if(DTK_BUILD_COMPOSER)
   add_subdirectory(dtkComposer)
+  add_subdirectory(dtkMonitoring)
 endif(DTK_BUILD_COMPOSER)
 
 if(DTK_BUILD_DISTRIBUTED)

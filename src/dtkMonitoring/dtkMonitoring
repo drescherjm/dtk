@@ -1,0 +1,2 @@
+#include "dtkMonitoringView.h"
+#include "dtkMonitoringScene.h"

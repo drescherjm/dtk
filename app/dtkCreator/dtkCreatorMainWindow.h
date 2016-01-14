@@ -1,5 +1,5 @@
-/* dtkCreatorMainWindow.h --- 
- * 
+/* dtkCreatorMainWindow.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Aug  3 17:38:47 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 70
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCREATORMAINWINDOW_H
@@ -54,8 +54,6 @@ protected slots:
     void switchToView(void);
 
 protected slots:
-    void showControls(void);
-
     void onViewFocused(dtkAbstractView *view);
 
 protected:

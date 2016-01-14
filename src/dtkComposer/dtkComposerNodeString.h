@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -39,7 +39,6 @@ private:
     dtkComposerNodeStringPrivate *d;
 };
 
-
 class dtkComposerNodeStringListPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringList : public dtkComposerNodeLeaf
@@ -61,5 +60,5 @@ private:
     dtkComposerNodeStringListPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeString.h ends here

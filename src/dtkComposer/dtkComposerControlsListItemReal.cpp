@@ -1,4 +1,4 @@
-/* @(#)dtkComposerControlsListItemReal.cpp ---
+/* dtkComposerControlsListItemReal.cpp ---
  *
  * Author: Nicolas Niclausse
  * Copyright (C) 2013 - Nicolas Niclausse, Inria.
@@ -24,7 +24,6 @@
 
 class dtkComposerControlsListItemRealPrivate
 {
-
 public:
     dtkComposerSceneNode *node;
 
@@ -50,7 +49,6 @@ dtkComposerControlsListItemReal::dtkComposerControlsListItemReal(QWidget *parent
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(2);
     layout->setAlignment(Qt::AlignTop);
-
     layout->addWidget(new QLabel(d->node->title(), frame));
 
     d->spin_d  = new QDoubleSpinBox(frame);
@@ -60,12 +58,13 @@ dtkComposerControlsListItemReal::dtkComposerControlsListItemReal(QWidget *parent
     d->spin_d->setSingleStep(1);
     d->spin_d->setEnabled(true);
     d->spin_d->setValue(d->r_node->value());
+
     QObject::connect(d->spin_d, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
 
     layout->addWidget(d->spin_d);
+
     this->setWidget(frame, qPrintable(d->node->title()));
 }
-
 
 dtkComposerControlsListItemReal::~dtkComposerControlsListItemReal(void )
 {
@@ -77,4 +76,3 @@ void dtkComposerControlsListItemReal::onValueChanged(double value)
 {
     d->r_node->setValue(value);
 }
-

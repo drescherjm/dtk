@@ -14,6 +14,8 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+######################################################################
+
 if(${CMAKE_MAJOR_VERSION} GREATER 2)
   cmake_policy(SET CMP0028 NEW)
 endif(${CMAKE_MAJOR_VERSION} GREATER 2)
@@ -114,7 +116,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
 option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
-option(DTK_ENABLE_MEMCHECK              "enable valgrind memcheck report" false)
+option(DTK_ENABLE_MEMCHECK     "enable valgrind memcheck report" false)
 
 option(DTK_BUILD_COMPOSER            "Build composer layer" false)
 option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
@@ -309,7 +311,6 @@ if (ZLIB_FOUND)
   include_directories( ${ZLIB_INCLUDE_DIRS} )
   set(DTK_HAVE_ZLIB "YES")
 endif (ZLIB_FOUND)
-
 
 set(DTK_HAVE_VRPN "NO")
 

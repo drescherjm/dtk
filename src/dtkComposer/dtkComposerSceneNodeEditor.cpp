@@ -34,9 +34,6 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
-// #include "dtkComposerNodeLeafData.h"
-// #include "dtkComposerNodeLeafProcess.h"
-// #include "dtkComposerNodeLeafView.h"
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
@@ -281,43 +278,10 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->spin_d->setVisible(false);
     d->spin_d->blockSignals(true);
 
-    // d->spin_f = new QDoubleSpinBox(this);
-    // d->spin_f->setMinimum(-9999999);
-    // d->spin_f->setMaximum(+9999999);
-    // d->spin_f->setDecimals(15);
-    // d->spin_f->setSingleStep(1.0);
-    // d->spin_f->setEnabled(false);
-    // d->spin_f->setVisible(false);
-    // d->spin_f->blockSignals(true);
-
     d->edit_s = new QLineEdit(this);
     d->edit_s->setEnabled(false);
     d->edit_s->setVisible(false);
     d->edit_s->blockSignals(true);
-
-    // --
-
-    d->current_widget = NULL;
-
-    // d->bool_widget = new QWidget(this);
-
-    // d->f_b = new QRadioButton("false", d->bool_widget);
-    // d->t_b = new QRadioButton("true", d->bool_widget);
-    // d->t_b->blockSignals(true);
-
-    // d->g_b = new QButtonGroup(this);
-    // d->g_b->setExclusive(true);
-    // d->g_b->addButton(d->t_b);
-    // d->g_b->addButton(d->f_b);
-
-    // QHBoxLayout *bool_layout = new QHBoxLayout;
-    // bool_layout->setContentsMargins(0, 0, 0, 0);
-    // bool_layout->addWidget(d->t_b);
-    // bool_layout->addWidget(d->f_b);
-
-    // d->bool_widget->setLayout(bool_layout);
-    // d->bool_widget->setEnabled(false);
-    // d->bool_widget->setVisible(false);
 
     // --
 
@@ -422,17 +386,15 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     si_layout->addWidget(d->select_implementation);
 
     d->layout_widg_edit = new QHBoxLayout;
-    d->layout_widg_edit->setContentsMargins(5, 0, 5, 0);
+    d->layout_widg_edit->setContentsMargins(0, 0, 0, 0);
     d->layout_widg_edit->setSpacing(0);
     d->layout_widg_edit->addWidget(d->spin_d);
-    // d->layout_widg_edit->addWidget(d->spin_f);
     d->layout_widg_edit->addWidget(d->edit_s);
     d->layout_widg_edit->addWidget(d->butn_f);
     d->layout_widg_edit->addWidget(d->butn_d);
-    // d->layout_widg_edit->addWidget(d->bool_widget);
 
     d->layout = new QVBoxLayout(this);
-    d->layout->setContentsMargins(5, 0, 5, 0);
+    d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
     d->layout->addWidget(top);
     d->layout->addLayout(si_layout);
@@ -460,12 +422,9 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     connect(d->selector, SIGNAL(currentIndexChanged(int)), this, SLOT(onBlockChanged(int)));
 
     connect(d->spin_d, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
-    // connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
     connect(d->edit_s, SIGNAL(textChanged(const QString&)), this, SLOT(onValueChanged(const QString &)));
     connect(d->butn_f, SIGNAL(clicked()), this, SLOT(onBrowse()));
     connect(d->butn_d, SIGNAL(clicked()), this, SLOT(onBrowseDirectory()));
-
-    // connect(d->t_b, SIGNAL(toggled(bool)), this, SLOT(onValueChanged(bool)));
 
     connect(d->select_implementation, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onImplementationChanged(const QString&)));
 }
@@ -601,7 +560,6 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             // d->spin_f->setEnabled(true);
             // d->spin_f->setValue(r_node->value());
 
-
         } else if (dtkComposerNodeString *s_node = dynamic_cast<dtkComposerNodeString *>(node->wrapee())) {
 
             d->edit_s->blockSignals(false);
@@ -651,16 +609,16 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
                 int current_index = 0;
                 d->select_implementation->addItem("Choose implementation");
-                
+
                 for(int i = 0; i < object_node->implementations().count(); ++i) {
                     if (object_node->implementations().at(i) == object_node->currentImplementation())
                         current_index = i+1;
                     d->select_implementation->addItem(object_node->implementations().at(i));
                 }
-                
+
                 d->select_implementation->setMaximumWidth(this->size().width() - 10);
                 d->select_implementation->setCurrentIndex(current_index);
-                
+
                 d->select_implementation->blockSignals(false);
                 d->select_implementation->setVisible(true);
                 d->select_implementation->setEnabled(true);

@@ -153,8 +153,8 @@ void dtkComposerControls::setup(int index)
     d->box->clear();
 
     foreach(dtkComposerSceneNodeLeaf *node, nodes) {
-        //dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
-        //item->setFlags(Qt::ItemIsEnabled);
+        // dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
+        // item->setFlags(Qt::ItemIsEnabled);
         // d->list->addItem(item);
         // d->list->setItemWidget(item,item->widget());
         d->box->addItem(dtkComposerControlsListItemFactory::instance()->create(node));

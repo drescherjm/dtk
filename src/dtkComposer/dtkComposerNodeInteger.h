@@ -1,16 +1,16 @@
-/* dtkComposerNodeInteger.h --- 
- * 
+/* dtkComposerNodeInteger.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:21 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -43,4 +43,3 @@ public:
 private:
     dtkComposerNodeIntegerPrivate *d;
 };
-

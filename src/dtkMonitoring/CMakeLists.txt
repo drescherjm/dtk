@@ -56,7 +56,7 @@ add_library(${PROJECT_NAME} SHARED
 ## Link rules
 ## ###################################################################
 
-target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
+target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog dtkComposer)
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)

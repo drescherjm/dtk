@@ -22,16 +22,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposer
   dtkComposer.h
   dtkComposerCompass.h
-  # dtkComposerControls.h
-  # dtkComposerControlsDelegate.h
-  # dtkComposerControlsListItem.h
-  # dtkComposerControlsListItemFactory.h
-  # dtkComposerControlsListItemBoolean.h
-  # dtkComposerControlsListItemFile.h
-  # dtkComposerControlsListItemInteger.h
-  # # dtkComposerControlsListItemLeafProcess.h
-  # dtkComposerControlsListItemReal.h
-  # dtkComposerControlsListItemString.h
   dtkComposerEvaluator.h
   dtkComposerEvaluator_p.h
   dtkComposerEvaluatorProcess.h
@@ -78,10 +68,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerNodeInteger.h
   dtkComposerNodeLeaf.h
   dtkComposerNodeRange.h
-  # dtkComposerNodeLeafActor.h
-  # dtkComposerNodeLeafData.h
-  # dtkComposerNodeLeafProcess.h
-  # dtkComposerNodeLeafView.h
   dtkComposerNodeLogger.h
   dtkComposerNodeMetaContainer.h
   dtkComposerNodeNumberOperator.h
@@ -146,16 +132,6 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkComposer.cpp
   dtkComposerCompass.cpp
-  # dtkComposerControls.cpp
-  # dtkComposerControlsDelegate.cpp
-  # dtkComposerControlsListItem.cpp
-  # dtkComposerControlsListItemBoolean.cpp
-  # dtkComposerControlsListItemFactory.cpp
-  # dtkComposerControlsListItemFile.cpp
-  # dtkComposerControlsListItemInteger.cpp
-  # # dtkComposerControlsListItemLeafProcess.cpp
-  # dtkComposerControlsListItemReal.cpp
-  # dtkComposerControlsListItemString.cpp
   dtkComposerEvaluator.cpp
   dtkComposerEvaluatorProcess.cpp
   dtkComposerEvaluatorSlave.cpp
@@ -194,10 +170,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerNodeInteger.cpp
   dtkComposerNodeLeaf.cpp
   dtkComposerNodeRange.cpp
-  # dtkComposerNodeLeafActor.cpp
-  # dtkComposerNodeLeafData.cpp
-  # dtkComposerNodeLeafProcess.cpp
-  # dtkComposerNodeLeafView.cpp
   dtkComposerNodeLogger.cpp
   dtkComposerNodeMetaContainer.cpp
   dtkComposerNodeNumberOperator.cpp

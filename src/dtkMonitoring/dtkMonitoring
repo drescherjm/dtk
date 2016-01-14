@@ -1,3 +1,6 @@
+#include "dtkMonitor.h"
+#include "dtkMonitoringController.h"
+#include "dtkMonitoringFactory.h"
 #include "dtkMonitoringList.h"
 #include "dtkMonitoringView.h"
 #include "dtkMonitoringScene.h"

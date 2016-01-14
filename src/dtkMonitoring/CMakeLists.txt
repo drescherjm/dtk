@@ -19,7 +19,13 @@ project(dtkMonitoring)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkMonitor
+  dtkMonitor.h
   dtkMonitoring
+  dtkMonitoringController
+  dtkMonitoringController.h
+  dtkMonitoringFactory
+  dtkMonitoringFactory.h
   dtkMonitoringList
   dtkMonitoringList.h
   dtkMonitoringScene
@@ -28,6 +34,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkMonitoringView.h)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkMonitor.cpp
+  dtkMonitoringController.cpp
+  dtkMonitoringFactory.cpp
   dtkMonitoringList.cpp
   dtkMonitoringScene.cpp
   dtkMonitoringView.cpp)

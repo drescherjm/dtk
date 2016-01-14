@@ -39,6 +39,8 @@ void dtkMonitoringFactory::registerCreator(const QString& type, dtkMonitorCreato
 
 dtkMonitor *dtkMonitoringFactory::create(const QString& type)
 {
+    if(d->creators.values(type).isEmpty())
+        return NULL;
     return d->creators.values(type).first()(type);
 }
 

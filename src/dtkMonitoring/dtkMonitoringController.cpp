@@ -21,7 +21,7 @@
 class dtkMonitoringControllerPrivate
 {
 public:
-    QHash<dtkComposerNode *, dtkMonitor *> monitors;
+    QMap<dtkComposerNode *, dtkMonitor *> monitors;
 };
 
 dtkMonitoringController *dtkMonitoringController::instance(void)
@@ -37,6 +37,16 @@ void dtkMonitoringController::registerNode(dtkComposerNode *node)
     dtkMonitor *monitor = dtkMonitoringFactory::instance()->create(node->type());
 
     d->monitors.insert(node, monitor);
+}
+
+int dtkMonitoringController::nodeCount() const
+{
+    return d->monitors.size();
+}
+
+QList<dtkComposerNode*> dtkMonitoringController::nodeList() const
+{
+    return d->monitors.keys();
 }
 
 dtkMonitoringController::dtkMonitoringController(void) : QObject()

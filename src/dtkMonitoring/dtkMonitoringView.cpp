@@ -22,6 +22,7 @@ public:
 dtkMonitoringView::dtkMonitoringView(QWidget *parent) : QGraphicsView(parent)
 {
     d = new dtkMonitoringViewPrivate;
+    setAcceptDrops(true);
 }
 
 dtkMonitoringView::~dtkMonitoringView(void)

@@ -34,10 +34,15 @@ set(${PROJECT_NAME}_HEADERS
   dtkMonitoringList.h
   dtkMonitoringModel
   dtkMonitoringModel.h
+  dtkMonitoringReader
+  dtkMonitoringReader.h
   dtkMonitoringScene
   dtkMonitoringScene.h
   dtkMonitoringView
-  dtkMonitoringView.h)
+  dtkMonitoringView.h
+  dtkMonitoringWriter
+  dtkMonitoringWriter.h
+)
 
 set(${PROJECT_NAME}_SOURCES
   dtkMonitor.cpp
@@ -47,8 +52,12 @@ set(${PROJECT_NAME}_SOURCES
   dtkMonitoringFactory.cpp
   dtkMonitoringList.cpp
   dtkMonitoringModel.cpp
+  dtkMonitoringReader.cpp
   dtkMonitoringScene.cpp
-  dtkMonitoringView.cpp)
+  dtkMonitoringView.cpp
+  dtkMonitoringWriter.cpp
+
+)
 
 set(${PROJECT_NAME}_RCC dtkMonitoring.qrc)
 

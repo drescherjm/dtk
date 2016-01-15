@@ -24,12 +24,12 @@ public:
 
 dtkMonitor::dtkMonitor(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-
+    d = new dtkMonitorPrivate;
 }
 
 dtkMonitor::~dtkMonitor(void)
 {
-
+    delete d;
 }
 
 void dtkMonitor::setNode(dtkComposerNode *node)

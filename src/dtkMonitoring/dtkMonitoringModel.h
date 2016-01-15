@@ -25,6 +25,9 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+public:
+    QMimeData * mimeData(const QModelIndexList & indexes) const;
+    QStringList mimeTypes() const;
 
 private:
     dtkMonitoringModelPrivate* d;

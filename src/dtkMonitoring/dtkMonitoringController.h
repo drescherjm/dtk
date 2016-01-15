@@ -19,6 +19,7 @@
 #include "dtkMonitoringExport.h"
 
 class dtkComposerNode;
+class dtkMonitor;
 
 class DTKMONITORING_EXPORT dtkMonitoringController : public QObject
 {
@@ -33,6 +34,10 @@ public:
 public:
     int nodeCount() const;
     QList<dtkComposerNode*> nodeList() const;
+
+public:
+    dtkMonitor* monitor(dtkComposerNode *node);
+
 
 private:
      dtkMonitoringController(void);

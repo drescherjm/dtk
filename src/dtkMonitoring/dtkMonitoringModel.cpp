@@ -29,6 +29,25 @@ QVariant dtkMonitoringModel::data(const QModelIndex &index, int role) const
         return QVariant();
 }
 
+
+QMimeData * dtkMonitoringModel::mimeData(const QModelIndexList & indexes) const
+{
+    QMimeData* mimeData =new QMimeData();
+    QString str;
+    for(QModelIndex index:indexes)
+    {
+        dtkComposerNode* node=dtkMonitoringController::instance()->nodeList().at(index.row());
+            str+=QString::number((qlonglong)(node))+" ";
+    }
+    mimeData->setText(str);
+    return mimeData;
+}
+
+QStringList dtkMonitoringModel::mimeTypes() const
+{
+    QStringList()<<"text/plain";
+}
+
 Qt::ItemFlags dtkMonitoringModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags defaultFlags = Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled;

@@ -65,7 +65,6 @@ void dtkComposerNodeFactory::record(const QString& metadata_file_path, creator f
         d->meta_datas.insert(meta_data->type(), meta_data);
         dtkCorePluginFactory<dtkComposerNode>::record(meta_data->type(), func);
         d->nodes << meta_data->type();
-
     } else {
         delete meta_data;
     }

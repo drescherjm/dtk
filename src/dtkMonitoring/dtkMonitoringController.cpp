@@ -34,8 +34,9 @@ dtkMonitoringController *dtkMonitoringController::instance(void)
 
 void dtkMonitoringController::registerNode(dtkComposerNode *node)
 {
+    qDebug()<<"node.type(): "<<node->type();
     dtkMonitor *monitor = dtkMonitoringFactory::instance()->create(node->type());
-
+    monitor->setNode(node);
     d->monitors.insert(node, monitor);
 }
 
@@ -48,6 +49,19 @@ QList<dtkComposerNode*> dtkMonitoringController::nodeList() const
 {
     return d->monitors.keys();
 }
+
+dtkMonitor* dtkMonitoringController::monitor(dtkComposerNode* node)
+{
+    if(!node) {
+        qDebug()<<Q_FUNC_INFO<<" node is NULL";
+        return NULL;
+    }
+    qDebug()<<node;
+    qDebug()<<d->monitors;
+
+    return d->monitors.value(node);
+}
+
 
 dtkMonitoringController::dtkMonitoringController(void) : QObject()
 {

@@ -46,6 +46,8 @@ public:
 
 public:
     const QStringList& nodes(void) const;
+
+public:
     const QHash<QString, dtkComposerNodeMetaData *>& metaDatas(void) const;
 
 protected:

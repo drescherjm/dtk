@@ -24,9 +24,10 @@ public:
 
 public:
     bool value(void);
+
+public:
     void setValue(bool value);
 };
-
 
 //
 // dtkMonitorBoolean.h ends here

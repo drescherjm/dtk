@@ -14,25 +14,27 @@
 
 #include "dtkMonitorBoolean.h"
 
+#include <dtkComposer/dtkComposerNodeBoolean.h>
+
 dtkMonitorBoolean::dtkMonitorBoolean(QGraphicsItem *parent) : dtkMonitor(parent)
 {
+
 }
 
 dtkMonitorBoolean::~dtkMonitorBoolean(void)
 {
+
 }
 
 bool dtkMonitorBoolean::value(void)
 {
-    // get value from node
-    return true;
+    return dynamic_cast<dtkComposerNodeBoolean *>(this->node())->value;
 }
 
 void dtkMonitorBoolean::setValue(bool value)
 {
-    // change node value
+    dynamic_cast<dtkComposerNodeBoolean *>(this->node())->setValue(value);
 }
-
 
 //
 // dtkMonitorBoolean.cpp ends here

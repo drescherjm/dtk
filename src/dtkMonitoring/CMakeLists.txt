@@ -48,7 +48,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkMonitoringScene.cpp
   dtkMonitoringView.cpp)
 
-set(${PROJECT_NAME}_RCC dtkMonitor.qrc)
+set(${PROJECT_NAME}_RCC dtkMonitoring.qrc)
 
 ## #################################################################
 ## Build rules

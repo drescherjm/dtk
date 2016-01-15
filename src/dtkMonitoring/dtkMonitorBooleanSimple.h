@@ -22,6 +22,10 @@ class dtkMonitorBooleanSimple : public dtkMonitorBoolean
 public:
      dtkMonitorBooleanSimple(QGraphicsItem *parent = 0);
     ~dtkMonitorBooleanSimple(void);
+
+public:
+    void setNode(dtkComposerNode *node);
+
 private:
     class dtkMonitorBooleanSimplePrivate *d;
 };

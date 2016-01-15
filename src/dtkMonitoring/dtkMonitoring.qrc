@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
-  <qresource prefix="dtkMonitor">
+  <qresource prefix="dtkMonitoring">
 
     <!-- Pixmaps -->
     <file>pixmaps/dtk-monitor-boolean-simple-on.png</file>

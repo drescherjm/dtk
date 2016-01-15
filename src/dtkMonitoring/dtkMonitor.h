@@ -27,7 +27,7 @@ public:
     ~dtkMonitor(void);
 
 public:
-    void setNode(dtkComposerNode *node);
+    virtual void setNode(dtkComposerNode *node);
 
 public:
     dtkComposerNode *node(void);

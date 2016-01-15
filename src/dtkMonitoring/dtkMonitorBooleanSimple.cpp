@@ -33,8 +33,9 @@ dtkMonitorBooleanSimple::dtkMonitorBooleanSimple(QGraphicsItem *parent) : dtkMon
     d->pixmap_on  = new QGraphicsPixmapItem(this);
     d->pixmap_off = new QGraphicsPixmapItem(this);
 
-    d->pixmap_on->setPixmap(QPixmap("qrc:dtkMonitoring/pixmaps/dtk-monitor-boolean-simple-on.png"));
-    d->pixmap_off->setPixmap(QPixmap("qrc:dtkMonitoring/pixmaps/dtk-monitor-boolean-simple-off.png"));
+    d->pixmap_on->setPixmap(QPixmap(":dtkMonitoring/pixmaps/dtk-monitor-boolean-simple-on.png"));
+    d->pixmap_off->setPixmap(QPixmap(":dtkMonitoring/pixmaps/dtk-monitor-boolean-simple-off.png"));
+
 }
 
 dtkMonitorBooleanSimple::~dtkMonitorBooleanSimple(void)
@@ -48,7 +49,6 @@ void dtkMonitorBooleanSimple::setNode(dtkComposerNode *node)
 
     d->pixmap_on->setVisible(  dynamic_cast<dtkComposerNodeBoolean *>(node)->value());
     d->pixmap_off->setVisible(!dynamic_cast<dtkComposerNodeBoolean *>(node)->value());
-
 }
 
 QRectF dtkMonitorBooleanSimple::boundingRect(void) const
@@ -58,6 +58,16 @@ QRectF dtkMonitorBooleanSimple::boundingRect(void) const
 
 void dtkMonitorBooleanSimple::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    QPen pen;
+
+    if ( this->isSelected() ) {
+        pen.setColor(Qt::magenta);
+    } else {
+        pen.setColor(Qt::black);
+    }
+
+    painter->setPen(pen);
+    painter->drawRect(this->boundingRect());
 }
 
 //

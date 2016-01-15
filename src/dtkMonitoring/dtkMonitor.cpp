@@ -25,6 +25,9 @@ public:
 dtkMonitor::dtkMonitor(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
     d = new dtkMonitorPrivate;
+
+    this->setFlag(QGraphicsItem::ItemIsMovable, true);
+    this->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 dtkMonitor::~dtkMonitor(void)

@@ -21,6 +21,8 @@ project(dtkMonitoring)
 set(${PROJECT_NAME}_HEADERS
   dtkMonitor
   dtkMonitor.h
+  dtkMonitorBoolean.h
+  dtkMonitorBooleanSimple.h
   dtkMonitoring
   dtkMonitoringController
   dtkMonitoringController.h
@@ -37,6 +39,8 @@ set(${PROJECT_NAME}_HEADERS
 
 set(${PROJECT_NAME}_SOURCES
   dtkMonitor.cpp
+  dtkMonitorBoolean.cpp
+  dtkMonitorBooleanSimple.cpp
   dtkMonitoringController.cpp
   dtkMonitoringFactory.cpp
   dtkMonitoringList.cpp
@@ -44,17 +48,23 @@ set(${PROJECT_NAME}_SOURCES
   dtkMonitoringScene.cpp
   dtkMonitoringView.cpp)
 
+set(${PROJECT_NAME}_RCC dtkMonitor.qrc)
+
 ## #################################################################
 ## Build rules
 ## #################################################################
 
+qt5_add_resources(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RCC})
+
 add_library(${PROJECT_NAME} SHARED
+  ${${PROJECT_NAME}_SOURCES_QRC}
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
 ## ###################################################################
 ## Link rules
 ## ###################################################################
+
 
 target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog dtkComposer)
 

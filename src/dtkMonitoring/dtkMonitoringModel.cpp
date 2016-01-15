@@ -45,7 +45,7 @@ QMimeData * dtkMonitoringModel::mimeData(const QModelIndexList & indexes) const
 
 QStringList dtkMonitoringModel::mimeTypes() const
 {
-    QStringList()<<"text/plain";
+    return QStringList()<<"text/plain";
 }
 
 Qt::ItemFlags dtkMonitoringModel::flags(const QModelIndex &index) const

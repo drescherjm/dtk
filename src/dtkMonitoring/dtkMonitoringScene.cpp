@@ -14,6 +14,7 @@
 
 #include "dtkMonitor.h"
 #include "dtkMonitoringController.h"
+#include "dtkMonitoringFactory.h"
 #include "dtkMonitoringScene.h"
 
 #include <dtkComposer/dtkComposerNode>
@@ -67,10 +68,21 @@ void dtkMonitoringScene::dropEvent(QGraphicsSceneDragDropEvent * event)
 
         dtkComposerNode *node = (dtkComposerNode*)(id.trimmed().toLongLong());
 
-        dtkMonitor *monitor = dtkMonitoringController::instance()->monitor(node);
+        dtkMonitor *monitor = NULL;
 
-        if(monitor)
-            this->addItem(monitor);
+        if (dtkMonitoringController::instance()->monitor(node))
+            continue;
+
+        monitor = dtkMonitoringFactory::instance()->create(node->type());
+
+        if (!monitor)
+            continue;
+
+        monitor->setNode(node);
+
+        dtkMonitoringController::instance()->replaceNode(node, monitor);
+
+        this->addItem(monitor);
     }
 
     QGraphicsScene::dropEvent(event);

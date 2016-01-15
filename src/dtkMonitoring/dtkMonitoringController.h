@@ -30,14 +30,14 @@ public:
 
 public:
     void registerNode(dtkComposerNode *);
+    void replaceNode(dtkComposerNode *, dtkMonitor *);
 
 public:
     int nodeCount() const;
     QList<dtkComposerNode*> nodeList() const;
 
 public:
-    dtkMonitor* monitor(dtkComposerNode *node);
-
+    dtkMonitor* monitor(dtkComposerNode *);
 
 private:
      dtkMonitoringController(void);

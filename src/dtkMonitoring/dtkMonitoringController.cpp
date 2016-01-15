@@ -34,10 +34,15 @@ dtkMonitoringController *dtkMonitoringController::instance(void)
 
 void dtkMonitoringController::registerNode(dtkComposerNode *node)
 {
-    qDebug()<<"node.type(): "<<node->type();
-    dtkMonitor *monitor = dtkMonitoringFactory::instance()->create(node->type());
-    monitor->setNode(node);
-    d->monitors.insert(node, monitor);
+    d->monitors.insert(node, NULL);
+}
+
+void dtkMonitoringController::replaceNode(dtkComposerNode *node, dtkMonitor *monitor)
+{
+    if (!d->monitors.keys().contains(node))
+        return;
+
+    d->monitors[node] = monitor;
 }
 
 int dtkMonitoringController::nodeCount() const

@@ -30,7 +30,7 @@ public:
     void setNode(dtkComposerNode *node);
 
 public:
-    dtkComposerNode node(void);
+    dtkComposerNode *node(void);
 
 private:
     class dtkMonitorPrivate *d;

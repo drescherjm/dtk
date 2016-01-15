@@ -30,6 +30,8 @@ dtkMonitorBooleanSimple::dtkMonitorBooleanSimple(QGraphicsItem *parent) : dtkMon
 
     d->pixmap_on  = new QGraphicsPixmapItem(this);
     d->pixmap_off = new QGraphicsPixmapItem(this);
+
+
 }
 
 dtkMonitorBooleanSimple::~dtkMonitorBooleanSimple(void)

@@ -45,5 +45,20 @@ dtkComposerNode *dtkMonitor::node(void)
     return d->node;
 }
 
+void dtkMonitor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QPen pen;
+    pen.setWidth(2);
+
+    if ( this->isSelected() ) {
+        pen.setColor(Qt::magenta);
+    } else {
+        pen.setColor(Qt::black);
+    }
+
+    painter->setPen(pen);
+    painter->drawRect(this->boundingRect());
+}
+
 //
 // dtkMonitor.cpp ends here

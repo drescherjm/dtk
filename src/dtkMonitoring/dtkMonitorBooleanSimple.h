@@ -29,8 +29,8 @@ public:
 public:
     QRectF boundingRect(void) const;
 
-public:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     class dtkMonitorBooleanSimplePrivate *d;

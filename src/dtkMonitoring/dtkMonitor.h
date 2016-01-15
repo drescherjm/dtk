@@ -32,6 +32,9 @@ public:
 public:
     dtkComposerNode *node(void);
 
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
 private:
     class dtkMonitorPrivate *d;
 };

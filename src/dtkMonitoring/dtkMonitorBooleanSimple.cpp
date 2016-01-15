@@ -47,27 +47,21 @@ void dtkMonitorBooleanSimple::setNode(dtkComposerNode *node)
 {
     dtkMonitor::setNode(node);
 
-    d->pixmap_on->setVisible(  dynamic_cast<dtkComposerNodeBoolean *>(node)->value());
-    d->pixmap_off->setVisible(!dynamic_cast<dtkComposerNodeBoolean *>(node)->value());
+    d->pixmap_on->setVisible(  this->value());
+    d->pixmap_off->setVisible(!this->value());
 }
 
 QRectF dtkMonitorBooleanSimple::boundingRect(void) const
 {
-    return d->pixmap_on->boundingRect();
+    return d->pixmap_on->boundingRect().adjusted(-2,-2,2,2);
 }
 
-void dtkMonitorBooleanSimple::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void dtkMonitorBooleanSimple::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPen pen;
+    this->setValue(!this->value());
 
-    if ( this->isSelected() ) {
-        pen.setColor(Qt::magenta);
-    } else {
-        pen.setColor(Qt::black);
-    }
-
-    painter->setPen(pen);
-    painter->drawRect(this->boundingRect());
+    d->pixmap_on->setVisible(  this->value());
+    d->pixmap_off->setVisible(!this->value());
 }
 
 //

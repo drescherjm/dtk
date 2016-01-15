@@ -28,7 +28,7 @@ dtkMonitorBoolean::~dtkMonitorBoolean(void)
 
 bool dtkMonitorBoolean::value(void)
 {
-    return dynamic_cast<dtkComposerNodeBoolean *>(this->node())->value;
+    return dynamic_cast<dtkComposerNodeBoolean *>(this->node())->value();
 }
 
 void dtkMonitorBoolean::setValue(bool value)

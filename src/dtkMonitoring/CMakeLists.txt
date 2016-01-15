@@ -21,7 +21,9 @@ project(dtkMonitoring)
 set(${PROJECT_NAME}_HEADERS
   dtkMonitor
   dtkMonitor.h
+  dtkMonitorBoolean
   dtkMonitorBoolean.h
+  dtkMonitorBooleanSimple
   dtkMonitorBooleanSimple.h
   dtkMonitoring
   dtkMonitoringController

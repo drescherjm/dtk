@@ -12,6 +12,8 @@
 
 // Code:
 
+#include "dtkMonitor.h"
+#include "dtkMonitorBooleanSimple.h"
 #include "dtkMonitoringFactory.h"
 
 class dtkMonitoringFactoryPrivate
@@ -32,6 +34,16 @@ dtkMonitoringFactory *dtkMonitoringFactory::instance(void)
     return s_instance;
 }
 
+void dtkMonitoringFactory::initialize(void)
+{
+    this->registerCreator("boolean", createMonitor<dtkMonitorBooleanSimple>);
+}
+
+void dtkMonitoringFactory::uninitialize(void)
+{
+    // TODO
+}
+
 void dtkMonitoringFactory::registerCreator(const QString& type, dtkMonitorCreator creator)
 {
     d->creators.insert(type, creator);
@@ -41,7 +53,7 @@ dtkMonitor *dtkMonitoringFactory::create(const QString& type)
 {
     if(d->creators.values(type).isEmpty())
         return NULL;
-    return d->creators.values(type).first()(type);
+    return d->creators.values(type).first()();
 }
 
 dtkMonitoringFactory::dtkMonitoringFactory(void)

@@ -25,10 +25,14 @@ class DTKMONITORING_EXPORT dtkMonitoringFactory : public QObject
     Q_OBJECT
 
 public:
-    typedef dtkMonitor *(*dtkMonitorCreator)(const QString& type);
+    typedef dtkMonitor *(*dtkMonitorCreator)(void);
 
 public:
     static dtkMonitoringFactory *instance(void);
+
+public:
+    void initialize(void);
+    void uninitialize(void);
 
 public:
     void registerCreator(const QString& type, dtkMonitorCreator creator);

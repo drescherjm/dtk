@@ -26,8 +26,15 @@ public:
 public:
     void setNode(dtkComposerNode *node);
 
+public:
+    QRectF boundingRect(void) const;
+
+public:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
 private:
     class dtkMonitorBooleanSimplePrivate *d;
+
 };
 
 

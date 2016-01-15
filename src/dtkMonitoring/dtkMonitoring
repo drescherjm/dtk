@@ -1,4 +1,6 @@
 #include "dtkMonitor.h"
+#include "dtkMonitorBoolean.h"
+#include "dtkMonitorBooleanSimple.h"
 #include "dtkMonitoringController.h"
 #include "dtkMonitoringFactory.h"
 #include "dtkMonitoringList.h"

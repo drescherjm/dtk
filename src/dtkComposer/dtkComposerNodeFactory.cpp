@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -18,18 +18,20 @@
 #include <dtkMeta>
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeFactoryPrivate
 {
 public:
     QStringList nodes;
+
+public:
     QHash<QString, dtkComposerNodeMetaData *> meta_datas;
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 dtkComposerNodeFactory::dtkComposerNodeFactory(void) : dtkCorePluginFactory<dtkComposerNode>(), d(new dtkComposerNodeFactoryPrivate)
@@ -51,6 +53,7 @@ dtkComposerNodeFactory::~dtkComposerNodeFactory(void)
 dtkComposerNode *dtkComposerNodeFactory::create(const QString& node) const
 {
     dtkComposerNode *n = dtkCorePluginFactory<dtkComposerNode>::create(node);
+
     if (n)
         n->setNodeMetaData(d->meta_datas[node]);
 
@@ -85,5 +88,5 @@ const QHash<QString, dtkComposerNodeMetaData *>& dtkComposerNodeFactory::metaDat
     return d->meta_datas;
 }
 
-// 
+//
 // dtkComposerNodeFactory.cpp ends here

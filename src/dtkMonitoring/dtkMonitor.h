@@ -36,7 +36,6 @@ private:
     class dtkMonitorPrivate *d;
 };
 
-
 template <typename T> dtkMonitor *createMonitor(void)
 {
     return new T;

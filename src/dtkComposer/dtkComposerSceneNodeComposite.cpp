@@ -1,4 +1,4 @@
-/* dtkComposerSceneNodeComposite.cpp --- 
+/* dtkComposerSceneNodeComposite.cpp ---
  *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
@@ -9,7 +9,7 @@
  *     Update #: 950
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -99,18 +99,14 @@ void dtkComposerSceneNodeComposite::wrap(dtkComposerNode *wrapee)
         return;
 
     for(int i = 0; i < composite->receivers().count(); ++i) {
-        
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         port->setLabel(composite->inputLabelHint(this->addInputPort(port)));
-        
     }
 
     for(int i = 0; i < composite->emitters().count(); ++i) {
-
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, this);
         this->addOutputPort(port);
         port->setLabel(composite->outputLabelHint(this->outputPorts().indexOf(port)));
-
     }
 
     dtkComposerSceneNode::wrap(wrapee);
@@ -203,10 +199,8 @@ bool dtkComposerSceneNodeComposite::flattened(void)
     return d->flattened || d->root;
 }
 
-// return true if node is visible, ie, it is flatenned and all it's parent are ( or entered )
 bool dtkComposerSceneNodeComposite::visible(void)
 {
-
     if (d->root)
         return true;
 
@@ -276,7 +270,7 @@ void dtkComposerSceneNodeComposite::unreveal(void)
     if (this->embedded()) {
         foreach(dtkComposerSceneNode *node, d->nodes)
             node->setPos(d->unreveal_pos + (node->scenePos() - this->scenePos() - d->offset));
-        
+
         foreach(dtkComposerSceneNote *note, d->notes)
             note->setPos(d->unreveal_pos + (note->scenePos() - this->scenePos() - d->offset));
 
@@ -351,7 +345,7 @@ void dtkComposerSceneNodeComposite::layout(void)
 {
     if (this->embedded() && !d->entered)
         goto port_location;
-    
+
     // /////////////////////////////////////////////////////////////////
     // Rect calculation
     // /////////////////////////////////////////////////////////////////
@@ -378,7 +372,7 @@ void dtkComposerSceneNodeComposite::layout(void)
         this->setPos(xmin - 50, ymin - 50);
 
     }
-    
+
     // /////////////////////////////////////////////////////////////////
     // Port location
     // /////////////////////////////////////////////////////////////////
@@ -394,7 +388,7 @@ port_location:
 
     for(int i = 0; i < this->inputPorts().count(); i++)
         this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
-    
+
     for(int i = 0; i < this->outputPorts().count(); i++)
         this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
 
@@ -431,7 +425,7 @@ update:
     // /////////////////////////////////////////////////////////////////
     // Update edges geometry
     // /////////////////////////////////////////////////////////////////
-    
+
     QRectF updateRect;
 
     foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
@@ -443,7 +437,7 @@ update:
         edge->adjust();
         updateRect |= edge->boundingRect();
     }
-    
+
     foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
@@ -473,11 +467,11 @@ void dtkComposerSceneNodeComposite::obfuscate(void)
         foreach(dtkComposerSceneNode *node, d->nodes)
             if (!rect.contains(node->sceneBoundingRect()))
                 d->obfuscated = true;
-        
+
         foreach(dtkComposerSceneNote *note, d->notes)
             if (!rect.contains(note->sceneBoundingRect()))
                 d->obfuscated = true;
-        
+
     }
 
     foreach(dtkComposerSceneNode *node, d->nodes) {
@@ -510,17 +504,17 @@ void dtkComposerSceneNodeComposite::boundingBox(qreal& x_min, qreal& x_max, qrea
 {
     qreal xmin = d->unreveal_pos.x();
     qreal xmax = d->unreveal_pos.x() + d->unreveal_rect.width();
-    
+
     qreal ymin = d->unreveal_pos.y();
     qreal ymax = d->unreveal_pos.y() + d->unreveal_rect.height();
-    
+
     foreach(dtkComposerSceneNode *node, d->nodes) {
         xmin = qMin(xmin, node->scenePos().x());
         xmax = qMax(xmax, node->scenePos().x() + node->boundingRect().width());
         ymin = qMin(ymin, node->scenePos().y());
         ymax = qMax(ymax, node->scenePos().y() + node->boundingRect().height());
     }
-    
+
     x_min = xmin;
     x_max = xmax;
     y_min = ymin;

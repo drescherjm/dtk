@@ -18,6 +18,8 @@
 
 #include "dtkMonitoringExport.h"
 
+class dtkComposerNode;
+
 class DTKMONITORING_EXPORT dtkMonitor : public QGraphicsItem
 {
 public:
@@ -25,7 +27,13 @@ public:
     ~dtkMonitor(void);
 
 public:
-    virtual QString identifier(void) = 0;
+    void setNode(dtkComposerNode *node);
+
+public:
+    dtkComposerNode node(void);
+
+private:
+    class dtkMonitorPrivate *d;
 };
 
 //

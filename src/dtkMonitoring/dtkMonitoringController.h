@@ -30,7 +30,10 @@ public:
 
 public:
     void registerNode(dtkComposerNode *);
-    void replaceNode(dtkComposerNode *, dtkMonitor *);
+
+public:
+    void replaceMonitor(dtkComposerNode *, dtkMonitor *);
+    void removeMonitor(dtkMonitor *);
 
 public:
     int nodeCount() const;

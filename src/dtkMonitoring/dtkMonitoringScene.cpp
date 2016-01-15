@@ -80,12 +80,32 @@ void dtkMonitoringScene::dropEvent(QGraphicsSceneDragDropEvent * event)
 
         monitor->setNode(node);
 
-        dtkMonitoringController::instance()->replaceNode(node, monitor);
+        dtkMonitoringController::instance()->replaceMonitor(node, monitor);
 
         this->addItem(monitor);
     }
 
     QGraphicsScene::dropEvent(event);
+}
+
+void dtkMonitoringScene::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key()) {
+    case Qt::Key_Backspace:
+    case Qt::Key_Delete:
+        foreach(QGraphicsItem *item, this->items()) {
+            if (item->isSelected()) {
+                this->removeItem(item);
+                if (dtkMonitor *monitor = dynamic_cast<dtkMonitor *>(item)) {
+                    dtkMonitoringController::instance()->removeMonitor(monitor);
+                    delete monitor;
+                }
+            }
+        }
+        break;
+    default:
+        break;
+    }
 }
 
 //

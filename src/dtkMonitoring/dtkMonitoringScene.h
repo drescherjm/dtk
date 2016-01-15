@@ -25,10 +25,12 @@ public:
     ~dtkMonitoringScene(void);
 
 protected:
-     virtual void dragEnterEvent(QGraphicsSceneDragDropEvent * event);
-     virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent * event);
-     virtual void dragMoveEvent (QGraphicsSceneDragDropEvent * event);
-     virtual void dropEvent     (QGraphicsSceneDragDropEvent * event);
+     void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+     void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+     void dragMoveEvent (QGraphicsSceneDragDropEvent *event);
+     void dropEvent     (QGraphicsSceneDragDropEvent *event);
+
+     void keyPressEvent(QKeyEvent *event);
 
 private:
     class dtkMonitoringScenePrivate *d;

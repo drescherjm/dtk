@@ -37,12 +37,19 @@ void dtkMonitoringController::registerNode(dtkComposerNode *node)
     d->monitors.insert(node, NULL);
 }
 
-void dtkMonitoringController::replaceNode(dtkComposerNode *node, dtkMonitor *monitor)
+void dtkMonitoringController::replaceMonitor(dtkComposerNode *node, dtkMonitor *monitor)
 {
     if (!d->monitors.keys().contains(node))
         return;
 
     d->monitors[node] = monitor;
+}
+
+void dtkMonitoringController::removeMonitor(dtkMonitor *monitor)
+{
+    dtkComposerNode *node = d->monitors.key(monitor);
+
+    d->monitors[node] = NULL;
 }
 
 int dtkMonitoringController::nodeCount() const
@@ -57,12 +64,8 @@ QList<dtkComposerNode*> dtkMonitoringController::nodeList() const
 
 dtkMonitor* dtkMonitoringController::monitor(dtkComposerNode* node)
 {
-    if(!node) {
-        qDebug()<<Q_FUNC_INFO<<" node is NULL";
+    if(!node)
         return NULL;
-    }
-    qDebug()<<node;
-    qDebug()<<d->monitors;
 
     return d->monitors.value(node);
 }

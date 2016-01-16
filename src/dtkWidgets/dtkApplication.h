@@ -1,17 +1,16 @@
-/* dtkApplication.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2015 - Nicolas Niclausse, Inria.
- * Created: 2015/01/26 12:24:18
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -42,3 +41,5 @@ static dtkAbstractApplication* create(int &argc, char *argv[])
 
 }
 
+//
+// dtkApplication.h ends here

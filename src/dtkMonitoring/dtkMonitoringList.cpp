@@ -23,6 +23,9 @@ public:
 dtkMonitoringList::dtkMonitoringList(QWidget *parent) : QListView(parent)
 {
     d = new dtkMonitoringListPrivate;
+
+    this->setAttribute(Qt::WA_MacShowFocusRect, false);
+    this->setFrameShape(QFrame::NoFrame);
 }
 
 dtkMonitoringList::~dtkMonitoringList(void)

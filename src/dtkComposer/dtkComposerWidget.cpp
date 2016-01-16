@@ -237,7 +237,6 @@ void dtkComposerWidget::updateRemotes(dtkComposerSceneNodeComposite *composite)
 #endif
 }
 
-
 void dtkComposerWidget::run(void)
 {
     this->updateRemotes(d->scene->root());

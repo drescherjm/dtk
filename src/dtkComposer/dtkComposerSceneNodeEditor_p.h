@@ -1,24 +1,18 @@
-/* dtkComposerSceneNodeEditor_p.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Feb  8 10:28:04 2012 (+0100)
- * Version: $Id$
- * Last-Updated: lun. juil.  6 16:22:43 2015 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 80
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
 
-#ifndef DTKCOMPOSERSCENENODEEDITOR_P_H
-#define DTKCOMPOSERSCENENODEEDITOR_P_H
+// Code:
+
+#pragma once
 
 #include <QtWidgets>
 
@@ -137,3 +131,6 @@ public:
 };
 
 #endif
+
+//
+// dtkComposerSceneNodeEditor_p.h ends here

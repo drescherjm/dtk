@@ -273,6 +273,14 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     // --
 
+    d->edit= new QLineEdit;
+
+    // --
+
+    d->layout_widg_edit = new QHBoxLayout;
+
+    // --
+
     QHBoxLayout *l_layout = new QHBoxLayout;
     l_layout->setContentsMargins(0, 0, 0, 0);
     l_layout->addWidget(d->add_loop_port);
@@ -309,6 +317,8 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     i_layout->setContentsMargins(0, 0, 0, 0);
     i_layout->addWidget(d->add_input_port);
     i_layout->addWidget(d->rem_input_port);
+
+    qDebug() << "so far so good" << 4;
 
     QHBoxLayout *o_layout = new QHBoxLayout;
     o_layout->setContentsMargins(0, 0, 0, 0);
@@ -354,13 +364,17 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
     d->layout->addWidget(top);
+
     d->layout->addLayout(si_layout);
     d->layout->addWidget(d->node_toolbox);
     d->layout->addLayout(lv_layout);
     d->layout->addLayout(bv_layout);
     d->layout->addLayout(p_layout);
-    d->layout->addSpacing(10);
     d->layout->addLayout(d->layout_widg_edit);
+
+// /////////////////////////////////////////////////////////////////
+// Connections
+// /////////////////////////////////////////////////////////////////
 
     connect(d->add_loop_port, SIGNAL(clicked()), this, SLOT(addLoopPort()));
     connect(d->rem_loop_port, SIGNAL(clicked()), this, SLOT(removeLoopPort()));
@@ -484,16 +498,16 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         foreach(dtkComposerScenePort *port, node->outputPorts())
             d->output_ports->addOutputPort(port);
 
-        QObject *object = NULL;
 
+        QObject *object = NULL;
         dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(node->wrapee());
 
         if (object_node) {
 
             object = object_node->variant().value<QObject*>();
 
-            int current_index = 0;
 
+            int current_index = 0;
             d->select_implementation->addItem("Choose implementation");
 
             for(int i = 0; i < object_node->implementations().count(); ++i) {
@@ -507,14 +521,13 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
             d->select_implementation->blockSignals(false);
             d->select_implementation->setVisible(true);
-            d->select_implementation->setEnabled(true);
+                d->select_implementation->setEnabled(true);
 
         }
 
+
         if (object) {
-
             dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
-
             if (item) {
                 item->setContentsMargins(0, 0, 0, 0);
                 item->hideButton();
@@ -528,20 +541,20 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 d->node_toolbox->setEnabled(true);
             }
         }
+    }
 
-        if (d->node->wrapee()->editor()) {
-            if (d->current_widget) {
-                d->current_widget->blockSignals(true);
-                d->current_widget->setVisible(false);
-                d->current_widget->setEnabled(false);
-                d->layout_widg_edit->removeWidget(d->current_widget);
-            }
-            d->current_widget = d->node->wrapee()->editor();
-            d->current_widget->blockSignals(false);
-            d->current_widget->setVisible(true);
-            d->current_widget->setEnabled(true);
-            d->layout_widg_edit->addWidget(d->current_widget);
+    if (d->node->wrapee()->editor()) {
+        if (d->current_widget) {
+            d->current_widget->blockSignals(true);
+            d->current_widget->setVisible(false);
+            d->current_widget->setEnabled(false);
+            d->layout_widg_edit->removeWidget(d->current_widget);
         }
+        d->current_widget = d->node->wrapee()->editor();
+        d->current_widget->blockSignals(false);
+        d->current_widget->setVisible(true);
+        d->current_widget->setEnabled(true);
+        d->layout_widg_edit->addWidget(d->current_widget);
     }
 
     d->edit->setText(d->node->title());
@@ -625,7 +638,6 @@ void dtkComposerSceneNodeEditor::clear(void)
         d->current_widget->setEnabled(false);
         d->layout_widg_edit->removeWidget(d->current_widget);
     }
-
     d->current_widget = NULL;
 }
 
@@ -636,7 +648,8 @@ void dtkComposerSceneNodeEditor::addBlock(void)
     if (!control)
         return;
 
-    dtkComposerStackCommandCreateBlock *command = new dtkComposerStackCommandCreateBlock;
+    dtkComposerStackCommandCreateBlock *command;
+    command = new dtkComposerStackCommandCreateBlock;
     command->setScene(d->scene);
     command->setGraph(d->graph);
     command->setNode(control);
@@ -658,7 +671,8 @@ void dtkComposerSceneNodeEditor::removeBlock(void)
     if (i < 1)
         return;
 
-    dtkComposerStackCommandDestroyBlock *command = new dtkComposerStackCommandDestroyBlock;
+    dtkComposerStackCommandDestroyBlock *command;
+    command = new dtkComposerStackCommandDestroyBlock;
     command->setScene(d->scene);
     command->setGraph(d->graph);
     command->setNode(control->blocks().at(i));
@@ -1022,6 +1036,7 @@ void dtkComposerSceneNodeEditor::onTitleChanged(const QString& text)
     }
 }
 
+
 void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implementation)
 {
     d->node_toolbox->clear();
@@ -1039,9 +1054,7 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
         dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
         item->setContentsMargins(0, 0, 0, 0);
         item->hideButton();
-
         qreal height = item->size().height();
-
         d->node_toolbox->resize(this->size().width(), height);
         d->node_toolbox->setMinimumHeight(height);
         d->node_toolbox->setMaximumHeight(height);

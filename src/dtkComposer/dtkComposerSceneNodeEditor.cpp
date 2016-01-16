@@ -283,11 +283,13 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     QHBoxLayout *l_layout = new QHBoxLayout;
     l_layout->setContentsMargins(0, 0, 0, 0);
+    l_layout->setSpacing(0);
     l_layout->addWidget(d->add_loop_port);
     l_layout->addWidget(d->rem_loop_port);
 
     QHBoxLayout *b_layout = new QHBoxLayout;
     b_layout->setContentsMargins(0, 0, 0, 0);
+    b_layout->setSpacing(0);
     b_layout->addWidget(d->add_block);
     b_layout->addWidget(d->rem_block);
 
@@ -317,8 +319,6 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     i_layout->setContentsMargins(0, 0, 0, 0);
     i_layout->addWidget(d->add_input_port);
     i_layout->addWidget(d->rem_input_port);
-
-    qDebug() << "so far so good" << 4;
 
     QHBoxLayout *o_layout = new QHBoxLayout;
     o_layout->setContentsMargins(0, 0, 0, 0);
@@ -364,7 +364,6 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
     d->layout->addWidget(top);
-
     d->layout->addLayout(si_layout);
     d->layout->addWidget(d->node_toolbox);
     d->layout->addLayout(lv_layout);
@@ -583,54 +582,80 @@ void dtkComposerSceneNodeEditor::clear(void)
 {
     d->node = NULL;
 
+    qDebug() << Q_FUNC_INFO << 1;
+
     d->loop_ports->clear();
     d->loop_ports->setVisible(false);
+
+    qDebug() << Q_FUNC_INFO << 2;
 
     d->add_loop_port->setEnabled(false);
     d->add_loop_port->setVisible(false);
     d->rem_loop_port->setEnabled(false);
     d->rem_loop_port->setVisible(false);
 
+    qDebug() << Q_FUNC_INFO << 3;
+
     d->blocks->clear();
     d->blocks->setVisible(false);
+
+    qDebug() << Q_FUNC_INFO << 4;
 
     d->add_block->setEnabled(false);
     d->add_block->setVisible(false);
     d->rem_block->setEnabled(false);
     d->rem_block->setVisible(false);
 
+    qDebug() << Q_FUNC_INFO << 5;
+
     d->input_ports->clear();
     d->input_ports->setVisible(false);
+
+    qDebug() << Q_FUNC_INFO << 6;
 
     d->add_input_port->setEnabled(false);
     d->add_input_port->setVisible(false);
     d->rem_input_port->setEnabled(false);
     d->rem_input_port->setVisible(false);
 
+    qDebug() << Q_FUNC_INFO << 7;
+
     d->output_ports->clear();
     d->output_ports->setVisible(false);
+
+    qDebug() << Q_FUNC_INFO << 8;
 
     d->add_output_port->setEnabled(false);
     d->add_output_port->setVisible(false);
     d->rem_output_port->setEnabled(false);
     d->rem_output_port->setVisible(false);
 
+    qDebug() << Q_FUNC_INFO << 9;
+
     d->edit->clear();
     d->edit->setEnabled(false);
+
+    qDebug() << Q_FUNC_INFO << 10;
 
     d->selector->clear();
     d->selector->setEnabled(false);
     d->selector->setVisible(false);
+
+    qDebug() << Q_FUNC_INFO << 11;
 
     d->select_implementation->blockSignals(true);
     d->select_implementation->setVisible(false);
     d->select_implementation->setEnabled(false);
     d->select_implementation->clear();
 
+    qDebug() << Q_FUNC_INFO << 12;
+
     d->node_toolbox->blockSignals(true);
     d->node_toolbox->setVisible(false);
     d->node_toolbox->setEnabled(false);
     d->node_toolbox->clear();
+
+    qDebug() << Q_FUNC_INFO << 13;
 
     if (d->current_widget) {
         d->current_widget->blockSignals(true);
@@ -638,6 +663,7 @@ void dtkComposerSceneNodeEditor::clear(void)
         d->current_widget->setEnabled(false);
         d->layout_widg_edit->removeWidget(d->current_widget);
     }
+
     d->current_widget = NULL;
 }
 

@@ -47,7 +47,6 @@ void dtkComposerNodeBooleanEditor::refresh(void)
     if (d->value) {
         t_b->setChecked(true);
         f_b->setChecked(false);
-
     } else {
         t_b->setChecked(false);
         f_b->setChecked(true);

@@ -101,25 +101,10 @@ public:
     QLineEdit *edit;
 
 public:
-    QSpinBox *spin_d;
-
-public:
-    QDoubleSpinBox *spin_f;
-
-public:
-    QLineEdit *edit_s;
-    QToolButton *butn_f;
-    QToolButton *butn_d;
-
-public:
     QHBoxLayout *layout_widg_edit;
     QVBoxLayout *layout;
 
 public:
-    QRadioButton *t_b;
-    QRadioButton *f_b;
-    QButtonGroup *g_b;
-    QWidget *bool_widget;
     QWidget *current_widget;
 
 public:

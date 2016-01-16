@@ -62,12 +62,6 @@ protected slots:
     void onTitleChanged(const QString& text);
 
 protected slots:
-    void onBrowse(void);
-    void onBrowseDirectory(void);
-    void onValueChanged(bool);
-    void onValueChanged(int);
-    void onValueChanged(double);
-    void onValueChanged(const QString&);
     void onImplementationChanged(const QString&);
 
 protected:

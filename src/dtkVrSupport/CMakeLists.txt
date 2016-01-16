@@ -1,21 +1,16 @@
-### CMakeLists.txt --- 
-## 
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Wed Jan 13 13:57:41 2010 (+0100)
 ## Version: $Id$
-## Last-Updated: Thu Sep 27 15:24:49 2012 (+0200)
-##           By: Julien Wintz
-##     Update #: 336
+##
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
-### Change log:
-## 
+##
+### Change Log:
+##
 ######################################################################
+##
+### Code:
 
 project(dtkVrSupport)
 
@@ -36,7 +31,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkVrHeadRecognizer.cpp
   dtkVrScreen.cpp
   dtkVrTracker.cpp)
-
 
 ## #################################################################
 ## Vrpn sources
@@ -77,11 +71,9 @@ endif(DTK_HAVE_NITE)
 ## Build rules
 ## #################################################################
 
-
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-)
+  ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
   dtkMathSupport
@@ -134,16 +126,13 @@ set(${PROJECT_NAME}_HEADERS
 ## Installation
 ## #################################################################
 
-foreach(header ${${PROJECT_NAME}_HEADERS})
-  string(REGEX REPLACE "(.*)\\.h\$" "\\1" h ${header})
-  set(${PROJECT_NAME}_HEADERS_QTS "${${PROJECT_NAME}_HEADERS_QTS}" ${h})
-endforeach(header)
-
 install(FILES ${${PROJECT_NAME}_HEADERS} DESTINATION include/${PROJECT_NAME})
 install(FILES ${${PROJECT_NAME}_HEADERS_QTS} DESTINATION include/${PROJECT_NAME})
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION ${CMAKE_INSTALL_LIBDIR}
   COMPONENT vrsupport
-  EXPORT dtkDepends
-  )
+  EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

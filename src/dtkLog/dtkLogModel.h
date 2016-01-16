@@ -1,24 +1,18 @@
-/* dtkLogModel.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Mon Mar  5 10:13:44 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar  5 11:14:39 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 27
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
 
-#ifndef DTKLOGMODEL_H
-#define DTKLOGMODEL_H
+// Code:
+
+#pragma once
 
 #include "dtkLogExport.h"
 
@@ -60,4 +54,5 @@ private:
     dtkLogModelPrivate *d;
 };
 
-#endif
+//
+// dtkLogModel.h ends here

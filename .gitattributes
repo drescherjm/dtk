@@ -16,6 +16,7 @@
 *.cpp ident
 *.tpp ident
 *.cmake ident
+*.cmake.in ident
 
 ######################################################################
 ### .gitattributes ends here

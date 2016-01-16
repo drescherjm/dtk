@@ -40,8 +40,7 @@ set(${PROJECT_NAME}_SOURCES
 
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
-  ${${PROJECT_NAME}_HEADERS}
-  )
+  ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 
@@ -68,8 +67,8 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
 
 set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
- "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export"
- "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
+  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export"
+  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
 
 ## ###################################################################
 ## Install rules - files

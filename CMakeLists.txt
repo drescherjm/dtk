@@ -34,12 +34,6 @@ set(dtk_VERSION_PATCH 0)
 set(dtk_VERSION
   ${dtk_VERSION_MAJOR}.${dtk_VERSION_PATCH}.${dtk_VERSION_PATCH})
 
-## #################################################################
-## Generate compilation database
-## #################################################################
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
-
 ## ###################################################################
 ## Path setup
 ## ###################################################################
@@ -51,7 +45,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'RelWithDebInfo' as none was specified.")
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build." FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
@@ -64,41 +57,39 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/install" CACHE PATH "${PROJECT_NAME} install prefix" FORCE)
 endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
+## #################################################################
+## Generate compilation database
+## #################################################################
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
 ## ###################################################################
 ## Build setup
 ## ###################################################################
 
-set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(GNUInstallDirs)
 include(GenerateExportHeader)
+include(CheckCXXCompilerFlag)
 
-if(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -I/usr/lib/c++/v1")
-endif(APPLE)
+check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 
-if(NOT APPLE AND NOT MSVC)
-  include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-  if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unknown-pragmas")
-  elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-unknown-pragmas")
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-  endif()
-  if(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-  endif(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
+if(COMPILER_SUPPORTS_CXX11)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unknown-pragmas")
+elseif(COMPILER_SUPPORTS_CXX0X)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-unknown-pragmas")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
+  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.")
+endif()
 
-else(NOT APPLE AND NOT MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-endif(NOT APPLE AND NOT MSVC)
+if(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+  set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+endif(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
 
 if(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_32 0)
@@ -137,8 +128,8 @@ option(DTK_BUILD_SUPPORT_VR          "Build support layer" false)
 
 if(DTK_ENABLE_MEMCHECK)
 
-  find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
-  set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml" )
+  find_program(CTEST_MEMORYCHECK_COMMAND valgrind)
+  set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml")
 
   function(add_test name binary)
     set(memcheck_command "${CTEST_MEMORYCHECK_COMMAND} ${CTEST_MEMORYCHECK_COMMAND_OPTIONS}")
@@ -155,9 +146,9 @@ endif(DTK_ENABLE_MEMCHECK)
 enable_testing()
 
 if(DTK_ENABLE_COVERAGE)
-
-  include(CodeCoverage)
+  include(dtkCodeCoverage)
   include(FindPythonInterp)
+
   if(DTK_COVERAGE_USE_COBERTURA)
     SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
   else(DTK_COVERAGE_USE_COBERTURA)
@@ -170,15 +161,16 @@ endif(DTK_ENABLE_COVERAGE)
 ## Dependencies
 ## #################################################################
 
-find_package(Qt5 REQUIRED COMPONENTS
-  Core
-  Concurrent
-  Quick
-  Network
-  Gui
-  Test
-  Widgets
-  Xml)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Concurrent REQUIRED)
+find_package(Qt5Quick REQUIRED)
+find_package(Qt5Network REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Test REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Xml REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
 
 ## ###################################################################
 ## Doc setup
@@ -187,7 +179,6 @@ find_package(Qt5 REQUIRED COMPONENTS
 set(dtk_INSTALL_DOCS ${CMAKE_BINARY_DIR}/html)
 set(dtk_CONFIG_DOCS  ${CMAKE_BINARY_DIR}/doc/cfg)
 
-# variables used by doc and tst
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
 get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
 
@@ -307,10 +298,10 @@ endif(DTK_BUILD_SUPPORT_DISTRIBUTED)
 set(DTK_HAVE_ZLIB "NO")
 
 find_package(ZLIB QUIET)
-if (ZLIB_FOUND)
+if(ZLIB_FOUND)
   include_directories( ${ZLIB_INCLUDE_DIRS} )
   set(DTK_HAVE_ZLIB "YES")
-endif (ZLIB_FOUND)
+endif(ZLIB_FOUND)
 
 set(DTK_HAVE_VRPN "NO")
 
@@ -419,15 +410,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkSetTestEnvironment.cmake.in
 "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CodeCoverage.cmake
-"${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake" @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkCodeCoverage.cmake
+"${CMAKE_CURRENT_BINARY_DIR}/dtkCodeCoverage.cmake" @ONLY)
 
 set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake")
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkCodeCoverage.cmake"
   DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
 
 install(EXPORT dtkDepends DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)

@@ -1,21 +1,16 @@
-/* dtkLogModel.cpp ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Mon Mar  5 10:25:48 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Mon Mar  5 12:29:52 2012 (+0100)
- *           By: Julien Wintz
- *     Update #: 18
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkLogModel.h"
 
@@ -141,8 +136,10 @@ void dtkLogModel::sort(int, Qt::SortOrder order)
 
     QModelIndexList oldList = persistentIndexList();
     QModelIndexList newList;
+
     for (int i = 0; i < oldList.count(); ++i)
         newList.append(index(forwarding.at(oldList.at(i).row()), 0));
+
     changePersistentIndexList(oldList, newList);
 
     emit layoutChanged();
@@ -152,3 +149,6 @@ Qt::DropActions dtkLogModel::supportedDropActions(void) const
 {
     return QAbstractItemModel::supportedDropActions() | Qt::MoveAction;
 }
+
+//
+// dtkLogModel.cpp ends here

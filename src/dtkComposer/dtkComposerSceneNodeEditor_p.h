@@ -57,8 +57,10 @@ public:
      dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent);
     ~dtkComposerSceneNodeEditorListItem(void);
 
+public:
     int type(void) const;
 
+public:
     dtkComposerScenePort *port(void);
 
 private:
@@ -129,8 +131,6 @@ public:
 public:
     dtkToolBox *node_toolbox;
 };
-
-#endif
 
 //
 // dtkComposerSceneNodeEditor_p.h ends here

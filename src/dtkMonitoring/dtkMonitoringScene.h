@@ -17,12 +17,16 @@
 #include <QtWidgets>
 
 #include "dtkMonitoringExport.h"
+#include "dtkMonitoringFactory.h"
 
 class DTKMONITORING_EXPORT dtkMonitoringScene : public QGraphicsScene
 {
 public:
      dtkMonitoringScene(QObject *parent = 0);
     ~dtkMonitoringScene(void);
+
+public:
+    void setFactory(dtkMonitoringFactory *);
 
 protected:
      void dragEnterEvent(QGraphicsSceneDragDropEvent *event);

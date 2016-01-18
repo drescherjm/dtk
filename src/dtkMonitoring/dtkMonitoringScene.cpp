@@ -22,7 +22,7 @@
 class dtkMonitoringScenePrivate
 {
 public:
-
+    dtkMonitoringFactory *factory;
 };
 
 dtkMonitoringScene::dtkMonitoringScene(QObject *parent) : QGraphicsScene(parent)
@@ -33,6 +33,11 @@ dtkMonitoringScene::dtkMonitoringScene(QObject *parent) : QGraphicsScene(parent)
 dtkMonitoringScene::~dtkMonitoringScene(void)
 {
     delete d;
+}
+
+void dtkMonitoringScene::setFactory(dtkMonitoringFactory *factory)
+{
+    d->factory = factory;
 }
 
 void dtkMonitoringScene::dragEnterEvent(QGraphicsSceneDragDropEvent * event)
@@ -61,7 +66,6 @@ void dtkMonitoringScene::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
 
 void dtkMonitoringScene::dropEvent(QGraphicsSceneDragDropEvent * event)
 {
-
     QStringList list=event->mimeData()->text().split(" ", QString::SkipEmptyParts);
 
     for(QString id : list) {
@@ -73,7 +77,7 @@ void dtkMonitoringScene::dropEvent(QGraphicsSceneDragDropEvent * event)
         if (dtkMonitoringController::instance()->monitor(node))
             continue;
 
-        monitor = dtkMonitoringFactory::instance()->create(node->type());
+        monitor = d->factory->create(node->type());
 
         if (!monitor)
             continue;

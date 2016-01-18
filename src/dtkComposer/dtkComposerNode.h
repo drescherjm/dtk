@@ -27,8 +27,10 @@ class dtkComposerViewWidget;
 // dtkComposerNode declaration
 // ///////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNode
+class DTKCOMPOSER_EXPORT dtkComposerNode : public QObject
 {
+    Q_OBJECT
+
 public:
              dtkComposerNode(void);
     virtual ~dtkComposerNode(void);
@@ -45,6 +47,9 @@ public:
              View = 7,
             Actor = 8
     };
+
+signals:
+    void monitorableChanged(bool);
 
 public:
     void setNodeMetaData(dtkComposerNodeMetaData *meta_data);
@@ -73,6 +78,12 @@ public:
 public:
     QString  inputLabelHint(int port);
     QString outputLabelHint(int port);
+
+public:
+    void setMonitorable(bool monitorable);
+
+public:
+    bool monitorable(void);
 
 public:
     virtual dtkComposerViewWidget *widget(void);

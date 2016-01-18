@@ -99,6 +99,7 @@ public:
 
 public:
     QLineEdit *edit;
+    QCheckBox *monitoring_box;
 
 public:
     QHBoxLayout *layout_widg_edit;

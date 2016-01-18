@@ -32,7 +32,7 @@ class dtkDistributedCommunicator;
 class dtkDistributedController;
 class dtkDistributedSlave;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public QObject, public dtkComposerNodeComposite
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public dtkComposerNodeComposite
 {
     Q_OBJECT
 
@@ -72,7 +72,7 @@ private:
 
 class dtkComposerNodeRemoteSubmitPrivate;
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public dtkComposerNodeLeaf
 {
     Q_OBJECT
 
@@ -92,4 +92,3 @@ public:
 protected:
     dtkComposerNodeRemoteSubmitPrivate *d;
 };
-

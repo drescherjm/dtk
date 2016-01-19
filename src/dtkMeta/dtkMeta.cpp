@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,10 +28,20 @@ QString dtkMetaType::description(const QVariant& v)
         dtkMetaContainerSequential mc = v.value<dtkMetaContainerSequential>();
         dbg << mc;
     } else {
-        if (v.canConvert<QString>()) {
-            dbg << qPrintable(v.value<QString>());
-        } else {
-            QMetaType::debugStream(dbg, v.constData(), v.userType());
+        const uint typeId = v.userType();
+        bool userStream = false;
+        bool canConvertToString = false;
+        if (typeId >= QMetaType::User) {
+            userStream = QMetaType::debugStream(dbg, v.constData(), typeId);
+            canConvertToString = v.canConvert<QString>();
+        }
+        if (!userStream && canConvertToString)
+            dbg << v.toString();
+        else if (!userStream) {
+            dbg << v;
+            int count = 11 + QString(v.typeName()).size();
+            str.remove(0, count);
+            str.remove(str.size()- 1, 1);
         }
     }
     return str;
@@ -55,7 +65,7 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
         } else {
             qDebug() << Q_FUNC_INFO << "Type" << type_name << "has not be registered to QMetaType System.";
         }
-        
+
     } else {
 
         int type_id = v.userType();
@@ -68,7 +78,7 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
                 const QMetaObject *mo = o->metaObject();
                 QString class_name(mo->className());
                 int class_type = QMetaType::type(qPrintable(class_name));
-                
+
                 while (class_type == QMetaType::UnknownType) {
                     mo = mo->superClass();
                     if (!mo)
@@ -76,7 +86,7 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
                     class_name = mo->className();
                     class_type = QMetaType::type(qPrintable(class_name));
                 }
-            
+
                 if (class_type != QMetaType::UnknownType) {
                     void *ptr = QMetaType::create(class_type, o);
 
@@ -166,5 +176,5 @@ bool dtkMetaType::destroyPointer(QVariant& v)
     return ok;
 }
 
-// 
+//
 // dtkMeta.cpp ends here

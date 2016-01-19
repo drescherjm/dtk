@@ -70,6 +70,10 @@ dtkMonitor* dtkMonitoringController::monitor(dtkComposerNode* node)
     return d->monitors.value(node);
 }
 
+void dtkMonitoringController::onMonitoringChanged(dtkComposerNode *node, bool status)
+{
+    qDebug() << Q_FUNC_INFO << node << status;
+}
 
 dtkMonitoringController::dtkMonitoringController(void) : QObject()
 {

@@ -36,11 +36,16 @@ public:
     void removeMonitor(dtkMonitor *);
 
 public:
-    int nodeCount() const;
-    QList<dtkComposerNode*> nodeList() const;
+    int nodeCount(void) const;
+
+ public:
+    QList<dtkComposerNode *> nodeList(void) const;
 
 public:
     dtkMonitor* monitor(dtkComposerNode *);
+
+public slots:
+    void onMonitoringChanged(dtkComposerNode *node, bool status);
 
 private:
      dtkMonitoringController(void);

@@ -32,7 +32,7 @@
 // dtkComposerNodeRemote implementation
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerNodeRemote::dtkComposerNodeRemote(void) : QObject(), dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
+dtkComposerNodeRemote::dtkComposerNodeRemote(void) : dtkComposerNodeComposite(), d(new dtkComposerNodeRemotePrivate)
 {
     static qlonglong count = 0;
 

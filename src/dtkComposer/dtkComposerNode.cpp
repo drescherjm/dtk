@@ -35,6 +35,9 @@ public:
 public:
     QHash<int, QString>  input_label_hint;
     QHash<int, QString> output_label_hint;
+
+public:
+    bool monitorable;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -45,6 +48,7 @@ dtkComposerNode::dtkComposerNode(void) : d(new dtkComposerNodePrivate)
 {
     d->title_hint = "Node";
     d->meta_data = 0;
+    d->monitorable = false;
 }
 
 dtkComposerNode::~dtkComposerNode(void)
@@ -140,6 +144,18 @@ QString dtkComposerNode::outputLabelHint(int port)
         return d->meta_data->outputLabels().value(port, "port");
 
     return "port";
+}
+
+void dtkComposerNode::setMonitorable(bool monitorable)
+{
+    d->monitorable = monitorable;
+
+    emit monitorableChanged(d->monitorable);
+}
+
+bool dtkComposerNode::monitorable(void)
+{
+    return d->monitorable;
 }
 
 dtkComposerViewWidget *dtkComposerNode::widget(void)

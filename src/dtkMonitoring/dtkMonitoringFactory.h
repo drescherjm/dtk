@@ -28,7 +28,8 @@ public:
     typedef dtkMonitor *(*dtkMonitorCreator)(void);
 
 public:
-    static dtkMonitoringFactory *instance(void);
+     dtkMonitoringFactory(void);
+    ~dtkMonitoringFactory(void);
 
 public:
     void initialize(void);
@@ -39,13 +40,6 @@ public:
 
 public slots:
     dtkMonitor *create(const QString& type);
-
-private:
-     dtkMonitoringFactory(void);
-    ~dtkMonitoringFactory(void);
-
-private:
-    static dtkMonitoringFactory *s_instance;
 
 private:
     class dtkMonitoringFactoryPrivate *d;

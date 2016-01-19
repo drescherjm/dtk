@@ -60,6 +60,7 @@ protected slots:
 protected slots:
     void onBlockChanged(int index);
     void onTitleChanged(const QString& text);
+    void onMonitoringChanged(bool);
 
 protected slots:
     void onImplementationChanged(const QString&);

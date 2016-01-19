@@ -21,6 +21,7 @@
 #include <QDomDocument>
 
 class dtkMonitoringScene;
+class dtkMonitoringFactory;
 class dtkMonitoringReaderPrivate;
 
 class  DTKMONITORING_EXPORT dtkMonitoringReader
@@ -30,7 +31,8 @@ public:
     virtual ~dtkMonitoringReader(void);
 
 public:
-    void setScene(dtkMonitoringScene *scene);
+    void setScene(dtkMonitoringScene *);
+    void setFactory(dtkMonitoringFactory *);
 
 public:
     void read(const QString& filename);
@@ -39,8 +41,6 @@ public:
     void loadSceneFromElement(const QDomElement &document);
     void loadItemFromElement(const QDomElement &document);
 
-
 private:
     dtkMonitoringReaderPrivate *d;
 };
-

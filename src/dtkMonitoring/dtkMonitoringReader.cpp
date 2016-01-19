@@ -6,7 +6,8 @@
 class dtkMonitoringReaderPrivate
 {
 public:
-    dtkMonitoringScene* scene;
+    dtkMonitoringScene   *scene;
+    dtkMonitoringFactory *factory;
 };
 
 dtkMonitoringReader::dtkMonitoringReader()
@@ -22,6 +23,11 @@ dtkMonitoringReader::~dtkMonitoringReader()
 void dtkMonitoringReader::setScene(dtkMonitoringScene *scene)
 {
     d->scene = scene;
+}
+
+void dtkMonitoringReader::setFactory(dtkMonitoringFactory *factory)
+{
+    d->factory = factory;
 }
 
 void dtkMonitoringReader::read(const QString& filename)
@@ -58,18 +64,18 @@ void dtkMonitoringReader::loadItemFromElement(const QDomElement& document)
     double x,y,z,w,h;
 
     if(document.hasAttribute("title"))
-        title=document.attribute("title");
+        title = document.attribute("title");
     if(document.hasAttribute("type"))
-        type=document.attribute("type");
+        type = document.attribute("type");
 
     if(document.hasAttribute("x"))
-        x=document.attribute("x").toDouble();
+        x = document.attribute("x").toDouble();
     if(document.hasAttribute("y"))
-        y=document.attribute("y").toDouble();
+        y = document.attribute("y").toDouble();
     if(document.hasAttribute("z"))
-        z=document.attribute("z").toDouble();
+        z = document.attribute("z").toDouble();
 
-    dtkMonitor* monitor=dtkMonitoringFactory::instance()->create(type);
+    dtkMonitor *monitor = d->factory->create(type);
     monitor->setPos(monitor->mapFromScene(monitor->pos()));
     monitor->setZValue(z);
     d->scene->addItem(monitor);
@@ -80,13 +86,13 @@ void dtkMonitoringReader::loadSceneFromElement(const QDomElement& document)
     double x,y,w,h;
 
     if(document.hasAttribute("x"))
-        x=document.attribute("x").toDouble();
+        x = document.attribute("x").toDouble();
     if(document.hasAttribute("y"))
-        y=document.attribute("y").toDouble();
+        y = document.attribute("y").toDouble();
     if(document.hasAttribute("w"))
-        w=document.attribute("w").toDouble();
+        w = document.attribute("w").toDouble();
     if(document.hasAttribute("h"))
-        h=document.attribute("h").toDouble();
+        h = document.attribute("h").toDouble();
 
     d->scene->setSceneRect(x,y,w,h);
 }

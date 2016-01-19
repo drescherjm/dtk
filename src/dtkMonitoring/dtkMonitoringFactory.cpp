@@ -26,12 +26,14 @@ public:
 // dtkMonitoringFactory
 // /////////////////////////////////////////////////////////////////
 
-dtkMonitoringFactory *dtkMonitoringFactory::instance(void)
+dtkMonitoringFactory::dtkMonitoringFactory(void)
 {
-    if(!s_instance)
-        s_instance = new dtkMonitoringFactory;
+    d = new dtkMonitoringFactoryPrivate;
+}
 
-    return s_instance;
+dtkMonitoringFactory::~dtkMonitoringFactory(void)
+{
+    delete d;
 }
 
 void dtkMonitoringFactory::initialize(void)
@@ -55,18 +57,6 @@ dtkMonitor *dtkMonitoringFactory::create(const QString& type)
         return NULL;
     return d->creators.values(type).first()();
 }
-
-dtkMonitoringFactory::dtkMonitoringFactory(void)
-{
-    d = new dtkMonitoringFactoryPrivate;
-}
-
-dtkMonitoringFactory::~dtkMonitoringFactory(void)
-{
-    delete d;
-}
-
-dtkMonitoringFactory *dtkMonitoringFactory::s_instance = NULL;
 
 //
 // dtkMonitoringFactory.cpp ends here

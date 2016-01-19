@@ -15,6 +15,7 @@
 #include "dtkMonitor.h"
 #include "dtkMonitoringController.h"
 #include "dtkMonitoringFactory.h"
+#include "dtkMonitoringModel.h"
 
 #include <dtkComposer/dtkComposerNode.h>
 
@@ -22,6 +23,7 @@ class dtkMonitoringControllerPrivate
 {
 public:
     QMap<dtkComposerNode *, dtkMonitor *> monitors;
+    dtkMonitoringModel *m_model;
 };
 
 dtkMonitoringController *dtkMonitoringController::instance(void)
@@ -37,14 +39,24 @@ void dtkMonitoringController::registerNode(dtkComposerNode *node)
     qDebug() << Q_FUNC_INFO << node->type();
 
     d->monitors.insert(node, NULL);
+    if(d->m_model)
+        d->m_model->update(d->monitors.keys().indexOf(node));
 }
 
 void dtkMonitoringController::unregisterNode(dtkComposerNode *node)
 {
-    qDebug() << Q_FUNC_INFO << node->type();
-
-    d->monitors.keys().removeAll(node);
+    qDebug() << Q_FUNC_INFO << node->type()<<" "<<d->monitors.keys().indexOf(node);
+    int index=d->monitors.keys().indexOf(node);
+    d->monitors.remove(node);
+    if(d->m_model)
+        d->m_model->update(index);
 }
+
+void dtkMonitoringController::registerModel(dtkMonitoringModel *model)
+{
+    d->m_model=model;
+}
+
 
 void dtkMonitoringController::replaceMonitor(dtkComposerNode *node, dtkMonitor *monitor)
 {
@@ -106,6 +118,7 @@ void dtkMonitoringController::onMonitoringChanged(dtkComposerNode *node, bool st
 dtkMonitoringController::dtkMonitoringController(void) : QObject()
 {
     d = new dtkMonitoringControllerPrivate;
+    d->m_model=NULL;
 }
 
 dtkMonitoringController::~dtkMonitoringController(void)

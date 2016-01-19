@@ -20,6 +20,7 @@
 
 class dtkComposerNode;
 class dtkMonitor;
+class dtkMonitoringModel;
 
 class DTKMONITORING_EXPORT dtkMonitoringController : public QObject
 {
@@ -39,8 +40,11 @@ public:
 public:
     int nodeCount(void) const;
 
- public:
+public:
     QList<dtkComposerNode *> nodeList(void) const;
+
+public:
+    void registerModel(dtkMonitoringModel *model);
 
 public:
     dtkMonitor *monitor(dtkComposerNode *);

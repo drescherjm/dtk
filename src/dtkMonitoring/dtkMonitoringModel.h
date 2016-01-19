@@ -29,6 +29,9 @@ public:
     QMimeData * mimeData(const QModelIndexList & indexes) const;
     QStringList mimeTypes() const;
 
+public:
+    void update(int index);
+
 private:
     dtkMonitoringModelPrivate* d;
 

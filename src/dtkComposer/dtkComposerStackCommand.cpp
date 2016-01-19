@@ -1,16 +1,16 @@
-/* dtkComposerStackCommand.cpp --- 
- * 
+/* dtkComposerStackCommand.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:17:43 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <dtkConfig.h>
@@ -182,6 +182,8 @@ void dtkComposerStackCommandCreateNode::redo(void)
 
         e->node->wrap(node);
         e->node->setParent(e->parent);
+
+        QObject::connect(node, SIGNAL(onMonitoringChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
     }
 
     e->node->setPos(e->position);
@@ -1061,7 +1063,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     i.toBack();
     while (i.hasPrevious())
         i.previous()->undo();
-    
+
     // --
 
    d->graph->removeNode(e->node);
@@ -1117,7 +1119,7 @@ dtkComposerStackCommandDestroyGroup::~dtkComposerStackCommandDestroyGroup(void)
     e->reparent.clear();
 
     delete e;
-    
+
     e = NULL;
 }
 
@@ -1149,7 +1151,7 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
         e->node->removeNote(note);
         note->setParent(e->node->parent());
     }
-    
+
     if(e->dirty) {
         foreach(dtkComposerSceneNode *node, e->nodes) {
             e->reparent << new dtkComposerStackCommandReparentNode;
@@ -1207,14 +1209,14 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
     }
 
     e->node->setPos(rect.center() - e->node->boundingRect().center());
-    
+
     // roll back reparent commands
 
     QListIterator<dtkComposerStackCommandReparentNode *> i(e->reparent);
     i.toBack();
     while (i.hasPrevious())
         i.previous()->undo();
-    
+
     // --
 
     foreach(dtkComposerSceneNote *note, e->notes) {
@@ -1361,7 +1363,7 @@ void dtkComposerStackCommandLeaveGroup::undo(void)
     d->scene->removeItem(e->node->former());
 
     e->node->enter();
-    
+
     d->scene->addItem(e->node);
     d->scene->setCurrent(e->node);
 
@@ -1760,7 +1762,7 @@ void dtkComposerStackCommandDestroyPort::redo(void)
 
     foreach(dtkComposerStackCommandDestroyEdge *destroy_left_edge, e->destroy_left_edges)
         destroy_left_edge->redo();
-        
+
     foreach(dtkComposerStackCommandDestroyEdge *destroy_right_edge, e->destroy_right_edges)
         destroy_right_edge->redo();
 
@@ -1883,7 +1885,7 @@ dtkComposerSceneNodeComposite *dtkComposerStackCommandReparentNodePrivate::ances
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerStackCommandReparentNode::dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandReparentNodePrivate)
@@ -2356,7 +2358,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         e->source->removeNode(e->origin);
 
-        // Remove node from the scene if source is not flattened 
+        // Remove node from the scene if source is not flattened
 
         if (e->source->flattened() || e->source == d->scene->current()) {
             d->scene->removeItem(e->origin);
@@ -2384,7 +2386,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         }
 
-        // Set node position 
+        // Set node position
 
         e->origin->setPos(e->target_pos);
 
@@ -2617,7 +2619,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         e->source->removeNode(e->origin);
 
-        // Remove node from the scene if source is not flattened 
+        // Remove node from the scene if source is not flattened
 
         if (e->source->flattened() || e->source == d->scene->current()) {
             d->scene->removeItem(e->origin);
@@ -2645,11 +2647,11 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
         }
 
-        // Set node position 
+        // Set node position
 
         e->origin->setPos(e->target_pos);
 
-        // 
+        //
 
         foreach(dtkComposerStackCommand *command, e->cps)
             command->redo();
@@ -2711,7 +2713,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
 void dtkComposerStackCommandReparentNode::undo(void)
 {
-    { // Undo down commands 
+    { // Undo down commands
 
     QListIterator<dtkComposerStackCommandReparentNode *> command(e->down); command.toBack();
 
@@ -2720,7 +2722,7 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     }
 
-    { // Undo up commands 
+    { // Undo up commands
 
     QListIterator<dtkComposerStackCommandReparentNode *> command(e->up); command.toBack();
 
@@ -2735,7 +2737,7 @@ void dtkComposerStackCommandReparentNode::undo(void)
         return;
 
 
-    { // Undo create edges commands 
+    { // Undo create edges commands
 
     QListIterator<dtkComposerStackCommandCreateEdge *> command(e->ces); command.toBack();
 
@@ -2744,7 +2746,7 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     }
 
-    { // Undo create ports commands 
+    { // Undo create ports commands
 
     QListIterator<dtkComposerStackCommandCreatePort *> command(e->cps); command.toBack();
 
@@ -2775,7 +2777,7 @@ void dtkComposerStackCommandReparentNode::undo(void)
     e->source = e->target;
     e->target = temp;
 
-    { // Undo destroy ports commands 
+    { // Undo destroy ports commands
 
     QListIterator<dtkComposerStackCommandDestroyPort *> command(e->dps); command.toBack();
 
@@ -2784,7 +2786,7 @@ void dtkComposerStackCommandReparentNode::undo(void)
 
     }
 
-    { // Undo destroy edges commands 
+    { // Undo destroy edges commands
 
     QListIterator<dtkComposerStackCommandDestroyEdge *> command(e->des); command.toBack();
 
@@ -3126,4 +3128,3 @@ void dtkComposerStackCommandCopyNodes::undo(void)
 
     d->scene->modify(true);
 }
-

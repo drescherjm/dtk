@@ -12,6 +12,7 @@
 
 // Code:
 
+#include "dtkComposerNode.h"
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerReader.h"
@@ -460,6 +461,16 @@ void dtkComposerScene::onUnMaskEdge(void)
     foreach (dtkComposerSceneEdge * edge, d->all_edges) {
         edge->setOpacity(1);
     }
+}
+
+void dtkComposerScene::onMonitoringChanged(bool status)
+{
+    dtkComposerNode *node = dynamic_cast<dtkComposerNode *>(sender());
+
+    if(!node)
+        return;
+
+    emit monitoringChanged(node, status);
 }
 
 // /////////////////////////////////////////////////////////////////

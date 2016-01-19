@@ -110,6 +110,9 @@ signals:
     void selectionCleared(void);
     // void selected(QGraphicsItem *item);
 
+signals:
+    void monitoringChanged(dtkComposerNode *node, bool status);
+
 // #pragma mark -
 // #pragma mark - Flag events
 
@@ -126,6 +129,9 @@ protected slots:
 protected slots:
     void onMaskEdge(void);
     void onUnMaskEdge(void);
+
+protected slots:
+    void onMonitoringChanged(bool);
 
 // #pragma mark -
 // #pragma mark - Drag Drop Events

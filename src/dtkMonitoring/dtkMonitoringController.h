@@ -29,7 +29,8 @@ public:
     static dtkMonitoringController *instance(void);
 
 public:
-    void registerNode(dtkComposerNode *);
+    void   registerNode(dtkComposerNode *);
+    void unregisterNode(dtkComposerNode *);
 
 public:
     void replaceMonitor(dtkComposerNode *, dtkMonitor *);
@@ -42,7 +43,7 @@ public:
     QList<dtkComposerNode *> nodeList(void) const;
 
 public:
-    dtkMonitor* monitor(dtkComposerNode *);
+    dtkMonitor *monitor(dtkComposerNode *);
 
 public slots:
     void onMonitoringChanged(dtkComposerNode *node, bool status);

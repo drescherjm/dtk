@@ -34,7 +34,16 @@ dtkMonitoringController *dtkMonitoringController::instance(void)
 
 void dtkMonitoringController::registerNode(dtkComposerNode *node)
 {
+    qDebug() << Q_FUNC_INFO << node->type();
+
     d->monitors.insert(node, NULL);
+}
+
+void dtkMonitoringController::unregisterNode(dtkComposerNode *node)
+{
+    qDebug() << Q_FUNC_INFO << node->type();
+
+    d->monitors.keys().removeAll(node);
 }
 
 void dtkMonitoringController::replaceMonitor(dtkComposerNode *node, dtkMonitor *monitor)
@@ -47,17 +56,19 @@ void dtkMonitoringController::replaceMonitor(dtkComposerNode *node, dtkMonitor *
 
 void dtkMonitoringController::removeMonitor(dtkMonitor *monitor)
 {
+    qDebug() << Q_FUNC_INFO;
+
     dtkComposerNode *node = d->monitors.key(monitor);
 
     d->monitors[node] = NULL;
 }
 
-int dtkMonitoringController::nodeCount() const
+int dtkMonitoringController::nodeCount(void) const
 {
     return d->monitors.size();
 }
 
-QList<dtkComposerNode*> dtkMonitoringController::nodeList() const
+QList<dtkComposerNode *> dtkMonitoringController::nodeList(void) const
 {
     return d->monitors.keys();
 }
@@ -72,7 +83,24 @@ dtkMonitor* dtkMonitoringController::monitor(dtkComposerNode* node)
 
 void dtkMonitoringController::onMonitoringChanged(dtkComposerNode *node, bool status)
 {
-    qDebug() << Q_FUNC_INFO << node << status;
+    qDebug() << Q_FUNC_INFO << node->type() << status;
+
+    if(status) {
+
+        this->registerNode(node);
+
+    } else {
+
+        dtkMonitor *monitor = this->monitor(node);
+
+        if(monitor) {
+            this->removeMonitor(monitor);
+
+            delete monitor;
+        }
+
+        this->unregisterNode(node);
+    }
 }
 
 dtkMonitoringController::dtkMonitoringController(void) : QObject()

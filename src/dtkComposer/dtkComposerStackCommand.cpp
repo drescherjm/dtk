@@ -183,7 +183,7 @@ void dtkComposerStackCommandCreateNode::redo(void)
         e->node->wrap(node);
         e->node->setParent(e->parent);
 
-        QObject::connect(node, SIGNAL(onMonitoringChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
+        QObject::connect(node, SIGNAL(monitorableChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
     }
 
     e->node->setPos(e->position);

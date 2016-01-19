@@ -1,5 +1,8 @@
 #include "dtkMonitoringModel.h"
 
+#include <QMetaType>
+#include <dtkComposer/dtkComposerNode>
+
 dtkMonitoringModel::dtkMonitoringModel()
 {
 
@@ -24,7 +27,7 @@ QVariant dtkMonitoringModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole)
-        return dtkMonitoringController::instance()->nodeList().at(index.row())->titleHint();
+        return QVariant::fromValue(dtkMonitoringController::instance()->nodeList().at(index.row()));
     else
         return QVariant();
 }

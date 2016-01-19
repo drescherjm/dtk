@@ -100,5 +100,7 @@ private:
     dtkComposerNodePrivate *d;
 };
 
+Q_DECLARE_METATYPE(dtkComposerNode*);
+
 //
 // dtkComposerNode.h ends here

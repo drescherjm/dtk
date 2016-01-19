@@ -18,6 +18,8 @@
 
 #include "dtkMonitoringExport.h"
 
+class dtkMonitoringModel;
+
 class DTKMONITORING_EXPORT dtkMonitoringList : public QListView
 {
     Q_OBJECT
@@ -25,6 +27,10 @@ class DTKMONITORING_EXPORT dtkMonitoringList : public QListView
 public:
      dtkMonitoringList(QWidget *parent);
     ~dtkMonitoringList(void);
+
+public:
+     void setModel(dtkMonitoringModel *model);
+
 
 private:
     class dtkMonitoringListPrivate *d;

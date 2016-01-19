@@ -139,7 +139,7 @@ void dtkMonitoringListItemDelegate::paint(QPainter *painter, const QStyleOptionV
     painter->setPen(Qt::white);
     painter->drawText(title_rect, Qt::AlignCenter | Qt::AlignTop, item->titleHint());
 
-    painter->setPen(QColor("#6a769d"));
+    painter->setPen(QColor(Qt::lightGray));
     painter->drawText(type_rect, Qt::AlignLeft | Qt::AlignTop, kindText+": "+item->type());
 }
 

@@ -194,14 +194,12 @@ void dtkComposerStackCommandCreateNode::redo(void)
     d->graph->addNode(e->node);
     d->graph->layout();
 
-// -- ??
     if (e->parent->visible()) {
         d->scene->addItem(e->node);
         e->node->layout();
     }
 
     d->scene->modify(true);
-// --
 }
 
 void dtkComposerStackCommandCreateNode::undo(void)
@@ -223,18 +221,18 @@ void dtkComposerStackCommandCreateNode::undo(void)
 
     e->position = e->node->scenePos();
 
-
     d->graph->removeNode(e->node);
     d->graph->layout();
 
     e->parent->removeNode(e->node);
     e->parent->layout();
-// -- ??
+
     if (e->parent->visible())
         d->scene->removeItem(e->node);
 
+    QObject::disconnect(e->node->wrapee(), SIGNAL(monitorableChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
+
     d->scene->modify(true);
-// --
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -248,6 +246,7 @@ public:
 
 public:
     bool dirty;
+
 public:
     dtkComposerSceneNodeComposite *parent;
 
@@ -257,6 +256,8 @@ public:
     QList<dtkComposerStackCommand *>  destroy_nodes;
     QList<dtkComposerStackCommandDestroyEdge *>  destroy_edges;
 
+public:
+    bool monitorable;
 };
 
 dtkComposerStackCommandDestroyNode::dtkComposerStackCommandDestroyNode(dtkComposerStackCommand *parent) : dtkComposerStackCommand(parent), e(new dtkComposerStackCommandDestroyNodePrivate)
@@ -312,7 +313,6 @@ void dtkComposerStackCommandDestroyNode::setNode(dtkComposerSceneNode *node)
                 e->destroy_nodes << cmd;
             }
         }
-
     }
 
     this->setText(QString("Destroy node %1").arg(e->node->title()));
@@ -341,12 +341,6 @@ void dtkComposerStackCommandDestroyNode::redo(void)
             e->destroy_edges.last()->setGraph(d->graph);
             e->destroy_edges.last()->setEdge(edge);
             e->destroy_edges.last()->redo();
-            // if (d->scene->items().contains(edge))
-            //     d->scene->removeItem(edge);
-            // d->graph->removeEdge(edge);
-            // e->parent->removeEdge(edge);
-            // e->input_edges << edge;
-            // edge->unlink();
         }
 
         foreach(dtkComposerSceneEdge *edge, e->node->outputEdges()){
@@ -361,6 +355,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         if (dtkComposerSceneNodeControl *control = dynamic_cast< dtkComposerSceneNodeControl * >(e->node)) {
 
             foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+
                 foreach(dtkComposerSceneEdge *edge, block->inputEdges()) {
                     e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
                     e->destroy_edges.last()->setFactory(d->factory);
@@ -369,6 +364,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
                     e->destroy_edges.last()->setEdge(edge);
                     e->destroy_edges.last()->redo();
                 }
+
                 foreach(dtkComposerSceneEdge *edge, block->outputEdges()) {
                     e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
                     e->destroy_edges.last()->setFactory(d->factory);
@@ -378,6 +374,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
                     e->destroy_edges.last()->redo();
                 }
             }
+
             foreach(dtkComposerSceneEdge *edge, control->header()->inputEdges()){
                 e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
                 e->destroy_edges.last()->setFactory(d->factory);
@@ -386,6 +383,7 @@ void dtkComposerStackCommandDestroyNode::redo(void)
                 e->destroy_edges.last()->setEdge(edge);
                 e->destroy_edges.last()->redo();
             }
+
             foreach(dtkComposerSceneEdge *edge, control->footer()->outputEdges()){
                 e->destroy_edges << new dtkComposerStackCommandDestroyEdge;
                 e->destroy_edges.last()->setFactory(d->factory);
@@ -395,13 +393,18 @@ void dtkComposerStackCommandDestroyNode::redo(void)
                 e->destroy_edges.last()->redo();
             }
         }
+
         e->dirty = false;
+
     } else {
+
         foreach(dtkComposerStackCommand *destroy_edge, e->destroy_edges)
             destroy_edge->redo();
+
     }
 
     const int listSize = e->destroy_nodes.size();
+
     for (int i = 0; i < listSize; ++i)
         e->destroy_nodes.at(i)->redo();
 
@@ -415,6 +418,10 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         d->scene->removeItem(e->node);
 
     d->scene->modify(true);
+
+    e->monitorable = e->node->wrapee()->monitorable();
+
+    e->node->wrapee()->setMonitorable(false);
 }
 
 void dtkComposerStackCommandDestroyNode::undo(void)
@@ -448,8 +455,11 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     d->graph->layout();
 
-
     d->scene->modify(true);
+
+    QObject::connect(e->node->wrapee(), SIGNAL(monitorableChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
+
+    e->node->wrapee()->setMonitorable(e->monitorable);
 }
 
 // /////////////////////////////////////////////////////////////////

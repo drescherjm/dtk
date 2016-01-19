@@ -32,7 +32,6 @@ QVariant dtkMonitoringModel::data(const QModelIndex &index, int role) const
         return QVariant();
 }
 
-
 QMimeData * dtkMonitoringModel::mimeData(const QModelIndexList & indexes) const
 {
     QMimeData* mimeData =new QMimeData();
@@ -59,4 +58,9 @@ Qt::ItemFlags dtkMonitoringModel::flags(const QModelIndex &index) const
         return Qt::ItemIsDragEnabled | defaultFlags;
     else
         return  defaultFlags;
+}
+
+void dtkMonitoringModel::update(int index)
+{
+    emit dataChanged(createIndex(index,0), createIndex(index,0));
 }

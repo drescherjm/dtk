@@ -41,7 +41,7 @@ QString dtkMetaType::description(const QVariant& v)
             dbg << v;
             int count = 11 + QString(v.typeName()).size();
             str.remove(0, count);
-            str.remove(str.size()- 1, 1);
+            str.chop(2);
         }
     }
     return str;

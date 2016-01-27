@@ -226,5 +226,16 @@ template <typename T> QStringList dtkCorePluginManager<T>::plugins(void)
     return d->loaders.keys();
 }
 
+// /////////////////////////////////////////////////////////////////
+// metaData Queries
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> QJsonObject dtkCorePluginManager<T>::metaData(const QString& pluginKey)
+{
+    if(d->loaders.keys().contains(pluginKey))
+        return d->loaders[pluginKey]->metaData();
+    return QJsonObject();
+}
+
 //
 // dtkCorePluginManager_t.h ends here

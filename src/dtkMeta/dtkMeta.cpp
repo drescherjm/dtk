@@ -44,15 +44,13 @@ QString dtkMetaType::description(const QVariant& v)
             QAssociativeIterable::const_iterator it = iterable.begin();
             const QAssociativeIterable::const_iterator end = iterable.end();
             for ( ; it != end; ++it) {
-                qDebug() << it.key();
                 dbg << dtkMetaType::description(it.key()) << ": " << dtkMetaType::description(it.value());
                 dbg << '\n' ;
             }
-            qDebug() << str;
 
         } else if (!userStream) {
             dbg << v;
-            str.remove(str.size()- 1, 1);
+            str.chop(2);
             int count = 11 + QString(v.typeName()).size();
             str.remove(0, count);
         }

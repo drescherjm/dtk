@@ -305,7 +305,6 @@ inline bool qthDistributedBufferManager::compareAndSwap(qint32 dest, qlonglong p
 {
     Q_ASSERT((dest >= 0 || dest < d->comm->size()));
     char *buffer = d->buffers[dest];
-    int locked = d->locked[dest].load();
 
     // should we lock ?
     return this->operation_manager->compareAndSwap(buffer + position * d->object_size, array, compare);

@@ -179,8 +179,6 @@ public:
 
         QTime time2; time2.start();
 
-        qlonglong sum = comm->size() * (comm->size()+1) / 2;
-
         for (int i =0; i< iter; ++i) {
 
             comm->gather(&input,result, 1, 0, false);

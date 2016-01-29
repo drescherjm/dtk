@@ -35,13 +35,26 @@ QString dtkMetaType::description(const QVariant& v)
             userStream = QMetaType::debugStream(dbg, v.constData(), typeId);
             canConvertToString = v.canConvert<QString>();
         }
-        if (!userStream && canConvertToString)
+
+        if (!userStream && canConvertToString) {
             dbg << v.toString();
-        else if (!userStream) {
+
+        } else if(typeId == QMetaType::QVariantMap || typeId == QMetaType::QVariantHash) {
+            QAssociativeIterable iterable = v.value<QAssociativeIterable>();
+            QAssociativeIterable::const_iterator it = iterable.begin();
+            const QAssociativeIterable::const_iterator end = iterable.end();
+            for ( ; it != end; ++it) {
+                qDebug() << it.key();
+                dbg << dtkMetaType::description(it.key()) << ": " << dtkMetaType::description(it.value());
+                dbg << '\n' ;
+            }
+            qDebug() << str;
+
+        } else if (!userStream) {
             dbg << v;
+            str.remove(str.size()- 1, 1);
             int count = 11 + QString(v.typeName()).size();
             str.remove(0, count);
-            str.remove(str.size()- 1, 1);
         }
     }
     return str;
@@ -119,7 +132,15 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
                 type_id = QMetaType::type(qPrintable(type_name + "*"));
                 return QVariant(type_id, &ptr, 1);
             } else {
-                qDebug() << Q_FUNC_INFO << ": Type" << type_name << "has not be registered to QMetaType System. Maybe it is not registered or maybe it is an abstract class.";
+                type_name = v.typeName();
+                type_id = QMetaType::type(qPrintable(type_name));
+
+                if (type_id != QMetaType::UnknownType) {
+                    void *ptr = nullptr;
+                    return QVariant(type_id, &ptr, 1);
+                } else {
+                    qDebug() << Q_FUNC_INFO << ": Type" << type_name << "has not be registered to QMetaType System. Maybe it is not registered or maybe it is a non copyable class.";
+                }
             }
         }
     }

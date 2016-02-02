@@ -26,7 +26,7 @@
 // dtkMetaTypeHandler definition
 // /////////////////////////////////////////////////////////////////
 
-template< typename T, bool = QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value > 
+template< typename T, bool = QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value >
 struct dtkMetaTypeHandler
 {
     static bool canConvert(const QList<int>& types);
@@ -34,30 +34,34 @@ struct dtkMetaTypeHandler
 
 template<typename T> struct dtkMetaTypeHandler<T *, false>
 {
-    static bool canConvert(const QList<int>& types);
+    static     bool  canConvert(const QList<int>& types);
     static QVariant  variantFromValue(T *t);
     static        T *clone(T *t);
+    static     void  copy(T *source, T *target);
 };
 
 template<typename T> struct dtkMetaTypeHandler<T *, true>
 {
-    static bool canConvert(const QList<int>& types);
-    static QVariant variantFromValue(T *t);
-    static T *clone(T *t);
+    static     bool  canConvert(const QList<int>& types);
+    static QVariant  variantFromValue(T *t);
+    static        T *clone(T *t);
+    static     void  copy(T *source, T *target);
 };
 
-template< typename T, bool = std::is_abstract<T>::value> struct dtkMetaTypeHandlerHelper;
+template< typename T, bool B> struct dtkMetaTypeHandlerHelper;
 
 template< typename T> struct dtkMetaTypeHandlerHelper<T *, false>
 {
     static bool  canConvert(const QList<int>& types);
-    static T *clone(T *t);
+    static    T *clone(T *t);
+    static void  copy(T *source, T *target);
 };
 
 template< typename T> struct dtkMetaTypeHandlerHelper<T *, true>
 {
-    static bool canConvert(const QList<int>& types);
-    static T *clone(T *t);
+    static bool  canConvert(const QList<int>& types);
+    static    T *clone(T *);
+    static void  copy(T *source, T *target);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -72,6 +76,7 @@ public:
     template <typename T> static QVariant variantFromValue(const T& t);
     template <typename T> static QVariant variantFromValue(      T *t);
     template <typename T> static        T *clone(T *t);
+    template <typename T> static     void copy(T *source, T *target);
     template <typename T> static     bool registerContainerPointerConverter(int id);
 
 public:

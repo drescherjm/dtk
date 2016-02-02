@@ -31,8 +31,7 @@ set(${PROJECT_NAME}_HEADERS
     dtkConceptGenerator.h
     dtkNewConceptPage.h
     dtkIntroPage.h
-    generator.h
-    )
+    generator.h)
 
 set(${PROJECT_NAME}_SOURCES
     dtkPluginGeneratorPage.cpp
@@ -41,27 +40,23 @@ set(${PROJECT_NAME}_SOURCES
     dtkNewConceptPage.cpp
     dtkIntroPage.cpp
     generator.cpp
-    main.cpp
-  )
+    main.cpp)
 
 set(${PROJECT_NAME}_UI
     dtkPluginGeneratorPage.ui
     dtkConceptDefinitionPage.ui
     dtkNewConceptPage.ui
-    dtkIntroPage.ui
-)
-
+    dtkIntroPage.ui)
 
 set(${PROJECT_NAME}_RESOURCES
-  templates.qrc
-  )
+  templates.qrc)
 
 ## #################################################################
 ## Build rules
 ## #################################################################
 
 if(NOT MSVC)
-add_definitions(-Wno-write-strings)
+  add_definitions(-Wno-write-strings)
 endif(NOT MSVC)
 
 qt5_add_RESOURCES(${PROJECT_NAME}_SOURCES_QRC ${${PROJECT_NAME}_RESOURCES})
@@ -73,29 +68,19 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_HEADERS})
 
-
 target_link_libraries(${PROJECT_NAME}
   dtkLog
   dtkCore
-  dtkComposer
   dtkGuiSupport
   dtkWidgets)
 
 if(APPLE)
-target_link_libraries(${PROJECT_NAME}
-  "-framework Cocoa")
+  target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
 endif(APPLE)
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
-
-## #################################################################
-## Source file layout in development environments like Visual Studio
-## #################################################################
-
-SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
-SOURCE_GROUP("Generated Files" FILES ${${PROJECT_NAME}_SOURCES_MOC})
 
 ## #################################################################
 ## Installation

@@ -651,16 +651,16 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
                 int current_index = 0;
                 d->select_implementation->addItem("Choose implementation");
-                
+
                 for(int i = 0; i < object_node->implementations().count(); ++i) {
                     if (object_node->implementations().at(i) == object_node->currentImplementation())
                         current_index = i+1;
                     d->select_implementation->addItem(object_node->implementations().at(i));
                 }
-                
+
                 d->select_implementation->setMaximumWidth(this->size().width() - 10);
                 d->select_implementation->setCurrentIndex(current_index);
-                
+
                 d->select_implementation->blockSignals(false);
                 d->select_implementation->setVisible(true);
                 d->select_implementation->setEnabled(true);
@@ -743,13 +743,11 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 d->current_widget->setVisible(false);
                 d->current_widget->setEnabled(false);
                 d->layout_widg_edit->removeWidget(d->current_widget);
-                qDebug() << Q_FUNC_INFO << d->current_widget;
             }
             d->current_widget = d->node->wrapee()->editor();
             d->current_widget->blockSignals(false);
             d->current_widget->setVisible(true);
             d->current_widget->setEnabled(true);
-            qDebug() << Q_FUNC_INFO << d->current_widget;
             d->layout_widg_edit->addWidget(d->current_widget);
         }
     }
@@ -858,7 +856,6 @@ void dtkComposerSceneNodeEditor::clear(void)
         d->current_widget->setVisible(false);
         d->current_widget->setEnabled(false);
         d->layout_widg_edit->removeWidget(d->current_widget);
-        qDebug() << Q_FUNC_INFO << d->current_widget;
     }
     d->current_widget = NULL;
 }
@@ -1364,6 +1361,20 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
         d->node_toolbox->blockSignals(false);
         d->node_toolbox->setVisible(true);
         d->node_toolbox->setEnabled(true);
+    }
+
+    if (d->node->wrapee()->editor()) {
+        if (d->current_widget) {
+            d->current_widget->blockSignals(true);
+            d->current_widget->setVisible(false);
+            d->current_widget->setEnabled(false);
+            d->layout_widg_edit->removeWidget(d->current_widget);
+        }
+        d->current_widget = d->node->wrapee()->editor();
+        d->current_widget->blockSignals(false);
+        d->current_widget->setVisible(true);
+        d->current_widget->setEnabled(true);
+        d->layout_widg_edit->addWidget(d->current_widget);
     }
 
 }

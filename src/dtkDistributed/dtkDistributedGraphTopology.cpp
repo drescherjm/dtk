@@ -187,7 +187,6 @@ void dtkDistributedGraphTopology::buildDomainDecompositionMaps(void)
     qlonglong first_id = this->mapper()->firstIndex(wid);
     qlonglong  last_id = this->mapper()->lastIndex(wid);
     qlonglong v_count = this->mapper()->count(wid);
-    qlonglong loc_size = this->mapper()->count(wid);
     qlonglong v_id = first_id;
 
     auto vit  = m_vertex_to_edge->begin();
@@ -414,7 +413,7 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
     qlonglong local_nnz = local_internal_nnz + local_hybrid_nnz + local_remote_nnz;
     m_dd.local_edge_to_vertex.resize(local_nnz);
 
-    qlonglong local_edge_count[m_comm->size()];
+    qlonglong *local_edge_count = new qlonglong[m_comm->size()];
     m_comm->gather(&local_nnz, local_edge_count, 1, 0, true);
 
     qlonglong total_local_nnz = 0;
@@ -430,6 +429,7 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
         m_dd.mapper->setMap(offset, i);
         offset += local_edge_count[i];
     }
+    delete[] local_edge_count;
 
     // We now fill the local CSR edge_to_vertex array. The global ids
     // are sorted according to their local ids. This operation is
@@ -655,9 +655,9 @@ void dtkDistributedGraphTopology::assemble(void)
         m_neighbour_count->unlock();
         m_comm->barrier();
 
-        //2 we do a all gather to avoid reading data of other processes 
-        qlonglong offset_per_proc[m_comm->size()] ;
-        m_comm->gather(&local_offset, offset_per_proc, 1, 0, true); 
+        //2 we do a all gather to avoid reading data of other processes
+        qlonglong *offset_per_proc = new qlonglong[m_comm->size()] ;
+        m_comm->gather(&local_offset, offset_per_proc, 1, 0, true);
 
         //3 do a reduction
         for(qlonglong i=0; i<this->wid(); ++i)
@@ -665,6 +665,7 @@ void dtkDistributedGraphTopology::assemble(void)
             offset += offset_per_proc[i];
         }
         offset += this->wid();
+        delete[] offset_per_proc;
 
         auto it  = m_neighbour_count->begin();
         auto ite = m_neighbour_count->end();

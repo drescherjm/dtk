@@ -213,7 +213,7 @@ void sumItemWork::run(void)
     }
 
     comm->barrier();
-    QVERIFY(*item == check_sum);
+    QCOMPARE(*item , check_sum);
     qDebug() << *item << check_sum << part_sum;
 }
 

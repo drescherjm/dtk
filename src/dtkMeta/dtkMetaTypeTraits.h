@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -19,6 +19,13 @@
 #include <complex>
 
 #include <QtCore>
+
+// /////////////////////////////////////////////////////////////////
+// dtkMetaTypeIsCopyable
+// /////////////////////////////////////////////////////////////////
+
+template< typename T > struct dtkMetaTypeIsClonable : std::integral_constant<bool, (!std::is_abstract<T>::value &&
+                                                                                    std::is_copy_constructible<T>::value)> {};
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaTypeIsNumeric definition
@@ -66,7 +73,7 @@ template< typename T > struct dtkMetaTypeIsMulAssignable : std::integral_constan
 template< typename T > struct dtkMetaTypeIsDivAssignable : std::integral_constant<bool, dtkMetaTypeIsNumeric<T>::value> {};
 
 // /////////////////////////////////////////////////////////////////
-// Container traits 
+// Container traits
 // /////////////////////////////////////////////////////////////////
 
 // Container kind trait
@@ -95,7 +102,7 @@ template< typename T > struct dtkMetaContainerIsReservable< QSet<T> > : std::tru
 template< typename T, class Allocator > struct dtkMetaContainerIsReservable< std::vector<T, Allocator> > : std::true_type {};
 
 // /////////////////////////////////////////////////////////////////
-// Iterator traits 
+// Iterator traits
 // /////////////////////////////////////////////////////////////////
 
 template < typename Iterator, typename Category = typename std::iterator_traits<Iterator>::iterator_category > struct dtkMetaIteratorIsRandomAccess : std::false_type {};
@@ -105,5 +112,5 @@ template< typename Iterator, typename Category = typename std::iterator_traits<I
 template< typename Iterator > struct dtkMetaIteratorIsBidirectional<Iterator, std::bidirectional_iterator_tag> : std::true_type {};
 
 
-// 
+//
 // dtkMetaTypeTraits.h ends here

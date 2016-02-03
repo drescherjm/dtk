@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,10 +28,31 @@ QString dtkMetaType::description(const QVariant& v)
         dtkMetaContainerSequential mc = v.value<dtkMetaContainerSequential>();
         dbg << mc;
     } else {
-        if (v.canConvert<QString>()) {
-            dbg << qPrintable(v.value<QString>());
-        } else {
-            QMetaType::debugStream(dbg, v.constData(), v.userType());
+        const uint typeId = v.userType();
+        bool userStream = false;
+        bool canConvertToString = false;
+        if (typeId >= QMetaType::User) {
+            userStream = QMetaType::debugStream(dbg, v.constData(), typeId);
+            canConvertToString = v.canConvert<QString>();
+        }
+
+        if (!userStream && canConvertToString) {
+            dbg << v.toString();
+
+        } else if(typeId == QMetaType::QVariantMap || typeId == QMetaType::QVariantHash) {
+            QAssociativeIterable iterable = v.value<QAssociativeIterable>();
+            QAssociativeIterable::const_iterator it = iterable.begin();
+            const QAssociativeIterable::const_iterator end = iterable.end();
+            for ( ; it != end; ++it) {
+                dbg << dtkMetaType::description(it.key()) << ": " << dtkMetaType::description(it.value());
+                dbg << '\n' ;
+            }
+
+        } else if (!userStream) {
+            dbg << v;
+            str.chop(2);
+            int count = 11 + QString(v.typeName()).size();
+            str.remove(0, count);
         }
     }
     return str;
@@ -55,7 +76,7 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
         } else {
             qDebug() << Q_FUNC_INFO << "Type" << type_name << "has not be registered to QMetaType System.";
         }
-        
+
     } else {
 
         int type_id = v.userType();
@@ -68,7 +89,7 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
                 const QMetaObject *mo = o->metaObject();
                 QString class_name(mo->className());
                 int class_type = QMetaType::type(qPrintable(class_name));
-                
+
                 while (class_type == QMetaType::UnknownType) {
                     mo = mo->superClass();
                     if (!mo)
@@ -76,7 +97,7 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
                     class_name = mo->className();
                     class_type = QMetaType::type(qPrintable(class_name));
                 }
-            
+
                 if (class_type != QMetaType::UnknownType) {
                     void *ptr = QMetaType::create(class_type, o);
 
@@ -109,7 +130,15 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
                 type_id = QMetaType::type(qPrintable(type_name + "*"));
                 return QVariant(type_id, &ptr, 1);
             } else {
-                qDebug() << Q_FUNC_INFO << ": Type" << type_name << "has not be registered to QMetaType System. Maybe it is not registered or maybe it is an abstract class.";
+                type_name = v.typeName();
+                type_id = QMetaType::type(qPrintable(type_name));
+
+                if (type_id != QMetaType::UnknownType) {
+                    void *ptr = nullptr;
+                    return QVariant(type_id, &ptr, 1);
+                } else {
+                    qDebug() << Q_FUNC_INFO << ": Type" << type_name << "has not be registered to QMetaType System. Maybe it is not registered or maybe it is a non copyable class.";
+                }
             }
         }
     }
@@ -166,5 +195,5 @@ bool dtkMetaType::destroyPointer(QVariant& v)
     return ok;
 }
 
-// 
+//
 // dtkMeta.cpp ends here

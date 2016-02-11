@@ -82,8 +82,6 @@
 
 #define DTK_UNUSED(variable) Q_UNUSED(variable)
 
-#define DTK_DEPRECATED Q_DECL_DEPRECATED
-
 #define DTK_SUCCEED 0
 #define DTK_FAILURE 1
 

@@ -21,7 +21,7 @@
 
 class dtkComposerNodeFactoryPrivate;
 class dtkComposerNodeMetaData;
-class dtkComposerNodeFactoryExtension;
+class dtkComposerExtension;
 
 // ///////////////////////////////////////////////////////////////////
 // dtkComposerNodeFactory definition
@@ -42,7 +42,7 @@ public:
     void record(const QString& metadata_file_path, creator func);
 
 public:
-    void extend(dtkComposerNodeFactoryExtension *extension);
+    void extend(dtkComposerExtension *extension);
 
 public:
     const QStringList& nodes(void) const;
@@ -65,15 +65,6 @@ template <typename T> dtkComposerNode *dtkComposerNodeCreator(void)
 //
 // ///////////////////////////////////////////////////////////////////
 
-class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryExtension
-{
-public:
-             dtkComposerNodeFactoryExtension(void) {}
-    virtual ~dtkComposerNodeFactoryExtension(void) {}
-
-public:
-    virtual void extend(dtkComposerNodeFactory *factory) = 0;
-};
 
 //
 // dtkComposerNodeFactory.h ends here

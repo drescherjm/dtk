@@ -44,6 +44,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerEvaluator_p.h
   dtkComposerEvaluatorProcess.h
   dtkComposerEvaluatorSlave.h
+  dtkComposerExtension.h
   dtkComposerFactory.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h

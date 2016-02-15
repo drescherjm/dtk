@@ -117,6 +117,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerScenePort.h
   dtkComposerSceneView.h
   dtkComposerSearchDialog.h
+  dtkComposerSettings.h
   dtkComposerStack.h
   dtkComposerStackCommand.h
   dtkComposerStackUtils.h
@@ -230,6 +231,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerScenePort.cpp
   dtkComposerSceneView.cpp
   dtkComposerSearchDialog.cpp
+  dtkComposerSettings.cpp
   dtkComposerStack.cpp
   dtkComposerStackCommand.cpp
   dtkComposerStackUtils.cpp

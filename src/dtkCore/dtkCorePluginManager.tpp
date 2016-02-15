@@ -155,16 +155,19 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
 
 template <typename T> void dtkCorePluginManager<T>::initialize(const QString& path)
 {
-    QDir dir(path);
 
-    foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
-        this->scan(info.absoluteFilePath());
-
-    if(d->autoLoading) {
+    foreach(QString path2, path.split(":",QString::SkipEmptyParts )) {
+        QDir dir(path2);
+        dtkTrace() << "scanning directory for plugins:" << path2;
         foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
-            this->load(info.absoluteFilePath());
+            this->scan(info.absoluteFilePath());
+
+        if(d->autoLoading) {
+            foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+                this->load(info.absoluteFilePath());
+        }
     }
-}   
+}
 
 template <typename T> void dtkCorePluginManager<T>::uninitialize(void)
 {

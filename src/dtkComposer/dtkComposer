@@ -57,6 +57,7 @@
 #include "dtkComposerScenePort.h"
 #include "dtkComposerSceneView.h"
 #include "dtkComposerSearchDialog.h"
+#include "dtkComposerSettings.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"

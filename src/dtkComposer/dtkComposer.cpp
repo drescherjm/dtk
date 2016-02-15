@@ -15,6 +15,7 @@
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerFactory.h"
 #include "dtkComposerExtension.h"
+#include "dtkComposerSettings.h"
 
 namespace dtkComposer
 {
@@ -40,11 +41,20 @@ namespace dtkComposer
             return _private::manager;
         }
         void initialize(const QString& path) {
-            if (path.isEmpty()) {
-                QString default_path = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkComposer");
-                dtkDebug() << "no composer plugin path configured, use default:" << default_path ;
+            QString realpath = path;
+
+            if (realpath.isEmpty()) {
+                dtkComposerSettings composer_settings;
+                composer_settings.beginGroup("extension");
+                realpath = composer_settings.value("plugins").toString();
+                composer_settings.endGroup();
+                if (realpath.isEmpty()) {
+
+                    realpath = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkComposer");
+                    dtkDebug() << "no composer plugin path configured, use default:" << realpath ;
+                }
                 pluginManager().setVerboseLoading(true);
-                pluginManager().initialize(default_path);
+                pluginManager().initialize(realpath);
             } else {
                 dtkDebug() << "initialize composer plugins using path:" << path ;
                 pluginManager().initialize(path);

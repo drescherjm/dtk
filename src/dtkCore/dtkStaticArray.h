@@ -17,13 +17,11 @@
 #include <cstring>
 #include <cstddef>
 
-#include "dtkCompilerCXXFeatures.h"
-
 // ///////////////////////////////////////////////////////////////////
 // dtkStaticArrayData interface
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, size_t Alignment, long long Size, bool = std::is_pod<T>::value > struct dtkStaticArrayData
+template < typename T, size_t Alignment, long long int Size, bool = std::is_pod<T>::value > struct dtkStaticArrayData
 {
     T _data[Size];
 
@@ -37,9 +35,13 @@ template < typename T, size_t Alignment > struct dtkStaticArrayData <T, Alignmen
           T *data(void)       { return NULL; }
 };
 
-template < typename T, size_t Alignment, long long Size > struct dtkStaticArrayData<T, Alignment, Size, true>
+template < typename T, size_t Alignment, long long int Size > struct dtkStaticArrayData<T, Alignment, Size, true>
 {
-    DTK_ALIGNAS(Alignment) T _data[Size];
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    alignas(Alignment) T _data[Size];
+#elif
+    T _data[Size];
+#endif
 
     const T *data(void) const { return _data; }
           T *data(void)       { return _data; }
@@ -55,7 +57,7 @@ template < typename T, size_t Alignment > struct dtkStaticArrayData <T, Alignmen
 // dtkStaticArray interface
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, long long Size, size_t Alignment = std::alignment_of<T>::value > class dtkStaticArray
+template < typename T, long long int Size, size_t Alignment = std::alignment_of<T>::value > class dtkStaticArray
 {
 public:
     dtkStaticArrayData<T, Alignment, Size> d;
@@ -67,7 +69,7 @@ public:
     typedef value_type&        reference;
     typedef const value_type&  const_reference;
     typedef std::ptrdiff_t     difference_type;
-    typedef long long          size_type;
+    typedef long long int      size_type;
 
 public:
     typedef value_type*                                         iterator;
@@ -82,18 +84,18 @@ public:
 
 public:
     bool       empty(void) const { return !Size; }
-    long long   size(void) const { return  Size; }
-    long long  count(void) const { return  Size; }
+    long long int   size(void) const { return  Size; }
+    long long int  count(void) const { return  Size; }
 
 public:
     void fill(const T& value) { std::fill_n(begin(), Size, value); }
 
-    void setAt(long long index, const T& value) { data()[index] = value; }
+    void setAt(long long int index, const T& value) { data()[index] = value; }
 
 public:
-    const T&          at (long long index) const { return *(data() + index); }
-    const T& operator [] (long long index) const { return *(data() + index); }
-          T& operator [] (long long index)       { return *(data() + index); }
+    const T&          at (long long int index) const { return *(data() + index); }
+    const T& operator [] (long long int index) const { return *(data() + index); }
+          T& operator [] (long long int index)       { return *(data() + index); }
 
           T& first(void)       { return *data(); }
     const T& first(void) const { return *data(); }
@@ -134,32 +136,32 @@ public:
 // Compararison operators
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, long long Size> inline bool operator == (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator == (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
-template < typename T, long long Size> inline bool operator != (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator != (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return !(lhs == rhs);
 }
 
-template < typename T, long long Size> inline bool operator < (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator < (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
-template < typename T, long long Size> inline bool operator > (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator > (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return rhs < lhs;
 }
 
-template < typename T, long long Size> inline bool operator <= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator <= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return !(lhs > rhs);
 }
 
-template < typename T, long long Size> inline bool operator >= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator >= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return !(lhs < rhs);
 }

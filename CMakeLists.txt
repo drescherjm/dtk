@@ -102,8 +102,6 @@ else(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_64 0)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
-include(dtkCompilerCXXFeatures)
-
 ## #################################################################
 ## Options
 ## #################################################################

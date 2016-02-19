@@ -23,6 +23,7 @@
 // No Copyable Data concrete class
 // ///////////////////////////////////////////////////////////////////
 
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
 class NoCopyableData
 {
 public:
@@ -80,6 +81,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(DeriveNoCopyableData*);
+#endif
 
 // ///////////////////////////////////////////////////////////////////
 //
@@ -383,6 +385,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
     int count = 0;
 
     // No copyable Data pointer
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
     {
         dtkComposerTransmitterEmitter<NoCopyableData *>  e_data;
         dtkComposerTransmitterReceiver<NoCopyableData *> r_data;
@@ -408,6 +411,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
 
         delete data_e;
     }
+#endif
 
     // Non QObject Data
     {

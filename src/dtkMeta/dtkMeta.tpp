@@ -39,7 +39,7 @@ template<typename T, bool B> inline bool dtkMetaTypeHandler<T, B>::canConvert(co
 
 template<typename T> inline bool dtkMetaTypeHandler<T *, false>::canConvert(const QList<int>& types)
 {
-    return dtkMetaTypeHandlerHelper<T *, std::is_constructible<T>::value>::canConvert(types);
+    return dtkMetaTypeHandlerHelper<T *, std::is_constructible<T>::value && !std::is_abstract<T>::value>::canConvert(types);
 }
 
 template<typename T> inline QVariant dtkMetaTypeHandler<T *, false>::variantFromValue(T *t)
@@ -49,7 +49,7 @@ template<typename T> inline QVariant dtkMetaTypeHandler<T *, false>::variantFrom
 
 template<typename T> inline T *dtkMetaTypeHandler<T *, false>::clone(T *t)
 {
-    return dtkMetaTypeHandlerHelper<T *, std::is_copy_constructible<T>::value>::clone(t);
+    return dtkMetaTypeHandlerHelper<T *, std::is_copy_constructible<T>::value && !std::is_abstract<T>::value>::clone(t);
 }
 
 template<typename T> inline void dtkMetaTypeHandler<T *, false>::copy(T *s, T *t)
@@ -61,7 +61,7 @@ template<typename T> inline void dtkMetaTypeHandler<T *, false>::copy(T *s, T *t
 
 template<typename T> inline bool dtkMetaTypeHandler<T *, true>::canConvert(const QList<int>& types)
 {
-    return dtkMetaTypeHandlerHelper<T *, std::is_constructible<T>::value>::canConvert(types);
+    return dtkMetaTypeHandlerHelper<T *, std::is_constructible<T>::value && !std::is_abstract<T>::value>::canConvert(types);
 }
 
 template<typename T> inline QVariant dtkMetaTypeHandler<T *, true>::variantFromValue(T *t)
@@ -81,7 +81,7 @@ template<typename T> inline T *dtkMetaTypeHandler<T *, true>::clone(T *t)
     int class_type = QMetaType::type(qPrintable(class_name));
 
     if (class_type == QMetaType::UnknownType) {
-        return dtkMetaTypeHandlerHelper<T *, std::is_copy_constructible<T>::value>::clone(t);
+        return dtkMetaTypeHandlerHelper<T *, std::is_copy_constructible<T>::value && !std::is_abstract<T>::value>::clone(t);
     }
 
     return static_cast<T *>(QMetaType::create(class_type, t));
@@ -96,7 +96,7 @@ template<typename T> inline void dtkMetaTypeHandler<T *, true>::copy(T *s, T *t)
     int s_class_type = QMetaType::type(qPrintable(s_class_name));
 
     if (t_class_type == QMetaType::UnknownType || (t_class_type != s_class_type)) {
-        return dtkMetaTypeHandlerHelper<T *, std::is_copy_assignable<T>::value>::copy(s, t);
+        return dtkMetaTypeHandlerHelper<T *, std::is_copy_assignable<T>::value && !std::is_abstract<T>::value>::copy(s, t);
     }
 
     QMetaType::construct(t_class_type, t, s);

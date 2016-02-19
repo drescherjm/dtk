@@ -39,7 +39,7 @@ template < typename T, size_t Alignment, long long int Size > struct dtkStaticAr
 {
 #if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
     alignas(Alignment) T _data[Size];
-#elif
+#else
     T _data[Size];
 #endif
 

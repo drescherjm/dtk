@@ -372,8 +372,10 @@ void dtkMetaTypeTestCase::init(void)
 
 void dtkMetaTypeTestCase::cleanup(void)
 {
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
     delete d->no_copyable_data;
     delete d->derive_no_copyable_data;
+#endif
     delete d->data;
     delete d->derive_data;
     delete d->abstract;

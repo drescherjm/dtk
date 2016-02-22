@@ -16,6 +16,7 @@
 
 #include <QtCore>
 #include <dtkMeta/dtkMeta>
+#include <dtkLog>
 
 // ///////////////////////////////////////////////////////////////////
 // Private practices
@@ -401,6 +402,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             d = Data::unsharableEmpty();
         else
 #endif
+            dtkDebug() << "detaching array of size " << d->size << __func__  ;
             reallocData(d->size, qlonglong(d->alloc));
     }
     Q_ASSERT(isDetached());

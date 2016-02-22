@@ -15,12 +15,13 @@
 #pragma once
 
 #include <cstring>
+#include <cstddef>
 
 // ///////////////////////////////////////////////////////////////////
 // dtkStaticArrayData interface
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, size_t Alignment, qlonglong Size, bool = std::is_pod<T>::value > struct dtkStaticArrayData
+template < typename T, size_t Alignment, long long int Size, bool = std::is_pod<T>::value > struct dtkStaticArrayData
 {
     T _data[Size];
 
@@ -34,13 +35,14 @@ template < typename T, size_t Alignment > struct dtkStaticArrayData <T, Alignmen
           T *data(void)       { return NULL; }
 };
 
-template < typename T, size_t Alignment, qlonglong Size > struct dtkStaticArrayData<T, Alignment, Size, true>
+template < typename T, size_t Alignment, long long int Size > struct dtkStaticArrayData<T, Alignment, Size, true>
 {
 #if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
     alignas(Alignment) T _data[Size];
 #else
     T _data[Size];
 #endif
+
     const T *data(void) const { return _data; }
           T *data(void)       { return _data; }
 };
@@ -55,26 +57,26 @@ template < typename T, size_t Alignment > struct dtkStaticArrayData <T, Alignmen
 // dtkStaticArray interface
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, qlonglong Size, size_t Alignment = std::alignment_of<T>::value > class dtkStaticArray
+template < typename T, long long int Size, size_t Alignment = std::alignment_of<T>::value > class dtkStaticArray
 {
 public:
     dtkStaticArrayData<T, Alignment, Size> d;
 
 public:
-    typedef T                 value_type;
-    typedef value_type*       pointer;
-    typedef const value_type* const_pointer;
-    typedef value_type&       reference;
-    typedef const value_type& const_reference;
-    typedef qptrdiff          difference_type;
-    typedef qlonglong         size_type;
+    typedef T                  value_type;
+    typedef value_type*        pointer;
+    typedef const value_type*  const_pointer;
+    typedef value_type&        reference;
+    typedef const value_type&  const_reference;
+    typedef std::ptrdiff_t     difference_type;
+    typedef long long int      size_type;
 
 public:
     typedef value_type*                                         iterator;
     typedef const value_type*                             const_iterator;
     typedef iterator                                            Iterator;
     typedef const_iterator                                 ConstIterator;
-    typedef std::reverse_iterator<iterator>	        reverse_iterator;
+    typedef std::reverse_iterator<iterator>	            reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
 public:
@@ -82,18 +84,18 @@ public:
 
 public:
     bool       empty(void) const { return !Size; }
-    qlonglong   size(void) const { return  Size; }
-    qlonglong  count(void) const { return  Size; }
+    long long int   size(void) const { return  Size; }
+    long long int  count(void) const { return  Size; }
 
 public:
     void fill(const T& value) { std::fill_n(begin(), Size, value); }
 
-    void setAt(qlonglong index, const T& value) { data()[index] = value; }
+    void setAt(long long int index, const T& value) { data()[index] = value; }
 
 public:
-    const T&          at (qlonglong index) const { return *(data() + index); }
-    const T& operator [] (qlonglong index) const { return *(data() + index); }
-          T& operator [] (qlonglong index)       { return *(data() + index); }
+    const T&          at (long long int index) const { return *(data() + index); }
+    const T& operator [] (long long int index) const { return *(data() + index); }
+          T& operator [] (long long int index)       { return *(data() + index); }
 
           T& first(void)       { return *data(); }
     const T& first(void) const { return *data(); }
@@ -134,32 +136,32 @@ public:
 // Compararison operators
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, qlonglong Size> inline bool operator == (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator == (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
-template < typename T, qlonglong Size> inline bool operator != (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator != (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return !(lhs == rhs);
 }
 
-template < typename T, qlonglong Size> inline bool operator < (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator < (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
-template < typename T, qlonglong Size> inline bool operator > (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator > (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return rhs < lhs;
 }
 
-template < typename T, qlonglong Size> inline bool operator <= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator <= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return !(lhs > rhs);
 }
 
-template < typename T, qlonglong Size> inline bool operator >= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
+template < typename T, long long int Size> inline bool operator >= (const dtkStaticArray<T, Size>& lhs, const dtkStaticArray<T, Size>& rhs)
 {
     return !(lhs < rhs);
 }

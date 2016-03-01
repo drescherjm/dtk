@@ -1,7 +1,9 @@
 #include "dtkMonitoringModel.h"
 
 #include <QMetaType>
-#include <dtkComposer/dtkComposerNode>
+#include <dtkMonitoringController>
+#include <dtkComposer/dtkComposerNode.h>
+
 
 dtkMonitoringModel::dtkMonitoringModel()
 {

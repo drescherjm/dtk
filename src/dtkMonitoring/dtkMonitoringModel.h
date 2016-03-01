@@ -5,9 +5,6 @@
 #include <QAbstractListModel>
 #include <QVariant>
 
-#include <dtkMonitoringController>
-#include <dtkComposer/dtkComposerNode>
-
 #include "dtkMonitoringExport.h"
 
 class dtkMonitoringModelPrivate;

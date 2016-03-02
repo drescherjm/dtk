@@ -460,6 +460,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         n->setParent(d->node);
         d->node->addNode(n);
         d->graph->addNode(n);
+        QObject::connect(new_node, SIGNAL(monitorableChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
 
     }
     QPointF position;
@@ -481,6 +482,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
     int id = node.toElement().attribute("id").toInt();
 
     d->node_map.insert(id, n);
+
 
     // --
 

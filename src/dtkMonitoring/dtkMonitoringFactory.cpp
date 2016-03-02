@@ -15,6 +15,7 @@
 #include "dtkMonitor.h"
 #include "dtkMonitorBooleanSimple.h"
 #include "dtkMonitorRealSimple.h"
+#include "dtkMonitorIntegerSimple.h"
 #include "dtkMonitoringFactory.h"
 
 class dtkMonitoringFactoryPrivate
@@ -41,6 +42,7 @@ void dtkMonitoringFactory::initialize(void)
 {
     this->registerCreator("boolean", createMonitor<dtkMonitorBooleanSimple>);
     this->registerCreator("real", createMonitor<dtkMonitorRealSimple>);
+    this->registerCreator("integer", createMonitor<dtkMonitorIntegerSimple>);
 }
 
 void dtkMonitoringFactory::uninitialize(void)

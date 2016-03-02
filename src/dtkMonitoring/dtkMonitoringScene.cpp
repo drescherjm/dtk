@@ -108,6 +108,7 @@ void dtkMonitoringScene::keyPressEvent(QKeyEvent *event)
         }
         break;
     default:
+        QGraphicsScene::keyPressEvent(event);
         break;
     }
 }

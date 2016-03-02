@@ -28,6 +28,8 @@ dtkMonitor::dtkMonitor(QGraphicsItem *parent) : QGraphicsItem(parent)
 
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
     this->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    this->setFlag(QGraphicsItem::ItemIsFocusable, true);
+
 }
 
 dtkMonitor::~dtkMonitor(void)

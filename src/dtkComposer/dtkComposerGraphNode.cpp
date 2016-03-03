@@ -41,19 +41,21 @@ public:
     bool breakpoint;
     bool endloop_initial;
     bool endloop;
+
+public:
+    static int count;
 };
 
-dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsObject(),d(new dtkComposerGraphNodePrivate)
+int dtkComposerGraphNodePrivate::count = 0;
+
+dtkComposerGraphNode::dtkComposerGraphNode() : QObject(),d(new dtkComposerGraphNodePrivate)
 {
-    this->setFlag(QGraphicsItem::ItemIsSelectable, true);
-    this->setFlag(QGraphicsItem::ItemIsMovable, true);
-    this->setZValue(1);
-    this->setTitle("Graph node");
     this->setStatus(dtkComposerGraphNode::Ready);
     d->breakpoint      = false;
     d->endloop         = false;
     d->endloop_initial = false;
     d->graph           = NULL;
+    d->count++;
 }
 
 dtkComposerGraphNode::~dtkComposerGraphNode(void)
@@ -109,38 +111,6 @@ void dtkComposerGraphNode::setEndLoop(bool value)
     d->endloop = value;
     if (value) // endloop is set to true, keep this info in endloop_initial (used to rerun node)
         d->endloop_initial = value;
-}
-
-QRectF dtkComposerGraphNode::boundingRect(void) const
-{
-    return QRectF(0, 0, 125, 25);
-}
-
-void dtkComposerGraphNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-{
-    d->breakpoint = !(d->breakpoint);
-}
-
-void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-
-    if(this->isSelected())
-        painter->setPen(Qt::red);
-    else
-        painter->setPen(Qt::black);
-
-    if (d->status == Done)
-        painter->setBrush(Qt::green);
-    else
-        if (d->breakpoint)
-            painter->setBrush(Qt::yellow);
-        else
-            painter->setBrush(Qt::white);
-
-    painter->drawRect(this->boundingRect());
-    painter->drawText(this->boundingRect(), Qt::AlignCenter, d->title);
 }
 
 void dtkComposerGraphNode::addSuccessor(dtkComposerGraphNode *node, int id)
@@ -206,8 +176,13 @@ const QString& dtkComposerGraphNode::title(void)
 
 void dtkComposerGraphNode::setTitle(const QString& title)
 {
-    this->setObjectName(title);
     d->title = title;
+    // set unique object name
+    QString id = QString::number(d->count);
+    id.prepend("_");
+    id.prepend(title);
+    id.replace(" ", "_");
+    this->setObjectName(id);
 }
 
 void dtkComposerGraphNode::eval(void)

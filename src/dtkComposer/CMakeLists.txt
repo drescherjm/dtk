@@ -39,7 +39,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerFactory.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h
-  dtkComposerGraphLayouter.h
   dtkComposerGraphNode.h
   dtkComposerGraphNodeBegin.h
   dtkComposerGraphNodeEnd.h
@@ -127,6 +126,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerTransmitterReceiver.tpp
   dtkComposerView.h
   dtkComposerReader.h
+  dtkComposerReaderNoScene.h
   dtkComposerWidget.h
   dtkComposerWriter.h
   dtkComposerViewController
@@ -162,7 +162,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerFactory.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
-  dtkComposerGraphLayouter.cpp
   dtkComposerGraphNodeBegin.cpp
   dtkComposerGraphNode.cpp
   dtkComposerGraphNodeEnd.cpp
@@ -234,6 +233,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerTransmitterProxyVariant.cpp
   dtkComposerView.cpp
   dtkComposerReader.cpp
+  dtkComposerReaderNoScene.cpp
   dtkComposerWidget.cpp
   dtkComposerWriter.cpp
   dtkComposerViewController.cpp
@@ -269,6 +269,7 @@ target_link_libraries(${PROJECT_NAME} Qt5::Core)
 target_link_libraries(${PROJECT_NAME} Qt5::Concurrent)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Network)
+target_link_libraries(${PROJECT_NAME} Qt5::Svg)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 

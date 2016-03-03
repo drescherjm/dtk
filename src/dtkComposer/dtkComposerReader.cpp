@@ -239,7 +239,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
 
     if(!append) {
         d->node = d->root;
-        d->graph->addNode(d->root);
+        d->graph->addNode(d->root->wrapee(), NULL);
     } else if(paste) {
         d->node = d->scene->current();
     } else {
@@ -247,7 +247,7 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
         d->node->wrap(d->factory->create("composite"));
         d->node->setParent(d->scene->current());
         d->scene->current()->addNode(d->node);
-        d->graph->addNode(d->node);
+        d->graph->addNode(d->node->wrapee(), d->node->parent()->wrapee());
     }
 
     // Feeding scene with notes
@@ -283,10 +283,6 @@ bool dtkComposerReader::readString(const QString& data, bool append, bool paste)
         d->scene->setRoot(d->root);
     else if(!paste)
         d->scene->addItem(d->node);
-
-    if (d->use_gui) {
-        d->graph->layout();
-    }
 
     // --
 
@@ -368,7 +364,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         n->wrap(d->factory->create(node.toElement().attribute("type")));
         n->setParent(d->node);
         d->node->addNode(n);
-        d->graph->addNode(n);
+        d->graph->addNode(n->wrapee(), d->node->wrapee());
         n->resize(w, h);
 
     } else if(node.toElement().tagName() == "block") {
@@ -379,7 +375,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
                 control->addBlock();
                 b->wrap(control->block(control->blockCount()-1));
                 d->control->addBlock(b);
-                d->graph->addBlock(d->control);
+                d->graph->addBlock(d->control->wrapee());
             }
             n = d->control->blocks().last();
         } else {
@@ -409,7 +405,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
             n->wrap(c);
             n->setParent(d->node);
             d->node->addNode(n);
-            d->graph->addNode(n);
+            d->graph->addNode(c, d->node->wrapee());
             if (paste)
                 d->scene->addItem(n);
         } else {
@@ -459,7 +455,7 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         n->wrap(new_node);
         n->setParent(d->node);
         d->node->addNode(n);
-        d->graph->addNode(n);
+        d->graph->addNode(new_node, d->node->wrapee());
 
     }
     QPointF position;
@@ -792,7 +788,7 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
 
     dtkComposerTransmitterConnection(d->scene->root(), d->node, edge);
 
-    d->graph->addEdge(edge);
+    d->graph->addEdge(edge->source()->node()->wrapee(), edge->destination()->node()->wrapee(), source_type, destin_type);
 
     return edge;
 
@@ -811,11 +807,12 @@ void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* l
 
 void dtkComposerReader::clear(void)
 {
+    if (d->graph)
+        d->graph->clear();
+
     if (d->scene)
         d->scene->clear();
 
-    if (d->graph)
-        d->graph->clear();
 }
 
 //

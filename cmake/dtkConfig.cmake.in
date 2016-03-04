@@ -42,8 +42,9 @@ find_package(Qt5 REQUIRED COMPONENTS
   Concurrent
   Network
   Quick
-  Widgets
+  Svg
   Test
+  Widgets
   Xml)
 
 set(dtk_INSTALL_DOCS @dtk_INSTALL_DOCS@)

@@ -23,9 +23,8 @@ set(DTK_BUILD_64 @DTK_BUILD_64@)
 set(dtk_INCLUDE_DIRS
   "@CMAKE_INSTALL_PREFIX@/include"
   "@CMAKE_INSTALL_PREFIX@/include/dtk"
-  "@CMAKE_INSTALL_PREFIX@/include/dtkComposer"
-  "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
   "@CMAKE_INSTALL_PREFIX@/include/dtkDistributed"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
   "@CMAKE_INSTALL_PREFIX@/include/dtkLog"
   "@CMAKE_INSTALL_PREFIX@/include/dtkMath"
   "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
@@ -71,6 +70,12 @@ set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
 set(DTK_HAVE_VRPN @DTK_HAVE_VRPN@)
 set(DTK_HAVE_NITE @DTK_HAVE_NITE@)
 set(DTK_HAVE_ZLIB @DTK_HAVE_ZLIB@)
+
+if(DTK_BUILD_COMPOSER)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_INSTALL_PREFIX@/include/dtkDistributed")
+endif(DTK_BUILD_COMPOSER)
+
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

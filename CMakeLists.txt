@@ -169,6 +169,7 @@ find_package(Qt5 REQUIRED COMPONENTS
   Network
   Gui
   Test
+  Svg
   Widgets
   Xml
   )

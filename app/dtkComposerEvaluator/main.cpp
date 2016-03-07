@@ -108,21 +108,14 @@ int main(int argc, char **argv)
         application->unspawn();
 
     } else {
-        dtkComposerScene *scene = new dtkComposerScene;
-        dtkComposerStack *stack = new dtkComposerStack;
         dtkComposerGraph *graph = new dtkComposerGraph;
         dtkComposerEvaluator *evaluator = new dtkComposerEvaluator;;
 
-        scene->setFactory(factory);
-        scene->setStack(stack);
-        scene->setGraph(graph);
-
         evaluator->setGraph(graph);
 
-        dtkComposerReader *reader;
-        reader = new dtkComposerReader;
+        dtkComposerReaderNoScene *reader;
+        reader = new dtkComposerReaderNoScene;
         reader->setFactory(factory);
-        reader->setScene(scene);
         reader->setGraph(graph);
 
         if (parser->isSet(pgOption)) {

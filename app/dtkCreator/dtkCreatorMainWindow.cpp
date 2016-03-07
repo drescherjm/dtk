@@ -153,11 +153,10 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->nodes = new dtkComposerNodeFactoryView(this);
     d->nodes->setFactory(d->composer->factory());
 
-    d->graph = new dtkComposerGraphView(this);
-    d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
-    d->graph->setScene(d->composer->graph());
-    d->graph->setVisible(false);
-    d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
+    // d->graph = new dtkComposerGraphView(this);
+    // d->graph->setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    // d->graph->setVisible(false);
+    // d->graph->setBackgroundBrush(QBrush(QPixmap(":dtkCreator/pixmaps/dtkComposerGraphView-bg.png")));
 
     // d->log_view = new dtkLogView(this);
     // d->log_view->setVisible(false);

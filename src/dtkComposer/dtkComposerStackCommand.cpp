@@ -189,16 +189,15 @@ void dtkComposerStackCommandCreateNode::redo(void)
     e->parent->addNode(e->node);
     e->parent->layout();
 
-    d->graph->addNode(e->node);
-    d->graph->layout();
+    d->graph->addNode(e->node->wrapee(), e->parent->wrapee());
 
 // -- ??
     if (e->parent->visible()) {
         d->scene->addItem(e->node);
         e->node->layout();
+    } else {
+        d->scene->modify(true);
     }
-
-    d->scene->modify(true);
 // --
 }
 
@@ -222,8 +221,7 @@ void dtkComposerStackCommandCreateNode::undo(void)
     e->position = e->node->scenePos();
 
 
-    d->graph->removeNode(e->node);
-    d->graph->layout();
+    d->graph->removeNode(e->node->wrapee(), e->node->parent()->wrapee());
 
     e->parent->removeNode(e->node);
     e->parent->layout();
@@ -403,16 +401,17 @@ void dtkComposerStackCommandDestroyNode::redo(void)
     for (int i = 0; i < listSize; ++i)
         e->destroy_nodes.at(i)->redo();
 
-    d->graph->removeNode(e->node);
-    d->graph->layout();
+    d->graph->removeNode(e->node->wrapee(), e->node->parent()->wrapee());
 
     e->parent->removeNode(e->node);
     e->parent->layout();
 
-    if (e->parent->visible())
+    if (e->parent->visible()) {
+        // will emit modified signals
         d->scene->removeItem(e->node);
-
-    d->scene->modify(true);
+    } else {
+        d->scene->modify(true);
+    }
 }
 
 void dtkComposerStackCommandDestroyNode::undo(void)
@@ -430,7 +429,7 @@ void dtkComposerStackCommandDestroyNode::undo(void)
         return;
 
     e->parent->addNode(e->node);
-    d->graph->addNode(e->node);
+    d->graph->addNode(e->node->wrapee(), e->node->parent()->wrapee());
 
     if (e->parent->visible())
         d->scene->addItem(e->node);
@@ -443,9 +442,6 @@ void dtkComposerStackCommandDestroyNode::undo(void)
 
     foreach(dtkComposerStackCommand *cmd, e->destroy_edges)
         cmd->undo();
-
-    d->graph->layout();
-
 
     d->scene->modify(true);
 }
@@ -547,13 +543,19 @@ void dtkComposerStackCommandCreateEdge::redo(void)
                     e->edge->stackBefore(e->destination->node());
             }
         }
+    } else {
+        d->scene->modify(true);
     }
 
-    d->scene->modify(true);
-
     // Setting up control flow
+    QString src_type = "input";
+    QString dst_type = "input";
+    if (e->source->type() == dtkComposerScenePort::Output)
+        src_type = "output";
+    if (e->destination->type() == dtkComposerScenePort::Output)
+        dst_type = "output";
 
-    d->graph->addEdge(e->edge);
+    d->graph->addEdge(e->source->node()->wrapee(),e->destination->node()->wrapee(), src_type, dst_type);
 
     // Setting up data flow
 
@@ -582,13 +584,19 @@ void dtkComposerStackCommandCreateEdge::undo(void)
     e->parent->removeEdge(e->edge);
 
     // Setting up control flow
+    QString src_type = "input";
+    QString dst_type = "input";
+    if (e->source->type() == dtkComposerScenePort::Output)
+        src_type = "output";
+    if (e->destination->type() == dtkComposerScenePort::Output)
+        dst_type = "output";
 
-    d->graph->removeEdge(e->edge);
+    d->graph->removeEdge(e->source->node()->wrapee(),e->destination->node()->wrapee(), src_type, dst_type, e->parent->wrapee() );
 
     if(e->parent->visible())
         d->scene->removeItem(e->edge);
-
-    d->scene->modify(true);
+    else
+        d->scene->modify(true);
 }
 
 void dtkComposerStackCommandCreateEdge::setParent(void)
@@ -681,7 +689,14 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
 
     // Setting up control flow
 
-    d->graph->removeEdge(e->edge);
+    QString src_type = "input";
+    QString dst_type = "input";
+    if (e->edge->source()->type() == dtkComposerScenePort::Output)
+        src_type = "output";
+    if (e->edge->destination()->type() == dtkComposerScenePort::Output)
+        dst_type = "output";
+
+    d->graph->removeEdge(e->edge->source()->node()->wrapee(),e->edge->destination()->node()->wrapee(), src_type, dst_type, e->parent->wrapee() );
 
     // Setting up data flow
 
@@ -696,8 +711,8 @@ void dtkComposerStackCommandDestroyEdge::redo(void)
 
     if(e->parent->visible())
         d->scene->removeItem(e->edge);
-
-    d->scene->modify(true);
+    else
+        d->scene->modify(true);
 }
 
 void dtkComposerStackCommandDestroyEdge::undo(void)
@@ -723,13 +738,21 @@ void dtkComposerStackCommandDestroyEdge::undo(void)
 
     if(e->parent->visible())
         d->scene->addItem(e->edge);
+    else
+        d->scene->modify(true);
 
     e->edge->adjust();
-    d->scene->modify(true);
 
     // Setting up control flow
 
-    d->graph->addEdge(e->edge);
+    QString src_type = "input";
+    QString dst_type = "input";
+    if (e->edge->source()->type() == dtkComposerScenePort::Output)
+        src_type = "output";
+    if (e->edge->destination()->type() == dtkComposerScenePort::Output)
+        dst_type = "output";
+
+    d->graph->addEdge(e->edge->source()->node()->wrapee(),e->edge->destination()->node()->wrapee(), src_type, dst_type);
 
     // Setting up data flow
 
@@ -797,7 +820,8 @@ void dtkComposerStackCommandCreateNote::redo(void)
 
     if (e->parent->visible())
         d->scene->addItem(e->note);
-    d->scene->modify(true);
+    else
+        d->scene->modify(true);
 }
 
 void dtkComposerStackCommandCreateNote::undo(void)
@@ -814,8 +838,8 @@ void dtkComposerStackCommandCreateNote::undo(void)
 
     if (e->parent->visible())
         d->scene->removeItem(e->note);
-
-    d->scene->modify(true);
+    else
+        d->scene->modify(true);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -873,8 +897,8 @@ void dtkComposerStackCommandDestroyNote::redo(void)
 
     if (e->parent->visible())
         d->scene->removeItem(e->note);
-
-    d->scene->modify(true);
+    else
+        d->scene->modify(true);
 }
 
 void dtkComposerStackCommandDestroyNote::undo(void)
@@ -894,8 +918,8 @@ void dtkComposerStackCommandDestroyNote::undo(void)
 
     if (e->parent->visible())
         d->scene->addItem(e->note);
-
-    d->scene->modify(true);
+    else
+        d->scene->modify(true);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -995,8 +1019,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
 
     e->parent->addNode(e->node);
 
-    d->graph->addNode(e->node);
-    d->graph->layout();
+    d->graph->addNode(e->node->wrapee(), e->node->parent()->wrapee());
 
     e->node->setPos(e->pos - e->node->boundingRect().center());
 
@@ -1030,7 +1053,7 @@ void dtkComposerStackCommandCreateGroup::redo(void)
     }
 
     d->scene->addItem(e->node);
-    d->scene->modify(true);
+//    d->scene->modify(true);
     d->scene->update();
 }
 
@@ -1064,8 +1087,7 @@ void dtkComposerStackCommandCreateGroup::undo(void)
     
     // --
 
-   d->graph->removeNode(e->node);
-   d->graph->layout();
+    d->graph->removeNode(e->node->wrapee(), e->parent->wrapee());
 
     e->parent->removeNode(e->node);
 
@@ -1172,13 +1194,12 @@ void dtkComposerStackCommandDestroyGroup::redo(void)
 
     }
 
-    d->graph->removeNode(e->node);
-    d->graph->layout();
+    d->graph->removeNode(e->node->wrapee(), e->parent->wrapee());
 
     e->parent->removeNode(e->node);
 
     d->scene->removeItem(e->node);
-    d->scene->modify(true);
+//    d->scene->modify(true);
     d->scene->update();
 }
 
@@ -1198,8 +1219,7 @@ void dtkComposerStackCommandDestroyGroup::undo(void)
 
     e->parent->addNode(e->node);
 
-    d->graph->addNode(e->node);
-    d->graph->layout();
+    d->graph->addNode(e->node->wrapee(), e->parent->wrapee());
 
     QRectF rect;
     foreach(dtkComposerSceneNode *node, e->nodes) {
@@ -2350,7 +2370,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
             }
         }
 
-        d->graph->reparentNode(e->origin, e->target);
+        d->graph->reparentNode(e->origin->wrapee(), e->origin->parent()->wrapee(), e->target->wrapee());
 
         // Notify source about reparenting
 
@@ -2611,7 +2631,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
         foreach(dtkComposerStackCommand *command, e->dps)
             command->redo();
 
-        d->graph->reparentNode(e->origin, e->target);
+        d->graph->reparentNode(e->origin->wrapee(), e->origin->parent()->wrapee(), e->target->wrapee());
 
         // Notify source about reparenting
 
@@ -2660,7 +2680,7 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     } else { //undo
 
-        d->graph->reparentNode(e->origin, e->target);
+        d->graph->reparentNode(e->origin->wrapee(), e->origin->parent()->wrapee(), e->target->wrapee());
 
         // Notify source about reparenting
 
@@ -2704,7 +2724,6 @@ void dtkComposerStackCommandReparentNode::redo(void)
 
     //     d->scene->addItem(e->origin);
     // }
-    d->graph->layout();
     d->scene->modify(true);
     d->scene->update();
 }
@@ -2854,7 +2873,7 @@ void dtkComposerStackCommandCreateBlock::redo(void)
     e->node->addBlock(e->block);
     e->node->layout();
 
-    d->graph->addBlock(e->node);
+    d->graph->addBlock(e->node->wrapee());
 
     d->scene->modify(true);
 }
@@ -2872,14 +2891,12 @@ void dtkComposerStackCommandCreateBlock::undo(void)
 
     dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->node->wrapee());
 
-    d->graph->removeBlock(e->block);
+    d->graph->removeBlock(e->block->wrapee(), control);
     control->removeBlock(e->id);
     e->node->removeBlock(e->block);
     e->node->layout();
 
     d->scene->removeItem(e->block);
-
-    d->scene->modify(true);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -2942,14 +2959,12 @@ void dtkComposerStackCommandDestroyBlock::redo(void)
 
     dtkComposerNodeControlCase *control = dynamic_cast<dtkComposerNodeControlCase *>(e->block->parent()->wrapee());
 
-    d->graph->removeBlock(e->block);
+    d->graph->removeBlock(e->block->wrapee(), control);
     e->node->removeBlock(e->block);
     e->node->layout();
     control->removeBlock(e->id);
 
     d->scene->removeItem(e->block);
-
-    d->scene->modify(true);
 }
 
 void dtkComposerStackCommandDestroyBlock::undo(void)
@@ -2972,8 +2987,7 @@ void dtkComposerStackCommandDestroyBlock::undo(void)
     e->node->addBlock(e->block);
     e->node->layout();
 
-    d->graph->addBlock(e->block);
-
+    d->graph->addBlock(e->block->wrapee());
 
     d->scene->modify(true);
 }

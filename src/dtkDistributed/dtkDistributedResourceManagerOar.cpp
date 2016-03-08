@@ -369,7 +369,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
     foreach(QVariant qv, nodes) {
         QVariantMap map = qv.toMap();
         qlonglong cpus  = map["cpuids"].toList().count();
-        qlonglong cores = map["cores"].toList().count();
+//        qlonglong cores = map["cores"].toList().count();
         map.insert("cpus", cpus);
         map.remove("cpuids");
         realnodes << map;

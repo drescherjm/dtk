@@ -26,7 +26,6 @@
 #include "dtkComposerGraphNodeEnd.h"
 
 #include <dtkLog/dtkLogger.h>
-#include <dtkMathSupport/dtkGraph.h>
 #include <dtkWidgets/dtkNotification.h>
 
 #include <QtCore>
@@ -240,7 +239,6 @@ void dtkComposerEvaluator::setGraph(dtkComposerGraph *graph)
 {
     d->graph = graph;
 
-    connect(graph, SIGNAL(cleared()), this, SLOT(reset()));
 }
 
 void dtkComposerEvaluator::setStartNode(dtkComposerGraphNode *node)
@@ -251,6 +249,8 @@ void dtkComposerEvaluator::setStartNode(dtkComposerGraphNode *node)
 void dtkComposerEvaluator::run(bool run_concurrent)
 {
     QTime time; time.start();
+
+//    dtkTrace() << d->graph->toString();
 
     if (d->stack.isEmpty())
         d->stack.setCapacity(1024);
@@ -280,6 +280,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     }
 
     d->should_stop = false;
+    d->start_node = NULL;
 
     emit evaluationStopped();
 }
@@ -362,7 +363,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
-    // dtkTrace() << "handle " << d->current->title() << d->start_node->title() ;
+    dtkTrace() << "handle " << d->current->title() << d->start_node->title() ;
     bool runnable = true;
 
     dtkComposerGraphNodeList::const_iterator it;
@@ -391,11 +392,11 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             }
             if (!node->endloop()) {
                 runnable = false;
-//                dtkTrace() << d->current->title() <<  " depends on " << node->title();
+                dtkTrace() << d->current->title() <<  " depends on " << node->title();
                 break;
             } else {
                 // predecessor is an end loop, we can continue, but we must unset the endloop flag.
-                // dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
+                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
                 node->setEndLoop(false);
             }
         }
@@ -424,7 +425,7 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
                 d->current->setStatus(dtkComposerGraphNode::Done);
             }
         } else {
-//            dtkTrace() << "evaluating leaf node"<< d->current->title();
+            dtkTrace() << "evaluating leaf node"<< d->current->title();
             d->current->eval();
         }
 

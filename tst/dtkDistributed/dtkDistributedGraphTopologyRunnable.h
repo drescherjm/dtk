@@ -216,18 +216,18 @@ inline void neighboursForTest::addEdgeToGraph(dtkDistributedGraphTopology& topo)
         qWarning() << "bad communicator size, should be equal to 4"  ;
         return;
     }
-    qlonglong start = 0;
-    qlonglong end   = 9;
-    if (comm->wid() == 1 ) {
-        start = 9;
-        end   = 15;
-    } else if (comm->wid() == 2 ) {
-        start = 15;
-        end   = 20;
-    } else if (comm->wid() == 3 ) {
-        start = 20;
-        end   = 23;
-    }
+    /* qlonglong start = 0; */
+    /* qlonglong end   = 9; */
+    /* if (comm->wid() == 1 ) { */
+    /*     start = 9; */
+    /*     end   = 15; */
+    /* } else if (comm->wid() == 2 ) { */
+    /*     start = 15; */
+    /*     end   = 20; */
+    /* } else if (comm->wid() == 3 ) { */
+    /*     start = 20; */
+    /*     end   = 23; */
+    /* } */
 
     const QMap<qlonglong, QVector<qlonglong> >& local_fe_neighbours = m_DD_neighbours[comm->wid()];
 
@@ -336,7 +336,7 @@ public:
 
         topo.assemble();
 
-        if (comm->wid() == 0) {
+        if (wid == 0) {
             for(qlonglong i = 0; i < topo.size(); ++i) {
                 QCOMPARE(topo.neighbourCount(i), neighbours.count(i));
             }
@@ -374,7 +374,7 @@ public:
 
         topo.assemble();
 
-        if (dtkDistributed::app()->communicator()->wid() == 0) {
+        if (wid == 0) {
             for(qlonglong i = 0; i < topo.size(); ++i) {
                 QCOMPARE(topo.neighbourCount(i), neighbours.count(i));
             }
@@ -395,7 +395,6 @@ public:
     void run(void)
     {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
-        qlonglong wid = comm->wid();
         qlonglong N = 23;
 
         dtkDistributedMapper *m = new dtkDistributedMapper;

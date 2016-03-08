@@ -18,18 +18,59 @@
  */
 
 #include "dtkComposerGraphView.h"
+#include "dtkComposerGraph.h"
+#include <dtkLog>
 
 class dtkComposerGraphViewPrivate
 {
 public:
+    dtkComposerGraph *graph;
+    bool graphviz_avail;
 };
 
-dtkComposerGraphView::dtkComposerGraphView(QWidget *parent) : QGraphicsView(parent),d(new dtkComposerGraphViewPrivate)
+dtkComposerGraphView::dtkComposerGraphView(QWidget *parent) : QSvgWidget(parent),d(new dtkComposerGraphViewPrivate)
 {
-    this->setAttribute(Qt::WA_MacShowFocusRect, false);
-    this->setFrameStyle(QFrame::NoFrame);
-    this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    this->setWindowTitle("Graph");
+    d->graph = NULL;
+    d->graphviz_avail = true;
+}
+
+void dtkComposerGraphView::setGraph(dtkComposerGraph *graph)
+{
+    d->graph = graph;
+}
+
+void dtkComposerGraphView::update(void)
+{
+    if (!d->graphviz_avail)
+        return;
+
+    QByteArray content = d->graph->toString().append("\n").toLocal8Bit() ;
+    // run dot
+    QStringList arglist;
+    arglist << "-Tsvg";
+    QString command = "dot";
+    QProcess cmd;
+    QStringList PATH =  QProcessEnvironment::systemEnvironment().value("PATH").split(":") ;
+    QDir::setSearchPaths("bin",PATH);
+    if(QFile("bin:"+command).exists()) {
+
+        dtkTrace() << "run graphviz dot" ;
+        cmd.start(command, arglist, QProcess::Unbuffered | QProcess::ReadWrite);
+        cmd.write(content);
+        cmd.closeWriteChannel();
+        cmd.waitForBytesWritten();
+        qlonglong timeout = 3000;
+        QString stdout_data;
+        if (cmd.waitForFinished(timeout)) {
+            QByteArray svg = cmd.readAllStandardOutput();
+            this->load(svg);
+        } else {
+            dtkWarn() << "graphviz timeout !";
+        }
+    } else {
+        d->graphviz_avail = false;
+        dtkWarn() << "can't find 'dot' binary in PATH, graphviz probably not installed";
+    }
 }
 
 dtkComposerGraphView::~dtkComposerGraphView(void)
@@ -38,3 +79,4 @@ dtkComposerGraphView::~dtkComposerGraphView(void)
 
     d = NULL;
 }
+

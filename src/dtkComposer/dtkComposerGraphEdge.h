@@ -20,7 +20,6 @@
 #pragma once
 
 #include <QtCore>
-#include <QtWidgets>
 
 #include <dtkMathSupport/dtkGraphEdge.h>
 #include "dtkComposerGraphNode.h"
@@ -32,7 +31,7 @@ class dtkGraphEdge;
 // dtkComposerGraphEdge
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerGraphEdge : public QGraphicsItem, public dtkGraphEdge
+class dtkComposerGraphEdge : public dtkGraphEdge
 {
 public:
      dtkComposerGraphEdge(void);
@@ -47,13 +46,6 @@ public:
 
 public:
     void setId(int id);
-
-public:
-    QRectF boundingRect(void) const;
-
-public:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-    void drawArrow(QPainter *p, QPointF from, QPointF to, qreal size = 10, qreal end_margin = 18);
 
 private:
     dtkComposerGraphEdgePrivate *d;

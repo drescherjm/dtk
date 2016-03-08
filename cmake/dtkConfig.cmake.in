@@ -41,6 +41,16 @@ set(dtk_INCLUDE_DIRS
 
 include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
 
+find_package(Qt5 REQUIRED COMPONENTS
+  Core
+  Concurrent
+  Network
+  Quick
+  Svg
+  Test
+  Widgets
+  Xml)
+
 set(dtk_INSTALL_DOCS @dtk_INSTALL_DOCS@)
 set(dtk_CONFIG_DOCS @dtk_CONFIG_DOCS@)
 
@@ -67,6 +77,11 @@ set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
 set(DTK_HAVE_VRPN @DTK_HAVE_VRPN@)
 set(DTK_HAVE_NITE @DTK_HAVE_NITE@)
 set(DTK_HAVE_ZLIB @DTK_HAVE_ZLIB@)
+
+if(DTK_BUILD_COMPOSER)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_INSTALL_PREFIX@/include/dtkComposer")
+endif(DTK_BUILD_COMPOSER)
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -17,6 +17,70 @@
 #include <dtkMeta/dtkMeta>
 
 #include <QtCore>
+
+// ///////////////////////////////////////////////////////////////////
+// No Copyable Data concrete class
+// ///////////////////////////////////////////////////////////////////
+
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+class NoCopyableData
+{
+public:
+             NoCopyableData(void) {;}
+             NoCopyableData(const int& id, const QString& name) : m_id(id), m_name(name) {;}
+    virtual ~NoCopyableData(void) {;}
+
+public:
+    bool operator == (const NoCopyableData& o) const { if (m_id != o.m_id || m_name != o.m_name) return false; return true; }
+
+public:
+    void   setId(const int& id)       { m_id   = id; }
+    void setName(const QString& name) { m_name = name; }
+
+public:
+    int       id(void) const { return m_id; }
+    QString name(void) const { return m_name; }
+
+private:
+    int m_id;
+    QString m_name;
+
+    NoCopyableData(const NoCopyableData&) {}
+    NoCopyableData& operator=(const NoCopyableData&) { return *this; }
+};
+
+Q_DECLARE_METATYPE(NoCopyableData *);
+
+QDebug operator << (QDebug dbg, NoCopyableData *data)
+{
+    dbg.nospace() << "NoCopyableData(" << data->id() << ", " << data->name() << ")"; return dbg.space();
+}
+
+class DeriveNoCopyableData : public NoCopyableData
+{
+public:
+    DeriveNoCopyableData(void) : NoCopyableData(), m_value(0) {;}
+    DeriveNoCopyableData(const int& id, const QString& name, double value = 0) : NoCopyableData(id, name), m_value(value) {;}
+
+private:
+    DeriveNoCopyableData(const DeriveNoCopyableData& o) {};
+    DeriveNoCopyableData& operator=(const DeriveNoCopyableData&) { return *this; }
+
+public:
+    bool operator == (const DeriveNoCopyableData& o) const { if (m_value != o.m_value) return false; return (static_cast<const NoCopyableData&>(*this) == static_cast<const NoCopyableData &>(o)); }
+
+public:
+    void setValue(double value) { m_value = value; }
+
+public:
+    double value(void) const { return m_value; }
+
+private:
+    double m_value;
+};
+
+Q_DECLARE_METATYPE(DeriveNoCopyableData*);
+#endif
 
 // ///////////////////////////////////////////////////////////////////
 // Data concrete class
@@ -86,7 +150,7 @@ Q_DECLARE_METATYPE(DeriveData);
 Q_DECLARE_METATYPE(DeriveData*);
 
 // ///////////////////////////////////////////////////////////////////
-// Abstract class 
+// Abstract class
 // ///////////////////////////////////////////////////////////////////
 
 class MyAbstract
@@ -119,7 +183,7 @@ Q_DECLARE_METATYPE(MyAbstract *);
 
 // ///////////////////////////////////////////////////////////////////
 
-class DeriveMyAbstract : public MyAbstract 
+class DeriveMyAbstract : public MyAbstract
 {
 public:
      DeriveMyAbstract(void) : MyAbstract(), m_id(-1), m_name(QString()) {;}
@@ -178,7 +242,7 @@ Q_DECLARE_METATYPE(VirtualObject *);
 
 // ///////////////////////////////////////////////////////////////////
 
-class VirtualObject2 : public VirtualObject 
+class VirtualObject2 : public VirtualObject
 {
     Q_OBJECT
 
@@ -238,6 +302,10 @@ public:
 public:
     int count;
 
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    NoCopyableData *no_copyable_data;
+    DeriveNoCopyableData *derive_no_copyable_data;
+#endif
     Data *data;
     DeriveData *derive_data;
     MyAbstract *abstract;
@@ -252,6 +320,9 @@ public:
 dtkMetaTypeTestCase::dtkMetaTypeTestCase(void) : QObject(), d(new dtkMetaTypeTestCasePrivate)
 {
     // Register debug operators
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    QMetaType::registerDebugStreamOperator<NoCopyableData*>();
+#endif
     QMetaType::registerDebugStreamOperator<Data>();
     QMetaType::registerDebugStreamOperator<Data*>();
     QMetaType::registerDebugStreamOperator<MyAbstract*>();
@@ -269,12 +340,18 @@ dtkMetaTypeTestCase::~dtkMetaTypeTestCase(void)
 
 void dtkMetaTypeTestCase::initTestCase(void)
 {
-    
+
 }
 
 void dtkMetaTypeTestCase::init(void)
 {
     d->count = 0;
+
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    d->no_copyable_data = new NoCopyableData(d->count ++, "PNoCopyableData");
+
+    d->derive_no_copyable_data = new DeriveNoCopyableData(d->count++, "PDeriveNoCopyableData", 5573.);
+#endif
 
     d->data = new Data(d->count ++, "PData");
 
@@ -295,6 +372,10 @@ void dtkMetaTypeTestCase::init(void)
 
 void dtkMetaTypeTestCase::cleanup(void)
 {
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    delete d->no_copyable_data;
+    delete d->derive_no_copyable_data;
+#endif
     delete d->data;
     delete d->derive_data;
     delete d->abstract;
@@ -309,6 +390,17 @@ void dtkMetaTypeTestCase::cleanupTestCase(void)
 
 void dtkMetaTypeTestCase::testCanConvert(void)
 {
+    // Non QObject No Copyable Data pointer
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    {
+        QVERIFY(!dtkMetaType::canConvert<NoCopyableData*>(QMetaType::type("DeriveNoCopyableData*")));
+
+        QVERIFY(!dtkMetaType::canConvert<DeriveNoCopyableData*>(QMetaType::type("NoCopyableData*")));
+        QMetaType::registerConverter<DeriveNoCopyableData*, NoCopyableData*>();
+        QVERIFY(dtkMetaType::canConvert<DeriveNoCopyableData*>(QMetaType::type("NoCopyableData*")));
+    }
+#endif
+
     // Non QObject Data pointer
     {
         QVERIFY(!dtkMetaType::canConvert<Data*>(QMetaType::type("DeriveData*")));
@@ -337,12 +429,40 @@ void dtkMetaTypeTestCase::testCanConvert(void)
 
         QVERIFY(!dtkMetaType::canConvert<VirtualObject2*>(QMetaType::type("VirtualObject *")));
         QMetaType::registerConverter<VirtualObject2*, VirtualObject*>();
-        QVERIFY(dtkMetaType::canConvert<VirtualObject2*>(QMetaType::type("VirtualObject*")));        
+        QVERIFY(dtkMetaType::canConvert<VirtualObject2*>(QMetaType::type("VirtualObject*")));
     }
 }
 
 void dtkMetaTypeTestCase::testVariantFromValue(void)
 {
+
+    // Non QObject No copyable Data pointer
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    {
+        NoCopyableData *d0 = d->no_copyable_data;
+        QVariant v_d0 = dtkMetaType::variantFromValue(d0);
+        QVERIFY(v_d0.isValid());
+        QCOMPARE(v_d0.typeName(), "NoCopyableData*");
+        QCOMPARE(*(v_d0.value<NoCopyableData*>()), *d0);
+
+        DeriveNoCopyableData *dd0 = d->derive_no_copyable_data;
+        QVariant v_dd0 = dtkMetaType::variantFromValue(dd0);
+        QVERIFY(v_dd0.isValid());
+        QCOMPARE(v_dd0.typeName(), "DeriveNoCopyableData*");
+        QCOMPARE(*(v_dd0.value<DeriveNoCopyableData*>()), *dd0);
+        QVERIFY(v_dd0.canConvert(v_d0.userType()));
+
+        NoCopyableData *d1 = dd0;
+        QVariant v_d1 = dtkMetaType::variantFromValue(d1);
+        QVERIFY(v_d1.isValid());
+        QVERIFY(v_d1.userType() != v_dd0.userType());
+        QCOMPARE(v_d1.typeName(), "NoCopyableData*");
+
+        NoCopyableData *d2 = v_dd0.value<NoCopyableData*>();
+        QCOMPARE(*d1, *d2);
+    }
+#endif
+
     // Non QObject Data
     {
         Data d0 = *d->data;
@@ -366,7 +486,7 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
         QCOMPARE(v_dd0.typeName(), "DeriveData*");
         QCOMPARE(*(v_dd0.value<DeriveData*>()), *dd0);
         QVERIFY(v_dd0.canConvert(v_d0.userType()));
-        
+
         Data *d1 = dd0;
         QVariant v_d1 = dtkMetaType::variantFromValue(d1);
         QVERIFY(v_d1.isValid());
@@ -419,6 +539,26 @@ void dtkMetaTypeTestCase::testVariantFromValue(void)
 
 void dtkMetaTypeTestCase::testClone(void)
 {
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    // Non QObject No Copyable Data pointer
+    {
+        // Cloning return nullptr;
+        NoCopyableData *d0 = d->no_copyable_data;
+        NoCopyableData *c0 = dtkMetaType::clone(d0);
+        QVERIFY(!c0);
+
+        // Cloning return nullptr;
+        DeriveNoCopyableData *dd0 = d->derive_no_copyable_data;
+        DeriveNoCopyableData *cc0 = dtkMetaType::clone(dd0);
+        QVERIFY(!cc0);
+
+        // Cloning return nullptr;
+        NoCopyableData *d1 = dd0;
+        NoCopyableData *c1 = dtkMetaType::clone(d1);
+        QVERIFY(!c1);
+    }
+#endif
+
     // Non QObject Data pointer
     {
         Data *d0 = d->data;
@@ -428,7 +568,7 @@ void dtkMetaTypeTestCase::testClone(void)
         DeriveData *dd0 = d->derive_data;
         DeriveData *cc0 = dtkMetaType::clone(dd0);
         QCOMPARE(*dd0, *cc0);
-        
+
         // When cloning from parent class, slicing occurs.
         Data *d1 = dd0;
         Data *c1 = dtkMetaType::clone(d1);
@@ -465,6 +605,85 @@ void dtkMetaTypeTestCase::testClone(void)
     }
 }
 
+void dtkMetaTypeTestCase::testCopy(void)
+{
+    // Non QObject No Copyable Data pointer
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    {
+        // Cloning return nullptr;
+        NoCopyableData *d0 = d->no_copyable_data;
+        NoCopyableData *c0 = new NoCopyableData(-12, "dummy");
+        dtkMetaType::copy(d0, c0);
+        QCOMPARE(QString("dummy"), c0->name());
+        delete c0;
+
+        // Cloning return nullptr;
+        DeriveNoCopyableData *dd0 = d->derive_no_copyable_data;
+        DeriveNoCopyableData *cc0 = new DeriveNoCopyableData(-12, "dummy", 3.14159);
+        dtkMetaType::copy(dd0, cc0);
+        QCOMPARE(3.14159, cc0->value());
+        delete cc0;
+
+    }
+#endif
+
+    // Non QObject Data pointer
+    {
+        Data *d0 = d->data;
+        Data *c0 = new Data();
+        dtkMetaType::copy(d0, c0);
+        QCOMPARE(*d0, *c0);
+        delete c0;
+
+        DeriveData *dd0 = d->derive_data;
+        DeriveData *cc0 = new DeriveData();
+        dtkMetaType::copy(dd0, cc0);
+        QCOMPARE(*dd0, *cc0);
+        delete cc0;
+
+        // When cloning from parent class, slicing occurs.
+        Data *d1 = dd0;
+        Data *c1 = new DeriveData;
+        dtkMetaType::copy(d1, c1);
+        QVERIFY(!(*dd0 == *dynamic_cast<DeriveData*>(c1)));
+        delete c1;
+    }
+
+    // Non QObject Abstract class
+    {
+        MyAbstract *a0 = d->abstract;
+        QVERIFY(dynamic_cast<DeriveMyAbstract*>(a0));
+
+        // No slicing occurs since the Abstract class is copy
+        // assignable at the top level and handles all the
+        // members. But it is luck.
+        MyAbstract *c0 = new DeriveMyAbstract;
+        dtkMetaType::copy(a0, c0);
+        QCOMPARE(*a0, *c0);
+        delete c0;
+    }
+
+    // QObject Abstract class
+    {
+        VirtualObject *a0 = d->virtual_object;
+        QVERIFY(dynamic_cast<DeriveVirtualObject*>(a0));
+
+        // To avoid slicing when copying, the deriveed class must be
+        // registered at runtime
+        qRegisterMetaType<DeriveVirtualObject>();
+        VirtualObject *c0 = new DeriveVirtualObject;
+        dtkMetaType::copy(a0, c0);
+        QCOMPARE(*c0, *a0);
+        delete c0;
+
+        VirtualObject2 *b1 = d->virtual_object2;
+        VirtualObject2 *c1 = new DeriveVirtualObject;
+        dtkMetaType::copy(b1, c1);
+        QCOMPARE(*c1, *b1);
+        delete c1;
+    }
+}
+
 void dtkMetaTypeTestCase::testCloneContent(void)
 {
     // Non QObject Data pointer
@@ -479,8 +698,28 @@ void dtkMetaTypeTestCase::testCloneContent(void)
         // QObject *o = new QObject();
         // QVariant v = QVariant::fromValue(o);
         // qDebug() << v << QMetaType::TypeFlags(v.userType());
-        
+
     }
+
+    // Non QObject No copyable Data pointer
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    {
+        NoCopyableData *d0 = d->no_copyable_data;
+        QVariant v = dtkMetaType::variantFromValue(d0);
+        QVariant vv = dtkMetaType::cloneContent(v);
+        NoCopyableData *c0 = vv.value<NoCopyableData *>();
+        QVERIFY(!c0);
+
+        DeriveNoCopyableData *dd0 = d->derive_no_copyable_data;
+        v = dtkMetaType::variantFromValue(dd0);
+
+        if (QMetaType::type("DeriveNoCopyableData*") == QMetaType::UnknownType)
+            qRegisterMetaType<DeriveNoCopyableData*>();
+        vv = dtkMetaType::cloneContent(v);
+        DeriveNoCopyableData *cc0 = vv.value<DeriveNoCopyableData *>();
+        QVERIFY(!cc0);
+    }
+#endif
 
     // Non QObject Data pointer
     {
@@ -500,7 +739,7 @@ void dtkMetaTypeTestCase::testCloneContent(void)
         DeriveData *cc0 = vv.value<DeriveData *>();
         QVERIFY(static_cast<void *>(dd0) != static_cast<void *>(cc0));
         QCOMPARE(*dd0, *cc0);
-        
+
         // When cloning from parent class, slicing occurs.
         Data *d1 = dd0;
         v = dtkMetaType::variantFromValue(d1);
@@ -553,7 +792,7 @@ void dtkMetaTypeTestCase::testCreateEmptyContainer(void)
         var.clear();
         var = dtkMetaType::variantFromValue(&vec);
         QVERIFY(var.canConvert<dtkMetaContainerSequential>());
-        
+
         QVariant res = dtkMetaType::createEmptyContainer(var);
         QVector<double> *v_res = res.value<QVector<double> *>();
         QVERIFY(v_res);
@@ -573,7 +812,7 @@ void dtkMetaTypeTestCase::testCreateEmptyContainer(void)
         var.clear();
         var = dtkMetaType::variantFromValue(&list);
         QVERIFY(var.canConvert<dtkMetaContainerSequential>());
-        
+
         QVariant res = dtkMetaType::createEmptyContainer(var);
         QList<double> *l_res = res.value<QList<double> *>();
         QVERIFY(l_res);
@@ -589,7 +828,7 @@ void dtkMetaTypeTestCase::testDestroyPointer(void)
         QVariant var = dtkMetaType::variantFromValue(vec);
         QVERIFY(var.canConvert<dtkMetaContainerSequential>());
         QVERIFY(!dtkMetaType::destroyPointer(var));
-        
+
         vec = new QVector<double>(5, 3.14159);
         var = dtkMetaType::variantFromValue(vec);
         QVERIFY(dtkMetaType::destroyPointer(var));
@@ -600,5 +839,5 @@ DTKTEST_MAIN_NOGUI(dtkMetaTypeTest, dtkMetaTypeTestCase)
 
 #include "dtkMetaTypeTest.moc"
 
-// 
+//
 // dtkMetaTypeTest.cpp ends here

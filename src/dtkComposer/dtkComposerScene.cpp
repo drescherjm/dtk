@@ -15,6 +15,7 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
+#include "dtkComposerNodeComposite.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -41,6 +42,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     setItemIndexMethod( QGraphicsScene::NoIndex);
 
     d->root_node = new dtkComposerSceneNodeComposite;
+    d->root_node->wrap(new dtkComposerNodeComposite);
     d->root_node->setRoot(true);
     d->root_node->setTitle("Root");
 
@@ -161,8 +163,7 @@ void dtkComposerScene::setStack(dtkComposerStack *stack)
 void dtkComposerScene::setGraph(dtkComposerGraph *graph)
 {
     d->graph = graph;
-    d->graph->addNode(d->root_node);
-    d->graph->layout();
+    d->graph->addNode(d->root_node->wrapee(),NULL);
 }
 
 // /////////////////////////////////////////////////////////////////

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <QtCore>
-#include <QtWidgets>
 
 class dtkComposerGraph;
 class dtkComposerGraphNodePrivate;
@@ -31,7 +30,7 @@ class dtkComposerNode;
 // dtkComposerGraphNode
 // /////////////////////////////////////////////////////////////////
 
-class dtkComposerGraphNode : public QGraphicsObject
+class dtkComposerGraphNode : public QObject
 {
     Q_OBJECT
 
@@ -44,17 +43,10 @@ public:
     enum   Kind { SelectBranch, Leaf, Data, Process, View, Actor, Begin, BeginLoop, BeginComposite,BeginIf, End, SetOutputs, SetInputs, SetVariables, SetConditions };
 
 public:
-    QRectF boundingRect(void) const;
-
-public:
-    virtual dtkComposerNode *wrapee(void);
-
-public:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     void setTitle(const QString& title);
 
 public:
-    void mouseDoubleClickEvent (QGraphicsSceneMouseEvent *event);
+    virtual dtkComposerNode *wrapee(void);
 
 public:
     void addChild(dtkComposerGraphNode *node);

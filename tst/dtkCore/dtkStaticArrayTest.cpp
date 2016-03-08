@@ -101,6 +101,7 @@ void dtkStaticArrayTestCase::testCreate(void)
 
 void dtkStaticArrayTestCase::testAlignment(void)
 {
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
     {
         typedef dtkStaticArray<double, 11>                           alignedArray;
         typedef dtkStaticArray<double, 11, 2 * sizeof(double)> customAlignedArray;
@@ -108,6 +109,7 @@ void dtkStaticArrayTestCase::testAlignment(void)
         QCOMPARE(std::alignment_of<alignedArray>::value, sizeof(double));
         QCOMPARE(std::alignment_of<customAlignedArray>::value, 2 * sizeof(double));
     }
+#endif
 }
 
 void dtkStaticArrayTestCase::testFill(void)
@@ -297,7 +299,7 @@ void dtkStaticArrayTestCase::testComparison(void)
         rhs = { 0.11, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         QVERIFY(lhs < rhs);
-    }    
+    }
 }
 
 

@@ -8,7 +8,6 @@
 #include "dtkComposerFactory.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
-#include "dtkComposerGraphLayouter.h"
 #include "dtkComposerGraphNode.h"
 #include "dtkComposerGraphNodeBegin.h"
 #include "dtkComposerGraphNodeEnd.h"
@@ -70,4 +69,5 @@
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerView.h"
 #include "dtkComposerReader.h"
+#include "dtkComposerReaderNoScene.h"
 #include "dtkComposerWriter.h"

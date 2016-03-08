@@ -1,15 +1,15 @@
 ## Version: $Id$
-## 
+##
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
-## 
+##
 ### Code:
 
 include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
@@ -52,7 +52,8 @@ indexes = \
   @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
   @dtk_INSTALL_DOCS@/dtkdistributed/dtkdistributed.index \
   @dtk_INSTALL_DOCS@/dtkio/dtkio.index \
-  @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index
+  @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index \
+  @dtk_INSTALL_DOCS@/dtklog/dtklog.index
 
 ######################################################################
 ### dtk.qdocconf.in ends here

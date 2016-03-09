@@ -51,7 +51,7 @@ indexes = \
   @dtk_INSTALL_DOCS@/dtkdistributed/dtkdistributed.index \
   @dtk_INSTALL_DOCS@/dtkio/dtkio.index \
   @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index \
-  @dtk_INSTALL_DOCS@/dtkio/dtkimaging.index
+  @dtk_INSTALL_DOCS@/dtkimaging/dtkimaging.index
 
 outputdir = @dtk_INSTALL_DOCS@/dtkdoc
 

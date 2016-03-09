@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <set>
+
 #include "dtkDistributedArray.h"
 #include "dtkDistributedNavigator.h"
 #include "dtkDistributedContainer.h"
@@ -193,7 +195,8 @@ public:
 protected:
     bool m_is_assembled;
 
-    typedef QList<qlonglong> EdgeList;
+    //typedef QList<qlonglong> EdgeList;
+    typedef std::set<qlonglong> EdgeList;
     typedef QMap<qlonglong, EdgeList> EdgeMap;
 
     dtkDistributedArray<qlonglong> *m_edge_count;

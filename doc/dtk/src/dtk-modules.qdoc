@@ -57,6 +57,9 @@
   \row
      \li \l{dtkIo Module} {Input/Output}
      \li High level interface to deal with input/output Data Model (ASCII, Hdf5,..).
+  \row
+     \li \l{dtkImaging Module} {Imaging}
+     \li High level interface for image processing.
   \endtable
 
   \section1 dtk Applications

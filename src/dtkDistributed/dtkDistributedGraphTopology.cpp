@@ -558,9 +558,37 @@ void dtkDistributedGraphTopology::assemble(void)
         auto it  = m_dd.map_hybrid.cbegin();
         auto ite = m_dd.map_hybrid.cend();
 
+        qlonglong buffer_array[512];
+        qlonglong last_key=it.key();
+        int local_counter=0;
+        qlonglong buffer_index = it.key();
+        
         for(; it != ite; ++it) {
-            m_neighbour_count->addAssign(it.key(), (*it).size());
+            if(it.key() < last_key)
+                qDebug() << "PB QMAP not ordered !!!" << it.key() << last_key;
+
+            qlonglong gap = it.key() - last_key;
+            //buffer is full or there is a gap too large, send it
+            if((local_counter+gap+1)>=511) {
+                m_neighbour_count->addAssign(buffer_index, buffer_array, local_counter);
+                buffer_index = it.key();
+                last_key = it.key();
+                local_counter=0;
+                gap=0;
+            }
+
+            //otherwise test if we have to fill buffer_array with 0
+            for(auto i=0; i <(gap-1); ++i) {
+                buffer_array[local_counter++]=0;
+            }
+
+            //then had this value to the buffer
+            buffer_array[local_counter++] = (*it).size();
+            last_key = it.key();
         }
+
+        //finally send the last values
+        m_neighbour_count->addAssign(buffer_index, buffer_array, local_counter);
     }
     this->m_comm->barrier();
 

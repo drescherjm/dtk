@@ -18,16 +18,25 @@
 #include "dtkComposerExport.h"
 
 #include <QtWidgets>
+#include <QSvgWidget>
 
 class dtkComposerGraphViewPrivate;
+class dtkComposerGraph;
 
-class DTKCOMPOSER_EXPORT dtkComposerGraphView : public QGraphicsView
+
+class DTKCOMPOSER_EXPORT dtkComposerGraphView : public QSvgWidget
 {
     Q_OBJECT
 
 public:
      dtkComposerGraphView(QWidget *parent = 0);
     ~dtkComposerGraphView(void);
+
+public:
+    void setGraph(dtkComposerGraph *graph);
+
+public slots:
+    void update(void);
 
 private:
     dtkComposerGraphViewPrivate *d;

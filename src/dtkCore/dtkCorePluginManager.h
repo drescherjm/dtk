@@ -37,6 +37,9 @@ public:
 public:
     void setVerboseLoading(bool value);
     bool verboseLoading(void) const;
+    void setAutoLoading(bool value);
+    bool autoLoading(void) const;
+    void loadFromName(const QString & plugin_name);
 
 #pragma mark -
 #pragma mark Plugin Management

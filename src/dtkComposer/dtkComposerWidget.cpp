@@ -243,8 +243,6 @@ void dtkComposerWidget::run(void)
     this->updateRemotes(d->scene->root());
 
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
-
-    d->graph->update();
 }
 
 void dtkComposerWidget::step(void)
@@ -252,7 +250,6 @@ void dtkComposerWidget::step(void)
     d->evaluator->step();
     d->evaluator->logStack();
 
-    d->graph->update();
 }
 
 void dtkComposerWidget::cont(void)
@@ -261,14 +258,12 @@ void dtkComposerWidget::cont(void)
 
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::cont, false);
 
-    d->graph->update();
 }
 
 void dtkComposerWidget::next(void)
 {
     QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::next, false);
 
-    d->graph->update();
 }
 
 void dtkComposerWidget::stop(void)

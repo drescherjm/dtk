@@ -24,11 +24,12 @@ class dtkComposerGraphEdgeList;
 class dtkComposerGraphNode;
 class dtkComposerGraphNodeList;
 class dtkComposerGraphPrivate;
-class dtkComposerSceneEdge;
-class dtkComposerSceneNode;
+class dtkComposerEdge;
+class dtkComposerNode;
+class dtkComposerNodeComposite;
 class dtkGraph;
 
-class DTKCOMPOSER_EXPORT dtkComposerGraph : public QGraphicsScene
+class DTKCOMPOSER_EXPORT dtkComposerGraph : public QObject
 {
     Q_OBJECT
 
@@ -37,20 +38,21 @@ public:
     ~dtkComposerGraph(void);
 
 public:
-    void    addNode(dtkComposerSceneNode *node);
-    void removeNode(dtkComposerSceneNode *node);
+    void    addNode(dtkComposerNode *node, dtkComposerNode *parent);
+    void removeNode(dtkComposerNode *node, dtkComposerNode *parent);
 
-    void    addBlock(dtkComposerSceneNode *node);
-    void removeBlock(dtkComposerSceneNode *node);
+    void    addBlock(dtkComposerNode *node);
+    void removeBlock(dtkComposerNode *node, dtkComposerNode *parent);
 
-    void    addEdge(dtkComposerSceneEdge *edge);
-    void removeEdge(dtkComposerSceneEdge *edge);
+    void    addEdge(dtkComposerNode *source, dtkComposerNode *destination, QString src_type, QString dst_type);
+    void removeEdge(dtkComposerNode *source, dtkComposerNode *destination, QString src_type, QString dst_type, dtkComposerNode *parent);
+    /* void removeEdge(dtkComposerNode *source, dtkComposerNode *destination, dtkComposerNode *source_parent, dtkComposerNode *dest_parent, dtkComposerNode *source_owner_parent, dtkComposerNode *dest_owner_parent); */
 
-    void reparentNode(dtkComposerSceneNode *node, dtkComposerSceneNode *newparent);
+    void reparentNode(dtkComposerNode *node, dtkComposerNode *oldparent, dtkComposerNode *newparent);
 
-    void createGroup(dtkComposerSceneNode *node);
-    void destroyGroup(dtkComposerSceneNode *node);
-    void removeGroup(dtkComposerSceneNode *node);
+    void createGroup(dtkComposerNode *node, dtkComposerNode *parent);
+    void destroyGroup(dtkComposerNode *node, dtkComposerNode *parent);
+    void removeGroup(dtkComposerNode *node, dtkComposerNode *parent);
 
 public:
     dtkComposerGraphNode *root(void);
@@ -70,16 +72,12 @@ public:
 
 public:
     void clear(void);
-    void layout(void);
 
 public:
     QString toString(void);
 
 signals:
     void cleared(void);
-
-protected slots:
-    void onSelectionChanged(void);
 
 private:
     dtkComposerGraphPrivate *d;

@@ -28,6 +28,7 @@ public:
 
 public:
     bool verboseLoading;
+    bool autoLoading;
 
 public:
     QHash<QString, QVariant> names;
@@ -82,6 +83,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
 template <typename T> dtkCorePluginManager<T>::dtkCorePluginManager(void) : d(new dtkCorePluginManagerPrivate<T>)
 {
     d->verboseLoading = false;
+    d->autoLoading = true;
 }
 
 template <typename T> dtkCorePluginManager<T>::~dtkCorePluginManager(void)
@@ -105,6 +107,35 @@ template <typename T> bool dtkCorePluginManager<T>::verboseLoading(void) const
     return d->verboseLoading;
 }
 
+// /////////////////////////////////////////////////////////////////
+// Auto loading
+// /////////////////////////////////////////////////////////////////
+
+template <typename T> void dtkCorePluginManager<T>::setAutoLoading(bool value)
+{
+    d->autoLoading = value;
+}
+
+template <typename T> bool dtkCorePluginManager<T>::autoLoading(void) const
+{
+    return d->autoLoading;
+}
+
+template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString & plugin_name)
+{
+    QString full_name = plugin_name % "Plugin";
+    QHash<QString, QVariant>::const_iterator i = d->names.constBegin();
+    while (i != d->names.constEnd()) {
+        if(QString::compare(i.value().toString(), full_name) == 0) {
+            this->load(i.key());
+            return;
+        }
+        ++i;
+    }
+
+    dtkWarn() << __func__ << plugin_name << " not found ";
+    dtkWarn() << __func__ << "keys" << d->names.keys() << d->names.values();
+}
 
 // /////////////////////////////////////////////////////////////////
 // Manager Management
@@ -117,9 +148,11 @@ template <typename T> void dtkCorePluginManager<T>::initialize(const QString& pa
     foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
         this->scan(info.absoluteFilePath());
 
-    foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
-        this->load(info.absoluteFilePath());
-}
+    if(d->autoLoading) {
+        foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+            this->load(info.absoluteFilePath());
+    }
+}   
 
 template <typename T> void dtkCorePluginManager<T>::uninitialize(void)
 {
@@ -186,6 +219,7 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
         error += path;
         if(d->verboseLoading) { dtkWarn() << error; }
 
+        loader->unload();
         delete loader;
         return;
     }

@@ -48,6 +48,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
 ## #################################################################
 ## Install prefix
 ## #################################################################
@@ -99,8 +101,6 @@ else(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_32 1)
   set(DTK_BUILD_64 0)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 ## #################################################################
 ## Options
@@ -169,10 +169,10 @@ find_package(Qt5 REQUIRED COMPONENTS
   Network
   Gui
   Test
+  Svg
   Widgets
   Xml
   )
-
 
 ## ###################################################################
 ## Doc setup

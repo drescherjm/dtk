@@ -26,7 +26,6 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_SOURCE_DIR@/src"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtk"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkLog"
-  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkCore"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkDistributed"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMath"
@@ -42,8 +41,9 @@ find_package(Qt5 REQUIRED COMPONENTS
   Concurrent
   Network
   Quick
-  Widgets
+  Svg
   Test
+  Widgets
   Xml)
 
 set(dtk_INSTALL_DOCS @dtk_INSTALL_DOCS@)
@@ -73,6 +73,11 @@ set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
 set(DTK_HAVE_VRPN @DTK_HAVE_VRPN@)
 set(DTK_HAVE_NITE @DTK_HAVE_NITE@)
 set(DTK_HAVE_ZLIB @DTK_HAVE_ZLIB@)
+
+if(DTK_BUILD_COMPOSER)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer")
+endif(DTK_BUILD_COMPOSER)
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

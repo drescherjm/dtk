@@ -1,0 +1,35 @@
+/*!
+    \module dtkComposer
+    \title Composer C++ Classes
+    \ingroup dtk-allAPI
+
+    \brief Provides all the mechanisms to provide a visual programming framework.
+
+     Composer layer provides a visual programming framework that enables not only to manipulate fundamental concepts defined in the Core layer (data, process, view) but also to integrate some features from other layers (e.g. dtkDistributed layer or dtkLinearAlgebraSparse layer). As the Core layer, it can be extended in any application logic so as to handle additional concepts.
+
+Composer layer is made up of three main frameworks, namely logic, scene and evaluation, that are at the heart of the visual programming concept. Three additional frameworks (command, interfaces, integration) provides peripheral tools that extend functionalities both in terms of programmation and interaction.
+
+  \section1 Logic framework
+
+This framework defines the logic of the data flow through two main concepts: the concept of node and the concept of transmitter.
+dtkComposerNode
+A node is a more or less atomic piece of the data flow that embeds a given logic. Three kind of nodes exist:
+
+\list
+    \li Leaf nodes wrap logics provided by other layers of dtk or application logics (e.g. dtkCore or numCore).
+    \li Composite nodes enables to define sub part of composition in order to provide some services or just to simplify the data flow for the end user.
+    \li Control nodes define control structure that allow to perform loop or switch between some parts of the composition.
+\endlist
+
+  \section1 dtkComposerTransmitter
+
+Transmitters enable data transmission between nodes. Transmission can be carried out according to two modes, namely a strong types data mode based on templates and a weak typed data mode based on QVariant. Furthermore, four types of transmitters exist:
+
+\list
+    \li dtkComposerTransmitterEmitter enables to send data according to the strong types way.
+    \li dtkComposerTransmitterReceiver enables to receive data according to the strong types way.
+    \li  dtkComposerTransmitterProxy is used as relay between emitters and receivers, it is not typed at all.
+    \li dtkComposerTransmitterVariant can play the role of both an emitter or a receiver. It is weakly typed, that is to say it can connect two nodes that exchange data of not exactly the same type (e.g. integer and real).
+\endlist
+
+*/

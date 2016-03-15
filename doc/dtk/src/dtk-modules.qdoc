@@ -34,6 +34,9 @@
      \li \l{Core Module} {Core}
      \li Fundamental concepts and related tools.
   \row
+     \li \l{Composer Module} {Composer}
+     \li Visual programming framework.
+  \row
      \li \l{Meta Module} {Meta}
      \li Meta concepts.
   \row

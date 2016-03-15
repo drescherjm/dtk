@@ -32,4 +32,21 @@ Transmitters enable data transmission between nodes. Transmission can be carried
     \li dtkComposerTransmitterVariant can play the role of both an emitter or a receiver. It is weakly typed, that is to say it can connect two nodes that exchange data of not exactly the same type (e.g. integer and real).
 \endlist
 
+ \section1 Shortcuts
+
+To facilitate the use of the composer, some shortcuts can be employed:
+
+\list
+    \li [ CTRL ] [ R ] : Evaluate a composition
+    \li [ CTRL ] [ G ] : Group selected nodes into a composite node
+    \li [ CTRL ] [ U ] : Ungroup a composite node
+    \li [ CTRL ] [ Z ] : Undo
+    \li [ CTRL ] [ backspace ] : delete a selected node
+    \li [ CTRL ] [ O ] : load a composition
+    \li [ CTRL ] [ SHIFT ] [ 1 ] : load last composition
+    \li [ CTRL ] [ S ] : save a composition
+\endlist
+
+
+
 */

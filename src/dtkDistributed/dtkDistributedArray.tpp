@@ -306,6 +306,22 @@ template<typename T> inline T dtkDistributedArray<T>::at(const qlonglong& index)
     }
 }
 
+template<typename T> inline void dtkDistributedArray<T>::range(const qlonglong& index, T* array, const qlonglong& count) const
+{
+    qint32 owner = static_cast<qint32>(m_mapper->owner(index));
+    qlonglong pos = m_mapper->globalToLocal(index, owner);
+
+    qlonglong owner_capacity = m_mapper->lastIndex(owner) - index + 1;
+
+    if (count <= owner_capacity) {
+        m_buffer_manager->get(owner, pos, array, count);
+
+    } else {
+        m_buffer_manager->get(owner, pos, array, owner_capacity);
+        this->get(index + owner_capacity, array + owner_capacity, count - owner_capacity);
+    }
+}
+
 template<typename T> inline T dtkDistributedArray<T>::first(void) const
 {
     return this->at(0);

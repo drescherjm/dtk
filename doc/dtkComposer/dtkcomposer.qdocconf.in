@@ -1,0 +1,58 @@
+## Version: $Id$
+##
+######################################################################
+##
+### Commentary:
+##
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+##
+### Code:
+
+include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
+
+project      = dtkComposer
+description  = dtkComposer Reference Documentation
+url          = ../dtkcomposer
+
+qhp.projects = dtkComposer
+
+qhp.dtkComposer.file             = dtkcomposer.qhp
+qhp.dtkComposer.namespace        = fr.inria.dtk.dtkcomposer
+qhp.dtkComposer.virtualFolder    = dtkcomposer
+qhp.dtkComposer.indexTitle       = Composer Module
+qhp.dtkComposer.indexRoot        =
+qhp.dtkComposer.filterAttributes = dtkcomposer
+
+qhp.dtkComposer.customFilters.dtk.name             = dtkComposer
+qhp.dtkComposer.customFilters.dtk.filterAttributes = dtkcomposer
+
+qhp.dtkComposer.subprojects                    = classes
+qhp.dtkComposer.subprojects.classes.title      = C++ Classes
+qhp.dtkComposer.subprojects.classes.indexTitle = Composer C++ Classes
+qhp.dtkComposer.subprojects.classes.selectors  = class fake:headerfile
+qhp.dtkComposer.subprojects.classes.sortPages  = true
+
+headerdirs  += ../../../src/dtkComposer
+sourcedirs  += ../../../src/dtkComposer \
+               ../../../doc/dtkComposer/src
+
+exampledirs += ../../../doc/dtkComposer/snp
+imagedirs   += ../../../doc/dtkComposer/img
+excludedirs += ../../../doc/dtkComposer/snp
+
+navigation.landingpage    = "Composer Module"
+navigation.cppclassespage = "Composer C++ Classes"
+
+outputdir = @dtk_INSTALL_DOCS@/dtkcomposer
+
+indexes = \
+  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
+  @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
+  @dtk_INSTALL_DOCS@/dtkdoc/dtkdoc.index
+
+######################################################################
+### dtkcomposer.qdocconf.in ends here

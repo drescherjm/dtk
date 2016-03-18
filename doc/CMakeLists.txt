@@ -106,6 +106,20 @@ add_custom_target(dtkDistributed-doc
 add_dependencies(dtkDistributed-doc dtkCore-doc)
 
 ## ###################################################################
+## dtkComposer
+## ###################################################################
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkComposer/dtkcomposer.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkcomposer.qdocconf IMMEDIATE @ONLY)
+
+add_custom_target(dtkComposer-doc
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${DTK_QDOC_EXECUTABLE} dtkcomposer.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkcomposer/dtkcomposer.qhp -o ${dtk_INSTALL_DOCS}/dtkcomposer.qch
+  COMMENT "-- Generating dtkComposer documentation")
+
+add_dependencies(dtkComposer-doc dtkCore-doc)
+
+## ###################################################################
 ## ALL
 ## ###################################################################
 
@@ -115,7 +129,7 @@ add_custom_target(doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkdoc/dtkdoc.qhp -o ${dtk_INSTALL_DOCS}/dtkdoc.qch
   COMMENT "-- Generating dtk documentation")
 
-add_dependencies(doc dtkMeta-doc dtkLog-doc dtkCore-doc dtkDistributed-doc)
+add_dependencies(doc dtkMeta-doc dtkLog-doc dtkCore-doc dtkDistributed-doc dtkComposer-doc)
 
 ######################################################################
 ### CMakeLists.txt ends here

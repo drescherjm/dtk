@@ -49,7 +49,7 @@ QString dtkMetaType::description(const QVariant& v)
             }
 
         } else if (!userStream) {
-            dbg << v;
+            dbg << qSetRealNumberPrecision( 15 )  << v;
             str.chop(2);
             int count = 11 + QString(v.typeName()).size();
             str.remove(0, count);

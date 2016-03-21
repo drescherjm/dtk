@@ -70,7 +70,7 @@ dtkComposerNodeMetaData *dtkComposerNode::nodeMetaData(void) const
 
 void dtkComposerNode::appendEmitter(dtkComposerTransmitter *emitter)
 {
-    if (!d->emitters.contains(emitter)) {
+    if(!d->emitters.contains(emitter)) {
         d->emitters << emitter;
         emitter->setParentNode(this);
     }

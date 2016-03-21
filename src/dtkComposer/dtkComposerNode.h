@@ -14,11 +14,12 @@
 
 #pragma once
 
-#include "dtkComposerExport.h"
+#include <dtkComposerExport.h>
 
 #include <QtCore>
 
 class dtkComposerNodePrivate;
+
 class dtkComposerTransmitter;
 class dtkComposerNodeMetaData;
 class dtkComposerViewWidget;

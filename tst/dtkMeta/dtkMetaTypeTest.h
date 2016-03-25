@@ -36,6 +36,7 @@ private slots:
     void testCanConvert(void);
     void testVariantFromValue(void);
     void testClone(void);
+    void testCopy(void);
     void testCloneContent(void);
     void testCreateEmptyContainer(void);
     void testDestroyPointer(void);

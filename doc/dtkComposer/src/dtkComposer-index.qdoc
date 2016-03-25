@@ -1,0 +1,13 @@
+/*!
+    \page dtkcomposer-index.html
+    \title Composer Module
+    \brief A module which provides a set of C++ technologies for building visual programs
+
+    \section1 Reference
+    These are links to the API reference materials.
+    \list
+    \li \l{Composer C++ Classes}{C++ Classes API}
+    \endlist
+
+    \sa {All Modules}
+*/

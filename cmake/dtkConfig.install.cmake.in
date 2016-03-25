@@ -27,10 +27,14 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_INSTALL_PREFIX@/include/dtkMonitoring"
   "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
   "@CMAKE_INSTALL_PREFIX@/include/dtkDistributed"
+  "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
   "@CMAKE_INSTALL_PREFIX@/include/dtkLog"
   "@CMAKE_INSTALL_PREFIX@/include/dtkMath"
   "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
   "@CMAKE_INSTALL_PREFIX@/include/dtkTest")
+
+set(CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH} "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/dtk/")
 
 set(DTK_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
 
@@ -43,8 +47,9 @@ find_package(Qt5 REQUIRED COMPONENTS
   Concurrent
   Network
   Quick
-  Widgets
+  Svg
   Test
+  Widgets
   Xml)
 
 ## ###################################################################
@@ -71,6 +76,24 @@ set(DTK_HAVE_MPI @DTK_HAVE_MPI@)
 set(DTK_HAVE_VRPN @DTK_HAVE_VRPN@)
 set(DTK_HAVE_NITE @DTK_HAVE_NITE@)
 set(DTK_HAVE_ZLIB @DTK_HAVE_ZLIB@)
+
+if(DTK_BUILD_COMPOSER)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_INSTALL_PREFIX@/include/dtkComposer")
+endif(DTK_BUILD_COMPOSER)
+
+## ###################################################################
+## Always full RPATH
+## ###################################################################
+
+include(GNUInstallDirs)
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# the RPATH to be used when installing, but only if it's not a system directory
+LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
+IF("${isSystemDir}" STREQUAL "-1")
+   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+ENDIF("${isSystemDir}" STREQUAL "-1")
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

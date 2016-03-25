@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -20,7 +20,71 @@
 #include <dtkComposer>
 
 // ///////////////////////////////////////////////////////////////////
-// 
+// No Copyable Data concrete class
+// ///////////////////////////////////////////////////////////////////
+
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+class NoCopyableData
+{
+public:
+             NoCopyableData(void) {;}
+             NoCopyableData(const int& id, const QString& name) : m_id(id), m_name(name) {;}
+    virtual ~NoCopyableData(void) {;}
+
+public:
+    bool operator == (const NoCopyableData& o) const { if (m_id != o.m_id || m_name != o.m_name) return false; return true; }
+
+public:
+    void   setId(const int& id)       { m_id   = id; }
+    void setName(const QString& name) { m_name = name; }
+
+public:
+    int       id(void) const { return m_id; }
+    QString name(void) const { return m_name; }
+
+private:
+    int m_id;
+    QString m_name;
+
+    NoCopyableData(const NoCopyableData&) {}
+    NoCopyableData& operator=(const NoCopyableData&) { return *this; }
+};
+
+Q_DECLARE_METATYPE(NoCopyableData *);
+
+QDebug operator << (QDebug dbg, NoCopyableData *data)
+{
+    dbg.nospace() << "NoCopyableData(" << data->id() << ", " << data->name() << ")"; return dbg.space();
+}
+
+class DeriveNoCopyableData : public NoCopyableData
+{
+public:
+    DeriveNoCopyableData(void) : NoCopyableData(), m_value(0) {;}
+    DeriveNoCopyableData(const int& id, const QString& name, double value = 0) : NoCopyableData(id, name), m_value(value) {;}
+
+private:
+    DeriveNoCopyableData(const DeriveNoCopyableData& o) {};
+    DeriveNoCopyableData& operator=(const DeriveNoCopyableData&) { return *this; }
+
+public:
+    bool operator == (const DeriveNoCopyableData& o) const { if (m_value != o.m_value) return false; return (static_cast<const NoCopyableData&>(*this) == static_cast<const NoCopyableData &>(o)); }
+
+public:
+    void setValue(double value) { m_value = value; }
+
+public:
+    double value(void) const { return m_value; }
+
+private:
+    double m_value;
+};
+
+Q_DECLARE_METATYPE(DeriveNoCopyableData*);
+#endif
+
+// ///////////////////////////////////////////////////////////////////
+//
 // ///////////////////////////////////////////////////////////////////
 
 class Data
@@ -77,7 +141,7 @@ Q_DECLARE_METATYPE(DeriveData);
 Q_DECLARE_METATYPE(DeriveData *);
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class ObjectData : public QObject
@@ -130,7 +194,7 @@ QDebug operator << (QDebug dbg, ObjectData *data)
     return dbg.space();
 }
 
-class DeriveObjectData : public ObjectData 
+class DeriveObjectData : public ObjectData
 {
     Q_OBJECT
 
@@ -139,7 +203,7 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class VirtualObject : public QObject
@@ -187,7 +251,7 @@ Q_DECLARE_METATYPE(VirtualObject *);
 
 // ///////////////////////////////////////////////////////////////////
 
-class DeriveVirtualObject : public VirtualObject 
+class DeriveVirtualObject : public VirtualObject
 {
     Q_OBJECT
 
@@ -213,12 +277,12 @@ Q_DECLARE_METATYPE(DeriveVirtualObject);
 Q_DECLARE_METATYPE(DeriveVirtualObject *);
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 void dtkComposerTransmitterTestCase::initTestCase(void)
 {
-    
+
 
 }
 
@@ -232,7 +296,7 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
     // Template transmitters
     dtkComposerTransmitterEmitter<int>     e_int;
     dtkComposerTransmitterEmitter<QString> e_str;
-    
+
     dtkComposerTransmitterReceiver<int>     r_int;
     dtkComposerTransmitterReceiver<QString> r_str;
 
@@ -261,7 +325,7 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
     QCOMPARE(str, r_str.data());
 
     QVERIFY(r_int.disconnect(&e_int));
-    QVERIFY(r_str.disconnect(&e_str));    
+    QVERIFY(r_str.disconnect(&e_str));
 
     // Variant transmitters
     dtkComposerTransmitterEmitterVariant  e_var;
@@ -283,8 +347,8 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
     QVERIFY(r_str.disconnect(&e_var));
 
     // -- Check for multiple types
-    r_var.setTypeList(dtkComposerTransmitter::TypeList() 
-		      << QMetaType::LongLong 
+    r_var.setTypeList(dtkComposerTransmitter::TypeList()
+		      << QMetaType::LongLong
 		      << QMetaType::Double);
     QVERIFY(r_var.connect(&e_str));
     QVERIFY(r_var.connect(&e_int));
@@ -309,16 +373,45 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
     QCOMPARE(static_cast<qlonglong>(0), r_var.data<qlonglong>());
     r_var.disconnect(&e_str);
 
-    r_var.setTypeList(dtkComposerTransmitter::TypeList() 
+    r_var.setTypeList(dtkComposerTransmitter::TypeList()
 		      << QMetaType::QString);
     r_var.connect(&e_str);
     QCOMPARE(str, r_var.data<QString>());
-    r_var.disconnect(&e_str);    
+    r_var.disconnect(&e_str);
 }
 
 void dtkComposerTransmitterTestCase::testComplexType(void)
 {
     int count = 0;
+
+    // No copyable Data pointer
+#if !defined(Q_CC_MSVC) || _MSC_FULL_VER > 190023025
+    {
+        dtkComposerTransmitterEmitter<NoCopyableData *>  e_data;
+        dtkComposerTransmitterReceiver<NoCopyableData *> r_data;
+        QVERIFY(r_data.connect(&e_data));
+
+        NoCopyableData *data_e = new NoCopyableData(count++, "PNoCopyableData");
+
+        e_data.setData(data_e);
+        QCOMPARE(*data_e, *(r_data.constData()));
+        QCOMPARE(*data_e, *(r_data.data()));
+        QVERIFY(r_data.disconnect(&e_data));
+
+        dtkComposerTransmitterReceiverVariant r_var;
+        QVERIFY(r_var.connect(&e_data));
+
+        QCOMPARE(*data_e, *(r_var.constData<NoCopyableData*>()));
+        QCOMPARE(*data_e, *(r_var.data<NoCopyableData*>()));
+        QVERIFY(r_var.disconnect(&e_data));
+
+        // -- Derived NoCopyableData pointer
+        dtkComposerTransmitterEmitter<DeriveNoCopyableData *> e_ddata;
+        QVERIFY(!r_data.connect(&e_ddata)); // Connection refused !!
+
+        delete data_e;
+    }
+#endif
 
     // Non QObject Data
     {
@@ -329,9 +422,9 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         Data data_e;
         data_e.setName("Data");
         data_e.setId(count++);
-	
+
         e_data.setData(data_e);
-	
+
         QCOMPARE(data_e, r_data.data());
         QVERIFY(r_data.disconnect(&e_data));
 
@@ -339,7 +432,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         QVERIFY(r_var.connect(&e_data));
 
         QCOMPARE(data_e, r_var.data<Data>());
-        QVERIFY(r_var.disconnect(&e_data));	
+        QVERIFY(r_var.disconnect(&e_data));
     }
 
     // Data pointer
@@ -349,7 +442,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         QVERIFY(r_data.connect(&e_data));
 
         Data *data_e = new Data(count++, "PData");
-    
+
         e_data.setData(data_e);
         QCOMPARE(*data_e, *(r_data.constData()));
         QCOMPARE(*data_e, *(r_data.data()));
@@ -361,11 +454,11 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         QCOMPARE(*data_e, *(r_var.constData<Data*>()));
         QCOMPARE(*data_e, *(r_var.data<Data*>()));
         QVERIFY(r_var.disconnect(&e_data));
-    
+
         // -- Derived Data pointer
         dtkComposerTransmitterEmitter<DeriveData *> e_ddata;
         QVERIFY(!r_data.connect(&e_ddata)); // Connection refused !!
-	
+
         delete data_e;
     }
 
@@ -374,9 +467,9 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         dtkComposerTransmitterEmitter<ObjectData *>  e_data;
         dtkComposerTransmitterReceiver<ObjectData *> r_data;
         QVERIFY(r_data.connect(&e_data));
-	
+
         ObjectData *data_e = new ObjectData(count++, "OPData");
-    
+
         e_data.setData(data_e);
         QCOMPARE(*data_e, *(r_data.constData()));
         QCOMPARE(*data_e, *(r_data.data()));
@@ -388,7 +481,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         QCOMPARE(*data_e, *(r_var.constData<ObjectData*>()));
         QCOMPARE(*data_e, *(r_var.data<ObjectData*>()));
         QVERIFY(r_var.disconnect(&e_data));
-	
+
         delete data_e;
 
         // -- Derived QObject Data pointer
@@ -409,7 +502,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         QCOMPARE(*data_ed, *(r_var.constData<DeriveObjectData*>()));
         QCOMPARE(*data_ed, *(r_var.data<DeriveObjectData*>()));
         QVERIFY(r_var.disconnect(&e_ddata));
-	
+
         delete data_ed;
     }
 
@@ -430,7 +523,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
 
         dtkComposerTransmitterReceiver<DeriveVirtualObject *> r_ddata;
         QVERIFY(!r_ddata.connect(&e_data)); // Connection disabled : Base into Derive
-	
+
 
         DeriveVirtualObject *data_ed = new DeriveVirtualObject;
         data_ed->setName("Derived Virtual Object");
@@ -445,7 +538,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
 
         QCOMPARE(*data_ed, *(r_var.constData<DeriveVirtualObject*>()));
         QCOMPARE(*data_ed, *(r_var.data<DeriveVirtualObject*>()));
-        
+
         dtkComposerTransmitterReceiver<VirtualObject *> r_copy;
         QVERIFY(r_copy.connect(&e_ddata));
 
@@ -466,7 +559,7 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
 
         QVERIFY(r_var.disconnect(&e_ddata));
         QVERIFY(r_copy.disconnect(&e_ddata));
-	
+
         delete data_ed;
     }
 }
@@ -506,7 +599,7 @@ void dtkComposerTransmitterTestCase::testLinks(void)
     QVERIFY(!r_var1.isEmpty());
     QVERIFY(!r_var2.isEmpty());
 
-    ObjectData *data = new ObjectData(0, "Hello"); 
+    ObjectData *data = new ObjectData(0, "Hello");
     e_0.setData(data);
 
     QVERIFY(e_0.variant().value<ObjectData *>());
@@ -567,7 +660,7 @@ void dtkComposerTransmitterTestCase::testProxyVariant(void)
 
     qlonglong i = 359;
     e_0.setData(i);
-    
+
     // By default proxy variant enables receiver mode.
     p_0.enableReceiver();
     QCOMPARE(i, p_0.data<qlonglong>());
@@ -587,7 +680,7 @@ void dtkComposerTransmitterTestCase::testSwapPointer(void)
         dtkComposerTransmitterReceiver<VirtualObject *> r_0;
         dtkComposerTransmitterReceiver<VirtualObject *> r_1;
         QVERIFY(r_0.connect(&e_data));
-        QVERIFY(r_1.connect(&e_data));	
+        QVERIFY(r_1.connect(&e_data));
 
         DeriveVirtualObject *data_ed = new DeriveVirtualObject;
         data_ed->setName("Derived Virtual Object");
@@ -616,13 +709,13 @@ void dtkComposerTransmitterTestCase::testSwapPointer(void)
         e_data.setData(res_2);
         VirtualObject *res_3 = r_0.data();
         QVERIFY(res_3);
-        QVERIFY(res_3 == res_0);        
+        QVERIFY(res_3 == res_0);
 
         QVERIFY(r_0.disconnect(&e_data));
         QVERIFY(r_1.disconnect(&e_data));
-	
+
         delete data_ed;
-    }    
+    }
 }
 
 void dtkComposerTransmitterTestCase::cleanupTestCase(void)
@@ -638,5 +731,5 @@ DTKTEST_MAIN_NOGUI(dtkComposerTransmitterTest, dtkComposerTransmitterTestCase)
 
 #include "dtkComposerTransmitterTest.moc"
 
-// 
+//
 // dtkComposerTransmitterTest.cpp ends here

@@ -187,7 +187,6 @@ void dtkDistributedGraphTopology::buildDomainDecompositionMaps(void)
     qlonglong first_id = this->mapper()->firstIndex(wid);
     qlonglong  last_id = this->mapper()->lastIndex(wid);
     qlonglong v_count = this->mapper()->count(wid);
-    qlonglong loc_size = this->mapper()->count(wid);
     qlonglong v_id = first_id;
 
     auto vit  = m_vertex_to_edge->begin();

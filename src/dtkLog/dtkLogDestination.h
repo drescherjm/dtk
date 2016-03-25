@@ -77,14 +77,14 @@ class dtkLogDestinationModelPrivate;
 
 class DTKLOG_EXPORT dtkLogDestinationModel : public dtkLogDestination
 {
- public:
+public:
      dtkLogDestinationModel(dtkLogModel *model);
     ~dtkLogDestinationModel(void);
 
- public:
+public:
     void write(const QString& message);
 
- private:
+private:
     dtkLogDestinationModelPrivate *d;
 };
 

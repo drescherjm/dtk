@@ -1,22 +1,24 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
 #include "dtkArrayData.h"
 
+#include <QtCore>
+
 // /////////////////////////////////////////////////////////////////
 
-void dtkRoundUpNextPowerOfTwo(quint32& nalloc) 
+void dtkRoundUpNextPowerOfTwo(quint32& nalloc)
 {
     nalloc |= nalloc >> 1;
     nalloc |= nalloc >> 2;
@@ -24,7 +26,7 @@ void dtkRoundUpNextPowerOfTwo(quint32& nalloc)
     nalloc |= nalloc >> 8;
     nalloc |= nalloc >> 16;
     ++nalloc;
-};
+}
 
 void dtkRoundUpNextPowerOfTwo(quint64& nalloc)
 {
@@ -34,8 +36,8 @@ void dtkRoundUpNextPowerOfTwo(quint64& nalloc)
     nalloc |= nalloc >> 8;
     nalloc |= nalloc >> 16;
     nalloc |= nalloc >> 32;
-    ++nalloc;        
-};
+    ++nalloc;
+}
 
 qintptr dtkAllocMore(qintptr alloc, qintptr extra)
 {
@@ -130,5 +132,5 @@ void dtkArrayData::deallocate(dtkArrayData *data, size_t objectSize, size_t alig
     ::free(data);
 }
 
-// 
+//
 // dtkArrayData.cpp ends here

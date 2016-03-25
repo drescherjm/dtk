@@ -83,20 +83,25 @@ void dtkLogDestinationFile::setMaxFileSize(qlonglong size)
 void dtkLogDestinationFile::write(const QString& message)
 {
     if (d->file.size() + message.size() > d->max_file_size) {
+
         qDebug() << "Max log file size reached" << d->max_file_size << ", rotate log file";
+
         d->file.flush();
         d->file.close();
+
         QString path = d->file.fileName();
         QString backup = path + ".old";
-        // remove old backup
+
         if (QFile::exists(backup))
             QFile::remove(backup);
 
         QFile::rename( path, backup);
+
         if(!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
             qDebug() << "Unable to open" <<  path << "for writing";
 
     }
+
     d->stream << message << endl;
     d->stream.flush();
 }

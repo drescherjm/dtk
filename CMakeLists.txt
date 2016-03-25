@@ -233,16 +233,11 @@ if(SWIG_FOUND)
 
     set(${target} ${${target}} ${wrap_output})
 
+    add_definitions(-DHAVE_SWIG)
   endmacro(dtk_wrap)
 
 else(SWIG_FOUND)
-
   message("DTK_BUILD_WRAPPERS options requires SWIG.")
-
-endif(SWIG_FOUND)
-
-if(SWIG_FOUND)
-  add_definitions(-DHAVE_SWIG)
 endif(SWIG_FOUND)
 
 ## #################################################################

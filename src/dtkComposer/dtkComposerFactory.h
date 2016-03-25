@@ -40,7 +40,6 @@ public:
 
 private:
     static dtkComposerFactory *s_instance;
-
 };
 
 //

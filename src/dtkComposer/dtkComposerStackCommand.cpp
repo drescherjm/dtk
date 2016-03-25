@@ -422,6 +422,8 @@ void dtkComposerStackCommandDestroyNode::redo(void)
         e->monitorable = e->node->wrapee()->monitorable();
 
         e->node->wrapee()->setMonitorable(false);
+    } else {
+        d->scene->modify(true);
     }
 }
 

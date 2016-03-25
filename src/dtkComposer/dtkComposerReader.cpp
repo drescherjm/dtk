@@ -455,9 +455,11 @@ dtkComposerSceneNode *dtkComposerReader::readNode(QDomNode node, bool paste)
         n->wrap(new_node);
         n->setParent(d->node);
         d->node->addNode(n);
+
         QObject::connect(new_node, SIGNAL(monitorableChanged(bool)), d->scene, SLOT(onMonitoringChanged(bool)));
         d->graph->addNode(new_node, d->node->wrapee());
     }
+
     QPointF position;
 
     if(node.toElement().hasAttribute("x"))
@@ -759,6 +761,7 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
     QString destin_type = destin.attribute("type");
 
     dtkComposerSceneEdge *edge = new dtkComposerSceneEdge;
+
     if (source_type == "input")
         if (source_id >= d->node_map.value(source_node)->inputPorts().count())
             goto handle_failure;
@@ -795,9 +798,10 @@ dtkComposerSceneEdge *dtkComposerReader::readEdge(QDomNode node)
 
 handle_failure:
     dtkWarn() << "Can't create edge from " << d->node_map.value(source_node)->title() << "to" << d->node_map.value(destin_node)->title();
-    delete edge;
-    return NULL;
 
+    delete edge;
+
+    return NULL;
 }
 
 void dtkComposerReader::extend(const QDomNode& node, dtkComposerSceneNodeLeaf* leaf)
@@ -813,7 +817,6 @@ void dtkComposerReader::clear(void)
 
     if (d->scene)
         d->scene->clear();
-
 }
 
 //

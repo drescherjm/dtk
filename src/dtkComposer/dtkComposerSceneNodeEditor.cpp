@@ -517,7 +517,6 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->select_implementation->addItem("Choose implementation");
 
             // d->edit_s->setMaximumWidth(this->sizeHint().width() - d->butn_d->sizeHint().width());
-
         } else {
 
             QObject *object = NULL;
@@ -530,9 +529,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
                 object = object_node->variant().value<QObject*>();
 
-            // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(node->wrapee())) {
-
-            //     if (data_node->isAbstractData()) {
+                int current_index = 0;
 
                 d->select_implementation->addItem("Choose implementation");
 
@@ -548,19 +545,13 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 d->select_implementation->blockSignals(false);
                 d->select_implementation->setVisible(true);
                 d->select_implementation->setEnabled(true);
-
-            //         object = reinterpret_cast<QObject *>(data_node->data());
-
-            //     }
             }
 
             d->select_implementation->setMaximumWidth(this->size().width() - 10);
-            d->select_implementation->setCurrentIndex(current_index);
 
             d->select_implementation->blockSignals(false);
             d->select_implementation->setVisible(true);
-                d->select_implementation->setEnabled(true);
-
+            d->select_implementation->setEnabled(true);
         }
 
         if (object) {

@@ -35,7 +35,6 @@ dtkMonitorBooleanSimple::dtkMonitorBooleanSimple(QGraphicsItem *parent) : dtkMon
 
     d->pixmap_on->setPixmap(QPixmap(":dtkMonitoring/pixmaps/dtk-monitor-boolean-simple-on.png"));
     d->pixmap_off->setPixmap(QPixmap(":dtkMonitoring/pixmaps/dtk-monitor-boolean-simple-off.png"));
-
 }
 
 dtkMonitorBooleanSimple::~dtkMonitorBooleanSimple(void)
@@ -53,7 +52,7 @@ void dtkMonitorBooleanSimple::setNode(dtkComposerNode *node)
 
 QRectF dtkMonitorBooleanSimple::boundingRect(void) const
 {
-    return d->pixmap_on->boundingRect().adjusted(-2,-2,2,2);
+    return d->pixmap_on->boundingRect().adjusted(-2, -2, 2, 2);
 }
 
 void dtkMonitorBooleanSimple::mousePressEvent(QGraphicsSceneMouseEvent *event)

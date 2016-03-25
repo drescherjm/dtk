@@ -25,7 +25,6 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_INSTALL_PREFIX@/include/dtk"
   "@CMAKE_INSTALL_PREFIX@/include/dtkComposer"
   "@CMAKE_INSTALL_PREFIX@/include/dtkMonitoring"
-  "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
   "@CMAKE_INSTALL_PREFIX@/include/dtkDistributed"
   "@CMAKE_INSTALL_PREFIX@/include/dtkCore"
   "@CMAKE_INSTALL_PREFIX@/include/dtkLog"

@@ -1,7 +1,5 @@
 #include "dtkComposer.h"
 #include "dtkComposerCompass.h"
-/*#include "dtkComposerControls.h"
-#include "dtkComposerControlsDelegate.h"*/
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerEvaluatorProcess.h"
 #include "dtkComposerEvaluatorSlave.h"

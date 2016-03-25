@@ -37,6 +37,5 @@ private:
 
 };
 
-
 //
 // dtkMonitorBoolean.h ends here

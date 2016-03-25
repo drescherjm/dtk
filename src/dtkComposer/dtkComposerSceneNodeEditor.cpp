@@ -508,6 +508,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
 
         QObject *object = NULL;
+
         dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(node->wrapee());
 
         if (object_node) {
@@ -517,6 +518,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
             d->select_implementation->addItem("Choose implementation");
 
             // d->edit_s->setMaximumWidth(this->sizeHint().width() - d->butn_d->sizeHint().width());
+
         } else {
 
             QObject *object = NULL;
@@ -546,12 +548,6 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                 d->select_implementation->setVisible(true);
                 d->select_implementation->setEnabled(true);
             }
-
-            d->select_implementation->setMaximumWidth(this->size().width() - 10);
-
-            d->select_implementation->blockSignals(false);
-            d->select_implementation->setVisible(true);
-            d->select_implementation->setEnabled(true);
         }
 
         if (object) {
@@ -574,24 +570,23 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
     }
 
     if (d->node->wrapee()->editor()) {
+
         if (d->current_widget) {
             d->current_widget->blockSignals(true);
             d->current_widget->setVisible(false);
             d->current_widget->setEnabled(false);
             d->layout_widg_edit->removeWidget(d->current_widget);
         }
-        d->current_widget = d->node->wrapee()->editor();
-        d->current_widget->blockSignals(false);
-        d->current_widget->setVisible(true);
-        d->current_widget->setEnabled(true);
-        d->layout_widg_edit->addWidget(d->current_widget);
-    }
 
-    d->current_widget = d->node->wrapee()->editor();
-    d->current_widget->blockSignals(false);
-    d->current_widget->setVisible(true);
-    d->current_widget->setEnabled(true);
-    d->layout_widg_edit->addWidget(d->current_widget);
+        d->current_widget = d->node->wrapee()->editor();
+
+        if (d->current_widget) {
+            d->current_widget->blockSignals(false);
+            d->current_widget->setVisible(true);
+            d->current_widget->setEnabled(true);
+            d->layout_widg_edit->addWidget(d->current_widget);
+        }
+    }
 
     d->edit->setText(d->node->title());
     d->edit->setEnabled(true);

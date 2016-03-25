@@ -30,8 +30,6 @@
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"
 
-#include <QtWidgets>
-
 dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(new dtkComposerScenePrivate)
 {
     d->factory = NULL;
@@ -39,7 +37,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->graph = NULL;
 
     // BspTreeIndex causes some bugs with (at least) "enter group"
-    setItemIndexMethod( QGraphicsScene::NoIndex);
+    setItemIndexMethod(QGraphicsScene::NoIndex);
 
     d->root_node = new dtkComposerSceneNodeComposite;
     d->root_node->wrap(new dtkComposerNodeComposite);

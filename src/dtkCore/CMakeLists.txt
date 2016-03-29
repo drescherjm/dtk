@@ -39,6 +39,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager.tpp
   dtkCoreSettings
   dtkCoreSettings.h
+  dtkHash
+  dtkHash.h
   dtkIterator
   dtkIterator.h
   dtkSpinLock.h

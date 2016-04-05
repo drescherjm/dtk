@@ -22,8 +22,47 @@
 #include <dtkLog>
 #include <dtkMeta>
 
-#include <QtCore>
-#include <QtNetwork>
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileEditor
+// /////////////////////////////////////////////////////////////////
+
+dtkComposerNodeFileEditor::dtkComposerNodeFileEditor(dtkComposerNodeFilePrivate *d)
+{
+    this->d = d;
+
+    this->edit = new QLineEdit(this);
+    this->button = new QToolButton(this);
+    this->button->setText("Browse");
+
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(this->edit);
+    layout->addWidget(this->button);
+
+    connect(this->button, SIGNAL(clicked()), this, SLOT(onClicked()));
+    connect(this->edit, SIGNAL(editingFinished()), this, SLOT(onEditingFinished()));
+}
+
+void dtkComposerNodeFileEditor::onClicked(void)
+{
+    d->fileName = QFileDialog::getOpenFileName(0);
+
+    this->refresh();
+}
+
+void dtkComposerNodeFileEditor::onEditingFinished(void)
+{
+    d->fileName = this->edit->text();
+}
+
+void dtkComposerNodeFileEditor::refresh(void)
+{
+    this->edit->blockSignals(true);
+
+    this->edit->setText(d->fileName);
+
+    this->edit->blockSignals(false);
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFilePrivate
@@ -32,6 +71,7 @@
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
     this->file.setAutoRemove(false);
+
     if (QFileInfo(url.fileName()).suffix() == "gz") {
         QString Tpl = QDir::tempPath() + QLatin1Char('/') + QCoreApplication::applicationName() + QString(".XXXXXX.gz");
         this->file.setFileTemplate(Tpl);
@@ -67,16 +107,18 @@ void dtkComposerNodeFilePrivate::onRequestFinished(QNetworkReply *reply)
     this->dwnl_ok = 1;
 }
 
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFile implementation
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeFile::dtkComposerNodeFile(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeFilePrivate)
 {
+    d->editor = new dtkComposerNodeFileEditor(d);
+
     this->appendReceiver(&(d->receiver));
 
     d->fileName = QString();
+
     this->appendEmitter(&(d->emitter));
 }
 
@@ -106,10 +148,9 @@ void dtkComposerNodeFile::run(void)
             d->fileName = path;
 
     } else {
-
         d->fileName = path;
-
     }
+
     if (!QFile(d->fileName).exists()) {
         QString msg = QString("File %1 does not exist! ").arg(d->fileName);
         dtkNotify(msg,30000);
@@ -126,9 +167,14 @@ QString dtkComposerNodeFile::value(void)
 void dtkComposerNodeFile::setValue(QString value)
 {
     d->fileName = value;
+
+    d->editor->refresh();
 }
 
-
+dtkComposerNodeFileEditor *dtkComposerNodeFile::editor(void)
+{
+    return d->editor;
+}
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileExists implementation

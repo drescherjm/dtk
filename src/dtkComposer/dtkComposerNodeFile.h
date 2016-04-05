@@ -14,13 +14,19 @@
 
 #pragma once
 
-#include "dtkComposerExport.h"
+#include <dtkComposerExport.h>
 
 #include "dtkComposerNodeLeaf.h"
+#include "dtkComposerNodeFile_p.h"
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFile
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeFileEditor;
 class dtkComposerNodeFilePrivate;
 
-class  DTKCOMPOSER_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
+class DTKCOMPOSER_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
 {
 public:
      dtkComposerNodeFile(void);
@@ -35,10 +41,16 @@ public:
 public:
     void setValue(QString value);
 
+public:
+    dtkComposerNodeFileEditor *editor(void);
+
 private:
     dtkComposerNodeFilePrivate *d;
 };
 
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileExists
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeFileExistsPrivate;
 
@@ -54,8 +66,6 @@ public:
 private:
     dtkComposerNodeFileExistsPrivate *d;
 };
-
-
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerNodeFileListDir definition

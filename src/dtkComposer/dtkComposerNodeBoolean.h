@@ -14,7 +14,8 @@
 
 #pragma once
 
-#include "dtkComposerExport.h"
+#include <dtkComposerExport.h>
+
 #include "dtkComposerNodeBoolean_p.h"
 #include "dtkComposerNodeLeaf.h"
 

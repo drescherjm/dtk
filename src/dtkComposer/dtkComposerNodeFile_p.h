@@ -21,6 +21,39 @@
 
 #include <QtCore>
 #include <QtNetwork>
+#include <QtWidgets>
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFileEditor
+// /////////////////////////////////////////////////////////////////
+
+class dtkComposerNodeFilePrivate;
+
+class dtkComposerNodeFileEditor : public QWidget
+{
+    Q_OBJECT
+
+public:
+    dtkComposerNodeFileEditor(dtkComposerNodeFilePrivate *d);
+
+public slots:
+    void onClicked(void);
+    void onEditingFinished(void);
+
+public slots:
+    void refresh(void);
+
+public:
+    QLineEdit *edit;
+    QToolButton *button;
+
+public:
+    dtkComposerNodeFilePrivate *d;
+};
+
+// /////////////////////////////////////////////////////////////////
+// dtkComposerNodeFilePrivate
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeFilePrivate : public QObject
 {
@@ -37,7 +70,11 @@ public:
     QString tempName;
 
     QTemporaryFile file;
+
     int dwnl_ok;
+
+public:
+    dtkComposerNodeFileEditor *editor;
 
 public:
     dtkComposerTransmitterReceiver<QString> receiver;
@@ -46,6 +83,9 @@ public:
     dtkComposerTransmitterEmitter<QString> emitter;
 };
 
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeFileExistsPrivate
 {
@@ -59,6 +99,9 @@ public:
     dtkComposerTransmitterEmitter<bool> emitter;
 };
 
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeFileListPrivate
 {
@@ -76,6 +119,10 @@ public:
    QStringList files;
 };
 
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerNodeFileReadPrivate
 {
 public:
@@ -87,6 +134,10 @@ public:
 public:
     QByteArray data;
 };
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeFileWritePrivate
 {
@@ -103,15 +154,19 @@ public:
     QString filename;
 };
 
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
+
 class dtkComposerNodeDirectoryPrivate
 {
- public:
+public:
     dtkComposerTransmitterReceiver<QString> receiver_directory;
 
- public:
+public:
     dtkComposerTransmitterEmitter<QString> emitter_directory;
 
- public:
+public:
     QString directory;
 };
 

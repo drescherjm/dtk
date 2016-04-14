@@ -32,6 +32,7 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMeta"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkTest"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkWidgets"
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer"
   "@CMAKE_CURRENT_BINARY_DIR@")
 
 include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")

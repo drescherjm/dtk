@@ -1,15 +1,15 @@
 ## Version: $Id$
-## 
+##
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
-## 
+##
 ### Code:
 
 include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
@@ -44,15 +44,18 @@ exampledirs += ../../../doc/dtk/snp
 imagedirs   += ../../../doc/dtk/img
 excludedirs += ../../../doc/dtk/snp
 
-outputdir = @dtk_INSTALL_DOCS@/dtkdoc
-
 indexes = \
   @dtk_INSTALL_DOCS@/dtklog/dtklog.index \
   @dtk_INSTALL_DOCS@/dtkmeta/dtkmeta.index \
   @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
+  @dtk_INSTALL_DOCS@/dtkcomposer/dtkcomposer.index \
   @dtk_INSTALL_DOCS@/dtkdistributed/dtkdistributed.index \
   @dtk_INSTALL_DOCS@/dtkio/dtkio.index \
-  @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index
+  @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index \
+  @dtk_INSTALL_DOCS@/dtkimaging/dtkimaging.index
+
+outputdir = @dtk_INSTALL_DOCS@/dtkdoc
+
 
 ######################################################################
 ### dtk.qdocconf.in ends here

@@ -77,7 +77,7 @@ set(DTK_HAVE_ZLIB @DTK_HAVE_ZLIB@)
 
 if(DTK_BUILD_COMPOSER)
   set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
-  "@CMAKE_INSTALL_PREFIX@/include/dtkComposer")
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer")
 endif(DTK_BUILD_COMPOSER)
 
 ######################################################################

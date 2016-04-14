@@ -54,6 +54,9 @@ void dtkLogEnginePrivate::write(void)
 	    dtkLogger::instance().write(message);
 	else
 	    dtkLogger::instance().write(message, level);
+
+    if(this->level ==  dtkLog::Fatal)
+        qFatal("Fatal error occured, please check log");
 }
 
 // /////////////////////////////////////////////////////////////////

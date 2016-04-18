@@ -1,0 +1,141 @@
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+/*!
+
+  \page dtk-coding-style.html
+
+  \title dtk Coding Style
+
+  \brief Description of dtk coding style.
+
+  \section1 Introduction
+
+  This document describes the recommended coding style for dtk. Nobody
+  is forced to use this style, but to have consistent formatting of
+  the source code files it is recommended to make use of it.
+
+  dtk coding style follows the Qt coding style, with few differences
+  desribed here after.
+
+  \section1 Indentation
+
+  \list
+  \li 4 spaces
+  \li no tab
+  \endlist
+
+  \section1 Variable declaration
+
+  \list
+  \li Declare each variable on a separate line
+  \li Avoid abbreviations and meaningless names (\e {e.g.} "a",
+  "rabarr", "toto")
+  \li Take useful names. No short names, except:
+      \list
+      \li Single character variable names can denote counters and
+      temporary variables whose purpose is obvious.
+      \endlist
+  \li Variable name are lower case and each part of the name is
+  separated with underscore.
+  \li Functions, methods and classes start with lower-case
+  letter. Each consecutive word in their names start with an
+  upper-case letter.
+  \li typedef and acronyms are camel-cased (\e {e.g.} dtkMesherCgal)
+  \endlist
+
+  Examples:
+  \code
+  // wrong
+  dtkSparseSolver *ss;
+  dtkSparseMatrix *mtx;
+
+  // correct
+  dtkSparseSolver *sparse_solver;
+  dtkSparseMatrix *sparse_matrix;
+  \endcode
+
+  \section1 Whitespaces
+
+  \list
+  \li Use blank lines to group statements together
+  \li Always use only one blank line
+  \li Always use a single space after a keyword and before a curly brace:
+  \endlist
+  \code
+  // Wrong
+  if(foo){
+  }
+
+  // Correct
+  if (foo) {
+  }
+  \endcode
+  \list
+  \li For pointers always use a single space between the type and '*'
+  but no space between the '*' and the variable name
+  \li For references, use no space between the type and the '&' but
+  always a single space between the '&' and the variable name
+  \endlist
+  \code
+  // Wrong
+  char* my_char;
+  const QString &my_string;
+
+  // Correct
+  char *my_char;
+  const QString& my_string;
+  \endcode
+  \list
+  \li Surround binary operators with spaces
+  \li No space after a cast
+  \li Avoid C-style casts when possible
+  \endlist
+  \code
+  // Wrong
+  char *block_of_memory = (char*) malloc(data.size());
+
+  // Correct
+  char *block_of_memory = reinterpret_cast<char *>(malloc(data.size()));
+  \endcode
+  \list
+  \li Do not put multiple statements on one line
+  \li By extension, use a new line for the body of a control flow statement:
+  \endlist
+  \code
+  // Wrong
+  if (foo) bar();
+
+  // Correct
+  if (foo) {
+      bar();
+  }
+  \endcode
+
+  \section1 Braces
+
+  \section1 Parenthesis
+
+  \section1 Switch statements
+
+  \section1 Jump statements
+
+  \section1 Line breaks
+
+  \section1 Qt includes
+
+*/
+
+//
+// dtk-coding-style.qdoc ends here

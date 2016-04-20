@@ -66,6 +66,34 @@
   dtkSparseMatrix *sparse_matrix;
   \endcode
 
+  \section1 Class members
+
+  \list
+  \li when using a d-pointer, the member variable declaration follows
+  the above rules.
+  \li when variables are declared directly as member of a class, their
+  name is asked to start with the prefix 'm_'
+  \endlist
+
+  Examples:
+  \code
+  // wrong
+  class dtkConcreteDummy
+  {
+  private:
+      int    _counter;
+      double value_;
+  };
+
+  // correct
+  class dtkConcreteDummy
+  {
+  private:
+      int    m_counter;
+      double m_value;
+  };
+  \endcode
+
   \section1 Whitespaces
 
   \list

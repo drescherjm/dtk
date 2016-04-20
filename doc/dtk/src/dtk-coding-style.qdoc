@@ -26,8 +26,9 @@
   is forced to use this style, but to have consistent formatting of
   the source code files it is recommended to make use of it.
 
-  dtk coding style follows the Qt coding style, with few differences
-  desribed here after.
+  dtk coding style follows the \l
+  {http://wiki.qt.io/Qt_Coding_Style}{Qt coding style}, with few
+  differences desribed here after.
 
   \section1 Indentation
 
@@ -52,7 +53,8 @@
   \li Functions, methods and classes start with lower-case
   letter. Each consecutive word in their names start with an
   upper-case letter.
-  \li typedef and acronyms are camel-cased (\e {e.g.} dtkMesherCgal)
+  \li typedef and acronyms are camel-cased (\e {e.g.} dtkMesherCgal
+  rather than dtkMesherCGAL)
   \endlist
 
   Examples:
@@ -66,12 +68,12 @@
   dtkSparseMatrix *sparse_matrix;
   \endcode
 
-  \section1 Class members
+  \section1 Member variables
 
   \list
-  \li when using a d-pointer, the member variable declaration follows
+  \li When using a d-pointer, the member variable declaration follows
   the above rules.
-  \li when variables are declared directly as member of a class, their
+  \li When variables are declared directly as member of a class, their
   name is asked to start with the prefix 'm_'
   \endlist
 
@@ -94,6 +96,37 @@
   };
   \endcode
 
+  \section1 Member methods
+
+  \list
+  \li Setter methods start with the prefix 'set' in lower case.
+  \li The getter methods do not start with 'get'.
+  \li When argument list is empty, the keyword \e{void} is used.
+  \li Users are asked to group setter and getter methods in a
+  consistent way by using \e{public} keyword as separator.
+  \endlist
+
+  Examples:
+  \code
+  // wrong
+  class dtkConcreteDummy
+  {
+  public:
+      void SetCounter(int counter);
+      double getValue();
+  };
+
+  // correct
+  class dtkConcreteDummy
+  {
+  public:
+      void setCounter(int counter);
+
+  public:
+      double value(void);
+  };
+  \endcode
+
   \section1 Whitespaces
 
   \list
@@ -102,11 +135,11 @@
   \li Always use a single space after a keyword and before a curly brace:
   \endlist
   \code
-  // Wrong
+  // wrong
   if(foo){
   }
 
-  // Correct
+  // correct
   if (foo) {
   }
   \endcode
@@ -116,36 +149,52 @@
   \li For references, use no space between the type and the '&' but
   always a single space between the '&' and the variable name
   \endlist
+
   \code
-  // Wrong
+  // wrong
   char* my_char;
   const QString &my_string;
 
-  // Correct
+  // correct
   char *my_char;
   const QString& my_string;
   \endcode
   \list
   \li Surround binary operators with spaces
+  \endlist
+  \code
+  // wrong
+  for (int i=0;i<N;++i) {
+      dtkDebug() << i;
+  }
+
+  // correct
+  for (int i = 0; i < N; ++i) {
+      dtkDebug() << i;
+  }
+  \endcode
+
+  \list
   \li No space after a cast
   \li Avoid C-style casts when possible
   \endlist
   \code
-  // Wrong
+  // wrong
   char *block_of_memory = (char*) malloc(data.size());
 
-  // Correct
+  // correct
   char *block_of_memory = reinterpret_cast<char *>(malloc(data.size()));
   \endcode
+
   \list
   \li Do not put multiple statements on one line
   \li By extension, use a new line for the body of a control flow statement:
   \endlist
   \code
-  // Wrong
+  // wrong
   if (foo) bar();
 
-  // Correct
+  // correct
   if (foo) {
       bar();
   }
@@ -153,16 +202,165 @@
 
   \section1 Braces
 
+  \list
+  \li As a base rule, the left curly brace goes on the same line as
+  the start of the statement.
+  \endlist
+  \code
+  // wrong
+  if (true)
+  {
+  }
+  else
+  {
+  }
+
+  // correct
+  if (true) {
+  } else {
+  }
+  \endcode
+
+  \list
+  \li The rule differs for function implementations, class, struct and
+  namespace declarations. In this case, the opening brace always
+  starts on a line.
+  \endlist
+  \code
+  static void foo(int g)
+  {
+      dtkDebug() << "foo: " << g;
+  }
+
+  class dtkAbstractConcept
+  {
+  };
+  \endcode
+
+  \list
+  \li Use curly braces even when the body of a conditional statement
+  contains only one line.
+  \endlist
+
+  Example:
+  \code
+  // wrong
+  if (true)
+      return true;
+
+  for (int i = 0; i < 10; ++i)
+      dtkDebug() << i;
+
+  // correct
+  if (true) {
+      return true;
+  }
+
+  for (int i = 0; i < 10; ++i) {
+      dtkDebug() << i;
+  }
+  \endcode
+
   \section1 Parenthesis
+
+  \list
+  \li Use parentheses to group expressions:
+  \endlist
+  \code
+  // wrong
+  if (a && b || c)
+
+  // correct
+  if ((a && b) || c)
+
+  // wrong
+  a + b & c
+
+  // correct
+  (a + b) & c
+  \endcode
 
   \section1 Switch statements
 
+  \list
+  \li The case labels are in the same column as the switch
+  \li Every case must have a break (or return) statement at the end or
+  a comment to indicate that there's intentionally no break, unless
+  another case follows immediately.
+  \endlist
+
+  \code
+  switch (myEnum) {
+  case Value1:
+      doSomething();
+      break;
+  case Value2:
+  case Value3:
+      doSomethingElse();
+      // fall through
+  default:
+      defaultHandling();
+      break;
+  }
+  \endcode
+
   \section1 Jump statements
+
+  \list
+  \li Do not put 'else' after jump statements
+  \endlist
+  \code
+  // Wrong
+  if (this_or_that) {
+     return;
+  } else {
+     somethingElse();
+  }
+
+  // Correct
+  if (this_or_that) {
+     return;
+  }
+  somethingElse();
+  \endcode
 
   \section1 Line breaks
 
+  \list
+  \li Line size is not limited provided the code is readable.
+  \li When breaking a line, commas go at the end of wrapped lines;
+  operators start at the beginning of the new lines. An operator at
+  the end of the line is easy to miss if the editor is too narrow.
+  \endlist
+
+  \code
+  // Wrong
+  if (long_expression +
+      other_long_expression +
+      another_long_expression) {
+  }
+
+  // Correct
+  if (long_expression
+      + other_long_expression
+      + anothero_ther_long_expression) {
+  }
+  \endcode
+
   \section1 Qt includes
 
+  \list
+  \li When including Qt classes, prefer the inclusion of the full
+  module rather than the corresponding header alone.
+  \endlist
+
+  \code
+  // wrong
+  #include <QString>
+
+  // preferable
+  #include <QtCore>
+  \endcode
 */
 
 //

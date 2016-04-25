@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
   dtkToolBox.h
+  dtkWidgets
   dtkWidgetsLogView.h
   dtkWidgetsLogView_p.h
   dtkWidgetsPlugin.h
@@ -87,6 +88,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
+  dtkCore
   dtkLog
   dtkDistributed)
 

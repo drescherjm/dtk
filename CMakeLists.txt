@@ -387,6 +387,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkScript)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkWidgets)
 
 ## ###################################################################
 ## Input

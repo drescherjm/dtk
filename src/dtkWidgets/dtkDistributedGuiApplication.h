@@ -36,6 +36,16 @@ public:
     virtual void unspawn(void);
 
 public:
+    static dtkDistributedGuiApplication *create(int &argc, char *argv[])
+    {
+        for (int i = 0; i < argc; i++)
+            if(!qstrcmp(argv[i], "-nw") ||!qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window")|| !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help")|| !qstrcmp(argv[i], "--version")) {
+                qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("minimal"));
+            }
+        return new dtkDistributedGuiApplication(argc, argv);
+    }
+
+public:
     bool isMaster(void);
     dtkDistributedCommunicator *communicator(void);
     dtkDistributedPolicy *policy(void);

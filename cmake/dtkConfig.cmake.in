@@ -31,7 +31,6 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMath"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkMeta"
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkTest"
-  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkWidgets"
   "@CMAKE_CURRENT_BINARY_DIR@")
 
 include("@CMAKE_BINARY_DIR@/dtkDepends.cmake")
@@ -79,6 +78,11 @@ if(DTK_BUILD_COMPOSER)
   set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkComposer")
 endif(DTK_BUILD_COMPOSER)
+
+if(DTK_BUILD_WIDGETS)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkWidgets")
+endif(DTK_BUILD_WIDGETS)
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

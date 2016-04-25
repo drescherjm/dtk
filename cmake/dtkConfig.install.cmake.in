@@ -81,6 +81,11 @@ if(DTK_BUILD_COMPOSER)
   "@CMAKE_INSTALL_PREFIX@/include/dtkComposer")
 endif(DTK_BUILD_COMPOSER)
 
+if(DTK_BUILD_WIDGETS)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_INSTALL_PREFIX@/include/dtkWidgets")
+endif(DTK_BUILD_WIDGETS)
+
 ## ###################################################################
 ## Always full RPATH
 ## ###################################################################

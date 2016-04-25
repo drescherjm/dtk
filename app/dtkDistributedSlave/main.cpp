@@ -18,6 +18,7 @@
 
 #include <dtkDistributed>
 #include <dtkLog>
+#include <dtkWidgets/dtkDistributedGuiApplication.h>
 
 #include <QtCore>
 
@@ -58,7 +59,7 @@ public:
 
 int main(int argc, char **argv)
 {
-    dtkDistributedApplication *app = dtkDistributed::create(argc, argv);
+    dtkDistributedGuiApplication *app = dtkDistributedGuiApplication::create(argc, argv);
     app->setApplicationName("dtkDistributedSlave");
     app->setApplicationVersion("1.0.0");
     app->setOrganizationName("inria");

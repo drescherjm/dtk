@@ -115,6 +115,7 @@ option(DTK_BUILD_COMPOSER            "Build composer layer" false)
 option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
 option(DTK_BUILD_SCRIPT              "Build script layer"  false)
 option(DTK_BUILD_WRAPPERS            "Build wrappers"      false)
+option(DTK_BUILD_WIDGETS             "Build widgets"        true)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)
@@ -386,6 +387,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkScript)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkWidgets)
 
 ## ###################################################################
 ## Input

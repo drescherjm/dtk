@@ -1,5 +1,6 @@
-#include "dtkApplication.h"
+#include "dtkApplicationPrivate.h"
 #include "dtkCore.h"
+#include "dtkCoreApplication.h"
 #include "dtkCorePlugin.h"
 #include "dtkCorePluginFactory.h"
 #include "dtkCorePluginFactory.tpp"
@@ -11,4 +12,3 @@
 #include "dtkArray.tpp"
 #include "dtkIterator.h"
 #include "dtkStaticArray.h"
-#include "dtkCoreWidgetFactory.h"

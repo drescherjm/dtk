@@ -15,7 +15,8 @@
 #pragma once
 
 #include <QtCore>
-#include "dtkCoreExport.h"
+
+#include "dtkWidgetsExport.h"
 
 class QWidget;
 
@@ -23,7 +24,7 @@ class QWidget;
 // dtkCoreWidgetFactory
 // ///////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkCoreWidgetFactory : public QObject
+class DTKWIDGETS_EXPORT dtkCoreWidgetFactory : public QObject
 {
 public:
      dtkCoreWidgetFactory(void);

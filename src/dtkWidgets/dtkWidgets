@@ -1,3 +1,7 @@
+#include "dtkApplication.h"
+#include "dtkCoreWidgetFactory.h"
+#include "dtkToolBox.h.h"
+#include "dtkWidgetsPlugin.h"
 #include "dtkWidgetsTag.h"
 #include "dtkWidgetsTagCloud.h"
 #include "dtkWidgetsTagCloudController.h"

@@ -19,7 +19,7 @@ project(dtkCore)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkApplication.h
+  dtkApplicationPrivate.h
   dtkArray
   dtkArray.h
   dtkArray.tpp
@@ -27,6 +27,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkArrayData.h
   dtkCore
   dtkCore.h
+  dtkCoreApplication.h
   dtkCorePlugin
   dtkCorePlugin.h
   dtkCorePluginFactory
@@ -46,14 +47,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkSpinLock.h
   dtkStaticArray
   dtkStaticArray.h
-  dtkCoreWidgetFactory.h
 )
 
 set(${PROJECT_NAME}_SOURCES
-  dtkApplication.cpp
+  dtkApplicationPrivate.cpp
+  dtkCoreApplication.cpp
   dtkCoreSettings.cpp
   dtkArrayData.cpp
-  dtkCoreWidgetFactory.cpp)
+ )
 
 ## #################################################################
 ## Deps
@@ -90,7 +91,6 @@ endif (DTK_HAVE_ZLIB)
 target_link_libraries(${PROJECT_NAME} dtkMeta dtkLog)
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 ## #################################################################
 ## Target properties

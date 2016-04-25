@@ -22,6 +22,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkDistributed
   dtkDistributed.h
   dtkDistributedApplication.h
+  dtkDistributedApplicationPrivate.h
   dtkDistributedArray
   dtkDistributedArray.h
   dtkDistributedArray.tpp
@@ -65,6 +66,7 @@ set(${PROJECT_NAME}_HEADERS
 set(${PROJECT_NAME}_SOURCES
   dtkDistributed.cpp
   dtkDistributedApplication.cpp
+  dtkDistributedApplicationPrivate.cpp
   dtkDistributedArray.cpp
   dtkDistributedBufferManager.cpp
   dtkDistributedCommunicator.cpp

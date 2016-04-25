@@ -1,8 +1,8 @@
-/* dtkDistributedApplication.h ---
+/* @(#)dtkDistributedGuiApplication.h ---
  *
  * Author: Nicolas Niclausse
- * Copyright (C) 2015 - Nicolas Niclausse, Inria.
- * Created: 2015/02/04 12:28:51
+ * Copyright (C) 2016 - Nicolas Niclausse, Inria.
+ * Created: 2016/04/25 13:04:29
  */
 
 /* Commentary:
@@ -15,19 +15,19 @@
 
 #pragma once
 
-#include "dtkDistributedExport.h"
+#include "dtkWidgetsExport.h"
 
-#include <dtkCore/dtkCoreApplication.h>
+#include "dtkApplication.h"
 
 class dtkDistributedCommunicator;
 class dtkDistributedPolicy;
 class dtkDistributedApplicationPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public dtkCoreApplication
+class DTKWIDGETS_EXPORT dtkDistributedGuiApplication: public dtkApplication
 {
 public:
-             dtkDistributedApplication(int &argc, char **argv);
-    virtual ~dtkDistributedApplication(void);
+             dtkDistributedGuiApplication(int &argc, char **argv);
+    virtual ~dtkDistributedGuiApplication(void);
 
 public:
     virtual void initialize(void);
@@ -37,7 +37,6 @@ public:
 
 public:
     bool isMaster(void);
-    virtual bool noGui(void);
     dtkDistributedCommunicator *communicator(void);
     dtkDistributedPolicy *policy(void);
 
@@ -45,5 +44,8 @@ private:
     dtkDistributedApplicationPrivate *d;
 
 };
+
+
+
 
 

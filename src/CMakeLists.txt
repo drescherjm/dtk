@@ -35,7 +35,10 @@ add_subdirectory(dtkLog)
 add_subdirectory(dtkMath)
 add_subdirectory(dtkMeta)
 add_subdirectory(dtkTest)
+
+if(DTK_BUILD_WIDGETS)
 add_subdirectory(dtkWidgets)
+endif(DTK_BUILD_WIDGETS)
 
 ## #################################################################
 ## Essential target
@@ -59,7 +62,10 @@ endif(DTK_BUILD_SCRIPT)
 set(DTK_TARGETS ${DTK_TARGETS} dtkLog)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMath)
 set(DTK_TARGETS ${DTK_TARGETS} dtkMeta)
+
+if(DTK_BUILD_WIDGETS)
 set(DTK_TARGETS ${DTK_TARGETS} dtkWidgets)
+endif(DTK_BUILD_WIDGETS)
 
 ## #################################################################
 ## Support layer

@@ -15,19 +15,20 @@
 #pragma once
 
 #include <QtCore>
-#include "dtkCoreExport.h"
+
+#include "dtkWidgetsExport.h"
 
 class QWidget;
 
 // ///////////////////////////////////////////////////////////////////
-// dtkCoreWidgetFactory
+// dtkWidgetFactory
 // ///////////////////////////////////////////////////////////////////
 
-class DTKCORE_EXPORT dtkCoreWidgetFactory : public QObject
+class DTKWIDGETS_EXPORT dtkWidgetFactory : public QObject
 {
 public:
-     dtkCoreWidgetFactory(void);
-    ~dtkCoreWidgetFactory(void);
+     dtkWidgetFactory(void);
+    ~dtkWidgetFactory(void);
 
 public:
     void record(const QString& key, QWidget* widget);
@@ -43,4 +44,4 @@ private:
 };
 
 //
-// dtkCoreWidgetFactory.h ends here
+// dtkWidgetFactory.h ends here

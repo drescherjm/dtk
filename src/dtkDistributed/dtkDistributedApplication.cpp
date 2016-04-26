@@ -16,22 +16,12 @@
 
 #include "dtkDistributed.h"
 #include "dtkDistributedApplication.h"
+#include "dtkDistributedApplicationPrivate.h"
 #include "dtkDistributedCommunicator"
 #include "dtkDistributedSettings.h"
 #include "dtkDistributedPolicy.h"
 
 #include <dtkLog>
-
-class dtkDistributedApplicationPrivate
-{
-
-public:
-    dtkDistributedPolicy policy;
-    bool spawned;
-    bool nospawn;
-    QString wrapper;
-    QString smp;
-};
 
 
 
@@ -42,103 +32,22 @@ public:
 
 */
 
-dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv): dtkApplication(argc, argv)
+dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv): dtkCoreApplication(argc, argv)
 {
 
     d = new dtkDistributedApplicationPrivate;
-    d->spawned = false;
-    d->nospawn = false;
-
 }
 
 dtkDistributedApplication::~dtkDistributedApplication(void)
 {
-    if (d->spawned)
-        this->unspawn();
-
     delete d;
     d = NULL;
 }
 
 void dtkDistributedApplication::initialize(void)
 {
-    QCommandLineParser *parser = dtkDistributedApplication::parser();
-
-    QString policyType = "qthread";
-    QCommandLineOption policyOption("policy", "dtkDistributed policy (default is qthread)", "qthread|mpi|mpi3", policyType);
-    parser->addOption(policyOption);
-
-    QCommandLineOption npOption("np","number of processes","int","1");
-    parser->addOption(npOption);
-    QCommandLineOption nsOption("no-spawn","disable spawning");
-    parser->addOption(nsOption);
-    QCommandLineOption ntOption("nt","number of threads (for hybrid plugins)","int", "1");
-    parser->addOption(ntOption);
-    QCommandLineOption wrapperOption("wrapper","use wrapper command when spawning processes","command", "");
-    parser->addOption(wrapperOption);
-    QCommandLineOption smpOption("smp", "smp option (disabled by default)", "single|funneled|serialized|multiple","");
-    parser->addOption(smpOption);
-    QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
-    parser->addOption(hostsOption);
-
-
-    QCommandLineOption DSsettingsOption("distributed-settings", "dtkDistributed settings file", "filename");
-    parser->addOption(DSsettingsOption);
-
-    dtkApplication::initialize();
-
-    QSettings *settings;
-    if(parser->isSet(DSsettingsOption)) {
-        settings = new QSettings(parser->value(DSsettingsOption), QSettings::IniFormat);
-    } else {
-        settings =  new dtkDistributedSettings;
-    }
-
-    if(parser->isSet(nsOption)) {
-        d->nospawn = true;
-    }
-
-    // plugins
-    settings->beginGroup("communicator");
-    dtkDebug() << "initialize plugin manager "<< settings->value("plugins").toString();
-
-    QCommandLineOption verboseOption("verbose", QCoreApplication::translate("main", "verbose plugin initialization"));
-    if (parser->isSet(verboseOption)) {
-        dtkDistributed::communicator::pluginManager().setVerboseLoading(true);
-    }
-    dtkDistributed::communicator::initialize(settings->value("plugins").toString());
-    settings->endGroup();
-
-    delete settings;
-
-    dtkDebug() << "available plugins:" << dtkDistributed::communicator::pluginFactory().keys();
-
-    if (parser->isSet(policyOption)) {
-        policyType = parser->value(policyOption);
-    }
-    if (parser->isSet(hostsOption)) {
-        foreach(QString s, parser->values(hostsOption)) {
-            d->policy.addHost(s);
-        }
-    } else {
-        d->policy.setHostsFromEnvironment();
-    }
-
-    if (parser->isSet(wrapperOption)) {
-        d->wrapper = parser->value(wrapperOption);
-    }
-    qlonglong np = 0;
-    if (parser->isSet(npOption)) {
-            np = parser->value(npOption).toLongLong();
-            dtkTrace() << "got np value from command line:"<< np ;
-            d->policy.setNWorkers(np);
-    }
-    if (parser->isSet(smpOption)) {
-        d->smp = parser->value(smpOption);
-    }
-    d->policy.setType(policyType);
+    d->initialize();
 }
-
 
 void dtkDistributedApplication::exec(QRunnable *task)
 {
@@ -147,24 +56,12 @@ void dtkDistributedApplication::exec(QRunnable *task)
 
 void dtkDistributedApplication::spawn(QMap<QString,QString> options)
 {
-    if (!d->smp.isEmpty()) {
-        options.insert("smp", d->smp);
-    }
-    if (d->nospawn) {
-        QStringList nospawn;
-        nospawn << "nospawn";
-        d->policy.communicator()->spawn(nospawn, d->wrapper, options);
-    } else {
-        QStringList hosts = d->policy.hosts();
-        d->spawned = true;
-        d->policy.communicator()->spawn(hosts, d->wrapper, options);
-    }
+    d->spawn();
 }
 
 void dtkDistributedApplication::unspawn(void)
 {
-    d->policy.communicator()->unspawn();
-    d->spawned = false;
+    d->unspawn();
 }
 
 dtkDistributedPolicy *dtkDistributedApplication::policy(void)
@@ -181,4 +78,10 @@ dtkDistributedCommunicator *dtkDistributedApplication::communicator(void)
 bool dtkDistributedApplication::isMaster(void)
 {
     return (d->policy.communicator()->rank() == 0);
+}
+
+/* always returns true: just to be compatible with dtkDistributedGuiApplication */
+bool dtkDistributedApplication::noGui(void)
+{
+    return true;
 }

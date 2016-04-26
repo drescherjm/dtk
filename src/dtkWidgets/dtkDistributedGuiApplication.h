@@ -17,13 +17,14 @@
 
 #include "dtkWidgetsExport.h"
 
-#include "dtkApplication.h"
+#include <QApplication>
+#include <QtCore>
 
 class dtkDistributedCommunicator;
 class dtkDistributedPolicy;
 class dtkDistributedApplicationPrivate;
 
-class DTKWIDGETS_EXPORT dtkDistributedGuiApplication: public dtkApplication
+class DTKWIDGETS_EXPORT dtkDistributedGuiApplication: public QApplication
 {
 public:
              dtkDistributedGuiApplication(int &argc, char **argv);
@@ -34,6 +35,12 @@ public:
     virtual void exec(QRunnable *task);
     virtual void spawn(QMap<QString, QString> options = QMap<QString, QString>() );
     virtual void unspawn(void);
+
+public:
+    virtual bool noGui(void);
+
+public:
+    QCommandLineParser *parser(void);
 
 public:
     static dtkDistributedGuiApplication *create(int &argc, char *argv[])

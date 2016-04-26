@@ -29,7 +29,7 @@
 
 */
 
-dtkDistributedGuiApplication::dtkDistributedGuiApplication(int &argc, char **argv): dtkApplication(argc, argv)
+dtkDistributedGuiApplication::dtkDistributedGuiApplication(int &argc, char **argv): QApplication(argc, argv)
 {
 
     d = new dtkDistributedApplicationPrivate;
@@ -49,6 +49,15 @@ void dtkDistributedGuiApplication::initialize(void)
     d->initialize();
 }
 
+QCommandLineParser *dtkDistributedGuiApplication::parser(void)
+{
+    return d->parser;
+}
+
+bool dtkDistributedGuiApplication::noGui(void)
+{
+    return !(qApp && qobject_cast<QGuiApplication *>(qApp) && (QGuiApplication::platformName() != "minimal")) ;
+}
 
 void dtkDistributedGuiApplication::exec(QRunnable *task)
 {

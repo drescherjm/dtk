@@ -17,13 +17,13 @@
 
 #include "dtkDistributedExport.h"
 
-#include <dtkCore/dtkCoreApplication.h>
+#include <QtCore>
 
 class dtkDistributedCommunicator;
 class dtkDistributedPolicy;
 class dtkDistributedApplicationPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public dtkCoreApplication
+class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public QCoreApplication
 {
 public:
              dtkDistributedApplication(int &argc, char **argv);
@@ -34,6 +34,15 @@ public:
     virtual void exec(QRunnable *task);
     virtual void spawn(QMap<QString, QString> options = QMap<QString, QString>() );
     virtual void unspawn(void);
+
+public:
+    QCommandLineParser  *parser(void);
+
+public:
+    static dtkDistributedApplication *create(int &argc, char *argv[])
+    {
+        return new dtkDistributedApplication(argc, argv);
+    }
 
 public:
     bool isMaster(void);

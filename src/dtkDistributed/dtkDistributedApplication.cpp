@@ -23,8 +23,6 @@
 
 #include <dtkLog>
 
-
-
 /*!
   \class dtkDistributedApplication
   \inmodule dtkDistributed
@@ -32,7 +30,7 @@
 
 */
 
-dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv): dtkCoreApplication(argc, argv)
+dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv): QCoreApplication(argc, argv)
 {
 
     d = new dtkDistributedApplicationPrivate;
@@ -62,6 +60,11 @@ void dtkDistributedApplication::spawn(QMap<QString,QString> options)
 void dtkDistributedApplication::unspawn(void)
 {
     d->unspawn();
+}
+
+QCommandLineParser *dtkDistributedApplication::parser(void)
+{
+    return d->parser;
 }
 
 dtkDistributedPolicy *dtkDistributedApplication::policy(void)

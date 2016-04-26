@@ -14,6 +14,8 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+######################################################################
+
 if(${CMAKE_MAJOR_VERSION} GREATER 2)
   cmake_policy(SET CMP0028 NEW)
 endif(${CMAKE_MAJOR_VERSION} GREATER 2)
@@ -75,8 +77,8 @@ endif(APPLE)
 
 if(NOT APPLE AND NOT MSVC)
   include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
   if(COMPILER_SUPPORTS_CXX11)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unknown-pragmas")
   elseif(COMPILER_SUPPORTS_CXX0X)
@@ -107,9 +109,9 @@ endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 ## Options
 ## #################################################################
 
-option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
-option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
-option(DTK_ENABLE_MEMCHECK              "enable valgrind memcheck report" false)
+option(DTK_ENABLE_COVERAGE           "enable coverage report" false)
+option(DTK_COVERAGE_USE_COBERTURA    "use cobertura coverage format" true)
+option(DTK_ENABLE_MEMCHECK           "enable valgrind memcheck report" false)
 
 option(DTK_BUILD_COMPOSER            "Build composer layer" false)
 option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
@@ -131,8 +133,9 @@ option(DTK_BUILD_SUPPORT_VR          "Build support layer" false)
 
 if(DTK_ENABLE_MEMCHECK)
 
-  find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
-  set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml" )
+  find_program(CTEST_MEMORYCHECK_COMMAND valgrind)
+
+  set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml")
 
   function(add_test name binary)
     set(memcheck_command "${CTEST_MEMORYCHECK_COMMAND} ${CTEST_MEMORYCHECK_COMMAND_OPTIONS}")
@@ -173,8 +176,7 @@ find_package(Qt5 REQUIRED COMPONENTS
   Test
   Svg
   Widgets
-  Xml
-  )
+  Xml)
 
 ## ###################################################################
 ## Doc setup
@@ -183,8 +185,8 @@ find_package(Qt5 REQUIRED COMPONENTS
 set(dtk_INSTALL_DOCS ${CMAKE_BINARY_DIR}/html)
 set(dtk_CONFIG_DOCS  ${CMAKE_BINARY_DIR}/doc/cfg)
 
-# variables used by doc and tst
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
+
 get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
 
 ## #################################################################
@@ -205,6 +207,7 @@ find_package(SWIG REQUIRED)
 
 if(SWIG_FOUND)
   include(${SWIG_USE_FILE})
+
   set(CMAKE_SWIG_FLAGS "")
 
   macro(dtk_wrap project target name language input deps)
@@ -308,13 +311,12 @@ if (ZLIB_FOUND)
   set(DTK_HAVE_ZLIB "YES")
 endif (ZLIB_FOUND)
 
-
 set(DTK_HAVE_VRPN "NO")
 
 if(DTK_BUILD_SUPPORT_VR)
 
 ## #################################################################
-## OpenNI / Nite && VRPN
+## OpenNI / Nite
 ## #################################################################
 
 find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
@@ -352,8 +354,8 @@ find_path(QUAT_INCLUDES           quat.h /usr/include /usr/local/include)
 find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
 
 if(QUAT_INCLUDES AND VRPN_INCLUDES)
-include_directories(${QUAT_INCLUDES})
-include_directories(${VRPN_INCLUDES})
+  include_directories(${QUAT_INCLUDES})
+  include_directories(${VRPN_INCLUDES})
 endif(QUAT_INCLUDES AND VRPN_INCLUDES)
 
 mark_as_advanced(VRPN_INCLUDES)
@@ -416,15 +418,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkSetTestEnvironment.cmake.in
 "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CodeCoverage.cmake
-"${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake" @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkCodeCoverage.cmake
+"${CMAKE_CURRENT_BINARY_DIR}/dtkCodeCoverage.cmake" @ONLY)
 
 set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake")
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkCodeCoverage.cmake"
   DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
 
 install(EXPORT dtkDepends DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)

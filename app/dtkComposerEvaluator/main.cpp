@@ -19,6 +19,7 @@
 #include <dtkDistributed>
 #include <dtkComposer>
 #include <dtkCore>
+#include <dtkWidgets>
 
 #include <dtkCoreSupport/dtkPluginManager.h>
 #include <dtkCoreSupport/dtkAbstractProcessFactory.h>
@@ -27,13 +28,13 @@
 
 int main(int argc, char **argv)
 {
-    dtkDistributedApplication *application = dtkDistributed::create(argc, argv);
+    dtkDistributedGuiApplication *application = dtkDistributedGuiApplication::create(argc, argv);
 
     application->setApplicationName("dtkComposerEvaluator");
     application->setApplicationVersion("1.0.0");
     application->setOrganizationName("inria");
     application->setOrganizationDomain("fr");
-    bool no_gui = dtkDistributed::app()->noGui();
+    bool no_gui = application->noGui();
 
     QCommandLineParser *parser = application->parser();
     parser->setApplicationDescription("DTK composer evaluator. Run the given compostion (XML file).");

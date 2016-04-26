@@ -36,6 +36,8 @@ set(dtk_VERSION
 ## Path setup
 ## ###################################################################
 
+include(GNUInstallDirs)
+
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
@@ -65,7 +67,6 @@ endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include(GNUInstallDirs)
 include(GenerateExportHeader)
 
 if(APPLE)
@@ -114,6 +115,7 @@ option(DTK_BUILD_COMPOSER            "Build composer layer" false)
 option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
 option(DTK_BUILD_SCRIPT              "Build script layer"  false)
 option(DTK_BUILD_WRAPPERS            "Build wrappers"      false)
+option(DTK_BUILD_WIDGETS             "Build widgets"        true)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)
@@ -385,6 +387,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkScript)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkWidgets)
 
 ## ###################################################################
 ## Input
@@ -442,6 +445,7 @@ mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
 mark_as_advanced(Qt5QuickTest_DIR)
 mark_as_advanced(Qt5Script_DIR)
+mark_as_advanced(Qt5Svg_DIR)
 mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
 mark_as_advanced(Qt5Xml_DIR)

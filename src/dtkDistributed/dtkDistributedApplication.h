@@ -17,13 +17,13 @@
 
 #include "dtkDistributedExport.h"
 
-#include <dtkCore/dtkApplication.h>
+#include <dtkCore/dtkCoreApplication.h>
 
 class dtkDistributedCommunicator;
 class dtkDistributedPolicy;
 class dtkDistributedApplicationPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public dtkApplication
+class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public dtkCoreApplication
 {
 public:
              dtkDistributedApplication(int &argc, char **argv);
@@ -37,6 +37,7 @@ public:
 
 public:
     bool isMaster(void);
+    virtual bool noGui(void);
     dtkDistributedCommunicator *communicator(void);
     dtkDistributedPolicy *policy(void);
 

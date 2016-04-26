@@ -29,6 +29,7 @@ target_link_libraries(${PROJECT_NAME}
   dtkCore
   dtkDistributed
   dtkLog
+  dtkWidgets
  )
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)

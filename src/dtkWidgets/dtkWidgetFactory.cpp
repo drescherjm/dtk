@@ -12,14 +12,14 @@
 
 // Code:
 
-#include "dtkCoreWidgetFactory.h"
+#include "dtkWidgetFactory.h"
 
-dtkCoreWidgetFactory::dtkCoreWidgetFactory(void)
+dtkWidgetFactory::dtkWidgetFactory(void)
 {
 
 }
 
-dtkCoreWidgetFactory::~dtkCoreWidgetFactory(void)
+dtkWidgetFactory::~dtkWidgetFactory(void)
 {
 
 }
@@ -28,7 +28,7 @@ dtkCoreWidgetFactory::~dtkCoreWidgetFactory(void)
 // Type creator registration
 // /////////////////////////////////////////////////////////////////
 
-void dtkCoreWidgetFactory::record(const QString& key, QWidget* widget)
+void dtkWidgetFactory::record(const QString& key, QWidget* widget)
 {
     if (this->widgets.contains(key)) {
         qDebug() << Q_FUNC_INFO << "Factory already contains key" << key << ". Nothing is done";
@@ -42,7 +42,7 @@ void dtkCoreWidgetFactory::record(const QString& key, QWidget* widget)
 // Type creator invokation
 // /////////////////////////////////////////////////////////////////
 
-QWidget *dtkCoreWidgetFactory::get(const QString& key) const
+QWidget *dtkWidgetFactory::get(const QString& key) const
 {
     if(!this->widgets.contains(key))
         return NULL;
@@ -54,10 +54,10 @@ QWidget *dtkCoreWidgetFactory::get(const QString& key) const
 // Type creator inspection
 // /////////////////////////////////////////////////////////////////
 
-QStringList dtkCoreWidgetFactory::keys(void) const
+QStringList dtkWidgetFactory::keys(void) const
 {
     return this->widgets.keys();
 }
 
 //
-// dtkCoreWidgetFactory_t.h ends here
+// dtkWidgetFactory_t.h ends here

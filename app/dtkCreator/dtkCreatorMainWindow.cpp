@@ -399,7 +399,7 @@ dtkCreatorMainWindow::dtkCreatorMainWindow(QWidget *parent) : QMainWindow(parent
     d->inner = new dtkSplitter(this);
     d->inner->setOrientation(Qt::Horizontal);
     d->inner->addWidget(left);
-    d->inner->addWidget(d->graph);
+    // d->inner->addWidget(d->graph);
     d->inner->addWidget(d->composer);
     d->inner->addWidget(right);
     d->inner->setSizes(QList<int>()
@@ -636,7 +636,7 @@ void dtkCreatorMainWindow::switchToCompo(void)
     // d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
 
-    d->graph->setVisible(false);
+    // d->graph->setVisible(false);
     // d->log_view->setVisible(false);
 
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
@@ -664,7 +664,7 @@ void dtkCreatorMainWindow::switchToDstrb(void)
     // d->distributor->setVisible(true);
     d->view_manager->setVisible(false);
 
-    d->graph->setVisible(false);
+    // d->graph->setVisible(false);
     // d->log_view->setVisible(false);
 
     d->inner->setSizes(QList<int>() << d->wl << 0 << this->size().width() - d->wl - d->wr << d->wr);
@@ -692,7 +692,7 @@ void dtkCreatorMainWindow::switchToDebug(void)
     // d->distributor->setVisible(false);
     d->view_manager->setVisible(false);
 
-    d->graph->setVisible(true);
+    // d->graph->setVisible(true);
     // d->log_view->setVisible(true);
 
     int w = this->size().width() - d->wl - d->wr;
@@ -722,7 +722,7 @@ void dtkCreatorMainWindow::switchToView(void)
     // d->distributor->setVisible(false);
     d->view_manager->setVisible(true);
 
-    d->graph->setVisible(false);
+    // d->graph->setVisible(false);
     // d->log_view->setVisible(false);
 }
 

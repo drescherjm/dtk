@@ -104,7 +104,7 @@ void dtkConceptGenerator::accept()
     values.insert("${NAMESPACE}",namespaceText);
 
     //values for node
-    values.insert("${NODE_CLASS_NAME}",prefix+name+"ComposerNode");
+    values.insert("${NODE_CLASS_NAME}",prefix+name+"Node");
 
 
     generate("abstraction",values,outputFilesPath);

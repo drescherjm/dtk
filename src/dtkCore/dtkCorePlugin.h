@@ -12,7 +12,6 @@
 
 // Code:
 
-
 #pragma once
 
 #include "dtkCorePluginManager"
@@ -23,7 +22,7 @@
 // DTK_DECLARE_OBJECT
 // ///////////////////////////////////////////////////////////////////
 
-#define DTK_DECLARE_OBJECT(type)                \
+#define DTK_DECLARE_OBJECT(type) \
     Q_DECLARE_METATYPE(type)
 
 // ///////////////////////////////////////////////////////////////////
@@ -68,9 +67,8 @@ public:
 // DTK_DECLARE_PLUGIN_MANAGER
 // ///////////////////////////////////////////////////////////////////
 
-#define DTK_DECLARE_PLUGIN_MANAGER(type,Export)                              \
+#define DTK_DECLARE_PLUGIN_MANAGER(type,Export)                         \
     class Export type##PluginManager : public dtkCorePluginManager<type##Plugin> {};
-
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DEFINE_PLUGIN

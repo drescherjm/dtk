@@ -150,7 +150,7 @@ enable_testing()
 
 if(DTK_ENABLE_COVERAGE)
 
-  include(CodeCoverage)
+  include(dtkCodeCoverage)
   include(FindPythonInterp)
   if(DTK_COVERAGE_USE_COBERTURA)
     SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)

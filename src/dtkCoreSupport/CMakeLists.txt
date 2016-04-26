@@ -1,21 +1,16 @@
-### CMakeLists.txt ---
-##
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. sept. 17 14:55:40 2014 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 411
+##
 ######################################################################
 ##
 ### Commentary:
 ##
 ######################################################################
 ##
-### Change log:
+### Change Log:
 ##
 ######################################################################
+##
+### Code:
 
 project(dtkCoreSupport)
 
@@ -55,8 +50,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewInteractor_p.h
   dtkAbstractViewNavigator.h
   dtkAbstractViewNavigator_p.h
-#  dtkArray.h
-#  dtkArray.tpp
   dtkCpuid.h
   dtkGlobal.h
   dtkPlugin.h
@@ -68,8 +61,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkSingleton.h
   dtkSingletonDeclare.h
   dtkSmartPointer.h
-  dtkTest.h
-  )
+  dtkTest.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataFactory.cpp
@@ -90,7 +82,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewAnimator.cpp
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
-#  dtkArray.cpp
   dtkCpuid.cpp
   dtkPlugin.cpp
   dtkPluginManager.cpp
@@ -98,8 +89,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkSingleton.cpp
   dtkSingletonDeclare.cpp
   dtkSmartPointer.cpp
-  dtkUpdater.cpp
-  )
+  dtkUpdater.cpp)
 
 ## #################################################################
 ## Wrapping
@@ -131,8 +121,7 @@ endif()
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_WRAP}
-  ${${PROJECT_NAME}_HEADERS}
-)
+  ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)
@@ -176,7 +165,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
-
 ## #################################################################
 ## Handling of generated script modules
 ## #################################################################
@@ -194,12 +182,13 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
       COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
     set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/dtkcoresupport.py)
+
     if(APPLE)
       add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
         COMMAND ln -sf ../lib/libdtkCoreSupport.dylib _dtkcoresupport.so
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-        )
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
+
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(APPLE)
 
@@ -207,8 +196,8 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
       add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
         COMMAND ln -fs ../${CMAKE_INSTALL_LIBDIR}/libdtkCoreSupport.so _dtkcoresupport.so
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-        )
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
+
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(UNIX AND NOT APPLE)
 
@@ -246,3 +235,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT coresupport
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

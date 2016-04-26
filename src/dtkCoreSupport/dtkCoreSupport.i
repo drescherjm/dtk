@@ -1,28 +1,25 @@
-/* dtkCoreSupport.i --- Core layer swig interface definition
+/* Version: $Id$
  *
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Tue Jan  6 21:45:15 2009 (+0100)
- * Version: $Id$
- * Last-Updated: ven. janv. 31 15:41:41 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 493
  */
 
 /* Commentary:
  *
  */
 
-/* Change log:
+/* Change Log:
  *
  */
 
-#ifndef DTKCORESUPPORT_I
-#define DTKCORESUPPORT_I
+/* Code: */
+
+#pragma once
 
 %module coresupport
+
 %include "carrays.i"
+
 %array_class(double, doubleArray);
+
 %{
 
 #include <QtDebug>
@@ -149,7 +146,7 @@
 // /////////////////////////////////////////////////////////////////
 
 %ignore created(dtkAbstractData *data, const QString& type);
-%ignore created(dtkAbstractProcess *process,const  QString& type);
+%ignore created(dtkAbstractProcess *process, const QString& type);
 %ignore created(dtkAbstractView *view, const QString& type);
 
 // /////////////////////////////////////////////////////////////////
@@ -158,7 +155,7 @@
 
 %ignore   loaded(const QString& path);
 %ignore unloaded(const QString& path);
-%ignore loadError(const QString& path);
+%ignore   loadError(const QString& path);
 
 // /////////////////////////////////////////////////////////////////
 // Typemaps
@@ -167,7 +164,7 @@
 #ifdef SWIGPYTHON
 
 %typecheck(SWIG_TYPECHECK_STRING) char * {
-  $1 = PyString_Check($input) ? 1 : 0;
+    $1 = PyString_Check($input) ? 1 : 0;
 }
 
 %typemap(typecheck)       QString  = char *;
@@ -177,19 +174,19 @@
 
 %typemap(in) QString {
     if (PyString_Check($input)) {
-         $1 = QString(PyString_AsString($input));
-     } else {
-         qDebug("QString expected");
-     }
+        $1 = QString(PyString_AsString($input));
+    } else {
+        qDebug("QString expected");
+    }
 }
 
 %typemap(in) const QString& {
     if (PyString_Check($input)) {
-         char *t = PyString_AsString($input);
-         $1 = new QString(t);
-     } else {
-         qDebug("QString expected");
-     }
+        char *t = PyString_AsString($input);
+        $1 = new QString(t);
+    } else {
+        qDebug("QString expected");
+    }
 }
 
 %typemap(in) QStringList {
@@ -198,9 +195,8 @@
         int end = PyList_Size($input);
         for(i;i!=end; ++i) {
             $1 << QString(PyString_AsString(PyList_GET_ITEM($input, i)));
-            }
         }
-    else {
+    } else {
         qDebug("QStringList expected");
     }
 }
@@ -213,13 +209,11 @@
         for(i;i!=end; ++i) {
             char *t = PyString_AsString(PyList_GET_ITEM($input, i));
             (*$1) << QString(t);
-            }
         }
-    else {
+    } else {
         qDebug("QStringList expected");
     }
 }
-
 
 // C++ -> Python
 
@@ -234,14 +228,14 @@
 %define %QList_typemapsPtr(DATA_TYPE)
 
 %typemap(out) QList<DATA_TYPE> {
-  $result = PyList_New($1.size());
-  int i = 0;
-  QList<DATA_TYPE>::iterator it = $1.begin();
-  QList<DATA_TYPE>::iterator end = $1.end();
-  for(;it!=end; ++it, ++i)  {
-    PyObject* obj = SWIG_NewPointerObj((*it), $descriptor(DATA_TYPE), 0|0);
-    PyList_SET_ITEM($result, i, obj);
-  }
+    $result = PyList_New($1.size());
+    int i = 0;
+    QList<DATA_TYPE>::iterator it = $1.begin();
+    QList<DATA_TYPE>::iterator end = $1.end();
+    for(;it!=end; ++it, ++i)  {
+        PyObject* obj = SWIG_NewPointerObj((*it), $descriptor(DATA_TYPE), 0|0);
+        PyList_SET_ITEM($result, i, obj);
+    }
 }
 
 %enddef // %QList_typemapsPtr()
@@ -251,15 +245,15 @@
 %define %QList_typemaps(DATA_TYPE)
 
 %typemap(out) QList<DATA_TYPE> {
-  $result = PyList_New($1.size());
-  int i = 0;
-  QList<DATA_TYPE>::iterator it = $1.begin();
-  QList<DATA_TYPE>::iterator end = $1.end();
-  for(;it!=end; ++it, ++i)  {
-    DATA_TYPE *newItem = new DATA_TYPE(*it);
-    PyObject* obj = SWIG_NewPointerObj(newItem, $descriptor(DATA_TYPE*), 0|0);
-    PyList_SET_ITEM($result, i, obj);
-  }
+    $result = PyList_New($1.size());
+    int i = 0;
+    QList<DATA_TYPE>::iterator it = $1.begin();
+    QList<DATA_TYPE>::iterator end = $1.end();
+    for(;it!=end; ++it, ++i)  {
+        DATA_TYPE *newItem = new DATA_TYPE(*it);
+        PyObject* obj = SWIG_NewPointerObj(newItem, $descriptor(DATA_TYPE*), 0|0);
+        PyList_SET_ITEM($result, i, obj);
+    }
 }
 
 %enddef // %QList_typemaps()
@@ -272,7 +266,7 @@
     for(;it!=end; ++it, ++i) {
         PyObject* st = PyString_FromString((*it).toUtf8().constData());
         PyList_SET_ITEM($result, i, st);
-  }
+    }
 }
 
 %typemap(out) QList<QString> {
@@ -283,11 +277,10 @@
     for(;it!=end; ++it, ++i) {
         PyObject* st = PyString_FromString((*it).toUtf8().constData());
         PyList_SET_ITEM($result, i, st);
-  }
+    }
 }
 
-template <class T1, class T2>
-class QPair
+template <class T1, class T2> class QPair
 {
 public:
     T1 first;
@@ -297,11 +290,11 @@ public:
 %define %QPair_typemaps(DATA_TYPE_1, DATA_TYPE_2)
 
 %typemap(out) QPair<DATA_TYPE_1, DATA_TYPE_2> {
-  $result = PyTuple_New(2);
-  PyObject* obj1 = SWIG_NewPointerObj(*$1.first, $descriptor(DATA_TYPE_1), 0|0);
-  PyObject* obj2 = SWIG_NewPointerObj(*$1.second, $descriptor(DATA_TYPE_2), 0|0);
-  PyTuple_SET_ITEM($result, 0, obj1);
-  PyTuple_SET_ITEM($result, 1, obj2);
+    $result = PyTuple_New(2);
+    PyObject* obj1 = SWIG_NewPointerObj(*$1.first, $descriptor(DATA_TYPE_1), 0|0);
+    PyObject* obj2 = SWIG_NewPointerObj(*$1.second, $descriptor(DATA_TYPE_2), 0|0);
+    PyTuple_SET_ITEM($result, 0, obj1);
+    PyTuple_SET_ITEM($result, 1, obj2);
 }
 
 %enddef // %QPair_typemaps()
@@ -338,34 +331,8 @@ public:
 #elif SWIGCSHARP
 
 // /////////////////////////////////////////////////////////////////
-// 
+// C#
 // /////////////////////////////////////////////////////////////////
-
-
-// %typemap(typecheck)       QString  = char *;
-// %typemap(typecheck) const QString& = char *;
-
-// // C# -> C++
-
-// %typemap(in) QString {
-//     QString $1_str((char *)$input);
-//     $1 = &$1_str;
-// }
-
-// %typemap(in) const QString& {
-//     QString $1_str((char *)$input);
-//     $1 = &$1_str;
-// }
-
-// // C++ -> C#
-
-// %typemap(out) QString {
-//     $result = SWIG_csharp_string_callback($1.toUtf8().constData());
-// }
-
-// %typemap(out) const QString & {
-//     $result = SWIG_csharp_string_callback($1.toUtf8().constData());
-// }
 
 %typemap(ctype) QString "char *"
 %typemap(imtype) QString "string"
@@ -373,51 +340,58 @@ public:
 %typemap(csdirectorin) QString "$iminput"
 %typemap(csdirectorout) QString "$cscall"
 
-%typemap(in, canthrow=1) QString 
-%{
+%typemap(in, canthrow=1) QString {
     if (!$input) {
         SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
         return $null;
     }
+
     $1 = QString($input);
-%}
+}
 
-%typemap(out) QString
-%{ 
+%typemap(out) QString {
     $result = SWIG_csharp_string_callback($1.toUtf8().constData());
-%}
+}
 
-%typemap(directorout, canthrow=1) QString 
-%{ if (!$input) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
-    return $null;
-   }
-   $result = string($input); %}
+%typemap(directorout, canthrow=1) QString {
+    if (!$input) {
+        SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+        return $null;
+    }
 
-%typemap(directorin) QString %{ $input = SWIG_csharp_string_callback($1.toUtf8().constData()); %}
+    $result = string($input);
+}
+
+%typemap(directorin) QString {
+    $input = SWIG_csharp_string_callback($1.toUtf8().constData());
+}
 
 %typemap(csin) QString "$csinput"
-%typemap(csout, excode=SWIGEXCODE) QString {
-    string ret = $imcall;$excode
-    return ret;
-  }
 
-%typemap(csvarin, excode=SWIGEXCODE2) QString %{
+%typemap(csout, excode=SWIGEXCODE) QString {
+    string ret = $imcall;$excode;
+    return ret;
+}
+
+%typemap(csvarin, excode=SWIGEXCODE2) QString {
     set {
       $imcall;$excode
-    } %}
-%typemap(csvarout, excode=SWIGEXCODE2) QString %{
+    }
+}
+
+%typemap(csvarout, excode=SWIGEXCODE2) QString {
     get {
       string ret = $imcall;$excode
       return ret;
-    } %}
+    }
+}
 
 %typemap(typecheck) QString = char *;
 
-%typemap(throws, canthrow=1) QString
-%{ SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, $1.c_str());
-   return $null; %}
-
+%typemap(throws, canthrow=1) QString {
+    SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, $1.c_str());
+    return $null;
+}
 
 %typemap(ctype) const QString & "char *"
 %typemap(imtype) const QString & "string"
@@ -425,48 +399,59 @@ public:
 %typemap(csdirectorin) const QString & "$iminput"
 %typemap(csdirectorout) const QString & "$cscall"
 
-%typemap(in, canthrow=1) const QString &
-%{ if (!$input) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
-    return $null;
-   }
-   QString $1_str($input);
-   $1 = &$1_str; %}
-%typemap(out) const QString & %{ $result = SWIG_csharp_string_callback($1->toUtf8().constData()); %}
+%typemap(in, canthrow=1) const QString & {
+    if (!$input) {
+        SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+        return $null;
+    }
+    QString $1_str($input);
+    $1 = &$1_str;
+}
+
+%typemap(out) const QString & {
+    $result = SWIG_csharp_string_callback($1->toUtf8().constData());
+}
 
 %typemap(csin) const QString & "$csinput"
+
 %typemap(csout, excode=SWIGEXCODE) const QString & {
     string ret = $imcall;$excode
     return ret;
-  }
+}
 
-%typemap(directorout, canthrow=1, warning=SWIGWARN_TYPEMAP_THREAD_UNSAFE_MSG) const QString &
-%{ if (!$input) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
-    return $null;
+%typemap(directorout, canthrow=1, warning=SWIGWARN_TYPEMAP_THREAD_UNSAFE_MSG) const QString & {
+    if (!$input) {
+        SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+        return $null;
    }
-   /* possible thread/reentrant code problem */
    static string $1_str;
    $1_str = $input;
-   $result = &$1_str; %}
+   $result = &$1_str;
+}
 
-%typemap(directorin) const QString & %{ $input = SWIG_csharp_string_callback($1.toUtf8().constData()); %}
+%typemap(directorin) const QString & {
+    $input = SWIG_csharp_string_callback($1.toUtf8().constData());
+}
 
-%typemap(csvarin, excode=SWIGEXCODE2) const QString & %{
+%typemap(csvarin, excode=SWIGEXCODE2) const QString & {
     set {
       $imcall;$excode
-    } %}
-%typemap(csvarout, excode=SWIGEXCODE2) const QString & %{
+    }
+}
+
+%typemap(csvarout, excode=SWIGEXCODE2) const QString & {
     get {
-      string ret = $imcall;$excode
-      return ret;
-    } %}
+        string ret = $imcall;$excode;
+        return ret;
+    }
+}
 
 %typemap(typecheck) const QString & = char *;
 
-%typemap(throws, canthrow=1) const QString &
-%{ SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, $1.c_str());
-   return $null; %}
+%typemap(throws, canthrow=1) const QString & {
+    SWIG_CSharpSetPendingException(SWIG_CSharpApplicationException, $1.c_str());
+    return $null;
+}
 
 #endif
 
@@ -490,4 +475,4 @@ public:
 %include "dtkPlugin.h"
 %include "dtkPluginManager.h"
 
-#endif
+/* dtkCoreSupport.i ends here */

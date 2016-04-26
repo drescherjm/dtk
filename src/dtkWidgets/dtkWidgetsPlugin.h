@@ -15,14 +15,14 @@
 
 #pragma once
 
-#include "dtkCoreWidgetFactory.h"
+#include "dtkWidgetFactory.h"
 
 // ///////////////////////////////////////////////////////////////////
 // DTK_DECLARE_WIDGET_FACTORY
 // ///////////////////////////////////////////////////////////////////
 
 #define DTK_DECLARE_WIDGET_FACTORY(type,Export)                              \
-    class Export type##WidgetFactory : public dtkCoreWidgetFactory{}; \
+    class Export type##WidgetFactory : public dtkWidgetFactory{}; \
     template <typename T> QWidget *type##WidgetCreator() { return new T; };
 
 

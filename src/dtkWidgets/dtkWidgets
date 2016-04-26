@@ -1,6 +1,6 @@
 #include "dtkApplication.h"
 #include "dtkDistributedGuiApplication.h"
-#include "dtkCoreWidgetFactory.h"
+#include "dtkWidgetFactory.h"
 #include "dtkToolBox.h"
 #include "dtkWidgetsPlugin.h"
 #include "dtkWidgetsTag.h"

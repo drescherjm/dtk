@@ -89,7 +89,7 @@ add_custom_target(dtkWidgets-doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkwidgets/dtkwidgets.qhp -o ${dtk_INSTALL_DOCS}/dtkwidgets.qch
   COMMENT "-- Generating dtkWidgets documentation")
 
-add_dependencies(dtkWidgets-doc dtk-widgets)
+add_dependencies(dtkWidgets-doc dtk-doc)
 
 ## ###################################################################
 ## dtkCore

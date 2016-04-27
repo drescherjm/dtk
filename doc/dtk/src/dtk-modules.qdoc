@@ -42,6 +42,9 @@
   \row
      \li \l{Log Module} {Log}
      \li Logging framework.
+  \row
+     \li \l{Widgets Module} {Widgets}
+     \li Widgets framework.
   \endtable
 
   \section1 dtk Applicative Layers

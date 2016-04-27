@@ -1,0 +1,57 @@
+## Version: $Id$
+##
+######################################################################
+##
+### Commentary:
+##
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+##
+### Code:
+
+include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
+
+project      = dtkWidgets
+description  = dtkWidgets Reference Documentation
+url          = ../dtkwidgets
+
+qhp.projects = dtkWidgets
+
+qhp.dtkWidgets.file             = dtkwidgets.qhp
+qhp.dtkWidgets.namespace        = fr.inria.dtk.dtkwidgets
+qhp.dtkWidgets.virtualFolder    = dtkwidgets
+qhp.dtkWidgets.indexTitle       = Widgets Module
+qhp.dtkWidgets.indexRoot        =
+qhp.dtkWidgets.filterAttributes = dtkwidgets
+
+qhp.dtkWidgets.customFilters.dtk.name             = dtkWidgets
+qhp.dtkWidgets.customFilters.dtk.filterAttributes = dtkwidgets
+
+qhp.dtkWidgets.subprojects                    = classes
+qhp.dtkWidgets.subprojects.classes.title      = C++ Classes
+qhp.dtkWidgets.subprojects.classes.indexTitle = Widgets C++ Classes
+qhp.dtkWidgets.subprojects.classes.selectors  = class fake:headerfile
+qhp.dtkWidgets.subprojects.classes.sortPages  = true
+
+headerdirs  += ../../../src/dtkWidgets
+sourcedirs  += ../../../src/dtkWidgets \
+               ../../../doc/dtkWidgets/src
+
+exampledirs += ../../../doc/dtkWidgets/snp
+imagedirs   += ../../../doc/dtkWidgets/img
+excludedirs += ../../../doc/dtkWidgets/snp
+
+navigation.landingpage    = "Widgets Module"
+navigation.cppclassespage = "Widgets C++ Classes"
+
+outputdir = @dtk_INSTALL_DOCS@/dtkwidgets
+
+indexes = \
+  @QT5_DOCUMENTATION_D@/qtcore/qtcore.index \
+  @dtk_INSTALL_DOCS@/dtkwidgets/dtkwidgets.index
+
+######################################################################
+### dtkwidgets.qdocconf.in ends here

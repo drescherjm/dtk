@@ -78,6 +78,20 @@ add_custom_target(dtkLog-doc
 add_dependencies(dtkLog-doc dtk-doc)
 
 ## ###################################################################
+## dtkWidgets
+## ###################################################################
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dtkWidgets/dtkwidgets.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/dtkwidgets.qdocconf IMMEDIATE @ONLY)
+
+add_custom_target(dtkWidgets-doc
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND ${DTK_QDOC_EXECUTABLE} dtkwidgets.qdocconf
+  COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkwidgets/dtkwidgets.qhp -o ${dtk_INSTALL_DOCS}/dtkwidgets.qch
+  COMMENT "-- Generating dtkWidgets documentation")
+
+add_dependencies(dtkWidgets-doc dtk-widgets)
+
+## ###################################################################
 ## dtkCore
 ## ###################################################################
 
@@ -129,7 +143,7 @@ add_custom_target(doc
   COMMAND ${QT5_QHGN_EXECUTABLE} ${dtk_INSTALL_DOCS}/dtkdoc/dtkdoc.qhp -o ${dtk_INSTALL_DOCS}/dtkdoc.qch
   COMMENT "-- Generating dtk documentation")
 
-add_dependencies(doc dtkMeta-doc dtkLog-doc dtkCore-doc dtkDistributed-doc dtkComposer-doc)
+add_dependencies(doc dtkMeta-doc dtkLog-doc dtkWidgets-doc dtkCore-doc dtkDistributed-doc dtkComposer-doc)
 
 ######################################################################
 ### CMakeLists.txt ends here

@@ -19,7 +19,7 @@
 
     \brief Provides fundamental concepts and related tools.
 
-    dtkCore, is the foundation layer in dtk, the one that reflects its
+    dtkCore is the foundation layer in dtk, the one that reflects its
     intents as well as it's design. Other layers provided with dtk
     rely on the core, and essentially provide thematic add-ons to
     manipulate the fundamental concepts found in dtkCore such as data,

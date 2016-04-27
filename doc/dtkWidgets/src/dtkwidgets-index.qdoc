@@ -1,0 +1,31 @@
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+/*!
+    \page dtkwidgets-index.html
+    \title Widgets Module
+
+    \brief The dtkWidgets module is part of dtk's essential \l {All Modules} {modules}.
+
+    \section1 Reference
+    These are links to the API reference materials.
+    \list
+    \li \l{Widgets C++ Classes}{C++ Classes API}
+    \endlist
+
+    \sa {All Modules}
+*/
+
+//
+// dtkwidgets-index.qdoc ends here

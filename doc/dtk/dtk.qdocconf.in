@@ -49,6 +49,7 @@ indexes = \
   @dtk_INSTALL_DOCS@/dtkmeta/dtkmeta.index \
   @dtk_INSTALL_DOCS@/dtkcore/dtkcore.index \
   @dtk_INSTALL_DOCS@/dtkcomposer/dtkcomposer.index \
+  @dtk_INSTALL_DOCS@/dtkwidgets/dtkwidgets.index \
   @dtk_INSTALL_DOCS@/dtkdistributed/dtkdistributed.index \
   @dtk_INSTALL_DOCS@/dtkio/dtkio.index \
   @dtk_INSTALL_DOCS@/dtklinearalgebradense/dtklinearalgebradense.index \

@@ -39,12 +39,6 @@ public:
     QCommandLineParser  *parser(void);
 
 public:
-    static dtkDistributedApplication *create(int &argc, char *argv[])
-    {
-        return new dtkDistributedApplication(argc, argv);
-    }
-
-public:
     bool isMaster(void);
     virtual bool noGui(void);
     dtkDistributedCommunicator *communicator(void);

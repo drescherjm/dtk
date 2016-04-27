@@ -207,17 +207,17 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
         error += path;
         error += " - ";
         error += loader->errorString();
-        if(d->verboseLoading) { dtkWarn() << error; }
+        dtkWarn() << error;
         delete loader;
         return;
     }
 
     T *plugin = qobject_cast<T *>(loader->instance());
 
-    if(!plugin) {
+    if (!plugin) {
         QString error = "Unable to retrieve ";
         error += path;
-        if(d->verboseLoading) { dtkWarn() << error; }
+        dtkWarn() << error;
 
         loader->unload();
         delete loader;

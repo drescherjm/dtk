@@ -12,9 +12,9 @@
 
 // Code:
 
-#include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeLeaf.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -427,6 +427,32 @@ QAction *dtkComposerScene::unmaskEdgesAction(void)
 QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor color)
 {
     return d->flagged_nodes[color];
+}
+
+bool dtkComposerScene::checkImplementations(void)
+{
+    populateNodes();
+    foreach (dtkComposerSceneNode * node, d->all_nodes) {
+        if (dtkComposerNodeLeafObject *nobj = dynamic_cast<dtkComposerNodeLeafObject*>(node->wrapee())) {
+            if (nobj->currentImplementation().isEmpty()) {
+                QMessageBox msgBox;
+
+                msgBox.setText("Node implementation is missing. Run anyway?");
+                msgBox.setInformativeText("A node has no implementation set, an execution may give you random results or a crash !");
+                QString msg = QString("The following node is missing an implementation: %1.\nAvailable implementations:\n%2").
+                    arg(node->title()).
+                    arg(nobj->implementations().join("\n"));
+                msgBox.setDetailedText(msg);
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Cancel);
+
+                if(msgBox.exec() == QMessageBox::Cancel)
+                    return false;
+
+            }
+        }
+    }
+    return true;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -1240,6 +1266,26 @@ void dtkComposerScene::populateEdges(dtkComposerSceneNode *node)
             this->populateEdges(block);
     }
 }
+
+void dtkComposerScene::populateNodes(dtkComposerSceneNode *node)
+{
+    if (!node) {
+        node = d->root_node;
+        d->all_nodes.clear();
+    }
+
+    d->all_nodes << node;
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        foreach(dtkComposerSceneNode *child, composite->nodes())
+            this->populateNodes(child);
+
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+            this->populateNodes(block);
+    }
+}
+
 
 //
 // dtkComposerScene.cpp ends here

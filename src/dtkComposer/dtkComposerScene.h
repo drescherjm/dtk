@@ -87,6 +87,7 @@ public:
 
 public:
     QList<dtkComposerSceneNodeLeaf *> flagged(Qt::GlobalColor);
+    bool checkImplementations(void);
 
 public:
     bool maskedEdges(void);
@@ -166,6 +167,7 @@ protected:
 
 protected:
     void populateEdges(dtkComposerSceneNode *root = NULL);
+    void populateNodes(dtkComposerSceneNode *root = NULL);
 
 // #pragma mark -
 // #pragma mark - Internal sigs handling

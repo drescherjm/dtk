@@ -242,7 +242,9 @@ void dtkComposerWidget::run(void)
 {
     this->updateRemotes(d->scene->root());
 
-    QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+    if (d->scene->checkImplementations()) {
+        QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+    }
 }
 
 void dtkComposerWidget::step(void)

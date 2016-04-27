@@ -51,6 +51,7 @@ public:
 public:
     dtkComposerSceneEdgeList connected_edges;
     dtkComposerSceneEdgeList all_edges;
+    dtkComposerSceneNodeList all_nodes;
 
 public:
     bool masked_edges;

@@ -142,12 +142,12 @@ target_link_libraries(${PROJECT_NAME}
 
 if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
-  if(TCL_FOUND)
-    target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
-  endif()
+ if (DTK_WRAPPING_TCL AND TCL_FOUND)
+   target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
+ endif()
 
-  if(PYTHONLIBS_FOUND)
-    target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+  if(DTK_WRAPPING_PYTHON AND PYTHONLIBS_FOUND)
+      target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
   endif()
 
 endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
@@ -181,7 +181,7 @@ set(${PROJECT_NAME}_MODULES)
 
 if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
-  if(PYTHONLIBS_FOUND)
+  if(DTK_WRAPPING_PYTHON AND PYTHONLIBS_FOUND )
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
       DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
@@ -209,16 +209,19 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(UNIX AND NOT APPLE)
 
-  endif(PYTHONLIBS_FOUND)
+  endif(DTK_WRAPPING_PYTHON AND PYTHONLIBS_FOUND )
 
-  file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
+  if (DTK_WRAPPING_CSHARP)
 
-  foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-      DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
-      COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
-      COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
-  endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+    file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
+
+    foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+      add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
+        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
+        COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
+    endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+  endif (DTK_WRAPPING_CSHARP)
 
 endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 

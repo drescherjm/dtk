@@ -54,7 +54,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
 
     if (conceptName != pluginConcept) {
         if (this->verboseLoading) {
-            dtkInfo() << "skip plugin: not an implementation of the current concept" << conceptName << ", current is " << pluginConcept;
+            dtkTrace() << "skip plugin: not an implementation of the current concept" << conceptName << ", current is " << pluginConcept;
         }
         return false;
     }

@@ -34,6 +34,7 @@ public:
     QHash<QString, QVariant> names;
     QHash<QString, QVariant> versions;
     QHash<QString, QVariantList> dependencies;
+    QHash<QString, QVariant> concept;
 
 public:
     QHash<QString, QPluginLoader *> loaders;
@@ -46,6 +47,17 @@ public:
 template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& path)
 {
     bool status = true;
+    QString conceptName = QMetaType::typeName(qMetaTypeId<T*>());
+    conceptName.remove("Plugin*");
+
+    QString pluginConcept = this->concept.value(path).toString();
+
+    if (conceptName != pluginConcept) {
+        if (this->verboseLoading) {
+            dtkInfo() << "skip plugin: not an implementation of the current concept" << conceptName << ", current is " << pluginConcept;
+        }
+        return false;
+    }
 
     foreach(QVariant item, this->dependencies.value(path)) {
 
@@ -172,6 +184,7 @@ template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
     QPluginLoader *loader = new QPluginLoader(path);
 
            d->names.insert(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
+         d->concept.insert(path, loader->metaData().value("MetaData").toObject().value("concept").toVariant());
         d->versions.insert(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
     d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
 
@@ -201,6 +214,8 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
     }
 
     loader->setLoadHints(QLibrary::ExportExternalSymbolsHint);
+
+    if(d->verboseLoading) { dtkTrace() << "Loading plugin from " << path;}
 
     if(!loader->load()) {
         QString error = "Unable to load ";

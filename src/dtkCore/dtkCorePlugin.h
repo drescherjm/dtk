@@ -53,6 +53,7 @@ public:
 #define DTK_DECLARE_PLUGIN(type, Export)                                \
     class Export type##Plugin : public dtkCorePluginBase{};             \
                                                                         \
+    Q_DECLARE_METATYPE(type##Plugin*);                                  \
     Q_DECLARE_INTERFACE(type##Plugin, DTK_DECLARE_PLUGIN_INTERFACE(type));
 
 // ///////////////////////////////////////////////////////////////////

@@ -17,9 +17,6 @@
 #include "dtkComposerViewLayoutItem.h"
 #include "dtkComposerViewWidget.h"
 
-#include <dtkCoreSupport/dtkAbstractView.h>
-#include <dtkCoreSupport/dtkAbstractViewFactory.h>
-
 #include <QtWidgets>
 
 // /////////////////////////////////////////////////////////////////
@@ -575,7 +572,7 @@ void dtkComposerViewLayoutItem::unsplit(void)
 
     } else {
 
-        qDebug() << DTK_PRETTY_FUNCTION << "Unhandled case.";
+        qDebug() << Q_FUNC_INFO << "Unhandled case.";
 
     }
 

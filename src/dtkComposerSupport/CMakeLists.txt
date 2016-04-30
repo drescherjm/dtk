@@ -14,6 +14,18 @@
 
 project(dtkComposerSupport)
 
+if(DTK_BUILD_SUPPORT_COMPOSER AND NOT DTK_BUILD_SUPPORT_GUI)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_COMPOSER\" because it's dependencies (DTK_BUILD_SUPPORT_GUI) were not met")
+endif()
+
+if(DTK_BUILD_SUPPORT_COMPOSER AND NOT DTK_BUILD_SUPPORT_CONTAINER)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_COMPOSER\" because it's dependencies (DTK_BUILD_SUPPORT_CONTAINER) were not met")
+endif()
+
+if(DTK_BUILD_SUPPORT_COMPOSER AND NOT DTK_BUILD_WIDGETS)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_COMPOSER\" because it's dependencies (DTK_BUILD_WIDGETS) were not met")
+endif()
+
 ## #################################################################
 ## Sources
 ## #################################################################
@@ -401,7 +413,7 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES_QRC})
 
 target_link_libraries(${PROJECT_NAME}
-  dtkMathSupport
+  dtkMath
   dtkContainerSupport
   dtkCoreSupport
   dtkGuiSupport

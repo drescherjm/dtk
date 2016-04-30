@@ -14,6 +14,10 @@
 
 project(dtkContainerSupport)
 
+if(DTK_BUILD_SUPPORT_CONTAINER AND NOT DTK_BUILD_SUPPORT_CORE)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_CONTAINER\" because it's dependencies (DTK_BUILD_SUPPORT_CORE) were not met")
+endif()
+
 ## #################################################################
 ## Sources
 ## #################################################################

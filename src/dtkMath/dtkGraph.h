@@ -15,14 +15,14 @@
 
 #pragma once
 
-#include "dtkMathSupportExport.h"
+#include "dtkMathExport.h"
 
 #include <QtCore>
 
 class dtkGraphEdge;
 class dtkGraphPrivate;
 
-class DTKMATHSUPPORT_EXPORT dtkGraph : public QObject
+class DTKMATH_EXPORT dtkGraph : public QObject
 {
     Q_OBJECT
 

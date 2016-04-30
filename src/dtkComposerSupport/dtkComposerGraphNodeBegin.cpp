@@ -31,7 +31,7 @@
 
 #include <dtkLog>
 
-#include <dtkMathSupport/dtkGraph.h>
+#include <dtkMath/dtkGraph.h>
 
 class dtkComposerGraphNodeBeginPrivate
 {

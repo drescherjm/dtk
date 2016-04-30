@@ -23,7 +23,7 @@
 #include <QtCore>
 #include <QtWidgets>
 
-#include <dtkMathSupport/dtkGraphEdge.h>
+#include <dtkMath/dtkGraphEdge.h>
 #include "dtkComposerGraphNode.h"
 
 class dtkComposerGraphEdgePrivate;

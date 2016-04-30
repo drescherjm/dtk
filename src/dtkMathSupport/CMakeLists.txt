@@ -7,8 +7,6 @@ project(dtkMathSupport)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
-  dtkGraph.h
-  dtkGraphEdge.h
   dtkMath.h
   dtkMath.tpp
   dtkMatrix.h
@@ -23,8 +21,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkVector3D.tpp)
 
 set(${PROJECT_NAME}_SOURCES
-  dtkGraph.cpp
-  dtkGraphEdge.cpp
   dtkMath.cpp
   dtkMatrix.cpp)
 

@@ -3,6 +3,10 @@
 
 project(dtkGuiSupport)
 
+if(DTK_BUILD_SUPPORT_GUI AND NOT DTK_BUILD_SUPPORT_CORE)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_GUI\" because it's dependencies (DTK_BUILD_SUPPORT_CORE) were not met")
+endif()
+
 ## #################################################################
 ## Sources
 ## #################################################################

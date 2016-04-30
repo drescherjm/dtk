@@ -14,6 +14,12 @@
 
 project(dtkCoreSupport)
 
+
+if(DTK_BUILD_SUPPORT_CORE AND NOT DTK_BUILD_SUPPORT_MATH)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_CORE\" because it's dependencies (DTK_BUILD_SUPPORT_MATH) were not met")
+endif()
+
+
 ## #################################################################
 ## Sources
 ## #################################################################

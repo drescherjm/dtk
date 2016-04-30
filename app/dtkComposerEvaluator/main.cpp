@@ -21,9 +21,6 @@
 #include <dtkCore>
 #include <dtkWidgets>
 
-#include <dtkCoreSupport/dtkPluginManager.h>
-#include <dtkCoreSupport/dtkAbstractProcessFactory.h>
-
 #include <QtConcurrent>
 
 int main(int argc, char **argv)
@@ -134,6 +131,5 @@ int main(int argc, char **argv)
             qApp->exec();
         }
     }
-    dtkPluginManager::instance()->uninitialize();
 }
 

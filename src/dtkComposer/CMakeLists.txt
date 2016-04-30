@@ -14,6 +14,14 @@
 
 project(dtkComposer)
 
+if(DTK_BUILD_COMPOSER AND NOT DTK_BUILD_WIDGETS)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_COMPOSER\" because it's dependencies (DTK_BUILD_WIDGETS) were not met")
+endif()
+
+if(DTK_BUILD_COMPOSER AND NOT DTK_BUILD_DISTRIBUTED)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_COMPOSER\" because it's dependencies (DTK_BUILD_DISTRIBUTED) were not met")
+endif()
+
 ## #################################################################
 ## Input
 ## #################################################################
@@ -279,8 +287,7 @@ target_link_libraries(${PROJECT_NAME} dtkMeta)
 target_link_libraries(${PROJECT_NAME} dtkWidgets)
 
 target_link_libraries(${PROJECT_NAME} dtkDistributed)
-target_link_libraries(${PROJECT_NAME} dtkMathSupport)
-target_link_libraries(${PROJECT_NAME} dtkCoreSupport)
+target_link_libraries(${PROJECT_NAME} dtkMath)
 
 ## #################################################################
 ## Export header file

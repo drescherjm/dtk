@@ -48,8 +48,8 @@
 
 #include <dtkLog>
 
-#include <dtkMathSupport/dtkGraph.h>
-#include <dtkMathSupport/dtkGraphEdge.h>
+#include <dtkMath/dtkGraph.h>
+#include <dtkMath/dtkGraphEdge.h>
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerGraphPrivate

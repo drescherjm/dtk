@@ -25,7 +25,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTA
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 target_link_libraries(${PROJECT_NAME}
-  dtkCoreSupport
   dtkComposer
   dtkDistributed
   dtkLog

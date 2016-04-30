@@ -13,7 +13,6 @@
 ### Code:
 
 if(DTK_BUILD_COMPOSER)
-  add_subdirectory(dtkCreator)
   add_subdirectory(dtkComposerEvaluator)
 endif(DTK_BUILD_COMPOSER)
 

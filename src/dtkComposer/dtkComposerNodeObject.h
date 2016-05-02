@@ -50,7 +50,8 @@ public:
 
 protected:
     QString m_implementation;
-    T *m_object;
+    T* m_object;
+    QHash<QString, T*> m_processes;
     const dtkCorePluginFactory<T> *m_factory;
 };
 

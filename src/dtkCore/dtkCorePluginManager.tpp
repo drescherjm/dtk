@@ -158,7 +158,8 @@ template <typename T> void dtkCorePluginManager<T>::initialize(const QString& pa
 
     foreach(QString path2, path.split(":",QString::SkipEmptyParts )) {
         QDir dir(path2);
-        dtkTrace() << "scanning directory for plugins:" << path2;
+        if(d->verboseLoading) {dtkTrace() << "scanning directory for plugins:" << path2; }
+
         foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
             this->scan(info.absoluteFilePath());
 

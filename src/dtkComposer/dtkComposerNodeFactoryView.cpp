@@ -12,7 +12,7 @@
  * 
  */
 
-#include "dtkComposerFactory.h"
+#include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFactoryView.h"
 #include "dtkComposerNodeMetaData.h"
 #include "dtkComposerSceneNode.h"
@@ -25,7 +25,7 @@
 class dtkComposerNodeFactoryViewPrivate
 {
 public:
-    dtkComposerFactory *factory;
+    dtkComposerNodeFactory *factory;
 
 public:
     dtkWidgetsTagCloud *cloud;
@@ -78,7 +78,7 @@ dtkComposerNodeFactoryView::~dtkComposerNodeFactoryView(void)
     d = NULL;
 }
 
-void dtkComposerNodeFactoryView::setFactory(dtkComposerFactory *factory)
+void dtkComposerNodeFactoryView::setFactory(dtkComposerNodeFactory *factory)
 {
     d->factory = factory;
 

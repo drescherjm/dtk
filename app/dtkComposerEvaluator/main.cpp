@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     // main_settings->endGroup();
     // dtkPluginManager::instance()->initialize();
 
-    dtkComposerFactory *factory = dtkComposerFactory::instance();
+    dtkComposerNodeFactory *factory = dtkComposer::node::factory();
 
 //     if (args[1] == "--spawn") {
 

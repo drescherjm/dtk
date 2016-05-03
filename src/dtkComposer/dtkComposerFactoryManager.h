@@ -1,28 +1,22 @@
-// Version: $Id$
-//
-//
-
-// Commentary:
-//
-//
-
-// Change Log:
-//
-//
-
-// Code:
+/* dtkComposerFactoryManager.h ---
+ *
+ * Author: Nicolas Niclausse
+ * Copyright (C) 2016 - Nicolas Niclausse, Inria.
+ * Created: 2016/05/02 08:04:58
+ */
 
 #pragma once
 
 #include "dtkComposerExport.h"
-
 #include "dtkComposerNodeFactory.h"
 
-class DTKCOMPOSER_EXPORT dtkComposerFactory : public dtkComposerNodeFactory
+class dtkComposerFactoryManagerPrivate;
+
+class DTKCOMPOSER_EXPORT dtkComposerFactoryManager
 {
 public:
-     dtkComposerFactory(void);
-    ~dtkComposerFactory(void);
+     dtkComposerFactoryManager(void);
+    ~dtkComposerFactoryManager(void);
 
 public:
     void initNodeBase(void);
@@ -36,12 +30,9 @@ public:
     void initNodeContainer(void);
 
 public:
-    static dtkComposerFactory *instance(void);
+    dtkComposerNodeFactory *factory(void);
 
 private:
-    static dtkComposerFactory *s_instance;
+    class dtkComposerFactoryManagerPrivate *d;
 
 };
-
-//
-// dtkComposerFactory.h ends here

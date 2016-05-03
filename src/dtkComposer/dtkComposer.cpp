@@ -13,7 +13,7 @@
 #include <dtkConfig.h>
 
 #include "dtkComposerNodeFactory.h"
-#include "dtkComposerFactory.h"
+#include "dtkComposerFactoryManager.h"
 #include "dtkComposerExtension.h"
 #include "dtkComposerSettings.h"
 
@@ -21,8 +21,22 @@ namespace dtkComposer
 {
     namespace node
     {
+        namespace _private {
+            dtkComposerFactoryManager manager;
+        }
         dtkComposerNodeFactory *factory(void) {
-            return dtkComposerFactory::instance();
+            return _private::manager.factory();
+        }
+        void initialize(void) {
+            _private::manager.initNodeBase();
+            _private::manager.initNodeBoolean();
+            _private::manager.initNodeControl();
+            _private::manager.initNodeConstants();
+            _private::manager.initNodeDistributed();
+            _private::manager.initNodeFile();
+            _private::manager.initNodeNumber();
+            _private::manager.initNodeString();
+            _private::manager.initNodeContainer();
         }
     }
 

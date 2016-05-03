@@ -26,6 +26,7 @@ namespace dtkComposer
 {
     namespace node {
         DTKCOMPOSER_EXPORT dtkComposerNodeFactory *factory(void);
+        DTKCOMPOSER_EXPORT void initialize(void);
     }
     namespace extension {
         DTKCOMPOSER_EXPORT dtkComposerExtensionPluginFactory& pluginFactory(void);

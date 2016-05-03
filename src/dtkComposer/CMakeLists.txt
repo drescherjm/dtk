@@ -45,7 +45,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkComposerEvaluatorProcess.h
   dtkComposerEvaluatorSlave.h
   dtkComposerExtension.h
-  dtkComposerFactory.h
+  dtkComposerFactoryManager.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h
   dtkComposerGraphNode.h
@@ -169,7 +169,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerEvaluator.cpp
   dtkComposerEvaluatorProcess.cpp
   dtkComposerEvaluatorSlave.cpp
-  dtkComposerFactory.cpp
+  dtkComposerFactoryManager.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
   dtkComposerGraphNodeBegin.cpp

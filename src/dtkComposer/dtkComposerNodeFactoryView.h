@@ -42,7 +42,7 @@ public:
     void addNote(void);
 
 public:
-    void setFactory(dtkComposerFactory *factory);
+    void setFactory(dtkComposerNodeFactory *factory);
 
 public:
     void setDark(void);

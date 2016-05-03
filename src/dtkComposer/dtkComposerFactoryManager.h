@@ -33,6 +33,6 @@ public:
     dtkComposerNodeFactory *factory(void);
 
 private:
-    class dtkComposerFactoryManagerPrivate *d;
+    dtkComposerFactoryManagerPrivate *d;
 
 };

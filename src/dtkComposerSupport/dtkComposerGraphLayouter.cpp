@@ -142,7 +142,7 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
     foreach(dtkComposerGraphEdge *edge, this->reversed)
         reverse(edge);
 
-    // qDebug() << __func__ << this->reversed.count() << "edges reversed";
+    // qDebug() << __FUNCTION__ << this->reversed.count() << "edges reversed";
 }
 
 void dtkComposerGraphLayouterPrivate::assignLayers(void)
@@ -165,7 +165,7 @@ void dtkComposerGraphLayouterPrivate::assignLayers(void)
         }
     }
 
-    // qDebug() << __func__ << "Layout height is" << height;
+    // qDebug() << __FUNCTION__ << "Layout height is" << height;
 }
 
 void dtkComposerGraphLayouterPrivate::createDummys(void)
@@ -266,7 +266,7 @@ dtkComposerGraphNodeList sort(dtkComposerGraphNodeList& nodes, dtkComposerGraphE
         if(!(inset(node, node_list, edge_list).count()))
             nodel << node;
 
-    // qDebug() << __func__ << nodel.count() << "nodel to be sorted";
+    // qDebug() << __FUNCTION__ << nodel.count() << "nodel to be sorted";
 
     while(!nodel.isEmpty()) {
 
@@ -283,7 +283,7 @@ dtkComposerGraphNodeList sort(dtkComposerGraphNodeList& nodes, dtkComposerGraphE
         }
     }
 
-    // qDebug() << __func__ << sortd.count() << "nodel sorted";
+    // qDebug() << __FUNCTION__ << sortd.count() << "nodel sorted";
 
     return sortd;
 }

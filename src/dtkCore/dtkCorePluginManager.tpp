@@ -145,8 +145,8 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
         ++i;
     }
 
-    dtkWarn() << __func__ << plugin_name << " not found ";
-    dtkWarn() << __func__ << "keys" << d->names.keys() << d->names.values();
+    dtkWarn() << __FUNCTION__ << plugin_name << " not found ";
+    dtkWarn() << __FUNCTION__ << "keys" << d->names.keys() << d->names.values();
 }
 
 // /////////////////////////////////////////////////////////////////

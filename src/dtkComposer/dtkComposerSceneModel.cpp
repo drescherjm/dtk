@@ -116,7 +116,7 @@ QVariant dtkComposerSceneModel::data(const QModelIndex& index, int role) const
     
     if(control) {
 
-        // qDebug() << __func__ << "Got control";
+        // qDebug() << __FUNCTION__ << "Got control";
 
         return QString("Block (%1)").arg(dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(index.internalPointer()))->title());
     }

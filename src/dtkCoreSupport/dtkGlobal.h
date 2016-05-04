@@ -65,7 +65,7 @@
 #elif defined __GNUG__
 #  define DTK_PRETTY_FUNCTION __PRETTY_FUNCTION__
 #else
-#  define DTK_PRETTY_FUNCTION __func__
+#  define DTK_PRETTY_FUNCTION __FUNCTION__
 #endif
 
 #define DTK_DEFAULT_IMPLEMENTATION                                      \

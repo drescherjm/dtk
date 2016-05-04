@@ -226,7 +226,7 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::LostUser(xn::UserGenerato
 
 void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationStarted(xn::SkeletonCapability& skeleton, XnUserID user, void* cxt)
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 }
 
 void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationEnded(xn::SkeletonCapability& skeleton, XnUserID user, XnBool bSuccess, void* cxt)
@@ -265,7 +265,7 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::PoseDetected(xn::PoseDete
 
 bool dtkVrTrackerKinectPrivateThread::assignUser(XnUserID user)
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     if (this->user_id)
         return false;
@@ -286,7 +286,7 @@ bool dtkVrTrackerKinectPrivateThread::assignUser(XnUserID user)
 
 void dtkVrTrackerKinectPrivateThread::findUser(void)
 {
-    qDebug() << __func__;
+    qDebug() << __FUNCTION__;
 
     if (this->user_id != 0)
         return;

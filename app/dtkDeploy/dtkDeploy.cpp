@@ -19,7 +19,7 @@
 #include <iostream>
 
 #if defined ( WIN32 )
-#define __func__ __FUNCTION__
+#define __FUNCTION__ __FUNCTION__
 #endif
 
 bool runStripEnabled = true;
@@ -102,7 +102,7 @@ FrameworkInfo parseOtoolLibraryLine(const QString &line, bool useDebugLibs)
         const QString currentPart = parts.at(part).simplified() ;
         ++part;
 
-        qDebug() << __func__ << state << parts << currentPart << part;
+        qDebug() << __FUNCTION__ << state << parts << currentPart << part;
 
         if (currentPart == "")
             continue;

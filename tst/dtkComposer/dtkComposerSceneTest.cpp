@@ -32,7 +32,7 @@ void dtkComposerSceneTestCase::test(void)
     dtkComposerStack *stack = new dtkComposerStack;
 
     dtkComposerScene *scene = new dtkComposerScene;
-    scene->setFactory(dtkComposer::node::factory());
+    scene->setFactory(&(dtkComposer::node::factory()));
     scene->setGraph(graph);
     scene->setStack(stack);
 
@@ -40,7 +40,7 @@ void dtkComposerSceneTestCase::test(void)
     view->setScene(scene);
 
     dtkComposerNodeFactoryView *nodes = new dtkComposerNodeFactoryView;
-    nodes->setFactory(dtkComposer::node::factory());
+    nodes->setFactory(&(dtkComposer::node::factory()));
 
     dtkComposerSceneModel *scene_model = new dtkComposerSceneModel;
     scene_model->setScene(scene);
@@ -74,7 +74,7 @@ void dtkComposerSceneTestCase::test(void)
     { // Create a boolean node
 
 	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(dtkComposer::node::factory());
+	command->setFactory(&(dtkComposer::node::factory()));
 	command->setScene(scene);
 	command->setGraph(graph);
 	command->setParent(scene->root());
@@ -88,7 +88,7 @@ void dtkComposerSceneTestCase::test(void)
     { // Create another boolean node
 
 	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(dtkComposer::node::factory());
+	command->setFactory(&(dtkComposer::node::factory()));
 	command->setScene(scene);
 	command->setGraph(graph);
 	command->setParent(scene->root());
@@ -102,7 +102,7 @@ void dtkComposerSceneTestCase::test(void)
     { // Create another boolean node
 
 	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(dtkComposer::node::factory());
+	command->setFactory(&(dtkComposer::node::factory()));
 	command->setScene(scene);
 	command->setGraph(graph);
 	command->setParent(scene->root());
@@ -116,7 +116,7 @@ void dtkComposerSceneTestCase::test(void)
     { // Create a boolean operator node
 
 	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(dtkComposer::node::factory());
+	command->setFactory(&(dtkComposer::node::factory()));
 	command->setScene(scene);
 	command->setGraph(graph);
 	command->setParent(scene->root());

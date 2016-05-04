@@ -40,12 +40,12 @@ set(${PROJECT_NAME}_HEADERS
   # dtkComposerControlsListItemLeafProcess.h
   dtkComposerControlsListItemReal.h
   dtkComposerControlsListItemString.h
+  dtkComposerDefaultExtensions.h
   dtkComposerEvaluator.h
   dtkComposerEvaluator_p.h
   dtkComposerEvaluatorProcess.h
   dtkComposerEvaluatorSlave.h
   dtkComposerExtension.h
-  dtkComposerFactoryManager.h
   dtkComposerGraph.h
   dtkComposerGraphEdge.h
   dtkComposerGraphNode.h
@@ -169,7 +169,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerEvaluator.cpp
   dtkComposerEvaluatorProcess.cpp
   dtkComposerEvaluatorSlave.cpp
-  dtkComposerFactoryManager.cpp
   dtkComposerGraph.cpp
   dtkComposerGraphEdge.cpp
   dtkComposerGraphNodeBegin.cpp

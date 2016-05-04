@@ -20,7 +20,6 @@
 #include "dtkComposerNode.h"
 #include "dtkComposerNodeObject.h"
 #include "dtkComposerNodeFactory.h"
-#include "dtkComposerFactoryManager.h"
 #include "dtkComposerNodeFactoryView.h"
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"

@@ -13,30 +13,39 @@
 #include <dtkConfig.h>
 
 #include "dtkComposerNodeFactory.h"
-#include "dtkComposerFactoryManager.h"
 #include "dtkComposerExtension.h"
 #include "dtkComposerSettings.h"
+#include "dtkComposerDefaultExtensions.h"
 
 namespace dtkComposer
 {
     namespace node
     {
         namespace _private {
-            dtkComposerFactoryManager manager;
+            dtkComposerNodeFactory factory;
         }
-        dtkComposerNodeFactory *factory(void) {
-            return _private::manager.factory();
+        dtkComposerNodeFactory& factory(void) {
+            return _private::factory;
         }
         void initialize(void) {
-            _private::manager.initNodeBase();
-            _private::manager.initNodeBoolean();
-            _private::manager.initNodeControl();
-            _private::manager.initNodeConstants();
-            _private::manager.initNodeDistributed();
-            _private::manager.initNodeFile();
-            _private::manager.initNodeNumber();
-            _private::manager.initNodeString();
-            _private::manager.initNodeContainer();
+            dtkComposerBaseExtension baseExt;
+            baseExt.extend(&(_private::factory));
+            dtkComposerBooleanExtension boolExt;
+            boolExt.extend(&(_private::factory));
+            dtkComposerControlExtension controlExt;
+            controlExt.extend(&(_private::factory));
+            dtkComposerConstantsExtension constantsExt;
+            constantsExt.extend(&(_private::factory));
+            dtkComposerDistributedExtension distributedExt;
+            distributedExt.extend(&(_private::factory));
+            dtkComposerFileExtension fileExt;
+            fileExt.extend(&(_private::factory));
+            dtkComposerNumberExtension numberExt;
+            numberExt.extend(&(_private::factory));
+            dtkComposerStringExtension stringExt;
+            stringExt.extend(&(_private::factory));
+            dtkComposerContainerExtension containerExt;
+            containerExt.extend(&(_private::factory));
         }
     }
 

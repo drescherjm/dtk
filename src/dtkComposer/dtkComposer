@@ -1,3 +1,17 @@
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
 #include "dtkComposer.h"
 #include "dtkComposerCompass.h"
 #include "dtkComposerControls.h"
@@ -71,3 +85,6 @@
 #include "dtkComposerReader.h"
 #include "dtkComposerReaderNoScene.h"
 #include "dtkComposerWriter.h"
+
+//
+// dtkComposer ends here

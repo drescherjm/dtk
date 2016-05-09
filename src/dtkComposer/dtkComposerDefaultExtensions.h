@@ -51,7 +51,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerBaseExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerBaseExtension(void) {};
+     dtkComposerBaseExtension(void) {};
     ~dtkComposerBaseExtension(void) {};
 
 public:
@@ -70,7 +70,7 @@ void dtkComposerBaseExtension::extend(dtkComposerNodeFactory *factory)
 class DTKCOMPOSER_EXPORT dtkComposerFileExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerFileExtension(void) {};
+     dtkComposerFileExtension(void) {};
     ~dtkComposerFileExtension(void) {};
 
 public:
@@ -93,7 +93,7 @@ void dtkComposerFileExtension::extend(dtkComposerNodeFactory *factory)
 class DTKCOMPOSER_EXPORT dtkComposerDistributedExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerDistributedExtension(void) {};
+     dtkComposerDistributedExtension(void) {};
     ~dtkComposerDistributedExtension(void) {};
 
 public:
@@ -119,7 +119,7 @@ void dtkComposerDistributedExtension::extend(dtkComposerNodeFactory *factory)
 class DTKCOMPOSER_EXPORT dtkComposerConstantsExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerConstantsExtension(void) {};
+     dtkComposerConstantsExtension(void) {};
     ~dtkComposerConstantsExtension(void) {};
 
 public:
@@ -132,13 +132,12 @@ void dtkComposerConstantsExtension::extend(dtkComposerNodeFactory *factory)
     factory->record(":dtkComposer/dtkComposerNodeE.json", dtkComposerNodeCreator<dtkComposerNodeE>);
 }
 
-
 // -- Control nodes
 
 class DTKCOMPOSER_EXPORT dtkComposerControlExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerControlExtension(void) {};
+     dtkComposerControlExtension(void) {};
     ~dtkComposerControlExtension(void) {};
 
 public:
@@ -156,13 +155,12 @@ void dtkComposerControlExtension::extend(dtkComposerNodeFactory *factory)
     factory->record(":dtkComposer/dtkComposerNodeControlWhile.json",   dtkComposerNodeCreator<dtkComposerNodeControlWhile>);
 }
 
-
 // -- Boolean nodes
 
 class DTKCOMPOSER_EXPORT dtkComposerBooleanExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerBooleanExtension(void) {};
+     dtkComposerBooleanExtension(void) {};
     ~dtkComposerBooleanExtension(void) {};
 
 public:
@@ -185,19 +183,17 @@ void dtkComposerBooleanExtension::extend(dtkComposerNodeFactory *factory)
     factory->record(":dtkComposer/dtkComposerNodeBooleanOperatorBinaryNimp.json", dtkComposerNodeCreator<dtkComposerNodeBooleanOperatorBinaryNimp>);
 }
 
-
 // -- Number nodes
 
 class DTKCOMPOSER_EXPORT dtkComposerNumberExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerNumberExtension(void) {};
+     dtkComposerNumberExtension(void) {};
     ~dtkComposerNumberExtension(void) {};
 
 public:
     void extend(dtkComposerNodeFactory *factory);
 };
-
 
 void dtkComposerNumberExtension::extend(dtkComposerNodeFactory *factory)
 {
@@ -265,14 +261,12 @@ void dtkComposerNumberExtension::extend(dtkComposerNodeFactory *factory)
 
 }
 
-
-
 // -- String nodes
 
 class DTKCOMPOSER_EXPORT dtkComposerStringExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerStringExtension(void) {};
+     dtkComposerStringExtension(void) {};
     ~dtkComposerStringExtension(void) {};
 
 public:
@@ -287,13 +281,12 @@ void dtkComposerStringExtension::extend(dtkComposerNodeFactory *factory)
     factory->record(":dtkComposer/dtkComposerNodeStringOperatorBinaryLogicEquality.json", dtkComposerNodeCreator<dtkComposerNodeStringOperatorBinaryLogicEquality>);
 }
 
-
 // -- Containers nodes
 
 class DTKCOMPOSER_EXPORT dtkComposerContainerExtension : public dtkComposerExtension
 {
 public:
-    dtkComposerContainerExtension(void) {};
+     dtkComposerContainerExtension(void) {};
     ~dtkComposerContainerExtension(void) {};
 
 public:

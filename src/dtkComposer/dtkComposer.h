@@ -1,20 +1,21 @@
-/* dtkComposer.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Tue Apr  9 12:43:49 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 10:30:06 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 32
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
+
 #include <QtCore>
 
 class dtkComposerNodeFactory;
@@ -34,3 +35,6 @@ namespace dtkComposer
         DTKCOMPOSER_EXPORT void initialize(const QString& path = "");
     }
 }
+
+//
+// dtkComposer.h ends here

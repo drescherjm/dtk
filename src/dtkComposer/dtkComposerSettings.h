@@ -1,21 +1,21 @@
-/* @(#)dtkComposerSettings.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2016 - Nicolas Niclausse, Inria.
- * Created: 2016/02/15 12:38:05
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
+
 #include <QtCore>
 
 class DTKCOMPOSER_EXPORT dtkComposerSettings : public QSettings
@@ -23,10 +23,7 @@ class DTKCOMPOSER_EXPORT dtkComposerSettings : public QSettings
 public:
      dtkComposerSettings(void);
     ~dtkComposerSettings(void);
-
 };
 
-
-
-
-
+//
+// dtkComposerSettings.h ends here

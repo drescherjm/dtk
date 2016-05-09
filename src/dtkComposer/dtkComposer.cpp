@@ -24,9 +24,11 @@ namespace dtkComposer
         namespace _private {
             dtkComposerNodeFactory factory;
         }
+
         dtkComposerNodeFactory& factory(void) {
             return _private::factory;
         }
+
         void initialize(void) {
             dtkComposerBaseExtension baseExt;
             baseExt.extend(&(_private::factory));

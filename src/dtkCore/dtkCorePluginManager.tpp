@@ -15,6 +15,7 @@
 #pragma once
 
 #include <QtDebug>
+
 #include <dtkLog>
 
 // ///////////////////////////////////////////////////////////////////
@@ -47,6 +48,7 @@ public:
 template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& path)
 {
     bool status = true;
+
     QString conceptName = QMetaType::typeName(qMetaTypeId<T*>());
     conceptName.remove("Plugin*");
 
@@ -69,18 +71,23 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
         if(!this->names.values().contains(na_mitem)) {
             dtkWarn() << "  Missing dependency:" << na_mitem.toString() << "for plugin" << path;
             status = false;
+
             continue;
         }
 
         if (this->versions.value(key) != ve_mitem) {
             dtkWarn() << "    Version mismatch:" << na_mitem.toString() << "version" << this->versions.value(this->names.key(na_mitem)).toString() << "but" << ve_mitem.toString() << "required for plugin" << path;
+
             status = false;
+
             continue;
         }
 
         if(!check(key)) {
             dtkWarn() << "Corrupted dependency:" << na_mitem.toString() << "for plugin" << path;
+
             status = false;
+
             continue;
         }
     }
@@ -136,7 +143,9 @@ template <typename T> bool dtkCorePluginManager<T>::autoLoading(void) const
 template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString & plugin_name)
 {
     QString full_name = plugin_name % "Plugin";
+
     QHash<QString, QVariant>::const_iterator i = d->names.constBegin();
+
     while (i != d->names.constEnd()) {
         if(QString::compare(i.value().toString(), full_name) == 0) {
             this->load(i.key());
@@ -156,9 +165,12 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
 template <typename T> void dtkCorePluginManager<T>::initialize(const QString& path)
 {
 
-    foreach(QString path2, path.split(":",QString::SkipEmptyParts )) {
+    foreach(QString path2, path.split(":", QString::SkipEmptyParts)) {
+
         QDir dir(path2);
-        if(d->verboseLoading) {dtkTrace() << "scanning directory for plugins:" << path2; }
+
+        if(d->verboseLoading)
+            dtkTrace() << "scanning directory for plugins:" << path2;
 
         foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
             this->scan(info.absoluteFilePath());

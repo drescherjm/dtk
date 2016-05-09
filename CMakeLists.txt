@@ -105,6 +105,10 @@ else(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_64 0)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
+if(WIN32)
+  add_definitions("/wd4068")
+endif(WIN32)
+
 ## #################################################################
 ## Options
 ## #################################################################

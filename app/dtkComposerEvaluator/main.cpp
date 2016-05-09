@@ -58,24 +58,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // Old Plugin manager initialization
-    // /////////////////////////////////////////////////////////////////
-
-    // QSettings *main_settings = application->settings();
-    // main_settings->beginGroup("plugins");
-
-    // if (main_settings->contains("path")) {
-    //     dtkPluginManager::instance()->setPath(main_settings->value("path").toString());
-    // }
-
-    // if (parser->isSet("verbose")) {
-    //     dtkPluginManager::instance()->setVerboseLoading(true);
-    // }
-
-    // main_settings->endGroup();
-    // dtkPluginManager::instance()->initialize();
-
+    dtkComposer::extension::initialize();
+    dtkComposer::node::initialize();
     dtkComposerNodeFactory *factory = &(dtkComposer::node::factory());
 
 //     if (args[1] == "--spawn") {

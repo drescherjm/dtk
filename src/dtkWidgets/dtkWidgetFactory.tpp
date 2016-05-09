@@ -14,12 +14,12 @@
 
 #include "dtkWidgetFactory.h"
 
-dtkWidgetFactory::dtkWidgetFactory(void)
+template <typename T> dtkWidgetFactory<T>::dtkWidgetFactory(void)
 {
 
 }
 
-dtkWidgetFactory::~dtkWidgetFactory(void)
+template <typename T>  dtkWidgetFactory<T>::~dtkWidgetFactory(void)
 {
 
 }
@@ -28,35 +28,39 @@ dtkWidgetFactory::~dtkWidgetFactory(void)
 // Type creator registration
 // /////////////////////////////////////////////////////////////////
 
-void dtkWidgetFactory::record(const QString& key, QWidget* widget)
+template <typename T>  void dtkWidgetFactory<T>::record(const QString& key, creator widget)
 {
-    if (this->widgets.contains(key)) {
+    if (this->m_widgets.contains(key)) {
         qDebug() << Q_FUNC_INFO << "Factory already contains key" << key << ". Nothing is done";
         return;
     }
 
-    this->widgets.insert(key, widget);
+    this->m_widgets.insert(key, widget);
 }
 
 // /////////////////////////////////////////////////////////////////
 // Type creator invokation
 // /////////////////////////////////////////////////////////////////
 
-QWidget *dtkWidgetFactory::get(const QString& key) const
+template <typename T> typename dtkWidgetTrait<T>::WidgetType *dtkWidgetFactory<T>::get(const QString& key, T *process)
 {
-    if(!this->widgets.contains(key))
+    if(!this->m_widgets.contains(key))
         return NULL;
 
-    return this->widgets.value(key);
+    if(!m_instanciated.contains(process)) {
+      this->m_instanciated.insert(process,this->m_widgets.value(key)());
+    }
+
+    return this->m_instanciated.value(process);
 }
 
 // /////////////////////////////////////////////////////////////////
 // Type creator inspection
 // /////////////////////////////////////////////////////////////////
 
-QStringList dtkWidgetFactory::keys(void) const
+template <typename T>  QStringList dtkWidgetFactory<T>::keys(void) const
 {
-    return this->widgets.keys();
+    return this->m_widgets.keys();
 }
 
 //

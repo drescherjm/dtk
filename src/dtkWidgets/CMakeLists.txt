@@ -33,7 +33,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgets
   dtkWidgetsLogView.h
   dtkWidgetsLogView_p.h
-  dtkWidgetsPlugin.h
   dtkWidgetsTag.h
   dtkWidgetsTagCloud.h
   dtkWidgetsTagCloudController.h
@@ -69,7 +68,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkWidgetsTagCloudScope.cpp
   dtkWidgetsTagCloudScopeItem.cpp
   dtkWidgetsTagCloudView.cpp
-  dtkWidgetFactory.cpp
   )
 
 set(${PROJECT_NAME}_SOURCES_RCC

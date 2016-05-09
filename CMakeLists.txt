@@ -106,7 +106,7 @@ else(CMAKE_SIZEOF_VOID_P MATCHES 8)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
 if(WIN32)
-  add_definitions("/wd4068")
+  add_definitions("/wd4068 /wd4244")
 endif(WIN32)
 
 ## #################################################################

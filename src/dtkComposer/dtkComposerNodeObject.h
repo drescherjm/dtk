@@ -39,11 +39,12 @@ public:
 
 public:
     QVariant variant(void) const;
+
+public:
     T *object(void) const;
 
 public:
-    QStringList implementations(void) const;
-
+    QStringList    implementations(void) const;
     QString currentImplementation(void) const;
 
     bool implementationHasChanged(const QString& implementation) const;

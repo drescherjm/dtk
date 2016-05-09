@@ -21,12 +21,12 @@ if(DTK_BUILD_DISTRIBUTED)
   add_subdirectory(dtkDistributedSlave)
   add_subdirectory(dtkDistributedDashboard)
 endif(DTK_BUILD_DISTRIBUTED)
-add_subdirectory(dtkDoc)
+
 add_subdirectory(dtkPluginsMetaInfoFetcher)
 add_subdirectory(dtkDeploy)
 
 if(DTK_BUILD_SUPPORT_GUI)
-add_subdirectory(dtkConceptGenerator)
+  add_subdirectory(dtkConceptGenerator)
 endif(DTK_BUILD_SUPPORT_GUI)
 
 ######################################################################

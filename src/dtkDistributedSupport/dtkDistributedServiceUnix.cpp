@@ -92,7 +92,7 @@ static QString absPath(const QString &path)
             dir.cd(path.left(slashpos));
             ret = dir.absolutePath();
         } else { // Need to search $PATH
-            char *envPath = qgetenv("PATH").constData();
+            char *envPath = qgetenv("PATH").data();
             if (envPath) {
                 QStringList envPaths = QString::fromLocal8Bit(envPath).split(':');
                 for (int i = 0; i < envPaths.size(); ++i) {

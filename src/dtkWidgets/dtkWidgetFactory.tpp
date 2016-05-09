@@ -19,7 +19,7 @@ template <typename T> dtkWidgetFactory<T>::dtkWidgetFactory(void)
 
 }
 
-template <typename T>  dtkWidgetFactory<T>::~dtkWidgetFactory(void)
+template <typename T> dtkWidgetFactory<T>::~dtkWidgetFactory(void)
 {
 
 }

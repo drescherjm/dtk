@@ -53,7 +53,7 @@ template <typename T> class dtkWidgetTrait {};
 // dtkWidgetFactory
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> class DTKWIDGETS_EXPORT dtkWidgetFactory : public QObject
+template <typename T> class dtkWidgetFactory : public QObject
 {
 public:
      dtkWidgetFactory(void);

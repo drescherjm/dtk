@@ -1,5 +1,5 @@
-/* dtkVrTrackerKinect_p.cpp --- 
- * 
+/* dtkVrTrackerKinect_p.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 25 17:16:28 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 13
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVrTrackerKinect_p.h"
@@ -32,7 +32,7 @@
 #include <XnUSB.h>
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 #define KNCT_CHECK_RC(rc, what)                                 \
@@ -48,7 +48,7 @@
     }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 
@@ -99,7 +99,7 @@ public:
 public:
     bool running;
     bool calibrated;
-    
+
 public:
     static dtkVrTrackerKinectPrivateThread *self;
 
@@ -126,7 +126,7 @@ void dtkVrTrackerKinectPrivateThread::run(void)
 
             XnSkeletonJointPosition head_position;
             this->users_generator.GetSkeletonCap().GetSkeletonJointPosition(this->user_id, XN_SKEL_HEAD, head_position);
-            
+
             if (head_position.fConfidence > 0.5)
                 this->position = dtkVector3D<double>(head_position.position.X, head_position.position.Y, head_position.position.Z);
 
@@ -136,7 +136,7 @@ void dtkVrTrackerKinectPrivateThread::run(void)
 
             XnSkeletonJointPosition hand_position;
             this->users_generator.GetSkeletonCap().GetSkeletonJointPosition(this->user_id, XN_SKEL_RIGHT_HAND, hand_position);
-            
+
             if (hand_position.fConfidence > 0.5)
                 this->hand_position = dtkVector3D<double>(hand_position.position.X, hand_position.position.Y, hand_position.position.Z);
 
@@ -144,7 +144,7 @@ void dtkVrTrackerKinectPrivateThread::run(void)
 
             XnSkeletonJointOrientation head_orientation;
             this->users_generator.GetSkeletonCap().GetSkeletonJointOrientation(this->user_id, XN_SKEL_HEAD, head_orientation);
-            
+
             if (head_orientation.fConfidence > 0.5) {
 
                 dtkMatrixSquared<double> matrix(3);
@@ -209,7 +209,7 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::NewUser(xn::UserGenerator
         self->users_generator.GetPoseDetectionCap().StartPoseDetection("Psi", user);
         return;
     }
-    
+
     self->assignUser(user);
 }
 
@@ -226,7 +226,7 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::LostUser(xn::UserGenerato
 
 void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationStarted(xn::SkeletonCapability& skeleton, XnUserID user, void* cxt)
 {
-    qDebug() << __func__;
+    qDebug() << Q_FUNC_INFO;
 }
 
 void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationEnded(xn::SkeletonCapability& skeleton, XnUserID user, XnBool bSuccess, void* cxt)
@@ -242,7 +242,7 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationEnded(xn::Skel
             self->users_generator.GetSkeletonCap().StartTracking(user);
             self->calibrated = true;
         }
-        
+
         XnUserID aUsers[10];
         XnUInt16 nUsers = 10;
 
@@ -265,16 +265,16 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::PoseDetected(xn::PoseDete
 
 bool dtkVrTrackerKinectPrivateThread::assignUser(XnUserID user)
 {
-    qDebug() << __func__;
+    qDebug << Q_FUNC_INFO;
 
     if (this->user_id)
         return false;
-    
+
     XnPoint3D com; this->users_generator.GetCoM(user, com);
 
     if (com.Z == 0)
         return false;
-    
+
     printf("Matching for existing calibration\n");
 
     this->users_generator.GetSkeletonCap().LoadCalibrationData(user, 0);
@@ -286,16 +286,16 @@ bool dtkVrTrackerKinectPrivateThread::assignUser(XnUserID user)
 
 void dtkVrTrackerKinectPrivateThread::findUser(void)
 {
-    qDebug() << __func__;
+    qDebug() << Q_FUNC_INFO;
 
     if (this->user_id != 0)
         return;
-    
+
     XnUserID aUsers[20];
     XnUInt16 nUsers = 20;
 
     this->users_generator.GetUsers(aUsers, nUsers);
-    
+
     for (int i = 0; i < nUsers; ++i)
         if (this->assignUser(aUsers[i]))
             return;
@@ -306,7 +306,7 @@ void dtkVrTrackerKinectPrivateThread::findUser(void)
 dtkVrTrackerKinectPrivateThread *dtkVrTrackerKinectPrivateThread::self = NULL;
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkVrTrackerKinectPrivate::dtkVrTrackerKinectPrivate(void) : QObject(), d(new dtkVrTrackerKinectPrivateThread)
@@ -355,7 +355,7 @@ void dtkVrTrackerKinectPrivate::initialize(void)
     KNCT_CHECK_RC(rc, "InitFromXmlFile");
 
     rc = d->context.FindExistingNode(XN_NODE_TYPE_DEPTH, d->depth_generator);
-    
+
     KNCT_CHECK_RC(rc, "Find depth generator");
 
     rc = d->context.FindExistingNode(XN_NODE_TYPE_HANDS, d->hands_generator);
@@ -392,11 +392,11 @@ void dtkVrTrackerKinectPrivate::initialize(void)
     rc = d->context.StartGeneratingAll();
 
     KNCT_CHECK_RC(rc, "StartGenerating");
-    
+
     XnCallbackHandle handle_user_callbacks;
     XnCallbackHandle handle_calibration_callbacks;
     XnCallbackHandle handle_pose_callbacks;
-    
+
     d->users_generator.RegisterUserCallbacks(
         dtkVrTrackerKinectPrivateThread::NewUser,
         dtkVrTrackerKinectPrivateThread::LostUser,
@@ -449,7 +449,7 @@ open:
         xnPrintError(res, "xnUSBSendControl 2 failed");
         goto close;
     }
-    
+
 rotate:
     res = xnUSBSendControl(m_dev, XN_USB_CONTROL_TYPE_VENDOR, 0x31, angle, 0x00, NULL, 0, 0);
     if (res != XN_STATUS_OK) {

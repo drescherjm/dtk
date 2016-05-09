@@ -88,8 +88,6 @@ dtkComposerViewLayoutItemProxy::dtkComposerViewLayoutItemProxy(QWidget *parent) 
 
 dtkComposerViewLayoutItemProxy::~dtkComposerViewLayoutItemProxy(void)
 {
-//    qDebug() << __func__ << 1;
-
     if(!d->view)
         goto finalize;
 
@@ -99,31 +97,19 @@ dtkComposerViewLayoutItemProxy::~dtkComposerViewLayoutItemProxy(void)
     if(!d->view->widget()->parentWidget())
         goto finalize;
 
-//    qDebug() << __func__ << 2;
-
     if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
-
-//        qDebug() << __func__ << 3;
 
         if(proxy == this) {
 
-//            qDebug() << __func__ << 4;
-
             layout()->removeWidget(d->view);
 
-//            qDebug() << __func__ << 5;
-
             d->view->widget()->setParent(0);
-
-//            qDebug() << __func__ << 6;
 
             disconnect(d->view, SIGNAL(focused()), proxy, SIGNAL(focusedIn()));
 
             d->view = NULL;
         }
     }
-
-//    qDebug() << __func__ << 7;
 
 finalize:
 
@@ -139,8 +125,6 @@ dtkComposerViewWidget *dtkComposerViewLayoutItemProxy::view(void)
 
 void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
 {
-    // qDebug() << __func__ << 1;
-
     if(!view)
         return;
 
@@ -149,7 +133,6 @@ void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
         proxy->d->view = NULL;
 
         if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
-            // qDebug() << "Got parent ! - clearing name";
             item->d->label->clear();
         }
 
@@ -159,22 +142,18 @@ void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
     this->layout()->addWidget(view->widget());
 
     d->view = view;
-    // d->view->show();
 
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
     if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(this->parentWidget()->parentWidget())) {
 
-        // qDebug() << "Got parent ! - setting name";
-
         item->d->close->setEnabled(true);
         item->d->vertc->setEnabled(true);
         item->d->horzt->setEnabled(true);
         item->d->maxmz->setEnabled(true);
+
         emit focusedIn();
     }
-
-    // qDebug() << __func__ << 2 << this->parentWidget()->objectName() << this->parentWidget()->metaObject()->className();
 }
 
 void dtkComposerViewLayoutItemProxy::focusInEvent(QFocusEvent *event)
@@ -426,15 +405,11 @@ void dtkComposerViewLayoutItem::unsplit(void)
 
     if(d->layout->current() == d->a) {
 
-        // qDebug() << __func__ << "Current item is a";
-
         d->a->deleteLater();
 
         d->a = NULL;
 
         if(d->b->d->a && d->b->d->b) {
-
-            // qDebug() << __func__ << "Current item is a, b has children, reparenting";
 
             dtkComposerViewLayoutItem *a = d->b->d->a; a->d->parent = this;
             dtkComposerViewLayoutItem *b = d->b->d->b; b->d->parent = this;
@@ -464,64 +439,32 @@ void dtkComposerViewLayoutItem::unsplit(void)
 
         } else {
 
-            // qDebug() << __func__ << "Current item is a, b has no children, creating a proxy.";
-
             d->proxy = new dtkComposerViewLayoutItemProxy(this);
-
-            // qDebug() << __func__ << "Current item is a, b has no children, proxy created.";
 
             connect(d->proxy, SIGNAL(focusedIn()), this, SLOT(onFocusedIn()));
             connect(d->proxy, SIGNAL(focusedOut()), this, SLOT(onFocusedOut()));
 
-            // qDebug() << __func__ << "Current item is a, b has no children, proxy connected.";
-
             d->splitter->addWidget(d->proxy);
-
-            // qDebug() << __func__ << "Current item is a, b has no children, proxy layout out.";
-
-            // if(!d->b->d->proxy->view())
-            //     qDebug() << "VIEW IS NULL";
-
-            // else if(!d->b->d->proxy->view()->widget())
-            //     qDebug() << "VIEW'S WIDGET IS NULL";
 
             d->proxy->setView(d->b->d->proxy->view());
 
-            // qDebug() << __func__ << "Current item is a, b has no children, proxy set up.";
-
             d->proxy->setFocus(Qt::OtherFocusReason);
-
-            // qDebug() << __func__ << "Current item is a, b has no children, proxy focused.";
 
             d->b->deleteLater();
 
             d->b = NULL;
 
-            // if(!d->proxy->view())
-            //     qDebug() << "VIEW IS NULL";
-
-            // else if(!d->proxy->view()->widget())
-            //     qDebug() << "VIEW'S WIDGET IS NULL";
-
-            // qDebug() << __func__ << "Current item is a, b has no children, b deleted.";
-
             d->footer->show();
-
-            // qDebug() << __func__ << "Current item is a, b has no children, done.";
         }
     }
 
     else if(d->layout->current() == d->b) {
-
-        // qDebug() << __func__ << "Current item is b";
 
         d->b->deleteLater();
 
         d->b = NULL;
 
         if(d->a->d->a && d->a->d->b) {
-
-            // qDebug() << __func__ << "Current item is b, a has children, reparenting";
 
             dtkComposerViewLayoutItem *a = d->a->d->a; a->d->parent = this;
             dtkComposerViewLayoutItem *b = d->a->d->b; b->d->parent = this;
@@ -550,8 +493,6 @@ void dtkComposerViewLayoutItem::unsplit(void)
                 child->setFocus(Qt::OtherFocusReason);
 
         } else {
-
-            // qDebug() << __func__ << "Current item is b, a has no children, creating a proxy.";
 
             d->proxy = new dtkComposerViewLayoutItemProxy(this);
 

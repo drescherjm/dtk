@@ -169,8 +169,9 @@ template <typename T> void dtkCorePluginManager<T>::initialize(const QString& pa
 
         QDir dir(path2);
 
-        if(d->verboseLoading)
+        if (d->verboseLoading) {
             dtkTrace() << "scanning directory for plugins:" << path2;
+        }
 
         foreach(QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
             this->scan(info.absoluteFilePath());
@@ -231,7 +232,9 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
 
     loader->setLoadHints(QLibrary::ExportExternalSymbolsHint);
 
-    if(d->verboseLoading) { dtkTrace() << "Loading plugin from " << path;}
+    if (d->verboseLoading) {
+        dtkTrace() << "Loading plugin from " << path;
+    }
 
     if(!loader->load()) {
         QString error = "Unable to load ";
@@ -259,7 +262,7 @@ template <typename T> void dtkCorePluginManager<T>::load(const QString& path)
 
     d->loaders.insert(path, loader);
 
-    if(d->verboseLoading) {
+    if (d->verboseLoading) {
         QString name =  loader->metaData().value("MetaData").toObject().value("name").toString();
         dtkTrace() << "Loaded plugin " <<  name  << " from " << path;
     }

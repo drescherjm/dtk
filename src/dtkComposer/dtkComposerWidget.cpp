@@ -124,7 +124,6 @@ dtkComposerWidget::dtkComposerWidget(QWidget *parent) : QWidget(parent), d(new d
 
 dtkComposerWidget::~dtkComposerWidget(void)
 {
-    delete d->factory;
     delete d->graph;
     delete d->stack;
     delete d->evaluator;

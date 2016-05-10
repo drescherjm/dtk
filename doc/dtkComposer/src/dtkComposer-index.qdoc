@@ -5,7 +5,7 @@
 
     \section1 Introduction
 
-    Composer layer provid es a visual programming framework that
+    Composer layer provides a visual programming framework that
     enables not only to manipulate fundamental concepts defined in
     the Core layer (data, process, view) but also to integrate some
     features from other layers (e.g. dtkDistributed layer or

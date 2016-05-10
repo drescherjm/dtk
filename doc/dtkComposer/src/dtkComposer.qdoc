@@ -32,6 +32,28 @@ Transmitters enable data transmission between nodes. Transmission can be carried
     \li dtkComposerTransmitterVariant can play the role of both an emitter or a receiver. It is weakly typed, that is to say it can connect two nodes that exchange data of not exactly the same type (e.g. integer and real).
 \endlist
 
+ \section1 Extension
+
+The composer can be extended by implementing a dtkComposerExtension plugin. You have to implement the \c { extend(dtkComposerFactory *f)} method that records new nodes to the composer factory, and the \c { initialize()} method of the plugin should extend the factory and initialize its own factories, like this:
+
+\code
+void dtkLinearAlgebraSparseComposerExtensionPlugin::initialize(void)
+{
+    dtkComposer::extension::pluginFactory().record("dtkLinearAlgebraSparse", dtkLinearAlgebraSparseComposerCreator);
+    dtkComposerExtension *extension = dtkComposer::extension::pluginFactory().create("dtkLinearAlgebraSparse");
+    bool verbose = dtkComposer::extension::pluginManager().verboseLoading();
+    dtkLinearAlgebraSparse::pluginManager::setVerboseLoading(verbose);
+    extension->extend(&(dtkComposer::node::factory()));
+    dtkLinearAlgebraSparse::pluginManager::initialize();
+}
+\endcode
+
+The final step is to configure the settings file dtk-composer.ini, in order to find the extension plugins from the different layes, like this:
+\code
+[extension]
+plugins=/home/<username>/git/dtk-imaging/build/plugins:/home/<username>/git/dtk-linear-algebra-sparse/build/plugins:/home/<username>/git/dtk-discrete-geometry/build/plugins:
+\endcode
+
  \section1 Shortcuts
 
 To facilitate the use of the composer, some shortcuts can be employed:

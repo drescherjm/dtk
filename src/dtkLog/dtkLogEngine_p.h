@@ -19,7 +19,7 @@
 class dtkLogEnginePrivate
 {
 public:
-    dtkLogEnginePrivate(void) : stream(&buffer) {}
+dtkLogEnginePrivate(void) : level(dtkLog::Info), stream(&buffer), custom(false) {}
 
 public:
     void write(void);

@@ -84,8 +84,11 @@ dtkDistributedPolicy::~dtkDistributedPolicy(void)
     d = NULL;
 }
 
-dtkDistributedPolicy::dtkDistributedPolicy(const dtkDistributedPolicy& other)
+dtkDistributedPolicy::dtkDistributedPolicy(const dtkDistributedPolicy& other): QObject(), d(new dtkDistributedPolicyPrivate)
 {
+    d->comm = other.d->comm;
+    d->np   = other.d->np;
+    d->type = other.d->type;
 }
 
 dtkDistributedPolicy& dtkDistributedPolicy::operator = (const dtkDistributedPolicy& other)

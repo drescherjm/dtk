@@ -29,10 +29,6 @@ public:
     virtual ~dtkDistributedCommunicatorStatus(void);
 
 public:
-    dtkDistributedCommunicatorStatus(const dtkDistributedCommunicatorStatus& other);
-    dtkDistributedCommunicatorStatus& operator = (const dtkDistributedCommunicatorStatus& other);
-
-public:
     int       tag(void) const;
     qlonglong  count(void) const;
     qint32 source(void) const;

@@ -44,6 +44,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudScopeItem.h
   dtkWidgetsTagCloudView.h
   dtkWidgetFactory.h
+  dtkWidgetFactory.tpp
   )
 
 set(${PROJECT_NAME}_SOURCES

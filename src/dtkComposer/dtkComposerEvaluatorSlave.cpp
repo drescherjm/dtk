@@ -141,13 +141,11 @@ void dtkComposerEvaluatorSlave::run(void)
     int size = d->communicator_i->size();
     dtkDebug() << "communicator size is" << size;
     dtkDebug() << "our rank is" << rank;
-    bool new_composition;
-
-
 
     if ( rank == 0) {
 
         QScopedPointer<dtkDistributedMessage> msg;
+        bool new_composition;
 
         if (!this->isConnected()) {
             dtkDebug() << "connect to server" << d->server;

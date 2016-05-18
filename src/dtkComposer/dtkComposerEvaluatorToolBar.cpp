@@ -29,6 +29,7 @@ public:
     QAction *continue_action;
     QAction *next_action;
     QAction *reset_action;
+    QAction *pause_action;
 
 public:
     dtkComposerWidget *composer;
@@ -59,9 +60,13 @@ void dtkComposerEvaluatorToolBarPrivate::init(void)
     next_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_T);
     next_action->setEnabled(false);
 
-    stop_action = q->addAction(QIcon(":dtkComposer/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
-    stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
-    stop_action->setEnabled(false);
+    pause_action = q->addAction(QIcon(":dtkComposer/pixmaps/dtkCreatorToolbarButton_Pause_Active.png"), "Pause");
+    pause_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
+    pause_action->setEnabled(false);
+
+    // stop_action = q->addAction(QIcon(":dtkComposer/pixmaps/dtkCreatorToolbarButton_Stop_Active.png"), "Stop");
+    // stop_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Period);
+    // stop_action->setEnabled(false);
 
     reset_action = q->addAction(QIcon(":dtkComposer/pixmaps/dtkCreatorToolbarButton_Reset_Active.png"), "Reset");
     reset_action->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_D);
@@ -97,7 +102,8 @@ QMenu *dtkComposerEvaluatorToolBar::menu(QWidget *parent)
     debug_menu->addAction(d->step_action);
     debug_menu->addAction(d->continue_action);
     debug_menu->addAction(d->next_action);
-    debug_menu->addAction(d->stop_action);
+    debug_menu->addAction(d->pause_action);
+    // debug_menu->addAction(d->stop_action);
     debug_menu->addAction(d->reset_action);
     return debug_menu;
 }
@@ -114,7 +120,7 @@ void dtkComposerEvaluatorToolBar::setComposerWidget(dtkComposerWidget *composer)
     connect(d->step_action, SIGNAL(triggered()), d->composer, SLOT(step()));
     connect(d->continue_action, SIGNAL(triggered()), d->composer, SLOT(cont()));
     connect(d->next_action, SIGNAL(triggered()), d->composer, SLOT(next()));
-    connect(d->stop_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
+    connect(d->pause_action, SIGNAL(triggered()), d->composer, SLOT(stop()));
     connect(d->reset_action, SIGNAL(triggered()), d->composer, SLOT(reset()));
 
 }
@@ -125,7 +131,7 @@ void dtkComposerEvaluatorToolBar::onEvaluatorPaused(dtkComposerGraphNode *node)
     d->next_action->setEnabled(true);
     d->continue_action->setEnabled(true);
     d->run_action->setEnabled(false);
-    d->stop_action->setEnabled(false);
+    d->pause_action->setEnabled(false);
 
     d->composer->scene()->onEvaluationPaused(node->wrapee());
 
@@ -137,7 +143,7 @@ void dtkComposerEvaluatorToolBar::onEvaluatorStarted(void)
     d->next_action->setEnabled(false);
     d->continue_action->setEnabled(false);
     d->run_action->setEnabled(false);
-    d->stop_action->setEnabled(true);
+    d->pause_action->setEnabled(true);
 
     d->composer->run();
 }
@@ -148,7 +154,7 @@ void dtkComposerEvaluatorToolBar::onEvaluatorFinished(void)
     d->next_action->setEnabled(false);
     d->continue_action->setEnabled(false);
     d->run_action->setEnabled(true);
-    d->stop_action->setEnabled(false);
+    d->pause_action->setEnabled(false);
 
     d->composer->scene()->onEvaluationFinished();
 }

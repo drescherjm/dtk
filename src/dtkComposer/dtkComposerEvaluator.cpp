@@ -351,9 +351,9 @@ void dtkComposerEvaluator::next(bool run_concurrent)
             }
         while (d->current != end) // we must continue if a node inside the begin/end contains a breakpoint
             this->cont(run_concurrent);
-        this->rawstep(run_concurrent); // eval End
+        this->step(run_concurrent); // eval End
     } else {
-        this->rawstep(run_concurrent);
+        this->step(run_concurrent);
     }
 }
 

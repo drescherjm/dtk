@@ -80,6 +80,7 @@ public:
     QAction *flagAsPinkAction(void);
     QAction *flagAsRedAction(void);
     QAction *flagAsYellowAction(void);
+    QAction *setBreakPointAction(void);
 
 public:
     QAction   *maskEdgesAction(void);
@@ -114,6 +115,10 @@ signals:
 // #pragma mark -
 // #pragma mark - Flag events
 
+public:
+    void onEvaluationPaused(dtkComposerNode *node);
+    void onEvaluationFinished(void);
+
 protected slots:
     void onFlagAsBlue(void);
     void onFlagAsGray(void);
@@ -123,6 +128,7 @@ protected slots:
     void onFlagAsPink(void);
     void onFlagAsYellow(void);
     void onFlagAs(Qt::GlobalColor);
+    void onBreakPointSet(void);
 
 protected slots:
     void onMaskEdge(void);

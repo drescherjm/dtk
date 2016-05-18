@@ -106,5 +106,7 @@
         <file>dtkComposerNodeFlag-pink.png</file>
         <file>dtkComposerNodeFlag-red.png</file>
         <file>dtkComposerNodeFlag-yellow.png</file>
+
+        <file>dtkComposerNode-breakpoint.png</file>
     </qresource>
 </RCC>

@@ -264,7 +264,7 @@ void dtkComposerEvaluator::run(bool run_concurrent)
 
     emit evaluationStarted();
 
-    while (this->step(run_concurrent) && !d->should_stop);
+    while (this->rawstep(run_concurrent) && !d->should_stop);
 
     if (!d->should_stop) {
         QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
@@ -272,17 +272,17 @@ void dtkComposerEvaluator::run(bool run_concurrent)
         if (d->notify)
             dtkNotify(msg,30000);
         d->max_stack_size = 0;
+        emit evaluationStopped();
+        d->start_node = NULL;
     } else {
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
         if (d->notify)
             dtkNotify(msg,30000);
+        emit evaluationPaused(d->current);
     }
 
     d->should_stop = false;
-    d->start_node = NULL;
-
-    emit evaluationStopped();
 }
 
 
@@ -305,23 +305,23 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
         return;
     }
 
-    while (this->step(run_concurrent) && !d->should_stop);
+    while (this->rawstep(run_concurrent) && !d->should_stop);
     if (!d->should_stop) {
         QString msg = QString("Evaluation resumed and finished");
         dtkInfo() << msg;
         if (d->notify)
             dtkNotify(msg,30000);
+        emit evaluationStopped();
     } else {
         QString msg = QString("Evaluation stopped ");
         dtkInfo() << msg;
         if (d->notify)
             dtkNotify(msg,30000);
         dtkInfo() << "stack size: " << d->stack.size();
+        emit evaluationPaused(d->current);
     }
 
     d->should_stop = false;
-
-    emit evaluationStopped();
 }
 
 void dtkComposerEvaluator::logStack(void)
@@ -351,13 +351,24 @@ void dtkComposerEvaluator::next(bool run_concurrent)
             }
         while (d->current != end) // we must continue if a node inside the begin/end contains a breakpoint
             this->cont(run_concurrent);
-        this->step(run_concurrent); // eval End
+        this->rawstep(run_concurrent); // eval End
     } else {
-        this->step(run_concurrent);
+        this->rawstep(run_concurrent);
     }
 }
 
 bool dtkComposerEvaluator::step(bool run_concurrent)
+{
+    bool res = this->rawstep(run_concurrent);
+    if (d->stack.isEmpty()) {
+        emit evaluationStopped();
+    } else if (res) {
+        emit evaluationPaused(d->current);
+    }
+    return res;
+}
+
+bool dtkComposerEvaluator::rawstep(bool run_concurrent)
 {
     if (d->stack.isEmpty())
         return false;
@@ -406,7 +417,9 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
         if (d->current->breakpoint() && d->current->status() == dtkComposerGraphNode::Ready ) {
             dtkTrace() << "break point reached";
             d->current->setStatus(dtkComposerGraphNode::Break);
-            d->stack.append( d->current);
+            d->stack.prepend( d->current);
+            d->should_stop = true;
+            emit evaluationPaused(d->current);
             return false;
         }
         if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Process)){
@@ -447,6 +460,8 @@ bool dtkComposerEvaluator::step(bool run_concurrent)
             while(it != ite)
                 d->stack.append(*it++);
         }
+        // needed for step by step
+        d->current = d->stack.first();
 
     } else if (run_concurrent) {
 //        dtkTrace() << "add back current node to stack: "<< d->current->title();

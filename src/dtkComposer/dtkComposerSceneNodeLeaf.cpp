@@ -67,6 +67,8 @@ void dtkComposerSceneNodeLeafPrivate::flagAs(Qt::GlobalColor color)
     case Qt::yellow:
         this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
         break;
+    case Qt::white:
+        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNode-breakpoint.png"));
     default:
         break;
     };
@@ -152,6 +154,8 @@ void dtkComposerSceneNodeLeaf::flag(QColor color)
         this->flag(Qt::magenta, true);
     else if(color == Qt::yellow)
         this->flag(Qt::yellow, true);
+    else if(color == Qt::white)
+        this->flag(Qt::white, true);
 }
 
 bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)

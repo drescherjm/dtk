@@ -13,6 +13,7 @@
 // Code:
 
 #include "dtkComposerGraph.h"
+#include "dtkComposerGraphNode.h"
 #include "dtkComposerNodeComposite.h"
 #include "dtkComposerNodeLeaf.h"
 #include "dtkComposerReader.h"
@@ -50,6 +51,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->reparent_origin = NULL;
     d->reparent_target = NULL;
+    d->last_paused_node = NULL;
 
     d->masked_edges = false;
 
@@ -87,6 +89,10 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     d->flag_as_yellow_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_Y));
     d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
 
+    d->set_breakpoint_action = new QAction("Set BreakPoint", this);
+    d->set_breakpoint_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_B));
+    d->set_breakpoint_action->setIcon(QIcon(":dtkComposer/dtkComposerNode-breakpoint.png"));
+
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 
     connect(d->mask_edges_action, SIGNAL(triggered()), this, SLOT(onMaskEdge()));
@@ -99,6 +105,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     connect(d->flag_as_pink_action, SIGNAL(triggered()), this, SLOT(onFlagAsPink()));
     connect(d->flag_as_red_action, SIGNAL(triggered()), this, SLOT(onFlagAsRed()));
     connect(d->flag_as_yellow_action, SIGNAL(triggered()), this, SLOT(onFlagAsYellow()));
+    connect(d->set_breakpoint_action, SIGNAL(triggered()), this, SLOT(onBreakPointSet()));
 
     this->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
@@ -414,6 +421,11 @@ QAction *dtkComposerScene::flagAsYellowAction(void)
     return d->flag_as_yellow_action;
 }
 
+QAction *dtkComposerScene::setBreakPointAction(void)
+{
+    return d->set_breakpoint_action;
+}
+
 QAction *dtkComposerScene::maskEdgesAction(void)
 {
     return d->mask_edges_action;
@@ -544,6 +556,52 @@ void dtkComposerScene::onFlagAs(Qt::GlobalColor color)
                 d->flagged_nodes[color] << node;
 
             emit flagged(node);
+        }
+    }
+}
+
+void dtkComposerScene::onBreakPointSet(void)
+{
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+
+        if (dtkComposerSceneNodeLeaf *node = dynamic_cast<dtkComposerSceneNodeLeaf *>(item)) {
+
+            dtkComposerNode *wrapee = node->wrapee();
+
+            foreach(dtkComposerGraphNode *gnode, d->graph->nodes()) {
+                if (gnode->wrapee() == wrapee) {
+                    if (gnode->breakpoint()) {
+                        gnode->setBreakPoint(false);
+                        node->flag(Qt::white, false);
+
+                    } else {
+                        gnode->setBreakPoint(true);
+                        node->flag(Qt::white, true);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void dtkComposerScene::onEvaluationFinished(void)
+{
+    if (d->last_paused_node) {
+        d->last_paused_node->setOpacity(1);
+        d->last_paused_node = NULL;
+    }
+}
+
+void dtkComposerScene::onEvaluationPaused(dtkComposerNode *node)
+{
+    this->populateNodes();
+    foreach (dtkComposerSceneNode * snode, d->all_nodes) {
+        if (snode->wrapee() == node) {
+            if (d->last_paused_node != NULL)
+                d->last_paused_node->setOpacity(1);
+            snode->setOpacity(0.5);
+            d->last_paused_node = snode;
         }
     }
 }

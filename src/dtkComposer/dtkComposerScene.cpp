@@ -572,11 +572,11 @@ void dtkComposerScene::onBreakPointSet(void)
                 if (gnode->wrapee() == wrapee) {
                     if (gnode->breakpoint()) {
                         gnode->setBreakPoint(false);
-                        node->flag(Qt::white, false);
+                        node->setBreakPoint(false);
 
                     } else {
                         gnode->setBreakPoint(true);
-                        node->flag(Qt::white, true);
+                        node->setBreakPoint(true);
                     }
                     return;
                 }

@@ -63,35 +63,35 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->flag_as_blue_action = new QAction("Flag as blue", this);
     d->flag_as_blue_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_B));
-    d->flag_as_blue_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-blue.png"));
+    d->flag_as_blue_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-blue.png"));
 
     d->flag_as_gray_action = new QAction("Flag as gray", this);
     d->flag_as_gray_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_W));
-    d->flag_as_gray_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-gray.png"));
+    d->flag_as_gray_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-gray.png"));
 
     d->flag_as_green_action = new QAction("Flag as green", this);
     d->flag_as_green_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_G));
-    d->flag_as_green_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-green.png"));
+    d->flag_as_green_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-green.png"));
 
     d->flag_as_orange_action = new QAction("Flag as orange", this);
     d->flag_as_orange_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_O));
-    d->flag_as_orange_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-orange.png"));
+    d->flag_as_orange_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-orange.png"));
 
     d->flag_as_pink_action = new QAction("Flag as pink", this);
     d->flag_as_pink_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_P));
-    d->flag_as_pink_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-pink.png"));
+    d->flag_as_pink_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-pink.png"));
 
     d->flag_as_red_action = new QAction("Flag as red", this);
     d->flag_as_red_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_R));
-    d->flag_as_red_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-red.png"));
+    d->flag_as_red_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-red.png"));
 
     d->flag_as_yellow_action = new QAction("Flag as yellow", this);
     d->flag_as_yellow_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_Y));
-    d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
+    d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-yellow.png"));
 
     d->set_breakpoint_action = new QAction("Set BreakPoint", this);
     d->set_breakpoint_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_B));
-    d->set_breakpoint_action->setIcon(QIcon(":dtkComposer/dtkComposerNode-breakpoint.png"));
+    d->set_breakpoint_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNode-breakpoint.png"));
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 

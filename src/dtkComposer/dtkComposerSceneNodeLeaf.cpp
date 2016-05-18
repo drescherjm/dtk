@@ -47,28 +47,28 @@ void dtkComposerSceneNodeLeafPrivate::flagAs(Qt::GlobalColor color)
 {
     switch(color) {
     case Qt::blue:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-blue.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-blue.png"));
         break;
     case Qt::gray:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-gray.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-gray.png"));
         break;
     case Qt::green:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-green.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-green.png"));
         break;
     case Qt::darkYellow:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-orange.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-orange.png"));
         break;
     case Qt::red:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-red.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-red.png"));
         break;
     case Qt::magenta:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-pink.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-pink.png"));
         break;
     case Qt::yellow:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-yellow.png"));
         break;
     case Qt::white:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNode-breakpoint.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNode-breakpoint.png"));
     default:
         break;
     };

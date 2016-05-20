@@ -31,6 +31,39 @@
 #include <QtCore>
 #include <QtConcurrent>
 
+#include <stdexcept>
+#include <csignal>
+
+class signalException: public std::exception
+{
+public:
+    signalException(int val) {m_val = val;};
+
+public:
+    int m_val;
+
+    virtual const char* what() const throw()
+        {
+            return strsignal(m_val);
+        }
+} ;
+
+void catchUnixSignals(const std::vector<int>& quitSignals,
+                      const std::vector<int>& ignoreSignals = std::vector<int>()) {
+
+    auto handler = [](int sig) ->void {
+        throw signalException(sig);
+    };
+
+    // all these signals will be ignored.
+    for ( int sig : ignoreSignals )
+        signal(sig, SIG_IGN);
+
+    // each of these signals calls the handler (quits the QCoreApplication).
+    for ( int sig : quitSignals )
+        signal(sig, handler);
+}
+
 // ///////////////////////////////////////////////////////////////////
 // Log categories
 // ///////////////////////////////////////////////////////////////////
@@ -47,8 +80,6 @@
 // dtkComposerEvaluatorPrivate
 // /////////////////////////////////////////////////////////////////
 
-// bool dtkComposerEvaluatorPrivate::should_stop = false;
-
 // /////////////////////////////////////////////////////////////////
 // dtkComposerEvaluator
 // /////////////////////////////////////////////////////////////////
@@ -61,6 +92,7 @@ dtkComposerEvaluator::dtkComposerEvaluator(QObject *parent) : QObject(parent), d
     d->notify         = true;
     d->profiling      = false;
     d->start_node     = NULL;
+    d->catch_exceptions = false;
     d->use_gui        = (qApp && qobject_cast<QGuiApplication *>(qApp));
 }
 
@@ -79,6 +111,16 @@ void dtkComposerEvaluator::setNotify(bool notify)
 void dtkComposerEvaluator::setProfiling(bool profiling)
 {
     d->profiling = profiling;
+}
+
+void dtkComposerEvaluator::setCatchExceptions(bool c)
+{
+    d->catch_exceptions = c;
+    if (c) {
+        catchUnixSignals({SIGFPE, SIGSEGV});
+    } else {
+        catchUnixSignals({});
+    }
 }
 
 void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
@@ -436,6 +478,23 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
 //                this->logStack();
             } else {
                 d->current->setStatus(dtkComposerGraphNode::Done);
+            }
+        } else if (d->catch_exceptions) {
+            dtkTrace() << "evaluating leaf node (try/catch)"<< d->current->title();
+            try {
+                d->current->eval();
+            } catch (signalException e) {
+                QString msg = QString("The node %1 has crashed: %2 ").arg(d->current->title()).arg(e.what());
+                dtkError() << msg ;
+                if (d->notify)
+                    dtkNotify(msg,30000);
+                return false;
+            } catch (std::exception e) {
+                QString msg = QString("The node %1 has raised an exception: %2 ").arg(d->current->title()).arg(e.what());
+                dtkError() << msg ;
+                if (d->notify)
+                    dtkNotify(msg,30000);
+                return false;
             }
         } else {
             dtkTrace() << "evaluating leaf node"<< d->current->title();

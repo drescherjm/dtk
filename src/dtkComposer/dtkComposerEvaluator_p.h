@@ -49,6 +49,7 @@ public:
     bool notify;
     bool use_gui;
     bool profiling;
+    bool catch_exceptions;
 
 public:
     int max_stack_size;

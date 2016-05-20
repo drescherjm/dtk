@@ -54,6 +54,7 @@ public slots:
     void  run(bool run_concurrent = false);
     void  run_static(bool run_concurrent = false);
     void  reset(void);
+    void  setCatchExceptions(bool c = true);
 
 public:
     void cont(bool run_concurrent = false);

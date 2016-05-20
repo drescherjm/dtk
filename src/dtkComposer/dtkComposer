@@ -19,6 +19,7 @@
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerEvaluatorProcess.h"
 #include "dtkComposerEvaluatorSlave.h"
+#include "dtkComposerEvaluatorToolBar.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"

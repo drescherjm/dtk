@@ -38,6 +38,7 @@ public:
 signals:
     void evaluationStarted(void);
     void evaluationStopped(void);
+    void evaluationPaused(dtkComposerGraphNode *node);
 
 signals:
     void runMainThread(void);
@@ -65,6 +66,7 @@ public:
 
 protected:
     void  run_static_rec(bool run_concurrent = false);
+    bool         rawstep(bool run_concurrent = false);
 
 private:
     dtkComposerEvaluatorPrivate *d;

@@ -44,7 +44,11 @@ public:
 
     virtual const char* what() const throw()
         {
+#if defined(Q_OS_WIN)
+            return "signal catched";
+#else
             return strsignal(m_val);
+#endif
         }
 } ;
 

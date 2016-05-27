@@ -70,9 +70,7 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
 
 target_link_libraries(${PROJECT_NAME}
   dtkLog
-  dtkCore
-  dtkGuiSupport
-  dtkWidgets)
+  dtkCore)
 
 if(APPLE)
   target_link_libraries(${PROJECT_NAME} "-framework Cocoa")

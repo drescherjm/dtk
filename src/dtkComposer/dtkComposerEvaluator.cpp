@@ -524,7 +524,7 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
                 d->stack.append(*it++);
         }
         // needed for step by step
-        d->current = d->stack.first();
+        d->current = d->stack.isEmpty() ? NULL : d->stack.first();
 
     } else if (run_concurrent) {
 //        dtkTrace() << "add back current node to stack: "<< d->current->title();

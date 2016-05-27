@@ -420,7 +420,7 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
         return false;
 
     d->current = d->stack.takeFirst();
-    dtkTrace() << "handle " << d->current->title() << d->start_node->title() ;
+//    dtkTrace() << "handle " << d->current->title() << d->start_node->title() ;
     bool runnable = true;
 
     dtkComposerGraphNodeList::const_iterator it;

@@ -244,6 +244,8 @@ void dtkComposerWidget::run(void)
 
     if (d->scene->checkImplementations()) {
         QtConcurrent::run(d->evaluator, &dtkComposerEvaluator::run, false);
+    } else {
+        emit evaluationStopped();
     }
 }
 

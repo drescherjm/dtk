@@ -115,6 +115,7 @@ void dtkComposerEvaluatorToolBar::setComposerWidget(dtkComposerWidget *composer)
     d->composer = composer;
     connect(d->run_action, SIGNAL(triggered()), this, SLOT(onEvaluatorStarted()));
     connect(d->composer->evaluator(), SIGNAL(evaluationStopped()), this, SLOT(onEvaluatorFinished()));
+    connect(d->composer, SIGNAL(evaluationStopped()), this, SLOT(onEvaluatorFinished()));
     connect(d->composer->evaluator(), SIGNAL(evaluationPaused(dtkComposerGraphNode*)), this, SLOT(onEvaluatorPaused(dtkComposerGraphNode*)));
 
     connect(d->step_action, SIGNAL(triggered()), d->composer, SLOT(step()));

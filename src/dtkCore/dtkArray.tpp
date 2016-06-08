@@ -1259,6 +1259,9 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
         const int newId = qRegisterNormalizedMetaType< dtkArray<T, PreallocSize> >(typeName, reinterpret_cast<dtkArray<T, PreallocSize>*>(quintptr(-1)));
         metatype_id.storeRelease(newId);
 
+        qRegisterMetaTypeStreamOperators<T>(array_type);
+        qRegisterMetaTypeStreamOperators< dtkArray<T, PreallocSize> >(typeName.constData());
+
         return newId;
     }
 };
@@ -1299,6 +1302,9 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
         if (newId > 0) {
             QMetaTypeId< dtkArray<T, PreallocSize> >::qt_metatype_id();
             dtkMetaType::registerContainerPointerConverter<dtkArray<T, PreallocSize> *>(newId);
+
+            qRegisterMetaTypeStreamOperators<T>(array_type);
+            qRegisterMetaTypeStreamOperators< dtkArray<T, PreallocSize> *>(typeName.constData());
         }
 
         return newId;

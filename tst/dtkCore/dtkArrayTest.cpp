@@ -1817,6 +1817,29 @@ void dtkArrayTestCase::testDataStream(void)
 
         QVERIFY(array == array2);
     }
+    {
+        dtkArray<double> array;
+        for (int index = 0; index < 1024; ++index) {
+            array.append(double(index));
+        }
+
+        QVariant var = dtkMetaType::variantFromValue(&array);
+        QByteArray data;
+        {
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream << var;
+        }
+
+        dtkArray<double> *array2;
+        QVariant var2;
+        {
+            QDataStream stream2(data);
+            stream2 >> var2;
+        }
+        array2 = var2.value<dtkArray<double> *>();
+
+        QVERIFY(array == *array2);
+    }
 
     // This part requires to declare QString* to the metatype system
     // using Q_DECLARE_METATYPE(QString*) in a header.

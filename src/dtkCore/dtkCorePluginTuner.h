@@ -24,7 +24,7 @@ template < typename T > class dtkCorePluginTuner
 {
 public:
              dtkCorePluginTuner(void);
-    virtual ~dtkCorePluginTuner(void) {}
+    virtual ~dtkCorePluginTuner(void);
 
     void setObject(T *object);
     void setMap(const QVariantHash& map);

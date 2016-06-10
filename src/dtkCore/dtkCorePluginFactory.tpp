@@ -38,6 +38,16 @@ template <typename T> void dtkCorePluginFactory<T>::record(const QString& key, c
     this->creators.insert(key, func);
 }
 
+template <typename T> void dtkCorePluginFactory<T>::recordTuner(const QString& key, tunerCreator func)
+{
+    if (this->tuner_creators.contains(key)) {
+        qDebug() << Q_FUNC_INFO << "Factory already contains key" << key << ". Nothing is done";
+        return;
+    }
+
+    this->tuner_creators.insert(key, func);
+}
+
 // /////////////////////////////////////////////////////////////////
 // Type creator invokation
 // /////////////////////////////////////////////////////////////////
@@ -48,6 +58,14 @@ template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key) con
         return NULL;
 
     return this->creators.value(key)();
+}
+
+template <typename T> dtkCorePluginTuner<T> *dtkCorePluginFactory<T>::createTuner(const QString& key) const
+{
+    if(!this->tuner_creators.contains(key))
+        return NULL;
+
+    return this->tuner_creators.value(key)();
 }
 
 // /////////////////////////////////////////////////////////////////

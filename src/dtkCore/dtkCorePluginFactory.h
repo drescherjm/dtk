@@ -16,6 +16,8 @@
 
 #include <QtCore>
 
+template < typename T > class dtkCorePluginTuner;
+
 // ///////////////////////////////////////////////////////////////////
 // dtkCorePluginFactory
 // ///////////////////////////////////////////////////////////////////
@@ -28,18 +30,22 @@ public:
 
 public:
     typedef T *(*creator) ();
+    typedef dtkCorePluginTuner<T> *(*tunerCreator) ();
 
 public:
     void record(const QString& key, creator func);
+    void recordTuner(const QString& key, tunerCreator func);
 
 public:
     T *create(const QString& key) const;
+    dtkCorePluginTuner<T> *createTuner(const QString& key) const;
 
 public:
     QStringList keys(void) const;
 
 private:
     QHash<QString, creator> creators;
+    QHash<QString, tunerCreator> tuner_creators;
 };
 
 // ///////////////////////////////////////////////////////////////////

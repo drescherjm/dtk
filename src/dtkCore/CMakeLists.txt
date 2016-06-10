@@ -38,6 +38,9 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginManager
   dtkCorePluginManager.h
   dtkCorePluginManager.tpp
+  dtkCorePluginTuner
+  dtkCorePluginTuner.h
+  dtkCorePluginTuner.tpp
   dtkCoreSettings
   dtkCoreSettings.h
   dtkHash

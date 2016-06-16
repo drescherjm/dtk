@@ -1,16 +1,16 @@
-/* dtkWidgetsTag.cpp ---
- * 
- * Author: Julien Wintz
- * Created: Mon Apr 15 11:52:23 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 11:56:24 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 7
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkWidgetsTag.h"
 
@@ -115,3 +115,6 @@ void dtkWidgetsTag::setColor(QString color)
     else
         d->color = "";
 }
+
+//
+// dtkWidgetsTag.cpp ends here

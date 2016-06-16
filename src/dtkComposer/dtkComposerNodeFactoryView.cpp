@@ -1,16 +1,16 @@
-/* dtkComposerNodeFactoryView.cpp ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Apr 11 10:39:25 2013 (+0200)
- * Version: 
- * Last-Updated: ven. janv.  9 10:50:29 2015 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 141
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerNodeFactory.h"
 #include "dtkComposerNodeFactoryView.h"
@@ -41,22 +41,23 @@ dtkComposerNodeFactoryView::dtkComposerNodeFactoryView(QWidget *parent) : QWidge
     d->scope = new dtkWidgetsTagCloudScope(this);
     d->scope->toggle();
 
-    d->cloud = new dtkWidgetsTagCloud(this);
-    d->cloud->setSortingType(dtkWidgetsTagCloud::Alpha);
-    d->cloud->setSortingOrder(dtkWidgetsTagCloud::Asc);
-    d->cloud->setFontSize(17);
-    d->cloud->setFontRange(15);
+    d->cloud = NULL;
+    // d->cloud = new dtkWidgetsTagCloud(this);
+    // d->cloud->setSortingType(dtkWidgetsTagCloud::Alpha);
+    // d->cloud->setSortingOrder(dtkWidgetsTagCloud::Asc);
+    // d->cloud->setFontSize(17);
+    // d->cloud->setFontRange(15);
 
     d->view = new dtkWidgetsTagCloudView(this);
 
     d->controller = new dtkWidgetsTagCloudController;
     d->controller->attach(d->scope);
     d->controller->attach(d->view);
-    d->controller->attach(d->cloud);
+    //d->controller->attach(d->cloud);
     d->controller->onUnionMode(false);
 
     QSplitter *splitter = new QSplitter(this);
-    splitter->addWidget(d->cloud);
+    //splitter->addWidget(d->cloud);
     splitter->addWidget(d->view);
     splitter->setOrientation(Qt::Vertical);
     splitter->setHandleWidth(1);
@@ -134,3 +135,6 @@ void dtkComposerNodeFactoryView::onShowNodeDocumentation(dtkComposerSceneNode *n
     if (wrapee->nodeMetaData())
         d->view->onItemClicked(wrapee->nodeMetaData()->description());
 }
+
+//
+// dtkComposerNodeFactoryView.cpp ends here

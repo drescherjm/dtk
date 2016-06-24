@@ -87,7 +87,6 @@ if(DTK_BUILD_WIDGETS)
   "@CMAKE_CURRENT_SOURCE_DIR@/src/dtkWidgets")
 endif(DTK_BUILD_WIDGETS)
 
-
 # HELPER function
 
 FUNCTION(PREPEND var prefix)

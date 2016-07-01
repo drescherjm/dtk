@@ -21,7 +21,7 @@
 #include <QtWidgets>
 
 class dtkComposerEvaluator;
-class dtkComposerFactory;
+class dtkComposerNodeFactory;
 class dtkComposerGraph;
 class dtkComposerScene;
 class dtkComposerSceneNodeComposite;
@@ -42,7 +42,7 @@ public:
     virtual ~dtkComposerWidget(void);
 
 public:
-    void setFactory(dtkComposerFactory *factory);
+    void setFactory(dtkComposerNodeFactory *factory);
     void setWriter(dtkComposerWriter *writer);
     void setReader(dtkComposerReader *reader);
 
@@ -68,7 +68,7 @@ signals:
 public:
     dtkComposerEvaluator *evaluator(void);
     dtkComposerCompass *compass(void);
-    dtkComposerFactory *factory(void);
+    dtkComposerNodeFactory *factory(void);
     dtkComposerGraph *graph(void);
     dtkComposerScene *scene(void);
     dtkComposerStack *stack(void);

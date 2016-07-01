@@ -402,9 +402,11 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             d = Data::unsharableEmpty();
         else
 #endif
-            dtkDebug() << "detaching array of size " << d->size << __func__  ;
-            reallocData(d->size, qlonglong(d->alloc));
+            dtkDebug() << Q_FUNC_INFO << "detaching array of size " << d->size;
+
+        reallocData(d->size, qlonglong(d->alloc));
     }
+
     Q_ASSERT(isDetached());
 }
 
@@ -418,6 +420,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     if (sharable == d->ref.isSharable())
         return;
+
     if (!sharable)
         detach();
 
@@ -1256,6 +1259,9 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
         const int newId = qRegisterNormalizedMetaType< dtkArray<T, PreallocSize> >(typeName, reinterpret_cast<dtkArray<T, PreallocSize>*>(quintptr(-1)));
         metatype_id.storeRelease(newId);
 
+        qRegisterMetaTypeStreamOperators<T>(array_type);
+        qRegisterMetaTypeStreamOperators< dtkArray<T, PreallocSize> >(typeName.constData());
+
         return newId;
     }
 };
@@ -1296,6 +1302,9 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
         if (newId > 0) {
             QMetaTypeId< dtkArray<T, PreallocSize> >::qt_metatype_id();
             dtkMetaType::registerContainerPointerConverter<dtkArray<T, PreallocSize> *>(newId);
+
+            qRegisterMetaTypeStreamOperators<T>(array_type);
+            qRegisterMetaTypeStreamOperators< dtkArray<T, PreallocSize> *>(typeName.constData());
         }
 
         return newId;

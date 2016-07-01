@@ -80,6 +80,7 @@ public:
     QAction *flagAsPinkAction(void);
     QAction *flagAsRedAction(void);
     QAction *flagAsYellowAction(void);
+    QAction *setBreakPointAction(void);
 
 public:
     QAction   *maskEdgesAction(void);
@@ -87,6 +88,7 @@ public:
 
 public:
     QList<dtkComposerSceneNodeLeaf *> flagged(Qt::GlobalColor);
+    bool checkImplementations(void);
 
 public:
     bool maskedEdges(void);
@@ -113,6 +115,10 @@ signals:
 // #pragma mark -
 // #pragma mark - Flag events
 
+public:
+    void onEvaluationPaused(dtkComposerNode *node);
+    void onEvaluationFinished(void);
+
 protected slots:
     void onFlagAsBlue(void);
     void onFlagAsGray(void);
@@ -122,6 +128,7 @@ protected slots:
     void onFlagAsPink(void);
     void onFlagAsYellow(void);
     void onFlagAs(Qt::GlobalColor);
+    void onBreakPointSet(void);
 
 protected slots:
     void onMaskEdge(void);
@@ -166,6 +173,7 @@ protected:
 
 protected:
     void populateEdges(dtkComposerSceneNode *root = NULL);
+    void populateNodes(dtkComposerSceneNode *root = NULL);
 
 // #pragma mark -
 // #pragma mark - Internal sigs handling

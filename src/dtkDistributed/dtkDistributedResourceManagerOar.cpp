@@ -42,7 +42,7 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
     } else if (jprops.count() > 0 ) {
         QVariantMap::const_iterator iter = jprops.begin();
         properties +=  " -p \""+iter.key()+"='"+iter.value().toString()+"'";
-        iter++;
+        ++iter;
         for(;iter != jprops.end(); ++iter) {
             properties +=  " and "+iter.key()+"='"+iter.value().toString()+"'";
         }

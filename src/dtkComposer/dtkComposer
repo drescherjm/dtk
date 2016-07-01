@@ -1,3 +1,17 @@
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
 #include "dtkComposer.h"
 #include "dtkComposerCompass.h"
 #include "dtkComposerControls.h"
@@ -5,7 +19,7 @@
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerEvaluatorProcess.h"
 #include "dtkComposerEvaluatorSlave.h"
-#include "dtkComposerFactory.h"
+#include "dtkComposerEvaluatorToolBar.h"
 #include "dtkComposerGraph.h"
 #include "dtkComposerGraphEdge.h"
 #include "dtkComposerGraphNode.h"
@@ -57,6 +71,7 @@
 #include "dtkComposerScenePort.h"
 #include "dtkComposerSceneView.h"
 #include "dtkComposerSearchDialog.h"
+#include "dtkComposerSettings.h"
 #include "dtkComposerStack.h"
 #include "dtkComposerStackCommand.h"
 #include "dtkComposerStackUtils.h"
@@ -71,3 +86,6 @@
 #include "dtkComposerReader.h"
 #include "dtkComposerReaderNoScene.h"
 #include "dtkComposerWriter.h"
+
+//
+// dtkComposer ends here

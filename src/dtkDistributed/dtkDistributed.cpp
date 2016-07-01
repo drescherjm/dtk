@@ -3,9 +3,9 @@
  * Author: Julien Wintz
  * Created: Mon Mar 25 09:23:52 2013 (+0100)
  * Version: 
- * Last-Updated: Tue Apr  9 12:28:59 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 3
+ * Last-Updated: Fri Jun 24 10:32:02 2016 (+0200)
+ *           By: tristan cabel
+ *     Update #: 8
  */
 
 /* Change Log:
@@ -98,11 +98,18 @@ namespace dtkDistributed
             return _private::manager;
         }
         void initialize(const QString& path) {
+            QString real_path = path;
             pluginFactory().record("qthread", qthDistributedCommunicatorCreator);
             if (path.isEmpty()) {
-                QString default_path = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkDistributed");
-                dtkDebug() << "no plugin path configured, use default:" << default_path ;
-                pluginManager().initialize(default_path);
+                dtkDistributedSettings settings;
+                settings.beginGroup("communicator");
+                real_path = settings.value("plugins").toString();
+                settings.endGroup();
+                if(real_path.isEmpty()) {
+                    real_path = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkDistributed");
+                    dtkDebug() << "no plugin path configured, use default:" << real_path ;
+                }
+                pluginManager().initialize(real_path);
             } else {
                 pluginManager().initialize(path);
             }

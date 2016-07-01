@@ -15,6 +15,18 @@
 
 project(dtkPlotSupport)
 
+## #################################################################
+## Dependencies
+## #################################################################
+
+if(DTK_BUILD_SUPPORT_PLOT AND NOT DTK_BUILD_SUPPORT_GUI)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_PLOT\" because it's dependencies (DTK_BUILD_SUPPORT_GUI) were not met")
+endif()
+
+if(DTK_BUILD_SUPPORT_PLOT AND NOT DTK_BUILD_WIDGETS)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_PLOT\" because it's dependencies (DTK_BUILD_WIDGETS) were not met")
+endif()
+
 find_package(Qwt 6 REQUIRED)
 
 if(QWT_FOUND)

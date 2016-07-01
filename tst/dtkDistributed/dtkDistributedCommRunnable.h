@@ -170,6 +170,7 @@ public:
 
         if (comm->size() <2 ) {
             qWarning() << "only one thread/process, skip GATHER variant test";
+            delete result;
             return;
         }
 

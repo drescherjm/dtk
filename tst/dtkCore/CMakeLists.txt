@@ -1,12 +1,12 @@
 ### CMakeLists.txt ---
-## 
+##
 ## Author: Thibaud Kloczko
 ## Created: Tue Jul 23 08:35:32 2013 (+0200)
 ##
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
 
 project(dtkCoreTest)
@@ -17,6 +17,7 @@ project(dtkCoreTest)
 
 set(${PROJECT_NAME}_HEADERS
   dtkArrayTest.h
+  dtkHashTest.h
   dtkIteratorTest.h
   dtkStaticArrayTest.h)
 
@@ -29,6 +30,7 @@ endif(DTK_HAVE_ZLIB)
 
 set(${PROJECT_NAME}_SOURCES
   dtkArrayTest.cpp
+  dtkHashTest.cpp
   dtkIteratorTest.cpp
   dtkStaticArrayTest.cpp)
 
@@ -73,6 +75,7 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 ## ###################################################################
 
 add_test(dtkArrayTest       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
+add_test(dtkHashTest        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkHashTest)
 add_test(dtkIteratorTest    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)
 add_test(dtkStaticArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkStaticArrayTest)
 

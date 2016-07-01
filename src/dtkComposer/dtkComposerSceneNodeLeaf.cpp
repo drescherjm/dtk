@@ -36,6 +36,7 @@ public:
 
 public:
     QGraphicsPixmapItem *flag;
+    QGraphicsPixmapItem *breakpoint;
          Qt::GlobalColor flag_color;
 
 public:
@@ -47,25 +48,25 @@ void dtkComposerSceneNodeLeafPrivate::flagAs(Qt::GlobalColor color)
 {
     switch(color) {
     case Qt::blue:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-blue.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-blue.png"));
         break;
     case Qt::gray:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-gray.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-gray.png"));
         break;
     case Qt::green:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-green.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-green.png"));
         break;
     case Qt::darkYellow:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-orange.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-orange.png"));
         break;
     case Qt::red:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-red.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-red.png"));
         break;
     case Qt::magenta:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-pink.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-pink.png"));
         break;
     case Qt::yellow:
-        this->flag->setPixmap(QPixmap(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
+        this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNodeFlag-yellow.png"));
         break;
     default:
         break;
@@ -89,9 +90,13 @@ dtkComposerSceneNodeLeaf::dtkComposerSceneNodeLeaf(void) : dtkComposerSceneNode(
         d->flag = new QGraphicsPixmapItem(this);
         d->flag->setVisible(false);
         d->flag_color = Qt::transparent;
+        d->breakpoint = new QGraphicsPixmapItem(this);
+        d->breakpoint->setPixmap(QPixmap(":dtkComposer/pixmaps/dtkComposerNode-breakpoint.png"));
+        d->breakpoint->setVisible(false);
     } else {
         d->use_gui = false;
         d->flag = NULL;
+        d->breakpoint = NULL;
     }
 }
 
@@ -153,6 +158,15 @@ void dtkComposerSceneNodeLeaf::flag(QColor color)
     else if(color == Qt::yellow)
         this->flag(Qt::yellow, true);
 }
+
+void dtkComposerSceneNodeLeaf::setBreakPoint(bool val)
+{
+    if(!d->breakpoint)
+        return ;
+
+    d->breakpoint->setVisible(val);
+}
+
 
 bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
 {
@@ -298,6 +312,7 @@ void dtkComposerSceneNodeLeaf::layout(void)
 // /////////////////////////////////////////////////////////////////
 
     d->flag->setPos(d->rect.right() - 20, d->rect.top() - 20);
+    d->breakpoint->setPos(-30, d->rect.top() - 20);
 }
 
 void dtkComposerSceneNodeLeaf::resize(qreal width, qreal height)

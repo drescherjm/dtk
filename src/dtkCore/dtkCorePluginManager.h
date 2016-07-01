@@ -53,6 +53,11 @@ public:
 
     QStringList plugins(void);
 
+#pragma mark -
+#pragma mark MetaData Queries
+
+    QJsonObject metaData(const QString& pluginKey);
+
 protected:
     dtkCorePluginManagerPrivate<T> *d;
 };

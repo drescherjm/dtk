@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -21,16 +21,13 @@
 
 template <typename T> inline dtkComposerNodeObject<T>::dtkComposerNodeObject(void) : dtkComposerNodeLeafObject(), m_implementation(QString()), m_object(0), m_factory(0)
 {
-    
+
 }
 
 template <typename T> inline dtkComposerNodeObject<T>::~dtkComposerNodeObject(void)
 {
-    if (m_object)
-        delete m_object;
-
-    m_object = 0;
-    m_factory = 0;
+    for(T *t : m_processes.values())
+      delete t;
 }
 
 template <typename T> inline void dtkComposerNodeObject<T>::setFactory(const dtkCorePluginFactory<T>& factory)
@@ -55,19 +52,20 @@ template <typename T> inline bool dtkComposerNodeObject<T>::createObject(const Q
 {
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return false;
-    
-    if (!m_object) {
-        m_object = m_factory->create(implementation);
-        if (m_object)
-            m_implementation = implementation;
 
-    } else if (m_implementation != implementation) {
-        if (m_object)
-            delete m_object;
-
+    if (m_processes.contains(implementation)) {
+        m_object=m_processes.value(implementation);
+    }
+    else {
         m_object = m_factory->create(implementation);
-        if (m_object)
-            m_implementation = implementation;
+
+        if(m_object) {
+            m_processes.insert(implementation, m_object);
+        }
+    }
+
+    if (m_object) {
+        m_implementation = implementation;
     }
 
     return (m_object != NULL);
@@ -91,5 +89,5 @@ template <typename T> inline bool dtkComposerNodeObject<T>::implementationHasCha
     return (m_implementation != implementation);
 }
 
-// 
+//
 // dtkComposerNodeObject.tpp ends here

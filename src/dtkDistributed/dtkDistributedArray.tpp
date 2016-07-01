@@ -133,7 +133,7 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
         typename Data::iterator it   = d->begin();
         for(; oit != oend; ++oit) {
             *it = *oit;
-            it++;
+            ++it;
         }
     }
     firstIndex = m_mapper->firstIndex(this->wid());
@@ -141,6 +141,23 @@ template <typename T> inline dtkDistributedArray<T>::dtkDistributedArray(const d
 }
 
 template <typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
+{
+    this->clear();
+}
+
+template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::operator = (const dtkDistributedArray<T>& other)
+{
+    if (m_size == other.m_size) {
+        copyConstruct(other.d->begin(), other.d->end(), d->begin());
+        m_cache->clear();
+    } else {
+        qCritical() << "can't copy: not the same size!"<<  m_size << other.m_size;
+        this->clear();
+    }
+    return *this;
+}
+
+template <typename T> inline void dtkDistributedArray<T>::clear(void)
 {
     m_comm->barrier();
     this->deallocate(m_buffer_manager, d);
@@ -151,21 +168,15 @@ template <typename T> inline dtkDistributedArray<T>::~dtkDistributedArray(void)
     m_cache = 0;
 }
 
-template <typename T> inline dtkDistributedArray<T>& dtkDistributedArray<T>::operator = (const dtkDistributedArray<T>& other)
-{
-    if (m_size == other.m_size) {
-        copyConstruct(other.d->begin(), other.d->end(), d->begin());
-    } else {
-        qCritical() << "can't copy: not the same size!"<<  m_size << other.m_size;
-    }
-    return *this;
-}
-
 template <typename T> inline void dtkDistributedArray<T>::remap(dtkDistributedMapper *remapper)
 {
     dtkDistributedBufferManager *new_buffer_manager = 0;
     Data *new_d = 0;
     this->allocate(new_buffer_manager, new_d, remapper->count(this->wid()));
+
+    if (!new_d) {
+        return;
+    }
 
     for (qlonglong i = 0; i < new_d->size; ++i) {
         new_d->begin()[i] = this->at(remapper->localToGlobal(i, this->wid()));

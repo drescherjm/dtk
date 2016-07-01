@@ -42,20 +42,6 @@ dtkDistributedCommunicatorStatus::~dtkDistributedCommunicatorStatus(void)
     d = NULL;
 }
 
-dtkDistributedCommunicatorStatus::dtkDistributedCommunicatorStatus(const dtkDistributedCommunicatorStatus& other)
-{
-    d->tag    = other.tag();
-    d->count  = other.count();
-    d->source = other.source();
-    d->error  = other.error();
-}
-
-dtkDistributedCommunicatorStatus& dtkDistributedCommunicatorStatus::operator = (const dtkDistributedCommunicatorStatus& other)
-{
-    return *this;
-}
-
-
 qlonglong dtkDistributedCommunicatorStatus::count(void) const
 {
     return d->count;

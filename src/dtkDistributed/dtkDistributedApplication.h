@@ -17,13 +17,13 @@
 
 #include "dtkDistributedExport.h"
 
-#include <dtkCore/dtkApplication.h>
+#include <QtCore>
 
 class dtkDistributedCommunicator;
 class dtkDistributedPolicy;
 class dtkDistributedApplicationPrivate;
 
-class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public dtkApplication
+class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public QCoreApplication
 {
 public:
              dtkDistributedApplication(int &argc, char **argv);
@@ -36,7 +36,11 @@ public:
     virtual void unspawn(void);
 
 public:
+    QCommandLineParser  *parser(void);
+
+public:
     bool isMaster(void);
+    virtual bool noGui(void);
     dtkDistributedCommunicator *communicator(void);
     dtkDistributedPolicy *policy(void);
 

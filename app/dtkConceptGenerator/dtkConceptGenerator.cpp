@@ -27,8 +27,8 @@ void dtkConceptGenerator::accept()
     //define variables required for abstraction
 
     values.insert("${ABSTRACTION}", prefix+"Abstract"+name);
-    values.insert("${LAYER_NAME}",prefix+layer);
-    values.insert("${_LAYER_NAME}",(prefix+layer).toUpper());
+    values.insert("${LAYER_NAME}", prefix+layer);
+    values.insert("${_LAYER_NAME}", (prefix+layer).toUpper());
 
     bool inheritsCustom,inheritsQObject,inheritsQRunnable,pluginSystem, inherits=false;
 
@@ -60,9 +60,9 @@ void dtkConceptGenerator::accept()
     {
         QString separator=inherits?",": "";
 
-        values.insert("${QRUNNABLE}",separator+"QRunnable");
+        values.insert("${QRUNNABLE}",separator+"public QRunnable");
         values.insert("${QRUNNABLE_CTR}",separator+"QRunnable()");
-        values.insert("${QRUNNABLE_INCLUDE}","#include<QRunnable>");
+        values.insert("${QRUNNABLE_INCLUDE}","#include <QRunnable>");
 
         inherits=true;
     }
@@ -104,7 +104,7 @@ void dtkConceptGenerator::accept()
     values.insert("${NAMESPACE}",namespaceText);
 
     //values for node
-    values.insert("${NODE_CLASS_NAME}",prefix+name+"ComposerNode");
+    values.insert("${NODE_CLASS_NAME}",prefix+name+"Node");
 
 
     generate("abstraction",values,outputFilesPath);

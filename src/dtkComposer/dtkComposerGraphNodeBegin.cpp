@@ -29,7 +29,7 @@
 #endif
 
 #include <dtkLog/dtkLogger.h>
-#include <dtkMathSupport/dtkGraph.h>
+#include <dtkMath/dtkGraph.h>
 
 class dtkComposerGraphNodeBeginPrivate
 {

@@ -1,0 +1,8 @@
+/*!
+    \module dtkComposer
+    \title Composer C++ Classes
+    \ingroup dtk-allAPI
+
+    \brief Provides all the mechanisms to provide a visual programming framework.
+
+*/

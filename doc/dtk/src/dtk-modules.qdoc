@@ -34,11 +34,17 @@
      \li \l{Core Module} {Core}
      \li Fundamental concepts and related tools.
   \row
+     \li \l{Composer Module} {Composer}
+     \li Visual programming framework.
+  \row
      \li \l{Meta Module} {Meta}
      \li Meta concepts.
   \row
      \li \l{Log Module} {Log}
      \li Logging framework.
+  \row
+     \li \l{Widgets Module} {Widgets}
+     \li Widgets framework.
   \endtable
 
   \section1 dtk Applicative Layers

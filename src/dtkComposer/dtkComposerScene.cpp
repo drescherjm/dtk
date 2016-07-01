@@ -12,9 +12,10 @@
 
 // Code:
 
-#include "dtkComposerEvaluator.h"
 #include "dtkComposerGraph.h"
+#include "dtkComposerGraphNode.h"
 #include "dtkComposerNodeComposite.h"
+#include "dtkComposerNodeLeaf.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerScene.h"
 #include "dtkComposerScene_p.h"
@@ -50,6 +51,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->reparent_origin = NULL;
     d->reparent_target = NULL;
+    d->last_paused_node = NULL;
 
     d->masked_edges = false;
 
@@ -61,31 +63,35 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
 
     d->flag_as_blue_action = new QAction("Flag as blue", this);
     d->flag_as_blue_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_B));
-    d->flag_as_blue_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-blue.png"));
+    d->flag_as_blue_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-blue.png"));
 
     d->flag_as_gray_action = new QAction("Flag as gray", this);
     d->flag_as_gray_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_W));
-    d->flag_as_gray_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-gray.png"));
+    d->flag_as_gray_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-gray.png"));
 
     d->flag_as_green_action = new QAction("Flag as green", this);
     d->flag_as_green_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_G));
-    d->flag_as_green_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-green.png"));
+    d->flag_as_green_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-green.png"));
 
     d->flag_as_orange_action = new QAction("Flag as orange", this);
     d->flag_as_orange_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_O));
-    d->flag_as_orange_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-orange.png"));
+    d->flag_as_orange_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-orange.png"));
 
     d->flag_as_pink_action = new QAction("Flag as pink", this);
     d->flag_as_pink_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_P));
-    d->flag_as_pink_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-pink.png"));
+    d->flag_as_pink_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-pink.png"));
 
     d->flag_as_red_action = new QAction("Flag as red", this);
     d->flag_as_red_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_R));
-    d->flag_as_red_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-red.png"));
+    d->flag_as_red_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-red.png"));
 
     d->flag_as_yellow_action = new QAction("Flag as yellow", this);
     d->flag_as_yellow_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::AltModifier + Qt::ShiftModifier + Qt::Key_Y));
-    d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/dtkComposerNodeFlag-yellow.png"));
+    d->flag_as_yellow_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNodeFlag-yellow.png"));
+
+    d->set_breakpoint_action = new QAction("Set BreakPoint", this);
+    d->set_breakpoint_action->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_B));
+    d->set_breakpoint_action->setIcon(QIcon(":dtkComposer/pixmaps/dtkComposerNode-breakpoint.png"));
 
     connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
 
@@ -99,6 +105,7 @@ dtkComposerScene::dtkComposerScene(QObject *parent) : QGraphicsScene(parent), d(
     connect(d->flag_as_pink_action, SIGNAL(triggered()), this, SLOT(onFlagAsPink()));
     connect(d->flag_as_red_action, SIGNAL(triggered()), this, SLOT(onFlagAsRed()));
     connect(d->flag_as_yellow_action, SIGNAL(triggered()), this, SLOT(onFlagAsYellow()));
+    connect(d->set_breakpoint_action, SIGNAL(triggered()), this, SLOT(onBreakPointSet()));
 
     this->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
@@ -414,6 +421,11 @@ QAction *dtkComposerScene::flagAsYellowAction(void)
     return d->flag_as_yellow_action;
 }
 
+QAction *dtkComposerScene::setBreakPointAction(void)
+{
+    return d->set_breakpoint_action;
+}
+
 QAction *dtkComposerScene::maskEdgesAction(void)
 {
     return d->mask_edges_action;
@@ -427,6 +439,32 @@ QAction *dtkComposerScene::unmaskEdgesAction(void)
 QList<dtkComposerSceneNodeLeaf *> dtkComposerScene::flagged(Qt::GlobalColor color)
 {
     return d->flagged_nodes[color];
+}
+
+bool dtkComposerScene::checkImplementations(void)
+{
+    populateNodes();
+    foreach (dtkComposerSceneNode * node, d->all_nodes) {
+        if (dtkComposerNodeLeafObject *nobj = dynamic_cast<dtkComposerNodeLeafObject*>(node->wrapee())) {
+            if (nobj->currentImplementation().isEmpty()) {
+                QMessageBox msgBox;
+
+                msgBox.setText("Node implementation is missing. Run anyway?");
+                msgBox.setInformativeText("A node has no implementation set, an execution may give you random results or a crash !");
+                QString msg = QString("The following node is missing an implementation: %1.\nAvailable implementations:\n%2").
+                    arg(node->title()).
+                    arg(nobj->implementations().join("\n"));
+                msgBox.setDetailedText(msg);
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Cancel);
+
+                if(msgBox.exec() == QMessageBox::Cancel)
+                    return false;
+
+            }
+        }
+    }
+    return true;
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -518,6 +556,52 @@ void dtkComposerScene::onFlagAs(Qt::GlobalColor color)
                 d->flagged_nodes[color] << node;
 
             emit flagged(node);
+        }
+    }
+}
+
+void dtkComposerScene::onBreakPointSet(void)
+{
+    foreach(QGraphicsItem *item, this->selectedItems()) {
+
+        if (dtkComposerSceneNodeLeaf *node = dynamic_cast<dtkComposerSceneNodeLeaf *>(item)) {
+
+            dtkComposerNode *wrapee = node->wrapee();
+
+            foreach(dtkComposerGraphNode *gnode, d->graph->nodes()) {
+                if (gnode->wrapee() == wrapee) {
+                    if (gnode->breakpoint()) {
+                        gnode->setBreakPoint(false);
+                        node->setBreakPoint(false);
+
+                    } else {
+                        gnode->setBreakPoint(true);
+                        node->setBreakPoint(true);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void dtkComposerScene::onEvaluationFinished(void)
+{
+    if (d->last_paused_node) {
+        d->last_paused_node->setOpacity(1);
+        d->last_paused_node = NULL;
+    }
+}
+
+void dtkComposerScene::onEvaluationPaused(dtkComposerNode *node)
+{
+    this->populateNodes();
+    foreach (dtkComposerSceneNode * snode, d->all_nodes) {
+        if (snode->wrapee() == node) {
+            if (d->last_paused_node != NULL)
+                d->last_paused_node->setOpacity(1);
+            snode->setOpacity(0.5);
+            d->last_paused_node = snode;
         }
     }
 }
@@ -1240,6 +1324,26 @@ void dtkComposerScene::populateEdges(dtkComposerSceneNode *node)
             this->populateEdges(block);
     }
 }
+
+void dtkComposerScene::populateNodes(dtkComposerSceneNode *node)
+{
+    if (!node) {
+        node = d->root_node;
+        d->all_nodes.clear();
+    }
+
+    d->all_nodes << node;
+
+    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        foreach(dtkComposerSceneNode *child, composite->nodes())
+            this->populateNodes(child);
+
+    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+        foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+            this->populateNodes(block);
+    }
+}
+
 
 //
 // dtkComposerScene.cpp ends here

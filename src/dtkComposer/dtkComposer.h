@@ -1,26 +1,40 @@
-/* dtkComposer.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Tue Apr  9 12:43:49 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 10:30:06 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 32
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
 
+#include <QtCore>
+
 class dtkComposerNodeFactory;
+class dtkComposerExtensionPlugin;
+class dtkComposerExtensionPluginManager;
+class dtkComposerExtensionPluginFactory;
 
 namespace dtkComposer
 {
     namespace node {
         DTKCOMPOSER_EXPORT dtkComposerNodeFactory& factory(void);
+        DTKCOMPOSER_EXPORT void initialize(void);
+    }
+    namespace extension {
+        DTKCOMPOSER_EXPORT dtkComposerExtensionPluginFactory& pluginFactory(void);
+        DTKCOMPOSER_EXPORT dtkComposerExtensionPluginManager& pluginManager(void);
+        DTKCOMPOSER_EXPORT void initialize(const QString& path = "");
     }
 }
+
+//
+// dtkComposer.h ends here

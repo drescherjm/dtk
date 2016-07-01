@@ -1,5 +1,5 @@
-/* dtkComposerSceneModel.cpp --- 
- * 
+/* dtkComposerSceneModel.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:30:18 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 915
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -34,7 +34,7 @@
 class dtkComposerSceneModelPrivate
 {
 public:
-    dtkComposerScene *scene; 
+    dtkComposerScene *scene;
 
 public:
     dtkComposerSceneModel *q;
@@ -68,7 +68,7 @@ Qt::ItemFlags dtkComposerSceneModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return 0;
-    
+
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
@@ -94,7 +94,7 @@ QVariant dtkComposerSceneModel::data(const QModelIndex& index, int role) const
         int c_notes = composite->notes().count();
         int c_nodes = composite->nodes().count();
         int c_edges = composite->edges().count();
-        
+
         if (c_notes && index.row() < c_notes)
             return QString("Note");
         else if (c_nodes && index.row() < c_notes + c_nodes)
@@ -113,10 +113,8 @@ QVariant dtkComposerSceneModel::data(const QModelIndex& index, int role) const
         control = dynamic_cast<dtkComposerSceneNodeControl *>(note->parent());
     else if(dtkComposerSceneEdge *edge = dynamic_cast<dtkComposerSceneEdge *>((QGraphicsItem *)(index.internalPointer())))
         control = dynamic_cast<dtkComposerSceneNodeControl *>(edge->parent());
-    
-    if(control) {
 
-        // qDebug() << __func__ << "Got control";
+    if(control) {
 
         return QString("Block (%1)").arg(dynamic_cast<dtkComposerSceneNodeComposite *>((QGraphicsItem *)(index.internalPointer()))->title());
     }
@@ -135,7 +133,7 @@ QVariant dtkComposerSceneModel::headerData(int section, Qt::Orientation orientat
 
     if (orientation == Qt::Vertical && role == Qt::DisplayRole)
         return QString("Composition");
-    
+
     return QVariant();
 }
 
@@ -156,7 +154,7 @@ QModelIndex dtkComposerSceneModel::index(int row, int column, const QModelIndex&
         int c_notes = composite->notes().count();
         int c_nodes = composite->nodes().count();
         int c_edges = composite->edges().count();
-        
+
         if (c_notes && row < c_notes)
             return this->createIndex(row, column, composite->notes().at(row));
         else if (c_nodes && row < c_notes + c_nodes)
@@ -195,13 +193,13 @@ QModelIndex dtkComposerSceneModel::parent(const QModelIndex& index) const
     if(control) {
 
         dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(control->parent());
-        
+
         if(parent)
             return this->createIndex(parent->notes().count() + parent->nodes().indexOf(control), 0, control);
     }
 
     if(composite) {
-        
+
         if(composite == d->scene->root())
             return QModelIndex();
 
@@ -215,7 +213,7 @@ QModelIndex dtkComposerSceneModel::parent(const QModelIndex& index) const
         if(ctrl)
             return this->createIndex(ctrl->blocks().indexOf(composite), 0, composite);
     }
-    
+
     return QModelIndex();
 }
 

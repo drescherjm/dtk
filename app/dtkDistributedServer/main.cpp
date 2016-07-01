@@ -21,7 +21,7 @@
 
 int main(int argc, char **argv)
 {
-    dtkApplication *application = dtkApplication::create(argc, argv);
+    dtkCoreApplication *application = dtkCoreApplication::create(argc, argv);
     application->setApplicationName("dtkDistributedServer");
     application->setApplicationVersion("1.0.0");
     application->setOrganizationName("inria");

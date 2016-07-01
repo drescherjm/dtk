@@ -13,6 +13,8 @@
 // Code:
 
 #include "dtkComposerNodeFactory.h"
+
+#include "dtkComposerExtension.h"
 #include "dtkComposerNodeMetaData.h"
 
 #include <dtkMeta>
@@ -71,7 +73,7 @@ void dtkComposerNodeFactory::record(const QString& metadata_file_path, creator f
     }
 }
 
-void dtkComposerNodeFactory::extend(dtkComposerNodeFactoryExtension *extension)
+void dtkComposerNodeFactory::extend(dtkComposerExtension *extension)
 {
     extension->extend(this);
 }

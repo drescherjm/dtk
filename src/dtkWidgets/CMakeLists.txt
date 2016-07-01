@@ -19,6 +19,8 @@ project(dtkWidgets)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkApplication.h
+  dtkDistributedGuiApplication.h
   dtkNotifiable.h
   dtkNotification.h
   dtkNotificationDisplay.h
@@ -28,6 +30,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
   dtkToolBox.h
+  dtkWidgets
   dtkWidgetsLogView.h
   dtkWidgetsLogView_p.h
   dtkWidgetsTag.h
@@ -39,9 +42,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudList.h
   dtkWidgetsTagCloudScope.h
   dtkWidgetsTagCloudScopeItem.h
-  dtkWidgetsTagCloudView.h)
+  dtkWidgetsTagCloudView.h
+  dtkWidgetFactory.h
+  dtkWidgetFactory.tpp
+  )
 
 set(${PROJECT_NAME}_SOURCES
+  dtkApplication.cpp
+  dtkDistributedGuiApplication.cpp
   dtkNotification.cpp
   dtkNotificationDisplay.cpp
   dtkNotificationEvent.cpp
@@ -60,7 +68,8 @@ set(${PROJECT_NAME}_SOURCES
   dtkWidgetsTagCloudList.cpp
   dtkWidgetsTagCloudScope.cpp
   dtkWidgetsTagCloudScopeItem.cpp
-  dtkWidgetsTagCloudView.cpp)
+  dtkWidgetsTagCloudView.cpp
+  )
 
 set(${PROJECT_NAME}_SOURCES_RCC
   dtkNotification.qrc
@@ -78,7 +87,9 @@ add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME}
-  dtkLog)
+  dtkCore
+  dtkLog
+  dtkDistributed)
 
 ## ###################################################################
 ## Link rules

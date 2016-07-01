@@ -18,10 +18,6 @@
 
 #include <iostream>
 
-#if defined ( WIN32 )
-#define __func__ __FUNCTION__
-#endif
-
 bool runStripEnabled = true;
 
 int logLevel = 1;
@@ -102,7 +98,7 @@ FrameworkInfo parseOtoolLibraryLine(const QString &line, bool useDebugLibs)
         const QString currentPart = parts.at(part).simplified() ;
         ++part;
 
-        qDebug() << __func__ << state << parts << currentPart << part;
+        qDebug() << Q_FUNC_INFO << state << parts << currentPart << part;
 
         if (currentPart == "")
             continue;

@@ -21,7 +21,7 @@
 
 class dtkComposerCompass;
 class dtkComposerEvaluator;
-class dtkComposerFactory;
+class dtkComposerNodeFactory;
 class dtkComposerGraph;
 class dtkComposerMachine;
 class dtkComposerPath;
@@ -44,7 +44,7 @@ public slots:
 public:
     dtkComposerCompass *compass;
     dtkComposerEvaluator *evaluator;
-    dtkComposerFactory *factory;
+    dtkComposerNodeFactory *factory;
     dtkComposerGraph *graph;
     dtkComposerMachine *machine;
     dtkComposerScene *scene;

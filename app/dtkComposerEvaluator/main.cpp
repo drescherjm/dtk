@@ -19,21 +19,19 @@
 #include <dtkDistributed>
 #include <dtkComposer>
 #include <dtkCore>
-
-#include <dtkCoreSupport/dtkPluginManager.h>
-#include <dtkCoreSupport/dtkAbstractProcessFactory.h>
+#include <dtkWidgets>
 
 #include <QtConcurrent>
 
 int main(int argc, char **argv)
 {
-    dtkDistributedApplication *application = dtkDistributed::create(argc, argv);
+    dtkDistributedGuiApplication *application = dtkDistributedGuiApplication::create(argc, argv);
 
     application->setApplicationName("dtkComposerEvaluator");
     application->setApplicationVersion("1.0.0");
     application->setOrganizationName("inria");
     application->setOrganizationDomain("fr");
-    bool no_gui = dtkDistributed::app()->noGui();
+    bool no_gui = application->noGui();
 
     QCommandLineParser *parser = application->parser();
     parser->setApplicationDescription("DTK composer evaluator. Run the given compostion (XML file).");
@@ -60,25 +58,9 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // Old Plugin manager initialization
-    // /////////////////////////////////////////////////////////////////
-
-    // QSettings *main_settings = application->settings();
-    // main_settings->beginGroup("plugins");
-
-    // if (main_settings->contains("path")) {
-    //     dtkPluginManager::instance()->setPath(main_settings->value("path").toString());
-    // }
-
-    // if (parser->isSet("verbose")) {
-    //     dtkPluginManager::instance()->setVerboseLoading(true);
-    // }
-
-    // main_settings->endGroup();
-    // dtkPluginManager::instance()->initialize();
-
-    dtkComposerFactory *factory = dtkComposerFactory::instance();
+    dtkComposer::extension::initialize();
+    dtkComposer::node::initialize();
+    dtkComposerNodeFactory *factory = &(dtkComposer::node::factory());
 
 //     if (args[1] == "--spawn") {
 
@@ -127,12 +109,12 @@ int main(int argc, char **argv)
         }
         if (no_gui) {
             evaluator->run_static();
+            return 0;
         } else {
             QObject::connect(evaluator,SIGNAL(evaluationStopped()),qApp, SLOT(quit()));
             QtConcurrent::run(evaluator, &dtkComposerEvaluator::run_static, false);
-            qApp->exec();
+            return qApp->exec();
         }
     }
-    dtkPluginManager::instance()->uninitialize();
 }
 

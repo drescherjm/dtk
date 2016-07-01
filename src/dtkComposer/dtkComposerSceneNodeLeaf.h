@@ -41,6 +41,9 @@ public:
     Qt::GlobalColor flagColor(void);
 
 public:
+    void setBreakPoint(bool val = true);
+
+public:
     void layout(void);
 
 public:

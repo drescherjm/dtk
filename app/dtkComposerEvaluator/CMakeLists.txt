@@ -25,10 +25,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTA
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 target_link_libraries(${PROJECT_NAME}
-  dtkCoreSupport
   dtkComposer
   dtkDistributed
   dtkLog
+  dtkWidgets
  )
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
@@ -44,6 +44,10 @@ SOURCE_GROUP("Header Files" REGULAR_EXPRESSION .*\\.h\$)
 ## #################################################################
 ## Installation
 ## #################################################################
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 install(TARGETS ${PROJECT_NAME}
    BUNDLE DESTINATION bin

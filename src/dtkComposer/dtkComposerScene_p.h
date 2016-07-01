@@ -51,6 +51,7 @@ public:
 public:
     dtkComposerSceneEdgeList connected_edges;
     dtkComposerSceneEdgeList all_edges;
+    dtkComposerSceneNodeList all_nodes;
 
 public:
     bool masked_edges;
@@ -64,6 +65,7 @@ public:
 
     dtkComposerSceneNode *reparent_origin;
     dtkComposerSceneNode *reparent_target;
+    dtkComposerSceneNode *last_paused_node;
 
 public:
     QAction *flag_as_blue_action;
@@ -73,6 +75,7 @@ public:
     QAction *flag_as_pink_action;
     QAction *flag_as_red_action;
     QAction *flag_as_yellow_action;
+    QAction *set_breakpoint_action;
 
 public:
     QAction *mask_edges_action;

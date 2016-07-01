@@ -40,12 +40,11 @@ void dtkComposerSceneTestCase::test(void)
     view->setScene(scene);
 
     dtkComposerNodeFactoryView *nodes = new dtkComposerNodeFactoryView;
-    //nodes->setFactory(&(dtkComposer::node::factory()));
-    nodes->setFactory(new dtkComposerFactory);
+    nodes->setFactory(&(dtkComposer::node::factory()));
 
     dtkComposerSceneModel *scene_model = new dtkComposerSceneModel;
     scene_model->setScene(scene);
-    
+
     dtkComposerSceneView *scene_view = new dtkComposerSceneView;
     scene_view->setModel(scene_model);
     scene_view->setScene(scene);

@@ -1,15 +1,15 @@
 ## Version: $Id$
-## 
+##
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change Log:
-## 
+##
 ######################################################################
-## 
+##
 ### Code:
 
 include(@dtk_CONFIG_DOCS@/dtk-config.qdocconf)
@@ -36,10 +36,10 @@ qhp.dtkCore.subprojects.classes.indexTitle = Core C++ Classes
 qhp.dtkCore.subprojects.classes.selectors  = class fake:headerfile
 qhp.dtkCore.subprojects.classes.sortPages  = true
 
-headerdirs  += ../../../../src/dtkCore
+headerdirs  += ../../../src/dtkCore
 sourcedirs  += ../../../src/dtkCore \
                ../../../doc/dtkCore/src
-              
+
 exampledirs += ../../../doc/dtkCore/snp
 imagedirs   += ../../../doc/dtkCore/img
 excludedirs += ../../../doc/dtkCore/snp

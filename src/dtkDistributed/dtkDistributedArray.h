@@ -140,6 +140,7 @@ private:
     void allocate(dtkDistributedBufferManager *&, Data *&, qlonglong);
     void deallocate(dtkDistributedBufferManager *, Data *);
     void copyConstruct(const T *srcFrom, const T *srcTo, T *dstFrom);
+    void clear(void);
 
 private:
     Data  *d;

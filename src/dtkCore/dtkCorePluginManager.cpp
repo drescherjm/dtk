@@ -1,5 +1,5 @@
 /* dtkCorePluginManager.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: jeu. avril  3 08:45:28 2014 (+0200)
  */
@@ -10,7 +10,7 @@
   \brief The dtkCorePluginManagerPrivate class is the private implementation of dtkCorePluginManager.
 */
 
-/*! \fn bool dtkCorePluginManagerPrivate::check(const QString& path)  
+/*! \fn bool dtkCorePluginManagerPrivate::check(const QString& path)
     \internal
     Checks validity of the plugin library \a path (name, version, dependencies).
 */
@@ -21,7 +21,7 @@
   \brief The dtkCorePluginManager class is a template class that handles plugins.
 */
 
-/*! \fn dtkCorePluginManager::dtkCorePluginManager(void)  
+/*! \fn dtkCorePluginManager::dtkCorePluginManager(void)
     Constructs the plugin manager.
 */
 

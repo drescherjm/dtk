@@ -23,7 +23,7 @@
 
 #include <dtkLog>
 
-#include <dtkMathSupport/dtkGraph.h>
+#include <dtkMath/dtkGraph.h>
 #include <dtkWidgets/dtkNotification.h>
 
 #include <QtCore>

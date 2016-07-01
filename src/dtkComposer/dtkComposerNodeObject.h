@@ -39,18 +39,20 @@ public:
 
 public:
     QVariant variant(void) const;
+
+public:
     T *object(void) const;
 
 public:
-    QStringList implementations(void) const;
-
+    QStringList    implementations(void) const;
     QString currentImplementation(void) const;
 
     bool implementationHasChanged(const QString& implementation) const;
 
 protected:
     QString m_implementation;
-    T *m_object;
+    T* m_object;
+    QHash<QString, T*> m_processes;
     const dtkCorePluginFactory<T> *m_factory;
 };
 

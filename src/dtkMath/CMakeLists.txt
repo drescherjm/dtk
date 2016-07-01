@@ -20,6 +20,10 @@ project(dtkMath)
 ## #################################################################
 
 set(${PROJECT_NAME}_HEADERS
+  dtkGraph
+  dtkGraph.h
+  dtkGraphEdge
+  dtkGraphEdge.h
   dtkMath
   dtkMath.h
   dtkMathArray.h
@@ -30,6 +34,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkMatrix.tpp)
 
 set(${PROJECT_NAME}_SOURCES
+  dtkGraph.cpp
+  dtkGraphEdge.cpp
   dtkMath.cpp
   dtkMathArray.cpp
   dtkMatrix.cpp)

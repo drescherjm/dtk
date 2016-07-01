@@ -29,6 +29,7 @@ static const QString DTK_INSTALL_PREFIX = "@CMAKE_INSTALL_PREFIX@";
 #cmakedefine DTK_BUILD_DISTRIBUTED
 #cmakedefine DTK_BUILD_SCRIPT
 #cmakedefine DTK_BUILD_WRAPPERS
+#cmakedefine DTK_BUILD_WIDGETS
 
 #cmakedefine DTK_BUILD_SUPPORT_CORE
 #cmakedefine DTK_BUILD_SUPPORT_COMPOSER

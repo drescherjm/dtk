@@ -42,10 +42,25 @@
     \list
     \li \l{All Modules}{All dtk Modules}
     \li \l{All dtk Classes}{All dtk Classes}
+    \li \l{All dtk Guides}{All dtk Guides}
     \endlist
    \enddiv
   \enddiv
  \enddiv
+
+ \div {class="col-2"}
+  \div {class="sectionlist normallist"}
+   \div {class="heading"}
+    \section1 Miscellaneous
+   \enddiv
+   \div {class="indexboxcont indexboxbar"}
+    \list
+    \li \l{dtk Coding Style}{dtk Coding Style}
+    \endlist
+   \enddiv
+  \enddiv
+ \enddiv
+
 \enddiv
 
 */

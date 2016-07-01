@@ -70,9 +70,7 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
 
 target_link_libraries(${PROJECT_NAME}
   dtkLog
-  dtkCore
-  dtkGuiSupport
-  dtkWidgets)
+  dtkCore)
 
 if(APPLE)
   target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
@@ -85,6 +83,10 @@ target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 ## #################################################################
 ## Installation
 ## #################################################################
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 install(FILES ${${PROJECT_NAME}_MODULES} DESTINATION modules)
 install(TARGETS ${PROJECT_NAME}

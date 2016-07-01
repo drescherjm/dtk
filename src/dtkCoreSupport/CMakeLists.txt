@@ -1,23 +1,24 @@
-### CMakeLists.txt ---
-##
-## Author: Julien Wintz
-## Copyright (C) 2008 - Julien Wintz, Inria.
-## Created: Mon Jul 20 18:39:20 2009 (+0200)
 ## Version: $Id$
-## Last-Updated: mer. sept. 17 14:55:40 2014 (+0200)
-##           By: Thibaud Kloczko
-##     Update #: 411
+##
 ######################################################################
 ##
 ### Commentary:
 ##
 ######################################################################
 ##
-### Change log:
+### Change Log:
 ##
 ######################################################################
+##
+### Code:
 
 project(dtkCoreSupport)
+
+
+if(DTK_BUILD_SUPPORT_CORE AND NOT DTK_BUILD_SUPPORT_MATH)
+  message(SEND_ERROR "You can't select \"DTK_BUILD_SUPPORT_CORE\" because it's dependencies (DTK_BUILD_SUPPORT_MATH) were not met")
+endif()
+
 
 ## #################################################################
 ## Sources
@@ -55,8 +56,6 @@ set(${PROJECT_NAME}_HEADERS
   dtkAbstractViewInteractor_p.h
   dtkAbstractViewNavigator.h
   dtkAbstractViewNavigator_p.h
-#  dtkArray.h
-#  dtkArray.tpp
   dtkCpuid.h
   dtkGlobal.h
   dtkPlugin.h
@@ -68,8 +67,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkSingleton.h
   dtkSingletonDeclare.h
   dtkSmartPointer.h
-  dtkTest.h
-  )
+  dtkTest.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkAbstractDataFactory.cpp
@@ -90,7 +88,6 @@ set(${PROJECT_NAME}_SOURCES
   dtkAbstractViewAnimator.cpp
   dtkAbstractViewInteractor.cpp
   dtkAbstractViewNavigator.cpp
-#  dtkArray.cpp
   dtkCpuid.cpp
   dtkPlugin.cpp
   dtkPluginManager.cpp
@@ -98,8 +95,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkSingleton.cpp
   dtkSingletonDeclare.cpp
   dtkSmartPointer.cpp
-  dtkUpdater.cpp
-  )
+  dtkUpdater.cpp)
 
 ## #################################################################
 ## Wrapping
@@ -111,15 +107,23 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
   set(${PROJECT_NAME}_WRAP_DEPENDS ${${PROJECT_NAME}_HEADERS})
 
-  if(PYTHONLIBS_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport python ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  option(DTK_WRAPPING_PYTHON    "Build python wrapper" OFF)
+  option(DTK_WRAPPING_TCL       "Build TCL wrapper" OFF)
+  option(DTK_WRAPPING_CSHARP    "Build C# wrapper" OFF)
+
+  if (DTK_WRAPPING_PYTHON)
+    if (PYTHONLIBS_FOUND)
+      dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport python ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+    endif()
   endif()
 
-  if(TCL_FOUND)
-    dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport tcl ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+  if (DTK_WRAPPING_TCL)
+    if (TCL_FOUND)
+      dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport tcl ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
+    endif()
   endif()
 
-  if(TRUE)
+  if (DTK_WRAPPING_CSHARP)
     dtk_wrap(${PROJECT_NAME} ${PROJECT_NAME}_SOURCES_WRAP dtkcoresupport csharp ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i ${${PROJECT_NAME}_WRAP_DEPENDS})
   endif()
 endif()
@@ -131,8 +135,7 @@ endif()
 add_library(${PROJECT_NAME} SHARED
   ${${PROJECT_NAME}_SOURCES}
   ${${PROJECT_NAME}_SOURCES_WRAP}
-  ${${PROJECT_NAME}_HEADERS}
-)
+  ${${PROJECT_NAME}_HEADERS})
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 target_link_libraries(${PROJECT_NAME} Qt5::Gui)
@@ -145,12 +148,12 @@ target_link_libraries(${PROJECT_NAME}
 
 if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
-  if(TCL_FOUND)
-    target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
-  endif()
+ if (DTK_WRAPPING_TCL AND TCL_FOUND)
+   target_link_libraries(${PROJECT_NAME} ${TCL_LIBRARY})
+ endif()
 
-  if(PYTHONLIBS_FOUND)
-    target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+  if(DTK_WRAPPING_PYTHON AND PYTHONLIBS_FOUND)
+      target_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
   endif()
 
 endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
@@ -176,7 +179,6 @@ add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}"
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different "${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Export.h" "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export")
 
-
 ## #################################################################
 ## Handling of generated script modules
 ## #################################################################
@@ -185,7 +187,7 @@ set(${PROJECT_NAME}_MODULES)
 
 if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
-  if(PYTHONLIBS_FOUND)
+  if(DTK_WRAPPING_PYTHON AND PYTHONLIBS_FOUND )
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
       DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
@@ -194,12 +196,13 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
       COMMENT "-- Moving python modules to ${CMAKE_BINARY_DIR}/modules")
 
     set(${PROJECT_NAME}_MODULES ${CMAKE_BINARY_DIR}/modules/dtkcoresupport.py)
+
     if(APPLE)
       add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
         COMMAND ln -sf ../lib/libdtkCoreSupport.dylib _dtkcoresupport.so
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-        )
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
+
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(APPLE)
 
@@ -207,21 +210,24 @@ if(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
       add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
         COMMAND ln -fs ../${CMAKE_INSTALL_LIBDIR}/libdtkCoreSupport.so _dtkcoresupport.so
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules
-        )
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
+
       set(${PROJECT_NAME}_MODULES ${${PROJECT_NAME}_MODULES} ${CMAKE_BINARY_DIR}/modules/_dtkcoresupport.so)
     endif(UNIX AND NOT APPLE)
 
-  endif(PYTHONLIBS_FOUND)
+  endif(DTK_WRAPPING_PYTHON AND PYTHONLIBS_FOUND )
 
-  file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
+  if (DTK_WRAPPING_CSHARP)
 
-  foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-      DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
-      COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
-      COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
-  endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+    file(GLOB DTK_CSHARP_SOURCES "${${PROJECT_NAME}_BINARY_DIR}/*.cs")
+
+    foreach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+      add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        DEPENDS ${PROJECT_SOURCE_DIR}/dtkCoreSupport.i
+        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${DTK_CSHARP_SOURCE} ${CMAKE_BINARY_DIR}/modules
+        COMMENT "-- Moving csharp ${DTK_CSHARP_SOURCE} source to ${CMAKE_BINARY_DIR}/modules")
+    endforeach(DTK_CSHARP_SOURCE ${DTK_CSHARP_SOURCES})
+  endif (DTK_WRAPPING_CSHARP)
 
 endif(DTK_BUILD_WRAPPERS AND SWIG_FOUND)
 
@@ -246,3 +252,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT coresupport
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

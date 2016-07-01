@@ -14,6 +14,8 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
+######################################################################
+
 if(${CMAKE_MAJOR_VERSION} GREATER 2)
   cmake_policy(SET CMP0028 NEW)
 endif(${CMAKE_MAJOR_VERSION} GREATER 2)
@@ -35,6 +37,8 @@ set(dtk_VERSION
 ## ###################################################################
 ## Path setup
 ## ###################################################################
+
+include(GNUInstallDirs)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -65,7 +69,6 @@ endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include(GNUInstallDirs)
 include(GenerateExportHeader)
 
 if(APPLE)
@@ -74,8 +77,8 @@ endif(APPLE)
 
 if(NOT APPLE AND NOT MSVC)
   include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
   if(COMPILER_SUPPORTS_CXX11)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unknown-pragmas")
   elseif(COMPILER_SUPPORTS_CXX0X)
@@ -102,18 +105,23 @@ else(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_64 0)
 endif(CMAKE_SIZEOF_VOID_P MATCHES 8)
 
+if(WIN32)
+  add_definitions("/wd4068 /wd4244 /wd4996 /wd4005 /wd4305")
+endif(WIN32)
+
 ## #################################################################
 ## Options
 ## #################################################################
 
-option(DTK_ENABLE_COVERAGE              "enable coverage report" false)
-option(DTK_COVERAGE_USE_COBERTURA "use cobertura coverage format" true)
-option(DTK_ENABLE_MEMCHECK              "enable valgrind memcheck report" false)
+option(DTK_ENABLE_COVERAGE           "enable coverage report" false)
+option(DTK_COVERAGE_USE_COBERTURA    "use cobertura coverage format" true)
+option(DTK_ENABLE_MEMCHECK           "enable valgrind memcheck report" false)
 
 option(DTK_BUILD_COMPOSER            "Build composer layer" false)
 option(DTK_BUILD_DISTRIBUTED         "Build distributed layer" true)
 option(DTK_BUILD_SCRIPT              "Build script layer"  false)
 option(DTK_BUILD_WRAPPERS            "Build wrappers"      false)
+option(DTK_BUILD_WIDGETS             "Build widgets"        true)
 option(DTK_BUILD_SUPPORT_CORE        "Build support layer" false)
 option(DTK_BUILD_SUPPORT_CONTAINER   "Build support layer" false)
 option(DTK_BUILD_SUPPORT_COMPOSER    "Build support layer" false)
@@ -129,8 +137,9 @@ option(DTK_BUILD_SUPPORT_VR          "Build support layer" false)
 
 if(DTK_ENABLE_MEMCHECK)
 
-  find_program( CTEST_MEMORYCHECK_COMMAND valgrind )
-  set( CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml" )
+  find_program(CTEST_MEMORYCHECK_COMMAND valgrind)
+
+  set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --xml=yes --suppressions=${CMAKE_SOURCE_DIR}/tst/gtk.suppressions  --xml-file=valgrind-%p.xml")
 
   function(add_test name binary)
     set(memcheck_command "${CTEST_MEMORYCHECK_COMMAND} ${CTEST_MEMORYCHECK_COMMAND_OPTIONS}")
@@ -148,7 +157,7 @@ enable_testing()
 
 if(DTK_ENABLE_COVERAGE)
 
-  include(CodeCoverage)
+  include(dtkCodeCoverage)
   include(FindPythonInterp)
   if(DTK_COVERAGE_USE_COBERTURA)
     SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
@@ -171,8 +180,7 @@ find_package(Qt5 REQUIRED COMPONENTS
   Test
   Svg
   Widgets
-  Xml
-  )
+  Xml)
 
 ## ###################################################################
 ## Doc setup
@@ -181,8 +189,8 @@ find_package(Qt5 REQUIRED COMPONENTS
 set(dtk_INSTALL_DOCS ${CMAKE_BINARY_DIR}/html)
 set(dtk_CONFIG_DOCS  ${CMAKE_BINARY_DIR}/doc/cfg)
 
-# variables used by doc and tst
 get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
+
 get_filename_component(QT5_BINARY_DIR ${QT5_QMAKE_EXECUTABLE} PATH)
 
 ## #################################################################
@@ -203,6 +211,7 @@ find_package(SWIG REQUIRED)
 
 if(SWIG_FOUND)
   include(${SWIG_USE_FILE})
+
   set(CMAKE_SWIG_FLAGS "")
 
   macro(dtk_wrap project target name language input deps)
@@ -306,13 +315,12 @@ if (ZLIB_FOUND)
   set(DTK_HAVE_ZLIB "YES")
 endif (ZLIB_FOUND)
 
-
 set(DTK_HAVE_VRPN "NO")
 
 if(DTK_BUILD_SUPPORT_VR)
 
 ## #################################################################
-## OpenNI / Nite && VRPN
+## OpenNI / Nite
 ## #################################################################
 
 find_path(OPENNI_INCLUDES XnOpenNI.h /usr/include/ni)
@@ -350,8 +358,8 @@ find_path(QUAT_INCLUDES           quat.h /usr/include /usr/local/include)
 find_path(VRPN_INCLUDES vrpn_Configure.h /usr/include /usr/local/include)
 
 if(QUAT_INCLUDES AND VRPN_INCLUDES)
-include_directories(${QUAT_INCLUDES})
-include_directories(${VRPN_INCLUDES})
+  include_directories(${QUAT_INCLUDES})
+  include_directories(${VRPN_INCLUDES})
 endif(QUAT_INCLUDES AND VRPN_INCLUDES)
 
 mark_as_advanced(VRPN_INCLUDES)
@@ -385,6 +393,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMath)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkMeta)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkScript)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkTest)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/dtkWidgets)
 
 ## ###################################################################
 ## Input
@@ -413,15 +422,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkConfigVersion.cmake.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkSetTestEnvironment.cmake.in
 "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake" @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CodeCoverage.cmake
-"${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake" @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/dtkCodeCoverage.cmake
+"${CMAKE_CURRENT_BINARY_DIR}/dtkCodeCoverage.cmake" @ONLY)
 
 set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${CMAKE_CURRENT_BINARY_DIR}/dtkSetTestEnvironment.cmake")
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/install/dtkConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/dtkConfigVersion.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/CodeCoverage.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/dtkCodeCoverage.cmake"
   DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
 
 install(EXPORT dtkDepends DESTINATION  ${CMAKE_INSTALL_LIBDIR}/cmake/dtk)
@@ -442,6 +451,7 @@ mark_as_advanced(Qt5Qml_DIR)
 mark_as_advanced(Qt5Quick_DIR)
 mark_as_advanced(Qt5QuickTest_DIR)
 mark_as_advanced(Qt5Script_DIR)
+mark_as_advanced(Qt5Svg_DIR)
 mark_as_advanced(Qt5Test_DIR)
 mark_as_advanced(Qt5Widgets_DIR)
 mark_as_advanced(Qt5Xml_DIR)

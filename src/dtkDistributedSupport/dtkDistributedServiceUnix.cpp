@@ -1,5 +1,5 @@
-/* dtkDistributedServiceUnix.cpp --- 
- * 
+/* dtkDistributedServiceUnix.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:38:51 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 37
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedService.h"
@@ -92,7 +92,7 @@ static QString absPath(const QString &path)
             dir.cd(path.left(slashpos));
             ret = dir.absolutePath();
         } else { // Need to search $PATH
-            char *envPath = ::getenv("PATH");
+            char *envPath = qgetenv("PATH").data();
             if (envPath) {
                 QStringList envPaths = QString::fromLocal8Bit(envPath).split(':');
                 for (int i = 0; i < envPaths.size(); ++i) {

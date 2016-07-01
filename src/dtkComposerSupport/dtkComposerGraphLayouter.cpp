@@ -1,5 +1,5 @@
-/* dtkComposerGraphLayouter.cpp --- 
- * 
+/* dtkComposerGraphLayouter.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 10 10:17:18 2012 (+0100)
@@ -9,13 +9,13 @@
  *     Update #: 493
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  * - removeCycle: greedy cycle removal algorithm
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraph.h"
@@ -134,15 +134,13 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
             foreach(dtkComposerGraphEdge *e, inset(m, nodes, edges)) {
                 edges.removeAll(e);
             }
-            
+
             nodes.removeAll(m);
         }
     }
 
     foreach(dtkComposerGraphEdge *edge, this->reversed)
         reverse(edge);
-
-    // qDebug() << __func__ << this->reversed.count() << "edges reversed";
 }
 
 void dtkComposerGraphLayouterPrivate::assignLayers(void)
@@ -164,8 +162,6 @@ void dtkComposerGraphLayouterPrivate::assignLayers(void)
             height = qMax(height, this->layers[v]);
         }
     }
-
-    // qDebug() << __func__ << "Layout height is" << height;
 }
 
 void dtkComposerGraphLayouterPrivate::createDummys(void)
@@ -266,8 +262,6 @@ dtkComposerGraphNodeList sort(dtkComposerGraphNodeList& nodes, dtkComposerGraphE
         if(!(inset(node, node_list, edge_list).count()))
             nodel << node;
 
-    // qDebug() << __func__ << nodel.count() << "nodel to be sorted";
-
     while(!nodel.isEmpty()) {
 
         dtkComposerGraphNode *n = nodel.takeFirst(); sortd << n;
@@ -275,15 +269,13 @@ dtkComposerGraphNodeList sort(dtkComposerGraphNodeList& nodes, dtkComposerGraphE
         foreach(dtkComposerGraphEdge *edge, outset(n, node_list, edge_list)) {
 
             dtkComposerGraphNode *m = edge->destination();
-            
+
             edge_list.removeAll(edge);
 
             if(inset(m, node_list, edge_list).count() == 0)
                 nodel << m;
         }
     }
-
-    // qDebug() << __func__ << sortd.count() << "nodel sorted";
 
     return sortd;
 }
@@ -349,7 +341,7 @@ int o_degree(dtkComposerGraphNode *node, dtkComposerGraphNodeList& nodes, dtkCom
 void reverse(dtkComposerGraphEdge *edge)
 {
     dtkComposerGraphNode *t = edge->source();
-    
+
     edge->setSource(edge->destination());
     edge->setDestination(t);
 }

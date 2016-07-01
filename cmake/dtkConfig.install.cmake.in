@@ -30,6 +30,9 @@ set(dtk_INCLUDE_DIRS
   "@CMAKE_INSTALL_PREFIX@/include/dtkMeta"
   "@CMAKE_INSTALL_PREFIX@/include/dtkTest")
 
+set(CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH} "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/dtk/")
+
 set(DTK_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
 
 set(dtk_INSTALL_DOCS "@CMAKE_INSTALL_PREFIX@/doc")
@@ -54,6 +57,7 @@ set(DTK_BUILD_DISTRIBUTED @DTK_BUILD_DISTRIBUTED@)
 set(DTK_BUILD_COMPOSER @DTK_BUILD_COMPOSER@)
 set(DTK_BUILD_SCRIPT @DTK_BUILD_SCRIPT@)
 set(DTK_BUILD_WRAPPERS @DTK_BUILD_WRAPPERS@)
+set(DTK_BUILD_WIDGETS @DTK_BUILD_WIDGETS@)
 set(DTK_BUILD_SUPPORT_CORE @DTK_BUILD_SUPPORT_CORE@)
 set(DTK_BUILD_SUPPORT_CONTAINER @DTK_BUILD_SUPPORT_CONTAINER@)
 set(DTK_BUILD_SUPPORT_COMPOSER @DTK_BUILD_SUPPORT_COMPOSER@)
@@ -76,6 +80,34 @@ if(DTK_BUILD_COMPOSER)
   "@CMAKE_INSTALL_PREFIX@/include/dtkComposer")
 endif(DTK_BUILD_COMPOSER)
 
+if(DTK_BUILD_WIDGETS)
+  set(dtk_INCLUDE_DIRS ${dtk_INCLUDE_DIRS}
+  "@CMAKE_INSTALL_PREFIX@/include/dtkWidgets")
+endif(DTK_BUILD_WIDGETS)
+
+## ###################################################################
+## Always full RPATH
+## ###################################################################
+
+include(GNUInstallDirs)
+
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
+
+message(STATUS ${CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES})
+
+if("${isSystemDir}" STREQUAL "-1")
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+endif("${isSystemDir}" STREQUAL "-1")
+
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+function(PREPEND var prefix)
+   set(listVar "")
+   foreach(f ${ARGN})
+      list(APPEND listVar "${prefix}/${f}")
+   endforeach(f)
+   set(${var} "${listVar}" PARENT_SCOPE)
+endfunction(PREPEND)
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

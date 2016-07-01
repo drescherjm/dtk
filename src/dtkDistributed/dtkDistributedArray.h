@@ -92,6 +92,7 @@ public:
     void setAt(const qlonglong& index, T *array, const qlonglong& size);
 
     T at(const qlonglong& index) const;
+    void range(const qlonglong& index, T* array, const qlonglong& count) const;
 
     T first(void) const;
     T  last(void) const;

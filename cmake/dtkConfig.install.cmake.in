@@ -90,21 +90,24 @@ endif(DTK_BUILD_WIDGETS)
 ## ###################################################################
 
 include(GNUInstallDirs)
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-# the RPATH to be used when installing, but only if it's not a system directory
-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
-IF("${isSystemDir}" STREQUAL "-1")
-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-ENDIF("${isSystemDir}" STREQUAL "-1")
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
 
-FUNCTION(PREPEND var prefix)
-   SET(listVar "")
-   FOREACH(f ${ARGN})
-      LIST(APPEND listVar "${prefix}/${f}")
-   ENDFOREACH(f)
-   SET(${var} "${listVar}" PARENT_SCOPE)
-ENDFUNCTION(PREPEND)
+message(STATUS ${CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES})
+
+if("${isSystemDir}" STREQUAL "-1")
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+endif("${isSystemDir}" STREQUAL "-1")
+
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+function(PREPEND var prefix)
+   set(listVar "")
+   foreach(f ${ARGN})
+      list(APPEND listVar "${prefix}/${f}")
+   endforeach(f)
+   set(${var} "${listVar}" PARENT_SCOPE)
+endfunction(PREPEND)
 
 ######################################################################
 ### dtkConfig.cmake.in ends here

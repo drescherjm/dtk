@@ -1,16 +1,16 @@
-/* dtkWidgetsTagCloudScope.cpp ---
- * 
- * Author: Julien Wintz
- * Created: Mon Apr 15 12:40:08 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 15:51:21 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 22
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkWidgetsTagCloudLayout.h"
 #include "dtkWidgetsTagCloudScope.h"
@@ -192,3 +192,6 @@ void dtkWidgetsTagCloudScope::onTagRemoved(void)
 
     emit tagRemoved(value);
 }
+
+//
+// dtkWidgetsTagCloudScope.cpp ends here

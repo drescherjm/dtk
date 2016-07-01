@@ -1,12 +1,16 @@
-/* dtkWidgetsTagCloudScope.h ---
- *
- * Author: Julien Wintz
- * Created: Mon Apr 15 12:38:14 2013 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- *
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -48,11 +52,14 @@ public slots:
 
 public slots:
     void toggle(void);
-		     
+
 protected slots:
     void onTagAdded(void);
     void onTagRemoved(void);
-    
+
 protected:
     dtkWidgetsTagCloudScopePrivate *d;
 };
+
+//
+// dtkWidgetsTagCloudScope.h ends here

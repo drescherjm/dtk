@@ -47,16 +47,11 @@ dtkComposerNodeFactoryView::dtkComposerNodeFactoryView(QWidget *parent) : QWidge
     d->controller->attach(d->view);
     d->controller->onUnionMode(false);
 
-    QSplitter *splitter = new QSplitter(this);
-    splitter->addWidget(d->view);
-    splitter->setOrientation(Qt::Vertical);
-    splitter->setHandleWidth(1);
-
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(d->scope);
-    layout->addWidget(splitter);
+    layout->addWidget(d->view);
 
     this->addNote();
 }

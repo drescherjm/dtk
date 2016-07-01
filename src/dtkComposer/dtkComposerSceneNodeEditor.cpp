@@ -1335,20 +1335,6 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
         object = object_node->variant().value<QObject*>();
     }
 
-    // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(d->node->wrapee())) {
-    //     data_node->createData(implementation);
-    //     object = reinterpret_cast<QObject *>(data_node->data());
-
-    // } else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee())) {
-    //     process_node->createProcess(implementation);
-    //     object = reinterpret_cast<QObject *>(process_node->process());
-
-    // } else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(d->node->wrapee())) {
-    //     view_node->createView(implementation);
-    //     object = reinterpret_cast<QObject *>(view_node->view());
-
-    // }
-
     if (object) {
         dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
         item->setContentsMargins(0, 0, 0, 0);

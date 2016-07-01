@@ -1376,7 +1376,6 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
         d->current_widget->setEnabled(true);
         d->layout_widg_edit->addWidget(d->current_widget);
     }
-
 }
 
 //

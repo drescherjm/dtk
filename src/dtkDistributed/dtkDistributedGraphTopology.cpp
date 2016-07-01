@@ -386,7 +386,6 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
     // they are registered at the end of the local_edge_to_vertex
     // array and they are not referenced by the local_vertex_to_edge
     // array.
-    dtkDebug() << __func__ << "stage 3 ";
     {
         auto it  = m_dd.map_remote.cbegin();
         auto ite = m_dd.map_remote.cend();
@@ -408,7 +407,6 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
 
     // Now we can build the mapper that describe how the edges are
     // distributed according to domain decomposition paradigm.
-    dtkDebug() << __func__ << "stage 4 ";
     qlonglong local_nnz = local_internal_nnz + local_hybrid_nnz + local_remote_nnz;
     m_dd.local_edge_to_vertex.resize(local_nnz);
 
@@ -433,7 +431,6 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
     // We now fill the local CSR edge_to_vertex array. The global ids
     // are sorted according to their local ids. This operation is
     // purely local.
-    dtkDebug() << __func__ << "stage 5 ";
     auto local_it = m_dd.local_edge_to_vertex.begin();
     {
         auto it  = m_dd.map.cbegin();
@@ -486,8 +483,7 @@ void dtkDistributedGraphTopology::buildDomainDecompositionData(void)
 
 
     // We scan the local vertices of the DD structure.
-    dtkDebug() << __func__ << "stage 6 ";
-    this->rlock();
+     this->rlock();
     for (qlonglong i = 0; i < m_dd.local_vertex_to_edge.size() - 1; ++i) {
 
         qlonglong gi = m_dd.loc_to_glob[i];
@@ -531,7 +527,6 @@ void dtkDistributedGraphTopology::assembleDomainDecompositionFeatures(void)
 void dtkDistributedGraphTopology::assemble(void)
 {
     this->m_comm->barrier();
-    dtkDebug() << "start of " << __func__ ;
     // ---------------------------
     // First stage: interface vertex counting
     // ---------------------------
@@ -548,7 +543,6 @@ void dtkDistributedGraphTopology::assemble(void)
     // stand on an interface. For each corresponding entry into the
     // m_neighbour_count DSarray, we add the number of edges that
     // connect these vertices to interior vertices.
-    dtkDebug() << __func__ << "stage 1 ";
     {
         auto it  = m_dd.map_hybrid.cbegin();
         auto ite = m_dd.map_hybrid.cend();
@@ -713,7 +707,6 @@ void dtkDistributedGraphTopology::assemble(void)
     m_vertex_to_edge->clearCache();
 
     // Reduction to compute the global number of interface edges.
-    dtkDebug() << __func__ << "stage 4 ";
     qlonglong itf_edges_count = 0;
     m_comm->reduce(&local_itf_edges, &itf_edges_count, 1, dtkDistributedCommunicator::Sum, 0, true);
 
@@ -961,7 +954,6 @@ void dtkDistributedGraphTopology::assemble(void)
 
     // Firstly, each partition add the odd edges stored in its
     // remote_edge_to_add map.
-    dtkDebug() << __func__ << "stage 11 ";
     {
         auto it  = remote_edge_to_add.cbegin();
         auto ite = remote_edge_to_add.cend();
@@ -987,7 +979,6 @@ void dtkDistributedGraphTopology::assemble(void)
     // Populate the m_edge_to_vertex DSarray
     m_vertex_to_edge->rlock(this->wid());
     m_neighbour_count->rlock(this->wid());
-    dtkDebug() << __func__ << "stage 12 ";
     {
         qlonglong e_offset = m_edge_to_vertex->mapper()->firstIndex(this->wid());
 

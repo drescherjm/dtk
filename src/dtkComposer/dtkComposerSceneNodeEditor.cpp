@@ -34,9 +34,6 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
-// #include "dtkComposerNodeLeafData.h"
-// #include "dtkComposerNodeLeafProcess.h"
-// #include "dtkComposerNodeLeafView.h"
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
@@ -78,6 +75,7 @@ QSize dtkComposerSceneNodeEditorList::sizeHint(void) const
 void dtkComposerSceneNodeEditorList::addInputPort(dtkComposerScenePort *port)
 {
     dtkComposerSceneNodeEditorListItem *item = new dtkComposerSceneNodeEditorListItem(port, this);
+
     port->isVisible() ? item->setCheckState(Qt::Checked) : item->setCheckState(Qt::Unchecked);
 
     this->addItem(item);
@@ -86,6 +84,7 @@ void dtkComposerSceneNodeEditorList::addInputPort(dtkComposerScenePort *port)
 void dtkComposerSceneNodeEditorList::addOutputPort(dtkComposerScenePort *port)
 {
     dtkComposerSceneNodeEditorListItem *item = new dtkComposerSceneNodeEditorListItem(port, this);
+
     port->isVisible() ? item->setCheckState(Qt::Checked) : item->setCheckState(Qt::Unchecked);
 
     this->addItem(item);

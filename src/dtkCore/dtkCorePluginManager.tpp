@@ -55,7 +55,6 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::checkVersion(const QS
 {
     QStringList ve_ref_list = ref_version.split(".");
     QStringList ve_elem_list = elem_version.split(".");
-    dtkDebug() << "checking versions " << ref_version << "against" << elem_version;
 
     //if major level different return false
     if(ve_ref_list.at(0).toInt() != ve_elem_list.at(0).toInt())
@@ -203,7 +202,6 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
 template <typename T>  void dtkCorePluginManager<T>::setLayerVersion(QString layer_version)
 {
     d->layerVersion = layer_version;
-    dtkDebug() << "setting layer version of a layer " << d->layerVersion;
 }
 
 // /////////////////////////////////////////////////////////////////

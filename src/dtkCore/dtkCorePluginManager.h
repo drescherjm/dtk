@@ -40,6 +40,7 @@ public:
     void setAutoLoading(bool value);
     bool autoLoading(void) const;
     void loadFromName(const QString & plugin_name);
+    void setLayerVersion(QString layer_version);
 
 #pragma mark -
 #pragma mark Plugin Management

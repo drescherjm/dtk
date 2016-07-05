@@ -36,6 +36,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkCorePluginFactoryTemplate
   dtkCorePluginFactoryTemplate.h
   dtkCorePluginManager
+  dtkCorePluginManagerBase.h
   dtkCorePluginManager.h
   dtkCorePluginManager.tpp
   dtkCorePluginTuner
@@ -57,6 +58,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkCoreApplication.cpp
   dtkCoreSettings.cpp
   dtkArrayData.cpp
+  dtkCorePluginManagerBase.cpp
  )
 
 ## #################################################################

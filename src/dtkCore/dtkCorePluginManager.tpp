@@ -51,7 +51,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
         QString conceptName = QMetaType::typeName(qMetaTypeId<T*>());
         conceptName.remove("Plugin*");
 
-        QString pluginConcept = dtkCorePluginManagerBase::instance()->concept.value(path).toString();
+        QString pluginConcept = dtkCorePluginManagerBase::instance()->concept(path).toString();
 
         if (conceptName != pluginConcept) {
             if (this->verboseLoading) {
@@ -66,17 +66,17 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
         QVariantMap mitem = item.toMap();
         QVariant na_mitem = mitem.value("name");
         QVariant ve_mitem = mitem.value("version");
-        QString key = dtkCorePluginManagerBase::instance()->names.key(na_mitem);
+        QString key = dtkCorePluginManagerBase::instance()->pluginPath(na_mitem);
 
-        if(!dtkCorePluginManagerBase::instance()->names.values().contains(na_mitem)) {
+        if(!dtkCorePluginManagerBase::instance()->hasName(na_mitem)) {
             dtkWarn() << "  Missing dependency:" << na_mitem.toString() << "for plugin" << path;
             status = false;
 
             continue;
         }
 
-        if (dtkCorePluginManagerBase::instance()->versions.value(key) != ve_mitem) {
-            dtkWarn() << "    Version mismatch:" << na_mitem.toString() << "version" << dtkCorePluginManagerBase::instance()->versions.value(dtkCorePluginManagerBase::instance()->names.key(na_mitem)).toString() << "but" << ve_mitem.toString() << "required for plugin" << path;
+        if (dtkCorePluginManagerBase::instance()->version(key) != ve_mitem) {
+            dtkWarn() << "    Version mismatch:" << na_mitem.toString() << "version" << dtkCorePluginManagerBase::instance()->version(key).toString() << "but" << ve_mitem.toString() << "required for plugin" << path;
 
             status = false;
 
@@ -144,9 +144,10 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
 {
     QString full_name = plugin_name % "Plugin";
 
-    QHash<QString, QVariant>::const_iterator i = dtkCorePluginManagerBase::instance()->names.constBegin();
+    auto i = dtkCorePluginManagerBase::instance()->namesBegin();
+    auto e = dtkCorePluginManagerBase::instance()->namesEnd();
 
-    while (i != dtkCorePluginManagerBase::instance()->names.constEnd()) {
+    while (i != e) {
         if(QString::compare(i.value().toString(), full_name) == 0) {
             this->load(i.key());
             return;
@@ -155,7 +156,7 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
     }
 
     dtkWarn() << Q_FUNC_INFO << plugin_name << " not found ";
-    dtkWarn() << Q_FUNC_INFO << "keys" << dtkCorePluginManagerBase::instance()->names.keys() << dtkCorePluginManagerBase::instance()->names.values();
+    dtkWarn() << Q_FUNC_INFO << "keys" << dtkCorePluginManagerBase::instance()->pluginPaths() << dtkCorePluginManagerBase::instance()->names();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -200,9 +201,9 @@ template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
 
     QPluginLoader *loader = new QPluginLoader(path);
 
-    dtkCorePluginManagerBase::instance()->names.insert(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
-    dtkCorePluginManagerBase::instance()->versions.insert(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
-    dtkCorePluginManagerBase::instance()->concept.insert(path, loader->metaData().value("MetaData").toObject().value("concept").toVariant());
+    dtkCorePluginManagerBase::instance()->insertName(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
+    dtkCorePluginManagerBase::instance()->insertVersion(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
+    dtkCorePluginManagerBase::instance()->insertConcept(path, loader->metaData().value("MetaData").toObject().value("concept").toVariant());
     d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
 
     delete loader;

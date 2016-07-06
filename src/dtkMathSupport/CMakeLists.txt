@@ -53,8 +53,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTA
 ## Export header file
 ## #################################################################
 
-add_compiler_export_flags()
-
 generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 

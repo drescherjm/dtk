@@ -120,8 +120,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION   ${dtk_VERSION}
 ## Export header file
 ## #################################################################
 
-add_compiler_export_flags()
-
 generate_export_header(${PROJECT_NAME}
   EXPORT_FILE_NAME "${PROJECT_NAME}Export.h")
 
@@ -133,7 +131,6 @@ set(${PROJECT_NAME}_HEADERS
   ${${PROJECT_NAME}_HEADERS}
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export"
  "${CMAKE_BINARY_DIR}/${PROJECT_NAME}Export.h")
-
 
 ## ###################################################################
 ## Install rules - files

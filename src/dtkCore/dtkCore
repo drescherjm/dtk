@@ -5,6 +5,7 @@
 #include "dtkCorePluginFactory.h"
 #include "dtkCorePluginFactoryTemplate.h"
 #include "dtkCorePluginManager.h"
+#include "dtkCorePluginManagerBase.h"
 #include "dtkCorePluginTuner.h"
 #include "dtkArrayData.h"
 #include "dtkArray.h"

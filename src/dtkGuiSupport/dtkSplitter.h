@@ -12,9 +12,11 @@
 
 // Code:
 
-#include <QtWidgets>
+#pragma once
 
-#include <dtkCore/dtkGlobal.h>
+#include <QSplitter>
+
+#include <dtkCoreSupport/dtkGlobal.h>
 
 #include "dtkGuiSupportExport.h"
 

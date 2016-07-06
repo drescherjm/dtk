@@ -12,7 +12,8 @@
 
 // Code:
 
-#include <QtGui>
+
+#include <QtWidgets>
 
 #include "dtkSplitter.h"
 

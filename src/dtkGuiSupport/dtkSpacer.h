@@ -12,7 +12,7 @@
 
 // Code:
 
-#include <QtWidgets>
+#include <QWidget>
 
 #include "dtkGuiSupportExport.h"
 

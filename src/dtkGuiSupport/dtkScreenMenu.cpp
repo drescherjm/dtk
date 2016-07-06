@@ -20,9 +20,6 @@
 #include <dtkVideo/dtkVideoEncoder.h>
 #endif
 
-#include <QtGui>
-#include <QtCore>
-
 class dtkScreenMenuPrivate
 {
 public:

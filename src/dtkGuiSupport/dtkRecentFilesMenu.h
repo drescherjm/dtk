@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <QMenu>
+#include <QtWidgets>
 
 #include "dtkGuiSupportExport.h"
 

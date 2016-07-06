@@ -1,16 +1,16 @@
-/* dtkWidgetsTagCloudController.cpp ---
- * 
- * Author: Julien Wintz
- * Created: Mon Apr 15 12:17:51 2013 (+0200)
- * Version: 
- * Last-Updated: Mon Apr 15 14:50:06 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 28
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkWidgetsTagCloud.h"
 #include "dtkWidgetsTagCloudController.h"
@@ -111,7 +111,7 @@ void dtkWidgetsTagCloudController::update(void)
     // d->tags.clear();
 
     // QHash<QString, QStringList> tags;
-    
+
     // foreach(dtkWidgetsTagCloudItem item, d->items)
     //     foreach(QString tag, item.tags())
     //         tags[tag] << item.name();
@@ -136,7 +136,7 @@ static bool unite(QStringList l1, QStringList l2) {
 void dtkWidgetsTagCloudController::clear(void)
 {
     d->filters.clear();
-    
+
     this->update();
     this->render();
 }
@@ -146,7 +146,7 @@ void dtkWidgetsTagCloudController::render(void)
     d->tags.clear();
 
     QHash<QString, QStringList> tags;
-    
+
     foreach(dtkWidgetsTagCloudItem item, d->items)
         foreach(QString tag, item.tags())
             tags[tag] << item.name();
@@ -207,3 +207,6 @@ void dtkWidgetsTagCloudController::onUnionMode(bool mode)
 
     this->render();
 }
+
+//
+// dtkWidgetsTagCloudController.cpp ends here

@@ -12,7 +12,7 @@
 ##
 ### Code:
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.2.0)
 
 ######################################################################
 
@@ -32,7 +32,7 @@ set(dtk_VERSION_MAJOR 1)
 set(dtk_VERSION_MINOR 1)
 set(dtk_VERSION_PATCH 0)
 set(dtk_VERSION
-  ${dtk_VERSION_MAJOR}.${dtk_VERSION_PATCH}.${dtk_VERSION_PATCH})
+  ${dtk_VERSION_MAJOR}.${dtk_VERSION_MINOR}.${dtk_VERSION_PATCH})
 
 ## ###################################################################
 ## Path setup
@@ -55,6 +55,12 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 ## #################################################################
+## Generate compilation database
+## #################################################################
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
+## #################################################################
 ## Install prefix
 ## #################################################################
 
@@ -71,31 +77,27 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(GenerateExportHeader)
 
-if(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -I/usr/lib/c++/v1")
-endif(APPLE)
+if(UNIX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
+endif(UNIX)
 
 if(NOT APPLE AND NOT MSVC)
+
   include(CheckCXXCompilerFlag)
+
   check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
   check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-  if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unknown-pragmas")
-  elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-unknown-pragmas")
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-  endif()
+
   if(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
     set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
   endif(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
 
-else(NOT APPLE AND NOT MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif(NOT APPLE AND NOT MSVC)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(CMAKE_SIZEOF_VOID_P MATCHES 8)
   set(DTK_BUILD_32 0)
@@ -159,6 +161,7 @@ if(DTK_ENABLE_COVERAGE)
 
   include(dtkCodeCoverage)
   include(FindPythonInterp)
+
   if(DTK_COVERAGE_USE_COBERTURA)
     SETUP_TARGET_FOR_COVERAGE_COBERTURA(cov ctest coverage)
   else(DTK_COVERAGE_USE_COBERTURA)

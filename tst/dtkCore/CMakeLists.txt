@@ -18,6 +18,7 @@ project(dtkCoreTest)
 set(${PROJECT_NAME}_HEADERS
   dtkArrayTest.h
   dtkHashTest.h
+  dtkHelperFunctionTest.h
   dtkIteratorTest.h
   dtkStaticArrayTest.h)
 
@@ -31,6 +32,7 @@ endif(DTK_HAVE_ZLIB)
 set(${PROJECT_NAME}_SOURCES
   dtkArrayTest.cpp
   dtkHashTest.cpp
+  dtkHelperFunctionTest.cpp
   dtkIteratorTest.cpp
   dtkStaticArrayTest.cpp)
 
@@ -76,6 +78,7 @@ target_link_libraries(${PROJECT_NAME} dtkCore)
 
 add_test(dtkArrayTest       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkArrayTest)
 add_test(dtkHashTest        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkHashTest)
+add_test(dtkHelperFunctionTest        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkHelperFunctionTest)
 add_test(dtkIteratorTest    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkIteratorTest)
 add_test(dtkStaticArrayTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dtkCoreTest dtkStaticArrayTest)
 

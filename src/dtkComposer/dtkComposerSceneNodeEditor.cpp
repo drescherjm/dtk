@@ -34,9 +34,6 @@
 #include "dtkComposerNodeControlMap.h"
 #include "dtkComposerNodeFile.h"
 #include "dtkComposerNodeInteger.h"
-// #include "dtkComposerNodeLeafData.h"
-// #include "dtkComposerNodeLeafProcess.h"
-// #include "dtkComposerNodeLeafView.h"
 
 #include "dtkComposerNodeReal.h"
 #include "dtkComposerNodeString.h"
@@ -72,12 +69,13 @@ dtkComposerSceneNodeEditorList::~dtkComposerSceneNodeEditorList(void)
 
 QSize dtkComposerSceneNodeEditorList::sizeHint(void) const
 {
-    return QSize(300, 50);
+    return QSize(300, 150);
 }
 
 void dtkComposerSceneNodeEditorList::addInputPort(dtkComposerScenePort *port)
 {
     dtkComposerSceneNodeEditorListItem *item = new dtkComposerSceneNodeEditorListItem(port, this);
+
     port->isVisible() ? item->setCheckState(Qt::Checked) : item->setCheckState(Qt::Unchecked);
 
     this->addItem(item);
@@ -86,6 +84,7 @@ void dtkComposerSceneNodeEditorList::addInputPort(dtkComposerScenePort *port)
 void dtkComposerSceneNodeEditorList::addOutputPort(dtkComposerScenePort *port)
 {
     dtkComposerSceneNodeEditorListItem *item = new dtkComposerSceneNodeEditorListItem(port, this);
+
     port->isVisible() ? item->setCheckState(Qt::Checked) : item->setCheckState(Qt::Unchecked);
 
     this->addItem(item);
@@ -223,7 +222,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->rem_loop_port->setVisible(false);
 
     d->blocks = new dtkComposerSceneNodeEditorList(this);
-    d->blocks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    d->blocks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->blocks->setVisible(false);
 
     d->add_block = new QPushButton("+", this);
@@ -235,7 +234,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->rem_block->setVisible(false);
 
     d->input_ports = new dtkComposerSceneNodeEditorList(this);
-    d->input_ports->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    d->input_ports->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->input_ports->setVisible(false);
 
     d->add_input_port = new QPushButton("+", this);
@@ -417,7 +416,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     p_layout->addLayout(op_layout);
 
     QHBoxLayout *si_layout = new QHBoxLayout;
-    si_layout->setContentsMargins(0, 0, 0, 0);
+    si_layout->setContentsMargins(0, 5, 0, 5);
     si_layout->setSpacing(0);
     si_layout->addWidget(d->select_implementation);
 
@@ -432,7 +431,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     // d->layout_widg_edit->addWidget(d->bool_widget);
 
     d->layout = new QVBoxLayout(this);
-    d->layout->setContentsMargins(5, 0, 5, 0);
+    d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
     d->layout->addWidget(top);
     d->layout->addLayout(si_layout);
@@ -442,6 +441,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
     d->layout->addLayout(p_layout);
     d->layout->addSpacing(10);
     d->layout->addLayout(d->layout_widg_edit);
+    d->layout->addStretch(1);
 
     connect(d->add_loop_port, SIGNAL(clicked()), this, SLOT(addLoopPort()));
     connect(d->rem_loop_port, SIGNAL(clicked()), this, SLOT(removeLoopPort()));
@@ -558,7 +558,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->rem_output_port->setVisible(true);
 
         foreach(dtkComposerSceneNodeComposite *block, c->blocks())
-            d->selector->addItem(block->title());
+           d->selector->addItem(block->title());
 
         d->selector->blockSignals(false);
         d->selector->setVisible(true);
@@ -1335,20 +1335,6 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
         object = object_node->variant().value<QObject*>();
     }
 
-    // if (dtkComposerNodeLeafData *data_node = dynamic_cast<dtkComposerNodeLeafData *>(d->node->wrapee())) {
-    //     data_node->createData(implementation);
-    //     object = reinterpret_cast<QObject *>(data_node->data());
-
-    // } else if (dtkComposerNodeLeafProcess *process_node = dynamic_cast<dtkComposerNodeLeafProcess *>(d->node->wrapee())) {
-    //     process_node->createProcess(implementation);
-    //     object = reinterpret_cast<QObject *>(process_node->process());
-
-    // } else if (dtkComposerNodeLeafView *view_node = dynamic_cast<dtkComposerNodeLeafView *>(d->node->wrapee())) {
-    //     view_node->createView(implementation);
-    //     object = reinterpret_cast<QObject *>(view_node->view());
-
-    // }
-
     if (object) {
         dtkToolBoxItem *item = dtkToolBoxItem::fromObject(object, 0);
         item->setContentsMargins(0, 0, 0, 0);
@@ -1376,7 +1362,6 @@ void dtkComposerSceneNodeEditor::onImplementationChanged(const QString& implemen
         d->current_widget->setEnabled(true);
         d->layout_widg_edit->addWidget(d->current_widget);
     }
-
 }
 
 //

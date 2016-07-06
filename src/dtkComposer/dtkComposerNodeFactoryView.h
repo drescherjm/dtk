@@ -1,16 +1,16 @@
-/* dtkComposerNodeFactoryView.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: Thu Apr 11 10:38:29 2013 (+0200)
- * Version: 
- * Last-Updated: ven. janv.  9 10:13:20 2015 (+0100)
- *           By: Thibaud Kloczko
- *     Update #: 8
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -48,10 +48,12 @@ public:
     void setDark(void);
 
 public:
-    dtkWidgetsTagCloud      *cloudView(void) const;
     dtkWidgetsTagCloudView   *itemView(void) const;
     dtkWidgetsTagCloudScope *scopeView(void) const;
 
 private:
     dtkComposerNodeFactoryViewPrivate *d;
 };
+
+//
+// dtkComposerNodeFactoryView.h ends here

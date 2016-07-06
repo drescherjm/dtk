@@ -87,7 +87,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
             continue;
         }
 
-        if (checkVersion(ve_mitem.toString(), dtkCorePluginManagerBase::instance()->version(key).toString())) {
+        if (!checkVersion(dtkCorePluginManagerBase::instance()->version(key).toString(), ve_mitem.toString())) {
             dtkWarn() << "    Version mismatch:" << na_mitem.toString() << "version" << dtkCorePluginManagerBase::instance()->version(key).toString() << "but" << ve_mitem.toString() << "required for plugin" << path;
 
             status = false;

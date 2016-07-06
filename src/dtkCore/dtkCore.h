@@ -117,6 +117,10 @@ inline bool checkVersion(const QString ref_version, const QString elem_version)
     if(ve_ref_list.at(1).toInt() < ve_elem_list.at(1).toInt())
         return false;
     else {
+        // no patch level specified in ref
+        if (ve_ref_list.size() < 3 || ve_elem_list.size() < 3) {
+            return true;
+        }
         //if same minor level, compare patch level
         if((ve_ref_list.at(1).toInt() == ve_elem_list.at(1).toInt()) &&
            (ve_ref_list.at(2).toInt() < ve_elem_list.at(2).toInt()))

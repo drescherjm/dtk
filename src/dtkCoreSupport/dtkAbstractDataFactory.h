@@ -1,26 +1,22 @@
-/* dtkAbstractDataFactory.h ---
- *
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Fri Nov  7 15:48:10 2008 (+0100)
- * Version: $Id$
- * Last-Updated: lun. févr.  3 13:43:19 2014 (+0100)
- *           By: Nicolas Niclausse
- *     Update #: 144
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #ifndef DTKABSTRACTDATAFACTORY_H
 #define DTKABSTRACTDATAFACTORY_H
 
 #include "dtkAbstractFactory.h"
+
 #include <dtkCoreSupport/dtkSmartPointer>
 #include <dtkCoreSupport/dtkAbstractData>
 #include <dtkCoreSupport/dtkAbstractDataConverter>
@@ -43,11 +39,11 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataFactory : public dtkAbstractFactory
     Q_OBJECT
 
 public:
-    typedef dtkAbstractData           *(*dtkAbstractDataCreator)         (void);
-    typedef dtkAbstractDataReader     *(*dtkAbstractDataReaderCreator)   (void);
-    typedef dtkAbstractDataWriter     *(*dtkAbstractDataWriterCreator)   (void);
-    typedef dtkAbstractDataConverter  *(*dtkAbstractDataConverterCreator)(void);
-    typedef dtkAbstractDataSerializer *(*dtkAbstractDataSerializerCreator)(void);
+    typedef dtkAbstractData             *(*dtkAbstractDataCreator)         (void);
+    typedef dtkAbstractDataReader       *(*dtkAbstractDataReaderCreator)   (void);
+    typedef dtkAbstractDataWriter       *(*dtkAbstractDataWriterCreator)   (void);
+    typedef dtkAbstractDataConverter    *(*dtkAbstractDataConverterCreator)(void);
+    typedef dtkAbstractDataSerializer   *(*dtkAbstractDataSerializerCreator)(void);
     typedef dtkAbstractDataDeserializer *(*dtkAbstractDataDeserializerCreator)(void);
 
 public:
@@ -124,3 +120,6 @@ private:
 };
 
 #endif
+
+//
+// dtkAbstractDataFactory.h ends here

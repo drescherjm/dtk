@@ -1,5 +1,5 @@
-### CMakeLists.txt --- 
-## 
+### CMakeLists.txt ---
+##
 ## Author: Julien Wintz
 ## Copyright (C) 2008-2009 - Julien Wintz, Inria.
 ## Created: Tue Mar 10 15:12:38 2009 (+0100)
@@ -8,13 +8,13 @@
 ##           By: Julien Wintz
 ##     Update #: 102
 ######################################################################
-## 
-### Commentary: 
-## 
+##
+### Commentary:
+##
 ######################################################################
-## 
+##
 ### Change log:
-## 
+##
 ######################################################################
 
 project(dtkScript)
@@ -83,6 +83,8 @@ endif(DTK_BUILD_WRAPPERS AND DTK_HAVE_PYTHON)
 set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH 0)
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION   ${dtk_VERSION}
+                                                 SOVERSION ${dtk_VERSION_MAJOR})
 
 ## #################################################################
 ## Export header file
@@ -120,4 +122,3 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT script
          EXPORT dtkDepends)
-

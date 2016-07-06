@@ -34,8 +34,12 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
+  dtkRecentFilesMenu.h
+  dtkScreenMenu.h
   dtkSearchField.h
   dtkSettingsEditor.h
+  dtkSpacer.h
+  dtkSplitter.h
   dtkSwitch.h
   dtkTagCloud.h
   dtkViewManager.h
@@ -61,7 +65,11 @@ set(${PROJECT_NAME}_SOURCES
   dtkPluginsEditor.cpp
   dtkPopup.cpp
   dtkProgressIndicator.cpp
+  dtkRecentFilesMenu.cpp
+  dtkScreenMenu.cpp
   dtkSettingsEditor.cpp
+  dtkSpacer.cpp
+  dtkSplitter.cpp
   dtkSwitch.cpp
   dtkTagCloud.cpp
   dtkViewManager.cpp

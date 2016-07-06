@@ -1,12 +1,16 @@
-/* dtkToolBox.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: lun. oct. 21 15:28:34 2013 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -15,7 +19,7 @@
 #include <QtWidgets>
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class DTKWIDGETS_EXPORT dtkToolBoxButton : public QAbstractButton
@@ -52,7 +56,7 @@ inline bool dtkToolBoxButton::isSelected(void) const
 }
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class dtkToolBox;
@@ -99,7 +103,7 @@ private:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class dtkToolBoxPrivate;
@@ -140,14 +144,14 @@ public:
 
 public:
     dtkToolBoxItem *itemAt(int index) const;
-    
+
 public:
     void    addItem(dtkToolBoxItem *item);
     void insertItem(int index, dtkToolBoxItem *item);
 
 public:
     void setCurrentItem(dtkToolBoxItem *item);
-    
+
 public:
     void removeItem(int index);
     void removeItem(dtkToolBoxItem *item);
@@ -164,3 +168,6 @@ inline void dtkToolBox::addItem(dtkToolBoxItem *item)
 {
     this->insertItem(this->count(), item);
 }
+
+//
+// dtkToolBox.h ends here

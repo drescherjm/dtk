@@ -28,66 +28,12 @@
 // Preallocated data area for quickly building small arrays on the stack without malloc overhead
 // ///////////////////////////////////////////////////////////////////
 
-#if defined(Q_DECL_ALIGN) && defined(Q_ALIGNOF)
-
-#if defined(Q_CC_GNU) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3))
-    typedef char __attribute__((__may_alias__)) dtkMathArrayAlignedChar;
-#else
-    typedef char dtkMathArrayAlignedChar;
-#endif
-
-template <typename T, qlonglong PreallocSize, size_t AlignT> struct dtkMathArrayAlignedPrealloc;
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 1>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(1) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 2>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(2) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 4>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(4) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 8>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(8) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 16>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(16) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 32>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(32) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 64>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(64) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkMathArrayAlignedPrealloc<T, PreallocSize, 128>
-{
-    dtkMathArrayAlignedChar Q_DECL_ALIGN(128) data[sizeof(T) * PreallocSize];
-};
-
-#else
-
 template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkMathArrayAlignedPrealloc
 {
     char data[sizeof(T) * PreallocSize];
     qint64 q_for_alignment_1;
     double q_for_alignment_2;
 };
-
-#endif
 
 // ///////////////////////////////////////////////////////////////////
 // dtkMathArrayPrealloc base class
@@ -96,11 +42,7 @@ template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkMathArrayA
 template <typename T, qlonglong PreallocSize> class dtkMathArrayPrealloc
 {
 public:
-#if defined(Q_ALIGNOF)
-    dtkMathArrayAlignedPrealloc<T, PreallocSize, Q_ALIGNOF(T)> m_prealloc;
-#else
     dtkMathArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
-#endif
 
     inline T *prealloc(void)
     {
@@ -133,8 +75,8 @@ template <typename T, qlonglong PreallocSize = 8> class dtkMathArray : private d
 {
 public:
     enum RawDataType {
-	ReadOnly = 0x001,
-	Writable = 0x002
+        ReadOnly = 0x001,
+        Writable = 0x002
     };
 
 public:

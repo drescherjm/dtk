@@ -15,67 +15,15 @@
 #pragma once
 
 #include "dtkArrayData.h"
-
-#include <QtCore>
 #include <iterator>
 #include <vector>
 #include <string.h>
 
+#include <QtCore>
+
 // ///////////////////////////////////////////////////////////////////
 // Preallocated data area for quickly building small arrays on the stack without malloc overhead
 // ///////////////////////////////////////////////////////////////////
-
-#if defined(Q_DECL_ALIGN) && defined(Q_ALIGNOF)
-
-#if defined(Q_CC_GNU) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3))
-    typedef char __attribute__((__may_alias__)) dtkArrayAlignedChar;
-#else
-    typedef char dtkArrayAlignedChar;
-#endif
-
-template <typename T, qlonglong PreallocSize, size_t AlignT> struct dtkArrayAlignedPrealloc;
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 1>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(1) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 2>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(2) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 4>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(4) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 8>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(8) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 16>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(16) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 32>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(32) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 64>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(64) data[sizeof(T) * PreallocSize];
-};
-
-template <typename T, qlonglong PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 128>
-{
-    dtkArrayAlignedChar Q_DECL_ALIGN(128) data[sizeof(T) * PreallocSize];
-};
-
-#else
 
 template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlignedPrealloc
 {
@@ -84,8 +32,6 @@ template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlign
     double q_for_alignment_2;
 };
 
-#endif
-
 // ///////////////////////////////////////////////////////////////////
 // dtkArrayPrealloc base class
 // ///////////////////////////////////////////////////////////////////
@@ -93,11 +39,7 @@ template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlign
 template <typename T, qlonglong PreallocSize> class dtkArrayPrealloc
 {
 public:
-#if defined(Q_ALIGNOF)
-    dtkArrayAlignedPrealloc<T, PreallocSize, Q_ALIGNOF(T)> m_prealloc;
-#else
     dtkArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
-#endif
 
     T *preallocData(void) { return reinterpret_cast<T *>(m_prealloc.data); }
 
@@ -354,6 +296,51 @@ template<typename T> using dtkArrayDynamic = dtkArray<T, 0>;
 // ///////////////////////////////////////////////////////////////////
 
 #include "dtkArray.tpp"
+
+// /////////////////////////////////////////////////////////////////
+// Credits
+// /////////////////////////////////////////////////////////////////
+
+/****************************************************************************
+**
+** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Contact: http://www.qt-project.org/legal
+**
+** This file is part of the Qt3D module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Digia.  For licensing terms and
+** conditions see http://qt.digia.com/licensing.  For further information
+** use the contact form at http://qt.digia.com/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** In addition, as a special exception, Digia gives you certain additional
+** rights.  These rights are described in the Digia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
 //
 // dtkArray.h ends here

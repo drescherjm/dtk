@@ -1,26 +1,20 @@
-/* dtkRecentFilesMenu.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Tue Jun  8 13:45:35 2010 (+0200)
- * Version: $Id$
- * Last-Updated: Thu Feb  3 13:51:59 2011 (+0100)
- *           By: Julien Wintz
- *     Update #: 16
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkRecentFilesMenu.h"
 
-#include <QSettings>
-#include <QFileInfo>
+#include <QtCore>
 
 dtkRecentFilesMenu::dtkRecentFilesMenu(QWidget *parent) : QMenu(parent), m_maxCount(8)
 {
@@ -116,3 +110,6 @@ void dtkRecentFilesMenu::updateRecentFileActions(void)
 
     setEnabled(numRecentFiles > 0);
 }
+
+//
+// dtkRecentFilesMenu.cpp ends here

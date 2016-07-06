@@ -1,16 +1,16 @@
-### CMakeLists.txt ---
+## Version: $Id$
 ##
-## Author: Julien Wintz
-## Created: Mon Apr 15 11:46:27 2013 (+0200)
-## Version:
-## Last-Updated: lun. avril  7 11:13:47 2014 (+0200)
-##           By: Nicolas Niclausse
-##     Update #: 58
+######################################################################
+##
+### Commentary:
+##
 ######################################################################
 ##
 ### Change Log:
 ##
 ######################################################################
+##
+### Code:
 
 project(dtkWidgets)
 
@@ -29,6 +29,10 @@ set(${PROJECT_NAME}_HEADERS
   dtkObjectEditor.h
   dtkPropertyEditor.h
   dtkPropertyEditorFactory.h
+  dtkRecentFilesMenu.h
+  dtkScreenMenu.h
+  dtkSpacer.h
+  dtkSplitter.h
   dtkToolBox.h
   dtkWidgets
   dtkWidgetsLogView.h
@@ -44,8 +48,7 @@ set(${PROJECT_NAME}_HEADERS
   dtkWidgetsTagCloudScopeItem.h
   dtkWidgetsTagCloudView.h
   dtkWidgetFactory.h
-  dtkWidgetFactory.tpp
-  )
+  dtkWidgetFactory.tpp)
 
 set(${PROJECT_NAME}_SOURCES
   dtkApplication.cpp
@@ -57,6 +60,10 @@ set(${PROJECT_NAME}_SOURCES
   dtkObjectEditor.cpp
   dtkPropertyEditor.cpp
   dtkPropertyEditorFactory.cpp
+  dtkRecentFilesMenu.cpp
+  dtkScreenMenu.cpp
+  dtkSpacer.cpp
+  dtkSplitter.cpp
   dtkToolBox.cpp
   dtkWidgetsLogView.cpp
   dtkWidgetsTag.cpp
@@ -68,8 +75,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkWidgetsTagCloudList.cpp
   dtkWidgetsTagCloudScope.cpp
   dtkWidgetsTagCloudScopeItem.cpp
-  dtkWidgetsTagCloudView.cpp
-  )
+  dtkWidgetsTagCloudView.cpp)
 
 set(${PROJECT_NAME}_SOURCES_RCC
   dtkNotification.qrc
@@ -145,3 +151,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT widgets
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

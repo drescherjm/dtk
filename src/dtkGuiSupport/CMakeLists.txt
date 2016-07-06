@@ -1,5 +1,16 @@
-### CMakeLists.txt ---
+## Version: $Id$
+##
 ######################################################################
+##
+### Commentary:
+##
+######################################################################
+##
+### Change Log:
+##
+######################################################################
+##
+### Code:
 
 project(dtkGuiSupport)
 
@@ -23,12 +34,8 @@ set(${PROJECT_NAME}_HEADERS
   dtkPluginsEditor.h
   dtkPopup.h
   dtkProgressIndicator.h
-  dtkRecentFilesMenu.h
-  dtkScreenMenu.h
   dtkSearchField.h
   dtkSettingsEditor.h
-  dtkSpacer.h
-  dtkSplitter.h
   dtkSwitch.h
   dtkTagCloud.h
   dtkViewManager.h
@@ -54,11 +61,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkPluginsEditor.cpp
   dtkPopup.cpp
   dtkProgressIndicator.cpp
-  dtkRecentFilesMenu.cpp
-  dtkScreenMenu.cpp
   dtkSettingsEditor.cpp
-  dtkSpacer.cpp
-  dtkSplitter.cpp
   dtkSwitch.cpp
   dtkTagCloud.cpp
   dtkViewManager.cpp
@@ -159,3 +162,6 @@ install(TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
       COMPONENT guisupport
          EXPORT dtkDepends)
+
+######################################################################
+### CMakeLists.txt ends here

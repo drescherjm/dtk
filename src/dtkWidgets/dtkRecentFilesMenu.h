@@ -1,30 +1,24 @@
-/* dtkRecentFilesMenu.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008 - Julien Wintz, Inria.
- * Created: Tue Jun  8 13:38:19 2010 (+0200)
- * Version: $Id$
- * Last-Updated: Tue Jun  8 14:01:54 2010 (+0200)
- *           By: Julien Wintz
- *     Update #: 9
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
 
-#ifndef DTKRECENTFILESMENU_H
-#define DTKRECENTFILESMENU_H
+// Code:
 
-#include <QMenu>
+#pragma once
 
-#include "dtkGuiSupportExport.h"
+#include <QtWidgets>
 
-class DTKGUISUPPORT_EXPORT dtkRecentFilesMenu : public QMenu
+#include "dtkWidgetsExport.h"
+
+class DTKWIDGETS_EXPORT dtkRecentFilesMenu : public QMenu
 {
     Q_OBJECT
     Q_PROPERTY(int maxCount READ maxCount WRITE setMaxCount)
@@ -51,4 +45,5 @@ private:
     int m_maxCount;
 };
 
-#endif // DTKRECENTFILEMENU_H
+//
+// dtkRecentFilesMenu.h ends here

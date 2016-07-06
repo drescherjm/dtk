@@ -15,8 +15,10 @@
 #pragma once
 
 #include "dtkCorePluginManagerBase.h"
+#include "dtkCore.h"
 
 #include <dtkLog>
+
 
 // ///////////////////////////////////////////////////////////////////
 // dtkCorePluginManagerPrivate
@@ -30,8 +32,10 @@ public:
 public:
     bool verboseLoading;
     bool autoLoading;
+    QString layerVersion = QString();
 
 public:
+    QHash<QString, QVariant> pluginsLayerVersion;
     QHash<QString, QVariantList> dependencies;
 
 public:
@@ -61,6 +65,14 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
         }
     }
 
+
+    if (!layerVersion.isNull() && !checkVersion(layerVersion ,this->pluginsLayerVersion.value(path).toString())) {
+        dtkWarn() << "    Version mismatch: layer version " << layerVersion
+                  << " plugin compiled for layer version" << this->pluginsLayerVersion.value(path).toString()
+                  << " for plugin " << path;
+        return false;
+    }
+
     foreach(QVariant item, this->dependencies.value(path)) {
 
         QVariantMap mitem = item.toMap();
@@ -75,7 +87,7 @@ template <typename T> bool dtkCorePluginManagerPrivate<T>::check(const QString& 
             continue;
         }
 
-        if (dtkCorePluginManagerBase::instance()->version(key) != ve_mitem) {
+        if (!checkVersion(dtkCorePluginManagerBase::instance()->version(key).toString(), ve_mitem.toString())) {
             dtkWarn() << "    Version mismatch:" << na_mitem.toString() << "version" << dtkCorePluginManagerBase::instance()->version(key).toString() << "but" << ve_mitem.toString() << "required for plugin" << path;
 
             status = false;
@@ -160,6 +172,15 @@ template <typename T> void dtkCorePluginManager<T>::loadFromName(const QString &
 }
 
 // /////////////////////////////////////////////////////////////////
+// set Layer Version
+// /////////////////////////////////////////////////////////////////
+
+template <typename T>  void dtkCorePluginManager<T>::setLayerVersion(QString layer_version)
+{
+    d->layerVersion = layer_version;
+}
+
+// /////////////////////////////////////////////////////////////////
 // Manager Management
 // /////////////////////////////////////////////////////////////////
 
@@ -205,6 +226,7 @@ template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
     dtkCorePluginManagerBase::instance()->insertVersion(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
     dtkCorePluginManagerBase::instance()->insertConcept(path, loader->metaData().value("MetaData").toObject().value("concept").toVariant());
     d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
+    d->pluginsLayerVersion.insert(path, loader->metaData().value("MetaData").toObject().value("layerVersion").toVariant());
 
     delete loader;
 }

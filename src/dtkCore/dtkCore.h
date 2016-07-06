@@ -101,3 +101,32 @@ inline bool dtkFileIsBinary(const QString& path)
 
     return (c != EOF);
 }
+
+
+// compare versions. Use it to compare  plugin version against version of his layer
+inline bool checkVersion(const QString ref_version, const QString elem_version)
+{
+    QStringList ve_ref_list = ref_version.split(".");
+    QStringList ve_elem_list = elem_version.split(".");
+
+    //if major level different return false
+    if(ve_ref_list.at(0).toInt() != ve_elem_list.at(0).toInt())
+        return false;
+
+    //if minor level of ref < elem return false
+    if(ve_ref_list.at(1).toInt() < ve_elem_list.at(1).toInt())
+        return false;
+    else {
+        // no patch level specified in ref
+        if (ve_ref_list.size() < 3 || ve_elem_list.size() < 3) {
+            return true;
+        }
+        //if same minor level, compare patch level
+        if((ve_ref_list.at(1).toInt() == ve_elem_list.at(1).toInt()) &&
+           (ve_ref_list.at(2).toInt() < ve_elem_list.at(2).toInt()))
+            return false;
+        //else minor level of elem < ref , then don't compare patch level
+    }
+
+    return true;
+}

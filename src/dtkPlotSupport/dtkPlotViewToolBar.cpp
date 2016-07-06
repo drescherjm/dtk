@@ -22,7 +22,7 @@
 #include "dtkPlotView.h"
 #include "dtkPlotRenderer.h"
 
-#include <dtkGuiSupport/dtkSpacer.h>
+#include <dtkWidgets/dtkSpacer.h>
 
 class dtkPlotViewToolBarPrivate
 {

@@ -16,12 +16,6 @@ cmake_minimum_required(VERSION 3.2.0)
 
 ######################################################################
 
-if(${CMAKE_MAJOR_VERSION} GREATER 2)
-  cmake_policy(SET CMP0028 NEW)
-endif(${CMAKE_MAJOR_VERSION} GREATER 2)
-
-######################################################################
-
 project(dtk)
 
 ## ###################################################################
@@ -82,11 +76,6 @@ if(UNIX)
 endif(UNIX)
 
 if(NOT APPLE AND NOT MSVC)
-
-  include(CheckCXXCompilerFlag)
-
-  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 
   if(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")

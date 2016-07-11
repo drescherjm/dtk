@@ -1,16 +1,16 @@
-/* dtkComposerWidget.h ---
- *
- * Author: tkloczko
- * Copyright (C) 2011 - Thibaud Kloczko, Inria.
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -83,3 +83,6 @@ public:
 private:
     dtkComposerWidgetPrivate *d;
 };
+
+//
+// dtkComposerWidget.h ends here

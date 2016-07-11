@@ -146,24 +146,26 @@ void dtkComposerWidget::setFactory(dtkComposerNodeFactory *factory)
 
 void dtkComposerWidget::setWriter(dtkComposerWriter *writer)
 {
-  if(writer) {
-    delete d->writer;
+    if(writer) {
 
-    d->writer = writer;
-    d->writer->setScene(d->scene);
-  }
+        delete d->writer;
+
+        d->writer = writer;
+        d->writer->setScene(d->scene);
+    }
 }
 
 void dtkComposerWidget::setReader(dtkComposerReader *reader)
 {
-  if(reader) {
-    delete d->reader;
+    if(reader) {
 
-    d->reader = reader;
-    d->reader->setFactory(d->factory);
-    d->reader->setScene(d->scene);
-    d->reader->setGraph(d->graph);
-  }
+        delete d->reader;
+
+        d->reader = reader;
+        d->reader->setFactory(d->factory);
+        d->reader->setScene(d->scene);
+        d->reader->setGraph(d->graph);
+    }
 }
 
 bool dtkComposerWidget::open(const QUrl& url)

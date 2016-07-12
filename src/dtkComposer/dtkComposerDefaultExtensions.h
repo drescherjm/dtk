@@ -1,24 +1,22 @@
-/* @(#)dtkComposerDefaultExtensions.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2016 - Nicolas Niclausse, Inria.
- * Created: 2016/05/04 12:47:16
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
 #include "dtkComposerExtension.h"
 #include "dtkComposerNodeFactory.h"
-
 #include "dtkComposerNodeBoolean.h"
 #include "dtkComposerNodeBooleanOperator.h"
 #include "dtkComposerNodeComposite.h"
@@ -42,7 +40,6 @@
 #include "dtkComposerNodeSpawn.h"
 #include "dtkComposerNodeString.h"
 #include "dtkComposerNodeStringOperator.h"
-
 #include "dtkComposerNodeLogger.h"
 #include "dtkComposerNodePrint.h"
 
@@ -306,3 +303,6 @@ void dtkComposerContainerExtension::extend(dtkComposerNodeFactory *factory)
     factory->record(":dtkComposer/dtkComposerNodeMetaContainerSize.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerSize>);
     factory->record(":dtkComposer/dtkComposerNodeMetaContainerTakeAt.json", dtkComposerNodeCreator<dtkComposerNodeMetaContainerTakeAt>);
 }
+
+//
+// dtkComposerDefaultExtensions.h ends here

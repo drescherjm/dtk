@@ -84,8 +84,11 @@
 #include "dtkComposerTransmitterProxyVariant.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerView.h"
+#include "dtkComposerViewController.h"
+#include "dtkComposerViewManager.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerReaderNoScene.h"
+#include "dtkComposerWidget.h"
 #include "dtkComposerWriter.h"
 
 //

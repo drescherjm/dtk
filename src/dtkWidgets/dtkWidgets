@@ -1,11 +1,28 @@
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
 #include "dtkApplication.h"
 #include "dtkDistributedGuiApplication.h"
-#include "dtkWidgetFactory.h"
+#include "dtkNotification.h"
+#include "dtkNotificationDisplay.h"
 #include "dtkToolBox.h"
 #include "dtkRecentFilesMenu.h"
 #include "dtkScreenMenu.h"
 #include "dtkSpacer.h"
 #include "dtkSplitter.h"
+#include "dtkWidgetsLogView.h"
+#include "dtkWidgetFactory.h"
 #include "dtkWidgetsTag.h"
 #include "dtkWidgetsTagCloud.h"
 #include "dtkWidgetsTagCloudController.h"
@@ -15,3 +32,6 @@
 #include "dtkWidgetsTagCloudList.h"
 #include "dtkWidgetsTagCloudScope.h"
 #include "dtkWidgetsTagCloudView.h"
+
+//
+// dtkWidgets ends here

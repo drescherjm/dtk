@@ -161,6 +161,7 @@ set(${PROJECT_NAME}_SOURCES
   dtkComposerControlsListItemInteger.cpp
   dtkComposerControlsListItemReal.cpp
   dtkComposerControlsListItemString.cpp
+  dtkComposerDefaultExtensions.cpp
   dtkComposerEvaluator.cpp
   dtkComposerEvaluatorProcess.cpp
   dtkComposerEvaluatorSlave.cpp

@@ -50,9 +50,11 @@ QString dtkMetaType::description(const QVariant& v)
 
         } else if (!userStream) {
             dbg << qSetRealNumberPrecision( 15 )  << v;
-            str.chop(2);
+            QString cleanStr = str.trimmed();
+            cleanStr.chop(1);
+            // remove "QVariant(typename, " from the string:
             int count = 11 + QString(v.typeName()).size();
-            str.remove(0, count);
+            str = cleanStr.remove(0, count);
         }
     }
     return str;

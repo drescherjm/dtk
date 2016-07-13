@@ -30,7 +30,7 @@ project(dtk)
 
 set(dtk_VERSION_MAJOR 1)
 set(dtk_VERSION_MINOR 1)
-set(dtk_VERSION_PATCH 0)
+set(dtk_VERSION_PATCH 1)
 set(dtk_VERSION
   ${dtk_VERSION_MAJOR}.${dtk_VERSION_MINOR}.${dtk_VERSION_PATCH})
 

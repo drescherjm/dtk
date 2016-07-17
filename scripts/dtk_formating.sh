@@ -51,11 +51,11 @@ dtk_formating_clear () {
 }
 
 dtk_formating_format () {
-    astyle --indent=spaces=4 --brackets=linux                    \
+    astyle --indent=spaces=4 --style=linux                       \
            --indent-labels --pad-oper --unpad-paren --pad-header \
            --keep-one-line-statements --convert-tabs             \
            --indent-preprocessor                                 \
-           `find -type f -name '*.cpp' -or -or name '*.tpp' -name -or -name '*.h'`
+           `find -type f -name '*.cpp' -or name '*.tpp' -name -or -name '*.h'`
 }
 
 

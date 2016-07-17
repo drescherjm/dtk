@@ -55,7 +55,7 @@ dtk_formating_format () {
            --indent-labels --pad-oper --unpad-paren --pad-header \
            --keep-one-line-statements --convert-tabs             \
            --indent-preprocessor                                 \
-           `find -type f -name '*.cpp' -or name '*.tpp' -name -or -name '*.h'`
+           `find . -type f -name '*.cpp' -or -name '*.tpp' -name -or -name '*.h'`
 }
 
 
@@ -68,7 +68,7 @@ if hash astyle 2>&-
 then
     dtk_formating_green "found."
 else
-    dtk_formating_red "not found. Aborting installation!"
+    dtk_formating_red "not found. Aborting source code formatting!"
     exit 1
 fi;
 

@@ -51,11 +51,21 @@ dtk_formating_clear () {
 }
 
 dtk_formating_format () {
-    astyle --indent=spaces=4 --style=linux                       \
-           --indent-labels --pad-oper --unpad-paren --pad-header \
-           --keep-one-line-statements --convert-tabs             \
-           --indent-preprocessor                                 \
-           `find . -type f -name '*.cpp' -or -name '*.tpp' -name -or -name '*.h'`
+    astyle --style=k/r                \
+           --indent=spaces=4          \
+           --attach-namespaces        \
+           --attach-inlines           \
+           --attach-extern-c          \
+           --break-blocks             \
+           --pad-oper                 \
+           --unpad-paren              \
+           --align-pointer=name       \
+           --align-reference=type     \
+           --keep-one-line-statements \
+           --convert-tabs             \
+           --exclude=templates        \
+           --suffix=none              \
+           `find . -type f -name '*.cpp' -or -name '*.tpp' -or -name '*.h'`
 }
 
 

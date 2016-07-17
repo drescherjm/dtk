@@ -53,12 +53,12 @@ dtk_formatting_clear () {
 dtk_formatting_format () {
     astyle --style=kr                 \
            --indent=spaces=4          \
+           --indent-namespaces        \
            --attach-namespaces        \
            --attach-inlines           \
            --attach-extern-c          \
            --break-blocks             \
            --pad-oper                 \
-           --unpad-paren              \
            --align-pointer=name       \
            --align-reference=type     \
            --keep-one-line-statements \

@@ -64,8 +64,6 @@ dtk_formatting_format () {
            --keep-one-line-statements \
            --convert-tabs             \
            --verbose                  \
-           --exclude=build            \
-           --exclude=templates        \
            --suffix=none              \
            `find . -type f -name '*.cpp' -or -name '*.tpp' -or -name '*.h'`
 }

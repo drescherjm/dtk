@@ -18,40 +18,40 @@
 ## Helper functions
 ## #################################################################
 
-dtk_formating_colortext () {
+dtk_formatting_colortext () {
     echo "[38;5;$2m$1[0m"
 }
 
-dtk_formating_green () {
-    echo $(dtk_formating_colortext "$1" "82")
+dtk_formatting_green () {
+    echo $2 $(dtk_formatting_colortext "$1" "82")
 }
 
-dtk_formating_red () {
-    echo $(dtk_formating_colortext "$1" "196")
+dtk_formatting_red () {
+    echo $2 $(dtk_formatting_colortext "$1" "196")
 }
 
-dtk_formating_blue () {
-    echo $(dtk_formating_colortext "$1" "27")
+dtk_formatting_blue () {
+    echo $2 $(dtk_formatting_colortext "$1" "27")
 }
 
-dtk_formating_purple () {
-    echo $(dtk_formating_colortext "$1" "141")
+dtk_formatting_purple () {
+    echo $2 $(dtk_formatting_colortext "$1" "141")
 }
 
-dtk_formating_yellow () {
-    echo $(dtk_formating_colortext "$1" "190")
+dtk_formatting_yellow () {
+    echo $2 $(dtk_formatting_colortext "$1" "190")
 }
 
-dtk_formating_cyan () {
-    echo $(dtk_formating_colortext "$1" "45")
+dtk_formatting_cyan () {
+    echo $2 $(dtk_formatting_colortext "$1" "45")
 }
 
-dtk_formating_clear () {
+dtk_formatting_clear () {
     echo "$1"
 }
 
-dtk_formating_format () {
-    astyle --style=k/r                \
+dtk_formatting_format () {
+    astyle --style=kr                 \
            --indent=spaces=4          \
            --attach-namespaces        \
            --attach-inlines           \
@@ -63,6 +63,8 @@ dtk_formating_format () {
            --align-reference=type     \
            --keep-one-line-statements \
            --convert-tabs             \
+           --verbose                  \
+           --exclude=build            \
            --exclude=templates        \
            --suffix=none              \
            `find . -type f -name '*.cpp' -or -name '*.tpp' -or -name '*.h'`
@@ -73,16 +75,16 @@ dtk_formating_format () {
 ## Main
 ## #################################################################
 
-dtk_formating_cyan "Checking to see if astyle is installed..."
+dtk_formatting_cyan "Checking to see if astyle is installed... " -n
 if hash astyle 2>&-
 then
-    dtk_formating_green "found."
+    dtk_formatting_green "found."
 else
-    dtk_formating_red "not found. Aborting source code formatting!"
+    dtk_formatting_red "not found. Aborting source code formatting!"
     exit 1
 fi;
 
-dtk_formating_format
+dtk_formatting_format
 
 #
 # dtk_formatting.sh ends here

@@ -55,7 +55,7 @@ dtk_formating_format () {
            --indent-labels --pad-oper --unpad-paren --pad-header \
            --keep-one-line-statements --convert-tabs             \
            --indent-preprocessor                                 \
-           `find -type f -name '*.cpp' -or -or name '*.tpp' -name -or -name '*.h'`k
+           `find -type f -name '*.cpp' -or -or name '*.tpp' -name -or -name '*.h'`
 }
 
 

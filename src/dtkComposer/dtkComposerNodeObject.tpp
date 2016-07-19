@@ -26,8 +26,10 @@ template <typename T> inline dtkComposerNodeObject<T>::dtkComposerNodeObject(voi
 
 template <typename T> inline dtkComposerNodeObject<T>::~dtkComposerNodeObject(void)
 {
-    for(T *t : m_processes.values())
+    for (T *t : m_objects.values()) {
       delete t;
+    }
+    m_objects.clear();
 }
 
 template <typename T> inline void dtkComposerNodeObject<T>::setFactory(const dtkCorePluginFactory<T>& factory)
@@ -37,10 +39,12 @@ template <typename T> inline void dtkComposerNodeObject<T>::setFactory(const dtk
 
 template <typename T> inline QVariant dtkComposerNodeObject<T>::variant(void) const
 {
-    if (this->object())
+    if (this->object()) {
         return dtkMetaType::variantFromValue(this->object());
-    else
+
+    } else {
         return QVariant();
+    }
 }
 
 template <typename T> inline T *dtkComposerNodeObject<T>::object(void) const
@@ -50,17 +54,18 @@ template <typename T> inline T *dtkComposerNodeObject<T>::object(void) const
 
 template <typename T> inline bool dtkComposerNodeObject<T>::createObject(const QString& implementation)
 {
-    if (implementation.isEmpty() || implementation == "Choose implementation")
+    if (implementation.isEmpty() || implementation == "Choose implementation") {
         return false;
-
-    if (m_processes.contains(implementation)) {
-        m_object=m_processes.value(implementation);
     }
-    else {
+
+    if (m_objects.contains(implementation)) {
+        m_object = m_objects.value(implementation);
+
+    } else {
         m_object = m_factory->create(implementation);
 
         if(m_object) {
-            m_processes.insert(implementation, m_object);
+            m_objects.insert(implementation, m_object);
         }
     }
 
@@ -73,8 +78,9 @@ template <typename T> inline bool dtkComposerNodeObject<T>::createObject(const Q
 
 template <typename T> inline QStringList dtkComposerNodeObject<T>::implementations(void) const
 {
-    if (m_factory)
+    if (m_factory) {
         return m_factory->keys();
+    }
 
     return QStringList();
 }

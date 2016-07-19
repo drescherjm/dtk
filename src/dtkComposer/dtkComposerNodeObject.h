@@ -44,15 +44,16 @@ public:
     T *object(void) const;
 
 public:
-    QStringList    implementations(void) const;
+    QStringList implementations(void) const;
+
     QString currentImplementation(void) const;
 
     bool implementationHasChanged(const QString& implementation) const;
 
 protected:
     QString m_implementation;
-    T* m_object;
-    QHash<QString, T*> m_processes;
+    T *m_object;
+    QHash<QString, T *> m_objects;
     const dtkCorePluginFactory<T> *m_factory;
 };
 

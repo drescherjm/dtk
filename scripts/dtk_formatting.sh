@@ -59,6 +59,7 @@ dtk_formatting_format () {
            --attach-extern-c          \
            --break-blocks             \
            --pad-oper                 \
+           --pad-header               \
            --align-pointer=name       \
            --align-reference=type     \
            --keep-one-line-statements \

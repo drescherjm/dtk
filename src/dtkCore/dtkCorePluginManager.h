@@ -40,7 +40,7 @@ public:
     void setAutoLoading(bool value);
     bool autoLoading(void) const;
     void loadFromName(const QString & plugin_name);
-    void setLayerVersion(QString layer_version);
+    void setLayerVersion(const QString& layer_version);
 
 #pragma mark -
 #pragma mark Plugin Management
@@ -52,12 +52,13 @@ public:
 #pragma mark -
 #pragma mark Plugin Queries
 
-    QStringList plugins(void);
+    QStringList plugins(void) const ;
+    QStringList availablePlugins(void) const;
 
 #pragma mark -
 #pragma mark MetaData Queries
 
-    QJsonObject metaData(const QString& pluginKey);
+    QJsonObject metaData(const QString& plugin) const;
 
 protected:
     dtkCorePluginManagerPrivate<T> *d;

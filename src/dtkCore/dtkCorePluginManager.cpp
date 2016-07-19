@@ -10,7 +10,7 @@
   \brief The dtkCorePluginManagerPrivate class is the private implementation of dtkCorePluginManager.
 */
 
-/*! \fn bool dtkCorePluginManagerPrivate::check(const QString& path)
+/*! \fn bool dtkCorePluginManagerPrivate::check(const QString& path, bool checkConceptLayer = true)
     \internal
     Checks validity of the plugin library \a path (name, version, dependencies).
 */
@@ -59,11 +59,35 @@
     \sa setVerboseLoading()
 */
 
+/*! \fn void dtkCorePluginManager::setAutoLoading(bool value)
+    Set auto loading to \a value. If true, the plugin manager will load all the plugins it found in the given path. Otherwize, it will only store plugins names and metadata. Plugin can be manual loaded with loadFromName
+
+    \sa autoLoading(), loadFromName()
+*/
+
+/*! \fn bool dtkCorePluginManager::autoLoading(void) const
+    return current status of auto loading.
+
+    \sa setAutoLoading()
+*/
+
+/*! \fn void dtkCorePluginManager::setLayerVersion(const QString& layer_version)
+     Set layer version to \a layer_version value. This will be used when checking plugins: plugins compiled for another layer version will not be loaded.
+ */
+
+
 /*! \fn void dtkCorePluginManager::load(const QString& path)
     Checks the validity of the plugin library \a path, and if so creates the plugin.
 
     \sa initialize(), scan(), unload()
  */
+
+/*! \fn void dtkCorePluginManager::loadFromName(const QString& plugin_name)
+    Checks the validity of the \a plugin_name, and if so creates the plugin.
+
+    \sa initialize(), scan(), unload()
+ */
+
 
 /*! \fn void dtkCorePluginManager::unload(const QString& path)
     Destroys the plugin of the plugin library \a path. Destroys the related plugin loader.
@@ -71,6 +95,14 @@
     \sa load()
  */
 
-/*! \fn QStringList dtkCorePluginManager::plugins(void)
-    Returns all absolute path to all the plugin libraries handled by the manager.
+/*! \fn QStringList dtkCorePluginManager::plugins(void) const
+    Returns all the loaded plugins .
+ */
+
+/*! \fn QStringList dtkCorePluginManager::availablePlugins(void) const
+    Returns all the plugin available, by name (not necessarily loaded ).
+ */
+
+/*! \fn QJsonObject dtkCorePluginManager::metaData(const QString& plugin) const
+    Returnsthe metadatas of the given \a plugin name
  */

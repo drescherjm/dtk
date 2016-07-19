@@ -149,6 +149,7 @@ void dtkDistributedPolicy::setHostsFromEnvironment(void) {
         dtkWarn() << "No hosts defined or found from scheduler, will use localhost";
         this->addHost("localhost");
     } else {
+        dtkInfo() << "Got hosts from scheduler: running on " << hosts.count() << " threads/procs";
         d->hosts = hosts;
     }
 

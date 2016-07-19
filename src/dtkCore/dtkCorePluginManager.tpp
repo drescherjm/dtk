@@ -19,7 +19,6 @@
 
 #include <dtkLog>
 
-
 // ///////////////////////////////////////////////////////////////////
 // dtkCorePluginManagerPrivate
 // ///////////////////////////////////////////////////////////////////
@@ -40,7 +39,6 @@ public:
 
 public:
     QHash<QString, QPluginLoader *> loaders;
-
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -225,6 +223,7 @@ template <typename T> void dtkCorePluginManager<T>::scan(const QString& path)
     dtkCorePluginManagerBase::instance()->insertName(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
     dtkCorePluginManagerBase::instance()->insertVersion(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
     dtkCorePluginManagerBase::instance()->insertConcept(path, loader->metaData().value("MetaData").toObject().value("concept").toVariant());
+
     d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
     d->pluginsLayerVersion.insert(path, loader->metaData().value("MetaData").toObject().value("layerVersion").toVariant());
 

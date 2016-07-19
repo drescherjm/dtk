@@ -1,12 +1,12 @@
 <RCC>
-    <qresource prefix="/templates">
-        <file>templates/abstraction/class.h</file>
-        <file>templates/plugin/class.cpp</file>
-        <file>templates/plugin/class.h</file>
-        <file>templates/plugin/classPlugin.cpp</file>
-        <file>templates/plugin/classPlugin.h</file>
-        <file>templates/plugin/classPlugin.json</file>
-        <file>templates/node/classNode.cpp</file>
-        <file>templates/node/classNode.h</file>
-    </qresource>
+  <qresource prefix="/templates">
+    <file>templates/abstraction/class_h</file>
+    <file>templates/plugin/class_cpp</file>
+    <file>templates/plugin/class_h</file>
+    <file>templates/plugin/classPlugin_cpp</file>
+    <file>templates/plugin/classPlugin_h</file>
+    <file>templates/plugin/classPlugin_json</file>
+    <file>templates/node/classNode_cpp</file>
+    <file>templates/node/classNode_h</file>
+  </qresource>
 </RCC>

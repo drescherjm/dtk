@@ -1,21 +1,36 @@
-#include "dtkIntroPage.h"
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+#include    "dtkIntroPage.h"
 #include "ui_dtkIntroPage.h"
 
-dtkIntroPage::dtkIntroPage(QWidget *parent) :
-    QWizardPage(parent),
-    ui(new Ui::dtkIntroPage)
+dtkIntroPage::dtkIntroPage(QWidget *parent) : QWizardPage(parent), ui(new Ui::dtkIntroPage)
 {
-    ui->setupUi(this);
-    registerField("intro.path"       ,ui->m_path       );
-    connect(ui->m_browse,SIGNAL(clicked(bool)),this,SLOT(browse()));
+    this->ui->setupUi(this);
+    this->registerField("intro.path", ui->m_path);
+    this->connect(ui->m_browse,SIGNAL(clicked(bool)),this,SLOT(browse()));
 }
 
-void dtkIntroPage::browse()
+void dtkIntroPage::browse(void)
 {
-    ui->m_path->setText(QFileDialog::getExistingDirectory(this,"Save"));
+    this->ui->m_path->setText(QFileDialog::getExistingDirectory(this,"Save"));
 }
 
-dtkIntroPage::~dtkIntroPage()
+dtkIntroPage::~dtkIntroPage(void)
 {
-    delete ui;
+    delete this->ui;
 }
+
+//
+// dtkIntroPage.cpp ends here

@@ -1,20 +1,34 @@
-#include "dtkConceptDefinitionPage.h"
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+#include    "dtkConceptDefinitionPage.h"
 #include "ui_dtkConceptDefinitionPage.h"
 
-dtkConceptDefinitionPage::dtkConceptDefinitionPage(QWidget *parent) :
-    QWizardPage(parent),
-    ui(new Ui::dtkConceptDefinitionPage)
+dtkConceptDefinitionPage::dtkConceptDefinitionPage(QWidget *parent) : QWizardPage(parent), ui(new Ui::dtkConceptDefinitionPage)
 {
-    ui->setupUi(this);
-    registerField("def.runnable",ui->m_runnable);
-    registerField("def.qObject",ui->m_qObject);
-    registerField("def.custom",ui->m_custom);
-    registerField("def.customName",ui->m_customName);
-    registerField("def.pluginSystem",ui->m_pluginSystem);
-
+    this->ui->setupUi(this);
+    this->registerField("def.runnable",ui->m_runnable);
+    this->registerField("def.qObject",ui->m_qObject);
+    this->registerField("def.custom",ui->m_custom);
+    this->registerField("def.customName",ui->m_customName);
+    this->registerField("def.pluginSystem",ui->m_pluginSystem);
 }
 
-dtkConceptDefinitionPage::~dtkConceptDefinitionPage()
+dtkConceptDefinitionPage::~dtkConceptDefinitionPage(void)
 {
-    delete ui;
+    delete this->ui;
 }
+
+//
+// dtkConceptDefinitionPage.cpp ends here

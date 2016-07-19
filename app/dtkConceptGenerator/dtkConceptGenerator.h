@@ -1,22 +1,29 @@
-#ifndef DTKCONCEPTGENERATOR_H
-#define DTKCONCEPTGENERATOR_H
+// Version: $Id$
+//
+//
 
-#include <QWizard>
-#include <QVariant>
+// Commentary:
+//
+//
 
-#include "dtkConceptDefinitionPage.h"
-#include "dtkNewConceptPage.h"
-#include "dtkPluginGeneratorPage.h"
-#include "dtkIntroPage.h"
+// Change Log:
+//
+//
 
-#include "generator.h"
+// Code:
+
+#pragma once
+
+#include <QtWidgets>
 
 class dtkConceptGenerator : public QWizard
 {
 public:
-    dtkConceptGenerator();
-    void accept();
+    dtkConceptGenerator(void);
 
+public:
+    void accept(void);
 };
 
-#endif // DTKCONCEPTGENERATOR_H
+//
+// dtkConceptGenerator.h ends here

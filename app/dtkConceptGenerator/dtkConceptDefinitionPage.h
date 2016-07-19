@@ -1,10 +1,23 @@
-#ifndef dtkConceptDefinitionPage_H
-#define dtkConceptDefinitionPage_H
+// Version: $Id$
+//
+//
 
-#include <QWizardPage>
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+#pragma once
+
+#include <QtWidgets>
 
 namespace Ui {
-class dtkConceptDefinitionPage;
+    class dtkConceptDefinitionPage;
 }
 
 class dtkConceptDefinitionPage : public QWizardPage
@@ -12,11 +25,12 @@ class dtkConceptDefinitionPage : public QWizardPage
     Q_OBJECT
 
 public:
-    explicit dtkConceptDefinitionPage(QWidget *parent = 0);
+     dtkConceptDefinitionPage(QWidget *parent = 0);
     ~dtkConceptDefinitionPage();
 
 private:
     Ui::dtkConceptDefinitionPage *ui;
 };
 
-#endif // dtkConceptDefinitionPage_H
+//
+// dtkConceptDefinitionPage.h ends here

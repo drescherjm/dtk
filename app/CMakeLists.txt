@@ -24,10 +24,7 @@ endif(DTK_BUILD_DISTRIBUTED  AND DTK_BUILD_WIDGETS)
 
 add_subdirectory(dtkPluginsMetaInfoFetcher)
 add_subdirectory(dtkDeploy)
-
-if(DTK_BUILD_SUPPORT_GUI)
-  add_subdirectory(dtkConceptGenerator)
-endif(DTK_BUILD_SUPPORT_GUI)
+add_subdirectory(dtkConceptGenerator)
 
 ######################################################################
 ### CMakeLists.txt ends here

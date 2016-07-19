@@ -1,9 +1,21 @@
-#include "dtkNewConceptPage.h"
+// Version: $Id$
+//
+//
+
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+#include     "dtkNewConceptPage.h"
 #include "ui_dtkNewConceptPage.h"
 
-dtkNewConceptPage::dtkNewConceptPage(QWidget *parent) :
-    QWizardPage(parent),
-    ui(new Ui::dtkNewConceptPage)
+dtkNewConceptPage::dtkNewConceptPage(QWidget *parent) : QWizardPage(parent), ui(new Ui::dtkNewConceptPage)
 {
     ui->setupUi(this);
     registerField("new.layer",ui->m_layer);
@@ -17,3 +29,6 @@ dtkNewConceptPage::~dtkNewConceptPage()
 {
     delete ui;
 }
+
+//
+// dtkNewConceptPage.cpp ends here

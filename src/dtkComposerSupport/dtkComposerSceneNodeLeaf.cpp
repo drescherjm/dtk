@@ -1,16 +1,16 @@
-/* dtkComposerSceneNodeLeaf.cpp --- 
- * 
+/* dtkComposerSceneNodeLeaf.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:14 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -41,37 +41,44 @@ public:
 
 public:
     QGraphicsPixmapItem *flag;
-         Qt::GlobalColor flag_color;
+    Qt::GlobalColor flag_color;
 
 public:
     QLinearGradient gradiant;
-               bool gradiant_defined;
+    bool gradiant_defined;
 };
 
 void dtkComposerSceneNodeLeafPrivate::flagAs(Qt::GlobalColor color)
 {
-    switch(color) {
+    switch (color) {
     case Qt::blue:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-blue.png"));
         break;
+
     case Qt::gray:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-gray.png"));
         break;
+
     case Qt::green:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-green.png"));
         break;
+
     case Qt::darkYellow:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-orange.png"));
         break;
+
     case Qt::red:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-red.png"));
         break;
+
     case Qt::magenta:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-pink.png"));
         break;
+
     case Qt::yellow:
         this->flag->setPixmap(QPixmap(":dtkComposer/pixmaps/dtk-composer-node-flag-yellow.png"));
         break;
+
     default:
         break;
     };
@@ -120,16 +127,16 @@ void dtkComposerSceneNodeLeaf::wrap(dtkComposerNode *node)
 
     //foreach(dtkComposerTransmitter *receiver, node->receivers()) {
 
-    for(int i = 0; i < node->receivers().count(); ++i) {
-        
+    for (int i = 0; i < node->receivers().count(); ++i) {
+
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Input, this);
         this->addInputPort(port);
         port->setLabel(node->inputLabelHint(this->inputPorts().indexOf(port)));
-        
+
     }
 
     //foreach(dtkComposerTransmitter *emitter, node->emitters()) {
-    for(int i = 0; i < node->emitters().count(); ++i) {
+    for (int i = 0; i < node->emitters().count(); ++i) {
 
         dtkComposerScenePort *port = new dtkComposerScenePort(dtkComposerScenePort::Output, this);
         this->addOutputPort(port);
@@ -150,30 +157,32 @@ void dtkComposerSceneNodeLeaf::flag(Qt::GlobalColor color, bool on)
 
 void dtkComposerSceneNodeLeaf::flag(QColor color)
 {
-    if (!d->use_gui) { return; }
+    if (!d->use_gui) {
+        return;
+    }
 
-    if(color == Qt::blue)
+    if (color == Qt::blue)
         this->flag(Qt::blue, true);
-    else if(color == Qt::gray)
+    else if (color == Qt::gray)
         this->flag(Qt::gray, true);
-    else if(color == Qt::green)
+    else if (color == Qt::green)
         this->flag(Qt::green, true);
-    else if(color == Qt::darkYellow)
+    else if (color == Qt::darkYellow)
         this->flag(Qt::darkYellow, true);
-    else if(color == Qt::red)
+    else if (color == Qt::red)
         this->flag(Qt::red, true);
-    else if(color == Qt::magenta)
+    else if (color == Qt::magenta)
         this->flag(Qt::magenta, true);
-    else if(color == Qt::yellow)
+    else if (color == Qt::yellow)
         this->flag(Qt::yellow, true);
 }
 
 bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
 {
-    if(!d->flag)
+    if (!d->flag)
         return false;
 
-    if(!d->flag->isVisible())
+    if (!d->flag->isVisible())
         return false;
     else
         return d->flag_color == color;
@@ -181,7 +190,7 @@ bool dtkComposerSceneNodeLeaf::flagged(Qt::GlobalColor color)
 
 bool dtkComposerSceneNodeLeaf::flagged(void)
 {
-    if(!d->flag)
+    if (!d->flag)
         return false;
 
     return d->flag->isVisible();
@@ -189,7 +198,7 @@ bool dtkComposerSceneNodeLeaf::flagged(void)
 
 QString dtkComposerSceneNodeLeaf::flagColorName(void)
 {
-    if(!d->flag || !d->flag->isVisible())
+    if (!d->flag || !d->flag->isVisible())
         return QString();
 
     QColor color(d->flag_color);
@@ -218,26 +227,26 @@ void dtkComposerSceneNodeLeaf::layout(void)
     int port_spacing = 10;
 
 // /////////////////////////////////////////////////////////////////
-// Setting up port position 
+// Setting up port position
 // /////////////////////////////////////////////////////////////////
 
-    for(int i = 0; i < this->inputPorts().count(); i++)
-        this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i*this->inputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
+    for (int i = 0; i < this->inputPorts().count(); i++)
+        this->inputPorts().at(i)->setPos(QPointF(port_margin_left, i * this->inputPorts().at(i)->boundingRect().height() + i * port_spacing + port_margin_top + header));
 
-    for(int i = 0; i < this->outputPorts().count(); i++)
-        this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i*this->outputPorts().at(i)->boundingRect().height() + i*port_spacing + port_margin_top + header));
+    for (int i = 0; i < this->outputPorts().count(); i++)
+        this->outputPorts().at(i)->setPos(QPointF(d->rect.right() - port_margin_left - this->outputPorts().at(i)->boundingRect().width(), i * this->outputPorts().at(i)->boundingRect().height() + i * port_spacing + port_margin_top + header));
 
 // /////////////////////////////////////////////////////////////////
 // Height calculation
 // /////////////////////////////////////////////////////////////////
 
-    if(this->inputPorts().count() || this->outputPorts().count())
-        if(this->inputPorts().count() >= this->outputPorts().count())
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count()-1) * port_spacing + header));
+    if (this->inputPorts().count() || this->outputPorts().count())
+        if (this->inputPorts().count() >= this->outputPorts().count())
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->inputPorts().count() * this->inputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->inputPorts().count() - 1) * port_spacing + header));
         else
-            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count()-1) * port_spacing + header));
+            d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), this->outputPorts().count() * this->outputPorts().at(0)->boundingRect().height() + port_margin_top + port_margin_bottom + (this->outputPorts().count() - 1) * port_spacing + header));
 
-    else if(this->embedded())
+    else if (this->embedded())
         d->rect = QRectF(d->rect.topLeft(), QSize(d->rect.width(), port_margin_top + port_margin_bottom + 10));
 
 // /////////////////////////////////////////////////////////////////
@@ -245,29 +254,29 @@ void dtkComposerSceneNodeLeaf::layout(void)
 // /////////////////////////////////////////////////////////////////
 
     if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(this->parent())) {
-        if(!parent->root()) {
+        if (!parent->root()) {
             if (parent->entered() || (parent->flattened() && !parent->embedded())) {
                 parent->layout();
             }
         }
     }
-    
+
 // /////////////////////////////////////////////////////////////////
 // Update edges geometry
 // /////////////////////////////////////////////////////////////////
 
     QRectF updateRect;
-    
-    foreach(dtkComposerSceneEdge *edge, this->inputEdges()) {
+
+    foreach (dtkComposerSceneEdge *edge, this->inputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
     }
-    
-    foreach(dtkComposerSceneEdge *edge, this->outputEdges()) {
+
+    foreach (dtkComposerSceneEdge *edge, this->outputEdges()) {
         edge->adjust();
         updateRect |= edge->boundingRect();
     }
-    
+
     this->update(updateRect);
 
 // /////////////////////////////////////////////////////////////////
@@ -275,24 +284,24 @@ void dtkComposerSceneNodeLeaf::layout(void)
 // /////////////////////////////////////////////////////////////////
 
     if (!d->gradiant_defined) {
-        
+
         d->gradiant = QLinearGradient(d->rect.left(), d->rect.top(), d->rect.left(), d->rect.bottom());
-        
+
         qreal stripe = 10. / d->rect.height();
-        
-        if (dynamic_cast<dtkComposerNodeLeafProcess*>(this->wrapee())) {
+
+        if (dynamic_cast<dtkComposerNodeLeafProcess *>(this->wrapee())) {
             d->gradiant.setColorAt(0.0, QColor(Qt::red).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkRed));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkRed).darker());
-        } else if (dynamic_cast<dtkComposerNodeLeafData*>(this->wrapee())) {
+        } else if (dynamic_cast<dtkComposerNodeLeafData *>(this->wrapee())) {
             d->gradiant.setColorAt(0.0, QColor(Qt::blue).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkBlue));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkBlue).darker());
-        } else if (dynamic_cast<dtkComposerNodeLeafView*>(this->wrapee())) {
+        } else if (dynamic_cast<dtkComposerNodeLeafView *>(this->wrapee())) {
             d->gradiant.setColorAt(0.0, QColor(Qt::green).lighter());
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGreen));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkGreen).darker());
-        } else if (dynamic_cast<dtkComposerNodeLeafActor*>(this->wrapee())) {
+        } else if (dynamic_cast<dtkComposerNodeLeafActor *>(this->wrapee())) {
             d->gradiant.setColorAt(0.0, QColor(255, 175, 0).lighter());
             d->gradiant.setColorAt(stripe, QColor(155, 75, 0));
             d->gradiant.setColorAt(1.0, QColor(155, 75, 0).darker());
@@ -301,7 +310,7 @@ void dtkComposerSceneNodeLeaf::layout(void)
             d->gradiant.setColorAt(stripe, QColor(Qt::darkGray));
             d->gradiant.setColorAt(1.0, QColor(Qt::darkGray).darker());
         }
-        
+
         d->gradiant_defined = true;
 
     }
@@ -350,14 +359,14 @@ void dtkComposerSceneNodeLeaf::paint(QPainter *painter, const QStyleOptionGraphi
 
     QFont font = painter->font();
     QFontMetricsF metrics(font);
-    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width()-2-4*margin);
+    QString title_text = metrics.elidedText(this->title(), Qt::ElideMiddle, this->boundingRect().width() - 2 - 4 * margin);
 
     QPointF title_pos;
 
-    if(!this->embedded())
-        title_pos = QPointF(2*margin, 2*margin + metrics.xHeight());
+    if (!this->embedded())
+        title_pos = QPointF(2 * margin, 2 * margin + metrics.xHeight());
     else
-        title_pos = QPointF(d->rect.right() - 2*margin - metrics.width(title_text), 2*margin + metrics.xHeight());
+        title_pos = QPointF(d->rect.right() - 2 * margin - metrics.width(title_text), 2 * margin + metrics.xHeight());
 
     painter->setPen(QPen(QColor(Qt::gray).darker().darker()));
     painter->drawText(title_pos + QPointF(0, -1), title_text);

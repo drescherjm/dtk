@@ -1,5 +1,5 @@
-/* dtkComposerPath.h --- 
- * 
+/* dtkComposerPath.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov 19 11:40:26 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 17
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERPATH_H
@@ -33,7 +33,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerPath : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerPath(QWidget *parent = 0);
+    dtkComposerPath(QWidget *parent = 0);
     ~dtkComposerPath(void);
 
 public:

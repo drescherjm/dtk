@@ -32,7 +32,7 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeFactory : public dtkCorePluginFactory<dt
     Q_OBJECT
 
 public:
-             dtkComposerNodeFactory(void);
+    dtkComposerNodeFactory(void);
     virtual ~dtkComposerNodeFactory(void);
 
 public slots:

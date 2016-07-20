@@ -26,7 +26,7 @@ class dtkComposerNodeMovieWriterPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMovieWriter : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMovieWriter(void);
+    dtkComposerNodeMovieWriter(void);
     ~dtkComposerNodeMovieWriter(void);
 
 public:

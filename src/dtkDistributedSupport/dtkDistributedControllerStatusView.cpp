@@ -1,5 +1,5 @@
-/* dtkDistributedControllerStatusView.cpp --- 
- * 
+/* dtkDistributedControllerStatusView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:21:43 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 34
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedControllerStatusModel.h"

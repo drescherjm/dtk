@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -24,15 +24,15 @@ inline bool dtkComposerTransmitterProxyLoop::enableCopy(void)
     bool enable_copy = (d->receivers.count() > 1);
 
     if (m_source)
-	enable_copy = (enable_copy || m_source->enableCopy());
+        enable_copy = (enable_copy || m_source->enableCopy());
 
     return enable_copy;
 }
 
 inline QVariant dtkComposerTransmitterProxyLoop::variant(void)
 {
-    if (m_source == d->active_emitter)	
-	return m_source->variant();
+    if (m_source == d->active_emitter)
+        return m_source->variant();
 
     return d->variant;
 }
@@ -45,7 +45,7 @@ inline void dtkComposerTransmitterProxyLoop::setVariant(const QVariant& v)
 inline QVariantList dtkComposerTransmitterProxyLoop::allData(void)
 {
     if (m_source)
-	m_source->allData();
+        m_source->allData();
 
     return QVariantList();
 }
@@ -70,5 +70,5 @@ inline dtkComposerTransmitterProxyLoop *dtkComposerTransmitterProxyLoop::twin(vo
     return m_twin;
 }
 
-// 
+//
 // dtkComposerTransmitterProxyLoop.tpp ends here

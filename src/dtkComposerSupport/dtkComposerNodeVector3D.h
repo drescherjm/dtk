@@ -1,5 +1,5 @@
-/* dtkComposerNodeVector3D.h --- 
- * 
+/* dtkComposerNodeVector3D.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 10:10:43 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 9
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEVECTOR3D_H
@@ -28,9 +28,9 @@ class dtkComposerNodeVector3DPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3D : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVector3D(void);
+    dtkComposerNodeVector3D(void);
     ~dtkComposerNodeVector3D(void);
-    
+
 public:
     void run(void);
 

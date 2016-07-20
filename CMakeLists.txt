@@ -16,12 +16,6 @@ cmake_minimum_required(VERSION 3.2.0)
 
 ######################################################################
 
-if(${CMAKE_MAJOR_VERSION} GREATER 2)
-  cmake_policy(SET CMP0028 NEW)
-endif(${CMAKE_MAJOR_VERSION} GREATER 2)
-
-######################################################################
-
 project(dtk)
 
 ## ###################################################################
@@ -80,21 +74,6 @@ include(GenerateExportHeader)
 if(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-pragmas")
 endif(UNIX)
-
-if(NOT APPLE AND NOT MSVC)
-
-  include(CheckCXXCompilerFlag)
-
-  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-
-  if(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-  endif(CMAKE_COMPILER_IS_GNUCXX AND DTK_ENABLE_COVERAGE)
-
-endif(NOT APPLE AND NOT MSVC)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -158,6 +137,12 @@ endif(DTK_ENABLE_MEMCHECK)
 enable_testing()
 
 if(DTK_ENABLE_COVERAGE)
+
+  if(UNIX AND CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS        "${CMAKE_CXX_FLAGS}        -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS          "${CMAKE_CXX_FLAGS}        -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+  endif(UNIX AND CMAKE_COMPILER_IS_GNUCXX)
 
   include(dtkCodeCoverage)
   include(FindPythonInterp)

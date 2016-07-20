@@ -28,7 +28,7 @@ class dtkComposerNodeControlCasePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlCase : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlCase(void);
+    dtkComposerNodeControlCase(void);
     virtual ~dtkComposerNodeControlCase(void);
 
 public:
@@ -42,7 +42,7 @@ public:
     void setConditions(void);
     void setOutputs(void);
     void setVariables(void);
-     int selectBranch(void);
+    int selectBranch(void);
     void begin(void);
     void end(void);
 

@@ -35,7 +35,7 @@ public:
     QLineEdit *edit;
 };
 
-dtkComposerControlsListItemString::dtkComposerControlsListItemString(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemStringPrivate)
+dtkComposerControlsListItemString::dtkComposerControlsListItemString(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemStringPrivate)
 {
     d->node = node;
 

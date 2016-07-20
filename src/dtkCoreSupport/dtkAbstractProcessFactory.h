@@ -24,8 +24,8 @@
 
 #include "dtkAbstractFactory.h"
 
-                  class dtkAbstractProcess;
-                  class dtkAbstractProcessFactoryPrivate;
+class dtkAbstractProcess;
+class dtkAbstractProcessFactoryPrivate;
 template<class T> class dtkSmartPointer;
 
 class DTKCORESUPPORT_EXPORT dtkAbstractProcessFactory : public dtkAbstractFactory
@@ -59,7 +59,7 @@ public slots:
     dtkAbstractProcess *create(const QString& type);
 
 protected:
-     dtkAbstractProcessFactory(void);
+    dtkAbstractProcessFactory(void);
     ~dtkAbstractProcessFactory(void);
 
 private:

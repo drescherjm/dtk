@@ -1,16 +1,16 @@
-/* dtkComposerNodeString.h --- 
- * 
+/* dtkComposerNodeString.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:50:23 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODESTRING_H
@@ -24,7 +24,7 @@ class dtkComposerNodeStringPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeString : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeString(void);
+    dtkComposerNodeString(void);
     ~dtkComposerNodeString(void);
 
 public:
@@ -40,10 +40,10 @@ public:
     }
 
     inline QString inputLabelHint(int port) {
-        if(port == 0)
+        if (port == 0)
             return "string";
 
-        if(port == 1)
+        if (port == 1)
             return "real";
 
         return dtkComposerNodeLeaf::inputLabelHint(port);
@@ -69,7 +69,7 @@ class dtkComposerNodeStringListPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringList : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringList(void);
+    dtkComposerNodeStringList(void);
     ~dtkComposerNodeStringList(void);
 
 public:
@@ -85,11 +85,13 @@ public:
     }
 
     inline QString inputLabelHint(int port) {
-        if(port == 0)
+        if (port == 0)
             return "list";
-        if(port == 1)
+
+        if (port == 1)
             return "size";
-        if(port == 2)
+
+        if (port == 2)
             return "value";
 
         return dtkComposerNodeLeaf::inputLabelHint(port);

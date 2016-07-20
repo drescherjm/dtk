@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,7 +28,7 @@ class dtkComposerSceneNodeHandlePrivate;
 class  dtkComposerSceneNodeHandle : public QGraphicsItem
 {
 public:
-     dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent);
+    dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent);
     ~dtkComposerSceneNodeHandle(void);
 
 public:
@@ -51,5 +51,5 @@ public:
     dtkComposerSceneNodeHandlePrivate *d;
 };
 
-// 
+//
 // dtkComposerSceneNodeHandle.h ends here

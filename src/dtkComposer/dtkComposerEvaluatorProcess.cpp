@@ -114,6 +114,7 @@ void dtkComposerEvaluatorProcess::run(void)
 {
 
     d->status = 0;
+
     if (!d->factory) {
         dtkFatal() << "No factory set ! abort process execution";
         d->status = 1;
@@ -126,7 +127,7 @@ void dtkComposerEvaluatorProcess::run(void)
 
     QByteArray data;
 
-    d->parent_comm->broadcast(data,0);
+    d->parent_comm->broadcast(data, 0);
 
     dtkDebug() << "Ok, composition received, parse" ;
 
@@ -158,6 +159,7 @@ void dtkComposerEvaluatorProcess::run(void)
         //     return 1;
         // }
     }
+
     dtkDebug() << "run composition" ;
     d->evaluator->run();
     dtkDebug() << "finished" ;

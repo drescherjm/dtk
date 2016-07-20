@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -27,7 +27,7 @@ class dtkComposerSceneNodeLeaf;
 class DTKCOMPOSER_EXPORT dtkComposerSceneNodeControl : public dtkComposerSceneNode
 {
 public:
-     dtkComposerSceneNodeControl(void);
+    dtkComposerSceneNodeControl(void);
     ~dtkComposerSceneNodeControl(void);
 
 public:
@@ -80,5 +80,5 @@ private:
     dtkComposerSceneNodeControlPrivate *d;
 };
 
-// 
+//
 // dtkComposerSceneNodeControl.h ends here

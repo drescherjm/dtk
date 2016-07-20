@@ -1,5 +1,5 @@
-/* dtkComposerSceneEdge.cpp --- 
- * 
+/* dtkComposerSceneEdge.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:00:23 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 191
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerSceneEdge.h"
@@ -82,8 +82,8 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
     painter->setPen(QPen(Qt::black, 1));
 
     // if (!d->scene)
-        if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene * > ( this->scene()))
-            d->scene = scene;
+    if (dtkComposerScene *scene = dynamic_cast<dtkComposerScene * > ( this->scene()))
+        d->scene = scene;
 
     if (d->scene && d->scene->maskedEdges())
         this->setOpacity(0.05);
@@ -93,11 +93,10 @@ void dtkComposerSceneEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
         this->setOpacity(1);
     } else if (!d->flagged)
         painter->setBrush(Qt::gray);
+    else if (d->valid)
+        painter->setBrush(Qt::green);
     else
-        if(d->valid)
-            painter->setBrush(Qt::green);
-        else
-            painter->setBrush(Qt::red);
+        painter->setBrush(Qt::red);
 
     if (this->isSelected())
         painter->setBrush(Qt::magenta);
@@ -161,7 +160,7 @@ void dtkComposerSceneEdge::adjust(const QPointF& start, const QPointF& end)
 
     QPointF midPoint = (start + end) / 2;
 
-    qreal halfMid = (midPoint.x() - start.x())/2;
+    qreal halfMid = (midPoint.x() - start.x()) / 2;
 
     QPainterPath path;
     path.moveTo(start);
@@ -179,13 +178,13 @@ bool dtkComposerSceneEdge::link(bool anyway)
 {
     Q_UNUSED(anyway);
 
-    if(!d->source || !d->destination)
+    if (!d->source || !d->destination)
         return false;
 
-    if(d->source == d->destination)
+    if (d->source == d->destination)
         return false;
 
-    if(d->source->node() == d->destination->node())
+    if (d->source->node() == d->destination->node())
         return false;
 
     if (d->source->type() == dtkComposerScenePort::Output)
@@ -200,7 +199,7 @@ bool dtkComposerSceneEdge::link(bool anyway)
 
 bool dtkComposerSceneEdge::unlink(void)
 {
-    if(!d->source || !d->destination)
+    if (!d->source || !d->destination)
         return false;
 
     if (d->source->type() == dtkComposerScenePort::Output)

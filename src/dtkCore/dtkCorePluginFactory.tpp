@@ -54,7 +54,7 @@ template <typename T> void dtkCorePluginFactory<T>::recordTuner(const QString& k
 
 template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key) const
 {
-    if(!this->creators.contains(key))
+    if (!this->creators.contains(key))
         return NULL;
 
     return this->creators.value(key)();
@@ -62,7 +62,7 @@ template <typename T> T *dtkCorePluginFactory<T>::create(const QString& key) con
 
 template <typename T> dtkCorePluginTuner<T> *dtkCorePluginFactory<T>::createTuner(const QString& key) const
 {
-    if(!this->tuner_creators.contains(key))
+    if (!this->tuner_creators.contains(key))
         return NULL;
 
     return this->tuner_creators.value(key)();

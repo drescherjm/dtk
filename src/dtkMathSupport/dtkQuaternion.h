@@ -1,5 +1,5 @@
-/* dtkQuaternion.h --- 
- * 
+/* dtkQuaternion.h ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 15:00:12 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 67
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKQUATERNION_H
@@ -30,86 +30,94 @@
 
 namespace dtkDeprecated {
 
-template <class T = double> class dtkQuaternion : public dtkVector<T>
-{
-public:	
-     dtkQuaternion(void) : dtkVector<T>(4U) {};
-     dtkQuaternion(const dtkMatrix<T>& mat): dtkVector<T>(mat) {};
-     dtkQuaternion(const dtkVector<T>& vec): dtkVector<T>(vec) {};
-     dtkQuaternion(const dtkQuaternion& qtn): dtkVector<T>(qtn) {};
-     dtkQuaternion(const dtkVector3D<T>&, const T& = dtkZero<T>());
-     dtkQuaternion(const T&, const T&, const T&, const T&);
-     dtkQuaternion(const T&);
-     dtkQuaternion(const dtkMatrix<T>&, unsigned, unsigned);
-     dtkQuaternion(const dtkVector<T>& vec, unsigned irowStart);
-     dtkQuaternion(const T& r, const dtkVector3D<T>& vec, const T& angle);
-    ~dtkQuaternion(void) {};
+    template <class T = double> class dtkQuaternion : public dtkVector<T>
+    {
+    public:
+        dtkQuaternion(void) : dtkVector<T>(4U) {};
+        dtkQuaternion(const dtkMatrix<T>& mat): dtkVector<T>(mat) {};
+        dtkQuaternion(const dtkVector<T>& vec): dtkVector<T>(vec) {};
+        dtkQuaternion(const dtkQuaternion& qtn): dtkVector<T>(qtn) {};
+        dtkQuaternion(const dtkVector3D<T>&, const T& = dtkZero<T>());
+        dtkQuaternion(const T&, const T&, const T&, const T&);
+        dtkQuaternion(const T&);
+        dtkQuaternion(const dtkMatrix<T>&, unsigned, unsigned);
+        dtkQuaternion(const dtkVector<T>& vec, unsigned irowStart);
+        dtkQuaternion(const T& r, const dtkVector3D<T>& vec, const T& angle);
+        ~dtkQuaternion(void) {};
 
-public:
-    QString identifier(void) const;
+    public:
+        QString identifier(void) const;
 
-public:
-    void allocate(void) { dtkVector<T>::allocate(4); };
+    public:
+        void allocate(void) {
+            dtkVector<T>::allocate(4);
+        };
 
-    void mapInto(const dtkMatrix<T>& mat,
-		 unsigned irowStart,
-		 unsigned icolStart);
-    void mapInto(const dtkVector<T>& vec, unsigned irowStart);
+        void mapInto(const dtkMatrix<T>& mat,
+                     unsigned irowStart,
+                     unsigned icolStart);
+        void mapInto(const dtkVector<T>& vec, unsigned irowStart);
 
-    unsigned size(void) { return 4; };
+        unsigned size(void) {
+            return 4;
+        };
 
-public:
-    dtkQuaternion operator +(const dtkQuaternion&) const;
-    dtkQuaternion operator -(const dtkQuaternion&) const;
-    dtkQuaternion operator -(void) const;
-    dtkQuaternion operator *(const T&) const;
-    dtkQuaternion operator *(const dtkQuaternion&) const;
-    dtkQuaternion operator /(const T& value) const {
-        T tTmp = dtkUnity<T>();
-        tTmp /= value;
-        return (*this)*tTmp;
-    }
-    dtkQuaternion operator /(const dtkQuaternion&) const;
+    public:
+        dtkQuaternion operator +(const dtkQuaternion&) const;
+        dtkQuaternion operator -(const dtkQuaternion&) const;
+        dtkQuaternion operator -(void) const;
+        dtkQuaternion operator *(const T&) const;
+        dtkQuaternion operator *(const dtkQuaternion&) const;
+        dtkQuaternion operator /(const T& value) const {
+            T tTmp = dtkUnity<T>();
+            tTmp /= value;
+            return (*this) * tTmp;
+        }
+        dtkQuaternion operator /(const dtkQuaternion&) const;
 
-    dtkQuaternion& operator  =(const dtkQuaternion&);
-    dtkQuaternion& operator  =(const dtkVector3D<T>&);
-    dtkQuaternion& operator +=(const dtkQuaternion&);
-    dtkQuaternion& operator -=(const dtkQuaternion&);
-    dtkQuaternion& operator *=(const T&);
-    dtkQuaternion& operator *=(const dtkQuaternion&);
-    dtkQuaternion& operator /=(const T&);
-    dtkQuaternion& operator /=(const dtkQuaternion&);
+        dtkQuaternion& operator  =(const dtkQuaternion&);
+        dtkQuaternion& operator  =(const dtkVector3D<T>&);
+        dtkQuaternion& operator +=(const dtkQuaternion&);
+        dtkQuaternion& operator -=(const dtkQuaternion&);
+        dtkQuaternion& operator *=(const T&);
+        dtkQuaternion& operator *=(const dtkQuaternion&);
+        dtkQuaternion& operator /=(const T&);
+        dtkQuaternion& operator /=(const dtkQuaternion&);
 
-    void storeProduct(const dtkQuaternion&, const dtkQuaternion&);
-    void storeConjugate(const dtkQuaternion&);
+        void storeProduct(const dtkQuaternion&, const dtkQuaternion&);
+        void storeConjugate(const dtkQuaternion&);
 
-    void makeConjugate(void);
+        void makeConjugate(void);
 
-    dtkQuaternion unit(void) const { return (*this)/(this->norm()); }
-};
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
-template <class T> class dtkUnity< dtkQuaternion<T> >: public dtkQuaternion<T>
-{
-public:
-    dtkUnity(void) {
-        (*this)[0] = (*this)[1] = (*this)[2] = dtkZero<T>();
-        (*this)[3] = dtkUnity<T>();
-    }
-};
+        dtkQuaternion unit(void) const {
+            return (*this) / (this->norm());
+        }
+    };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-template <class T> class dtkZero< dtkQuaternion<T> >: public dtkQuaternion<T>
-{
-public:
-    dtkZero(void) { fill(dtkZero<T>()); }
-};
+    template <class T> class dtkUnity< dtkQuaternion<T> >: public dtkQuaternion<T>
+    {
+    public:
+        dtkUnity(void) {
+            (*this)[0] = (*this)[1] = (*this)[2] = dtkZero<T>();
+            (*this)[3] = dtkUnity<T>();
+        }
+    };
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
+
+    template <class T> class dtkZero< dtkQuaternion<T> >: public dtkQuaternion<T>
+    {
+    public:
+        dtkZero(void) {
+            fill(dtkZero<T>());
+        }
+    };
 
 } // end of namespace
 
@@ -120,7 +128,7 @@ public:
 #include "dtkQuaternion.tpp"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 #include <QtCore>

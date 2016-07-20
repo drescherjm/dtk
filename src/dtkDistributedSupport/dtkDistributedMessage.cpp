@@ -45,7 +45,7 @@ dtkDistributedMessage::~dtkDistributedMessage(void)
 }
 
 
-dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, int rank, qint64 size, QString type, const QByteArray  &content,  const QHash<QString,QString>  &headers ) :  d(new dtkDistributedMessagePrivate)
+dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, int rank, qint64 size, QString type, const QByteArray&  content,  const QHash<QString, QString>&  headers ) :  d(new dtkDistributedMessagePrivate)
 {
     d->method = method;
     d->size = size;
@@ -61,6 +61,7 @@ dtkDistributedMessage::dtkDistributedMessage(Method method, QString jobid, int r
 void dtkDistributedMessage::setMethod(QString method)
 {
     QStringList tokens = QString(method).split(QRegExp("/"));
+
     if (method.startsWith("GET /status")) {
         d->method = STATUS;
     } else if (method.startsWith("OK /status")) {
@@ -90,6 +91,7 @@ void dtkDistributedMessage::setMethod(QString method)
     } else if (method.startsWith("POST /data")) {
         d->method = DATA;
         d->jobid  = tokens[2];
+
         if (tokens.size() > 2)
             d->rank  = tokens[3].toInt();
     } else if (method.startsWith("PUT /rank")) {
@@ -101,9 +103,10 @@ void dtkDistributedMessage::setMethod(QString method)
 
 }
 
-void dtkDistributedMessage::setSize(const QString &header)
+void dtkDistributedMessage::setSize(const QString& header)
 {
     QStringList tokens = header.split(QRegExp(":\\s*"));
+
     if (tokens[0].toLower() != "content-size") {
         dtkWarn() << "Error: Not a size header ! " << header;
         d->size = -1;
@@ -111,9 +114,10 @@ void dtkDistributedMessage::setSize(const QString &header)
         d->size = tokens[1].toInt();
 }
 
-void dtkDistributedMessage::setType(const QString &header)
+void dtkDistributedMessage::setType(const QString& header)
 {
     QStringList tokens = header.split(QRegExp(":\\s*"));
+
     if (tokens[0].toLower() != "content-type") {
         dtkWarn() << "Error: Not a content type header ! " << header;
         d->type = "unknown";
@@ -121,13 +125,13 @@ void dtkDistributedMessage::setType(const QString &header)
         d->type = tokens[1].trimmed();
 }
 
-void dtkDistributedMessage::setContent(QByteArray &content)
+void dtkDistributedMessage::setContent(QByteArray& content)
 {
     d->size    = content.size();
     d->content = content;
 }
 
-void dtkDistributedMessage::setHeader(const QString &headerString)
+void dtkDistributedMessage::setHeader(const QString& headerString)
 {
     QStringList tokens = headerString.split(QRegExp(":\\s*"));
     d->headers.insert(tokens[0], tokens[1].trimmed());
@@ -146,47 +150,61 @@ dtkDistributedMessage::Method dtkDistributedMessage::method(void)
 QString dtkDistributedMessage::req(void)
 {
     QString req;
+
     switch (d->method) {
-        case STATUS:
-            req = "GET /status";
-            break;
-        case OKSTATUS:
-            req = "OK /status/"+d->jobid;
-            break;
-        case NEWJOB:
-            req = "PUT /job";
-            break;
-        case OKJOB:
-            req = "OK /job/"+d->jobid;
-            break;
-        case DELJOB:
-            req = "DELETE /job/"+d->jobid;
-            break;
-        case OKDEL:
-            req = "OK /deleted/"+d->jobid;
-            break;
-        case ERRORDEL:
-            req = "ERROR /deleted/"+d->jobid;
-            break;
-        case STARTJOB:
-            req = "STARTED /job/"+d->jobid;
-            break;
-        case ENDJOB:
-            req = "ENDED /job/"+d->jobid;
-            break;
-        case DATA:
-            req = "POST /data/"+d->jobid+"/"+QString::number(d->rank) ;
-            break;
-        case SETRANK:
-            req = "PUT /rank/"+d->jobid +"/"+QString::number(d->rank) ;
-            break;
-        case STOP:
-            req = "DELETE /";
-            break;
-        default:
-            dtkWarn() << "Unsupported method";
-        };
-    return req +"\n";
+    case STATUS:
+        req = "GET /status";
+        break;
+
+    case OKSTATUS:
+        req = "OK /status/" + d->jobid;
+        break;
+
+    case NEWJOB:
+        req = "PUT /job";
+        break;
+
+    case OKJOB:
+        req = "OK /job/" + d->jobid;
+        break;
+
+    case DELJOB:
+        req = "DELETE /job/" + d->jobid;
+        break;
+
+    case OKDEL:
+        req = "OK /deleted/" + d->jobid;
+        break;
+
+    case ERRORDEL:
+        req = "ERROR /deleted/" + d->jobid;
+        break;
+
+    case STARTJOB:
+        req = "STARTED /job/" + d->jobid;
+        break;
+
+    case ENDJOB:
+        req = "ENDED /job/" + d->jobid;
+        break;
+
+    case DATA:
+        req = "POST /data/" + d->jobid + "/" + QString::number(d->rank) ;
+        break;
+
+    case SETRANK:
+        req = "PUT /rank/" + d->jobid + "/" + QString::number(d->rank) ;
+        break;
+
+    case STOP:
+        req = "DELETE /";
+        break;
+
+    default:
+        dtkWarn() << "Unsupported method";
+    };
+
+    return req + "\n";
 }
 
 QString dtkDistributedMessage::jobid(void)
@@ -219,7 +237,7 @@ qint64  dtkDistributedMessage::size(void)
     return d->size;
 }
 
-QByteArray &dtkDistributedMessage::content(void)
+QByteArray& dtkDistributedMessage::content(void)
 {
     return d->content;
 }

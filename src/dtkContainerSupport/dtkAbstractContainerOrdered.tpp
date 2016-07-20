@@ -1,5 +1,5 @@
-/* dtkAbstractContainerOrdered.tpp --- 
- * 
+/* dtkAbstractContainerOrdered.tpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 16:20:45 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTCONTAINERORDERED_TPP

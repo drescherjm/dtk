@@ -25,7 +25,7 @@ template < typename T > class dtkCorePluginTuner;
 template <typename T> class dtkCorePluginFactory : public QObject
 {
 public:
-     dtkCorePluginFactory(void);
+    dtkCorePluginFactory(void);
     ~dtkCorePluginFactory(void);
 
 public:
@@ -52,7 +52,8 @@ private:
 // Helper functions
 // ///////////////////////////////////////////////////////////////////
 
-template <typename S, typename T> S *dtkCorePluginFactoryCreator(void) {
+template <typename S, typename T> S *dtkCorePluginFactoryCreator(void)
+{
     return new T;
 }
 

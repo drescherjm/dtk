@@ -1,5 +1,5 @@
-/* dtkComposerNodeControl.h --- 
- * 
+/* dtkComposerNodeControl.h ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 42
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONTROL_H
@@ -36,7 +36,7 @@ class dtkComposerTransmitterVariant;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControl : public dtkComposerNode
 {
 public:
-             dtkComposerNodeControl(void);
+    dtkComposerNodeControl(void);
     virtual ~dtkComposerNodeControl(void);
 
 public:

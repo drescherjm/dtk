@@ -29,7 +29,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedController : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedController(QObject *parent=0);
+    dtkDistributedController(QObject *parent = 0);
     ~dtkDistributedController(void);
 
 public:
@@ -60,7 +60,7 @@ signals:
     void jobQueued(QString jobid);
 
 public slots:
-    bool    connect(const QUrl& server, bool ssh_tunnel = false,bool ssh_rank = false, bool emit_connected = true);
+    bool    connect(const QUrl& server, bool ssh_tunnel = false, bool ssh_rank = false, bool emit_connected = true);
     void disconnect(const QUrl& server);
     void       stop(const QUrl& server);
     void    refresh(const QUrl& server);

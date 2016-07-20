@@ -1,5 +1,5 @@
-/* dtkComposerNodeVectorOperator.cpp --- 
- * 
+/* dtkComposerNodeVectorOperator.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 118
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeVectorOperator.h"
@@ -31,7 +31,7 @@ class dtkComposerNodeVectorOperatorUnaryPrivate
 // public:
 //     dtkComposerReceiver<??> *receiver;
 
-// public:    
+// public:
 //     dtkComposerEmitter<??> *emitter;
 };
 
@@ -49,7 +49,7 @@ dtkComposerNodeVectorOperatorUnary::~dtkComposerNodeVectorOperatorUnary(void)
     // delete d->receiver;
     // delete d->emitter;
     delete d;
-    
+
     d = NULL;
 }
 
@@ -63,7 +63,7 @@ class dtkComposerNodeVectorOperatorBinaryPrivate
 //     dtkComposerTransmitterReceiver<??> *receiver_lhs;
 //     dtkComposerTransmitterReceiver<??> *receiver_rhs;
 
-// public:    
+// public:
 //     dtkComposerTransmitterEmitter<??> *emitter;
 };
 
@@ -85,6 +85,6 @@ dtkComposerNodeVectorOperatorBinary::~dtkComposerNodeVectorOperatorBinary(void)
     // delete d->receiver_rhs;
     // delete d->emitter;
     delete d;
-    
+
     d = NULL;
 }

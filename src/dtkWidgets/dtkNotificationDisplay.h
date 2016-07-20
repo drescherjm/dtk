@@ -1,5 +1,5 @@
-/* dtkNotificationDisplay.h --- 
- * 
+/* dtkNotificationDisplay.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:06:30 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 40
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKNOTIFICATIONDISPLAY_H
@@ -29,10 +29,10 @@ class dtkNotificationDisplayPrivate;
 
 class DTKWIDGETS_EXPORT dtkNotificationDisplay : public QFrame, public dtkNotifiable
 {
-    Q_OBJECT    
+    Q_OBJECT
 
 public:
-     dtkNotificationDisplay(QWidget *parent = 0);
+    dtkNotificationDisplay(QWidget *parent = 0);
     ~dtkNotificationDisplay(void);
 
 public slots:

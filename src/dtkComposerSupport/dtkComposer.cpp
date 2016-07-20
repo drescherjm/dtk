@@ -66,7 +66,7 @@ void dtkComposerPrivate::download(const QUrl& url)
 
     http.get(QNetworkRequest(url));
 
-    while(!this->dwnl_ok)
+    while (!this->dwnl_ok)
         qApp->processEvents();
 
     this->file.close();
@@ -157,24 +157,24 @@ void dtkComposer::setFactory(dtkComposerFactory *factory)
 
 void dtkComposer::setWriter(dtkComposerWriter *writer)
 {
-  if(writer) {
-    delete d->writer;
+    if (writer) {
+        delete d->writer;
 
-    d->writer = writer;
-    d->writer->setScene(d->scene);
-  }
+        d->writer = writer;
+        d->writer->setScene(d->scene);
+    }
 }
 
 void dtkComposer::setReader(dtkComposerReader *reader)
 {
-  if(reader) {
-    delete d->reader;
+    if (reader) {
+        delete d->reader;
 
-    d->reader = reader;
-    d->reader->setFactory(d->factory);
-    d->reader->setScene(d->scene);
-    d->reader->setGraph(d->graph);
-  }
+        d->reader = reader;
+        d->reader->setFactory(d->factory);
+        d->reader->setScene(d->scene);
+        d->reader->setGraph(d->graph);
+    }
 }
 
 bool dtkComposer::open(const QUrl& url)
@@ -183,7 +183,7 @@ bool dtkComposer::open(const QUrl& url)
 
     bool status = false;
 
-    if(!d->tempName.isEmpty())
+    if (!d->tempName.isEmpty())
         status = this->open(d->tempName);
 
     return status;
@@ -210,7 +210,7 @@ bool dtkComposer::saveNode(dtkComposerSceneNodeComposite *node, QString file, dt
 {
     QString fName = d->fileName;
 
-    if(!file.isEmpty())
+    if (!file.isEmpty())
         fName = file;
 
     d->writer->writeNode(node, fName, type);
@@ -234,15 +234,17 @@ bool dtkComposer::insert(QString file)
 void dtkComposer::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
 #if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
-    foreach(dtkComposerSceneNode *node, composite->nodes()) {
+
+    foreach (dtkComposerSceneNode *node, composite->nodes()) {
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
             remote->setComposition(d->writer->toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
         else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
             this->updateRemotes(sub);
         else if (dtkComposerSceneNodeControl *ctrl = dynamic_cast<dtkComposerSceneNodeControl *>(node))
-            foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
+            foreach (dtkComposerSceneNodeComposite *block, ctrl->blocks())
                 this->updateRemotes(block);
     }
+
 #else
     Q_UNUSED(composite);
 #endif

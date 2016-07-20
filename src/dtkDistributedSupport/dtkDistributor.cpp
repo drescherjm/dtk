@@ -1,5 +1,5 @@
-/* dtkDistributor.cpp --- 
- * 
+/* dtkDistributor.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:35:49 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 184
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -56,10 +56,10 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     QString port = QString::number(d->controller->defaultPort());
 
     d->host_address->addItem("dtk://<host>[:port]");
-    d->host_address->addItem("dtk://nef-devel.inria.fr:"+port);
-    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:"+port);
-    d->host_address->addItem("dtk://is-master.inria.fr:"+port);
-    d->host_address->addItem("dtk://localhost:"+port);
+    d->host_address->addItem("dtk://nef-devel.inria.fr:" + port);
+    d->host_address->addItem("dtk://fsophia.sophia.grid5000.fr:" + port);
+    d->host_address->addItem("dtk://is-master.inria.fr:" + port);
+    d->host_address->addItem("dtk://localhost:" + port);
     d->host_address->setEditable(true);
     d->host_address->setAttribute(Qt::WA_MacShowFocusRect, false);
 
@@ -110,29 +110,29 @@ dtkDistributor::dtkDistributor(QWidget *parent) : QFrame(parent), d(new dtkDistr
     layout->addWidget(toolbox);
 
     item = new dtkToolBoxItem(toolbox);
-    item->setWidget(d->target_view,"Clusters");
+    item->setWidget(d->target_view, "Clusters");
     item->setExpanded(true);
     toolbox->addItem(item);
 
     item = new dtkToolBoxItem(toolbox);
-    item->setWidget(d->header_view,"Cluster load");
+    item->setWidget(d->header_view, "Cluster load");
     item->setExpanded(true);
     toolbox->addItem(item);
 
     item = new dtkToolBoxItem(toolbox);
-    item->setWidget(d->status_view,"Nodes");
+    item->setWidget(d->status_view, "Nodes");
     toolbox->addItem(item);
 
     item = new dtkToolBoxItem(toolbox);
-    item->setWidget(d->job_view,"Jobs");
+    item->setWidget(d->job_view, "Jobs");
     toolbox->addItem(item);
 
     item = new dtkToolBoxItem(toolbox);
-    item->setWidget(d->filter_view,"Filter");
+    item->setWidget(d->filter_view, "Filter");
     toolbox->addItem(item);
 
     item = new dtkToolBoxItem(toolbox);
-    item->setWidget(d->submit_view,"Submit");
+    item->setWidget(d->submit_view, "Submit");
     item->setExpanded(true);
     toolbox->addItem(item);
 
@@ -159,12 +159,14 @@ void dtkDistributor::setApplication(const QString& application)
 void dtkDistributor::onConnect(void)
 {
     QUrl url = QUrl(d->host_address->currentText());
+
     if (!d->controller->connect(url)) {
         // can't connect, try to deploy:
         if (!d->controller->deploy(url)) {
             return;
         } else {
             dtkInfo() << "Server is now deployed, retry to connect";
+
             if (!d->controller->connect(url))
                 return;
         }

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -117,10 +117,10 @@ void dtkDistributedArrayTestCase::cleanupTestCase(void)
 
 void dtkDistributedArrayTestCase::cleanup(void)
 {
-    
+
 }
 
 DTKDISTRIBUTEDTEST_MAIN_NOGUI(dtkDistributedArrayTest, dtkDistributedArrayTestCase)
 
-// 
+//
 // dtkDistributedArrayTest.cpp ends here

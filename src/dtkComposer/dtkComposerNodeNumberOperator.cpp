@@ -35,8 +35,8 @@ bool dtkComposerAlmostEqualUlpsSimple(float A, float B, int32_t maxUlps)
     if (A == B)
         return true;
 
-    int32_t *AA = reinterpret_cast<int32_t*>(&A);
-    int32_t *BB = reinterpret_cast<int32_t*>(&B);
+    int32_t *AA = reinterpret_cast<int32_t *>(&A);
+    int32_t *BB = reinterpret_cast<int32_t *>(&B);
 
     int32_t intDiff = abs(*AA) - abs(*BB);
 
@@ -51,8 +51,8 @@ bool dtkComposerAlmostEqualUlpsSimple(double A, double B, int64_t maxUlps)
     if (A == B)
         return true;
 
-    int64_t *AA = reinterpret_cast<int64_t*>(&A);
-    int64_t *BB = reinterpret_cast<int64_t*>(&B);
+    int64_t *AA = reinterpret_cast<int64_t *>(&A);
+    int64_t *BB = reinterpret_cast<int64_t *>(&B);
 
     int64_t intDiff = labs(*AA - *BB);
 
@@ -222,15 +222,16 @@ void dtkComposerNodeNumberAlmosteq::run(void)
     QVariant rhs_var = d->receiver_rhs.variant();
 
     if (lhs_var.userType() == QMetaType::Double || rhs_var.userType() == QMetaType::Double) {
-	d->value = dtkComposerAlmostEqualUlpsSimple(lhs_var.value<double>(), rhs_var.value<double>(), d->receiver_eps.data<double>());
+        d->value = dtkComposerAlmostEqualUlpsSimple(lhs_var.value<double>(), rhs_var.value<double>(), d->receiver_eps.data<double>());
 
     } else if (lhs_var.userType() == QMetaType::Float || rhs_var.userType() == QMetaType::Float) {
-	d->value = dtkComposerAlmostEqualUlpsSimple(lhs_var.value<float>(), rhs_var.value<float>(), d->receiver_eps.data<float>());
+        d->value = dtkComposerAlmostEqualUlpsSimple(lhs_var.value<float>(), rhs_var.value<float>(), d->receiver_eps.data<float>());
 
     } else {
         d->value = ( lhs_var.value<qlonglong>() == rhs_var.value<qlonglong>() );
 
     }
+
     d->emitter.setData(d->value);
 }
 
@@ -292,6 +293,7 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
         d->value = ( lhs_var.value<qlonglong>() != rhs_var.value<qlonglong>() );
 
     }
+
     d->emitter.setData(d->value);
 }
 

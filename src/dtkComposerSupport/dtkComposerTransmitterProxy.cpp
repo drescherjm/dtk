@@ -1,5 +1,5 @@
-/* dtkComposerTransmitterProxy.cpp --- 
- * 
+/* dtkComposerTransmitterProxy.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:47:39 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 63
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerTransmitter_p.h"
@@ -46,8 +46,8 @@ dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
 }
 
 //! Returns.
-/*! 
- *  
+/*!
+ *
  */
 dtkComposerTransmitter::Kind dtkComposerTransmitterProxy::kind(void) const
 {
@@ -63,13 +63,13 @@ void dtkComposerTransmitterProxy::setActive(bool active)
 {
     dtkComposerTransmitter::setActive(active);
 
-    foreach(dtkComposerTransmitter *prev, d->previous_list)
+    foreach (dtkComposerTransmitter *prev, d->previous_list)
         prev->setActive(active);
 }
 
 void dtkComposerTransmitterProxy::setReady(bool ready)
 {
-    foreach(dtkComposerTransmitter *next, d->next_list)
+    foreach (dtkComposerTransmitter *next, d->next_list)
         next->setReady(ready);
 }
 
@@ -77,7 +77,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkCompos
 {
     LinkMap link_map;
 
-    foreach(dtkComposerTransmitter *p, d->previous_list) {
+    foreach (dtkComposerTransmitter *p, d->previous_list) {
         list << new dtkComposerTransmitterLink(p, this);
         link_map += p->leftLinks(this, list);
         list.removeLast();
@@ -90,7 +90,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkCompo
 {
     LinkMap link_map;
 
-    foreach(dtkComposerTransmitter *n, d->next_list) {
+    foreach (dtkComposerTransmitter *n, d->next_list) {
         list << new dtkComposerTransmitterLink(this, n);
         link_map += n->rightLinks(this, list);
         list.removeLast();

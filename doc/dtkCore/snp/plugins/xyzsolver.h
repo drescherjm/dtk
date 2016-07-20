@@ -1,21 +1,23 @@
-/* implementations.h ---
- * 
- * Author: Thibaud Kloczko
- * Created: ven. avril 11 10:27:52 2014 (+0200)
- */
+// Version: $Id$
+//
+//
 
-/* Change Log:
- * 
- */
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
 
 //![0]
 #pragma once
 
 #include "dtkabstractsolver.h"
 
-#include <QtPlugin>
-#include <QStringList>
-#include <QImage>
+#include <QtCore>
 
 class xyzSolverPlugin : public dtkAbstractSolver
 {
@@ -33,3 +35,6 @@ public:
     QString result(void);
 };
 //! [0]
+
+//
+// xyzsolver.h ends here

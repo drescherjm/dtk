@@ -1,15 +1,15 @@
 /* dtkWidgetsTagCloudItem.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:10:33 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Mon Apr 15 14:12:03 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 4
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkWidgetsTagCloudItem.h"

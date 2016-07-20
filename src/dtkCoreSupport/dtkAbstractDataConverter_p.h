@@ -1,5 +1,5 @@
-/* dtkAbstractDataConverter_p.h --- 
- * 
+/* dtkAbstractDataConverter_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 10:57:11 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATACONVERTER_P
@@ -36,8 +36,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataConverterPrivate : public dtkAbstract
 public:
     dtkAbstractDataConverterPrivate(dtkAbstractDataConverter *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractDataConverterPrivate(const dtkAbstractDataConverterPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                                    enabled(false),
-                                                                                    data(other.data) {}
+        enabled(false),
+        data(other.data) {}
 
 public:
     virtual ~dtkAbstractDataConverterPrivate(void) {}

@@ -35,20 +35,21 @@ public:
     static const int DEFAULT_SIZE = 16;
 
 public:
-    QVarLengthArray<dtkComposerGraphNode *,DEFAULT_SIZE> successors;
+    QVarLengthArray<dtkComposerGraphNode *, DEFAULT_SIZE> successors;
 
 public:
     int result;
 };
 
 
-dtkComposerGraphNodeSelectBranch::dtkComposerGraphNodeSelectBranch(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeSelectBranchPrivate)
+dtkComposerGraphNodeSelectBranch::dtkComposerGraphNodeSelectBranch(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(), d(new dtkComposerGraphNodeSelectBranchPrivate)
 {
     d->composer_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
     this->setTitle(title);
     this->setStatus(dtkComposerGraphNode::Ready);
-    d->result =-1;
+    d->result = -1;
     d->successors.resize(dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE);
+
     for (int i = 0; i < dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE; i++)
         d->successors[i] = NULL;
 }
@@ -67,15 +68,15 @@ dtkComposerGraphNode::Kind dtkComposerGraphNodeSelectBranch::kind(void)
 void dtkComposerGraphNodeSelectBranch::addSuccessor(dtkComposerGraphNode *node, int id)
 {
     if (id > dtkComposerGraphNodeSelectBranchPrivate::DEFAULT_SIZE)
-        d->successors.resize(id*4); //FIXME
+        d->successors.resize(id * 4); //FIXME
 
-    d->successors[id]=node;
+    d->successors[id] = node;
 }
 
 
 void dtkComposerGraphNodeSelectBranch::removeSuccessor(dtkComposerGraphNode *node)
 {
-    for (int i=0; i < d->successors.size(); i++)
+    for (int i = 0; i < d->successors.size(); i++)
         if (d->successors[i] == node)
             d->successors[i] = NULL;
 }
@@ -93,19 +94,22 @@ dtkComposerGraphNode *dtkComposerGraphNodeSelectBranch::firstSuccessor(void)
 dtkComposerGraphNodeList dtkComposerGraphNodeSelectBranch::successors(void)
 {
     dtkComposerGraphNodeList val;
+
     if (d->result >= 0  && d->result < d->successors.size())
         val << d->successors[d->result];
     else {
         int i = 0;
+
         do {
             val << d->successors[i];
             i++;
         } while (d->successors[i] != NULL);
     }
+
     return val;
 }
 
-void dtkComposerGraphNodeSelectBranch::clean(void) 
+void dtkComposerGraphNodeSelectBranch::clean(void)
 {
     d->result = -1;
     dtkComposerGraphNode::clean();

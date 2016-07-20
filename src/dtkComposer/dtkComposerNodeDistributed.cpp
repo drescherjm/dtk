@@ -112,7 +112,7 @@ void dtkComposerNodeCommunicatorSize::run(void)
 class dtkComposerNodeCommunicatorSendPrivate
 {
 public:
-    dtkComposerTransmitterReceiver<QTcpSocket*> receiver_socket;
+    dtkComposerTransmitterReceiver<QTcpSocket *> receiver_socket;
     dtkComposerTransmitterReceiverVariant receiver_data;
     dtkComposerTransmitterReceiver<qlonglong> receiver_target;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
@@ -152,11 +152,13 @@ void dtkComposerNodeCommunicatorSend::run(void)
     }
 
     d->emitter.setData(false);
+
     if (!d->receiver_data.isEmpty()  && !d->receiver_target.isEmpty() ) {
 
         QVariant v = d->receiver_data.variant();
 
         qint32 tag = 0;
+
         if (!d->receiver_tag.isEmpty())
             tag = d->receiver_tag.data();
 
@@ -168,7 +170,7 @@ void dtkComposerNodeCommunicatorSend::run(void)
             //FIXME: we need the jobid
             QString jobid;
             dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, target, v);
-            msg->addHeader("Tag",QString::number(tag));
+            msg->addHeader("Tag", QString::number(tag));
             msg->send(d->socket);
         } else {
             d->socket = NULL;
@@ -196,7 +198,7 @@ public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_source;
     dtkComposerTransmitterEmitter<qlonglong> emitter_tag;
 
-    dtkComposerTransmitterReceiver<QTcpSocket*> receiver_socket;
+    dtkComposerTransmitterReceiver<QTcpSocket *> receiver_socket;
     dtkComposerTransmitterReceiver<qlonglong> receiver_source;
     dtkComposerTransmitterReceiver<qlonglong> receiver_tag;
     dtkComposerTransmitterReceiverVariant     receiver_data;
@@ -244,10 +246,12 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         d->source = d->receiver_source.data();
 
         d->tag = 0;
+
         if (!d->receiver_tag.isEmpty())
             d->tag = d->receiver_tag.data();
 
         d->emitter.clearData();
+
         if (!d->receiver_data.isEmpty()) {
             d->emitter.setData(d->receiver_data.variant());
         }
@@ -255,6 +259,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         if (!d->receiver_socket.isEmpty()) {
             QTcpSocket *socket = d->receiver_socket.constData();
             dtkDebug() << "TCP communicator. Parse message from socket, waiting for tag" << d->tag;
+
             if (d->msg_map.contains(d->tag)) {
                 dtkDebug() << "msg already received for tag" << d->tag;
                 dtkDistributedMessage *msg = d->msg_map.take(d->tag);
@@ -273,9 +278,11 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                 dtkDistributedMessage msg;
                 msg.parse(socket);
                 qlonglong msg_tag = msg.header("Tag").toLongLong();
+
                 if (msg_tag == d->tag || d->tag == dtkDistributedCommunicator::ANY_TAG) {
                     dtkTrace() << "OK, this is the expected tag " << d->tag;
                     d->emitter.setData(msg.variant());
+
                     if (d->tag == dtkDistributedCommunicator::ANY_TAG)
                         d->tag = msg_tag;
                 } else {
@@ -285,6 +292,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
                     this->run(); // do it again
                 }
             }
+
             socket->blockSignals(false); // needed ?
         } else { // communicator
             QVariant v;
@@ -293,6 +301,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
 
             if (d->tag == dtkDistributedCommunicator::ANY_TAG)
                 d->tag = status.tag();
+
             if (d->source == dtkDistributedCommunicator::ANY_SOURCE)
                 d->source = status.source();
 

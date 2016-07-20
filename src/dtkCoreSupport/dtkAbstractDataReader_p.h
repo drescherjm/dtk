@@ -1,5 +1,5 @@
-/* dtkAbstractDataReader_p.h --- 
- * 
+/* dtkAbstractDataReader_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 10:34:11 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 11
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATAREADER_P_H
@@ -36,10 +36,10 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataReaderPrivate : public dtkAbstractObj
 public:
     dtkAbstractDataReaderPrivate(dtkAbstractDataReader *q = 0) : dtkAbstractObjectPrivate(q), data(NULL) {}
     dtkAbstractDataReaderPrivate(const dtkAbstractDataReaderPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                              enabled(false),
-                                                                              data(other.data),
-                                                                              file(other.file),
-                                                                              files(other.files) {}
+        enabled(false),
+        data(other.data),
+        file(other.file),
+        files(other.files) {}
 
 public:
     virtual ~dtkAbstractDataReaderPrivate(void) {}

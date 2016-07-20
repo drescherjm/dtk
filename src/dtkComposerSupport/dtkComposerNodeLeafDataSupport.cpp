@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -23,7 +23,7 @@
 
 dtkComposerNodeObject<dtkAbstractData>::dtkComposerNodeObject(void) : dtkComposerNodeLeafObject(), m_implementation_has_changed(false), m_data(0)
 {
-    
+
 }
 
 dtkComposerNodeObject<dtkAbstractData>::~dtkComposerNodeObject(void)
@@ -33,7 +33,7 @@ dtkComposerNodeObject<dtkAbstractData>::~dtkComposerNodeObject(void)
 
     m_data = 0;
 }
-    
+
 QVariant dtkComposerNodeObject<dtkAbstractData>::variant(void) const
 {
     if (this->object())
@@ -56,7 +56,7 @@ bool dtkComposerNodeObject<dtkAbstractData>::createObject(const QString& impleme
 
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractDataType();
-        
+
     if (!m_data) {
         m_data = dtkAbstractDataFactory::instance()->create(implementation);
         m_implementation_has_changed = true;
@@ -78,7 +78,7 @@ dtkAbstractData *dtkComposerNodeObject<dtkAbstractData>::data(void) const
 QStringList dtkComposerNodeObject<dtkAbstractData>::implementations(void) const
 {
     QStringList implementations = dtkAbstractDataFactory::instance()->implementations(this->abstractDataType());
-    
+
     if (this->enableDefaultImplementation())
         implementations.prepend("default");
 
@@ -111,5 +111,5 @@ bool dtkComposerNodeObject<dtkAbstractData>::enableDefaultImplementation(void) c
     return false;
 }
 
-// 
+//
 // dtkComposerNodeLeafDataSupport.cpp ends here

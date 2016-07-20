@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayData.h --- 
- * 
+/* dtkComposerNodeArrayData.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 09:09:31 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 2
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEARRAYDATA_H
@@ -32,9 +32,9 @@ class dtkComposerNodeArrayDataPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayData : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayData(void);
+    dtkComposerNodeArrayData(void);
     ~dtkComposerNodeArrayData(void);
-    
+
 public:
     void run(void);
 

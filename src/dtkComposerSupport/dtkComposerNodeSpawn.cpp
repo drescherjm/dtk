@@ -96,7 +96,7 @@ void dtkComposerNodeSpawn::setApplication(QString app)
 void dtkComposerNodeSpawn::setComposition(QDomDocument document)
 {
     d->composition  = document;
-    d->current_hash = QCryptographicHash::hash(d->composition.toByteArray(),QCryptographicHash::Md5);
+    d->current_hash = QCryptographicHash::hash(d->composition.toByteArray(), QCryptographicHash::Md5);
 }
 
 void dtkComposerNodeSpawn::setCommunicator(dtkDistributedCommunicator *comm)
@@ -140,15 +140,16 @@ void dtkComposerNodeSpawn::begin(void)
     }
 
     int first_transmitter = 3;
+
     if (d->is_parent) {
         int rank =  dtkDistributedCommunicator::ROOT;
 
-        if (d->current_hash != d->last_sent_hash){
+        if (d->current_hash != d->last_sent_hash) {
             // send sub-composition to rank 0 on remote node
             QByteArray compo = d->composition.toByteArray();
             dtkDebug() << "running node remote begin statement on controller, send composition of size " << compo.size();
             d->communicator->broadcast(compo, rank);
-            d->last_sent_hash=d->current_hash;
+            d->last_sent_hash = d->current_hash;
         } else {
             dtkDebug() << "composition hash hasn't changed, send 'not-modified' to slave";
             QByteArray data = QString("not-modified").toUtf8();
@@ -157,6 +158,7 @@ void dtkComposerNodeSpawn::begin(void)
 
         // then send transmitters data
         int max  = dtkComposerNodeComposite::receivers().count();
+
         for (int i = first_transmitter; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             // FIXME: use our own transmitter variant list (see control nodes)
@@ -170,12 +172,13 @@ void dtkComposerNodeSpawn::begin(void)
             d->interval_comm_emitter.setData(d->internal_comm);
             d->rank = d->internal_comm->rank();
             d->np = d->internal_comm->size();
-            dtkDebug() << "rank/size"<< d->rank << d->np;
+            dtkDebug() << "rank/size" << d->rank << d->np;
         }
 
         dtkTrace() << "get transmitter data";
         // running on the slave, receive data and set transmitters
         int max  = dtkComposerNodeComposite::receivers().count();
+
         for (int i = first_transmitter; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(dtkComposerNodeComposite::receivers().at(i));
             QByteArray array ;
@@ -193,9 +196,11 @@ void dtkComposerNodeSpawn::begin(void)
 void dtkComposerNodeSpawn::end(void)
 {
     qint16 tag = 0;
+
     if (d->is_parent) {
         dtkDebug() << "running node remote end statement on controller";
         int max  = this->emitters().count();
+
         for (int i = 1; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
 
@@ -215,6 +220,7 @@ void dtkComposerNodeSpawn::end(void)
 
         for (int i = 1; i < max; i++) {
             dtkComposerTransmitterVariant *t = dynamic_cast<dtkComposerTransmitterVariant *>(this->emitters().at(i));
+
             if (d->communicator->rank() == 0) {
                 dtkDebug() << "end, send transmitter data (we are rank 0)";
 

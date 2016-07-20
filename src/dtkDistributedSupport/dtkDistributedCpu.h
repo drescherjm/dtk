@@ -1,5 +1,5 @@
-/* dtkDistributedCpu.h --- 
- * 
+/* dtkDistributedCpu.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:23:49 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 46
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCPU_H
@@ -33,19 +33,19 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCpu : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedCpu(dtkDistributedNode *parent);
+    dtkDistributedCpu(dtkDistributedNode *parent);
     ~dtkDistributedCpu(void);
 
 public:
     enum Architecture {
-           x86 = 0x1,
+        x86 = 0x1,
         x86_64 = 0x2
     };
 
     Q_DECLARE_FLAGS(Architectures, Architecture)
 
     enum Model {
-           Xeon = 0x1,
+        Xeon = 0x1,
         Opteron = 0x2
     };
 

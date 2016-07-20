@@ -34,7 +34,7 @@ class DTKVRSUPPORT_EXPORT dtkVrTracker : public QObject
     Q_OBJECT
 
 public:
-     dtkVrTracker(void);
+    dtkVrTracker(void);
     ~dtkVrTracker(void);
 
 public:

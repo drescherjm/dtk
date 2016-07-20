@@ -37,7 +37,7 @@ typedef unsigned __int32  uint32_t;
 class dtkCpuidPrivate
 {
 public:
-  uint32_t regs[4];
+    uint32_t regs[4];
 };
 
 dtkCpuid::dtkCpuid(void) : d (new dtkCpuidPrivate)
@@ -50,13 +50,14 @@ dtkCpuid::~dtkCpuid(void)
     delete d;
 }
 
-void dtkCpuid::load(unsigned i) {
+void dtkCpuid::load(unsigned i)
+{
 #if defined(Q_OS_WIN) && defined(Q_CC_MSVC)
     __cpuid((int *)d->regs, (int)i);
 #elif defined(DTK_BUILD_64)
     asm volatile
-      ("cpuid" : "=a" (d->regs[0]), "=b" (d->regs[1]), "=c" (d->regs[2]), "=d" (d->regs[3])
-       : "a" (i), "c" (0));
+    ("cpuid" : "=a" (d->regs[0]), "=b" (d->regs[1]), "=c" (d->regs[2]), "=d" (d->regs[3])
+     : "a" (i), "c" (0));
 #endif
 }
 
@@ -65,8 +66,8 @@ QString dtkCpuid::vendor(void)
     this->load(0); // Get CPU vendor
 
     QString vendor;
-    vendor += QString::fromUtf8((const char *)&d->regs[1],4);
-    vendor += QString::fromUtf8((const char *)&d->regs[3],4);
-    vendor += QString::fromUtf8((const char *)&d->regs[2],4);
+    vendor += QString::fromUtf8((const char *)&d->regs[1], 4);
+    vendor += QString::fromUtf8((const char *)&d->regs[3], 4);
+    vendor += QString::fromUtf8((const char *)&d->regs[2], 4);
     return vendor;
 }

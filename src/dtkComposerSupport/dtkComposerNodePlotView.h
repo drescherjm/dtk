@@ -1,17 +1,17 @@
-/* dtkComposerNodePlotView.h --- 
- * 
+/* dtkComposerNodePlotView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
  * Version: $Id$
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEPLOTVIEW_H
@@ -31,7 +31,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotView : public QObject, public
     Q_OBJECT
 
 public:
-     dtkComposerNodePlotView(void);
+    dtkComposerNodePlotView(void);
     ~dtkComposerNodePlotView(void);
 
 public:
@@ -44,26 +44,35 @@ public:
     }
 
 public:
-    inline bool isAbstractView(void) const {return false;} ;
+    inline bool isAbstractView(void) const {
+        return false;
+    } ;
 
-    inline QString abstractViewType(void) const {return "";};
+    inline QString abstractViewType(void) const {
+        return "";
+    };
 
 public:
     dtkAbstractView *view(void);
 
 public:
     inline QString inputLabelHint(int port) {
-        switch(port) {
+        switch (port) {
         case 0:
             return "curve";
+
         case 1:
             return "curves list";
+
         case 2:
             return "title";
+
         case 3:
             return "x-axis label";
+
         case 4:
             return "y-axis label";
+
         default:
             return dtkComposerNodeLeaf::inputLabelHint(port);
         }

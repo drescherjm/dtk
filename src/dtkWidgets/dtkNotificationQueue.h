@@ -1,5 +1,5 @@
-/* dtkNotificationQueue.h --- 
- * 
+/* dtkNotificationQueue.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:11:20 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 38
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKNOTIFICATIONQUEUE_H
@@ -61,7 +61,7 @@ private:
     static dtkNotificationQueue *s_instance;
 
 private:
-     dtkNotificationQueue(QObject *parent = 0);
+    dtkNotificationQueue(QObject *parent = 0);
     ~dtkNotificationQueue(void);
 
 private:

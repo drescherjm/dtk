@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlForEach.h --- 
- * 
+/* dtkComposerNodeControlForEach.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONTROLFOREACH_H
@@ -32,7 +32,7 @@ class dtkComposerNodeControlForEachPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlForEach : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlForEach(void);
+    dtkComposerNodeControlForEach(void);
     virtual ~dtkComposerNodeControlForEach(void);
 
 public:
@@ -45,7 +45,7 @@ public:
     void setInputs(void);
     void setOutputs(void);
     void setVariables(void);
-     int selectBranch(void);
+    int selectBranch(void);
     void begin(void);
     void end(void);
 

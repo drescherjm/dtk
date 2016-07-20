@@ -1,15 +1,15 @@
-/* dtkComposerSceneNodeComposite.h --- 
- * 
+/* dtkComposerSceneNodeComposite.h ---
+ *
  * Author: Julien Wintz
  * Created: Fri Feb  3 12:32:09 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -28,7 +28,7 @@ class dtkComposerSceneNoteList;
 class DTKCOMPOSER_EXPORT dtkComposerSceneNodeComposite : public dtkComposerSceneNode
 {
 public:
-     dtkComposerSceneNodeComposite(void);
+    dtkComposerSceneNodeComposite(void);
     ~dtkComposerSceneNodeComposite(void);
 
 public:
@@ -106,7 +106,7 @@ public:
 public:
     void  setUnrevealPos(const QPointF& pos);
     void setUnrevealRect(const QRectF& rect);
-    
+
     QPointF  unrevealPos(void) const;
     QRectF  unrevealRect(void) const;
 

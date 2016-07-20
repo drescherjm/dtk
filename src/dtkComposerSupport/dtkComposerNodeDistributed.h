@@ -32,7 +32,7 @@ class dtkComposerNodeCommunicatorInitPrivate;
 class dtkComposerNodeCommunicatorInit : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeCommunicatorInit(void);
+    dtkComposerNodeCommunicatorInit(void);
     ~dtkComposerNodeCommunicatorInit(void);
 
 public:
@@ -65,7 +65,7 @@ class dtkComposerNodeCommunicatorUninitializePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeCommunicatorUninitialize : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeCommunicatorUninitialize(void);
+    dtkComposerNodeCommunicatorUninitialize(void);
     ~dtkComposerNodeCommunicatorUninitialize(void);
 
 public:
@@ -100,7 +100,7 @@ class dtkComposerNodeCommunicatorRankPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeCommunicatorRank : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeCommunicatorRank(void);
+    dtkComposerNodeCommunicatorRank(void);
     ~dtkComposerNodeCommunicatorRank(void);
 
 public:
@@ -134,7 +134,7 @@ class dtkComposerNodeCommunicatorSizePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeCommunicatorSize : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeCommunicatorSize(void);
+    dtkComposerNodeCommunicatorSize(void);
     ~dtkComposerNodeCommunicatorSize(void);
 
 public:
@@ -168,7 +168,7 @@ class dtkComposerNodeCommunicatorSendPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeCommunicatorSend : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeCommunicatorSend(void);
+    dtkComposerNodeCommunicatorSend(void);
     ~dtkComposerNodeCommunicatorSend(void);
 
 public:
@@ -218,7 +218,7 @@ class dtkComposerNodeCommunicatorReceivePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeCommunicatorReceive : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeCommunicatorReceive(void);
+    dtkComposerNodeCommunicatorReceive(void);
     ~dtkComposerNodeCommunicatorReceive(void);
 
 public:

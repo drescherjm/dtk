@@ -1,5 +1,5 @@
-/* dtkVector3D.h --- 
- * 
+/* dtkVector3D.h ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:41:18 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 77
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKVECTOR3D_H
@@ -29,88 +29,106 @@
 
 namespace dtkDeprecated {
 
-template <class T = double> class dtkVector3D: public dtkVector<T>
-{
-public:
-     dtkVector3D(void): dtkVector<T>(3U) {};
-     dtkVector3D(const dtkMatrix<T>& mat): dtkVector<T>(mat) {};
-     dtkVector3D(const dtkVector<T>& vec): dtkVector<T>(vec) {};
-     dtkVector3D(const dtkVector3D& vec3D): dtkVector<T>(vec3D) {};
-     dtkVector3D(const T&, const T&, const T&);
-     dtkVector3D(const dtkMatrix<T>&, unsigned, unsigned);
-     dtkVector3D(const dtkVector<T>& vec, unsigned irowStart): dtkVector<T>(vec, irowStart, irowStart + 2) {};
-    ~dtkVector3D(void) {};
+    template <class T = double> class dtkVector3D: public dtkVector<T>
+    {
+    public:
+        dtkVector3D(void): dtkVector<T>(3U) {};
+        dtkVector3D(const dtkMatrix<T>& mat): dtkVector<T>(mat) {};
+        dtkVector3D(const dtkVector<T>& vec): dtkVector<T>(vec) {};
+        dtkVector3D(const dtkVector3D& vec3D): dtkVector<T>(vec3D) {};
+        dtkVector3D(const T&, const T&, const T&);
+        dtkVector3D(const dtkMatrix<T>&, unsigned, unsigned);
+        dtkVector3D(const dtkVector<T>& vec, unsigned irowStart): dtkVector<T>(vec, irowStart, irowStart + 2) {};
+        ~dtkVector3D(void) {};
 
-public:
-    QString identifier(void) const;
+    public:
+        QString identifier(void) const;
 
-public:
-    void allocate(void) { dtkVector<T>::allocate(3); };
+    public:
+        void allocate(void) {
+            dtkVector<T>::allocate(3);
+        };
 
-    void mapInto(const dtkMatrix<T>& mat, unsigned irowStart, unsigned icolStart);
-    void mapInto(const dtkVector<T>& vec, unsigned irowStart = 0);
+        void mapInto(const dtkMatrix<T>& mat, unsigned irowStart, unsigned icolStart);
+        void mapInto(const dtkVector<T>& vec, unsigned irowStart = 0);
 
-    unsigned size(void) { return 3; };
+        unsigned size(void) {
+            return 3;
+        };
 
-    dtkVector3D operator +(const dtkVector3D&) const;
-    dtkVector3D operator -(const dtkVector3D&) const;
-    dtkVector3D operator -(void) const;
-    dtkVector3D operator *(const T&) const;
+        dtkVector3D operator +(const dtkVector3D&) const;
+        dtkVector3D operator -(const dtkVector3D&) const;
+        dtkVector3D operator -(void) const;
+        dtkVector3D operator *(const T&) const;
 
-    T operator *(const dtkVector3D&) const;
-    dtkVector3D operator %(const dtkVector3D&) const;
-    dtkVector3D operator /(const T& value) const;
+        T operator *(const dtkVector3D&) const;
+        dtkVector3D operator %(const dtkVector3D&) const;
+        dtkVector3D operator /(const T& value) const;
 
-    dtkVector3D& operator  =(const dtkVector3D&);
-    dtkVector3D& operator +=(const dtkVector3D&);
-    dtkVector3D& operator -=(const dtkVector3D&);
-    dtkVector3D& operator *=(const T&);
+        dtkVector3D& operator  =(const dtkVector3D&);
+        dtkVector3D& operator +=(const dtkVector3D&);
+        dtkVector3D& operator -=(const dtkVector3D&);
+        dtkVector3D& operator *=(const T&);
 
-    dtkVector3D& operator %=(const dtkVector3D&);
-    dtkVector3D& operator /=(const T& value);
+        dtkVector3D& operator %=(const dtkVector3D&);
+        dtkVector3D& operator /=(const T& value);
 
-    void storeOuterProduct(const dtkVector3D&, const dtkVector3D&);
+        void storeOuterProduct(const dtkVector3D&, const dtkVector3D&);
 
-    T norm(void) const { return sqrt( (*this)[0]*(*this)[0] + (*this)[1]*(*this)[1] + (*this)[2]*(*this)[2]); };
+        T norm(void) const {
+            return sqrt( (*this)[0] * (*this)[0] + (*this)[1] * (*this)[1] + (*this)[2] * (*this)[2]);
+        };
 
-    dtkVector3D unit(void) const { return (*this)/(this->norm()); }
+        dtkVector3D unit(void) const {
+            return (*this) / (this->norm());
+        }
 
-    void makeUnit(void) { (*this) /= this->norm(); }
-};
+        void makeUnit(void) {
+            (*this) /= this->norm();
+        }
+    };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-template <class T> class dtkZero< dtkVector3D<T> >: public dtkVector3D<T>
-{
-public:
-    dtkZero(void) { dtkMatrix<T>::fill(dtkZero<T>()); }
-};
+    template <class T> class dtkZero< dtkVector3D<T> >: public dtkVector3D<T>
+    {
+    public:
+        dtkZero(void) {
+            dtkMatrix<T>::fill(dtkZero<T>());
+        }
+    };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-template <class T = double> class dtkReferential : dtkVector3D<dtkVector3D<T> >
-{
-public:
-    dtkReferential(void) {
-        (*this)[0] = dtkVector3D<T>((T)(1), (T)(0), (T)(0));
-        (*this)[1] = dtkVector3D<T>((T)(0), (T)(1), (T)(0));
-        (*this)[2] = dtkVector3D<T>((T)(0), (T)(0), (T)(1));
-    }
+    template <class T = double> class dtkReferential : dtkVector3D<dtkVector3D<T> >
+    {
+    public:
+        dtkReferential(void) {
+            (*this)[0] = dtkVector3D<T>((T)(1), (T)(0), (T)(0));
+            (*this)[1] = dtkVector3D<T>((T)(0), (T)(1), (T)(0));
+            (*this)[2] = dtkVector3D<T>((T)(0), (T)(0), (T)(1));
+        }
 
-    dtkReferential(const dtkVector3D<T>& i, const dtkVector3D<T>& j, const dtkVector3D<T>& k) {
-        (*this)[0] = i;
-        (*this)[1] = j;
-        (*this)[2] = k;
-    }
+        dtkReferential(const dtkVector3D<T>& i, const dtkVector3D<T>& j, const dtkVector3D<T>& k) {
+            (*this)[0] = i;
+            (*this)[1] = j;
+            (*this)[2] = k;
+        }
 
-    const dtkVector3D<T>& i(void) { return (*this)[0]; }
-    const dtkVector3D<T>& j(void) { return (*this)[1]; }
-    const dtkVector3D<T>& k(void) { return (*this)[2]; }
-};
+        const dtkVector3D<T>& i(void) {
+            return (*this)[0];
+        }
+        const dtkVector3D<T>& j(void) {
+            return (*this)[1];
+        }
+        const dtkVector3D<T>& k(void) {
+            return (*this)[2];
+        }
+    };
 
 } // end of namespace
 
@@ -121,7 +139,7 @@ public:
 #include "dtkVector3D.tpp"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 #include <QtCore>

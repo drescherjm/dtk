@@ -1,5 +1,5 @@
-/* dtkComposerFactoryView.h --- 
- * 
+/* dtkComposerFactoryView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:22:54 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 28
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERFACTORYVIEW_H
@@ -36,7 +36,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerFactoryView : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposerFactoryView(QWidget *parent = 0);
+    dtkComposerFactoryView(QWidget *parent = 0);
     ~dtkComposerFactoryView(void);
 
 public:
@@ -45,7 +45,7 @@ public:
 public slots:
     void onShowNodeDocumentation(dtkComposerSceneNode *node);
 
- public:
+public:
     void showTagCloud(const bool show);
 
 public:

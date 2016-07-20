@@ -1,5 +1,5 @@
-/* dtkComposerNodeInteger.h --- 
- * 
+/* dtkComposerNodeInteger.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:21 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEINTEGER_H
@@ -34,7 +34,7 @@ class dtkComposerNodeIntegerPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeInteger : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeInteger(void);
+    dtkComposerNodeInteger(void);
     ~dtkComposerNodeInteger(void);
 
 public:

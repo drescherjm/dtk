@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -83,14 +83,14 @@ void dtkComposerNodeData::run(void)
         d->data = this->data();
 
     if (!d->data) {
-        dtkWarn() << "no data, abort "<< this->currentImplementation();
+        dtkWarn() << "no data, abort " << this->currentImplementation();
         return;
     }
 
     if (!d->receiver_string.isEmpty())
         d->data->setParameter(*d->receiver_string.data());
 
-    if(!d->receiver_vector.isEmpty())
+    if (!d->receiver_vector.isEmpty())
         d->data->setParameter(*d->receiver_vector.data());
 
     d->data->update();
@@ -113,10 +113,13 @@ QString dtkComposerNodeData::inputLabelHint(int port)
     switch (port) {
     case 0:
         return "string";
+
     case 1:
         return "data";
+
     case 2:
         return "vector";
+
     default:
         return dtkComposerNodeLeaf::inputLabelHint(port);
     }
@@ -127,10 +130,11 @@ QString dtkComposerNodeData::outputLabelHint(int port)
     switch (port) {
     case 0:
         return "data";
+
     default:
         return dtkComposerNodeLeaf::outputLabelHint(port);
     }
 }
 
-// 
+//
 // dtkComposerNodeData.cpp ends here

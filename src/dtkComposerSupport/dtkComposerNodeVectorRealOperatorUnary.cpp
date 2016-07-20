@@ -70,7 +70,7 @@ public:
 
 dtkComposerNodeVectorRealOperatorUnaryScalar::dtkComposerNodeVectorRealOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorRealOperatorUnaryScalarPrivate)
 {
-    this->appendReceiver(&d->receiver_vec);  
+    this->appendReceiver(&d->receiver_vec);
 
     d->value = 0.;
     d->emitter_val.setData(&d->value);
@@ -90,7 +90,7 @@ dtkComposerNodeVectorRealOperatorUnaryScalar::~dtkComposerNodeVectorRealOperator
 
 void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
 {
-    if (d->receiver_vec.isEmpty()){
+    if (d->receiver_vec.isEmpty()) {
         dtkWarn() << "Input not specified. Nothing is done";
         d->emitter_vec.clearData();
 
@@ -106,7 +106,7 @@ void dtkComposerNodeVectorRealOperatorUnaryUnitary::run(void)
 
 void dtkComposerNodeVectorRealOperatorUnaryScalarNorm::run(void)
 {
-    if (d->receiver_vec.isEmpty()){
+    if (d->receiver_vec.isEmpty()) {
         dtkWarn() << "Input not specified. Nothing is done";
         d->value = -1.;
 

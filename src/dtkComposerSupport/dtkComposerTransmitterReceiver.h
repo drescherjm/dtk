@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterReceiver.h --- 
- * 
+/* dtkComposerTransmitterReceiver.h ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 11:39:15 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTERRECEIVER_H
@@ -23,7 +23,7 @@
 template <typename T> class dtkComposerTransmitterEmitter;
 
 class dtkComposerTransmitterVariant;
-namespace dtkDeprecated{
+namespace dtkDeprecated {
     template <typename T> class dtkMatrix;
 }
 
@@ -34,7 +34,7 @@ namespace dtkDeprecated{
 template <typename T> class dtkComposerTransmitterReceiver : public dtkComposerTransmitterAbstractReceiver
 {
 public:
-     dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterReceiver(void);
 
 public:
@@ -53,14 +53,14 @@ public:
     dtkDeprecated::dtkMatrix<double> *matrix(void);
 
     QVariant& variant(void);
-          
-    QVector<T*> allData(void);
+
+    QVector<T *> allData(void);
 
 public:
     void activateEmitter(dtkComposerTransmitter        *emitter);
     void activateEmitter(dtkComposerTransmitterVariant *emitter);
 
- public:
+public:
     void setReady(bool ready);
 
 public:
@@ -105,7 +105,7 @@ template <typename T> class dtkComposerTransmitterEmitterVector;
 template <typename T> class dtkComposerTransmitterReceiverVector : public dtkComposerTransmitterAbstractReceiver
 {
 public:
-     dtkComposerTransmitterReceiverVector(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterReceiverVector(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterReceiverVector(void);
 
 public:

@@ -1,16 +1,16 @@
-/* dtkDistributedCommunicator.cpp --- 
- * 
+/* dtkDistributedCommunicator.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 13:38:59 2010 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedCommunicator.h"
@@ -55,7 +55,7 @@ void dtkDistributedCommunicator::initialize(void)
 dtkDistributedCommunicator *dtkDistributedCommunicator::spawn(QString cmd, qlonglong np)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
-   return new dtkDistributedCommunicator;
+    return new dtkDistributedCommunicator;
 }
 
 bool dtkDistributedCommunicator::initialized(void)
@@ -73,13 +73,13 @@ void dtkDistributedCommunicator::uninitialize(void)
 int dtkDistributedCommunicator::rank(void)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
-   return -1;
+    return -1;
 }
 
 int dtkDistributedCommunicator::size(void)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
-   return 0;
+    return 0;
 }
 
 void dtkDistributedCommunicator::send(void   *data, qint64 size, DataType dataType, qint16 target, int tag)
@@ -113,12 +113,12 @@ void dtkDistributedCommunicator::receive(dtkAbstractData *&data, qint16 source, 
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }
 
-void dtkDistributedCommunicator::receive(QString &s, qint16 source, int tag)
+void dtkDistributedCommunicator::receive(QString& s, qint16 source, int tag)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }
 
-void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag)
+void dtkDistributedCommunicator::receive(QByteArray& v, qint16 source, int tag)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }
@@ -135,7 +135,7 @@ void dtkDistributedCommunicator::receive(void   *data, qint64 size, DataType dat
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }
 
-void dtkDistributedCommunicator::receive(QByteArray &v, qint16 source, int tag, dtkDistributedCommunicatorStatus &status)
+void dtkDistributedCommunicator::receive(QByteArray& v, qint16 source, int tag, dtkDistributedCommunicatorStatus& status)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }
@@ -382,12 +382,12 @@ void dtkDistributedCommunicator::broadcast(double *data, qint64 size, qint16 sou
 }
 
 
-void dtkDistributedCommunicator::broadcast(QString &s,   qint16 source)
+void dtkDistributedCommunicator::broadcast(QString& s,   qint16 source)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }
 
-void dtkDistributedCommunicator::broadcast(QByteArray &v,qint16 source)
+void dtkDistributedCommunicator::broadcast(QByteArray& v, qint16 source)
 {
     qCritical() << Q_FUNC_INFO << "NOT IMPLEMENTED";
 }

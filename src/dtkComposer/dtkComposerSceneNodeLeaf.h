@@ -25,7 +25,7 @@ class dtkComposerSceneNodeLeafPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerSceneNodeLeaf : public dtkComposerSceneNode
 {
 public:
-     dtkComposerSceneNodeLeaf(void);
+    dtkComposerSceneNodeLeaf(void);
     ~dtkComposerSceneNodeLeaf(void);
 
 public:

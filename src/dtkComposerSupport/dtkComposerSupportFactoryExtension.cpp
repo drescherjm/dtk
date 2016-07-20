@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -19,7 +19,7 @@
 #include "dtkComposerNodeView.h"
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 dtkComposerSupportFactoryExtension::dtkComposerSupportFactoryExtension(void) : dtkComposerNodeFactoryExtension()
@@ -39,5 +39,5 @@ void dtkComposerSupportFactoryExtension::extend(dtkComposerNodeFactory *factory)
     factory->record(":dtkComposerSupport/dtkComposerNodeView.json",    dtkComposerNodeCreator< dtkComposerNodeView >);
 }
 
-// 
+//
 // dtkComposerSupportFactoryExtension.cpp ends here

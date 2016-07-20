@@ -30,7 +30,7 @@ public:
 };
 
 
-dtkComposerGraphNodeSetOutputs::dtkComposerGraphNodeSetOutputs(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeSetOutputsPrivate)
+dtkComposerGraphNodeSetOutputs::dtkComposerGraphNodeSetOutputs(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(), d(new dtkComposerGraphNodeSetOutputsPrivate)
 {
     d->composer_node = dynamic_cast<dtkComposerNodeControl *>(cnode);
     this->setTitle(title);

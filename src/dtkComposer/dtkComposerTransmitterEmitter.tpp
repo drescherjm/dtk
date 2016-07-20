@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -42,7 +42,7 @@ template <typename T> inline void dtkComposerTransmitterEmitterVariant::setData(
 
 template <typename T> inline void dtkComposerTransmitterEmitterVariant::setData(T& data)
 {
-   d->variant.setValue(data);
+    d->variant.setValue(data);
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ template <typename T> inline void dtkComposerTransmitterEmitterVariant::setData(
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs an empty emitter.
-/*! 
+/*!
  *  Initialize the type of the emitter and the variant that it contains.
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterEmitterBase(parent)
@@ -59,8 +59,8 @@ template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransm
 };
 
 //! Destroys the emitter.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
 {
@@ -69,7 +69,7 @@ template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTrans
 
 template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(const T& data)
 {
-    d->variant.setValue(const_cast<T&>(data)); 
+    d->variant.setValue(const_cast<T&>(data));
 }
 
 template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T& data)
@@ -87,5 +87,5 @@ template <typename T> inline bool dtkComposerTransmitterEmitter<T>::enableConnec
     return dtkComposerTransmitterHandler<T>::enableConnection(*transmitter);
 }
 
-// 
+//
 // dtkComposerTransmitterEmitter.tpp ends here

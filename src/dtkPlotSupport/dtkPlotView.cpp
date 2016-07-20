@@ -1,5 +1,5 @@
-/* dtkPlotView.cpp --- 
- * 
+/* dtkPlotView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 17:04:01 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 560
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotCurve.h"
@@ -137,7 +137,7 @@ QList<dtkPlotCurve *> dtkPlotView::curves(void)
 
 void dtkPlotView::activatePanning(void)
 {
-    if(!d->panner)
+    if (!d->panner)
         d->panner = new dtkPlotViewPanner(this);
 
     d->panner->activate();
@@ -147,10 +147,10 @@ void dtkPlotView::updateAxes()
 {
     QRectF rect;
 
-    foreach(dtkPlotCurve *curve, d->curves) {
-      if (((QwtPlotCurve *)(curve->d))->isVisible()) {
-          rect = rect.united(curve->boundingRect());
-      }
+    foreach (dtkPlotCurve *curve, d->curves) {
+        if (((QwtPlotCurve *)(curve->d))->isVisible()) {
+            rect = rect.united(curve->boundingRect());
+        }
     }
 
     qreal xmin = rect.left();
@@ -165,7 +165,7 @@ void dtkPlotView::updateAxes()
 
     d->updateAxes();
 
-    if(d->zoomer)
+    if (d->zoomer)
         d->zoomer->updateBase(rect);
 
     this->update();
@@ -173,7 +173,7 @@ void dtkPlotView::updateAxes()
 
 void dtkPlotView::deactivatePanning(void)
 {
-    if(!d->panner)
+    if (!d->panner)
         d->panner = new dtkPlotViewPanner(this);
 
     d->panner->deactivate();
@@ -181,7 +181,7 @@ void dtkPlotView::deactivatePanning(void)
 
 void dtkPlotView::activatePicking(void)
 {
-    if(!d->picker) {
+    if (!d->picker) {
         d->picker = new dtkPlotViewPicker(this);
         d->picker->setColor(d->picking_color);
     }
@@ -191,7 +191,7 @@ void dtkPlotView::activatePicking(void)
 
 void dtkPlotView::deactivatePicking(void)
 {
-    if(!d->picker)
+    if (!d->picker)
         d->picker = new dtkPlotViewPicker(this);
 
     d->picker->deactivate();
@@ -199,7 +199,7 @@ void dtkPlotView::deactivatePicking(void)
 
 void dtkPlotView::setPickingColor(const QColor& color)
 {
-    if(d->picker)
+    if (d->picker)
         d->picker->setColor(color);
 
     d->picking_color = color;
@@ -214,7 +214,7 @@ QColor dtkPlotView::pickingColor(void) const
 
 void dtkPlotView::activateZooming(void)
 {
-    if(!d->zoomer) {
+    if (!d->zoomer) {
         d->zoomer = new dtkPlotViewZoomer(this);
         this->setZoomColor(d->zoom_color);
     }
@@ -224,7 +224,7 @@ void dtkPlotView::activateZooming(void)
 
 void dtkPlotView::deactivateZooming(void)
 {
-    if(!d->zoomer)
+    if (!d->zoomer)
         d->zoomer = new dtkPlotViewZoomer(this);
 
     d->zoomer->deactivate();
@@ -234,7 +234,7 @@ bool dtkPlotView::isZoomActivated(void) const
 {
     bool value = false;
 
-    if(d->zoomer)
+    if (d->zoomer)
         value = d->zoomer->isActivated();
 
     return value;
@@ -242,7 +242,7 @@ bool dtkPlotView::isZoomActivated(void) const
 
 void dtkPlotView::setZoomColor(const QColor& color)
 {
-    if(d->zoomer)
+    if (d->zoomer)
         d->zoomer->setColor(color);
 
     d->zoom_color = color;
@@ -257,7 +257,7 @@ QColor dtkPlotView::zoomColor(void) const
 
 void dtkPlotView::activateGrid(void)
 {
-    if(!d->grid) {
+    if (!d->grid) {
         d->grid = new dtkPlotViewGrid(this);
         d->grid->setColor(d->grid_color);
     }
@@ -267,7 +267,7 @@ void dtkPlotView::activateGrid(void)
 
 void dtkPlotView::deactivateGrid(void)
 {
-    if(d->grid) {
+    if (d->grid) {
         delete d->grid;
         d->grid = NULL;
     }
@@ -277,7 +277,7 @@ void dtkPlotView::deactivateGrid(void)
 
 void dtkPlotView::setGridColor(const QColor& color)
 {
-    if(d->grid)
+    if (d->grid)
         d->grid->setColor(color);
 
     d->grid_color = color;
@@ -292,7 +292,7 @@ QColor dtkPlotView::gridColor(void) const
 
 void dtkPlotView::activateLegend(void)
 {
-    if(!d->legend)
+    if (!d->legend)
         d->legend = new dtkPlotViewLegend(this);
 
     this->update();
@@ -300,9 +300,9 @@ void dtkPlotView::activateLegend(void)
 
 void dtkPlotView::deactivateLegend(void)
 {
-    if(d->legend) {
-      delete d->legend;
-      d->legend = NULL;
+    if (d->legend) {
+        delete d->legend;
+        d->legend = NULL;
     }
 
     this->update();
@@ -405,10 +405,10 @@ void dtkPlotView::setAxisScaleY(double min, double max)
 
 void dtkPlotView::setAxisScaleX(dtkPlotView::Scale scale)
 {
-    if(scale == dtkPlotView::Linear)
+    if (scale == dtkPlotView::Linear)
         d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLinearScaleEngine);
-    
-    if(scale == dtkPlotView::Logarithmic) {
+
+    if (scale == dtkPlotView::Logarithmic) {
 #if QWT_VERSION >= 0x060100
         d->setAxisScaleEngine(QwtPlot::xBottom, new QwtLogScaleEngine);
 #else
@@ -425,10 +425,10 @@ void dtkPlotView::setAxisScaleX(dtkPlotView::Scale scale)
 
 void dtkPlotView::setAxisScaleY(dtkPlotView::Scale scale)
 {
-    if(scale == dtkPlotView::Linear)
+    if (scale == dtkPlotView::Linear)
         d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLinearScaleEngine);
-    
-    if(scale == dtkPlotView::Logarithmic) {
+
+    if (scale == dtkPlotView::Logarithmic) {
 #if QWT_VERSION >= 0x060100
         d->setAxisScaleEngine(QwtPlot::yLeft, new QwtLogScaleEngine);
 #else
@@ -524,7 +524,7 @@ void dtkPlotView::fillCurveArea(int alpha)
 
     foreach (dtkPlotCurve *curve, d->curves) {
         QColor color = curve->color();
-        color.setAlphaF(alpha/255.);
+        color.setAlphaF(alpha / 255.);
         curve->setColorArea(color);
     }
 
@@ -567,10 +567,10 @@ void dtkPlotView::updateCurveColor(dtkPlotCurve *curve)
     int delta = 0;
 
     while ( qAbs(c_color_value - v_color_value) < 50 && delta < 120) {
-	int r = (c_color.red() + delta) % 255;
-	int g = (c_color.green() + delta) % 255;
-	int b = (c_color.blue() + delta) % 255;
-	curve->setColor(QColor(255 - r, 255 - g, 255 - b));
+        int r = (c_color.red() + delta) % 255;
+        int g = (c_color.green() + delta) % 255;
+        int b = (c_color.blue() + delta) % 255;
+        curve->setColor(QColor(255 - r, 255 - g, 255 - b));
         c_color_value = qGray(255 - r, 255 - g, 255 - b);
         delta += 10;
     }
@@ -645,7 +645,7 @@ void dtkPlotView::writeSettings(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkAbstractView *createPlotView(void)

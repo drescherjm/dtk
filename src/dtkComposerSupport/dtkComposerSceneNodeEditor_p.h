@@ -1,5 +1,5 @@
-/* dtkComposerSceneNodeEditor_p.h --- 
- * 
+/* dtkComposerSceneNodeEditor_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 10:28:04 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 78
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENODEEDITOR_P_H
@@ -38,7 +38,7 @@ class dtkComposerSceneNodeEditorList : public QListWidget
     Q_OBJECT
 
 public:
-     dtkComposerSceneNodeEditorList(QWidget *parent = 0);
+    dtkComposerSceneNodeEditorList(QWidget *parent = 0);
     ~dtkComposerSceneNodeEditorList(void);
 
 public:
@@ -60,7 +60,7 @@ protected slots:
 class dtkComposerSceneNodeEditorListItem : public QListWidgetItem
 {
 public:
-     dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent);
+    dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent);
     ~dtkComposerSceneNodeEditorListItem(void);
 
     int type(void) const;

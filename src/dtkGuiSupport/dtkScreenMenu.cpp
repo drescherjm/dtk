@@ -33,11 +33,11 @@ public:
 
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
 public:
-    dtkVideoEncoder * encoder;
+    dtkVideoEncoder *encoder;
 #endif
 };
 
-dtkScreenMenu::dtkScreenMenu(const QString &title, QWidget *parent) : QMenu(title, parent), d(new dtkScreenMenuPrivate)
+dtkScreenMenu::dtkScreenMenu(const QString& title, QWidget *parent) : QMenu(title, parent), d(new dtkScreenMenuPrivate)
 {
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
     d->encoder = NULL;
@@ -45,12 +45,12 @@ dtkScreenMenu::dtkScreenMenu(const QString &title, QWidget *parent) : QMenu(titl
     d->fps = 10;
     d->bitrate = 4000000;
 
-    QAction* screenshot = this->addAction(QString("Take screenshot")); screenshot->setVisible(true);
+    QAction *screenshot = this->addAction(QString("Take screenshot")); screenshot->setVisible(true);
     screenshot->setShortcut(Qt::Key_Print);
 
     this->addSeparator();
-    QAction* screencast_start = this->addAction(QString("Start screencast"));
-    QAction* screencast_stop  = this->addAction(QString("Stop screencast"));
+    QAction *screencast_start = this->addAction(QString("Start screencast"));
+    QAction *screencast_stop  = this->addAction(QString("Stop screencast"));
     screencast_start->setShortcut(Qt::ControlModifier + Qt::Key_Print);
     screencast_stop->setShortcut(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_Print);
 
@@ -67,7 +67,8 @@ dtkScreenMenu::dtkScreenMenu(const QString &title, QWidget *parent) : QMenu(titl
 void dtkScreenMenu::startScreencast(void)
 {
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
-    if(!d->encoder)
+
+    if (!d->encoder)
         d->encoder = new dtkVideoEncoder;
 
     QString path = QDir::homePath();
@@ -75,10 +76,10 @@ void dtkScreenMenu::startScreencast(void)
     QString file = QDir::home().filePath(name);
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save screencast"), file, tr("Screencast (*.avi *.mpg *.mp4 *.mov *.ogv)"));
 
-    if(fileName.isEmpty())
+    if (fileName.isEmpty())
         return;
 
-    if (QWidget * widget = dynamic_cast<QWidget *>(parent())) {
+    if (QWidget *widget = dynamic_cast<QWidget *>(parent())) {
 
         int gop = 20;
         int FULLHD = 1920;
@@ -96,7 +97,7 @@ void dtkScreenMenu::startScreencast(void)
 
     d->timer.connect(&(d->timer), SIGNAL(timeout()), this, SLOT(addFrameToVideo()));
 
-    int interval = 1000/d->fps;
+    int interval = 1000 / d->fps;
 
     d->timer.start(interval);
 #endif
@@ -105,28 +106,30 @@ void dtkScreenMenu::startScreencast(void)
 void dtkScreenMenu::stopScreencast(void)
 {
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
-     d->encoder->close();
-     d->timer.stop();
+    d->encoder->close();
+    d->timer.stop();
 #endif
 }
 
 void dtkScreenMenu::addFrameToVideo(void)
 {
 #if defined(DTK_BUILD_VIDEO) && defined(DTK_HAVE_FFMPEG)
-    if (QWidget * widget = dynamic_cast<QWidget *>(parent())) {
+
+    if (QWidget *widget = dynamic_cast<QWidget *>(parent())) {
         QImage image = screenshot(widget, d->width);
-        QPoint mouse_pos= QCursor::pos() - widget->pos();
+        QPoint mouse_pos = QCursor::pos() - widget->pos();
         QPainter painter(&image);
         int x = mouse_pos.x();
         int y = mouse_pos.y();
         int length = 8;
-        QLine line1(x-length,y,x+length,y);
-        QLine line2(x,y-length,x,y+length);
+        QLine line1(x - length, y, x + length, y);
+        QLine line2(x, y - length, x, y + length);
         painter.setPen( Qt::red );
         painter.drawLine(line1);
         painter.drawLine(line2);
-       d->encoder->encodeImage(image);
+        d->encoder->encodeImage(image);
     }
+
 #endif
 }
 
@@ -135,22 +138,23 @@ QImage dtkScreenMenu::screenshot(QWidget *widget, qlonglong maxsize)
     QPixmap pixmap(widget->size());
     widget->render(&pixmap);
 
-    if( maxsize > 0 && pixmap.width() > maxsize) {
-         return pixmap.scaledToWidth(maxsize).toImage();
+    if ( maxsize > 0 && pixmap.width() > maxsize) {
+        return pixmap.scaledToWidth(maxsize).toImage();
     }
+
     return pixmap.toImage();
 }
 
 void dtkScreenMenu::takeScreenshot(void)
 {
-    if (QWidget * widget = dynamic_cast<QWidget *>(parent())) {
+    if (QWidget *widget = dynamic_cast<QWidget *>(parent())) {
 
         QString path = QDir::homePath();
         QString name = QString("%1 - Screenshot - %2").arg(qApp->applicationName()).arg(QDateTime::currentDateTime().toString("MMMM dd yyyy - hh:mm:ss"));
         QString file = QDir::home().filePath(name);
         QString fileName = QFileDialog::getSaveFileName(this, tr("Save screenshot"), file, tr("Screenshot (*.png)"));
 
-        if(fileName.isEmpty())
+        if (fileName.isEmpty())
             return;
 
         QImage image = screenshot(widget);

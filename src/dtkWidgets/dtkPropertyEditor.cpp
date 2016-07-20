@@ -1,15 +1,15 @@
 /* dtkPropertyEditor.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 13:33:45 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: lun. févr.  3 14:33:55 2014 (+0100)
  *           By: Thibaud Kloczko
  *     Update #: 284
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkPropertyEditor.h"
@@ -40,7 +40,7 @@ dtkPropertyEditor::dtkPropertyEditor(const QString& property_name, QObject *obje
         qDebug() << Q_FUNC_INFO << "dtkPropertyEditor must be created using a valid QObject.";
         return;
     }
-    
+
     d->object = object;
     this->setObjectName(property_name);
 
@@ -89,7 +89,7 @@ dtkPropertyEditorDouble::dtkPropertyEditorDouble(const QString& property_name, Q
     spin_d->setSingleStep(1);
     spin_d->setEnabled(true);
     spin_d->setValue(object->property(d->meta_property.name()).toDouble());
-    
+
     QObject::connect(spin_d, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
 
     d->editor = spin_d;
@@ -113,8 +113,8 @@ void dtkPropertyEditorDouble::setEditorData(const QVariant& data)
 }
 
 QVariant dtkPropertyEditorDouble::editorData(void)
-{	
-    return QVariant::fromValue(static_cast<QDoubleSpinBox*>(d->editor)->value());
+{
+    return QVariant::fromValue(static_cast<QDoubleSpinBox *>(d->editor)->value());
 }
 
 void dtkPropertyEditorDouble::onValueChanged(void)
@@ -141,7 +141,7 @@ dtkPropertyEditorInteger::dtkPropertyEditorInteger(const QString& property_name,
     spin_i->setSingleStep(1);
     spin_i->setEnabled(true);
     spin_i->setValue(object->property(d->meta_property.name()).toLongLong());
-    
+
     QObject::connect(spin_i, SIGNAL(editingFinished()), this, SLOT(onValueChanged()));
 
     d->editor = spin_i;
@@ -165,7 +165,7 @@ void dtkPropertyEditorInteger::setEditorData(const QVariant& data)
 }
 
 QVariant dtkPropertyEditorInteger::editorData(void)
-{	
+{
     return QVariant::fromValue(static_cast<QSpinBox *>(d->editor)->value());
 }
 
@@ -189,7 +189,7 @@ dtkPropertyEditorString::dtkPropertyEditorString(const QString& property_name, Q
     edit->setObjectName(property_name);
     edit->setEnabled(true);
     edit->setText(object->property(d->meta_property.name()).toString());
-    
+
     QObject::connect(edit, SIGNAL(returnPressed()), this, SLOT(onTextChanged()));
 
     d->editor = edit;
@@ -213,7 +213,7 @@ void dtkPropertyEditorString::setEditorData(const QVariant& data)
 }
 
 QVariant dtkPropertyEditorString::editorData(void)
-{	
+{
     return QVariant::fromValue(static_cast<QLineEdit *>(d->editor)->text());
 }
 
@@ -242,13 +242,16 @@ dtkPropertyEditorEnum::dtkPropertyEditorEnum(const QString& property_name, QObje
     QMetaEnum meta_enum = d->meta_property.enumerator();
     int count = meta_enum.keyCount();
     int current_index = 0;
+
     for (int i = 0; i < count; ++i) {
         list->addItem(meta_enum.key(i));
+
         if (meta_enum.value(i) == current_value)
             current_index = i;
     }
+
     list->setCurrentIndex(current_index);
-    
+
     QObject::connect(list, SIGNAL(currentIndexChanged(int)), this, SLOT(onIndexChanged(int)));
 
     d->editor = list;
@@ -271,19 +274,21 @@ void dtkPropertyEditorEnum::setEditorData(const QVariant& data)
     switch (data.type()) {
 
     case QMetaType::Int:
-        current_index = data.toInt();       
+        current_index = data.toInt();
         break;
 
     case QMetaType::QString: {
         QMetaEnum meta_enum = d->meta_property.enumerator();
         int count = meta_enum.keyCount();
         QString name = data.toString();
+
         for (int i = 0; i < count; ++i) {
             if (QString(meta_enum.key(i)) == name) {
                 current_index = i;
                 break;
             }
         }
+
         break;
     }
 
@@ -298,7 +303,7 @@ void dtkPropertyEditorEnum::setEditorData(const QVariant& data)
 }
 
 QVariant dtkPropertyEditorEnum::editorData(void)
-{	
+{
     return QVariant::fromValue(static_cast<QComboBox *>(d->editor)->currentIndex());
 }
 

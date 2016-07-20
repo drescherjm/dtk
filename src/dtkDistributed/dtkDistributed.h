@@ -29,8 +29,7 @@ class dtkDistributedPolicy;
 // Distribution layer attributes
 // ///////////////////////////////////////////////////////////////////
 
-namespace dtkDistributed
-{
+namespace dtkDistributed {
 #pragma mark -
 #pragma mark Distribution namespace flags
 
@@ -57,7 +56,7 @@ namespace dtkDistributed
 #pragma mark -
 #pragma mark create dtkDistributedApplication application
 
-    DTKDISTRIBUTED_EXPORT dtkDistributedApplication* create(int &argc, char *argv[]);
+    DTKDISTRIBUTED_EXPORT dtkDistributedApplication *create(int& argc, char *argv[]);
 
 #pragma mark -
 #pragma mark retrieve current policy

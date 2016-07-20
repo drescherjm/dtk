@@ -39,10 +39,10 @@ public:
     typedef typename dtkArray<T>::const_iterator const_iterator;
 
 public:
-             dtkContainerVector(void);
-             dtkContainerVector(qlonglong size);
-             dtkContainerVector(qlonglong size, const T& value);
-             dtkContainerVector(const dtkContainerVector<T>& other);
+    dtkContainerVector(void);
+    dtkContainerVector(qlonglong size);
+    dtkContainerVector(qlonglong size, const T& value);
+    dtkContainerVector(const dtkContainerVector<T>& other);
     virtual ~dtkContainerVector(void);
 
 public:
@@ -111,17 +111,17 @@ public:
     dtkContainerVector<T> *subContainer(const dtkAbstractContainerOrdered<qlonglong>& indices)  const;
     dtkContainerVector<T> *subContainer(qlonglong from, qlonglong to, qlonglong step = 1) const;
 
-          T *toArray(qlonglong& count);
+    T *toArray(qlonglong& count);
     const T *toArray(qlonglong& count) const;
 
-          T *array(void);
+    T *array(void);
     const T *array(void) const;
 
     const T *constArray(void) const;
 
 public:
     const T& operator [] (qlonglong index) const;
-          T& operator [] (qlonglong index)      ;
+    T& operator [] (qlonglong index)      ;
 
 public:
     dtkContainerVector& operator = (const dtkContainerVector<T>& other);
@@ -152,13 +152,25 @@ public:
 
 
 public:
-          iterator begin(iterator = iterator())                    { return m_vector.begin(); }
-    const_iterator begin(const_iterator = const_iterator()) const  { return m_vector.constBegin(); }
-    const_iterator cbegin(const_iterator = const_iterator()) const { return m_vector.constBegin(); }
+    iterator begin(iterator = iterator())                    {
+        return m_vector.begin();
+    }
+    const_iterator begin(const_iterator = const_iterator()) const  {
+        return m_vector.constBegin();
+    }
+    const_iterator cbegin(const_iterator = const_iterator()) const {
+        return m_vector.constBegin();
+    }
 
-          iterator end(iterator = iterator())                        { return m_vector.end(); }
-    const_iterator end(const_iterator = const_iterator()) const      { return m_vector.constEnd(); }
-    const_iterator cend(const_iterator = const_iterator()) const     { return m_vector.constEnd(); }
+    iterator end(iterator = iterator())                        {
+        return m_vector.end();
+    }
+    const_iterator end(const_iterator = const_iterator()) const      {
+        return m_vector.constEnd();
+    }
+    const_iterator cend(const_iterator = const_iterator()) const     {
+        return m_vector.constEnd();
+    }
 
 private:
     dtkArray<T> m_vector;
@@ -199,7 +211,7 @@ Q_DECLARE_METATYPE(dtkContainerVectorInteger *);
 
 #include <dtkMathSupport/dtkVector3D.h>
 
-typedef dtkContainerVector<dtkVector3DReal*> dtkContainerVectorVector3DReal;
+typedef dtkContainerVector<dtkVector3DReal *> dtkContainerVectorVector3DReal;
 
 Q_DECLARE_METATYPE(dtkContainerVectorVector3DReal  );
 Q_DECLARE_METATYPE(dtkContainerVectorVector3DReal *);

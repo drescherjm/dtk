@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaScalarArray.h --- 
- * 
+/* dtkComposerNodeMetaScalarArray.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:04:11 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEMETASCALARARRAY_H
@@ -33,9 +33,9 @@ class dtkComposerNodeMetaScalarArrayPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaScalarArray : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaScalarArray(void);
+    dtkComposerNodeMetaScalarArray(void);
     ~dtkComposerNodeMetaScalarArray(void);
-    
+
 public:
     void run(void);
 

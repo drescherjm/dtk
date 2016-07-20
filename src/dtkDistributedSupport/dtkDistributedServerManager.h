@@ -1,5 +1,5 @@
-/* dtkDistributedServerManager.h --- 
- * 
+/* dtkDistributedServerManager.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:00:53 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 35
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVERMANAGER_H
@@ -35,7 +35,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerManager : public QObject
     Q_OBJECT
 
 public:
-             dtkDistributedServerManager(void);
+    dtkDistributedServerManager(void);
     virtual ~dtkDistributedServerManager(void);
 
     enum Type {
@@ -44,7 +44,9 @@ public:
         Ssh
     };
 
-    static QString protocol(void) { return "1.0"; };
+    static QString protocol(void) {
+        return "1.0";
+    };
 
 public slots:
     virtual QByteArray status(void) = 0;

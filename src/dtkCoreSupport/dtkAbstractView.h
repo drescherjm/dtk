@@ -38,8 +38,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractView : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkAbstractView(      dtkAbstractView *parent = 0);
-	     dtkAbstractView(const dtkAbstractView& other);
+    dtkAbstractView(      dtkAbstractView *parent = 0);
+    dtkAbstractView(const dtkAbstractView& other);
     virtual ~dtkAbstractView(void);
 
 public:
@@ -49,7 +49,7 @@ public:
     dtkAbstractView& operator = (const dtkAbstractView& other);
 
 protected:
-   virtual void copy(const dtkAbstractObject& other);
+    virtual void copy(const dtkAbstractObject& other);
 
 public:
     friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractView& viewer);
@@ -97,7 +97,7 @@ public slots:
 
 public slots:
     virtual QWidget *widget(void);
-    
+
 public slots:
     virtual void close(void);
 
@@ -130,8 +130,8 @@ public slots:
     dtkAbstractViewInteractor *interactor(const QString& type);
 
 public slots:
-    QList<dtkAbstractViewAnimator   *> animators(void) const;
-    QList<dtkAbstractViewNavigator  *> navigators(void) const;
+    QList<dtkAbstractViewAnimator *> animators(void) const;
+    QList<dtkAbstractViewNavigator *> navigators(void) const;
     QList<dtkAbstractViewInteractor *> interactors(void) const;
 
 public slots:

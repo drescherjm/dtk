@@ -61,7 +61,7 @@ QAction *dtkComposerView::searchAction(void)
 
 void dtkComposerView::search(void)
 {
-    if(!d->dialog)
+    if (!d->dialog)
         d->dialog = new dtkComposerSearchDialog(this);
 
     d->dialog->setScene(dynamic_cast<dtkComposerScene *>(this->scene()));
@@ -99,9 +99,9 @@ void dtkComposerView::mouseReleaseEvent(QMouseEvent *event)
 }
 
 #ifndef QT_NO_WHEELEVENT
-void dtkComposerView::wheelEvent( QWheelEvent * event )
+void dtkComposerView::wheelEvent( QWheelEvent *event )
 {
-    if (event->modifiers().testFlag(Qt::ControlModifier)){ //zoom only when CTRL key pressed
+    if (event->modifiers().testFlag(Qt::ControlModifier)) { //zoom only when CTRL key pressed
         qreal scaleFactor = pow((double)2, event->delta() / 500.0);
 
         qreal factor = this->matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();

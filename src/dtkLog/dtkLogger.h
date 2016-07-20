@@ -47,7 +47,7 @@ public:
     void attachFile(const QString& path, qlonglong max_file_size = DEFAULT_MAX_FILE_SIZE);
     void detachFile(const QString& path);
 
- public:
+public:
     void attachModel(dtkLogModel *model);
     void detachModel(dtkLogModel *model);
 
@@ -56,8 +56,8 @@ public:
     void redirectCerr(dtkLog::Level level = dtkLog::Error);
 
 private:
-     dtkLogger(void);
-     dtkLogger(const dtkLogger& other);
+    dtkLogger(void);
+    dtkLogger(const dtkLogger& other);
     ~dtkLogger(void);
 
 private:

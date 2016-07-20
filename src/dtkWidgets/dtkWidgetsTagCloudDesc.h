@@ -21,7 +21,7 @@ class dtkWidgetsTagCloudDesc : public QFrame
     Q_OBJECT
 
 public:
-     dtkWidgetsTagCloudDesc(QWidget *parent = 0);
+    dtkWidgetsTagCloudDesc(QWidget *parent = 0);
     ~dtkWidgetsTagCloudDesc(void);
 
 signals:

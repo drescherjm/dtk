@@ -1,5 +1,5 @@
-/* dtkDistributedController.h --- 
- * 
+/* dtkDistributedController.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:13:03 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 115
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLER_H
@@ -38,7 +38,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedController : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedController(void);
+    dtkDistributedController(void);
     ~dtkDistributedController(void);
 
 public:

@@ -27,7 +27,7 @@ class DTKGUISUPPORT_EXPORT dtkViewListControl : public QFrame
     Q_OBJECT
 
 public:
-     dtkViewListControl(QWidget *parent = 0);
+    dtkViewListControl(QWidget *parent = 0);
     ~dtkViewListControl(void);
 
 public:

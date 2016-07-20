@@ -44,7 +44,7 @@ dtkPropertyEditor DTKWIDGETS_EXPORT    *createDtkPropertyEditorEnum(const QStrin
 
 DTKWIDGETS_EXPORT dtkPropertyEditorFactory *dtkPropertyEditorFactory::instance(void)
 {
-    if(!s_instance) {
+    if (!s_instance) {
         s_instance = new dtkPropertyEditorFactory;
 
         s_instance->registerCreator(QMetaType::Double, createDtkPropertyEditorDouble);
@@ -67,10 +67,11 @@ dtkPropertyEditor *dtkPropertyEditorFactory::create(const QString& property_name
     int id = meta_object->indexOfProperty(qPrintable(property_name));
     const QMetaProperty& meta_property = meta_object->property(id);
     int type = meta_property.userType();
+
     if (meta_property.isEnumType())
         type *= -1;
 
-    if(!d->creators.contains(type))
+    if (!d->creators.contains(type))
         return NULL;
 
     return d->creators[type](property_name, object, parent);
@@ -86,12 +87,15 @@ QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *objec
     }
 
     const QMetaObject *meta_object = object->metaObject();
+
     if (meta_object) {
         int limit_level = 0;
         int offset = 0;
-        while(meta_object && limit_level <= hierarchy_level) {
+
+        while (meta_object && limit_level <= hierarchy_level) {
             meta_object = meta_object->superClass();
-            if(meta_object) {
+
+            if (meta_object) {
                 ++limit_level;
                 offset = meta_object->propertyCount();
             }
@@ -100,6 +104,7 @@ QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *objec
         meta_object = object->metaObject();
         int count = meta_object->propertyCount();
         QString name;
+
         for (int i = offset; i < count; ++i) {
             name = QString(meta_object->property(i).name());
             list << reinterpret_cast<QWidget *>(dtkPropertyEditorFactory::instance()->create(name, object, NULL));
@@ -111,7 +116,7 @@ QList<QWidget *> dtkPropertyEditorFactory::createObjectProperties(QObject *objec
 
 bool dtkPropertyEditorFactory::registerCreator(int type, dtkPropertyEditorCreator func)
 {
-    if(!d->creators.contains(type)) {
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         return true;
     }

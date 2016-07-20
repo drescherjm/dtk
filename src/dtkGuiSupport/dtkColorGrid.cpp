@@ -1,5 +1,5 @@
-/* dtkColorGrid.cpp --- 
- * 
+/* dtkColorGrid.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:07:40 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 46
  */
 
-/* Commentary: 
+/* Commentary:
  * See credits at EOF.
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkColorGrid.h"
@@ -53,7 +53,7 @@ dtkColorGrid::dtkColorGrid(QWidget *parent) : QWidget(parent), d(new dtkColorGri
     d->pickDrag = true;
     d->clickMode = CM_PRESS;
     d->colors = 0;
-    
+
     setScheme(defaultColors());
     setFixedSize(minimumSizeHint());
     setMouseTracking(true);
@@ -68,7 +68,7 @@ dtkColorGrid::~dtkColorGrid(void)
 
 QSize dtkColorGrid::minimumSizeHint() const
 {
-    return QSize((d->cellSize+1) * d->widthInCells + 3, (d->cellSize+1) * heightInCells() + 3);
+    return QSize((d->cellSize + 1) * d->widthInCells + 3, (d->cellSize + 1) * heightInCells() + 3);
 }
 
 QSize dtkColorGrid::sizeHint() const
@@ -119,14 +119,18 @@ dtkColorList *dtkColorGrid::scheme(void) const
 int dtkColorGrid::heightInCells() const
 {
     if (!d->colors) return 0;
+
     int h = d->colors->size() / d->widthInCells;
+
     if (d->colors->size() % d->widthInCells) h++;
+
     return h;
 }
 
 void dtkColorGrid::setAutoSize(bool autosize)
 {
     d->autoSize = autosize;
+
     if (d->autoSize && d->colors) {
         setWidthInCells(sqrt((float)(d->colors->count())));
     }
@@ -135,6 +139,7 @@ void dtkColorGrid::setAutoSize(bool autosize)
 void dtkColorGrid::setCellSize(int size)
 {
     if (size < 8) size = 8;
+
     d->cellSize = size;
     setFixedSize(minimumSizeHint());
     redraw();
@@ -143,6 +148,7 @@ void dtkColorGrid::setCellSize(int size)
 void dtkColorGrid::setWidthInCells(int width)
 {
     if (width < 1) width = 1;
+
     d->widthInCells = width;
     setFixedSize(minimumSizeHint());
     redraw();
@@ -161,6 +167,7 @@ void dtkColorGrid::setClickMode(ClickMode mode)
 void dtkColorGrid::setScheme(dtkColorList *list)
 {
     if (!list) return;
+
     d->colors = list;
     d->idx = -1;
 
@@ -178,23 +185,26 @@ void dtkColorGrid::redraw(void)
 {
     int rows = heightInCells();
 
-    int c = d->cellSize+1;	// frame
+    int c = d->cellSize + 1; // frame
 
     d->pix = QPixmap(minimumSizeHint());
     QPainter p(&d->pix);
 
     p.setBrush(palette().base());
     p.setPen(palette().shadow().color());
-    p.drawRect(d->pix.rect().adjusted(0,0,-1,-1));
+    p.drawRect(d->pix.rect().adjusted(0, 0, -1, -1));
 
     int x = 2, y = 2;
     int idx = 0;
-    for (int j = 0; j < rows; j++, y+=c) {
+
+    for (int j = 0; j < rows; j++, y += c) {
         x = 2;
-        for (int i = 0; i < d->widthInCells; i++, x+=c) {
+
+        for (int i = 0; i < d->widthInCells; i++, x += c) {
             if (idx == d->colors->size())
                 return;
-            p.fillRect(QRect(x,y,d->cellSize,d->cellSize), d->colors->at(idx++));
+
+            p.fillRect(QRect(x, y, d->cellSize, d->cellSize), d->colors->at(idx++));
         }
     }
 
@@ -203,35 +213,37 @@ void dtkColorGrid::redraw(void)
 
 int dtkColorGrid::index() const
 {
-    int i = d->widthInCells*d->row + d->col;
+    int i = d->widthInCells * d->row + d->col;
+
     if (d->col >= d->widthInCells || i < 0 || i >= d->colors->size())
         i = -1;
+
     return i;
 }
 
-void dtkColorGrid::paintEvent ( QPaintEvent * event )
+void dtkColorGrid::paintEvent ( QPaintEvent *event )
 {
     DTK_UNUSED(event);
 
     QPainter p(this);
     p.fillRect(rect(), palette().button());
-    p.drawPixmap(0,0, d->pix);
+    p.drawPixmap(0, 0, d->pix);
 
     d->hlColor = QColor();
 
     if (d->idx >= 0) {
         d->hlColor = d->colors->at(d->idx);
 
-        int c = d->cellSize+1;
+        int c = d->cellSize + 1;
         int x = d->col * c;
         int y = d->row * c;;
 
-        p.setPen(QPen(palette().highlight(),2));
-        p.drawRect(QRect(x+1,y+1,c,c));
+        p.setPen(QPen(palette().highlight(), 2));
+        p.drawRect(QRect(x + 1, y + 1, c, c));
     }
 }
 
-void dtkColorGrid::mouseMoveEvent ( QMouseEvent * event )
+void dtkColorGrid::mouseMoveEvent ( QMouseEvent *event )
 {
     //if (!hasFocus()) setFocus();
 
@@ -239,13 +251,13 @@ void dtkColorGrid::mouseMoveEvent ( QMouseEvent * event )
 
     d->pos = event->pos();
 
-    int c = d->cellSize+1;
+    int c = d->cellSize + 1;
     d->row = d->pos.y() / c;
     d->col = d->pos.x() / c;
 
     int i = index();
-    if (i != d->idx)
-    {
+
+    if (i != d->idx) {
         d->idx = i;
         repaint();
 
@@ -266,7 +278,7 @@ void dtkColorGrid::mouseMoveEvent ( QMouseEvent * event )
 
 }
 
-void dtkColorGrid::mousePressEvent ( QMouseEvent * event )
+void dtkColorGrid::mousePressEvent ( QMouseEvent *event )
 {
     if (!hasFocus()) setFocus();
 
@@ -277,7 +289,7 @@ void dtkColorGrid::mousePressEvent ( QMouseEvent * event )
     }
 }
 
-void dtkColorGrid::mouseReleaseEvent ( QMouseEvent * event )
+void dtkColorGrid::mouseReleaseEvent ( QMouseEvent *event )
 {
     if (!hasFocus()) setFocus();
 
@@ -288,7 +300,7 @@ void dtkColorGrid::mouseReleaseEvent ( QMouseEvent * event )
     }
 }
 
-void dtkColorGrid::leaveEvent ( QEvent * event )
+void dtkColorGrid::leaveEvent ( QEvent *event )
 {
     DTK_UNUSED(event);
 
@@ -300,7 +312,7 @@ void dtkColorGrid::leaveEvent ( QEvent * event )
     }
 }
 
-bool dtkColorGrid::event ( QEvent * event )
+bool dtkColorGrid::event ( QEvent *event )
 {
     //if (event->type() == QEvent::ToolTip) {
     //    QToolTip::showText(d->pos, "zzz", this);
@@ -312,128 +324,151 @@ bool dtkColorGrid::event ( QEvent * event )
     return QWidget::event(event);
 }
 
-void dtkColorGrid::keyPressEvent ( QKeyEvent * event )
+void dtkColorGrid::keyPressEvent ( QKeyEvent *event )
 {
     QToolTip::hideText();
 
     switch (event->key()) {
 
-        case Qt::Key_Right:
-            if (d->idx == -1) {
-                d->row = d->col = 0;
-                d->idx = 0;
-            } else {
-                if (++d->col == d->widthInCells)
-                { d->col = 0; d->row++; }
-                d->idx = index();
-                if (d->idx == -1) {
-                    d->row = d->col = 0;
-                    d->idx = 0;
-                }
+    case Qt::Key_Right:
+        if (d->idx == -1) {
+            d->row = d->col = 0;
+            d->idx = 0;
+        } else {
+            if (++d->col == d->widthInCells) {
+                d->col = 0;
+                d->row++;
             }
-            repaint();
-            d->hlColor = d->colors->at(d->idx);
-            emit highlighted(d->hlColor);
-            event->accept();
-            return;
 
-        case Qt::Key_Left:
+            d->idx = index();
+
             if (d->idx == -1) {
                 d->row = d->col = 0;
                 d->idx = 0;
-            } else {
-                if (--d->col < 0)
-                { d->col = d->widthInCells-1; d->row--; }
-                d->idx = index();
-                if (d->idx == -1) {
-                    d->row = heightInCells()-1;
-                    d->idx = d->colors->size()-1;
+            }
+        }
+
+        repaint();
+        d->hlColor = d->colors->at(d->idx);
+        emit highlighted(d->hlColor);
+        event->accept();
+        return;
+
+    case Qt::Key_Left:
+        if (d->idx == -1) {
+            d->row = d->col = 0;
+            d->idx = 0;
+        } else {
+            if (--d->col < 0) {
+                d->col = d->widthInCells - 1;
+                d->row--;
+            }
+
+            d->idx = index();
+
+            if (d->idx == -1) {
+                d->row = heightInCells() - 1;
+                d->idx = d->colors->size() - 1;
+                d->col = d->idx % d->widthInCells;
+            }
+        }
+
+        repaint();
+        d->hlColor = d->colors->at(d->idx);
+        emit highlighted(d->hlColor);
+        event->accept();
+        return;
+
+    case Qt::Key_Up:
+        if (d->idx == -1) {
+            d->row = d->col = 0;
+            d->idx = 0;
+        } else {
+            int h = heightInCells() - 1;
+
+            if (--d->row < 0) {
+                d->row = h;
+
+                if (--d->col < 0) {
+                    d->row = h;
+                    d->idx = d->colors->size() - 1;
                     d->col = d->idx % d->widthInCells;
                 }
             }
-            repaint();
-            d->hlColor = d->colors->at(d->idx);
-            emit highlighted(d->hlColor);
-            event->accept();
-            return;
 
-        case Qt::Key_Up:
+            d->idx = index();
+
+            if (d->idx == -1 && d->row == h) {
+                d->row--;
+                d->idx = index();
+            }
+
+            if (d->idx == -1) {
+                d->row = h;
+                d->idx = d->colors->size() - 1;
+                d->col = d->idx % d->widthInCells;
+            }
+        }
+
+        repaint();
+        d->hlColor = d->colors->at(d->idx);
+        emit highlighted(d->hlColor);
+        event->accept();
+        return;
+
+    case Qt::Key_Down:
+        if (d->idx == -1) {
+            d->row = d->col = 0;
+            d->idx = 0;
+        } else {
+            int h = heightInCells() - 1;
+
+            if (++d->row > h) {
+                d->row = 0;
+                d->col++;
+            }
+
+            d->idx = index();
+
+            if (d->idx == -1 && d->row == h) {
+                d->row = 0; d->col++;
+                d->idx = index();
+            }
+
             if (d->idx == -1) {
                 d->row = d->col = 0;
                 d->idx = 0;
-            } else {
-                int h = heightInCells()-1;
-                if (--d->row < 0)
-                {
-                    d->row = h;
-                    if (--d->col < 0) {
-                        d->row = h;
-                        d->idx = d->colors->size()-1;
-                        d->col = d->idx % d->widthInCells;
-                    }
-                }
-                d->idx = index();
-                if (d->idx == -1 && d->row == h) {
-                    d->row--;
-                    d->idx = index();
-                }
-                if (d->idx == -1) {
-                    d->row = h;
-                    d->idx = d->colors->size()-1;
-                    d->col = d->idx % d->widthInCells;
-                }
             }
-            repaint();
-            d->hlColor = d->colors->at(d->idx);
-            emit highlighted(d->hlColor);
-            event->accept();
-            return;
+        }
 
-        case Qt::Key_Down:
-            if (d->idx == -1) {
-                d->row = d->col = 0;
-                d->idx = 0;
-            } else {
-                int h = heightInCells()-1;
-                if (++d->row > h)
-                { d->row = 0; d->col++; }
-                d->idx = index();
-                if (d->idx == -1 && d->row == h) {
-                    d->row = 0; d->col++;
-                    d->idx = index();
-                }
-                if (d->idx == -1) {
-                    d->row = d->col = 0;
-                    d->idx = 0;
-                }
-            }
-            repaint();
-            d->hlColor = d->colors->at(d->idx);
-            emit highlighted(d->hlColor);
-            event->accept();
-            return;
+        repaint();
+        d->hlColor = d->colors->at(d->idx);
+        emit highlighted(d->hlColor);
+        event->accept();
+        return;
 
-        case Qt::Key_Return:
-            if (d->idx != -1) {
-                emit picked(d->selColor = d->hlColor);
-                emit accepted();
-            }
-            event->accept();
-            return;
+    case Qt::Key_Return:
+        if (d->idx != -1) {
+            emit picked(d->selColor = d->hlColor);
+            emit accepted();
+        }
 
-        case Qt::Key_Escape:
-            emit rejected();
-            event->accept();
-            return;
+        event->accept();
+        return;
 
-        default:
-            event->ignore();
+    case Qt::Key_Escape:
+        emit rejected();
+        event->accept();
+        return;
+
+    default:
+        event->ignore();
     }
 
     return QWidget::keyPressEvent(event);
 }
 
-dtkColorList* dtkColorGrid::defaultColors()
+dtkColorList *dtkColorGrid::defaultColors()
 {
     static dtkColorList s_defaultColors;
 
@@ -445,7 +480,7 @@ dtkColorList* dtkColorGrid::defaultColors()
     for (int b = 0; b <= 256; b += 16) {
         if (b == 256) b = 255;
 
-        s_defaultColors.append(QColor(b,b,b));
+        s_defaultColors.append(QColor(b, b, b));
     }
 
     for (int r = 0; r <= 256; r += step) {
@@ -457,7 +492,7 @@ dtkColorList* dtkColorGrid::defaultColors()
             for (int b = 0; b <= 256; b += step) {
                 if (b == 256) b = 255;
 
-                s_defaultColors.append(QColor(r,g,b));
+                s_defaultColors.append(QColor(r, g, b));
             }
         }
     }
@@ -465,7 +500,7 @@ dtkColorList* dtkColorGrid::defaultColors()
     return &s_defaultColors;
 }
 
-dtkColorList* dtkColorGrid::defaultColors2()
+dtkColorList *dtkColorGrid::defaultColors2()
 {
     static dtkColorList s_defaultColors2;
 
@@ -477,7 +512,7 @@ dtkColorList* dtkColorGrid::defaultColors2()
     for (int b = 0; b <= 256; b += 16) {
         if (b == 256) b = 255;
 
-        s_defaultColors2.append(QColor(b,b,b));
+        s_defaultColors2.append(QColor(b, b, b));
     }
 
     for (int r = 0; r <= 256; r += step) {
@@ -489,7 +524,7 @@ dtkColorList* dtkColorGrid::defaultColors2()
             for (int b = 0; b <= 256; b += step) {
                 if (b == 256) b = 255;
 
-                s_defaultColors2.append(QColor(r,g,b));
+                s_defaultColors2.append(QColor(r, g, b));
             }
         }
     }
@@ -497,7 +532,7 @@ dtkColorList* dtkColorGrid::defaultColors2()
     return &s_defaultColors2;
 }
 
-dtkColorList* dtkColorGrid::baseColors()
+dtkColorList *dtkColorGrid::baseColors()
 {
     static dtkColorList s_baseColors;
 
@@ -510,7 +545,7 @@ dtkColorList* dtkColorGrid::baseColors()
     return &s_baseColors;
 }
 
-dtkColorList* dtkColorGrid::namedColors()
+dtkColorList *dtkColorGrid::namedColors()
 {
     static dtkColorList s_namedColors;
 
@@ -518,6 +553,7 @@ dtkColorList* dtkColorGrid::namedColors()
         return &s_namedColors;
 
     QStringList names = QColor::colorNames();
+
     for (int i = 0; i < names.size(); i++)
         s_namedColors.append(QColor(names.at(i)));
 

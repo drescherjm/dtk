@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -24,36 +24,32 @@
 // Helpers
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> struct dtkNegate
-{
-    T operator() (const T& lhs, const T& rhs) const
-    {
+template <typename T> struct dtkNegate {
+    T operator() (const T& lhs, const T& rhs) const {
         Q_UNUSED(lhs);
         return -rhs;
     }
 };
 
-template <typename T> struct dtkInvert
-{
-    T operator() (const T& lhs, const T& rhs) const
-    {
+template <typename T> struct dtkInvert {
+    T operator() (const T& lhs, const T& rhs) const {
         Q_UNUSED(lhs);
         return 1 / rhs;
     }
 };
 
-template <> struct dtkInvert<void>
-{
+template <> struct dtkInvert<void> {
 };
 
 // ///////////////////////////////////////////////////////////////////
 // dtkDistributedBufferOperationManager
 // ///////////////////////////////////////////////////////////////////
 
-struct DTKDISTRIBUTED_EXPORT dtkDistributedBufferOperationManager
-{
+struct DTKDISTRIBUTED_EXPORT dtkDistributedBufferOperationManager {
 public:
-    virtual ~dtkDistributedBufferOperationManager(void) {;}
+    virtual ~dtkDistributedBufferOperationManager(void) {
+        ;
+    }
 
 public:
     virtual void addAssign(char *result, void *source, qlonglong count) = 0;
@@ -71,8 +67,7 @@ public:
 // dtkDistributedBufferOperationManagerTyped
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> struct dtkDistributedBufferOperationManagerTyped : public dtkDistributedBufferOperationManager
-{
+template <typename T> struct dtkDistributedBufferOperationManagerTyped : public dtkDistributedBufferOperationManager {
 public:
     void addAssign(char *result, void *source, qlonglong count);
     void subAssign(char *result, void *source, qlonglong count);
@@ -85,46 +80,47 @@ public:
     void invert(void *result, void *source, qlonglong count);
 
 private:
-   QMutex mutex;
+    QMutex mutex;
 };
 
 // ///////////////////////////////////////////////////////////////////
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::addAssign(char *result, void *source, qlonglong count)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::plus<T>());
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult + count, Tsource, Tresult, std::plus<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::subAssign(char *result, void *source, qlonglong count)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::minus<T>());
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult + count, Tsource, Tresult, std::minus<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::mulAssign(char *result, void *source, qlonglong count)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::multiplies<T>());
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult + count, Tsource, Tresult, std::multiplies<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::divAssign(char *result, void *source, qlonglong count)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    std::transform(Tresult, Tresult+count, Tsource, Tresult, std::divides<T>());
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult + count, Tsource, Tresult, std::divides<T>());
 }
 
 template <typename T> inline bool dtkDistributedBufferOperationManagerTyped<T>::compareAndSwap(char *result, void *source,  void *compare)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    T * Tcompare = reinterpret_cast<T *>(compare);
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    T *Tcompare = reinterpret_cast<T *>(compare);
 
     mutex.lock();
+
     if (*Tresult == *Tcompare) {
         *Tresult = *Tsource ;
         mutex.unlock();
@@ -133,6 +129,7 @@ template <typename T> inline bool dtkDistributedBufferOperationManagerTyped<T>::
         mutex.unlock();
         return false;
     }
+
     /*  m_atomic_value.store(Tresult) */
     /* if ( std::atomic_compare_exchange_strong( &m_atomic_value, Tcompare , *Tsource  ) ) { */
     /*     *Tresult = m_atomic_value.load(); */
@@ -140,16 +137,16 @@ template <typename T> inline bool dtkDistributedBufferOperationManagerTyped<T>::
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::negate(void *result, void *source, qlonglong count)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    std::transform(Tresult, Tresult+count, Tsource, Tresult, dtkNegate<T>());
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult + count, Tsource, Tresult, dtkNegate<T>());
 }
 
 template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::invert(void *result, void *source, qlonglong count)
 {
-    T * Tresult = reinterpret_cast<T *>(result);
-    T * Tsource = reinterpret_cast<T *>(source);
-    std::transform(Tresult, Tresult+count, Tsource, Tresult, dtkInvert<T>());
+    T *Tresult = reinterpret_cast<T *>(result);
+    T *Tsource = reinterpret_cast<T *>(source);
+    std::transform(Tresult, Tresult + count, Tsource, Tresult, dtkInvert<T>());
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -159,12 +156,12 @@ template <typename T> inline void dtkDistributedBufferOperationManagerTyped<T>::
 class DTKDISTRIBUTED_EXPORT dtkDistributedBufferManager
 {
 public:
-             dtkDistributedBufferManager(void);
+    dtkDistributedBufferManager(void);
     virtual ~dtkDistributedBufferManager(void);
 
 public:
     template <typename T>    T *allocate(qlonglong capacity);
-    template <typename T> void  deallocate(T *& buffer);
+    template <typename T> void  deallocate(T *&buffer);
 
 public:
     virtual bool shouldCache(const qint32& owner) = 0;
@@ -204,7 +201,7 @@ protected:
 // dtkDistributedBufferManager templated member functions
 // ///////////////////////////////////////////////////////////////////
 
-inline dtkDistributedBufferManager::dtkDistributedBufferManager(void) : operation_manager(NULL) 
+inline dtkDistributedBufferManager::dtkDistributedBufferManager(void) : operation_manager(NULL)
 {
 }
 
@@ -225,7 +222,7 @@ template <typename T> inline T *dtkDistributedBufferManager::allocate(qlonglong 
     return static_cast<T *>(this->allocate(sizeof(T), capacity, qMetaTypeId<T>()));
 }
 
-template <typename T> inline void dtkDistributedBufferManager::deallocate(T *& buffer)
+template <typename T> inline void dtkDistributedBufferManager::deallocate(T *&buffer)
 {
     if (this->operation_manager && this->canHandleOperationManager()) {
         delete this->operation_manager;
@@ -236,5 +233,5 @@ template <typename T> inline void dtkDistributedBufferManager::deallocate(T *& b
     buffer = NULL;
 }
 
-// 
+//
 // dtkDistributedBufferManager.h ends here

@@ -38,15 +38,15 @@ dtkWidgetsLogViewBar::dtkWidgetsLogViewBar(QWidget *parent) : QFrame(parent)
 
     b_trace->setCheckable(true);
     b_debug->setCheckable(true);
-     b_info->setCheckable(true);
-     b_warn->setCheckable(true);
+    b_info->setCheckable(true);
+    b_warn->setCheckable(true);
     b_error->setCheckable(true);
     b_fatal->setCheckable(true);
 
     b_trace->setChecked(true);
     b_debug->setChecked(true);
-     b_info->setChecked(true);
-     b_warn->setChecked(true);
+    b_info->setChecked(true);
+    b_warn->setChecked(true);
     b_error->setChecked(true);
     b_fatal->setChecked(true);
 
@@ -133,7 +133,7 @@ dtkWidgetsLogViewList::~dtkWidgetsLogViewList(void)
 
 void dtkWidgetsLogViewList::setAutoScroll(bool autoScroll)
 {
-    if(autoScroll)
+    if (autoScroll)
         connect(this->model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), this, SLOT(scrollToBottom()));
     else
         disconnect(this->model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), this, SLOT(scrollToBottom()));
@@ -153,7 +153,7 @@ void dtkWidgetsLogViewList::setFile(const QString& path)
 
     QFile file(path);
 
-    if(!file.open(QFile::ReadOnly))
+    if (!file.open(QFile::ReadOnly))
         qDebug() << "Unable to read file" << path;
 
     QString contents = file.readAll();
@@ -182,12 +182,14 @@ void dtkWidgetsLogViewList::setFilter(const QRegExp& expression)
 
 QRegExp dtkWidgetsLogViewPrivate::expression(void)
 {
-    if(this->exclude.isEmpty())
+    if (this->exclude.isEmpty())
         return QRegExp();
 
     QString patterns;
-    foreach(QString pattern, this->exclude)
+
+    foreach (QString pattern, this->exclude)
         patterns.append(QString("%1|").arg(pattern));
+
     patterns.chop(1);
 
     return QRegExp(QString("^(?!%1).*").arg(patterns), Qt::CaseSensitive, QRegExp::RegExp2);
@@ -249,7 +251,7 @@ dtkWidgetsLogView::~dtkWidgetsLogView(void)
 
 void dtkWidgetsLogView::autoScrollChecked(int state)
 {
-    if(state == Qt::Unchecked)
+    if (state == Qt::Unchecked)
         this->disableAutoScroll();
     else
         this->enableAutoScroll();
@@ -269,7 +271,7 @@ void dtkWidgetsLogView::enableAutoScroll(void)
 
 void dtkWidgetsLogView::displayTrace(bool display)
 {
-    if(!display)
+    if (!display)
         d->exclude << "TRACE";
     else
         d->exclude.removeAll("TRACE");
@@ -279,7 +281,7 @@ void dtkWidgetsLogView::displayTrace(bool display)
 
 void dtkWidgetsLogView::displayDebug(bool display)
 {
-    if(!display)
+    if (!display)
         d->exclude << "DEBUG";
     else
         d->exclude.removeAll("DEBUG");
@@ -289,7 +291,7 @@ void dtkWidgetsLogView::displayDebug(bool display)
 
 void dtkWidgetsLogView::displayInfo(bool display)
 {
-    if(!display)
+    if (!display)
         d->exclude << "INFO";
     else
         d->exclude.removeAll("INFO");
@@ -299,7 +301,7 @@ void dtkWidgetsLogView::displayInfo(bool display)
 
 void dtkWidgetsLogView::displayWarn(bool display)
 {
-    if(!display)
+    if (!display)
         d->exclude << "WARN";
     else
         d->exclude.removeAll("WARN");
@@ -309,7 +311,7 @@ void dtkWidgetsLogView::displayWarn(bool display)
 
 void dtkWidgetsLogView::displayError(bool display)
 {
-    if(!display)
+    if (!display)
         d->exclude << "ERROR";
     else
         d->exclude.removeAll("ERROR");
@@ -319,7 +321,7 @@ void dtkWidgetsLogView::displayError(bool display)
 
 void dtkWidgetsLogView::displayFatal(bool display)
 {
-    if(!display)
+    if (!display)
         d->exclude << "FATAL";
     else
         d->exclude.removeAll("FATAL");

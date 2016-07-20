@@ -1,15 +1,15 @@
 /* dtkComposerNodeTest.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Wed Apr  3 12:16:50 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Wed Apr  3 16:51:04 2013 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 577
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkComposerNodeTest.h"
@@ -17,12 +17,12 @@
 #include <dtkComposer>
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeTestCase::initTestCase(void)
 {
-    
+
 
 }
 
@@ -114,7 +114,7 @@ void dtkComposerNodeTestCase::testBooleanOperatorBinary(void)
     dtkComposerNodeBoolean n_b;
 
     // Result node
-    dtkComposerNodeBoolean n_res;    
+    dtkComposerNodeBoolean n_res;
 
     // AND
     dtkComposerNodeBooleanOperatorBinaryAnd n_and;
@@ -171,7 +171,7 @@ void dtkComposerNodeTestCase::testBooleanOperatorBinary(void)
 
     QVERIFY(n_xor.receivers().first()->disconnect(n_a.emitters().first()));
     QVERIFY(n_xor.receivers().last()->disconnect(n_b.emitters().first()));
-    QVERIFY(n_res.receivers().first()->disconnect(n_xor.emitters().first()));   
+    QVERIFY(n_res.receivers().first()->disconnect(n_xor.emitters().first()));
 
     // NAND
     dtkComposerNodeBooleanOperatorBinaryNand n_nand;
@@ -277,7 +277,7 @@ void dtkComposerNodeTestCase::testString(void)
     QString str = "I'm the king of the World!!";
     node.setValue(str);
     QCOMPARE(str, node.value());
-    
+
     dtkComposerNodeString other;
     QVERIFY(other.receivers().first()->connect(node.emitters().first()));
 
@@ -324,7 +324,7 @@ void dtkComposerNodeTestCase::testStringOperator(void)
     n_bool.run();
 
     QCOMPARE(sum, n_res.value());
-    QVERIFY(n_bool.value());    
+    QVERIFY(n_bool.value());
 }
 
 void dtkComposerNodeTestCase::testNumber(void)
@@ -369,7 +369,7 @@ void dtkComposerNodeTestCase::testNumber(void)
 
     n_int.run();
     n_rres.run();
-    QCOMPARE(static_cast<double>(v_int), n_rres.value());    
+    QCOMPARE(static_cast<double>(v_int), n_rres.value());
 }
 
 void dtkComposerNodeTestCase::testNumberOperatorUnary(void)
@@ -433,7 +433,7 @@ void dtkComposerNodeTestCase::testNumberOperatorUnary(void)
     QVERIFY(n_end.receivers().first()->connect(n_log10.emitters().first()));
     n_log10.run();
     n_end.run();
-    QCOMPARE(qLn(v_r)/qLn(10.), n_end.value());
+    QCOMPARE(qLn(v_r) / qLn(10.), n_end.value());
     QVERIFY(n_end.receivers().first()->disconnect(n_log10.emitters().first()));
 
     // EXP
@@ -572,7 +572,7 @@ void dtkComposerNodeTestCase::testNumberOperatorUnary(void)
     n_iend.run();
     QCOMPARE(qRound(v_r), static_cast<int>(n_iend.value()));
     QVERIFY(n_iend.receivers().first()->disconnect(n_round.emitters().first()));
-    
+
 }
 
 void dtkComposerNodeTestCase::testNumberOperatorBinary(void)
@@ -585,7 +585,7 @@ void dtkComposerNodeTestCase::testNumberOperatorBinary(void)
 
     n_i0.setValue(v_i0);
     n_i1.setValue(v_i1);
-    
+
     n_i0.run();
     n_i1.run();
 
@@ -621,7 +621,7 @@ void dtkComposerNodeTestCase::testNumberOperatorBinary(void)
 
     n_r0.setValue(v_r0);
     n_r1.setValue(v_r1);
-    
+
     n_r0.run();
     n_r1.run();
 
@@ -718,7 +718,7 @@ void dtkComposerNodeTestCase::testNumberComparator(void)
 
     n_0.setValue(v_0);
     n_1.setValue(v_1);
-    
+
     n_0.run();
     n_1.run();
 

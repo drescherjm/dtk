@@ -1,5 +1,5 @@
-// dtkComposerNodeMetaScalarArrayExtractor.cpp --- 
-// 
+// dtkComposerNodeMetaScalarArrayExtractor.cpp ---
+//
 // Author: Régis Duvigneau
 // Copyright (C) 2008 - Regis Duvigneau, Inria.
 // Created: Thu Jul 19 11:27:24 2012 (+0200)
@@ -7,15 +7,15 @@
 // Last-Updated: mar. févr.  4 17:40:38 2014 (+0100)
 //           By: Nicolas Niclausse
 //     Update #: 25
-// 
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change log:
-// 
-// 
+//
+//
 
 #include "dtkComposerNodeMetaScalarArrayExtractor.h"
 
@@ -59,7 +59,7 @@ dtkComposerNodeMetaScalarArrayExtractor::dtkComposerNodeMetaScalarArrayExtractor
 dtkComposerNodeMetaScalarArrayExtractor::~dtkComposerNodeMetaScalarArrayExtractor(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 

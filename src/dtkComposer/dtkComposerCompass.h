@@ -1,26 +1,22 @@
-/* dtkComposerCompass.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Apr 18 09:35:33 2012 (+0200)
- * Version: $Id$
- * Last-Updated: Wed Apr 17 10:28:18 2013 (+0200)
- *           By: Julien Wintz
- *     Update #: 52
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
 
+#include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerCompassPrivate;
@@ -52,3 +48,5 @@ private:
     dtkComposerCompassPrivate *d;
 };
 
+//
+// dtkComposerCompass.h ends here

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -16,7 +16,7 @@
 
 // /////////////////////////////////////////////////////////////////
 
-void dtkRoundUpNextPowerOfTwo(quint32& nalloc) 
+void dtkRoundUpNextPowerOfTwo(quint32& nalloc)
 {
     nalloc |= nalloc >> 1;
     nalloc |= nalloc >> 2;
@@ -34,7 +34,7 @@ void dtkRoundUpNextPowerOfTwo(quint64& nalloc)
     nalloc |= nalloc >> 8;
     nalloc |= nalloc >> 16;
     nalloc |= nalloc >> 32;
-    ++nalloc;        
+    ++nalloc;
 };
 
 qintptr dtkAllocMore(qintptr alloc, qintptr extra)
@@ -60,12 +60,14 @@ qintptr dtkAllocMore(qintptr alloc, qintptr extra)
 
 const dtkArrayData dtkArrayData::shared_null[2] = {
     { -1, 0, 0, 0, sizeof(dtkArrayData) }, // shared null
-    /* zero initialized terminator */};
+    /* zero initialized terminator */
+};
 
 static const dtkArrayData dtk_array[3] = {
     { -1, 0, 0, 0, sizeof(dtkArrayData) }, // shared empty
     {  0, 0, 0, 0, sizeof(dtkArrayData) }, // unsharable empty
-    /* zero initialized terminator */};
+    /* zero initialized terminator */
+};
 
 static const dtkArrayData& dtk_array_empty = dtk_array[0];
 static const dtkArrayData& dtk_array_unsharable_empty = dtk_array[1];
@@ -80,8 +82,10 @@ dtkArrayData *dtkArrayData::allocate(size_t objectSize, size_t alignment, size_t
     // Don't allocate empty headers
     if (!(options & RawData) && !capacity) {
 #if QT_SUPPORTS(UNSHARABLE_CONTAINERS)
+
         if (options & Unsharable)
             return const_cast<dtkArrayData *>(&dtk_array_unsharable_empty);
+
 #endif
         return const_cast<dtkArrayData *>(&dtk_array_empty);
     }
@@ -102,6 +106,7 @@ dtkArrayData *dtkArrayData::allocate(size_t objectSize, size_t alignment, size_t
     size_t allocSize = headerSize + objectSize * capacity;
 
     dtkArrayData *header = static_cast<dtkArrayData *>(::malloc(allocSize));
+
     if (header) {
         quintptr data = (quintptr(header) + sizeof(dtkArrayData) + alignment - 1) & ~(alignment - 1);
 
@@ -122,13 +127,15 @@ void dtkArrayData::deallocate(dtkArrayData *data, size_t objectSize, size_t alig
     Q_UNUSED(objectSize) Q_UNUSED(alignment)
 
 #if QT_SUPPORTS(UNSHARABLE_CONTAINERS)
+
     if (data == &dtk_array_unsharable_empty)
         return;
+
 #endif
     Q_ASSERT_X(!data->ref.isStatic(), "dtkArrayData::deallocate", "Static data can not be deleted");
 
     ::free(data);
 }
 
-// 
+//
 // dtkArrayData.cpp ends here

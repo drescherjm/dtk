@@ -33,7 +33,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewLayoutItemProxy : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerViewLayoutItemProxy(QWidget *parent = 0);
+    dtkComposerViewLayoutItemProxy(QWidget *parent = 0);
     ~dtkComposerViewLayoutItemProxy(void);
 
 public:
@@ -63,7 +63,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewLayoutItem : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerViewLayoutItem(dtkComposerViewLayoutItem *parent = 0);
+    dtkComposerViewLayoutItem(dtkComposerViewLayoutItem *parent = 0);
     ~dtkComposerViewLayoutItem(void);
 
 public:
@@ -123,11 +123,11 @@ private:
     void notify(dtkComposerViewWidget *view);
 
 private:
-     dtkComposerViewLayoutItemPrivate *d;
+    dtkComposerViewLayoutItemPrivate *d;
 
 private:
-     friend class dtkComposerViewLayoutItemPrivate;
-     friend class dtkComposerViewLayoutItemProxy;
+    friend class dtkComposerViewLayoutItemPrivate;
+    friend class dtkComposerViewLayoutItemProxy;
 };
 
 //

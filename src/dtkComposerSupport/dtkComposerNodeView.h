@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -30,16 +30,20 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeView : public QObject, public dtk
     Q_OBJECT
 
 public:
-     dtkComposerNodeView(void);
+    dtkComposerNodeView(void);
     ~dtkComposerNodeView(void);
 
 public:
     void run(void);
 
 public:
-    bool isAbstractView(void) const { return true; }
+    bool isAbstractView(void) const {
+        return true;
+    }
 
-    QString abstractViewType(void) const { return "dtkAbstractView"; }
+    QString abstractViewType(void) const {
+        return "dtkAbstractView";
+    }
 
 public:
     QString type(void);
@@ -53,5 +57,5 @@ private:
     dtkComposerNodeViewPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeView.h ends here

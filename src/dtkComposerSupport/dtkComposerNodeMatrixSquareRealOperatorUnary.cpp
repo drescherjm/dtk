@@ -70,7 +70,7 @@ public:
 
 dtkComposerNodeMatrixSquareRealOperatorUnaryScalar::dtkComposerNodeMatrixSquareRealOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeMatrixSquareRealOperatorUnaryScalarPrivate)
 {
-    this->appendReceiver(&d->receiver_matrix);   
+    this->appendReceiver(&d->receiver_matrix);
 
     d->value = 0.;
     d->emitter_val.setData(&d->value);
@@ -127,7 +127,7 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryInverse::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 {
-    if (!d->receiver_matrix.isEmpty()){
+    if (!d->receiver_matrix.isEmpty()) {
 
         d->value = dtkDeterminant(*d->receiver_matrix.data());
 
@@ -142,7 +142,7 @@ void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarDeterminant::run(void)
 
 void dtkComposerNodeMatrixSquareRealOperatorUnaryScalarTrace::run(void)
 {
-    if (!d->receiver_matrix.isEmpty()){
+    if (!d->receiver_matrix.isEmpty()) {
 
         d->value = dtkMatrixSquaredTrace(*d->receiver_matrix.data());
 

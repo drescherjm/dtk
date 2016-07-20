@@ -22,7 +22,7 @@ class dtkComposerNodeVectorRealOperatorModifierPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorModifier : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealOperatorModifier(void);
+    dtkComposerNodeVectorRealOperatorModifier(void);
     ~dtkComposerNodeVectorRealOperatorModifier(void);
 
 public:
@@ -52,7 +52,7 @@ class dtkComposerNodeVectorRealOperatorModifierAllPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorModifierAll : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealOperatorModifierAll(void);
+    dtkComposerNodeVectorRealOperatorModifierAll(void);
     ~dtkComposerNodeVectorRealOperatorModifierAll(void);
 
     inline QString inputLabelHint(int port) {
@@ -79,7 +79,7 @@ class dtkComposerNodeVectorRealOperatorModifierPartPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorModifierPart : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealOperatorModifierPart(void);
+    dtkComposerNodeVectorRealOperatorModifierPart(void);
     ~dtkComposerNodeVectorRealOperatorModifierPart(void);
 
     inline QString inputLabelHint(int port) {

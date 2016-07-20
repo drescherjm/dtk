@@ -1,5 +1,5 @@
-/* dtkComposerNodeTrackerKinect.h --- 
- * 
+/* dtkComposerNodeTrackerKinect.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 10:25:11 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 18
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODETRACKERKINECT_H
@@ -28,7 +28,7 @@ class dtkComposerNodeTrackerKinectPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeTrackerKinect : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeTrackerKinect(void);
+    dtkComposerNodeTrackerKinect(void);
     ~dtkComposerNodeTrackerKinect(void);
 
 public:
@@ -44,10 +44,10 @@ public:
     }
 
     inline QString outputLabelHint(int port) {
-        if(port == 0)
+        if (port == 0)
             return "head position";
 
-        if(port == 1)
+        if (port == 1)
             return "head orientation";
 
         return dtkComposerNodeLeaf::outputLabelHint(port);

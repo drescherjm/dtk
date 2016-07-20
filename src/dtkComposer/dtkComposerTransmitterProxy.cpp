@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -31,8 +31,8 @@ dtkComposerTransmitterProxy::~dtkComposerTransmitterProxy(void)
 }
 
 //! Returns.
-/*! 
- *  
+/*!
+ *
  */
 dtkComposerTransmitter::Kind dtkComposerTransmitterProxy::kind(void) const
 {
@@ -48,7 +48,7 @@ void dtkComposerTransmitterProxy::setActive(bool active)
 {
     dtkComposerTransmitter::setActive(active);
 
-    foreach(dtkComposerTransmitter *prev, d->previous_list)
+    foreach (dtkComposerTransmitter *prev, d->previous_list)
         prev->setActive(active);
 }
 
@@ -58,7 +58,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::leftLinks(dtkCompos
 
     LinkMap link_map;
 
-    foreach(dtkComposerTransmitter *p, d->previous_list) {
+    foreach (dtkComposerTransmitter *p, d->previous_list) {
         list << new dtkComposerTransmitterLink(p, this);
         link_map += p->leftLinks(this, list);
         list.removeLast();
@@ -73,7 +73,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkCompo
 
     LinkMap link_map;
 
-    foreach(dtkComposerTransmitter *n, d->next_list) {
+    foreach (dtkComposerTransmitter *n, d->next_list) {
         list << new dtkComposerTransmitterLink(this, n);
         link_map += n->rightLinks(this, list);
         list.removeLast();
@@ -82,5 +82,5 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxy::rightLinks(dtkCompo
     return link_map;
 }
 
-// 
+//
 // dtkComposerTransmitterProxy.cpp ends here

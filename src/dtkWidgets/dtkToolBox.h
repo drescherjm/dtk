@@ -70,7 +70,7 @@ class DTKWIDGETS_EXPORT dtkToolBoxItem : public QFrame
 
 public:
     explicit dtkToolBoxItem(QWidget *parent = 0);
-            ~dtkToolBoxItem(void);
+    ~dtkToolBoxItem(void);
 
 public:
     bool isExpanded(void) const;
@@ -82,7 +82,7 @@ public:
     void hideButton(void);
 
 public:
-    void setWidget(QWidget *widget, const QString& text, const QIcon &icon = QIcon());
+    void setWidget(QWidget *widget, const QString& text, const QIcon& icon = QIcon());
 
 public slots:
     void setExpanded(bool expanded);
@@ -132,7 +132,7 @@ public:
 
 public:
     explicit dtkToolBox(QWidget *parent = 0);
-            ~dtkToolBox(void);
+    ~dtkToolBox(void);
 
 public:
     void clear(void);

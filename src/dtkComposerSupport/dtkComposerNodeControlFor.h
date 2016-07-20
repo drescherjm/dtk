@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlFor.h --- 
- * 
+/* dtkComposerNodeControlFor.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:12:58 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 18
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONTROLFOR_H
@@ -28,7 +28,7 @@ class dtkComposerNodeControlForPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlFor : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlFor(void);
+    dtkComposerNodeControlFor(void);
     virtual ~dtkComposerNodeControlFor(void);
 
 public:
@@ -41,7 +41,7 @@ public:
     void setInputs(void);
     void setOutputs(void);
     void setVariables(void);
-     int selectBranch(void);
+    int selectBranch(void);
     void begin(void);
     void end(void);
 

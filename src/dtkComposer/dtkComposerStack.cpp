@@ -1,5 +1,5 @@
-/* dtkComposerStack.cpp --- 
- * 
+/* dtkComposerStack.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:23:50 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerStack.h"

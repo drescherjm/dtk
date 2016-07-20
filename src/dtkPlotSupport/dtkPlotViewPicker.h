@@ -1,5 +1,5 @@
-/* dtkPlotViewPicker.h --- 
- * 
+/* dtkPlotViewPicker.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Jun 10 01:13:02 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 7
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTVIEWPICKER_H
@@ -33,7 +33,7 @@ class DTKPLOTSUPPORT_EXPORT dtkPlotViewPicker : public QObject
     Q_OBJECT
 
 public:
-     dtkPlotViewPicker(dtkPlotView *parent);
+    dtkPlotViewPicker(dtkPlotView *parent);
     ~dtkPlotViewPicker(void);
 
 public:

@@ -31,7 +31,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerControlsDelegate : public QStyledItem
     Q_OBJECT
 
 public:
-     dtkComposerControlsDelegate(QObject *parent = 0);
+    dtkComposerControlsDelegate(QObject *parent = 0);
     ~dtkComposerControlsDelegate(void);
 
 public:

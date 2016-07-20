@@ -114,7 +114,7 @@ int dtkComposerEvaluatorProcess::exec(void)
 
     QByteArray data;
 
-    d->parent_comm->broadcast(data,0);
+    d->parent_comm->broadcast(data, 0);
 
     dtkDebug() << "Ok, composition received, parse" ;
 
@@ -145,6 +145,7 @@ int dtkComposerEvaluatorProcess::exec(void)
             return 1;
         }
     }
+
     dtkDebug() << "run composition" ;
     d->evaluator->run();
     dtkDebug() << "finished" ;

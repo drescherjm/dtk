@@ -26,7 +26,7 @@ class DTKMATH_EXPORT dtkMatrix : public QObject
     Q_PROPERTY(qulonglong rowCount READ rowCount)
 
 public:
-             dtkMatrix(void);
+    dtkMatrix(void);
     virtual ~dtkMatrix(void);
 
 public:
@@ -75,7 +75,7 @@ DTKMATH_EXPORT dtkMatrix& operator*(const dtkMatrix& lhs, const dtkMatrix& rhs);
 DTKMATH_EXPORT QDebug operator<<(QDebug debug, const dtkMatrix *matrix);
 DTKMATH_EXPORT QDebug operator<<(QDebug debug, const dtkMatrix& matrix);
 
-DTK_DECLARE_OBJECT(dtkMatrix*)
+DTK_DECLARE_OBJECT(dtkMatrix *)
 DTK_DECLARE_PLUGIN(dtkMatrix, DTKMATH_EXPORT)
 DTK_DECLARE_PLUGIN_FACTORY(dtkMatrix, DTKMATH_EXPORT)
 DTK_DECLARE_PLUGIN_MANAGER(dtkMatrix, DTKMATH_EXPORT)

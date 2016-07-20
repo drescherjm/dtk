@@ -1,5 +1,5 @@
 /* dtkCorePluginFactory.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: jeu. avril  3 08:44:47 2014 (+0200)
  */
@@ -29,12 +29,12 @@
     Registers the creator function \a func under key \a key.
  */
 
-/*! \fn T *dtkCorePluginFactory::create(const QString& key)
+/*! \fn T *dtkCorePluginFactory::create(const QString& key) const
     Creates object from the creator function identified by \a key.
 
     Returns null pointer if \a key is not found.
  */
 
-/*! \fn QStringList dtkCorePluginFactory::keys(void)
+/*! \fn QStringList dtkCorePluginFactory::keys(void) const
     Returns all the recorded creator function keys.
  */

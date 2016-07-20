@@ -1,5 +1,5 @@
-/* dtkAboutBox.cpp --- 
- * 
+/* dtkAboutBox.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Apr 19 12:52:49 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAboutBox.h"

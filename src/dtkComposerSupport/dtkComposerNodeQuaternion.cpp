@@ -1,5 +1,5 @@
-/* dtkComposerNodeQuaternion.cpp --- 
- * 
+/* dtkComposerNodeQuaternion.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:06:02 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 44
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeQuaternion.h"
@@ -24,7 +24,7 @@
 #include <dtkMathSupport/dtkQuaternion.h>
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeQuaternionPrivate
@@ -54,7 +54,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeQuaternion::dtkComposerNodeQuaternion(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeQuaternionPrivate)
@@ -88,31 +88,37 @@ dtkComposerNodeQuaternion::~dtkComposerNodeQuaternion(void)
 {
     if (d->quat)
         delete d->quat;
+
     d->quat = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
-QString dtkComposerNodeQuaternion::inputLabelHint(int port) 
+QString dtkComposerNodeQuaternion::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "quat";
         break;
+
     case 1:
         return "q0";
         break;
+
     case 2:
         return "q1";
         break;
+
     case 3:
         return "q2";
         break;
+
     case 4:
         return "q3";
         break;
+
     default:
         break;
     }
@@ -121,23 +127,28 @@ QString dtkComposerNodeQuaternion::inputLabelHint(int port)
 }
 
 QString dtkComposerNodeQuaternion::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "quat";
         break;
+
     case 1:
         return "q0";
         break;
+
     case 2:
         return "q1";
         break;
+
     case 3:
         return "q2";
         break;
+
     case 4:
         return "q3";
         break;
+
     default:
         break;
     }
@@ -160,7 +171,7 @@ void dtkComposerNodeQuaternion::run(void)
     } else {
 
         if (!d->quat)
-            d->quat = new dtkQuaternionReal();  
+            d->quat = new dtkQuaternionReal();
 
         if (!d->receiver_q0.isEmpty())
             d->q0 = *d->receiver_q0.data();
@@ -181,7 +192,7 @@ void dtkComposerNodeQuaternion::run(void)
             d->q3 = *d->receiver_q3.data();
         else
             d->q3 = 0.;
-        
+
         (*d->quat)[0] = d->q0;
         (*d->quat)[1] = d->q1;
         (*d->quat)[2] = d->q2;

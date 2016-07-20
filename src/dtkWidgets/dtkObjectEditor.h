@@ -1,15 +1,15 @@
 /* dtkObjectEditor.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: mar. oct. 15 16:54:54 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: mer. oct. 23 14:30:58 2013 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 18
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -25,7 +25,7 @@ class DTKWIDGETS_EXPORT dtkObjectEditor : public QFrame
     Q_OBJECT
 
 public:
-     dtkObjectEditor(QObject *object, QWidget *parent = 0);
+    dtkObjectEditor(QObject *object, QWidget *parent = 0);
     ~dtkObjectEditor(void);
 
 private:

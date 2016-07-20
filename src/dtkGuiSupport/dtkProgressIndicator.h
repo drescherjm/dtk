@@ -1,5 +1,5 @@
-/* dtkProgressIndicator.h --- 
- * 
+/* dtkProgressIndicator.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar 22 10:18:05 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPROGRESSINDICATOR_H
@@ -34,7 +34,7 @@ class dtkProgressIndicator : public QWidget
     Q_PROPERTY(QColor color READ color WRITE setColor)
 
 public:
-    dtkProgressIndicator(QWidget* parent = 0);
+    dtkProgressIndicator(QWidget *parent = 0);
 
     int animationDelay(void) const;
 
@@ -56,7 +56,7 @@ public slots:
     void setColor(const QColor& color);
 
 protected:
-    virtual void timerEvent(QTimerEvent *event); 
+    virtual void timerEvent(QTimerEvent *event);
     virtual void paintEvent(QPaintEvent *event);
 
 private:

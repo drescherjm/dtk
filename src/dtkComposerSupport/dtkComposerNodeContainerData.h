@@ -1,5 +1,5 @@
-/* dtkComposerNodeContainerData.h --- 
- * 
+/* dtkComposerNodeContainerData.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:12:04 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONTAINERDATA_H
@@ -28,9 +28,9 @@ class dtkComposerNodeContainerDataPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeContainerData : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeContainerData(void);
+    dtkComposerNodeContainerData(void);
     ~dtkComposerNodeContainerData(void);
-    
+
 public:
     void run(void);
 

@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaScalarArray.cpp --- 
- * 
+/* dtkComposerNodeMetaScalarArray.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:06:48 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 27
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <dtkComposerNodeMetaScalarArray.h>
@@ -52,16 +52,17 @@ dtkComposerNodeMetaScalarArray::dtkComposerNodeMetaScalarArray(void) : dtkCompos
 dtkComposerNodeMetaScalarArray::~dtkComposerNodeMetaScalarArray(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
 QString dtkComposerNodeMetaScalarArray::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "arrays";
         break;
+
     default:
         break;
     }

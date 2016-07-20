@@ -20,7 +20,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerNodeRange : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeRange(void);
+    dtkComposerNodeRange(void);
     ~dtkComposerNodeRange(void);
 
 public slots:

@@ -31,8 +31,8 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedMapper : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedMapper(void);
-     dtkDistributedMapper(const dtkDistributedMapper& o);
+    dtkDistributedMapper(void);
+    dtkDistributedMapper(const dtkDistributedMapper& o);
     ~dtkDistributedMapper(void);
 
 public:

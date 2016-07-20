@@ -32,7 +32,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotCurve : public QObject, publi
     Q_OBJECT
 
 public:
-     dtkComposerNodePlotCurve(void);
+    dtkComposerNodePlotCurve(void);
     ~dtkComposerNodePlotCurve(void);
 
 public:
@@ -46,11 +46,13 @@ public:
 
 public:
     inline QString inputLabelHint(int port) {
-        switch(port) {
+        switch (port) {
         case 0:
             return "vector x";
+
         case 1:
             return "vector y";
+
         default:
             return "port";
         }

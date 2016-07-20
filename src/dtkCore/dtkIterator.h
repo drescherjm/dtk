@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -37,8 +37,8 @@ public:
     explicit dtkIterator(dtkAbstractIterator<T> *iterator = 0);
 
 public:
-     dtkIterator(const dtkIterator& o);
-     dtkIterator(dtkIterator&& o);
+    dtkIterator(const dtkIterator& o);
+    dtkIterator(dtkIterator&& o);
     ~dtkIterator(void);
 
 public:
@@ -69,7 +69,7 @@ public:
     dtkIterator  operator -  (qlonglong j) const;
 
 public:
-    operator T*() const;
+    operator T *() const;
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -79,7 +79,9 @@ public:
 template <typename T> class dtkAbstractIterator
 {
 public:
-    virtual ~dtkAbstractIterator(void) {;}
+    virtual ~dtkAbstractIterator(void) {
+        ;
+    }
 
 public:
     virtual dtkAbstractIterator *clone(void) const = 0;
@@ -101,7 +103,7 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 template <typename T> inline dtkIterator<T>::dtkIterator(dtkAbstractIterator<T> *iterator) : it(iterator)
@@ -199,7 +201,7 @@ template <typename T> inline dtkIterator<T>& dtkIterator<T>::operator -- (void)
 {
     it->rewind();
     return *this;
-    
+
 }
 
 template <typename T> inline dtkIterator<T> dtkIterator<T>::operator -- (int)
@@ -235,7 +237,7 @@ template <typename T> inline dtkIterator<T> dtkIterator<T>::operator - (qlonglon
     return o;
 }
 
-template <typename T> inline dtkIterator<T>::operator T*() const
+template <typename T> inline dtkIterator<T>::operator T *() const
 {
     return &(it->ref());
 }
@@ -256,13 +258,13 @@ public:
     bool greaterThan(const dtkAbstractIterator<T>& o) const;
 
 public:
-     T& ref(void) const;
+    T& ref(void) const;
 
 public:
-     void advance(void);
-     void  rewind(void);
-     void advance(qlonglong j);
-     void  rewind(qlonglong j);
+    void advance(void);
+    void  rewind(void);
+    void advance(qlonglong j);
+    void  rewind(qlonglong j);
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -337,33 +339,80 @@ public:
     dtkIteratorGeneric(const dtkIteratorGeneric& o) : it(o.it) {}
 
 public:
-    dtkIteratorGeneric& operator = (const dtkIteratorGeneric& o) { it = o.it; return *this; }
+    dtkIteratorGeneric& operator = (const dtkIteratorGeneric& o) {
+        it = o.it;
+        return *this;
+    }
 
 public:
-    bool operator == (const dtkIteratorGeneric& o) const { return it == o.it; }
-    bool operator != (const dtkIteratorGeneric& o) const { return it != o.it; }
-    bool operator <  (const dtkIteratorGeneric& o) const { return it <  o.it; }
-    bool operator <= (const dtkIteratorGeneric& o) const { return it <= o.it; }
-    bool operator >  (const dtkIteratorGeneric& o) const { return it >  o.it; }
-    bool operator >= (const dtkIteratorGeneric& o) const { return it >= o.it; }
+    bool operator == (const dtkIteratorGeneric& o) const {
+        return it == o.it;
+    }
+    bool operator != (const dtkIteratorGeneric& o) const {
+        return it != o.it;
+    }
+    bool operator <  (const dtkIteratorGeneric& o) const {
+        return it <  o.it;
+    }
+    bool operator <= (const dtkIteratorGeneric& o) const {
+        return it <= o.it;
+    }
+    bool operator >  (const dtkIteratorGeneric& o) const {
+        return it >  o.it;
+    }
+    bool operator >= (const dtkIteratorGeneric& o) const {
+        return it >= o.it;
+    }
 
 public:
-    reference operator *  (void) const { return *it; }
-    pointer   operator -> (void) const { return &(*it); }
-    reference operator [] (qlonglong j) const { return it[j]; }
+    reference operator *  (void) const {
+        return *it;
+    }
+    pointer   operator -> (void) const {
+        return &(*it);
+    }
+    reference operator [] (qlonglong j) const {
+        return it[j];
+    }
 
 public:
-    dtkIteratorGeneric& operator ++ (void) { ++it; return *this; }
-    dtkIteratorGeneric  operator ++ (int)  { dtkIteratorGeneric o(it); ++it; return o; }
-    dtkIteratorGeneric& operator -- (void) { --it; return *this; }
-    dtkIteratorGeneric  operator -- (int)  { dtkIteratorGeneric o(it); --it; return o; }
-    dtkIteratorGeneric& operator += (qlonglong j) { it += j; return *this; }
-    dtkIteratorGeneric& operator -= (qlonglong j) { it -= j; return *this; }
-    dtkIteratorGeneric  operator +  (qlonglong j) const { return dtkIteratorGeneric(it + j); }
-    dtkIteratorGeneric  operator -  (qlonglong j) const { return dtkIteratorGeneric(it - j); }
+    dtkIteratorGeneric& operator ++ (void) {
+        ++it;
+        return *this;
+    }
+    dtkIteratorGeneric  operator ++ (int)  {
+        dtkIteratorGeneric o(it);
+        ++it;
+        return o;
+    }
+    dtkIteratorGeneric& operator -- (void) {
+        --it;
+        return *this;
+    }
+    dtkIteratorGeneric  operator -- (int)  {
+        dtkIteratorGeneric o(it);
+        --it;
+        return o;
+    }
+    dtkIteratorGeneric& operator += (qlonglong j) {
+        it += j;
+        return *this;
+    }
+    dtkIteratorGeneric& operator -= (qlonglong j) {
+        it -= j;
+        return *this;
+    }
+    dtkIteratorGeneric  operator +  (qlonglong j) const {
+        return dtkIteratorGeneric(it + j);
+    }
+    dtkIteratorGeneric  operator -  (qlonglong j) const {
+        return dtkIteratorGeneric(it - j);
+    }
 
 public:
-    operator pointer () const { return &(*it); }
+    operator pointer () const {
+        return &(*it);
+    }
 };
-// 
+//
 // dtkIterator.h ends here

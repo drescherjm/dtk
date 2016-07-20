@@ -1,5 +1,5 @@
-/* dtkVrTrackerVrpn.h --- 
- * 
+/* dtkVrTrackerVrpn.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Feb 18 20:35:23 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 29
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -34,7 +34,7 @@ class DTKVRSUPPORT_EXPORT dtkVrTrackerVrpn : public dtkVrTracker
     Q_OBJECT
 
 public:
-     dtkVrTrackerVrpn(void);
+    dtkVrTrackerVrpn(void);
     ~dtkVrTrackerVrpn(void);
 
 public:
@@ -96,7 +96,7 @@ public:
     QString description(void) const;
 
 signals:
-     void buttonPressed(int button);
+    void buttonPressed(int button);
     void buttonReleased(int button);
 
 public slots:

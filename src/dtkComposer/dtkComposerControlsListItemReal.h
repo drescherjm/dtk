@@ -26,7 +26,7 @@ class dtkComposerControlsListItemReal: public dtkComposerControlsListItem
     Q_OBJECT
 
 public:
-             dtkComposerControlsListItemReal(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
+    dtkComposerControlsListItemReal(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
     virtual ~dtkComposerControlsListItemReal(void);
 
 public slots:

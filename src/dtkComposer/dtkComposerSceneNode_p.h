@@ -1,5 +1,5 @@
-/* dtkComposerSceneNode_p.h --- 
- * 
+/* dtkComposerSceneNode_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:15:01 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 33
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once

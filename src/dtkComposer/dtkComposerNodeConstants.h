@@ -1,16 +1,16 @@
-/* dtkComposerNodeConstants.h --- 
- * 
+/* dtkComposerNodeConstants.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:13 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -30,7 +30,7 @@ class dtkComposerNodePiPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodePi : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodePi(void);
+    dtkComposerNodePi(void);
     ~dtkComposerNodePi(void);
 
 public:
@@ -49,7 +49,7 @@ class dtkComposerNodeEPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeE : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeE(void);
+    dtkComposerNodeE(void);
     ~dtkComposerNodeE(void);
 
 public:
@@ -71,7 +71,7 @@ class dtkComposerNodeControllerRankPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeControllerRank : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeControllerRank(void);
+    dtkComposerNodeControllerRank(void);
     ~dtkComposerNodeControllerRank(void);
 
 public:
@@ -90,7 +90,7 @@ class dtkComposerNodeAnyTagPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeAnyTag : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeAnyTag(void);
+    dtkComposerNodeAnyTag(void);
     ~dtkComposerNodeAnyTag(void);
 
 public:
@@ -109,7 +109,7 @@ class dtkComposerNodeAnySourcePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeAnySource : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeAnySource(void);
+    dtkComposerNodeAnySource(void);
     ~dtkComposerNodeAnySource(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkAbstractContainerOrdered.h --- 
- * 
+/* dtkAbstractContainerOrdered.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 14:57:44 2012 (+0200)
@@ -9,14 +9,14 @@
  *     Update #: 50
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
- 
+
 #ifndef DTKABSTRACTCONTAINERORDERED_H
 #define DTKABSTRACTCONTAINERORDERED_H
 
@@ -30,8 +30,8 @@
 template <typename T> class dtkAbstractContainerOrdered : public dtkAbstractContainer<T>
 {
 public:
-     dtkAbstractContainerOrdered(void);
-     dtkAbstractContainerOrdered(const dtkAbstractContainerOrdered<T>& other);
+    dtkAbstractContainerOrdered(void);
+    dtkAbstractContainerOrdered(const dtkAbstractContainerOrdered<T>& other);
     ~dtkAbstractContainerOrdered(void);
 
 public:
@@ -46,12 +46,12 @@ public:
 
     virtual void prepend(const T& value) = 0;
     virtual void prepend(const dtkAbstractContainer<T>& values) = 0;
-    
+
     virtual void insert(qlonglong index, const T& value) = 0;
     virtual void insert(qlonglong from, const dtkAbstractContainer<T>& values) = 0;
     virtual void insert(qlonglong from, qlonglong step, const dtkAbstractContainer<T>& values) = 0;
     virtual void insert(qlonglong *indices, const dtkAbstractContainer<T>& values) = 0;
-    
+
     virtual void replace(qlonglong index, const T& value) = 0;
     virtual void replace(qlonglong from, const dtkAbstractContainer<T>& values) = 0;
     virtual void replace(qlonglong from, qlonglong step, const dtkAbstractContainer<T>& values) = 0;

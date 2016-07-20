@@ -1,5 +1,5 @@
-/* dtkDistributedService.h --- 
- * 
+/* dtkDistributedService.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 09:43:06 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 28
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVICE_H
@@ -35,13 +35,12 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServiceController
     Q_DECLARE_PRIVATE(dtkDistributedServiceController)
 
 public:
-    enum StartupType
-    {
-          AutoStartup = 0,
+    enum StartupType {
+        AutoStartup = 0,
         ManualStartup
     };
 
-             dtkDistributedServiceController(const QString &name);
+    dtkDistributedServiceController(const QString& name);
     virtual ~dtkDistributedServiceController(void);
 
     bool isInstalled(void) const;
@@ -52,10 +51,10 @@ public:
     StartupType startupType(void) const;
     QString serviceFilePath(void) const;
 
-    static bool   install(const QString &serviceFilePath, const QString &account = QString(), const QString &password = QString());
-           bool uninstall(void);
+    static bool   install(const QString& serviceFilePath, const QString& account = QString(), const QString& password = QString());
+    bool uninstall(void);
 
-    bool start(const QStringList &arguments);
+    bool start(const QStringList& arguments);
     bool start(void);
     bool stop(void);
     bool pause(void);
@@ -77,31 +76,29 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServiceBase
     Q_DECLARE_PRIVATE(dtkDistributedServiceBase)
 
 public:
-    enum MessageType
-    {
-	    Success = 0,
-              Error,
-            Warning,
+    enum MessageType {
+        Success = 0,
+        Error,
+        Warning,
         Information
     };
 
-    enum ServiceFlag
-    {
-                    Default = 0x00,
-             CanBeSuspended = 0x01,
-            CannotBeStopped = 0x02,
+    enum ServiceFlag {
+        Default = 0x00,
+        CanBeSuspended = 0x01,
+        CannotBeStopped = 0x02,
         NeedsStopOnShutdown = 0x04
     };
 
     Q_DECLARE_FLAGS(ServiceFlags, ServiceFlag)
 
-             dtkDistributedServiceBase(int argc, char **argv, const QString &name);
+    dtkDistributedServiceBase(int argc, char **argv, const QString& name);
     virtual ~dtkDistributedServiceBase();
 
     QString serviceName(void) const;
 
     QString serviceDescription(void) const;
-    void setServiceDescription(const QString &description);
+    void setServiceDescription(const QString& description);
 
     dtkDistributedServiceController::StartupType startupType(void) const;
     void setStartupType(dtkDistributedServiceController::StartupType startupType);
@@ -111,7 +108,7 @@ public:
 
     int exec(void);
 
-    void logMessage(const QString &message, MessageType type = Success, int id = 0, uint category = 0, const QByteArray &data = QByteArray());
+    void logMessage(const QString& message, MessageType type = Success, int id = 0, uint category = 0, const QByteArray& data = QByteArray());
 
     static dtkDistributedServiceBase *instance();
 
@@ -122,7 +119,7 @@ protected:
     virtual void resume(void);
     virtual void processCommand(int code);
 
-    virtual void createApplication(int &argc, char **argv) = 0;
+    virtual void createApplication(int& argc, char **argv) = 0;
     virtual int executeApplication(void) = 0;
 
 private:
@@ -130,23 +127,21 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 template <typename Application> class dtkDistributedService : public dtkDistributedServiceBase
 {
 public:
-     dtkDistributedService(int argc, char **argv, const QString &name) : dtkDistributedServiceBase(argc, argv, name), app(0) {}
+    dtkDistributedService(int argc, char **argv, const QString& name) : dtkDistributedServiceBase(argc, argv, name), app(0) {}
     ~dtkDistributedService(void) {}
 
 protected:
-    Application *application(void) const
-    {
+    Application *application(void) const {
         return app;
     }
 
-    virtual void createApplication(int &argc, char **argv)
-    {
+    virtual void createApplication(int& argc, char **argv) {
         app = new Application(argc, argv);
         QCoreApplication *a = app;
         Q_UNUSED(a);

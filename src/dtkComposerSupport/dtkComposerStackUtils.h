@@ -1,5 +1,5 @@
-/* dtkComposerStackUtils.h --- 
- * 
+/* dtkComposerStackUtils.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 20 16:07:10 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 38
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSTACKUTILS_H

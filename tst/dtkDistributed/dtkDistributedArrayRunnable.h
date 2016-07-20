@@ -21,8 +21,7 @@
 class testArrayCreateDestroy: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 21;
 
         dtkDistributedArray<qlonglong> *array = new dtkDistributedArray<qlonglong>(N);
@@ -54,6 +53,7 @@ public:
         delete array;
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
@@ -69,25 +69,28 @@ public:
 class testArrayAtFirstLast : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 67;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
         dtkDistributedArray<qlonglong> array(N, input);
 
-        for(int i = 0; i < comm->size(); ++i) {
+        for (int i = 0; i < comm->size(); ++i) {
             if (comm->wid() == i) {
                 QCOMPARE(array.first(), input[0]);
+
                 for (int j = 0; j < N; ++j) {
                     QCOMPARE(array.at(j), input[j]);
                 }
-                QCOMPARE(array.last(), input[N-1]);
+
+                QCOMPARE(array.last(), input[N - 1]);
             }
+
             comm->barrier();
         }
 
@@ -99,8 +102,7 @@ public:
 class testArrayFill : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 67;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
@@ -108,14 +110,16 @@ public:
 
         dtkDistributedArray<qlonglong> array(N, input);
 
-        for(int i = 0; i < comm->size(); ++i) {
+        for (int i = 0; i < comm->size(); ++i) {
             if (comm->wid() == i) {
                 for (int j = 0; j < N; ++j) {
                     QCOMPARE(array.at(j), input);
                 }
             }
+
             comm->barrier();
         }
+
         comm->barrier();
     }
 };
@@ -124,31 +128,34 @@ public:
 class testArraySwap : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong N = 4;
 
         qlonglong input = -1;
 
-        dtkDistributedArray<qlonglong> array(N *comm->size(), input);
+        dtkDistributedArray<qlonglong> array(N * comm->size(), input);
         comm->barrier();
         qDebug() << "compare and swap"  << N *comm->size();
         qlonglong index = 0;
-        for(int i = 0; i < N; ++i) {
-            qlonglong value = comm->wid()+42;
+
+        for (int i = 0; i < N; ++i) {
+            qlonglong value = comm->wid() + 42;
+
             while (!array.compareAndSwap(index, value, input) && index < N * comm->size()) {
                 index ++;
             }
-            QVERIFY(index < N *comm->size());
+
+            QVERIFY(index < N * comm->size());
             index ++;
         }
+
         comm->barrier();
 
         if (comm->wid() == 0) {
-            for(int i = 0; i < N *comm->size(); ++i) {
+            for (int i = 0; i < N * comm->size(); ++i) {
                 qDebug() << i << array.at(i);
-                QVERIFY(array.at(i)!= input);
+                QVERIFY(array.at(i) != input);
             }
         }
     }
@@ -157,23 +164,24 @@ public:
 class testArrayOperatorGet : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 107;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
         dtkDistributedArray<qlonglong> array(N, input);
 
-        for(int i = 0; i < comm->size(); ++i) {
+        for (int i = 0; i < comm->size(); ++i) {
             if (comm->wid() == i) {
                 for (int j = 0; j < N; ++j) {
                     QCOMPARE(array[j], input[j]);
                 }
             }
+
             comm->barrier();
         }
 
@@ -184,26 +192,28 @@ public:
 class testArraySetAt : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 107;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
         dtkDistributedArray<qlonglong> array(N);
 
-        for(int i = 0; i < comm->size(); ++i) {
+        for (int i = 0; i < comm->size(); ++i) {
             if (comm->wid() == i) {
                 for (int j = 0; j < N; ++j) {
                     array.setAt(j, input[j]);
                 }
+
                 for (int j = 0; j < N; ++j) {
                     QCOMPARE(array[j], input[j]);
                 }
             }
+
             comm->barrier();
         }
 
@@ -213,12 +223,14 @@ public:
         if (comm->wid() == 0) {
             array.setAt(0, input, N);
         }
-        for(int i = 0; i < comm->size(); ++i) {
+
+        for (int i = 0; i < comm->size(); ++i) {
             if (comm->wid() == i) {
                 for (int j = 0; j < N; ++j) {
                     QCOMPARE(array[j], input[j]);
                 }
             }
+
             comm->barrier();
         }
 
@@ -229,12 +241,12 @@ public:
 class testArrayIterator : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 16257;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
@@ -242,17 +254,19 @@ public:
 
         dtkDistributedArray<qlonglong>::iterator ite = array.begin();
         dtkDistributedArray<qlonglong>::iterator end = array.end();
-        for(int i = 0; ite != end; ++ite, ++i) {
+
+        for (int i = 0; ite != end; ++ite, ++i) {
             QCOMPARE(*ite, input[array.mapper()->localToGlobal(i, comm->wid())]);
         }
 
         dtkDistributedArray<qlonglong>::const_iterator cite = array.cbegin();
         dtkDistributedArray<qlonglong>::const_iterator cend = array.cend();
-        for(int i = 0; cite != cend; ++cite, ++i) {
+
+        for (int i = 0; cite != cend; ++cite, ++i) {
             QCOMPARE(*cite, input[array.mapper()->localToGlobal(i, comm->wid())]);
         }
 
-        for(int i = 0; ite != end; ++ite, ++i) {
+        for (int i = 0; ite != end; ++ite, ++i) {
             *ite += i;
             QCOMPARE(*ite, input[array.mapper()->localToGlobal(i, comm->wid())] + i);
         }
@@ -265,8 +279,7 @@ public:
 class testArrayRemap : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 200;
         qlonglong pu_size = dtkDistributed::app()->communicator()->size();
 
@@ -276,7 +289,8 @@ public:
         dtkDistributedMapper *mapper = new dtkDistributedMapper;
         mapper->initMap(N, pu_size);
         qlonglong offset = 0;
-        for(int i = 0; i < pu_size; ++i) {
+
+        for (int i = 0; i < pu_size; ++i) {
             mapper->setMap(offset, i);
             offset += (local_size + i);
         }
@@ -292,46 +306,49 @@ public:
 class testArrayCopyIntoArray : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 107;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
         dtkDistributedArray<qlonglong> array(N, input);
 
         if (comm->wid() == 0) {
-            for(int i = 0; i < comm->size(); ++i) {
+            for (int i = 0; i < comm->size(); ++i) {
                 qlonglong size = array.mapper()->count(i);
                 qlonglong fid = array.mapper()->firstIndex(i);
 
                 qlonglong *output = new qlonglong[size];
                 qint32 owner = array.mapper()->owner(fid);
                 array.copyIntoArray(fid, owner, output, size);
+
                 for (int j = 0; j < size; ++j) {
                     QCOMPARE(array[fid + j], output[j]);
                 }
+
                 delete[] output;
             }
         }
+
         comm->barrier();
-        
+
         delete[] input;
-        }
+    }
 };
 
 class testArrayToNavigator : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 107;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         qlonglong *input = new qlonglong[N];
+
         for (int i = 0; i < N; ++i)
             input[i] = i;
 
@@ -341,10 +358,12 @@ public:
             dtkDistributedArray<qlonglong>::navigator nav = array.toNavigator();
             dtkDistributedArray<qlonglong>::navigator::iterator ite = nav.begin();
             dtkDistributedArray<qlonglong>::navigator::iterator end = nav.end();
-            for(qlonglong i = 0; ite != end; ++i, ++ite) {
+
+            for (qlonglong i = 0; ite != end; ++i, ++ite) {
                 QCOMPARE(*ite, input[i]);
             }
         }
+
         comm->barrier();
 
         delete[] input;
@@ -357,7 +376,7 @@ public:
 
         dtkDistributedArray<qlonglong>::iterator ite = array.begin();
 
-        for(; nite != nend; ++nite, ++ite) {
+        for (; nite != nend; ++nite, ++ite) {
             QCOMPARE(*nite, *ite);
         }
     }

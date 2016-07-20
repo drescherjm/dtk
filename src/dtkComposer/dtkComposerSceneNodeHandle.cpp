@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -17,7 +17,7 @@
 #include "dtkComposerSceneNodeHandle.h"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerSceneNodeHandlePrivate
@@ -34,7 +34,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerSceneNodeHandle::dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent) : QGraphicsItem(parent), d(new dtkComposerSceneNodeHandlePrivate)
@@ -99,5 +99,5 @@ void dtkComposerSceneNodeHandle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     d->parent->layout();
 }
 
-// 
+//
 // dtkComposerSceneNodeHandle.cpp ends here

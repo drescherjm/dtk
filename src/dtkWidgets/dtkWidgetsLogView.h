@@ -31,7 +31,7 @@ class DTKWIDGETS_EXPORT dtkWidgetsLogView : public QWidget
     Q_OBJECT
 
 public:
-     dtkWidgetsLogView(QWidget *parent = 0);
+    dtkWidgetsLogView(QWidget *parent = 0);
     ~dtkWidgetsLogView(void);
 
 protected slots:

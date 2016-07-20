@@ -34,7 +34,7 @@ public:
     QSpinBox *spin_d;
 };
 
-dtkComposerControlsListItemInteger::dtkComposerControlsListItemInteger(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemIntegerPrivate)
+dtkComposerControlsListItemInteger::dtkComposerControlsListItemInteger(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemIntegerPrivate)
 {
     d->node = node;
 

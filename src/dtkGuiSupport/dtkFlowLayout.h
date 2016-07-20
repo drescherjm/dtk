@@ -1,5 +1,5 @@
-/* dtkFlowLayout.h --- 
- * 
+/* dtkFlowLayout.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 29 00:02:24 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 12
  */
 
-/* Commentary: 
+/* Commentary:
  * See credit at EOF.
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKFLOWLAYOUT_H
@@ -27,8 +27,8 @@
 class DTKGUISUPPORT_EXPORT dtkFlowLayout : public QLayout
 {
 public:
-     dtkFlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
-     dtkFlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
+    dtkFlowLayout(QWidget *parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
+    dtkFlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
     ~dtkFlowLayout();
 
     void addItem(QLayoutItem *item);
@@ -40,12 +40,12 @@ public:
     int count() const;
     QLayoutItem *itemAt(int index) const;
     QSize minimumSize() const;
-    void setGeometry(const QRect &rect);
+    void setGeometry(const QRect& rect);
     QSize sizeHint() const;
     QLayoutItem *takeAt(int index);
 
 private:
-    int doLayout(const QRect &rect, bool testOnly) const;
+    int doLayout(const QRect& rect, bool testOnly) const;
     int smartSpacing(QStyle::PixelMetric pm) const;
 
     QList<QLayoutItem *> itemList;

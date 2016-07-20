@@ -119,7 +119,7 @@ dtkWarn()  <<  "Warn messaage"; // will     output as dtkLog::Warn >= dtkLog::In
  * The output will be carried on depending on the dtkLogger instance log Level.
  */
 
-/*! 
+/*!
  * \relates dtkLog
  *
  * Convenience method to return the path to an \a application's log file

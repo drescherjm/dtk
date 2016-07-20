@@ -1,5 +1,5 @@
-/* dtkNotification.h --- 
- * 
+/* dtkNotification.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 21:39:44 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 22
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKNOTIFICATION_H

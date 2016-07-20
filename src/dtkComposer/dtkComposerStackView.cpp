@@ -1,5 +1,5 @@
-/* dtkComposerStackView.cpp --- 
- * 
+/* dtkComposerStackView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:14:21 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 70
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerStack.h"
@@ -49,6 +49,6 @@ dtkComposerStackView::~dtkComposerStackView(void)
 void dtkComposerStackView::setStack(dtkComposerStack *stack)
 {
     d->view->setStack(stack);
-    
+
     d->stack = stack;
 }

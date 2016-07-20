@@ -1,5 +1,5 @@
-/* dtkComposerNodeTrackerVrpn.h --- 
- * 
+/* dtkComposerNodeTrackerVrpn.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 16:50:56 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODETRACKERVRPN_H
@@ -28,7 +28,7 @@ class dtkComposerNodeTrackerVrpnPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeTrackerVrpn : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeTrackerVrpn(void);
+    dtkComposerNodeTrackerVrpn(void);
     ~dtkComposerNodeTrackerVrpn(void);
 
 public:
@@ -44,17 +44,17 @@ public:
     }
 
     inline QString inputLabelHint(int port) {
-        if(port == 0)
+        if (port == 0)
             return "url";
 
         return dtkComposerNodeLeaf::outputLabelHint(port);
     }
 
     inline QString outputLabelHint(int port) {
-        if(port == 0)
+        if (port == 0)
             return "head position";
 
-        if(port == 1)
+        if (port == 1)
             return "head orientation";
 
         return dtkComposerNodeLeaf::outputLabelHint(port);

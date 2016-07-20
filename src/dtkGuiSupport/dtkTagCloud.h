@@ -1,5 +1,5 @@
-/* dtkTagCloud.h --- 
- * 
+/* dtkTagCloud.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sun May  3 10:42:01 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 235
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKTAGCLOUD_H
@@ -33,11 +33,11 @@ class dtkTagPrivate;
 class DTKGUISUPPORT_EXPORT dtkTag
 {
 public:
-     dtkTag(void);
-     dtkTag(QString text, int instances);
-     dtkTag(QString text, int instances, QStringList items);
-     dtkTag(QString text, int instances, QStringList items, QString color);
-     dtkTag(const dtkTag& other);
+    dtkTag(void);
+    dtkTag(QString text, int instances);
+    dtkTag(QString text, int instances, QStringList items);
+    dtkTag(QString text, int instances, QStringList items, QString color);
+    dtkTag(const dtkTag& other);
     ~dtkTag(void);
 
     int count(void) const;
@@ -65,7 +65,7 @@ class DTKGUISUPPORT_EXPORT dtkTagCloud : public QTextBrowser
     Q_OBJECT
 
 public:
-     dtkTagCloud(QWidget *parent = 0);
+    dtkTagCloud(QWidget *parent = 0);
     ~dtkTagCloud(void);
 
     enum SortingType {
@@ -116,11 +116,11 @@ class dtkTagScopeTag : public QWidget
     Q_OBJECT
 
 public:
-     dtkTagScopeTag(QWidget *parent = 0);
+    dtkTagScopeTag(QWidget *parent = 0);
     ~dtkTagScopeTag(void);
 
 signals:
-     void clicked(void);
+    void clicked(void);
 
 public:
     QSize sizeHint(void) const;
@@ -158,7 +158,7 @@ class DTKGUISUPPORT_EXPORT dtkTagScope : public QFrame
     Q_OBJECT
 
 public:
-     dtkTagScope(QWidget *parent = 0);
+    dtkTagScope(QWidget *parent = 0);
     ~dtkTagScope(void);
 
     QSize sizeHint(void) const;
@@ -203,11 +203,11 @@ class dtkItemPrivate;
 class DTKGUISUPPORT_EXPORT dtkItem : public QListWidgetItem
 {
 public:
-     dtkItem(QString name);
-     dtkItem(QString name, QString description);
-     dtkItem(QString name, QString description, QStringList tags);
-     dtkItem(QString name, QString description, QStringList tags, QString kind, QString type);
-     dtkItem(const dtkItem& item);
+    dtkItem(QString name);
+    dtkItem(QString name, QString description);
+    dtkItem(QString name, QString description, QStringList tags);
+    dtkItem(QString name, QString description, QStringList tags, QString kind, QString type);
+    dtkItem(const dtkItem& item);
     ~dtkItem(void);
 
     QString name(void) const;
@@ -231,7 +231,7 @@ class DTKGUISUPPORT_EXPORT dtkItemList : public QListWidget
     Q_OBJECT
 
 public:
-     dtkItemList(QWidget *parent = 0);
+    dtkItemList(QWidget *parent = 0);
     ~dtkItemList(void);
 
     void addItem(QString name);
@@ -253,7 +253,7 @@ protected slots:
     void onItemClicked(QListWidgetItem *item);
 
 protected:
-     QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+    QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
     QStringList mimeTypes(void) const;
 
 protected:
@@ -276,7 +276,7 @@ class dtkItemDesc : public QFrame
     Q_OBJECT
 
 public:
-     dtkItemDesc(QWidget *parent = 0);
+    dtkItemDesc(QWidget *parent = 0);
     ~dtkItemDesc(void);
 
 signals:
@@ -336,16 +336,16 @@ protected:
 
 class DTKGUISUPPORT_EXPORT dtkItemBlueDelegate: public QStyledItemDelegate
 {
- public:
+public:
     dtkItemBlueDelegate(dtkItemList *list);
 
- public:
+public:
     virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
- public:
+public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
- protected:
+protected:
     dtkItemList *list;
 };
 
@@ -367,9 +367,9 @@ public:
         Bottom2Top,
         Automatic
     };
-    
+
 public:
-     dtkItemView(QWidget *parent = 0);
+    dtkItemView(QWidget *parent = 0);
     ~dtkItemView(void);
 
 public:
@@ -393,7 +393,7 @@ protected slots:
     void slideInNext(void);
     void slideInPrev(void);
     void slideInIdx(int idx, Direction direction = Automatic);
-    
+
 signals:
     void animationFinished(void);
 
@@ -418,7 +418,7 @@ class DTKGUISUPPORT_EXPORT dtkTagController : public QObject
     Q_OBJECT
 
 public:
-     dtkTagController(void);
+    dtkTagController(void);
     ~dtkTagController(void);
 
     void attach(dtkItemView *view);

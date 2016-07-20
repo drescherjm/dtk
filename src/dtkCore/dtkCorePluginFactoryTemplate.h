@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -31,8 +31,12 @@
 class dtkCorePluginFactoryTemplate : public QObject
 {
 public:
-     dtkCorePluginFactoryTemplate(void) : QObject() {;}
-    ~dtkCorePluginFactoryTemplate(void) {;}
+    dtkCorePluginFactoryTemplate(void) : QObject() {
+        ;
+    }
+    ~dtkCorePluginFactoryTemplate(void) {
+        ;
+    }
 
 public:
     template <typename FactoryType> FactoryType *pluginFactory(void);
@@ -66,10 +70,10 @@ template <typename FactoryType> inline FactoryType *dtkCorePluginFactoryTemplate
         FactoryType *factory = new FactoryType;
         m_factories.insert(factoryTypeName, factory);
     }
-    
+
     return static_cast<FactoryType *>(m_factories[factoryTypeName]);
 #endif
 }
 
-// 
+//
 // dtkCorePluginFactoryTemplate.h ends here

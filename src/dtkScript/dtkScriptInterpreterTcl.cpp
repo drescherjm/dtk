@@ -1,5 +1,5 @@
-/* dtkScriptInterpreterTcl.cpp --- 
- * 
+/* dtkScriptInterpreterTcl.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:19:44 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 316
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkScriptInterpreterTcl.h"
@@ -59,12 +59,17 @@ QString dtkScriptInterpreterTcl::interpret(const QString& command, int *stat)
 {
     int res = Tcl_Eval(d->interpreter, command.toUtf8().constData());
 
-    switch(res) {
+    switch (res) {
     case TCL_OK:       *stat = Status_Ok;       break;
+
     case TCL_ERROR:    *stat = Status_Error;    break;
+
     case TCL_RETURN:   *stat = Status_Return;   break;
-    case TCL_BREAK:    *stat = Status_Break;    break;	
+
+    case TCL_BREAK:    *stat = Status_Break;    break;
+
     case TCL_CONTINUE: *stat = Status_Continue; break;
+
     default: break;
     }
 
@@ -85,15 +90,15 @@ static  int InterpreterHandle _ANSI_ARGS_((ClientData instanceData, int directio
 
 static Tcl_ChannelType interpreterChannelType = {
     (char *)"interpreter",      // Type name.
-    NULL,	                // Always non-blocking.
-    InterpreterClose,		// Close proc.
-    InterpreterInput,		// Input proc.
-    InterpreterOutput,		// Output proc.
-    NULL,			// Seek proc.
-    NULL,			// Set option proc.
-    NULL,			// Get option proc.
-    InterpreterWatch,		// Watch for events on interpreter.
-    InterpreterHandle		// Get a handle from the device.
+    NULL,                   // Always non-blocking.
+    InterpreterClose,       // Close proc.
+    InterpreterInput,       // Input proc.
+    InterpreterOutput,      // Output proc.
+    NULL,           // Seek proc.
+    NULL,           // Set option proc.
+    NULL,           // Get option proc.
+    InterpreterWatch,       // Watch for events on interpreter.
+    InterpreterHandle       // Get a handle from the device.
 };
 
 #ifdef __WIN32__
@@ -116,16 +121,19 @@ static int ShouldUseInterpreterChannel(int type)
         mode = TCL_READABLE;
         bufMode = "line";
         break;
+
     case TCL_STDOUT:
         handleId = STD_OUTPUT_HANDLE;
         mode = TCL_WRITABLE;
         bufMode = "line";
         break;
+
     case TCL_STDERR:
         handleId = STD_ERROR_HANDLE;
         mode = TCL_WRITABLE;
         bufMode = "none";
         break;
+
     default:
         return 0;
         break;
@@ -136,10 +144,12 @@ static int ShouldUseInterpreterChannel(int type)
     if ((handle == INVALID_HANDLE_VALUE) || (handle == 0)) {
         return 1;
     }
+
     fileType = GetFileType(handle);
 
     if (fileType == FILE_TYPE_CHAR) {
         dcb.DCBlength = sizeof( DCB ) ;
+
         if (!GetConsoleMode(handle, &interpreterParams) && !GetCommState(handle, &dcb)) {
             return 1;
         }
@@ -170,34 +180,41 @@ void InitInterpreterChannels(Tcl_Interp *interp)
 
         if (ShouldUseInterpreterChannel(TCL_STDIN)) {
             interpreterChannel = Tcl_CreateChannel(&interpreterChannelType, "interpreter0", (ClientData) TCL_STDIN, TCL_READABLE);
+
             if (interpreterChannel != NULL) {
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-translation", "lf");
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-buffering", "none");
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-encoding", "utf-8");
             }
+
             Tcl_SetStdChannel(interpreterChannel, TCL_STDIN);
         }
 
         if (ShouldUseInterpreterChannel(TCL_STDOUT)) {
             interpreterChannel = Tcl_CreateChannel(&interpreterChannelType, "interpreter1", (ClientData) TCL_STDOUT, TCL_WRITABLE);
+
             if (interpreterChannel != NULL) {
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-translation", "lf");
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-buffering", "none");
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-encoding", "utf-8");
             }
+
             Tcl_SetStdChannel(interpreterChannel, TCL_STDOUT);
         }
 
         if (ShouldUseInterpreterChannel(TCL_STDERR)) {
             interpreterChannel = Tcl_CreateChannel(&interpreterChannelType, "interpreter2", (ClientData) TCL_STDERR, TCL_WRITABLE);
+
             if (interpreterChannel != NULL) {
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-translation", "lf");
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-buffering", "none");
                 Tcl_SetChannelOption(NULL, interpreterChannel, "-encoding", "utf-8");
             }
+
             Tcl_SetStdChannel(interpreterChannel, TCL_STDERR);
         }
     }
+
     Tcl_MutexUnlock(&interpreterMutex);
 }
 

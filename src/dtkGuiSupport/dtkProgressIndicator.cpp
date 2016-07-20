@@ -1,5 +1,5 @@
-/* dtkProgressIndicator.cpp --- 
- * 
+/* dtkProgressIndicator.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Mar 22 10:20:50 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 12
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkProgressIndicator.h"
@@ -29,7 +29,7 @@ public:
     QColor color;
 };
 
-dtkProgressIndicator::dtkProgressIndicator(QWidget* parent) : QWidget(parent), d(new dtkProgressIndicatorPrivate)
+dtkProgressIndicator::dtkProgressIndicator(QWidget *parent) : QWidget(parent), d(new dtkProgressIndicatorPrivate)
 {
     d->angle = 0;
     d->timerId = -1;
@@ -106,7 +106,7 @@ void dtkProgressIndicator::setColor(const QColor& color)
 
 QSize dtkProgressIndicator::sizeHint(void) const
 {
-    return QSize(20,20);
+    return QSize(20, 20);
 }
 
 int dtkProgressIndicator::heightForWidth(int w) const
@@ -118,7 +118,7 @@ void dtkProgressIndicator::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
 
-    d->angle = (d->angle+30)%360;
+    d->angle = (d->angle + 30) % 360;
 
     update();
 }
@@ -131,27 +131,26 @@ void dtkProgressIndicator::paintEvent(QPaintEvent *event)
         return;
 
     int width = qMin(this->width(), this->height());
-    
+
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
-    
-    int outerRadius = (width-1)*0.5;
-    int innerRadius = (width-1)*0.5*0.38;
+
+    int outerRadius = (width - 1) * 0.5;
+    int innerRadius = (width - 1) * 0.5 * 0.38;
 
     int capsuleHeight = outerRadius - innerRadius;
-    int capsuleWidth  = (width > 32 ) ? capsuleHeight *.23 : capsuleHeight *.35;
-    int capsuleRadius = capsuleWidth/2;
+    int capsuleWidth  = (width > 32 ) ? capsuleHeight * .23 : capsuleHeight * .35;
+    int capsuleRadius = capsuleWidth / 2;
 
-    for (int i=0; i<12; i++)
-    {
+    for (int i = 0; i < 12; i++) {
         QColor color = d->color;
-        color.setAlphaF(1.0f - (i/12.0f));
+        color.setAlphaF(1.0f - (i / 12.0f));
         p.setPen(Qt::NoPen);
-        p.setBrush(color);       
+        p.setBrush(color);
         p.save();
         p.translate(rect().center());
-        p.rotate(d->angle - i*30.0f);
-        p.drawRoundedRect(-capsuleWidth*0.5, -(innerRadius+capsuleHeight), capsuleWidth, capsuleHeight, capsuleRadius, capsuleRadius);
+        p.rotate(d->angle - i * 30.0f);
+        p.drawRoundedRect(-capsuleWidth * 0.5, -(innerRadius + capsuleHeight), capsuleWidth, capsuleHeight, capsuleRadius, capsuleRadius);
         p.restore();
     }
 }

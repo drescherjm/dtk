@@ -31,11 +31,11 @@ public:
 
     }
 
-    dtkSmartPointer(const dtkSmartPointer<T> &p) : d(p.d) {
+    dtkSmartPointer(const dtkSmartPointer<T>& p) : d(p.d) {
         this->retain();
     }
 
-    template <typename TR> dtkSmartPointer(const dtkSmartPointer<TR> &p) : d(dynamic_cast<T*>( p.operator->())) {
+    template <typename TR> dtkSmartPointer(const dtkSmartPointer<TR>& p) : d(dynamic_cast<T *>( p.operator->())) {
         this->retain();
     }
 
@@ -47,7 +47,7 @@ public:
         this->release();
     }
 
-    T* operator->(void) const {
+    T *operator->(void) const {
         return d;
     }
 
@@ -67,46 +67,46 @@ public:
     }
 
     template <typename TR> bool operator==(TR r) const {
-        return (d == static_cast<const T*>(r));
+        return (d == static_cast<const T *>(r));
     }
 
-    template <typename TR> bool operator==(const dtkSmartPointer<TR> &r) const {
-        return (d == static_cast<const T*>(r.constData()));
+    template <typename TR> bool operator==(const dtkSmartPointer<TR>& r) const {
+        return (d == static_cast<const T *>(r.constData()));
     }
 
     template <typename TR> bool operator != (TR r) const {
-        return (d != static_cast<const T*>(r));
+        return (d != static_cast<const T *>(r));
     }
 
-    template <typename TR> bool operator != (const dtkSmartPointer<TR> &r) const {
-        return (d != static_cast<const T*>(r.constData()));
+    template <typename TR> bool operator != (const dtkSmartPointer<TR>& r) const {
+        return (d != static_cast<const T *>(r.constData()));
     }
 
-    bool operator==(const dtkSmartPointer &r) const {
+    bool operator==(const dtkSmartPointer& r) const {
         return d == r.d;
     }
-    
-    bool operator!=(const dtkSmartPointer &r) const {
+
+    bool operator!=(const dtkSmartPointer& r) const {
         return d != r.d;
     }
-    
-    bool operator<(const dtkSmartPointer &r) const {
+
+    bool operator<(const dtkSmartPointer& r) const {
         return d < r.d;
     }
 
-    bool operator<=(const dtkSmartPointer &r) const {
+    bool operator<=(const dtkSmartPointer& r) const {
         return d <= r.d;
     }
-    
-    bool operator>(const dtkSmartPointer &r) const {
+
+    bool operator>(const dtkSmartPointer& r) const {
         return d > r.d;
     }
-    
-    bool operator>=(const dtkSmartPointer &r) const {
+
+    bool operator>=(const dtkSmartPointer& r) const {
         return d >= r.d;
     }
 
-    T* data(void) {
+    T *data(void) {
         return d;
     }
 
@@ -122,29 +122,29 @@ public:
         return *d;
     }
 
-    dtkSmartPointer& operator=(const dtkSmartPointer &r) {
+    dtkSmartPointer& operator=(const dtkSmartPointer& r) {
         return this->operator=(r.d);
     }
 
-    template <typename TR> dtkSmartPointer& operator=(const dtkSmartPointer<TR> &r) {
-        return this->operator=(dynamic_cast<T*>(r.operator->()));
+    template <typename TR> dtkSmartPointer& operator=(const dtkSmartPointer<TR>& r) {
+        return this->operator=(dynamic_cast<T *>(r.operator->()));
     }
 
     dtkSmartPointer& operator=(T *r) {
         if (d != r) {
             T *tmp = d;
             d = r;
-            
+
             this->retain();
 
             if (tmp)
                 tmp->release();
         }
-        
+
         return *this;
     }
 
-    void swap(dtkSmartPointer &other) {
+    void swap(dtkSmartPointer& other) {
         T *tmp = d;
         d = other.d;
         other.d = tmp;
@@ -154,6 +154,7 @@ public:
         if (d != r) {
             T *tmp = d;
             d = r;
+
             if (tmp)
                 tmp->release();
         }
@@ -183,7 +184,8 @@ private:
 };
 
 
-template <class T> inline uint qHash(const dtkSmartPointer<T> &key) {
+template <class T> inline uint qHash(const dtkSmartPointer<T>& key)
+{
     return qHash(key.constData());
 }
 

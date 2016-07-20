@@ -74,16 +74,19 @@ dtkComposerNodeMatrixSquareRealExtractor::~dtkComposerNodeMatrixSquareRealExtrac
 
 QString dtkComposerNodeMatrixSquareRealExtractor::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "matrix";
         break;
+
     case 1:
         return "row index";
         break;
+
     case 2:
         return "col index";
         break;
+
     default:
         break;
     }
@@ -93,10 +96,11 @@ QString dtkComposerNodeMatrixSquareRealExtractor::inputLabelHint(int port)
 
 QString dtkComposerNodeMatrixSquareRealExtractor::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "value";
         break;
+
     default:
         break;
     }

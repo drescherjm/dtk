@@ -28,17 +28,17 @@ class dtkCpuidPrivate;
 class DTKCORESUPPORT_EXPORT dtkCpuid
 {
 public:
-             dtkCpuid(void);
+    dtkCpuid(void);
     virtual ~dtkCpuid(void);
 
 public:
-  QString vendor(void);
+    QString vendor(void);
 
 private:
-  dtkCpuidPrivate *d;
+    dtkCpuidPrivate *d;
 
 private:
-  void load(unsigned i);
+    void load(unsigned i);
 };
 
 #endif /* DTKCPUID_H */

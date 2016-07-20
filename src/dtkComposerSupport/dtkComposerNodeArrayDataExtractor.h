@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayDataExtractor.h --- 
- * 
+/* dtkComposerNodeArrayDataExtractor.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 12:05:59 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 1
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEARRAYDATAEXTRACTOR_H
@@ -32,7 +32,7 @@ class dtkComposerNodeArrayDataExtractorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataExtractor : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayDataExtractor(void);
+    dtkComposerNodeArrayDataExtractor(void);
     ~dtkComposerNodeArrayDataExtractor(void);
 
 public:
@@ -64,7 +64,7 @@ class dtkComposerNodeArrayDataExtractorSubArrayPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataExtractorSubArray : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayDataExtractorSubArray(void);
+    dtkComposerNodeArrayDataExtractorSubArray(void);
     ~dtkComposerNodeArrayDataExtractorSubArray(void);
 
 public:
@@ -96,7 +96,7 @@ class dtkComposerNodeArrayDataExtractorArrayPartPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayDataExtractorArrayPart : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayDataExtractorArrayPart(void);
+    dtkComposerNodeArrayDataExtractorArrayPart(void);
     ~dtkComposerNodeArrayDataExtractorArrayPart(void);
 
 public:

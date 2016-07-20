@@ -35,7 +35,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedSocket : public QTcpSocket
     Q_OBJECT
 
 public:
-             dtkDistributedSocket( QObject *parent = 0);
+    dtkDistributedSocket( QObject *parent = 0);
     virtual ~dtkDistributedSocket(void);
 
 public:

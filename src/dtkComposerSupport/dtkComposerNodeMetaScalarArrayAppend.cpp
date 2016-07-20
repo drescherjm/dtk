@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaScalarArrayAppend.cpp --- 
- * 
+/* dtkComposerNodeMetaScalarArrayAppend.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Jul 13 16:06:48 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 41
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeMetaScalarArrayAppend.h"
@@ -57,7 +57,7 @@ dtkComposerNodeMetaScalarArrayAppend::dtkComposerNodeMetaScalarArrayAppend(void)
 dtkComposerNodeMetaScalarArrayAppend::~dtkComposerNodeMetaScalarArrayAppend(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 

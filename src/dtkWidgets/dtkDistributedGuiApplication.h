@@ -27,7 +27,7 @@ class dtkDistributedApplicationPrivate;
 class DTKWIDGETS_EXPORT dtkDistributedGuiApplication: public QApplication
 {
 public:
-             dtkDistributedGuiApplication(int &argc, char **argv);
+    dtkDistributedGuiApplication(int& argc, char **argv);
     virtual ~dtkDistributedGuiApplication(void);
 
 public:
@@ -43,12 +43,12 @@ public:
     QCommandLineParser *parser(void);
 
 public:
-    static dtkDistributedGuiApplication *create(int &argc, char *argv[])
-    {
+    static dtkDistributedGuiApplication *create(int& argc, char *argv[]) {
         for (int i = 0; i < argc; i++)
-            if(!qstrcmp(argv[i], "-nw") ||!qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window")|| !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help")|| !qstrcmp(argv[i], "--version")) {
+            if (!qstrcmp(argv[i], "-nw") || !qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window") || !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help") || !qstrcmp(argv[i], "--version")) {
                 qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("minimal"));
             }
+
         return new dtkDistributedGuiApplication(argc, argv);
     }
 

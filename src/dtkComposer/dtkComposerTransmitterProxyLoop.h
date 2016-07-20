@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -26,7 +26,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxyLoop : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterProxyLoop(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterProxyLoop(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterProxyLoop(void);
 
 public:
@@ -64,7 +64,9 @@ public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 
 private:
-    void setTypeList(const TypeList& list) {;}
+    void setTypeList(const TypeList& list) {
+        ;
+    }
 
 private:
     dtkComposerTransmitter *m_source;
@@ -77,5 +79,5 @@ private:
 
 #include "dtkComposerTransmitterProxyLoop.tpp"
 
-// 
+//
 // dtkComposerTransmitterProxyLoop.h ends here

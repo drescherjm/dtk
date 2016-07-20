@@ -1,5 +1,5 @@
-/* dtkContainerVectorWrapper.h --- 
- * 
+/* dtkContainerVectorWrapper.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:29:47 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 25
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCONTAINERVECTORWRAPPER_H
@@ -35,9 +35,9 @@
 template <typename T> class dtkContainerVectorWrapper : public dtkAbstractContainerWrapper
 {
 public:
-     dtkContainerVectorWrapper(void);
-     dtkContainerVectorWrapper(dtkContainerVector<T> *vector);
-     dtkContainerVectorWrapper(const dtkContainerVectorWrapper<T>& other);
+    dtkContainerVectorWrapper(void);
+    dtkContainerVectorWrapper(dtkContainerVector<T> *vector);
+    dtkContainerVectorWrapper(const dtkContainerVectorWrapper<T>& other);
     ~dtkContainerVectorWrapper(void);
 
 public:
@@ -79,15 +79,15 @@ public:
 
     qlonglong   count(void) const;
     qlonglong indexOf(const QVariant& data, qlonglong from = 0) const;
-     
-    QVariant    at(qlonglong index) const; 
+
+    QVariant    at(qlonglong index) const;
 
 public:
     bool operator != (const dtkContainerVectorWrapper<T>& other) const;
     bool operator == (const dtkContainerVectorWrapper<T>& other) const;
 
 public:
-    bool isEqual(const dtkAbstractObject& other) const;    
+    bool isEqual(const dtkAbstractObject& other) const;
 
 private:
     dtkContainerVector<T> *m_vector;

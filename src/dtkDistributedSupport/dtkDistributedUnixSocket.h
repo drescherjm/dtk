@@ -1,5 +1,5 @@
-/* dtkDistributedUnixSocket.h --- 
- * 
+/* dtkDistributedUnixSocket.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 11:05:53 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDUNIXSOCKET_H
@@ -30,7 +30,7 @@ public:
     dtkDistributedUnixSocket(QObject *parent = 0);
 
 public:
-    bool connectTo(const QString &path);
+    bool connectTo(const QString& path);
 };
 
 #endif

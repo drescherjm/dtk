@@ -1,5 +1,5 @@
-/* dtkComposerSceneView.cpp --- 
- * 
+/* dtkComposerSceneView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Feb  5 15:25:21 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 188
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerScene.h"
@@ -52,7 +52,7 @@ void dtkComposerSceneView::setScene(dtkComposerScene *scene)
 void dtkComposerSceneView::reset(void)
 {
     QTreeView::reset();
-    
+
     this->expandAll();
 }
 
@@ -69,12 +69,12 @@ void dtkComposerSceneView::selectionChanged(const QItemSelection& selected, cons
 
     d->scene->clearSelection();
 
-    if(selected.indexes().count())
-        if(QGraphicsItem *item = static_cast<QGraphicsItem *>(selected.indexes().first().internalPointer()))
+    if (selected.indexes().count())
+        if (QGraphicsItem *item = static_cast<QGraphicsItem *>(selected.indexes().first().internalPointer()))
             item->setSelected(true);
 
-    if(deselected.indexes().count())
-        if(QGraphicsItem *item = static_cast<QGraphicsItem *>(deselected.indexes().first().internalPointer()))
+    if (deselected.indexes().count())
+        if (QGraphicsItem *item = static_cast<QGraphicsItem *>(deselected.indexes().first().internalPointer()))
             item->setSelected(false);
 
     d->scene->blockSignals(false);

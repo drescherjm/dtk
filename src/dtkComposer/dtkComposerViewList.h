@@ -23,7 +23,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewList : public QListWidget
     Q_OBJECT
 
 public:
-     dtkComposerViewList(QWidget *parent = 0);
+    dtkComposerViewList(QWidget *parent = 0);
     ~dtkComposerViewList(void);
 
 public slots:

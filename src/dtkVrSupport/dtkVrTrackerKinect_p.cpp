@@ -41,9 +41,9 @@
     }
 
 #define KNCT_CHECK_ERRORS(rc, errors, what)     \
-    if (rc == XN_STATUS_NO_NODE_PRESENT) {	\
+    if (rc == XN_STATUS_NO_NODE_PRESENT) {  \
         XnChar strError[1024];                  \
-        errors.ToString(strError, 1024);	\
+        errors.ToString(strError, 1024);    \
         printf("%s\n", strError);               \
     }
 
@@ -57,7 +57,7 @@ class dtkVrTrackerKinectPrivateThread : public QThread
 public:
     enum SessionState {
         IN_SESSION,
-	NOT_IN_SESSION,
+        NOT_IN_SESSION,
         QUICK_REFOCUS
     };
 
@@ -66,15 +66,15 @@ public:
     void stop(void);
 
 public:
-    static void XN_CALLBACK_TYPE SessionStarting(const XnPoint3D& ptPosition, void* UserCxt);
-    static void XN_CALLBACK_TYPE SessionEnding(void* UserCxt);
-    static void XN_CALLBACK_TYPE FocusProgress(const XnChar* strFocus, const XnPoint3D& ptPosition, XnFloat fProgress, void* UserCxt);
+    static void XN_CALLBACK_TYPE SessionStarting(const XnPoint3D& ptPosition, void *UserCxt);
+    static void XN_CALLBACK_TYPE SessionEnding(void *UserCxt);
+    static void XN_CALLBACK_TYPE FocusProgress(const XnChar *strFocus, const XnPoint3D& ptPosition, XnFloat fProgress, void *UserCxt);
 
-    static void XN_CALLBACK_TYPE NewUser(xn::UserGenerator& generator, XnUserID user, void* cookie);
-    static void XN_CALLBACK_TYPE LostUser(xn::UserGenerator& generator, XnUserID user, void* cookie);
-    static void XN_CALLBACK_TYPE CalibrationStarted(xn::SkeletonCapability& skeleton, XnUserID user, void* cxt);
-    static void XN_CALLBACK_TYPE CalibrationEnded(xn::SkeletonCapability& skeleton, XnUserID user, XnBool bSuccess, void* cxt);
-    static void XN_CALLBACK_TYPE PoseDetected(xn::PoseDetectionCapability& pose, const XnChar* strPose, XnUserID user, void* cxt);
+    static void XN_CALLBACK_TYPE NewUser(xn::UserGenerator& generator, XnUserID user, void *cookie);
+    static void XN_CALLBACK_TYPE LostUser(xn::UserGenerator& generator, XnUserID user, void *cookie);
+    static void XN_CALLBACK_TYPE CalibrationStarted(xn::SkeletonCapability& skeleton, XnUserID user, void *cxt);
+    static void XN_CALLBACK_TYPE CalibrationEnded(xn::SkeletonCapability& skeleton, XnUserID user, XnBool bSuccess, void *cxt);
+    static void XN_CALLBACK_TYPE PoseDetected(xn::PoseDetectionCapability& pose, const XnChar *strPose, XnUserID user, void *cxt);
 
 public:
     bool assignUser(XnUserID user);
@@ -107,16 +107,16 @@ public:
     dtkVrTrackerKinectPrivate *q;
 
 public: // -- head
-      dtkVector3D<double> position;
+    dtkVector3D<double> position;
     dtkQuaternion<double> orientation;
 
 public: // -- right hand
-      dtkVector3D<double> hand_position;
+    dtkVector3D<double> hand_position;
 };
 
 void dtkVrTrackerKinectPrivateThread::run(void)
 {
-    while(this->running) {
+    while (this->running) {
         this->context.WaitAndUpdateAll();
         this->session_manager->Update(&this->context);
 
@@ -163,6 +163,7 @@ void dtkVrTrackerKinectPrivateThread::run(void)
 
             XnPoint3D com;
             this->users_generator.GetCoM(this->user_id, com);
+
             if (com.Z == 0) {
                 this->user_id = 0;
                 this->findUser();
@@ -180,31 +181,30 @@ void dtkVrTrackerKinectPrivateThread::stop(void)
 
 // /////////////////////////////////////////////////////////////////
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::SessionStarting(const XnPoint3D& ptPosition, void* UserCxt)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::SessionStarting(const XnPoint3D& ptPosition, void *UserCxt)
 {
     printf("Session start: (%f,%f,%f)\n", ptPosition.X, ptPosition.Y, ptPosition.Z);
 
     self->session_state = IN_SESSION;
 }
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::SessionEnding(void* UserCxt)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::SessionEnding(void *UserCxt)
 {
     printf("Session end\n");
 
     self->session_state = NOT_IN_SESSION;
 }
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::FocusProgress(const XnChar* strFocus, const XnPoint3D& ptPosition, XnFloat fProgress, void* UserCxt)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::FocusProgress(const XnChar *strFocus, const XnPoint3D& ptPosition, XnFloat fProgress, void *UserCxt)
 {
     printf("Focus progress: %s @(%f,%f,%f): %f\n", strFocus, ptPosition.X, ptPosition.Y, ptPosition.Z, fProgress);
 }
 
 // /////////////////////////////////////////////////////////////////
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::NewUser(xn::UserGenerator& generator, XnUserID user, void* cookie)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::NewUser(xn::UserGenerator& generator, XnUserID user, void *cookie)
 {
-    if (!self->calibrated)
-    {
+    if (!self->calibrated) {
         printf("Look for pose\n");
         self->users_generator.GetPoseDetectionCap().StartPoseDetection("Psi", user);
         return;
@@ -213,30 +213,27 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::NewUser(xn::UserGenerator
     self->assignUser(user);
 }
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::LostUser(xn::UserGenerator& generator, XnUserID user, void* cookie)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::LostUser(xn::UserGenerator& generator, XnUserID user, void *cookie)
 {
     printf("Lost user %d\n", user);
 
-    if (self->user_id == user)
-    {
+    if (self->user_id == user) {
         self->user_id = 0;
         self->findUser();
     }
 }
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationStarted(xn::SkeletonCapability& skeleton, XnUserID user, void* cxt)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationStarted(xn::SkeletonCapability& skeleton, XnUserID user, void *cxt)
 {
     qDebug() << Q_FUNC_INFO;
 }
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationEnded(xn::SkeletonCapability& skeleton, XnUserID user, XnBool bSuccess, void* cxt)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationEnded(xn::SkeletonCapability& skeleton, XnUserID user, XnBool bSuccess, void *cxt)
 {
-    printf("Calibration done [%d] %ssuccessfully\n", user, bSuccess?"":"un");
+    printf("Calibration done [%d] %ssuccessfully\n", user, bSuccess ? "" : "un");
 
-    if (bSuccess)
-    {
-        if (!self->calibrated)
-        {
+    if (bSuccess) {
+        if (!self->calibrated) {
             self->users_generator.GetSkeletonCap().SaveCalibrationData(user, 0);
             self->user_id = user;
             self->users_generator.GetSkeletonCap().StartTracking(user);
@@ -253,7 +250,7 @@ void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::CalibrationEnded(xn::Skel
     }
 }
 
-void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::PoseDetected(xn::PoseDetectionCapability& pose, const XnChar* strPose, XnUserID user, void* cxt)
+void XN_CALLBACK_TYPE dtkVrTrackerKinectPrivateThread::PoseDetected(xn::PoseDetectionCapability& pose, const XnChar *strPose, XnUserID user, void *cxt)
 {
     printf("Found pose \"%s\" for user %d\n", strPose, user);
 
@@ -367,8 +364,7 @@ void dtkVrTrackerKinectPrivate::initialize(void)
     KNCT_CHECK_RC(rc, "Find user generator");
 
     if (!d->users_generator.IsCapabilitySupported(XN_CAPABILITY_SKELETON) ||
-        !d->users_generator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION))
-    {
+            !d->users_generator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION)) {
         printf("User generator doesn't support either skeleton or pose detection.\n");
     }
 
@@ -434,17 +430,20 @@ open:
     XnStatus res;
 
     res = xnUSBEnumerateDevices(0x045E /* VendorID */, 0x02B0 /*ProductID*/, &paths, &count);
+
     if (res != XN_STATUS_OK) {
         xnPrintError(res, "xnUSBEnumerateDevices failed");
     }
 
     res = xnUSBOpenDeviceByPath(paths[0], &m_dev);
+
     if (res != XN_STATUS_OK) {
         xnPrintError(res, "xnUSBOpenDeviceByPath failed");
     }
 
     res = xnUSBSendControl(m_dev, XN_USB_CONTROL_TYPE_VENDOR, 0x06, 0x01, 0x00, NULL,
                            0, 0);
+
     if (res != XN_STATUS_OK) {
         xnPrintError(res, "xnUSBSendControl 2 failed");
         goto close;
@@ -452,6 +451,7 @@ open:
 
 rotate:
     res = xnUSBSendControl(m_dev, XN_USB_CONTROL_TYPE_VENDOR, 0x31, angle, 0x00, NULL, 0, 0);
+
     if (res != XN_STATUS_OK) {
         xnPrintError(res, "xnUSBSendControl failed");
     }

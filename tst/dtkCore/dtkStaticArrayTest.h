@@ -17,7 +17,7 @@ class dtkStaticArrayTestCase : public QObject
     Q_OBJECT
 
 public:
-     dtkStaticArrayTestCase(void);
+    dtkStaticArrayTestCase(void);
     ~dtkStaticArrayTestCase(void);
 
 private slots:

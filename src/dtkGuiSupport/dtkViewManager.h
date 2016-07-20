@@ -26,7 +26,7 @@ class DTKGUISUPPORT_EXPORT dtkViewManager : public QFrame
     Q_OBJECT
 
 public:
-     dtkViewManager(QWidget *parent = 0);
+    dtkViewManager(QWidget *parent = 0);
     ~dtkViewManager(void);
 
 public:

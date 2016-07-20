@@ -28,8 +28,7 @@
 // Preallocated data area for quickly building small arrays on the stack without malloc overhead
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkMathArrayAlignedPrealloc
-{
+template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkMathArrayAlignedPrealloc {
     char data[sizeof(T) * PreallocSize];
     qint64 q_for_alignment_1;
     double q_for_alignment_2;
@@ -44,24 +43,23 @@ template <typename T, qlonglong PreallocSize> class dtkMathArrayPrealloc
 public:
     dtkMathArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
 
-    inline T *prealloc(void)
-    {
-	return reinterpret_cast<T *>(m_prealloc.data);
+    inline T *prealloc(void) {
+        return reinterpret_cast<T *>(m_prealloc.data);
     }
 
-    inline bool isPrealloc(const T *start) const
-    {
-	return start == reinterpret_cast<const T *>(m_prealloc.data);
+    inline bool isPrealloc(const T *start) const {
+        return start == reinterpret_cast<const T *>(m_prealloc.data);
     }
 };
 
 template <typename T> class dtkMathArrayPrealloc<T, 0>
 {
 public:
-    inline T *prealloc(void) { return 0; }
+    inline T *prealloc(void) {
+        return 0;
+    }
 
-    inline bool isPrealloc(const T *start) const
-    {
+    inline bool isPrealloc(const T *start) const {
         Q_UNUSED(start);
         return false;
     }
@@ -80,11 +78,11 @@ public:
     };
 
 public:
-             dtkMathArray(void);
+    dtkMathArray(void);
     explicit dtkMathArray(qlonglong arraySize);
-             dtkMathArray(qlonglong size, const T& value);
-             dtkMathArray(const T *values, qlonglong size);
-             dtkMathArray(const dtkMathArray<T, PreallocSize>& other);
+    dtkMathArray(qlonglong size, const T& value);
+    dtkMathArray(const T *values, qlonglong size);
+    dtkMathArray(const dtkMathArray<T, PreallocSize>& other);
 
 public:
     ~dtkMathArray(void);
@@ -109,7 +107,7 @@ public:
 
     const T&         at(qlonglong index) const;
     const T& operator[](qlonglong index) const;
-          T& operator[](qlonglong index);
+    T& operator[](qlonglong index);
 
     T value(qlonglong index) const;
     T value(qlonglong index, const T& defaultValue) const;
@@ -135,8 +133,12 @@ public:
 
     void remove(qlonglong index);
     void remove(qlonglong index, qlonglong countToRemove);
-    void removeFirst() { remove(0); }
-    void removeLast() { remove(size() - 1); }
+    void removeFirst() {
+        remove(0);
+    }
+    void removeLast() {
+        remove(size() - 1);
+    }
 
     iterator erase(iterator begin, iterator end);
     iterator erase(iterator pos);
@@ -161,7 +163,7 @@ public:
 
     void setRawData(const T *raw_data, qlonglong size, RawDataType data_type = ReadOnly);
 
-          T *rawData(void);
+    T *rawData(void);
     const T *rawData(void) const;
     const T *constRawData(void) const;
 
@@ -186,33 +188,80 @@ public:
     typedef ptrdiff_t difference_type;
     typedef qlonglong size_type;
 
-    inline iterator begin(void) { return rawData(); }
-    inline const_iterator begin(void) const { return constRawData(); }
-    inline const_iterator constBegin(void) const { return constRawData(); }
-    inline iterator end(void) { return rawData() + size(); }
-    inline const_iterator end(void) const { return constRawData() + size(); }
-    inline const_iterator constEnd(void) const { return constRawData() + size(); }
+    inline iterator begin(void) {
+        return rawData();
+    }
+    inline const_iterator begin(void) const {
+        return constRawData();
+    }
+    inline const_iterator constBegin(void) const {
+        return constRawData();
+    }
+    inline iterator end(void) {
+        return rawData() + size();
+    }
+    inline const_iterator end(void) const {
+        return constRawData() + size();
+    }
+    inline const_iterator constEnd(void) const {
+        return constRawData() + size();
+    }
 
-    inline T& first(void) { Q_ASSERT(!isEmpty()); return *begin(); }
-    inline const T& first(void) const { Q_ASSERT(!isEmpty()); return *begin(); }
-    inline T& last(void) { Q_ASSERT(!isEmpty()); return *(end()-1); }
-    inline const T& last(void) const { Q_ASSERT(!isEmpty()); return *(end()-1); }
-    inline bool startsWith(const T& t) const { return !isEmpty() && first() == t; }
-    inline bool endsWith(const T& t) const { return !isEmpty() && last() == t; }
+    inline T& first(void) {
+        Q_ASSERT(!isEmpty());
+        return *begin();
+    }
+    inline const T& first(void) const {
+        Q_ASSERT(!isEmpty());
+        return *begin();
+    }
+    inline T& last(void) {
+        Q_ASSERT(!isEmpty());
+        return *(end() - 1);
+    }
+    inline const T& last(void) const {
+        Q_ASSERT(!isEmpty());
+        return *(end() - 1);
+    }
+    inline bool startsWith(const T& t) const {
+        return !isEmpty() && first() == t;
+    }
+    inline bool endsWith(const T& t) const {
+        return !isEmpty() && last() == t;
+    }
 
-    inline void push_back(const T& newValue) { append(newValue); }
-    inline void push_front(const T& newValue) { prepend(newValue); }
-    inline void pop_back(void) { Q_ASSERT(!isEmpty()); removeLast(); }
-    inline void pop_front(void) { Q_ASSERT(!isEmpty()); removeFirst(); }
-    inline bool empty(void) const { return isEmpty(); }
-    inline reference front(void) { return first(); }
-    inline const_reference front(void) const { return first(); }
-    inline reference back(void) { return last(); }
-    inline const_reference back(void) const { return last(); }
+    inline void push_back(const T& newValue) {
+        append(newValue);
+    }
+    inline void push_front(const T& newValue) {
+        prepend(newValue);
+    }
+    inline void pop_back(void) {
+        Q_ASSERT(!isEmpty());
+        removeLast();
+    }
+    inline void pop_front(void) {
+        Q_ASSERT(!isEmpty());
+        removeFirst();
+    }
+    inline bool empty(void) const {
+        return isEmpty();
+    }
+    inline reference front(void) {
+        return first();
+    }
+    inline const_reference front(void) const {
+        return first();
+    }
+    inline reference back(void) {
+        return last();
+    }
+    inline const_reference back(void) const {
+        return last();
+    }
 
 private:
-    struct Data
-    {
+    struct Data {
         QBasicAtomicInt ref;
         qlonglong capacity;
         T array[1];
@@ -239,8 +288,7 @@ private:
     mutable T *m_limit;
     Data *m_data;
 
-    inline void initPrealloc(void)
-    {
+    inline void initPrealloc(void) {
         m_end = m_start = dtkMathArrayPrealloc<T, PreallocSize>::prealloc();
         m_limit = m_start + PreallocSize;
     }

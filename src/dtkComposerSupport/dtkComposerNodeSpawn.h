@@ -37,7 +37,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeSpawn : public dtkComposerNodeRem
     Q_OBJECT
 
 public:
-             dtkComposerNodeSpawn(void);
+    dtkComposerNodeSpawn(void);
     virtual ~dtkComposerNodeSpawn(void);
 
 public:

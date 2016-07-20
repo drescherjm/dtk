@@ -25,7 +25,7 @@ class dtkDistributedResourceManagerLocal : public dtkDistributedResourceManager
 
 
 public:
-             dtkDistributedResourceManagerLocal(void);
+    dtkDistributedResourceManagerLocal(void);
     virtual ~dtkDistributedResourceManagerLocal(void);
 
 public slots:

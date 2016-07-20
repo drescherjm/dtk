@@ -84,7 +84,7 @@ dtkComposerTransmitter *dtkComposerNode::removeEmitter(int index)
 
 void dtkComposerNode::appendReceiver(dtkComposerTransmitter *receiver)
 {
-    if(!d->receivers.contains(receiver)) {
+    if (!d->receivers.contains(receiver)) {
         d->receivers << receiver;
         receiver->setParentNode(this);
     }

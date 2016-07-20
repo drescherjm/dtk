@@ -37,7 +37,7 @@ public:
 
 dtkAbstractProcessFactory *dtkAbstractProcessFactory::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkAbstractProcessFactory;
 
     return s_instance;
@@ -45,7 +45,7 @@ dtkAbstractProcessFactory *dtkAbstractProcessFactory::instance(void)
 
 dtkAbstractProcess *dtkAbstractProcessFactory::create(const QString& type)
 {
-    if(!d->creators.contains(type))
+    if (!d->creators.contains(type))
         return NULL;
 
     dtkAbstractProcess *process = d->creators[type]();
@@ -68,7 +68,7 @@ dtkSmartPointer<dtkAbstractProcess> dtkAbstractProcessFactory::createSmartPointe
 
 bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbstractProcessCreator func)
 {
-    if(!d->creators.contains(type)) {
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         d->processCount[type] = 0;
         return true;
@@ -79,7 +79,7 @@ bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbst
 
 bool dtkAbstractProcessFactory::registerProcessType(const QString& type, dtkAbstractProcessCreator func, const QString& interface)
 {
-    if(!d->creators.contains(type)) {
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         d->processCount[type] = 0;
         d->interfaces.insertMulti(interface, type);
@@ -113,7 +113,7 @@ QStringList dtkAbstractProcessFactory::implementations(const QString& interface)
 {
     QStringList implementations;
 
-    if(d->interfaces.keys().contains(interface))
+    if (d->interfaces.keys().contains(interface))
         implementations << d->interfaces.values(interface);
     else
         dtkWarn() << "There is no available implementation of " << interface ;

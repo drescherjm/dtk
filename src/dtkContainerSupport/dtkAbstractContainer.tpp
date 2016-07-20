@@ -1,5 +1,5 @@
-/* dtkAbstractContainer.tpp --- 
- * 
+/* dtkAbstractContainer.tpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 14:32:11 2012 (+0200)
@@ -9,19 +9,19 @@
  *     Update #: 35
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTCONTAINER_TPP
 #define DTKABSTRACTCONTAINER_TPP
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 template <> DTKCONTAINERSUPPORT_EXPORT QString dtkAbstractContainer<double>::description(void) const;

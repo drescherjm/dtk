@@ -1,5 +1,5 @@
-/* dtkAbstractViewNavigator_p.h --- 
- * 
+/* dtkAbstractViewNavigator_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 14:34:26 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 2
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTVIEWNAVIGATOR_P_H
@@ -39,9 +39,9 @@ class DTKCORESUPPORT_EXPORT dtkAbstractViewNavigatorPrivate : public dtkAbstract
 public:
     dtkAbstractViewNavigatorPrivate(dtkAbstractViewNavigator *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractViewNavigatorPrivate(const dtkAbstractViewNavigatorPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                                    enabled(other.enabled),
-                                                                                    data(other.data),
-                                                                                    view(other.view) {}
+        enabled(other.enabled),
+        data(other.data),
+        view(other.view) {}
 
 public:
     virtual ~dtkAbstractViewNavigatorPrivate(void) {}

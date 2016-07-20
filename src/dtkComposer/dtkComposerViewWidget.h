@@ -23,7 +23,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewWidget : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposerViewWidget(void);
+    dtkComposerViewWidget(void);
     ~dtkComposerViewWidget(void);
 
 signals:

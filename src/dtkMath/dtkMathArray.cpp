@@ -1,11 +1,11 @@
 /* dtkMathArray.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 14:59:07 2013 (+0200)
  */
 
 /* Commentary:
- * 
+ *
  *  For credits, see EOF
  */
 
@@ -994,15 +994,20 @@ qlonglong dtkMathArrayAllocMore(qlonglong alloc, qlonglong extra, qlonglong size
     qlonglong nalloc;
     alloc += extra;
     alloc *= sizeOfT;
+
     // don't do anything if the loop will overflow signed int.
-    if (alloc >= maximum/2)
+    if (alloc >= maximum / 2)
         return maximum / sizeOfT;
+
     nalloc = (alloc < page) ? 64 : page;
+
     while (nalloc < alloc) {
         if (nalloc <= 0)
             return maximum / sizeOfT;
+
         nalloc *= 2;
     }
+
     return nalloc / sizeOfT;
 }
 

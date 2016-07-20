@@ -21,7 +21,9 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedRequest
 {
 
 public:
-    virtual ~dtkDistributedRequest(void) {;}
+    virtual ~dtkDistributedRequest(void) {
+        ;
+    }
 
 };
 

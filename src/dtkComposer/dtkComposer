@@ -16,6 +16,7 @@
 #include "dtkComposerCompass.h"
 #include "dtkComposerControls.h"
 #include "dtkComposerControlsDelegate.h"
+#include "dtkComposerDefaultExtensions.h"
 #include "dtkComposerEvaluator.h"
 #include "dtkComposerEvaluatorProcess.h"
 #include "dtkComposerEvaluatorSlave.h"
@@ -83,8 +84,11 @@
 #include "dtkComposerTransmitterProxyVariant.h"
 #include "dtkComposerTransmitterReceiver.h"
 #include "dtkComposerView.h"
+#include "dtkComposerViewController.h"
+#include "dtkComposerViewManager.h"
 #include "dtkComposerReader.h"
 #include "dtkComposerReaderNoScene.h"
+#include "dtkComposerWidget.h"
 #include "dtkComposerWriter.h"
 
 //

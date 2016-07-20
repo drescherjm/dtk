@@ -1,5 +1,5 @@
-/* dtkDistributedUnixSocket.cpp --- 
- * 
+/* dtkDistributedUnixSocket.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 11:07:40 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 4
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedUnixSocket.h"
@@ -35,10 +35,11 @@ dtkDistributedUnixSocket::dtkDistributedUnixSocket(QObject *parent) : QTcpSocket
 
 }
 
-bool dtkDistributedUnixSocket::connectTo(const QString &path)
+bool dtkDistributedUnixSocket::connectTo(const QString& path)
 {
     bool ret = false;
     int sock = ::socket(PF_UNIX, SOCK_STREAM, 0);
+
     if (sock != -1) {
         struct sockaddr_un addr;
         ::memset(&addr, 0, sizeof(struct sockaddr_un));
@@ -47,6 +48,7 @@ bool dtkDistributedUnixSocket::connectTo(const QString &path)
         pathlen = qMin(pathlen, sizeof(addr.sun_path));
         ::memcpy(addr.sun_path, path.toLatin1().constData(), pathlen);
         int err = ::connect(sock, (struct sockaddr *)&addr, SUN_LEN(&addr));
+
         if (err != -1) {
             setSocketDescriptor(sock);
             ret = true;
@@ -54,6 +56,7 @@ bool dtkDistributedUnixSocket::connectTo(const QString &path)
             ::close(sock);
         }
     }
+
     return ret;
 }
 

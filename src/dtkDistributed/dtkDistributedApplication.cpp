@@ -79,7 +79,7 @@ The \a argc and \a argv arguments are processed by the application, and made ava
 Warning: The data referred to by \a argc and \a argv must stay valid for the entire lifetime of the dtkCoreApplication object. In addition, argc must be greater than zero and argv must contain at least one valid character string.
 */
 
-dtkDistributedApplication::dtkDistributedApplication(int &argc, char **argv): QCoreApplication(argc, argv)
+dtkDistributedApplication::dtkDistributedApplication(int& argc, char **argv): QCoreApplication(argc, argv)
 {
 
     d = new dtkDistributedApplicationPrivate;
@@ -126,7 +126,7 @@ void dtkDistributedApplication::exec(QRunnable *task)
 
 */
 
-void dtkDistributedApplication::spawn(QMap<QString,QString> options)
+void dtkDistributedApplication::spawn(QMap<QString, QString> options)
 {
     d->spawn();
 }
@@ -160,7 +160,7 @@ QCommandLineParser *dtkDistributedApplication::parser(void)
 
 dtkDistributedPolicy *dtkDistributedApplication::policy(void)
 {
-     return &(d->policy);
+    return &(d->policy);
 }
 
 /*! \fn dtkDistributedCommunicator *dtkDistributedApplication::communicator(void)

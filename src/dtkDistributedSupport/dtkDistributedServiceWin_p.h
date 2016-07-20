@@ -1,5 +1,5 @@
-/* dtkDistributedServiceWin_p.h --- 
- * 
+/* dtkDistributedServiceWin_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:45:37 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 7
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVICEWIN_P_H

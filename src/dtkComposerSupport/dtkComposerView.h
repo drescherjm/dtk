@@ -31,7 +31,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerView : public QGraphicsView
     Q_OBJECT
 
 public:
-             dtkComposerView(QWidget *parent = 0);
+    dtkComposerView(QWidget *parent = 0);
     virtual ~dtkComposerView(void);
 
 public:

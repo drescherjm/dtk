@@ -22,7 +22,7 @@ class DTKWIDGETS_EXPORT dtkWidgetsTagCloudList : public QListWidget
     Q_OBJECT
 
 public:
-     dtkWidgetsTagCloudList(QWidget *parent = 0);
+    dtkWidgetsTagCloudList(QWidget *parent = 0);
     ~dtkWidgetsTagCloudList(void);
 
     void addItem(QString name);
@@ -43,7 +43,7 @@ protected slots:
     void onItemClicked(QListWidgetItem *item);
 
 protected:
-     QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+    QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
     QStringList mimeTypes(void) const;
 
 protected:

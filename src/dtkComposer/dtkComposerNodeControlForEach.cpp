@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -135,7 +135,7 @@ dtkComposerNodeLeaf *dtkComposerNodeControlForEach::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->body_block);
 
     return NULL;
@@ -143,21 +143,24 @@ dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 
 void dtkComposerNodeControlForEach::setInputs(void)
 {
-    for(dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
+    for (dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
         t->disableLoopMode();
     }
+
     d->first_iteration = true;
 }
 
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
     if (d->first_iteration) {
-        for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+        for (dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
             t->twin()->enableLoopMode();
         }
+
         d->first_iteration = false;
     }
-    for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+
+    for (dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
         t->twin()->setVariant(t->variant());
     }
 }
@@ -193,5 +196,5 @@ void dtkComposerNodeControlForEach::end(void)
     delete d->container;
 }
 
-// 
+//
 // dtkComposerNodeControlForEach.cpp ends here

@@ -1,5 +1,5 @@
-/* dtkDistributedControllerStatusModelItem.cpp --- 
- * 
+/* dtkDistributedControllerStatusModelItem.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 16:46:29 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 45
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedControllerStatusModelItem.h"
@@ -29,7 +29,7 @@ public:
     dtkDistributedControllerStatusModelItem *parentItem;
 };
 
-dtkDistributedControllerStatusModelItem::dtkDistributedControllerStatusModelItem(const QList<QVariant> &data, dtkDistributedControllerStatusModelItem *parent) : d(new dtkDistributedControllerStatusModelItemPrivate)
+dtkDistributedControllerStatusModelItem::dtkDistributedControllerStatusModelItem(const QList<QVariant>& data, dtkDistributedControllerStatusModelItem *parent) : d(new dtkDistributedControllerStatusModelItemPrivate)
 {
     d->parentItem = parent;
     d->itemData = data;
@@ -85,7 +85,7 @@ dtkDistributedControllerStatusModelItem *dtkDistributedControllerStatusModelItem
 int dtkDistributedControllerStatusModelItem::row(void) const
 {
     if (d->parentItem)
-        return d->parentItem->d->childItems.indexOf(const_cast<dtkDistributedControllerStatusModelItem*>(this));
+        return d->parentItem->d->childItems.indexOf(const_cast<dtkDistributedControllerStatusModelItem *>(this));
 
     return 0;
 }

@@ -73,7 +73,7 @@ void dtkComposerNodeFactoryView::setFactory(dtkComposerNodeFactory *factory)
     QHash<QString, dtkComposerNodeMetaData *>::const_iterator cit = meta_datas.begin();
     QHash<QString, dtkComposerNodeMetaData *>::const_iterator cend = meta_datas.end();
 
-    for(; cit != cend; ++cit) {
+    for (; cit != cend; ++cit) {
         dtkComposerNodeMetaData *md = *cit;
         d->controller->addItem(md->title(), md->description(), md->tags(), "node", md->type());
     }
@@ -83,7 +83,7 @@ void dtkComposerNodeFactoryView::addNote(void)
 {
     dtkComposerNodeMetaData *note_md = new dtkComposerNodeMetaData;
 
-    if(note_md->setFromFile(":dtkComposer/dtkComposerNote.json")) {
+    if (note_md->setFromFile(":dtkComposer/dtkComposerNote.json")) {
         d->controller->addItem(note_md->title(), note_md->description(), note_md->tags(), "note", note_md->type());
     }
 
@@ -108,12 +108,12 @@ dtkWidgetsTagCloudScope *dtkComposerNodeFactoryView::scopeView(void) const
 
 void dtkComposerNodeFactoryView::onShowNodeDocumentation(dtkComposerSceneNode *node)
 {
-    if(!node)
+    if (!node)
         return;
 
-    dtkComposerNode* wrapee = node->wrapee();
+    dtkComposerNode *wrapee = node->wrapee();
 
-    if(!wrapee)
+    if (!wrapee)
         return;
 
     if (wrapee->nodeMetaData())

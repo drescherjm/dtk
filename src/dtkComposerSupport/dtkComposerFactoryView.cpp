@@ -1,5 +1,5 @@
-/* dtkComposerFactoryView.cpp --- 
- * 
+/* dtkComposerFactoryView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 13:24:50 2012 (+0100)
@@ -86,7 +86,7 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 {
     d->factory = factory;
 
-    foreach(QString node, factory->nodes())
+    foreach (QString node, factory->nodes())
         d->controller->addItem(node, factory->descriptions().value(node), factory->tags().value(node), "node", factory->types().value(node));
 
     d->controller->addItem("Note", "<p>Notes help to identify and annotate some parts of a composition.</p>", QStringList() << "note", "note", "");
@@ -94,12 +94,11 @@ void dtkComposerFactoryView::setFactory(dtkComposerFactory *factory)
 
 void dtkComposerFactoryView::showTagCloud(const bool show)
 {
-    if(show) {
+    if (show) {
         d->cloud->blockSignals(false);
         d->cloud->setEnabled(true);
         d->cloud->setVisible(true);
-    }
-    else {
+    } else {
         d->cloud->blockSignals(true);
         d->cloud->setEnabled(false);
         d->cloud->setVisible(false);
@@ -120,23 +119,27 @@ void dtkComposerFactoryView::setDark(void)
 
 void dtkComposerFactoryView::onShowNodeDocumentation(dtkComposerSceneNode *node)
 {
-    if(!node)
+    if (!node)
         return;
 
-    dtkComposerNode* wrapee = node->wrapee();
-    if(!wrapee)
+    dtkComposerNode *wrapee = node->wrapee();
+
+    if (!wrapee)
         return;
 
     QString node_type = wrapee->type();
-    if(node_type.isEmpty())
+
+    if (node_type.isEmpty())
         return;
 
     QString key = d->factory->types().key(node_type);
-    if(key.isEmpty())
+
+    if (key.isEmpty())
         return;
 
     QString description = d->factory->descriptions().value(key);
-    if(description.isEmpty())
+
+    if (description.isEmpty())
         return;
 
     d->view->onItemClicked(description);

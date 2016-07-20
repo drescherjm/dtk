@@ -1,17 +1,17 @@
-/* dtkComposerNodeControlFor.cpp --- 
- * 
+/* dtkComposerNodeControlFor.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
  * Version: $Id$
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeControlForEach.h"
@@ -35,7 +35,7 @@
 
 class dtkComposerNodeControlForEachPrivate
 {
-public:    
+public:
     dtkComposerNodeProxy header;
     dtkComposerNodeProxy footer;
 
@@ -65,7 +65,7 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->header.removeEmitter(0);
     d->header.removeReceiver(0);
     d->header.appendReceiver(&(d->header_rcv));
-    d->header.setInputLabelHint("container", 0); 
+    d->header.setInputLabelHint("container", 0);
     d->header.setAsHeader(true);
 
     d->footer.removeReceiver(0);
@@ -73,13 +73,13 @@ dtkComposerNodeControlForEach::dtkComposerNodeControlForEach(void) : dtkComposer
     d->footer.setAsFooter(true);
 
     d->body_block.setTitleHint("Body");
-    d->body_block.setInputLabelHint("container", 0); 
+    d->body_block.setInputLabelHint("container", 0);
     d->body_block.appendReceiver(&(d->block_container));
-    d->body_block.setInputLabelHint("size", 1); 
+    d->body_block.setInputLabelHint("size", 1);
     d->body_block.appendReceiver(&(d->block_size));
-    d->body_block.setInputLabelHint("index", 2); 
+    d->body_block.setInputLabelHint("index", 2);
     d->body_block.appendReceiver(&(d->block_index));
-    d->body_block.setInputLabelHint("item", 3); 
+    d->body_block.setInputLabelHint("item", 3);
     d->body_block.appendReceiver(&(d->block_item));
 
     d->block_container.appendPrevious(&d->header_rcv);
@@ -118,7 +118,7 @@ dtkComposerNodeLeaf *dtkComposerNodeControlForEach::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlForEach::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->body_block);
 
     return NULL;
@@ -137,7 +137,7 @@ void dtkComposerNodeControlForEach::setInputs(void)
     d->counter = 0;
     d->size = d->container->count();
 
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    foreach (dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
         v->setDataFrom(v);
         v->setTwinned(true);
@@ -146,7 +146,7 @@ void dtkComposerNodeControlForEach::setInputs(void)
 
 void dtkComposerNodeControlForEach::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+    foreach (dtkComposerTransmitterVariant *v, this->outputTwins()) {
         v->twin()->setDataFrom(v);
     }
 

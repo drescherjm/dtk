@@ -20,7 +20,7 @@ class DTKWIDGETS_EXPORT dtkWidgetsTagCloudScopeItem : public QWidget
     Q_OBJECT
 
 public:
-     dtkWidgetsTagCloudScopeItem(QWidget *parent = 0);
+    dtkWidgetsTagCloudScopeItem(QWidget *parent = 0);
     ~dtkWidgetsTagCloudScopeItem(void);
 
 signals:

@@ -33,11 +33,17 @@ QString dtkLogger::levelString(void) const
 {
     switch (d->level) {
     case dtkLog::Trace: return "trace";
+
     case dtkLog::Debug: return "debug";
+
     case dtkLog::Info:  return "info";
+
     case dtkLog::Warn:  return "warn";
+
     case dtkLog::Error: return "error";
+
     case dtkLog::Fatal: return "fatal";
+
     default:            return "info";
     };
 }
@@ -82,7 +88,7 @@ void dtkLogger::detachConsole(void)
 
 void dtkLogger::attachFile(const QString& path, qlonglong max_file_size)
 {
-    if(d->files.contains(path))
+    if (d->files.contains(path))
         return;
 
     d->files[path] = dtkLogDestinationPointer(new dtkLogDestinationFile(path, max_file_size));
@@ -92,7 +98,7 @@ void dtkLogger::attachFile(const QString& path, qlonglong max_file_size)
 
 void dtkLogger::detachFile(const QString& path)
 {
-    if(!d->files.contains(path))
+    if (!d->files.contains(path))
         return;
 
     d->destinations.removeOne(d->files[path]);
@@ -102,7 +108,7 @@ void dtkLogger::detachFile(const QString& path)
 
 void dtkLogger::attachModel(dtkLogModel *model)
 {
-    if(d->models.contains(model))
+    if (d->models.contains(model))
         return;
 
     d->models[model] = dtkLogDestinationPointer(new dtkLogDestinationModel(model));
@@ -112,7 +118,7 @@ void dtkLogger::attachModel(dtkLogModel *model)
 
 void dtkLogger::detachModel(dtkLogModel *model)
 {
-    if(!d->models.contains(model))
+    if (!d->models.contains(model))
         return;
 
     d->destinations.removeOne(d->models[model]);
@@ -132,6 +138,7 @@ dtkLogger::~dtkLogger(void)
 {
     if (d->cerr_stream)
         delete d->cerr_stream;
+
     if (d->cout_stream)
         delete d->cout_stream;
 
@@ -142,16 +149,16 @@ dtkLogger::~dtkLogger(void)
 
 void dtkLogger::write(const QString& message)
 {
-    for(int i = 0; i < d->destinations.count(); i++)
+    for (int i = 0; i < d->destinations.count(); i++)
         d->destinations.at(i)->write(message);
 }
 
 void dtkLogger::write(const QString& message, dtkLog::Level level)
 {
-    for(int i = 0; i < d->destinations.count(); i++) {
+    for (int i = 0; i < d->destinations.count(); i++) {
 
-        if(d->levels.keys().contains(d->destinations.at(i))) {
-            if(level > d->levels[d->destinations.at(i)]) {
+        if (d->levels.keys().contains(d->destinations.at(i))) {
+            if (level > d->levels[d->destinations.at(i)]) {
                 d->destinations.at(i)->write(message);
             }
         } else {
@@ -160,11 +167,13 @@ void dtkLogger::write(const QString& message, dtkLog::Level level)
     }
 }
 
-void dtkLogger::redirectCout(dtkLog::Level level) {
+void dtkLogger::redirectCout(dtkLog::Level level)
+{
     d->cout_stream =  new redirectStream(std::cout, level);
 }
 
-void dtkLogger::redirectCerr(dtkLog::Level level) {
+void dtkLogger::redirectCerr(dtkLog::Level level)
+{
     d->cerr_stream =  new redirectStream(std::cerr, level);
 }
 

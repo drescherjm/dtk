@@ -1,5 +1,5 @@
-/* dtkComposerSceneNote.h --- 
- * 
+/* dtkComposerSceneNote.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:35:30 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 25
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENOTE_H
@@ -34,7 +34,7 @@ class dtkComposerSceneNotePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNote : public QGraphicsItem
 {
 public:
-     dtkComposerSceneNote(void);
+    dtkComposerSceneNote(void);
     ~dtkComposerSceneNote(void);
 
     QString text(void) const;

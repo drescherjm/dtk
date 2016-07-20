@@ -80,7 +80,7 @@ The argc and argv arguments are processed by the application, and made available
 Warning: The data referred to by argc and argv must stay valid for the entire lifetime of the dtkCoreApplication object. In addition, argc must be greater than zero and argv must contain at least one valid character string.
 */
 
-dtkCoreApplication::dtkCoreApplication(int &argc, char **argv): QCoreApplication(argc, argv)
+dtkCoreApplication::dtkCoreApplication(int& argc, char **argv): QCoreApplication(argc, argv)
 {
     d = new dtkApplicationPrivate;
     d->setApplication(this);

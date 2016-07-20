@@ -1,5 +1,5 @@
-/* dtkComposerNodeVector3DOperatorUnary.h --- 
- * 
+/* dtkComposerNodeVector3DOperatorUnary.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 15:57:47 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 12
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEVECTOR3DOPERATORUNARY_H
@@ -32,7 +32,7 @@ class dtkComposerNodeVector3DOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVector3DOperatorUnary(void);
+    dtkComposerNodeVector3DOperatorUnary(void);
     ~dtkComposerNodeVector3DOperatorUnary(void);
 
     inline QString inputLabelHint(int) {
@@ -56,7 +56,7 @@ class dtkComposerNodeVector3DOperatorUnaryScalarPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVector3DOperatorUnaryScalar(void);
+    dtkComposerNodeVector3DOperatorUnaryScalar(void);
     ~dtkComposerNodeVector3DOperatorUnaryScalar(void);
 
     inline QString inputLabelHint(int port) {

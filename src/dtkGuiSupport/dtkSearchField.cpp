@@ -1,5 +1,5 @@
-/* dtkSearchField.cpp --- 
- * 
+/* dtkSearchField.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Mar 21 23:45:02 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkSearchField.h"
@@ -80,9 +80,10 @@ dtkSearchField::~dtkSearchField(void)
     d = NULL;
 }
 
-void dtkSearchField::setText(const QString &text)
+void dtkSearchField::setText(const QString& text)
 {
     Q_ASSERT(d && d->clearButton && d->lineEdit);
+
     if (!(d && d->clearButton && d->lineEdit))
         return;
 
@@ -92,9 +93,10 @@ void dtkSearchField::setText(const QString &text)
         d->lineEdit->setText(text);
 }
 
-void dtkSearchField::setPlaceholderText(const QString &text)
+void dtkSearchField::setPlaceholderText(const QString& text)
 {
     Q_ASSERT(d && d->lineEdit);
+
     if (!(d && d->lineEdit))
         return;
 
@@ -106,6 +108,7 @@ void dtkSearchField::setPlaceholderText(const QString &text)
 void dtkSearchField::clear()
 {
     Q_ASSERT(d && d->lineEdit);
+
     if (!(d && d->lineEdit))
         return;
 
@@ -115,6 +118,7 @@ void dtkSearchField::clear()
 QString dtkSearchField::text() const
 {
     Q_ASSERT(d && d->lineEdit);
+
     if (!(d && d->lineEdit))
         return QString();
 
@@ -124,11 +128,12 @@ QString dtkSearchField::text() const
 void dtkSearchField::resizeEvent(QResizeEvent *resizeEvent)
 {
     Q_ASSERT(d && d->clearButton && d->lineEdit);
+
     if (!(d && d->clearButton && d->lineEdit))
         return;
 
     QWidget::resizeEvent(resizeEvent);
     const int x = width() - d->clearButtonPaddedWidth();
-    const int y = (height() - d->clearButton->height())/2;
+    const int y = (height() - d->clearButton->height()) / 2;
     d->clearButton->move(x, y);
 }

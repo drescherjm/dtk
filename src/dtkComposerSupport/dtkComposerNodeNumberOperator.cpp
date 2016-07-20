@@ -202,11 +202,11 @@ void dtkComposerNodeNumberAlmosteq::run(void)
 
     } else {
 
-            double lhs = *(d->receiver_lhs.data<double>());
-            double rhs = *(d->receiver_rhs.data<double>());
-            double eps = *(d->receiver_eps.data<double>());
+        double lhs = *(d->receiver_lhs.data<double>());
+        double rhs = *(d->receiver_rhs.data<double>());
+        double eps = *(d->receiver_eps.data<double>());
 
-            d->value = dtkAlmostEqualUlpsSimple(lhs, rhs, eps);
+        d->value = dtkAlmostEqualUlpsSimple(lhs, rhs, eps);
     }
 }
 
@@ -262,11 +262,11 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
 
     } else {
 
-            double lhs = *(d->receiver_lhs.data<double>());
-            double rhs = *(d->receiver_rhs.data<double>());
-            double eps = *(d->receiver_eps.data<double>());
+        double lhs = *(d->receiver_lhs.data<double>());
+        double rhs = *(d->receiver_rhs.data<double>());
+        double eps = *(d->receiver_eps.data<double>());
 
-            d->value = !dtkAlmostEqualUlpsSimple(lhs, rhs, eps);
+        d->value = !dtkAlmostEqualUlpsSimple(lhs, rhs, eps);
     }
 }
 
@@ -276,19 +276,21 @@ void dtkComposerNodeNumberNotalmosteq::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 {
-    switch(d->receiver.dataType()) {
+    switch (d->receiver.dataType()) {
     case QMetaType::LongLong: {
         qlonglong *value = d->receiver.data<qlonglong>();
         ++(*value);
         d->emitter.setData<qlonglong>(value);
         break;
     }
+
     case QMetaType::Double: {
         double *value = d->receiver.data<double>();
         ++(*value);
         d->emitter.setData<double>(value);
         break;
     }
+
     default:
         dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
@@ -301,19 +303,21 @@ void dtkComposerNodeNumberOperatorUnaryIncr::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 {
-    switch(d->receiver.dataType()) {
+    switch (d->receiver.dataType()) {
     case QMetaType::LongLong: {
         qlonglong *value = d->receiver.data<qlonglong>();
         --(*value);
         d->emitter.setData<qlonglong>(value);
         break;
     }
+
     case QMetaType::Double: {
         double *value = d->receiver.data<double>();
         --(*value);
         d->emitter.setData<double>(value);
         break;
     }
+
     default:
         dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
@@ -326,19 +330,21 @@ void dtkComposerNodeNumberOperatorUnaryDecr::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 {
-    switch(d->receiver.dataType()) {
+    switch (d->receiver.dataType()) {
     case QMetaType::LongLong: {
         qlonglong *value = d->receiver.data<qlonglong>();
         *value = qSqrt(*value);
         d->emitter.setData<qlonglong>(value);
         break;
     }
+
     case QMetaType::Double: {
         double *value = d->receiver.data<double>();
         *value = qSqrt(*value);
         d->emitter.setData<double>(value);
         break;
     }
+
     default:
         dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
@@ -351,19 +357,21 @@ void dtkComposerNodeNumberOperatorUnarySqrt::run(void)
 
 void dtkComposerNodeNumberOperatorUnarySquare::run(void)
 {
-    switch(d->receiver.dataType()) {
+    switch (d->receiver.dataType()) {
     case QMetaType::LongLong: {
         qlonglong *value = d->receiver.data<qlonglong>();
         *value *= (*value);
         d->emitter.setData<qlonglong>(value);
         break;
     }
+
     case QMetaType::Double: {
         double *value = d->receiver.data<double>();
         *value *= (*value);
         d->emitter.setData<double>(value);
         break;
     }
+
     default:
         dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;
@@ -564,19 +572,21 @@ void dtkComposerNodeNumberOperatorUnaryRound::run(void)
 
 void dtkComposerNodeNumberOperatorUnaryAbs::run(void)
 {
-    switch(d->receiver.dataType()) {
+    switch (d->receiver.dataType()) {
     case QMetaType::LongLong: {
         qlonglong *value = d->receiver.data<qlonglong>();
         *value = qAbs(*value);
         d->emitter.setData<qlonglong>(value);
         break;
     }
+
     case QMetaType::Double: {
         double *value = d->receiver.data<double>();
         *value = qAbs(*value);
         d->emitter.setData<double>(value);
         break;
     }
+
     default:
         dtkWarn() << "Type" << d->receiver.dataType() << "is not handled by the node.";
         break;

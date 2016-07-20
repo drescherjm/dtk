@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -46,13 +46,13 @@ bool dtkComposerTransmitterReceiverBase::connect(dtkComposerTransmitter *transmi
 
     if (!d->emitters.contains(transmitter)) {
 
-	enable_connection = transmitter->enableConnection(this);
+        enable_connection = transmitter->enableConnection(this);
 
-	if (enable_connection) {
-	    d->emitters << transmitter;
-	    d->active_emitter = transmitter;
-	    transmitter->appendReceiver(this);
-	}
+        if (enable_connection) {
+            d->emitters << transmitter;
+            d->active_emitter = transmitter;
+            transmitter->appendReceiver(this);
+        }
     }
 
     return enable_connection;
@@ -64,13 +64,14 @@ bool dtkComposerTransmitterReceiverBase::disconnect(dtkComposerTransmitter *tran
     bool disable_connection = d->emitters.removeOne(transmitter);
 
     if (transmitter == d->active_emitter) {
-	d->active_emitter = NULL;
-	foreach(dtkComposerTransmitter *em, d->emitters) {
-	    if (em->active()) {
-		d->active_emitter = em;
-		break;
-	    }
-	}
+        d->active_emitter = NULL;
+
+        foreach (dtkComposerTransmitter *em, d->emitters) {
+            if (em->active()) {
+                d->active_emitter = em;
+                break;
+            }
+        }
     }
 
     return disable_connection;
@@ -81,10 +82,11 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterReceiverBase::rightLinks(d
     Q_UNUSED(transmitter);
 
     LinkMap link_map;
-    foreach(dtkComposerTransmitterLink *l, list)
+
+    foreach (dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);
 
-    return link_map;  
+    return link_map;
 }
 
 // ///////////////////////////////////////////////////////////////////
@@ -101,5 +103,5 @@ dtkComposerTransmitterReceiverVariant::~dtkComposerTransmitterReceiverVariant(vo
 
 }
 
-// 
+//
 // dtkComposerTransmitterReceiver.cpp ends here

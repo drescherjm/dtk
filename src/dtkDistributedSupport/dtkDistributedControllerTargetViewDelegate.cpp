@@ -1,5 +1,5 @@
-/* dtkDistributedControllerTargetViewDelegate.cpp --- 
- * 
+/* dtkDistributedControllerTargetViewDelegate.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 10:10:54 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 84
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -71,8 +71,8 @@ QWidget *dtkDistributedControllerTargetViewDelegate::createEditor(QWidget *paren
 void dtkDistributedControllerTargetViewDelegate::setEditorData(QWidget *widget, const QModelIndex& index) const
 {
     dtkDistributedControllerTargetViewEditor *editor = qobject_cast<dtkDistributedControllerTargetViewEditor *>(widget);
-    
-    if(!editor)
+
+    if (!editor)
         return;
 
     editor->setCluster(index.data().toString());
@@ -143,7 +143,7 @@ void dtkDistributedControllerTargetViewEditor::setCluster(QUrl cluster)
 
 void dtkDistributedControllerTargetViewEditor::onRefresh(void)
 {
-    if(!d->controller)
+    if (!d->controller)
         return;
 
     d->controller->refresh(d->cluster);
@@ -151,7 +151,7 @@ void dtkDistributedControllerTargetViewEditor::onRefresh(void)
 
 void dtkDistributedControllerTargetViewEditor::onDisconnect(void)
 {
-    if(!d->controller)
+    if (!d->controller)
         return;
 
     d->controller->disconnect(d->cluster);
@@ -159,7 +159,7 @@ void dtkDistributedControllerTargetViewEditor::onDisconnect(void)
 
 void dtkDistributedControllerTargetViewEditor::onStop(void)
 {
-    if(!d->controller)
+    if (!d->controller)
         return;
 
     d->controller->stop(d->cluster);

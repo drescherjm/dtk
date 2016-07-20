@@ -1,15 +1,15 @@
-/* dtkDistributedContainerTest.cpp --- 
- * 
+/* dtkDistributedContainerTest.cpp ---
+ *
  * Author: Thibaud Kloczko
  * Created: 2013 Mon Feb  4 15:37:54 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedContainerTest.h"

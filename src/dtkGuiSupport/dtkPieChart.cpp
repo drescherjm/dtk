@@ -35,9 +35,9 @@ dtkPieChart::dtkPieChart(QWidget *parent, int width, int height) : QWidget(paren
     this->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     this->setMinimumSize(width, height);
 
-    if(width && !height)
+    if (width && !height)
         this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    else if(!width && height)
+    else if (!width && height)
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     else
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -50,9 +50,9 @@ dtkPieChart::~dtkPieChart(void)
 
 QSize dtkPieChart::sizeHint(void) const
 {
-    QSize size = QSize(320,80);
+    QSize size = QSize(320, 80);
 
-    return(size);
+    return (size);
 }
 
 
@@ -60,6 +60,7 @@ void dtkPieChart::addPiece(const QString& key, int val, QColor color)
 {
     if (val < 1)
         return;
+
     d->values.insert(key, val);
     d->colors.insert(key, color);
 }
@@ -75,7 +76,8 @@ void dtkPieChart::paintEvent(QPaintEvent *ev)
 
     QHash<QString, int>::const_iterator it;
     int total = 0;
-    for(it = d->values.begin(); it != d->values.end(); ++it)
+
+    for (it = d->values.begin(); it != d->values.end(); ++it)
         total += it.value();
 
     QPainter p(this);
@@ -86,17 +88,16 @@ void dtkPieChart::paintEvent(QPaintEvent *ev)
 
     QRect legendRect = rect();
     legendRect.setLeft(pieRect.width());
-    legendRect.adjust(10,10,-10,-10);
+    legendRect.adjust(10, 10, -10, -10);
     int lastAngleOffset = 0;
     int currentPos = 0;
 
-    for(it = d->values.begin(); it != d->values.end(); ++it)
-    {
+    for (it = d->values.begin(); it != d->values.end(); ++it) {
         int value = it.value();
         QString text = it.key();
-        int angle = (int)(16*360*(value/(double)total));
+        int angle = (int)(16 * 360 * (value / (double)total));
 
-        QRadialGradient rg(pieRect.center(), pieRect.width()/2, pieRect.topLeft());
+        QRadialGradient rg(pieRect.center(), pieRect.width() / 2, pieRect.topLeft());
         rg.setColorAt(0, Qt::white);
         rg.setColorAt(1, d->colors[text]);
         p.setBrush(rg);
@@ -107,7 +108,7 @@ void dtkPieChart::paintEvent(QPaintEvent *ev)
         lastAngleOffset += angle;
 
         int fh = fontMetrics().height();
-        QRect legendEntryRect(0,(fh*1.5)*currentPos,fh,fh);
+        QRect legendEntryRect(0, (fh * 1.5)*currentPos, fh, fh);
         currentPos++;
         legendEntryRect.translate(legendRect.topLeft());
 

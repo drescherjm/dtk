@@ -1,5 +1,5 @@
-/* dtkPlugin.cpp --- 
- * 
+/* dtkPlugin.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 14:14:48 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 90
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlugin.h"
@@ -26,7 +26,7 @@
 
 dtkPlugin::dtkPlugin(QObject *parent) : dtkAbstractObject(*new dtkPluginPrivate(this), parent)
 {
-    
+
 }
 
 dtkPlugin::dtkPlugin(const dtkPlugin& other) : dtkAbstractObject(*new dtkPluginPrivate(*other.d_func()), other)

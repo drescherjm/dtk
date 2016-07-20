@@ -130,7 +130,8 @@ const QString& dtkComposerSceneNode::title(void)
 void dtkComposerSceneNode::setTitle(const QString& title)
 {
     d->title = title;
-    if(d->wrapee) {
+
+    if (d->wrapee) {
         d->wrapee->setTitle(title);
     }
 }

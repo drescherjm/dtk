@@ -31,7 +31,7 @@ class dtkDistributedSocketPrivate
 {
 };
 
-dtkDistributedSocket::dtkDistributedSocket( QObject* parent ) :  QTcpSocket(parent), d(new dtkDistributedSocketPrivate)
+dtkDistributedSocket::dtkDistributedSocket( QObject *parent ) :  QTcpSocket(parent), d(new dtkDistributedSocketPrivate)
 {
 }
 
@@ -57,22 +57,26 @@ qint64 dtkDistributedSocket::sendRequest( dtkDistributedMessage *msg)
     QString buffer;
 
     buffer += msg->req();
+
     if (msg->size() == 0 ) {
         buffer += "content-size: 0\n\n";
         qint64 ret = this->write(buffer.toUtf8());
         this->flush();
         return ret;
     } else if (msg->size() > 0) {
-        buffer += "content-size: "+ QString::number(msg->size()) +"\n";
-        if (!msg->type().isEmpty() && !msg->type().isNull())
-            buffer += "content-type: " +msg->type() +"\n";
+        buffer += "content-size: " + QString::number(msg->size()) + "\n";
 
-        foreach (const QString &key, (msg->headers()).keys())
-            buffer += key +": " + msg->header(key) +"\n";
+        if (!msg->type().isEmpty() && !msg->type().isNull())
+            buffer += "content-type: " + msg->type() + "\n";
+
+        foreach (const QString& key, (msg->headers()).keys())
+            buffer += key + ": " + msg->header(key) + "\n";
+
         buffer += "\n";
     }
 
     qint64 ret;
+
     if (msg->content().isNull() || msg->content().isEmpty()) {
         // no content provided, the caller is supposed to send the content itself
         ret = this->write(buffer.toUtf8());
@@ -104,24 +108,27 @@ dtkDistributedMessage *dtkDistributedSocket::parseRequest(void)
 
         // read optional headers
         QByteArray line = this->readLine();
+
         while (!QString(line).trimmed().isEmpty()) {// empty line after last header
             msg->setHeader(QString(line));
-            line=this->readLine();
+            line = this->readLine();
         }
 
         // read content
         QByteArray buffer;
         buffer.append(this->read(msg->size()));
+
         while (buffer.size() < msg->size() ) {
             if (this->waitForReadyRead()) {
-                buffer.append(this->read(msg->size()-buffer.size()));
+                buffer.append(this->read(msg->size() - buffer.size()));
             } else {
                 dtkWarn() << "not enough data received, only  " << buffer.size() << "out of " << msg->size() ;
                 msg->setContent(buffer);
-                msg->addHeader("missing_data",QString::number(msg->size()-buffer.size()));
+                msg->addHeader("missing_data", QString::number(msg->size() - buffer.size()));
                 break;
             }
         }
+
         msg->setContent(buffer);
     } else
         // end of request == empty line

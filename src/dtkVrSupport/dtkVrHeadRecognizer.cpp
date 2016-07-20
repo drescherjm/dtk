@@ -73,7 +73,7 @@ void dtkVrHeadRecognizerPrivate::run(void)
     this->analog->register_change_handler(this, vrpn_head_recognizer_handle_analog);
     this->tracker->register_change_handler(this, vrpn_head_recognizer_handle_tracker);
 
-    while(this->running) {
+    while (this->running) {
         this->analog->mainloop();
         this->button->mainloop();
         this->tracker->mainloop();
@@ -96,8 +96,8 @@ void dtkVrHeadRecognizerPrivate::stop(void)
 void dtkVrHeadRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
     callback.state
-        ? emit buttonPressed(callback.button)
-        : emit buttonReleased(callback.button);
+    ? emit buttonPressed(callback.button)
+    : emit buttonReleased(callback.button);
 }
 
 void dtkVrHeadRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
@@ -107,7 +107,7 @@ void dtkVrHeadRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
 
 void dtkVrHeadRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 {
-    if(callback.sensor == 0) {
+    if (callback.sensor == 0) {
         this->head_position[0] = callback.pos[0];
         this->head_position[1] = callback.pos[1];
         this->head_position[2] = callback.pos[2];
@@ -163,7 +163,7 @@ void dtkVrHeadRecognizer::stopConnection(void)
 
 void dtkVrHeadRecognizer::onMoved(void)
 {
-    if(!d->activated || !d->view)
+    if (!d->activated || !d->view)
         return;
 
     double x =  d->head_position[0];
@@ -171,15 +171,15 @@ void dtkVrHeadRecognizer::onMoved(void)
     double z = -d->head_position[1];
 
     dtkDeprecated::dtkVector3D<double> f_art = dtkDeprecated::dtkVector3D<double>(
-        (   dtkVrScreen::screens[4][1][0] +    dtkVrScreen::screens[4][0][0]) / 2,
-        (-1*dtkVrScreen::screens[4][2][2] + -1*dtkVrScreen::screens[4][1][2]) / 2,
-            dtkVrScreen::screens[4][0][1]);
+                (   dtkVrScreen::screens[4][1][0] +    dtkVrScreen::screens[4][0][0]) / 2,
+                (-1 * dtkVrScreen::screens[4][2][2] + -1 * dtkVrScreen::screens[4][1][2]) / 2,
+                dtkVrScreen::screens[4][0][1]);
 
     dtkDeprecated::dtkVector3D<double> z_art = dtkDeprecated::dtkVector3D<double>(0, f_art[1], 0);
     dtkDeprecated::dtkVector3D<double> p_art = dtkDeprecated::dtkVector3D<double>(x, y, z);
     dtkDeprecated::dtkVector3D<double> d_art = p_art - d->last;
 
-    if(d_art.norm()/d->last.norm() < 0.005)
+    if (d_art.norm() / d->last.norm() < 0.005)
         return;
 
     double camera_up[3];
@@ -200,14 +200,14 @@ void dtkVrHeadRecognizer::onMoved(void)
     dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > xtk_in_xtk = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(l, m, n);
 
     dtkDeprecated::dtkVector3D<double> j = u_xtk;
-    dtkDeprecated::dtkVector3D<double> k = p_xtk-f_xtk;
-    dtkDeprecated::dtkVector3D<double> i = j%k;
+    dtkDeprecated::dtkVector3D<double> k = p_xtk - f_xtk;
+    dtkDeprecated::dtkVector3D<double> i = j % k;
     dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> > cam_in_xtk = dtkDeprecated::dtkVector3D<dtkDeprecated::dtkVector3D<double> >(i.unit(), j.unit(), k.unit());
 
     dtkDeprecated::dtkMatrixSquared<double> cam_to_xtk = dtkChangeOfBasis(cam_in_xtk, xtk_in_xtk);
     dtkDeprecated::dtkMatrixSquared<double> xtk_to_cam = dtkChangeOfBasis(xtk_in_xtk, cam_in_xtk);
 
-    dtkDeprecated::dtkVector3D<double> d_xtk = cam_to_xtk*d_art;
+    dtkDeprecated::dtkVector3D<double> d_xtk = cam_to_xtk * d_art;
     dtkDeprecated::dtkVector3D<double> c_xtk = ((p_xtk - f_xtk).norm() / (z_art - f_art).norm()) * d_xtk + p_xtk;
 
 //    d->view->setCameraPosition(c_xtk[0], c_xtk[1], c_xtk[2]);
@@ -218,7 +218,7 @@ void dtkVrHeadRecognizer::onMoved(void)
 
 void dtkVrHeadRecognizer::onButtonPressed(int)
 {
-    if(!d->view)
+    if (!d->view)
         return;
 
     // d->activated = true;
@@ -228,7 +228,7 @@ void dtkVrHeadRecognizer::onButtonPressed(int)
 
 void dtkVrHeadRecognizer::onButtonReleased(int)
 {
-    if(!d->view)
+    if (!d->view)
         return;
 
     // d->activated = false;
@@ -244,19 +244,19 @@ void dtkVrHeadRecognizer::onButtonReleased(int)
 
 void VRPN_CALLBACK vrpn_head_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {
-    if(dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
+    if (dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
         recognizer->handle_button(callback);
 }
 
 void VRPN_CALLBACK vrpn_head_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback)
 {
-    if(dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
+    if (dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
         recognizer->handle_analog(callback);
 }
 
 void VRPN_CALLBACK vrpn_head_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback)
 {
-    if(dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
+    if (dtkVrHeadRecognizerPrivate *recognizer = static_cast<dtkVrHeadRecognizerPrivate *>(data))
         recognizer->handle_tracker(callback);
 }
 

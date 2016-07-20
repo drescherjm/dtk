@@ -1,5 +1,5 @@
-/* dtkDistributedServer.cpp --- 
- * 
+/* dtkDistributedServer.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed May 25 14:15:13 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 232
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedServer.h"
@@ -64,18 +64,18 @@ void dtkDistributedServer::start(void)
 
     quint16 port;
 
-    if(dtkApplicationArgumentsContain(app, "-p"))
+    if (dtkApplicationArgumentsContain(app, "-p"))
         port = dtkApplicationArgumentsValue(app, "-p").toInt();
     else
         port = 9999;
 
     d->daemon = new dtkDistributedServerDaemon(port, app);
 
-    if(dtkApplicationArgumentsContain(app, "--oar"))
+    if (dtkApplicationArgumentsContain(app, "--oar"))
         d->daemon->setManager(dtkDistributedServerManager::Oar);
-    else if(dtkApplicationArgumentsContain(app, "--torque"))
+    else if (dtkApplicationArgumentsContain(app, "--torque"))
         d->daemon->setManager(dtkDistributedServerManager::Torque);
-    else if(dtkApplicationArgumentsContain(app, "--ssh"))
+    else if (dtkApplicationArgumentsContain(app, "--ssh"))
         d->daemon->setManager(dtkDistributedServerManager::Ssh);
     else {
         logMessage(QString("No manager set !"));
@@ -95,21 +95,21 @@ void dtkDistributedServer::run(void)
 {
     quint16 port;
 
-    if(dtkApplicationArgumentsContain(qApp, "-p"))
+    if (dtkApplicationArgumentsContain(qApp, "-p"))
         port = dtkApplicationArgumentsValue(qApp, "-p").toInt();
     else
         port = 9999;
 
     d->daemon = new dtkDistributedServerDaemon(port, qApp);
 
-    if(dtkApplicationArgumentsContain(qApp, "--oar"))
+    if (dtkApplicationArgumentsContain(qApp, "--oar"))
         d->daemon->setManager(dtkDistributedServerManager::Oar);
-    else if(dtkApplicationArgumentsContain(qApp, "--torque"))
+    else if (dtkApplicationArgumentsContain(qApp, "--torque"))
         d->daemon->setManager(dtkDistributedServerManager::Torque);
-    else if(dtkApplicationArgumentsContain(qApp, "--ssh"))
+    else if (dtkApplicationArgumentsContain(qApp, "--ssh"))
         d->daemon->setManager(dtkDistributedServerManager::Ssh);
     else {
-        qDebug()<< "No manager set!";
+        qDebug() << "No manager set!";
         return;
     }
 

@@ -35,7 +35,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeEditor : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposerSceneNodeEditor(QWidget *parent = 0);
+    dtkComposerSceneNodeEditor(QWidget *parent = 0);
     ~dtkComposerSceneNodeEditor(void);
 
 public slots:

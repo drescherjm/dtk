@@ -1,4 +1,4 @@
-/* dtkScriptInterpreterPython.cpp --- 
+/* dtkScriptInterpreterPython.cpp ---
  *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
@@ -9,7 +9,7 @@
  *     Update #: 616
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -27,10 +27,10 @@
 #include <Python.h>
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-static const QString dtkScriptInterpreterPythonRedirector_declare = 
+static const QString dtkScriptInterpreterPythonRedirector_declare =
     "import sys\n"
     "\n"
     "class Redirector:\n"
@@ -39,13 +39,13 @@ static const QString dtkScriptInterpreterPythonRedirector_declare =
     "    def write(self, stuff):\n"
     "        self.data+= stuff\n";
 
-static const QString dtkScriptInterpreterPythonRedirector_define = 
+static const QString dtkScriptInterpreterPythonRedirector_define =
     "redirector = Redirector()\n"
     "sys.stdout = redirector\n"
     "sys.stderr = redirector\n";
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkScriptInterpreterPythonPrivate
@@ -55,7 +55,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkScriptInterpreterPython::dtkScriptInterpreterPython(QObject *parent) : dtkScriptInterpreter(parent), d(new dtkScriptInterpreterPythonPrivate)
@@ -77,37 +77,42 @@ QString dtkScriptInterpreterPython::interpret(const QString& command, int *stat)
 {
     QString statement = command;
 
-    if(command.endsWith(":")) {
-        if(!d->buffer.isEmpty())
+    if (command.endsWith(":")) {
+        if (!d->buffer.isEmpty())
             d->buffer.append("\n");
+
         d->buffer.append(command);
         return "";
     }
 
-    if(!command.isEmpty() && command.startsWith(" ")) {
-        if(!d->buffer.isEmpty())
+    if (!command.isEmpty() && command.startsWith(" ")) {
+        if (!d->buffer.isEmpty())
             d->buffer.append("\n");
+
         d->buffer.append(command);
         return "";
     }
 
-    if(command.isEmpty() && !d->buffer.isEmpty()) {
-        if(!d->buffer.isEmpty())
+    if (command.isEmpty() && !d->buffer.isEmpty()) {
+        if (!d->buffer.isEmpty())
             d->buffer.append("\n");
+
         statement = d->buffer;
         d->buffer.clear();
     }
 
-    if(statement.isEmpty())
+    if (statement.isEmpty())
         return "";
 
     PyObject *module = PyImport_AddModule("__main__");
 
     PyRun_SimpleString(dtkScriptInterpreterPythonRedirector_define.toUtf8().constData());
 
-    switch(PyRun_SimpleString(statement.toUtf8().constData())) {
+    switch (PyRun_SimpleString(statement.toUtf8().constData())) {
     case  0: *stat = Status_Ok;    break;
+
     case -1: *stat = Status_Error; break;
+
     default: break;
     }
 

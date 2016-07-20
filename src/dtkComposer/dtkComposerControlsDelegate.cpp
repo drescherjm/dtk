@@ -1,21 +1,16 @@
-/* dtkComposerControlsDelegate.cpp --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Nov 28 15:12:23 2012 (+0100)
- * Version: $Id$
- * Last-Updated: ven. oct. 11 14:29:45 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 183
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #include "dtkComposerControls.h"
 #include "dtkComposerControlsDelegate.h"
@@ -79,3 +74,6 @@ void dtkComposerControlsDelegate::updateEditorGeometry(QWidget *editor, const QS
 {
     QStyledItemDelegate::updateEditorGeometry(editor, option, index);
 }
+
+//
+// dtkComposerControlsDelegate.cpp ends here

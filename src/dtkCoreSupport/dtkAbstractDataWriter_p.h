@@ -1,5 +1,5 @@
-/* dtkAbstractDataWriter_p.h --- 
- * 
+/* dtkAbstractDataWriter_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 10:48:55 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATAWRITER_P_H
@@ -36,8 +36,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataWriterPrivate : public dtkAbstractObj
 public:
     dtkAbstractDataWriterPrivate(dtkAbstractDataWriter *q = 0) : dtkAbstractObjectPrivate(q), data(NULL) {}
     dtkAbstractDataWriterPrivate(const dtkAbstractDataWriterPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                              enabled(false),
-                                                                              data(other.data) {}
+        enabled(false),
+        data(other.data) {}
 
 public:
     virtual ~dtkAbstractDataWriterPrivate(void) {}

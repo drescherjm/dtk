@@ -55,7 +55,7 @@ dtkGraph::~dtkGraph(void)
 
 void dtkGraph::addNode(QObject *o)
 {
-if (!d->nodes.contains(o)) {
+    if (!d->nodes.contains(o)) {
         d->nodes.append(o);
     }
 }
@@ -64,11 +64,13 @@ void dtkGraph::deleteNode(QObject *o)
 {
     if (d->nodes.contains(o)) {
         qlonglong count = d->edges.count();
-        for( int i = count-1 ; i >= 0 ; i--) {
+
+        for ( int i = count - 1 ; i >= 0 ; i--) {
             if ((d->edges.at(i).source() == o) || (d->edges.at(i).destination() == o )) {
                 this->deleteEdge(d->edges.at(i));
             }
         }
+
         d->nodes.removeAll(o);
     } else {
         dtkWarn() << "removing unknown node from graph !" << o->objectName() ;
@@ -79,31 +81,33 @@ void dtkGraph::addEdge(dtkGraphEdge e)
 {
 
     if (!d->edges.contains(e)) {
-        QObject* source  = e.source();
-        QObject* destination = e.destination();
+        QObject *source  = e.source();
+        QObject *destination = e.destination();
         d->edges.append(e);
-        d->predecessors.insert(destination,source);
-        d->successors.insert(source,destination);
+        d->predecessors.insert(destination, source);
+        d->successors.insert(source, destination);
     }
 }
 
 void dtkGraph::deleteEdge(dtkGraphEdge e)
 {
     if (d->edges.contains(e)) {
-        QObject* source  = e.source();
-        QObject* destination = e.destination();
+        QObject *source  = e.source();
+        QObject *destination = e.destination();
         d->edges.removeOne(e);
-        d->predecessors.remove(destination,source);
-        d->successors.remove(source,destination);
+        d->predecessors.remove(destination, source);
+        d->successors.remove(source, destination);
     }
 }
 
 QList<QObject *> dtkGraph::rootNodes(void)
 {
     QList<QObject *> rootNodes;
-    foreach(QObject *node, d->nodes)
+
+    foreach (QObject *node, d->nodes)
         if (d->predecessors.values(node).count() == 0)
             rootNodes << node;
+
     return rootNodes;
 }
 
@@ -149,22 +153,28 @@ dtkGraph dtkGraph::subgraph(QObject *from, QObject *to)
 
     while (!nodes.isEmpty()) {
         QObject *node = nodes.takeFirst();
+
         if (node == to) {
             break;
         }
+
         subGraph.addNode(node);
+
         foreach (QObject *n, d->successors.values(node)) {
             if ((n != to) && !(subGraph.contains(n))) {
                 nodes << n;
             }
         }
     }
+
     subGraph.addNode(to);
+
     foreach (const dtkGraphEdge& e, d->edges) {
         if (subGraph.contains(e.source()) &&  subGraph.contains(e.destination())) {
             subGraph.addEdge(e);
         }
     }
+
     return subGraph;
 }
 
@@ -193,16 +203,21 @@ QList<QObject *> dtkGraph::topologicalSort(void)
     while (!rootNodes.isEmpty()) {
         QObject *n = rootNodes.takeFirst();
         result << n;
-        foreach(QObject *m,  d->successors.values(n)) {
+
+        foreach (QObject *m,  d->successors.values(n)) {
             int i = 0;
             bool found = false;
+
             while (i < d->edges.count() && !found) {
                 dtkGraphEdge e = d->edges.at(i);
+
                 if ((e.source() == n) && (e.destination() == m)) {
                     this->deleteEdge(e);
+
                     if (d->predecessors.values(m).isEmpty()) {
                         rootNodes << m;
                     }
+
                     found = true;
                 }
 
@@ -212,25 +227,29 @@ QList<QObject *> dtkGraph::topologicalSort(void)
     }
 
     if (!d->edges.isEmpty()) {
-        dtkError() << "Topological sorting has failed: the graph has at least one cycle" << d->edges.at(0).source()->objectName() << "->"<<d->edges.at(0).destination()->objectName();
+        dtkError() << "Topological sorting has failed: the graph has at least one cycle" << d->edges.at(0).source()->objectName() << "->" << d->edges.at(0).destination()->objectName();
         result.clear();
     }
 
     // rebuild edges
-    foreach(dtkGraphEdge e, tmp_edges) {
+    foreach (dtkGraphEdge e, tmp_edges) {
         this->addEdge(e);
     }
+
     return result;
 }
 
 QString dtkGraph::description(void) const
 {
     QString out;
+
     foreach (QObject *o, d->nodes) {
         out.append(o->objectName() + QString( "\n"));
     }
+
     foreach (dtkGraphEdge e, d->edges) {
-        out.append(e.source()->objectName() +QString(" -> ")+e.destination()->objectName() + QString( "\n"));
+        out.append(e.source()->objectName() + QString(" -> ") + e.destination()->objectName() + QString( "\n"));
     }
+
     return out;
 }

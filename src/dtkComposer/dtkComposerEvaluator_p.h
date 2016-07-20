@@ -1,5 +1,5 @@
-/* dtkComposerEvaluator_p.h --- 
- * 
+/* dtkComposerEvaluator_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:39:36 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 39
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once

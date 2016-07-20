@@ -1,17 +1,17 @@
-/* dtkComposerNodePlotView.cpp --- 
- * 
+/* dtkComposerNodePlotView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
  * Version: $Id$
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodePlotView.h"
@@ -68,7 +68,7 @@ dtkAbstractView *dtkComposerNodePlotView::view(void)
 void dtkComposerNodePlotView::run(void)
 {
     if (!d->view)
-	d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
+        d->view = reinterpret_cast<dtkPlotView *>(dtkAbstractViewFactory::instance()->create("dtkPlotView"));
 
     if (d->receiver_curve.isEmpty() && d->receiver_list_curve.isEmpty()) {
         dtkWarn() << "no curve specified!";
@@ -78,14 +78,14 @@ void dtkComposerNodePlotView::run(void)
     if (!d->view)
         return;
 
-    foreach(dtkPlotCurve *curve, d->receiver_curve.allData()) {
+    foreach (dtkPlotCurve *curve, d->receiver_curve.allData()) {
         if (curve) {
             (*(d->view)) << curve;
         }
     }
 
-    foreach(dtkPlotCurves *curves, d->receiver_list_curve.allData()) {
-        foreach(dtkPlotCurve *curve, *curves) {
+    foreach (dtkPlotCurves *curves, d->receiver_list_curve.allData()) {
+        foreach (dtkPlotCurve *curve, *curves) {
             if (curve) {
                 (*(d->view)) << curve;
             }
@@ -95,10 +95,10 @@ void dtkComposerNodePlotView::run(void)
     if (!d->receiver_title.isEmpty())
         d->view->setTitle(*d->receiver_title.data());
 
-    if(!d->receiver_x_axis_label.isEmpty())
+    if (!d->receiver_x_axis_label.isEmpty())
         d->view->setAxisTitleX(*d->receiver_x_axis_label.data());
 
-    if(!d->receiver_y_axis_label.isEmpty())
+    if (!d->receiver_y_axis_label.isEmpty())
         d->view->setAxisTitleY(*d->receiver_y_axis_label.data());
 
     if (!d->view->isZoomActivated())

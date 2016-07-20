@@ -27,7 +27,7 @@ class DTKCOMPOSER_EXPORT dtkComposerEvaluatorSlave : public dtkDistributedSlave,
 {
 
 public:
-     dtkComposerEvaluatorSlave(void);
+    dtkComposerEvaluatorSlave(void);
     ~dtkComposerEvaluatorSlave(void);
 
 public:

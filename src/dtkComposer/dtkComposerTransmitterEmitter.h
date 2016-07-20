@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -26,7 +26,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitterBase : public dtkComposerTransmitter
 {
 public:
-             dtkComposerTransmitterEmitterBase(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterEmitterBase(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitterEmitterBase(void);
 
 public:
@@ -45,13 +45,13 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterEmitterVariant 
+// dtkComposerTransmitterEmitterVariant
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterEmitterVariant : public dtkComposerTransmitterEmitterBase
 {
 public:
-     dtkComposerTransmitterEmitterVariant(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterEmitterVariant(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitterVariant(void);
 
 public:
@@ -69,8 +69,8 @@ public:
 template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitterEmitterBase
 {
 public:
-      dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
-     ~dtkComposerTransmitterEmitter(void);
+    dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
+    ~dtkComposerTransmitterEmitter(void);
 
 public:
     void setData(const T& data);
@@ -83,7 +83,9 @@ public:
     bool enableConnection(dtkComposerTransmitter *transmitter);
 
 private:
-    void setTypeList(const TypeList& list) {;}
+    void setTypeList(const TypeList& list) {
+        ;
+    }
 
 public:
     using dtkComposerTransmitterEmitterBase::d;
@@ -99,7 +101,7 @@ public:
 // Alias for support layer
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> using dtkComposerTransmitterEmitterSupport = dtkComposerTransmitterEmitter<T*>;
+template <typename T> using dtkComposerTransmitterEmitterSupport = dtkComposerTransmitterEmitter<T *>;
 
-// 
+//
 // dtkComposerTransmitterEmitter.h ends here

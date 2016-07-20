@@ -50,16 +50,14 @@ set(${PROJECT_NAME}_HEADERS
   dtkIterator.h
   dtkSpinLock.h
   dtkStaticArray
-  dtkStaticArray.h
-)
+  dtkStaticArray.h)
 
 set(${PROJECT_NAME}_SOURCES
   dtkApplicationPrivate.cpp
   dtkCoreApplication.cpp
   dtkCoreSettings.cpp
   dtkArrayData.cpp
-  dtkCorePluginManagerBase.cpp
- )
+  dtkCorePluginManagerBase.cpp)
 
 ## #################################################################
 ## Deps

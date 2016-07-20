@@ -26,7 +26,7 @@ class dtkComposerControlsListItemFile: public dtkComposerControlsListItem
     Q_OBJECT
 
 public:
-             dtkComposerControlsListItemFile(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
+    dtkComposerControlsListItemFile(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
     virtual ~dtkComposerControlsListItemFile(void);
 
 public slots:

@@ -1,8 +1,8 @@
-/* numComposerNodePlotCurveFile.cpp --- 
+/* numComposerNodePlotCurveFile.cpp ---
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 #include "dtkComposerNodePlotCurveFile.h"
@@ -40,10 +40,11 @@ dtkComposerNodePlotCurveFile::dtkComposerNodePlotCurveFile(void) : dtkComposerNo
 dtkComposerNodePlotCurveFile::~dtkComposerNodePlotCurveFile(void)
 {
     if (!d->curves.isEmpty()) {
-        foreach (dtkPlotCurve* curve, d->curves) {
+        foreach (dtkPlotCurve *curve, d->curves) {
             delete curve;
             curve = NULL;
         }
+
         d->curves.clear();
     }
 
@@ -63,7 +64,7 @@ QString dtkComposerNodePlotCurveFile::titleHint(void)
 
 QString dtkComposerNodePlotCurveFile::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "file";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
@@ -71,7 +72,7 @@ QString dtkComposerNodePlotCurveFile::inputLabelHint(int port)
 
 QString dtkComposerNodePlotCurveFile::outputLabelHint(int port)
 {
-    if(port == 0) {
+    if (port == 0) {
         return "curves list";
     }
 
@@ -83,7 +84,8 @@ bool dtkComposerNodePlotCurveFile::read(const QString& fileName)
     QString value;
 
     QFile file(fileName);
-    if(!file.open(QFile::ReadOnly | QIODevice::Text)) {
+
+    if (!file.open(QFile::ReadOnly | QIODevice::Text)) {
         qDebug() << "Unable to read file" << fileName;
         return false;
     }
@@ -111,29 +113,33 @@ bool dtkComposerNodePlotCurveFile::read(const QString& fileName)
 
         numberOfCurves = lineSplit.count() - 1;
 
-        if (numberOfCurves<1) {
+        if (numberOfCurves < 1) {
             qDebug() << "Wrong file format" << fileName;
             return false;
         }
 
         vx.clear();
         vy.clear();
-        for (int i = 0; i<numberOfCurves; i++) {
+
+        for (int i = 0; i < numberOfCurves; i++) {
             vy << dtkContainerVectorReal();
         }
 
         while (!line.isEmpty()) {
             lineSplit = line.split(" ", QString::SkipEmptyParts);
             vx << lineSplit[0].toDouble();
-            for (int i = 0; i<numberOfCurves; i++) {
-                vy[i] << lineSplit[i+1].toDouble();
+
+            for (int i = 0; i < numberOfCurves; i++) {
+                vy[i] << lineSplit[i + 1].toDouble();
             }
+
             line = in.readLine();
         }
 
-        for (int i = 0; i<numberOfCurves; i++) {
+        for (int i = 0; i < numberOfCurves; i++) {
             d->list_vector_x << vx;
         }
+
         d->list_vector_y << vy;
 
         line = in.readLine();
@@ -142,7 +148,7 @@ bool dtkComposerNodePlotCurveFile::read(const QString& fileName)
     file.close();
 
     if ((titlesSplit.count() - 1) == numberOfCurves) {
-        for (int i = 0, j = 1; i<numberOfCurves; i++) {
+        for (int i = 0, j = 1; i < numberOfCurves; i++) {
             d->titlesCurve << titlesSplit[j++];
         }
     }
@@ -175,7 +181,7 @@ void dtkComposerNodePlotCurveFile::run(void)
 
     int numberOfCurrentCurves = d->curves.count();
 
-    for (int i = numberOfCurves; i<numberOfCurrentCurves; i++) {
+    for (int i = numberOfCurves; i < numberOfCurrentCurves; i++) {
         dtkPlotCurve *curve = d->curves.takeLast();
         d->curves.removeLast();
     }
@@ -184,7 +190,7 @@ void dtkComposerNodePlotCurveFile::run(void)
 
     int sizex, sizey;
 
-    for (int i = 0; i<numberOfCurves; i++) {
+    for (int i = 0; i < numberOfCurves; i++) {
         vx = d->list_vector_x[i];
         vy = d->list_vector_y[i];
 
@@ -197,29 +203,31 @@ void dtkComposerNodePlotCurveFile::run(void)
         }
     }
 
-    for (int index = 0; index<numberOfCurves; index++) {
+    for (int index = 0; index < numberOfCurves; index++) {
         data.clear();
 
         vx = d->list_vector_x[index];
         vy = d->list_vector_y[index];
         sizex = vx.count();
 
-        for(int i = 0; i<sizex; i++ ) {
+        for (int i = 0; i < sizex; i++ ) {
             if (dtkIsInfinite(vx[i]) || dtkIsNan(vx[i]) || dtkIsInfinite(vy[i]) || dtkIsNan(vy[i])) {
-	        dtkWarn() << "Found wrong values in Curve node";
+                dtkWarn() << "Found wrong values in Curve node";
                 continue;
             }
-	    data << QPointF(vx[i], vy[i]);
+
+            data << QPointF(vx[i], vy[i]);
         }
 
-	dtkPlotCurve *curve = NULL;
-	if (index < d->curves.count()) {
-	  curve = d->curves[index];
-          curve->clear();
-	} else {
-	  curve = new dtkPlotCurve;
-	  d->curves << curve;
-	}
+        dtkPlotCurve *curve = NULL;
+
+        if (index < d->curves.count()) {
+            curve = d->curves[index];
+            curve->clear();
+        } else {
+            curve = new dtkPlotCurve;
+            d->curves << curve;
+        }
 
         if (d->titlesCurve.count() > index) {
             curve->setName(d->titlesCurve[index]);

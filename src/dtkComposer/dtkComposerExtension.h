@@ -1,17 +1,16 @@
-/* @(#)dtkComposerExtension.h ---
- *
- * Author: Nicolas Niclausse
- * Copyright (C) 2016 - Nicolas Niclausse, Inria.
- * Created: 2016/02/09 14:13:42
- */
+// Version: $Id$
+//
+//
 
-/* Commentary:
- *
- */
+// Commentary:
+//
+//
 
-/* Change log:
- *
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
@@ -24,7 +23,7 @@ class dtkComposerNodeFactory;
 class DTKCOMPOSER_EXPORT dtkComposerExtension
 {
 public:
-             dtkComposerExtension(void) {}
+    dtkComposerExtension(void) {}
     virtual ~dtkComposerExtension(void) {}
 
 public:
@@ -35,5 +34,5 @@ DTK_DECLARE_PLUGIN(dtkComposerExtension, DTKCOMPOSER_EXPORT)
 DTK_DECLARE_PLUGIN_FACTORY(dtkComposerExtension, DTKCOMPOSER_EXPORT)
 DTK_DECLARE_PLUGIN_MANAGER(dtkComposerExtension, DTKCOMPOSER_EXPORT)
 
-
-
+//
+// dtkComposerExtension.h ends here

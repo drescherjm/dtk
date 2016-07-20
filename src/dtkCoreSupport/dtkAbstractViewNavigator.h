@@ -36,15 +36,15 @@ class DTKCORESUPPORT_EXPORT dtkAbstractViewNavigator : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkAbstractViewNavigator(void);
-             dtkAbstractViewNavigator(const dtkAbstractViewNavigator& other);
+    dtkAbstractViewNavigator(void);
+    dtkAbstractViewNavigator(const dtkAbstractViewNavigator& other);
     virtual ~dtkAbstractViewNavigator(void);
 
 public:
     virtual QString description(void) const = 0;
     virtual QStringList handled(void) const = 0;
 
-            bool enabled(void) const;
+    bool enabled(void) const;
     virtual void  enable(void);
     virtual void disable(void);
 

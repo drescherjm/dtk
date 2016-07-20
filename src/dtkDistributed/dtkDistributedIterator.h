@@ -29,11 +29,11 @@ public:
     typedef std::random_access_iterator_tag     iterator_category;
     typedef typename Container::value_type      value_type;
     typedef typename Container::difference_type difference_type;
-    typedef value_type*                         pointer;
+    typedef value_type                         *pointer;
     typedef value_type&                         reference;
 
 public:
-             dtkDistributedIterator(void);
+    dtkDistributedIterator(void);
     explicit dtkDistributedIterator(const Container& container, qlonglong index);
 
 public:
@@ -179,7 +179,7 @@ template <typename Container> inline dtkDistributedIterator<Container>& dtkDistr
 
 template <typename Container> inline dtkDistributedIterator<Container>& dtkDistributedIterator<Container>::operator -= (qlonglong j)
 {
-    gid-= j; return *this;
+    gid -= j; return *this;
 }
 
 template <typename Container> inline dtkDistributedIterator<Container> dtkDistributedIterator<Container>::operator + (qlonglong j) const

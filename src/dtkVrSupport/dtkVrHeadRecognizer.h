@@ -1,5 +1,5 @@
-/* dtkVrHeadRecognizer.h --- 
- * 
+/* dtkVrHeadRecognizer.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Oct 26 12:38:20 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -31,7 +31,7 @@ class DTKVRSUPPORT_EXPORT dtkVrHeadRecognizer : public QObject
     Q_OBJECT
 
 public:
-     dtkVrHeadRecognizer(void);
+    dtkVrHeadRecognizer(void);
     ~dtkVrHeadRecognizer(void);
 
     void setView(dtkAbstractView *view);

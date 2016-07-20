@@ -1,5 +1,5 @@
-/* dtkNotificationEvent.cpp --- 
- * 
+/* dtkNotificationEvent.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 20:37:16 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 38
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkNotification.h"

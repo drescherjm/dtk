@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -69,6 +69,7 @@ dtkComposerNodeView::~dtkComposerNodeView(void)
 {
     if (d->view)
         delete d->view;
+
     d->view = NULL;
 
     delete d;
@@ -88,28 +89,28 @@ QString dtkComposerNodeView::titleHint(void)
 
 QString dtkComposerNodeView::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "type";
 
-    if(port == 1)
+    if (port == 1)
         return "fullscreen";
 
-    if(port == 2)
+    if (port == 2)
         return "head position";
 
-    if(port == 3)
+    if (port == 3)
         return "head orientation";
 
-    if(port == 4)
+    if (port == 4)
         return "screen upper left";
 
-    if(port == 5)
+    if (port == 5)
         return "screen lower left";
 
-    if(port == 6)
+    if (port == 6)
         return "screen lower right";
 
-    if(port == 7)
+    if (port == 7)
         return "data";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
@@ -126,36 +127,36 @@ void dtkComposerNodeView::run(void)
         d->view = this->view();
 
     if (!d->view) {
-        dtkWarn() << "no view, abort "<< this->currentImplementation();
+        dtkWarn() << "no view, abort " << this->currentImplementation();
         return;
     }
 
-    if(!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data()) {
+    if (!d->receiver_fullscreen.isEmpty() && d->receiver_fullscreen.data()) {
         d->view->widget()->showFullScreen();
     } else {
         d->view->widget()->resize(1024, 1024);
         d->view->widget()->show();
     }
 
-    if(!d->receiver_head_position.isEmpty())
+    if (!d->receiver_head_position.isEmpty())
         d->view->setHeadPosition(*d->receiver_head_position.data());
 
-    if(!d->receiver_head_orientation.isEmpty())
+    if (!d->receiver_head_orientation.isEmpty())
         d->view->setHeadOrientation(*d->receiver_head_orientation.data());
 
-    if(!d->receiver_screen_upper_left.isEmpty())
+    if (!d->receiver_screen_upper_left.isEmpty())
         d->view->setUpperLeft(*d->receiver_screen_upper_left.data());
 
-    if(!d->receiver_screen_lower_left.isEmpty())
+    if (!d->receiver_screen_lower_left.isEmpty())
         d->view->setLowerLeft(*d->receiver_screen_lower_left.data());
 
-    if(!d->receiver_screen_lower_right.isEmpty())
+    if (!d->receiver_screen_lower_right.isEmpty())
         d->view->setLowerRight(*d->receiver_screen_lower_right.data());
 
-    if(!d->receiver_data.isEmpty())
+    if (!d->receiver_data.isEmpty())
         foreach (dtkAbstractData *data, d->receiver_data.allData())
             d->view->setData(data);
 }
 
-// 
+//
 // dtkComposerNodeView.cpp ends here

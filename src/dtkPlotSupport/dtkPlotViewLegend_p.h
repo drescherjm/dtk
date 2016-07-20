@@ -1,11 +1,11 @@
 /* dtkPlotViewLegend_p.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Tue Oct  1 06:17:40 2013 (+0200)
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #ifndef DTKPLOTVIEWLEGEND_P_H
@@ -34,9 +34,9 @@ protected slots:
     void showCurve(QwtPlotItem *item, bool value);
 
 public:
-     dtkPlotView *plotView;
-     QwtPlot *plot;
-     QwtLegend *legend;
+    dtkPlotView *plotView;
+    QwtPlot *plot;
+    QwtLegend *legend;
 };
 
 #endif

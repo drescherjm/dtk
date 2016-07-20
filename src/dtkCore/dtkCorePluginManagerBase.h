@@ -31,38 +31,38 @@ public:
     static dtkCorePluginManagerBase *instance(void);
 
 public:
-    void    insertName(const QString& path, const QVariant& name);
-    void insertVersion(const QString& path, const QVariant& version);
-    void insertConcept(const QString& path, const QVariant& concept);
+    void    insertName(const QString& path, const QString& name);
+    void insertVersion(const QString& path, const QString& version);
+    void insertConcept(const QString& path, const QString& concept);
 
 public:
-    QString pluginPath(const QVariant& name) const;
+    QString pluginPath(const QString& name) const;
 
-    QVariant    name(const QString& path) const;
-    QVariant version(const QString& path) const;
-    QVariant concept(const QString& path) const;
-
-public:
-    bool    hasName(const QVariant& name) const;
-    bool hasVersion(const QVariant& version) const;
-    bool hasConcept(const QVariant& concept) const;
+    QString    name(const QString& path) const;
+    QString version(const QString& path) const;
+    QString concept(const QString& path) const;
 
 public:
-    QHash<QString, QVariant>::const_iterator namesBegin(void) const;
-    QHash<QString, QVariant>::const_iterator   namesEnd(void) const;
+    bool    hasName(const QString& name) const;
+    bool hasVersion(const QString& version) const;
+    bool hasConcept(const QString& concept) const;
 
-    QHash<QString, QVariant>::const_iterator versionsBegin(void) const;
-    QHash<QString, QVariant>::const_iterator   versionsEnd(void) const;
+public:
+    QHash<QString, QString>::const_iterator namesBegin(void) const;
+    QHash<QString, QString>::const_iterator   namesEnd(void) const;
 
-    QHash<QString, QVariant>::const_iterator conceptsBegin(void) const;
-    QHash<QString, QVariant>::const_iterator   conceptsEnd(void) const;
+    QHash<QString, QString>::const_iterator versionsBegin(void) const;
+    QHash<QString, QString>::const_iterator   versionsEnd(void) const;
+
+    QHash<QString, QString>::const_iterator conceptsBegin(void) const;
+    QHash<QString, QString>::const_iterator   conceptsEnd(void) const;
 
 public:
     QStringList pluginPaths(void) const;
 
-    QVariantList    names(void) const;
-    QVariantList versions(void) const;
-    QVariantList concepts(void) const;
+    QStringList    names(void) const;
+    QStringList versions(void) const;
+    QStringList concepts(void) const;
 
 private:
     dtkCorePluginManagerBase(void);

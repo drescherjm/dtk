@@ -22,7 +22,7 @@ class DTKGUISUPPORT_EXPORT dtkSpacer : public QWidget
 
 public:
     dtkSpacer(QWidget *parent = 0, int width = 0, int height = 0);
-   ~dtkSpacer(void);
+    ~dtkSpacer(void);
 
     QSize sizeHint (void) const;
 };

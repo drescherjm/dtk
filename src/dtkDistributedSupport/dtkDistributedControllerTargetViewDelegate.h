@@ -1,5 +1,5 @@
-/* dtkDistributedControllerTargetViewDelegate.h --- 
- * 
+/* dtkDistributedControllerTargetViewDelegate.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 10:04:27 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 31
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERTARGETVIEWDELEGATE_H
@@ -37,11 +37,11 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerTargetViewDelegate : 
     Q_OBJECT
 
 public:
-     dtkDistributedControllerTargetViewDelegate(QWidget *parent = 0);
+    dtkDistributedControllerTargetViewDelegate(QWidget *parent = 0);
     ~dtkDistributedControllerTargetViewDelegate(void);
 
 public:
-    void setController(dtkDistributedController *controller); 
+    void setController(dtkDistributedController *controller);
 
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -71,7 +71,7 @@ class dtkDistributedControllerTargetViewEditor : public QWidget
     Q_OBJECT
 
 public:
-     dtkDistributedControllerTargetViewEditor(QWidget *parent = 0);
+    dtkDistributedControllerTargetViewEditor(QWidget *parent = 0);
     ~dtkDistributedControllerTargetViewEditor(void);
 
 public:

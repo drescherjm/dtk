@@ -24,8 +24,7 @@
 class DTKMETA_EXPORT dtkMetaContainerSequentialHandler
 {
 public:
-    struct DTKMETA_EXPORT iterator
-    {
+    struct DTKMETA_EXPORT iterator {
     public:
         virtual ~iterator(void) {}
 
@@ -55,8 +54,7 @@ public:
     };
 
 public:
-    struct DTKMETA_EXPORT const_iterator
-    {
+    struct DTKMETA_EXPORT const_iterator {
     public:
         virtual ~const_iterator(void) {}
 
@@ -64,18 +62,18 @@ public:
         virtual const_iterator *clone(void) const = 0;
         virtual void copy(const const_iterator& o) = 0;
         virtual bool equal(const const_iterator& o) const = 0;
-        
+
     public:
         virtual void advance(void) = 0;
         virtual void  moveForward(qlonglong step) = 0;
         virtual void moveBackward(qlonglong step) = 0;
-     
+
     public:
         virtual const void *value(void) const = 0;
         virtual QVariant variant(void) const = 0;
     };
 
-public:  
+public:
     virtual ~dtkMetaContainerSequentialHandler(void) {}
 
 public:
@@ -140,8 +138,7 @@ public:
     typedef dtkMetaContainerSequentialHandler::const_iterator HandlerConstIterator;
 
 public:
-    struct iterator : public HandlerIterator
-    {
+    struct iterator : public HandlerIterator {
     public:
         Iterator it;
 
@@ -163,19 +160,18 @@ public:
         QVariant variant(void) const;
 
     public:
-         void    assign(const void *t);
-         void addAssign(const void *t);
-         void subAssign(const void *t);
-         void mulAssign(const void *t);
-         void divAssign(const void *t);
+        void    assign(const void *t);
+        void addAssign(const void *t);
+        void subAssign(const void *t);
+        void mulAssign(const void *t);
+        void divAssign(const void *t);
 
     public:
         bool equalToValue(const void *t) const;
     };
 
 public:
-    struct const_iterator : public HandlerConstIterator
-    { 
+    struct const_iterator : public HandlerConstIterator {
     public:
         ConstIterator it;
 
@@ -186,7 +182,7 @@ public:
         HandlerConstIterator *clone(void) const;
         void copy(const HandlerConstIterator& o);
         bool equal(const HandlerConstIterator& o) const;
-        
+
     public:
         void advance(void);
         void  moveForward(qlonglong step);
@@ -205,7 +201,7 @@ public:
 
 public:
     explicit dtkMetaContainerSequentialHandlerTemplate(T *c);
-            ~dtkMetaContainerSequentialHandlerTemplate(void);
+    ~dtkMetaContainerSequentialHandlerTemplate(void);
 
 public:
     QString description(void) const;
@@ -234,7 +230,7 @@ public:
 
 public:
     const void *at(qlonglong idx) const;
-          void *at(qlonglong idx);
+    void *at(qlonglong idx);
 
 public:
     HandlerIterator *iteratorAt(qlonglong idx, HandlerIterator *pit);
@@ -248,18 +244,25 @@ private:
 // dtkMetaContainerSequentialHandlerHelper
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> struct dtkMetaContainerSequentialHandlerHelper
-{
+template <typename T> struct dtkMetaContainerSequentialHandlerHelper {
     typedef typename T::value_type ValueType;
     typedef typename T::iterator Iterator;
 
 public:
-    template <typename U = T> static typename std::enable_if< dtkMetaIteratorIsBidirectional<typename U::iterator>::value, bool>::type hasBidirectionalIterator(void) { return true; }
-    template <typename U = T> static typename std::enable_if<!dtkMetaIteratorIsBidirectional<typename U::iterator>::value, bool>::type hasBidirectionalIterator(void) { return false; }
+    template <typename U = T> static typename std::enable_if< dtkMetaIteratorIsBidirectional<typename U::iterator>::value, bool>::type hasBidirectionalIterator(void) {
+        return true;
+    }
+    template <typename U = T> static typename std::enable_if < !dtkMetaIteratorIsBidirectional<typename U::iterator>::value, bool >::type hasBidirectionalIterator(void) {
+        return false;
+    }
 
 public:
-    template <typename U = T> static typename std::enable_if< dtkMetaIteratorIsRandomAccess<typename U::iterator>::value, bool>::type hasRandomAccesIterator(void) { return true; }
-    template <typename U = T> static typename std::enable_if<!dtkMetaIteratorIsRandomAccess<typename U::iterator>::value, bool>::type hasRandomAccesIterator(void) { return false; }
+    template <typename U = T> static typename std::enable_if< dtkMetaIteratorIsRandomAccess<typename U::iterator>::value, bool>::type hasRandomAccesIterator(void) {
+        return true;
+    }
+    template <typename U = T> static typename std::enable_if < !dtkMetaIteratorIsRandomAccess<typename U::iterator>::value, bool >::type hasRandomAccesIterator(void) {
+        return false;
+    }
 
 public:
     static bool      empty(const T *c);
@@ -270,11 +273,11 @@ public:
 
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaContainerIsReservable<U>::value>::type reserve(T *c, qlonglong size);
-    template <typename U = T> static typename std::enable_if<!dtkMetaContainerIsReservable<U>::value>::type reserve(T *c, qlonglong size);
+    template <typename U = T> static typename std::enable_if < !dtkMetaContainerIsReservable<U>::value >::type reserve(T *c, qlonglong size);
 
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaContainerIsResizable<U>::value>::type resize(T *c, qlonglong size);
-    template <typename U = T> static typename std::enable_if<!dtkMetaContainerIsResizable<U>::value>::type resize(T *c, qlonglong size);
+    template <typename U = T> static typename std::enable_if < !dtkMetaContainerIsResizable<U>::value >::type resize(T *c, qlonglong size);
 
 public:
     static void   insert(T *c, qlonglong idx, const ValueType& t);
@@ -296,39 +299,36 @@ public:
 // dtkMetaContainerSequentialItemHelper
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> struct dtkMetaContainerSequentialIteratorHelper
-{
+template <typename T> struct dtkMetaContainerSequentialIteratorHelper {
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaTypeIsAssignable<U>::value>::type assign(T& lhs, const T& rhs);
-    template <typename U = T> static typename std::enable_if<!dtkMetaTypeIsAssignable<U>::value>::type assign(T&, const T&);
+    template <typename U = T> static typename std::enable_if < !dtkMetaTypeIsAssignable<U>::value >::type assign(T&, const T&);
 
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaTypeIsAddAssignable<U>::value>::type addAssign(T& lhs, const T& rhs);
-    template <typename U = T> static typename std::enable_if<!dtkMetaTypeIsAddAssignable<U>::value>::type addAssign(T&, const T&);
+    template <typename U = T> static typename std::enable_if < !dtkMetaTypeIsAddAssignable<U>::value >::type addAssign(T&, const T&);
 
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaTypeIsSubAssignable<U>::value>::type subAssign(T& lhs, const T& rhs);
-    template <typename U = T> static typename std::enable_if<!dtkMetaTypeIsSubAssignable<U>::value>::type subAssign(T&, const T&);
+    template <typename U = T> static typename std::enable_if < !dtkMetaTypeIsSubAssignable<U>::value >::type subAssign(T&, const T&);
 
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaTypeIsMulAssignable<U>::value>::type mulAssign(T& lhs, const T& rhs);
-    template <typename U = T> static typename std::enable_if<!dtkMetaTypeIsMulAssignable<U>::value>::type mulAssign(T&, const T&);
+    template <typename U = T> static typename std::enable_if < !dtkMetaTypeIsMulAssignable<U>::value >::type mulAssign(T&, const T&);
 
 public:
     template <typename U = T> static typename std::enable_if< dtkMetaTypeIsDivAssignable<U>::value>::type divAssign(T& lhs, const T& rhs);
-    template <typename U = T> static typename std::enable_if<!dtkMetaTypeIsDivAssignable<U>::value>::type divAssign(T&, const T&);
+    template <typename U = T> static typename std::enable_if < !dtkMetaTypeIsDivAssignable<U>::value >::type divAssign(T&, const T&);
 };
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaContainerSequentialPrivate::convertFunctor for QMetatype system
 // /////////////////////////////////////////////////////////////////
 
-template <typename From> struct dtkMetaContainerSequentialConvertFunctor
-{    
+template <typename From> struct dtkMetaContainerSequentialConvertFunctor {
 };
 
-template <typename From> struct dtkMetaContainerSequentialConvertFunctor<From *>
-{
+template <typename From> struct dtkMetaContainerSequentialConvertFunctor<From *> {
     dtkMetaContainerSequentialHandler *operator () (From *f) const;
 };
 
@@ -336,23 +336,23 @@ template <typename From> struct dtkMetaContainerSequentialConvertFunctor<From *>
 // dtkMetaContainerSequentialRegisterConverter
 // ///////////////////////////////////////////////////////////////////
 
-template < typename T, bool = QMetaTypeId2<typename std::remove_pointer<T>::type::value_type>::Defined > struct dtkContainerSequentialValueTypeIsMetaType
-{
-    static bool record(int) { return false; }
+template < typename T, bool = QMetaTypeId2<typename std::remove_pointer<T>::type::value_type>::Defined > struct dtkContainerSequentialValueTypeIsMetaType {
+    static bool record(int) {
+        return false;
+    }
 };
 
-template < typename T > struct dtkContainerSequentialValueTypeIsMetaType<T, true>
-{
+template < typename T > struct dtkContainerSequentialValueTypeIsMetaType<T, true> {
     static bool record(int id);
 };
 
-template < typename T, bool = dtkMetaTypeIsSequentialContainerPointer<T>::value > struct dtkMetaContainerSequentialRegisterConverter
-{
-    static bool record(int) { return false; }
+template < typename T, bool = dtkMetaTypeIsSequentialContainerPointer<T>::value > struct dtkMetaContainerSequentialRegisterConverter {
+    static bool record(int) {
+        return false;
+    }
 };
 
-template < typename T> struct dtkMetaContainerSequentialRegisterConverter<T, true> : public dtkContainerSequentialValueTypeIsMetaType<T>
-{
+template < typename T> struct dtkMetaContainerSequentialRegisterConverter<T, true> : public dtkContainerSequentialValueTypeIsMetaType<T> {
 };
 
 // /////////////////////////////////////////////////////////////////

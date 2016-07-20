@@ -1,5 +1,5 @@
-/* dtkComposerSceneNodeHandle.h --- 
- * 
+/* dtkComposerSceneNodeHandle.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 18 14:05:01 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENODEHANDLE_H
@@ -32,7 +32,7 @@ class dtkComposerSceneNodeHandlePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeHandle : public QGraphicsItem
 {
 public:
-     dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent);
+    dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent);
     ~dtkComposerSceneNodeHandle(void);
 
 public:

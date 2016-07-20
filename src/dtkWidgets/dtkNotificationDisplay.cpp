@@ -1,5 +1,5 @@
-/* dtkNotificationDisplay.cpp --- 
- * 
+/* dtkNotificationDisplay.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr 20 21:07:54 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 184
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkNotification.h"
@@ -23,7 +23,7 @@
 #include "dtkNotificationQueue.h"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkNotificationDisplayPrivate
@@ -46,7 +46,7 @@ QString dtkNotificationDisplayPrivate::read(const QString& path)
 {
     QFile file(path);
 
-    if(!file.open(QFile::ReadOnly))
+    if (!file.open(QFile::ReadOnly))
         qDebug() << "Unable to read file" << path;
 
     QString contents = file.readAll();
@@ -57,7 +57,7 @@ QString dtkNotificationDisplayPrivate::read(const QString& path)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent), d(new dtkNotificationDisplayPrivate)
@@ -89,7 +89,7 @@ dtkNotificationDisplay::dtkNotificationDisplay(QWidget *parent) : QFrame(parent)
     d->clse = new QToolButton(this);
     d->clse->setObjectName("dtkNotifiable-clse");
     d->clse->setVisible(false);
-    
+
     QVBoxLayout *l_layout = new QVBoxLayout;
     l_layout->setContentsMargins(0, 0, 0, 0);
     l_layout->setSpacing(0);

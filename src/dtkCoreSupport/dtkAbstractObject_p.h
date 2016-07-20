@@ -1,5 +1,5 @@
-/* dtkAbstractObject_p.h --- 
- * 
+/* dtkAbstractObject_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 10:50:52 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 13
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTOBJECT_P_H
@@ -34,9 +34,9 @@ class DTKCORESUPPORT_EXPORT dtkAbstractObjectPrivate
 public:
     dtkAbstractObjectPrivate(dtkAbstractObject *q = 0) : q_ptr(q) {}
     dtkAbstractObjectPrivate(const dtkAbstractObjectPrivate& other, dtkAbstractObject *q = 0) : q_ptr(q),
-                                                                     values(other.values),
-                                                                     properties(other.properties),
-                                                                     metadatas(other.metadatas) {}
+        values(other.values),
+        properties(other.properties),
+        metadatas(other.metadatas) {}
 public:
     virtual ~dtkAbstractObjectPrivate(void) {}
 

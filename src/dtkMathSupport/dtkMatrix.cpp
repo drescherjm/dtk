@@ -1,15 +1,15 @@
-/* dtkMatrix.cpp --- 
- * 
+/* dtkMatrix.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkMatrix.h"
@@ -31,7 +31,7 @@ template <> QByteArray *dtkDeprecated::dtkMatrix<double>::serialize(void)
     stream << m_ccol;
 
     for (unsigned i = 0; i < i_end; ++i)
-	stream << (*m_rgrow)[i];
+        stream << (*m_rgrow)[i];
 
     return array;
 };
@@ -51,5 +51,5 @@ template <> void dtkDeprecated::dtkMatrix<double>::deserialize(const QByteArray&
     this->allocate(m_crow, m_ccol);
 
     for (unsigned i = 0; i < i_end; ++i)
-	stream >> (*m_rgrow)[i];
+        stream >> (*m_rgrow)[i];
 };

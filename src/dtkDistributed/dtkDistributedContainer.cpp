@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -29,13 +29,13 @@
 /*! \fn dtkDistributedContainer::dtkDistributedContainer(void)
 
   Constructs a distributed container and instanciates a default mapper.
-  
+
 */
 
 /*! \fn dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size)
 
   Constructs a distributed container of size \a size and instanciates a default mapper.
-  
+
 */
 
 /*! \fn dtkDistributedContainer::dtkDistributedContainer(const qlonglong& size, dtkDistributedMapper *mapper)
@@ -62,7 +62,7 @@
   Returns \c true if the distributed container has size 0; otherwise returns \c false.
 
   \sa size()
-  
+
 */
 
 /*! \fn qlonglong dtkDistributedContainer::size(void) const
@@ -91,5 +91,5 @@
 
 */
 
-// 
+//
 // dtkDistributedContainer.cpp ends here

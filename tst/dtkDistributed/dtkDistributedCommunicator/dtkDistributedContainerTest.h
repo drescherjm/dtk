@@ -1,15 +1,15 @@
-/* dtkDistributedContainerTest.h --- 
- * 
+/* dtkDistributedContainerTest.h ---
+ *
  * Author: Thibaud Kloczko
  * Created: 2013 Mon Feb  4 15:37:01 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once

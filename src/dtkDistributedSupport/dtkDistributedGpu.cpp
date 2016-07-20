@@ -1,5 +1,5 @@
-/* dtkDistributedGpu.cpp --- 
- * 
+/* dtkDistributedGpu.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:23:42 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 15
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedGpu.h"

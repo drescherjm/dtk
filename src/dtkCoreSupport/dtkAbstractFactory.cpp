@@ -1,5 +1,5 @@
-/* dtkAbstractFactory.cpp --- 
- * 
+/* dtkAbstractFactory.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 12 11:05:50 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <QtCore/QtGlobal>

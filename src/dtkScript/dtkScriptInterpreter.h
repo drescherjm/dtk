@@ -1,5 +1,5 @@
-/* dtkScriptInterpreter.h --- 
- * 
+/* dtkScriptInterpreter.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:10:31 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 203
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 
@@ -44,7 +44,7 @@ public:
     };
 
 public:
-             dtkScriptInterpreter(QObject *parent = 0);
+    dtkScriptInterpreter(QObject *parent = 0);
     virtual ~dtkScriptInterpreter(void);
 
 public slots:

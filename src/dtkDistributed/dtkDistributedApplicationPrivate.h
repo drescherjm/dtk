@@ -24,7 +24,7 @@
 class DTKDISTRIBUTED_EXPORT dtkDistributedApplicationPrivate: public dtkApplicationPrivate
 {
 public:
-             dtkDistributedApplicationPrivate(void);
+    dtkDistributedApplicationPrivate(void);
     virtual ~dtkDistributedApplicationPrivate(void);
 
 public:

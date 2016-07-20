@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,7 +28,7 @@
 template <> class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeObject<dtkAbstractProcess> : public dtkComposerNodeLeafObject
 {
 public:
-             dtkComposerNodeObject(void);
+    dtkComposerNodeObject(void);
     virtual ~dtkComposerNodeObject(void);
 
 public:
@@ -64,10 +64,10 @@ protected:
 
 protected:
     QString m_implementation;
-    dtkAbstractProcess *m_process;    
+    dtkAbstractProcess *m_process;
 };
 
 typedef dtkComposerNodeObject<dtkAbstractProcess> dtkComposerNodeLeafProcessSupport;
 
-// 
+//
 // dtkComposerNodeLeafProcessSupport.h ends here

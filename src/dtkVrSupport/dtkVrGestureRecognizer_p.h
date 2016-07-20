@@ -1,5 +1,5 @@
-/* dtkVrGestureRecognizer_p.h --- 
- * 
+/* dtkVrGestureRecognizer_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:12:59 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 27
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <dtkConfig.h>

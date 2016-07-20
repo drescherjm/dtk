@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayScalar.h --- 
- * 
+/* dtkComposerNodeArrayScalar.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 15 11:33:29 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 2
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEARRAYSCALAR_H
@@ -28,9 +28,9 @@ class dtkComposerNodeArrayScalarPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalar : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayScalar(void);
+    dtkComposerNodeArrayScalar(void);
     ~dtkComposerNodeArrayScalar(void);
-    
+
 public:
     void run(void);
 

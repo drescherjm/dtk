@@ -1,5 +1,5 @@
-/* dtkDistributedServerDaemon.h --- 
- * 
+/* dtkDistributedServerDaemon.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Jun  1 11:27:42 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 32
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVERDAEMON_H
@@ -33,7 +33,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerDaemon : public QTcpServe
     Q_OBJECT
 
 public:
-     dtkDistributedServerDaemon(quint16 port, QObject *parent = 0);
+    dtkDistributedServerDaemon(quint16 port, QObject *parent = 0);
     ~dtkDistributedServerDaemon(void);
 
     void setManager(dtkDistributedServerManager::Type type);

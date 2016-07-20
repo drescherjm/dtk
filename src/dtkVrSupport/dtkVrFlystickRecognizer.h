@@ -1,5 +1,5 @@
-/* dtkVrFlystickRecognizer.h --- 
- * 
+/* dtkVrFlystickRecognizer.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb  7 10:04:10 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -31,7 +31,7 @@ class DTKVRSUPPORT_EXPORT dtkVrFlystickRecognizer : public QObject
     Q_OBJECT
 
 public:
-     dtkVrFlystickRecognizer(void);
+    dtkVrFlystickRecognizer(void);
     ~dtkVrFlystickRecognizer(void);
 
 public slots:

@@ -1,5 +1,5 @@
-/* dtkDistributedServiceWin.cpp --- 
- * 
+/* dtkDistributedServiceWin.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:40:36 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 36
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedService.h"
@@ -29,46 +29,46 @@
 #include <stdio.h>
 
 #ifndef MAX_PATH
-#define	MAX_PATH	(260)
+#define MAX_PATH    (260)
 #endif
 
-#define	_MAX_PATH	MAX_PATH
+#define _MAX_PATH   MAX_PATH
 
-typedef SERVICE_STATUS_HANDLE(WINAPI*PRegisterServiceCtrlHandler)(const wchar_t*,LPHANDLER_FUNCTION);
+typedef SERVICE_STATUS_HANDLE(WINAPI *PRegisterServiceCtrlHandler)(const wchar_t *, LPHANDLER_FUNCTION);
 static PRegisterServiceCtrlHandler pRegisterServiceCtrlHandler = 0;
-typedef BOOL(WINAPI*PSetServiceStatus)(SERVICE_STATUS_HANDLE,LPSERVICE_STATUS);
+typedef BOOL(WINAPI *PSetServiceStatus)(SERVICE_STATUS_HANDLE, LPSERVICE_STATUS);
 static PSetServiceStatus pSetServiceStatus = 0;
-typedef BOOL(WINAPI*PChangeServiceConfig2)(SC_HANDLE,DWORD,LPVOID);
+typedef BOOL(WINAPI *PChangeServiceConfig2)(SC_HANDLE, DWORD, LPVOID);
 static PChangeServiceConfig2 pChangeServiceConfig2 = 0;
-typedef BOOL(WINAPI*PCloseServiceHandle)(SC_HANDLE);
+typedef BOOL(WINAPI *PCloseServiceHandle)(SC_HANDLE);
 static PCloseServiceHandle pCloseServiceHandle = 0;
-typedef SC_HANDLE(WINAPI*PCreateService)(SC_HANDLE,LPCTSTR,LPCTSTR,DWORD,DWORD,DWORD,DWORD,LPCTSTR,LPCTSTR,LPDWORD,LPCTSTR,LPCTSTR,LPCTSTR);
+typedef SC_HANDLE(WINAPI *PCreateService)(SC_HANDLE, LPCTSTR, LPCTSTR, DWORD, DWORD, DWORD, DWORD, LPCTSTR, LPCTSTR, LPDWORD, LPCTSTR, LPCTSTR, LPCTSTR);
 static PCreateService pCreateService = 0;
-typedef SC_HANDLE(WINAPI*POpenSCManager)(LPCTSTR,LPCTSTR,DWORD);
+typedef SC_HANDLE(WINAPI *POpenSCManager)(LPCTSTR, LPCTSTR, DWORD);
 static POpenSCManager pOpenSCManager = 0;
-typedef BOOL(WINAPI*PDeleteService)(SC_HANDLE);
+typedef BOOL(WINAPI *PDeleteService)(SC_HANDLE);
 static PDeleteService pDeleteService = 0;
-typedef SC_HANDLE(WINAPI*POpenService)(SC_HANDLE,LPCTSTR,DWORD);
+typedef SC_HANDLE(WINAPI *POpenService)(SC_HANDLE, LPCTSTR, DWORD);
 static POpenService pOpenService = 0;
-typedef BOOL(WINAPI*PQueryServiceStatus)(SC_HANDLE,LPSERVICE_STATUS);
+typedef BOOL(WINAPI *PQueryServiceStatus)(SC_HANDLE, LPSERVICE_STATUS);
 static PQueryServiceStatus pQueryServiceStatus = 0;
-typedef BOOL(WINAPI*PStartServiceCtrlDispatcher)(CONST SERVICE_TABLE_ENTRY*);
+typedef BOOL(WINAPI *PStartServiceCtrlDispatcher)(CONST SERVICE_TABLE_ENTRY *);
 static PStartServiceCtrlDispatcher pStartServiceCtrlDispatcher = 0;
-typedef BOOL(WINAPI*PStartService)(SC_HANDLE,DWORD,const wchar_t**);
+typedef BOOL(WINAPI *PStartService)(SC_HANDLE, DWORD, const wchar_t **);
 static PStartService pStartService = 0;
-typedef BOOL(WINAPI*PControlService)(SC_HANDLE,DWORD,LPSERVICE_STATUS);
+typedef BOOL(WINAPI *PControlService)(SC_HANDLE, DWORD, LPSERVICE_STATUS);
 static PControlService pControlService = 0;
-typedef HANDLE(WINAPI*PDeregisterEventSource)(HANDLE);
+typedef HANDLE(WINAPI *PDeregisterEventSource)(HANDLE);
 static PDeregisterEventSource pDeregisterEventSource = 0;
-typedef BOOL(WINAPI*PReportEvent)(HANDLE,WORD,WORD,DWORD,PSID,WORD,DWORD,LPCTSTR*,LPVOID);
+typedef BOOL(WINAPI *PReportEvent)(HANDLE, WORD, WORD, DWORD, PSID, WORD, DWORD, LPCTSTR *, LPVOID);
 static PReportEvent pReportEvent = 0;
-typedef HANDLE(WINAPI*PRegisterEventSource)(LPCTSTR,LPCTSTR);
+typedef HANDLE(WINAPI *PRegisterEventSource)(LPCTSTR, LPCTSTR);
 static PRegisterEventSource pRegisterEventSource = 0;
-typedef DWORD(WINAPI*PRegisterServiceProcess)(DWORD,DWORD);
+typedef DWORD(WINAPI *PRegisterServiceProcess)(DWORD, DWORD);
 static PRegisterServiceProcess pRegisterServiceProcess = 0;
-typedef BOOL(WINAPI*PQueryServiceConfig)(SC_HANDLE,LPQUERY_SERVICE_CONFIG,DWORD,LPDWORD);
+typedef BOOL(WINAPI *PQueryServiceConfig)(SC_HANDLE, LPQUERY_SERVICE_CONFIG, DWORD, LPDWORD);
 static PQueryServiceConfig pQueryServiceConfig = 0;
-typedef BOOL(WINAPI*PQueryServiceConfig2)(SC_HANDLE,DWORD,LPBYTE,DWORD,LPDWORD);
+typedef BOOL(WINAPI *PQueryServiceConfig2)(SC_HANDLE, DWORD, LPBYTE, DWORD, LPDWORD);
 static PQueryServiceConfig2 pQueryServiceConfig2 = 0;
 
 #define RESOLVE(name) p##name = (P##name)lib.resolve(#name);
@@ -99,6 +99,7 @@ static bool winServiceInit(void)
         RESOLVEW(QueryServiceConfig);
         RESOLVEW(QueryServiceConfig2);
     }
+
     return pOpenSCManager != 0;
 }
 
@@ -106,11 +107,13 @@ bool dtkDistributedServiceController::isInstalled(void) const
 {
     Q_D(const dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
@@ -120,8 +123,10 @@ bool dtkDistributedServiceController::isInstalled(void) const
             result = true;
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -129,24 +134,31 @@ bool dtkDistributedServiceController::isRunning(void) const
 {
     Q_D(const dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_STATUS);
+
         if (hService) {
             SERVICE_STATUS info;
             int res = pQueryServiceStatus(hService, &info);
+
             if (res)
                 result = info.dwCurrentState != SERVICE_STOPPED;
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -154,26 +166,33 @@ QString dtkDistributedServiceController::serviceFilePath(void) const
 {
     Q_D(const dtkDistributedServiceController);
     QString result;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_CONFIG);
+
         if (hService) {
             DWORD sizeNeeded = 0;
             char data[8 * 1024];
+
             if (pQueryServiceConfig(hService, (LPQUERY_SERVICE_CONFIG)data, 8 * 1024, &sizeNeeded)) {
                 LPQUERY_SERVICE_CONFIG config = (LPQUERY_SERVICE_CONFIG)data;
-                result = QString::fromUtf16((const ushort*)config->lpBinaryPathName);
+                result = QString::fromUtf16((const ushort *)config->lpBinaryPathName);
             }
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -181,32 +200,40 @@ QString dtkDistributedServiceController::serviceDescription(void) const
 {
     Q_D(const dtkDistributedServiceController);
     QString result;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
-             SERVICE_QUERY_CONFIG);
+                                          SERVICE_QUERY_CONFIG);
+
         if (hService) {
             DWORD dwBytesNeeded;
             char data[8 * 1024];
+
             if (pQueryServiceConfig2(
-                    hService,
-                    SERVICE_CONFIG_DESCRIPTION,
-                    (unsigned char *)data,
-                    8096,
-                    &dwBytesNeeded)) {
+                        hService,
+                        SERVICE_CONFIG_DESCRIPTION,
+                        (unsigned char *)data,
+                        8096,
+                        &dwBytesNeeded)) {
                 LPSERVICE_DESCRIPTION desc = (LPSERVICE_DESCRIPTION)data;
+
                 if (desc->lpDescription)
-                    result = QString::fromUtf16((const ushort*)desc->lpDescription);
+                    result = QString::fromUtf16((const ushort *)desc->lpDescription);
             }
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -214,26 +241,33 @@ dtkDistributedServiceController::StartupType dtkDistributedServiceController::st
 {
     Q_D(const dtkDistributedServiceController);
     StartupType result = ManualStartup;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, 0);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_QUERY_CONFIG);
+
         if (hService) {
             DWORD sizeNeeded = 0;
             char data[8 * 1024];
+
             if (pQueryServiceConfig(hService, (QUERY_SERVICE_CONFIG *)data, 8 * 1024, &sizeNeeded)) {
                 QUERY_SERVICE_CONFIG *config = (QUERY_SERVICE_CONFIG *)data;
                 result = config->dwStartType == SERVICE_DEMAND_START ? ManualStartup : AutoStartup;
             }
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -241,47 +275,60 @@ bool dtkDistributedServiceController::uninstall(void)
 {
     Q_D(dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), DELETE);
+
         if (hService) {
             if (pDeleteService(hService))
                 result = true;
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
-bool dtkDistributedServiceController::start(const QStringList &args)
+bool dtkDistributedServiceController::start(const QStringList& args)
 {
     Q_D(dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
+
     if (hSCM) {
         // Try to open the service
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), SERVICE_START);
+
         if (hService) {
             QVector<const wchar_t *> argv(args.size());
+
             for (int i = 0; i < args.size(); ++i)
-                argv[i] = (const wchar_t*)args.at(i).utf16();
+                argv[i] = (const wchar_t *)args.at(i).utf16();
 
             if (pStartService(hService, args.size(), argv.data()))
                 result = true;
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -289,32 +336,43 @@ bool dtkDistributedServiceController::stop(void)
 {
     Q_D(dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
+
     if (hSCM) {
-        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), SERVICE_STOP|SERVICE_QUERY_STATUS);
+        SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(), SERVICE_STOP | SERVICE_QUERY_STATUS);
+
         if (hService) {
             SERVICE_STATUS status;
+
             if (pControlService(hService, SERVICE_CONTROL_STOP, &status)) {
                 bool stopped = status.dwCurrentState == SERVICE_STOPPED;
                 int i = 0;
-                while(!stopped && i < 10) {
+
+                while (!stopped && i < 10) {
                     Sleep(200);
+
                     if (!pQueryServiceStatus(hService, &status))
                         break;
+
                     stopped = status.dwCurrentState == SERVICE_STOPPED;
                     ++i;
                 }
+
                 result = stopped;
             } else {
                 qErrnoWarning(GetLastError(), "stopping");
             }
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -322,21 +380,28 @@ bool dtkDistributedServiceController::pause(void)
 {
     Q_D(dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
+
     if (hSCM) {
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
-                             SERVICE_PAUSE_CONTINUE);
+                                          SERVICE_PAUSE_CONTINUE);
+
         if (hService) {
             SERVICE_STATUS status;
+
             if (pControlService(hService, SERVICE_CONTROL_PAUSE, &status))
                 result = true;
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -344,83 +409,110 @@ bool dtkDistributedServiceController::resume(void)
 {
     Q_D(dtkDistributedServiceController);
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
+
     if (hSCM) {
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
-                             SERVICE_PAUSE_CONTINUE);
+                                          SERVICE_PAUSE_CONTINUE);
+
         if (hService) {
             SERVICE_STATUS status;
+
             if (pControlService(hService, SERVICE_CONTROL_CONTINUE, &status))
                 result = true;
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
 bool dtkDistributedServiceController::sendCommand(int code)
 {
-   Q_D(dtkDistributedServiceController);
-   bool result = false;
-   if (!winServiceInit())
+    Q_D(dtkDistributedServiceController);
+    bool result = false;
+
+    if (!winServiceInit())
         return result;
 
     if (code < 0 || code > 127 || !isRunning())
         return result;
 
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_CONNECT);
+
     if (hSCM) {
         SC_HANDLE hService = pOpenService(hSCM, (LPCTSTR)d->serviceName.utf16(),
                                           SERVICE_USER_DEFINED_CONTROL);
+
         if (hService) {
             SERVICE_STATUS status;
+
             if (pControlService(hService, 128 + code, &status))
                 result = true;
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
 #if defined(QTSERVICE_DEBUG)
-extern void qtServiceLogDebug(dtkDistributedMsgType type, const char* msg);
+extern void qtServiceLogDebug(dtkDistributedMsgType type, const char *msg);
 #endif
 
-void dtkDistributedServiceBase::logMessage(const QString &message, MessageType type, int id, uint category, const QByteArray &data)
+void dtkDistributedServiceBase::logMessage(const QString& message, MessageType type, int id, uint category, const QByteArray& data)
 {
 #if defined(QTSERVICE_DEBUG)
     QByteArray dbgMsg("[LOGGED ");
+
     switch (type) {
     case Error: dbgMsg += "Error] " ; break;
+
     case Warning: dbgMsg += "Warning] "; break;
+
     case Success: dbgMsg += "Success] "; break;
+
     case Information: //fall through
     default: dbgMsg += "Information] "; break;
     }
+
     dbgMsg += message.toUtf8();
-    qtServiceLogDebug((dtkDistributedMsgType)-1, dbgMsg.constData());
+    qtServiceLogDebug((dtkDistributedMsgType) - 1, dbgMsg.constData());
 #endif
 
     Q_D(dtkDistributedServiceBase);
+
     if (!winServiceInit())
         return;
+
     WORD wType;
+
     switch (type) {
     case Error: wType = EVENTLOG_ERROR_TYPE; break;
+
     case Warning: wType = EVENTLOG_WARNING_TYPE; break;
+
     case Information: wType = EVENTLOG_INFORMATION_TYPE; break;
+
     default: wType = EVENTLOG_SUCCESS; break;
     }
+
     HANDLE h = pRegisterEventSource(0, (LPCSTR)d->controller.serviceName().utf16());
+
     if (h) {
-        const wchar_t *msg = (wchar_t*)message.utf16();
+        const wchar_t *msg = (wchar_t *)message.utf16();
         const char *bindata = data.size() ? data.constData() : 0;
-        pReportEvent(h, wType, category, id, 0, 1, data.size(),(LPCTSTR*)&msg,
+        pReportEvent(h, wType, category, id, 0, 1, data.size(), (LPCTSTR *)&msg,
                      const_cast<char *>(bindata));
         pDeregisterEventSource(h);
     }
@@ -440,7 +532,7 @@ public:
     void setServiceFlags(dtkDistributedServiceBase::ServiceFlags flags);
     DWORD serviceFlags(dtkDistributedServiceBase::ServiceFlags flags) const;
     inline bool available() const;
-    static void WINAPI serviceMain( DWORD dwArgc, wchar_t** lpszArgv );
+    static void WINAPI serviceMain( DWORD dwArgc, wchar_t **lpszArgv );
     static void WINAPI handler( DWORD dwOpcode );
 
     SERVICE_STATUS status;
@@ -485,7 +577,7 @@ inline bool dtkDistributedServiceSysPrivate::available(void) const
     return 0 != pOpenSCManager;
 }
 
-void WINAPI dtkDistributedServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t** lpszArgv)
+void WINAPI dtkDistributedServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t **lpszArgv)
 {
     if (!instance || !dtkDistributedServiceBase::instance())
         return;
@@ -495,7 +587,7 @@ void WINAPI dtkDistributedServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t**
     // in the main thread to go ahead with start()'ing the service.
 
     for (DWORD i = 0; i < dwArgc; i++)
-        instance->serviceArgs.append(QString::fromUtf16((unsigned short*)lpszArgv[i]));
+        instance->serviceArgs.append(QString::fromUtf16((unsigned short *)lpszArgv[i]));
 
     instance->startSemaphore.release(); // let the qapp creation start
     instance->startSemaphore2.acquire(); // wait until its done
@@ -506,7 +598,7 @@ void WINAPI dtkDistributedServiceSysPrivate::serviceMain(DWORD dwArgc, wchar_t**
         return;
 
     handler(QTSERVICE_STARTUP); // Signal startup to the application -
-                                // causes dtkDistributedServiceBase::start() to be called in the main thread
+    // causes dtkDistributedServiceBase::start() to be called in the main thread
 
     // The MSDN doc says that this thread should just exit - the service is
     // running in the main thread (here, via callbacks in the handler thread).
@@ -522,23 +614,28 @@ void dtkDistributedServiceSysPrivate::handleCustomEvent(QEvent *e)
 {
     int code = e->type() - QEvent::User;
 
-    switch(code) {
+    switch (code) {
     case QTSERVICE_STARTUP: // Startup
         dtkDistributedServiceBase::instance()->start();
         break;
+
     case SERVICE_CONTROL_STOP:
         dtkDistributedServiceBase::instance()->stop();
         QCoreApplication::instance()->quit();
         break;
+
     case SERVICE_CONTROL_PAUSE:
         dtkDistributedServiceBase::instance()->pause();
         break;
+
     case SERVICE_CONTROL_CONTINUE:
         dtkDistributedServiceBase::instance()->resume();
         break;
+
     default:
-	if (code >= 128 && code <= 255)
-	    dtkDistributedServiceBase::instance()->processCommand(code - 128);
+        if (code >= 128 && code <= 255)
+            dtkDistributedServiceBase::instance()->processCommand(code - 128);
+
         break;
     }
 
@@ -553,6 +650,7 @@ void WINAPI dtkDistributedServiceSysPrivate::handler(DWORD code)
         return;
 
     instance->mutex.lock();
+
     switch (code) {
     case QTSERVICE_STARTUP: // dtkDistributedService startup (called from WinMain when started)
         instance->setStatus(SERVICE_START_PENDING);
@@ -560,6 +658,7 @@ void WINAPI dtkDistributedServiceSysPrivate::handler(DWORD code)
         instance->condition.wait(&instance->mutex);
         instance->setStatus(SERVICE_RUNNING);
         break;
+
     case SERVICE_CONTROL_STOP: // 1
         instance->setStatus(SERVICE_STOP_PENDING);
         QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + code)));
@@ -596,6 +695,7 @@ void WINAPI dtkDistributedServiceSysPrivate::handler(DWORD code)
             QCoreApplication::postEvent(instance->controllerHandler, new QEvent(QEvent::Type(QEvent::User + code)));
             instance->condition.wait(&instance->mutex);
         }
+
         break;
     }
 
@@ -609,7 +709,8 @@ void WINAPI dtkDistributedServiceSysPrivate::handler(DWORD code)
 void dtkDistributedServiceSysPrivate::setStatus(DWORD state)
 {
     if (!available())
-	return;
+        return;
+
     status.dwCurrentState = state;
     pSetServiceStatus(serviceStatus, &status);
 }
@@ -618,6 +719,7 @@ void dtkDistributedServiceSysPrivate::setServiceFlags(dtkDistributedServiceBase:
 {
     if (!available())
         return;
+
     status.dwControlsAccepted = serviceFlags(flags);
     pSetServiceStatus(serviceStatus, &status);
 }
@@ -625,10 +727,13 @@ void dtkDistributedServiceSysPrivate::setServiceFlags(dtkDistributedServiceBase:
 DWORD dtkDistributedServiceSysPrivate::serviceFlags(dtkDistributedServiceBase::ServiceFlags flags) const
 {
     DWORD control = 0;
+
     if (flags & dtkDistributedServiceBase::CanBeSuspended)
         control |= SERVICE_ACCEPT_PAUSE_CONTINUE;
+
     if (!(flags & dtkDistributedServiceBase::CannotBeStopped))
         control |= SERVICE_ACCEPT_STOP;
+
     if (flags & dtkDistributedServiceBase::NeedsStopOnShutdown)
         control |= SERVICE_ACCEPT_SHUTDOWN;
 
@@ -640,31 +745,34 @@ class HandlerThread : public QThread
 public:
     HandlerThread(void) : success(true), console(false), QThread() {}
 
-    bool calledOk(void) { return success; }
-    bool runningAsConsole(void) { return console; }
+    bool calledOk(void) {
+        return success;
+    }
+    bool runningAsConsole(void) {
+        return console;
+    }
 
 protected:
     bool success, console;
 
-    void run(void)
-    {
+    void run(void) {
         SERVICE_TABLE_ENTRYW st [2];
-        st[0].lpServiceName = (wchar_t*)dtkDistributedServiceBase::instance()->serviceName().utf16();
+        st[0].lpServiceName = (wchar_t *)dtkDistributedServiceBase::instance()->serviceName().utf16();
         st[0].lpServiceProc = dtkDistributedServiceSysPrivate::serviceMain;
         st[1].lpServiceName = 0;
         st[1].lpServiceProc = 0;
-        
+
         success = (pStartServiceCtrlDispatcher((const SERVICE_TABLE_ENTRY *)st) != 0); // should block
-        
+
         if (!success) {
             if (GetLastError() == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT) {
                 // Means we're started from console, not from service mgr
                 // start() will ask the mgr to start another instance of us as a service instead
                 console = true;
-            }
-            else {
+            } else {
                 dtkDistributedServiceBase::instance()->logMessage(QString("The Service failed to start [%1]").arg(qt_error_string(GetLastError())), dtkDistributedServiceBase::Error);
             }
+
             dtkDistributedServiceSysPrivate::instance->startSemaphore.release();  // let start() continue, since serviceMain won't be doing it
         }
     }
@@ -674,16 +782,19 @@ protected:
   Ignore WM_ENDSESSION system events, since they make the dtkDistributed kernel quit
 */
 
-bool myEventFilter(void* message, long* result)
+bool myEventFilter(void *message, long *result)
 {
-    MSG* msg = reinterpret_cast<MSG*>(message);
+    MSG *msg = reinterpret_cast<MSG *>(message);
+
     if (!msg || (msg->message != WM_ENDSESSION) || !(msg->lParam & ENDSESSION_LOGOFF))
         return dtkDistributedServiceSysPrivate::nextFilter ? dtkDistributedServiceSysPrivate::nextFilter(message, result) : false;
 
     if (dtkDistributedServiceSysPrivate::nextFilter)
         dtkDistributedServiceSysPrivate::nextFilter(message, result);
+
     if (result)
         *result = TRUE;
+
     return true;
 }
 
@@ -708,16 +819,17 @@ bool myEventFilter(void* message, long* result)
 bool dtkDistributedServiceBasePrivate::start(void)
 {
     sysInit();
+
     if (!winServiceInit())
         return false;
 
     // Since StartServiceCtrlDispatcher() blocks waiting for service
     // control events, we need to call it in another thread, so that
     // the main thread can run the QApplication event loop.
-    HandlerThread* ht = new HandlerThread();
+    HandlerThread *ht = new HandlerThread();
     ht->start();
 
-    dtkDistributedServiceSysPrivate* sys = dtkDistributedServiceSysPrivate::instance;
+    dtkDistributedServiceSysPrivate *sys = dtkDistributedServiceSysPrivate::instance;
 
     // Wait until service args have been received by serviceMain.
     // If Windows doesn't call serviceMain (or
@@ -736,13 +848,16 @@ bool dtkDistributedServiceBasePrivate::start(void)
     int argc = sys->serviceArgs.size();
     QVector<char *> argv(argc);
     QList<QByteArray> argvData;
+
     for (int i = 0; i < argc; ++i)
         argvData.append(sys->serviceArgs.at(i).toLocal8Bit());
+
     for (int i = 0; i < argc; ++i)
         argv[i] = argvData[i].data();
 
     q_ptr->createApplication(argc, argv.data());
     QCoreApplication *app = QCoreApplication::instance();
+
     if (!app)
         return false;
 
@@ -771,31 +886,36 @@ bool dtkDistributedServiceBasePrivate::start(void)
     return true;
 }
 
-bool dtkDistributedServiceBasePrivate::install(const QString &account, const QString &password)
+bool dtkDistributedServiceBasePrivate::install(const QString& account, const QString& password)
 {
     bool result = false;
+
     if (!winServiceInit())
         return result;
 
     // Open the Service Control Manager
     SC_HANDLE hSCM = pOpenSCManager(0, 0, SC_MANAGER_ALL_ACCESS);
+
     if (hSCM) {
         QString acc = account;
         DWORD dwStartType = startupType == dtkDistributedServiceController::AutoStartup ? SERVICE_AUTO_START : SERVICE_DEMAND_START;
         DWORD dwServiceType = SERVICE_WIN32_OWN_PROCESS;
         wchar_t *act = 0;
         wchar_t *pwd = 0;
+
         if (!acc.isEmpty()) {
             // The act string must contain a string of the format "Domain\UserName",
             // so if only a username was specified without a domain, default to the local machine domain.
             if (!acc.contains(QChar('\\'))) {
                 acc.prepend(QLatin1String(".\\"));
             }
+
             if (!acc.endsWith(QLatin1String("\\LocalSystem")))
-                act = (wchar_t*)acc.utf16();
+                act = (wchar_t *)acc.utf16();
         }
+
         if (!password.isEmpty() && act) {
-            pwd = (wchar_t*)password.utf16();
+            pwd = (wchar_t *)password.utf16();
         }
 
         // Only set INTERACTIVE if act is LocalSystem. (and act should be 0 if it is LocalSystem).
@@ -809,17 +929,22 @@ bool dtkDistributedServiceBasePrivate::install(const QString &account, const QSt
                                             dwStartType, SERVICE_ERROR_NORMAL, (LPCTSTR)filePath().utf16(),
                                             0, 0, 0,
                                             (LPCTSTR)act, (LPCTSTR)pwd);
+
         if (hService) {
             result = true;
+
             if (!serviceDescription.isEmpty()) {
                 SERVICE_DESCRIPTION sdesc;
                 sdesc.lpDescription = (LPSTR)serviceDescription.utf16();
                 pChangeServiceConfig2(hService, SERVICE_CONFIG_DESCRIPTION, &sdesc);
             }
+
             pCloseServiceHandle(hService);
         }
+
         pCloseServiceHandle(hSCM);
     }
+
     return result;
 }
 
@@ -827,21 +952,21 @@ QString dtkDistributedServiceBasePrivate::filePath(void) const
 {
     wchar_t path[_MAX_PATH];
     ::GetModuleFileNameW( 0, path, sizeof(path) );
-    return QString::fromUtf16((unsigned short*)path);
+    return QString::fromUtf16((unsigned short *)path);
 }
 
 bool dtkDistributedServiceBasePrivate::sysInit()
 {
     sysd = new dtkDistributedServiceSysPrivate();
 
-    sysd->serviceStatus			    = 0;
-    sysd->status.dwServiceType		    = SERVICE_WIN32_OWN_PROCESS|SERVICE_INTERACTIVE_PROCESS;
-    sysd->status.dwCurrentState		    = SERVICE_STOPPED;
+    sysd->serviceStatus             = 0;
+    sysd->status.dwServiceType          = SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS;
+    sysd->status.dwCurrentState         = SERVICE_STOPPED;
     sysd->status.dwControlsAccepted         = sysd->serviceFlags(serviceFlags);
-    sysd->status.dwWin32ExitCode	    = NO_ERROR;
+    sysd->status.dwWin32ExitCode        = NO_ERROR;
     sysd->status.dwServiceSpecificExitCode  = 0;
-    sysd->status.dwCheckPoint		    = 0;
-    sysd->status.dwWaitHint		    = 0;
+    sysd->status.dwCheckPoint           = 0;
+    sysd->status.dwWaitHint         = 0;
 
     return true;
 }

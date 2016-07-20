@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -45,20 +45,20 @@ public:
 
 public:
     typedef T value_type;
-    typedef value_type* pointer;
-    typedef const value_type* const_pointer;
+    typedef value_type *pointer;
+    typedef const value_type *const_pointer;
     typedef value_type& reference;
     typedef const value_type& const_reference;
     typedef qptrdiff difference_type;
     typedef qlonglong size_type;
 
 public:
-     dtkDistributedArray(const qlonglong& size);
-     dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
-     dtkDistributedArray(const qlonglong& size, const T& init_value);
-     dtkDistributedArray(const qlonglong& size, const T *array);
-     dtkDistributedArray(const dtkArray<T> &array);
-     dtkDistributedArray(const dtkDistributedArray& other);
+    dtkDistributedArray(const qlonglong& size);
+    dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper);
+    dtkDistributedArray(const qlonglong& size, const T& init_value);
+    dtkDistributedArray(const qlonglong& size, const T *array);
+    dtkDistributedArray(const dtkArray<T>& array);
+    dtkDistributedArray(const dtkDistributedArray& other);
     ~dtkDistributedArray(void);
 
 public:
@@ -92,7 +92,7 @@ public:
     void setAt(const qlonglong& index, T *array, const qlonglong& size);
 
     T at(const qlonglong& index) const;
-    void range(const qlonglong& index, T* array, const qlonglong& count) const;
+    void range(const qlonglong& index, T *array, const qlonglong& count) const;
 
     T first(void) const;
     T  last(void) const;
@@ -108,17 +108,17 @@ public:
     bool compareAndSwap(const qlonglong& index, T& value, T& compare);
 
 public:
-    void addAssign(const qlonglong& index, T* array, const qlonglong& count);
-    void subAssign(const qlonglong& index, T* array, const qlonglong& count);
-    void mulAssign(const qlonglong& index, T* array, const qlonglong& count);
-    void divAssign(const qlonglong& index, T* array, const qlonglong& count);
+    void addAssign(const qlonglong& index, T *array, const qlonglong& count);
+    void subAssign(const qlonglong& index, T *array, const qlonglong& count);
+    void mulAssign(const qlonglong& index, T *array, const qlonglong& count);
+    void divAssign(const qlonglong& index, T *array, const qlonglong& count);
 
 public:
     void copyIntoArray(const qlonglong& from, const qint32& owner, T *array, qlonglong& size) const;
 
 public:
-          iterator  begin(iterator = iterator());
-          iterator    end(iterator = iterator());
+    iterator  begin(iterator = iterator());
+    iterator    end(iterator = iterator());
     const_iterator  begin(const_iterator = const_iterator()) const;
     const_iterator    end(const_iterator = const_iterator()) const;
     const_iterator cbegin(const_iterator = const_iterator()) const;
@@ -126,7 +126,7 @@ public:
 
 public:
     const T *data(void) const;
-          T *data(void);
+    T *data(void);
 
     const T *constData(void) const;
 
@@ -155,5 +155,5 @@ private:
 
 #include "dtkDistributedArray.tpp"
 
-// 
+//
 // dtkDistributedArray.h ends here

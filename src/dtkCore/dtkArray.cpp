@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -26,14 +26,14 @@
   size of the preallocated area, which defaults to 8, can be specified
   with the second template parameter:
 
-  \code 
+  \code
   dtkArray<double, 32> array;
   \endcode
 
   Moreover, dtkArray can be set from raw data without any
   copy. According to the writable permission, the dtkArray will detach
   or not if any modification is performed.
-  
+
 */
 
 /*! \fn dtkArray::dtkArray(void)
@@ -265,7 +265,7 @@
 */
 
 /*! \fn int dtkArray::preallocatedCapacity(void) const
-  
+
     \internal
 */
 
@@ -805,5 +805,5 @@
     Typedef for T. Provided for STL compatibility.
 */
 
-// 
+//
 // dtkArray.cpp ends here

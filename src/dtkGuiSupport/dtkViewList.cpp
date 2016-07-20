@@ -1,5 +1,5 @@
-/* dtkViewList.cpp --- 
- * 
+/* dtkViewList.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:39:06 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 85
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkViewList.h"
@@ -60,12 +60,14 @@ void dtkViewList::update(void)
 {
     this->clear();
 
-    foreach(QString objectName, dtkAbstractViewFactory::instance()->viewNames()) {
+    foreach (QString objectName, dtkAbstractViewFactory::instance()->viewNames()) {
         dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(objectName);
         QListWidgetItem *item = new QListWidgetItem;
         QString text = objectName;
+
         if (!view->name().isEmpty())
             text += " - " + view->name();
+
         item->setText(text);
         this->addItem(item);
 

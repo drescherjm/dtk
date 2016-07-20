@@ -164,7 +164,7 @@ void dtkToolBoxItem::hideButton(void)
     d->button->hide();
 }
 
-void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon &icon)
+void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon& icon)
 {
     if (!widget) {
         qDebug() << Q_FUNC_INFO << "Widget is not valid, nothing is done.";
@@ -175,6 +175,7 @@ void dtkToolBoxItem::setWidget(QWidget *widget, const QString& text, const QIcon
     d->button->setIcon(icon);
 
     d->widget = widget;
+
     if (!d->is_expanded)
         d->widget->hide();
 
@@ -200,6 +201,7 @@ void dtkToolBoxItem::setExpanded(bool expanded)
     } else {
         d->widget->hide();
     }
+
     d->button->setSelected(expanded);
 }
 
@@ -253,7 +255,7 @@ dtkToolBoxItem *dtkToolBoxItem::fromObject(QObject *object, int hierarchy_level)
 
     QString name;
 
-    foreach(QWidget *w, list) {
+    foreach (QWidget *w, list) {
         name = QString(w->objectName()).append(":");
         layout->addWidget(new QLabel(name, frame));
         layout->addWidget(w);
@@ -316,7 +318,7 @@ void dtkToolBoxPrivate::relayout(void)
     this->layout->setSpacing(0);
     this->layout->setAlignment(Qt::AlignTop);
 
-    switch(this->order) {
+    switch (this->order) {
 
     case dtkToolBox::Ascending: {
 
@@ -355,6 +357,7 @@ void dtkToolBoxPrivate::relayout(void)
         }
 
         QMultiMap<QString, dtkToolBoxItem *>::ConstIterator i = map.constBegin();
+
         while (i != map.constEnd()) {
             this->layout->addWidget(i.value());
             ++i;
@@ -379,13 +382,13 @@ void dtkToolBoxPrivate::relayout(void)
 
 void dtkToolBoxPrivate::insert(int index, dtkToolBoxItem *item)
 {
-    switch(this->order) {
+    switch (this->order) {
 
     case dtkToolBox::Ascending: {
 
-            this->layout->insertWidget(index, item);
+        this->layout->insertWidget(index, item);
 
-            break;
+        break;
     }
 
     case dtkToolBox::Descending: {
@@ -418,9 +421,10 @@ void dtkToolBoxPrivate::setCurrentItem(dtkToolBoxItem *item)
 
 
     if (this->mode == dtkToolBox::OneItemExpanded) {
-        foreach(dtkToolBoxItem *it, this->items) {
+        foreach (dtkToolBoxItem *it, this->items) {
             it->setExpanded(false);
         }
+
         if (this->current_item)
             this->current_item->setExpanded(true);
     }
@@ -528,20 +532,24 @@ void dtkToolBox::setDisplayMode(DisplayMode mode)
     d->mode = mode;
 
     bool display_all_items = false;
-    switch(mode) {
+
+    switch (mode) {
     case Default:
         break;
+
     case AllItemExpanded:
         display_all_items = true;
         break;
+
     case OneItemExpanded:
         d->setCurrentItem(d->current_item);
         break;
+
     default:
         break;
     }
 
-    foreach(dtkToolBoxItem * item, d->items)
+    foreach (dtkToolBoxItem *item, d->items)
         item->setEnforced(display_all_items);
 }
 

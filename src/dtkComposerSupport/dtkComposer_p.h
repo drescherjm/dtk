@@ -1,5 +1,5 @@
-/* dtkComposer_p.h --- 
- * 
+/* dtkComposer_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:35:09 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 68
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSER_P_H

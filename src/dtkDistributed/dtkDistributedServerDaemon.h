@@ -27,7 +27,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedServerDaemon : public QTcpServer
     Q_OBJECT
 
 public:
-     dtkDistributedServerDaemon(quint16 port, QObject *parent = 0);
+    dtkDistributedServerDaemon(quint16 port, QObject *parent = 0);
     ~dtkDistributedServerDaemon(void);
 
     void setManager(QString type);

@@ -1,5 +1,5 @@
-/* dtkComposerTransmitter_p.h --- 
- * 
+/* dtkComposerTransmitter_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 55
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTER_P_H
@@ -27,7 +27,7 @@
 class dtkComposerNode;
 class dtkAbstractObject;
 class dtkAbstractContainerWrapper;
-namespace dtkDeprecated{
+namespace dtkDeprecated {
     template <typename T> class dtkMatrix;
 }
 

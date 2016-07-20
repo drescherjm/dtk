@@ -1,5 +1,5 @@
-/* dtkAnchoredBar.h --- 
- * 
+/* dtkAnchoredBar.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:43:54 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 9
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKANCHOREDBAR_H

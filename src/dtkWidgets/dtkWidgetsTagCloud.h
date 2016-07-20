@@ -33,7 +33,7 @@ public:
     };
 
 public:
-     dtkWidgetsTagCloud(QWidget *parent = 0);
+    dtkWidgetsTagCloud(QWidget *parent = 0);
     ~dtkWidgetsTagCloud(void);
 
 #pragma mark -

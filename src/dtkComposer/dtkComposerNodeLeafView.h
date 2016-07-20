@@ -1,5 +1,5 @@
-/* dtkComposerNodeLeafView.h --- 
- * 
+/* dtkComposerNodeLeafView.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:38:07 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODELEAFVIEW_H
@@ -35,7 +35,7 @@ class dtkComposerNodeLeafViewPrivate;
 class  dtkComposerNodeLeafView : public dtkComposerNodeLeaf
 {
 public:
-             dtkComposerNodeLeafView(void);
+    dtkComposerNodeLeafView(void);
     virtual ~dtkComposerNodeLeafView(void);
 
 public:

@@ -47,7 +47,7 @@ template <typename T> inline T dtkComposerTransmitterHandler<T>::constData(dtkCo
 
 template <typename T> inline void dtkComposerTransmitterHandler<T *>::init(dtkComposerTransmitter& t)
 {
-    t.d->type_list << qMetaTypeId<T*>(reinterpret_cast<T **>(0));
+    t.d->type_list << qMetaTypeId<T *>(reinterpret_cast<T **>(0));
     T *ptr = NULL;
     t.d->variant = QVariant::fromValue(ptr);
     t.d->swap = QVariant::fromValue(ptr);
@@ -62,20 +62,24 @@ template <typename T> inline T *dtkComposerTransmitterHandler<T *>::data(dtkComp
 {
     T *source = t.variant().value<T *>();
 
-    switch(t.dataTransmission()) {
+    switch (t.dataTransmission()) {
     case dtkComposerTransmitter::AutoCopy:
-	if (!t.enableCopy()) {
-	    return source;
-	} else {
-        return copy(source, t.d->variant, t.d->swap);
-	}
-    	break;
+        if (!t.enableCopy()) {
+            return source;
+        } else {
+            return copy(source, t.d->variant, t.d->swap);
+        }
+
+        break;
+
     case dtkComposerTransmitter::Reference:
         return source;
         break;
+
     case dtkComposerTransmitter::Copy:
         return copy(source, t.d->variant, t.d->swap);
-    	break;
+        break;
+
     default:
         return source;
     }
@@ -92,6 +96,7 @@ template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *sour
         return source;
 
     T *dest = target.value<T *>();
+
     if (!dest) {
         dest = dtkMetaType::clone(source);
         target.setValue(dest);
@@ -100,17 +105,21 @@ template <typename T> inline T *dtkComposerTransmitterHandler<T *>::copy(T *sour
             dtkMetaType::copy(source, dest);
         } else {
             dest = swap.value<T *>();
+
             if (!dest) {
                 dest = dtkMetaType::clone(source);
+
                 if (!dest) {
                     dtkWarn() << Q_FUNC_INFO << "Copy failed. nullptr is returned.";
                 }
             } else {
                 dtkMetaType::copy(source, dest);
+
                 if (!dest) {
                     dtkWarn() << Q_FUNC_INFO << "Copy failed. nullptr is returned.";
                 }
             }
+
             swap.setValue(source);
             target.setValue(dest);
         }
@@ -127,22 +136,26 @@ inline QVariant dtkComposerTransmitterHandlerVariant::data(dtkComposerTransmitte
 {
     QVariant source = t.variant();
 
-    switch(t.dataTransmission()) {
+    switch (t.dataTransmission()) {
     case dtkComposerTransmitter::AutoCopy:
-	if (!t.enableCopy()) {
-	    return source;
-	} else {
+        if (!t.enableCopy()) {
+            return source;
+        } else {
             copy(source, t.d->variant);
             return t.d->variant;
-	}
-    	break;
+        }
+
+        break;
+
     case dtkComposerTransmitter::Reference:
         return source;
         break;
+
     case dtkComposerTransmitter::Copy:
         copy(source, t.d->variant);
         return t.d->variant;
-    	break;
+        break;
+
     default:
         return source;
     }
@@ -152,8 +165,8 @@ inline bool dtkComposerTransmitterHandlerVariant::containSamePointer(const QVari
 {
     if (QString(v0.typeName()).endsWith("*") && QString(v1.typeName()).endsWith("*")) {
 
-        const void *v0_ptr = *static_cast<const void * const *>(v0.data());
-        const void *v1_ptr = *static_cast<const void * const *>(v1.data());
+        const void *v0_ptr = *static_cast<const void *const *>(v0.data());
+        const void *v1_ptr = *static_cast<const void *const *>(v1.data());
 
         return (v0_ptr && v1_ptr && (v0_ptr == v1_ptr));
     }

@@ -1,5 +1,5 @@
-/* dtkDistributedServerManager.cpp --- 
- * 
+/* dtkDistributedServerManager.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:02:52 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 9
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedCore.h"

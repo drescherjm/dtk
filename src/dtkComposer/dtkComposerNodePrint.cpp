@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -53,5 +53,5 @@ void dtkComposerNodePrint::run(void)
 }
 
 
-// 
+//
 // dtkComposerNodePrint.cpp ends here

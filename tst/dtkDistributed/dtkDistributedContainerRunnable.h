@@ -24,11 +24,11 @@
 class qvectorWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong N = 200;
         QVector<qlonglong> myvector(N);
+
         for (qlonglong i = 0; i < N; ++i) {
             myvector[i] = i;
         }
@@ -39,17 +39,20 @@ public:
 
         dtkDistributedArray<qlonglong>::iterator it  = array.begin();
         dtkDistributedArray<qlonglong>::iterator ite = array.end();
-        for(qlonglong i = 0; it != ite; ++it, ++i) {
+
+        for (qlonglong i = 0; it != ite; ++it, ++i) {
             QCOMPARE(myvector.at(array.mapper()->localToGlobal(i, array.wid())), *it);
         }
 
         comm->barrier();
+
         if (array.wid() == 1) {
             for (qlonglong i = 0; i < N; ++i) {
                 qDebug() << i << array.at(i);
                 QCOMPARE(myvector.at(i), array.at(i));
             }
         }
+
         comm->barrier();
     }
 };
@@ -57,10 +60,9 @@ public:
 class containerWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         QTime time;
-        qlonglong max= 150;
+        qlonglong max = 150;
         dtkDistributedArray<qlonglong> array(max);
 
         QVERIFY(array.size() == static_cast<qlonglong>(max));
@@ -76,13 +78,14 @@ public:
 
         qDebug() << "check mapper";
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+
         for (qlonglong i = 0; i < comm->size(); ++i) {
             qlonglong start = array.mapper()->firstIndex(i);
             qlonglong end = array.mapper()->lastIndex(i);
-            qDebug() << "start end" << i<< start << end;
+            qDebug() << "start end" << i << start << end;
 
             for (qlonglong j = start; j <= end; ++j) {
-                qDebug() << "owner" << j <<array.mapper()->owner(j) << i;
+                qDebug() << "owner" << j << array.mapper()->owner(j) << i;
                 QVERIFY(array.mapper()->owner(j) == i);
             }
         }
@@ -194,6 +197,7 @@ void sumItemWork::run(void)
     int N = 10000001;
     dtkArray<qlonglong> myvector(N);
     qlonglong check_sum = 0;
+
     for (qlonglong i = 0; i < N; ++i) {
         myvector[i] = i;
         check_sum += i;
@@ -207,7 +211,8 @@ void sumItemWork::run(void)
 
     dtkDistributedArray<qlonglong>::iterator ite = array.begin();
     dtkDistributedArray<qlonglong>::iterator end = array.end();
-    for(int i = 0; ite != end; ++ite, ++i) {
+
+    for (int i = 0; ite != end; ++ite, ++i) {
         item += *ite;
         part_sum += *ite;
     }
@@ -376,6 +381,7 @@ void graphReadWork::run(void)
     int N = graph.vertexCount();
 
     QVector<qlonglong> myvector(N);
+
     for (qlonglong i = 0; i < N; ++i) {
         myvector[i] = i;
     }
@@ -390,34 +396,39 @@ void graphReadWork::run(void)
 
     if (array.wid() == 0)
         time.restart();
+
     // max array will be modified locally, but not accessed remotely, wlock
     max_array.wlock(comm->wid());
     array.rlock();
     graph.rlock();
     qlonglong  current_max;
-    for(;it != end; ++it) {
 
-        current_max =0;
+    for (; it != end; ++it) {
+
+        current_max = 0;
         dtkDistributedGraphTopology::Neighbours n = graph[it.id()];
         dtkDistributedGraphTopology::Neighbours::iterator nit  = n.begin();
         dtkDistributedGraphTopology::Neighbours::iterator nend = n.end();
 
-        for(;nit != nend; ++nit) {
+        for (; nit != nend; ++nit) {
             dtkDistributedGraphTopology::Neighbours nn = graph[*nit];
             dtkDistributedGraphTopology::Neighbours::iterator nnit  = nn.begin();
             dtkDistributedGraphTopology::Neighbours::iterator nnend = nn.end();
 
-            for(;nnit != nnend; ++nnit) {
-                current_max= qMax(current_max, array.at(*nnit));
+            for (; nnit != nnend; ++nnit) {
+                current_max = qMax(current_max, array.at(*nnit));
             }
         }
+
         max_array.setAt(it.id(), current_max);
     }
+
     graph.unlock();
     array.unlock();
     max_array.unlock(comm->wid());
 
     comm->barrier();
+
     if (comm->wid() == 0) {
         qDebug() << "max of all vertices done in" << time.elapsed() << "ms";
 
@@ -426,6 +437,7 @@ void graphReadWork::run(void)
 
     if (N < 100) {
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
+
         for (qlonglong i = 0; i < N; ++i) {
             qDebug() << i << max_array.at(i);
         }
@@ -436,8 +448,7 @@ void graphReadWork::run(void)
 
 
 
-namespace communicator_container_test
-{
+namespace communicator_container_test {
     void runAll(QString type)
     {
         dtkDistributed::policy()->setType(type);

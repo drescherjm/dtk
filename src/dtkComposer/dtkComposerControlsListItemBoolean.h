@@ -25,7 +25,7 @@ class dtkComposerControlsListItemBoolean: public dtkComposerControlsListItem
     Q_OBJECT
 
 public:
-             dtkComposerControlsListItemBoolean(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
+    dtkComposerControlsListItemBoolean(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
     virtual ~dtkComposerControlsListItemBoolean(void);
 
 public slots:

@@ -1,5 +1,5 @@
-/* dtkComposerNodeBooleanOperator.cpp --- 
- * 
+/* dtkComposerNodeBooleanOperator.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:52:45 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 163
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeBooleanOperator.h"
@@ -30,7 +30,7 @@ class dtkComposerNodeBooleanOperatorUnaryPrivate
 public:
     dtkComposerTransmitterReceiver<bool> receiver;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<bool> emitter;
 };
 
@@ -44,7 +44,7 @@ dtkComposerNodeBooleanOperatorUnary::dtkComposerNodeBooleanOperatorUnary(void) :
 dtkComposerNodeBooleanOperatorUnary::~dtkComposerNodeBooleanOperatorUnary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -58,7 +58,7 @@ public:
     dtkComposerTransmitterReceiver<bool> receiver_lhs;
     dtkComposerTransmitterReceiver<bool> receiver_rhs;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<bool> emitter;
 };
 
@@ -73,7 +73,7 @@ dtkComposerNodeBooleanOperatorBinary::dtkComposerNodeBooleanOperatorBinary(void)
 dtkComposerNodeBooleanOperatorBinary::~dtkComposerNodeBooleanOperatorBinary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 

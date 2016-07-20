@@ -24,13 +24,19 @@
 
 QString dtkLogLevel2String(dtkLog::Level level)
 {
-    switch(level) {
+    switch (level) {
     case dtkLog::Trace: return "TRACE"; break;
+
     case dtkLog::Debug: return "DEBUG"; break;
+
     case dtkLog::Info:  return "INFO "; break;
+
     case dtkLog::Warn:  return "WARN "; break;
+
     case dtkLog::Error: return "ERROR"; break;
+
     case dtkLog::Fatal: return "FATAL"; break;
+
     default:
         return "UNKNOWN";
         break;
@@ -44,18 +50,18 @@ QString dtkLogLevel2String(dtkLog::Level level)
 void dtkLogEnginePrivate::write(void)
 {
     const QString message = QString("%1 - %2 - %3")
-        .arg(qPrintable(dtkLogLevel2String(this->level)))
-        .arg(QDateTime::currentDateTime().toString())
-        .arg(this->buffer);
+                            .arg(qPrintable(dtkLogLevel2String(this->level)))
+                            .arg(QDateTime::currentDateTime().toString())
+                            .arg(this->buffer);
 
     QMutexLocker lock(&(dtkLogger::instance().d->mutex));
 
-	if(!this->custom)
-	    dtkLogger::instance().write(message);
-	else
-	    dtkLogger::instance().write(message, level);
+    if (!this->custom)
+        dtkLogger::instance().write(message);
+    else
+        dtkLogger::instance().write(message, level);
 
-    if(this->level ==  dtkLog::Fatal)
+    if (this->level ==  dtkLog::Fatal)
         qFatal("Fatal error occured, please check log");
 }
 

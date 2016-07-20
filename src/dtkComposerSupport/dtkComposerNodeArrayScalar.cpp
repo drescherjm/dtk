@@ -1,4 +1,4 @@
-/* dtkComposerNodeArrayScalar.cpp --- 
+/* dtkComposerNodeArrayScalar.cpp ---
  *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
@@ -9,7 +9,7 @@
  *     Update #: 137
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -76,25 +76,29 @@ dtkComposerNodeArrayScalar::~dtkComposerNodeArrayScalar(void)
 {
     if (d->array)
         delete d->array;
+
     d->array = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
-QString dtkComposerNodeArrayScalar::inputLabelHint(int port) 
+QString dtkComposerNodeArrayScalar::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "size";
         break;
+
     case 2:
         return "value";
         break;
+
     default:
         break;
     }
@@ -103,14 +107,16 @@ QString dtkComposerNodeArrayScalar::inputLabelHint(int port)
 }
 
 QString dtkComposerNodeArrayScalar::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "size";
         break;
+
     default:
         break;
     }
@@ -125,26 +131,27 @@ void dtkComposerNodeArrayScalar::run(void)
         d->array = d->receiver_array.data();
         d->size = d->array->count();
 
-        if (!d->receiver_value.isEmpty()){
+        if (!d->receiver_value.isEmpty()) {
             qreal value = *d->receiver_value.data<qreal>();
-            for(qlonglong i = 0 ; i < d->size; ++i)
+
+            for (qlonglong i = 0 ; i < d->size; ++i)
                 d->array->replace(i, value);
         }
 
-        d->emitter_array.setData(d->array);        
+        d->emitter_array.setData(d->array);
 
     } else {
 
         if (!d->array)
-            d->array = new dtkContainerVectorReal();  
-        
+            d->array = new dtkContainerVectorReal();
+
         if (!d->receiver_size.isEmpty())
             d->size = *d->receiver_size.data<qlonglong>();
 
         if (d->size == 0) {
 
             d->array->clear();
-            
+
             dtkWarn() << "The size of the array is zero.";
 
         } else {
@@ -156,10 +163,11 @@ void dtkComposerNodeArrayScalar::run(void)
             if (!d->receiver_value.isEmpty())
                 value = *d->receiver_value.data<qreal>();
 
-            for(qlonglong i = 0 ; i < d->size; ++i)
+            for (qlonglong i = 0 ; i < d->size; ++i)
                 d->array->replace(i, value);
 
         }
+
         d->emitter_array.setData(d->array);
     }
 }

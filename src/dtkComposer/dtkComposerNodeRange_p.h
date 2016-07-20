@@ -24,7 +24,7 @@ class dtkComposerNodeRangeWidget : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposerNodeRangeWidget(QWidget *parent = 0);
+    dtkComposerNodeRangeWidget(QWidget *parent = 0);
     ~dtkComposerNodeRangeWidget(void);
 
 signals:
@@ -44,7 +44,7 @@ class dtkComposerNodeRangeInspector : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposerNodeRangeInspector(QWidget *parent = 0);
+    dtkComposerNodeRangeInspector(QWidget *parent = 0);
     ~dtkComposerNodeRangeInspector(void);
 
 signals:
@@ -62,7 +62,7 @@ public:
 class dtkComposerNodeRangeViewWidget : public dtkComposerViewWidget
 {
 public:
-     dtkComposerNodeRangeViewWidget(void);
+    dtkComposerNodeRangeViewWidget(void);
     ~dtkComposerNodeRangeViewWidget(void);
 
 public:
@@ -83,7 +83,7 @@ class dtkComposerNodeRangePrivate : public QObject
     Q_OBJECT
 
 public:
-     dtkComposerNodeRangePrivate(void);
+    dtkComposerNodeRangePrivate(void);
 
 public:
     dtkComposerTransmitterEmitter<qlonglong> emt_val;

@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterVariant.h --- 
- * 
+/* dtkComposerTransmitterVariant.h ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: Fri Mar  2 16:19:20 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTERVARIANT_H
@@ -21,7 +21,7 @@
 #include <dtkCoreSupport/dtkGlobal>
 
 template <typename T> class dtkContainerVector;
-namespace dtkDeprecated{
+namespace dtkDeprecated {
     template <typename T> class dtkMatrix;
 }
 
@@ -34,7 +34,7 @@ class dtkComposerTransmitterVariantPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterVariant : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterVariant(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterVariant(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterVariant(void);
 
 public:
@@ -113,7 +113,7 @@ public:
     void setTwin(dtkComposerTransmitterVariant *twin);
 
     dtkComposerTransmitterVariant *twin(void);
-    
+
     void setTwinned(bool twinned);
 
 public:

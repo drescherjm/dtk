@@ -1,10 +1,23 @@
-#ifndef DTKPLUGINGENERATORPAGE_H
-#define DTKPLUGINGENERATORPAGE_H
+// Version: $Id$
+//
+//
 
-#include <QWizardPage>
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+#pragma once
+
+#include <QtWidgets>
 
 namespace Ui {
-class dtkPluginGeneratorPage;
+    class dtkPluginGeneratorPage;
 }
 
 class dtkPluginGeneratorPage : public QWizardPage
@@ -12,17 +25,19 @@ class dtkPluginGeneratorPage : public QWizardPage
     Q_OBJECT
 
 public:
-    explicit dtkPluginGeneratorPage(QWidget *parent = 0);
-    ~dtkPluginGeneratorPage();
+     dtkPluginGeneratorPage(QWidget *parent = 0);
+    ~dtkPluginGeneratorPage(void);
+
 protected:
-    void initializePage();
+    void initializePage(void);
 
 public slots:
-    void refresh();
+    void refresh(void);
 
 
 private:
     Ui::dtkPluginGeneratorPage *ui;
 };
 
-#endif // DTKPLUGINGENERATORPAGE_H
+//
+// dtkPluginGeneratorPage.h ends here

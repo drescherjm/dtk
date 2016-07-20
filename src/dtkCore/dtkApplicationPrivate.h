@@ -23,7 +23,7 @@
 class DTKCORE_EXPORT dtkApplicationPrivate
 {
 public:
-             dtkApplicationPrivate(void);
+    dtkApplicationPrivate(void);
     virtual ~dtkApplicationPrivate(void);
 
 public:

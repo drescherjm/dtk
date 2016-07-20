@@ -1,5 +1,5 @@
-/* dtkAbstractProcess.h --- 
- * 
+/* dtkAbstractProcess.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:00:26 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 148
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTPROCESS_H
@@ -34,23 +34,23 @@ class DTKCORESUPPORT_EXPORT dtkAbstractProcess : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkAbstractProcess(      dtkAbstractProcess *parent = 0);
-             dtkAbstractProcess(const dtkAbstractProcess& other);
+    dtkAbstractProcess(      dtkAbstractProcess *parent = 0);
+    dtkAbstractProcess(const dtkAbstractProcess& other);
     virtual ~dtkAbstractProcess(void);
 
 public:
-   virtual dtkAbstractProcess *clone(void);
+    virtual dtkAbstractProcess *clone(void);
 
 public:
     dtkAbstractProcess& operator = (const dtkAbstractProcess& other);
 
 protected:
-   virtual void copy(const dtkAbstractObject& other);
+    virtual void copy(const dtkAbstractObject& other);
 
 public:
     friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractProcess& process);
     friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug,       dtkAbstractProcess *process);
-    
+
 signals:
     void started(const QString& message);
     void elapsed(const QString& duration);
@@ -65,14 +65,14 @@ public slots:
     void cancel(void);
 
     int run(void);
-   
+
     virtual  int update(void);
 
     virtual void onCanceled (void);
-    
+
     virtual bool read(const QString& file);
     virtual bool read(const QStringList& files);
-    
+
     virtual bool write(const QString& file);
     virtual bool write(const QStringList& files);
 
@@ -100,17 +100,17 @@ public slots:
     virtual void setParameter(double *data, int count, int channel);
     virtual void setParameter(double *data, int count, int channel, int frame);
 
-    virtual void setParameter(dtkAbstractObject*  data);
-    virtual void setParameter(dtkAbstractObject*  data, int channel);
-    virtual void setParameter(dtkAbstractObject*  data, int channel, int frame);
+    virtual void setParameter(dtkAbstractObject  *data);
+    virtual void setParameter(dtkAbstractObject  *data, int channel);
+    virtual void setParameter(dtkAbstractObject  *data, int channel, int frame);
 
     virtual void setInput(dtkAbstractData *data);
     virtual void setInput(dtkAbstractData *data, int channel);
     virtual void setInput(dtkAbstractData *data, int channel, int frame);
 
-    virtual void setData(void* data);
-    virtual void setData(void* data, int channel);
-    virtual void setData(void* data, int channel, int frame);
+    virtual void setData(void *data);
+    virtual void setData(void *data, int channel);
+    virtual void setData(void *data, int channel, int frame);
 
     virtual dtkAbstractData *output(void);
     virtual dtkAbstractData *output(int channel);

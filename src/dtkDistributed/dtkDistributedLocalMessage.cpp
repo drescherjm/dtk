@@ -38,7 +38,7 @@ dtkDistributedLocalMessage::dtkDistributedLocalMessage(): d(new dtkDistributedLo
     d->wait_for_data = false;
 }
 
-dtkDistributedLocalMessage::dtkDistributedLocalMessage(QVariant &v, qint32 source, qint32 tag): d(new dtkDistributedLocalMessagePrivate)
+dtkDistributedLocalMessage::dtkDistributedLocalMessage(QVariant& v, qint32 source, qint32 tag): d(new dtkDistributedLocalMessagePrivate)
 {
     d->tag    = tag;
     d->source = source;
@@ -77,7 +77,7 @@ void dtkDistributedLocalMessage::wake(void)
     d->wait.wakeOne();
 }
 
-QVariant &dtkDistributedLocalMessage::data(void)
+QVariant& dtkDistributedLocalMessage::data(void)
 {
     return d->data;
 }

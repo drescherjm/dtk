@@ -1,15 +1,15 @@
-/* dtkComposerTransmitter.h --- 
- * 
+/* dtkComposerTransmitter.h ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 16:36:09 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTER_H
@@ -27,7 +27,7 @@ class dtkComposerTransmitterPrivate;
 class dtkComposerTransmitterLink;
 class dtkComposerTransmitterLinkList;
 class dtkComposerTransmitterVariant;
-namespace dtkDeprecated{
+namespace dtkDeprecated {
     template <typename T> class dtkMatrix;
 }
 
@@ -48,14 +48,14 @@ public:
     };
 
 public:
-    enum DataTransmission { 
+    enum DataTransmission {
         AutoCopy,
         Copy,
         Reference
     };
 
 public:
-             dtkComposerTransmitter(dtkComposerNode *parent = 0);
+    dtkComposerTransmitter(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitter(void);
 
 public:
@@ -107,7 +107,7 @@ public:
 
 public:
     void setDataTransmission(DataTransmission value);
-    
+
     DataTransmission dataTransmission(void) const;
 
     virtual bool enableCopy(void);
@@ -120,7 +120,7 @@ public:
 public:
     void appendNext(dtkComposerTransmitter *transmitter);
     void removeNext(dtkComposerTransmitter *transmitter);
-    
+
     void appendPrevious(dtkComposerTransmitter *transmitter);
     void removePrevious(dtkComposerTransmitter *transmitter);
 
@@ -169,7 +169,7 @@ class dtkComposerTransmitterLinkPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterLink
 {
 public:
-     dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
+    dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
     ~dtkComposerTransmitterLink(void);
 
 public:

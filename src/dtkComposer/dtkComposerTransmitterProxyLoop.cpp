@@ -1,26 +1,26 @@
 /* dtkComposerTransmitterProxyLoop.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Fri Mar 29 15:05:13 2013 (+0100)
- * Version: 
+ * Version:
  * Last-Updated: Tue Apr  2 09:41:36 2013 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 32
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkComposerTransmitterProxyLoop.h"
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 dtkComposerTransmitterProxyLoop::dtkComposerTransmitterProxyLoop(dtkComposerNode *parent) : dtkComposerTransmitter(parent), m_source(0), m_twin(0)
 {
-    
+
 }
 
 dtkComposerTransmitterProxyLoop::~dtkComposerTransmitterProxyLoop(void)
@@ -44,14 +44,14 @@ bool dtkComposerTransmitterProxyLoop::connect(dtkComposerTransmitter *transmitte
 
     if (!d->emitters.contains(transmitter)) {
 
-	enable_connection = transmitter->enableConnection(this);
+        enable_connection = transmitter->enableConnection(this);
 
-	if (enable_connection) {
-	    d->emitters << transmitter;
-	    d->active_emitter = transmitter;
-	    m_source = transmitter;
-	    transmitter->appendReceiver(this);
-	}
+        if (enable_connection) {
+            d->emitters << transmitter;
+            d->active_emitter = transmitter;
+            m_source = transmitter;
+            transmitter->appendReceiver(this);
+        }
     }
 
     return enable_connection;
@@ -63,13 +63,14 @@ bool dtkComposerTransmitterProxyLoop::disconnect(dtkComposerTransmitter *transmi
     bool disable_connection = d->emitters.removeOne(transmitter);
 
     if (transmitter == d->active_emitter) {
-	d->active_emitter = NULL;
-	foreach(dtkComposerTransmitter *em, d->emitters) {
-	    if (em->active()) {
-		d->active_emitter = em;
-		break;
-	    }
-	}
+        d->active_emitter = NULL;
+
+        foreach (dtkComposerTransmitter *em, d->emitters) {
+            if (em->active()) {
+                d->active_emitter = em;
+                break;
+            }
+        }
     }
 
     return disable_connection;
@@ -87,7 +88,8 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxyLoop::leftLinks(dtkCo
     Q_UNUSED(transmitter);
 
     LinkMap link_map;
-    foreach(dtkComposerTransmitterLink *l, list)
+
+    foreach (dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);
 
     return link_map;
@@ -98,7 +100,8 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterProxyLoop::rightLinks(dtkC
     Q_UNUSED(transmitter);
 
     LinkMap link_map;
-    foreach(dtkComposerTransmitterLink *l, list)
+
+    foreach (dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);
 
     return link_map;

@@ -1,5 +1,5 @@
-/* dtkDistributedControllerHeaderView.h --- 
- * 
+/* dtkDistributedControllerHeaderView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:22:09 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERHEADERVIEW_H
@@ -32,7 +32,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerHeaderView : public Q
     Q_OBJECT
 
 public:
-     dtkDistributedControllerHeaderView(QWidget *parent = 0);
+    dtkDistributedControllerHeaderView(QWidget *parent = 0);
     ~dtkDistributedControllerHeaderView(void);
 
 public:

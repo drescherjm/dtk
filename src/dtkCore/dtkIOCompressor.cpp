@@ -1,17 +1,17 @@
 /****************************************************************************
-** 
+**
 ** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Nokia Corporation (qt-info@nokia.com)
-** 
+**
 ** This file is part of a Qt Solutions component.
 **
-** Commercial Usage  
+** Commercial Usage
 ** Licensees holding valid Qt Commercial licenses may use this file in
 ** accordance with the Qt Solutions Commercial License Agreement provided
 ** with the Software or, alternatively, in accordance with the terms
 ** contained in a written agreement between you and Nokia.
-** 
+**
 ** GNU Lesser General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU Lesser
 ** General Public License version 2.1 as published by the Free Software
@@ -19,29 +19,29 @@
 ** packaging of this file.  Please review the following information to
 ** ensure the GNU Lesser General Public License version 2.1 requirements
 ** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-** 
+**
 ** In addition, as a special exception, Nokia gives you certain
 ** additional rights. These rights are described in the Nokia Qt LGPL
 ** Exception version 1.1, included in the file LGPL_EXCEPTION.txt in this
 ** package.
-** 
-** GNU General Public License Usage 
+**
+** GNU General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU
 ** General Public License version 3.0 as published by the Free Software
 ** Foundation and appearing in the file LICENSE.GPL included in the
 ** packaging of this file.  Please review the following information to
 ** ensure the GNU General Public License version 3.0 requirements will be
 ** met: http://www.gnu.org/copyleft/gpl.html.
-** 
+**
 ** Please note Third Party Software included with Qt Solutions may impose
 ** additional restrictions and it is the user's responsibility to ensure
 ** that they have met the licensing requirements of the GPL, LGPL, or Qt
 ** Solutions Commercial license and the relevant license of the Third
 ** Party Software they are using.
-** 
+**
 ** If you are unsure which license is appropriate for your use, please
 ** contact Nokia at qt-info@nokia.com.
-** 
+**
 ****************************************************************************/
 
 #include "dtkIOCompressor.h"
@@ -53,7 +53,8 @@
 typedef Bytef ZlibByte;
 typedef uInt ZlibSize;
 
-class dtkIOCompressorPrivate {
+class dtkIOCompressorPrivate
+{
     dtkIOCompressor *q_ptr;
     Q_DECLARE_PUBLIC(dtkIOCompressor)
 public:
@@ -74,7 +75,7 @@ public:
     ~dtkIOCompressorPrivate();
     void flushZlib(int flushMode);
     bool writeBytes(ZlibByte *buffer, ZlibSize outputSize);
-    void setZlibError(const QString &erroMessage, int zlibErrorCode);
+    void setZlibError(const QString& erroMessage, int zlibErrorCode);
 
     QIODevice *device;
     bool manageDevice;
@@ -90,13 +91,13 @@ public:
     \internal
 */
 dtkIOCompressorPrivate::dtkIOCompressorPrivate(dtkIOCompressor *q_ptr, QIODevice *device, int compressionLevel, int bufferSize)
-    :q_ptr(q_ptr)
-    ,device(device)
-    ,compressionLevel(compressionLevel)
-    ,bufferSize(bufferSize)
-    ,buffer(new ZlibByte[bufferSize])
-    ,state(Closed)
-    ,streamFormat(dtkIOCompressor::ZlibFormat)
+    : q_ptr(q_ptr)
+    , device(device)
+    , compressionLevel(compressionLevel)
+    , bufferSize(bufferSize)
+    , buffer(new ZlibByte[bufferSize])
+    , state(Closed)
+    , streamFormat(dtkIOCompressor::ZlibFormat)
 {
     // Use default zlib memory management.
     zlibStream.zalloc = Z_NULL;
@@ -122,10 +123,12 @@ void dtkIOCompressorPrivate::flushZlib(int flushMode)
     zlibStream.next_in = 0;
     zlibStream.avail_in = 0;
     int status;
+
     do {
         zlibStream.next_out = buffer;
         zlibStream.avail_out = bufferSize;
         status = deflate(&zlibStream, flushMode);
+
         if (status != Z_OK && status != Z_STREAM_END) {
             state = dtkIOCompressorPrivate::Error;
             setZlibError(QT_TRANSLATE_NOOP("QtIOCompressor", "Internal zlib error when compressing: "), status);
@@ -138,8 +141,8 @@ void dtkIOCompressorPrivate::flushZlib(int flushMode)
         if (!writeBytes(buffer, outputSize))
             return;
 
-    // If the mode is Z_FNISH we must loop until we get Z_STREAM_END,
-    // else we loop as long as zlib is able to fill the output buffer.
+        // If the mode is Z_FNISH we must loop until we get Z_STREAM_END,
+        // else we loop as long as zlib is able to fill the output buffer.
     } while ((flushMode == Z_FINISH && status != Z_STREAM_END) || (flushMode != Z_FINISH && zlibStream.avail_out == 0));
 
     if (flushMode == Z_FINISH)
@@ -156,13 +159,16 @@ bool dtkIOCompressorPrivate::writeBytes(ZlibByte *buffer, ZlibSize outputSize)
 {
     Q_Q(dtkIOCompressor);
     ZlibSize totalBytesWritten = 0;
+
     // Loop until all bytes are written to the underlying device.
     do {
         const qint64 bytesWritten = device->write(reinterpret_cast<char *>(buffer), outputSize);
+
         if (bytesWritten == -1) {
             q->setErrorString(QT_TRANSLATE_NOOP("QtIOCompressor", "Error writing to underlying device: ") + device->errorString());
             return false;
         }
+
         totalBytesWritten += bytesWritten;
     } while (totalBytesWritten != outputSize);
 
@@ -175,12 +181,13 @@ bool dtkIOCompressorPrivate::writeBytes(ZlibByte *buffer, ZlibSize outputSize)
     \internal
     Sets the error string to errorMessage + zlib error string for zlibErrorCode
 */
-void dtkIOCompressorPrivate::setZlibError(const QString &errorMessage, int zlibErrorCode)
+void dtkIOCompressorPrivate::setZlibError(const QString& errorMessage, int zlibErrorCode)
 {
     Q_Q(dtkIOCompressor);
     // Watch out, zlibErrorString may be null.
-    const char * const zlibErrorString = zError(zlibErrorCode);
+    const char *const zlibErrorString = zError(zlibErrorCode);
     QString errorString;
+
     if (zlibErrorString)
         errorString = errorMessage + zlibErrorString;
     else
@@ -257,10 +264,11 @@ void dtkIOCompressorPrivate::setZlibError(const QString &errorMessage, int zlibE
     deompression at the expense of memory usage.
 */
 dtkIOCompressor::dtkIOCompressor(QIODevice *device, int compressionLevel, int bufferSize)
-:d_ptr(new dtkIOCompressorPrivate(this, device, compressionLevel, bufferSize))
+    : d_ptr(new dtkIOCompressorPrivate(this, device, compressionLevel, bufferSize))
 {
     if (QFile *file = dynamic_cast<QFile *>(device)) {
         QFileInfo info = QFileInfo(file->fileName());
+
         if (info.suffix() == "gz") {
             this->setStreamFormat(dtkIOCompressor::GzipFormat);
         }
@@ -338,6 +346,7 @@ bool dtkIOCompressor::isSequential() const
 bool dtkIOCompressor::open(OpenMode mode)
 {
     Q_D(dtkIOCompressor);
+
     if (isOpen()) {
         qWarning("dtkIOCompressor::open: device already open");
         return false;
@@ -348,6 +357,7 @@ bool dtkIOCompressor::open(OpenMode mode)
     const bool write = (bool)(mode & WriteOnly);
     const bool both = (read && write);
     const bool neither = !(read || write);
+
     if (both || neither) {
         qWarning("dtkIOCompressor::open: dtkIOCompressor can only be opened in the ReadOnly or WriteOnly modes");
         return false;
@@ -357,6 +367,7 @@ bool dtkIOCompressor::open(OpenMode mode)
     if (d->device->isOpen()) {
         d->manageDevice = false;
         const OpenMode deviceMode = d->device->openMode();
+
         if (read && !(deviceMode & ReadOnly)) {
             qWarning("dtkIOCompressor::open: underlying device must be open in one of the ReadOnly or WriteOnly modes");
             return false;
@@ -365,9 +376,10 @@ bool dtkIOCompressor::open(OpenMode mode)
             return false;
         }
 
-    // If the underlying device is closed, open it.
+        // If the underlying device is closed, open it.
     } else {
         d->manageDevice = true;
+
         if (d->device->open(mode) == false) {
             setErrorString(QT_TRANSLATE_NOOP("dtkIOCompressor", "Error opening underlying device: ") + d->device->errorString());
             return false;
@@ -383,22 +395,27 @@ bool dtkIOCompressor::open(OpenMode mode)
     // (So passing 31 gives gzip headers and 15 windowBits). Passing a negative
     // value selects no headers hand then negates the windowBits argument.
     int windowBits;
+
     switch (d->streamFormat) {
     case dtkIOCompressor::GzipFormat:
         windowBits = 31;
         break;
+
     case dtkIOCompressor::RawZipFormat:
         windowBits = -15;
         break;
+
     default:
         windowBits = 15;
     }
 
     int status;
+
     if (read) {
         d->state = dtkIOCompressorPrivate::NotReadFirstByte;
         d->zlibStream.avail_in = 0;
         d->zlibStream.next_in = 0;
+
         if (d->streamFormat == dtkIOCompressor::ZlibFormat) {
             status = inflateInit(&d->zlibStream);
         } else {
@@ -411,6 +428,7 @@ bool dtkIOCompressor::open(OpenMode mode)
         }
     } else {
         d->state = dtkIOCompressorPrivate::NoBytesWritten;
+
         if (d->streamFormat == dtkIOCompressor::ZlibFormat)
             status = deflateInit(&d->zlibStream, d->compressionLevel);
         else
@@ -422,6 +440,7 @@ bool dtkIOCompressor::open(OpenMode mode)
         d->setZlibError(QT_TRANSLATE_NOOP("dtkIOCompressor::open", "Internal zlib error: "), status);
         return false;
     }
+
     return QIODevice::open(mode);
 }
 
@@ -432,6 +451,7 @@ bool dtkIOCompressor::open(OpenMode mode)
 void dtkIOCompressor::close()
 {
     Q_D(dtkIOCompressor);
+
     if (isOpen() == false)
         return;
 
@@ -444,6 +464,7 @@ void dtkIOCompressor::close()
             d->state = dtkIOCompressorPrivate::NoBytesWritten;
             d->flushZlib(Z_FINISH);
         }
+
         deflateEnd(&d->zlibStream);
     }
 
@@ -466,6 +487,7 @@ void dtkIOCompressor::close()
 void dtkIOCompressor::flush()
 {
     Q_D(dtkIOCompressor);
+
     if (isOpen() == false || openMode() & ReadOnly)
         return;
 
@@ -483,22 +505,25 @@ void dtkIOCompressor::flush()
 qint64 dtkIOCompressor::bytesAvailable() const
 {
     Q_D(const dtkIOCompressor);
+
     if ((openMode() & ReadOnly) == false)
         return 0;
 
     int numBytes = 0;
 
     switch (d->state) {
-        case dtkIOCompressorPrivate::NotReadFirstByte:
-            numBytes = d->device->bytesAvailable();
+    case dtkIOCompressorPrivate::NotReadFirstByte:
+        numBytes = d->device->bytesAvailable();
         break;
-        case dtkIOCompressorPrivate::InStream:
-            numBytes = 1;
+
+    case dtkIOCompressorPrivate::InStream:
+        numBytes = 1;
         break;
-        case dtkIOCompressorPrivate::EndOfStream:
-        case dtkIOCompressorPrivate::Error:
-        default:
-            numBytes = 0;
+
+    case dtkIOCompressorPrivate::EndOfStream:
+    case dtkIOCompressorPrivate::Error:
+    default:
+        numBytes = 0;
         break;
     };
 
@@ -529,6 +554,7 @@ qint64 dtkIOCompressor::readData(char *data, qint64 maxSize)
     d->zlibStream.avail_out = maxSize;
 
     int status;
+
     do {
         // Read data if if the input buffer is empty. There could be data in the buffer
         // from a previous readData call.
@@ -545,7 +571,7 @@ qint64 dtkIOCompressor::readData(char *data, qint64 maxSize)
 
             if (d->state != dtkIOCompressorPrivate::InStream) {
                 // If we are not in a stream and get 0 bytes, we are probably trying to read from an empty device.
-                if(bytesAvalible == 0)
+                if (bytesAvalible == 0)
                     return 0;
                 else if (bytesAvalible > 0)
                     d->state = dtkIOCompressorPrivate::InStream;
@@ -554,18 +580,21 @@ qint64 dtkIOCompressor::readData(char *data, qint64 maxSize)
 
         // Decompress.
         status = inflate(&d->zlibStream, Z_SYNC_FLUSH);
+
         switch (status) {
-            case Z_NEED_DICT:
-            case Z_DATA_ERROR:
-            case Z_MEM_ERROR:
-                d->state = dtkIOCompressorPrivate::Error;
-                d->setZlibError(QT_TRANSLATE_NOOP("dtkIOCompressor", "Internal zlib error when decompressing: "), status);
-                return -1;
-            case Z_BUF_ERROR: // No more input and zlib can not privide more output - Not an error, we can try to read again when we have more input.
-                return 0;
+        case Z_NEED_DICT:
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+            d->state = dtkIOCompressorPrivate::Error;
+            d->setZlibError(QT_TRANSLATE_NOOP("dtkIOCompressor", "Internal zlib error when decompressing: "), status);
+            return -1;
+
+        case Z_BUF_ERROR: // No more input and zlib can not privide more output - Not an error, we can try to read again when we have more input.
+            return 0;
             break;
         }
-    // Loop util data buffer is full or we reach the end of the input stream.
+
+        // Loop util data buffer is full or we reach the end of the input stream.
     } while (d->zlibStream.avail_out != 0 && status != Z_STREAM_END);
 
     if (status == Z_STREAM_END) {
@@ -589,6 +618,7 @@ qint64 dtkIOCompressor::writeData(const char *data, qint64 maxSize)
 {
     if (maxSize < 1)
         return 0;
+
     Q_D(dtkIOCompressor);
     d->zlibStream.next_in = reinterpret_cast<ZlibByte *>(const_cast<char *>(data));
     d->zlibStream.avail_in = maxSize;
@@ -600,6 +630,7 @@ qint64 dtkIOCompressor::writeData(const char *data, qint64 maxSize)
         d->zlibStream.next_out = d->buffer;
         d->zlibStream.avail_out = d->bufferSize;
         const int status = deflate(&d->zlibStream, Z_NO_FLUSH);
+
         if (status != Z_OK) {
             d->state = dtkIOCompressorPrivate::Error;
             d->setZlibError(QT_TRANSLATE_NOOP("dtkIOCompressor", "Internal zlib error when compressing: "), status);
@@ -613,6 +644,7 @@ qint64 dtkIOCompressor::writeData(const char *data, qint64 maxSize)
             return -1;
 
     } while (d->zlibStream.avail_out == 0); // run until output is not full.
+
     Q_ASSERT(d->zlibStream.avail_in == 0);
 
     return maxSize;
@@ -622,7 +654,7 @@ qint64 dtkIOCompressor::writeData(const char *data, qint64 maxSize)
     \internal
     Checks if the run-time zlib version is 1.2.x or higher.
 */
-bool dtkIOCompressor::checkGzipSupport(const char * const versionString)
+bool dtkIOCompressor::checkGzipSupport(const char *const versionString)
 {
     if (strlen(versionString) < 3)
         return false;

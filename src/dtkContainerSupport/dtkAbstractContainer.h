@@ -1,5 +1,5 @@
-/* dtkAbstractContainer.h --- 
- * 
+/* dtkAbstractContainer.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue May 22 13:07:11 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 80
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTCONTAINER_H
@@ -40,8 +40,8 @@ enum dtkContainerType {
 template <typename T> class dtkAbstractContainer
 {
 public:
-     dtkAbstractContainer(void);
-     dtkAbstractContainer(const dtkAbstractContainer<T>& other);
+    dtkAbstractContainer(void);
+    dtkAbstractContainer(const dtkAbstractContainer<T>& other);
     ~dtkAbstractContainer(void);
 
 public:
@@ -55,7 +55,7 @@ public:
 
     virtual void add(const T& value) = 0;
     virtual void add(const dtkAbstractContainer<T>& values) = 0;
-    
+
     virtual void remove(const T& value) = 0;
     virtual void remove(const dtkAbstractContainer<T>& values) = 0;
 

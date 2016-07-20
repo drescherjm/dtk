@@ -26,7 +26,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewManager : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerViewManager(QWidget *parent = 0);
+    dtkComposerViewManager(QWidget *parent = 0);
     ~dtkComposerViewManager(void);
 
 signals:

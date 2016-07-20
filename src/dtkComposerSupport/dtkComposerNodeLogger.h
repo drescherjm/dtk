@@ -24,7 +24,7 @@ class dtkComposerNodeLoggerPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLogger : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeLogger(void);
+    dtkComposerNodeLogger(void);
     ~dtkComposerNodeLogger(void);
 
 public:

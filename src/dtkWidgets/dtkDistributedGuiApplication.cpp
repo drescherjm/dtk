@@ -80,7 +80,7 @@ The argc and argv arguments are processed by the application, and made available
 Warning: The data referred to by \a argc and \a argv must stay valid for the entire lifetime of the dtkCoreApplication object. In addition, argc must be greater than zero and argv must contain at least one valid character string.
 */
 
-dtkDistributedGuiApplication::dtkDistributedGuiApplication(int &argc, char **argv): QApplication(argc, argv)
+dtkDistributedGuiApplication::dtkDistributedGuiApplication(int& argc, char **argv): QApplication(argc, argv)
 {
 
     d = new dtkDistributedApplicationPrivate;
@@ -184,7 +184,7 @@ void dtkDistributedGuiApplication::unspawn(void)
 
 dtkDistributedPolicy *dtkDistributedGuiApplication::policy(void)
 {
-     return &(d->policy);
+    return &(d->policy);
 }
 
 /*! \fn dtkDistributedCommunicator *dtkDistributedGuiApplication::communicator(void)

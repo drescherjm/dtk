@@ -1,5 +1,5 @@
-/* dtkAbstractDataWriter.cpp --- 
- * 
+/* dtkAbstractDataWriter.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 38
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractDataWriter.h"
@@ -114,12 +114,12 @@ void dtkAbstractDataWriter::setProgress(int value)
     emit progressed (value);
 }
 
-//! 
-/*! 
+//!
+/*!
  * Get the extension this writer prefers.  The list may depend on the
  * data set by setData.  The default implementation returns an
  * empty StringList, indicating no preferred extension.
- * 
+ *
  * \return The list of supported extensions.
  */
 

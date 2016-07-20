@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayDataOperatorModifier.cpp --- 
- * 
+/* dtkComposerNodeArrayDataOperatorModifier.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jul  5 09:37:40 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 52
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerTransmitterVariant.h"
@@ -106,7 +106,7 @@ void dtkComposerNodeArrayDataOperatorInsert::run(void)
             d->emitter_array.clearData();
             return;
         }
-    
+
         if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
             d->emitter_array.clearData();
@@ -120,6 +120,7 @@ void dtkComposerNodeArrayDataOperatorInsert::run(void)
             array->insert(d->receiver_item.variant(), index);
 
         }
+
         d->emitter_array.setData(array);
 
     } else {
@@ -144,7 +145,7 @@ void dtkComposerNodeArrayDataOperatorSet::run(void)
             d->emitter_array.clearData();
             return;
         }
-    
+
         if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
             d->emitter_array.clearData();
@@ -158,6 +159,7 @@ void dtkComposerNodeArrayDataOperatorSet::run(void)
             array->replace(d->receiver_item.variant(), index);
 
         }
+
         d->emitter_array.setData(array);
 
     } else {
@@ -181,7 +183,7 @@ void dtkComposerNodeArrayDataOperatorAppend::run(void)
             d->emitter_array.clearData();
             return;
         }
-    
+
         if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
             d->emitter_array.clearData();
@@ -212,7 +214,7 @@ void dtkComposerNodeArrayDataOperatorPrepend::run(void)
             d->emitter_array.clearData();
             return;
         }
-    
+
         if (array->isReset()) {
             dtkWarn() << "Input array is not valid. Nothing is done.";
             d->emitter_array.clearData();

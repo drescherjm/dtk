@@ -24,7 +24,7 @@ public:
 
 dtkComposerViewController *dtkComposerViewController::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkComposerViewController;
 
     return s_instance;

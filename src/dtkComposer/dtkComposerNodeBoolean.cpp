@@ -68,7 +68,7 @@ void dtkComposerNodeBooleanEditor::onValueChanged(bool val)
 
 dtkComposerNodeBooleanEditor *dtkComposerNodeBooleanPrivate::editor(void)
 {
-    if(!m_editor)
+    if (!m_editor)
         m_editor = new dtkComposerNodeBooleanEditor(this);
 
     m_editor->refresh();

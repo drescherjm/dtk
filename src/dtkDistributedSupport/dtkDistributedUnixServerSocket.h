@@ -1,5 +1,5 @@
-/* dtkDistributedUnixServerSocket.h --- 
- * 
+/* dtkDistributedUnixServerSocket.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:57:15 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDUNIXSERVERSOCKET_H
@@ -27,10 +27,10 @@ class dtkDistributedUnixServerSocket : public QTcpServer
     Q_OBJECT
 
 public:
-    dtkDistributedUnixServerSocket(const QString &path, QObject *parent = 0);
+    dtkDistributedUnixServerSocket(const QString& path, QObject *parent = 0);
     dtkDistributedUnixServerSocket(QObject *parent = 0);
 
-    void setPath(const QString &path);
+    void setPath(const QString& path);
     void close(void);
 
 private:

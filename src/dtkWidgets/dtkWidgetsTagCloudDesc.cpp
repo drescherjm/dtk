@@ -1,15 +1,15 @@
 /* dtkWidgetsTagCloudDesc.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:37:36 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Mon Apr 15 14:38:16 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 3
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkWidgetsTagCloudDesc.h"

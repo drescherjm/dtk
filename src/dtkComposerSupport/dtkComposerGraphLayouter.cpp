@@ -85,13 +85,13 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
 
     this->reversed = edges;
 
-    while(nodes.count()) {
+    while (nodes.count()) {
 
         // Handle sink nodes
 
-        while(dtkComposerGraphNode *s = sink(nodes, edges)) {
+        while (dtkComposerGraphNode *s = sink(nodes, edges)) {
 
-            foreach(dtkComposerGraphEdge *edge, inset(s, nodes, edges)) {
+            foreach (dtkComposerGraphEdge *edge, inset(s, nodes, edges)) {
                 this->feedback << edge;
                 this->reversed.removeAll(edge);
                 edges.removeAll(edge);
@@ -100,15 +100,15 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
 
         // Handle isolated nodes
 
-        while(dtkComposerGraphNode *i = isolated(nodes, edges)) {
+        while (dtkComposerGraphNode *i = isolated(nodes, edges)) {
             nodes.removeAll(i);
         }
 
         // Handle source nodes
 
-        while(dtkComposerGraphNode *s = source(nodes, edges)) {
+        while (dtkComposerGraphNode *s = source(nodes, edges)) {
 
-            foreach(dtkComposerGraphEdge *edge, outset(s, nodes, edges)) {
+            foreach (dtkComposerGraphEdge *edge, outset(s, nodes, edges)) {
                 this->feedback << edge;
                 this->reversed.removeAll(edge);
                 edges.removeAll(edge);
@@ -117,21 +117,21 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
 
         // Handle connected nodes
 
-        if(nodes.count()) {
+        if (nodes.count()) {
 
             dtkComposerGraphNode *m = nodes.first();
 
-            foreach(dtkComposerGraphNode *n, nodes)
-                if(o_degree(n, nodes, edges) - i_degree(n, nodes, edges) > o_degree(m, nodes, edges) - i_degree(m, nodes, edges))
+            foreach (dtkComposerGraphNode *n, nodes)
+                if (o_degree(n, nodes, edges) - i_degree(n, nodes, edges) > o_degree(m, nodes, edges) - i_degree(m, nodes, edges))
                     m = n;
 
-            foreach(dtkComposerGraphEdge *e, outset(m, nodes, edges)) {
+            foreach (dtkComposerGraphEdge *e, outset(m, nodes, edges)) {
                 this->feedback << e;
                 this->reversed.removeAll(e);
                 edges.removeAll(e);
             }
 
-            foreach(dtkComposerGraphEdge *e, inset(m, nodes, edges)) {
+            foreach (dtkComposerGraphEdge *e, inset(m, nodes, edges)) {
                 edges.removeAll(e);
             }
 
@@ -139,7 +139,7 @@ void dtkComposerGraphLayouterPrivate::removeCycles(void)
         }
     }
 
-    foreach(dtkComposerGraphEdge *edge, this->reversed)
+    foreach (dtkComposerGraphEdge *edge, this->reversed)
         reverse(edge);
 }
 
@@ -150,15 +150,15 @@ void dtkComposerGraphLayouterPrivate::assignLayers(void)
 
     QList<dtkComposerGraphNode *> sortd = sort(nodes, edges);
 
-    foreach(dtkComposerGraphNode *node, sortd)
+    foreach (dtkComposerGraphNode *node, sortd)
         this->layers.insert(node, 1);
 
     int height = 1;
 
-    foreach(dtkComposerGraphNode *u, sortd) {
-        foreach(dtkComposerGraphEdge *edge, outset(u, nodes, edges)) {
+    foreach (dtkComposerGraphNode *u, sortd) {
+        foreach (dtkComposerGraphEdge *edge, outset(u, nodes, edges)) {
             dtkComposerGraphNode *v = edge->destination();
-            this->layers[v] = qMax(this->layers[v], this->layers[u]+1);
+            this->layers[v] = qMax(this->layers[v], this->layers[u] + 1);
             height = qMax(height, this->layers[v]);
         }
     }
@@ -176,7 +176,7 @@ void dtkComposerGraphLayouterPrivate::assignPostns(void)
 
     // y-coordinate assignment
 
-    foreach(dtkComposerGraphNode *n, layers.keys())
+    foreach (dtkComposerGraphNode *n, layers.keys())
         n->setPos(QPointF(n->pos().x(), layers[n] * 2 * n->boundingRect().height()));
 
     // x-coordinate assignment (left aligned)
@@ -187,20 +187,20 @@ void dtkComposerGraphLayouterPrivate::assignPostns(void)
     int max_layer = 0;
     qreal max_width = 0.0;
 
-    foreach(dtkComposerGraphNode *n, nodes) {
+    foreach (dtkComposerGraphNode *n, nodes) {
 
         int layer = this->layers[n];
 
-        if(!layer_count.contains(layer))
+        if (!layer_count.contains(layer))
             layer_count.insert(layer, 0);
         else
-            layer_count[layer] = layer_count[layer]+1;
+            layer_count[layer] = layer_count[layer] + 1;
 
-        n->setPos(QPointF(2*n->boundingRect().width()*layer_count[layer], n->pos().y()));
+        n->setPos(QPointF(2 * n->boundingRect().width()*layer_count[layer], n->pos().y()));
 
         layer_width[layer] = n->sceneBoundingRect().right();
 
-        if(layer_width[layer] > max_width) {
+        if (layer_width[layer] > max_width) {
             max_width = layer_width[layer];
             max_layer = layer;
         }
@@ -208,14 +208,14 @@ void dtkComposerGraphLayouterPrivate::assignPostns(void)
 
     // x-coordinate assignment (center aligned)
 
-    foreach(dtkComposerGraphNode *n, nodes)
-        if(this->layers[n] != max_layer)
-            n->setPos(n->pos() + QPointF((max_width-layer_width[this->layers[n]])/2.0, 0));
+    foreach (dtkComposerGraphNode *n, nodes)
+        if (this->layers[n] != max_layer)
+            n->setPos(n->pos() + QPointF((max_width - layer_width[this->layers[n]]) / 2.0, 0));
 }
 
 void dtkComposerGraphLayouterPrivate::createCycles(void)
 {
-    foreach(dtkComposerGraphEdge *edge, this->reversed)
+    foreach (dtkComposerGraphEdge *edge, this->reversed)
         reverse(edge);
 }
 
@@ -258,21 +258,21 @@ dtkComposerGraphNodeList sort(dtkComposerGraphNodeList& nodes, dtkComposerGraphE
     dtkComposerGraphNodeList nodel;
     dtkComposerGraphNodeList sortd;
 
-    foreach(dtkComposerGraphNode *node, node_list)
-        if(!(inset(node, node_list, edge_list).count()))
+    foreach (dtkComposerGraphNode *node, node_list)
+        if (!(inset(node, node_list, edge_list).count()))
             nodel << node;
 
-    while(!nodel.isEmpty()) {
+    while (!nodel.isEmpty()) {
 
         dtkComposerGraphNode *n = nodel.takeFirst(); sortd << n;
 
-        foreach(dtkComposerGraphEdge *edge, outset(n, node_list, edge_list)) {
+        foreach (dtkComposerGraphEdge *edge, outset(n, node_list, edge_list)) {
 
             dtkComposerGraphNode *m = edge->destination();
 
             edge_list.removeAll(edge);
 
-            if(inset(m, node_list, edge_list).count() == 0)
+            if (inset(m, node_list, edge_list).count() == 0)
                 nodel << m;
         }
     }
@@ -282,8 +282,8 @@ dtkComposerGraphNodeList sort(dtkComposerGraphNodeList& nodes, dtkComposerGraphE
 
 dtkComposerGraphNode *isolated(dtkComposerGraphNodeList& nodes, dtkComposerGraphEdgeList& edges)
 {
-    foreach(dtkComposerGraphNode *node, nodes) {
-        if(!inset(node, nodes, edges).count() && !outset(node, nodes, edges).count()) {
+    foreach (dtkComposerGraphNode *node, nodes) {
+        if (!inset(node, nodes, edges).count() && !outset(node, nodes, edges).count()) {
             nodes.removeAll(node);
             return node;
         }
@@ -294,8 +294,8 @@ dtkComposerGraphNode *isolated(dtkComposerGraphNodeList& nodes, dtkComposerGraph
 
 dtkComposerGraphNode *source(dtkComposerGraphNodeList& nodes, dtkComposerGraphEdgeList& edges)
 {
-    foreach(dtkComposerGraphNode *node, nodes) {
-        if(!inset(node, nodes, edges).count() && outset(node, nodes, edges).count()) {
+    foreach (dtkComposerGraphNode *node, nodes) {
+        if (!inset(node, nodes, edges).count() && outset(node, nodes, edges).count()) {
             nodes.removeAll(node);
             return node;
         }
@@ -306,8 +306,8 @@ dtkComposerGraphNode *source(dtkComposerGraphNodeList& nodes, dtkComposerGraphEd
 
 dtkComposerGraphNode *sink(dtkComposerGraphNodeList& nodes, dtkComposerGraphEdgeList& edges)
 {
-    foreach(dtkComposerGraphNode *node, nodes) {
-        if(inset(node, nodes, edges).count() && !outset(node, nodes, edges).count()) {
+    foreach (dtkComposerGraphNode *node, nodes) {
+        if (inset(node, nodes, edges).count() && !outset(node, nodes, edges).count()) {
             nodes.removeAll(node);
             return node;
         }
@@ -320,8 +320,8 @@ int i_degree(dtkComposerGraphNode *node, dtkComposerGraphNodeList& nodes, dtkCom
 {
     int degree = 0;
 
-    foreach(dtkComposerGraphEdge *edge, edges)
-        if(edge->destination() == node)
+    foreach (dtkComposerGraphEdge *edge, edges)
+        if (edge->destination() == node)
             degree++;
 
     return degree;
@@ -331,8 +331,8 @@ int o_degree(dtkComposerGraphNode *node, dtkComposerGraphNodeList& nodes, dtkCom
 {
     int degree = 0;
 
-    foreach(dtkComposerGraphEdge *edge, edges)
-        if(edge->source() == node)
+    foreach (dtkComposerGraphEdge *edge, edges)
+        if (edge->source() == node)
             degree++;
 
     return degree;
@@ -350,8 +350,8 @@ dtkComposerGraphEdgeList inset(dtkComposerGraphNode *node, dtkComposerGraphNodeL
 {
     dtkComposerGraphEdgeList list;
 
-    foreach(dtkComposerGraphEdge *edge, edges)
-        if(edge->destination() == node)
+    foreach (dtkComposerGraphEdge *edge, edges)
+        if (edge->destination() == node)
             list << edge;
 
     return list;
@@ -361,8 +361,8 @@ dtkComposerGraphEdgeList outset(dtkComposerGraphNode *node, dtkComposerGraphNode
 {
     dtkComposerGraphEdgeList list;
 
-    foreach(dtkComposerGraphEdge *edge, edges)
-        if(edge->source() == node)
+    foreach (dtkComposerGraphEdge *edge, edges)
+        if (edge->source() == node)
             list << edge;
 
     return list;

@@ -1,5 +1,5 @@
-/* dtkDistributedNode.cpp --- 
- * 
+/* dtkDistributedNode.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:05:14 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 23
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedNode.h"

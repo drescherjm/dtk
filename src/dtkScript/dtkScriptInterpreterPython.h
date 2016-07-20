@@ -1,5 +1,5 @@
-/* dtkScriptInterpreterPython.h --- 
- * 
+/* dtkScriptInterpreterPython.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 26 16:28:12 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 51
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once

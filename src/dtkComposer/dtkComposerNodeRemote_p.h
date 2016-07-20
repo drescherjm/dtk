@@ -34,7 +34,7 @@ public:
     dtkComposerTransmitterReceiver<QString> jobid_receiver;
 
 public:
-    dtkComposerTransmitterEmitter<QTcpSocket* > socket_emitter;
+    dtkComposerTransmitterEmitter<QTcpSocket * > socket_emitter;
 
 public:
     QDomDocument composition;

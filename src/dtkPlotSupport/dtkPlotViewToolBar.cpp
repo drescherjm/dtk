@@ -1,5 +1,5 @@
-/* dtkPlotViewToolBar.cpp --- 
- * 
+/* dtkPlotViewToolBar.cpp ---
+ *
  * Author: Selim Kraria
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 423
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotViewToolBar.h"
@@ -99,7 +99,7 @@ dtkPlotViewToolBar::dtkPlotViewToolBar(dtkPlotView *parent) : QFrame(parent->wid
     connect(d->gridAction, SIGNAL(triggered(bool)), this, SLOT(onGridActivated(bool)));
     connect(d->pickingAction, SIGNAL(triggered(bool)), this, SLOT(onPickingActivated(bool)));
     connect(d->legendAction, SIGNAL(triggered(bool)), this, SLOT(onLegendActivated(bool)));
-    connect(d->exportAction, SIGNAL(triggered()), this, SLOT(onExport()));    
+    connect(d->exportAction, SIGNAL(triggered()), this, SLOT(onExport()));
 }
 
 dtkPlotViewToolBar::~dtkPlotViewToolBar(void)
@@ -161,7 +161,7 @@ void dtkPlotViewToolBar::onExport(void)
 #endif
     filters += "Postscript Documents (*.ps)";
 
-    for(int i = 0; i < imageFormats.size(); i++) {
+    for (int i = 0; i < imageFormats.size(); i++) {
         QString imageFilter;
         imageFilter += imageFormats[i].toUpper();
         imageFilter += " (*.";
@@ -177,35 +177,38 @@ void dtkPlotViewToolBar::onExport(void)
     dialog->setFileMode(QFileDialog::AnyFile);
 
     QRegExp filter_regex(QLatin1String("(?:^\\*\\.(?!.*\\()|\\(\\*\\.)(\\w+)"));
+
     if (dialog->exec() == QDialog::Accepted) {
         QString fileName = dialog->selectedFiles().first();
         QFileInfo info(fileName);
+
         if (info.suffix().isEmpty() && !dialog->selectedNameFilter().isEmpty()) {
             if (filter_regex.indexIn(dialog->selectedNameFilter()) != -1) {
                 QString extension = filter_regex.cap(1);
                 fileName += QLatin1String(".") + extension;
             }
         }
+
         this->onExport(fileName);
     }
 }
 
 void dtkPlotViewToolBar::setDark(bool dark)
 {
-    if(dark) {
-	d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis-light.png"));
-	d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid-light.png"));
-	d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking-light.png"));
-	d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom-light.png"));
-	d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend-light.png"));
-	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport-light.png"));
+    if (dark) {
+        d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis-light.png"));
+        d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid-light.png"));
+        d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking-light.png"));
+        d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom-light.png"));
+        d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend-light.png"));
+        d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport-light.png"));
     } else {
-	d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis.png"));
-	d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid.png"));
-	d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking.png"));
-	d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom.png"));
-	d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend.png"));
-	d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport.png"));
+        d->defaultViewAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotAxis.png"));
+        d->gridAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotGrid.png"));
+        d->pickingAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotPicking.png"));
+        d->zoomAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotZoom.png"));
+        d->legendAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotLegend.png"));
+        d->exportAction->setIcon(QPixmap(":dtkPlot/pixmaps/dtkPlotSupportExport.png"));
     }
 }
 

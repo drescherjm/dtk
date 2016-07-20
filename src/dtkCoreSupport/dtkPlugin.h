@@ -1,5 +1,5 @@
-/* dtkPlugin.h --- 
- * 
+/* dtkPlugin.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Oct 31 13:49:50 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 70
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTPLUGIN_H
@@ -35,14 +35,14 @@ class DTKCORESUPPORT_EXPORT dtkPlugin : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkPlugin(QObject *parent = 0);
-             dtkPlugin(const dtkPlugin& other);
+    dtkPlugin(QObject *parent = 0);
+    dtkPlugin(const dtkPlugin& other);
     virtual ~dtkPlugin(void);
-    
+
 public:
     virtual bool initialize(void) = 0;
     virtual bool uninitialize(void) = 0;
-    
+
     virtual QString contact(void) const;
     virtual QString description(void) const = 0;
     virtual QString name(void) const = 0;

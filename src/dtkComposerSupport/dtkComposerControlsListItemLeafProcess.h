@@ -1,12 +1,12 @@
 /* dtkComposerControlsListItemLeafProcess.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:18:27 2013 (+0200)
- * Version: 
+ * Version:
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -21,7 +21,7 @@ class dtkComposerControlsListItemLeafProcess: public dtkComposerControlsListItem
     Q_OBJECT
 
 public:
-             dtkComposerControlsListItemLeafProcess(QListWidget *parent = 0, dtkComposerSceneNode *node = NULL);
+    dtkComposerControlsListItemLeafProcess(QListWidget *parent = 0, dtkComposerSceneNode *node = NULL);
     virtual ~dtkComposerControlsListItemLeafProcess(void);
 
 public:

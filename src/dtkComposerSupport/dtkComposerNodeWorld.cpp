@@ -73,6 +73,7 @@ dtkComposerNodeWorld::~dtkComposerNodeWorld(void)
 {
     if (d->communicator)
         delete d->communicator;
+
     d->communicator = NULL;
 
     delete d;
@@ -101,7 +102,7 @@ void dtkComposerNodeWorld::begin(void)
 
     if (!d->communicator->initialized())
         d->communicator->initialize();
-    
+
     d->rank = d->communicator->rank();
     d->size = d->communicator->size();
 }

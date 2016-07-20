@@ -27,7 +27,7 @@ class dtkComposerNodeMetaScalarArrayExtractorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaScalarArrayExtractor : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaScalarArrayExtractor(void);
+    dtkComposerNodeMetaScalarArrayExtractor(void);
     ~dtkComposerNodeMetaScalarArrayExtractor(void);
 
 public:
@@ -45,10 +45,10 @@ public:
 public:
     inline QString inputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "arrays";
 
-        if(port == 1)
+        if (port == 1)
             return "index";
 
         return "input";
@@ -56,7 +56,7 @@ public:
 
     inline QString outputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "array";
 
         return "output";

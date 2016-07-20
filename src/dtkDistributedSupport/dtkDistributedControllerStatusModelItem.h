@@ -1,5 +1,5 @@
-/* dtkDistributedControllerStatusModelItem.h --- 
- * 
+/* dtkDistributedControllerStatusModelItem.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 16:44:27 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 24
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERSTATUSMODELITEM_H
@@ -33,27 +33,27 @@ public:
     };
 
 public:
-     dtkDistributedControllerStatusModelItem(const QList<QVariant> &data, dtkDistributedControllerStatusModelItem *parent = 0);
+    dtkDistributedControllerStatusModelItem(const QList<QVariant>& data, dtkDistributedControllerStatusModelItem *parent = 0);
     ~dtkDistributedControllerStatusModelItem(void);
 
     void appendChild(dtkDistributedControllerStatusModelItem *child);
     void removeChild(dtkDistributedControllerStatusModelItem *child);
-   
+
     void clear(void);
- 
+
     dtkDistributedControllerStatusModelItem *child(int row);
     dtkDistributedControllerStatusModelItem *parent(void);
-    
+
     int childCount(void) const;
     int columnCount(void) const;
-    
+
     QVariant data(int column) const;
-    
+
     int row(void) const;
 
 public:
     Kind kind;
-    
+
 private:
     friend class dtkDistributedControllerStatusModelItemPrivate; dtkDistributedControllerStatusModelItemPrivate *d;
 };

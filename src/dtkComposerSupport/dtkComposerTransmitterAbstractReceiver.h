@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterAbstractReceiver.h --- 
- * 
+/* dtkComposerTransmitterAbstractReceiver.h ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: 2012 Thu Oct 11 12:19:59 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTERABSTRACTRECEIVER_H
@@ -26,7 +26,7 @@
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterAbstractReceiver : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterAbstractReceiver(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterAbstractReceiver(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterAbstractReceiver(void);
 
 public:

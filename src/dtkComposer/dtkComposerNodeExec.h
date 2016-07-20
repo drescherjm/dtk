@@ -25,7 +25,7 @@ class dtkComposerNodeExecPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeExec : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeExec(void);
+    dtkComposerNodeExec(void);
     ~dtkComposerNodeExec(void);
 
 public:

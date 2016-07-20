@@ -21,7 +21,7 @@ class dtkLoggerHandlersTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkLoggerHandlersTestCase(void);
+    dtkLoggerHandlersTestCase(void);
     virtual ~dtkLoggerHandlersTestCase(void);
 
 private slots:

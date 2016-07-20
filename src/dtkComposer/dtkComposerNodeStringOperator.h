@@ -29,7 +29,7 @@ class dtkComposerNodeStringOperatorUnaryPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringOperatorUnary(void);
+    dtkComposerNodeStringOperatorUnary(void);
     ~dtkComposerNodeStringOperatorUnary(void);
 
 protected:
@@ -45,7 +45,7 @@ class dtkComposerNodeStringOperatorBinaryPrivate;
 class DTKCOMPOSER_EXPORT  dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringOperatorBinary(void);
+    dtkComposerNodeStringOperatorBinary(void);
     ~dtkComposerNodeStringOperatorBinary(void);
 
 protected:
@@ -61,7 +61,7 @@ class dtkComposerNodeStringOperatorBinaryLogicPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringOperatorBinaryLogic(void);
+    dtkComposerNodeStringOperatorBinaryLogic(void);
     ~dtkComposerNodeStringOperatorBinaryLogic(void);
 
 protected:
@@ -99,7 +99,7 @@ class dtkComposerNodeStringReplacePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringReplace : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringReplace(void);
+    dtkComposerNodeStringReplace(void);
     ~dtkComposerNodeStringReplace(void);
 
 public:
@@ -123,7 +123,7 @@ class dtkComposerNodeStringListAppendPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringListAppend(void);
+    dtkComposerNodeStringListAppend(void);
     ~dtkComposerNodeStringListAppend(void);
 
 public:
@@ -144,7 +144,7 @@ class dtkComposerNodeStringListExtractPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringListExtract(void);
+    dtkComposerNodeStringListExtract(void);
     ~dtkComposerNodeStringListExtract(void);
 
 public:
@@ -166,7 +166,7 @@ class dtkComposerNodeStringListSetPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringListSet(void);
+    dtkComposerNodeStringListSet(void);
     ~dtkComposerNodeStringListSet(void);
 
 public:

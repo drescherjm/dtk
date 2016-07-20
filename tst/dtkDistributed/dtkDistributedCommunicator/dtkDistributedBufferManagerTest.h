@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -41,5 +41,5 @@ private slots:
 
 };
 
-// 
+//
 // dtkDistributedBufferManagerTest.h ends here

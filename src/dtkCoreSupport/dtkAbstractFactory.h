@@ -1,5 +1,5 @@
-/* dtkAbstractFactory.h --- 
- * 
+/* dtkAbstractFactory.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Nov 12 11:03:31 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 13
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTFACTORY_H
@@ -30,11 +30,13 @@ class DTKCORESUPPORT_EXPORT dtkAbstractFactory : public QObject
     Q_OBJECT
 
 public:
-     dtkAbstractFactory(void);
+    dtkAbstractFactory(void);
     ~dtkAbstractFactory(void);
 
 private slots:
-    void clear(void) { delete this; }
+    void clear(void) {
+        delete this;
+    }
 };
 
 #endif

@@ -1,5 +1,5 @@
-/* dtkComposerGraphEdge.cpp --- 
- * 
+/* dtkComposerGraphEdge.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 167
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraphEdge.h"
@@ -64,12 +64,12 @@ void dtkComposerGraphEdge::setId(int id)
 // dtkComposerGraphEdgeList
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(void) : QList<dtkComposerGraphEdge *>()
+dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(void) : QList<dtkComposerGraphEdge * >()
 {
 
 }
 
-dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other) : QList<dtkComposerGraphEdge *>(other)
+dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other) : QList<dtkComposerGraphEdge * >(other)
 {
 
 }

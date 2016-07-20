@@ -31,7 +31,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedServerManagerSsh : public dtkDi
 
 
 public:
-             dtkDistributedServerManagerSsh(void);
+    dtkDistributedServerManagerSsh(void);
     virtual ~dtkDistributedServerManagerSsh(void);
 
 public slots:

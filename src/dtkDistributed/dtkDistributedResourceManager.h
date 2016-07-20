@@ -23,10 +23,12 @@ class dtkDistributedResourceManager : public QObject
     Q_OBJECT
 
 public:
-             dtkDistributedResourceManager(void);
+    dtkDistributedResourceManager(void);
     virtual ~dtkDistributedResourceManager(void);
 
-    static QString protocol(void) { return "1.1"; };
+    static QString protocol(void) {
+        return "1.1";
+    };
 
 public slots:
     virtual QByteArray status(void) = 0;

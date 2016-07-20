@@ -1,5 +1,5 @@
-/* dtkAbstractDataSerializer_p.h --- 
- * 
+/* dtkAbstractDataSerializer_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 11:04:31 2012 (+0200)
@@ -9,14 +9,14 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
- 
+
 #ifndef DTKABSTRACTDATASERIALIZER_P
 #define DTKABSTRACTDATASERIALIZER_P
 
@@ -35,8 +35,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataSerializerPrivate : public dtkAbstrac
 public:
     dtkAbstractDataSerializerPrivate(dtkAbstractDataSerializer *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractDataSerializerPrivate(const dtkAbstractDataSerializerPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                                      enabled(false),
-                                                                                      array(other.array) {}
+        enabled(false),
+        array(other.array) {}
 
 public:
     virtual ~dtkAbstractDataSerializerPrivate(void) {}

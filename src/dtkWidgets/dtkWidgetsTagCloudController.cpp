@@ -120,16 +120,23 @@ void dtkWidgetsTagCloudController::update(void)
     //     d->tags << dtkWidgetsTag(tag, tags[tag].count(), tags[tag]);
 }
 
-static bool intersect(QStringList l1, QStringList l2) {
+static bool intersect(QStringList l1, QStringList l2)
+{
     bool pass = true;
-    foreach(QString s, l1) if(!l2.contains(s)) pass = false;
+
+    foreach(QString s, l1) if (!l2.contains(s)) pass = false;
+
     return pass;
 }
 
-static bool unite(QStringList l1, QStringList l2) {
-    if(l1.isEmpty()) return true;
+static bool unite(QStringList l1, QStringList l2)
+{
+    if (l1.isEmpty()) return true;
+
     bool pass = false;
-    foreach(QString s, l1) if(l2.contains(s)) pass = true;
+
+    foreach(QString s, l1) if (l2.contains(s)) pass = true;
+
     return pass;
 }
 
@@ -147,31 +154,36 @@ void dtkWidgetsTagCloudController::render(void)
 
     QHash<QString, QStringList> tags;
 
-    foreach(dtkWidgetsTagCloudItem item, d->items)
-        foreach(QString tag, item.tags())
+    foreach (dtkWidgetsTagCloudItem item, d->items)
+        foreach (QString tag, item.tags())
             tags[tag] << item.name();
 
-    foreach(QString tag, tags.keys())
+    foreach (QString tag, tags.keys())
         d->tags << dtkWidgetsTag(tag, tags[tag].count(), tags[tag]);
 
     if (d->list) {
         d->list->clear();
-        foreach(dtkWidgetsTagCloudItem item, d->items)
-            if((d->union_mode && unite(d->filters, item.tags())) || (!d->union_mode && intersect(d->filters, item.tags())))
+
+        foreach (dtkWidgetsTagCloudItem item, d->items)
+            if ((d->union_mode && unite(d->filters, item.tags())) || (!d->union_mode && intersect(d->filters, item.tags())))
                 d->list->addItem(item);
     }
 
     if (d->cloud) {
         d->cloud->clear();
-        foreach(dtkWidgetsTag tag, d->tags)
+
+        foreach (dtkWidgetsTag tag, d->tags)
             d->cloud->addTag(tag);
+
         d->cloud->render();
     }
 
     if (d->scope) {
         d->scope->clear();
-        foreach(QString filter, d->filters)
+
+        foreach (QString filter, d->filters)
             d->scope->addTag(filter, tags[filter].count());
+
         d->scope->render();
     }
 

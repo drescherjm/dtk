@@ -1,16 +1,16 @@
-/* dtkDistributedCommunicator.h --- 
- * 
+/* dtkDistributedCommunicator.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 09:18:40 2010 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCOMMUNICATOR_H
@@ -30,7 +30,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorStatus
 {
 
 public:
-             dtkDistributedCommunicatorStatus(void);
+    dtkDistributedCommunicatorStatus(void);
     virtual ~dtkDistributedCommunicatorStatus(void);
 
 public:
@@ -57,7 +57,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorRequest
 {
 
 public:
-             dtkDistributedCommunicatorRequest(void);
+    dtkDistributedCommunicatorRequest(void);
     virtual ~dtkDistributedCommunicatorRequest(void);
 
 public:
@@ -71,7 +71,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicator : public QObject
     Q_OBJECT
 
 public:
-             dtkDistributedCommunicator(void);
+    dtkDistributedCommunicator(void);
     virtual ~dtkDistributedCommunicator(void);
 
 public:
@@ -159,11 +159,11 @@ public:
     virtual void   receive(float  *data, qint64 size, qint16 source, int tag);
     virtual void   receive(double *data, qint64 size, qint16 source, int tag);
     virtual void   receive(dtkAbstractData *&data, qint16 source, int tag);
-    virtual void   receive(QString &s,   qint16 source, int tag);
-    virtual void   receive(QByteArray &v,  qint16 source, int tag);
+    virtual void   receive(QString& s,   qint16 source, int tag);
+    virtual void   receive(QByteArray& v,  qint16 source, int tag);
 
     virtual void   receive(void   *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorStatus& status);
-    virtual void   receive(QByteArray &v,  qint16 source, int tag, dtkDistributedCommunicatorStatus& status);
+    virtual void   receive(QByteArray& v,  qint16 source, int tag, dtkDistributedCommunicatorStatus& status);
 
     virtual void   ireceive(void   *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
     virtual void   ireceive(bool   *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
@@ -174,8 +174,8 @@ public:
     virtual void   ireceive(float  *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
     virtual void   ireceive(double *data, qint64 size, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
     virtual void   ireceive(dtkAbstractData *&data, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void   ireceive(QString &s,   qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
-    virtual void   ireceive(QByteArray &v,  qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
+    virtual void   ireceive(QString& s,   qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
+    virtual void   ireceive(QByteArray& v,  qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
 
 
     virtual void   barrier(void);
@@ -188,8 +188,8 @@ public:
     virtual void broadcast(qint64 *data, qint64 size, qint16 source);
     virtual void broadcast(float  *data, qint64 size, qint16 source);
     virtual void broadcast(double *data, qint64 size, qint16 source);
-    virtual void broadcast(QString &s,   qint16 source);
-    virtual void broadcast(QByteArray &v,qint16 source);
+    virtual void broadcast(QString& s,   qint16 source);
+    virtual void broadcast(QByteArray& v, qint16 source);
     virtual void broadcast(dtkAbstractData *&data, qint16 source);
 
     virtual void    gather(void   *send, void   *recv, qint64 size, DataType dataType, qint16 target, bool all = false);

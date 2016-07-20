@@ -29,7 +29,7 @@ class DTKCOMPOSER_EXPORT dtkComposerGraphView : public QSvgWidget
     Q_OBJECT
 
 public:
-     dtkComposerGraphView(QWidget *parent = 0);
+    dtkComposerGraphView(QWidget *parent = 0);
     ~dtkComposerGraphView(void);
 
 public:

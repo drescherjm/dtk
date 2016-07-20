@@ -57,12 +57,12 @@ dtkLogDestinationFile::dtkLogDestinationFile(const QString& path, qlonglong max_
 
     QDir dir(info.absoluteDir());
 
-    if(!dir.exists()) {
+    if (!dir.exists()) {
         QString name = dir.path();
         dir.mkpath(name);
     }
 
-    if(!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
+    if (!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
         qDebug() << "Unable to open" << path << "for writing";
 
     d->stream.setDevice(&(d->file));
@@ -88,15 +88,18 @@ void dtkLogDestinationFile::write(const QString& message)
         d->file.close();
         QString path = d->file.fileName();
         QString backup = path + ".old";
+
         // remove old backup
         if (QFile::exists(backup))
             QFile::remove(backup);
 
         QFile::rename( path, backup);
-        if(!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
+
+        if (!d->file.open(QFile::WriteOnly | QFile::Text | QIODevice::Append))
             qDebug() << "Unable to open" <<  path << "for writing";
 
     }
+
     d->stream << message << endl;
     d->stream.flush();
 }

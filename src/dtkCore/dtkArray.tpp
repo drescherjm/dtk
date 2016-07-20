@@ -40,6 +40,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
         } else {
             d = Data::allocate(other_d->size);
         }
+
         if (d->alloc) {
             copyConstruct(other_d->begin(), other_d->end(), d->begin());
             d->size = other_d->size;
@@ -57,7 +58,8 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
     if (aalloc != 0) {
         if (aalloc != qlonglong(d->alloc) || isShared) {
             QT_TRY {
-                if (aalloc > PreallocSize) {
+                if (aalloc > PreallocSize)
+                {
                     // allocate memory
                     x = Data::allocate(aalloc, options);
                     x->size = asize;
@@ -80,7 +82,8 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
                 T *srcEnd = asize > d->size ? d->end() : d->begin() + asize;
                 T *dst = x->begin();
 
-                if (QTypeInfo<T>::isStatic || (isShared && QTypeInfo<T>::isComplex)) {
+                if (QTypeInfo<T>::isStatic || (isShared && QTypeInfo<T>::isComplex))
+                {
                     // we can not move the data, we need to copy construct it
                     while (srcBegin != srcEnd) {
                         new (dst++) T(*srcBegin++);
@@ -94,7 +97,8 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
                         destruct(d->begin() + asize, d->end());
                 }
 
-                if (asize > d->size) {
+                if (asize > d->size)
+                {
                     // construct all new objects when growing
                     QT_TRY {
                         defaultConstruct(dst, x->end());
@@ -112,11 +116,13 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             Q_ASSERT(qlonglong(d->alloc) == aalloc); // resize, without changing allocation size
             Q_ASSERT(isDetached());       // can be done only on detached d
             Q_ASSERT(x == d);             // in this case we do not need to allocate anything
+
             if (asize <= d->size) {
                 destruct(x->begin() + asize, x->end()); // from future end to current end
             } else {
                 defaultConstruct(x->end(), x->begin() + asize); // from current end to future end
             }
+
             x->size = asize;
         }
     } else {
@@ -124,6 +130,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
         x->capacityReserved = bool(PreallocSize);
         x->alloc = PreallocSize;
     }
+
     if (d != x) {
         if (!d->ref.deref()) {
             if (QTypeInfo<T>::isStatic || !aalloc || (isShared && QTypeInfo<T>::isComplex)) {
@@ -134,6 +141,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
                 Data::deallocate(d);
             }
         }
+
         d = x;
     }
 
@@ -154,8 +162,9 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::freeData(Data *x)
 {
-    if(!isRawData)
+    if (!isRawData)
         destruct(x->begin(), x->end());
+
     Data::deallocate(x);
 }
 
@@ -189,7 +198,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
     }
 }
 
-template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSize>::isValidIterator(const iterator &i) const
+template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSize>::isValidIterator(const iterator& i) const
 {
     return (i <= d->end()) && (d->begin() <= i);
 }
@@ -201,6 +210,7 @@ template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSi
 template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::dtkArray(void) : isRawData(false)
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
+
     if (PreallocSize) {
         d = Data::fromRawData(this->preallocData(), 0, dtkArrayData::Unsharable);
         d->capacityReserved = bool(PreallocSize);
@@ -215,6 +225,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater or equal than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
+
     if (size > PreallocSize) {
         d = Data::allocate(size);
         d->size = size;
@@ -223,6 +234,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         d->capacityReserved = bool(PreallocSize);
         d->alloc = PreallocSize;
     }
+
     defaultConstruct(d->begin(), d->end());
 }
 
@@ -230,6 +242,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
+
     if (size > PreallocSize) {
         d = Data::allocate(size);
         d->size = size;
@@ -238,7 +251,9 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         d->capacityReserved = bool(PreallocSize);
         d->alloc = PreallocSize;
     }
-    T* i = d->end();
+
+    T *i = d->end();
+
     while (i != d->begin())
         new (--i) T(value);
 }
@@ -247,6 +262,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
     Q_ASSERT_X(size >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
+
     if (size > PreallocSize) {
         d = Data::allocate(size);
         d->size = size;
@@ -255,8 +271,10 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         d->capacityReserved = bool(PreallocSize);
         d->alloc = PreallocSize;
     }
+
     T *i = d->end();
     const T *value = values + size;
+
     while (i != d->begin())
         new (--i) T(*(--value));
 }
@@ -265,6 +283,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
 {
     Q_STATIC_ASSERT_X(PreallocSize >= 0, "dtkArray PreallocSize must be greater than 0.");
     Q_ASSERT_X(args.size() >= 0, "dtkArray::dtkArray", "Size must be greater than or equal to 0.");
+
     if (args.size() > PreallocSize) {
         d = Data::allocate(args.size());
         d->size = int(args.size());
@@ -273,6 +292,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>::
         d->capacityReserved = bool(PreallocSize);
         d->alloc = PreallocSize;
     }
+
     copyConstruct(args.begin(), args.end(), d->begin());
 }
 
@@ -304,6 +324,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>& 
 
         this->copyData(other.d);
     }
+
     return *this;
 }
 
@@ -319,14 +340,18 @@ template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSi
 {
     if (d->size != other.d->size)
         return false;
+
     if (d == other.d)
         return true;
-    T* b = d->begin();
-    T* i = b + d->size;
-    T* j = other.d->end();
+
+    T *b = d->begin();
+    T *i = b + d->size;
+    T *j = other.d->end();
+
     while (i != b)
         if (!(*--i == *--j))
             return false;
+
     return true;
 }
 
@@ -349,6 +374,7 @@ template <typename T, qlonglong PreallocSize> template <qlonglong PreallocSizeOt
 
         this->copyData(other.d);
     }
+
     return *this;
 }
 
@@ -356,14 +382,18 @@ template <typename T, qlonglong PreallocSize> template <qlonglong PreallocSizeOt
 {
     if (d->size != other.d->size)
         return false;
+
     if (d == other.d)
         return true;
-    T* b = d->begin();
-    T* i = b + d->size;
-    T* j = other.d->end();
+
+    T *b = d->begin();
+    T *i = b + d->size;
+    T *j = other.d->end();
+
     while (i != b)
         if (!(*--i == *--j))
             return false;
+
     return true;
 }
 
@@ -398,6 +428,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     if (!isDetached()) {
 #if QT_SUPPORTS(UNSHARABLE_CONTAINERS)
+
         if (!d->alloc)
             d = Data::unsharableEmpty();
         else
@@ -430,6 +461,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
     } else {
         d->ref.setSharable(sharable);
     }
+
     Q_ASSERT(d->ref.isSharable() == sharable);
 }
 #endif
@@ -497,6 +529,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
     } else {
         newAlloc = oldAlloc;
     }
+
     reallocData(asize, newAlloc, opt);
 }
 
@@ -504,14 +537,17 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     if (asize > qlonglong(d->alloc))
         reallocData(d->size, asize);
+
     if (isDetached())
         d->capacityReserved = 1;
+
     Q_ASSERT(capacity() >= asize);
 
 }
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::squeeze(void)
 {
     reallocData(d->size, d->size);
+
     if (d->capacityReserved && d->size > PreallocSize) {
         // capacity reserved in a read only memory would be useless
         // this checks avoid writing to such memory.
@@ -522,15 +558,18 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::append(const T& value)
 {
     const bool isTooSmall = quintptr(d->size + 1) > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? d->size + 1 : d->alloc, opt);
     }
+
     if (QTypeInfo<T>::isComplex) {
         new (d->end()) T(value);
     } else {
         *d->end() = T(value);
     }
+
     ++d->size;
 }
 
@@ -538,6 +577,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     quintptr newSize = d->size + 2;
     const bool isTooSmall = newSize > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -545,6 +585,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 
     if (d->alloc) {
         T *w = d->begin() + newSize;
+
         if (QTypeInfo<T>::isComplex) {
             new (--w) T(v2);
             new (--w) T(v1);
@@ -552,6 +593,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             *--w = T(v2);
             *--w = T(v1);
         }
+
         d->size = newSize;
     }
 }
@@ -560,6 +602,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     quintptr newSize = d->size + 3;
     const bool isTooSmall = newSize > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -567,6 +610,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 
     if (d->alloc) {
         T *w = d->begin() + newSize;
+
         if (QTypeInfo<T>::isComplex) {
             new (--w) T(v3);
             new (--w) T(v2);
@@ -576,6 +620,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             *--w = T(v2);
             *--w = T(v1);
         }
+
         d->size = newSize;
     }
 }
@@ -584,6 +629,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     quintptr newSize = d->size + 4;
     const bool isTooSmall = newSize > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -591,6 +637,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 
     if (d->alloc) {
         T *w = d->begin() + newSize;
+
         if (QTypeInfo<T>::isComplex) {
             new (--w) T(v4);
             new (--w) T(v3);
@@ -602,6 +649,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             *--w = T(v2);
             *--w = T(v1);
         }
+
         d->size = newSize;
     }
 }
@@ -610,6 +658,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     quintptr newSize = d->size + size;
     const bool isTooSmall = newSize > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -619,12 +668,14 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
         T *w = d->begin() + newSize;
         const T *i = values + size;
         const T *b = values;
+
         while (i != b) {
             if (QTypeInfo<T>::isComplex)
                 new (--w) T(*--i);
             else
                 *--w = *--i;
         }
+
         d->size = newSize;
     }
 }
@@ -632,9 +683,11 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::append(std::initializer_list<T> args)
 {
     qlonglong size = args.size();
+
     if (size != 0) {
         quintptr newSize = d->size + size;
         const bool isTooSmall = newSize > d->alloc;
+
         if (!isDetached() || isTooSmall) {
             dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
             reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -651,6 +704,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 {
     quintptr newSize = d->size + other.d->size;
     const bool isTooSmall = newSize > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -660,12 +714,14 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
         T *w = d->begin() + newSize;
         T *i = other.d->end();
         T *b = other.d->begin();
+
         while (i != b) {
             if (QTypeInfo<T>::isComplex)
                 new (--w) T(*--i);
             else
                 *--w = *--i;
         }
+
         d->size = newSize;
     }
 }
@@ -699,32 +755,43 @@ template <typename T, qlonglong PreallocSize> inline typename dtkArray<T, Preall
     Q_ASSERT_X(isValidIterator(before), "dtkArray<T, PreallocSize>::insert", "The specified iterator argument 'before' is invalid");
 
     qlonglong offset = std::distance(d->begin(), before);
+
     if (n > 0) {
         const T copy(t);
+
         if (!isDetached() || d->size + n > qlonglong(d->alloc))
             reallocData(d->size, d->size + n, dtkArrayData::Grow);
+
         if (QTypeInfo<T>::isStatic) {
             T *b = d->end();
             T *i = d->end() + n;
+
             while (i != b)
                 new (--i) T;
+
             i = d->end();
             T *j = i + n;
             b = d->begin() + offset;
+
             while (i != b)
                 *--j = *--i;
-            i = b+n;
+
+            i = b + n;
+
             while (i != b)
                 *--i = copy;
         } else {
             T *b = d->begin() + offset;
             T *i = b + n;
             ::memmove(i, b, (d->size - offset) * sizeof(T));
+
             while (i != b)
                 new (--i) T(copy);
         }
+
         d->size += n;
     }
+
     return d->begin() + offset;
 }
 
@@ -741,6 +808,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
     if (length != 0) {
         quintptr newSize = qMax((quintptr)d->size, (quintptr)(index + length));
         const bool isTooSmall = newSize > d->alloc;
+
         if (!isDetached() || isTooSmall) {
             dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
             reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -750,12 +818,15 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             if (index >= d->size) {
                 T *b = d->end();
                 T *i = d->begin() + index;
+
                 while (i != b)
                     new (--i) T;
             }
+
             T *w = d->begin() + index + length;
             const T *b = values;
             const T *i = b + length;
+
             while (i != b)
                 new (--w) T(*--i);
 
@@ -763,14 +834,17 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
             if (index >= d->size) {
                 T *b = d->end();
                 T *i = d->begin() + index;
+
                 while (i != b) {
                     new (--i) T();
                 }
             }
+
             T *src = const_cast<T *>(values);
             T *dst = d->begin() + index;
             ::memmove(dst, src, length * sizeof(T));
         }
+
         d->size = newSize;
     }
 }
@@ -788,12 +862,15 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize>& dtkArray<T, PreallocSize>::fill(const T& from, qlonglong asize)
 {
     resize(asize < 0 ? d->size : asize);
+
     if (d->size) {
         T *i = d->end();
         T *b = d->begin();
+
         while (i != b)
             *--i = from;
     }
+
     return *this;
 }
 
@@ -872,14 +949,18 @@ template <typename T, qlonglong PreallocSize> inline typename dtkArray<T, Preall
         detach();
         abegin = d->begin() + itemsUntouched;
         aend = abegin + itemsToErase;
+
         if (QTypeInfo<T>::isStatic) {
             iterator moveBegin = abegin + itemsToErase;
             iterator moveEnd = d->end();
+
             while (moveBegin != moveEnd) {
                 if (QTypeInfo<T>::isComplex)
                     static_cast<T *>(abegin)->~T();
+
                 new (abegin++) T(*moveBegin++);
             }
+
             if (abegin < d->end()) {
                 // destroy rest of instances
                 destruct(abegin, d->end());
@@ -888,14 +969,16 @@ template <typename T, qlonglong PreallocSize> inline typename dtkArray<T, Preall
             destruct(abegin, aend);
             memmove(abegin, aend, (d->size - itemsToErase - itemsUntouched) * sizeof(T));
         }
+
         d->size -= itemsToErase;
     }
+
     return d->begin() + itemsUntouched;
 }
 
 template <typename T, qlonglong PreallocSize> inline typename dtkArray<T, PreallocSize>::iterator dtkArray<T, PreallocSize>::erase(iterator pos)
 {
-    return erase(pos, pos+1);
+    return erase(pos, pos + 1);
 }
 
 template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSize>::remove(qlonglong index)
@@ -926,6 +1009,7 @@ template <typename T, qlonglong PreallocSize> inline void dtkArray<T, PreallocSi
 
     if (!d->ref.isShared()) {
         --d->size;
+
         if (QTypeInfo<T>::isComplex)
             (d->data() + d->size)->~T();
     } else {
@@ -960,6 +1044,7 @@ template <typename T, qlonglong PreallocSize> Q_OUTOFLINE_TEMPLATE void dtkArray
     detach();
     T *src = begin();
     T *dst = end() - 1;
+
     while (src < dst)
         qSwap(*(dst--), *(src++));
 }
@@ -969,6 +1054,7 @@ template <typename T, qlonglong PreallocSize> Q_OUTOFLINE_TEMPLATE dtkArray<T, P
     dtkArray<T, PreallocSize> result(size());
     const T *src = begin();
     T *dst = result.end() - 1;
+
     if (!QTypeInfo<T>::isComplex) {
         while (src != end())
             *(dst--) = *(src++);
@@ -1008,6 +1094,7 @@ template <typename T, qlonglong PreallocSize> template <qlonglong PreallocSizeOt
 {
     quintptr newSize = d->size + other.d->size;
     const bool isTooSmall = newSize > d->alloc;
+
     if (!isDetached() || isTooSmall) {
         dtkArrayData::AllocationOptions opt(isTooSmall ? dtkArrayData::Grow : dtkArrayData::Default);
         reallocData(d->size, isTooSmall ? newSize : d->alloc, opt);
@@ -1017,14 +1104,17 @@ template <typename T, qlonglong PreallocSize> template <qlonglong PreallocSizeOt
         T *w = d->begin() + newSize;
         T *i = other.d->end();
         T *b = other.d->begin();
+
         while (i != b) {
             if (QTypeInfo<T>::isComplex)
                 new (--w) T(*--i);
             else
                 *--w = *--i;
         }
+
         d->size = newSize;
     }
+
     return *this;
 }
 
@@ -1064,12 +1154,12 @@ template <typename T, qlonglong PreallocSize> inline const T& dtkArray<T, Preall
 
 template <typename T, qlonglong PreallocSize> inline T& dtkArray<T, PreallocSize>::last(void)
 {
-    Q_ASSERT(!isEmpty()); return *(end()-1);
+    Q_ASSERT(!isEmpty()); return *(end() - 1);
 }
 
 template <typename T, qlonglong PreallocSize> inline const T& dtkArray<T, PreallocSize>::last(void) const
 {
-    Q_ASSERT(!isEmpty()); return *(end()-1);
+    Q_ASSERT(!isEmpty()); return *(end() - 1);
 }
 
 template <typename T, qlonglong PreallocSize> Q_OUTOFLINE_TEMPLATE T dtkArray<T, PreallocSize>::value(qlonglong index) const
@@ -1092,55 +1182,65 @@ template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSi
     return !isEmpty() && last() == t;
 }
 
-template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSize>::contains(const T &t) const
+template <typename T, qlonglong PreallocSize> inline bool dtkArray<T, PreallocSize>::contains(const T& t) const
 {
-    T* b = d->begin();
-    T* i = d->end();
+    T *b = d->begin();
+    T *i = d->end();
+
     while (i != b)
         if (*--i == t)
             return true;
+
     return false;
 }
 
-template <typename T, qlonglong PreallocSize> inline qlonglong dtkArray<T, PreallocSize>::indexOf(const T &t, qlonglong from) const
+template <typename T, qlonglong PreallocSize> inline qlonglong dtkArray<T, PreallocSize>::indexOf(const T& t, qlonglong from) const
 {
     if (from < 0)
         from = qMax(from + d->size, qlonglong(0));
+
     if (from < d->size) {
-        T* n = d->begin() + from - 1;
-        T* e = d->end();
+        T *n = d->begin() + from - 1;
+        T *e = d->end();
+
         while (++n != e)
             if (*n == t)
                 return n - d->begin();
     }
+
     return -1;
 }
 
-template <typename T, qlonglong PreallocSize> inline qlonglong dtkArray<T, PreallocSize>::lastIndexOf(const T &t, qlonglong from) const
+template <typename T, qlonglong PreallocSize> inline qlonglong dtkArray<T, PreallocSize>::lastIndexOf(const T& t, qlonglong from) const
 {
     if (from < 0)
         from += d->size;
     else if (from >= d->size)
-        from = d->size-1;
+        from = d->size - 1;
+
     if (from >= 0) {
-        T* b = d->begin();
-        T* n = d->begin() + from + 1;
+        T *b = d->begin();
+        T *n = d->begin() + from + 1;
+
         while (n != b) {
             if (*--n == t)
                 return n - b;
         }
     }
+
     return -1;
 }
 
-template <typename T, qlonglong PreallocSize> inline qlonglong dtkArray<T, PreallocSize>::count(const T &t) const
+template <typename T, qlonglong PreallocSize> inline qlonglong dtkArray<T, PreallocSize>::count(const T& t) const
 {
     qlonglong c = 0;
-    T* b = d->begin();
-    T* i = d->end();
+    T *b = d->begin();
+    T *i = d->end();
+
     while (i != b)
         if (*--i == t)
             ++c;
+
     return c;
 }
 
@@ -1148,10 +1248,13 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize> d
 {
     if (len < 0)
         len = size() - pos;
+
     if (pos == 0 && len == size())
         return *this;
+
     if (pos + len > size())
         len = size() - pos;
+
     dtkArray<T, PreallocSize> copy;
     copy.append(constData() + pos, len);
     return copy;
@@ -1166,6 +1269,7 @@ template <typename T, qlonglong PreallocSize> inline dtkArray<T, PreallocSize> d
 {
     if (length < 0 || length >= size())
         length = size();
+
     return mid(size() - length, length);
 }
 
@@ -1176,11 +1280,14 @@ template <typename T, qlonglong PreallocSize> inline QDebug& operator << (QDebug
     const bool oldSetting = debug.autoInsertSpaces();
     debug.nospace() << "dtkArray";
     debug.nospace() << '(';
+
     for (typename dtkArray<T, PreallocSize>::size_type i = 0; i < array.size(); ++i) {
         if (i)
             debug << ", ";
+
         debug << array.at(i);
     }
+
     debug << ')';
     debug.setAutoInsertSpaces(oldSetting);
     return debug.maybeSpace();
@@ -1192,8 +1299,10 @@ template <typename T, qlonglong PreallocSize> inline QDebug& operator << (QDebug
 template<typename T, qlonglong PreallocSize> inline QDataStream& operator << (QDataStream& s, const dtkArray<T, PreallocSize>& array)
 {
     s << quint64(array.size());
+
     for (const T& t : array)
         s << t;
+
     return s;
 }
 
@@ -1202,18 +1311,22 @@ template<typename T, qlonglong PreallocSize> inline QDataStream& operator >> (QD
     array.clear();
     quint64 size; s >> size;
     array.resize(size);
+
     for (T& t : array) {
         s >> t;
     }
+
     return s;
 }
 
 template<typename T, qlonglong PreallocSize> inline QDataStream& operator << (QDataStream& s, const dtkArray<T *, PreallocSize>& array)
 {
     s << quint64(array.size());
+
     for (T *t : array) {
         s << dtkMetaType::variantFromValue(t);
     }
+
     return s;
 }
 
@@ -1222,11 +1335,13 @@ template<typename T, qlonglong PreallocSize> inline QDataStream& operator >> (QD
     array.clear();
     quint64 size; s >> size;
     array.resize(size);
-    for (T *& t : array) {
+
+    for (T *&t : array) {
         QVariant var;
         s >> var;
         t = var.value<T *>();
     }
+
     return s;
 }
 
@@ -1234,14 +1349,14 @@ template<typename T, qlonglong PreallocSize> inline QDataStream& operator >> (QD
 // Registering dtkArray to QMetaType system
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> >
-{
+template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> > {
     enum {
         Defined = QMetaTypeId2<T>::Defined
     };
 
     static int qt_metatype_id() {
         static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
+
         if (const int id = metatype_id.load())
             return id;
 
@@ -1266,23 +1381,21 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
     }
 };
 namespace QtPrivate {
-template<typename T, qlonglong PreallocSize> struct IsSequentialContainer< dtkArray<T, PreallocSize> >
-{
-    enum { Value = true };
-};
+    template<typename T, qlonglong PreallocSize> struct IsSequentialContainer< dtkArray<T, PreallocSize> > {
+        enum { Value = true };
+    };
 
 // Pointer version
 
 }
-template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> *>
-{
+template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, PreallocSize> *> {
     enum {
         Defined = QMetaTypeId2<T>::Defined
     };
 
-    static int qt_metatype_id()
-    {
+    static int qt_metatype_id() {
         static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
+
         if (const int id = metatype_id.load())
             return id;
 
@@ -1297,8 +1410,9 @@ template <typename T, qlonglong PreallocSize> struct QMetaTypeId< dtkArray<T, Pr
         typeName.reserve(array_name.size() + 1 + type_length + 1 + array_size.size() + 1 + 1);
         typeName.append(array_name).append('<').append(array_type).append(',').append(array_size).append('>').append('*');
 
-        const int newId = qRegisterNormalizedMetaType<dtkArray<T, PreallocSize> *>(typeName, reinterpret_cast<dtkArray<T, PreallocSize>**>(quintptr(-1)));
+        const int newId = qRegisterNormalizedMetaType<dtkArray<T, PreallocSize> *>(typeName, reinterpret_cast<dtkArray<T, PreallocSize>* *>(quintptr(-1)));
         metatype_id.storeRelease(newId);
+
         if (newId > 0) {
             QMetaTypeId< dtkArray<T, PreallocSize> >::qt_metatype_id();
             dtkMetaType::registerContainerPointerConverter<dtkArray<T, PreallocSize> *>(newId);

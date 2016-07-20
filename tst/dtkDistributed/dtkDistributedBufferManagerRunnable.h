@@ -21,8 +21,7 @@
 class testBufferManagerCreateDestroy: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         dtkDistributedBufferManager *buffer_manager = comm->createBufferManager();
@@ -36,8 +35,7 @@ public:
 class testBufferManagerAllocateDeallocate : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong size = 10001;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         dtkDistributedBufferManager *buffer_manager = comm->createBufferManager();
@@ -45,9 +43,10 @@ public:
         qlonglong *array = buffer_manager->allocate<qlonglong>(size);
         QVERIFY(array);
 
-        for(qlonglong i = 0; i < size; ++i) {
+        for (qlonglong i = 0; i < size; ++i) {
             array[i] = i;
         }
+
         buffer_manager->deallocate(array);
         QVERIFY(!array);
 
@@ -58,8 +57,7 @@ public:
 class testBufferManagerLocks : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong size = 10001;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         dtkDistributedBufferManager *buffer_manager = comm->createBufferManager();
@@ -86,8 +84,7 @@ public:
 class testBufferManagerPut : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 10001;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong pu_count = comm->size();
@@ -96,17 +93,21 @@ public:
         qlonglong wid = comm->wid();
 
         comm->barrier();
+
         if (comm->wid() == 0) {
-            for(qlonglong i = 0; i < pu_count * N; ++i) {
-                buffer_manager->put(i/N, i%N, &i);
+            for (qlonglong i = 0; i < pu_count * N; ++i) {
+                buffer_manager->put(i / N, i % N, &i);
             }
         }
+
         comm->barrier();
 
         buffer_manager->rlock(wid);
-        for(qlonglong i = 0; i < N; ++i) {
+
+        for (qlonglong i = 0; i < N; ++i) {
             QCOMPARE(array[i], i + wid * N);
         }
+
         buffer_manager->unlock(wid);
 
         buffer_manager->deallocate(array);
@@ -118,8 +119,7 @@ public:
 class testBufferManagerAdd : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 11;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong pu_count = comm->size();
@@ -129,20 +129,24 @@ public:
 
         double one = 1;
         comm->barrier();
+
         if (comm->wid() == 0) {
-            for(qlonglong i = 0; i < pu_count * N; ++i) {
-                buffer_manager->put(i/N, i%N, &one);
+            for (qlonglong i = 0; i < pu_count * N; ++i) {
+                buffer_manager->put(i / N, i % N, &one);
                 double val = i;
-                buffer_manager->addAssign(i/N, i%N, &val);
+                buffer_manager->addAssign(i / N, i % N, &val);
             }
         }
+
         comm->barrier();
 
         buffer_manager->rlock(wid);
-        for(qlonglong i = 0; i < N; ++i) {
+
+        for (qlonglong i = 0; i < N; ++i) {
             double tmp = i + wid * N + one;
             QCOMPARE(array[i], tmp);
         }
+
         buffer_manager->unlock(wid);
 
         buffer_manager->deallocate(array);
@@ -154,8 +158,7 @@ public:
 class testBufferManagerSub : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 11;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong pu_count = comm->size();
@@ -165,20 +168,24 @@ public:
 
         double one = 1;
         comm->barrier();
+
         if (comm->wid() == 0) {
-            for(qlonglong i = 0; i < pu_count * N; ++i) {
-                buffer_manager->put(i/N, i%N, &one);
+            for (qlonglong i = 0; i < pu_count * N; ++i) {
+                buffer_manager->put(i / N, i % N, &one);
                 double val = i;
-                buffer_manager->subAssign(i/N, i%N, &val);
+                buffer_manager->subAssign(i / N, i % N, &val);
             }
         }
+
         comm->barrier();
 
         buffer_manager->rlock(wid);
-        for(qlonglong i = 0; i < N; ++i) {
+
+        for (qlonglong i = 0; i < N; ++i) {
             double tmp = one - (i + wid * N);
             QCOMPARE(array[i], tmp);
         }
+
         buffer_manager->unlock(wid);
 
         buffer_manager->deallocate(array);
@@ -190,8 +197,7 @@ public:
 class testBufferManagerMul : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 11;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong pu_count = comm->size();
@@ -201,20 +207,24 @@ public:
 
         double one = 1;
         comm->barrier();
+
         if (comm->wid() == 0) {
-            for(qlonglong i = 0; i < pu_count * N; ++i) {
-                buffer_manager->put(i/N, i%N, &one);
+            for (qlonglong i = 0; i < pu_count * N; ++i) {
+                buffer_manager->put(i / N, i % N, &one);
                 double val = i;
-                buffer_manager->mulAssign(i/N, i%N, &val);
+                buffer_manager->mulAssign(i / N, i % N, &val);
             }
         }
+
         comm->barrier();
 
         buffer_manager->rlock(wid);
-        for(qlonglong i = 0; i < N; ++i) {
+
+        for (qlonglong i = 0; i < N; ++i) {
             double tmp = i + wid * N;
             QCOMPARE(array[i], tmp);
         }
+
         buffer_manager->unlock(wid);
 
         buffer_manager->deallocate(array);
@@ -226,8 +236,7 @@ public:
 class testBufferManagerDiv : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 11;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong pu_count = comm->size();
@@ -237,20 +246,24 @@ public:
 
         double one = 1;
         comm->barrier();
+
         if (comm->wid() == 0) {
-            for(qlonglong i = 0; i < pu_count * N; ++i) {
-                buffer_manager->put(i/N, i%N, &one);
+            for (qlonglong i = 0; i < pu_count * N; ++i) {
+                buffer_manager->put(i / N, i % N, &one);
                 double val = i + one;
-                buffer_manager->divAssign(i/N, i%N, &val);
+                buffer_manager->divAssign(i / N, i % N, &val);
             }
         }
+
         comm->barrier();
 
         buffer_manager->rlock(wid);
-        for(qlonglong i = 0; i < N; ++i) {
+
+        for (qlonglong i = 0; i < N; ++i) {
             double tmp = one / (one + i + wid * N);
             QCOMPARE(array[i], tmp);
         }
+
         buffer_manager->unlock(wid);
 
         buffer_manager->deallocate(array);
@@ -262,8 +275,7 @@ public:
 class testBufferManagerGet : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 10001;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong pu_count = comm->size();
@@ -271,15 +283,17 @@ public:
         qlonglong *array = buffer_manager->allocate<qlonglong>(N);
         qlonglong wid = comm->wid();
 
-        for(qlonglong i = 0; i < N; ++i) {
+        for (qlonglong i = 0; i < N; ++i) {
             array[i] = i + wid * N;
         }
 
         comm->barrier();
+
         if (comm->wid() == 0) {
             qlonglong temp;
-            for(qlonglong i = 0; i < N * pu_count; ++i) {
-                buffer_manager->get(i/N, i%N, &temp);
+
+            for (qlonglong i = 0; i < N * pu_count; ++i) {
+                buffer_manager->get(i / N, i % N, &temp);
                 QCOMPARE(temp, i);
             }
         }
@@ -290,26 +304,27 @@ public:
 class testBufferManagerLockGetUnlock : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         qlonglong N = 10001;
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         dtkDistributedBufferManager *buffer_manager = comm->createBufferManager();
         qlonglong *array = buffer_manager->allocate<qlonglong>(N);
         qlonglong wid = comm->wid();
 
-        for(qlonglong i = 0; i < N; ++i) {
+        for (qlonglong i = 0; i < N; ++i) {
             array[i] = i + wid * N;
         }
 
         comm->barrier();
         buffer_manager->rlock(wid);
         qlonglong temp;
-        for(qlonglong i = 0; i < N; ++i) {
+
+        for (qlonglong i = 0; i < N; ++i) {
             qlonglong global_id = i + wid * N;
             buffer_manager->get(wid, i, &temp);
             QCOMPARE(temp, global_id);
         }
+
         buffer_manager->unlock(wid);
     }
 };
@@ -318,8 +333,7 @@ public:
 class testBufferManagerPerf : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         /* QTime time; */
 
         /* qlonglong N = 1000001; */

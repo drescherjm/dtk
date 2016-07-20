@@ -32,7 +32,7 @@
 
 namespace {
 
-    typedef QHash<QString, QList<dtkAbstractData*> > dtkAbstractDataHash;
+    typedef QHash<QString, QList<dtkAbstractData *> > dtkAbstractDataHash;
 
     struct dtkAbstractDataReaderInfo {
         dtkAbstractDataReaderInfo() : creator(NULL) {}
@@ -112,8 +112,8 @@ public:
 
 DTKCORESUPPORT_EXPORT dtkAbstractDataFactory *dtkAbstractDataFactory::instance(void)
 {
-    if(!s_instance)
-	s_instance = new dtkAbstractDataFactory;
+    if (!s_instance)
+        s_instance = new dtkAbstractDataFactory;
 
     return s_instance;
 }
@@ -122,42 +122,39 @@ dtkAbstractData *dtkAbstractDataFactory::create(const QString& type)
 {
     static int count = 0;
 
-    if(!d->creators.contains(type))
-	return NULL;
+    if (!d->creators.contains(type))
+        return NULL;
 
     dtkAbstractData *data = d->creators[type]();
 
-    for(dtkAbstractDataReaderCreatorHash::const_iterator it(d->readers.begin() ); it != d->readers.end(); ++it) {
-        if(it.value().handled.contains(type))
+    for (dtkAbstractDataReaderCreatorHash::const_iterator it(d->readers.begin() ); it != d->readers.end(); ++it) {
+        if (it.value().handled.contains(type))
             data->addReader(it.key());
     }
 
-    for(dtkAbstractDataWriterCreatorHash::const_iterator it(d->writers.begin() ); it != d->writers.end(); ++it) {
-        if(it.value().handled.contains(type))
+    for (dtkAbstractDataWriterCreatorHash::const_iterator it(d->writers.begin() ); it != d->writers.end(); ++it) {
+        if (it.value().handled.contains(type))
             data->addWriter(it.key());
     }
 
-    for(dtkAbstractDataConverterCreatorHash::const_iterator it(d->converters.begin() ); it != d->converters.end(); ++it) {
-        if(it.value().fromTypes.contains(type))
-        {
-          data->addConverter(it.key());
-          data->enableConverter(it.key());
+    for (dtkAbstractDataConverterCreatorHash::const_iterator it(d->converters.begin() ); it != d->converters.end(); ++it) {
+        if (it.value().fromTypes.contains(type)) {
+            data->addConverter(it.key());
+            data->enableConverter(it.key());
         }
     }
 
-    for(dtkAbstractDataSerializerCreatorHash::const_iterator it(d->serializers.begin() ); it != d->serializers.end(); ++it) {
-        if(it.value().handled.contains(type))
-        {
-          data->addSerializer(it.key());
-          data->enableSerializer(it.key());
+    for (dtkAbstractDataSerializerCreatorHash::const_iterator it(d->serializers.begin() ); it != d->serializers.end(); ++it) {
+        if (it.value().handled.contains(type)) {
+            data->addSerializer(it.key());
+            data->enableSerializer(it.key());
         }
     }
 
-    for(dtkAbstractDataDeserializerCreatorHash::const_iterator it(d->deserializers.begin() ); it != d->deserializers.end(); ++it) {
-        if(it.value().handled.contains(type))
-        {
-          data->addDeserializer(it.key());
-          data->enableDeserializer(it.key());
+    for (dtkAbstractDataDeserializerCreatorHash::const_iterator it(d->deserializers.begin() ); it != d->deserializers.end(); ++it) {
+        if (it.value().handled.contains(type)) {
+            data->addDeserializer(it.key());
+            data->enableDeserializer(it.key());
         }
     }
 
@@ -178,7 +175,7 @@ dtkAbstractDataReader *dtkAbstractDataFactory::reader(const QString& type)
 {
     dtkAbstractDataReaderCreatorHash::const_iterator it(d->readers.find(type));
 
-    if (it == d->readers.end()) 
+    if (it == d->readers.end())
         return NULL;
     else
         return it->creator();
@@ -194,7 +191,7 @@ dtkAbstractDataWriter *dtkAbstractDataFactory::writer(const QString& type)
 {
     dtkAbstractDataWriterCreatorHash::const_iterator it(d->writers.find(type));
 
-    if (it == d->writers.end()) 
+    if (it == d->writers.end())
         return NULL;
     else
         return it->creator();
@@ -295,7 +292,7 @@ QStringList dtkAbstractDataFactory::implementations(const QString& interface)
 {
     QStringList implementations;
 
-    if(d->interfaces.keys().contains(interface))
+    if (d->interfaces.keys().contains(interface))
         implementations << d->interfaces.values(interface);
     else
         qDebug() << "There is no available implementation of " << interface ;
@@ -310,7 +307,7 @@ QStringList dtkAbstractDataFactory::interfaces(void)
 
 bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDataCreator func)
 {
-    if(!d->creators.contains(type)) {
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         return true;
     }
@@ -320,7 +317,7 @@ bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDa
 
 bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDataCreator func, const QString& interface)
 {
-    if(!d->creators.contains(type)) {
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         d->interfaces.insertMulti(interface, type);
         return true;
@@ -331,7 +328,7 @@ bool dtkAbstractDataFactory::registerDataType(const QString& type, dtkAbstractDa
 
 bool dtkAbstractDataFactory::registerDataReaderType(const QString& type, const QStringList& handled, dtkAbstractDataReaderCreator func)
 {
-    if(!d->readers.contains(type) ) {
+    if (!d->readers.contains(type) ) {
         d->readers.insert(type, dtkAbstractDataReaderInfo(handled, func) );
         return true;
     }
@@ -341,7 +338,7 @@ bool dtkAbstractDataFactory::registerDataReaderType(const QString& type, const Q
 
 bool dtkAbstractDataFactory::registerDataWriterType(const QString& type, const QStringList& handled, dtkAbstractDataWriterCreator func)
 {
-    if(!d->writers.contains(type) ) {
+    if (!d->writers.contains(type) ) {
         d->writers.insert(type, dtkAbstractDataWriterInfo( handled, func) );
         return true;
     }
@@ -351,7 +348,7 @@ bool dtkAbstractDataFactory::registerDataWriterType(const QString& type, const Q
 
 bool dtkAbstractDataFactory::registerDataConverterType(const QString& type, const QStringList& fromTypes, const QString& toType, dtkAbstractDataConverterCreator func)
 {
-    if(!d->converters.contains(type) ) {
+    if (!d->converters.contains(type) ) {
         d->converters.insert(type, dtkAbstractDataConverterInfo(fromTypes, toType, func) );
         return true;
     }
@@ -361,7 +358,7 @@ bool dtkAbstractDataFactory::registerDataConverterType(const QString& type, cons
 
 bool dtkAbstractDataFactory::registerDataSerializerType(const QString& type, const QStringList& handled, dtkAbstractDataSerializerCreator func)
 {
-    if(!d->serializers.contains(type) ) {
+    if (!d->serializers.contains(type) ) {
         d->serializers.insert(type, dtkAbstractDataSerializerInfo(handled, func) );
         return true;
     }
@@ -369,9 +366,9 @@ bool dtkAbstractDataFactory::registerDataSerializerType(const QString& type, con
     return false;
 }
 
-bool dtkAbstractDataFactory::registerDataDeserializerType(const QString& type, const QStringList& handled,dtkAbstractDataDeserializerCreator func)
+bool dtkAbstractDataFactory::registerDataDeserializerType(const QString& type, const QStringList& handled, dtkAbstractDataDeserializerCreator func)
 {
-    if(!d->deserializers.contains(type) ) {
+    if (!d->deserializers.contains(type) ) {
         d->deserializers.insert(type, dtkAbstractDataDeserializerInfo(handled, func) );
         return true;
     }
@@ -423,15 +420,15 @@ QList<QString> dtkAbstractDataFactory::creators(void) const
 
 QList<QString> dtkAbstractDataFactory::readers(void) const
 {
-    if(d->reader_priorities.isEmpty())
+    if (d->reader_priorities.isEmpty())
         return d->readers.keys();
-    
+
     const QStringList priorities = d->reader_priorities.values();
 
     QMap<int, QString> readers;
 
-    foreach(QString reader, d->readers.keys())
-        if(priorities.contains(reader))
+    foreach (QString reader, d->readers.keys())
+        if (priorities.contains(reader))
             readers.insert(d->reader_priorities.key(reader), reader);
 
     return readers.values();
@@ -439,15 +436,15 @@ QList<QString> dtkAbstractDataFactory::readers(void) const
 
 QList<QString> dtkAbstractDataFactory::writers(void) const
 {
-    if(d->writer_priorities.isEmpty())
+    if (d->writer_priorities.isEmpty())
         return d->writers.keys();
-    
+
     const QStringList priorities = d->writer_priorities.values();
 
     QMap<int, QString> writers;
 
-    foreach(QString writer, d->writers.keys())
-        if(priorities.contains(writer))
+    foreach (QString writer, d->writers.keys())
+        if (priorities.contains(writer))
             writers.insert(d->writer_priorities.key(writer), writer);
 
     return writers.values();
@@ -455,15 +452,15 @@ QList<QString> dtkAbstractDataFactory::writers(void) const
 
 QList<QString> dtkAbstractDataFactory::converters(void) const
 {
-    if(d->converter_priorities.isEmpty())
+    if (d->converter_priorities.isEmpty())
         return d->converters.keys();
-    
+
     const QStringList priorities = d->converter_priorities.values();
 
     QMap<int, QString> converters;
 
-    foreach(QString converter, d->converters.keys())
-        if(priorities.contains(converter))
+    foreach (QString converter, d->converters.keys())
+        if (priorities.contains(converter))
             converters.insert(d->converter_priorities.key(converter), converter);
 
     return converters.values();

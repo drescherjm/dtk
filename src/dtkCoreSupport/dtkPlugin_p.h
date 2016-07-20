@@ -1,5 +1,5 @@
-/* dtkPlugin_p.h --- 
- * 
+/* dtkPlugin_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 14:44:23 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 2
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLUGIN_P

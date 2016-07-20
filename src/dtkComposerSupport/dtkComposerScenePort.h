@@ -1,5 +1,5 @@
-/* dtkComposerScenePort.h --- 
- * 
+/* dtkComposerScenePort.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:28:22 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 49
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENEPORT_H
@@ -34,8 +34,8 @@ public:
     };
 
 public:
-     dtkComposerScenePort(Type type, dtkComposerSceneNode *parent);
-     dtkComposerScenePort(Type type, const QString& label, dtkComposerSceneNode *parent);
+    dtkComposerScenePort(Type type, dtkComposerSceneNode *parent);
+    dtkComposerScenePort(Type type, const QString& label, dtkComposerSceneNode *parent);
     ~dtkComposerScenePort(void);
 
 public:

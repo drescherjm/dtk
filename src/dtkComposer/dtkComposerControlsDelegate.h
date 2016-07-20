@@ -1,26 +1,22 @@
-/* dtkComposerControlsDelegate.h --- 
- * 
- * Author: Julien Wintz
- * Copyright (C) 2008-2011 - Julien Wintz, Inria.
- * Created: Wed Nov 28 15:06:31 2012 (+0100)
- * Version: $Id$
- * Last-Updated: Thu Apr 11 10:33:43 2013 (+0200)
- *           By: Thibaud Kloczko
- *     Update #: 58
- */
+// Version: $Id$
+//
+//
 
-/* Commentary: 
- * 
- */
+// Commentary:
+//
+//
 
-/* Change log:
- * 
- */
+// Change Log:
+//
+//
+
+// Code:
 
 #pragma once
 
 #include "dtkComposerExport.h"
 
+#include <QtGui>
 #include <QtWidgets>
 
 class dtkComposerControlsDelegatePrivate;
@@ -30,7 +26,7 @@ class DTKCOMPOSER_EXPORT dtkComposerControlsDelegate : public QStyledItemDelegat
     Q_OBJECT
 
 public:
-     dtkComposerControlsDelegate(QObject *parent = 0);
+    dtkComposerControlsDelegate(QObject *parent = 0);
     ~dtkComposerControlsDelegate(void);
 
 public:
@@ -49,3 +45,5 @@ private:
     dtkComposerControlsDelegatePrivate *d;
 };
 
+//
+// dtkComposerControlsDelegate.h ends here

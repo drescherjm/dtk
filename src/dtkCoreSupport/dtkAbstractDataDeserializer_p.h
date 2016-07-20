@@ -1,5 +1,5 @@
-/* dtkAbstractDataDeserializer_p.h --- 
- * 
+/* dtkAbstractDataDeserializer_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 11:13:02 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 4
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATADESERIALIZER_P
@@ -35,8 +35,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataDeserializerPrivate : public dtkAbstr
 public:
     dtkAbstractDataDeserializerPrivate(dtkAbstractDataDeserializer *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractDataDeserializerPrivate(const dtkAbstractDataDeserializerPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                                          enabled(false),
-                                                                                          data(other.data) {}
+        enabled(false),
+        data(other.data) {}
 
 public:
     virtual ~dtkAbstractDataDeserializerPrivate(void) {}

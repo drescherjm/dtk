@@ -1,5 +1,5 @@
-/* dtkComposerNodeBooleanOperator.h --- 
- * 
+/* dtkComposerNodeBooleanOperator.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:51:36 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 88
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEBOOLEANOPERATOR_H
@@ -32,7 +32,7 @@ class dtkComposerNodeBooleanOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeBooleanOperatorUnary(void);
+    dtkComposerNodeBooleanOperatorUnary(void);
     ~dtkComposerNodeBooleanOperatorUnary(void);
 
 public:
@@ -57,7 +57,7 @@ class dtkComposerNodeBooleanOperatorBinaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBooleanOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeBooleanOperatorBinary(void);
+    dtkComposerNodeBooleanOperatorBinary(void);
     ~dtkComposerNodeBooleanOperatorBinary(void);
 
 public:

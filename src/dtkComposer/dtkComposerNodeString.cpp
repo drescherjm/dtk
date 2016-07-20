@@ -1,5 +1,5 @@
-/* dtkComposerNodeString.cpp --- 
- * 
+/* dtkComposerNodeString.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 71
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeString.h"
@@ -68,7 +68,7 @@ QString dtkComposerNodeString::value(void)
 {
     return d->value;
 }
-   
+
 void dtkComposerNodeString::setValue(QString value)
 {
     d->value = value;
@@ -130,9 +130,11 @@ void dtkComposerNodeStringList::run(void)
 
     if (!d->receiver.isEmpty()) {
         qlonglong size = 1;
+
         if (!d->receiver_size.isEmpty())
             size = d->receiver_size.data();
-        for (qlonglong i = 0; i< size; ++i){
+
+        for (qlonglong i = 0; i < size; ++i) {
             d->value.append(d->receiver.data());
         }
     }

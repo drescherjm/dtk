@@ -1,5 +1,5 @@
-/* dtkPopup.cpp --- 
- * 
+/* dtkPopup.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:40:14 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 26
  */
 
-/* Commentary: 
+/* Commentary:
  * See credits at EOF.
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPopup.h"
@@ -42,22 +42,18 @@ dtkPopup::dtkPopup(QWidget *parent) : QFrame(parent, Qt::Popup), d(new dtkPopupP
 
     setLayout(new QVBoxLayout());
 
-    layout()->setContentsMargins(0,0,0,0);
+    layout()->setContentsMargins(0, 0, 0, 0);
 }
 
 void dtkPopup::setWidget(QWidget *widget, bool own)
 {
-    if (d->widget)
-    {
+    if (d->widget) {
         layout()->removeWidget(d->widget);
 
-        if (d->own)
-        {
+        if (d->own) {
             d->widget->setParent(0);
             delete d->widget;
-        }
-        else
-        {
+        } else {
             d->widget->setParent(d->oldParent);
         }
     }
@@ -66,8 +62,7 @@ void dtkPopup::setWidget(QWidget *widget, bool own)
     d->own = own;
     d->oldParent = 0;
 
-    if (d->widget)
-    {
+    if (d->widget) {
         d->oldParent = d->widget->parentWidget();
         d->widget->setParent(this);
         layout()->addWidget(d->widget);
@@ -92,12 +87,15 @@ void dtkPopup::show(QPoint coord)
 
     if (coord.x() < screen.x())
         coord.setX(screen.x());
+
     if (coord.y() < screen.y())
         coord.setY(screen.y());
-    if (coord.x() > (screen.right()-width()))
-        coord.setX(screen.right()-width());
-    if (coord.y() > (screen.bottom()-height()))
-        coord.setY(screen.bottom()-height());
+
+    if (coord.x() > (screen.right() - width()))
+        coord.setX(screen.right() - width());
+
+    if (coord.y() > (screen.bottom() - height()))
+        coord.setY(screen.bottom() - height());
 
     move(coord);
 }

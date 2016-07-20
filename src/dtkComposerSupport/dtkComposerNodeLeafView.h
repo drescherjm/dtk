@@ -35,7 +35,7 @@ class dtkComposerNodeLeafViewPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLeafView : public dtkComposerNodeLeaf
 {
 public:
-             dtkComposerNodeLeafView(void);
+    dtkComposerNodeLeafView(void);
     virtual ~dtkComposerNodeLeafView(void);
 
 public:

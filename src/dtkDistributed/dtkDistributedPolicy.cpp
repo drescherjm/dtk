@@ -24,19 +24,24 @@ QStringList hostsFromScheduler(void)
 
     foreach (QString envname, schedulers) {
         QString nodefile =  QString::fromUtf8(qgetenv(qPrintable(envname)));
+
         if (!nodefile.isEmpty()) {
             dtkDebug() << "Extracting hosts from file" << nodefile;
             QFile file(nodefile);
+
             if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                dtkWarn() << "Error while opening"<< nodefile;
+                dtkWarn() << "Error while opening" << nodefile;
                 return hosts;
             }
+
             QTextStream in(&file);
+
             while (!in.atEnd()) {
                 hosts << in.readLine();
             }
         }
     }
+
     return hosts;
 }
 
@@ -127,6 +132,7 @@ void dtkDistributedPolicy::setType(const QString& type)
     dtkDebug() << "create" << type << "communicator";
     d->type = type;
     d->comm = dtkDistributed::communicator::pluginFactory().create(type);
+
     if (!d->comm)
         qWarning() << "NULL communicator !!" << type;
 }
@@ -141,7 +147,8 @@ QStringList dtkDistributedPolicy::types(void) const
 
   Try to detect the hosts file from a scheduler environment variables. Torque and OAR are currently supported.
 */
-void dtkDistributedPolicy::setHostsFromEnvironment(void) {
+void dtkDistributedPolicy::setHostsFromEnvironment(void)
+{
 
     QStringList hosts = hostsFromScheduler();
 
@@ -149,11 +156,13 @@ void dtkDistributedPolicy::setHostsFromEnvironment(void) {
         dtkWarn() << "No hosts defined or found from scheduler, will use localhost";
         this->addHost("localhost");
     } else {
+        dtkInfo() << "Got hosts from scheduler: running on " << hosts.count() << " threads/procs";
         d->hosts = hosts;
     }
 
     if (d->np == 0) {
         QByteArray numprocs = qgetenv("DTK_NUM_PROCS");
+
         if (!numprocs.isEmpty()) {
             d->np = numprocs.toInt();
             dtkInfo() << "got num procs from env" << d->np;
@@ -185,8 +194,10 @@ QStringList dtkDistributedPolicy::hosts(void) const
 void dtkDistributedPolicy::setNWorkers(qlonglong np)
 {
     d->np = np;
+
     if (d->np > d->hosts.count()) {
         qlonglong i = 0;
+
         while (d->hosts.count() < d->np) {
             d->hosts << d->hosts.at(i);
             ++i;

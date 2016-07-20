@@ -274,13 +274,14 @@ dtkComposerNodeStringListSet::~dtkComposerNodeStringListSet(void)
 
 void dtkComposerNodeStringListSet::run(void)
 {
-    if (!d->receiver_list.isEmpty() && !d->receiver_value.isEmpty()&& !d->receiver_index.isEmpty()  ) {
+    if (!d->receiver_list.isEmpty() && !d->receiver_value.isEmpty() && !d->receiver_index.isEmpty()  ) {
         d->list = *(d->receiver_list.data());
         qlonglong index = *(d->receiver_index.data());
-         if (index >= 0 && index < d->list.size())
-             d->list.replace(index, *(d->receiver_value.data()));
-         else
-             dtkWarn() << "bad index value in set string list" << index;
+
+        if (index >= 0 && index < d->list.size())
+            d->list.replace(index, *(d->receiver_value.data()));
+        else
+            dtkWarn() << "bad index value in set string list" << index;
     } else {
         dtkWarn() << "Inputs not specified. Nothing is done";
         d->emitter.clearData();

@@ -26,7 +26,7 @@ class dtkDistributedApplicationPrivate;
 class DTKDISTRIBUTED_EXPORT dtkDistributedApplication: public QCoreApplication
 {
 public:
-             dtkDistributedApplication(int &argc, char **argv);
+    dtkDistributedApplication(int& argc, char **argv);
     virtual ~dtkDistributedApplication(void);
 
 public:

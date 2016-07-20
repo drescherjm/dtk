@@ -1,15 +1,15 @@
-/* dtkVariant.tpp --- 
- * 
+/* dtkVariant.tpp ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: 2012 Fri Oct 26 09:04:46 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKVARIANT_TPP

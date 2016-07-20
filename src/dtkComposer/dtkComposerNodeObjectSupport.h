@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -27,7 +27,7 @@ template <typename T> class dtkCorePluginFactory;
 template <typename T> class dtkComposerNodeObject : public dtkComposerNodeLeafObject
 {
 public:
-             dtkComposerNodeObject(void);
+    dtkComposerNodeObject(void);
     virtual ~dtkComposerNodeObject(void);
 
 public:
@@ -52,5 +52,5 @@ protected:
     const dtkCorePluginFactory<T> *m_factory;
 };
 
-// 
+//
 // dtkComposerNodeObjectSupport.h ends here

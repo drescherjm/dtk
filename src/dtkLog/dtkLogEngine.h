@@ -24,7 +24,7 @@ class dtkLogEnginePrivate;
 class DTKLOG_EXPORT dtkLogEngine
 {
 public:
-     dtkLogEngine(dtkLog::Level level, bool custom = false);
+    dtkLogEngine(dtkLog::Level level, bool custom = false);
     ~dtkLogEngine(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkVrGestureRecognizer.h --- 
- * 
+/* dtkVrGestureRecognizer.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu Oct 21 19:11:52 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 15
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -31,7 +31,7 @@ class DTKVRSUPPORT_EXPORT dtkVrGestureRecognizer : public QObject
     Q_OBJECT
 
 public:
-     dtkVrGestureRecognizer(void);
+    dtkVrGestureRecognizer(void);
     ~dtkVrGestureRecognizer(void);
 
     void setReceiver(QObject *receiver);

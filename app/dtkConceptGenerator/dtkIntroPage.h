@@ -1,11 +1,23 @@
-#ifndef DTKINTROPAGE_H
-#define DTKINTROPAGE_H
+// Version: $Id$
+//
+//
 
-#include <QWizardPage>
-#include <QFileDialog>
+// Commentary:
+//
+//
+
+// Change Log:
+//
+//
+
+// Code:
+
+#pragma once
+
+#include <QtWidgets>
 
 namespace Ui {
-class dtkIntroPage;
+    class dtkIntroPage;
 }
 
 class dtkIntroPage : public QWizardPage
@@ -13,11 +25,11 @@ class dtkIntroPage : public QWizardPage
     Q_OBJECT
 
 public:
-    explicit dtkIntroPage(QWidget *parent = 0);
-    ~dtkIntroPage();
+     dtkIntroPage(QWidget *parent = 0);
+    ~dtkIntroPage(void);
 
 public slots:
-    void browse();
+    void browse(void);
 
 signals:
     void generatorSet(QString);
@@ -26,4 +38,5 @@ private:
     Ui::dtkIntroPage *ui;
 };
 
-#endif // dtkIntroPage_H
+//
+// dtkIntroPage.h ends here

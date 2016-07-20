@@ -42,9 +42,9 @@ public:
         QThread::sleep(5);
 
         if (comm->rank() == 0) {
-            QString hello = "I'm the master slave, we are " + QString::number(comm->size())+ " slaves";
+            QString hello = "I'm the master slave, we are " + QString::number(comm->size()) + " slaves";
             QVariant v(hello);
-            dtkDistributedMessage msg(dtkDistributedMessage::DATA,slave.jobId(),dtkDistributedMessage::CONTROLLER_RANK, v);
+            dtkDistributedMessage msg(dtkDistributedMessage::DATA, slave.jobId(), dtkDistributedMessage::CONTROLLER_RANK, v);
 
             msg.send(slave.socket());
             slave.socket()->flush();
@@ -72,10 +72,10 @@ int main(int argc, char **argv)
 
     app->initialize();
 
-     if (!parser->isSet(serverOption)) {
-         qCritical() << "Error: no server set ! Use --server <url> " ;
-         return 1;
-     }
+    if (!parser->isSet(serverOption)) {
+        qCritical() << "Error: no server set ! Use --server <url> " ;
+        return 1;
+    }
 
 
     // work

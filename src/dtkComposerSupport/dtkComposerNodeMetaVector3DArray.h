@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaVector3DArray.h --- 
- * 
+/* dtkComposerNodeMetaVector3DArray.h ---
+ *
  * Author: Jeremie Labroquere
  * Copyright (C) 2011 - Jeremie Labroquere, Inria.
  * Created: Mon Aug  6 14:25:15 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEMETAVECTOR3DARRAY_H
@@ -34,9 +34,9 @@ class dtkComposerNodeMetaVector3DArrayPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaVector3DArray : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaVector3DArray(void);
+    dtkComposerNodeMetaVector3DArray(void);
     ~dtkComposerNodeMetaVector3DArray(void);
-    
+
 public:
     void run(void);
 

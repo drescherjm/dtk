@@ -1,5 +1,5 @@
-/* dtkVrTrackerKinect.cpp --- 
- * 
+/* dtkVrTrackerKinect.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 25 16:59:15 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 16
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVrTrackerKinect.h"
@@ -28,7 +28,7 @@ dtkVrTrackerKinect::dtkVrTrackerKinect(void) : dtkVrTracker(), d(new dtkVrTracke
 dtkVrTrackerKinect::~dtkVrTrackerKinect(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -44,7 +44,7 @@ void dtkVrTrackerKinect::uninitialize(void)
 
 dtkVector3D<double> dtkVrTrackerKinect::headPosition(void)
 {
-    return d->position()/10;
+    return d->position() / 10;
 }
 
 dtkVector3D<double> dtkVrTrackerKinect::handPosition(void)

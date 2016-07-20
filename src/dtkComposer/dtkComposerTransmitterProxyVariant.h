@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -25,8 +25,8 @@
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxyVariant : public dtkComposerTransmitter
 {
-public:    
-     dtkComposerTransmitterProxyVariant(dtkComposerNode *parent = 0);
+public:
+    dtkComposerTransmitterProxyVariant(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterProxyVariant(void);
 
 public:
@@ -113,5 +113,5 @@ template <typename T> inline void dtkComposerTransmitterProxyVariant::setData(T&
     m_emitter.setData(data);
 }
 
-// 
+//
 // dtkComposerTransmitterProxyVariant.h ends here

@@ -1,5 +1,5 @@
-/* dtkComposerTransmitter_p.h --- 
- * 
+/* dtkComposerTransmitter_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Mar 12 11:43:28 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 106
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -53,7 +53,7 @@ public:
     QList<dtkComposerTransmitter *> receivers;
     QList<dtkComposerTransmitter *>  emitters;
 
- public:
+public:
     dtkComposerTransmitter *active_emitter;
 
 public:

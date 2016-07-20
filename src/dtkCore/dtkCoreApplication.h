@@ -25,15 +25,14 @@ class dtkApplicationPrivate;
 class DTKCORE_EXPORT dtkCoreApplication: public QCoreApplication
 {
 public:
-             dtkCoreApplication(int &argc, char **argv);
+    dtkCoreApplication(int& argc, char **argv);
     virtual ~dtkCoreApplication(void);
 
 public:
     virtual void initialize(void);
 
 public:
-    static dtkCoreApplication *create(int &argc, char *argv[])
-    {
+    static dtkCoreApplication *create(int& argc, char *argv[]) {
         return new dtkCoreApplication(argc, argv);
     }
 

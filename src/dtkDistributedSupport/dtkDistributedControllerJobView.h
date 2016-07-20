@@ -1,5 +1,5 @@
-/* dtkDistributedControllerJobView.h --- 
- * 
+/* dtkDistributedControllerJobView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 11 16:18:04 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 26
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERJOBVIEW_H
@@ -32,7 +32,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerJobView : public QTre
     Q_OBJECT
 
 public:
-     dtkDistributedControllerJobView(QWidget *parent = 0);
+    dtkDistributedControllerJobView(QWidget *parent = 0);
     ~dtkDistributedControllerJobView(void);
 
 public:

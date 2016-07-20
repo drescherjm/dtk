@@ -22,8 +22,7 @@ class dtkMatrix;
 class dtkMatrixPluginFactory;
 class dtkMatrixPluginManager;
 
-namespace dtkMath
-{
+namespace dtkMath {
     namespace matrix {
         DTKMATH_EXPORT dtkMatrixPluginFactory& pluginFactory(void);
         DTKMATH_EXPORT dtkMatrixPluginManager& pluginManager(void);

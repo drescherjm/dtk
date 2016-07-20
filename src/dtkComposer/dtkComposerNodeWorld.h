@@ -32,7 +32,7 @@ class dtkComposerNodeWorldPrivate;
 class  dtkComposerNodeWorld : public dtkComposerNodeComposite
 {
 public:
-             dtkComposerNodeWorld(void);
+    dtkComposerNodeWorld(void);
     virtual ~dtkComposerNodeWorld(void);
 
 public:

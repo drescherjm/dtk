@@ -32,7 +32,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator : public QObject
     Q_OBJECT
 
 public:
-             dtkDistributedCommunicator(void);
+    dtkDistributedCommunicator(void);
     virtual ~dtkDistributedCommunicator(void);
 
 public:
@@ -71,8 +71,12 @@ public:
     virtual bool       active(void) = 0;
 
 public:
-    virtual dtkDistributedBufferManager *createBufferManager(void) { return 0; } ;
-    virtual void destroyBufferManager(dtkDistributedBufferManager *&) {;}
+    virtual dtkDistributedBufferManager *createBufferManager(void) {
+        return 0;
+    } ;
+    virtual void destroyBufferManager(dtkDistributedBufferManager *&) {
+        ;
+    }
 
 public:
     virtual void send(void   *data, qint64 size, QMetaType::Type dataType, qint32 target, qint32 tag) = 0;
@@ -88,9 +92,9 @@ public:
 
 public:
     template <typename T> void send(T data, qint32 target, qint32 tag);
-    template <typename T> void receive(T &data, qint32 source, qint32 tag);
+    template <typename T> void receive(T& data, qint32 source, qint32 tag);
 
-    template <typename T, typename U> void run(T* t, U (T::*functionPointer)());
+    template <typename T, typename U> void run(T *t, U (T::*functionPointer)());
 
 public:
     virtual void broadcast(void *data, qint64 size, QMetaType::Type dataType, qint32 source) = 0;
@@ -113,10 +117,10 @@ public:
     void receive(float  *data, qint64 size, qint32 source, int tag);
     void receive(double *data, qint64 size, qint32 source, int tag);
     void receive(char   *data, qint64 size, qint32 source, qint32 tag);
-    virtual void receive(QByteArray &v,qint32 source, qint32 tag) = 0 ;
-    virtual void receive(QByteArray &v,qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
-    virtual void receive(QVariant &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status);
-    virtual void receive(QVariant &v,  qint32 source, qint32 tag) ;
+    virtual void receive(QByteArray& v, qint32 source, qint32 tag) = 0 ;
+    virtual void receive(QByteArray& v, qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status) = 0;
+    virtual void receive(QVariant& v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status);
+    virtual void receive(QVariant& v,  qint32 source, qint32 tag) ;
 
     virtual dtkDistributedRequest *ireceive(void   *data, qint64 size, QMetaType::Type dataType, qint32 source, int tag) = 0;
     dtkDistributedRequest *ireceive(bool   *data, qint64 size, qint32 source, int tag);
@@ -148,7 +152,7 @@ public:
     virtual void gather(double *send, double *recv, qint64 size, qint32 target, bool all = false);
 
 public:
-    virtual void spawn(QStringList hostnames, QString wrapper = "", QMap<QString,QString> options = QMap<QString,QString>() ) = 0;
+    virtual void spawn(QStringList hostnames, QString wrapper = "", QMap<QString, QString> options = QMap<QString, QString>() ) = 0;
     virtual void  exec(QRunnable *work) = 0;
 
 public:
@@ -157,15 +161,19 @@ public:
 
 public:
     virtual qint32  wid(void) = 0;
-    inline  qint32 rank(void) {return wid();};
+    inline  qint32 rank(void) {
+        return wid();
+    };
     virtual qint32 size(void) = 0;
-    virtual void*  data(void) { return NULL;}; 
+    virtual void  *data(void) {
+        return NULL;
+    };
 public:
     virtual void setWid(qint32 id) ;
 
 };
 
-DTK_DECLARE_OBJECT(dtkDistributedCommunicator*)
+DTK_DECLARE_OBJECT(dtkDistributedCommunicator *)
 DTK_DECLARE_PLUGIN(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 DTK_DECLARE_PLUGIN_FACTORY(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
 DTK_DECLARE_PLUGIN_MANAGER(dtkDistributedCommunicator, DTKDISTRIBUTED_EXPORT)
@@ -177,13 +185,13 @@ template <typename T> void dtkDistributedCommunicator::send(T data, qint32 targe
 {
     QVariant v;
     v = QVariant::fromValue<T>(data);
-    send(v, target,tag);
+    send(v, target, tag);
 }
 
-template <typename T> void dtkDistributedCommunicator::receive(T &data, qint32 source, qint32 tag)
+template <typename T> void dtkDistributedCommunicator::receive(T& data, qint32 source, qint32 tag)
 {
     QVariant v;
-    receive(v,source,tag);
+    receive(v, source, tag);
     data = v.value<T>();
 }
 
@@ -199,9 +207,9 @@ public:
     }
 };
 
-template <typename T, typename U> void dtkDistributedCommunicator::run(T* t, U (T::*functionPointer)())
+template <typename T, typename U> void dtkDistributedCommunicator::run(T *t, U (T::*functionPointer)())
 {
-    runFunction<T,U> runner;
+    runFunction<T, U> runner;
     runner.func = functionPointer;
     runner.object = t;
     this->exec(&runner);

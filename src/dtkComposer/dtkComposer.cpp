@@ -17,19 +17,19 @@
 #include "dtkComposerSettings.h"
 #include "dtkComposerDefaultExtensions.h"
 
-namespace dtkComposer
-{
-    namespace node
-    {
+namespace dtkComposer {
+    namespace node {
         namespace _private {
             dtkComposerNodeFactory factory;
         }
 
-        dtkComposerNodeFactory& factory(void) {
+        dtkComposerNodeFactory& factory(void)
+        {
             return _private::factory;
         }
 
-        void initialize(void) {
+        void initialize(void)
+        {
             dtkComposerBaseExtension baseExt;
             baseExt.extend(&(_private::factory));
             dtkComposerBooleanExtension boolExt;
@@ -51,21 +51,23 @@ namespace dtkComposer
         }
     }
 
-    namespace extension
-    {
+    namespace extension {
         namespace _private {
             dtkComposerExtensionPluginFactory factory;
             dtkComposerExtensionPluginManager manager;
         }
 
-        dtkComposerExtensionPluginFactory& pluginFactory(void) {
+        dtkComposerExtensionPluginFactory& pluginFactory(void)
+        {
             return _private::factory;
         }
 
-        dtkComposerExtensionPluginManager& pluginManager(void) {
+        dtkComposerExtensionPluginManager& pluginManager(void)
+        {
             return _private::manager;
         }
-        void initialize(const QString& path) {
+        void initialize(const QString& path)
+        {
             QString realpath = path;
 
             if (realpath.isEmpty()) {
@@ -73,11 +75,13 @@ namespace dtkComposer
                 composer_settings.beginGroup("extension");
                 realpath = composer_settings.value("plugins").toString();
                 composer_settings.endGroup();
+
                 if (realpath.isEmpty()) {
 
                     realpath = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkComposer");
                     dtkDebug() << "no composer plugin path configured, use default:" << realpath ;
                 }
+
                 pluginManager().setVerboseLoading(true);
                 pluginManager().initialize(realpath);
             } else {

@@ -34,14 +34,22 @@ public:
     neighboursForTest(void);
 
 public:
-    qlonglong size(void) const { return m_neighbours.count(); }
-    qlonglong edgeCount(void) const { return m_count; }
+    qlonglong size(void) const {
+        return m_neighbours.count();
+    }
+    qlonglong edgeCount(void) const {
+        return m_count;
+    }
 
 public:
-    qlonglong count(qlonglong v_id) const { return m_neighbours[v_id].count(); }
+    qlonglong count(qlonglong v_id) const {
+        return m_neighbours[v_id].count();
+    }
 
 public:
-    QVector<qlonglong> operator[] (qlonglong v_id) const { return m_neighbours[v_id]; }
+    QVector<qlonglong> operator[] (qlonglong v_id) const {
+        return m_neighbours[v_id];
+    }
 
 public:
     void addEdgeToGraph(dtkDistributedGraphTopology& topo);
@@ -73,7 +81,7 @@ inline neighboursForTest::neighboursForTest(void) : m_count(0)
     m_neighbours[21] << 7 << 19 << 20 << 22;
     m_neighbours[22] << 7 << 8 << 21;
 
-    for(int i = 0; i < m_neighbours.count(); ++i)
+    for (int i = 0; i < m_neighbours.count(); ++i)
         m_count += m_neighbours[i].count();
 
     m_DD_neighbours.resize(4);
@@ -212,10 +220,12 @@ inline neighboursForTest::neighboursForTest(void) : m_count(0)
 inline void neighboursForTest::addEdgeToGraph(dtkDistributedGraphTopology& topo)
 {
     dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
+
     if (comm->size() != 4 ) {
         qWarning() << "bad communicator size, should be equal to 4"  ;
         return;
     }
+
     /* qlonglong start = 0; */
     /* qlonglong end   = 9; */
     /* if (comm->wid() == 1 ) { */
@@ -233,9 +243,11 @@ inline void neighboursForTest::addEdgeToGraph(dtkDistributedGraphTopology& topo)
 
     auto it  = local_fe_neighbours.cbegin();
     auto ite = local_fe_neighbours.cend();
-    for(; it != ite; ++it) {
+
+    for (; it != ite; ++it) {
         qlonglong i = it.key();
         const QVector<qlonglong>& n = *it;
+
         for (int j = 0; j < n.count(); ++j) {
             topo.addEdge(i, n[j]);
         }
@@ -249,8 +261,7 @@ inline void neighboursForTest::addEdgeToGraph(dtkDistributedGraphTopology& topo)
 class testGraphTopologyCreateDestroy: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong wid = comm->wid();
 
@@ -281,8 +292,7 @@ public:
 class testGraphTopologyClearResize: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong wid = comm->wid();
         qlonglong N = 101;
@@ -315,8 +325,7 @@ public:
 class testGraphTopologyAssemble: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong wid = comm->wid();
         qlonglong N = 23;
@@ -337,11 +346,13 @@ public:
         topo.assemble();
 
         if (wid == 0) {
-            for(qlonglong i = 0; i < topo.size(); ++i) {
+            for (qlonglong i = 0; i < topo.size(); ++i) {
                 QCOMPARE(topo.neighbourCount(i), neighbours.count(i));
             }
+
             qlonglong count = 0;
-            for(qlonglong i = 0; i < topo.size(); ++i) {
+
+            for (qlonglong i = 0; i < topo.size(); ++i) {
                 dtkDistributedGraphTopology::Neighbours n = topo[i];
                 QCOMPARE(n.size(), neighbours.count(i));
                 QCOMPARE(n.startIndex(), count);
@@ -354,8 +365,7 @@ public:
 class testGraphTopologyNeighbours: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong wid = comm->wid();
         qlonglong N = 23;
@@ -375,11 +385,13 @@ public:
         topo.assemble();
 
         if (wid == 0) {
-            for(qlonglong i = 0; i < topo.size(); ++i) {
+            for (qlonglong i = 0; i < topo.size(); ++i) {
                 QCOMPARE(topo.neighbourCount(i), neighbours.count(i));
             }
+
             qlonglong count = 0;
-            for(qlonglong i = 0; i < topo.size(); ++i) {
+
+            for (qlonglong i = 0; i < topo.size(); ++i) {
                 dtkDistributedGraphTopology::Neighbours n = topo[i];
                 QCOMPARE(n.size(), neighbours.count(i));
                 QCOMPARE(n.startIndex(), count);
@@ -392,8 +404,7 @@ public:
 class testGraphTopologyIterator: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
         qlonglong N = 23;
 
@@ -420,7 +431,7 @@ public:
             dtkDistributedGraphTopology::Neighbours::iterator nit  = (*it).begin();
             dtkDistributedGraphTopology::Neighbours::iterator nend = (*it).end();
 
-            for(int i = 0; nit != nend; ++nit, ++i) {
+            for (int i = 0; nit != nend; ++nit, ++i) {
                 QCOMPARE(*nit, neighbours[it.id()][i]);
             }
         }
@@ -430,8 +441,7 @@ public:
 class testGraphTopologyRead: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedGraphTopology topo;
         qDebug() << topo.mapper()->deref() << topo.mapper()->ref();
         QVERIFY(topo.read("../customGraph.graph"));
@@ -447,7 +457,7 @@ public:
             dtkDistributedGraphTopology::Neighbours::iterator nit  = (*it).begin();
             dtkDistributedGraphTopology::Neighbours::iterator nend = (*it).end();
 
-            for(int i = 0; nit != nend; ++nit, ++i) {
+            for (int i = 0; nit != nend; ++nit, ++i) {
                 QCOMPARE(*nit, neighbours[it.id()][i]);
             }
         }
@@ -457,8 +467,7 @@ public:
 class testGraphTopologyLock: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedGraphTopology topo;
         QVERIFY(topo.read("../customGraph.graph"));
 
@@ -475,7 +484,7 @@ public:
             dtkDistributedGraphTopology::Neighbours::iterator nit  = (*it).begin();
             dtkDistributedGraphTopology::Neighbours::iterator nend = (*it).end();
 
-            for(int i = 0; nit != nend; ++nit, ++i) {
+            for (int i = 0; nit != nend; ++nit, ++i) {
                 QCOMPARE(*nit, neighbours[it.id()][i]);
             }
         }
@@ -487,8 +496,7 @@ public:
 class testGraphTopologyVertex: public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedGraphTopology topo;
         QVERIFY(topo.read("../customGraph.graph"));
 
@@ -496,7 +504,7 @@ public:
 
         dtkDistributedGraphTopology::vertex v_it  = topo.beginVertex();
         //dtkDistributedGraphTopology::vertex v_end = topo.endVertex();
-        
+
         //qDebug() << topo[18].size() << topo.neighbourCount(18);
 
         // for (; v_it != v_end; ++v_it) {

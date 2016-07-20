@@ -1,5 +1,5 @@
-/* dtkComposerNodePlotCurveFile.h --- 
- * 
+/* dtkComposerNodePlotCurveFile.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:32:55 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 35
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEPLOTCURVEFILE_H
@@ -32,7 +32,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotCurveFile : public QObject, p
     Q_OBJECT
 
 public:
-     dtkComposerNodePlotCurveFile(void);
+    dtkComposerNodePlotCurveFile(void);
     ~dtkComposerNodePlotCurveFile(void);
 
 public:

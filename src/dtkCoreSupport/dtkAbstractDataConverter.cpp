@@ -1,5 +1,5 @@
-/* dtkAbstractDataConverter.cpp --- 
- * 
+/* dtkAbstractDataConverter.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 22:03:03 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 47
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractDataConverter.h"

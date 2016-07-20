@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -31,7 +31,7 @@ inline bool dtkComposerTransmitterReceiverBase::enableCopy(void)
 inline QVariant dtkComposerTransmitterReceiverBase::variant(void)
 {
     if (d->active_emitter)
-	return d->active_emitter->variant();
+        return d->active_emitter->variant();
 
     return d->variant;
 }
@@ -40,9 +40,9 @@ inline QVariantList dtkComposerTransmitterReceiverBase::allData(void)
 {
     QVariantList list;
 
-    foreach(dtkComposerTransmitter *e, d->emitters) {
-	if (e->active())
-	    list << e->variant();
+    foreach (dtkComposerTransmitter *e, d->emitters) {
+        if (e->active())
+            list << e->variant();
     }
 
     return list;
@@ -72,7 +72,7 @@ template <typename T> inline T dtkComposerTransmitterReceiverVariant::constData(
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs a receiver.
-/*! 
+/*!
  *  Initialize the type of the receiver and the variant that it contains.
  */
 template <typename T> inline dtkComposerTransmitterReceiver<T>::dtkComposerTransmitterReceiver(dtkComposerNode *parent) : dtkComposerTransmitterReceiverBase(parent)
@@ -100,10 +100,10 @@ template <typename T> inline int dtkComposerTransmitterReceiver<T>::type(void) c
     return d->type_list.first();
 }
 
-template <typename T> inline void dtkComposerTransmitterReceiver<T>::setTypeList(const TypeList&) 
+template <typename T> inline void dtkComposerTransmitterReceiver<T>::setTypeList(const TypeList&)
 {
     // Forbiden method.
 }
 
-// 
+//
 // dtkComposerTransmitterReceiver.tpp ends here

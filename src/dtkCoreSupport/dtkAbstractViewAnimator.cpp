@@ -1,5 +1,5 @@
-/* dtkAbstractViewAnimator.cpp --- 
- * 
+/* dtkAbstractViewAnimator.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Jan 30 16:14:03 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 26
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractViewAnimator.h"

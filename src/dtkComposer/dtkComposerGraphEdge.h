@@ -1,5 +1,5 @@
-/* dtkComposerGraphEdge.h --- 
- * 
+/* dtkComposerGraphEdge.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:08:41 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 59
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -34,7 +34,7 @@ class dtkGraphEdge;
 class dtkComposerGraphEdge : public dtkGraphEdge
 {
 public:
-     dtkComposerGraphEdge(void);
+    dtkComposerGraphEdge(void);
     ~dtkComposerGraphEdge(void);
 
 public:

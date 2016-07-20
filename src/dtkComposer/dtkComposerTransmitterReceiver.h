@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -16,7 +16,7 @@
 
 #include "dtkComposerExport.h"
 
-#include "dtkComposerTransmitter.h" 
+#include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
 // dtkComposerTransmitterReceiverBase
@@ -25,7 +25,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverBase : public dtkComposerTransmitter
 {
 public:
-             dtkComposerTransmitterReceiverBase(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterReceiverBase(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitterReceiverBase(void);
 
 public:
@@ -51,13 +51,13 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiverVariant 
+// dtkComposerTransmitterReceiverVariant
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterReceiverVariant : public dtkComposerTransmitterReceiverBase
 {
 public:
-     dtkComposerTransmitterReceiverVariant(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterReceiverVariant(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterReceiverVariant(void);
 
 public:
@@ -69,13 +69,13 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterReceiver 
+// dtkComposerTransmitterReceiver
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> class dtkComposerTransmitterReceiver : public dtkComposerTransmitterReceiverBase
 {
 public:
-     dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterReceiver(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterReceiver(void);
 
 public:
@@ -102,7 +102,7 @@ private:
 // Alias for support layer
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T> using dtkComposerTransmitterReceiverSupport = dtkComposerTransmitterReceiver<T*>;
+template <typename T> using dtkComposerTransmitterReceiverSupport = dtkComposerTransmitterReceiver<T *>;
 
-// 
+//
 // dtkComposerTransmitterReceiver.h ends here

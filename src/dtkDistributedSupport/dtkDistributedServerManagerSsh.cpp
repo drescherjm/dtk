@@ -35,7 +35,7 @@
 class dtkDistributedServerManagerSshPrivate
 {
 public:
-    QHash<QString,QProcess *> slaves;
+    QHash<QString, QProcess *> slaves;
 
 public:
     QTemporaryFile tmp_err;
@@ -75,9 +75,9 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
     QString njobs  = "0";
     QString ngpus   = "0";
 
-    for (int c=0;c< QThread::idealThreadCount();c++) {
+    for (int c = 0; c < QThread::idealThreadCount(); c++) {
         QVariantMap core;
-        core.insert("id",c);
+        core.insert("id", c);
         cores << core;
     }
 
@@ -89,6 +89,7 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
 
     dtkCpuid cpuID;
     QString vendor = cpuID.vendor();
+
     if  (vendor == "GenuineIntel") {
         props.insert("cpu_model", "xeon");
         props.insert("cpu_arch", "x86_64");
@@ -96,9 +97,10 @@ QByteArray  dtkDistributedServerManagerSsh::status(void)
         props.insert("cpu_model", "opteron");
         props.insert("cpu_arch", "x86_64");
     }
+
     props.insert("ethernet", "1G");
 
-    foreach(QString id, d->slaves.keys()) {
+    foreach (QString id, d->slaves.keys()) {
         QVariantMap job;
         job.insert("id", id);
         job.insert("username", "me");
@@ -139,6 +141,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
         dtkWarn() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
+
     QVariantMap json = jsonDoc.object().toVariantMap();
 
     QSettings settings("inria", "dtk");
@@ -146,41 +149,45 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
 
     // script
     if (json.contains("script")) {
-        qsub += " "+json["script"].toString();
+        qsub += " " + json["script"].toString();
     } else if (json.contains("application")) {
         QString server = QHostInfo::localHostName ();
 #if defined(Q_OS_MAC)
         server.replace(".", "_");
 #endif
-        if (settings.contains(server +"_server_mpirun_path")) {
-            dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
-            qsub = settings.value(server +"_server_mpirun_path").toString();
+
+        if (settings.contains(server + "_server_mpirun_path")) {
+            dtkDebug() << "found specific command for this server:" << settings.value(server + "_server_mpirun").toString();
+            qsub = settings.value(server + "_server_mpirun_path").toString();
         } else
             qsub = "mpirun";
 
         QVariantMap res = json["resources"].toMap();
+
         if (res["nodes"].toInt() == 0) {
             // no nodes, only cores; TODO
         } else if (res["cores"].toInt() == 0) {
             // no cores, only nodes; TODO
         } else {
-            int procs = res["nodes"].toInt()*res["cores"].toInt();
+            int procs = res["nodes"].toInt() * res["cores"].toInt();
+
             if (procs > 1)
-                args += "-np "+ QString::number(procs) + " ";
+                args += "-np " + QString::number(procs) + " ";
         }
 
-        if (settings.contains(server +"_server_mpirun_args"))
-            args += settings.value(server +"_server_mpirun_args").toString();
+        if (settings.contains(server + "_server_mpirun_args"))
+            args += settings.value(server + "_server_mpirun_args").toString();
+
         args += qApp->applicationDirPath()
-            + "/"
-            + json["application"].toString();
+                + "/"
+                + json["application"].toString();
     } else {
         dtkError() << "no script and no application";
         return QString("ERROR");
     }
 
     QProcess *stat = new QProcess;
-    QStringList rargs= args.split(" ");
+    QStringList rargs = args.split(" ");
     QString err_filename;
 
     dtkDebug() << DTK_PRETTY_FUNCTION << qsub << rargs;
@@ -189,6 +196,7 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
         if (settings.contains("keep_output_files") && settings.value("keep_output_files").toBool() ) {
             d->tmp_err.setAutoRemove(false);
         }
+
         err_filename = d->tmp_err.fileName();
         stat->setStandardErrorFile(err_filename);
         dtkInfo() << "std error file of job is" << err_filename;
@@ -196,7 +204,8 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
         return QString("ERROR");
     }
 
-    stat->start(qsub,rargs);
+    stat->start(qsub, rargs);
+
     if (stat->waitForStarted(5000))
         dtkDebug() << DTK_PRETTY_FUNCTION << "process started";
     else
@@ -204,18 +213,20 @@ QString dtkDistributedServerManagerSsh::submit(QString input)
 
     // Wait for jobid in stdout
     QEventLoop loop;
-    loop.connect(stat,SIGNAL(readyRead()),&loop,SLOT(quit()));
+    loop.connect(stat, SIGNAL(readyRead()), &loop, SLOT(quit()));
     loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
     loop.exec();
 
     QString tmp = stat->readLine();
+
     if (tmp.isEmpty()) {
         dtkError() << DTK_PRETTY_FUNCTION << "empty output file";
         return QString("ERROR");
     }
+
     QString jobid = tmp.simplified().split("=").at(1);
 
-    d->slaves.insert(jobid,stat);
+    d->slaves.insert(jobid, stat);
     dtkDebug() << DTK_PRETTY_FUNCTION << jobid;
     return jobid;
 }

@@ -1,5 +1,5 @@
-/* dtkDistributedControllerSubmitView.cpp --- 
- * 
+/* dtkDistributedControllerSubmitView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:53:43 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 109
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -62,7 +62,7 @@ dtkDistributedControllerSubmitView::dtkDistributedControllerSubmitView(QWidget *
     d->time_edit->setTime(QTime(0, 15, 0));
 
     d->submit_button = new QPushButton("Submit", this);
-    
+
     QFormLayout *f_layout = new QFormLayout;
     f_layout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
     f_layout->addRow("Nodes", d->node_spin);
@@ -84,7 +84,7 @@ dtkDistributedControllerSubmitView::dtkDistributedControllerSubmitView(QWidget *
     layout->setSpacing(0);
     layout->addWidget(header);
     layout->addWidget(bottom);
-    
+
     connect(d->submit_button, SIGNAL(clicked()), this, SLOT(onSubmit()));
 
     this->setEnabled(false);
@@ -116,10 +116,10 @@ void dtkDistributedControllerSubmitView::setApplication(const QString& applicati
 
 void dtkDistributedControllerSubmitView::onSubmit(void)
 {
-    if(!d->controller)
+    if (!d->controller)
         return;
 
-    if(d->cluster.isEmpty())
+    if (d->cluster.isEmpty())
         return;
 
     QVariantMap resources;
@@ -130,7 +130,7 @@ void dtkDistributedControllerSubmitView::onSubmit(void)
     job.insert("resources", resources);
     job.insert("properties", QVariantMap());
     job.insert("walltime", d->time_edit->time().toString("hh:mm:ss"));
-    job.insert("application", d->application +" "+d->cluster);
+    job.insert("application", d->application + " " + d->cluster);
 
     QByteArray data = QJsonDocument(QJsonObject::fromVariantMap(job)).toJson();
 

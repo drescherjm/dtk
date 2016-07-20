@@ -25,16 +25,20 @@ class  dtkComposerNodeView : public QObject, public dtkComposerNodeLeafView
     Q_OBJECT
 
 public:
-     dtkComposerNodeView(void);
+    dtkComposerNodeView(void);
     ~dtkComposerNodeView(void);
 
 public:
     void run(void);
 
 public:
-    inline bool isAbstractView(void) const {return true;} ;
+    inline bool isAbstractView(void) const {
+        return true;
+    } ;
 
-    inline QString abstractViewType(void) const {return "dtkAbstractView";};
+    inline QString abstractViewType(void) const {
+        return "dtkAbstractView";
+    };
 
 public:
     QString type(void);

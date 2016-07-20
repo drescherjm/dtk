@@ -1,5 +1,5 @@
-/* dtkContainerVectorWrapper.tpp --- 
- * 
+/* dtkContainerVectorWrapper.tpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri May 25 09:47:39 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 61
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCONTAINERVECTORWRAPPER_TPP
@@ -50,7 +50,7 @@ template <typename T> dtkContainerVectorWrapper<T>& dtkContainerVectorWrapper<T>
     dtkAbstractData::operator = (other);
 
     m_vector = other.m_vector;
-    
+
     return *this;
 };
 

@@ -39,7 +39,7 @@ signals:
     void inserted(dtkComposerViewWidget *, const QString&);
 
 protected:
-     dtkComposerViewController(void);
+    dtkComposerViewController(void);
     ~dtkComposerViewController(void);
 
 private:

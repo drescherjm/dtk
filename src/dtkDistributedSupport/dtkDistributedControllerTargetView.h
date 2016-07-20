@@ -1,5 +1,5 @@
-/* dtkDistributedControllerTargetView.h --- 
- * 
+/* dtkDistributedControllerTargetView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:25:27 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERTARGETVIEW_H
@@ -32,7 +32,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerTargetView : public Q
     Q_OBJECT
 
 public:
-     dtkDistributedControllerTargetView(QWidget *parent = 0);
+    dtkDistributedControllerTargetView(QWidget *parent = 0);
     ~dtkDistributedControllerTargetView(void);
 
 public:

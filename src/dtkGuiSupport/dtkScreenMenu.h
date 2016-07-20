@@ -27,7 +27,7 @@ class DTKGUISUPPORT_EXPORT dtkScreenMenu : public QMenu
     Q_OBJECT
 
 public:
-    dtkScreenMenu(const QString &title, QWidget *parent = 0);
+    dtkScreenMenu(const QString& title, QWidget *parent = 0);
 
 public:
     QImage screenshot(QWidget *widget, qlonglong maxsize = 0);

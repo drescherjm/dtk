@@ -34,7 +34,7 @@ class DTKGUISUPPORT_EXPORT dtkViewLayout : public QFrame
     Q_OBJECT
 
 public:
-     dtkViewLayout(QWidget *parent = 0);
+    dtkViewLayout(QWidget *parent = 0);
     ~dtkViewLayout(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkComposerSceneNote.cpp --- 
- * 
+/* dtkComposerSceneNote.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 14:02:44 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 32
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerSceneNode.h"
@@ -103,7 +103,7 @@ void dtkComposerSceneNote::paint(QPainter *painter, const QStyleOptionGraphicsIt
     painter->setBrush(QColor("#ffff88"));
     painter->drawPath(path);
 
-    if(this->isSelected()) {
+    if (this->isSelected()) {
         QPen pen;
         pen.setColor(Qt::magenta);
         pen.setWidth(2);
@@ -116,7 +116,7 @@ void dtkComposerSceneNote::paint(QPainter *painter, const QStyleOptionGraphicsIt
 void dtkComposerSceneNote::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton && !d->drag_point.isNull()) {
-        
+
         QPointF delta = QPointF(event->scenePos() - d->drag_point);
 
         d->bounding_rect.setBottomRight(d->bounding_rect.bottomRight() + delta);

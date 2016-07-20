@@ -1,5 +1,5 @@
-/* dtkAbstractContainerWrapper.h --- 
- * 
+/* dtkAbstractContainerWrapper.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:46:55 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 50
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTCONTAINERWRAPPER_H
@@ -43,8 +43,8 @@ public:
     };
 
 public:
-             dtkAbstractContainerWrapper(void);
-             dtkAbstractContainerWrapper(const dtkAbstractContainerWrapper& other);
+    dtkAbstractContainerWrapper(void);
+    dtkAbstractContainerWrapper(const dtkAbstractContainerWrapper& other);
     virtual ~dtkAbstractContainerWrapper(void);
 
 protected:
@@ -102,7 +102,7 @@ public:
     virtual qlonglong count(void) const;
 
     virtual qlonglong indexOf(const QVariant& data, qlonglong from = 0) const;
-     
+
     virtual QVariant at(qlonglong index) const;
 
 public:
@@ -117,13 +117,13 @@ private:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 #include "dtkAbstractContainerWrapper.tpp"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 Q_DECLARE_METATYPE(dtkAbstractContainerWrapper);

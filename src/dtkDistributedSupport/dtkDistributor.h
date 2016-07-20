@@ -1,5 +1,5 @@
-/* dtkDistributor.h --- 
- * 
+/* dtkDistributor.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr  3 16:33:58 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTOR_H
@@ -31,7 +31,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributor : public QFrame
     Q_OBJECT
 
 public:
-     dtkDistributor(QWidget *parent = 0);
+    dtkDistributor(QWidget *parent = 0);
     ~dtkDistributor(void);
 
 public:

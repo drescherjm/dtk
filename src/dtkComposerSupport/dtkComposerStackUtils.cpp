@@ -1,5 +1,5 @@
-/* dtkComposerStackUtils.cpp --- 
- * 
+/* dtkComposerStackUtils.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 20 16:08:18 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 115
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -32,7 +32,7 @@ void dtkComposerPropagateEdgeValidity(dtkComposerSceneNodeComposite *node, const
     dtkComposerTransmitter *s = NULL;
     dtkComposerTransmitter *d = NULL;
 
-    foreach(dtkComposerSceneEdge *edge, node->edges()) {
+    foreach (dtkComposerSceneEdge *edge, node->edges()) {
 
         if (node != edge->source()->node())
             s = edge->source()->node()->wrapee()->emitters().at(edge->source()->node()->outputPorts().indexOf(edge->source()));
@@ -44,24 +44,24 @@ void dtkComposerPropagateEdgeValidity(dtkComposerSceneNodeComposite *node, const
         else
             d = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->node()->outputPorts().indexOf(edge->destination()));
 
-        foreach(dtkComposerTransmitterLink *link, invalid_links)
-            if(link->source() == s && link->destination() == d)
+        foreach (dtkComposerTransmitterLink *link, invalid_links)
+            if (link->source() == s && link->destination() == d)
                 edge->invalidate();
-        
-        foreach(dtkComposerTransmitterLink *link, valid_links)
-            if(link->source() == s && link->destination() == d)
+
+        foreach (dtkComposerTransmitterLink *link, valid_links)
+            if (link->source() == s && link->destination() == d)
                 edge->validate();
     }
 
 
-    foreach(dtkComposerSceneNode *n, node->nodes()) {
+    foreach (dtkComposerSceneNode *n, node->nodes()) {
 
-        if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
+        if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(n)) {
             dtkComposerPropagateEdgeValidity(composite, valid_links, invalid_links);
         }
 
-        if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(n)) {
-            foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+        if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(n)) {
+            foreach (dtkComposerSceneNodeComposite *block, control->blocks())
                 dtkComposerPropagateEdgeValidity(block, valid_links, invalid_links);
         }
     }
@@ -82,7 +82,7 @@ void dtkComposerTransmitterConnection(dtkComposerSceneNodeComposite *root, dtkCo
         d_t = edge->destination()->node()->wrapee()->receivers().at(edge->destination()->node()->inputPorts().indexOf(edge->destination()));
     else
         d_t = edge->destination()->node()->wrapee()->emitters().at(edge->destination()->node()->outputPorts().indexOf(edge->destination()));
-    
+
     dtkComposerTransmitterLinkList   valid_edges;
     dtkComposerTransmitterLinkList invalid_edges;
     dtkComposerTransmitter::onTransmittersConnected(s_t, d_t, valid_edges, invalid_edges);
@@ -122,13 +122,13 @@ void dtkComposerTransmitterDisconnection(dtkComposerSceneNodeComposite *root, dt
 
 bool areBrothers(dtkComposerSceneNodeList nodes)
 {
-    if(nodes.isEmpty())
+    if (nodes.isEmpty())
         return true;
 
     dtkComposerSceneNode *parent = nodes.first()->parent();
 
-    foreach(dtkComposerSceneNode *node, nodes)
-        if(node->parent() != parent)
+    foreach (dtkComposerSceneNode *node, nodes)
+        if (node->parent() != parent)
             return false;
 
     return true;
@@ -136,13 +136,13 @@ bool areBrothers(dtkComposerSceneNodeList nodes)
 
 bool areBrothers(dtkComposerSceneNoteList notes)
 {
-    if(notes.isEmpty())
+    if (notes.isEmpty())
         return true;
 
     dtkComposerSceneNode *parent = notes.first()->parent();
 
-    foreach(dtkComposerSceneNote *note, notes)
-        if(note->parent() != parent)
+    foreach (dtkComposerSceneNote *note, notes)
+        if (note->parent() != parent)
             return false;
 
     return true;
@@ -150,23 +150,23 @@ bool areBrothers(dtkComposerSceneNoteList notes)
 
 bool areBrothers(dtkComposerSceneNodeList nodes, dtkComposerSceneNoteList notes)
 {
-    if(nodes.isEmpty() && notes.isEmpty())
+    if (nodes.isEmpty() && notes.isEmpty())
         return true;
 
-    if(nodes.isEmpty())
-       return areBrothers(notes);
+    if (nodes.isEmpty())
+        return areBrothers(notes);
 
-    if(notes.isEmpty())
-       return areBrothers(nodes);
+    if (notes.isEmpty())
+        return areBrothers(nodes);
 
     dtkComposerSceneNode *parent = nodes.first()->parent();
 
-    foreach(dtkComposerSceneNode *node, nodes)
-        if(node->parent() != parent)
+    foreach (dtkComposerSceneNode *node, nodes)
+        if (node->parent() != parent)
             return false;
 
-    foreach(dtkComposerSceneNote *note, notes)
-        if(note->parent() != parent)
+    foreach (dtkComposerSceneNote *note, notes)
+        if (note->parent() != parent)
             return false;
 
     return true;

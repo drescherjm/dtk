@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -30,6 +30,7 @@ void dtkDistributedBufferManagerTestCase::initTestCase(void)
     for (int i = 0; i < 2; ++i) {
         dtkDistributed::policy()->addHost("localhost");
     }
+
     dtkDistributed::spawn();
 }
 
@@ -114,5 +115,5 @@ void dtkDistributedBufferManagerTestCase::cleanup(void)
 
 DTKDISTRIBUTEDTEST_MAIN_NOGUI(dtkDistributedBufferManagerTest, dtkDistributedBufferManagerTestCase)
 
-// 
+//
 // dtkDistributedBufferManagerTest.cpp ends here

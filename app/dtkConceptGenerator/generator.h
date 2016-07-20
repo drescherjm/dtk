@@ -1,18 +1,25 @@
-#ifndef GENERATOR_H
-#define GENERATOR_H
+// Version: $Id$
+//
+//
 
-#include <QMap>
-#include <QString>
-#include <QFile>
-#include <QTextStream>
-#include <QDir>
-#include <QStringList>
-#include <QDebug>
+// Commentary:
+//
+//
 
-void generate(QString target,QMap<QString, QString> pairs,QString path);
+// Change Log:
+//
+//
 
-QString readAndReplace(QString filePath, QMap<QString,QString> pairs);
+// Code:
 
+#pragma once
 
-#endif // GENERATOR_H
+#include <QtCore>
+#include <QtDebug>
 
+void generate(QString target, QMap<QString, QString> pairs, QString path);
+
+QString readAndReplace(QString filePath, QMap<QString, QString> pairs);
+
+//
+// generator.h ends here

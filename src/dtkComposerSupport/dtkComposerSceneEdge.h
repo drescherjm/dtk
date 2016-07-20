@@ -1,5 +1,5 @@
-/* dtkComposerSceneEdge.h --- 
- * 
+/* dtkComposerSceneEdge.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:29:21 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 30
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENEEDGE_H
@@ -33,7 +33,7 @@ class dtkComposerScenePort;
 class dtkComposerSceneEdge : public QGraphicsItem
 {
 public:
-     dtkComposerSceneEdge(void);
+    dtkComposerSceneEdge(void);
     ~dtkComposerSceneEdge(void);
 
 public:
@@ -52,7 +52,7 @@ public:
 public:
     void setSource(dtkComposerScenePort *port);
     void setDestination(dtkComposerScenePort *port);
-    
+
 public:
     void adjust(void);
     void adjust(const QPointF& start, const QPointF& end);

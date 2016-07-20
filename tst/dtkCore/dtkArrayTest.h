@@ -17,7 +17,7 @@ class dtkArrayTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkArrayTestCase(void);
+    dtkArrayTestCase(void);
     virtual ~dtkArrayTestCase(void);
 
 private slots:

@@ -1,5 +1,5 @@
-/* dtkComposerSceneNode.h --- 
- * 
+/* dtkComposerSceneNode.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 12:31:15 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 80
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENODE_H
@@ -39,7 +39,7 @@ class dtkComposerSceneNodePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNode : public QGraphicsItem
 {
 public:
-             dtkComposerSceneNode(void);
+    dtkComposerSceneNode(void);
     virtual ~dtkComposerSceneNode(void);
 
 #pragma mark -

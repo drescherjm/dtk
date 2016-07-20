@@ -1,5 +1,5 @@
-/* dtkComposerControls.h --- 
- * 
+/* dtkComposerControls.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:16:42 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 27
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERCONTROLS_H
@@ -32,7 +32,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerControls : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerControls(QWidget *parent = 0);
+    dtkComposerControls(QWidget *parent = 0);
     ~dtkComposerControls(void);
 
 public:

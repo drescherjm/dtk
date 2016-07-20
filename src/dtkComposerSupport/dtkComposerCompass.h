@@ -1,5 +1,5 @@
-/* dtkComposerCompass.h --- 
- * 
+/* dtkComposerCompass.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:35:33 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 46
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERCOMPASS_H
@@ -32,7 +32,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerCompass : public QGraphicsView
     Q_OBJECT
 
 public:
-     dtkComposerCompass(QWidget *parent = 0);
+    dtkComposerCompass(QWidget *parent = 0);
     ~dtkComposerCompass(void);
 
 public:

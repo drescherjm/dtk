@@ -155,6 +155,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierSet::run(void)
             (*vector)[index] = value;
 
         }
+
         d->emitter_vector.setData(vector);
 
     } else {
@@ -187,6 +188,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierSum::run(void)
             (*vector)[index] += value;
 
         }
+
         d->emitter_vector.setData(vector);
 
     } else {
@@ -218,6 +220,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierSubstract::run(void)
             (*vector)[index] -= value;
 
         }
+
         d->emitter_vector.setData(vector);
 
     } else {
@@ -250,6 +253,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierMult::run(void)
             (*vector)[index] *= value;
 
         }
+
         d->emitter_vector.setData(vector);
 
     } else {
@@ -286,6 +290,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierDivide::run(void)
                 (*vector)[index] /= value;
 
         }
+
         d->emitter_vector.setData(vector);
 
     } else {
@@ -338,7 +343,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierAllSubstract::run(void)
             return;
         }
 
-        for (qlonglong i = 0 ; i< vector->size(); ++i)
+        for (qlonglong i = 0 ; i < vector->size(); ++i)
             (*vector)[i] -= value ;
 
         d->emitter_vector.setData(vector);
@@ -398,7 +403,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierAllDivide::run(void)
             dtkWarn() << "Value is zero. Same array is returned." ;
 
         } else {
-            
+
             for (qlonglong i = 0 ; i < vector->size(); ++i)
                 (*vector)[i] /= value ;
 
@@ -439,7 +444,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierPartSum::run(void)
 
         if (!d->receiver_index.isEmpty())
             index = *d->receiver_index.data();
-            
+
         for (qlonglong i = 0; i < subvector->size(); ++i, ++index)
             (*vector)[index] += (*subvector)[i] ;
 
@@ -478,7 +483,7 @@ void dtkComposerNodeVectorIntegerOperatorModifierPartSubstract::run(void)
 
         if (!d->receiver_index.isEmpty())
             index = *d->receiver_index.data();
-            
+
         for (qlonglong i = 0; i < subvector->size(); ++i, ++index)
             (*vector)[index] -= (*subvector)[i] ;
 

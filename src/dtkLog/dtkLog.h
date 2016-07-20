@@ -16,13 +16,12 @@
 
 #include <QtCore>
 
-namespace dtkLog
-{
+namespace dtkLog {
     enum Level {
         Trace = 0x000,
         Debug = 0x001,
-         Info = 0x010,
-         Warn = 0x011,
+        Info = 0x010,
+        Warn = 0x011,
         Error = 0x100,
         Fatal = 0x101
     };

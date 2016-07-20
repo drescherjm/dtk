@@ -1,15 +1,15 @@
 /* dtkAbstractProcessController.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:37:38 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Thu Aug 29 17:10:46 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 71
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkAbstractProcess.h"
@@ -33,7 +33,7 @@ public:
 void dtkAbstractProcessControllerPrivate::run(void)
 {
     if (this->process)
-	this->process->run();
+        this->process->run();
 }
 
 // ///////////////////////////////////////////////////////////////////

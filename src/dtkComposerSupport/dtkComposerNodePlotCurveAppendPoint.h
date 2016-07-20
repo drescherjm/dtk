@@ -33,7 +33,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePlotCurveAppendPoint : public QOb
     Q_OBJECT
 
 public:
-     dtkComposerNodePlotCurveAppendPoint(void);
+    dtkComposerNodePlotCurveAppendPoint(void);
     ~dtkComposerNodePlotCurveAppendPoint(void);
 
 public:
@@ -47,13 +47,16 @@ public:
 
 public:
     inline QString inputLabelHint(int port) {
-        switch(port) {
+        switch (port) {
         case 0:
             return "curve";
+
         case 1:
             return "x";
+
         case 2:
             return "y";
+
         default:
             return "port";
         }

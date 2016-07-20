@@ -27,7 +27,7 @@ class dtkComposerNodeNumberOperatorUnaryPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberOperatorUnary(void);
+    dtkComposerNodeNumberOperatorUnary(void);
     ~dtkComposerNodeNumberOperatorUnary(void);
 
 protected:
@@ -43,7 +43,7 @@ class dtkComposerNodeNumberOperatorBinaryPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeNumberOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberOperatorBinary(void);
+    dtkComposerNodeNumberOperatorBinary(void);
     ~dtkComposerNodeNumberOperatorBinary(void);
 
 protected:
@@ -59,7 +59,7 @@ class dtkComposerNodeNumberComparatorPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeNumberComparator : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberComparator(void);
+    dtkComposerNodeNumberComparator(void);
     ~dtkComposerNodeNumberComparator(void);
 
 protected:
@@ -75,7 +75,7 @@ class dtkComposerNodeNumberAlmosteqPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeNumberAlmosteq : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberAlmosteq(void);
+    dtkComposerNodeNumberAlmosteq(void);
     ~dtkComposerNodeNumberAlmosteq(void);
 
 public:
@@ -94,7 +94,7 @@ class dtkComposerNodeNumberNotalmosteqPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeNumberNotalmosteq : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberNotalmosteq(void);
+    dtkComposerNodeNumberNotalmosteq(void);
     ~dtkComposerNodeNumberNotalmosteq(void);
 
 public:

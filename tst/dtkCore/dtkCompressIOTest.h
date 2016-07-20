@@ -17,7 +17,7 @@ class dtkCompressIOTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkCompressIOTestCase(void);
+    dtkCompressIOTestCase(void);
     virtual ~dtkCompressIOTestCase(void);
 
 private slots:

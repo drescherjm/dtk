@@ -45,7 +45,7 @@ public:
     bool endloop;
 };
 
-dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsObject(),d(new dtkComposerGraphNodePrivate)
+dtkComposerGraphNode::dtkComposerGraphNode() : QGraphicsObject(), d(new dtkComposerGraphNodePrivate)
 {
     this->setFlag(QGraphicsItem::ItemIsSelectable, true);
     this->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -109,6 +109,7 @@ void dtkComposerGraphNode::setBreakPoint(bool value)
 void dtkComposerGraphNode::setEndLoop(bool value)
 {
     d->endloop = value;
+
     if (value) // endloop is set to true, keep this info in endloop_initial (used to rerun node)
         d->endloop_initial = value;
 }
@@ -128,18 +129,17 @@ void dtkComposerGraphNode::paint(QPainter *painter, const QStyleOptionGraphicsIt
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if(this->isSelected())
+    if (this->isSelected())
         painter->setPen(Qt::red);
     else
         painter->setPen(Qt::black);
 
     if (d->status == Done)
         painter->setBrush(Qt::green);
+    else if (d->breakpoint)
+        painter->setBrush(Qt::yellow);
     else
-        if (d->breakpoint)
-            painter->setBrush(Qt::yellow);
-        else
-            painter->setBrush(Qt::white);
+        painter->setBrush(Qt::white);
 
     painter->drawRect(this->boundingRect());
     painter->drawText(this->boundingRect(), Qt::AlignCenter, d->title);
@@ -227,12 +227,12 @@ void dtkComposerGraphNode::clean(void)
 // dtkComposerGraphNodeList
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerGraphNodeList::dtkComposerGraphNodeList(void) : QList<dtkComposerGraphNode *>()
+dtkComposerGraphNodeList::dtkComposerGraphNodeList(void) : QList<dtkComposerGraphNode * >()
 {
 
 }
 
-dtkComposerGraphNodeList::dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other) : QList<dtkComposerGraphNode *>(other)
+dtkComposerGraphNodeList::dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other) : QList<dtkComposerGraphNode * >(other)
 {
 
 }

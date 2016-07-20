@@ -60,13 +60,15 @@ dtkComposerNodeVectorIntegerExtractor::~dtkComposerNodeVectorIntegerExtractor(vo
 
 QString dtkComposerNodeVectorIntegerExtractor::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "index";
         break;
+
     default:
         break;
     }
@@ -76,10 +78,11 @@ QString dtkComposerNodeVectorIntegerExtractor::inputLabelHint(int port)
 
 QString dtkComposerNodeVectorIntegerExtractor::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "value";
         break;
+
     default:
         break;
     }
@@ -111,7 +114,7 @@ void dtkComposerNodeVectorIntegerExtractor::run(void)
     } else {
         dtkWarn() << "Inputs not specified. Zero is returned.";
         d->value = 0;
-    }        
+    }
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -152,26 +155,30 @@ dtkComposerNodeVectorIntegerExtractorSubVector::~dtkComposerNodeVectorIntegerExt
 {
     if (d->subvector)
         delete d->subvector;
+
     d->subvector = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
 QString dtkComposerNodeVectorIntegerExtractorSubVector::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "from";
         break;
         break;
+
     case 2:
         return "length";
         break;
+
     default:
         break;
     }
@@ -181,10 +188,11 @@ QString dtkComposerNodeVectorIntegerExtractorSubVector::inputLabelHint(int port)
 
 QString dtkComposerNodeVectorIntegerExtractorSubVector::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "subvector";
         break;
+
     default:
         break;
     }
@@ -205,6 +213,7 @@ void dtkComposerNodeVectorIntegerExtractorSubVector::run(void)
         }
 
         qlonglong from = *d->receiver_from.data();
+
         if (from >= vector->size()) {
             dtkWarn() << DTK_PRETTY_FUNCTION << "Starting value from is greater than vector size:" << from << ">=" << vector->size();
             d->emitter_subvector.clearData();
@@ -212,6 +221,7 @@ void dtkComposerNodeVectorIntegerExtractorSubVector::run(void)
         }
 
         qlonglong length = vector->size();
+
         if (!d->receiver_length.isEmpty())
             length = *d->receiver_length.data();
 
@@ -223,11 +233,11 @@ void dtkComposerNodeVectorIntegerExtractorSubVector::run(void)
 
         qlonglong to = qMin((from + length), static_cast<qlonglong>(vector->size()));
         qlonglong size = to - from;
-        
+
         if (d->subvector->size() != size)
             d->subvector->allocate(size);
-        
-        for(qlonglong i = from, count = 0; i < to; ++i, ++count)
+
+        for (qlonglong i = from, count = 0; i < to; ++i, ++count)
             (*d->subvector)[count] = (*vector)[i];
 
     } else {

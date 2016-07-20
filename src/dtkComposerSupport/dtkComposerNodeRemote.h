@@ -40,7 +40,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeRemote : public QObject, public d
     Q_OBJECT
 
 public:
-             dtkComposerNodeRemote(void);
+    dtkComposerNodeRemote(void);
     virtual ~dtkComposerNodeRemote(void);
 
 public:
@@ -85,7 +85,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeRemoteSubmit : public QObject, pu
     Q_OBJECT
 
 public:
-     dtkComposerNodeRemoteSubmit(void);
+    dtkComposerNodeRemoteSubmit(void);
     ~dtkComposerNodeRemoteSubmit(void);
 
 public:

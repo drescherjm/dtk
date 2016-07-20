@@ -32,7 +32,7 @@ class dtkComposerNodeVectorRealOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealOperatorUnary(void);
+    dtkComposerNodeVectorRealOperatorUnary(void);
     ~dtkComposerNodeVectorRealOperatorUnary(void);
 
     inline QString inputLabelHint(int) {
@@ -56,7 +56,7 @@ class dtkComposerNodeVectorRealOperatorUnaryScalarPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealOperatorUnaryScalar(void);
+    dtkComposerNodeVectorRealOperatorUnaryScalar(void);
     ~dtkComposerNodeVectorRealOperatorUnaryScalar(void);
 
     inline QString inputLabelHint(int port) {

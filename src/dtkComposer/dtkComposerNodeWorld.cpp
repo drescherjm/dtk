@@ -36,7 +36,7 @@ class dtkComposerNodeWorldPrivate
 public:
     dtkComposerTransmitterEmitter<qlonglong> emitter_rank;
     dtkComposerTransmitterEmitter<qlonglong> emitter_size;
-    dtkComposerTransmitterEmitter<dtkDistributedCommunicator*> emitter_communicator;
+    dtkComposerTransmitterEmitter<dtkDistributedCommunicator *> emitter_communicator;
 
 public:
     dtkDistributedCommunicatorMpi *communicator;
@@ -67,6 +67,7 @@ dtkComposerNodeWorld::~dtkComposerNodeWorld(void)
 {
     if (d->communicator)
         delete d->communicator;
+
     d->communicator = NULL;
 
     delete d;
@@ -95,7 +96,7 @@ void dtkComposerNodeWorld::begin(void)
 
     if (!d->communicator->initialized())
         d->communicator->initialize();
-    
+
     d->emitter_rank.setData(d->communicator->rank());
     d->emitter_size.setData(d->communicator->size());
 }

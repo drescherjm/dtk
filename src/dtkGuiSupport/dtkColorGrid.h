@@ -1,5 +1,5 @@
-/* dtkColorGrid.h --- 
- * 
+/* dtkColorGrid.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:03:54 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 61
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOLORGRID_H
@@ -44,7 +44,7 @@ public:
         CM_RELEASE
     };
 
-             dtkColorGrid(QWidget *parent = 0);
+    dtkColorGrid(QWidget *parent = 0);
     virtual ~dtkColorGrid(void);
 
     virtual QSize minimumSizeHint(void) const;
@@ -78,8 +78,8 @@ public:
     static dtkColorList *namedColors(void);
 
 signals:
-    void highlighted(const QColor &color);
-    void picked(const QColor &color);
+    void highlighted(const QColor& color);
+    void picked(const QColor& color);
     void accepted(void);
     void rejected(void);
 

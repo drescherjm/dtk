@@ -1,5 +1,5 @@
-/* dtkPlotRenderer.cpp --- 
- * 
+/* dtkPlotRenderer.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jul  4 21:14:19 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 22
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotView.h"

@@ -1,5 +1,5 @@
-/* dtkSettingsEditor.h --- 
- * 
+/* dtkSettingsEditor.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Wed Dec 23 09:54:06 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
+/* Commentary:
  * See credits at en of file
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKSETTINGSEDITOR_H
@@ -36,15 +36,15 @@ class dtkSettingsEditorVariantDelegate : public QItemDelegate
 public:
     dtkSettingsEditorVariantDelegate(QObject *parent = 0);
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex& index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex& index) const;
 
     static bool isSupportedType(QVariant::Type type);
-    static QString displayText(const QVariant &value);
+    static QString displayText(const QVariant& value);
 
 private:
     mutable QRegExp boolExp;
@@ -90,10 +90,10 @@ private slots:
 
 private:
     void updateChildItems(QTreeWidgetItem *parent);
-    QTreeWidgetItem *createItem(const QString &text, QTreeWidgetItem *parent, int index);
+    QTreeWidgetItem *createItem(const QString& text, QTreeWidgetItem *parent, int index);
     QTreeWidgetItem *childAt(QTreeWidgetItem *parent, int index);
     int childCount(QTreeWidgetItem *parent);
-    int findChild(QTreeWidgetItem *parent, const QString &text, int startIndex);
+    int findChild(QTreeWidgetItem *parent, const QString& text, int startIndex);
     void moveItemForward(QTreeWidgetItem *parent, int oldIndex, int newIndex);
 
     QSettings *settings;
@@ -114,7 +114,7 @@ class DTKGUISUPPORT_EXPORT dtkSettingsEditor : public QWidget
     Q_OBJECT
 
 public:
-     dtkSettingsEditor(QWidget *parent = 0);
+    dtkSettingsEditor(QWidget *parent = 0);
     ~dtkSettingsEditor(void);
 
     void setSettings(const QString& organisation, const QString& application);

@@ -32,57 +32,63 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
         dtkWarn() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
+
     QVariantMap json = jsonDoc.object().toVariantMap();
 
 
     QVariantMap jprops = json["properties"].toMap();
     QString properties ;
+
     if (jprops.contains("cpu_model")) {
-        properties +=  " -p \"cputype='"+jprops["cpu_model"].toString()+"'\"";
+        properties +=  " -p \"cputype='" + jprops["cpu_model"].toString() + "'\"";
     } else if (jprops.count() > 0 ) {
         QVariantMap::const_iterator iter = jprops.begin();
-        properties +=  " -p \""+iter.key()+"='"+iter.value().toString()+"'";
+        properties +=  " -p \"" + iter.key() + "='" + iter.value().toString() + "'";
         ++iter;
-        for(;iter != jprops.end(); ++iter) {
-            properties +=  " and "+iter.key()+"='"+iter.value().toString()+"'";
+
+        for (; iter != jprops.end(); ++iter) {
+            properties +=  " and " + iter.key() + "='" + iter.value().toString() + "'";
         }
+
         properties +=  "\"";
     }
+
     oarsub += properties;
 
     QVariantMap res = json["resources"].toMap();
 
     if (res["nodes"].toInt() == 0) {
         // no nodes, only cores;
-        oarsub += " -l /core="+res["cores"].toString();
+        oarsub += " -l /core=" + res["cores"].toString();
     } else if (res["cores"].toInt() == 0) {
         // no cores, only nodes;
-        oarsub += " -l /nodes="+res["nodes"].toString();
+        oarsub += " -l /nodes=" + res["nodes"].toString();
     } else {
-        oarsub += " -l /nodes="+res["nodes"].toString()+"/core="+res["cores"].toString();
+        oarsub += " -l /nodes=" + res["nodes"].toString() + "/core=" + res["cores"].toString();
     }
 
     // walltime, syntax=HH:MM:SS
     if (json.contains("walltime")) {
-        oarsub += ",walltime="+json["walltime"].toString();
+        oarsub += ",walltime=" + json["walltime"].toString();
     }
 
 
     // script
     if (json.contains("script")) {
-        oarsub += " "+json["script"].toString();
+        oarsub += " " + json["script"].toString();
     } else if (json.contains("application")) {
 
         QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
         QFile script(scriptName);
 
-        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+        if (!script.open(QFile::WriteOnly | QFile::Truncate)) {
             dtkWarn() << "unable to open script for writing";
         } else {
-            script.setPermissions(QFile::ExeOwner|QFile::ReadOwner|QFile::WriteOwner);
+            script.setPermissions(QFile::ExeOwner | QFile::ReadOwner | QFile::WriteOwner);
             QTextStream out(&script);
             QString app_path = json["application"].toString();
             out << "#!/bin/bash\n";
+
             if (QFileInfo(app_path).isAbsolute()) {
                 out << json["application"].toString();
             } else {
@@ -103,11 +109,12 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
 
     // queue
     if (json.contains("queue")) {
-        oarsub += " -q "+json["queue"].toString();
+        oarsub += " -q " + json["queue"].toString();
     }
+
     // options
     if (json.contains("options")) {
-        oarsub += " "+json["options"].toString();
+        oarsub += " " + json["options"].toString();
     }
 
     dtkDebug() << oarsub;
@@ -122,6 +129,7 @@ QString  dtkDistributedResourceManagerOar::submit(QString input)
         dtkError() << "Unable to completed oarsub command";
         return QString("error");
     }
+
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkError() << "Error running oarsub :" << error;
@@ -155,6 +163,7 @@ QString dtkDistributedResourceManagerOar::deljob(QString jobid)
         dtkError() << "Unable to complete oardel command";
         return QString("ERROR");
     }
+
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkError() << "Error running oardel :" << error;
@@ -194,6 +203,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         dtkError() << "Error while parsing JSON document (OAR) : not a json object" << data;
         return QByteArray();
     }
+
     json = jsonDoc.object().toVariantMap();
 
     stat.close();
@@ -201,7 +211,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
     QVariantList jobs;
     QHash<QString, QString> activecores; //key is core id, value is jobid
 
-    foreach(QVariant qv, json) {
+    foreach (QVariant qv, json) {
         QVariantMap job = qv.toMap();
         QVariantMap dtkjob;
         QString id = job["Job_Id"].toString();
@@ -210,7 +220,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         QString qtime = job["submissionTime"].toString();
         QString stime = job["scheduledStart"].toString();
         QString walltime ;
-        QString state =job["state"].toString();
+        QString state = job["state"].toString();
+
         if (state == "Running")
             state = "running";
         else if ((state == "Waiting") && (job["reservation"].toString() == "scheduled"))
@@ -226,7 +237,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         else
             state = "unknown";
 
-        foreach(QVariant coreid, job["assigned_resources"].toList()) {
+        foreach (QVariant coreid, job["assigned_resources"].toList()) {
             activecores[coreid.toString()] = id;
         }
 
@@ -239,9 +250,11 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         QStringList resources_list = rx.capturedTexts();
         qlonglong nodes = resources_list.at(1).toInt();
         qlonglong cores = resources_list.at(2).toInt();
+
         if (cores == 0) {// all resources reserved
             cores = job["assigned_resources"].toList().count();
         }
+
         if (resources_list.count() > 3) {
             walltime = resources_list.at(3);
         } else {
@@ -251,8 +264,8 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
 
         QVariantMap jresources;
 
-        jresources.insert("nodes",nodes);
-        jresources.insert("cores",cores);
+        jresources.insert("nodes", nodes);
+        jresources.insert("cores", cores);
 
         dtkjob.insert("id", id);
         dtkjob.insert("username", user);
@@ -288,29 +301,36 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         dtkError() << "Error while parsing JSON document (OAR) : not a JSON object" << data;
         return QByteArray();
     }
+
     json = jsonDoc.object().toVariantMap();
 
     stat.close();
 
     QVariantMap nodes;
-    foreach(QVariant qv, json) {
+
+    foreach (QVariant qv, json) {
         QVariantMap jcore = qv.toMap();
+
         if (nodes.contains(jcore["host"].toString())) {
             QVariantMap core;
             QVariantMap node = nodes[jcore["host"].toString()].toMap();
             QVariantList cores = node["cores"].toList();
             QVariantList cpuids = node["cpuids"].toList();
 
-            core.insert("id",jcore["resource_id"].toString());
+            core.insert("id", jcore["resource_id"].toString());
+
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("job",activecores[core["id"].toString()]);
+                core.insert("job", activecores[core["id"].toString()]);
                 int current_busy_cores = node["cores_busy"].toInt();
-                node.insert("cores_busy", current_busy_cores+1);
+                node.insert("cores_busy", current_busy_cores + 1);
             }
+
             qlonglong cpuid =  jcore["cpu"].toLongLong();
+
             if (!cpuids.contains(cpuid)) {
                 cpuids <<  cpuid;
             }
+
             cores.append(core);
             node["cores"] = cores;
             node["cpuids"] = cpuids;
@@ -322,15 +342,18 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
             QVariantMap prop;
             QVariantMap core;
             QVariantMap node;
+
             if (jcore["cputype"].toString().contains("opteron")) {
-                prop.insert("cpu_model","opteron");
-                prop.insert("cpu_arch","x86_64");
+                prop.insert("cpu_model", "opteron");
+                prop.insert("cpu_arch", "x86_64");
             } else if (jcore["cputype"].toString().contains("xeon")) {
-                prop.insert("cpu_model","xeon");
-                prop.insert("cpu_arch","x86_64");
+                prop.insert("cpu_model", "xeon");
+                prop.insert("cpu_arch", "x86_64");
             }
-            node.insert("name",jcore["host"]);
+
+            node.insert("name", jcore["host"]);
             QString state;
+
             if (jcore["state"].toString() == "Absent")
                 if (jcore["available_upto"].toLongLong() > 0)
                     state = "standby";
@@ -346,27 +369,31 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
                 else
                     state = "busy";
             }
+
             node.insert("state", state);
             cpuids << jcore["cpu"].toLongLong();
-            node.insert("cpuids",cpuids);
-            core.insert("id",jcore["resource_id"]);
+            node.insert("cpuids", cpuids);
+            core.insert("id", jcore["resource_id"]);
+
             if (!activecores[core["id"].toString()].isEmpty()) {
-                core.insert("job",activecores[core["id"].toString()]);
-                node.insert("cores_busy",1);
+                core.insert("job", activecores[core["id"].toString()]);
+                node.insert("cores_busy", 1);
             } else {
-                node.insert("cores_busy",0);
+                node.insert("cores_busy", 0);
             }
+
             cores << core;
             props << prop;
-            node.insert("cores",cores);
-            node.insert("properties",props);
+            node.insert("cores", cores);
+            node.insert("properties", props);
             nodes.insert(jcore["host"].toString(), node);
         }
     }
 
     QVariantList realnodes;
+
     // now we can compute the number of cpus per node
-    foreach(QVariant qv, nodes) {
+    foreach (QVariant qv, nodes) {
         QVariantMap map = qv.toMap();
         qlonglong cpus  = map["cpuids"].toList().count();
 //        qlonglong cores = map["cores"].toList().count();
@@ -374,6 +401,7 @@ QByteArray dtkDistributedResourceManagerOar::status(void)
         map.remove("cpuids");
         realnodes << map;
     }
+
     result.insert("nodes", realnodes);
 
     return QJsonDocument(QJsonObject::fromVariantMap(result)).toJson();

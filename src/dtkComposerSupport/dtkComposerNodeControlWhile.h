@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlWhile.h --- 
- * 
+/* dtkComposerNodeControlWhile.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 24 16:52:08 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 7
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONTROLWHILE_H
@@ -28,7 +28,7 @@ class dtkComposerNodeControlWhilePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlWhile : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlWhile(void);
+    dtkComposerNodeControlWhile(void);
     virtual ~dtkComposerNodeControlWhile(void);
 
 public:
@@ -42,7 +42,7 @@ public:
     void setConditions(void);
     void setOutputs(void);
     void setVariables(void);
-     int selectBranch(void);
+    int selectBranch(void);
     void begin(void);
     void end(void);
 

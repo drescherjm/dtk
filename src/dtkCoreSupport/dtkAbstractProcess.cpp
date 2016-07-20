@@ -1,5 +1,5 @@
-/* dtkAbstractProcess.cpp --- 
- * 
+/* dtkAbstractProcess.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Nov  7 16:01:09 2008 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 115
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractProcess.h"
@@ -152,7 +152,7 @@ int dtkAbstractProcess::update(void)
 
 void dtkAbstractProcess::onCanceled (void)
 {
-    //DTK_DEFAULT_IMPLEMENTATION;  
+    //DTK_DEFAULT_IMPLEMENTATION;
 }
 
 bool dtkAbstractProcess::read(const QString& file)
@@ -208,20 +208,20 @@ void dtkAbstractProcess::setParameter(int data, int channel, int frame)
     Q_UNUSED(frame);
 }
 
-void dtkAbstractProcess::setParameter(int* data)
+void dtkAbstractProcess::setParameter(int *data)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
 }
 
-void dtkAbstractProcess::setParameter(int* data, int channel)
+void dtkAbstractProcess::setParameter(int *data, int channel)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
     Q_UNUSED(channel);
 }
 
-void dtkAbstractProcess::setParameter(int* data, int channel, int frame)
+void dtkAbstractProcess::setParameter(int *data, int channel, int frame)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
@@ -250,20 +250,20 @@ void dtkAbstractProcess::setParameter(qlonglong data, int channel, int frame)
     Q_UNUSED(frame);
 }
 
-void dtkAbstractProcess::setParameter(qlonglong* data)
+void dtkAbstractProcess::setParameter(qlonglong *data)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
 }
 
-void dtkAbstractProcess::setParameter(qlonglong* data, int channel)
+void dtkAbstractProcess::setParameter(qlonglong *data, int channel)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
     Q_UNUSED(channel);
 }
 
-void dtkAbstractProcess::setParameter(qlonglong* data, int channel, int frame)
+void dtkAbstractProcess::setParameter(qlonglong *data, int channel, int frame)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
@@ -316,20 +316,20 @@ void dtkAbstractProcess::setParameter(double *data, int count, int channel, int 
     Q_UNUSED(frame);
 }
 
-void dtkAbstractProcess::setParameter(dtkAbstractObject*  data)
+void dtkAbstractProcess::setParameter(dtkAbstractObject  *data)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
 }
 
-void dtkAbstractProcess::setParameter(dtkAbstractObject*  data, int channel)
+void dtkAbstractProcess::setParameter(dtkAbstractObject  *data, int channel)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);
     Q_UNUSED(channel);
 }
 
-void dtkAbstractProcess::setParameter(dtkAbstractObject*  data, int channel, int frame)
+void dtkAbstractProcess::setParameter(dtkAbstractObject  *data, int channel, int frame)
 {
     //DTK_DEFAULT_IMPLEMENTATION;
     Q_UNUSED(data);

@@ -10,7 +10,7 @@
  */
 
 /* Commentary:
- * This file only provides documentation - the implementation of the class 
+ * This file only provides documentation - the implementation of the class
  * is in the header.
  */
 
@@ -22,27 +22,27 @@
 
 /*! \class      dtkSmartPointer
  *  \brief      A smart pointer for reference counting dtk objects.
- *  
- * A smart pointer for automatic reference counting of anything 
- * derived from dtkAbstractObject.The class can also be used with any class 
+ *
+ * A smart pointer for automatic reference counting of anything
+ * derived from dtkAbstractObject.The class can also be used with any class
  * which implements retain() and release().
- * 
+ *
  * This class automatically increases the reference count of pointers assigned
  * to it, and decreases the reference count when it goes out of scope.
- * 
+ *
  * Warning : dtkAbstractObject currently uses this->deleteLater() to delete
- * itself when the reference count reaches zero. This means the object will 
+ * itself when the reference count reaches zero. This means the object will
  * not be deleted until an event loop is reached.
- * 
+ *
  * Code example :
  * \code
  *  dtkSmartPointer< dtkAbstractData > myInstance;
  *  myInstance = factory->createSmartPointer( "MyDataTypeName" );
  * \endcode
- * Here, the dtkSmartPointer takes ownership of the object created by the factory. It will be 
+ * Here, the dtkSmartPointer takes ownership of the object created by the factory. It will be
  * deleted when the dtkSmartPointer goes out of scope, unless another object takes it.
- * 
- * It is also safe to use dtkSmartPointer in containers from Qt : 
+ *
+ * It is also safe to use dtkSmartPointer in containers from Qt :
  * \code
  *  typedef QHash<QString, dtkSmartPointer< dtkAbstractData > > DataContainer;
  *  DataContainer myHashMapContainer;
@@ -51,8 +51,8 @@
  *  myHashMapContainer["gee"] = myOtherInstance2;
  *  myHashMapContainer.clear();
  * \endcode
- * 
- * And STL containers : 
+ *
+ * And STL containers :
  * \code
  * typedef std::vector< dtkSmartPointer< dtkAbstractData > > StlContainer;
  * StlContainer myVector;
@@ -75,8 +75,8 @@
 */
 
 /*! \fn        template < TR > dtkSmartPointer< T >::dtkSmartPointer(const dtkSmartPointer< TR > &p)
-    \brief      Constructor from SmartPointer of other type. 
-                Managed pointer is initialized with object from p using dynamic_cast. 
+    \brief      Constructor from SmartPointer of other type.
+                Managed pointer is initialized with object from p using dynamic_cast.
                 The reference count of p is increased by 1 if the cast succeeds.
     \param      p : SmartPointer that is copied.
 */
@@ -120,7 +120,7 @@
     \fn         bool dtkSmartPointer< T >::operator==( const dtkSmartPointer< TR > &r ) const
     \fn         bool dtkSmartPointer< T >::operator==(const dtkSmartPointer &r) const
     \brief      Compare with another pointer.
-                Explicitly templating for dtkSmartPointer<TR> means that no temporary 
+                Explicitly templating for dtkSmartPointer<TR> means that no temporary
                 needs to be created - and hence no additional retain / release.
     \return     True if static_cast< T* >(r) == d.
 */
@@ -128,7 +128,7 @@
 /*! \fn         bool dtkSmartPointer< T >::operator!=(TR r) const
     \fn         bool dtkSmartPointer< T >::operator!=( const dtkSmartPointer< TR > &r ) const
     \fn         bool dtkSmartPointer< T >::operator!=(const dtkSmartPointer &r) const
-                Explicitly templating for dtkSmartPointer<TR> means that no temporary 
+                Explicitly templating for dtkSmartPointer<TR> means that no temporary
                 needs to be created - and hence no additional retain / release.
     \brief      Compare with another pointer.
     \return     True if static_cast< T* >(r) != d.
@@ -169,8 +169,8 @@
 */
 
 /*! \fn         template<TR> dtkSmartPointer& dtkSmartPointer< T >::operator=(const dtkSmartPointer<TR>& r)
-    \brief      Overload operator assignment with dtkSmartPointer of other type. 
-                Managed pointer is assigned using dynamic_cast of pointer in r. 
+    \brief      Overload operator assignment with dtkSmartPointer of other type.
+                Managed pointer is assigned using dynamic_cast of pointer in r.
                 The reference count of p is increased by 1 if the cast succeeds.
     \param      r : SmartPointer that is copied.
     \return     *this.

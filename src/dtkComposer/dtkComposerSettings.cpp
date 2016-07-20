@@ -22,9 +22,11 @@
 dtkComposerSettings::dtkComposerSettings(void) : QSettings(QSettings::IniFormat, QSettings::UserScope, "inria", "dtk-composer")
 {
     this->beginGroup("extension");
-    if(!this->allKeys().contains("plugins")){
+
+    if (!this->allKeys().contains("plugins")) {
         this->setValue("plugins", QString());
     }
+
     this->sync();
     this->endGroup();
 }

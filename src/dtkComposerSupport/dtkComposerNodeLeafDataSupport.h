@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,7 +28,7 @@
 template <> class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeObject<dtkAbstractData> : public dtkComposerNodeLeafObject
 {
 public:
-             dtkComposerNodeObject(void);
+    dtkComposerNodeObject(void);
     virtual ~dtkComposerNodeObject(void);
 
 public:
@@ -63,5 +63,5 @@ protected:
 
 typedef dtkComposerNodeObject<dtkAbstractData> dtkComposerNodeLeafDataSupport;
 
-// 
+//
 // dtkComposerNodeLeafDataSupport.h ends here

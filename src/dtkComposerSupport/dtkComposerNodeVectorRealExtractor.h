@@ -28,7 +28,7 @@ class dtkComposerNodeVectorRealExtractorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealExtractor : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealExtractor(void);
+    dtkComposerNodeVectorRealExtractor(void);
     ~dtkComposerNodeVectorRealExtractor(void);
 
 public:
@@ -60,7 +60,7 @@ class dtkComposerNodeVectorRealExtractorSubVectorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVectorRealExtractorSubVector : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVectorRealExtractorSubVector(void);
+    dtkComposerNodeVectorRealExtractorSubVector(void);
     ~dtkComposerNodeVectorRealExtractorSubVector(void);
 
 public:

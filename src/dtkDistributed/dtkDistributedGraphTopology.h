@@ -42,41 +42,107 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedGraphTopologyVertex
     qlonglong first_pos;
 
 public:
-    dtkDistributedGraphTopologyVertex(const dtkDistributedGraphTopology *graph, qlonglong id) : g(graph), m_id(id) { init(); }
-    dtkDistributedGraphTopologyVertex(const dtkDistributedGraphTopologyVertex& o) : g(o.g), m_id(o.m_id) { init(); }
+    dtkDistributedGraphTopologyVertex(const dtkDistributedGraphTopology *graph, qlonglong id) : g(graph), m_id(id) {
+        init();
+    }
+    dtkDistributedGraphTopologyVertex(const dtkDistributedGraphTopologyVertex& o) : g(o.g), m_id(o.m_id) {
+        init();
+    }
 
 public:
-    dtkDistributedGraphTopologyVertex& operator = (const dtkDistributedGraphTopologyVertex& o) { m_id = o.m_id; init(); return *this; }
+    dtkDistributedGraphTopologyVertex& operator = (const dtkDistributedGraphTopologyVertex& o) {
+        m_id = o.m_id;
+        init();
+        return *this;
+    }
 
 public:
-    qlonglong id(void) const { return m_id; }
+    qlonglong id(void) const {
+        return m_id;
+    }
 
 public:
-    qlonglong neighbourCount(void) const { return *c_it; }
-    qlonglong neighbourPos(qlonglong j) const { return *v_it + j; }
-    qlonglong neighbourLocalPos(qlonglong j) const { return *v_it + j - first_pos; }
+    qlonglong neighbourCount(void) const {
+        return *c_it;
+    }
+    qlonglong neighbourPos(qlonglong j) const {
+        return *v_it + j;
+    }
+    qlonglong neighbourLocalPos(qlonglong j) const {
+        return *v_it + j - first_pos;
+    }
 
 public:
-    dtkDistributedArray<qlonglong>::const_iterator begin(void) const { return n_it; }
-    dtkDistributedArray<qlonglong>::const_iterator   end(void) const { return n_it + *c_it; }
+    dtkDistributedArray<qlonglong>::const_iterator begin(void) const {
+        return n_it;
+    }
+    dtkDistributedArray<qlonglong>::const_iterator   end(void) const {
+        return n_it + *c_it;
+    }
 
 public:
-    bool operator == (const dtkDistributedGraphTopologyVertex& o) const { return (m_id == o.m_id); }
-    bool operator != (const dtkDistributedGraphTopologyVertex& o) const { return (m_id != o.m_id); }
-    bool operator <  (const dtkDistributedGraphTopologyVertex& o) const { return (m_id <  o.m_id); }
-    bool operator <= (const dtkDistributedGraphTopologyVertex& o) const { return (m_id <= o.m_id); }
-    bool operator >  (const dtkDistributedGraphTopologyVertex& o) const { return (m_id >  o.m_id); }
-    bool operator >= (const dtkDistributedGraphTopologyVertex& o) const { return (m_id >= o.m_id); }
+    bool operator == (const dtkDistributedGraphTopologyVertex& o) const {
+        return (m_id == o.m_id);
+    }
+    bool operator != (const dtkDistributedGraphTopologyVertex& o) const {
+        return (m_id != o.m_id);
+    }
+    bool operator <  (const dtkDistributedGraphTopologyVertex& o) const {
+        return (m_id <  o.m_id);
+    }
+    bool operator <= (const dtkDistributedGraphTopologyVertex& o) const {
+        return (m_id <= o.m_id);
+    }
+    bool operator >  (const dtkDistributedGraphTopologyVertex& o) const {
+        return (m_id >  o.m_id);
+    }
+    bool operator >= (const dtkDistributedGraphTopologyVertex& o) const {
+        return (m_id >= o.m_id);
+    }
 
 public:
-    dtkDistributedGraphTopologyVertex& operator ++ (void) { ++m_id; advance(); return *this; }
-    dtkDistributedGraphTopologyVertex  operator ++ (int)  { dtkDistributedGraphTopologyVertex o(*this); ++m_id; advance(); return o; }
-    dtkDistributedGraphTopologyVertex& operator -- (void) { --m_id; rewind(); return *this; }
-    dtkDistributedGraphTopologyVertex  operator -- (int)  { dtkDistributedGraphTopologyVertex o(*this); --m_id; rewind(); return o; }
-    dtkDistributedGraphTopologyVertex& operator += (qlonglong j) { m_id += j; advance(j); return *this; }
-    dtkDistributedGraphTopologyVertex& operator -= (qlonglong j) { m_id -= j; rewind(j); return *this; }
-    dtkDistributedGraphTopologyVertex  operator +  (qlonglong j) const { dtkDistributedGraphTopologyVertex o(*this); o += j; return o; }
-    dtkDistributedGraphTopologyVertex  operator -  (qlonglong j) const { dtkDistributedGraphTopologyVertex o(*this); o -= j; return o; }
+    dtkDistributedGraphTopologyVertex& operator ++ (void) {
+        ++m_id;
+        advance();
+        return *this;
+    }
+    dtkDistributedGraphTopologyVertex  operator ++ (int)  {
+        dtkDistributedGraphTopologyVertex o(*this);
+        ++m_id;
+        advance();
+        return o;
+    }
+    dtkDistributedGraphTopologyVertex& operator -- (void) {
+        --m_id;
+        rewind();
+        return *this;
+    }
+    dtkDistributedGraphTopologyVertex  operator -- (int)  {
+        dtkDistributedGraphTopologyVertex o(*this);
+        --m_id;
+        rewind();
+        return o;
+    }
+    dtkDistributedGraphTopologyVertex& operator += (qlonglong j) {
+        m_id += j;
+        advance(j);
+        return *this;
+    }
+    dtkDistributedGraphTopologyVertex& operator -= (qlonglong j) {
+        m_id -= j;
+        rewind(j);
+        return *this;
+    }
+    dtkDistributedGraphTopologyVertex  operator +  (qlonglong j) const {
+        dtkDistributedGraphTopologyVertex o(*this);
+        o += j;
+        return o;
+    }
+    dtkDistributedGraphTopologyVertex  operator -  (qlonglong j) const {
+        dtkDistributedGraphTopologyVertex o(*this);
+        o -= j;
+        return o;
+    }
 
 private:
     void init(void);
@@ -108,8 +174,8 @@ public:
 
 public:
     typedef Neighbours value_type;
-    typedef value_type* pointer;
-    typedef const value_type* const_pointer;
+    typedef value_type *pointer;
+    typedef const value_type *const_pointer;
     typedef value_type& reference;
     typedef const value_type& const_reference;
     typedef qptrdiff difference_type;
@@ -171,8 +237,12 @@ public:
     qlonglong  firstNeighbourId(qlonglong vertex_id) const;
 
 public:
-    vertex beginVertex() const { return vertex(this, this->m_mapper->firstIndex(this->wid())); }
-    vertex   endVertex() const { return vertex(this, this->m_mapper->lastIndex(this->wid()) + 1); }
+    vertex beginVertex() const {
+        return vertex(this, this->m_mapper->firstIndex(this->wid()));
+    }
+    vertex   endVertex() const {
+        return vertex(this, this->m_mapper->lastIndex(this->wid()) + 1);
+    }
 
 public:
     iterator cbegin(void) const;
@@ -205,10 +275,10 @@ protected:
     dtkDistributedArray<qlonglong> *m_vertex_to_edge;
 
     dtkDistributedArray<qlonglong> *m_edge_to_vertex;
-    
+
 public:
     struct DDData {
-    
+
         EdgeMap map;
         EdgeMap map_hybrid;
         EdgeMap map_remote;
@@ -220,10 +290,10 @@ public:
 
         dtkDistributedMapper *mapper;
         dtkDistributedArray<qlonglong> *positions;
-        
+
         dtkArray<qlonglong, 0> local_vertex_to_edge;
         dtkArray<qlonglong, 0> local_edge_to_vertex;
-        
+
         QMap<qlonglong, qlonglong> glob_to_loc;
         dtkArray<qlonglong, 0> loc_to_glob;
     } m_dd;

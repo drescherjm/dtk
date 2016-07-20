@@ -23,7 +23,7 @@ class dtkIteratorTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkIteratorTestCase(void);
+    dtkIteratorTestCase(void);
     virtual ~dtkIteratorTestCase(void);
 
 private slots:

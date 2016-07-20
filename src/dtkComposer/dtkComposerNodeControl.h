@@ -1,16 +1,16 @@
-/* dtkComposerNodeControl.h --- 
- * 
+/* dtkComposerNodeControl.h ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -25,13 +25,13 @@ class dtkComposerNodeControlPrivate;
 class dtkComposerTransmitterProxyLoop;
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeControl 
+// dtkComposerNodeControl
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeControl : public dtkComposerNode
 {
 public:
-             dtkComposerNodeControl(void);
+    dtkComposerNodeControl(void);
     virtual ~dtkComposerNodeControl(void);
 
 public:

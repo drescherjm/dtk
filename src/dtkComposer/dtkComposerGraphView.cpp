@@ -1,5 +1,5 @@
-/* dtkComposerGraphView.cpp --- 
- * 
+/* dtkComposerGraphView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:43:33 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 22
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraphView.h"
@@ -28,7 +28,7 @@ public:
     bool graphviz_avail;
 };
 
-dtkComposerGraphView::dtkComposerGraphView(QWidget *parent) : QSvgWidget(parent),d(new dtkComposerGraphViewPrivate)
+dtkComposerGraphView::dtkComposerGraphView(QWidget *parent) : QSvgWidget(parent), d(new dtkComposerGraphViewPrivate)
 {
     d->graph = NULL;
     d->graphviz_avail = true;
@@ -51,8 +51,9 @@ void dtkComposerGraphView::update(void)
     QString command = "dot";
     QProcess cmd;
     QStringList PATH =  QProcessEnvironment::systemEnvironment().value("PATH").split(":") ;
-    QDir::setSearchPaths("bin",PATH);
-    if(QFile("bin:"+command).exists()) {
+    QDir::setSearchPaths("bin", PATH);
+
+    if (QFile("bin:" + command).exists()) {
 
         dtkTrace() << "run graphviz dot" ;
         cmd.start(command, arglist, QProcess::Unbuffered | QProcess::ReadWrite);
@@ -61,6 +62,7 @@ void dtkComposerGraphView::update(void)
         cmd.waitForBytesWritten();
         qlonglong timeout = 3000;
         QString stdout_data;
+
         if (cmd.waitForFinished(timeout)) {
             QByteArray svg = cmd.readAllStandardOutput();
             this->load(svg);

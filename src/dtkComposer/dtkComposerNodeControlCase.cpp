@@ -159,7 +159,7 @@ void dtkComposerNodeControlCase::removeBlock(int id)
     delete d->blocks_md.takeAt(id);
 
     d->blocks.removeAt(id);
-    delete d->blocks_input.takeAt(id-1);
+    delete d->blocks_input.takeAt(id - 1);
 
     for (int i = 1; i < d->blocks.count(); ++i) {
         d->blocks_md.at(i)->setTitle("Case#" + QString::number(i));
@@ -203,12 +203,13 @@ int dtkComposerNodeControlCase::selectBranch(void)
         return d->block_id;
 
     QString s_cond = var.toString();
-    int count = d->blocks.count() - 1;    
+    int count = d->blocks.count() - 1;
+
     for (int i = 0; i < count; ++i) {
-	if (s_cond == d->blocks_input.at(i)->variant().toString()) {
-	    d->block_id = i + 1;
-	    break;
-	}
+        if (s_cond == d->blocks_input.at(i)->variant().toString()) {
+            d->block_id = i + 1;
+            break;
+        }
     }
 
     return d->block_id;
@@ -223,9 +224,11 @@ void dtkComposerNodeControlCase::end(void)
 {
     int count = d->blocks.count();
     bool active;
+
     for (int i = 0; i < count; ++i) {
         active = (i == d->block_id);
-        foreach(dtkComposerTransmitter *t, d->blocks.at(i)->emitters()) {
+
+        foreach (dtkComposerTransmitter *t, d->blocks.at(i)->emitters()) {
             t->setActive(active);
         }
     }

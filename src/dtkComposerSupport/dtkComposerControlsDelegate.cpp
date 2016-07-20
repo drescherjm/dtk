@@ -1,5 +1,5 @@
-/* dtkComposerControlsDelegate.cpp --- 
- * 
+/* dtkComposerControlsDelegate.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov 28 15:12:23 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 183
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerControls.h"

@@ -31,8 +31,8 @@ class DTKPLOTSUPPORT_EXPORT dtkPlotCurve : public QObject
     Q_OBJECT
 
 public:
-     dtkPlotCurve(const QString& title = QString());
-     dtkPlotCurve(const dtkPlotCurve& other);
+    dtkPlotCurve(const QString& title = QString());
+    dtkPlotCurve(const dtkPlotCurve& other);
     ~dtkPlotCurve(void);
 
 public:

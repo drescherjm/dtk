@@ -1,11 +1,11 @@
 /* dtkCorePlugin.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: lun. avril 14 10:48:03 2014 (+0200)
  */
 
 /* Change Log:
- * 
+ *
  */
 
 /*!

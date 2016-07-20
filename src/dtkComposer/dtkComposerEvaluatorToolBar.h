@@ -28,8 +28,8 @@ class DTKCOMPOSER_EXPORT dtkComposerEvaluatorToolBar : public QToolBar
     Q_OBJECT
 
 public:
-             dtkComposerEvaluatorToolBar(const QString & title, QWidget *parent = 0);
-             dtkComposerEvaluatorToolBar(QWidget *parent = 0);
+    dtkComposerEvaluatorToolBar(const QString& title, QWidget *parent = 0);
+    dtkComposerEvaluatorToolBar(QWidget *parent = 0);
     virtual ~dtkComposerEvaluatorToolBar(void);
 
 public slots:

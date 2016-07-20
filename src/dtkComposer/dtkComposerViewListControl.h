@@ -27,7 +27,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewListControl : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerViewListControl(QWidget *parent = 0);
+    dtkComposerViewListControl(QWidget *parent = 0);
     ~dtkComposerViewListControl(void);
 
 public:

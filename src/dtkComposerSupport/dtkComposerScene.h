@@ -41,7 +41,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-             dtkComposerScene(QObject *parent = 0);
+    dtkComposerScene(QObject *parent = 0);
     virtual ~dtkComposerScene(void);
 
 // #pragma mark -

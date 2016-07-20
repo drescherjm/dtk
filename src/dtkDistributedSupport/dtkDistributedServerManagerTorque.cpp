@@ -51,7 +51,8 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
     qint64 globalcores = 0;
 
     QDomNodeList nodes = document.elementsByTagName("Node");
-    for(int i = 0; i < nodes.count(); i++) {
+
+    for (int i = 0; i < nodes.count(); i++) {
         QVariantMap node;
         QVariantMap props;
         int np = nodes.item(i).firstChildElement("np").text().toInt();
@@ -74,7 +75,8 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         // Everything here is specific to nef setup.
         props.insert("infiniband", "QDR");
         props.insert("ethernet", "1G");
-        foreach( prop, properties ) {
+
+        foreach ( prop, properties ) {
             if (prop.contains("opteron")) {
                 props.insert("cpu_model", "opteron");
                 props.insert("cpu_arch", "x86_64");
@@ -91,6 +93,7 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
                 props.insert("gpu_model", "T10");
                 props.insert("gpu_arch", "nvidia-1.3");
             }
+
             if (prop.contains("dellr815")) {
                 ncpus = "4";
             }
@@ -101,27 +104,32 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         QRegExp rx("(\\d+)/(\\d+)\\[?(\\d*)\\]?\\..*");
         QVariantList cores;
         qint64 njobs = 0;
-        for (int c=0;c<np;c++) {
+
+        for (int c = 0; c < np; c++) {
             QVariantMap core;
             // torque doesn't define a unique id per core, so assigned
             // a unique number to each core of the cluster
-            core.insert("id",globalcores +c);
+            core.insert("id", globalcores + c);
             cores << core;
         }
+
         if (rjobs.at(0).count() > 0) { // running jobs ?
-            foreach( QString rjob, rjobs ) {
+            foreach ( QString rjob, rjobs ) {
                 rx.indexIn(rjob);
                 QStringList list = rx.capturedTexts();
                 njobs++;
                 qint64 jobcore = list.at(1).toInt();
                 QVariantMap q = cores[jobcore].toMap();
+
                 if (list.at(3).isEmpty())
-                    q.insert("job",list.at(2));
+                    q.insert("job", list.at(2));
                 else
-                    q.insert("job",list.at(2)+"[]"); // array job
+                    q.insert("job", list.at(2) + "[]"); // array job
+
                 cores[jobcore] = q;
             }
         }
+
         node.insert("cores", cores );
         node.insert("cpus", ncpus);
         node.insert("cores_busy", njobs);
@@ -130,12 +138,13 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         node.insert("properties", props);
 
         if (state.contains("job-exclusive")) {
-            state="busy";
+            state = "busy";
         } else if (state.contains("free")) {
-            state="free";
+            state = "free";
         } else {
-            state="down";
+            state = "down";
         }
+
         node.insert("state", state);
         jnodes << node;
         result.insert("nodes", jnodes);
@@ -145,7 +154,8 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
     // Now get the jobs
     document = getXML("qstat -x");
     QDomNodeList jobs = document.elementsByTagName("Job");
-    for(int i = 0; i < jobs.count(); i++) {
+
+    for (int i = 0; i < jobs.count(); i++) {
         QVariantMap job;
         QVariantMap jresources;
 
@@ -161,34 +171,42 @@ QByteArray  dtkDistributedServerManagerTorque::status(void)
         QString nodes = rlist.at(0);
         QString cores = ppn.last();
 
-        jresources.insert("nodes",nodes);
-        jresources.insert("cores",cores);
+        jresources.insert("nodes", nodes);
+        jresources.insert("cores", cores);
 
         QString walltime = resources_list.firstChildElement("walltime").text().simplified() ;
         QString state;
-        char J= jobs.item(i).firstChildElement("job_state").text().simplified().at(0).unicode();
+        char J = jobs.item(i).firstChildElement("job_state").text().simplified().at(0).unicode();
+
         switch (J) {
         case 'R' : {
             state = "running";
             stime = jobs.item(i).firstChildElement("start_time").text().simplified();
             break;
         }
+
         case 'Q' :
             state = "queued";    break;
+
         case 'S' :
             state = "suspended"; break;
+
         case 'H' :
             state = "blocked";   break;
+
         case 'E' : {
             state = "exiting";
             stime = jobs.item(i).firstChildElement("start_time").text().simplified();
             break;
         }
+
         case 'W' :
             state = "scheduled"; break;
+
         default  :
             state = "unknown";   break;
         };
+
         job.insert("id", id);
         job.insert("username", user);
         job.insert("queue", queue);
@@ -224,14 +242,16 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         dtkWarn() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
+
     QVariantMap json = jsonDoc.object().toVariantMap();
 
     // FIXME: we should read the properties mapping from a file instead of hardcoding it
     // Everything here is specific to nef setup.
     QVariantMap jprops = json["properties"].toMap();
     QString properties ;
+
     if (jprops.contains("cpu_model")) {
-        properties +=  ":"+jprops["cpu_model"].toString();
+        properties +=  ":" + jprops["cpu_model"].toString();
     } else if (jprops.contains("nvidia-C2050")) {
         properties += ":C2050";
     } else if (jprops.contains("nvidia-C2070")) {
@@ -241,28 +261,29 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
     }
 
     QVariantMap res = json["resources"].toMap();
+
     if (res["nodes"].toInt() == 0) {
         // no nodes, only cores; TODO
     } else if (res["cores"].toInt() == 0) {
         // no cores, only nodes; TODO
     } else {
-        qsub += " -l nodes="+res["nodes"].toString()+properties+":ppn="+res["cores"].toString();
+        qsub += " -l nodes=" + res["nodes"].toString() + properties + ":ppn=" + res["cores"].toString();
     }
 
     // walltime, syntax=HH:MM:SS
     if (json.contains("walltime")) {
-        qsub += ",walltime="+json["walltime"].toString();
+        qsub += ",walltime=" + json["walltime"].toString();
     }
 
     // script
     if (json.contains("script")) {
-        qsub += " "+json["script"].toString();
+        qsub += " " + json["script"].toString();
     } else if (json.contains("application")) {
 
         QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
         QFile script(scriptName);
 
-        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+        if (!script.open(QFile::WriteOnly | QFile::Truncate)) {
             dtkWarn() << "unable to open script for writing";
         } else {
             QTextStream out(&script);
@@ -284,12 +305,12 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
 
     // queue
     if (json.contains("queue")) {
-        qsub += " -q "+json["queue"].toString();
+        qsub += " -q " + json["queue"].toString();
     }
 
     // options
     if (json.contains("options")) {
-        qsub += " "+json["options"].toString();
+        qsub += " " + json["options"].toString();
     }
 
     dtkDebug() << DTK_PRETTY_FUNCTION << qsub;
@@ -304,6 +325,7 @@ QString dtkDistributedServerManagerTorque::submit(QString input)
         dtkError() << "Unable to completed stat command";
         return QString("ERROR");
     }
+
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkError() << "Error running qsub :" << error;
@@ -329,6 +351,7 @@ QString dtkDistributedServerManagerTorque::deljob(QString jobid)
         dtkError() << "Unable to complete qdel command";
         return QString("ERROR");
     }
+
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkError() << "Error running qdel :" << error;
@@ -361,7 +384,7 @@ QDomDocument getXML(QString command)
 
     QString data = stat.readAll();
 
-    if(!document.setContent(data, false, &error)) {
+    if (!document.setContent(data, false, &error)) {
         dtkDebug() << "Error retrieving xml output out of torque "  << error;
     }
 

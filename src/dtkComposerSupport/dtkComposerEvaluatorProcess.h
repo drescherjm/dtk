@@ -28,7 +28,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerEvaluatorProcess : public QObject
     Q_OBJECT
 
 public:
-     dtkComposerEvaluatorProcess(void);
+    dtkComposerEvaluatorProcess(void);
     ~dtkComposerEvaluatorProcess(void);
 
 public:

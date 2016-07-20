@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterAbstractEmitter.h --- 
- * 
+/* dtkComposerTransmitterAbstractEmitter.h ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: 2012 Thu Oct 11 10:43:43 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTERABSTRACTEMITTER_H
@@ -26,7 +26,7 @@
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterAbstractEmitter : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterAbstractEmitter(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterAbstractEmitter(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterAbstractEmitter(void);
 
 public:

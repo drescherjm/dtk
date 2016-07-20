@@ -1,5 +1,5 @@
-/* dtkContainer.cpp --- 
- * 
+/* dtkContainer.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:12:39 2012 (+0200)
@@ -9,11 +9,11 @@
  *     Update #: 1
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 

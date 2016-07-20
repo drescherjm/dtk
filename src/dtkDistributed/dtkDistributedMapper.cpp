@@ -24,8 +24,12 @@
 class dtkDistributedMapperPrivate
 {
 public:
-    dtkDistributedMapperPrivate(void) : ref(0), id_count(0) { clear();}
-    ~dtkDistributedMapperPrivate(void) { clear(); }
+    dtkDistributedMapperPrivate(void) : ref(0), id_count(0) {
+        clear();
+    }
+    ~dtkDistributedMapperPrivate(void) {
+        clear();
+    }
 
 public:
     void clear(void);
@@ -89,12 +93,15 @@ void dtkDistributedMapperPrivate::setMapping(const qlonglong& id_number, const q
         qlonglong step = this->id_count / this->pu_count + 1;
 
         qlonglong rest = this->id_count % this->pu_count;
-        for (qlonglong i = 0; i < rest+1; ++i) {
-            this->map << i * step;
+
+        for (qlonglong i = 0; i < rest + 1; ++i) {
+            this->map << i *step;
         }
+
         qlonglong last = rest * step;
-        for (qlonglong i = 1; i < this->pu_count-rest; ++i) {
-            this->map << last + i * (step -1);
+
+        for (qlonglong i = 1; i < this->pu_count - rest; ++i) {
+            this->map << last + i * (step - 1);
         }
     }
 
@@ -145,9 +152,11 @@ qlonglong dtkDistributedMapperPrivate::count(const qlonglong& pu_id) const
 qlonglong dtkDistributedMapperPrivate::countMax(void) const
 {
     qlonglong count_max = this->map.at(1) - this->map.at(0);
-    for(int i = 1; i < this->map.count() - 1; ++i) {
+
+    for (int i = 1; i < this->map.count() - 1; ++i) {
         count_max = qMax(count_max, this->map.at(i + 1) - this->map.at(i));
     }
+
     return count_max;
 }
 
@@ -155,12 +164,13 @@ qlonglong dtkDistributedMapperPrivate::owner(const qlonglong& global_id)
 {
     if (global_id >= this->map.at(last_pu_id + 1)) {
         ++last_pu_id;
-        while(global_id >= this->map.at(last_pu_id + 1))
+
+        while (global_id >= this->map.at(last_pu_id + 1))
             ++last_pu_id;
-    }
-    else if (global_id  < this->map.at(last_pu_id)) {
+    } else if (global_id  < this->map.at(last_pu_id)) {
         --last_pu_id;
-        while(global_id < this->map.at(last_pu_id))
+
+        while (global_id < this->map.at(last_pu_id))
             --last_pu_id;
 
     }
@@ -195,6 +205,7 @@ dtkDistributedMapper *dtkDistributedMapper::scaledClone(qlonglong factor) const
     dtkDistributedMapper *mapper = new dtkDistributedMapper;
 
     mapper->initMap(d->id_count * factor, d->pu_count);
+
     for (qlonglong i = 0; i < d->pu_count; ++i) {
         mapper->setMap(d->map[i] * factor, i);
     }

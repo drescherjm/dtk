@@ -31,12 +31,12 @@ int main(int argc, char **argv)
     parser.addPositionalArgument("plugin", "The plugin from which information is fetched.");
     parser.process(application);
 
-    if(!parser.positionalArguments().count())
+    if (!parser.positionalArguments().count())
         parser.showHelp();
 
     QString plugin = parser.positionalArguments().at(0);
 
-    if(!QLibrary::isLibrary(plugin)) {
+    if (!QLibrary::isLibrary(plugin)) {
         qDebug() << "plugin is not a  library.";
         return 1;
     }

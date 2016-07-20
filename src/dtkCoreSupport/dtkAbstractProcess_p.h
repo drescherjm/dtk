@@ -1,5 +1,5 @@
-/* dtkAbstractProcess_p.h --- 
- * 
+/* dtkAbstractProcess_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 16:39:35 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 4
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTPROCESS_P_H

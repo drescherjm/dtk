@@ -44,7 +44,7 @@ public:
 
 DTKCORESUPPORT_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkAbstractViewFactory;
 
     return s_instance;
@@ -52,24 +52,25 @@ DTKCORESUPPORT_EXPORT dtkAbstractViewFactory *dtkAbstractViewFactory::instance(v
 
 dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
 {
-    if(!d->creators.contains(type))
+    if (!d->creators.contains(type))
         return NULL;
 
     dtkAbstractView *view = d->creators[type]();
 
-    foreach(dtkAbstractViewTypeHandler key, d->animators.keys())
-        if(key.second.contains(type) || key.second.contains("any"))
+    foreach (dtkAbstractViewTypeHandler key, d->animators.keys())
+        if (key.second.contains(type) || key.second.contains("any"))
             view->addAnimator(d->animators[key]());
 
-    foreach(dtkAbstractViewTypeHandler key, d->navigators.keys())
-        if(key.second.contains(type) || key.second.contains("any"))
+    foreach (dtkAbstractViewTypeHandler key, d->navigators.keys())
+        if (key.second.contains(type) || key.second.contains("any"))
             view->addNavigator(d->navigators[key]());
 
-    foreach(dtkAbstractViewTypeHandler key, d->interactors.keys())
-        if(key.second.contains(type) || key.second.contains("any"))
+    foreach (dtkAbstractViewTypeHandler key, d->interactors.keys())
+        if (key.second.contains(type) || key.second.contains("any"))
             view->addInteractor(d->interactors[key]());
 
     QString prefixName;
+
     if (view->objectName().isEmpty())
         prefixName = view->metaObject()->className();
     else
@@ -78,10 +79,12 @@ dtkAbstractView *dtkAbstractViewFactory::create(const QString& type)
     const QStringList& viewsName = d->views.keys();
     int index = d->viewCount[type];
     QString name = QString("%1%2").arg(prefixName).arg(index);
+
     while (viewsName.contains(name)) {
         index++;
         name = QString("%1%2").arg(prefixName).arg(index);
     }
+
     view->setObjectName(name);
 
     d->viewCount[type]++;
@@ -102,7 +105,7 @@ QStringList dtkAbstractViewFactory::implementations(const QString& interface_nam
 {
     QStringList implementations;
 
-    if(d->interfaces.keys().contains(interface_name))
+    if (d->interfaces.keys().contains(interface_name))
         implementations << d->interfaces.values(interface_name);
     else
         qDebug() << "There is no available implementation of " << interface_name ;
@@ -123,7 +126,7 @@ dtkSmartPointer<dtkAbstractView> dtkAbstractViewFactory::createSmartPointer(cons
 
 dtkAbstractViewAnimator *dtkAbstractViewFactory::animator(const QString& type)
 {
-    foreach(dtkAbstractViewTypeHandler key, d->animators.keys())
+    foreach (dtkAbstractViewTypeHandler key, d->animators.keys())
         if (key.first == type)
             return d->animators[key]();
 
@@ -138,7 +141,7 @@ dtkSmartPointer<dtkAbstractViewAnimator> dtkAbstractViewFactory::animatorSmartPo
 
 dtkAbstractViewNavigator *dtkAbstractViewFactory::navigator(const QString& type)
 {
-    foreach(dtkAbstractViewTypeHandler key, d->navigators.keys())
+    foreach (dtkAbstractViewTypeHandler key, d->navigators.keys())
         if (key.first == type)
             return d->navigators[key]();
 
@@ -153,7 +156,7 @@ dtkSmartPointer<dtkAbstractViewNavigator> dtkAbstractViewFactory::navigatorSmart
 
 dtkAbstractViewInteractor *dtkAbstractViewFactory::interactor(const QString& type)
 {
-    foreach(dtkAbstractViewTypeHandler key, d->interactors.keys())
+    foreach (dtkAbstractViewTypeHandler key, d->interactors.keys())
         if (key.first == type)
             return d->interactors[key]();
 
@@ -168,20 +171,20 @@ dtkSmartPointer<dtkAbstractViewInteractor> dtkAbstractViewFactory::interactorSma
 
 bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func)
 {
- //   qDebug()<<"dtkAbstractViewFactory::registerViewType ";
-    if(!d->creators.contains(type)) {
+//   qDebug()<<"dtkAbstractViewFactory::registerViewType ";
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         return true;
     }
 
-  //  qDebug()<<"dtkAbstractViewFactory::registerViewType 2 ";
+    //  qDebug()<<"dtkAbstractViewFactory::registerViewType 2 ";
 
     return false;
 }
 
 bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractViewCreator func, const QString& interface_name)
 {
-    if(!d->creators.contains(type)) {
+    if (!d->creators.contains(type)) {
         d->creators.insert(type, func);
         d->interfaces.insertMulti(interface_name, type);
         return true;
@@ -192,7 +195,7 @@ bool dtkAbstractViewFactory::registerViewType(const QString& type, dtkAbstractVi
 
 bool dtkAbstractViewFactory::registerViewAnimatorType(const QString& type, const QStringList& handled, dtkAbstractViewAnimatorCreator func)
 {
-    if(!d->animators.contains(qMakePair(type, handled))) {
+    if (!d->animators.contains(qMakePair(type, handled))) {
         d->animators.insert(qMakePair(type, handled), func);
         return true;
     }
@@ -202,7 +205,7 @@ bool dtkAbstractViewFactory::registerViewAnimatorType(const QString& type, const
 
 bool dtkAbstractViewFactory::registerViewNavigatorType(const QString& type, const QStringList& handled, dtkAbstractViewNavigatorCreator func)
 {
-    if(!d->navigators.contains(qMakePair(type, handled))) {
+    if (!d->navigators.contains(qMakePair(type, handled))) {
         d->navigators.insert(qMakePair(type, handled), func);
         return true;
     }
@@ -212,7 +215,7 @@ bool dtkAbstractViewFactory::registerViewNavigatorType(const QString& type, cons
 
 bool dtkAbstractViewFactory::registerViewInteractorType(const QString& type, const QStringList& handled, dtkAbstractViewInteractorCreator func)
 {
-    if(!d->interactors.contains(qMakePair(type, handled))) {
+    if (!d->interactors.contains(qMakePair(type, handled))) {
         d->interactors.insert(qMakePair(type, handled), func);
         return true;
     }
@@ -262,11 +265,11 @@ QList<dtkAbstractViewFactory::dtkAbstractViewTypeHandler> dtkAbstractViewFactory
 
 void dtkAbstractViewFactory::clear(void)
 {
-    foreach(dtkAbstractView *view, d->views.values()) {
+    foreach (dtkAbstractView *view, d->views.values()) {
         view->deleteLater();
         view = NULL;
     }
-    
+
     d->views.clear();
     d->viewCount.clear();
     d->viewsType.clear();

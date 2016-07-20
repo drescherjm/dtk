@@ -1,11 +1,11 @@
 /* dtkMathArrayTest.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 08:31:17 2013 (+0200)
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -17,7 +17,7 @@ class dtkMathArrayTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkMathArrayTestCase(void);
+    dtkMathArrayTestCase(void);
     virtual ~dtkMathArrayTestCase(void);
 
 private slots:
@@ -57,7 +57,7 @@ private slots:
     /* void testFill(void); */
     /* void testZeroPrealloc(void); */
     /* void testExceptions(void); */
-    /* void testDataStream(void); */    
+    /* void testDataStream(void); */
 
 private slots:
     void cleanupTestCase(void);

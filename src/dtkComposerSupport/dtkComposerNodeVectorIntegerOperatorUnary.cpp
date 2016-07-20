@@ -70,7 +70,7 @@ public:
 
 dtkComposerNodeVectorIntegerOperatorUnaryScalar::dtkComposerNodeVectorIntegerOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVectorIntegerOperatorUnaryScalarPrivate)
 {
-    this->appendReceiver(&d->receiver_vec);  
+    this->appendReceiver(&d->receiver_vec);
 
     d->value = 0.;
     d->emitter_val.setData(&d->value);
@@ -90,7 +90,7 @@ dtkComposerNodeVectorIntegerOperatorUnaryScalar::~dtkComposerNodeVectorIntegerOp
 
 void dtkComposerNodeVectorIntegerOperatorUnaryUnitary::run(void)
 {
-    if (d->receiver_vec.isEmpty()){
+    if (d->receiver_vec.isEmpty()) {
         dtkWarn() << "Input not specified. Nothing is done";
         d->emitter_vec.clearData();
 
@@ -106,7 +106,7 @@ void dtkComposerNodeVectorIntegerOperatorUnaryUnitary::run(void)
 
 void dtkComposerNodeVectorIntegerOperatorUnaryScalarNorm::run(void)
 {
-    if (d->receiver_vec.isEmpty()){
+    if (d->receiver_vec.isEmpty()) {
         dtkWarn() << "Input not specified. Nothing is done";
         d->value = -1.;
 

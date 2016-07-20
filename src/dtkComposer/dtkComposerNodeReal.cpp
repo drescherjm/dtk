@@ -1,5 +1,5 @@
-/* dtkComposerNodeReal.cpp --- 
- * 
+/* dtkComposerNodeReal.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:38:46 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 108
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeReal.h"

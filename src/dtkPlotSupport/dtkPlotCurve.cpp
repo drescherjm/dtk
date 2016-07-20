@@ -1,4 +1,4 @@
-/* dtkPlotCurve.cpp --- 
+/* dtkPlotCurve.cpp ---
  *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
@@ -9,7 +9,7 @@
  *     Update #: 239
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -89,7 +89,7 @@ dtkPlotCurve::~dtkPlotCurve(void)
 
 dtkPlotCurve& dtkPlotCurve::operator=(const dtkPlotCurve& other)
 {
-    d->setTitle(other.d->title().text()); 
+    d->setTitle(other.d->title().text());
 
     d->data->setSamples(other.d->data->samples());
 
@@ -159,6 +159,7 @@ QString  dtkPlotCurve::description(void)
     QString string;
 
     string = "[ " ;
+
     for (int i = 0; i < d->data->samples().count(); i++) {
         if (i > 0)
             string.append("; ");
@@ -166,8 +167,9 @@ QString  dtkPlotCurve::description(void)
         QString stringx = QString("%1").arg(d->data->samples().at(i).x());
         QString stringy = QString("%1").arg(d->data->samples().at(i).y());
 
-        string += "(" +stringx + ", "+ stringy +")";
+        string += "(" + stringx + ", " + stringy + ")";
     }
+
     string.append(" ]");
 
     return string;

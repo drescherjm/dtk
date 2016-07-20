@@ -25,8 +25,7 @@
 // Preallocated data area for quickly building small arrays on the stack without malloc overhead
 // ///////////////////////////////////////////////////////////////////
 
-template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlignedPrealloc
-{
+template <typename T, qlonglong PreallocSize, size_t AlignT> union dtkArrayAlignedPrealloc {
     char data[sizeof(T) * PreallocSize];
     qint64 q_for_alignment_1;
     double q_for_alignment_2;
@@ -41,17 +40,25 @@ template <typename T, qlonglong PreallocSize> class dtkArrayPrealloc
 public:
     dtkArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
 
-    T *preallocData(void) { return reinterpret_cast<T *>(m_prealloc.data); }
+    T *preallocData(void) {
+        return reinterpret_cast<T *>(m_prealloc.data);
+    }
 
-    bool isPreallocated(const T *start) const { return start == reinterpret_cast<const T *>(m_prealloc.data); }
+    bool isPreallocated(const T *start) const {
+        return start == reinterpret_cast<const T *>(m_prealloc.data);
+    }
 };
 
 template <typename T> class dtkArrayPrealloc<T, 0>
 {
 public:
-    T *preallocData(void) { return 0; }
+    T *preallocData(void) {
+        return 0;
+    }
 
-    bool isPreallocated(const T *) const { return false; }
+    bool isPreallocated(const T *) const {
+        return false;
+    }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -70,22 +77,22 @@ public:
     typedef iterator Iterator;
     typedef const_iterator ConstIterator;
     typedef T value_type;
-    typedef value_type* pointer;
-    typedef const value_type* const_pointer;
+    typedef value_type *pointer;
+    typedef const value_type *const_pointer;
     typedef value_type& reference;
     typedef const value_type& const_reference;
     typedef qptrdiff difference_type;
     typedef qlonglong size_type;
 
 public:
-             dtkArray(void);
+    dtkArray(void);
     explicit dtkArray(qlonglong size);
-             dtkArray(qlonglong size, const T& value);
-             dtkArray(const T *values, qlonglong size);
-             dtkArray(std::initializer_list<T> args);
-             dtkArray(const dtkArray& other);
+    dtkArray(qlonglong size, const T& value);
+    dtkArray(const T *values, qlonglong size);
+    dtkArray(std::initializer_list<T> args);
+    dtkArray(const dtkArray& other);
 #ifdef Q_COMPILER_RVALUE_REFS
-             dtkArray(dtkArray&& other);
+    dtkArray(dtkArray&& other);
 #endif
 
 public:
@@ -163,7 +170,7 @@ public:
     void replace(qlonglong index, const T& value);
     void replace(qlonglong index, const T *values, qlonglong length);
 
-    dtkArray& fill(const T &t, qlonglong size = -1);
+    dtkArray& fill(const T& t, qlonglong size = -1);
 
     void setRawData(const T *raw_data, qlonglong size);
     void setWritableRawData(T *raw_data, qlonglong size);
@@ -205,55 +212,96 @@ public:
 public:
     const T&         at(qlonglong index) const;
     const T& operator[](qlonglong index) const;
-          T& operator[](qlonglong index);
+    T& operator[](qlonglong index);
 
-          T& first(void);
+    T& first(void);
     const T& first(void) const;
-          T& last(void);
+    T& last(void);
     const T& last(void) const;
 
     T value(qlonglong index) const;
     T value(qlonglong index, const T& defaultValue) const;
 
 public:
-    bool startsWith(const T &t) const;
-    bool   endsWith(const T &t) const;
-    bool   contains(const T &t) const;
+    bool startsWith(const T& t) const;
+    bool   endsWith(const T& t) const;
+    bool   contains(const T& t) const;
 
-    qlonglong indexOf(const T &t, qlonglong from = 0) const;
-    qlonglong lastIndexOf(const T &t, qlonglong from = -1) const;
-    qlonglong count(const T &t) const;
+    qlonglong indexOf(const T& t, qlonglong from = 0) const;
+    qlonglong lastIndexOf(const T& t, qlonglong from = -1) const;
+    qlonglong count(const T& t) const;
 
     dtkArray   mid(qlonglong pos, qlonglong length = -1) const;
     dtkArray  left(qlonglong length) const;
     dtkArray right(qlonglong length) const;
 
 public:
-    void  push_back(const T &t) {  append(t); }
-    void push_front(const T &t) { prepend(t); }
-    void  pop_back(void) {  removeLast(); }
-    void pop_front(void) { removeFirst(); }
-          reference front(void)       { return first(); }
-    const_reference front(void) const { return first(); }
-          reference  back(void)       { return  last(); }
-    const_reference  back(void) const { return  last(); }
+    void  push_back(const T& t) {
+        append(t);
+    }
+    void push_front(const T& t) {
+        prepend(t);
+    }
+    void  pop_back(void) {
+        removeLast();
+    }
+    void pop_front(void) {
+        removeFirst();
+    }
+    reference front(void)       {
+        return first();
+    }
+    const_reference front(void) const {
+        return first();
+    }
+    reference  back(void)       {
+        return  last();
+    }
+    const_reference  back(void) const {
+        return  last();
+    }
 
 public:
-          T      *data(void)       { detach(); return d->begin(); }
-    const T      *data(void) const {           return d->begin(); }
-    const T *constData(void) const {           return d->begin(); }
+    T      *data(void)       {
+        detach();
+        return d->begin();
+    }
+    const T      *data(void) const {
+        return d->begin();
+    }
+    const T *constData(void) const {
+        return d->begin();
+    }
 
 public:
-          iterator begin(iterator = iterator())                        { detach(); return d->begin(); }
-    const_iterator begin(const_iterator = const_iterator()) const      { return d->constBegin(); }
-    const_iterator cbegin(const_iterator = const_iterator()) const     { return d->constBegin(); }
-    const_iterator constBegin(const_iterator = const_iterator()) const { return d->constBegin(); }
+    iterator begin(iterator = iterator())                        {
+        detach();
+        return d->begin();
+    }
+    const_iterator begin(const_iterator = const_iterator()) const      {
+        return d->constBegin();
+    }
+    const_iterator cbegin(const_iterator = const_iterator()) const     {
+        return d->constBegin();
+    }
+    const_iterator constBegin(const_iterator = const_iterator()) const {
+        return d->constBegin();
+    }
 
-          iterator end(iterator = iterator())                        { detach(); return d->end(); }
-    const_iterator end(const_iterator = const_iterator()) const      { return d->constEnd(); }
-    const_iterator cend(const_iterator = const_iterator()) const     { return d->constEnd(); }
+    iterator end(iterator = iterator())                        {
+        detach();
+        return d->end();
+    }
+    const_iterator end(const_iterator = const_iterator()) const      {
+        return d->constEnd();
+    }
+    const_iterator cend(const_iterator = const_iterator()) const     {
+        return d->constEnd();
+    }
 
-    const_iterator constEnd(const_iterator = const_iterator()) const { return d->constEnd(); }
+    const_iterator constEnd(const_iterator = const_iterator()) const {
+        return d->constEnd();
+    }
 
 private:
     template <typename, qlonglong> friend class dtkArray;
@@ -268,7 +316,7 @@ private:
     void copyConstruct(const T *srcFrom, const T *srcTo, T *dstFrom);
     void destruct(T *from, T *to);
 
-    bool isValidIterator(const iterator &i) const;
+    bool isValidIterator(const iterator& i) const;
 };
 
 // ///////////////////////////////////////////////////////////////////

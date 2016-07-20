@@ -1,5 +1,5 @@
-/* dtkComposerNodeTrackerVrpn.cpp --- 
- * 
+/* dtkComposerNodeTrackerVrpn.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 16:51:45 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 25
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeTrackerVrpn.h"
@@ -74,13 +74,13 @@ dtkComposerNodeTrackerVrpn::~dtkComposerNodeTrackerVrpn(void)
 
 void dtkComposerNodeTrackerVrpn::run(void)
 {
-    if(!d->tracker && !d->url.isEmpty()) {
+    if (!d->tracker && !d->url.isEmpty()) {
         d->tracker = new dtkVrTrackerVrpn;
         d->tracker->setUrl(QUrl(*d->url.data()));
         d->tracker->initialize();
     }
 
-    if(!d->tracker)
+    if (!d->tracker)
         return;
 
     *(d->position) = d->tracker->headPosition();

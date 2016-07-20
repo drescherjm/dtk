@@ -32,7 +32,7 @@ public:
     };
 
 public:
-     dtkWidgetsTagCloudView(QWidget *parent = 0);
+    dtkWidgetsTagCloudView(QWidget *parent = 0);
     ~dtkWidgetsTagCloudView(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkAbstractViewAnimator_p.h --- 
- * 
+/* dtkAbstractViewAnimator_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 14:25:52 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 4
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTVIEWANIMATOR_P_H
@@ -39,9 +39,9 @@ class DTKCORESUPPORT_EXPORT dtkAbstractViewAnimatorPrivate : public dtkAbstractO
 public:
     dtkAbstractViewAnimatorPrivate(dtkAbstractViewAnimator *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractViewAnimatorPrivate(const dtkAbstractViewAnimatorPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                                  enabled(other.enabled),
-                                                                                  data(other.data),
-                                                                                  view(other.view) {}
+        enabled(other.enabled),
+        data(other.data),
+        view(other.view) {}
 
 public:
     virtual ~dtkAbstractViewAnimatorPrivate(void) {}

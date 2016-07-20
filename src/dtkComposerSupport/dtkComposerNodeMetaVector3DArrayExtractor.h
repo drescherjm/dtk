@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaVector3DArrayExtractor.h --- 
- * 
+/* dtkComposerNodeMetaVector3DArrayExtractor.h ---
+ *
  * Author: Jeremie Labroquere
  * Copyright (C) 2011 - Jeremie Labroquere, Inria.
  * Created: Mon Aug  6 15:39:13 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEMETAVECTOR3DARRAYEXTRACTOR_H
@@ -34,9 +34,9 @@ class dtkComposerNodeMetaVector3DArrayExtractorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaVector3DArrayExtractor : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaVector3DArrayExtractor(void);
+    dtkComposerNodeMetaVector3DArrayExtractor(void);
     ~dtkComposerNodeMetaVector3DArrayExtractor(void);
-    
+
 public:
     void run(void);
 
@@ -52,10 +52,10 @@ public:
 public:
     inline QString inputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "arrays";
 
-        if(port == 1)
+        if (port == 1)
             return "index";
 
         return "input";
@@ -63,7 +63,7 @@ public:
 
     inline QString outputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "array";
 
         return "output";

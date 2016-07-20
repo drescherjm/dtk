@@ -73,7 +73,7 @@ void dtkVrFlystickRecognizerPrivate::run(void)
     this->analog->register_change_handler(this, vrpn_flystick_recognizer_handle_analog);
     this->tracker->register_change_handler(this, vrpn_flystick_recognizer_handle_tracker);
 
-    while(this->running) {
+    while (this->running) {
         this->analog->mainloop();
         this->button->mainloop();
         this->tracker->mainloop();
@@ -96,8 +96,8 @@ void dtkVrFlystickRecognizerPrivate::stop(void)
 void dtkVrFlystickRecognizerPrivate::handle_button(const vrpn_BUTTONCB callback)
 {
     callback.state
-        ? emit buttonPressed(callback.button)
-        : emit buttonReleased(callback.button);
+    ? emit buttonPressed(callback.button)
+    : emit buttonReleased(callback.button);
 }
 
 void dtkVrFlystickRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
@@ -107,7 +107,7 @@ void dtkVrFlystickRecognizerPrivate::handle_analog(const vrpn_ANALOGCB callback)
 
 void dtkVrFlystickRecognizerPrivate::handle_tracker(const vrpn_TRACKERCB callback)
 {
-    if(callback.sensor == 5) {
+    if (callback.sensor == 5) {
 
         this->flystick_position[0] = callback.pos[0];
         this->flystick_position[1] = callback.pos[1];
@@ -206,19 +206,19 @@ void dtkVrFlystickRecognizer::onButtonReleased(int button)
 
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_button(void *data, const vrpn_BUTTONCB callback)
 {
-    if(dtkVrFlystickRecognizerPrivate *recognizer = static_cast<dtkVrFlystickRecognizerPrivate *>(data))
+    if (dtkVrFlystickRecognizerPrivate *recognizer = static_cast<dtkVrFlystickRecognizerPrivate *>(data))
         recognizer->handle_button(callback);
 }
 
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_analog(void *data, const vrpn_ANALOGCB callback)
 {
-    if(dtkVrFlystickRecognizerPrivate *recognizer = static_cast<dtkVrFlystickRecognizerPrivate *>(data))
+    if (dtkVrFlystickRecognizerPrivate *recognizer = static_cast<dtkVrFlystickRecognizerPrivate *>(data))
         recognizer->handle_analog(callback);
 }
 
 void VRPN_CALLBACK vrpn_flystick_recognizer_handle_tracker(void *data, const vrpn_TRACKERCB callback)
 {
-    if(dtkVrFlystickRecognizerPrivate *recognizer = static_cast<dtkVrFlystickRecognizerPrivate *>(data))
+    if (dtkVrFlystickRecognizerPrivate *recognizer = static_cast<dtkVrFlystickRecognizerPrivate *>(data))
         recognizer->handle_tracker(callback);
 }
 

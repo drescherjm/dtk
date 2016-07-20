@@ -23,7 +23,7 @@ class dtkMetaContainerSequentialTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkMetaContainerSequentialTestCase(void);
+    dtkMetaContainerSequentialTestCase(void);
     virtual ~dtkMetaContainerSequentialTestCase(void);
 
 private slots:

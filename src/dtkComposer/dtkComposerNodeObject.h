@@ -28,7 +28,7 @@ template <typename T> class dtkCorePluginFactory;
 template <typename T> class dtkComposerNodeObject : public dtkComposerNodeLeafObject
 {
 public:
-             dtkComposerNodeObject(void);
+    dtkComposerNodeObject(void);
     virtual ~dtkComposerNodeObject(void);
 
 public:

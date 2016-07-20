@@ -34,8 +34,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataReader : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkAbstractDataReader(void);
-             dtkAbstractDataReader(const dtkAbstractDataReader& other);
+    dtkAbstractDataReader(void);
+    dtkAbstractDataReader(const dtkAbstractDataReader& other);
     virtual ~dtkAbstractDataReader(void);
 
 public:

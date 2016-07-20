@@ -32,7 +32,7 @@ class dtkComposerNodeMatrixSquareRealOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMatrixSquareRealOperatorUnary(void);
+    dtkComposerNodeMatrixSquareRealOperatorUnary(void);
     ~dtkComposerNodeMatrixSquareRealOperatorUnary(void);
 
     inline QString inputLabelHint(int) {
@@ -56,7 +56,7 @@ class dtkComposerNodeMatrixSquareRealOperatorUnaryScalarPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMatrixSquareRealOperatorUnaryScalar(void);
+    dtkComposerNodeMatrixSquareRealOperatorUnaryScalar(void);
     ~dtkComposerNodeMatrixSquareRealOperatorUnaryScalar(void);
 
     inline QString inputLabelHint(int port) {

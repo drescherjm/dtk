@@ -1,5 +1,5 @@
-/* dtkComposerNodeControl.cpp --- 
- * 
+/* dtkComposerNodeControl.cpp ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:50 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 31
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeControl.h"
@@ -28,7 +28,7 @@
 
 class dtkComposerNodeControlPrivate
 {
-public:    
+public:
     QList<dtkComposerTransmitterVariant *>  input_twins;
     QList<dtkComposerTransmitterVariant *> output_twins;
 };

@@ -1,5 +1,5 @@
-/* dtkComposerNodeTrackerKinect.cpp --- 
- * 
+/* dtkComposerNodeTrackerKinect.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 26 10:27:53 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 67
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeTrackerKinect.h"
@@ -59,6 +59,7 @@ dtkComposerNodeTrackerKinect::~dtkComposerNodeTrackerKinect(void)
         d->tracker->uninitialize();
         delete d->tracker;
     }
+
     d->tracker = NULL;
 
     delete d;
@@ -68,7 +69,7 @@ dtkComposerNodeTrackerKinect::~dtkComposerNodeTrackerKinect(void)
 
 void dtkComposerNodeTrackerKinect::run(void)
 {
-    if(!d->tracker) {
+    if (!d->tracker) {
         d->tracker = new dtkVrTrackerKinect;
         d->tracker->initialize();
     }

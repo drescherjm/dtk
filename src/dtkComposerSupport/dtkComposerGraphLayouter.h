@@ -1,5 +1,5 @@
-/* dtkComposerGraphLayouter.h --- 
- * 
+/* dtkComposerGraphLayouter.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb 10 10:16:15 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 16
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERGRAPHLAYOUTER_H
@@ -26,7 +26,7 @@ class dtkComposerGraphLayouterPrivate;
 class dtkComposerGraphLayouter
 {
 public:
-     dtkComposerGraphLayouter(void);
+    dtkComposerGraphLayouter(void);
     ~dtkComposerGraphLayouter(void);
 
 public:

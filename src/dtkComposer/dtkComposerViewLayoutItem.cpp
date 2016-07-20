@@ -88,18 +88,18 @@ dtkComposerViewLayoutItemProxy::dtkComposerViewLayoutItemProxy(QWidget *parent) 
 
 dtkComposerViewLayoutItemProxy::~dtkComposerViewLayoutItemProxy(void)
 {
-    if(!d->view)
+    if (!d->view)
         goto finalize;
 
-    if(!d->view->widget())
+    if (!d->view->widget())
         goto finalize;
 
-    if(!d->view->widget()->parentWidget())
+    if (!d->view->widget()->parentWidget())
         goto finalize;
 
-    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
+    if (dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
 
-        if(proxy == this) {
+        if (proxy == this) {
 
             layout()->removeWidget(d->view);
 
@@ -125,14 +125,14 @@ dtkComposerViewWidget *dtkComposerViewLayoutItemProxy::view(void)
 
 void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
 {
-    if(!view)
+    if (!view)
         return;
 
-    if(dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(view->widget()->parentWidget())) {
+    if (dtkComposerViewLayoutItemProxy *proxy = dynamic_cast<dtkComposerViewLayoutItemProxy *>(view->widget()->parentWidget())) {
         proxy->layout()->removeWidget(view->widget());
         proxy->d->view = NULL;
 
-        if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
+        if (dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
             item->d->label->clear();
         }
 
@@ -145,7 +145,7 @@ void dtkComposerViewLayoutItemProxy::setView(dtkComposerViewWidget *view)
 
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
 
-    if(dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(this->parentWidget()->parentWidget())) {
+    if (dtkComposerViewLayoutItem *item = dynamic_cast<dtkComposerViewLayoutItem *>(this->parentWidget()->parentWidget())) {
 
         item->d->close->setEnabled(true);
         item->d->vertc->setEnabled(true);
@@ -176,13 +176,13 @@ void dtkComposerViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
 
 dtkComposerViewLayoutItemProxy *dtkComposerViewLayoutItemPrivate::firstViewChild(dtkComposerViewLayoutItem *item)
 {
-    if(item->d->proxy)
+    if (item->d->proxy)
         return item->d->proxy;
 
-    if(item->d->a)
+    if (item->d->a)
         return firstViewChild(item->d->a);
 
-    if(item->d->b)
+    if (item->d->b)
         return firstViewChild(item->d->b);
 
     return NULL;
@@ -200,7 +200,7 @@ dtkComposerViewLayoutItem::dtkComposerViewLayoutItem(dtkComposerViewLayoutItem *
 
     d->layout = NULL;
 
-    if((d->parent = parent)) {
+    if ((d->parent = parent)) {
         d->root = d->parent->d->root;
         d->layout = d->parent->d->layout;
     } else {
@@ -250,7 +250,7 @@ dtkComposerViewLayoutItem::dtkComposerViewLayoutItem(dtkComposerViewLayoutItem *
 
     d->proxy->setFocus(Qt::OtherFocusReason);
 
-    d->close->setEnabled(d->parent!=NULL);
+    d->close->setEnabled(d->parent != NULL);
     d->vertc->setEnabled(false);
     d->horzt->setEnabled(false);
     d->maxmz->setEnabled(false);
@@ -265,7 +265,7 @@ dtkComposerViewLayoutItem::~dtkComposerViewLayoutItem(void)
 
 dtkComposerViewWidget *dtkComposerViewLayoutItem::view(void)
 {
-    if(this->proxy())
+    if (this->proxy())
         return proxy()->view();
     else
         return NULL;
@@ -333,10 +333,11 @@ void dtkComposerViewLayoutItem::setLayout(dtkComposerViewLayout *layout)
 
 void dtkComposerViewLayoutItem::clear(void)
 {
-    if (d->proxy && d->proxy->view()){
+    if (d->proxy && d->proxy->view()) {
         d->proxy->view()->hide();
         emit unfocused(d->proxy->view());
     }
+
     delete d->proxy;
 
     d->proxy = new dtkComposerViewLayoutItemProxy(d->root);
@@ -370,7 +371,7 @@ void dtkComposerViewLayoutItem::clear(void)
 
 void dtkComposerViewLayoutItem::split(void)
 {
-    if(!d->proxy->view())
+    if (!d->proxy->view())
         return;
 
     QSize size = this->size();
@@ -398,18 +399,18 @@ void dtkComposerViewLayoutItem::split(void)
 
 void dtkComposerViewLayoutItem::unsplit(void)
 {
-    if(!d->a && !d->b)
+    if (!d->a && !d->b)
         return;
 
     d->root->setUpdatesEnabled(false);
 
-    if(d->layout->current() == d->a) {
+    if (d->layout->current() == d->a) {
 
         d->a->deleteLater();
 
         d->a = NULL;
 
-        if(d->b->d->a && d->b->d->b) {
+        if (d->b->d->a && d->b->d->b) {
 
             dtkComposerViewLayoutItem *a = d->b->d->a; a->d->parent = this;
             dtkComposerViewLayoutItem *b = d->b->d->b; b->d->parent = this;
@@ -431,8 +432,8 @@ void dtkComposerViewLayoutItem::unsplit(void)
 
             dtkComposerViewLayoutItemProxy *child = NULL;
 
-            if(!(child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->a)))
-                 child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->b);
+            if (!(child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->a)))
+                child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->b);
 
             if (child)
                 child->setFocus(Qt::OtherFocusReason);
@@ -458,13 +459,13 @@ void dtkComposerViewLayoutItem::unsplit(void)
         }
     }
 
-    else if(d->layout->current() == d->b) {
+    else if (d->layout->current() == d->b) {
 
         d->b->deleteLater();
 
         d->b = NULL;
 
-        if(d->a->d->a && d->a->d->b) {
+        if (d->a->d->a && d->a->d->b) {
 
             dtkComposerViewLayoutItem *a = d->a->d->a; a->d->parent = this;
             dtkComposerViewLayoutItem *b = d->a->d->b; b->d->parent = this;
@@ -486,8 +487,8 @@ void dtkComposerViewLayoutItem::unsplit(void)
 
             dtkComposerViewLayoutItemProxy *child = NULL;
 
-            if(!(child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->a)))
-                 child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->b);
+            if (!(child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->a)))
+                child = dtkComposerViewLayoutItemPrivate::firstViewChild(d->b);
 
             if (child)
                 child->setFocus(Qt::OtherFocusReason);
@@ -522,10 +523,10 @@ void dtkComposerViewLayoutItem::unsplit(void)
 
 void dtkComposerViewLayoutItem::maximize(void)
 {
-    if(d->a && d->b)
+    if (d->a && d->b)
         return;
 
-    if(this == d->root)
+    if (this == d->root)
         return;
 
     d->root->setUpdatesEnabled(false);
@@ -563,7 +564,7 @@ void dtkComposerViewLayoutItem::onFocusedIn(void)
     d->footer->style()->polish(d->footer);
     d->footer->update();
 
-    if(d->proxy->view())
+    if (d->proxy->view())
         d->root->notify(d->proxy->view());
 }
 
@@ -629,10 +630,10 @@ void dtkComposerViewLayoutItem::dropEvent(QDropEvent *event)
 {
     Q_UNUSED(event);
 
-    if(d->a && d->b)
+    if (d->a && d->b)
         return;
 
-    if(d->proxy->view())
+    if (d->proxy->view())
         return;
 
     dtkComposerViewWidget *view = dtkComposerViewController::instance()->view(event->mimeData()->text());
@@ -641,7 +642,7 @@ void dtkComposerViewLayoutItem::dropEvent(QDropEvent *event)
 
 void dtkComposerViewLayoutItem::notify(dtkComposerViewWidget *view)
 {
-    if(d->root == this)
+    if (d->root == this)
         emit focused(view);
 }
 

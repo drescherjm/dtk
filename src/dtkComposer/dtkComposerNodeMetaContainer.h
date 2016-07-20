@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -27,7 +27,7 @@ class dtkComposerNodeMetaContainerPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainer : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainer(void);
+    dtkComposerNodeMetaContainer(void);
     ~dtkComposerNodeMetaContainer(void);
 
 public:
@@ -47,7 +47,7 @@ class dtkComposerNodeMetaContainerAppendPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerAppend : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerAppend(void);
+    dtkComposerNodeMetaContainerAppend(void);
     ~dtkComposerNodeMetaContainerAppend(void);
 
 public:
@@ -67,7 +67,7 @@ class dtkComposerNodeMetaContainerSizePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerSize : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerSize(void);
+    dtkComposerNodeMetaContainerSize(void);
     ~dtkComposerNodeMetaContainerSize(void);
 
 public:
@@ -86,7 +86,7 @@ class dtkComposerNodeMetaContainerAtPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerAt : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerAt(void);
+    dtkComposerNodeMetaContainerAt(void);
     ~dtkComposerNodeMetaContainerAt(void);
 
 public:
@@ -106,7 +106,7 @@ class dtkComposerNodeMetaContainerSetAtPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerSetAt : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerSetAt(void);
+    dtkComposerNodeMetaContainerSetAt(void);
     ~dtkComposerNodeMetaContainerSetAt(void);
 
 public:
@@ -125,7 +125,7 @@ class dtkComposerNodeMetaContainerRemoveAtPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerRemoveAt : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerRemoveAt(void);
+    dtkComposerNodeMetaContainerRemoveAt(void);
     ~dtkComposerNodeMetaContainerRemoveAt(void);
 
 public:
@@ -145,7 +145,7 @@ class dtkComposerNodeMetaContainerTakeAtPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerTakeAt : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerTakeAt(void);
+    dtkComposerNodeMetaContainerTakeAt(void);
     ~dtkComposerNodeMetaContainerTakeAt(void);
 
 public:
@@ -164,7 +164,7 @@ class dtkComposerNodeMetaContainerInsertPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerInsert : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerInsert(void);
+    dtkComposerNodeMetaContainerInsert(void);
     ~dtkComposerNodeMetaContainerInsert(void);
 
 public:
@@ -184,7 +184,7 @@ class dtkComposerNodeMetaContainerPrependPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerPrepend : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerPrepend(void);
+    dtkComposerNodeMetaContainerPrepend(void);
     ~dtkComposerNodeMetaContainerPrepend(void);
 
 public:
@@ -204,7 +204,7 @@ class dtkComposerNodeMetaContainerResizePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaContainerResize : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaContainerResize(void);
+    dtkComposerNodeMetaContainerResize(void);
     ~dtkComposerNodeMetaContainerResize(void);
 
 public:

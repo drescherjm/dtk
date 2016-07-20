@@ -1,5 +1,5 @@
-/* dtkComposerNodePlotCurveAppendPoint.cpp --- 
- * 
+/* dtkComposerNodePlotCurveAppendPoint.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 97
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodePlotCurveAppendPoint.h"

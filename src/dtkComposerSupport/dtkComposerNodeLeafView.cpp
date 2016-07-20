@@ -73,11 +73,13 @@ QString dtkComposerNodeLeafView::currentImplementation(void)
 QStringList dtkComposerNodeLeafView::implementations(void)
 {
     QStringList implementations;
+
     if (this->enableDefaultImplementation())
         implementations << "default";
+
     QStringList all_implementations = dtkAbstractViewFactory::instance()->implementations(this->abstractViewType());
 
-   for (int i = 0; i < all_implementations.count(); ++i)
+    for (int i = 0; i < all_implementations.count(); ++i)
         implementations << all_implementations.at(i);
 
     return implementations;
@@ -117,7 +119,8 @@ QImage dtkComposerNodeLeafView::screenshot(void) const
     QWidget *widget = d->view->widget();
     QPixmap pixmap(widget->size());
     widget->render(&pixmap);
-    if( pixmap.width() > 1920) {
+
+    if ( pixmap.width() > 1920) {
         // limit width to FULL HD res.
         return pixmap.scaledToWidth(1920).toImage();
     }

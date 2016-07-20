@@ -1,5 +1,5 @@
-/* dtkComposerNodeProxy.cpp --- 
- * 
+/* dtkComposerNodeProxy.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar 21 10:28:20 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 8
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeProxy.h"
@@ -30,7 +30,7 @@ class dtkComposerNodeProxyPrivate
 {
 public:
     dtkComposerTransmitterProxy receiver;
-    dtkComposerTransmitterProxy emitter;    
+    dtkComposerTransmitterProxy emitter;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ public:
 dtkComposerNodeProxy::dtkComposerNodeProxy(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeProxyPrivate)
 {
     this->appendReceiver(&(d->receiver));
-    this->appendEmitter(&(d->emitter));    
+    this->appendEmitter(&(d->emitter));
 }
 
 dtkComposerNodeProxy::~dtkComposerNodeProxy(void)

@@ -1,5 +1,5 @@
-/* dtkAbstractView_p.h --- 
- * 
+/* dtkAbstractView_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 16:46:48 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 11
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTVIEW_P_H
@@ -38,10 +38,10 @@ class DTKCORESUPPORT_EXPORT dtkAbstractViewPrivate : public dtkAbstractObjectPri
 public:
     dtkAbstractViewPrivate(dtkAbstractView *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractViewPrivate(const dtkAbstractViewPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                  stereo(other.stereo),
-                                                                  animators(other.animators),
-                                                                  navigators(other.navigators),
-                                                                  interactors(other.interactors) {}
+        stereo(other.stereo),
+        animators(other.animators),
+        navigators(other.navigators),
+        interactors(other.interactors) {}
 
 public:
     virtual ~dtkAbstractViewPrivate(void) {}

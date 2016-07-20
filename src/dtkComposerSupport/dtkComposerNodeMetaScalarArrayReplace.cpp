@@ -76,7 +76,7 @@ void dtkComposerNodeMetaScalarArrayReplace::run(void)
     qlonglong  size = d->arrays->count();
     qlonglong index = (*(d->receiver_index.data()));
 
-    for (qlonglong i=0; i<size; i++)
+    for (qlonglong i = 0; i < size; i++)
         (*d->arrays->at(i))[index] = (*(d->receiver_vector.data()))[i];
 
     d->emitter_arrays.setData(d->arrays);

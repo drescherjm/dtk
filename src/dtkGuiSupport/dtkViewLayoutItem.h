@@ -40,7 +40,7 @@ class DTKGUISUPPORT_EXPORT dtkViewLayoutItemProxy : public QFrame
     Q_OBJECT
 
 public:
-     dtkViewLayoutItemProxy(QWidget *parent = 0);
+    dtkViewLayoutItemProxy(QWidget *parent = 0);
     ~dtkViewLayoutItemProxy(void);
 
 public:
@@ -73,7 +73,7 @@ class DTKGUISUPPORT_EXPORT dtkViewLayoutItem : public QFrame
     Q_OBJECT
 
 public:
-     dtkViewLayoutItem(dtkViewLayoutItem *parent = 0);
+    dtkViewLayoutItem(dtkViewLayoutItem *parent = 0);
     ~dtkViewLayoutItem(void);
 
 public:
@@ -133,11 +133,11 @@ private:
     void notify(dtkAbstractView *view);
 
 private:
-     dtkViewLayoutItemPrivate *d;
+    dtkViewLayoutItemPrivate *d;
 
 private:
-     friend class dtkViewLayoutItemPrivate;
-     friend class dtkViewLayoutItemProxy;
+    friend class dtkViewLayoutItemPrivate;
+    friend class dtkViewLayoutItemProxy;
 };
 
 #endif

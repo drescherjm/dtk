@@ -1,5 +1,5 @@
-/* dtkComposerPath.cpp --- 
- * 
+/* dtkComposerPath.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov 19 11:42:27 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 174
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerSceneNode.h"
@@ -39,9 +39,9 @@ public:
 };
 
 void dtkComposerPathPrivate::clear(void)
-{   
+{
     QLayoutItem *child;
-    
+
     while ((child = layout->takeAt(0)) != 0) {
         delete child->widget();
         delete child;
@@ -75,12 +75,12 @@ QSize dtkComposerPath::sizeHint(void) const
 
 void dtkComposerPath::setScene(dtkComposerScene *scene)
 {
-    if(d->scene)
+    if (d->scene)
         disconnect(d->scene, SIGNAL(changed()), this, SLOT(update()));
 
     d->scene = scene;
 
-    if(d->scene)
+    if (d->scene)
         connect(d->scene, SIGNAL(changed()), this, SLOT(update()));
 
     this->update();
@@ -92,13 +92,13 @@ void dtkComposerPath::update(void)
 
     dtkComposerSceneNode *current = d->scene->current();
 
-    while(current != d->scene->root()) {
+    while (current != d->scene->root()) {
 
         if (d->layout->count())
             d->layout->insertWidget(0, new QLabel(">", this));
 
         d->layout->insertWidget(0, new QLabel(current->title(), this));
-        
+
         current = current->parent();
     }
 

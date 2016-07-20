@@ -1,5 +1,5 @@
-/* dtkUpdater_p.h --- 
- * 
+/* dtkUpdater_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 12:41:15 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 10
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKUPDATER_P_H

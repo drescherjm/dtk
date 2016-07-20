@@ -34,7 +34,7 @@ class dtkComposerNodePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNode
 {
 public:
-             dtkComposerNode(void);
+    dtkComposerNode(void);
     virtual ~dtkComposerNode(void);
 
 public:

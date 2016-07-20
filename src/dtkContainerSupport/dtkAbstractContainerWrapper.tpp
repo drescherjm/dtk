@@ -1,5 +1,5 @@
-/* dtkAbstractContainerWrapper.tpp --- 
- * 
+/* dtkAbstractContainerWrapper.tpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Aug  9 14:48:22 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 12
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTCONTAINERWRAPPER_TPP
@@ -25,7 +25,7 @@ class dtkAbstractContainerWrapper;
 template <typename T> class dtkContainerVectorWrapper;
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 template <typename T> void dtkAbstractContainerWrapper::setVector(dtkContainerVector<T> *vector)

@@ -1,5 +1,5 @@
-/* dtkComposerNodeProxy.h --- 
- * 
+/* dtkComposerNodeProxy.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Mar 21 10:25:19 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEPROXY_H
@@ -28,7 +28,7 @@ class dtkComposerNodeProxyPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProxy : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeProxy(void);
+    dtkComposerNodeProxy(void);
     ~dtkComposerNodeProxy(void);
 
 public:

@@ -51,7 +51,7 @@ public:
     void setVerboseLoading (bool value);
     bool verboseLoading (void) const;
 
-          dtkPlugin *  plugin(const QString& name);
+    dtkPlugin   *plugin(const QString& name);
     QList<dtkPlugin *> plugins(void);
 
     void setPath(const QString& path);
@@ -66,7 +66,7 @@ signals:
     void   loadError(const QString& errorMessage);
 
 protected:
-     dtkPluginManager(void);
+    dtkPluginManager(void);
     ~dtkPluginManager(void);
 
     QString path(void) const;

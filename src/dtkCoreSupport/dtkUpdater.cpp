@@ -1,5 +1,5 @@
-/* dtkUpdater.cpp --- 
- * 
+/* dtkUpdater.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:27 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 50
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include <QtNetwork>
@@ -32,15 +32,16 @@ void dtkUpdaterPrivate::onRequestFinished(QNetworkReply *reply)
 
     if (reply->url() == cfgUrl) { // WARN: the url may not be the same ...
 
-        if(!cfgFile->open(QFile::ReadWrite)) {
+        if (!cfgFile->open(QFile::ReadWrite)) {
             qDebug() << "Unable to open config file  for writing.";
             return;
         }
+
         cfgFile->write(reply->readAll());
         cfgFile->flush();
         cfgFile->close();
 
-        if(!cfgFile->openMode() == QIODevice::NotOpen)
+        if (!cfgFile->openMode() == QIODevice::NotOpen)
             cfgFile->close();
 
         if (!cfgFile->open(QFile::ReadOnly | QFile::Text))
@@ -50,21 +51,23 @@ void dtkUpdaterPrivate::onRequestFinished(QNetworkReply *reply)
 
         while (!reader.atEnd()) {
             reader.readNext();
+
             if (reader.isStartElement() && reader.attributes().hasAttribute("version") && reader.attributes().value("version").toString() > qApp->applicationVersion()) {
                 reader.readNext();
-                if(reader.isCharacters()) {
+
+                if (reader.isCharacters()) {
                     binUrl.setUrl(reader.text().toString());
                 }
             }
         }
 
-        if(!cfgFile->openMode() == QIODevice::NotOpen)
+        if (!cfgFile->openMode() == QIODevice::NotOpen)
             cfgFile->close();
 
         if (reader.error())
             qDebug() << reader.error() << reader.errorString();
 
-        if(binUrl.isEmpty()) {
+        if (binUrl.isEmpty()) {
             qDebug() << "You are up to date at version" << qApp->applicationVersion();
             return;
         } else {
@@ -73,7 +76,7 @@ void dtkUpdaterPrivate::onRequestFinished(QNetworkReply *reply)
 
         char c = getchar(); getchar();
 
-        if(c == 'y')
+        if (c == 'y')
             downl(binUrl);
 
     }  else {
@@ -86,14 +89,14 @@ void dtkUpdaterPrivate::onRequestFinished(QNetworkReply *reply)
 
         char c = getchar(); getchar();
 
-        if(c == 'y')
+        if (c == 'y')
             extract();
     }
 }
 
 void dtkUpdaterPrivate::downl(const QUrl& url)
 {
-    if(!binFile->open(QFile::ReadWrite))
+    if (!binFile->open(QFile::ReadWrite))
         qDebug() << "Unable to open binary file for saving";
 
     http->get(QNetworkRequest(url));
@@ -113,7 +116,8 @@ void dtkUpdaterPrivate::extract(void)
 #else
     ;
 #endif
-    if(process.waitForFinished())
+
+    if (process.waitForFinished())
         qDebug() << "Updates have been installed successfully";
 }
 
@@ -131,7 +135,7 @@ dtkUpdater::dtkUpdater(const QUrl& cfgUrl)
     d->cfgFile = new QFile("/tmp/cfg");
     d->binFile = new QFile("/tmp/bin");
 
-    QObject::connect(d->http, SIGNAL(finished(QNetworkReply*)), d, SLOT(onRequestFinished(QNetworkReply*)));
+    QObject::connect(d->http, SIGNAL(finished(QNetworkReply *)), d, SLOT(onRequestFinished(QNetworkReply *)));
 
     d->http->get(QNetworkRequest(cfgUrl));
 }

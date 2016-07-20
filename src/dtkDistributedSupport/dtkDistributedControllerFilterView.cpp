@@ -1,5 +1,5 @@
-/* dtkDistributedControllerFilterView.cpp --- 
- * 
+/* dtkDistributedControllerFilterView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:12:41 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 271
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedNode.h"
@@ -214,14 +214,21 @@ QFlags<dtkDistributedCpu::Model> dtkDistributedControllerFilterView::modelFlags(
 
 void dtkDistributedControllerFilterView::onNetworkButtonClicked(int button)
 {
-    switch(button) {
+    switch (button) {
     case 1: d->network_flags ^= dtkDistributedNode::Ethernet1G; break;
+
     case 2: d->network_flags ^= dtkDistributedNode::Ethernet10G; break;
+
     case 3: d->network_flags ^= dtkDistributedNode::Myrinet2G; break;
+
     case 4: d->network_flags ^= dtkDistributedNode::Myrinet10G; break;
+
     case 5: d->network_flags ^= dtkDistributedNode::Infiniband10G; break;
+
     case 6: d->network_flags ^= dtkDistributedNode::Infiniband20G; break;
+
     case 7: d->network_flags ^= dtkDistributedNode::Infiniband40G; break;
+
     default:
         break;
     }
@@ -231,12 +238,17 @@ void dtkDistributedControllerFilterView::onNetworkButtonClicked(int button)
 
 void dtkDistributedControllerFilterView::onStateButtonClicked(int button)
 {
-    switch(button) {
+    switch (button) {
     case 1: d->state_flags ^= dtkDistributedNode::Free; break;
+
     case 2: d->state_flags ^= dtkDistributedNode::Busy; break;
+
     case 3: d->state_flags ^= dtkDistributedNode::Down; break;
+
     case 4: d->state_flags ^= dtkDistributedNode::StandBy; break;
+
     case 5: d->state_flags ^= dtkDistributedNode::Absent; break;
+
     default:
         break;
     }
@@ -246,11 +258,15 @@ void dtkDistributedControllerFilterView::onStateButtonClicked(int button)
 
 void dtkDistributedControllerFilterView::onBrandButtonClicked(int button)
 {
-    switch(button) {
+    switch (button) {
     case 1: d->brand_flags ^= dtkDistributedNode::Hp; break;
+
     case 2: d->brand_flags ^= dtkDistributedNode::Ibm; break;
+
     case 3: d->brand_flags ^= dtkDistributedNode::Dell; break;
+
     case 4: d->brand_flags ^= dtkDistributedNode::Carri; break;
+
     default:
         break;
     }
@@ -260,9 +276,11 @@ void dtkDistributedControllerFilterView::onBrandButtonClicked(int button)
 
 void dtkDistributedControllerFilterView::onArchButtonClicked(int button)
 {
-    switch(button) {
+    switch (button) {
     case 1: d->arch_flags ^= dtkDistributedCpu::x86; break;
+
     case 2: d->arch_flags ^= dtkDistributedCpu::x86_64; break;
+
     default:
         break;
     }
@@ -272,9 +290,11 @@ void dtkDistributedControllerFilterView::onArchButtonClicked(int button)
 
 void dtkDistributedControllerFilterView::onModelButtonClicked(int button)
 {
-    switch(button) {
+    switch (button) {
     case 1: d->model_flags ^= dtkDistributedCpu::Xeon; break;
+
     case 2: d->model_flags ^= dtkDistributedCpu::Opteron; break;
+
     default:
         break;
     }

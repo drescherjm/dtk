@@ -25,7 +25,7 @@ class dtkMetaTypeTestCase : public QObject
     Q_OBJECT
 
 public:
-             dtkMetaTypeTestCase(void);
+    dtkMetaTypeTestCase(void);
     virtual ~dtkMetaTypeTestCase(void);
 
 private slots:

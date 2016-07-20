@@ -1,16 +1,16 @@
-/* dtkComposerStackCommand.h --- 
- * 
+/* dtkComposerStackCommand.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 18:15:13 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -41,7 +41,7 @@ class dtkComposerStackCommandPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommand : public QUndoCommand
 {
 public:
-             dtkComposerStackCommand(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommand(dtkComposerStackCommand *parent = 0);
     virtual ~dtkComposerStackCommand(void);
 
 public:
@@ -62,7 +62,7 @@ class dtkComposerStackCommandCreateNodePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandCreateNode : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateNode(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandCreateNode(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateNode(void);
 
 public:
@@ -91,7 +91,7 @@ class dtkComposerStackCommandDestroyNodePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandDestroyNode : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandDestroyNode(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandDestroyNode(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandDestroyNode(void);
 
 public:
@@ -114,7 +114,7 @@ class dtkComposerStackCommandCreateEdgePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandCreateEdge : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateEdge(void);
+    dtkComposerStackCommandCreateEdge(void);
     ~dtkComposerStackCommandCreateEdge(void);
 
 public:
@@ -142,7 +142,7 @@ class dtkComposerStackCommandDestroyEdgePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandDestroyEdge : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandDestroyEdge(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandDestroyEdge(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandDestroyEdge(void);
 
 public:
@@ -165,7 +165,7 @@ class dtkComposerStackCommandCreateNotePrivate;
 class dtkComposerStackCommandCreateNote : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateNote(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandCreateNote(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateNote(void);
 
 public:
@@ -189,7 +189,7 @@ class dtkComposerStackCommandDestroyNotePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandDestroyNote : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandDestroyNote(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandDestroyNote(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandDestroyNote(void);
 
 public:
@@ -212,7 +212,7 @@ class dtkComposerStackCommandCreateGroupPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandCreateGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandCreateGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateGroup(void);
 
 public:
@@ -236,7 +236,7 @@ class dtkComposerStackCommandDestroyGroupPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandDestroyGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandDestroyGroup(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandDestroyGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandDestroyGroup(void);
 
 public:
@@ -259,7 +259,7 @@ class dtkComposerStackCommandEnterGroupPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandEnterGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandEnterGroup(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandEnterGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandEnterGroup(void);
 
 public:
@@ -283,7 +283,7 @@ class dtkComposerStackCommandLeaveGroupPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandLeaveGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandLeaveGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandLeaveGroup(void);
 
 public:
@@ -306,7 +306,7 @@ class dtkComposerStackCommandFlattenGroupPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandFlattenGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandFlattenGroup(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandFlattenGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandFlattenGroup(void);
 
 public:
@@ -329,7 +329,7 @@ class dtkComposerStackCommandUnflattenGroupPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandUnflattenGroup : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandUnflattenGroup(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandUnflattenGroup(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandUnflattenGroup(void);
 
 public:
@@ -354,7 +354,7 @@ class dtkComposerStackCommandCreatePortPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandCreatePort : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreatePort(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandCreatePort(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreatePort(void);
 
 public:
@@ -382,7 +382,7 @@ class dtkComposerStackCommandDestroyPortPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandDestroyPort : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandDestroyPort(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandDestroyPort(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandDestroyPort(void);
 
 public:
@@ -406,7 +406,7 @@ class dtkComposerStackCommandReparentNodePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandReparentNode : public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandReparentNode(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandReparentNode(void);
 
 public:
@@ -433,7 +433,7 @@ class dtkComposerStackCommandCreateBlockPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandCreateBlock: public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCreateBlock(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandCreateBlock(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCreateBlock(void);
 
 public:
@@ -456,7 +456,7 @@ class dtkComposerStackCommandDestroyBlockPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandDestroyBlock: public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandDestroyBlock(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandDestroyBlock(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandDestroyBlock(void);
 
 public:
@@ -482,7 +482,7 @@ class dtkComposerStackCommandCopyNodesPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerStackCommandCopyNodes: public dtkComposerStackCommand
 {
 public:
-     dtkComposerStackCommandCopyNodes(dtkComposerStackCommand *parent = 0);
+    dtkComposerStackCommandCopyNodes(dtkComposerStackCommand *parent = 0);
     ~dtkComposerStackCommandCopyNodes(void);
 
 public:

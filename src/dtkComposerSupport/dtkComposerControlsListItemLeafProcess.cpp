@@ -1,15 +1,15 @@
 /* dtkComposerControlsListItemLeafProcess.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: mar. févr.  4 15:07:27 2014 (+0100)
  *           By: Nicolas Niclausse
  *     Update #: 598
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkComposerControlsListItemLeafProcess.h"
@@ -46,10 +46,10 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
-dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemLeafProcessPrivate)
+dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemLeafProcessPrivate)
 {
     d->node = node;
 
@@ -82,6 +82,7 @@ QWidget *dtkComposerControlsListItemLeafProcess::widget(void)
         delete d->item;
 
     QObject *object = d->p_node->process();
+
     if (object) {
         d->item = dtkToolBoxItem::fromObject(object);
         d->implementation = d->p_node->process()->identifier();

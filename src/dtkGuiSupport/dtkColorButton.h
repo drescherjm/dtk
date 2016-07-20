@@ -1,5 +1,5 @@
-/* dtkColorButton.h --- 
- * 
+/* dtkColorButton.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:42:33 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 54
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOLORBUTTON_H
@@ -29,13 +29,13 @@ class dtkColorGrid;
 class dtkColorPopup;
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 typedef QList<QColor> dtkColorList;
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class DTKGUISUPPORT_EXPORT dtkColorButton : public QPushButton
@@ -54,7 +54,7 @@ public:
         PM_COLORGRID
     };
 
-             dtkColorButton(QWidget *parent = 0);
+    dtkColorButton(QWidget *parent = 0);
     virtual ~dtkColorButton(void);
 
     int cellSize(void) const;
@@ -64,7 +64,7 @@ public:
     const PickMode& pickModeLeft() const;
     const PickMode& pickModeRight() const;
 
-    dtkColorList* scheme(void) const;
+    dtkColorList *scheme(void) const;
 
     void setCellSize(int size);
     void setPickModeLeft(const PickMode& mode);
@@ -78,7 +78,7 @@ public slots:
     void setColor(const QColor& color);
 
 protected:
-    virtual void drawColorItem(QPixmap &pm, const QColor& color);
+    virtual void drawColorItem(QPixmap& pm, const QColor& color);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

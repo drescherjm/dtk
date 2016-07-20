@@ -46,21 +46,21 @@ public:
         STOP
     };
 
-             dtkDistributedMessage(void);
-             dtkDistributedMessage(Method method, QString jobid="", int rank= SERVER_RANK,qint64 size=0, QString type ="json",  const QByteArray  &content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
-             dtkDistributedMessage(Method method, QString jobid, int rank, const QVariant  &v, const dtkDistributedHeaders &headers= dtkDistributedHeaders());
+    dtkDistributedMessage(void);
+    dtkDistributedMessage(Method method, QString jobid = "", int rank = SERVER_RANK, qint64 size = 0, QString type = "json",  const QByteArray&  content = QByteArray(), const dtkDistributedHeaders& headers = dtkDistributedHeaders());
+    dtkDistributedMessage(Method method, QString jobid, int rank, const QVariant&  v, const dtkDistributedHeaders& headers = dtkDistributedHeaders());
     virtual ~dtkDistributedMessage(void);
 
 public:
     void addHeader(QString name, QString value);
-    void setHeader(const QString &headers);
+    void setHeader(const QString& headers);
     void setMethod(QString method);
     void setMethod(Method method);
-    void setJobid(const QString &jobid);
+    void setJobid(const QString& jobid);
     void setRank(qint16 rank);
     void setType(void);
     void setSize(void);
-    void setContent(QByteArray &content);
+    void setContent(QByteArray& content);
 
 public:
     qlonglong  send(QTcpSocket *socket);
@@ -71,11 +71,11 @@ public:
     QString         req(void);
     QString       jobid(void);
     int            rank(void);
-    QString      header(const QString &name);
+    QString      header(const QString& name);
     QString        type(void);
     qint64         size(void);
-    QByteArray &content(void);
-    QVariant   &variant(void);
+    QByteArray& content(void);
+    QVariant&   variant(void);
     QString methodString(void);
 
 public:

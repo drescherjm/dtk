@@ -59,7 +59,7 @@ void dtkComposerWidgetPrivate::download(const QUrl& url)
 
     http.get(QNetworkRequest(url));
 
-    while(!this->dwnl_ok)
+    while (!this->dwnl_ok)
         qApp->processEvents();
 
     this->file.close();
@@ -146,7 +146,7 @@ void dtkComposerWidget::setFactory(dtkComposerNodeFactory *factory)
 
 void dtkComposerWidget::setWriter(dtkComposerWriter *writer)
 {
-    if(writer) {
+    if (writer) {
 
         delete d->writer;
 
@@ -157,7 +157,7 @@ void dtkComposerWidget::setWriter(dtkComposerWriter *writer)
 
 void dtkComposerWidget::setReader(dtkComposerReader *reader)
 {
-    if(reader) {
+    if (reader) {
 
         delete d->reader;
 
@@ -174,7 +174,7 @@ bool dtkComposerWidget::open(const QUrl& url)
 
     bool status = false;
 
-    if(!d->tempName.isEmpty())
+    if (!d->tempName.isEmpty())
         status = this->open(d->tempName);
 
     return status;
@@ -201,7 +201,7 @@ bool dtkComposerWidget::saveNode(dtkComposerSceneNodeComposite *node, QString fi
 {
     QString fName = d->fileName;
 
-    if(!file.isEmpty())
+    if (!file.isEmpty())
         fName = file;
 
     d->writer->writeNode(node, fName, type);
@@ -225,15 +225,17 @@ bool dtkComposerWidget::insert(QString file)
 void dtkComposerWidget::updateRemotes(dtkComposerSceneNodeComposite *composite)
 {
 #if defined(DTK_BUILD_DISTRIBUTED)
-    foreach(dtkComposerSceneNode *node, composite->nodes()) {
+
+    foreach (dtkComposerSceneNode *node, composite->nodes()) {
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(node->wrapee()))
             remote->setComposition(d->writer->toXML(dynamic_cast<dtkComposerSceneNodeComposite *>(node)));
         else if (dtkComposerSceneNodeComposite *sub = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
             this->updateRemotes(sub);
         else if (dtkComposerSceneNodeControl *ctrl = dynamic_cast<dtkComposerSceneNodeControl *>(node))
-            foreach(dtkComposerSceneNodeComposite *block, ctrl->blocks())
+            foreach (dtkComposerSceneNodeComposite *block, ctrl->blocks())
                 this->updateRemotes(block);
     }
+
 #else
     Q_UNUSED(composite);
 #endif

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -52,7 +52,7 @@ public:
     static T *constData(dtkComposerTransmitter& t);
 
 protected:
-    static T *copy(T * source, QVariant& target, QVariant& swap);
+    static T *copy(T *source, QVariant& target, QVariant& swap);
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -76,5 +76,5 @@ protected:
 
 #include "dtkComposerTransmitterHandler.tpp"
 
-// 
+//
 // dtkComposerTransmitterHandler.h ends here

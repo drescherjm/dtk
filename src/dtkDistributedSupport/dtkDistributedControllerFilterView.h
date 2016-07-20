@@ -1,5 +1,5 @@
-/* dtkDistributedControllerFilterView.h --- 
- * 
+/* dtkDistributedControllerFilterView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Apr 10 10:10:19 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 33
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERFILTERVIEW_H
@@ -33,7 +33,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerFilterView : public Q
     Q_OBJECT
 
 public:
-     dtkDistributedControllerFilterView(QWidget *parent = 0);
+    dtkDistributedControllerFilterView(QWidget *parent = 0);
     ~dtkDistributedControllerFilterView(void);
 
 public:

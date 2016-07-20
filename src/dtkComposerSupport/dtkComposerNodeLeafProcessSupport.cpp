@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -23,7 +23,7 @@
 
 dtkComposerNodeObject<dtkAbstractProcess>::dtkComposerNodeObject(void) : dtkComposerNodeLeafObject(), m_implementation(QString()), m_process(0)
 {
-    
+
 }
 
 dtkComposerNodeObject<dtkAbstractProcess>::~dtkComposerNodeObject(void)
@@ -42,9 +42,9 @@ QVariant dtkComposerNodeObject<dtkAbstractProcess>::variant(void) const
         return QVariant();
 }
 
-dtkAbstractProcess *dtkComposerNodeObject<dtkAbstractProcess>::object(void) const 
-{ 
-    return this->process(); 
+dtkAbstractProcess *dtkComposerNodeObject<dtkAbstractProcess>::object(void) const
+{
+    return this->process();
 }
 
 bool dtkComposerNodeObject<dtkAbstractProcess>::createObject(const QString& implementation)
@@ -54,7 +54,7 @@ bool dtkComposerNodeObject<dtkAbstractProcess>::createObject(const QString& impl
 
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractProcessType();
-        
+
     if (!this->process()) {
         this->setProcess(dtkAbstractProcessFactory::instance()->create(implementation));
 
@@ -66,7 +66,9 @@ bool dtkComposerNodeObject<dtkAbstractProcess>::createObject(const QString& impl
         if (m_process) {
             delete m_process;
         }
+
         m_process = this->process();
+
         if (m_process)
             m_implementation = this->process()->identifier();
     }
@@ -77,7 +79,7 @@ bool dtkComposerNodeObject<dtkAbstractProcess>::createObject(const QString& impl
 QStringList dtkComposerNodeObject<dtkAbstractProcess>::implementations(void) const
 {
     QStringList implementations = dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType());
-    
+
     if (this->enableDefaultImplementation())
         implementations.prepend("default");
 
@@ -107,10 +109,12 @@ bool dtkComposerNodeObject<dtkAbstractProcess>::isInteractive(void)
 void dtkComposerNodeObject<dtkAbstractProcess>::clearProcess(void)
 {
     dtkAbstractProcess *p = this->process();
+
     if (p)
         delete p;
+
     this->setProcess(NULL);
 }
 
-// 
+//
 // dtkComposerNodeLeafProcessSupport.cpp ends here

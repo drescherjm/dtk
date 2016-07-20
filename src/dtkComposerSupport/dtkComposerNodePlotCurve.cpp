@@ -1,5 +1,5 @@
-/* dtkComposerNodePlotCurve.cpp --- 
- * 
+/* dtkComposerNodePlotCurve.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 29 14:40:41 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 109
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodePlotCurve.h"
@@ -52,6 +52,7 @@ dtkComposerNodePlotCurve::~dtkComposerNodePlotCurve(void)
 {
     if (d->curve)
         delete d->curve;
+
     d->curve = NULL;
 
     delete d;
@@ -67,6 +68,7 @@ void dtkComposerNodePlotCurve::run(void)
         dtkWarn() << "no vector x speficied in Plot Curve node!";
         return;
     }
+
     if (!d->receiver_vector_x.isEmpty() && d->receiver_vector_y.isEmpty()) {
         dtkWarn() << "no vector y speficied in Plot Curve node!";
         return;
@@ -88,11 +90,12 @@ void dtkComposerNodePlotCurve::run(void)
 
         QVector<QPointF> data;
 
-        for(int i = 0; i<sizex; i++ ) {
+        for (int i = 0; i < sizex; i++ ) {
             if (dtkIsInfinite((*vx)[i]) || dtkIsNan((*vx)[i]) || dtkIsInfinite((*vy)[i]) || dtkIsNan((*vy)[i])) {
                 dtkWarn() << "Wrong values found in Plot Curve node";
                 continue;
             }
+
             data << QPointF((*vx)[i], (*vy)[i]);
         }
 

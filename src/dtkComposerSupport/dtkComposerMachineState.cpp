@@ -1,5 +1,5 @@
-/* dtkComposerMachineState.cpp --- 
- * 
+/* dtkComposerMachineState.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:12:24 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 155
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerMachineState.h"

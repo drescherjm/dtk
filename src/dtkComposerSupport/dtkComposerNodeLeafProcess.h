@@ -1,5 +1,5 @@
-/* dtkComposerNodeLeafProcess.h --- 
- * 
+/* dtkComposerNodeLeafProcess.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:02 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 32
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODELEAFPROCESS_H
@@ -35,7 +35,7 @@ class dtkComposerNodeLeafProcessPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLeafProcess : public dtkComposerNodeLeaf
 {
 public:
-             dtkComposerNodeLeafProcess(void);
+    dtkComposerNodeLeafProcess(void);
     virtual ~dtkComposerNodeLeafProcess(void);
 
 public:

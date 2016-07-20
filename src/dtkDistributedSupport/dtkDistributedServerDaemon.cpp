@@ -37,7 +37,7 @@ public:
     dtkDistributedServerManager *manager;
 
 public:
-    QMap< QPair<int,QString>, dtkDistributedSocket *> sockets;
+    QMap< QPair<int, QString>, dtkDistributedSocket *> sockets;
 };
 
 dtkDistributedServerDaemon::dtkDistributedServerDaemon(quint16 port, QObject *parent) : QTcpServer(parent), d(new dtkDistributedServerDaemonPrivate)
@@ -61,23 +61,26 @@ dtkDistributedServerDaemon::~dtkDistributedServerDaemon(void)
     d = NULL;
 }
 
-dtkDistributedServerManager * dtkDistributedServerDaemon::manager(void)
+dtkDistributedServerManager *dtkDistributedServerDaemon::manager(void)
 {
     return d->manager;
 }
 
 void dtkDistributedServerDaemon::setManager(dtkDistributedServerManager::Type type)
 {
-    switch(type) {
+    switch (type) {
     case dtkDistributedServerManager::Oar:
         d->manager = new dtkDistributedServerManagerOar;
         break;
+
     case dtkDistributedServerManager::Torque:
         d->manager = new dtkDistributedServerManagerTorque;
         break;
+
     case dtkDistributedServerManager::Ssh:
         d->manager = new dtkDistributedServerManagerSsh;
         break;
+
     default:
         break;
     }
@@ -103,7 +106,7 @@ void dtkDistributedServerDaemon::incomingConnection(qintptr descriptor)
  */
 void dtkDistributedServerDaemon::waitForConnection(int rank, QString jobid)
 {
-    while(!d->sockets.keys().contains(qMakePair(rank, jobid)))
+    while (!d->sockets.keys().contains(qMakePair(rank, jobid)))
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
@@ -111,7 +114,7 @@ QByteArray dtkDistributedServerDaemon::waitForData(int rank, QString jobid)
 {
     dtkDistributedSocket *socket = d->sockets.value(qMakePair(rank, jobid), NULL);
 
-    if(!socket) {
+    if (!socket) {
         dtkWarn() << "No socket found for rank " << rank;
         return QByteArray();
     }
@@ -152,7 +155,7 @@ void dtkDistributedServerDaemon::read(void)
     switch (msg->method()) {
     case dtkDistributedMessage::STATUS:
         r = d->manager->status();
-        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS,"",dtkDistributedMessage::SERVER_RANK,r.size(),"json",r));
+        socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::OKSTATUS, "", dtkDistributedMessage::SERVER_RANK, r.size(), "json", r));
         // GET status is from the controller, store the socket in sockets using rank=-1
         d->sockets.insert(controller, socket);
         break;
@@ -177,7 +180,8 @@ void dtkDistributedServerDaemon::read(void)
     case dtkDistributedMessage::SETRANK:
 
         dtkDebug() << DTK_PRETTY_FUNCTION << "connected remote is of rank " << msg->rank() << msg->jobid();
-        d->sockets.insert(qMakePair(msg->rank(),msg->jobid()), socket);
+        d->sockets.insert(qMakePair(msg->rank(), msg->jobid()), socket);
+
         // rank 0 is alive, warn the controller
         if (msg->rank() == dtkDistributedMessage::SLAVE_RANK && d->sockets.contains(controller))
             (d->sockets[controller])->sendRequest(msg.data());
@@ -186,6 +190,7 @@ void dtkDistributedServerDaemon::read(void)
 
     case dtkDistributedMessage::DELJOB:
         jobid = msg->jobid();
+
         if (d->manager->deljob(jobid).startsWith("OK")) {
             msg.reset(new dtkDistributedMessage(dtkDistributedMessage::OKDEL, jobid));
             socket->sendRequest(msg.data());
@@ -193,13 +198,15 @@ void dtkDistributedServerDaemon::read(void)
             msg.reset(new dtkDistributedMessage(dtkDistributedMessage::ERRORDEL, jobid));
             socket->sendRequest(msg.data() );
         }
+
         break;
 
     case dtkDistributedMessage::DATA:
         pair = d->sockets.key(socket);
         msg->addHeader("x-forwarded-for", QString::number(pair.first));
         dtkDebug() << DTK_PRETTY_FUNCTION << "forwarding data of type" << msg->type() << "and size" << msg->content().size() << "from" << pair.first << "to" << msg->rank();
-        pair = qMakePair(msg->rank(),msg->jobid());
+        pair = qMakePair(msg->rank(), msg->jobid());
+
         if (d->sockets.contains(pair )) {
             (d->sockets[pair])->sendRequest(msg.data());
         } else {

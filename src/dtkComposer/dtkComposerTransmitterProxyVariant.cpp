@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -94,5 +94,5 @@ QVariantList dtkComposerTransmitterProxyVariant::allData(void)
     return m_transmitter->allData();
 }
 
-// 
+//
 // dtkComposerTransmitterProxyVariant.cpp ends here

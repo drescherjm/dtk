@@ -1,5 +1,5 @@
-/* dtkComposerScenePort.cpp --- 
- * 
+/* dtkComposerScenePort.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Feb  3 13:59:41 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 177
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerSceneNode.h"
@@ -58,7 +58,7 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, dtkComposerSceneNode *pare
     d->label->setFont(QFont("Lucida Grande", 9));
 #endif
     d->label->setDefaultTextColor(Qt::white);
-    
+
     this->setFlags(QGraphicsItem::ItemIsSelectable);
     this->setZValue(1);
 }
@@ -81,7 +81,7 @@ dtkComposerScenePort::dtkComposerScenePort(Type type, const QString& label, dtkC
     d->label->setFont(QFont("Lucida Grande", 9));
 #endif
     d->label->setDefaultTextColor(Qt::white);
-    
+
     this->setLabel(label);
     this->setFlags(QGraphicsItem::ItemIsSelectable);
     this->setZValue(1);
@@ -142,9 +142,9 @@ void dtkComposerScenePort::setLabel(const QString& label)
         d->label->setPlainText(fm.elidedText(d->unelided, Qt::ElideLeft, 50));
 
     if (d->type == Input)
-        d->label->setPos(d->ellipse->pos() + QPointF(d->ellipse->boundingRect().width(), 0) - QPointF(0, fm.height()/2.0));
+        d->label->setPos(d->ellipse->pos() + QPointF(d->ellipse->boundingRect().width(), 0) - QPointF(0, fm.height() / 2.0));
     else
-        d->label->setPos(d->ellipse->pos() - QPointF(7, 0) - QPointF(fm.width(d->label->toPlainText()), fm.height()/2.0));
+        d->label->setPos(d->ellipse->pos() - QPointF(7, 0) - QPointF(fm.width(d->label->toPlainText()), fm.height() / 2.0));
 
     d->ellipse->setToolTip(d->unelided);
     d->label->setToolTip(d->unelided);

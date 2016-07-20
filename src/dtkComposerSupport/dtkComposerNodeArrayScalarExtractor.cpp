@@ -65,13 +65,15 @@ dtkComposerNodeArrayScalarExtractor::~dtkComposerNodeArrayScalarExtractor(void)
 
 QString dtkComposerNodeArrayScalarExtractor::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "index";
         break;
+
     default:
         break;
     }
@@ -81,10 +83,11 @@ QString dtkComposerNodeArrayScalarExtractor::inputLabelHint(int port)
 
 QString dtkComposerNodeArrayScalarExtractor::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "value";
         break;
+
     default:
         break;
     }
@@ -158,6 +161,7 @@ dtkComposerNodeArrayScalarExtractorSubArray::~dtkComposerNodeArrayScalarExtracto
 {
     if (d->subarray)
         delete d->subarray;
+
     d->subarray = NULL;
 
     delete d;
@@ -167,13 +171,15 @@ dtkComposerNodeArrayScalarExtractorSubArray::~dtkComposerNodeArrayScalarExtracto
 
 QString dtkComposerNodeArrayScalarExtractorSubArray::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "index array";
         break;
+
     default:
         break;
     }
@@ -183,10 +189,11 @@ QString dtkComposerNodeArrayScalarExtractorSubArray::inputLabelHint(int port)
 
 QString dtkComposerNodeArrayScalarExtractorSubArray::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "subarray";
         break;
+
     default:
         break;
     }
@@ -211,8 +218,10 @@ void dtkComposerNodeArrayScalarExtractorSubArray::run(void)
         d->subarray->reserve(indices->count());
 
         qlonglong index;
-        for(qlonglong i = 0; i < indices->count(); ++i) {
+
+        for (qlonglong i = 0; i < indices->count(); ++i) {
             index = indices->at(i).value<qlonglong>();
+
             if (index >= array->count()) {
                 dtkWarn() << "index " << i << " of indices array is greater than the size of the array. Zero is inserted.";
                 d->subarray->append(0);
@@ -264,6 +273,7 @@ dtkComposerNodeArrayScalarExtractorArrayPart::~dtkComposerNodeArrayScalarExtract
 {
     if (d->subarray)
         delete d->subarray;
+
     d->subarray = NULL;
 
     delete d;
@@ -273,16 +283,19 @@ dtkComposerNodeArrayScalarExtractorArrayPart::~dtkComposerNodeArrayScalarExtract
 
 QString dtkComposerNodeArrayScalarExtractorArrayPart::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "from";
         break;
+
     case 2:
         return "length";
         break;
+
     default:
         break;
     }
@@ -292,10 +305,11 @@ QString dtkComposerNodeArrayScalarExtractorArrayPart::inputLabelHint(int port)
 
 QString dtkComposerNodeArrayScalarExtractorArrayPart::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "subarray";
         break;
+
     default:
         break;
     }
@@ -316,6 +330,7 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
         }
 
         qlonglong from = *d->receiver_from.data();
+
         if (from >= array->count()) {
             dtkWarn() << "Starting value from is greater than array size:" << from << ">=" << array->count();
             d->emitter_subarray.clearData();
@@ -323,6 +338,7 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
         }
 
         qlonglong length = array->count();
+
         if (!d->receiver_length.isEmpty())
             length = *d->receiver_length.data();
 
@@ -337,7 +353,7 @@ void dtkComposerNodeArrayScalarExtractorArrayPart::run(void)
         d->subarray->clear();
         d->subarray->reserve(to - from);
 
-        for(qlonglong i = from; i < to; ++i)
+        for (qlonglong i = from; i < to; ++i)
             d->subarray->append(array->at(i));
 
     } else {

@@ -91,7 +91,7 @@ bool dtkAbstractDataReader::canRead(const QString& file)
 
 bool dtkAbstractDataReader::canRead(const QStringList& files)
 {
-    if (files.size()==1)
+    if (files.size() == 1)
         return canRead(files[0]);
 
     return false;
@@ -114,7 +114,7 @@ bool dtkAbstractDataReader::read(const QStringList& files)
 
     //  Provide a sensible default for the case the list contains only one file.
 
-    if (files.size()==1)
+    if (files.size() == 1)
         return read(files[0]);
 
     return false;
@@ -128,8 +128,9 @@ bool dtkAbstractDataReader::readInformation(const QString& path)
 
 bool dtkAbstractDataReader::readInformation(const QStringList& paths)
 {
-    if (paths.size()==1)
+    if (paths.size() == 1)
         return readInformation(paths[0]);
+
     return false;
 }
 

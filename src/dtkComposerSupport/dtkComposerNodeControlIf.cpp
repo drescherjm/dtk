@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlIf.cpp --- 
- * 
+/* dtkComposerNodeControlIf.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 65
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeControlIf.h"
@@ -33,7 +33,7 @@
 
 class dtkComposerNodeControlIfPrivate
 {
-public:    
+public:
     dtkComposerNodeProxy header;
     dtkComposerNodeProxy footer;
 
@@ -55,7 +55,7 @@ dtkComposerNodeControlIf::dtkComposerNodeControlIf(void) : dtkComposerNodeContro
     d->cond.setDataTypes(variants);
 
     d->header.removeEmitter(0);
-    d->header.setInputLabelHint("cond", 0); 
+    d->header.setInputLabelHint("cond", 0);
     d->header.setAsHeader(true);
 
     d->cond.appendPrevious(d->header.receivers().first());
@@ -97,10 +97,10 @@ dtkComposerNodeLeaf *dtkComposerNodeControlIf::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlIf::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->then_block);
 
-    if(id == 1)
+    if (id == 1)
         return &(d->else_block);
 
     return NULL;
@@ -113,7 +113,7 @@ void dtkComposerNodeControlIf::setInputs(void)
 
 void dtkComposerNodeControlIf::setConditions(void)
 {
-    
+
 }
 
 void dtkComposerNodeControlIf::setOutputs(void)
@@ -123,7 +123,7 @@ void dtkComposerNodeControlIf::setOutputs(void)
 
 void dtkComposerNodeControlIf::setVariables(void)
 {
-    
+
 }
 
 int dtkComposerNodeControlIf::selectBranch(void)
@@ -132,25 +132,25 @@ int dtkComposerNodeControlIf::selectBranch(void)
         return static_cast<int>(false);
 
     bool value = *d->cond.data<bool>();
-    
-    foreach(dtkComposerTransmitter *t, d->then_block.emitters())
+
+    foreach (dtkComposerTransmitter *t, d->then_block.emitters())
         t->setActive(value);
 
-    foreach(dtkComposerTransmitter *t, d->else_block.emitters())
+    foreach (dtkComposerTransmitter *t, d->else_block.emitters())
         t->setActive(!value);
-    
-    foreach(dtkComposerTransmitter *t, d->then_block.receivers())
+
+    foreach (dtkComposerTransmitter *t, d->then_block.receivers())
         t->setReady(value);
 
-    foreach(dtkComposerTransmitter *t, d->else_block.receivers())
+    foreach (dtkComposerTransmitter *t, d->else_block.receivers())
         t->setReady(!value);
-        
+
     return (!value);
 }
 
 void dtkComposerNodeControlIf::begin(void)
 {
-    
+
 }
 
 void dtkComposerNodeControlIf::end(void)
@@ -160,10 +160,10 @@ void dtkComposerNodeControlIf::end(void)
 
     // bool value = *d->cond.data<bool>();
 
-    foreach(dtkComposerTransmitter *t, d->then_block.receivers())
+    foreach (dtkComposerTransmitter *t, d->then_block.receivers())
         t->setReady(true);
 
-    foreach(dtkComposerTransmitter *t, d->else_block.receivers())
+    foreach (dtkComposerTransmitter *t, d->else_block.receivers())
         t->setReady(true);
 }
 

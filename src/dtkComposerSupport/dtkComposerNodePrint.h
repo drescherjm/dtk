@@ -24,7 +24,7 @@ class dtkComposerNodePrintPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePrint : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodePrint(void);
+    dtkComposerNodePrint(void);
     ~dtkComposerNodePrint(void);
 
 public:

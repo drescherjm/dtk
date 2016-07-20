@@ -1,5 +1,5 @@
-/* dtkMatrixSquared.h --- 
- * 
+/* dtkMatrixSquared.h ---
+ *
  * Author: Thibaud Kloczko
  * Copyright (C) 2008 - Thibaud Kloczko, Inria.
  * Created: Tue Jun  8 14:08:32 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 73
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKMATRIXSQUARED_H
@@ -28,95 +28,103 @@
 
 namespace dtkDeprecated {
 
-template <typename T = double> class dtkMatrixSquared : public dtkMatrix<T>
-{
-public:
-     dtkMatrixSquared(void): dtkMatrix<T>() {};
-     dtkMatrixSquared(unsigned crowInit): dtkMatrix<T>( crowInit, crowInit) {};
-     dtkMatrixSquared(T *array, unsigned crowInit): dtkMatrix<T>(array, crowInit, crowInit) {};
-     dtkMatrixSquared(const dtkMatrix<T> &mat): dtkMatrix<T>(mat) {};
-     dtkMatrixSquared(const dtkMatrixSquared &matSquared): dtkMatrix<T>(matSquared) {};
-     dtkMatrixSquared(const dtkMatrix<T> &, unsigned, unsigned, unsigned);
-     dtkMatrixSquared(const dtkMatrixSquared<T> &, unsigned, unsigned, unsigned);
-    ~dtkMatrixSquared(void) {};
+    template <typename T = double> class dtkMatrixSquared : public dtkMatrix<T>
+    {
+    public:
+        dtkMatrixSquared(void): dtkMatrix<T>() {};
+        dtkMatrixSquared(unsigned crowInit): dtkMatrix<T>( crowInit, crowInit) {};
+        dtkMatrixSquared(T *array, unsigned crowInit): dtkMatrix<T>(array, crowInit, crowInit) {};
+        dtkMatrixSquared(const dtkMatrix<T>& mat): dtkMatrix<T>(mat) {};
+        dtkMatrixSquared(const dtkMatrixSquared& matSquared): dtkMatrix<T>(matSquared) {};
+        dtkMatrixSquared(const dtkMatrix<T>&, unsigned, unsigned, unsigned);
+        dtkMatrixSquared(const dtkMatrixSquared<T>&, unsigned, unsigned, unsigned);
+        ~dtkMatrixSquared(void) {};
 
-public:
-    QString identifier(void) const;
+    public:
+        QString identifier(void) const;
 
-public:
-    void allocate(unsigned crowInit) {
-        dtkMatrix<T>::allocate(crowInit, crowInit);
-    }
+    public:
+        void allocate(unsigned crowInit) {
+            dtkMatrix<T>::allocate(crowInit, crowInit);
+        }
 
-    void fromRawData(T *array, unsigned crowInit) {
-        dtkMatrix<T>::fromRawData(array, crowInit, crowInit);
-    }
-    void mapInto(const dtkMatrixSquared &, unsigned, unsigned, unsigned);
+        void fromRawData(T *array, unsigned crowInit) {
+            dtkMatrix<T>::fromRawData(array, crowInit, crowInit);
+        }
+        void mapInto(const dtkMatrixSquared&, unsigned, unsigned, unsigned);
 
-    unsigned size(void) const { return this->numberOfRows(); };
+        unsigned size(void) const {
+            return this->numberOfRows();
+        };
 
-public:
-    dtkMatrixSquared operator +(const dtkMatrixSquared &) const;
-    dtkMatrixSquared operator -(const dtkMatrixSquared &) const;
-    dtkMatrixSquared operator -(void) const;
-    dtkMatrixSquared operator *(const T &) const;
-    dtkMatrixSquared operator *(const dtkMatrixSquared &) const;
-    dtkMatrixSquared operator /(const T &value) const {
-        T tTmp = dtkUnity<T>();
-        tTmp /= value;
-        return (*this)*tTmp;
-    }
-    dtkMatrixSquared operator /(const dtkMatrixSquared &) const;
+    public:
+        dtkMatrixSquared operator +(const dtkMatrixSquared&) const;
+        dtkMatrixSquared operator -(const dtkMatrixSquared&) const;
+        dtkMatrixSquared operator -(void) const;
+        dtkMatrixSquared operator *(const T&) const;
+        dtkMatrixSquared operator *(const dtkMatrixSquared&) const;
+        dtkMatrixSquared operator /(const T& value) const {
+            T tTmp = dtkUnity<T>();
+            tTmp /= value;
+            return (*this) * tTmp;
+        }
+        dtkMatrixSquared operator /(const dtkMatrixSquared&) const;
 
-public:
-    dtkMatrixSquared & operator =(const dtkMatrixSquared &matSquared);
-    dtkMatrixSquared & operator +=(const dtkMatrixSquared &matSquared);
-    dtkMatrixSquared & operator -=(const dtkMatrixSquared &matSquared);
-    dtkMatrixSquared & operator *=(const T &value);
-    dtkMatrixSquared & operator *=(const dtkMatrixSquared &);
-    dtkMatrixSquared & operator /=(const T &value);
-    dtkMatrixSquared & operator /=(const dtkMatrixSquared &);
+    public:
+        dtkMatrixSquared& operator =(const dtkMatrixSquared& matSquared);
+        dtkMatrixSquared& operator +=(const dtkMatrixSquared& matSquared);
+        dtkMatrixSquared& operator -=(const dtkMatrixSquared& matSquared);
+        dtkMatrixSquared& operator *=(const T& value);
+        dtkMatrixSquared& operator *=(const dtkMatrixSquared&);
+        dtkMatrixSquared& operator /=(const T& value);
+        dtkMatrixSquared& operator /=(const dtkMatrixSquared&);
 
-public:
-    void storeAdjoint(const dtkMatrixSquared &);
-    void storeInverse(const dtkMatrixSquared &);
+    public:
+        void storeAdjoint(const dtkMatrixSquared&);
+        void storeInverse(const dtkMatrixSquared&);
 
-    void makeAdjoint(void);
-    void makeInverse(void);
-    void makeUnity(void);
-};
-
-// /////////////////////////////////////////////////////////////////
-// 
-// /////////////////////////////////////////////////////////////////
-
-template <typename T, unsigned crow> class dtkMatSquared: public T
-{
-public:
-    dtkMatSquared(void): T(crow) {}
-
-    T & operator =(const T &smtx) { return T::operator=(smtx); }
-};
+        void makeAdjoint(void);
+        void makeInverse(void);
+        void makeUnity(void);
+    };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-template <typename T, unsigned crow> class dtkUnity< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
-{
-public:
-    dtkUnity(void) { this->makeUnity(); }
-};
+    template <typename T, unsigned crow> class dtkMatSquared: public T
+    {
+    public:
+        dtkMatSquared(void): T(crow) {}
+
+        T& operator =(const T& smtx) {
+            return T::operator=(smtx);
+        }
+    };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
-template <typename T, unsigned crow> class dtkZero< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
-{
-public:
-    dtkZero(void) { fill(dtkZero<T>()); }
-};
+    template <typename T, unsigned crow> class dtkUnity< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
+    {
+    public:
+        dtkUnity(void) {
+            this->makeUnity();
+        }
+    };
+
+// /////////////////////////////////////////////////////////////////
+//
+// /////////////////////////////////////////////////////////////////
+
+    template <typename T, unsigned crow> class dtkZero< dtkMatSquared<dtkMatrixSquared<T>, crow> >: public dtkMatSquared<dtkMatrixSquared<T>, crow>
+    {
+    public:
+        dtkZero(void) {
+            fill(dtkZero<T>());
+        }
+    };
 
 } // end of namespace
 

@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayData.cpp --- 
- * 
+/* dtkComposerNodeArrayData.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 11:47:12 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 62
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeArrayData.h"
@@ -72,25 +72,29 @@ dtkComposerNodeArrayData::~dtkComposerNodeArrayData(void)
 {
     if (d->container)
         delete d->container;
+
     d->container = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
-QString dtkComposerNodeArrayData::inputLabelHint(int port) 
+QString dtkComposerNodeArrayData::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "size";
         break;
+
     case 2:
         return "item";
         break;
+
     default:
         break;
     }
@@ -99,14 +103,16 @@ QString dtkComposerNodeArrayData::inputLabelHint(int port)
 }
 
 QString dtkComposerNodeArrayData::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "size";
         break;
+
     default:
         break;
     }
@@ -118,7 +124,7 @@ void dtkComposerNodeArrayData::run(void)
 {
     if (!d->receiver_array.isEmpty()) {
 
-        dtkAbstractContainerWrapper* array = d->receiver_array.container();
+        dtkAbstractContainerWrapper *array = d->receiver_array.container();
 
         if (!array || array->isReset()) {
             d->emitter_array.clearData();
@@ -134,15 +140,15 @@ void dtkComposerNodeArrayData::run(void)
         if (!d->container) {
             dtkContainerVector<QVariant> *array = new dtkContainerVector<QVariant>();
             d->container = new dtkContainerVectorWrapper<QVariant>(array);
-        }  
-        
+        }
+
         if (!d->receiver_size.isEmpty())
             d->size = *d->receiver_size.data();
 
         if (d->size == 0) {
 
             d->container->clear();
-            
+
             dtkWarn() << "The size of the array is zero.";
 
         } else {
@@ -151,8 +157,9 @@ void dtkComposerNodeArrayData::run(void)
 
             d->container->clear();
             d->container->resize(d->size);
+
             if (!d->receiver_value.isEmpty()) {
-                for(qlonglong i = 0 ; i < d->size; ++i) {
+                for (qlonglong i = 0 ; i < d->size; ++i) {
                     d->container->replace(d->receiver_value.variant(), i);
                 }
             }

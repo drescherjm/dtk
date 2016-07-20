@@ -73,7 +73,7 @@ public:
     dtkComposerTransmitterEmitter< QStringList *> emitter_files;
 
 public:
-   QStringList files;
+    QStringList files;
 };
 
 class dtkComposerNodeFileReadPrivate
@@ -105,13 +105,13 @@ public:
 
 class dtkComposerNodeDirectoryPrivate
 {
- public:
+public:
     dtkComposerTransmitterReceiver<QString> receiver_directory;
 
- public:
+public:
     dtkComposerTransmitterEmitter<QString> emitter_directory;
 
- public:
+public:
     QString directory;
 };
 

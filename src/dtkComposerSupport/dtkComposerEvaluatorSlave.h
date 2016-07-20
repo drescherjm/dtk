@@ -31,7 +31,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerEvaluatorSlave : public dtkDistribute
 {
 
 public:
-     dtkComposerEvaluatorSlave(void);
+    dtkComposerEvaluatorSlave(void);
     ~dtkComposerEvaluatorSlave(void);
 
 public:

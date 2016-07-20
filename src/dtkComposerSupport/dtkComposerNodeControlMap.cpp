@@ -135,7 +135,7 @@ dtkComposerNodeLeaf *dtkComposerNodeControlMap::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlMap::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->body_block);
 
     return NULL;
@@ -147,13 +147,14 @@ void dtkComposerNodeControlMap::setInputs(void)
 
     if (d->out_container)
         delete d->out_container;
-    d->out_container = d->container->voidClone();    
+
+    d->out_container = d->container->voidClone();
     d->footer_emit.setData(d->out_container);
 
     d->counter = 0;
     d->size = d->container->count();
 
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    foreach (dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
         v->setDataFrom(v);
         v->setTwinned(true);
@@ -163,7 +164,7 @@ void dtkComposerNodeControlMap::setInputs(void)
 
 void dtkComposerNodeControlMap::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+    foreach (dtkComposerTransmitterVariant *v, this->outputTwins()) {
         v->twin()->setDataFrom(v);
     }
 

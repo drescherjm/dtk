@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -25,7 +25,7 @@ class qthDistributedCommunicator : public dtkDistributedCommunicator
     Q_OBJECT
 
 public:
-     qthDistributedCommunicator(void);
+    qthDistributedCommunicator(void);
     ~qthDistributedCommunicator(void);
 
 public:
@@ -44,12 +44,12 @@ public:
 
 public:
     dtkDistributedBufferManager *createBufferManager(void);
-    void destroyBufferManager(dtkDistributedBufferManager *& buffer_manager);
+    void destroyBufferManager(dtkDistributedBufferManager *&buffer_manager);
 
 public:
     void broadcast(void *data, qint64 size, QMetaType::Type dataType, qint32 source);
-    void broadcast(QByteArray &array, qint32 source );
-    void broadcast(QVariant &v, qint32 source );
+    void broadcast(QByteArray& array, qint32 source );
+    void broadcast(QVariant& v, qint32 source );
 
 
 public:
@@ -58,8 +58,8 @@ public:
 
 public:
     void receive(void *data, qint64 size, QMetaType::Type dataType, qint32 source, qint32 tag);
-    void receive(QByteArray &v,  qint32 source, qint32 tag);
-    void receive(QByteArray &v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status);
+    void receive(QByteArray& v,  qint32 source, qint32 tag);
+    void receive(QByteArray& v,  qint32 source, qint32 tag, dtkDistributedCommunicatorStatus& status);
     using dtkDistributedCommunicator::receive;
 
 public:
@@ -88,5 +88,5 @@ static dtkDistributedCommunicator *qthDistributedCommunicatorCreator(void)
     return new qthDistributedCommunicator();
 }
 
-// 
+//
 // qthDistributedCommunicator.h ends here

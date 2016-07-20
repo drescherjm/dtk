@@ -1,5 +1,5 @@
-/* dtkAbstractViewInteractor_p.h --- 
- * 
+/* dtkAbstractViewInteractor_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Apr 24 12:55:27 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 9
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTVIEWINTERACTOR_P_H
@@ -39,9 +39,9 @@ class DTKCORESUPPORT_EXPORT dtkAbstractViewInteractorPrivate : public dtkAbstrac
 public:
     dtkAbstractViewInteractorPrivate(dtkAbstractViewInteractor *q = 0) : dtkAbstractObjectPrivate(q) {}
     dtkAbstractViewInteractorPrivate(const dtkAbstractViewInteractorPrivate& other) : dtkAbstractObjectPrivate(other),
-                                                                                      enabled(other.enabled),
-                                                                                      data(other.data),
-                                                                                      view(other.view) {}
+        enabled(other.enabled),
+        data(other.data),
+        view(other.view) {}
 
 public:
     virtual ~dtkAbstractViewInteractorPrivate(void) {}

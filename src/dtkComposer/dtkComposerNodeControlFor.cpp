@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlFor.cpp --- 
- * 
+/* dtkComposerNodeControlFor.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Feb 15 09:14:22 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 332
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeControlFor.h"
@@ -158,13 +158,13 @@ dtkComposerNodeLeaf *dtkComposerNodeControlFor::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->cond_block);
 
-    if(id == 1)
+    if (id == 1)
         return &(d->body_block);
 
-    if(id == 2)
+    if (id == 2)
         return &(d->incr_block);
 
     return NULL;
@@ -172,21 +172,24 @@ dtkComposerNodeComposite *dtkComposerNodeControlFor::block(int id)
 
 void dtkComposerNodeControlFor::setInputs(void)
 {
-    for(dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
-	t->disableLoopMode();
+    for (dtkComposerTransmitterProxyLoop *t : this->inputTwins()) {
+        t->disableLoopMode();
     }
+
     d->first_iteration = true;
 }
 
 void dtkComposerNodeControlFor::setOutputs(void)
 {
     if (d->first_iteration) {
-	for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
-	    t->twin()->enableLoopMode();
-	}
-	d->first_iteration = false;
+        for (dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+            t->twin()->enableLoopMode();
+        }
+
+        d->first_iteration = false;
     }
-    for(dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
+
+    for (dtkComposerTransmitterProxyLoop *t : this->outputTwins()) {
         t->twin()->setVariant(t->variant());
     }
 }
@@ -194,16 +197,17 @@ void dtkComposerNodeControlFor::setOutputs(void)
 void dtkComposerNodeControlFor::setVariables(void)
 {
     if (d->var_first_it) {
-	d->incr_emt.twin()->enableLoopMode();
-	d->var_first_it = false;
+        d->incr_emt.twin()->enableLoopMode();
+        d->var_first_it = false;
     }
+
     d->incr_emt.twin()->setVariant(d->incr_emt.variant());
 }
 
 int dtkComposerNodeControlFor::selectBranch(void)
 {
     if (!d->cond.isEmpty())
-	return static_cast<int>(!(d->cond.data()));
+        return static_cast<int>(!(d->cond.data()));
 
     return static_cast<int>(true);
 }

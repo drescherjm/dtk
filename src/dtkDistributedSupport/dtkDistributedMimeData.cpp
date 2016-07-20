@@ -1,5 +1,5 @@
-/* dtkDistributedMimeData.cpp --- 
- * 
+/* dtkDistributedMimeData.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 12 11:36:43 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 17
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"

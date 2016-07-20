@@ -1,5 +1,5 @@
-/* dtkAbstractData_p.h --- 
- * 
+/* dtkAbstractData_p.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Apr 23 12:12:08 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 22
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATA_P_H
@@ -33,16 +33,16 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataPrivate : public dtkAbstractObjectPri
 {
 public:
     dtkAbstractDataPrivate(dtkAbstractData *q = 0) : dtkAbstractObjectPrivate(q) {}
-dtkAbstractDataPrivate(const dtkAbstractDataPrivate& other, dtkAbstractData *q = 0) : dtkAbstractObjectPrivate(other, q),
-                                                                  readers(other.readers),
-                                                                  writers(other.writers),
-                                                                  converters(other.converters),
-                                                                  serializers(other.serializers),
-                                                                  deserializers(other.deserializers),
-                                                                  path(other.path),
-                                                                  paths(other.paths),
-                                                                  numberOfChannels(other.numberOfChannels),
-                                                                  thumbnails(other.thumbnails) {}
+    dtkAbstractDataPrivate(const dtkAbstractDataPrivate& other, dtkAbstractData *q = 0) : dtkAbstractObjectPrivate(other, q),
+        readers(other.readers),
+        writers(other.writers),
+        converters(other.converters),
+        serializers(other.serializers),
+        deserializers(other.deserializers),
+        path(other.path),
+        paths(other.paths),
+        numberOfChannels(other.numberOfChannels),
+        thumbnails(other.thumbnails) {}
 
 public:
     virtual ~dtkAbstractDataPrivate(void) {}

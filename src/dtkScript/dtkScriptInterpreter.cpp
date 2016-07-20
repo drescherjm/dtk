@@ -1,5 +1,5 @@
-/* dtkScriptInterpreter.cpp --- 
- * 
+/* dtkScriptInterpreter.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Jan 10 14:09:18 2013 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 15
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkScriptInterpreter.h"

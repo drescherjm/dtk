@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -22,7 +22,7 @@ class dtkComposerNodePrintPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodePrint : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodePrint(void);
+    dtkComposerNodePrint(void);
     ~dtkComposerNodePrint(void);
 
 public:
@@ -32,5 +32,5 @@ private:
     dtkComposerNodePrintPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodePrint.h ends here

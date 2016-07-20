@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -23,7 +23,7 @@
 
 dtkComposerNodeObject<dtkAbstractView>::dtkComposerNodeObject(void) : dtkComposerNodeLeafObject(), m_implementation_has_changed(false), m_view(0)
 {
-    
+
 }
 
 dtkComposerNodeObject<dtkAbstractView>::~dtkComposerNodeObject(void)
@@ -47,7 +47,7 @@ dtkAbstractView *dtkComposerNodeObject<dtkAbstractView>::object(void) const
 }
 
 bool dtkComposerNodeObject<dtkAbstractView>::createObject(const QString& implementation)
-{ 
+{
     m_implementation_has_changed = false;
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
@@ -55,7 +55,7 @@ bool dtkComposerNodeObject<dtkAbstractView>::createObject(const QString& impleme
 
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractViewType();
-        
+
     if (!m_view) {
         m_view = dtkAbstractViewFactory::instance()->create(implementation);
         m_implementation_has_changed = true;
@@ -74,7 +74,8 @@ QImage dtkComposerNodeObject<dtkAbstractView>::screenshot(void) const
     QWidget *widget = m_view->widget();
     QPixmap pixmap(widget->size());
     widget->render(&pixmap);
-    if( pixmap.width() > 1920) {
+
+    if ( pixmap.width() > 1920) {
         // limit width to FULL HD res.
         return pixmap.scaledToWidth(1920).toImage();
     }
@@ -96,7 +97,7 @@ dtkAbstractView *dtkComposerNodeObject<dtkAbstractView>::view(void)
 QStringList dtkComposerNodeObject<dtkAbstractView>::implementations(void) const
 {
     QStringList implementations = dtkAbstractViewFactory::instance()->implementations(this->abstractViewType());
-    
+
     if (this->enableDefaultImplementation())
         implementations.prepend("default");
 
@@ -129,9 +130,9 @@ bool dtkComposerNodeObject<dtkAbstractView>::enableDefaultImplementation(void) c
     return false;
 }
 
-// 
+//
 // dtkComposerNodeLeafViewSupport.cpp ends here
 
 
-// 
+//
 // dtkComposerNodeLeafViewSupport.cpp ends here

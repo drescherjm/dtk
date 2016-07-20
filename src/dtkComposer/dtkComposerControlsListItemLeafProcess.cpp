@@ -1,15 +1,15 @@
 /* dtkComposerControlsListItemLeafProcess.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: jeu. oct. 10 16:19:35 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: lun. juin 16 16:32:08 2014 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 613
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkComposerControlsListItemLeafProcess.h"
@@ -29,7 +29,7 @@ public:
 };
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 dtkComposerControlsListItemLeafProcess::dtkComposerControlsListItemLeafProcess(QWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemLeafProcessPrivate)

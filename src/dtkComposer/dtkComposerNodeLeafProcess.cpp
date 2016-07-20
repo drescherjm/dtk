@@ -1,5 +1,5 @@
-/* dtkComposerNodeLeafProcess.cpp --- 
- * 
+/* dtkComposerNodeLeafProcess.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 14:08:54 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 123
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeLeafProcess.h"
@@ -74,8 +74,10 @@ QString dtkComposerNodeLeafProcess::currentImplementation(void) const
 QStringList dtkComposerNodeLeafProcess::implementations(void)
 {
     QStringList implementations;
+
     if (this->enableDefaultImplementation())
         implementations << "default";
+
     QStringList all_implementations = dtkAbstractProcessFactory::instance()->implementations(this->abstractProcessType());
 
     for (int i = 0; i < all_implementations.count(); ++i)
@@ -91,7 +93,7 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
 
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractProcessType();
-    
+
     if (!this->process()) {
         this->setProcess(dtkAbstractProcessFactory::instance()->create(implementation));
     } else if (this->process()->identifier() != implementation) {
@@ -102,6 +104,7 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
         if (d->old_process) {
             delete d->old_process;
         }
+
         d->old_process = this->process();
     }
 
@@ -111,7 +114,9 @@ dtkAbstractProcess *dtkComposerNodeLeafProcess::createProcess(const QString& imp
 void dtkComposerNodeLeafProcess::clearProcess(void)
 {
     dtkAbstractProcess *p = this->process();
+
     if (p)
         delete p;
+
     this->setProcess(NULL);
 }

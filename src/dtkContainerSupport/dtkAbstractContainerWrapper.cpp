@@ -1,5 +1,5 @@
-/* dtkAbstractContainerWrapper.cpp --- 
- * 
+/* dtkAbstractContainerWrapper.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May 23 17:51:33 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 51
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAbstractContainerWrapper.h"

@@ -1,5 +1,5 @@
-/* dtkDistributedControllerStatusModel.cpp --- 
- * 
+/* dtkDistributedControllerStatusModel.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jul  1 13:48:10 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 337
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -29,25 +29,25 @@
 
 QVariant toString(dtkDistributedNode::Network flag)
 {
-    if(flag == dtkDistributedNode::Ethernet1G)
+    if (flag == dtkDistributedNode::Ethernet1G)
         return "Ethernet1G";
 
-    if(flag == dtkDistributedNode::Ethernet10G)
+    if (flag == dtkDistributedNode::Ethernet10G)
         return "Ethernet10G";
 
-    if(flag == dtkDistributedNode::Myrinet2G)
+    if (flag == dtkDistributedNode::Myrinet2G)
         return "Myrinet2G";
 
-    if(flag == dtkDistributedNode::Myrinet10G)
+    if (flag == dtkDistributedNode::Myrinet10G)
         return "Myrinet10G";
 
-    if(flag == dtkDistributedNode::Infiniband10G)
+    if (flag == dtkDistributedNode::Infiniband10G)
         return "Infiniband10G";
 
-    if(flag == dtkDistributedNode::Infiniband20G)
+    if (flag == dtkDistributedNode::Infiniband20G)
         return "Infiniband20G";
 
-    if(flag == dtkDistributedNode::Infiniband40G)
+    if (flag == dtkDistributedNode::Infiniband40G)
         return "Infiniband40G";
 
     return QString();
@@ -55,19 +55,19 @@ QVariant toString(dtkDistributedNode::Network flag)
 
 QVariant toString(dtkDistributedNode::State flag)
 {
-    if(flag == dtkDistributedNode::Free)
+    if (flag == dtkDistributedNode::Free)
         return "Free";
 
-    if(flag == dtkDistributedNode::Busy)
+    if (flag == dtkDistributedNode::Busy)
         return "Busy";
 
-    if(flag == dtkDistributedNode::Down)
+    if (flag == dtkDistributedNode::Down)
         return "Down";
 
-    if(flag == dtkDistributedNode::StandBy)
+    if (flag == dtkDistributedNode::StandBy)
         return "StandBy";
 
-    if(flag == dtkDistributedNode::Absent)
+    if (flag == dtkDistributedNode::Absent)
         return "Absent";
 
     return QString();
@@ -75,16 +75,16 @@ QVariant toString(dtkDistributedNode::State flag)
 
 QVariant toString(dtkDistributedNode::Brand flag)
 {
-    if(flag == dtkDistributedNode::Hp)
+    if (flag == dtkDistributedNode::Hp)
         return "Hp";
 
-    if(flag == dtkDistributedNode::Ibm)
+    if (flag == dtkDistributedNode::Ibm)
         return "Ibm";
 
-    if(flag == dtkDistributedNode::Dell)
+    if (flag == dtkDistributedNode::Dell)
         return "Dell";
 
-    if(flag == dtkDistributedNode::Carri)
+    if (flag == dtkDistributedNode::Carri)
         return "Carri";
 
     return QString();
@@ -92,10 +92,10 @@ QVariant toString(dtkDistributedNode::Brand flag)
 
 QVariant toString(dtkDistributedCpu::Architecture flag)
 {
-    if(flag == dtkDistributedCpu::x86)
+    if (flag == dtkDistributedCpu::x86)
         return "x86";
 
-    if(flag == dtkDistributedCpu::x86_64)
+    if (flag == dtkDistributedCpu::x86_64)
         return "x86_64";
 
     return QString();
@@ -103,10 +103,10 @@ QVariant toString(dtkDistributedCpu::Architecture flag)
 
 QVariant toString(dtkDistributedCpu::Model flag)
 {
-    if(flag == dtkDistributedCpu::Xeon)
+    if (flag == dtkDistributedCpu::Xeon)
         return "Xeon";
 
-    if(flag == dtkDistributedCpu::Opteron)
+    if (flag == dtkDistributedCpu::Opteron)
         return "Opteron";
 
     return QString();
@@ -146,22 +146,22 @@ void dtkDistributedControllerStatusModelPrivate::update(void)
 
     QList<dtkDistributedNode *> nodes;
 
-    if(cluster.isEmpty())
+    if (cluster.isEmpty())
         nodes = this->controller->nodes();
     else
         nodes = this->controller->nodes(cluster);
 
-    foreach(dtkDistributedNode *node, nodes) {
+    foreach (dtkDistributedNode *node, nodes) {
 
         dtkDistributedControllerStatusModelItem *nodeItem = new dtkDistributedControllerStatusModelItem(QList<QVariant>() << node->name() << toString(node->network()) << toString(node->state()) << toString(node->brand()) << "" << "", this->rootItem);
         nodeItem->kind = dtkDistributedControllerStatusModelItem::Node;
 
-        foreach(dtkDistributedCpu *cpu, node->cpus()) {
-            foreach(dtkDistributedCore *core, cpu->cores()) {
+        foreach (dtkDistributedCpu *cpu, node->cpus()) {
+            foreach (dtkDistributedCore *core, cpu->cores()) {
 
                 QList<QVariant> data;
 
-                if(core->job())
+                if (core->job())
                     data << core->job()->Id() + " " + core->job()->Username();
                 else
                     data << "Free";
@@ -232,16 +232,20 @@ void dtkDistributedControllerStatusModel::onUpdated(void)
 void dtkDistributedControllerStatusModel::onUpdated(const QUrl& server)
 {
     this->beginResetModel();
-    if(d->cluster == server.toString())
+
+    if (d->cluster == server.toString())
         d->update();
+
     this->endResetModel();
 }
 
 void dtkDistributedControllerStatusModel::onDisconnected(const QUrl& server)
 {
     this->beginResetModel();
-    if(d->cluster == server.toString())
+
+    if (d->cluster == server.toString())
         d->clear();
+
     this->endResetModel();
 }
 
@@ -249,8 +253,8 @@ int dtkDistributedControllerStatusModel::columnCount(const QModelIndex& parent) 
 {
     if (parent.isValid())
         return static_cast<dtkDistributedControllerStatusModelItem *>(parent.internalPointer())->columnCount();
-     else
-         return d->rootItem->columnCount();
+    else
+        return d->rootItem->columnCount();
 }
 
 int dtkDistributedControllerStatusModel::rowCount(const QModelIndex& parent) const
@@ -333,7 +337,7 @@ QModelIndex dtkDistributedControllerStatusModel::parent(const QModelIndex& index
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-Qt::ItemFlags dtkDistributedControllerStatusModel::flags(const QModelIndex &index) const
+Qt::ItemFlags dtkDistributedControllerStatusModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return 0;

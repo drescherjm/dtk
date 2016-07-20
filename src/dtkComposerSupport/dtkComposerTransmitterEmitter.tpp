@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterEmitter.tpp --- 
- * 
+/* dtkComposerTransmitterEmitter.tpp ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:37:37 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_TPP
@@ -24,7 +24,7 @@
 
 #include <dtkContainerSupport/dtkContainerVectorWrapper.h>
 
-#if defined(DTK_BUILD_PLOT_SUPPORT) 
+#if defined(DTK_BUILD_PLOT_SUPPORT)
 #include <dtkPlotSupport/dtkPlotCurve.h>
 #endif
 
@@ -43,8 +43,8 @@ template <> DTKCOMPOSERSUPPORT_EXPORT QString        dtkComposerTransmitterEmitt
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs an empty emitter.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransmitterEmitter(dtkComposerNode *parent) : dtkComposerTransmitterAbstractEmitter(parent)
 {
@@ -54,8 +54,8 @@ template <typename T> inline dtkComposerTransmitterEmitter<T>::dtkComposerTransm
 };
 
 //! Destroys the emitter.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline dtkComposerTransmitterEmitter<T>::~dtkComposerTransmitterEmitter(void)
 {
@@ -72,8 +72,8 @@ template <typename T> void dtkComposerTransmitterEmitter<T>::clearData(void)
 };
 
 //! Sets the data with \a data.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T *data)
 {
@@ -82,17 +82,17 @@ template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(T *d
 };
 
 //! Sets the data with \a data.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline void dtkComposerTransmitterEmitter<T>::setData(const T *data)
 {
-    this->setData(const_cast<T*>(data));
+    this->setData(const_cast<T *>(data));
 };
 
 //! Returns the data as a modifiable reference.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
 {
@@ -101,17 +101,17 @@ template <typename T> inline T *dtkComposerTransmitterEmitter<T>::data(void)
 
 template <typename T> dtkAbstractObject *dtkComposerTransmitterEmitter<T>::object(void)
 {
-    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
-        return reinterpret_cast<dtkAbstractObject*>(m_data);
-    
+    if (dtkTypeInfo<T *>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject *>(m_data);
+
     return NULL;
 };
 
 template <typename T> dtkMatrixReal *dtkComposerTransmitterEmitter<T>::matrix(void)
 {
-    if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
+    if (dtkTypeInfo<T *>::dtkMatrixRealPointer)
         return reinterpret_cast<dtkMatrixReal *>(m_data);
-    
+
     return NULL;
 };
 
@@ -122,22 +122,22 @@ template <typename T> int dtkComposerTransmitterEmitter<T>::dataType(void)
 
 template <typename T> QString dtkComposerTransmitterEmitter<T>::dataIdentifier(void)
 {
-    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
-        return reinterpret_cast<dtkAbstractObject*>(m_data)->identifier();
+    if (dtkTypeInfo<T *>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject *>(m_data)->identifier();
 
-    if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
-        return reinterpret_cast<dtkMatrixReal*>(m_data)->identifier();
+    if (dtkTypeInfo<T *>::dtkMatrixRealPointer)
+        return reinterpret_cast<dtkMatrixReal *>(m_data)->identifier();
 
     return QString(QMetaType::typeName(d->data_type));
 };
 
 template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(void)
 {
-    if (dtkTypeInfo<T*>::dtkAbstractObjectPointer)
-        return reinterpret_cast<dtkAbstractObject*>(m_data)->description();
+    if (dtkTypeInfo<T *>::dtkAbstractObjectPointer)
+        return reinterpret_cast<dtkAbstractObject *>(m_data)->description();
 
-    if (dtkTypeInfo<T*>::dtkMatrixRealPointer)
-        return reinterpret_cast<dtkMatrixReal*>(m_data)->description();
+    if (dtkTypeInfo<T *>::dtkMatrixRealPointer)
+        return reinterpret_cast<dtkMatrixReal *>(m_data)->description();
 
 // #if defined(DTK_BUILD_PLOT_SUPPORT)
 //     if (dtkPlotCurve *curve = dynamic_cast<dtkPlotCurve*>(m_data))
@@ -146,14 +146,14 @@ template <typename T> QString dtkComposerTransmitterEmitter<T>::dataDescription(
 
     QString address;
     QTextStream addressStream (&address);
-    addressStream << (static_cast<const void*>(m_data));
+    addressStream << (static_cast<const void *>(m_data));
 
     return address;
 };
 
 //! Returns.
-/*! 
- *  
+/*!
+ *
  */
 template <typename T> inline dtkComposerTransmitter::Kind dtkComposerTransmitterEmitter<T>::kind(void) const
 {
@@ -172,7 +172,7 @@ template <typename T> inline QString dtkComposerTransmitterEmitter<T>::kindName(
 template <typename T> inline dtkComposerTransmitterEmitterVector<T>::dtkComposerTransmitterEmitterVector(dtkComposerNode *parent) : dtkComposerTransmitterAbstractEmitter(parent)
 {
     m_vector = NULL;
-    d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper*>(0));
+    d->data_type = qMetaTypeId<dtkAbstractContainerWrapper>(reinterpret_cast<dtkAbstractContainerWrapper *>(0));
     d->variant.setValue(d->container);
 };
 
@@ -186,8 +186,10 @@ template <typename T> void dtkComposerTransmitterEmitterVector<T>::clearData(voi
     m_vector = NULL;
     d->object = NULL;
     d->variant.clear();
+
     if (d->container)
         delete d->container;
+
     d->container = NULL;
     d->matrix = NULL;
 };
@@ -205,10 +207,12 @@ template <typename T> inline QString dtkComposerTransmitterEmitterVector<T>::kin
 template <typename T> inline void dtkComposerTransmitterEmitterVector<T>::setData(dtkContainerVector<T> *vector)
 {
     m_vector = vector;
+
     if (!d->container)
         d->container = new dtkContainerVectorWrapper<T>(m_vector);
     else
         d->container->setVector(m_vector);
+
     d->variant.setValue(d->container);
 
     d->object = d->container;

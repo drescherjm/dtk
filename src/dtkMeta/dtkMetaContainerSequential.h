@@ -29,8 +29,7 @@ class DTKMETA_EXPORT dtkMetaContainerSequential
 
 public:
     struct iterator;
-    struct DTKMETA_EXPORT item
-    {
+    struct DTKMETA_EXPORT item {
         HandlerIterator *it;
     private:
         friend class dtkMetaContainerSequential;
@@ -40,10 +39,10 @@ public:
         explicit item(HandlerIterator *iterator);
 
     public:
-         item(const item& o) = delete;
-         item(item&& o);
+        item(const item& o) = delete;
+        item(item&& o);
         ~item(void);
-        
+
     public:
         item& operator = (const item& o);
         item& operator = (item&& o);
@@ -71,8 +70,7 @@ public:
     };
 
 public:
-    struct DTKMETA_EXPORT iterator
-    {
+    struct DTKMETA_EXPORT iterator {
     private:
         friend class dtkMetaContainerSequential;
         item proxy;
@@ -81,8 +79,8 @@ public:
         explicit iterator(HandlerIterator *iterator);
 
     public:
-         iterator(const iterator& o);
-         iterator(iterator&& o);
+        iterator(const iterator& o);
+        iterator(iterator&& o);
         ~iterator(void);
 
     public:
@@ -112,8 +110,7 @@ public:
     };
 
 public:
-    struct DTKMETA_EXPORT const_iterator
-    {
+    struct DTKMETA_EXPORT const_iterator {
     private:
         friend class dtkMetaContainerSequential;
         HandlerConstIterator *it;
@@ -122,17 +119,17 @@ public:
         explicit const_iterator(HandlerConstIterator *iterator);
 
     public:
-         const_iterator(const const_iterator& o);
-         const_iterator(const_iterator&& o);
+        const_iterator(const const_iterator& o);
+        const_iterator(const_iterator&& o);
         ~const_iterator(void);
 
     public:
-         const_iterator& operator = (const const_iterator& o);
-         const_iterator& operator = (const_iterator&& o);
+        const_iterator& operator = (const const_iterator& o);
+        const_iterator& operator = (const_iterator&& o);
 
     public:
-         bool operator == (const const_iterator& o) const;
-         bool operator != (const const_iterator& o) const;
+        bool operator == (const const_iterator& o) const;
+        bool operator != (const const_iterator& o) const;
 
     public:
         QVariant operator *  (void)        const;
@@ -157,10 +154,10 @@ public:
     ~dtkMetaContainerSequential(void);
 
 public:
-          iterator  begin(void);
+    iterator  begin(void);
     const_iterator  begin(void) const;
     const_iterator cbegin(void) const;
-          iterator    end(void);
+    iterator    end(void);
     const_iterator    end(void) const;
     const_iterator   cend(void) const;
 
@@ -204,13 +201,13 @@ public:
 
 public:
     const QVariant& first(void) const;
-              item& first(void);
+    item& first(void);
 
     const QVariant& last(void) const;
-              item& last(void);
+    item& last(void);
 
     const QVariant& operator [] (qlonglong idx) const;
-              item& operator [] (qlonglong idx);
+    item& operator [] (qlonglong idx);
 
 protected:
     friend QDebug& operator << (QDebug debug, const dtkMetaContainerSequential& container);
@@ -241,15 +238,14 @@ DTK_DECLARE_SEQUENTIAL_CONTAINER_POINTER(std::vector);
 // Register QStringList* as a sequential container pointer
 // /////////////////////////////////////////////////////////////////
 
-template <> struct QMetaTypeId<QStringList *>
-{
+template <> struct QMetaTypeId<QStringList *> {
     enum {
         Defined = QMetaTypeId2<QString>::Defined
     };
 
-    static int qt_metatype_id()
-    {
+    static int qt_metatype_id() {
         static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
+
         if (const int id = metatype_id.load())
             return id;
 
@@ -257,6 +253,7 @@ template <> struct QMetaTypeId<QStringList *>
 
         const int newId = qRegisterNormalizedMetaType<QStringList *>(typeName, reinterpret_cast<QStringList **>(quintptr(-1)));
         metatype_id.storeRelease(newId);
+
         if (newId > 0) {
             dtkMetaType::registerContainerPointerConverter<QStringList *>(newId);
         }

@@ -1,5 +1,5 @@
-/* dtkDistributedControllerTargetView.cpp --- 
- * 
+/* dtkDistributedControllerTargetView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 54
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -67,7 +67,7 @@ void dtkDistributedControllerTargetView::setController(dtkDistributedController 
 void dtkDistributedControllerTargetView::onConnected(const QUrl& server)
 {
     QListWidgetItem *item = new QListWidgetItem(server.toString(), this);
-    item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);    
+    item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
 
     this->addItem(item);
     this->openPersistentEditor(item);
@@ -76,8 +76,8 @@ void dtkDistributedControllerTargetView::onConnected(const QUrl& server)
 void dtkDistributedControllerTargetView::onDisconnected(const QUrl& server)
 {
     QList<QListWidgetItem *> items = this->findItems(server.toString(), Qt::MatchExactly);
-    
-    foreach(QListWidgetItem *item, items) {
+
+    foreach (QListWidgetItem *item, items) {
         this->closePersistentEditor(item);
         delete this->takeItem(this->row(item));
     }

@@ -1,5 +1,5 @@
-/* dtkDistributedService_p.h --- 
- * 
+/* dtkDistributedService_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:31:56 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 23
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVICE_P_H
@@ -23,7 +23,7 @@
 #include "dtkDistributedService.h"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkDistributedServiceControllerPrivate
@@ -36,7 +36,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkDistributedServiceBasePrivate
@@ -44,7 +44,7 @@ class dtkDistributedServiceBasePrivate
     Q_DECLARE_PUBLIC(dtkDistributedServiceBase)
 
 public:
-     dtkDistributedServiceBasePrivate(const QString &name);
+    dtkDistributedServiceBasePrivate(const QString& name);
     ~dtkDistributedServiceBasePrivate(void);
 
     dtkDistributedServiceBase *q_ptr;
@@ -59,8 +59,8 @@ public:
     dtkDistributedServiceController controller;
 
     void startService(void);
-    int run(bool asService, const QStringList &argList);
-    bool install(const QString &account, const QString &password);
+    int run(bool asService, const QStringList& argList);
+    bool install(const QString& account, const QString& password);
 
     bool start(void);
 
@@ -73,7 +73,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkDistributedServiceStarter : public QObject
@@ -84,8 +84,7 @@ public:
     dtkDistributedServiceStarter(dtkDistributedServiceBasePrivate *service) : QObject(), d_ptr(service) {}
 
 public slots:
-    void slotStart(void)
-    {
+    void slotStart(void) {
         d_ptr->startService();
     }
 

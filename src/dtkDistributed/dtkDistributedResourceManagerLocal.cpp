@@ -25,7 +25,7 @@
 class dtkDistributedResourceManagerLocalPrivate
 {
 public:
-    QHash<QString,QProcess *> slaves;
+    QHash<QString, QProcess *> slaves;
 
 public:
     QTemporaryFile tmp_err;
@@ -65,12 +65,14 @@ QByteArray  dtkDistributedResourceManagerLocal::status(void)
     qlonglong njobs  = d->slaves.keys().count();
     qlonglong ngpus  = 0;
 
-    for (int c=0;c< QThread::idealThreadCount();c++) {
+    for (int c = 0; c < QThread::idealThreadCount(); c++) {
         QVariantMap core;
-        core.insert("id",c);
+        core.insert("id", c);
+
         if (c < njobs) {
-            core.insert("job",d->slaves.keys().at(c));
+            core.insert("job", d->slaves.keys().at(c));
         }
+
         cores << core;
     }
 
@@ -90,7 +92,7 @@ QByteArray  dtkDistributedResourceManagerLocal::status(void)
 
     props.insert("ethernet", "1G");
 
-    foreach(QString id, d->slaves.keys()) {
+    foreach (QString id, d->slaves.keys()) {
         QVariantMap job;
         job.insert("id", id);
         job.insert("username", "me");
@@ -100,9 +102,9 @@ QByteArray  dtkDistributedResourceManagerLocal::status(void)
         job.insert("walltime", "12:0:0");
         job.insert("state", "running");
         QVariantMap jresources;
-        jresources.insert("nodes",1);
+        jresources.insert("nodes", 1);
         //FIXME: how many cores ?
-        jresources.insert("cores",1);
+        jresources.insert("cores", 1);
         job.insert("resources", jresources);
         jjobs << job;
     }
@@ -136,6 +138,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         dtkWarn() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
+
     QVariantMap json = jsonDoc.object().toVariantMap();
 
     QSettings settings("inria", "dtk");
@@ -143,7 +146,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
 
     // script
     if (json.contains("script")) {
-        qsub += " "+json["script"].toString();
+        qsub += " " + json["script"].toString();
     } else if (json.contains("application")) {
         QString server = QHostInfo::localHostName ();
 #if defined(Q_OS_MAC)
@@ -154,6 +157,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         QVariantMap res = json["resources"].toMap();
         int nodes   = 0;
         int threads = 0;
+
         if (res["nodes"].toInt() == 0) {
             // no nodes, only cores; TODO
         } else if (res["cores"].toInt() == 0) {
@@ -164,16 +168,17 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         }
 
         QString app_path = json["application"].toString();
-        if (settings.contains(server +"_server_mpirun_path")) {
-            dtkDebug() << "found specific command for this server:" << settings.value(server +"_server_mpirun").toString();
-            qsub = settings.value(server +"_server_mpirun_path").toString();
+
+        if (settings.contains(server + "_server_mpirun_path")) {
+            dtkDebug() << "found specific command for this server:" << settings.value(server + "_server_mpirun").toString();
+            qsub = settings.value(server + "_server_mpirun_path").toString();
 
             if (nodes > 1)
-                args += "-np " + QString::number(nodes*threads) + " ";
+                args += "-np " + QString::number(nodes * threads) + " ";
 
 
-            if (settings.contains(server +"_server_mpirun_args")) {
-                args += settings.value(server +"_server_mpirun_args").toString();
+            if (settings.contains(server + "_server_mpirun_args")) {
+                args += settings.value(server + "_server_mpirun_args").toString();
             }
 
             if (QFileInfo(app_path).isAbsolute()) {
@@ -181,27 +186,28 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
             } else {
                 //relative PATH, append our application path
                 args += qApp->applicationDirPath()
-                    + "/"
-                    + app_path;
+                        + "/"
+                        + app_path;
             }
 
         } else {
             QStringList app = json["application"].toString().split(" ");
             app_path = app.takeFirst();
+
             if (QFileInfo(app_path).isAbsolute()) {
                 qsub = app_path;
             } else {
                 qsub = qApp->applicationDirPath()
-                    + "/"
-                    + app_path;
+                       + "/"
+                       + app_path;
             }
 
             args += app.join(" ");
 
             if (nodes > 1) {
-                args += " -np "+ QString::number(nodes*threads)+ " ";
+                args += " -np " + QString::number(nodes * threads) + " ";
             } else if (threads > 1) {
-                args += " -np "+ res["cores"].toString();
+                args += " -np " + res["cores"].toString();
             }
         }
 
@@ -211,7 +217,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
     }
 
     QProcess *stat = new QProcess;
-    QStringList rargs= args.split(" ");
+    QStringList rargs = args.split(" ");
     QString err_filename;
 
     dtkDebug() << qsub << rargs;
@@ -220,6 +226,7 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         if (settings.contains("keep_output_files") && settings.value("keep_output_files").toBool() ) {
             d->tmp_err.setAutoRemove(false);
         }
+
         err_filename = d->tmp_err.fileName();
         stat->setStandardErrorFile(err_filename);
         dtkInfo() << "std error file of job is" << err_filename;
@@ -227,7 +234,8 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
         return QString("ERROR");
     }
 
-    stat->start(qsub,rargs);
+    stat->start(qsub, rargs);
+
     if (stat->waitForStarted(5000))
         dtkDebug() << "process started";
     else
@@ -235,23 +243,26 @@ QString dtkDistributedResourceManagerLocal::submit(QString input)
 
     // Wait for jobid in stdout
     QEventLoop loop;
-    loop.connect(stat,SIGNAL(readyRead()),&loop,SLOT(quit()));
+    loop.connect(stat, SIGNAL(readyRead()), &loop, SLOT(quit()));
     loop.connect(qApp, SIGNAL(aboutToQuit()), &loop, SLOT(quit()));
     loop.exec();
 
     QString jobid;
+
     while (jobid.isEmpty() && !(stat->atEnd())) {
         QString tmp = stat->readLine();
+
         if (tmp.startsWith("DTK_JOBID")) {
             jobid = tmp.simplified().split("=").at(1);
         }
     }
+
     if (jobid.isEmpty()) {
         dtkError() << "bad output file";
         return QString("ERROR");
     }
 
-    d->slaves.insert(jobid,stat);
+    d->slaves.insert(jobid, stat);
     dtkDebug() << jobid;
     return jobid;
 }

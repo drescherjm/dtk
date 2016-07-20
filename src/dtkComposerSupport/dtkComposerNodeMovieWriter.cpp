@@ -52,6 +52,7 @@ dtkComposerNodeMovieWriter::~dtkComposerNodeMovieWriter(void)
 {
     if (d->video)
         d->video->close();
+
     delete d;
     d = NULL;
 }
@@ -68,16 +69,16 @@ QString dtkComposerNodeMovieWriter::titleHint(void)
 
 QString dtkComposerNodeMovieWriter::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "file";
 
-    if(port == 1)
+    if (port == 1)
         return "frame";
 
-    if(port == 2)
+    if (port == 2)
         return "fps";
 
-    if(port == 3)
+    if (port == 3)
         return "bitrate";
 
     return dtkComposerNodeLeaf::inputLabelHint(port);
@@ -88,17 +89,20 @@ void dtkComposerNodeMovieWriter::run(void)
     if (!d->receiver_fps.isEmpty()) {
         d->fps = *(d->receiver_fps.data());
     }
+
     if (!d->receiver_bitrate.isEmpty()) {
         d->bitrate = *(d->receiver_bitrate.data());
     }
 
     if (!d->receiver_file.isEmpty() && !d->receiver_frame.isEmpty()) {
         QImage *image = d->receiver_frame.data();
+
         if (!d->video) {
             d->video = new dtkVideoEncoder;
             int gop = 20;
-            bool res = d->video->createFile(*(d->receiver_file.data()), image->width(),image->height(),d->bitrate,gop,d->fps);
+            bool res = d->video->createFile(*(d->receiver_file.data()), image->width(), image->height(), d->bitrate, gop, d->fps);
         }
+
         d->video->encodeImage(*image);
     }
 }

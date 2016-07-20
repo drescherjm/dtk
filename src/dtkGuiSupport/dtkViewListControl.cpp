@@ -110,16 +110,17 @@ void dtkViewListControl::layoutHorizontally(void)
     int w = d->layout->current()->width();
     int n = d->list->count();
     int s = d->layout->current()->handleWidth();
-    int v = (w-(n-1)*s)/n;
+    int v = (w - (n - 1) * s) / n;
 
-    for(int i = 1; i <= n; i++) {
+    for (int i = 1; i <= n; i++) {
 
         dtkViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Horizontal);
-        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text().split(" ").first()));
-        if(i != n) {
+        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i - 1)->text().split(" ").first()));
 
-            QList<int> sizes = QList<int>() << v << current->width()-s-v;
+        if (i != n) {
+
+            QList<int> sizes = QList<int>() << v << current->width() - s - v;
             current->split();
             current->setSizes(sizes);
         }
@@ -146,16 +147,17 @@ void dtkViewListControl::layoutVertically(void)
     int f = d->layout->current()->footerHeight();
     int n = d->list->count();
     int s = d->layout->current()->handleHeight();
-    int v = (h-n*f-(n-1)*s)/n;
+    int v = (h - n * f - (n - 1) * s) / n;
 
-    for(int i = 1; i <= n; i++) {
+    for (int i = 1; i <= n; i++) {
 
         dtkViewLayoutItem *current = d->layout->current();
         current->setOrientation(Qt::Vertical);
-        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i-1)->text().split(" ").first()));
-        if(i != n) {
+        current->proxy()->setView(dtkAbstractViewFactory::instance()->view(d->list->item(i - 1)->text().split(" ").first()));
 
-            QList<int> sizes = QList<int>() << v+f << current->height()-s-v-f;
+        if (i != n) {
+
+            QList<int> sizes = QList<int>() << v + f << current->height() - s - v - f;
             current->split();
             current->setSizes(sizes);
         }
@@ -185,7 +187,7 @@ void dtkViewListControl::layoutGrid(void)
 
     QList<item_t> items; items << qMakePair(d->layout->current(), Qt::Horizontal);
 
-    for(int i = 1; i < n; i++) {
+    for (int i = 1; i < n; i++) {
 
         item_t item = items.takeFirst();
 

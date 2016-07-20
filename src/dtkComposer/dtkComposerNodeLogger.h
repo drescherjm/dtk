@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -21,7 +21,7 @@ class dtkComposerNodeLoggerPrivate;
 class  dtkComposerNodeLogger : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeLogger(void);
+    dtkComposerNodeLogger(void);
     ~dtkComposerNodeLogger(void);
 
 public:
@@ -31,5 +31,5 @@ private:
     dtkComposerNodeLoggerPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeLogger.h ends here

@@ -1,4 +1,4 @@
-/* dtkInterpreter.cpp --- 
+/* dtkInterpreter.cpp ---
  *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
@@ -9,7 +9,7 @@
  *     Update #: 521
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -98,33 +98,33 @@ void dtkInterpreter::keyPressEvent(QKeyEvent *event)
 {
     QTextCursor cursor = textCursor();
 
-    if(event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
 
         this->onKeyEnterPressed();
 
-    } else if(event->key() == Qt::Key_Backspace) {
-        
-        if(cursor.columnNumber() > d->prompt.size())
+    } else if (event->key() == Qt::Key_Backspace) {
+
+        if (cursor.columnNumber() > d->prompt.size())
             QPlainTextEdit::keyPressEvent(event);
 
-    } else if(event->key() == Qt::Key_Up) {
+    } else if (event->key() == Qt::Key_Up) {
 
         this->onKeyUpPressed();
 
-    } else if(event->key() == Qt::Key_Down) {
+    } else if (event->key() == Qt::Key_Down) {
 
         this->onKeyDownPressed();
 
-    } else if(event->key() == Qt::Key_Left) {
+    } else if (event->key() == Qt::Key_Left) {
 
-        if(cursor.columnNumber() > d->prompt.size())
+        if (cursor.columnNumber() > d->prompt.size())
             QPlainTextEdit::keyPressEvent(event);
-        
+
         this->onKeyLeftPressed();
 
-    } else if(event->key() == Qt::Key_Right) {
+    } else if (event->key() == Qt::Key_Right) {
 
-        if(cursor.columnNumber() < currentLine().size())
+        if (cursor.columnNumber() < currentLine().size())
             QPlainTextEdit::keyPressEvent(event);
 
         this->onKeyRightPressed();
@@ -145,21 +145,22 @@ void dtkInterpreter::mouseReleaseEvent(QMouseEvent *event)
 {
     QPlainTextEdit::mouseReleaseEvent(event);
 
-    if(d->cursor.blockNumber() +1 != currentLineNumber() && d->cursor.columnNumber() <= d->prompt.size())
+    if (d->cursor.blockNumber() + 1 != currentLineNumber() && d->cursor.columnNumber() <= d->prompt.size())
         this->setTextCursor(d->cursor);
 }
 
 void dtkInterpreter::onKeyUpPressed(void)
 {
-    if(d->history.size() == 0)
+    if (d->history.size() == 0)
         return;
 
-    if(d->history_index && d->history_index == (unsigned int)d->history.size()-1)
+    if (d->history_index && d->history_index == (unsigned int)d->history.size() - 1)
         return;
 
-    if(d->history_index == 0 && !d->history_dirty) {
+    if (d->history_index == 0 && !d->history_dirty) {
         QString line = currentLine();
-        if(d->interpreter)
+
+        if (d->interpreter)
             line.remove(d->prompt);
 
         d->history.push_front(line);
@@ -180,7 +181,7 @@ void dtkInterpreter::onKeyUpPressed(void)
 
 void dtkInterpreter::onKeyDownPressed(void)
 {
-    if(d->history_index == 0)
+    if (d->history_index == 0)
         return;
 
     d->history_index--;
@@ -194,7 +195,7 @@ void dtkInterpreter::onKeyDownPressed(void)
     cursor.movePosition(QTextCursor::EndOfLine);
     this->setTextCursor(cursor);
 
-    if(d->history_index == 0 && d->history_dirty) {
+    if (d->history_index == 0 && d->history_dirty) {
         d->history.pop_front();
         d->history_dirty = false;
     }
@@ -216,11 +217,11 @@ void dtkInterpreter::onKeyEnterPressed(void)
 
     QString line = currentBlock();
 
-    if(d->interpreter)
+    if (d->interpreter)
         line.remove(d->prompt);
-    
-    if(!line.isEmpty()) {
-        if(d->history_index > 0 && d->history_dirty)
+
+    if (!line.isEmpty()) {
+        if (d->history_index > 0 && d->history_dirty)
             d->history.removeFirst();
 
         d->history.push_front(line);
@@ -235,11 +236,11 @@ void dtkInterpreter::output(const QString& result)
 {
     QString text(result);
 
-    if(!text.simplified().isEmpty())
+    if (!text.simplified().isEmpty())
         this->appendPlainText(text);
 
     this->appendPlainText(d->prompt);
-    
+
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::End);
     this->setTextCursor(cursor);
@@ -254,7 +255,7 @@ QString dtkInterpreter::currentLine(void) const
 {
     QTextCursor tc = textCursor();
     tc.select(QTextCursor::LineUnderCursor);
-    
+
     return tc.selectedText();
 }
 
@@ -262,15 +263,15 @@ QString dtkInterpreter::currentBlock(void) const
 {
     QTextCursor tc = textCursor();
     tc.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
-    
-    while(!tc.selectedText().contains(d->prompt))
+
+    while (!tc.selectedText().contains(d->prompt))
         tc.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
     QString block;
     QString text = tc.selectedText();
     QStringList lines = text.split(QChar(8233));
 
-    if(lines.count() > 1)
+    if (lines.count() > 1)
         block = lines.join("\n");
     else
         block = text;

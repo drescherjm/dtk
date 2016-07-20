@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -23,7 +23,7 @@
 // /////////////////////////////////////////////////////////////////
 
 //! Constructs dtkComposerTransmitter with \a parent as parent node.
-/*! 
+/*!
  *  The parent node is the node that owns the transmitter in its list
  *  of emitters or receivers.
  */
@@ -40,7 +40,7 @@ dtkComposerTransmitter::~dtkComposerTransmitter(void)
 }
 
 //! Sets the node to which the current transmitter is parented.
-/*! 
+/*!
  *  The parent node is the node that owns the transmitter in its list
  *  of emitters or receivers.
  */
@@ -50,7 +50,7 @@ void dtkComposerTransmitter::setParentNode(dtkComposerNode *parent)
 }
 
 //! Returns pointer to parent node.
-/*! 
+/*!
  *  The parent node is the node that owns the transmitter in its list
  *  of emitters or receivers.
  */
@@ -60,7 +60,7 @@ dtkComposerNode *dtkComposerTransmitter::parentNode(void) const
 }
 
 //! Sets the type of data transmission.
-/*! 
+/*!
  *  The transmission type can be either AutoCopy, Copy, or
  *  Reference. By default, the transmission type is AutoCopy.
  *
@@ -83,8 +83,8 @@ void dtkComposerTransmitter::setDataTransmission(DataTransmission value)
 }
 
 //! Returns the type of the data transmission.
-/*! 
- *  
+/*!
+ *
  */
 dtkComposerTransmitter::DataTransmission dtkComposerTransmitter::dataTransmission(void) const
 {
@@ -92,7 +92,7 @@ dtkComposerTransmitter::DataTransmission dtkComposerTransmitter::dataTransmissio
 }
 
 //! Sets required flag to \a required.
-/*! 
+/*!
  *  Required flags is typically used to know whether a transmitter
  *  must be connected or not.
  */
@@ -102,7 +102,7 @@ void dtkComposerTransmitter::setRequired(bool required)
 }
 
 //! Returns true if transmitter is required.
-/*! 
+/*!
  *  Required flags is typically used to know whether a transmitter
  *  must be connected or not.
  */
@@ -113,10 +113,11 @@ bool dtkComposerTransmitter::required(void)
 
 void dtkComposerTransmitter::clearData(void)
 {
-    d->variant.clear(); 
-    d->swap.clear();  
-    
+    d->variant.clear();
+    d->swap.clear();
+
     int type = QMetaType::UnknownType;
+
     if (!d->type_list.isEmpty())
         type = d->type_list.first();
 
@@ -130,7 +131,7 @@ bool dtkComposerTransmitter::isEmpty(void) const
 }
 
 //! Returns true if transmitter is active.
-/*! 
+/*!
  *  Active flags is typically used to select an emitter among a list
  *  owned by a control node.
  */
@@ -140,7 +141,7 @@ bool dtkComposerTransmitter::active(void)
 }
 
 //! Sets active flag to \a active.
-/*! 
+/*!
  *  Active flags is typically used to select an emitter among a list
  *  owned by a control node.
  */
@@ -151,19 +152,19 @@ void dtkComposerTransmitter::setActive(bool active)
     if (!active)
         return;
 
-    foreach(dtkComposerTransmitter *receiver, d->receivers)
+    foreach (dtkComposerTransmitter *receiver, d->receivers)
         receiver->activateEmitter(this);
 }
 
 //! Sets \a emitter as the one that provides data.
-/*! 
- *  
+/*!
+ *
  */
 void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitter *emitter)
 {
     d->active_emitter = NULL;
 
-    foreach(dtkComposerTransmitter *e, d->emitters) {
+    foreach (dtkComposerTransmitter *e, d->emitters) {
         if (emitter == e) {
             d->active_emitter = e;
             break;
@@ -173,7 +174,7 @@ void dtkComposerTransmitter::activateEmitter(dtkComposerTransmitter *emitter)
 
 //! Returns true if more than one receiver is connected to one
 //! emitter. Returns false otherwise.
-/*! 
+/*!
  *  Returns true by default.
  */
 bool dtkComposerTransmitter::enableCopy(void)
@@ -181,18 +182,18 @@ bool dtkComposerTransmitter::enableCopy(void)
     return true;
 }
 
-//! Sets the types that can be handled by the transmitter 
-/*!  
- *  
+//! Sets the types that can be handled by the transmitter
+/*!
+ *
  */
 void dtkComposerTransmitter::setTypeList(const TypeList& list)
 {
     d->type_list = list;
 }
 
-//! List of types of data likely handled by the transmitter 
-/*!  
- *  
+//! List of types of data likely handled by the transmitter
+/*!
+ *
  */
 dtkComposerTransmitter::TypeList dtkComposerTransmitter::typeList(void) const
 {
@@ -200,7 +201,7 @@ dtkComposerTransmitter::TypeList dtkComposerTransmitter::typeList(void) const
 }
 
 //! Several cases can occur when calling this method.
-/*!  
+/*!
  *  A transmitter can be either an emitter, a receiver or a
  *  variant. The case of the proxy is forgotten since this method must
  *  not be called in this case.
@@ -232,8 +233,8 @@ QVariantList dtkComposerTransmitter::allData(void)
 }
 
 //! Appends \a transmitter to the list of the transmitters that follow
-//! the current one. 
-/*! 
+//! the current one.
+/*!
  *  This list contains only one reference to each transmitter.
  */
 void dtkComposerTransmitter::appendNext(dtkComposerTransmitter *transmitter)
@@ -246,8 +247,8 @@ void dtkComposerTransmitter::appendNext(dtkComposerTransmitter *transmitter)
 
 //! Removes \a transmitter from the list of the transmitters that
 //! follow the current one.
-/*! 
- *  
+/*!
+ *
  */
 void dtkComposerTransmitter::removeNext(dtkComposerTransmitter *transmitter)
 {
@@ -256,7 +257,7 @@ void dtkComposerTransmitter::removeNext(dtkComposerTransmitter *transmitter)
 
 //! Appends \a transmitter to the list of the transmitters that precede
 //! the current one.
-/*! 
+/*!
  *  This list contains only one reference to each transmitter.
  */
 void dtkComposerTransmitter::appendPrevious(dtkComposerTransmitter *transmitter)
@@ -269,8 +270,8 @@ void dtkComposerTransmitter::appendPrevious(dtkComposerTransmitter *transmitter)
 
 //! Removes \a transmitter from the list of the transmitters that
 //! precede the current one.
-/*! 
- *  
+/*!
+ *
  */
 void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
 {
@@ -279,7 +280,7 @@ void dtkComposerTransmitter::removePrevious(dtkComposerTransmitter *transmitter)
 
 //! Returns true when current transmitter and \a transmitter share
 //! data of same type.
-/*! 
+/*!
  *  In practice, this method is only reimplemented in
  *  dtkComposerReceiver class where the type checking is performed.
  *
@@ -294,8 +295,8 @@ bool dtkComposerTransmitter::connect(dtkComposerTransmitter *transmitter)
 
 //! Adds \a receiver to the list of the receivers to which the current
 //! transmitter is connected.
-/*! 
- *  
+/*!
+ *
  */
 void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
 {
@@ -304,8 +305,8 @@ void dtkComposerTransmitter::appendReceiver(dtkComposerTransmitter *receiver)
 
 //! Remove \a receiver from the list of the receivers to which the current
 //! transmitter is connected.
-/*! 
- *  
+/*!
+ *
  */
 void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
 {
@@ -314,8 +315,8 @@ void dtkComposerTransmitter::removeReceiver(dtkComposerTransmitter *receiver)
 
 //! Returns the number of receiver transmitters to which the current
 //! transmitter is connected.
-/*! 
- *  
+/*!
+ *
  */
 int dtkComposerTransmitter::receiverCount(void)
 {
@@ -324,7 +325,7 @@ int dtkComposerTransmitter::receiverCount(void)
 
 //! Returns true when current transmitter and \a transmitter share
 //! data of same type.
-/*! 
+/*!
  *  In practice, this method is only reimplemented in
  *  dtkComposerReceiver class where the type checking is performed.
  *
@@ -337,9 +338,9 @@ bool dtkComposerTransmitter::disconnect(dtkComposerTransmitter *transmitter)
     return false;
 }
 
-//! 
-/*! 
- *  
+//!
+/*!
+ *
  */
 bool dtkComposerTransmitter::enableConnection(dtkComposerTransmitter *transmitter)
 {
@@ -349,7 +350,7 @@ bool dtkComposerTransmitter::enableConnection(dtkComposerTransmitter *transmitte
 }
 
 //! Finds all emitters connected to \a transmitter.
-/*! 
+/*!
  *  All links from every emitter found to \a transmitter are stored in
  *  a multi-hash table.
  *
@@ -364,7 +365,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::leftLinks(dtkComposerTra
 }
 
 //! Finds all receivers connected to \a transmitter.
-/*! 
+/*!
  *  All links from every receiver found to \a transmitter are stored
  *  in a multi-hash table.
  *
@@ -380,7 +381,7 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitter::rightLinks(dtkComposerTr
 
 //! Connects all emitters and all receivers that share the link (\a
 //! source, \a destination).
-/*! 
+/*!
  *  All links from \a destination to all likely emitters are first
  *  computed. Second, all paths from \a source to all possible receivers
  *  are also computed. Then, every receiver trys to connect each
@@ -399,9 +400,9 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
     LinkMap  left_link_map =  source->leftLinks(destination, list);
     LinkMap right_link_map = destination->rightLinks(source, list);
 
-    foreach(dtkComposerTransmitter *receiver, right_link_map.uniqueKeys()) {
+    foreach (dtkComposerTransmitter *receiver, right_link_map.uniqueKeys()) {
 
-        foreach(dtkComposerTransmitter *emitter, left_link_map.uniqueKeys()) {
+        foreach (dtkComposerTransmitter *emitter, left_link_map.uniqueKeys()) {
 
             if (receiver->connect(emitter)) {
 
@@ -410,20 +411,22 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
                 // instance that need to check compatibility of
                 // input/output types.
 
-                foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
-                    if(!valid_links.contains(l))
+                foreach (dtkComposerTransmitterLink *l, right_link_map.values(receiver))
+                    if (!valid_links.contains(l))
                         valid_links << l;
-                foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
-                    if(!valid_links.contains(l))
+
+                foreach (dtkComposerTransmitterLink *l, left_link_map.values(emitter))
+                    if (!valid_links.contains(l))
                         valid_links << l;
-            
+
             } else {
 
-                foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
-                    if(!invalid_links.contains(l))
+                foreach (dtkComposerTransmitterLink *l, right_link_map.values(receiver))
+                    if (!invalid_links.contains(l))
                         invalid_links << l;
-                foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
-                    if(!invalid_links.contains(l))
+
+                foreach (dtkComposerTransmitterLink *l, left_link_map.values(emitter))
+                    if (!invalid_links.contains(l))
                         invalid_links << l;
 
             }
@@ -435,7 +438,7 @@ bool dtkComposerTransmitter::onTransmittersConnected(dtkComposerTransmitter *sou
 
 //! Connects all emitters and all receivers that share the link (\a
 //! source, \a destination).
-/*! 
+/*!
  *  All links from \a destination to all likely emitters are first
  *  computed. Second, all paths from \a source to all possible receivers
  *  are also computed. Then, every receiver trys to connect each
@@ -454,17 +457,18 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
     LinkMap  left_link_map =  source->leftLinks(destination, list);
     LinkMap right_link_map = destination->rightLinks(source, list);
 
-    foreach(dtkComposerTransmitter *receiver, right_link_map.uniqueKeys()) {
+    foreach (dtkComposerTransmitter *receiver, right_link_map.uniqueKeys()) {
 
-        foreach(dtkComposerTransmitter *emitter, left_link_map.uniqueKeys()) {
+        foreach (dtkComposerTransmitter *emitter, left_link_map.uniqueKeys()) {
 
             receiver->disconnect(emitter);
 
-            foreach(dtkComposerTransmitterLink *l, right_link_map.values(receiver))
-                if(!invalid_links.contains(l))
+            foreach (dtkComposerTransmitterLink *l, right_link_map.values(receiver))
+                if (!invalid_links.contains(l))
                     invalid_links << l;
-            foreach(dtkComposerTransmitterLink *l, left_link_map.values(emitter))
-                if(!invalid_links.contains(l))
+
+            foreach (dtkComposerTransmitterLink *l, left_link_map.values(emitter))
+                if (!invalid_links.contains(l))
                     invalid_links << l;
 
         }
@@ -478,24 +482,24 @@ bool dtkComposerTransmitter::onTransmittersDisconnected(dtkComposerTransmitter *
 // /////////////////////////////////////////////////////////////////
 
 //! Writes the transmitter's identifier to the stream.
-/*! 
- *  
+/*!
+ *
  */
 QDebug operator<<(QDebug debug, const dtkComposerTransmitter& transmitter)
 {
     debug.nospace() << "dtkComposerTransmitter: " << transmitter.kindName() << " " << const_cast<dtkComposerTransmitter&>(transmitter).d->variant.typeName();
-    
+
     return debug.space();
 }
 
 //!  Writes the transmitter's identifier to the stream.
-/*! 
- *  
+/*!
+ *
  */
 QDebug operator<<(QDebug debug, dtkComposerTransmitter *transmitter)
 {
     debug.nospace() << "dtkComposerTransmitter: " << transmitter->kindName() << " " << transmitter->d->variant.typeName();
-    
+
     return debug.space();
 }
 
@@ -523,7 +527,7 @@ dtkComposerTransmitterLink::dtkComposerTransmitterLink(dtkComposerTransmitter *s
 dtkComposerTransmitterLink::~dtkComposerTransmitterLink(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -537,5 +541,5 @@ dtkComposerTransmitter *dtkComposerTransmitterLink::destination(void)
     return d->destination;
 }
 
-// 
+//
 // dtkComposerTransmitter.cpp ends here

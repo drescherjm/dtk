@@ -1,5 +1,5 @@
-/* dtkComposerSearchDialog.cpp --- 
- * 
+/* dtkComposerSearchDialog.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Nov  5 16:41:00 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 292
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -26,7 +26,7 @@
 #include "dtkComposerView.h"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerSearchDialogPrivate
@@ -65,32 +65,32 @@ public:
 
 void dtkComposerSearchDialogPrivate::populate(dtkComposerSceneNode *node)
 {
-    if(!node->title().isEmpty()) {
+    if (!node->title().isEmpty()) {
         this->node_combo->addItem(node->title());
 
         this->nodes[node->title()] << node;
         this->nodes["*"] << node;
     }
 
-    if(node->wrapee()) {
+    if (node->wrapee()) {
         this->type_combo->addItem(node->wrapee()->type());
-        
+
         this->types[node->wrapee()->type()] << node;
         this->types["*"] << node;
     }
-    
-    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
-        foreach(dtkComposerSceneNode *child, composite->nodes())
+
+    if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+        foreach (dtkComposerSceneNode *child, composite->nodes())
             this->populate(child);
 
-    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
-        foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+        foreach (dtkComposerSceneNodeComposite *block, control->blocks())
             this->populate(block);
 }
 
 void dtkComposerSearchDialogPrivate::sortCombo(QComboBox *combo)
 {
-    QSortFilterProxyModel* proxy = new QSortFilterProxyModel(combo);
+    QSortFilterProxyModel *proxy = new QSortFilterProxyModel(combo);
     proxy->setSourceModel(combo->model());
     combo->model()->setParent(proxy);
     combo->setModel(proxy);
@@ -107,10 +107,10 @@ void dtkComposerSearchDialogPrivate::update(void)
                                "- type: %3\n"
                                "\n"
                                "Currently highlighting node %4 over %1")
-        .arg(this->result.count())
-        .arg(this->node_combo->currentText())
-        .arg(this->type_combo->currentText())
-        .arg(this->index+1);
+                       .arg(this->result.count())
+                       .arg(this->node_combo->currentText())
+                       .arg(this->type_combo->currentText())
+                       .arg(this->index + 1);
 
     this->info->setText(contents);
 
@@ -119,12 +119,12 @@ void dtkComposerSearchDialogPrivate::update(void)
     if (this->scene)
         this->scene->clearSelection();
 
-    if(!this->result.count())
+    if (!this->result.count())
         return;
-    
+
     dtkComposerSceneNode *node = this->result.at(this->index);
 
-    if(!node)
+    if (!node)
         return;
 
     node->setSelected(true);
@@ -136,7 +136,7 @@ void dtkComposerSearchDialogPrivate::update(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerSearchDialog::dtkComposerSearchDialog(dtkComposerView *parent) : QDialog(parent), d(new dtkComposerSearchDialogPrivate)
@@ -154,7 +154,7 @@ dtkComposerSearchDialog::dtkComposerSearchDialog(dtkComposerView *parent) : QDia
     d->info->setVisible(false);
 
     QDialogButtonBox *box = new QDialogButtonBox(this);
-    
+
     d->find_button = box->addButton("Find", QDialogButtonBox::ActionRole);
     d->find_button->setDefault(true);
 
@@ -215,10 +215,10 @@ void dtkComposerSearchDialog::setScene(dtkComposerScene *scene)
     d->sortCombo(d->node_combo);
     d->sortCombo(d->type_combo);
 
-    if(!node.isEmpty())
+    if (!node.isEmpty())
         d->node_combo->setEditText(node);
 
-    if(!type.isEmpty())
+    if (!type.isEmpty())
         d->type_combo->setEditText(type);
 
     d->find_button->setDefault(true);
@@ -249,10 +249,10 @@ void dtkComposerSearchDialog::find(void)
 
 void dtkComposerSearchDialog::next(void)
 {
-    if(!d->result.count())
+    if (!d->result.count())
         return;
 
-    d->index = (d->index+1) % d->result.count();
+    d->index = (d->index + 1) % d->result.count();
 
     d->update();
 }
@@ -267,5 +267,5 @@ void dtkComposerSearchDialog::clear(void)
     d->find_button->setDefault(true);
     d->find_button->setEnabled(true);
     d->next_button->setEnabled(false);
-    d->next_button->setDefault(false);    
+    d->next_button->setDefault(false);
 }

@@ -35,12 +35,12 @@ class dtkComposerGraphNode : public QObject
     Q_OBJECT
 
 public:
-     dtkComposerGraphNode(void);
+    dtkComposerGraphNode(void);
     ~dtkComposerGraphNode(void);
 
 public:
     enum Status { Ready, Done, Running, Break};
-    enum   Kind { SelectBranch, Leaf, Data, Process, View, Actor, Begin, BeginLoop, BeginComposite,BeginIf, End, SetOutputs, SetInputs, SetVariables, SetConditions };
+    enum   Kind { SelectBranch, Leaf, Data, Process, View, Actor, Begin, BeginLoop, BeginComposite, BeginIf, End, SetOutputs, SetInputs, SetVariables, SetConditions };
 
 public:
     void setTitle(const QString& title);
@@ -54,11 +54,11 @@ public:
 
 public:
     virtual void addSuccessor(dtkComposerGraphNode *node, int id = 0);
-            void addPredecessor(dtkComposerGraphNode *node);
+    void addPredecessor(dtkComposerGraphNode *node);
 
 public:
     virtual void removeSuccessor(dtkComposerGraphNode *node);
-            void removePredecessor(dtkComposerGraphNode *node);
+    void removePredecessor(dtkComposerGraphNode *node);
 
 public:
     virtual Kind kind(void) = 0;
@@ -86,7 +86,7 @@ public:
     virtual dtkComposerGraphNodeList successors(void);
     virtual dtkComposerGraphNode    *firstSuccessor(void);
     virtual dtkComposerGraphNodeList predecessors(void);
-            dtkComposerGraphNodeList childs(void);
+    dtkComposerGraphNodeList childs(void);
     virtual dtkComposerGraphNodeList evaluableChilds(void);
 
 public:

@@ -35,8 +35,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataDeserializer : public dtkAbstractObje
     Q_OBJECT
 
 public:
-             dtkAbstractDataDeserializer(void);
-             dtkAbstractDataDeserializer(const dtkAbstractDataDeserializer& other);
+    dtkAbstractDataDeserializer(void);
+    dtkAbstractDataDeserializer(const dtkAbstractDataDeserializer& other);
     virtual ~dtkAbstractDataDeserializer(void);
 
 public:

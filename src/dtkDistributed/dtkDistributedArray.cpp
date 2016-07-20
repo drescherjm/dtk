@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -17,101 +17,101 @@
 /*!
   \class dtkDistributedArray
   \inmodule dtkDistributed
-  \brief The 
+  \brief The
 
-  
+
 */
 
 /*! \fn dtkDistributedArray::dtkDistributedArray(const qlonglong& size)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray::dtkDistributedArray(const qlonglong& size, dtkDistributedMapper *mapper)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray::dtkDistributedArray(const qlonglong& size, const T& init_value)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray::dtkDistributedArray(const qlonglong& size, const T *array)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray::dtkDistributedArray(const dtkArray<T> &array)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray::dtkDistributedArray(const dtkDistributedArray& other)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray::~dtkDistributedArray(void)
-\internal 
+\internal
 */
 
 /*! \fn dtkDistributedArray& dtkDistributedArray::operator = (const dtkDistributedArray& other)
-\internal 
+\internal
 */
 
 /*! \fn void dtkDistributedArray::remap(dtkDistributedMapper *remapper)
-   \internal 
+   \internal
 */
 
 /*! \fn void dtkDistributedArray::rlock(qint32 owner)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::wlock(qint32 owner)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::unlock(qint32 owner)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::rlock(void)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::wlock(void)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::unlock(void)
-  \internal 
+  \internal
 */
 
 /*! \fn bool dtkDistributedArray::empty(void) const
-\internal 
+\internal
 */
 
 /*! \fn qlonglong dtkDistributedArray::size(void) const
-\internal 
+\internal
 */
 
 /*! \fn void dtkDistributedArray::clearCache(void) const
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::fill(const T& value)
-\internal 
+\internal
 */
 
 /*! \fn void dtkDistributedArray::setAt(const qlonglong& index, const T& value)
-\internal 
+\internal
 */
 
 /*! \fn void dtkDistributedArray::setAt(const qlonglong& index, T *array, const qlonglong& size)
-\internal 
+\internal
 */
 
 /*! \fn T dtkDistributedArray::at(const qlonglong& index) const
-\internal 
+\internal
 */
 
 /*! \fn T dtkDistributedArray::first(void) const
-\internal 
+\internal
 */
 
 /*! \fn T dtkDistributedArray::last(void) const
@@ -119,43 +119,43 @@
 */
 
 /*! \fn T dtkDistributedArray::operator[](const qlonglong& index) const
-\internal 
+\internal
 */
 
 /*! \fn void dtkDistributedArray::addAssign(const qlonglong& index, const T& value)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::subAssign(const qlonglong& index, const T& value)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::mulAssign(const qlonglong& index, const T& value)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::divAssign(const qlonglong& index, const T& value)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::addAssign(const qlonglong& index, T* array, const qlonglong& count)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::subAssign(const qlonglong& index, T* array, const qlonglong& count)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::mulAssign(const qlonglong& index, T* array, const qlonglong& count)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::divAssign(const qlonglong& index, T* array, const qlonglong& count)
-  \internal 
+  \internal
 */
 
 /*! \fn void dtkDistributedArray::copyIntoArray(const qlonglong& from, T *array, qlonglong& size) const
-  \internal 
+  \internal
 */
 
 /*! \fn iterator dtkDistributedArray::begin(iterator = iterator())
@@ -195,13 +195,13 @@
 */
 
 /*! \fn navigator dtkDistributedArray::toNavigator(void) const
-\internal 
+\internal
 */
 
 /*! \fn void dtkDistributedArray::stats(void) const
-  \internal 
+  \internal
 */
 
 
-// 
+//
 // dtkDistributedArray.cpp ends here

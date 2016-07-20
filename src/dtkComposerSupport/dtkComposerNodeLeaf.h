@@ -1,5 +1,5 @@
-/* dtkComposerNodeLeaf.h --- 
- * 
+/* dtkComposerNodeLeaf.h ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 15:40:03 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 26
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODELEAF_H
@@ -32,7 +32,7 @@ class dtkComposerNodeLeafPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLeaf : public dtkComposerNode
 {
 public:
-             dtkComposerNodeLeaf(void);
+    dtkComposerNodeLeaf(void);
     virtual ~dtkComposerNodeLeaf(void);
 
 public:

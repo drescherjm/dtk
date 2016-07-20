@@ -1,5 +1,5 @@
-/* dtkDistributedServerManagerTorque.h --- 
- * 
+/* dtkDistributedServerManagerTorque.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:08:25 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 21
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVERMANAGERTORQUE_H

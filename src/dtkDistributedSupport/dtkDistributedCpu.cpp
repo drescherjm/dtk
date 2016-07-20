@@ -1,5 +1,5 @@
-/* dtkDistributedCpu.cpp --- 
- * 
+/* dtkDistributedCpu.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:18:36 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 31
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedCore.h"

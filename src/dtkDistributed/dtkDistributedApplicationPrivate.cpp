@@ -32,11 +32,12 @@ dtkDistributedApplicationPrivate::~dtkDistributedApplicationPrivate(void)
 }
 
 
-void dtkDistributedApplicationPrivate::spawn(QMap<QString,QString> options)
+void dtkDistributedApplicationPrivate::spawn(QMap<QString, QString> options)
 {
     if (!smp.isEmpty()) {
         options.insert("smp", smp);
     }
+
     if (nospawn) {
         QStringList nospawn;
         nospawn << "nospawn";
@@ -60,17 +61,17 @@ void dtkDistributedApplicationPrivate::initialize(void)
     QCommandLineOption policyOption("policy", "dtkDistributed policy (default is qthread)", "qthread|mpi|mpi3", policyType);
     parser->addOption(policyOption);
 
-    QCommandLineOption npOption("np","number of processes","int","1");
+    QCommandLineOption npOption("np", "number of processes", "int", "1");
     parser->addOption(npOption);
-    QCommandLineOption nsOption("no-spawn","disable spawning");
+    QCommandLineOption nsOption("no-spawn", "disable spawning");
     parser->addOption(nsOption);
-    QCommandLineOption ntOption("nt","number of threads (for hybrid plugins)","int", "1");
+    QCommandLineOption ntOption("nt", "number of threads (for hybrid plugins)", "int", "1");
     parser->addOption(ntOption);
-    QCommandLineOption wrapperOption("wrapper","use wrapper command when spawning processes","command", "");
+    QCommandLineOption wrapperOption("wrapper", "use wrapper command when spawning processes", "command", "");
     parser->addOption(wrapperOption);
-    QCommandLineOption smpOption("smp", "smp option (disabled by default)", "single|funneled|serialized|multiple","");
+    QCommandLineOption smpOption("smp", "smp option (disabled by default)", "single|funneled|serialized|multiple", "");
     parser->addOption(smpOption);
-    QCommandLineOption hostsOption("hosts","hosts (multiple hosts can be specified)","hostname", "localhost");
+    QCommandLineOption hostsOption("hosts", "hosts (multiple hosts can be specified)", "hostname", "localhost");
     parser->addOption(hostsOption);
 
 
@@ -80,24 +81,27 @@ void dtkDistributedApplicationPrivate::initialize(void)
     dtkApplicationPrivate::initialize();
 
     QSettings *settings;
-    if(parser->isSet(DSsettingsOption)) {
+
+    if (parser->isSet(DSsettingsOption)) {
         settings = new QSettings(parser->value(DSsettingsOption), QSettings::IniFormat);
     } else {
         settings =  new dtkDistributedSettings;
     }
 
-    if(parser->isSet(nsOption)) {
+    if (parser->isSet(nsOption)) {
         nospawn = true;
     }
 
     // plugins
     settings->beginGroup("communicator");
-    dtkDebug() << "initialize plugin manager "<< settings->value("plugins").toString();
+    dtkDebug() << "initialize plugin manager " << settings->value("plugins").toString();
 
     QCommandLineOption verboseOption("verbose", QCoreApplication::translate("main", "verbose plugin initialization"));
+
     if (parser->isSet(verboseOption)) {
         dtkDistributed::communicator::pluginManager().setVerboseLoading(true);
     }
+
     dtkDistributed::communicator::initialize(settings->value("plugins").toString());
     settings->endGroup();
 
@@ -108,8 +112,9 @@ void dtkDistributedApplicationPrivate::initialize(void)
     if (parser->isSet(policyOption)) {
         policyType = parser->value(policyOption);
     }
+
     if (parser->isSet(hostsOption)) {
-        foreach(QString s, parser->values(hostsOption)) {
+        foreach (QString s, parser->values(hostsOption)) {
             policy.addHost(s);
         }
     } else {
@@ -119,15 +124,19 @@ void dtkDistributedApplicationPrivate::initialize(void)
     if (parser->isSet(wrapperOption)) {
         wrapper = parser->value(wrapperOption);
     }
+
     qlonglong np = 0;
+
     if (parser->isSet(npOption)) {
-            np = parser->value(npOption).toLongLong();
-            dtkTrace() << "got np value from command line:"<< np ;
-            policy.setNWorkers(np);
+        np = parser->value(npOption).toLongLong();
+        dtkTrace() << "got np value from command line:" << np ;
+        policy.setNWorkers(np);
     }
+
     if (parser->isSet(smpOption)) {
         smp = parser->value(smpOption);
     }
+
     policy.setType(policyType);
 }
 

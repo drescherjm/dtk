@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterEmitter.cpp --- 
- * 
+/* dtkComposerTransmitterEmitter.cpp ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Sep 18 09:19:03 2012 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerTransmitterEmitter.h"

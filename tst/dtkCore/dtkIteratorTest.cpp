@@ -29,14 +29,22 @@ class Dummy
     dtkArray<qlonglong> m_elts;
 
 public:
-    Dummy(qlonglong id, qlonglong e0, qlonglong e1, qlonglong e2, qlonglong e3) : m_id(id) { m_elts.append(e0, e1, e2, e3); }
+    Dummy(qlonglong id, qlonglong e0, qlonglong e1, qlonglong e2, qlonglong e3) : m_id(id) {
+        m_elts.append(e0, e1, e2, e3);
+    }
 
 public:
-    bool operator == (const Dummy& o) const { return (m_id == o.m_id && m_elts == o.m_elts); }
+    bool operator == (const Dummy& o) const {
+        return (m_id == o.m_id && m_elts == o.m_elts);
+    }
 
 public:
-    qlonglong id() const { return m_id; }
-    dtkArray<qlonglong> elts() { return m_elts; }
+    qlonglong id() const {
+        return m_id;
+    }
+    dtkArray<qlonglong> elts() {
+        return m_elts;
+    }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -53,33 +61,80 @@ public:
     dummyIterator(const dummyIterator& o) : it(o.it) {}
 
 public:
-    dummyIterator& operator = (const dummyIterator& o) { it = o.it; return *this; }
+    dummyIterator& operator = (const dummyIterator& o) {
+        it = o.it;
+        return *this;
+    }
 
 public:
-    bool operator == (const dummyIterator& o) const { return it == o.it; }
-    bool operator != (const dummyIterator& o) const { return it != o.it; }
-    bool operator <  (const dummyIterator& o) const { return it <  o.it; }
-    bool operator <= (const dummyIterator& o) const { return it <= o.it; }
-    bool operator >  (const dummyIterator& o) const { return it >  o.it; }
-    bool operator >= (const dummyIterator& o) const { return it >= o.it; }
+    bool operator == (const dummyIterator& o) const {
+        return it == o.it;
+    }
+    bool operator != (const dummyIterator& o) const {
+        return it != o.it;
+    }
+    bool operator <  (const dummyIterator& o) const {
+        return it <  o.it;
+    }
+    bool operator <= (const dummyIterator& o) const {
+        return it <= o.it;
+    }
+    bool operator >  (const dummyIterator& o) const {
+        return it >  o.it;
+    }
+    bool operator >= (const dummyIterator& o) const {
+        return it >= o.it;
+    }
 
 public:
-    Dummy*& operator *  (void) const { return *it; }
-    Dummy* *operator -> (void) const { return it.i; }
-    Dummy*& operator [] (qlonglong j) const { return it[j]; }
+    Dummy *&operator *  (void) const {
+        return *it;
+    }
+    Dummy * *operator -> (void) const {
+        return it.i;
+    }
+    Dummy *&operator [] (qlonglong j) const {
+        return it[j];
+    }
 
 public:
-    dummyIterator& operator ++ (void) { ++it; return *this; }
-    dummyIterator  operator ++ (int)  { dummyIterator o(it); ++it; return o; }
-    dummyIterator& operator -- (void) { --it; return *this; }
-    dummyIterator  operator -- (int)  { dummyIterator o(it); --it; return o; }
-    dummyIterator& operator += (qlonglong j) { it += j; return *this; }
-    dummyIterator& operator -= (qlonglong j) { it -= j; return *this; }
-    dummyIterator  operator +  (qlonglong j) const { return dummyIterator(it + j); }
-    dummyIterator  operator -  (qlonglong j) const { return dummyIterator(it - j); }
+    dummyIterator& operator ++ (void) {
+        ++it;
+        return *this;
+    }
+    dummyIterator  operator ++ (int)  {
+        dummyIterator o(it);
+        ++it;
+        return o;
+    }
+    dummyIterator& operator -- (void) {
+        --it;
+        return *this;
+    }
+    dummyIterator  operator -- (int)  {
+        dummyIterator o(it);
+        --it;
+        return o;
+    }
+    dummyIterator& operator += (qlonglong j) {
+        it += j;
+        return *this;
+    }
+    dummyIterator& operator -= (qlonglong j) {
+        it -= j;
+        return *this;
+    }
+    dummyIterator  operator +  (qlonglong j) const {
+        return dummyIterator(it + j);
+    }
+    dummyIterator  operator -  (qlonglong j) const {
+        return dummyIterator(it - j);
+    }
 
 public:
-    operator Dummy* * () const { return it.i; }
+    operator Dummy * *() const {
+        return it.i;
+    }
 };
 
 typedef dtkIterator<Dummy *> dtkDummyIterator;
@@ -94,8 +149,12 @@ public:
     dtkArray<Dummy *> dummies;
 
 public:
-    dtkDummyIterator begin() { return dtkDummyIterator(new dummyIterator(dummies.begin())); }
-    dtkDummyIterator   end() { return dtkDummyIterator(new dummyIterator(dummies.end())); }
+    dtkDummyIterator begin() {
+        return dtkDummyIterator(new dummyIterator(dummies.begin()));
+    }
+    dtkDummyIterator   end() {
+        return dtkDummyIterator(new dummyIterator(dummies.end()));
+    }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -168,7 +227,7 @@ void dtkIteratorTestCase::testBracket(void)
 {
     dtkDummyIterator it = d->begin();
 
-    for(qlonglong i = 0; i < 4; ++i)
+    for (qlonglong i = 0; i < 4; ++i)
         QCOMPARE((it[i])->id(), i);
 }
 
@@ -176,7 +235,7 @@ void dtkIteratorTestCase::testForward(void)
 {
     dtkDummyIterator it = d->begin();
 
-    for(qlonglong i = 0; i < 4; ++i) {
+    for (qlonglong i = 0; i < 4; ++i) {
         QCOMPARE((*it)->id(), i);
         it++;
     }
@@ -186,7 +245,7 @@ void dtkIteratorTestCase::testPreForward(void)
 {
     dtkDummyIterator it = d->begin();
 
-    for(qlonglong i = 0; i < 4; ++i, ++it) {
+    for (qlonglong i = 0; i < 4; ++i, ++it) {
         QCOMPARE((*it)->id(), i);
     }
 }
@@ -195,7 +254,7 @@ void dtkIteratorTestCase::testBackward(void)
 {
     dtkDummyIterator it = --d->end();
 
-    for(qlonglong i = 3; i >= 0; --i, --it) {
+    for (qlonglong i = 3; i >= 0; --i, --it) {
         QCOMPARE((*it)->id(), i);
     }
 }
@@ -204,7 +263,7 @@ void dtkIteratorTestCase::testPreBackward(void)
 {
     dtkDummyIterator it = --d->end();
 
-    for(qlonglong i = 3; i >= 0; --i, --it) {
+    for (qlonglong i = 3; i >= 0; --i, --it) {
         QCOMPARE((*it)->id(), i);
     }
 }
@@ -321,7 +380,7 @@ void dtkIteratorTestCase::cleanup(void)
 
 void dtkIteratorTestCase::cleanupTestCase(void)
 {
-    for(Dummy *dum : d->dummies)
+    for (Dummy *dum : d->dummies)
         delete dum;
 }
 

@@ -51,7 +51,7 @@ public:
     typedef QList<int> TypeList;
 
 public:
-             dtkComposerTransmitter(dtkComposerNode *parent = 0);
+    dtkComposerTransmitter(dtkComposerNode *parent = 0);
     virtual ~dtkComposerTransmitter(void);
 
 #pragma mark -
@@ -148,7 +148,7 @@ public:
 
 public:
     template <typename T> friend class dtkComposerTransmitterHandler;
-                          friend class dtkComposerTransmitterHandlerVariant;
+    friend class dtkComposerTransmitterHandlerVariant;
 
 private:
     friend QDebug operator << (QDebug debug, const dtkComposerTransmitter& transmitter);
@@ -174,7 +174,7 @@ class dtkComposerTransmitterLinkPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterLink
 {
 public:
-     dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
+    dtkComposerTransmitterLink(dtkComposerTransmitter *source, dtkComposerTransmitter *destination);
     ~dtkComposerTransmitterLink(void);
 
 public:

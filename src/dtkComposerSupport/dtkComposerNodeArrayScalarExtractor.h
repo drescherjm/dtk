@@ -32,7 +32,7 @@ class dtkComposerNodeArrayScalarExtractorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarExtractor : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayScalarExtractor(void);
+    dtkComposerNodeArrayScalarExtractor(void);
     ~dtkComposerNodeArrayScalarExtractor(void);
 
 public:
@@ -64,7 +64,7 @@ class dtkComposerNodeArrayScalarExtractorSubArrayPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarExtractorSubArray : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayScalarExtractorSubArray(void);
+    dtkComposerNodeArrayScalarExtractorSubArray(void);
     ~dtkComposerNodeArrayScalarExtractorSubArray(void);
 
 public:
@@ -96,7 +96,7 @@ class dtkComposerNodeArrayScalarExtractorArrayPartPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeArrayScalarExtractorArrayPart : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeArrayScalarExtractorArrayPart(void);
+    dtkComposerNodeArrayScalarExtractorArrayPart(void);
     ~dtkComposerNodeArrayScalarExtractorArrayPart(void);
 
 public:

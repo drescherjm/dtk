@@ -21,7 +21,7 @@ class dtkHashTestCase : public QObject
     Q_OBJECT
 
 public:
-     dtkHashTestCase(void);
+    dtkHashTestCase(void);
     ~dtkHashTestCase(void);
 
 private slots:

@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayDataExtractor.cpp --- 
- * 
+/* dtkComposerNodeArrayDataExtractor.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed Jul  4 12:07:20 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 64
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeArrayDataExtractor.h"
@@ -61,13 +61,15 @@ dtkComposerNodeArrayDataExtractor::~dtkComposerNodeArrayDataExtractor(void)
 
 QString dtkComposerNodeArrayDataExtractor::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "index";
         break;
+
     default:
         break;
     }
@@ -77,10 +79,11 @@ QString dtkComposerNodeArrayDataExtractor::inputLabelHint(int port)
 
 QString dtkComposerNodeArrayDataExtractor::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "item";
         break;
+
     default:
         break;
     }
@@ -154,6 +157,7 @@ dtkComposerNodeArrayDataExtractorSubArray::~dtkComposerNodeArrayDataExtractorSub
 {
     if (d->subarray)
         delete d->subarray;
+
     d->subarray = NULL;
 
     delete d;
@@ -163,13 +167,15 @@ dtkComposerNodeArrayDataExtractorSubArray::~dtkComposerNodeArrayDataExtractorSub
 
 QString dtkComposerNodeArrayDataExtractorSubArray::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "index array";
         break;
+
     default:
         break;
     }
@@ -179,10 +185,11 @@ QString dtkComposerNodeArrayDataExtractorSubArray::inputLabelHint(int port)
 
 QString dtkComposerNodeArrayDataExtractorSubArray::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "subarray";
         break;
+
     default:
         break;
     }
@@ -209,8 +216,10 @@ void dtkComposerNodeArrayDataExtractorSubArray::run(void)
             d->subarray->clear();
 
         qlonglong index;
-        for(qlonglong i = 0; i < indices->count(); ++i) {
+
+        for (qlonglong i = 0; i < indices->count(); ++i) {
             index = indices->at(i).value<qlonglong>();
+
             if (index >= array->count()) {
                 dtkWarn() << "index " << i << " of indices array is greater than the size of the array. Zero is inserted.";
                 d->subarray->append(QVariant());
@@ -218,6 +227,7 @@ void dtkComposerNodeArrayDataExtractorSubArray::run(void)
                 d->subarray->append(array->at(index));
             }
         }
+
         d->emitter_subarray.setData(d->subarray);
 
     } else {
@@ -263,6 +273,7 @@ dtkComposerNodeArrayDataExtractorArrayPart::~dtkComposerNodeArrayDataExtractorAr
 {
     if (d->subarray)
         delete d->subarray;
+
     d->subarray = NULL;
 
     delete d;
@@ -272,16 +283,19 @@ dtkComposerNodeArrayDataExtractorArrayPart::~dtkComposerNodeArrayDataExtractorAr
 
 QString dtkComposerNodeArrayDataExtractorArrayPart::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "array";
         break;
+
     case 1:
         return "from";
         break;
+
     case 2:
         return "length";
         break;
+
     default:
         break;
     }
@@ -291,10 +305,11 @@ QString dtkComposerNodeArrayDataExtractorArrayPart::inputLabelHint(int port)
 
 QString dtkComposerNodeArrayDataExtractorArrayPart::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "subarray";
         break;
+
     default:
         break;
     }
@@ -321,6 +336,7 @@ void dtkComposerNodeArrayDataExtractorArrayPart::run(void)
         }
 
         qlonglong from = *d->receiver_from.data();
+
         if (from >= array->count()) {
             dtkWarn() << "Starting value from is greater than array size:" << from << ">=" << array->count();
             d->emitter_subarray.clearData();
@@ -328,9 +344,10 @@ void dtkComposerNodeArrayDataExtractorArrayPart::run(void)
         }
 
         qlonglong length = 0;
+
         if (!d->receiver_length.isEmpty())
             length = *d->receiver_length.data();
-        
+
         if (length < 0) {
             dtkWarn() << "Length value is negative:" << length << "<" << 0;
             d->emitter_subarray.clearData();
@@ -347,6 +364,7 @@ void dtkComposerNodeArrayDataExtractorArrayPart::run(void)
         for (qlonglong i = from; i < to; ++i) {
             d->subarray->append(array->at(i));
         }
+
         d->emitter_subarray.setData(d->subarray);
 
     } else {

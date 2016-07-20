@@ -1,5 +1,5 @@
-/* dtkComposerNodeVector3DOperatorBinary.h --- 
- * 
+/* dtkComposerNodeVector3DOperatorBinary.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 16:14:44 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 38
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEVECTOR3DOPERATORBINARY_H
@@ -32,7 +32,7 @@ class dtkComposerNodeVector3DOperatorBinaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVector3DOperatorBinary(void);
+    dtkComposerNodeVector3DOperatorBinary(void);
     ~dtkComposerNodeVector3DOperatorBinary(void);
 
     inline QString inputLabelHint(int port) {
@@ -59,7 +59,7 @@ class dtkComposerNodeVector3DOperatorBinaryScalarPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinaryScalar : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVector3DOperatorBinaryScalar(void);
+    dtkComposerNodeVector3DOperatorBinaryScalar(void);
     ~dtkComposerNodeVector3DOperatorBinaryScalar(void);
 
     inline QString inputLabelHint(int port) {
@@ -86,7 +86,7 @@ class dtkComposerNodeVector3DOperatorHomotheticPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorHomothetic : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeVector3DOperatorHomothetic(void);
+    dtkComposerNodeVector3DOperatorHomothetic(void);
     ~dtkComposerNodeVector3DOperatorHomothetic(void);
 
     inline QString inputLabelHint(int port) {
@@ -105,7 +105,7 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeVector3DOperatorBinary - SUM 
+// dtkComposerNodeVector3DOperatorBinary - SUM
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeVector3DOperatorBinarySum : public dtkComposerNodeVector3DOperatorBinary

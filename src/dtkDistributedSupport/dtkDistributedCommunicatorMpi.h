@@ -1,5 +1,5 @@
-/* dtkDistributedCommunicatorMpi.h --- 
- * 
+/* dtkDistributedCommunicatorMpi.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Feb 15 16:50:54 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 211
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCOMMUNICATORMPI_H
@@ -30,7 +30,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorMpi : public dtkDis
     Q_OBJECT
 
 public:
-     dtkDistributedCommunicatorMpi(void);
+    dtkDistributedCommunicatorMpi(void);
     ~dtkDistributedCommunicatorMpi(void);
 
 public:
@@ -76,9 +76,9 @@ public:
     void broadcast(dtkAbstractData *&data, qint16 source);
 
     void   receive(dtkAbstractData *&data, qint16 source, int tag);
-    void   receive(QString &s, qint16 source, int tag) ;
-    void   receive(QByteArray &a, qint16 source, int tag) ;
-    void   receive(QByteArray &a, qint16 source, int tag, dtkDistributedCommunicatorStatus& status) ;
+    void   receive(QString& s, qint16 source, int tag) ;
+    void   receive(QByteArray& a, qint16 source, int tag) ;
+    void   receive(QByteArray& a, qint16 source, int tag, dtkDistributedCommunicatorStatus& status) ;
 
     void ireceive(void *data, qint64 size, DataType dataType, qint16 source, int tag, dtkDistributedCommunicatorRequest *req);
     /* void ireceive(dtkAbstractData *&data, qint16 source, int tag); */
@@ -96,7 +96,7 @@ class dtkDistributedCommunicatorRequestMpiPrivate;
 class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCommunicatorRequestMpi : public dtkDistributedCommunicatorRequest
 {
 public:
-             dtkDistributedCommunicatorRequestMpi(void);
+    dtkDistributedCommunicatorRequestMpi(void);
     virtual ~dtkDistributedCommunicatorRequestMpi(void);
 
 public:
@@ -110,7 +110,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi);
-Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi*);
+Q_DECLARE_METATYPE(dtkDistributedCommunicatorMpi *);
 
 
 #endif

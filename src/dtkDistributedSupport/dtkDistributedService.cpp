@@ -1,5 +1,5 @@
-/* dtkDistributedService.cpp --- 
- * 
+/* dtkDistributedService.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Thu May 26 10:03:31 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 45
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedService.h"
@@ -24,7 +24,7 @@
 
 /*!
   \class dtkDistributedServiceController
-  
+
   \brief The dtkDistributedServiceController class allows you to control
   services from separate applications.
 
@@ -97,7 +97,7 @@
   \a name.
 */
 
-dtkDistributedServiceController::dtkDistributedServiceController(const QString &name) : d_ptr(new dtkDistributedServiceControllerPrivate())
+dtkDistributedServiceController::dtkDistributedServiceController(const QString& name) : d_ptr(new dtkDistributedServiceControllerPrivate())
 {
     Q_D(dtkDistributedServiceController);
     d->q_ptr = this;
@@ -197,7 +197,7 @@ QString dtkDistributedServiceController::serviceName(void) const
   \sa uninstall(), start()
 */
 
-bool dtkDistributedServiceController::install(const QString &serviceFilePath, const QString &account, const QString &password)
+bool dtkDistributedServiceController::install(const QString& serviceFilePath, const QString& account, const QString& password)
 {
     QStringList arguments;
     arguments << QLatin1String("-i");
@@ -300,7 +300,7 @@ bool dtkDistributedServiceController::start(void)
 
 dtkDistributedServiceBase *dtkDistributedServiceBasePrivate::instance = 0;
 
-dtkDistributedServiceBasePrivate::dtkDistributedServiceBasePrivate(const QString &name) : startupType(dtkDistributedServiceController::ManualStartup), serviceFlags(0), controller(name)
+dtkDistributedServiceBasePrivate::dtkDistributedServiceBasePrivate(const QString& name) : startupType(dtkDistributedServiceController::ManualStartup), serviceFlags(0), controller(name)
 {
 
 }
@@ -315,13 +315,15 @@ void dtkDistributedServiceBasePrivate::startService(void)
     q_ptr->start();
 }
 
-int dtkDistributedServiceBasePrivate::run(bool asService, const QStringList &argList)
+int dtkDistributedServiceBasePrivate::run(bool asService, const QStringList& argList)
 {
     int argc = argList.size();
     QVector<char *> argv(argc);
     QList<QByteArray> argvData;
+
     for (int i = 0; i < argc; ++i)
         argvData.append(argList.at(i).toLocal8Bit());
+
     for (int i = 0; i < argc; ++i)
         argv[i] = argvData[i].data();
 
@@ -330,6 +332,7 @@ int dtkDistributedServiceBasePrivate::run(bool asService, const QStringList &arg
 
     q_ptr->createApplication(argc, argv.data());
     QCoreApplication *app = QCoreApplication::instance();
+
     if (!app)
         return -1;
 
@@ -343,6 +346,7 @@ int dtkDistributedServiceBasePrivate::run(bool asService, const QStringList &arg
 
     if (asService)
         sysCleanup();
+
     return res;
 }
 
@@ -504,7 +508,7 @@ int dtkDistributedServiceBasePrivate::run(bool asService, const QStringList &arg
   \sa exec(), start(), dtkDistributedServiceController::install()
 */
 
-dtkDistributedServiceBase::dtkDistributedServiceBase(int argc, char **argv, const QString &name)
+dtkDistributedServiceBase::dtkDistributedServiceBase(int argc, char **argv, const QString& name)
 {
 #if defined(QTSERVICE_DEBUG)
     qInstallMsgHandler(qtServiceLogDebug);
@@ -517,13 +521,13 @@ dtkDistributedServiceBase::dtkDistributedServiceBase(int argc, char **argv, cons
     QString nm(name);
 
     if (nm.length() > 255) {
-	qWarning("dtkDistributedService: 'name' is longer than 255 characters.");
-	nm.truncate(255);
+        qWarning("dtkDistributedService: 'name' is longer than 255 characters.");
+        nm.truncate(255);
     }
 
     if (nm.contains('\\')) {
-	qWarning("dtkDistributedService: 'name' contains backslashes '\\'.");
-	nm.replace((QChar)'\\', (QChar)'\0');
+        qWarning("dtkDistributedService: 'name' contains backslashes '\\'.");
+        nm.replace((QChar)'\\', (QChar)'\0');
     }
 
     d_ptr = new dtkDistributedServiceBasePrivate(nm);
@@ -582,7 +586,7 @@ QString dtkDistributedServiceBase::serviceDescription(void) const
   \sa serviceDescription()
 */
 
-void dtkDistributedServiceBase::setServiceDescription(const QString &description)
+void dtkDistributedServiceBase::setServiceDescription(const QString& description)
 {
     d_ptr->serviceDescription = description;
 }
@@ -650,14 +654,18 @@ int dtkDistributedServiceBase::exec(void)
 {
     if (d_ptr->args.size() > 1) {
         QString a =  d_ptr->args.at(1);
+
         if (a == QLatin1String("-i") || a == QLatin1String("-install")) {
             if (!d_ptr->controller.isInstalled()) {
                 QString account;
                 QString password;
+
                 if (d_ptr->args.size() > 2)
                     account = d_ptr->args.at(2);
+
                 if (d_ptr->args.size() > 3)
                     password = d_ptr->args.at(3);
+
                 if (!d_ptr->install(account, password)) {
                     fprintf(stderr, "The service %s could not be installed\n", serviceName().toLatin1().constData());
                     return -1;
@@ -668,6 +676,7 @@ int dtkDistributedServiceBase::exec(void)
             } else {
                 fprintf(stderr, "The service %s is already installed\n", serviceName().toLatin1().constData());
             }
+
             return 0;
         } else if (a == QLatin1String("-u") || a == QLatin1String("-uninstall")) {
             if (d_ptr->controller.isInstalled()) {
@@ -681,6 +690,7 @@ int dtkDistributedServiceBase::exec(void)
             } else {
                 fprintf(stderr, "The service %s is not installed\n", serviceName().toLatin1().constData());
             }
+
             return 0;
         } else if (a == QLatin1String("-v") || a == QLatin1String("-version")) {
             printf("The service\n"
@@ -691,12 +701,15 @@ int dtkDistributedServiceBase::exec(void)
         } else if (a == QLatin1String("-e") || a == QLatin1String("-exec")) {
             d_ptr->args.removeAt(1);
             int ec = d_ptr->run(false, d_ptr->args);
+
             if (ec == -1)
                 qErrnoWarning("The service could not be executed.");
+
             return ec;
         } else if (a == QLatin1String("-t") || a == QLatin1String("-terminate")) {
             if (!d_ptr->controller.stop())
                 qErrnoWarning("The service could not be stopped.");
+
             return 0;
         } else if (a == QLatin1String("-p") || a == QLatin1String("-pause")) {
             d_ptr->controller.pause();
@@ -706,8 +719,10 @@ int dtkDistributedServiceBase::exec(void)
             return 0;
         } else if (a == QLatin1String("-c") || a == QLatin1String("-command")) {
             int code = 0;
+
             if (d_ptr->args.size() > 2)
                 code = d_ptr->args.at(2).toInt();
+
             d_ptr->controller.sendCommand(code);
             return 0;
         } else  if (a == QLatin1String("-h") || a == QLatin1String("-help")) {
@@ -724,19 +739,26 @@ int dtkDistributedServiceBase::exec(void)
             return 0;
         }
     }
+
 #if defined(Q_OS_UNIX)
+
     if (::getenv("QTSERVICE_RUN")) {
         // Means we're the detached, real service process.
         int ec = d_ptr->run(true, d_ptr->args);
+
         if (ec == -1)
             qErrnoWarning("The service failed to run.");
+
         return ec;
     }
+
 #endif
+
     if (!d_ptr->start()) {
         fprintf(stderr, "The service %s could not start\n", serviceName().toLatin1().constData());
         return -4;
     }
+
     return 0;
 }
 

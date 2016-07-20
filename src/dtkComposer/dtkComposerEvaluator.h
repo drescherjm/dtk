@@ -1,5 +1,5 @@
-/* dtkComposerEvaluator.h --- 
- * 
+/* dtkComposerEvaluator.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 11:30:36 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 44
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -32,7 +32,7 @@ class DTKCOMPOSER_EXPORT dtkComposerEvaluator : public QObject
     Q_OBJECT
 
 public:
-     dtkComposerEvaluator(QObject *parent = 0);
+    dtkComposerEvaluator(QObject *parent = 0);
     ~dtkComposerEvaluator(void);
 
 signals:
@@ -48,7 +48,7 @@ public:
     void  setStartNode(dtkComposerGraphNode *node);
     void  setNotify(bool notify);
     void  setProfiling(bool profiling);
-    void  printProfiling(qlonglong level=0);
+    void  printProfiling(qlonglong level = 0);
 
 public slots:
     void  run(bool run_concurrent = false);

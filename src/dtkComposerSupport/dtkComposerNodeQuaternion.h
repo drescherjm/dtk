@@ -1,5 +1,5 @@
-/* dtkComposerNodeQuaternion.h --- 
- * 
+/* dtkComposerNodeQuaternion.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Apr 26 13:03:34 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEQUATERNION_H
@@ -28,9 +28,9 @@ class dtkComposerNodeQuaternionPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternion : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeQuaternion(void);
+    dtkComposerNodeQuaternion(void);
     ~dtkComposerNodeQuaternion(void);
-    
+
 public:
     void run(void);
 

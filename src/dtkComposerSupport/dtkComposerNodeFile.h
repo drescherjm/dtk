@@ -1,15 +1,15 @@
-/* dtkComposerNodeFile.h --- 
- * 
+/* dtkComposerNodeFile.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEFILE_H
@@ -23,7 +23,7 @@ class dtkComposerNodeFilePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFile(void);
+    dtkComposerNodeFile(void);
     ~dtkComposerNodeFile(void);
 
 public:
@@ -53,7 +53,7 @@ class dtkComposerNodeFileExistsPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileExists : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileExists(void);
+    dtkComposerNodeFileExists(void);
     ~dtkComposerNodeFileExists(void);
 
 public:
@@ -82,7 +82,7 @@ class dtkComposerNodeFileListPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileList : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileList(void);
+    dtkComposerNodeFileList(void);
     ~dtkComposerNodeFileList(void);
 
 public:
@@ -109,7 +109,7 @@ class dtkComposerNodeFileReadPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileRead : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileRead(void);
+    dtkComposerNodeFileRead(void);
     ~dtkComposerNodeFileRead(void);
 
 public:
@@ -136,7 +136,7 @@ class dtkComposerNodeFileWritePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeFileWrite : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileWrite(void);
+    dtkComposerNodeFileWrite(void);
     ~dtkComposerNodeFileWrite(void);
 
 public:
@@ -162,28 +162,28 @@ class dtkComposerNodeDirectoryPrivate;
 
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeDirectory : public dtkComposerNodeLeaf
 {
- public:
+public:
     dtkComposerNodeDirectory(void);
     ~dtkComposerNodeDirectory(void);
 
- public:
+public:
     void run(void);
 
- public:
+public:
     QString type(void);
     QString titleHint(void);
 
- public:
+public:
     QString inputLabelHint(int);
     QString outputLabelHint(int);
 
- public:
+public:
     QString value(void);
 
- public:
+public:
     void setValue(QString value);
 
- private:
+private:
     dtkComposerNodeDirectoryPrivate *d;
 };
 

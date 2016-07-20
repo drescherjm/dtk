@@ -1,5 +1,5 @@
-/* dtkPluginsEditor.cpp --- 
- * 
+/* dtkPluginsEditor.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov  9 16:05:37 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPluginsEditor.h"
@@ -31,7 +31,7 @@ dtkPluginsEditor::dtkPluginsEditor(QWidget *parent) : QWidget(parent), d(new dtk
 {
     d->tree = new QTreeWidget(this);
     d->tree->setAttribute(Qt::WA_MacShowFocusRect, false);
-    
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);

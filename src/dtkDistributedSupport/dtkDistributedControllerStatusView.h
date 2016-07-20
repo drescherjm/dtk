@@ -1,5 +1,5 @@
-/* dtkDistributedControllerStatusView.h --- 
- * 
+/* dtkDistributedControllerStatusView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon May 30 13:19:21 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 22
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERSTATUSVIEW_H
@@ -33,7 +33,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerStatusView : public Q
     Q_OBJECT
 
 public:
-     dtkDistributedControllerStatusView(QWidget *parent = 0);
+    dtkDistributedControllerStatusView(QWidget *parent = 0);
     ~dtkDistributedControllerStatusView(void);
 
 private:

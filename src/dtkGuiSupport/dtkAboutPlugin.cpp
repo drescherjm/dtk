@@ -49,7 +49,7 @@ dtkAboutPlugin::~dtkAboutPlugin(void)
 
 void dtkAboutPlugin::setup(dtkPlugin *plugin)
 {
-    if(!plugin)
+    if (!plugin)
         return;
 
     d->description = new QTextBrowser(this);
@@ -57,15 +57,18 @@ void dtkAboutPlugin::setup(dtkPlugin *plugin)
     d->description->setHtml(plugin->description());
 
     QListWidget *authors = new QListWidget(this);
-    foreach(const QString& author, plugin->authors())
+
+    foreach (const QString& author, plugin->authors())
         authors->addItem(author);
 
     QListWidget *contributors = new QListWidget(this);
-    foreach(const QString& contributor, plugin->contributors())
+
+    foreach (const QString& contributor, plugin->contributors())
         contributors->addItem(contributor);
 
     QListWidget *dependencies = new QListWidget(this);
-    foreach(const QString& dependency, plugin->dependencies())
+
+    foreach (const QString& dependency, plugin->dependencies())
         dependencies->addItem(dependency);
 
     QFormLayout *layout = new QFormLayout(this);

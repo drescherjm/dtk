@@ -66,7 +66,7 @@ void dtkVrScreen::initialize(void)
     d->y = d->upperLeft - d->lowerLeft;
     d->height = d->y.norm();
 
-    d->upperRight = d->lowerRight + d->y*d->height;
+    d->upperRight = d->lowerRight + d->y * d->height;
 }
 
 void dtkVrScreen::uninitialize(void)
@@ -117,7 +117,7 @@ double dtkVrScreen::height(void) const
 const dtkDeprecated::dtkVector3D<double> dtkVrScreen::screens[5][3] = {
     { dtkDeprecated::dtkVector3D<double>(-1.6, -0.8, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6, 2.4, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6, -0.8,  2.35)}, // left
     { dtkDeprecated::dtkVector3D<double>(-1.6,  2.4, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6, 2.4, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6,  2.4,  2.35)}, // front
-    { dtkDeprecated::dtkVector3D<double>( 1.6,  2.4, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6,-0.8, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6,  2.4,  2.35)}, // right
+    { dtkDeprecated::dtkVector3D<double>( 1.6,  2.4, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6, -0.8, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6,  2.4,  2.35)}, // right
     { dtkDeprecated::dtkVector3D<double>(-1.6,  0.0, -0.05), dtkDeprecated::dtkVector3D<double>( 1.6, 0.0, -0.05), dtkDeprecated::dtkVector3D<double>(-1.6,  2.4, -0.05)}, // bottom
     { dtkDeprecated::dtkVector3D<double>(-2.05, 1.5,  0.76), dtkDeprecated::dtkVector3D<double>( 2.05, 1.5, 0.76), dtkDeprecated::dtkVector3D<double>(-2.05, 1.5,  2.16)}  // wall
 };

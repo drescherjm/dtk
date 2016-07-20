@@ -26,7 +26,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerNodeComposite : public dtkComposerNode
 {
 public:
-             dtkComposerNodeComposite(void);
+    dtkComposerNodeComposite(void);
     virtual ~dtkComposerNodeComposite(void);
 
 public:

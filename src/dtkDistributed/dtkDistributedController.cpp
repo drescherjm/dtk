@@ -79,7 +79,7 @@ dtkDistributedController::~dtkDistributedController(void)
 
 dtkDistributedController *dtkDistributedController::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkDistributedController;
 
     return s_instance;
@@ -100,15 +100,17 @@ quint16 dtkDistributedController::defaultPort(void)
 
     QByteArray bin = username.toUtf8();
     quint16 p =  qChecksum(bin.data(), bin.length());
+
     if (p < 1024) // listen port should be higher than 1024
         p += 1024;
+
     dtkInfo() << "default port is" << p;
     return p;
 }
 
 bool dtkDistributedController::isConnected(const QUrl& server)
 {
-    if(d->sockets.keys().contains(server.toString())) {
+    if (d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = d->sockets.value(server.toString());
 
@@ -120,7 +122,7 @@ bool dtkDistributedController::isConnected(const QUrl& server)
 
 bool dtkDistributedController::isDisconnected(const QUrl& server)
 {
-    if(d->sockets.keys().contains(server.toString())) {
+    if (d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = d->sockets.value(server.toString());
 
@@ -133,7 +135,8 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
 bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     dtkDebug() << "Want to submit jobs with resources:" << resources;
-    QScopedPointer<dtkDistributedMessage> msg (new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",dtkDistributedMessage::SERVER_RANK,resources.size(),"json",resources));
+    QScopedPointer<dtkDistributedMessage> msg (new dtkDistributedMessage(dtkDistributedMessage::NEWJOB, "", dtkDistributedMessage::SERVER_RANK, resources.size(), "json", resources));
+
     if (d->sockets.contains(server.toString())) {
         msg->send(d->sockets[server.toString()]);
         return true;
@@ -146,7 +149,7 @@ bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
 void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 {
     dtkDebug() << "Want to kill job" << jobid;
-    dtkDistributedMessage * msg  =new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,dtkDistributedMessage::SERVER_RANK);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB, jobid, dtkDistributedMessage::SERVER_RANK);
     msg->send(d->sockets[server.toString()]);
     delete msg;
 }
@@ -154,6 +157,7 @@ void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 void dtkDistributedController::stop(const QUrl& server)
 {
     dtkDebug() << "Want to stop server on " << server.toString();
+
     if (!d->sockets.contains(server.toString())) {
         dtkDebug() << "Needs to reconnect to server" << server.toString();
         this->connect(server);
@@ -166,7 +170,7 @@ void dtkDistributedController::stop(const QUrl& server)
     }
 
     dtkDebug() << "Send stop message to server" << server.toString();
-    dtkDistributedMessage msg(dtkDistributedMessage::STOP,"",dtkDistributedMessage::SERVER_RANK);
+    dtkDistributedMessage msg(dtkDistributedMessage::STOP, "", dtkDistributedMessage::SERVER_RANK);
     msg.send(d->sockets[server.toString()]);
     this->disconnect(server);
     d->servers.remove(server.toString());
@@ -176,7 +180,7 @@ void dtkDistributedController::refresh(const QUrl& server)
 {
     dtkDebug() << server;
 
-    if(!d->sockets.keys().contains(server.toString()))
+    if (!d->sockets.keys().contains(server.toString()))
         return;
 
     d->refreshing = true;
@@ -198,16 +202,16 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
         // can connect, server already deployed by someone else
         dtkInfo() << "server" << server << "is already deployed, restart server";
         stop(server);
-   }
+    }
 
-    if(!d->servers.keys().contains(server.toString())) {
-        int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
+    if (!d->servers.keys().contains(server.toString())) {
+        int port = (server.port() == -1) ? dtkDistributedController::defaultPort() : server.port();
         QProcess *serverProc = new QProcess (this);
 
         QStringList args;
         args << "-t"; // that way, ssh will forward the SIGINT signal,
-                      // and the server will stop when the ssh process
-                      // is killed
+        // and the server will stop when the ssh process
+        // is killed
         args << "-t"; // do it twice to force tty allocation
         args << "-x"; // disable X11 forwarding
         args << server.host();
@@ -216,16 +220,18 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
 
         if (ssh_tunnel) {
             dtkTrace() << "ssh port forwarding is set for server " << server.host();
-            int port = (server.port() == -1) ? dtkDistributedController::defaultPort(): server.port();
-            args << "-L" << QString::number(port)+":localhost:"+QString::number(port);
+            int port = (server.port() == -1) ? dtkDistributedController::defaultPort() : server.port();
+            args << "-L" << QString::number(port) + ":localhost:" + QString::number(port);
         }
 
         args << path;
         args << "-nw";
+
         if (loglevel != "info") {
             args << "--loglevel";
             args << loglevel;
         }
+
         args << "-p";
         args << QString::number(port);
         args << "-type ";
@@ -251,7 +257,7 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
             return false;
         }
 
-        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
+        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
 
         QObject::connect (qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
 
@@ -266,7 +272,7 @@ bool dtkDistributedController::deploy(const QUrl& server, QString type, bool ssh
             //server exists but is not connected, remove from list and retry
             dtkWarn() << "dtkDistributedServer " << server.host() << "exist  but is not connected";
             d->servers.remove(server.toString());
-            return this->deploy(server,type,ssh_tunnel,path);
+            return this->deploy(server, type, ssh_tunnel, path);
         }
     }
 
@@ -294,7 +300,7 @@ void dtkDistributedController::send(QVariant v, QString jobid, qint16 rank)
         QString type = "qvariant";
 
         //FIXME: what about the size ?
-        dtkDistributedMessage* msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, -1, type);
+        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, rank, -1, type);
         msg->send(socket);
         socket << v;
         delete msg;
@@ -314,7 +320,7 @@ QTcpSocket *dtkDistributedController::socket(const QString& jobid)
 bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool set_rank, bool emit_connected)
 {
 
-    if(!d->sockets.keys().contains(server.toString())) {
+    if (!d->sockets.keys().contains(server.toString())) {
 
         QTcpSocket *socket = new QTcpSocket(this);
 
@@ -326,6 +332,7 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool
         if (server.port() == -1) {
             const_cast<QUrl&>(server).setPort(dtkDistributedController::defaultPort());
         }
+
         int port = server.port();
 
         if (ssh_tunnel)
@@ -333,7 +340,7 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool
         else
             socket->connectToHost(server.host(), port);
 
-        if(socket->waitForConnected()) {
+        if (socket->waitForConnected()) {
 
             QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
             QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
@@ -344,7 +351,7 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool
                 emit connected(server);
 
             if (set_rank) {
-                dtkDistributedMessage msg(dtkDistributedMessage::SETRANK,"",dtkDistributedMessage::CONTROLLER_RANK);
+                dtkDistributedMessage msg(dtkDistributedMessage::SETRANK, "", dtkDistributedMessage::CONTROLLER_RANK);
                 msg.send(socket);
             }
 
@@ -364,7 +371,7 @@ bool dtkDistributedController::connect(const QUrl& server, bool ssh_tunnel, bool
 
 void dtkDistributedController::disconnect(const QUrl& server)
 {
-    if(!d->sockets.keys().contains(server.toString())) {
+    if (!d->sockets.keys().contains(server.toString())) {
         dtkDebug() << "disconnect: unknown server" << server;
         return;
     }
@@ -393,30 +400,37 @@ void dtkDistributedController::read(void)
     msg->parse(socket);
 
     dtkDistributedMessage::Method method = msg->method();
+
     switch (method) {
     case dtkDistributedMessage::OKSTATUS:
         emit updated();
         break;
+
     case dtkDistributedMessage::OKJOB:
         dtkDebug() << "New job queued: " << msg->jobid();
         d->queued_jobs[msg->jobid()] = server;
         emit jobQueued(msg->jobid());
         break;
+
     case dtkDistributedMessage::SETRANK:
         dtkDebug() << "set rank received";
+
         if (msg->rank() ==  dtkDistributedMessage::SLAVE_RANK ||  msg->rank() ==  0 ) {
             dtkDebug() << "job started";
             d->running_jobs[msg->jobid()] = server;
             emit jobStarted(msg->jobid());
             this->refresh(QUrl(server));
         }
+
         break;
+
     case dtkDistributedMessage::ENDJOB:
         dtkDebug() << "job finished: " << msg->jobid();
         d->queued_jobs.remove(msg->jobid());
         d->running_jobs.remove(msg->jobid());
         emit jobEnded(msg->jobid());
         break;
+
     case dtkDistributedMessage::DATA:
         if (msg->header("content-type") == "qvariant") {
             result = msg->variant();
@@ -424,11 +438,14 @@ void dtkDistributedController::read(void)
             dtkWarn() << "Data received, but not a variant: " << msg->header("content-type");
             result = QVariant::fromValue(msg->content());
         }
+
         emit dataPosted(result);
         break;
+
     default:
         dtkWarn() << "unknown response from server ";
     };
+
     if (socket->bytesAvailable() > 0)
         this->read();
 }
@@ -436,7 +453,7 @@ void dtkDistributedController::read(void)
 void dtkDistributedController::cleanup()
 {
     foreach (const QString& key, d->servers.keys()) {
-        foreach (QProcess* server, d->servers[key]) {
+        foreach (QProcess *server, d->servers[key]) {
             dtkDebug() << "terminating servers started on" << key;
             server->terminate();
         }
@@ -446,6 +463,7 @@ void dtkDistributedController::cleanup()
 void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus )
 {
     Q_UNUSED(exitCode);
+
     if (exitStatus != QProcess::NormalExit)
         dtkInfo() <<  "remote server deployment failure" << exitStatus ;
     else
@@ -454,67 +472,87 @@ void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitSta
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)
 {
-    switch(error) {
+    switch (error) {
     case QAbstractSocket::ConnectionRefusedError:
         dtkError() <<  "The connection was refused by the peer (or timed out).";
         break;
+
     case QAbstractSocket::RemoteHostClosedError:
         dtkError() <<  "The remote host closed the connection. Note that the slave socket (i.e., this socket) will be closed after the remote close notification has been sent.";
         break;
+
     case QAbstractSocket::HostNotFoundError:
         dtkError() <<  "The host address was not found.";
         break;
+
     case QAbstractSocket::SocketAccessError:
         dtkError() <<  "The socket operation failed because the application lacked the required privileges.";
         break;
+
     case QAbstractSocket::SocketResourceError:
         dtkError() <<  "The local system ran out of resources (e.g., too many sockets).";
         break;
+
     case QAbstractSocket::SocketTimeoutError:
-	dtkError() <<  "The socket operation timed out.";
+        dtkError() <<  "The socket operation timed out.";
         break;
+
     case QAbstractSocket::DatagramTooLargeError:
         dtkError() <<  "The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).";
         break;
+
     case QAbstractSocket::NetworkError:
         dtkError() <<  "An error occurred with the network (e.g., the network cable was accidentally plugged out).";
         break;
+
     case QAbstractSocket::AddressInUseError:
         dtkError() <<  "The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.";
         break;
+
     case QAbstractSocket::SocketAddressNotAvailableError:
         dtkError() <<  "The address specified to QUdpSocket::bind() does not belong to the host.";
         break;
+
     case QAbstractSocket::UnsupportedSocketOperationError:
-	dtkError() <<  "The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).";
+        dtkError() <<  "The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).";
         break;
+
     case QAbstractSocket::ProxyAuthenticationRequiredError:
-	dtkError() <<  "The socket is using a proxy, and the proxy requires authentication.";
+        dtkError() <<  "The socket is using a proxy, and the proxy requires authentication.";
         break;
+
     case QAbstractSocket::SslHandshakeFailedError:
-	dtkError() <<  "The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)";
+        dtkError() <<  "The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)";
         break;
+
     case QAbstractSocket::UnfinishedSocketOperationError:
-	dtkError() <<  "Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).";
+        dtkError() <<  "Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).";
         break;
+
     case QAbstractSocket::ProxyConnectionRefusedError:
         dtkError() <<  "Could not contact the proxy server because the connection to that server was denied";
         break;
+
     case QAbstractSocket::ProxyConnectionClosedError:
-	dtkError() <<  "The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)";
+        dtkError() <<  "The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)";
         break;
+
     case QAbstractSocket::ProxyConnectionTimeoutError:
-	dtkError() <<  "The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.";
+        dtkError() <<  "The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.";
         break;
+
     case QAbstractSocket::ProxyNotFoundError:
-	dtkError() <<  "The proxy address set with setProxy() (or the application proxy) was not found.";
+        dtkError() <<  "The proxy address set with setProxy() (or the application proxy) was not found.";
         break;
+
     case QAbstractSocket::ProxyProtocolError:
-	dtkError() <<  "The connection negotiation with the proxy server because the response from the proxy server could not be understood.";
+        dtkError() <<  "The connection negotiation with the proxy server because the response from the proxy server could not be understood.";
         break;
+
     case QAbstractSocket::UnknownSocketError:
-	dtkError() <<  "An unidentified error occurred.";
+        dtkError() <<  "An unidentified error occurred.";
         break;
+
     default:
         break;
     }

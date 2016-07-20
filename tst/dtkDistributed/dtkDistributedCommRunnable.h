@@ -21,8 +21,7 @@
 class PingPongWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         QTime time;
         /* QByteArray y; */
         /* QByteArray x("ping"); */
@@ -37,7 +36,7 @@ public:
 
         qlonglong size = x.size() * iter / 8;
 
-        if (comm->size() <2 ) {
+        if (comm->size() < 2 ) {
             qWarning() << "only one thread/process, skip PINGPONG test";
             return;
         }
@@ -50,11 +49,13 @@ public:
         DTK_DISTRIBUTED_BEGIN_LOCAL;
 
         QTime time2; time2.start();
-        for (int i =0; i< iter; ++i) {
+
+        for (int i = 0; i < iter; ++i) {
             for (int source = 0; source < comm->size(); ++source) {
                 for (int target = 0; target < comm->size(); ++target) {
                     if (source == target)
                         continue;
+
                     if (comm->wid() == source) {
                         comm->send(x, target, 0);
                         comm->receive(y, target, 0);
@@ -65,11 +66,12 @@ public:
                 }
             }
         }
+
         double elapsed = time2.elapsed();
         DTK_DISTRIBUTED_END_LOCAL;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "throughput" << size/elapsed << "kbits/sec";
+        qDebug() << "throughput" << size / elapsed << "kbits/sec";
         qDebug() << "latency"    << 1000.0 * elapsed / iter << "microsec";
         QVERIFY(y == "ping");
         DTK_DISTRIBUTED_END_GLOBAL;
@@ -80,18 +82,19 @@ public:
 class ReduceWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         int iter = 10000;
+
         if (QThread::idealThreadCount() == 1)
             iter = 10;
-        qlonglong input  = comm->rank()+1;
+
+        qlonglong input  = comm->rank() + 1;
         qlonglong result = 0;
         qlonglong pu_count = comm->size();
 
-        if (comm->size() <2 ) {
+        if (comm->size() < 2 ) {
             qWarning() << "only one thread/process, skip REDUCE variant test";
             return;
         }
@@ -103,50 +106,55 @@ public:
         QTime time2; time2.start();
 
         qlonglong product = 1;
-        for (int i = 0; i< comm->size(); ++i) {
-            product  *= i+1;
+
+        for (int i = 0; i < comm->size(); ++i) {
+            product  *= i + 1;
         }
-        qlonglong sum = comm->size() * (comm->size()+1) / 2;
 
-        for (int i =0; i< iter; ++i) {
+        qlonglong sum = comm->size() * (comm->size() + 1) / 2;
 
-            comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Sum,0, false);
+        for (int i = 0; i < iter; ++i) {
+
+            comm->reduce(&input, &result, 1, dtkDistributedCommunicator::Sum, 0, false);
 
 
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
             QCOMPARE(result , sum);
             DTK_DISTRIBUTED_END_GLOBAL;
 
-            comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Max,0, false);
+            comm->reduce(&input, &result, 1, dtkDistributedCommunicator::Max, 0, false);
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
             QCOMPARE(result , comm->size());
             DTK_DISTRIBUTED_END_GLOBAL;
 
-            comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Min,0, false);
+            comm->reduce(&input, &result, 1, dtkDistributedCommunicator::Min, 0, false);
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
             QCOMPARE(result, 1);
             DTK_DISTRIBUTED_END_GLOBAL;
 
             //ALL REDUCE
-            comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Sum,0, true);
+            comm->reduce(&input, &result, 1, dtkDistributedCommunicator::Sum, 0, true);
             QCOMPARE(result , sum);
 
-            comm->reduce(&input,&result, 1, dtkDistributedCommunicator::Product,0, true);
+            comm->reduce(&input, &result, 1, dtkDistributedCommunicator::Product, 0, true);
             QCOMPARE(result , product);
 
             double a;
             double b;
-            if (comm->rank() ==0)
-                a=3.14;
+
+            if (comm->rank() == 0)
+                a = 3.14;
             else
-                a=1.42;
-            comm->reduce(&a,&b, 1, dtkDistributedCommunicator::Min,1, true);
+                a = 1.42;
+
+            comm->reduce(&a, &b, 1, dtkDistributedCommunicator::Min, 1, true);
             QVERIFY(b == 1.42);
         }
+
         double elapsed = time2.elapsed();
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "REDUCE latency"    << 1000.0 * elapsed / (pu_count *iter *4) << "microsec";
+        qDebug() << "REDUCE latency"    << 1000.0 * elapsed / (pu_count * iter * 4) << "microsec";
         DTK_DISTRIBUTED_END_GLOBAL;
 
     }
@@ -156,19 +164,20 @@ public:
 class GatherWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         int iter = 10000;
+
         if (QThread::idealThreadCount() == 1)
             iter = 10;
-        qlonglong input  = comm->rank()+1;
-        qlonglong * result;
-        qlonglong pu_count = comm->size();
-        result = static_cast<qlonglong*>(calloc(pu_count,sizeof(qlonglong)));
 
-        if (comm->size() <2 ) {
+        qlonglong input  = comm->rank() + 1;
+        qlonglong *result;
+        qlonglong pu_count = comm->size();
+        result = static_cast<qlonglong *>(calloc(pu_count, sizeof(qlonglong)));
+
+        if (comm->size() < 2 ) {
             qWarning() << "only one thread/process, skip GATHER variant test";
             delete result;
             return;
@@ -180,27 +189,31 @@ public:
 
         QTime time2; time2.start();
 
-        for (int i =0; i< iter; ++i) {
+        for (int i = 0; i < iter; ++i) {
 
-            comm->gather(&input,result, 1, 0, false);
+            comm->gather(&input, result, 1, 0, false);
 
             DTK_DISTRIBUTED_BEGIN_GLOBAL;
-            for (int i = 0; i< comm->size(); ++i) {
-                QVERIFY(result[i] == i+1);
+
+            for (int i = 0; i < comm->size(); ++i) {
+                QVERIFY(result[i] == i + 1);
             }
+
             DTK_DISTRIBUTED_END_GLOBAL;
 
             //ALL GATHER
-            comm->gather(&input,result, 1, 0, true);
-            for (int i = 0; i< comm->size(); ++i) {
-                QVERIFY(result[i] == i+1);
+            comm->gather(&input, result, 1, 0, true);
+
+            for (int i = 0; i < comm->size(); ++i) {
+                QVERIFY(result[i] == i + 1);
             }
 
         }
+
         double elapsed = time2.elapsed();
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "GATHER latency"    << 1000.0 * elapsed / (pu_count *iter *4) << "microsec";
+        qDebug() << "GATHER latency"    << 1000.0 * elapsed / (pu_count * iter * 4) << "microsec";
         DTK_DISTRIBUTED_END_GLOBAL;
 
     }
@@ -211,8 +224,7 @@ public:
 class SendVariantWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         QTime time;
         dtkArray<qlonglong> a;
         dtkArray<qlonglong> *b;
@@ -223,12 +235,12 @@ public:
         int iter = 5;
         qlonglong size = a.size() * iter;
 
-        if (comm->size() <2 ) {
+        if (comm->size() < 2 ) {
             qWarning() << "only one thread/process, skip Send/Receive variant test";
             return;
         }
 
-        for (int i = 0; i< arraySize ; ++i) {
+        for (int i = 0; i < arraySize ; ++i) {
             a[i] = i;
         }
 
@@ -245,25 +257,28 @@ public:
         int source = 0;
         int target = 1;
         QVariant v;
+
         if (comm->rank() < 2) {
-            for (int i =0; i< iter; ++i) {
+            for (int i = 0; i < iter; ++i) {
                 if (comm->wid() == source) {
                     v = QVariant::fromValue(&a);
                     comm->send(v, target, 0);
                 }  else if (comm->wid() == target) {
-                    comm->receive(v,source, 0);
+                    comm->receive(v, source, 0);
                     b = v.value< dtkArray<qlonglong> *>();
-                    for (int j = 0; j< arraySize ; ++j) {
+
+                    for (int j = 0; j < arraySize ; ++j) {
                         QVERIFY(a[j] == (*b)[j]);
                     }
                 }
             }
         }
+
         double elapsed = time2.elapsed();
         DTK_DISTRIBUTED_END_LOCAL;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "throughput" << size/elapsed << "kbits/sec";
+        qDebug() << "throughput" << size / elapsed << "kbits/sec";
         qDebug() << "latency"    << 1000.0 * elapsed / iter << "microsec";
         DTK_DISTRIBUTED_END_GLOBAL;
     }
@@ -272,8 +287,7 @@ public:
 class iReceiveWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         QTime time;
         dtkArray<qlonglong> a, b;
         qlonglong arraySize = 1000000;
@@ -284,12 +298,12 @@ public:
         int iter = 5;
         qlonglong size = a.size() * iter;
 
-        if (comm->size() <2 ) {
+        if (comm->size() < 2 ) {
             qWarning() << "only one thread/process, skip IRECEIVE test";
             return;
         }
 
-        for (int i = 0; i< arraySize ; ++i) {
+        for (int i = 0; i < arraySize ; ++i) {
             a[i] = i;
             b[i] = 0;
         }
@@ -306,24 +320,27 @@ public:
         int source = 0;
         int target = 1;
         QVariant v;
+
         if (comm->rank() < 2) {
-            for (int i =0; i< iter; ++i) {
+            for (int i = 0; i < iter; ++i) {
                 if (comm->wid() == source) {
                     comm->send(a.data(), a.size(), target, 0);
                 }  else if (comm->wid() == target) {
-                    dtkDistributedRequest *req = comm->ireceive(b.data(), b.size(),source, 0);
+                    dtkDistributedRequest *req = comm->ireceive(b.data(), b.size(), source, 0);
                     comm->wait(req);
-                    for (int j = 0; j< arraySize ; ++j) {
+
+                    for (int j = 0; j < arraySize ; ++j) {
                         QVERIFY(a[j] == b[j]);
                     }
                 }
             }
         }
+
         double elapsed = time2.elapsed();
         DTK_DISTRIBUTED_END_LOCAL;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "throughput" << size/elapsed << "kbits/sec";
+        qDebug() << "throughput" << size / elapsed << "kbits/sec";
         qDebug() << "latency"    << 1000.0 * elapsed / iter << "microsec";
         DTK_DISTRIBUTED_END_GLOBAL;
     }
@@ -331,31 +348,34 @@ public:
 class BroadcastWork : public QRunnable
 {
 public:
-    void run(void)
-    {
+    void run(void) {
         QTime time;
         QByteArray x;
         QByteArray msg("ping broadcast");
         dtkDistributedCommunicator *comm = dtkDistributed::app()->communicator();
 
         int iter = 10000;
+
         if (QThread::idealThreadCount() == 1)
             iter = 10;
-        if (comm->size() <2 ) {
+
+        if (comm->size() < 2 ) {
             qWarning() << "only one thread/process, skip broadcast test";
             return;
         }
-        qlonglong size = msg.size() * iter * (comm->size()-1)  * comm->size() / 8;
+
+        qlonglong size = msg.size() * iter * (comm->size() - 1)  * comm->size() / 8;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "****** BROADCAST TEST ******" << iter * comm->size();
+        qDebug() << "****** BROADCAST TEST ******" << iter *comm->size();
         DTK_DISTRIBUTED_END_GLOBAL;
 
         DTK_DISTRIBUTED_BEGIN_LOCAL;
 
         QTime time2; time2.start();
+
         for (qint32 source = 0; source < comm->size(); ++source) {
-            for (int i =0; i< iter; ++i) {
+            for (int i = 0; i < iter; ++i) {
                 if (comm->wid() == source) {
                     x = msg;
                     dtkDistributed::app()->communicator()->broadcast(x, source);
@@ -365,18 +385,18 @@ public:
                 }
             }
         }
+
         double elapsed = time2.elapsed();
         DTK_DISTRIBUTED_END_LOCAL;
 
         DTK_DISTRIBUTED_BEGIN_GLOBAL;
-        qDebug() << "throughput" << size/elapsed << "kbits/sec";
+        qDebug() << "throughput" << size / elapsed << "kbits/sec";
         qDebug() << "latency"    << 1000.0 * elapsed / (iter * comm->size()) << "microsec";
         DTK_DISTRIBUTED_END_GLOBAL;
     }
 };
 
-namespace communicator_send_test
-{
+namespace communicator_send_test {
     void runAll(QString type)
     {
         dtkDistributed::policy()->setType(type);

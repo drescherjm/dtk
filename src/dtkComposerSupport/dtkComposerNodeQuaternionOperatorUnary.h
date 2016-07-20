@@ -1,5 +1,5 @@
-/* dtkComposerNodeQuaternionOperatorUnary.h --- 
- * 
+/* dtkComposerNodeQuaternionOperatorUnary.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:19:43 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 9
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEQUATERNIONOPERATORUNARY_H
@@ -32,7 +32,7 @@ class dtkComposerNodeQuaternionOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeQuaternionOperatorUnary(void);
+    dtkComposerNodeQuaternionOperatorUnary(void);
     ~dtkComposerNodeQuaternionOperatorUnary(void);
 
     inline QString inputLabelHint(int) {
@@ -56,7 +56,7 @@ class dtkComposerNodeQuaternionOperatorUnaryScalarPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorUnaryScalar : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeQuaternionOperatorUnaryScalar(void);
+    dtkComposerNodeQuaternionOperatorUnaryScalar(void);
     ~dtkComposerNodeQuaternionOperatorUnaryScalar(void);
 
     inline QString inputLabelHint(int port) {

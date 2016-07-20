@@ -1,15 +1,15 @@
 /* dtkWidgetsTagCloudList.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:15:07 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Mon Apr 15 15:48:15 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 40
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkWidgetsTagCloudList.h"
@@ -20,16 +20,16 @@
 
 class dtkWidgetsTagCloudListLightDelegate: public QStyledItemDelegate
 {
- public:
+public:
     dtkWidgetsTagCloudListLightDelegate(dtkWidgetsTagCloudList *list);
 
- public:
+public:
     virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
- public:
+public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
- protected:
+protected:
     dtkWidgetsTagCloudList *list;
 };
 
@@ -39,16 +39,16 @@ class dtkWidgetsTagCloudListLightDelegate: public QStyledItemDelegate
 
 class dtkWidgetsTagCloudListDarkDelegate: public QStyledItemDelegate
 {
- public:
+public:
     dtkWidgetsTagCloudListDarkDelegate(dtkWidgetsTagCloudList *list);
 
- public:
+public:
     virtual void paint(QPainter *painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
- public:
+public:
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
- protected:
+protected:
     dtkWidgetsTagCloudList *list;
 };
 
@@ -69,7 +69,7 @@ public:
 dtkWidgetsTagCloudList::dtkWidgetsTagCloudList(QWidget *parent) : QListWidget(parent)
 {
     d = new dtkWidgetsTagCloudListPrivate;
-    
+
     this->setAttribute(Qt::WA_MacShowFocusRect, false);
     this->setFrameShape(QFrame::NoFrame);
     this->setDragEnabled(true);
@@ -135,7 +135,7 @@ void dtkWidgetsTagCloudList::onItemClicked(QListWidgetItem *item)
 {
     dtkWidgetsTagCloudItem *i = dynamic_cast<dtkWidgetsTagCloudItem *>(item);
 
-    if(!i)
+    if (!i)
         return;
 
     emit itemClicked(i->description());
@@ -147,7 +147,7 @@ QMimeData *dtkWidgetsTagCloudList::mimeData(const QList<QListWidgetItem *> items
 
     dtkWidgetsTagCloudItem *i = dynamic_cast<dtkWidgetsTagCloudItem *>(items.first());
 
-    if(i) {
+    if (i) {
         data = new QMimeData;
         data->setUrls(QList<QUrl>() << QUrl(QString("%1:%2").arg(i->kind()).arg(i->type())));
     }
@@ -164,14 +164,14 @@ QStringList dtkWidgetsTagCloudList::mimeTypes(void) const
 // Helper functions
 // ///////////////////////////////////////////////////////////////////
 
-QString dtkWidgetsTagCloudListDelegateUnhtmlize(const QString &htmlString)
+QString dtkWidgetsTagCloudListDelegateUnhtmlize(const QString& htmlString)
 {
     QString textString;
 
     QXmlStreamReader xml(htmlString);
- 
-   while(!xml.atEnd())
-        if(xml.readNext() == QXmlStreamReader::Characters)
+
+    while (!xml.atEnd())
+        if (xml.readNext() == QXmlStreamReader::Characters)
             textString += xml.text();
 
     return textString;
@@ -190,7 +190,7 @@ void dtkWidgetsTagCloudListLightDelegate::paint(QPainter *painter, const QStyleO
 {
     dtkWidgetsTagCloudItem *item = dynamic_cast<dtkWidgetsTagCloudItem *>(list->itemFromIndex(index));
 
-    if(!item)
+    if (!item)
         return;
 
     QLinearGradient gradiant(option.rect.left(), option.rect.top(), option.rect.left(), option.rect.bottom());
@@ -210,15 +210,15 @@ void dtkWidgetsTagCloudListLightDelegate::paint(QPainter *painter, const QStyleO
     static int h1 = 20;
     static int h2 = 20;
     static int h3 = 20;
-    
+
     int w = option.rect.width();
     int h = option.rect.height();
     int t = option.rect.top();
     int r = option.rect.right();
 
-    QRect name_rect = QRect(m, t+1*m,       w-2*m, h1);
-    QRect desc_rect = QRect(m, t+2*m+h1,    w-6*m, h2);
-    QRect tags_rect = QRect(m, t+3*m+h1+h2, w-2*m, h3);
+    QRect name_rect = QRect(m, t + 1 * m,       w - 2 * m, h1);
+    QRect desc_rect = QRect(m, t + 2 * m + h1,    w - 6 * m, h2);
+    QRect tags_rect = QRect(m, t + 3 * m + h1 + h2, w - 2 * m, h3);
 
     QFontMetrics metrics = QFontMetrics(painter->font());
 
@@ -234,7 +234,7 @@ void dtkWidgetsTagCloudListLightDelegate::paint(QPainter *painter, const QStyleO
     painter->setPen(Qt::darkGray);
     painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
-    QPointF arrow_pos = QPointF(r - m - arrow.width(), t + h/2 - arrow.height()/2);
+    QPointF arrow_pos = QPointF(r - m - arrow.width(), t + h / 2 - arrow.height() / 2);
     painter->drawPixmap(arrow_pos, arrow);
     painter->drawPixmap(tags_rect.topLeft(), tags);
 }
@@ -260,7 +260,7 @@ void dtkWidgetsTagCloudListDarkDelegate::paint(QPainter *painter, const QStyleOp
 {
     dtkWidgetsTagCloudItem *item = dynamic_cast<dtkWidgetsTagCloudItem *>(list->itemFromIndex(index));
 
-    if(!item)
+    if (!item)
         return;
 
     QLinearGradient gradiant(option.rect.left(), option.rect.top(), option.rect.left(), option.rect.bottom());
@@ -280,15 +280,15 @@ void dtkWidgetsTagCloudListDarkDelegate::paint(QPainter *painter, const QStyleOp
     static int h1 = 20;
     static int h2 = 20;
     static int h3 = 20;
-    
+
     int w = option.rect.width();
     int h = option.rect.height();
     int t = option.rect.top();
     int r = option.rect.right();
 
-    QRect name_rect = QRect(m, t+1*m,       w-2*m, h1);
-    QRect desc_rect = QRect(m, t+2*m+h1,    w-6*m, h2);
-    QRect tags_rect = QRect(m, t+3*m+h1+h2, w-2*m, h3);
+    QRect name_rect = QRect(m, t + 1 * m,       w - 2 * m, h1);
+    QRect desc_rect = QRect(m, t + 2 * m + h1,    w - 6 * m, h2);
+    QRect tags_rect = QRect(m, t + 3 * m + h1 + h2, w - 2 * m, h3);
 
     QFontMetrics metrics = QFontMetrics(painter->font());
 
@@ -304,7 +304,7 @@ void dtkWidgetsTagCloudListDarkDelegate::paint(QPainter *painter, const QStyleOp
     painter->setPen(Qt::black);
     painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
-    QPointF arrow_pos = QPointF(r - m - arrow.width(), t + h/2 - arrow.height()/2);
+    QPointF arrow_pos = QPointF(r - m - arrow.width(), t + h / 2 - arrow.height() / 2);
     painter->drawPixmap(arrow_pos, arrow);
     painter->drawPixmap(tags_rect.topLeft(), tags);
 }

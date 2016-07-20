@@ -1,15 +1,15 @@
 /* dtkAbstractProcessController.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Thu Aug 29 14:32:38 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Thu Aug 29 17:01:35 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 21
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -24,7 +24,7 @@ class DTKCORESUPPORT_EXPORT dtkAbstractProcessController : public dtkAbstractObj
     Q_OBJECT
 
 public:
-     dtkAbstractProcessController(void);
+    dtkAbstractProcessController(void);
     ~dtkAbstractProcessController(void);
 
 public:

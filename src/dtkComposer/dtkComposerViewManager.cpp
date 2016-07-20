@@ -77,7 +77,7 @@ void dtkComposerViewManager::clear(void)
 
 void dtkComposerViewManager::onViewFocused(dtkComposerViewWidget *widget)
 {
-    if(!widget->inspector())
+    if (!widget->inspector())
         return;
 
     d->view_inspector->addWidget(widget->inspector());
@@ -86,7 +86,7 @@ void dtkComposerViewManager::onViewFocused(dtkComposerViewWidget *widget)
 
 void dtkComposerViewManager::onViewUnfocused(dtkComposerViewWidget *widget)
 {
-    if(!widget->inspector())
+    if (!widget->inspector())
         return;
 
     d->view_inspector->removeWidget(widget->inspector());

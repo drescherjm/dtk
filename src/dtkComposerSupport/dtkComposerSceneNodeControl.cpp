@@ -66,7 +66,7 @@ void dtkComposerSceneNodeControl::wrap(dtkComposerNode *wrapee)
 {
     dtkComposerNodeControl *control = dynamic_cast<dtkComposerNodeControl *>(wrapee);
 
-    if(!control)
+    if (!control)
         return;
 
     d->header = new dtkComposerSceneNodeLeaf;
@@ -75,15 +75,15 @@ void dtkComposerSceneNodeControl::wrap(dtkComposerNode *wrapee)
     d->header->setTitle(wrapee->titleHint());
     this->setHeader(d->header);
 
-    for(int i = 0; i < control->blockCount(); i++) {
-    
+    for (int i = 0; i < control->blockCount(); i++) {
+
         dtkComposerSceneNodeComposite *block = new dtkComposerSceneNodeComposite;
         block->wrap(control->block(i));
         block->setParent(this);
         // block->setTitle(block->titleHint());
         this->addBlock(block);
     }
-    
+
     d->footer = new dtkComposerSceneNodeLeaf;
     d->footer->wrap(control->footer());
     d->footer->setParent(this);
@@ -100,8 +100,8 @@ QList<dtkComposerSceneNodeComposite *> dtkComposerSceneNodeControl::blocks(void)
 
 dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::block(const QString& title)
 {
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks)
-        if(block->title() == title)
+    foreach (dtkComposerSceneNodeComposite *block, d->blocks)
+        if (block->title() == title)
             return block;
 
     return NULL;
@@ -155,9 +155,9 @@ void dtkComposerSceneNodeControl::addBlock(dtkComposerSceneNodeComposite *block)
     block->setFlag(QGraphicsItem::ItemIsSelectable, false);
     block->layout();
 
-    if(d->blocks.count() > 1) {
-        dtkComposerSceneNodeComposite *top = d->blocks.at(d->blocks.count()-2);
-        dtkComposerSceneNodeComposite *bot = d->blocks.at(d->blocks.count()-1);
+    if (d->blocks.count() > 1) {
+        dtkComposerSceneNodeComposite *top = d->blocks.at(d->blocks.count() - 2);
+        dtkComposerSceneNodeComposite *bot = d->blocks.at(d->blocks.count() - 1);
 
         dtkComposerSceneNodeHandle *handle = new dtkComposerSceneNodeHandle(this);
         handle->setTopBlock(top);
@@ -178,10 +178,10 @@ void dtkComposerSceneNodeControl::removeBlock(dtkComposerSceneNodeComposite *blo
 
 void dtkComposerSceneNodeControl::layout(void)
 {
-    if(!d->header)
+    if (!d->header)
         return;
 
-    if(!d->footer)
+    if (!d->footer)
         return;
 
     d->header->layout();
@@ -189,18 +189,18 @@ void dtkComposerSceneNodeControl::layout(void)
 
     qreal h = 0;
     qreal b = (d->rect.size().height()
-              -d->header->boundingRect().adjusted(2, 2, -2, -2).size().height()
-              -d->footer->boundingRect().adjusted(2, 2, -2, -2).size().height())
-              /d->blocks.count();
+               - d->header->boundingRect().adjusted(2, 2, -2, -2).size().height()
+               - d->footer->boundingRect().adjusted(2, 2, -2, -2).size().height())
+              / d->blocks.count();
 
     if (d->header) {
         d->header->setPos(0, 0);
         h = d->header->boundingRect().adjusted(2, 2, -2, -2).height();
         d->header->resize(d->rect.size().width(), h);
     }
-    
-    if(d->sizes.empty()) {
-        foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+
+    if (d->sizes.empty()) {
+        foreach (dtkComposerSceneNodeComposite *block, d->blocks) {
             d->sizes.insert(block, QRectF(0, h, d->rect.size().width(), b));
             h += b;
         }
@@ -211,14 +211,14 @@ void dtkComposerSceneNodeControl::layout(void)
     else {
         qreal ref_h = d->sizes.values().first().height();
 
-        foreach(QRectF r, d->sizes) {
-            if(r.height() != ref_h) {
+        foreach (QRectF r, d->sizes) {
+            if (r.height() != ref_h) {
                 ref_h = -1.0;
             }
         }
 
-        if(ref_h != -1.0) {
-            foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+        if (ref_h != -1.0) {
+            foreach (dtkComposerSceneNodeComposite *block, d->blocks) {
                 d->sizes.insert(block, QRectF(0, h, d->rect.size().width(), b));
                 h += b;
             }
@@ -227,7 +227,7 @@ void dtkComposerSceneNodeControl::layout(void)
 
     // -- ... until here.
 
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+    foreach (dtkComposerSceneNodeComposite *block, d->blocks) {
         block->layout();
         block->setPos(d->sizes.value(block).topLeft());
         block->resize(d->sizes.value(block).size());
@@ -235,15 +235,15 @@ void dtkComposerSceneNodeControl::layout(void)
         block->layout();
     }
 
-    foreach(dtkComposerSceneNodeHandle *handle, d->handles)
+    foreach (dtkComposerSceneNodeHandle *handle, d->handles)
         handle->layout();
 
-    if(d->blocks.count())
+    if (d->blocks.count())
         h = d->blocks.last()->boundingRect().top() + d->blocks.last()->boundingRect().height();
 
     if (d->footer) {
         h = d->footer->boundingRect().adjusted(2, 2, -2, -2).height();
-        d->footer->setPos(0, this->boundingRect().bottom()-h-2);
+        d->footer->setPos(0, this->boundingRect().bottom() - h - 2);
         d->footer->resize(d->rect.size().width(), h);
     }
 
@@ -255,12 +255,12 @@ void dtkComposerSceneNodeControl::layout(void)
 
     if (dtkComposerSceneNodeComposite *parent = dynamic_cast<dtkComposerSceneNodeComposite *>(node->parent())) {
 
-        if(parent->visible())
+        if (parent->visible())
             parent->layout();
     }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
     this->update();
@@ -268,7 +268,7 @@ void dtkComposerSceneNodeControl::layout(void)
 
 void dtkComposerSceneNodeControl::setBlockSize(dtkComposerSceneNodeComposite *block, qreal x, qreal y, qreal w, qreal h)
 {
-    if(!d->sizes.keys().contains(block))
+    if (!d->sizes.keys().contains(block))
         return;
 
     d->sizes[block] = QRectF(x, y, w, h);
@@ -278,12 +278,12 @@ void dtkComposerSceneNodeControl::setBlockSize(dtkComposerSceneNodeComposite *bl
 
 void dtkComposerSceneNodeControl::resizeBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy)
 {
-    if(!d->sizes.keys().contains(block))
+    if (!d->sizes.keys().contains(block))
         return;
 
     QRectF rect = d->sizes.value(block);
-    rect.setWidth(rect.width()+dx);
-    rect.setHeight(rect.height()+dy);
+    rect.setWidth(rect.width() + dx);
+    rect.setHeight(rect.height() + dy);
 
     d->sizes[block] = rect;
 
@@ -292,14 +292,14 @@ void dtkComposerSceneNodeControl::resizeBlock(dtkComposerSceneNodeComposite *blo
 
 void dtkComposerSceneNodeControl::moveBlock(dtkComposerSceneNodeComposite *block, qreal dx, qreal dy)
 {
-    if(!d->sizes.keys().contains(block))
+    if (!d->sizes.keys().contains(block))
         return;
 
     QRectF rect = d->sizes.value(block);
-    qreal x = rect.x()+dx;
-    qreal y = rect.y()+dy;
-    qreal w = rect.width()-dx;
-    qreal h = rect.height()-dy;
+    qreal x = rect.x() + dx;
+    qreal y = rect.y() + dy;
+    qreal w = rect.width() - dx;
+    qreal h = rect.height() - dy;
 
     d->sizes[block] = QRectF(x, y, w, h);
 
@@ -316,11 +316,11 @@ dtkComposerSceneNodeComposite *dtkComposerSceneNodeControl::blockAt(const QPoint
 {
     QPointF position = this->mapFromScene(point);
 
-    foreach(dtkComposerSceneNodeComposite *block, d->blocks) {
+    foreach (dtkComposerSceneNodeComposite *block, d->blocks) {
 
         QRectF rect = QRectF(block->pos(), block->boundingRect().size());
 
-        if(rect.contains(position))
+        if (rect.contains(position))
             return block;
     }
 
@@ -356,10 +356,10 @@ void dtkComposerSceneNodeControl::paint(QPainter *painter, const QStyleOptionGra
 
     painter->setPen(QPen(Qt::white, 1, Qt::DashLine));
 
-    for(int i = 0; i < d->blocks.count()-1; i++) {
+    for (int i = 0; i < d->blocks.count() - 1; i++) {
 
         dtkComposerSceneNodeComposite *block = d->blocks.at(i);
-        
+
         QPointF left  = block->pos() + block->boundingRect().adjusted(2, 2, -2, -2).bottomLeft();
         QPointF right = block->pos() + block->boundingRect().adjusted(2, 2, -2, -2).bottomRight();
 
@@ -392,29 +392,29 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
 
 // /////////////////////////////////////////////////////////////////
 
-    for(int i = 0; i < d->blocks.count(); i++) {
+        for (int i = 0; i < d->blocks.count(); i++) {
 
-        dtkComposerSceneNodeComposite *previous = NULL;
-        dtkComposerSceneNodeComposite *current = d->blocks.at(i);
+            dtkComposerSceneNodeComposite *previous = NULL;
+            dtkComposerSceneNodeComposite *current = d->blocks.at(i);
 
-        if(i >= 1)
-            previous = d->blocks.at(i-1);
+            if (i >= 1)
+                previous = d->blocks.at(i - 1);
 
-        QRectF size = d->sizes.value(current);
+            QRectF size = d->sizes.value(current);
 
-        qreal x = size.x();
-        qreal y = size.y();
-        qreal w = size.width();
-        qreal h = size.height();
+            qreal x = size.x();
+            qreal y = size.y();
+            qreal w = size.width();
+            qreal h = size.height();
 
-        if(previous)
-            y = d->sizes.value(previous).y() + d->sizes.value(previous).height();
+            if (previous)
+                y = d->sizes.value(previous).y() + d->sizes.value(previous).height();
 
-        w  = d->rect.width();
-        h += delta.y()/d->sizes.count();
+            w  = d->rect.width();
+            h += delta.y() / d->sizes.count();
 
-        d->sizes[current] = QRectF(x, y, w, h);
-    }
+            d->sizes[current] = QRectF(x, y, w, h);
+        }
 
 // /////////////////////////////////////////////////////////////////
 
@@ -424,18 +424,18 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
 
         qreal delta_y = 0;
 
-        for(int i = 0; i < d->blocks.count(); i++) {            
-            
-            foreach(dtkComposerSceneNode *node, d->blocks.at(i)->nodes())
+        for (int i = 0; i < d->blocks.count(); i++) {
+
+            foreach (dtkComposerSceneNode *node, d->blocks.at(i)->nodes())
                 node->moveBy(0, delta_y);
-            
-            foreach(dtkComposerSceneNote *note, d->blocks.at(i)->notes())
+
+            foreach (dtkComposerSceneNote *note, d->blocks.at(i)->notes())
                 note->moveBy(0, delta_y);
-            
-            foreach(dtkComposerSceneEdge *edge, d->blocks.at(i)->edges())
+
+            foreach (dtkComposerSceneEdge *edge, d->blocks.at(i)->edges())
                 edge->adjust();
 
-            delta_y += delta.y()/d->blocks.count();
+            delta_y += delta.y() / d->blocks.count();
         }
 
         event->accept();
@@ -446,28 +446,28 @@ void dtkComposerSceneNodeControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event
     QPointF delta = event->pos() - event->lastPos();
     qreal delta_x = delta.x();
     qreal delta_y = delta.y();
-    
-    QStack<dtkComposerSceneNodeComposite *> nodes; foreach(dtkComposerSceneNodeComposite *block, this->blocks()) nodes.push(block);
 
-    while(!nodes.isEmpty()) {
+    QStack<dtkComposerSceneNodeComposite *> nodes; foreach(dtkComposerSceneNodeComposite * block, this->blocks()) nodes.push(block);
+
+    while (!nodes.isEmpty()) {
 
         dtkComposerSceneNodeComposite *n = nodes.pop();
 
-        foreach(dtkComposerSceneNode *node, n->nodes()) {
+        foreach (dtkComposerSceneNode *node, n->nodes()) {
             node->moveBy(delta_x, delta_y);
-            
-            if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
-                foreach(dtkComposerSceneNodeComposite *block, control->blocks())
+
+            if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node))
+                foreach (dtkComposerSceneNodeComposite *block, control->blocks())
                     nodes.push(block);
-            
-            if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
+
+            if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node))
                 nodes.push(composite);
         }
-        
-        foreach(dtkComposerSceneNote *note, n->notes())
+
+        foreach (dtkComposerSceneNote *note, n->notes())
             note->moveBy(delta_x, delta_y);
-        
-        foreach(dtkComposerSceneEdge *edge, n->edges())
+
+        foreach (dtkComposerSceneEdge *edge, n->edges())
             edge->adjust();
     }
 

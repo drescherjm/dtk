@@ -52,6 +52,7 @@ dtkComposerNodeCommunicatorInit::~dtkComposerNodeCommunicatorInit(void)
 {
     if (d->communicator)
         delete d->communicator;
+
     d->communicator = NULL;
 
     delete d;
@@ -281,6 +282,7 @@ void dtkComposerNodeCommunicatorSend::run(void)
         d->emitter.setData(d->communicator);
 
         int tag = 0;
+
         if (!d->receiver_tag.isEmpty())
             tag = *(d->receiver_tag.data());
 
@@ -353,6 +355,7 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         dtkDistributedCommunicator *communicator = d->receiver_comm.data();
 
         d->tag = 0;
+
         if (!d->receiver_tag.isEmpty())
             d->tag = *(d->receiver_tag.data());
 
@@ -368,11 +371,12 @@ void dtkComposerNodeCommunicatorReceive::run(void)
         if (dtkDistributedCommunicatorTcp *tcp = dynamic_cast<dtkDistributedCommunicatorTcp *>(communicator)) {
             dtkDebug() << "TCP communicator. Parse message from socket, waiting for tag" << d->tag;
             QMap<qlonglong, dtkDistributedMessage *> *msg_map = tcp->msgBuffer();
+
             if (msg_map->contains(d->tag)) {
                 dtkDebug() << "msg already received for tag" << d->tag;
                 d->emitter.setTwinned(false);
                 dtkDistributedMessage *msg = msg_map->take(d->tag);
-                d->emitter.setDataFrom(msg->content(),o);
+                d->emitter.setDataFrom(msg->content(), o);
                 d->emitter.setTwinned(true);
                 delete msg;
                 return;
@@ -387,21 +391,24 @@ void dtkComposerNodeCommunicatorReceive::run(void)
             } else {
                 dtkDistributedMessage *msg = tcp->socket()->parseRequest();
                 int msg_tag = msg->header("Tag").toInt();
+
                 if (msg_tag == d->tag || d->tag == dtkDistributedCommunicator::ANY_TAG) {
                     dtkTrace() << "OK, this is the expected tag " << d->tag;
                     d->emitter.setTwinned(false);
-                    d->emitter.setDataFrom(msg->content(),o);
+                    d->emitter.setDataFrom(msg->content(), o);
                     d->emitter.setTwinned(true);
                     delete msg;
+
                     if (d->tag == dtkDistributedCommunicator::ANY_TAG)
                         d->tag = msg_tag;
                 } else {
                     //store msg for another call with the right tag
                     dtkInfo() << "Msg received, but wrong tag, store the msg" << d->tag << msg_tag;
-                    msg_map->insert(msg_tag,msg);
+                    msg_map->insert(msg_tag, msg);
                     this->run(); // do it again
                 }
             }
+
             tcp->socket()->blockSignals(false); // needed ?
         } else { // MPI
             QByteArray array;
@@ -410,12 +417,13 @@ void dtkComposerNodeCommunicatorReceive::run(void)
 
             if (d->tag == dtkDistributedCommunicator::ANY_TAG)
                 d->tag = status.tag();
+
             if (d->source == dtkDistributedCommunicator::ANY_SOURCE)
                 d->source = status.source();
 
             if (!array.isEmpty()) {
                 d->emitter.setTwinned(false);
-                d->emitter.setDataFrom(array,o);
+                d->emitter.setDataFrom(array, o);
                 d->emitter.setTwinned(true);
             } else {
                 dtkWarn() << "Empty data in receive";

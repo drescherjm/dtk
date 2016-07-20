@@ -1,5 +1,5 @@
-/* dtkPlotViewGrid.cpp --- 
- * 
+/* dtkPlotViewGrid.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 88
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotView.h"
@@ -26,7 +26,7 @@
 class dtkPlotViewGridPrivate : public QwtPlotGrid
 {
 public:
-     dtkPlotViewGridPrivate(dtkPlotView *parent);
+    dtkPlotViewGridPrivate(dtkPlotView *parent);
     ~dtkPlotViewGridPrivate(void);
 };
 
@@ -43,7 +43,7 @@ dtkPlotViewGridPrivate::~dtkPlotViewGridPrivate(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkPlotViewGrid::dtkPlotViewGrid(dtkPlotView *parent) : QObject(parent), d(new dtkPlotViewGridPrivate(parent))

@@ -160,10 +160,10 @@ void dtkDistributedCommunicator::send(double *data, qint64 size, qint32 target, 
     return this->send(data, size, QMetaType::Double, target, tag);
 }
 
-void dtkDistributedCommunicator::send(const QVariant &v, qint32 target, qint32 tag)
+void dtkDistributedCommunicator::send(const QVariant& v, qint32 target, qint32 tag)
 {
     QByteArray bytes;
-    QDataStream stream(&bytes,QIODevice::WriteOnly);
+    QDataStream stream(&bytes, QIODevice::WriteOnly);
     stream << v;
     this->send(bytes, target, tag);
 }
@@ -238,19 +238,19 @@ void dtkDistributedCommunicator::receive(double *data, qint64 size, qint32 sourc
     return this->receive(data, size, QMetaType::Double, source, tag);
 }
 
-void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag)
+void dtkDistributedCommunicator::receive(QVariant& v, qint32 target, qint32 tag)
 {
     QByteArray bytes;
     this->receive(bytes, target, tag);
-    QDataStream stream(&bytes,QIODevice::ReadOnly);
+    QDataStream stream(&bytes, QIODevice::ReadOnly);
     stream >> v;
 }
 
-void dtkDistributedCommunicator::receive(QVariant &v, qint32 target, qint32 tag, dtkDistributedCommunicatorStatus &status)
+void dtkDistributedCommunicator::receive(QVariant& v, qint32 target, qint32 tag, dtkDistributedCommunicatorStatus& status)
 {
     QByteArray bytes;
     this->receive(bytes, target, tag, status);
-    QDataStream stream(&bytes,QIODevice::ReadOnly);
+    QDataStream stream(&bytes, QIODevice::ReadOnly);
     stream >> v;
 }
 

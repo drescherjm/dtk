@@ -29,10 +29,12 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
     dtkTrace() << "slurm status";
 
     stats.start("sinfo -o \"%13n %8t %4c %8z %8m %18P\"");
+
     if (!stats.waitForStarted()) {
         dtkError() << "Unable to launch sinfo command";
         return QByteArray();
     }
+
     if (!stats.waitForFinished()) {
         dtkError() << "Unable to completed sinfo command";
         return QByteArray();
@@ -44,8 +46,10 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
 // HOSTNAMES     STATE    CPUS S:C:T    MEMORY   PARTITION
 // server        idle     1    1:1:1    1        debug*
     QRegExp rx("(\\w+)\\s+(\\w+)\\s+(\\d+)\\s+(\\d+):(\\d+):(\\d+)\\s+(\\d+)\\s+(\\S+)\\s*");
+
     do {
         line = stream.readLine();
+
         if (rx.exactMatch(line)) {
             QVariantMap node;
             QStringList list = rx.capturedTexts();
@@ -57,20 +61,23 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
             int threads = list.at(6).toInt();
             int mem     = list.at(7).toInt();
             QString partition = list.at(8);
+
             if (nodes_map.contains(name)) {
                 continue;
             }
+
             node.insert("name", name);
             nodes_map.insert(name, true);
             QVariantList cores;
 
-            for (int c = 0; c<np; c++) {
+            for (int c = 0; c < np; c++) {
                 QVariantMap core;
                 // slurm doesn't define a unique id per core, so assigned
                 // a unique number to each core of the cluster
-                core.insert("id",globalcores +c);
+                core.insert("id", globalcores + c);
                 cores << core;
             }
+
             node.insert("cores", cores );
             node.insert("cpus", socket);
             node.insert("gpus", 0); // FIXME: does slurm support gpu ?
@@ -80,18 +87,19 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
             // available states:
             //ALLOC, ALLOCATED, COMP, COMPLETING, DOWN, DRAIN, DRAINED, DRAINING, FAIL, FAILING, IDLE, MAINT, NO_RESPOND, POWER_SAVE, UNK, and UNKNOWN.
             if (state.contains("alloc") || state.contains("comp")) {
-                state="busy";
+                state = "busy";
                 node.insert("cores_busy", np);
             } else if (state.contains("idle")) {
-                state="free";
+                state = "free";
                 node.insert("cores_busy", 0);
             } else if (state.contains("power_save")) {
-                state="standby";
+                state = "standby";
                 node.insert("cores_busy", 0);
             } else {
                 node.insert("cores_busy", 0);
-                state="down";
+                state = "down";
             }
+
             node.insert("state", state);
             jnodes << node;
             result.insert("nodes", jnodes);
@@ -106,10 +114,12 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
     // Now get the jobs
     stats.close();
     stats.start("squeue -o \"%.18i %.9P %.8j %.8u %.2t %.10l %S %.6D %R %C\" " );
+
     if (!stats.waitForStarted()) {
         dtkError() << "Unable to launch squeue command";
         return QByteArray();
     }
+
     if (!stats.waitForFinished()) {
         dtkError() << "Unable to completed squeue command";
         return QByteArray();
@@ -120,8 +130,10 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
     line = stream.readLine(); // skip first line
 
     rx.setPattern("\\s*(\\d+)\\s+(\\w+)\\s+(\\w+)\\s+(\\w+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\d+)\\s+(\\S+)\\s+(\\d+)\\s*");
+
     do {
         line = stream.readLine();
+
         if (rx.exactMatch(line)) {
             QStringList list = rx.capturedTexts();
             qlonglong id = list.at(1).toLongLong();
@@ -138,6 +150,7 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
             QVariantMap job;
             QVariantMap jresources;
             QString state;
+
             // PD  (pending),  R (running), CA (cancelled), CF(configuring), CG (completing), CD (completed), F (failed), TO (timeout), and NF (node failure)
             if (status ==  "R" ) {
                 state = "running";
@@ -153,17 +166,27 @@ QByteArray  dtkDistributedResourceManagerSlurm::status(void)
                 state = "unknown";
             };
 
-            jresources.insert("nodes",nodes);
-            jresources.insert("cores",cores);
+            jresources.insert("nodes", nodes);
+
+            jresources.insert("cores", cores);
+
             job.insert("id", id);
+
             job.insert("username", user);
+
             job.insert("queue", partition);
+
 //            job.insert("queue_time", qtime);
             job.insert("start_time", stime);
+
             job.insert("walltime", walltime);
+
             job.insert("resources", jresources);
+
             job.insert("state", state);
+
             jjobs << job;
+
             result.insert("jobs", jjobs);
         } else {
             dtkInfo() << "slurm squeue: skip line" << line;
@@ -193,6 +216,7 @@ QString dtkDistributedResourceManagerSlurm::submit(QString input)
         dtkWarn() << "Error while parsing JSON document: not a json object" << input;
         return QString("ERROR");
     }
+
     QVariantMap json = jsonDoc.object().toVariantMap();
 
     // FIXME: we should read the properties mapping from a file instead of hardcoding it
@@ -202,34 +226,36 @@ QString dtkDistributedResourceManagerSlurm::submit(QString input)
     //FIXME: not used
 
     QVariantMap res = json["resources"].toMap();
+
     if (res["nodes"].toInt() == 0) {
         // no nodes, only cores; TODO
     } else if (res["cores"].toInt() == 0) {
         // no cores, only nodes; TODO
     } else {
         qlonglong tasks = res["nodes"].toInt() * res["cores"].toInt();
-        qsub += " --nodes="+res["nodes"].toString()+properties+" --tasks="+QString::number(tasks);
+        qsub += " --nodes=" + res["nodes"].toString() + properties + " --tasks=" + QString::number(tasks);
     }
 
     // walltime, syntax=HH:MM:SS
     if (json.contains("walltime")) {
-        qsub += " --time="+json["walltime"].toString();
+        qsub += " --time=" + json["walltime"].toString();
     }
 
     // script
     if (json.contains("script")) {
-        qsub += " "+json["script"].toString();
+        qsub += " " + json["script"].toString();
     } else if (json.contains("application")) {
 
         QString scriptName = qApp->applicationDirPath() + "/dtkDistributedServerScript.sh";
         QFile script(scriptName);
 
-        if (!script.open(QFile::WriteOnly|QFile::Truncate)) {
+        if (!script.open(QFile::WriteOnly | QFile::Truncate)) {
             dtkWarn() << "unable to open script for writing";
         } else {
             QTextStream out(&script);
             QString app_path = json["application"].toString();
             out << "#!/bin/bash\n";
+
             if (QFileInfo(app_path).isAbsolute()) {
                 out << json["application"].toString();
             } else {
@@ -255,7 +281,7 @@ QString dtkDistributedResourceManagerSlurm::submit(QString input)
 
     // options
     if (json.contains("options")) {
-        qsub += " "+json["options"].toString();
+        qsub += " " + json["options"].toString();
     }
 
     dtkDebug() << qsub;
@@ -270,6 +296,7 @@ QString dtkDistributedResourceManagerSlurm::submit(QString input)
         dtkError() << "Unable to completed sbatch command";
         return QString("ERROR");
     }
+
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkError() << "Error running sbatch :" << error;
@@ -295,6 +322,7 @@ QString dtkDistributedResourceManagerSlurm::deljob(QString jobid)
         dtkError() << "Unable to complete qcancel command";
         return QString("ERROR");
     }
+
     if (stat.exitCode() > 0) {
         QString error = stat.readAllStandardError();
         dtkError() << "Error running qcancel :" << error;

@@ -14,7 +14,7 @@
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONTROLMAP_H
@@ -28,7 +28,7 @@ class dtkComposerNodeControlMapPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControlMap : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlMap(void);
+    dtkComposerNodeControlMap(void);
     virtual ~dtkComposerNodeControlMap(void);
 
 public:
@@ -41,7 +41,7 @@ public:
     void setInputs(void);
     void setOutputs(void);
     void setVariables(void);
-     int selectBranch(void);
+    int selectBranch(void);
     void begin(void);
     void end(void);
 

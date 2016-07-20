@@ -49,17 +49,18 @@ void dtkComposerNodeLogger::run(void)
     QStringList identifiers  = d->receiver.allDataIdentifier();
 
 
-    for(int i = 0; i < descriptions.count(); ++i) {
+    for (int i = 0; i < descriptions.count(); ++i) {
 
         QString output;
 
         if (!d->receiver_header.isEmpty())
-            output += *(d->receiver_header.data()) +" ";
+            output += *(d->receiver_header.data()) + " ";
 
         output += identifiers.at(i) + ": " + descriptions.at(i);
 
         if (!d->receiver_level.isEmpty()) {
             QString level = *(d->receiver_level.data());
+
             if (level == "trace")
                 dtkTrace() <<  output;
             else if  (level == "debug")

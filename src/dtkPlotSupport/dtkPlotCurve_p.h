@@ -1,15 +1,15 @@
 /* dtkPlotCurve_p.h ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Tue Oct  1 06:17:40 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: mer. avril  9 14:06:10 2014 (+0200)
  *           By: Nicolas Niclausse
  *     Update #: 42
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -25,7 +25,7 @@
 class dtkPlotCurvePrivateData : public QwtPointSeriesData
 {
 public:
-     dtkPlotCurvePrivateData(void) {}
+    dtkPlotCurvePrivateData(void) {}
     ~dtkPlotCurvePrivateData(void) {}
 
 public:
@@ -44,7 +44,7 @@ public:
 class dtkPlotCurvePrivate : public QwtPlotCurve
 {
 public:
-             dtkPlotCurvePrivate(const QString& title);
+    dtkPlotCurvePrivate(const QString& title);
     virtual ~dtkPlotCurvePrivate(void);
 
 public:

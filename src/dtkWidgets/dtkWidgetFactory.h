@@ -27,12 +27,12 @@ class QWidget;
 #define DTK_DECLARE_WIDGET_CLASS(type, Export)            \
     class Export type##Widget : public QWidget            \
     {                                                     \
-	public:                                               \
+    public:                                               \
         type##Widget(QWidget *parent) : QWidget(parent) { \
                                                           \
         }                                                 \
                                                           \
-	public:                                               \
+    public:                                               \
         virtual void setProcess(type *process) = 0;       \
     };
 
@@ -56,7 +56,7 @@ template <typename T> class dtkWidgetTrait {};
 template <typename T> class dtkWidgetFactory : public QObject
 {
 public:
-     dtkWidgetFactory(void);
+    dtkWidgetFactory(void);
     ~dtkWidgetFactory(void);
 
 public:
@@ -73,7 +73,7 @@ public:
 
 private:
     QHash<QString, creator> m_widgets;
-    QHash<T * , typename dtkWidgetTrait<T>::WidgetType *> m_instanciated;
+    QHash<T *, typename dtkWidgetTrait<T>::WidgetType *> m_instanciated;
 };
 
 #include "dtkWidgetFactory.tpp"

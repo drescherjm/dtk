@@ -50,16 +50,19 @@ public:
 };
 
 
-dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeEndPrivate)
+dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(), d(new dtkComposerGraphNodeEndPrivate)
 {
     d->is_remote = false;
+
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
 #if defined(DTK_BUILD_DISTRIBUTED)
+
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(cnode)) {
             d->is_remote = true;
             d->remote = remote ;
             //We can't call isSlave() now
         }
+
 #endif
         d->composite = dynamic_cast<dtkComposerNodeComposite *>(cnode);
         d->control_node = NULL;
@@ -68,7 +71,7 @@ dtkComposerGraphNodeEnd::dtkComposerGraphNodeEnd(dtkComposerNode *cnode, const Q
         d->composite = NULL;
     }
 
-    d->begin= NULL;
+    d->begin = NULL;
     this->setTitle(title);
 }
 
@@ -104,6 +107,7 @@ void dtkComposerGraphNodeEnd::setBegin(dtkComposerGraphNodeBegin *begin)
 dtkComposerGraphNodeList dtkComposerGraphNodeEnd::predecessors(void)
 {
 #if defined(DTK_BUILD_DISTRIBUTED)
+
     if (d->is_remote && !d->remote->isSlave()) {
         dtkDebug() << "we are running the end statement of a remote node on a controller, predecessor is only the begin statement";
         dtkComposerGraphNodeList list;
@@ -112,6 +116,7 @@ dtkComposerGraphNodeList dtkComposerGraphNodeEnd::predecessors(void)
     } else {
         return dtkComposerGraphNode::predecessors();
     }
+
 #else
     return dtkComposerGraphNode::predecessors();
 #endif

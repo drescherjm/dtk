@@ -17,7 +17,7 @@
 #include <QtCore>
 #include <QtGui>
 
-Q_DECLARE_METATYPE(QImage*);
+Q_DECLARE_METATYPE(QImage *);
 Q_DECLARE_METATYPE(QByteArray *);
 
 //

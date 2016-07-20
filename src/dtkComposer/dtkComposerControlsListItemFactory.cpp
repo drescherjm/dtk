@@ -43,7 +43,7 @@ dtkComposerControlsListItemFactory::~dtkComposerControlsListItemFactory(void)
 
 dtkComposerControlsListItemFactory  *dtkComposerControlsListItemFactory::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkComposerControlsListItemFactory;
 
     return s_instance;
@@ -96,7 +96,7 @@ dtkToolBoxItem *dtkComposerControlsListItemFactory::create(dtkComposerSceneNode 
 
     if (dynamic_cast<dtkComposerNodeFile *>(node->wrapee()))
         return new dtkComposerControlsListItemFile(0, node);
-    
+
     return new dtkToolBoxItem();
 }
 

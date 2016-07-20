@@ -1,5 +1,5 @@
-/* dtkViewManager.cpp --- 
- * 
+/* dtkViewManager.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed May 16 09:37:54 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 63
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkViewManager.h"
@@ -94,6 +94,7 @@ void dtkViewManager::setCurrentWidget(QWidget *widget)
 void dtkViewManager::hideCurrentWidget(void)
 {
     QWidget *widget = d->view_inspector->currentWidget();
+
     if (widget)
-        widget->setVisible(false);    
+        widget->setVisible(false);
 }

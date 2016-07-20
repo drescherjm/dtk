@@ -1,5 +1,5 @@
-/* dtkComposerCompass.cpp --- 
- * 
+/* dtkComposerCompass.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 18 09:37:07 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 344
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerCompass.h"
@@ -26,7 +26,7 @@
 
 QRect toRect(QPolygon polygon)
 {
-    if(polygon.size() != 4)
+    if (polygon.size() != 4)
         return QRect();
 
     return QRect(polygon.first(), polygon.at(2));
@@ -38,7 +38,7 @@ QRect toRect(QPolygonF polygon)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerCompassPrivate
@@ -59,7 +59,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerCompass::dtkComposerCompass(QWidget *parent) : QGraphicsView(parent), d(new dtkComposerCompassPrivate)
@@ -93,7 +93,7 @@ void dtkComposerCompass::setView(dtkComposerView *view)
 void dtkComposerCompass::update(void)
 {
     this->scene()->update();
-    
+
     QGraphicsView::update();
 }
 
@@ -102,10 +102,10 @@ void dtkComposerCompass::update(void)
 
 void dtkComposerCompass::paintEvent(QPaintEvent *event)
 {
-    if(!d->view)
+    if (!d->view)
         return;
 
-    if(event->rect().width() < 20 || event->rect().height() < 20)
+    if (event->rect().width() < 20 || event->rect().height() < 20)
         return;
 
     bool fit = false;
@@ -120,38 +120,38 @@ void dtkComposerCompass::paintEvent(QPaintEvent *event)
         fit = true;
     }
 
-    if(fit && (d->s_rect.width() > d->t_rect.width() || d->s_rect.height() > d->t_rect.height()))
+    if (fit && (d->s_rect.width() > d->t_rect.width() || d->s_rect.height() > d->t_rect.height()))
         this->fitInView(this->scene()->sceneRect(), Qt::KeepAspectRatio);
 
     // --
 
     QGraphicsView::paintEvent(event);
-    
-    // -- Map source view to target view through scene 
+
+    // -- Map source view to target view through scene
 
     d->c_rect = toRect(d->view->mapToScene(d->view->rect()));
     d->c_rect = toRect(this->mapFromScene(d->c_rect));
 
     // --
 
-    if(d->c_rect.contains(d->t_rect))
+    if (d->c_rect.contains(d->t_rect))
         return;
 
     // --
 
     QPainterPath cropPath;
     cropPath.addRect(d->c_rect);
-    
+
     QPainterPath windowPath;
     windowPath.addRect(d->t_rect);
     windowPath -= cropPath;
 
     QPainter painter(this->viewport());
     painter.setRenderHints(QPainter::Antialiasing);
-    
+
     // Draw Alpha-Black Background.
     painter.fillPath(windowPath, QColor(0x83, 0x83, 0x83, 0x77));
-    
+
     // Draw Crop Rect
     painter.setPen(QPen(QColor(0xdd, 0xdd, 0xdd), 1));
     painter.drawPath(cropPath);
@@ -164,20 +164,21 @@ void dtkComposerCompass::paintEvent(QPaintEvent *event)
     qreal f = 1.0f / CROP_GRID_SIZE;
     qreal hsize = d->c_rect.height() * f;
     qreal wsize = d->c_rect.width() * f;
-    
+
     QPainterPath gridPath;
+
     for (uint i = 1; i < CROP_GRID_SIZE; ++i) {
         qreal y = d->c_rect.y() + i * hsize;
         gridPath.moveTo(d->c_rect.x(), y);
         gridPath.lineTo(topRightX, y);
-        
+
         for (uint j = 1; j < CROP_GRID_SIZE; ++j) {
             qreal x = d->c_rect.x() + j * wsize;
             gridPath.moveTo(x, d->c_rect.y());
             gridPath.lineTo(x, bottomY);
         }
     }
-    
+
     // Draw Grid Path
     painter.setPen(QPen(QColor(0x99, 0x99, 0x99, 0x80), 1));
     painter.drawPath(gridPath);
@@ -191,26 +192,26 @@ void dtkComposerCompass::paintEvent(QPaintEvent *event)
     borderPath.lineTo(d->c_rect.x() + CROP_BORDER_LINE, d->c_rect.y());
     borderPath.moveTo(d->c_rect.x(), d->c_rect.y());
     borderPath.lineTo(d->c_rect.x(), d->c_rect.y() + CROP_BORDER_LINE);
-    
+
     // Top-Right Corner
     borderPath.moveTo(topRightX - CROP_BORDER_LINE, d->c_rect.y());
     borderPath.lineTo(topRightX, d->c_rect.y());
     borderPath.moveTo(topRightX, d->c_rect.y());
     borderPath.lineTo(topRightX, d->c_rect.y() + CROP_BORDER_LINE);
-    
+
     // Bottom-Left Corner
     borderPath.moveTo(d->c_rect.x(), bottomY);
     borderPath.lineTo(d->c_rect.x() + CROP_BORDER_LINE, bottomY);
     borderPath.moveTo(d->c_rect.x(), bottomY - CROP_BORDER_LINE);
     borderPath.lineTo(d->c_rect.x(), bottomY);
-    
+
     // Bottom-Left Corner
     borderPath.moveTo(topRightX, bottomY);
     borderPath.lineTo(topRightX - CROP_BORDER_LINE, bottomY);
     borderPath.moveTo(topRightX, bottomY - CROP_BORDER_LINE);
     borderPath.lineTo(topRightX, bottomY);
-    
-    // Draw Border Path    
+
+    // Draw Border Path
     painter.setPen(QPen(QColor(0xee, 0xee, 0xee), 3));
     painter.drawPath(borderPath);
 }

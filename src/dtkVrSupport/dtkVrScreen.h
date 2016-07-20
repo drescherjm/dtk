@@ -30,8 +30,8 @@ class dtkVrScreenPrivate;
 class  DTKVRSUPPORT_EXPORT dtkVrScreen
 {
 public:
-     dtkVrScreen(const dtkDeprecated::dtkVector3D<double>& lowerLeft, const dtkDeprecated::dtkVector3D<double>& lowerRight, const dtkDeprecated::dtkVector3D<double>& upperLeft);
-     dtkVrScreen(const dtkVrScreen& other);
+    dtkVrScreen(const dtkDeprecated::dtkVector3D<double>& lowerLeft, const dtkDeprecated::dtkVector3D<double>& lowerRight, const dtkDeprecated::dtkVector3D<double>& upperLeft);
+    dtkVrScreen(const dtkVrScreen& other);
     ~dtkVrScreen(void);
 
     void   initialize(void);

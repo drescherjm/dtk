@@ -52,7 +52,7 @@ public:
     void clear();
 
 public:
-    void read_status(QByteArray const &buffer, dtkDistributedSocket *socket);
+    void read_status(QByteArray const& buffer, dtkDistributedSocket *socket);
 
 public:
     QHash<QString, dtkDistributedSocket *> sockets;
@@ -71,17 +71,17 @@ public:
 
 void dtkDistributedControllerPrivate::clear(void)
 {
-    foreach(QList<dtkDistributedNode *> n, this->nodes.values())
+    foreach (QList<dtkDistributedNode *> n, this->nodes.values())
         qDeleteAll(n);
 
-    foreach(QList<dtkDistributedJob *> j, this->jobs.values())
+    foreach (QList<dtkDistributedJob *> j, this->jobs.values())
         qDeleteAll(j);
 
     this->nodes.clear();
     this->jobs.clear();
 }
 
-void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkDistributedSocket *socket)
+void dtkDistributedControllerPrivate::read_status(QByteArray const& buffer, dtkDistributedSocket *socket)
 {
     if (this->refreshing) {
         this->clear();
@@ -95,6 +95,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         dtkWarn() << "Error while parsing JSON document: not a json object" << buffer;
         return;
     }
+
     QVariantMap json = jsonDoc.object().toVariantMap();
 
     // TODO: check version
@@ -103,7 +104,7 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
     // store mapping between cores and jobs in this list
     QHash<QString, QList<dtkDistributedCore *> > coreref;
 
-    foreach(QVariant qv, json["nodes"].toList()) {
+    foreach (QVariant qv, json["nodes"].toList()) {
 
         QVariantMap jnode = qv.toMap();
 
@@ -122,55 +123,61 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         dtkDistributedNode *node = new dtkDistributedNode;
         node->setName( jnode["name"].toString());
 
-        if(state == "free")
+        if (state == "free")
             node->setState(dtkDistributedNode::Free);
-        if(state == "busy")
+
+        if (state == "busy")
             node->setState(dtkDistributedNode::Busy);
-        if(state == "down")
+
+        if (state == "down")
             node->setState(dtkDistributedNode::Down);
-        if(state == "standby")
+
+        if (state == "standby")
             node->setState(dtkDistributedNode::StandBy);
-        if(state == "absent")
+
+        if (state == "absent")
             node->setState(dtkDistributedNode::Absent);
 
-        if(properties.contains("dell"))
+        if (properties.contains("dell"))
             node->setBrand(dtkDistributedNode::Dell);
-        if(properties.contains("hp"))
+
+        if (properties.contains("hp"))
             node->setBrand(dtkDistributedNode::Hp);
-        if(properties.contains("ibm"))
+
+        if (properties.contains("ibm"))
             node->setBrand(dtkDistributedNode::Ibm);
 
         if (properties["myrinet"] == "10G") {
             node->setNetwork(dtkDistributedNode::Myrinet10G);
-        } else if(properties["infiniband"] == "QDR") {
+        } else if (properties["infiniband"] == "QDR") {
             node->setNetwork(dtkDistributedNode::Infiniband40G);
-        } else if(properties["infiniband"] == "DDR") {
+        } else if (properties["infiniband"] == "DDR") {
             node->setNetwork(dtkDistributedNode::Infiniband20G);
-        } else if(properties["infiniband"] == "SDR") {
+        } else if (properties["infiniband"] == "SDR") {
             node->setNetwork(dtkDistributedNode::Infiniband10G);
-        } else if(properties["ethernet"] == "10G") {
+        } else if (properties["ethernet"] == "10G") {
             node->setNetwork(dtkDistributedNode::Ethernet10G);
         } else {
             node->setNetwork(dtkDistributedNode::Ethernet1G);
         }
 
-        for(int i = 0; i < ngpus; i++) {
+        for (int i = 0; i < ngpus; i++) {
             dtkDistributedGpu *gpu = new dtkDistributedGpu(node);
 
-            if(properties["gpu_model"] == "T10")
+            if (properties["gpu_model"] == "T10")
                 gpu->setModel(dtkDistributedGpu::T10);
-            else if(properties["gpu_model"] == "C2050")
+            else if (properties["gpu_model"] == "C2050")
                 gpu->setModel(dtkDistributedGpu::C2050);
-            else if(properties["gpu_model"] == "C2070")
+            else if (properties["gpu_model"] == "C2070")
                 gpu->setModel(dtkDistributedGpu::C2070);
 
-            if(properties["gpu_arch"] == "nvidia-1.0")
+            if (properties["gpu_arch"] == "nvidia-1.0")
                 gpu->setArchitecture(dtkDistributedGpu::Nvidia_10);
-            else if(properties["gpu_arch"] == "nvidia-1.3")
+            else if (properties["gpu_arch"] == "nvidia-1.3")
                 gpu->setArchitecture(dtkDistributedGpu::Nvidia_13);
-            else if(properties["gpu_arch"] == "nvidia-2.0")
+            else if (properties["gpu_arch"] == "nvidia-2.0")
                 gpu->setArchitecture(dtkDistributedGpu::Nvidia_20);
-            else if(properties["gpu_arch"].toString().contains("amd"))
+            else if (properties["gpu_arch"].toString().contains("amd"))
                 gpu->setArchitecture(dtkDistributedGpu::AMD);
 
             *node << gpu;
@@ -178,25 +185,25 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
 
         // feed cpus
 
-        for(int i = 0; i < ncpus; i++) {
+        for (int i = 0; i < ncpus; i++) {
 
             dtkDistributedCpu *cpu = new dtkDistributedCpu(node);
 
             int ppn = ncores / ncpus;
             cpu->setCardinality(ppn);
 
-            if(properties["cpu_arch"] == "x86")
+            if (properties["cpu_arch"] == "x86")
                 cpu->setArchitecture(dtkDistributedCpu::x86);
             else
                 cpu->setArchitecture(dtkDistributedCpu::x86_64);
 
-            if(properties["cpu_model"].toString().contains("opteron")) {
+            if (properties["cpu_model"].toString().contains("opteron")) {
                 cpu->setModel(dtkDistributedCpu::Opteron);
-            } else if(properties["cpu_model"].toString().contains("xeon")) {
+            } else if (properties["cpu_model"].toString().contains("xeon")) {
                 cpu->setModel(dtkDistributedCpu::Xeon);
             }
 
-            for(int j = i*ppn; j < (i+1)*ppn; j++) {
+            for (int j = i * ppn; j < (i + 1)*ppn; j++) {
 
                 QVariantMap qmap = cores.at(j).toMap();
 
@@ -214,11 +221,11 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         dtkTrace() << "Found node" << node->name() << "with" << node->cpus().count() << "cpus";
     }
 
-    foreach(QVariant qv, json["jobs"].toList()) {
+    foreach (QVariant qv, json["jobs"].toList()) {
 
         dtkDistributedJob *job = new dtkDistributedJob;
 
-        QVariantMap jjob=qv.toMap();
+        QVariantMap jjob = qv.toMap();
         QString jobid = jjob["id"].toString();
         job->setId(jobid);
         job->setState(jjob["state"].toString());
@@ -226,14 +233,16 @@ void dtkDistributedControllerPrivate::read_status(QByteArray const &buffer, dtkD
         job->setName(jjob["name"].toString());
         job->setWalltime(jjob["walltime"].toString());
         job->setQueue(jjob["queue"].toString());
-        job->setQtime(jjob["queue_time"].toLongLong()*1000);
-        job->setStime(jjob["start_time"].toLongLong()*1000);
+        job->setQtime(jjob["queue_time"].toLongLong() * 1000);
+        job->setStime(jjob["start_time"].toLongLong() * 1000);
         job->setResources(jjob["resources"].toString());
+
         if (coreref.contains(jobid))
-            foreach(dtkDistributedCore *job_core,  coreref[jobid])
+            foreach (dtkDistributedCore *job_core,  coreref[jobid])
                 job_core->setJob(job);
+
         jobs[sockets.key(socket)] << job;
-        dtkTrace() << "Found job " << job->Id() <<"from "<< job->Username() << " in queue " << job->Queue();
+        dtkTrace() << "Found job " << job->Id() << "from " << job->Username() << " in queue " << job->Queue();
     }
 }
 
@@ -257,7 +266,7 @@ dtkDistributedController::~dtkDistributedController(void)
 
 DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedController *dtkDistributedController::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkDistributedController;
 
     return s_instance;
@@ -278,15 +287,17 @@ quint16 dtkDistributedController::defaultPort(void)
 
     QByteArray bin = username.toUtf8();
     quint16 p =  qChecksum(bin.data(), bin.length());
+
     if (p < 1024) // listen port should be higher than 1024
         p += 1024;
+
     dtkInfo() << "default port is" << p;
     return p;
 }
 
 bool dtkDistributedController::isConnected(const QUrl& server)
 {
-    if(d->sockets.keys().contains(server.toString())) {
+    if (d->sockets.keys().contains(server.toString())) {
 
         dtkDistributedSocket *socket = d->sockets.value(server.toString());
 
@@ -298,7 +309,7 @@ bool dtkDistributedController::isConnected(const QUrl& server)
 
 bool dtkDistributedController::isDisconnected(const QUrl& server)
 {
-    if(d->sockets.keys().contains(server.toString())) {
+    if (d->sockets.keys().contains(server.toString())) {
 
         dtkDistributedSocket *socket = d->sockets.value(server.toString());
 
@@ -311,7 +322,8 @@ bool dtkDistributedController::isDisconnected(const QUrl& server)
 bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources)
 {
     dtkDebug() << "Want to submit jobs with resources:" << resources;
-    QScopedPointer<dtkDistributedMessage> msg (new dtkDistributedMessage(dtkDistributedMessage::NEWJOB,"",dtkDistributedMessage::SERVER_RANK,resources.size(),"json",resources));
+    QScopedPointer<dtkDistributedMessage> msg (new dtkDistributedMessage(dtkDistributedMessage::NEWJOB, "", dtkDistributedMessage::SERVER_RANK, resources.size(), "json", resources));
+
     if (d->sockets.contains(server.toString())) {
         d->sockets[server.toString()]->sendRequest(msg.data());
         return true;
@@ -324,7 +336,7 @@ bool dtkDistributedController::submit(const QUrl& server,  QByteArray& resources
 void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 {
     dtkDebug() << "Want to kill job" << jobid;
-    dtkDistributedMessage * msg  =new dtkDistributedMessage(dtkDistributedMessage::DELJOB,jobid,dtkDistributedMessage::SERVER_RANK);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::DELJOB, jobid, dtkDistributedMessage::SERVER_RANK);
     d->sockets[server.toString()]->sendRequest(msg);
     delete msg;
 }
@@ -332,7 +344,7 @@ void dtkDistributedController::killjob(const QUrl& server, QString jobid)
 void dtkDistributedController::stop(const QUrl& server)
 {
     dtkDebug() << "Want to stop server on " << server;
-    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::STOP,"",dtkDistributedMessage::SERVER_RANK);
+    dtkDistributedMessage *msg  = new dtkDistributedMessage(dtkDistributedMessage::STOP, "", dtkDistributedMessage::SERVER_RANK);
     d->sockets[server.toString()]->sendRequest(msg);
     this->disconnect(server);
     d->servers.remove(server.toString());
@@ -343,7 +355,7 @@ void dtkDistributedController::refresh(const QUrl& server)
 {
     dtkDebug() << DTK_PRETTY_FUNCTION << server;
 
-    if(!d->sockets.keys().contains(server.toString()))
+    if (!d->sockets.keys().contains(server.toString()))
         return;
 
     d->refreshing = true;
@@ -358,12 +370,12 @@ void dtkDistributedController::refresh(const QUrl& server)
 // deploy a server instance on remote host (to be executed before connect)
 bool dtkDistributedController::deploy(const QUrl& server)
 {
-    if(!d->servers.keys().contains(server.toString())) {
+    if (!d->servers.keys().contains(server.toString())) {
         QProcess *serverProc = new QProcess (this);
         QStringList args;
         args << "-t"; // that way, ssh will forward the SIGINT signal,
-                      // and the server will stop when the ssh process
-                      // is killed
+        // and the server will stop when the ssh process
+        // is killed
         args << "-t"; // do it twice to force tty allocation
         args << "-x"; // disable X11 forwarding
         args << server.host();
@@ -380,22 +392,24 @@ bool dtkDistributedController::deploy(const QUrl& server)
         key = server.host();
 #endif
 
-        if (!settings.contains(key+"_server_path")) {
+        if (!settings.contains(key + "_server_path")) {
             defaultPath =  "./dtkDistributedServer";
             dtkDebug() << "Filling in empty path in settings with default path:" << defaultPath;
         }
-        QString path = settings.value(key+"_server_path", defaultPath).toString();
 
-        QString forward = key+"_server_forward";
+        QString path = settings.value(key + "_server_path", defaultPath).toString();
+
+        QString forward = key + "_server_forward";
+
         if (settings.contains(forward) && settings.value(forward).toString() == "true") {
             dtkTrace() << "ssh port forwarding is set for server " << server.host();
-            args << "-L" << QString::number(server.port())+":localhost:"+QString::number(server.port());
+            args << "-L" << QString::number(server.port()) + ":localhost:" + QString::number(server.port());
         }
 
         args << path;
         args << "-p";
         args << QString::number(server.port());
-        args << "--"+settings.value(key+"_server_type", "torque").toString();
+        args << "--" + settings.value(key + "_server_type", "torque").toString();
 
         settings.endGroup();
         serverProc->start("ssh", args);
@@ -418,7 +432,7 @@ bool dtkDistributedController::deploy(const QUrl& server)
             return false;
         }
 
-        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int,QProcess::ExitStatus)));
+        QObject::connect(serverProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
 
         QObject::connect (qApp, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
 
@@ -449,6 +463,7 @@ void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16
         QString server = d->queued_jobs[jobid];
         dtkDistributedSocket *socket = d->sockets[server];
         QByteArray *array = data->serialize();
+
         if (!array) {
             dtkError() << "serialization failed for jobid" << jobid;
             return;
@@ -456,7 +471,7 @@ void dtkDistributedController::send(dtkAbstractData *data, QString jobid, qint16
 
         QString type = data->identifier();
 
-        dtkDistributedMessage* msg = new dtkDistributedMessage(dtkDistributedMessage::DATA,jobid,rank, array->size(), type);
+        dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, rank, array->size(), type);
         socket->sendRequest(msg);
         socket->write(*array);
         delete msg;
@@ -475,7 +490,7 @@ dtkDistributedSocket *dtkDistributedController::socket(const QString& jobid)
 
 bool dtkDistributedController::connect(const QUrl& server)
 {
-    if(!d->sockets.keys().contains(server.toString())) {
+    if (!d->sockets.keys().contains(server.toString())) {
 
         dtkDistributedSocket *socket = new dtkDistributedSocket(this);
 
@@ -488,7 +503,7 @@ bool dtkDistributedController::connect(const QUrl& server)
 
         QSettings settings("inria", "dtk");
         settings.beginGroup("distributed");
-        QString forward = key+"_server_forward";
+        QString forward = key + "_server_forward";
 
         if (settings.contains(forward) && settings.value(forward).toString() == "true")
             socket->connectToHost("localhost", server.port());
@@ -497,7 +512,7 @@ bool dtkDistributedController::connect(const QUrl& server)
 
         settings.endGroup();
 
-        if(socket->waitForConnected()) {
+        if (socket->waitForConnected()) {
 
             QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
             QObject::connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
@@ -506,7 +521,7 @@ bool dtkDistributedController::connect(const QUrl& server)
 
             emit connected(server);
 
-            dtkDistributedMessage* msg = new dtkDistributedMessage(dtkDistributedMessage::STATUS);
+            dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::STATUS);
             socket->sendRequest(msg);
             delete msg;
 
@@ -526,7 +541,7 @@ bool dtkDistributedController::connect(const QUrl& server)
 
 void dtkDistributedController::disconnect(const QUrl& server)
 {
-    if(!d->sockets.keys().contains(server.toString())) {
+    if (!d->sockets.keys().contains(server.toString())) {
         dtkDebug() << "disconnect: unknown server" << server;
         return;
     }
@@ -544,7 +559,7 @@ QList<dtkDistributedNode *> dtkDistributedController::nodes(void)
 {
     QList<dtkDistributedNode *> n;
 
-    foreach(QList<dtkDistributedNode *> nodeset, d->nodes)
+    foreach (QList<dtkDistributedNode *> nodeset, d->nodes)
         n << nodeset;
 
     return n;
@@ -559,7 +574,7 @@ QList<dtkDistributedJob *> dtkDistributedController::jobs(void)
 {
     QList<dtkDistributedJob *> j;
 
-    foreach(QList<dtkDistributedJob *> jobset, d->jobs)
+    foreach (QList<dtkDistributedJob *> jobset, d->jobs)
         j << jobset;
 
     return j;
@@ -584,41 +599,50 @@ void dtkDistributedController::read(void)
     QByteArray result;
 
     dtkDistributedMessage::Method method = msg->method();
+
     switch (method) {
     case dtkDistributedMessage::OKSTATUS:
         result = msg->content();
-        d->read_status(result,socket);
+        d->read_status(result, socket);
         emit status(QUrl(server));
         emit updated();
         break;
+
     case dtkDistributedMessage::OKJOB:
         dtkDebug() << DTK_PRETTY_FUNCTION << "New job queued: " << msg->jobid();
         d->queued_jobs[msg->jobid()] = server;
         emit jobQueued(msg->jobid());
         break;
+
     case dtkDistributedMessage::SETRANK:
         dtkDebug() << DTK_PRETTY_FUNCTION << "set rank received";
+
         if (msg->rank() ==  dtkDistributedMessage::SLAVE_RANK ) {
             dtkDebug() << DTK_PRETTY_FUNCTION << "job started";
             d->running_jobs[msg->jobid()] = server;
             emit jobStarted(msg->jobid());
             this->refresh(QUrl(server));
         }
+
         break;
+
     case dtkDistributedMessage::ENDJOB:
         dtkDebug() << "job finished: " << msg->jobid();
         d->queued_jobs.remove(msg->jobid());
         d->running_jobs.remove(msg->jobid());
         emit updated();
         break;
+
     case dtkDistributedMessage::DATA:
         result = msg->content();
         dtkDebug() << "Result size: " << result.size();
         emit dataPosted(result);
         break;
+
     default:
         dtkWarn() << "unknown response from server ";
     };
+
     if (socket->bytesAvailable() > 0)
         this->read();
 }
@@ -626,7 +650,7 @@ void dtkDistributedController::read(void)
 void dtkDistributedController::cleanup()
 {
     foreach (const QString& key, d->servers.keys()) {
-        foreach (QProcess* server, d->servers[key]) {
+        foreach (QProcess *server, d->servers[key]) {
             dtkDebug() << "terminating servers started on" << key;
             server->terminate();
         }
@@ -641,67 +665,87 @@ void dtkDistributedController::onProcessFinished(int exitCode, QProcess::ExitSta
 
 void dtkDistributedController::error(QAbstractSocket::SocketError error)
 {
-    switch(error) {
+    switch (error) {
     case QAbstractSocket::ConnectionRefusedError:
         dtkError() << DTK_PRETTY_FUNCTION << "The connection was refused by the peer (or timed out).";
         break;
+
     case QAbstractSocket::RemoteHostClosedError:
         dtkError() << DTK_PRETTY_FUNCTION << "The remote host closed the connection. Note that the slave socket (i.e., this socket) will be closed after the remote close notification has been sent.";
         break;
+
     case QAbstractSocket::HostNotFoundError:
         dtkError() << DTK_PRETTY_FUNCTION << "The host address was not found.";
         break;
+
     case QAbstractSocket::SocketAccessError:
         dtkError() << DTK_PRETTY_FUNCTION << "The socket operation failed because the application lacked the required privileges.";
         break;
+
     case QAbstractSocket::SocketResourceError:
         dtkError() << DTK_PRETTY_FUNCTION << "The local system ran out of resources (e.g., too many sockets).";
         break;
+
     case QAbstractSocket::SocketTimeoutError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The socket operation timed out.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The socket operation timed out.";
         break;
+
     case QAbstractSocket::DatagramTooLargeError:
         dtkError() << DTK_PRETTY_FUNCTION << "The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).";
         break;
+
     case QAbstractSocket::NetworkError:
         dtkError() << DTK_PRETTY_FUNCTION << "An error occurred with the network (e.g., the network cable was accidentally plugged out).";
         break;
+
     case QAbstractSocket::AddressInUseError:
         dtkError() << DTK_PRETTY_FUNCTION << "The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.";
         break;
+
     case QAbstractSocket::SocketAddressNotAvailableError:
         dtkError() << DTK_PRETTY_FUNCTION << "The address specified to QUdpSocket::bind() does not belong to the host.";
         break;
+
     case QAbstractSocket::UnsupportedSocketOperationError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).";
+        dtkError() << DTK_PRETTY_FUNCTION << "The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).";
         break;
+
     case QAbstractSocket::ProxyAuthenticationRequiredError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The socket is using a proxy, and the proxy requires authentication.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The socket is using a proxy, and the proxy requires authentication.";
         break;
+
     case QAbstractSocket::SslHandshakeFailedError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)";
+        dtkError() << DTK_PRETTY_FUNCTION << "The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)";
         break;
+
     case QAbstractSocket::UnfinishedSocketOperationError:
-	dtkError() << DTK_PRETTY_FUNCTION << "Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).";
+        dtkError() << DTK_PRETTY_FUNCTION << "Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).";
         break;
+
     case QAbstractSocket::ProxyConnectionRefusedError:
         dtkError() << DTK_PRETTY_FUNCTION << "Could not contact the proxy server because the connection to that server was denied";
         break;
+
     case QAbstractSocket::ProxyConnectionClosedError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)";
+        dtkError() << DTK_PRETTY_FUNCTION << "The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)";
         break;
+
     case QAbstractSocket::ProxyConnectionTimeoutError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.";
         break;
+
     case QAbstractSocket::ProxyNotFoundError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The proxy address set with setProxy() (or the application proxy) was not found.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The proxy address set with setProxy() (or the application proxy) was not found.";
         break;
+
     case QAbstractSocket::ProxyProtocolError:
-	dtkError() << DTK_PRETTY_FUNCTION << "The connection negotiation with the proxy server because the response from the proxy server could not be understood.";
+        dtkError() << DTK_PRETTY_FUNCTION << "The connection negotiation with the proxy server because the response from the proxy server could not be understood.";
         break;
+
     case QAbstractSocket::UnknownSocketError:
-	dtkError() << DTK_PRETTY_FUNCTION << "An unidentified error occurred.";
+        dtkError() << DTK_PRETTY_FUNCTION << "An unidentified error occurred.";
         break;
+
     default:
         break;
     }

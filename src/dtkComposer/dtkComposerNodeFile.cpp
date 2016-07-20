@@ -32,6 +32,7 @@
 void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
     this->file.setAutoRemove(false);
+
     if (QFileInfo(url.fileName()).suffix() == "gz") {
         QString Tpl = QDir::tempPath() + QLatin1Char('/') + QCoreApplication::applicationName() + QString(".XXXXXX.gz");
         this->file.setFileTemplate(Tpl);
@@ -50,7 +51,7 @@ void dtkComposerNodeFilePrivate::download(const QUrl& url)
 
     http.get(QNetworkRequest(url));
 
-    while(!this->dwnl_ok)
+    while (!this->dwnl_ok)
         qApp->processEvents();
 
     this->file.close();
@@ -110,9 +111,10 @@ void dtkComposerNodeFile::run(void)
         d->fileName = path;
 
     }
+
     if (!QFile(d->fileName).exists()) {
         QString msg = QString("File %1 does not exist! ").arg(d->fileName);
-        dtkNotify(msg,30000);
+        dtkNotify(msg, 30000);
     }
 
     d->emitter.setData(d->fileName);
@@ -193,7 +195,7 @@ void dtkComposerNodeFileList::run(void)
 
         if (!d->receiver_filters.isEmpty()) {
 
-            switch(d->receiver_filters.variant().type()) {
+            switch (d->receiver_filters.variant().type()) {
 
             case QMetaType::QString: {
                 dir.setNameFilters(QStringList(d->receiver_filters.data<QString>()));
@@ -241,12 +243,14 @@ void dtkComposerNodeFileRead::run(void)
 {
     QString filename;
 
-    if(!d->receiver_file.isEmpty()) {
+    if (!d->receiver_file.isEmpty()) {
         filename = d->receiver_file.data();
 
         if (!filename.isEmpty()) {
             QFile file(filename);
+
             if (!file.open(QIODevice::ReadOnly)) return;
+
             d->data = file.readAll();
         }
     }
@@ -276,23 +280,26 @@ dtkComposerNodeFileWrite::~dtkComposerNodeFileWrite(void)
 void dtkComposerNodeFileWrite::run(void)
 {
     d->success = false;
-    if(!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
-         d->filename = d->receiver_file.data();
-         d->emitter_file.setData(d->filename);
+
+    if (!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
+        d->filename = d->receiver_file.data();
+        d->emitter_file.setData(d->filename);
 
         if (!d->filename.isEmpty()) {
             QFile file(d->filename);
 
-            if(!file.open(QIODevice::WriteOnly)) {
-                dtkError() << "Can't open file for writing"<< d->filename;
+            if (!file.open(QIODevice::WriteOnly)) {
+                dtkError() << "Can't open file for writing" << d->filename;
                 return;
             }
 
             qlonglong size = file.write(*(d->receiver_data.data()));
+
             if (size < 0) {
                 dtkWarn() << "error while writing to file" << d->filename << file.errorString();
                 return;
             }
+
             d->success = file.flush();
             d->emitter.setData(d->success);
             file.close();
@@ -326,21 +333,21 @@ dtkComposerNodeDirectory::~dtkComposerNodeDirectory(void)
 void dtkComposerNodeDirectory::run(void)
 {
     QString directory;
+
     if (!d->receiver_directory.isEmpty()) {
         directory = d->receiver_directory.data();
-    }
-    else {
+    } else {
         directory = d->directory;
     }
 
     d->directory = directory;
     d->emitter_directory.setData(d->directory);
 
-    dtkDebug()<<"DIRECTORY : "<<d->directory;
+    dtkDebug() << "DIRECTORY : " << d->directory;
 
     if (!QDir(d->directory).exists()) {
         QString msg = QString("Directory %1 does not exist! ").arg(d->directory);
-        dtkNotify(msg,30000);
+        dtkNotify(msg, 30000);
     }
 }
 

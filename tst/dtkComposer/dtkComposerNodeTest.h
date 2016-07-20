@@ -1,15 +1,15 @@
 /* dtkComposerNodeTest.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Wed Apr  3 12:14:41 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Thu Apr  4 09:12:07 2013 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 27
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once

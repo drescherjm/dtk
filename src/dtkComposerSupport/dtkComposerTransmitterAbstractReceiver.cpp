@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterAbstractReceiver.cpp --- 
- * 
+/* dtkComposerTransmitterAbstractReceiver.cpp ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: 2012 Thu Oct 11 12:29:44 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerTransmitterAbstractReceiver.h"
@@ -24,14 +24,14 @@ dtkComposerTransmitterAbstractReceiver::dtkComposerTransmitterAbstractReceiver(d
 {
 
 }
- 
+
 dtkComposerTransmitterAbstractReceiver::~dtkComposerTransmitterAbstractReceiver(void)
 {
 
 }
 
-//! 
-/*! 
+//!
+/*!
  *  All links from every receiver found to \a transmitter are stored
  *  in a multi-hash table.
  *
@@ -42,8 +42,9 @@ dtkComposerTransmitter::LinkMap dtkComposerTransmitterAbstractReceiver::rightLin
     DTK_UNUSED(transmitter);
 
     LinkMap link_map;
-    foreach(dtkComposerTransmitterLink *l, list)
+
+    foreach (dtkComposerTransmitterLink *l, list)
         link_map.insert(this, l);
 
-    return link_map;  
+    return link_map;
 }

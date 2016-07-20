@@ -56,6 +56,7 @@ dtkComposerNodeVectorRealOperatorBinary::~dtkComposerNodeVectorRealOperatorBinar
 {
     if (d->vector)
         delete d->vector;
+
     d->vector = NULL;
 
     delete d;
@@ -149,7 +150,7 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
         dtkVectorReal *v_rhs = d->receiver_rhs.data();
 
         if (!v_lhs || !v_rhs) {
-            dtkWarn()<< "NULL Input vectors. Nothing is done";
+            dtkWarn() << "NULL Input vectors. Nothing is done";
             return;
         }
 
@@ -159,7 +160,7 @@ void dtkComposerNodeVectorRealOperatorBinarySum::run(void)
         }
 
         if (v_lhs->size() != v_rhs->size()) {
-            dtkWarn()<< "Input vectors do not have the same size. Nothing is done";
+            dtkWarn() << "Input vectors do not have the same size. Nothing is done";
             d->vector->deallocate();
         } else {
             *(d->vector) = (*v_lhs + *v_rhs);
@@ -190,7 +191,7 @@ void dtkComposerNodeVectorRealOperatorBinarySubstract::run(void)
         dtkVectorReal *v_rhs = d->receiver_rhs.data();
 
         if (v_lhs->size() != v_rhs->size()) {
-            dtkWarn()<< "Input vectors do not have the same size. Nothing is done";
+            dtkWarn() << "Input vectors do not have the same size. Nothing is done";
             d->vector->deallocate();
         } else {
             *(d->vector) = ((*v_lhs) - (*v_rhs));
@@ -222,13 +223,13 @@ void dtkComposerNodeVectorRealOperatorBinaryScalarDotProd::run(void)
 
 void dtkComposerNodeVectorRealOperatorHomotheticMult::run(void)
 {
-    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()){ 
+    if (d->receiver_vec.isEmpty() || d->receiver_val.isEmpty()) {
         dtkWarn() << "Inputs not specified. Nothing is done";
 
         d->emitter_vec.clearData();
 
     } else {
-        
+
         dtkVectorReal *vector = d->receiver_vec.data();
         qreal value = *d->receiver_val.data<qreal>();
 
@@ -253,7 +254,7 @@ void dtkComposerNodeVectorRealOperatorHomotheticDivision::run(void)
         qreal value = *d->receiver_val.data<qreal>();
 
         if (value != 0 ) {
-            
+
             dtkVectorReal *vector = d->receiver_vec.data();
 
             *vector /= value;

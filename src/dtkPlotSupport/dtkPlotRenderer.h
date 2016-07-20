@@ -1,5 +1,5 @@
-/* dtkPlotRenderer.h --- 
- * 
+/* dtkPlotRenderer.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jul  4 21:11:19 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 17
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTRENDERER_H
@@ -29,7 +29,7 @@ class dtkPlotView;
 class DTKPLOTSUPPORT_EXPORT dtkPlotRenderer
 {
 public:
-     dtkPlotRenderer(void);
+    dtkPlotRenderer(void);
     ~dtkPlotRenderer(void);
 
 public:

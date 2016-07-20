@@ -1,5 +1,5 @@
-/* dtkAnchoredBar.cpp --- 
- * 
+/* dtkAnchoredBar.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Mar 16 08:45:44 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 23
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkAnchoredBar.h"
@@ -52,21 +52,21 @@ QSize dtkAnchoredBar::sizeHint(void) const
 
 void dtkAnchoredBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if(!d->drag_enabled)
+    if (!d->drag_enabled)
         return;
 
-    if(event->pos().x() > this->width() - 23)
+    if (event->pos().x() > this->width() - 23)
         this->setCursor(Qt::SplitHCursor);
     else
         this->setCursor(Qt::ArrowCursor);
 
-    if(!d->dragPosition.isNull())
+    if (!d->dragPosition.isNull())
         parentWidget()->setMaximumWidth(d->parentWidth + (event->pos().x() - d->dragPosition.x()));
 }
 
 void dtkAnchoredBar::mousePressEvent(QMouseEvent *event)
 {
-    if(event->pos().x() > this->width() - 23) {
+    if (event->pos().x() > this->width() - 23) {
         d->parentHeight = parentWidget()->height();
         d->parentWidth = parentWidget()->width();
         d->dragPosition = event->pos();

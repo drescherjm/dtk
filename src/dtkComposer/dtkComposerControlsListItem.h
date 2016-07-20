@@ -24,7 +24,7 @@ class dtkComposerControlsListItem : public dtkToolBoxItem
     Q_OBJECT
 
 public:
-             dtkComposerControlsListItem(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
+    dtkComposerControlsListItem(QWidget *parent = 0, dtkComposerSceneNode *node = NULL);
     virtual ~dtkComposerControlsListItem(void);
 };
 

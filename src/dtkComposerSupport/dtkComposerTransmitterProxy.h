@@ -1,5 +1,5 @@
-/* dtkComposerTransmitterProxy.h --- 
- * 
+/* dtkComposerTransmitterProxy.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Feb 20 11:17:31 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 33
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTERPROXY_H
@@ -32,7 +32,7 @@ class dtkComposerTransmitterProxyPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerTransmitterProxy : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterProxy(void);
 
 public:

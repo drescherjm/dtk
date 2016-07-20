@@ -31,7 +31,7 @@ public:
     QHash<QString, int> counts;
 
 public:
-          QCompleter *completer;
+    QCompleter *completer;
     QStringListModel *completer_model;
 
 public:
@@ -130,19 +130,23 @@ void dtkWidgetsTagCloudScope::toggle(void)
 
 void dtkWidgetsTagCloudScope::render(void)
 {
-    foreach(dtkWidgetsTagCloudScopeItem *tag, d->tags) {
+    foreach (dtkWidgetsTagCloudScopeItem *tag, d->tags) {
         d->layout->removeWidget(tag);
     }
 
     qDeleteAll(d->tags); d->tags.clear();
 
-    foreach(QString filter, d->filters) {
+    foreach (QString filter, d->filters) {
         dtkWidgetsTagCloudScopeItem *tag = new dtkWidgetsTagCloudScopeItem;
-        if(!d->light)
+
+        if (!d->light)
             tag->setDark();
+
         tag->setText(filter);
-        if(d->counts.contains(filter))
+
+        if (d->counts.contains(filter))
             tag->setCount(d->counts[filter]);
+
         d->tags << tag;
         d->layout->addWidget(tag);
 
@@ -185,7 +189,7 @@ void dtkWidgetsTagCloudScope::onTagRemoved(void)
 {
     dtkWidgetsTagCloudScopeItem *tag = dynamic_cast<dtkWidgetsTagCloudScopeItem *>(sender());
 
-    if(!tag)
+    if (!tag)
         return;
 
     QString value = tag->text();

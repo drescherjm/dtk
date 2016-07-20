@@ -1,15 +1,15 @@
 /* dtkArray.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 12:38:21 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Tue Jul  2 10:56:29 2013 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 55
  */
 
 /* Commentary:
- * 
+ *
  *  For credits, see EOF
  */
 
@@ -991,19 +991,25 @@ int dtkArrayAllocMore(int alloc, int extra, int sizeOfT)
 {
     if (alloc == 0 && extra == 0)
         return 0;
+
     const int page = 1 << 12;
     int nalloc;
     alloc += extra;
     alloc *= sizeOfT;
+
     // don't do anything if the loop will overflow signed int.
-    if (alloc >= INT_MAX/2)
+    if (alloc >= INT_MAX / 2)
         return INT_MAX / sizeOfT;
+
     nalloc = (alloc < page) ? 64 : page;
+
     while (nalloc < alloc) {
         if (nalloc <= 0)
             return INT_MAX / sizeOfT;
+
         nalloc *= 2;
     }
+
     return nalloc / sizeOfT;
 }
 

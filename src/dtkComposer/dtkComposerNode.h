@@ -30,20 +30,20 @@ class dtkComposerViewWidget;
 class DTKCOMPOSER_EXPORT dtkComposerNode
 {
 public:
-             dtkComposerNode(void);
+    dtkComposerNode(void);
     virtual ~dtkComposerNode(void);
 
 public:
     enum Kind {
-          Unknown = 0,
-           Atomic = 1,
+        Unknown = 0,
+        Atomic = 1,
         Composite = 2,
-          Control = 3,
-            Proxy = 4,
-             Data = 5,
-          Process = 6,
-             View = 7,
-            Actor = 8
+        Control = 3,
+        Proxy = 4,
+        Data = 5,
+        Process = 6,
+        View = 7,
+        Actor = 8
     };
 
 public:

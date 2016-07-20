@@ -1,5 +1,5 @@
-/* dtkPlotViewZoomer.cpp --- 
- * 
+/* dtkPlotViewZoomer.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 102
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotView.h"
@@ -27,7 +27,7 @@
 class dtkPlotViewZoomerPrivate : public QwtPlotZoomer
 {
 public:
-     dtkPlotViewZoomerPrivate(QwtPlotCanvas *canvas);
+    dtkPlotViewZoomerPrivate(QwtPlotCanvas *canvas);
     ~dtkPlotViewZoomerPrivate(void);
 };
 
@@ -43,7 +43,7 @@ dtkPlotViewZoomerPrivate::~dtkPlotViewZoomerPrivate(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkPlotViewZoomer::dtkPlotViewZoomer(dtkPlotView *parent) : QObject(parent)

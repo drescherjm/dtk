@@ -1,5 +1,5 @@
-/* dtkPluginsEditor.h --- 
- * 
+/* dtkPluginsEditor.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Nov  9 16:04:20 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 7
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLUGINSEDITOR_H
@@ -31,7 +31,7 @@ class DTKGUISUPPORT_EXPORT dtkPluginsEditor : public QWidget
     Q_OBJECT
 
 public:
-     dtkPluginsEditor(QWidget *parent = 0);
+    dtkPluginsEditor(QWidget *parent = 0);
     ~dtkPluginsEditor(void);
 
 private:

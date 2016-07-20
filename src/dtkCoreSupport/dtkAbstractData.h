@@ -42,8 +42,8 @@ class DTKCORESUPPORT_EXPORT dtkAbstractData : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkAbstractData(      dtkAbstractData *parent = 0);
-             dtkAbstractData(const dtkAbstractData& other);
+    dtkAbstractData(      dtkAbstractData *parent = 0);
+    dtkAbstractData(const dtkAbstractData& other);
     virtual ~dtkAbstractData(void);
 
 public:
@@ -53,13 +53,13 @@ public:
     dtkAbstractData& operator = (const dtkAbstractData& other);
 
 protected:
-   virtual void copy(const dtkAbstractObject& other);
+    virtual void copy(const dtkAbstractObject& other);
 
 public:
     bool operator == (const dtkAbstractData& other) const;
 
 protected:
-   virtual bool isEqual(const dtkAbstractObject& other) const;
+    virtual bool isEqual(const dtkAbstractObject& other) const;
 
 public:
     friend DTKCORESUPPORT_EXPORT QDebug operator<<(QDebug debug, const dtkAbstractData& data);
@@ -146,7 +146,7 @@ public slots:
     QString     path(void);
     QStringList paths(void);
 
-    virtual       QImage & thumbnail(void) ;
+    virtual       QImage& thumbnail(void) ;
     virtual QList<QImage>& thumbnails(void);
 
 public:

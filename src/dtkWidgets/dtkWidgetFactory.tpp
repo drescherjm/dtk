@@ -44,11 +44,11 @@ template <typename T>  void dtkWidgetFactory<T>::record(const QString& key, crea
 
 template <typename T> typename dtkWidgetTrait<T>::WidgetType *dtkWidgetFactory<T>::get(const QString& key, T *process)
 {
-    if(!this->m_widgets.contains(key))
+    if (!this->m_widgets.contains(key))
         return NULL;
 
-    if(!m_instanciated.contains(process)) {
-      this->m_instanciated.insert(process,this->m_widgets.value(key)());
+    if (!m_instanciated.contains(process)) {
+        this->m_instanciated.insert(process, this->m_widgets.value(key)());
     }
 
     return this->m_instanciated.value(process);

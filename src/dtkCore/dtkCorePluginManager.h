@@ -25,7 +25,7 @@ template <typename T> class dtkCorePluginManagerPrivate;
 template <typename T> class dtkCorePluginManager : public QObject
 {
 public:
-     dtkCorePluginManager(void);
+    dtkCorePluginManager(void);
     ~dtkCorePluginManager(void);
 
 #pragma mark -
@@ -39,7 +39,7 @@ public:
     bool verboseLoading(void) const;
     void setAutoLoading(bool value);
     bool autoLoading(void) const;
-    void loadFromName(const QString & plugin_name);
+    void loadFromName(const QString& plugin_name);
     void setLayerVersion(const QString& layer_version);
 
 #pragma mark -

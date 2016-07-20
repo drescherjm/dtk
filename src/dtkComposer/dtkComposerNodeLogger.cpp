@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -25,7 +25,7 @@
 //DTK_LOG_CATEGORY(FR_INRIA_DTK_COMPOSER_LOGGER, "fr.inria.dtk.composer.logger")
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeLoggerPrivate
@@ -57,12 +57,13 @@ void dtkComposerNodeLogger::run(void)
 
     QStringList identifiers;
     QStringList descriptions;
+
     foreach (QVariant v, list) {
         identifiers << v.typeName();
         descriptions << qPrintable(dtkMetaType::description(v));
     }
 
-    for(int i = 0; i < descriptions.count(); ++i) {
+    for (int i = 0; i < descriptions.count(); ++i) {
 
         QString output;
 
@@ -73,6 +74,7 @@ void dtkComposerNodeLogger::run(void)
 
         if (!d->receiver_level.isEmpty()) {
             QString level = d->receiver_level.data();
+
             if (level == "trace")
                 dtkTrace() <<  output;
             else if  (level == "debug")
@@ -93,5 +95,5 @@ void dtkComposerNodeLogger::run(void)
     }
 }
 
-// 
+//
 // dtkComposerNodeLogger.cpp ends here

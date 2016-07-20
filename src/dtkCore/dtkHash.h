@@ -27,7 +27,7 @@
 
 template <typename SizeT> inline void dtkHashCombineImpl(SizeT& seed, SizeT value)
 {
-    seed ^= value + 0x9e3779b9 + (seed<<6) + (seed>>2);
+    seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
 
 template < typename T > inline void dtkHashCombine(std::size_t& seed, const T& v)
@@ -40,7 +40,7 @@ template < typename It > inline std::size_t dtkHashRange(It first, It last)
 {
     std::size_t seed = 0;
 
-    for(; first != last; ++first) {
+    for (; first != last; ++first) {
         dtkHashCombineImpl(seed, *first);
     }
 
@@ -51,8 +51,7 @@ template < typename It > inline std::size_t dtkHashRange(It first, It last)
 // dtkHash functor
 // /////////////////////////////////////////////////////////////////
 
-struct dtkHash
-{
+struct dtkHash {
 public:
     template < typename T, typename U > std::size_t operator()(const std::pair<T, U>& c) const;
 

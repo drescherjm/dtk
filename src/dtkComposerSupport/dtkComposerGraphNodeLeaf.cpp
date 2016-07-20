@@ -33,9 +33,10 @@ public:
 };
 
 
-dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeLeafPrivate)
+dtkComposerGraphNodeLeaf::dtkComposerGraphNodeLeaf(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(), d(new dtkComposerGraphNodeLeafPrivate)
 {
     d->composer_node = dynamic_cast<dtkComposerNodeLeaf *>(cnode);
+
     if (dtkComposerNodeLeafProcess *process = dynamic_cast<dtkComposerNodeLeafProcess *>(cnode))
         if (process->isInteractive())
             d->kind = dtkComposerGraphNode::View; // needs an graphical interaction with the user, set it to view kind

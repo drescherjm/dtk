@@ -23,7 +23,7 @@ class DTKGUISUPPORT_EXPORT dtkViewList : public QListWidget
     Q_OBJECT
 
 public:
-     dtkViewList(QWidget *parent = 0);
+    dtkViewList(QWidget *parent = 0);
     ~dtkViewList(void);
 
 public slots:

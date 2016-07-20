@@ -27,21 +27,18 @@
 // /////////////////////////////////////////////////////////////////
 
 template< typename T, bool = QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value >
-struct dtkMetaTypeHandler
-{
+struct dtkMetaTypeHandler {
     static bool canConvert(const QList<int>& types);
 };
 
-template<typename T> struct dtkMetaTypeHandler<T *, false>
-{
+template<typename T> struct dtkMetaTypeHandler<T *, false> {
     static     bool  canConvert(const QList<int>& types);
     static QVariant  variantFromValue(T *t);
     static        T *clone(T *t);
     static     void  copy(T *source, T *target);
 };
 
-template<typename T> struct dtkMetaTypeHandler<T *, true>
-{
+template<typename T> struct dtkMetaTypeHandler<T *, true> {
     static     bool  canConvert(const QList<int>& types);
     static QVariant  variantFromValue(T *t);
     static        T *clone(T *t);
@@ -50,15 +47,13 @@ template<typename T> struct dtkMetaTypeHandler<T *, true>
 
 template< typename T, bool B> struct dtkMetaTypeHandlerHelper;
 
-template< typename T> struct dtkMetaTypeHandlerHelper<T *, false>
-{
+template< typename T> struct dtkMetaTypeHandlerHelper<T *, false> {
     static bool  canConvert(const QList<int>& types);
     static    T *clone(T *t);
     static void  copy(T *source, T *target);
 };
 
-template< typename T> struct dtkMetaTypeHandlerHelper<T *, true>
-{
+template< typename T> struct dtkMetaTypeHandlerHelper<T *, true> {
     static bool  canConvert(const QList<int>& types);
     static    T *clone(T *);
     static void  copy(T *source, T *target);
@@ -90,8 +85,8 @@ public:
 // Stream operators redefinition
 // /////////////////////////////////////////////////////////////////
 
-template <typename T> QDataStream& operator << (QDataStream& s, T *  t);
-template <typename T> QDataStream& operator >> (QDataStream& s, T *& t);
+template <typename T> QDataStream& operator << (QDataStream& s, T   *t);
+template <typename T> QDataStream& operator >> (QDataStream& s, T *&t);
 
 template<typename T> QDataStream& operator << (QDataStream& s, const QList<T *>& l);
 template<typename T> QDataStream& operator >> (QDataStream& s,       QList<T *>& l);

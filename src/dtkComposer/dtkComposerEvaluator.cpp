@@ -37,23 +37,25 @@
 class signalException: public std::exception
 {
 public:
-    signalException(int val) {m_val = val;};
+    signalException(int val) {
+        m_val = val;
+    };
 
 public:
     int m_val;
 
-    virtual const char* what() const throw()
-        {
+    virtual const char *what() const throw() {
 #if defined(Q_OS_WIN)
-            return "signal catched";
+        return "signal catched";
 #else
-            return strsignal(m_val);
+        return strsignal(m_val);
 #endif
-        }
+    }
 } ;
 
 void catchUnixSignals(const std::vector<int>& quitSignals,
-                      const std::vector<int>& ignoreSignals = std::vector<int>()) {
+                      const std::vector<int>& ignoreSignals = std::vector<int>())
+{
 
     auto handler = [](int sig) ->void {
         throw signalException(sig);
@@ -120,6 +122,7 @@ void dtkComposerEvaluator::setProfiling(bool profiling)
 void dtkComposerEvaluator::setCatchExceptions(bool c)
 {
     d->catch_exceptions = c;
+
     if (c) {
         catchUnixSignals({SIGFPE, SIGSEGV});
     } else {
@@ -137,7 +140,7 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
     dtkComposerGraphNodeBegin *begin = static_cast<dtkComposerGraphNodeBegin *>(d->start_node);
     bool is_if  = (begin->kind() ==  dtkComposerGraphNode::BeginIf );
 
-    dtkComposerGraphNodeList L= begin->evaluableChilds();
+    dtkComposerGraphNodeList L = begin->evaluableChilds();
 
     qlonglong end_loop_next = -1 ;
     qlonglong nodeCount = L.count();
@@ -146,17 +149,22 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
     QElapsedTimer *timer = NULL;
 
     dtkComposerGraphNode::Kind kind;
+
     while (current < nodeCount &&  !d->should_stop) {
         if (d->profiling) {
             timer = new QElapsedTimer;
             timer->restart();
         }
+
         dtkComposerGraphNode *node = L.at(current);
+
         if (!d->eval_count.contains(node)) {
             d->eval_count[node]    = 0;
             d->eval_duration[node] = 0.0;
         }
+
         kind = node->kind();
+
         if (kind == dtkComposerGraphNode::BeginLoop || kind == dtkComposerGraphNode::BeginIf) {
 
             node->eval();
@@ -164,6 +172,7 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
             // ev.setGraph(d->graph);
             setStartNode(node);
             run_static_rec(false);
+
             if (d->profiling) {
                 d->eval_count[node] ++;
                 d->eval_duration[node] +=  timer->nsecsElapsed() / 1000000.0;
@@ -179,12 +188,14 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
                 setStartNode(next);
                 run_static_rec(false);
                 current = nodeCount;
+
                 if (d->profiling) {
                     d->eval_count[node] ++;
                     d->eval_duration[node] +=  timer->nsecsElapsed() / 1000000.0;
                 }
             } else {
                 qlonglong i = 0;
+
                 while (i < nodeCount && (L[i]) != next) {
                     i++;
                 }
@@ -195,11 +206,17 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
         } else if (node->endloop() ) {
             // dtkTrace() << "End Loop";
             node->eval();
+
             if (end_loop_next < 0) {
                 dtkComposerGraphNode *next = node->firstSuccessor();
-                qlonglong i = nodeCount -1;
-                while (L[i] != next) { i--; };
+                qlonglong i = nodeCount - 1;
+
+                while (L[i] != next) {
+                    i--;
+                };
+
                 current = i;
+
                 end_loop_next = i;
             } else {
                 current = end_loop_next;
@@ -207,24 +224,28 @@ void dtkComposerEvaluator::run_static_rec(bool run_concurrent)
         } else if (kind == dtkComposerGraphNode::View || kind == dtkComposerGraphNode::Actor ) {
             // dtkTrace() << "View|Actor";
             if (d->use_gui) {
-                connect(this, SIGNAL(runMainThread()), node, SLOT(eval()),Qt::BlockingQueuedConnection);
+                connect(this, SIGNAL(runMainThread()), node, SLOT(eval()), Qt::BlockingQueuedConnection);
                 // dtkTrace() << "emit signal and wait for GUI thread to run the node";
                 emit runMainThread();
                 disconnect(this, SIGNAL(runMainThread()), node, SLOT(eval()));
             } else {
                 node->setStatus(dtkComposerGraphNode::Done);
             }
+
             current ++;
         } else {
             // dtkTrace() << "eval" << node->title();
             node->eval();
+
             if (d->profiling) {
                 d->eval_count[node] ++;
                 d->eval_duration[node] +=  timer->nsecsElapsed() / 1000000.0;
             }
+
             current ++;
         }
     }
+
     if (d->profiling && timer) {
         delete timer;
     }
@@ -239,8 +260,10 @@ void dtkComposerEvaluator::run_static(bool run_concurrent)
     run_static_rec(run_concurrent);
     QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
     dtkInfo() << msg;
+
     if (d->notify)
-        dtkNotify(msg,30000);
+        dtkNotify(msg, 30000);
+
     emit evaluationStopped();
     d->start_node = d->graph->root();
 
@@ -259,7 +282,7 @@ void  dtkComposerEvaluator::printProfiling(qlonglong level)
 {
     dtkComposerGraphNodeBegin *begin = static_cast<dtkComposerGraphNodeBegin *>(d->start_node);
 
-    dtkComposerGraphNodeList L= begin->evaluableChilds();
+    dtkComposerGraphNodeList L = begin->evaluableChilds();
     qlonglong nodeCount = L.count();
     qlonglong current = 0;
 
@@ -272,11 +295,13 @@ void  dtkComposerEvaluator::printProfiling(qlonglong level)
         double mean = d->eval_duration[node] / count;
         qDebug() << QString(level, QChar(' ')) + node->title() << ";" << count << ";" <<  mean << ";" << d->eval_duration[node];
         kind = node->kind();
+
         if (kind == dtkComposerGraphNode::BeginLoop || kind == dtkComposerGraphNode::BeginIf) {
             setStartNode(node);
-            qlonglong sublevel = level +1;
+            qlonglong sublevel = level + 1;
             printProfiling(sublevel);
         }
+
         current++;
     }
 }
@@ -315,16 +340,20 @@ void dtkComposerEvaluator::run(bool run_concurrent)
     if (!d->should_stop) {
         QString msg = QString("Evaluation finished in %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
+
         if (d->notify)
-            dtkNotify(msg,30000);
+            dtkNotify(msg, 30000);
+
         d->max_stack_size = 0;
         emit evaluationStopped();
         d->start_node = NULL;
     } else {
         QString msg = QString("Evaluation stopped after %1 ms").arg(time.elapsed());
         dtkInfo() << msg;
+
         if (d->notify)
-            dtkNotify(msg,30000);
+            dtkNotify(msg, 30000);
+
         emit evaluationPaused(d->current);
     }
 
@@ -352,17 +381,22 @@ void dtkComposerEvaluator::cont(bool run_concurrent)
     }
 
     while (this->rawstep(run_concurrent) && !d->should_stop);
+
     if (!d->should_stop) {
         QString msg = QString("Evaluation resumed and finished");
         dtkInfo() << msg;
+
         if (d->notify)
-            dtkNotify(msg,30000);
+            dtkNotify(msg, 30000);
+
         emit evaluationStopped();
     } else {
         QString msg = QString("Evaluation stopped ");
         dtkInfo() << msg;
+
         if (d->notify)
-            dtkNotify(msg,30000);
+            dtkNotify(msg, 30000);
+
         dtkInfo() << "stack size: " << d->stack.size();
         emit evaluationPaused(d->current);
     }
@@ -374,9 +408,11 @@ void dtkComposerEvaluator::logStack(void)
 {
     dtkTrace() << "stack content:" ;
     d->stack.normalizeIndexes();
+
     for (int i = d->stack.firstIndex()  ; i <= d->stack.lastIndex() ; i++ ) {
-            dtkTrace() << "  " << d->stack.at(i)->title() << d->stack.at(i)->status() << d->stack.at(i)->predecessors().count() ;
+        dtkTrace() << "  " << d->stack.at(i)->title() << d->stack.at(i)->status() << d->stack.at(i)->predecessors().count() ;
     }
+
     dtkTrace() << "stack end";
 }
 
@@ -386,17 +422,21 @@ void dtkComposerEvaluator::next(bool run_concurrent)
         return;
 
     dtkComposerGraphNode *first = d->stack.first();
+
     if (dynamic_cast<dtkComposerGraphNodeBegin *>(first)) {
         // Begin node, look for the corresponding End node
         dtkComposerGraphNode *end = NULL;
-        foreach(dtkComposerGraphNode *n,  d->graph->nodes())
+
+        foreach (dtkComposerGraphNode *n,  d->graph->nodes())
             if ((dynamic_cast<dtkComposerGraphNodeEnd *>(n)) && n->wrapee() == first->wrapee()) {
                 end = n;
                 end->setBreakPoint();
                 break;
             }
+
         while (d->current != end) // we must continue if a node inside the begin/end contains a breakpoint
             this->cont(run_concurrent);
+
         this->step(run_concurrent); // eval End
     } else {
         this->step(run_concurrent);
@@ -406,11 +446,13 @@ void dtkComposerEvaluator::next(bool run_concurrent)
 bool dtkComposerEvaluator::step(bool run_concurrent)
 {
     bool res = this->rawstep(run_concurrent);
+
     if (d->stack.isEmpty()) {
         emit evaluationStopped();
     } else if (res) {
         emit evaluationPaused(d->current);
     }
+
     return res;
 }
 
@@ -430,30 +472,34 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
     dtkComposerGraphNodeList preds = d->current->predecessors();
     it = preds.constBegin();
     ite = preds.constEnd();
-    while(it != ite) {
+
+    while (it != ite) {
         node = *it++;
+
         if (node->status() != dtkComposerGraphNode::Done) {
             if (node->status() == dtkComposerGraphNode::Running) {
                 dtkDebug() << d->current->title() <<  " is waiting for " << node->title();
                 this->logStack();
-                if (d->waitfor.contains(d->current,node)) { // d->current is already waiting for node
-                    dtkDebug()<< "Force the evaluator to wait for " << node->title();
+
+                if (d->waitfor.contains(d->current, node)) { // d->current is already waiting for node
+                    dtkDebug() << "Force the evaluator to wait for " << node->title();
                     d->futures.take(node).waitForFinished();
-                    d->waitfor.remove(d->current,node);
+                    d->waitfor.remove(d->current, node);
                     continue;
                 } else {
-                    dtkDebug()<< "store the waiting of " << node->title();
-                    d->waitfor.insert(d->current,node);
+                    dtkDebug() << "store the waiting of " << node->title();
+                    d->waitfor.insert(d->current, node);
                     // FIXME: we should clear the hash when wait is not necessary (it won't be removed in this case)
                 }
             }
+
             if (!node->endloop()) {
                 runnable = false;
                 dtkTrace() << d->current->title() <<  " depends on " << node->title();
                 break;
             } else {
                 // predecessor is an end loop, we can continue, but we must unset the endloop flag.
-                dtkTrace() << "predecessor of "<< d->current->title() << " is an end loop, continue" << node->title();
+                dtkTrace() << "predecessor of " << d->current->title() << " is an end loop, continue" << node->title();
                 node->setEndLoop(false);
             }
         }
@@ -468,14 +514,15 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
             emit evaluationPaused(d->current);
             return false;
         }
-        if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Process)){
+
+        if (run_concurrent && (d->current->kind() == dtkComposerGraphNode::Process)) {
             // dtkDebug() << "running process node in another thread"<< d->current->title();
             d->current->setStatus(dtkComposerGraphNode::Running);
-            d->futures.insert(d->current,QtConcurrent::run(d->current, &dtkComposerGraphNode::eval));
+            d->futures.insert(d->current, QtConcurrent::run(d->current, &dtkComposerGraphNode::eval));
             // FIXME: we should clear the hash when futures are finished
         } else if ((d->current->kind() == dtkComposerGraphNode::View) || (d->current->kind() == dtkComposerGraphNode::Actor)) {
             if (d->use_gui) {
-                connect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()),Qt::BlockingQueuedConnection);
+                connect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()), Qt::BlockingQueuedConnection);
 //                dtkTrace() << "emit signal and wait for GUI thread to run the node";
                 emit runMainThread();
                 disconnect(this, SIGNAL(runMainThread()), d->current, SLOT(eval()));
@@ -484,45 +531,54 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
                 d->current->setStatus(dtkComposerGraphNode::Done);
             }
         } else if (d->catch_exceptions) {
-            dtkTrace() << "evaluating leaf node (try/catch)"<< d->current->title();
+            dtkTrace() << "evaluating leaf node (try/catch)" << d->current->title();
+
             try {
                 d->current->eval();
             } catch (signalException e) {
                 QString msg = QString("The node %1 has crashed: %2 ").arg(d->current->title()).arg(e.what());
                 dtkError() << msg ;
+
                 if (d->notify)
-                    dtkNotify(msg,30000);
+                    dtkNotify(msg, 30000);
+
                 return false;
             } catch (std::exception e) {
                 QString msg = QString("The node %1 has raised an exception: %2 ").arg(d->current->title()).arg(e.what());
                 dtkError() << msg ;
+
                 if (d->notify)
-                    dtkNotify(msg,30000);
+                    dtkNotify(msg, 30000);
+
                 return false;
             }
         } else {
-            dtkTrace() << "evaluating leaf node"<< d->current->title();
+            dtkTrace() << "evaluating leaf node" << d->current->title();
             d->current->eval();
         }
 
         dtkComposerGraphNodeList s = d->current->successors();
         it = s.constBegin();
         ite = s.constEnd();
+
         if (!d->stack.isEmpty()) {
-            while(it != ite) {
+            while (it != ite) {
                 node = *it++;
                 bool stacked = false;
                 int j = d->stack.firstIndex();
-                while(j <= d->stack.lastIndex() && !stacked)
+
+                while (j <= d->stack.lastIndex() && !stacked)
                     stacked = (d->stack.at(j++) == node);
+
                 // dtkTrace() << "add successor to stack " << node->title();
                 if (!stacked)
                     d->stack.append(node);
             }
         } else {
-            while(it != ite)
+            while (it != ite)
                 d->stack.append(*it++);
         }
+
         // needed for step by step
         d->current = d->stack.isEmpty() ? NULL : d->stack.first();
 
@@ -530,6 +586,7 @@ bool dtkComposerEvaluator::rawstep(bool run_concurrent)
 //        dtkTrace() << "add back current node to stack: "<< d->current->title();
         d->stack.append(d->current);
     }
+
     // if (d->stack.size() > d->max_stack_size) {
     //     d->max_stack_size = d->stack.size();
     //     dtkDebug() << "Max stack size raised: "<< d->max_stack_size;

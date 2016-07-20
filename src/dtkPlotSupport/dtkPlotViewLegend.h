@@ -1,16 +1,16 @@
-/* dtkPlotViewLegend.h --- 
- * 
+/* dtkPlotViewLegend.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTVIEWLEGEND_H
@@ -24,7 +24,7 @@ class dtkPlotViewLegendPrivate;
 class DTKPLOTSUPPORT_EXPORT dtkPlotViewLegend
 {
 public:
-     dtkPlotViewLegend(dtkPlotView *parent);
+    dtkPlotViewLegend(dtkPlotView *parent);
     ~dtkPlotViewLegend(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkSignalBlocker.cpp --- 
- * 
+/* dtkSignalBlocker.cpp ---
+ *
  * Author: John Stark
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun 24 16:21:08 2011 (+0200)
@@ -15,7 +15,7 @@
  */
 
 /* Change log:
- * 
+ *
  */
 
 

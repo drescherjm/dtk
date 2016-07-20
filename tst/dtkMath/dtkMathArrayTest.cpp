@@ -1,11 +1,11 @@
 /* dtkMathArrayTest.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Tue Jul 23 15:00:18 2013 (+0200)
   */
 
 /* Credits:
- *  
+ *
  * See EOF.
  */
 
@@ -30,8 +30,12 @@ public:
     ComplexValueException(int value, bool inCtor)
         : m_value(value), m_inCtor(inCtor) {}
 
-    int value() const { return m_value; }
-    bool inConstructor() const { return m_inCtor; }
+    int value() const {
+        return m_value;
+    }
+    bool inConstructor() const {
+        return m_inCtor;
+    }
 
 private:
     int m_value;
@@ -43,8 +47,7 @@ private:
 class ComplexValue
 {
 public:
-    enum Mode
-    {
+    enum Mode {
         Default,
         Init,
         Copy,
@@ -59,48 +62,59 @@ public:
     ComplexValue() : m_value(-1), m_mode(Default) {}
     ComplexValue(int value) : m_value(value), m_mode(Init) {}
 #ifndef QT_NO_EXCEPTIONS
-    ComplexValue(int value, Mode mode) : m_value(value), m_mode(mode)
-    {
+    ComplexValue(int value, Mode mode) : m_value(value), m_mode(mode) {
         if (mode == ThrowInCtor)
             throw new ComplexValueException(value, true);
     }
 #endif
     ComplexValue(const ComplexValue& other)
-        : m_value(other.m_value)
-    {
+        : m_value(other.m_value) {
         if (other.m_mode == Copy || other.m_mode == CopiedAgain)
             m_mode = CopiedAgain;
+
 #ifndef QT_NO_EXCEPTIONS
         else if (other.m_mode == ThrowOnCopy)
             throw new ComplexValueException(other.m_value, false);
+
 #endif
         else
             m_mode = Copy;
     }
-    ~ComplexValue() { ++destroyCount; }
+    ~ComplexValue() {
+        ++destroyCount;
+    }
 
-    ComplexValue& operator=(const ComplexValue& other)
-    {
+    ComplexValue& operator=(const ComplexValue& other) {
 #ifndef QT_NO_EXCEPTIONS
+
         if (other.m_mode == ThrowOnCopy)
             throw new ComplexValueException(other.m_value, false);
+
 #endif
         m_value = other.m_value;
         m_mode = Assign;
         return *this;
     }
 
-    int value() const { return m_value; }
-    Mode mode() const { return m_mode; }
+    int value() const {
+        return m_value;
+    }
+    Mode mode() const {
+        return m_mode;
+    }
 
-    bool operator==(const ComplexValue& other) const
-        { return m_value == other.m_value; }
-    bool operator==(int other) const
-        { return m_value == other; }
-    bool operator!=(const ComplexValue& other) const
-        { return m_value != other.m_value; }
-    bool operator!=(int other) const
-        { return m_value != other; }
+    bool operator==(const ComplexValue& other) const {
+        return m_value == other.m_value;
+    }
+    bool operator==(int other) const {
+        return m_value == other;
+    }
+    bool operator!=(const ComplexValue& other) const {
+        return m_value != other.m_value;
+    }
+    bool operator!=(int other) const {
+        return m_value != other;
+    }
 
 private:
     int m_value;
@@ -110,7 +124,7 @@ private:
 int ComplexValue::destroyCount = 0;
 
 // ///////////////////////////////////////////////////////////////////
-// 
+//
 // ///////////////////////////////////////////////////////////////////
 
 dtkMathArrayTestCase::dtkMathArrayTestCase(void)
@@ -180,6 +194,7 @@ void dtkMathArrayTestCase::testCreate(void)
     QVERIFY(array2.constRawData() != 0LL);
     QVERIFY(array2.rawData() == array2.constRawData());
     QVERIFY(((const dtkMathArray<QVector3D> *)&array2)->rawData() == array2.constRawData());
+
     for (int index = 0; index < 100; ++index)
         QVERIFY(array2.at(index) == QVector3D(1.0f, 2.0f, 3.0f));
 
@@ -191,6 +206,7 @@ void dtkMathArrayTestCase::testCreate(void)
     QVERIFY(array3.capacity() == ExpectedMinCapacity);
     QVERIFY(array3.constRawData() != 0);
     QVERIFY(array3.rawData() == array3.constRawData());
+
     for (int index = 0; index < ExpectedMinCapacity; ++index)
         QVERIFY(array3.at(index) == 42.5f);
 
@@ -1451,7 +1467,7 @@ void dtkMathArrayTestCase::testCreate(void)
 //     for (int index = 0; index < 6; ++index)
 //         QCOMPARE(array.at(index), contents[index]);
 //     QVERIFY(array.constRawData() == contents);
-//     QVERIFY(!array.isDetached());    
+//     QVERIFY(!array.isDetached());
 
 //     // Force a copy-on-write.
 //     array[3] = 42.0;

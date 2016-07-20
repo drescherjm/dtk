@@ -16,11 +16,11 @@
 
 #include "dtkAbstractFactory.h"
 
-                  class dtkAbstractView;
-                  class dtkAbstractViewAnimator;
-                  class dtkAbstractViewNavigator;
-                  class dtkAbstractViewInteractor;
-                  class dtkAbstractViewFactoryPrivate;
+class dtkAbstractView;
+class dtkAbstractViewAnimator;
+class dtkAbstractViewNavigator;
+class dtkAbstractViewInteractor;
+class dtkAbstractViewFactoryPrivate;
 template<class T> class dtkSmartPointer;
 
 class DTKCORESUPPORT_EXPORT dtkAbstractViewFactory : public dtkAbstractFactory
@@ -84,7 +84,7 @@ public slots:
     void clear(void);
 
 protected:
-     dtkAbstractViewFactory(void);
+    dtkAbstractViewFactory(void);
     ~dtkAbstractViewFactory(void);
 
 private:

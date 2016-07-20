@@ -32,7 +32,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerFactory : public QObject
     Q_OBJECT
 
 public:
-             dtkComposerFactory(void);
+    dtkComposerFactory(void);
     virtual ~dtkComposerFactory(void);
 
 public:

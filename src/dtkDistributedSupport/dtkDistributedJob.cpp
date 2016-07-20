@@ -45,77 +45,100 @@ dtkDistributedJob::~dtkDistributedJob(void)
     d = NULL;
 }
 
-QString dtkDistributedJob::Id(void) {
+QString dtkDistributedJob::Id(void)
+{
     return d->id;
 }
 
-void dtkDistributedJob::setId(const QString& id) {
+void dtkDistributedJob::setId(const QString& id)
+{
     d->id = id;
 }
 
-QString dtkDistributedJob::Name(void) {
+QString dtkDistributedJob::Name(void)
+{
     return d->name;
 }
 
-void dtkDistributedJob::setName(const QString& name) {
+void dtkDistributedJob::setName(const QString& name)
+{
     d->name = name;
 }
 
-QString dtkDistributedJob::Queue(void) {
+QString dtkDistributedJob::Queue(void)
+{
     return d->queue;
 }
 
-void dtkDistributedJob::setQueue(const QString& queue) {
+void dtkDistributedJob::setQueue(const QString& queue)
+{
     d->queue = queue;
 }
 
-dtkDistributedJob::State dtkDistributedJob::state(void) {
+dtkDistributedJob::State dtkDistributedJob::state(void)
+{
     return d->state;
 }
 
-void dtkDistributedJob::setState(const QString& state) {
+void dtkDistributedJob::setState(const QString& state)
+{
     if (state == "Running")    d->state = dtkDistributedJob::Running;
+
     if (state == "Blocked")    d->state = dtkDistributedJob::Blocked;
+
     if (state == "Queued")     d->state = dtkDistributedJob::Queued;
+
     if (state == "Suspended")  d->state = dtkDistributedJob::Suspended;
+
     if (state == "Scheduled")  d->state = dtkDistributedJob::Scheduled;
+
     if (state == "EndedOK")    d->state = dtkDistributedJob::EndedOK;
+
     if (state == "EndedError") d->state = dtkDistributedJob::EndedError;
 }
 
-QString dtkDistributedJob::Username(void) {
+QString dtkDistributedJob::Username(void)
+{
     return d->username;
 }
 
-void dtkDistributedJob::setUsername(const QString& username) {
+void dtkDistributedJob::setUsername(const QString& username)
+{
     d->username = username;
 }
 
-QString dtkDistributedJob::Script(void) {
+QString dtkDistributedJob::Script(void)
+{
     return d->script;
 }
 
-void dtkDistributedJob::setScript(const QString& script) {
+void dtkDistributedJob::setScript(const QString& script)
+{
     d->script = script;
 }
 
-QString dtkDistributedJob::Resources(void) {
+QString dtkDistributedJob::Resources(void)
+{
     return d->resources;
 }
 
-void dtkDistributedJob::setResources(const QString& resources) {
+void dtkDistributedJob::setResources(const QString& resources)
+{
     d->resources = resources;
 }
 
-QDateTime dtkDistributedJob::Stime(void) {
+QDateTime dtkDistributedJob::Stime(void)
+{
     return d->stime;
 }
 
 #include <time.h>
 
-void dtkDistributedJob::setStime(qint64 stime) {
+void dtkDistributedJob::setStime(qint64 stime)
+{
     if (stime == 0)
         return;
+
 #if QT_VERSION > 0x0406FF
     d->stime = QDateTime::fromMSecsSinceEpoch(stime);
 #else
@@ -126,13 +149,16 @@ void dtkDistributedJob::setStime(qint64 stime) {
 #endif
 }
 
-QDateTime dtkDistributedJob::Qtime(void) {
+QDateTime dtkDistributedJob::Qtime(void)
+{
     return d->qtime;
 }
 
-void dtkDistributedJob::setQtime(qint64 qtime) {
+void dtkDistributedJob::setQtime(qint64 qtime)
+{
     if (qtime == 0)
         return;
+
 #if QT_VERSION > 0x0406FF
     d->qtime = QDateTime::fromMSecsSinceEpoch(qtime);
 #else
@@ -143,10 +169,12 @@ void dtkDistributedJob::setQtime(qint64 qtime) {
 #endif
 }
 
-QString dtkDistributedJob::Walltime(void) {
+QString dtkDistributedJob::Walltime(void)
+{
     return d->walltime;
 }
 
-void dtkDistributedJob::setWalltime(const QString& walltime) {
-    d->walltime=walltime;
+void dtkDistributedJob::setWalltime(const QString& walltime)
+{
+    d->walltime = walltime;
 }

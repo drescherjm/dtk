@@ -29,7 +29,7 @@ class dtkComposerNodeStringOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringOperatorUnary(void);
+    dtkComposerNodeStringOperatorUnary(void);
     ~dtkComposerNodeStringOperatorUnary(void);
 
     inline QString inputLabelHint(int) {
@@ -53,7 +53,7 @@ class dtkComposerNodeStringOperatorBinaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringOperatorBinary(void);
+    dtkComposerNodeStringOperatorBinary(void);
     ~dtkComposerNodeStringOperatorBinary(void);
 
     inline QString inputLabelHint(int port) {
@@ -82,7 +82,7 @@ class dtkComposerNodeStringOperatorBinaryLogicPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringOperatorBinaryLogic : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringOperatorBinaryLogic(void);
+    dtkComposerNodeStringOperatorBinaryLogic(void);
     ~dtkComposerNodeStringOperatorBinaryLogic(void);
 
     inline QString inputLabelHint(int port) {
@@ -157,7 +157,7 @@ class dtkComposerNodeStringListAppendPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringListAppend : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringListAppend(void);
+    dtkComposerNodeStringListAppend(void);
     ~dtkComposerNodeStringListAppend(void);
 
     inline QString inputLabelHint(int port) {
@@ -165,6 +165,7 @@ public:
             return "list";
         else if (port == 1)
             return "string";
+
         return "port";
     }
 
@@ -197,7 +198,7 @@ class dtkComposerNodeStringListExtractPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringListExtract : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringListExtract(void);
+    dtkComposerNodeStringListExtract(void);
     ~dtkComposerNodeStringListExtract(void);
 
     inline QString inputLabelHint(int port) {
@@ -205,6 +206,7 @@ public:
             return "list";
         else if (port == 1)
             return "index";
+
         return "port";
     }
 
@@ -236,7 +238,7 @@ class dtkComposerNodeStringListSetPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeStringListSet : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeStringListSet(void);
+    dtkComposerNodeStringListSet(void);
     ~dtkComposerNodeStringListSet(void);
 
     inline QString inputLabelHint(int port) {
@@ -246,6 +248,7 @@ public:
             return "index";
         else if (port == 2)
             return "string";
+
         return "port";
     }
 

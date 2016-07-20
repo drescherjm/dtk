@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -20,13 +20,13 @@
 #include "dtkComposerTransmitter.h"
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerTransmitterProxy 
+// dtkComposerTransmitterProxy
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSER_EXPORT dtkComposerTransmitterProxy : public dtkComposerTransmitter
 {
 public:
-     dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterProxy(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterProxy(void);
 
 public:
@@ -42,5 +42,5 @@ public:
     LinkMap rightLinks(dtkComposerTransmitter *transmitter, dtkComposerTransmitterLinkList list);
 };
 
-// 
+//
 // dtkComposerTransmitterProxy.h ends here

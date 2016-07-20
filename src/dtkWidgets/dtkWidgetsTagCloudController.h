@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -28,7 +28,7 @@ class DTKWIDGETS_EXPORT dtkWidgetsTagCloudController : public QObject
     Q_OBJECT
 
 public:
-     dtkWidgetsTagCloudController(void);
+    dtkWidgetsTagCloudController(void);
     ~dtkWidgetsTagCloudController(void);
 
     void attach(dtkWidgetsTagCloud *cloud);
@@ -45,16 +45,16 @@ public:
 
 public slots:
     void onUnionMode(bool mode);
-			       
+
 protected slots:
     void addFilter(QString tag);
     void setFilter(QString tag);
     void remFilter(QString tag);
     void clear(void);
-    
+
 protected:
     dtkWidgetsTagCloudControllerPrivate *d;
 };
 
-// 
+//
 // dtkWidgetsTagCloudController.h ends here

@@ -22,7 +22,9 @@ class dtkAbstractSolver : public QObject
     Q_OBJECT
 
 public:
-    virtual ~dtkAbstractSolver(void) {;}
+    virtual ~dtkAbstractSolver(void) {
+        ;
+    }
 
 public:
     virtual void setMethod(const QString& method) = 0;

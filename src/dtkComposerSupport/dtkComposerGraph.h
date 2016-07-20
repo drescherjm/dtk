@@ -1,5 +1,5 @@
-/* dtkComposerGraph.h --- 
- * 
+/* dtkComposerGraph.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 94
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERGRAPH_H
@@ -38,7 +38,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerGraph : public QGraphicsScene
     Q_OBJECT
 
 public:
-     dtkComposerGraph(void);
+    dtkComposerGraph(void);
     ~dtkComposerGraph(void);
 
 public:

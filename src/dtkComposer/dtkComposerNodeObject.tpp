@@ -27,8 +27,9 @@ template <typename T> inline dtkComposerNodeObject<T>::dtkComposerNodeObject(voi
 template <typename T> inline dtkComposerNodeObject<T>::~dtkComposerNodeObject(void)
 {
     for (T *t : m_objects.values()) {
-      delete t;
+        delete t;
     }
+
     m_objects.clear();
 }
 
@@ -64,7 +65,7 @@ template <typename T> inline bool dtkComposerNodeObject<T>::createObject(const Q
     } else {
         m_object = m_factory->create(implementation);
 
-        if(m_object) {
+        if (m_object) {
             m_objects.insert(implementation, m_object);
         }
     }

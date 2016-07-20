@@ -16,7 +16,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedPolicy : public QObject
     Q_OBJECT
 
 public:
-             dtkDistributedPolicy(void);
+    dtkDistributedPolicy(void);
     virtual ~dtkDistributedPolicy(void);
 
 public:

@@ -1,15 +1,15 @@
 /* dtkDistributed.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Mar 25 09:23:52 2013 (+0100)
- * Version: 
+ * Version:
  * Last-Updated: Fri Jun 24 10:32:02 2016 (+0200)
  *           By: tristan cabel
  *     Update #: 8
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "qthDistributedCommunicator.h"
@@ -22,101 +22,116 @@
 #include "dtkDistributedPolicy.h"
 #include "dtkDistributedSettings.h"
 
-namespace dtkDistributed
-{
+namespace dtkDistributed {
     namespace _private {
         dtkDistributed::Mode mode = dtkDistributed::Global;
         dtkDistributedApplication *app = NULL;
     }
 
-    void setMode(dtkDistributed::Mode mode) {
+    void setMode(dtkDistributed::Mode mode)
+    {
         _private::mode = mode;
     }
 
-    dtkDistributed::Mode mode(void) {
+    dtkDistributed::Mode mode(void)
+    {
         return _private::mode;
     }
 
-    dtkDistributedApplication* create(int &argc, char *argv[])
+    dtkDistributedApplication *create(int& argc, char *argv[])
     {
         for (int i = 0; i < argc; i++)
-            if(!qstrcmp(argv[i], "-nw") ||!qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window")|| !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help")|| !qstrcmp(argv[i], "--version")) {
+            if (!qstrcmp(argv[i], "-nw") || !qstrcmp(argv[i], "--nw") ||  !qstrcmp(argv[i], "-no-window") || !qstrcmp(argv[i], "--no-window") || !qstrcmp(argv[i], "-h") || !qstrcmp(argv[i], "--help") || !qstrcmp(argv[i], "--version")) {
                 qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("minimal"));
             }
+
         _private::app = new dtkDistributedApplication(argc, argv);
         return _private::app;
     }
 
-    dtkDistributedApplication *app(void) {
+    dtkDistributedApplication *app(void)
+    {
         if (!_private::app ) {
             _private::app = dynamic_cast<dtkDistributedApplication *>(qApp);
         }
+
         return _private::app;
     }
 
-    dtkDistributedPolicy *policy(void) {
+    dtkDistributedPolicy *policy(void)
+    {
         if (!app())
             return NULL;
 
         return _private::app->policy();
     }
 
-    void spawn(void) {
+    void spawn(void)
+    {
         if (!app())
             return;
 
         _private::app->spawn();
     }
 
-    void exec(QRunnable *task) {
+    void exec(QRunnable *task)
+    {
         if (!app())
             return;
 
         _private::app->exec(task);
     }
 
-    void unspawn(void) {
+    void unspawn(void)
+    {
         if (!app())
             return;
 
         _private::app->unspawn();
     }
 
-    namespace communicator
-    {
+    namespace communicator {
         namespace _private {
             dtkDistributedCommunicatorPluginFactory factory;
             dtkDistributedCommunicatorPluginManager manager;
             dtkDistributedCommunicator *communicator = NULL;
         }
 
-        dtkDistributedCommunicatorPluginFactory& pluginFactory(void) {
+        dtkDistributedCommunicatorPluginFactory& pluginFactory(void)
+        {
             return _private::factory;
         }
 
-        dtkDistributedCommunicatorPluginManager& pluginManager(void) {
+        dtkDistributedCommunicatorPluginManager& pluginManager(void)
+        {
             return _private::manager;
         }
-        void initialize(const QString& path) {
+        void initialize(const QString& path)
+        {
             QString real_path = path;
             pluginFactory().record("qthread", qthDistributedCommunicatorCreator);
+
             if (path.isEmpty()) {
                 dtkDistributedSettings settings;
                 settings.beginGroup("communicator");
                 real_path = settings.value("plugins").toString();
                 settings.endGroup();
-                if(real_path.isEmpty()) {
+
+                if (real_path.isEmpty()) {
                     real_path = QDir(DTK_INSTALL_PREFIX).filePath("plugins/dtkDistributed");
                     dtkDebug() << "no plugin path configured, use default:" << real_path ;
                 }
+
                 pluginManager().initialize(real_path);
             } else {
                 pluginManager().initialize(path);
             }
         }
 
-        dtkDistributedCommunicator *instance(void) {
+        dtkDistributedCommunicator *instance(void)
+        {
             dtkDistributedApplication *app = dtkDistributed::app();
+
             if (_private::communicator) {
                 return _private::communicator;
             } else if (app) {
@@ -127,6 +142,7 @@ namespace dtkDistributed
                 dtkDistributed::communicator::initialize(settings.value("plugins").toString());
                 _private::communicator = dtkDistributed::communicator::pluginFactory().create("qthread");
             }
+
             return _private::communicator;
         }
     }

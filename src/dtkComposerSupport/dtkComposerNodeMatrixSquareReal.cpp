@@ -86,16 +86,19 @@ dtkComposerNodeMatrixSquareReal::~dtkComposerNodeMatrixSquareReal(void)
 
 QString dtkComposerNodeMatrixSquareReal::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "matrix";
         break;
+
     case 1:
         return "size";
         break;
+
     case 2:
         return "value";
         break;
+
     default:
         break;
     }
@@ -105,13 +108,15 @@ QString dtkComposerNodeMatrixSquareReal::inputLabelHint(int port)
 
 QString dtkComposerNodeMatrixSquareReal::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "matrix";
         break;
+
     case 1:
         return "size";
         break;
+
     default:
         break;
     }

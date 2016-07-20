@@ -31,20 +31,20 @@ class dtkComposerGraphNodeSelectBranchPrivate;
 class dtkComposerGraphNodeSelectBranch : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeSelectBranch(dtkComposerNode *node, const QString& title = "Select Branch");
+    dtkComposerGraphNodeSelectBranch(dtkComposerNode *node, const QString& title = "Select Branch");
 
 public:
     dtkComposerGraphNode::Kind kind(void);
 
 public:
-     void addSuccessor(dtkComposerGraphNode *node, int id = 0);
+    void addSuccessor(dtkComposerGraphNode *node, int id = 0);
 
 public:
-     void removeSuccessor(dtkComposerGraphNode *node);
+    void removeSuccessor(dtkComposerGraphNode *node);
 
 public:
-     dtkComposerGraphNodeList successors();
-     dtkComposerGraphNode *firstSuccessor();
+    dtkComposerGraphNodeList successors();
+    dtkComposerGraphNode *firstSuccessor();
 
 public:
     void eval(void);

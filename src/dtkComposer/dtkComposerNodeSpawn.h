@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -35,7 +35,7 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeSpawn : public dtkComposerNodeRemote
     Q_OBJECT
 
 public:
-             dtkComposerNodeSpawn(void);
+    dtkComposerNodeSpawn(void);
     virtual ~dtkComposerNodeSpawn(void);
 
 public:
@@ -55,5 +55,5 @@ private:
     dtkComposerNodeSpawnPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeSpawn.h ends here

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -44,7 +44,7 @@ public:
 class qthDistributedBufferManager : public dtkDistributedBufferManager
 {
 public:
-     qthDistributedBufferManager(dtkDistributedCommunicator *comm);
+    qthDistributedBufferManager(dtkDistributedCommunicator *comm);
     ~qthDistributedBufferManager(void);
 
 protected:
@@ -91,7 +91,7 @@ inline qthDistributedBufferManager::qthDistributedBufferManager(dtkDistributedCo
     d->locks.resize(d->size);
     d->locked.resize(d->size);
 
-    for(qlonglong i = 0; i < d->size; ++i) {
+    for (qlonglong i = 0; i < d->size; ++i) {
         d->locks[i] = new QReadWriteLock;
         d->locked[i].store(0);
     }
@@ -99,9 +99,10 @@ inline qthDistributedBufferManager::qthDistributedBufferManager(dtkDistributedCo
 
 inline qthDistributedBufferManager::~qthDistributedBufferManager(void)
 {
-    for(qlonglong i = 0; i < d->size; ++i) {
+    for (qlonglong i = 0; i < d->size; ++i) {
         delete d->locks[i];
     }
+
     delete d;
     d = 0;
 }
@@ -118,7 +119,7 @@ inline void *qthDistributedBufferManager::allocate(qlonglong objectSize, qlonglo
     d->object_size = objectSize;
     qlonglong wid = d->comm->wid();
     d->locks[wid]->lockForWrite();
-    d->buffers[wid] = static_cast<char*>(::malloc(objectSize * capacity));
+    d->buffers[wid] = static_cast<char *>(::malloc(objectSize * capacity));
     buffer = d->buffers[wid];
     d->locks[wid]->unlock();
     d->comm->barrier();
@@ -135,12 +136,14 @@ inline void qthDistributedBufferManager::deallocate(void *buffer, qlonglong obje
 
     d->comm->barrier();
     qlonglong wid = d->comm->wid();
+
     if (d->buffers[wid] == buffer) {
         d->locks[wid]->lockForWrite();
         ::free(d->buffers[wid]);
         d->locks[wid]->unlock();
         d->object_size = 0;
     }
+
     d->comm->barrier();
 }
 
@@ -153,15 +156,17 @@ inline void qthDistributedBufferManager::rlock(void)
 {
     d->comm->barrier();
     qlonglong wid = d->comm->wid();
-    if (d->locked[wid].testAndSetRelaxed(0,1)) {
+
+    if (d->locked[wid].testAndSetRelaxed(0, 1)) {
         d->locks[wid]->lockForRead();
     }
+
     d->comm->barrier();
 }
 
 inline void qthDistributedBufferManager::rlock(qlonglong wid)
 {
-    if (d->locked[wid].testAndSetRelaxed(0,1)) {
+    if (d->locked[wid].testAndSetRelaxed(0, 1)) {
         d->locks[wid]->lockForRead();
     }
 }
@@ -171,9 +176,11 @@ inline void qthDistributedBufferManager::wlock(void)
 {
     d->comm->barrier();
     qlonglong wid = d->comm->wid();
-    if (d->locked[wid].testAndSetRelaxed(0,1)) {
+
+    if (d->locked[wid].testAndSetRelaxed(0, 1)) {
         d->locks[wid]->lockForWrite();
     }
+
     d->comm->barrier();
 }
 
@@ -193,9 +200,11 @@ inline void qthDistributedBufferManager::unlock(void)
 {
     d->comm->barrier();
     qlonglong wid = d->comm->wid();
-    if (d->locked[wid].testAndSetRelaxed(1,0)) {
+
+    if (d->locked[wid].testAndSetRelaxed(1, 0)) {
         d->locks[wid]->unlock();
     }
+
     d->comm->barrier();
 }
 
@@ -316,5 +325,5 @@ inline bool qthDistributedBufferManager::canHandleOperationManager(void)
     return (d->comm->wid() == 0);
 }
 
-// 
+//
 // qthDistributedBufferManager.h ends here

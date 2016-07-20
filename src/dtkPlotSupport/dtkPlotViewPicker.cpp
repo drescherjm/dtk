@@ -1,5 +1,5 @@
-/* dtkPlotViewPicker.cpp --- 
- * 
+/* dtkPlotViewPicker.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Jun 10 01:13:40 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotView.h"
@@ -27,7 +27,7 @@
 class dtkPlotViewPickerPrivate : public QwtPlotPicker
 {
 public:
-     dtkPlotViewPickerPrivate(QwtPlotCanvas *canvas);
+    dtkPlotViewPickerPrivate(QwtPlotCanvas *canvas);
     ~dtkPlotViewPickerPrivate(void);
 };
 
@@ -42,7 +42,7 @@ dtkPlotViewPickerPrivate::~dtkPlotViewPickerPrivate(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkPlotViewPicker::dtkPlotViewPicker(dtkPlotView *parent) : QObject(parent)

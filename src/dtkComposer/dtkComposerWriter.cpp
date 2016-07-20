@@ -75,7 +75,7 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, b
 {
     QDomDocument document("dtk");
 
-    if(!rootNode)
+    if (!rootNode)
         return document;
 
     if (d->id > 0) {
@@ -90,13 +90,13 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, b
         root.appendChild(this->writeNode(rootNode, root, document));
     else {
 
-        foreach(dtkComposerSceneNote *note, rootNode->notes())
+        foreach (dtkComposerSceneNote *note, rootNode->notes())
             root.appendChild(this->writeNote(note, root, document));
 
-        foreach(dtkComposerSceneNode *node, rootNode->nodes())
+        foreach (dtkComposerSceneNode *node, rootNode->nodes())
             root.appendChild(this->writeNode(node, root, document));
 
-        foreach(dtkComposerSceneEdge *edge, rootNode->edges())
+        foreach (dtkComposerSceneEdge *edge, rootNode->edges())
             if (addSelf || (edge->source()->node() != rootNode && edge->destination()->node() != rootNode))
                 root.appendChild(this->writeEdge(edge, root, document));
     }
@@ -106,7 +106,7 @@ QDomDocument dtkComposerWriter::toXML(dtkComposerSceneNodeComposite *rootNode, b
 
 void dtkComposerWriter::write(const QString& fileName, Type type)
 {
-    if(!d->scene)
+    if (!d->scene)
         return;
 
     writeNode(d->scene->root(), fileName, type);
@@ -114,7 +114,7 @@ void dtkComposerWriter::write(const QString& fileName, Type type)
 
 void dtkComposerWriter::writeNode(dtkComposerSceneNodeComposite *node, const QString& fileName, Type type)
 {
-    if(!d->scene)
+    if (!d->scene)
         return;
 
     QDomDocument document = this->toXML(node, false);
@@ -124,7 +124,7 @@ void dtkComposerWriter::writeNode(dtkComposerSceneNodeComposite *node, const QSt
     if (!file.open(QIODevice::WriteOnly))
         return;
 
-    if(type == dtkComposerWriter::Ascii) {
+    if (type == dtkComposerWriter::Ascii) {
         QTextStream out(&file); out << document.toString();
     } else {
         QDataStream out(&file); out << qCompress(document.toByteArray().toHex());
@@ -162,14 +162,14 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
     tag.setAttribute("y", QString::number(node->pos().y()));
     tag.setAttribute("id", QString::number(current_id));
 
-    if(dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
+    if (dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(node)) {
 
         tag.setAttribute("type", control->wrapee()->type());
 
         tag.setAttribute("w", control->boundingRect().size().width());
         tag.setAttribute("h", control->boundingRect().size().height());
 
-        if(node->wrapee() && node->title() != node->wrapee()->titleHint())
+        if (node->wrapee() && node->title() != node->wrapee()->titleHint())
             tag.setAttribute("title", node->title());
 
         int i = 0;
@@ -177,7 +177,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         QDomElement child = this->writeNode(control->header(), tag, document);
         tag.appendChild(child);
 
-        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+        foreach (dtkComposerSceneNodeComposite *block, control->blocks()) {
             child = this->writeNode(block, tag, document);
             child.setAttribute("blockid", i++);
             child.setAttribute("w", block->boundingRect().width());
@@ -195,9 +195,9 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         tag.appendChild(child);
     }
 
-    if(dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
+    if (dtkComposerSceneNodeComposite *composite = dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
-        if(composite->embedded())
+        if (composite->embedded())
             tag.setTagName("block");
 
         tag.setAttribute("title", node->title());
@@ -205,7 +205,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         dtkComposerScenePort *port = NULL;
 
-        for(int i = 0; i < composite->inputPorts().count(); ++i) {
+        for (int i = 0; i < composite->inputPorts().count(); ++i) {
             port = composite->inputPorts().at(i);
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
@@ -217,18 +217,22 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
             if (port->loop())
                 property.setAttribute("loop", port->loop());
+
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
                 property.setAttribute("kind", "proxy");
+
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
                 property.setAttribute("kind", "proxyloop");
+
             if (port->node()->wrapee()->receivers().at(port->node()->inputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyVariant)
                 property.setAttribute("kind", "proxyvariant");
+
             tag.appendChild(property);
         }
 
         port = NULL;
 
-        for(int i = 0; i < composite->outputPorts().count(); ++i) {
+        for (int i = 0; i < composite->outputPorts().count(); ++i) {
             port = composite->outputPorts().at(i);
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
@@ -240,31 +244,34 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
             if (port->loop())
                 property.setAttribute("loop", port->loop());
+
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::Proxy)
                 property.setAttribute("kind", "proxy");
+
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyLoop)
                 property.setAttribute("kind", "proxyloop");
+
             if (port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port))->kind() == dtkComposerTransmitter::ProxyVariant)
                 property.setAttribute("kind", "proxyvariant");
 
 // --- twin ports
 
-            if(dtkComposerTransmitterProxyLoop *tpl = dynamic_cast<dtkComposerTransmitterProxyLoop *>(port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port)))) {
+            if (dtkComposerTransmitterProxyLoop *tpl = dynamic_cast<dtkComposerTransmitterProxyLoop *>(port->node()->wrapee()->emitters().at(port->node()->outputPorts().indexOf(port)))) {
 
                 if (dtkComposerTransmitterProxyLoop *twin = tpl->twin()) {
 
                     QString block = twin->parentNode()->titleHint();
 
-                    if(block != port->node()->title())
+                    if (block != port->node()->title())
                         property.setAttribute("block", block);
 
                     dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(port->node()->parent());
 
-                    if(control) {
+                    if (control) {
 
-                    foreach(dtkComposerScenePort *p, control->block(block)->inputPorts())
-                        if(p->node()->wrapee()->receivers().at(p->node()->inputPorts().indexOf(p)) == twin)
-                            property.setAttribute("twin", p->node()->inputPorts().indexOf(p));
+                        foreach (dtkComposerScenePort *p, control->block(block)->inputPorts())
+                            if (p->node()->wrapee()->receivers().at(p->node()->inputPorts().indexOf(p)) == twin)
+                                property.setAttribute("twin", p->node()->inputPorts().indexOf(p));
 
                     }
                 }
@@ -275,18 +282,18 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
             tag.appendChild(property);
         }
 
-        foreach(dtkComposerSceneNote *note, composite->notes())
+        foreach (dtkComposerSceneNote *note, composite->notes())
             tag.appendChild(this->writeNote(note, tag, document));
 
-        foreach(dtkComposerSceneNode *child, composite->nodes())
+        foreach (dtkComposerSceneNode *child, composite->nodes())
             tag.appendChild(this->writeNode(child, tag, document));
 
-        foreach(dtkComposerSceneEdge *edge, composite->edges())
+        foreach (dtkComposerSceneEdge *edge, composite->edges())
             tag.appendChild(this->writeEdge(edge, tag, document));
 
     }
 
-    if(dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
+    if (dtkComposerSceneNodeLeaf *leaf = dynamic_cast<dtkComposerSceneNodeLeaf *>(node)) {
 
         if (dynamic_cast<dtkComposerNodeLeaf *>(leaf->wrapee())->isHeader())
             tag.setTagName("header");
@@ -305,15 +312,17 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         tag.setAttribute("type", leaf->wrapee()->type());
 
-        if(node->wrapee() && node->title() != node->wrapee()->titleHint())
+        if (node->wrapee() && node->title() != node->wrapee()->titleHint())
             tag.setAttribute("title", node->title());
 
         dtkComposerScenePort *port = NULL;
 
-        for(int i = 0; i < leaf->inputPorts().count(); i++) {
+        for (int i = 0; i < leaf->inputPorts().count(); i++) {
             port = leaf->inputPorts().at(i);
-            if(port->label() == leaf->wrapee()->inputLabelHint(i))
+
+            if (port->label() == leaf->wrapee()->inputLabelHint(i))
                 continue;
+
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
             property.setAttribute("type", "input");
@@ -323,10 +332,12 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
 
         port = NULL;
 
-        for(int i = 0; i < leaf->outputPorts().count(); i++) {
+        for (int i = 0; i < leaf->outputPorts().count(); i++) {
             port = leaf->outputPorts().at(i);
-            if(port->label() == leaf->wrapee()->outputLabelHint(i))
+
+            if (port->label() == leaf->wrapee()->outputLabelHint(i))
                 continue;
+
             QDomElement property = document.createElement("port");
             property.setAttribute("id", i);
             property.setAttribute("type", "output");
@@ -385,7 +396,7 @@ QDomElement dtkComposerWriter::writeNode(dtkComposerSceneNode *node, QDomElement
         }
 
         if (dtkComposerNodeLeafObject *object_node = dynamic_cast<dtkComposerNodeLeafObject *>(node->wrapee())) {
-            
+
             QDomText text = document.createTextNode(object_node->currentImplementation());
             QDomElement implementation = document.createElement("implementation");
             implementation.appendChild(text);
@@ -443,7 +454,8 @@ QDomElement dtkComposerWriter::writeEdge(dtkComposerSceneEdge *edge, QDomElement
 
     QDomElement source = document.createElement("source");
     source.setAttribute("node", d->node_ids.key(edge->source()->node()));
-    if(edge->source()->type() == dtkComposerScenePort::Input) {
+
+    if (edge->source()->type() == dtkComposerScenePort::Input) {
         source.setAttribute("id", edge->source()->node()->inputPorts().indexOf(edge->source()));
         source.setAttribute("type", "input");
     } else {
@@ -453,7 +465,8 @@ QDomElement dtkComposerWriter::writeEdge(dtkComposerSceneEdge *edge, QDomElement
 
     QDomElement destin = document.createElement("destination");
     destin.setAttribute("node", d->node_ids.key(edge->destination()->node()));
-    if(edge->destination()->type() == dtkComposerScenePort::Input) {
+
+    if (edge->destination()->type() == dtkComposerScenePort::Input) {
         destin.setAttribute("id", edge->destination()->node()->inputPorts().indexOf(edge->destination()));
         destin.setAttribute("type", "input");
     } else {

@@ -48,7 +48,7 @@ public:
 
 int dtkComposerGraphNodePrivate::count = 0;
 
-dtkComposerGraphNode::dtkComposerGraphNode() : QObject(),d(new dtkComposerGraphNodePrivate)
+dtkComposerGraphNode::dtkComposerGraphNode() : QObject(), d(new dtkComposerGraphNodePrivate)
 {
     this->setStatus(dtkComposerGraphNode::Ready);
     d->breakpoint      = false;
@@ -109,6 +109,7 @@ void dtkComposerGraphNode::setBreakPoint(bool value)
 void dtkComposerGraphNode::setEndLoop(bool value)
 {
     d->endloop = value;
+
     if (value) // endloop is set to true, keep this info in endloop_initial (used to rerun node)
         d->endloop_initial = value;
 }
@@ -200,12 +201,12 @@ void dtkComposerGraphNode::clean(void)
 // dtkComposerGraphNodeList
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerGraphNodeList::dtkComposerGraphNodeList(void) : QList<dtkComposerGraphNode *>()
+dtkComposerGraphNodeList::dtkComposerGraphNodeList(void) : QList<dtkComposerGraphNode * >()
 {
 
 }
 
-dtkComposerGraphNodeList::dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other) : QList<dtkComposerGraphNode *>(other)
+dtkComposerGraphNodeList::dtkComposerGraphNodeList(const QList<dtkComposerGraphNode *>& other) : QList<dtkComposerGraphNode * >(other)
 {
 
 }

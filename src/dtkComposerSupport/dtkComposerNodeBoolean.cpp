@@ -1,5 +1,5 @@
-/* dtkComposerNodeBoolean.cpp --- 
- * 
+/* dtkComposerNodeBoolean.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:49:25 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 42
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeBoolean.h"
@@ -30,7 +30,7 @@ class dtkComposerNodeBooleanPrivate
 public:
     dtkComposerTransmitterVariant receiver;
 
-public:    
+public:
     dtkComposerTransmitterEmitter<bool> emitter;
 
 public:
@@ -57,7 +57,7 @@ dtkComposerNodeBoolean::dtkComposerNodeBoolean(void) : dtkComposerNodeLeaf(), d(
 dtkComposerNodeBoolean::~dtkComposerNodeBoolean(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 

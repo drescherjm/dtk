@@ -1,5 +1,5 @@
-/* dtkFlowLayout.cpp --- 
- * 
+/* dtkFlowLayout.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 29 00:03:40 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 4
  */
 
-/* Commentary: 
+/* Commentary:
  * See credits at EOF
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkFlowLayout.h"
@@ -34,6 +34,7 @@ dtkFlowLayout::dtkFlowLayout(int margin, int hSpacing, int vSpacing)
 dtkFlowLayout::~dtkFlowLayout()
 {
     QLayoutItem *item;
+
     while ((item = takeAt(0)))
         delete item;
 }
@@ -95,7 +96,7 @@ int dtkFlowLayout::heightForWidth(int width) const
     return height;
 }
 
-void dtkFlowLayout::setGeometry(const QRect &rect)
+void dtkFlowLayout::setGeometry(const QRect& rect)
 {
     QLayout::setGeometry(rect);
     doLayout(rect, false);
@@ -110,14 +111,15 @@ QSize dtkFlowLayout::minimumSize() const
 {
     QSize size;
     QLayoutItem *item;
+
     foreach (item, itemList)
         size = size.expandedTo(item->minimumSize());
 
-    size += QSize(2*margin(), 2*margin());
+    size += QSize(2 * margin(), 2 * margin());
     return size;
 }
 
-int dtkFlowLayout::doLayout(const QRect &rect, bool testOnly) const
+int dtkFlowLayout::doLayout(const QRect& rect, bool testOnly) const
 {
     int left, top, right, bottom;
     getContentsMargins(&left, &top, &right, &bottom);
@@ -127,17 +129,23 @@ int dtkFlowLayout::doLayout(const QRect &rect, bool testOnly) const
     int lineHeight = 0;
 
     QLayoutItem *item;
+
     foreach (item, itemList) {
         QWidget *wid = item->widget();
         int spaceX = horizontalSpacing();
+
         if (spaceX == -1)
             spaceX = wid->style()->layoutSpacing(
-                QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal);
+                         QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal);
+
         int spaceY = verticalSpacing();
+
         if (spaceY == -1)
             spaceY = wid->style()->layoutSpacing(
-                QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Vertical);
+                         QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Vertical);
+
         int nextX = x + item->sizeHint().width() + spaceX;
+
         if (nextX - spaceX > effectiveRect.right() && lineHeight > 0) {
             x = effectiveRect.x();
             y = y + lineHeight + spaceY;
@@ -151,12 +159,14 @@ int dtkFlowLayout::doLayout(const QRect &rect, bool testOnly) const
         x = nextX;
         lineHeight = qMax(lineHeight, item->sizeHint().height());
     }
+
     return y + lineHeight - rect.y() + bottom;
 }
 
 int dtkFlowLayout::smartSpacing(QStyle::PixelMetric pm) const
 {
     QObject *parent = this->parent();
+
     if (!parent) {
         return -1;
     } else if (parent->isWidgetType()) {

@@ -33,7 +33,7 @@ class dtkComposerSceneNodePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerSceneNode : public QGraphicsItem
 {
 public:
-             dtkComposerSceneNode(void);
+    dtkComposerSceneNode(void);
     virtual ~dtkComposerSceneNode(void);
 
 #pragma mark -

@@ -38,7 +38,7 @@ class dtkComposerSceneNodeEditorList : public QListWidget
     Q_OBJECT
 
 public:
-     dtkComposerSceneNodeEditorList(QWidget *parent = 0);
+    dtkComposerSceneNodeEditorList(QWidget *parent = 0);
     ~dtkComposerSceneNodeEditorList(void);
 
 public:
@@ -60,7 +60,7 @@ protected slots:
 class dtkComposerSceneNodeEditorListItem : public QListWidgetItem
 {
 public:
-     dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent);
+    dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent);
     ~dtkComposerSceneNodeEditorListItem(void);
 
     int type(void) const;

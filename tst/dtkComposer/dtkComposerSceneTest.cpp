@@ -1,15 +1,15 @@
 /* dtkComposerSceneTest.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 10:32:46 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: lun. janv.  5 13:52:47 2015 (+0100)
  *           By: Thibaud Kloczko
  *     Update #: 147
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkComposerSceneTest.h"
@@ -67,64 +67,68 @@ void dtkComposerSceneTestCase::test(void)
     splitter->setHandleWidth(1);
     splitter->setWindowTitle("Quit app to validate test");
     splitter->resize(1200, 600);
-    splitter->setSizes(QList<int>() << 300 << 1200 - 2*300 << 300);
+    splitter->setSizes(QList<int>() << 300 << 1200 - 2 * 300 << 300);
     splitter->show();
     splitter->raise();
 
-    { // Create a boolean node
+    {
+        // Create a boolean node
 
-	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(&(dtkComposer::node::factory()));
-	command->setScene(scene);
-	command->setGraph(graph);
-	command->setParent(scene->root());
-	command->setPosition(QPointF(-250, 50));
-	command->setType("boolean");
-	command->setName("node");
+        dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
+        command->setFactory(&(dtkComposer::node::factory()));
+        command->setScene(scene);
+        command->setGraph(graph);
+        command->setParent(scene->root());
+        command->setPosition(QPointF(-250, 50));
+        command->setType("boolean");
+        command->setName("node");
 
-	stack->push(command);
+        stack->push(command);
     }
 
-    { // Create another boolean node
+    {
+        // Create another boolean node
 
-	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(&(dtkComposer::node::factory()));
-	command->setScene(scene);
-	command->setGraph(graph);
-	command->setParent(scene->root());
-	command->setPosition(QPointF(-250, -50));
-	command->setType("boolean");
-	command->setName("node");
-            
-	stack->push(command);
+        dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
+        command->setFactory(&(dtkComposer::node::factory()));
+        command->setScene(scene);
+        command->setGraph(graph);
+        command->setParent(scene->root());
+        command->setPosition(QPointF(-250, -50));
+        command->setType("boolean");
+        command->setName("node");
+
+        stack->push(command);
     }
 
-    { // Create another boolean node
+    {
+        // Create another boolean node
 
-	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(&(dtkComposer::node::factory()));
-	command->setScene(scene);
-	command->setGraph(graph);
-	command->setParent(scene->root());
-	command->setPosition(QPointF(250, 0));
-	command->setType("boolean");
-	command->setName("node");
-            
-	stack->push(command);
+        dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
+        command->setFactory(&(dtkComposer::node::factory()));
+        command->setScene(scene);
+        command->setGraph(graph);
+        command->setParent(scene->root());
+        command->setPosition(QPointF(250, 0));
+        command->setType("boolean");
+        command->setName("node");
+
+        stack->push(command);
     }
 
-    { // Create a boolean operator node
+    {
+        // Create a boolean operator node
 
-	dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
-	command->setFactory(&(dtkComposer::node::factory()));
-	command->setScene(scene);
-	command->setGraph(graph);
-	command->setParent(scene->root());
-	command->setPosition(QPointF(0, 0));
-	command->setType("and");
-	command->setName("node");
-            
-	stack->push(command);
+        dtkComposerStackCommandCreateNode *command = new dtkComposerStackCommandCreateNode;
+        command->setFactory(&(dtkComposer::node::factory()));
+        command->setScene(scene);
+        command->setGraph(graph);
+        command->setParent(scene->root());
+        command->setPosition(QPointF(0, 0));
+        command->setType("and");
+        command->setName("node");
+
+        stack->push(command);
     }
 
     // --

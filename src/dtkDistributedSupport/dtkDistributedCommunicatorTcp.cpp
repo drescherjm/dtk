@@ -62,11 +62,11 @@ dtkDistributedCommunicatorTcp& dtkDistributedCommunicatorTcp::operator = (const 
     return *this;
 }
 
-void dtkDistributedCommunicatorTcp::connectToHost(const QString &host , qint16 port)
+void dtkDistributedCommunicatorTcp::connectToHost(const QString& host , qint16 port)
 {
     if (!d->socket) {
         d->socket = new dtkDistributedSocket();
-        d->socket->connectToHost(host,port);
+        d->socket->connectToHost(host, port);
     }
 }
 
@@ -99,7 +99,7 @@ void dtkDistributedCommunicatorTcp::uninitialize(void)
 
 int dtkDistributedCommunicatorTcp::rank(void)
 {
-    if(d->server)
+    if (d->server)
         return 0;
     else
         return -1;
@@ -107,7 +107,7 @@ int dtkDistributedCommunicatorTcp::rank(void)
 
 int dtkDistributedCommunicatorTcp::size(void)
 {
-    if(d->server)
+    if (d->server)
         return d->sockets.count() + 1;
     else
         return -1;
@@ -117,17 +117,17 @@ void dtkDistributedCommunicatorTcp::barrier(void)
 {
     char junk;
 
-    if(d->server) {
+    if (d->server) {
         this->send(&junk, 1,
                    dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
                    dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
         this->receive(&junk, 1,
-                   dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
-                   dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
+                      dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
+                      dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
     } else {
         this->receive(&junk, 1,
-                   dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
-                   dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
+                      dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
+                      dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
         this->send(&junk, 1,
                    dtkDistributedCommunicator::dtkDistributedCommunicatorChar, 0,
                    dtkDistributedCommunicator::dtkDistributedCommunicatorBarrier);
@@ -143,6 +143,7 @@ void dtkDistributedCommunicatorTcp::flush(void)
 void dtkDistributedCommunicatorTcp::send(dtkAbstractData *data, qint16 target, int tag)
 {
     QByteArray *array = data->serialize();
+
     if (array) {
         QVariant v_jobid = this->property("jobid");
         QString jobid = (v_jobid.isValid()) ? v_jobid.toString() : "unknown";
@@ -169,11 +170,14 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
         dtkWarn() << "Data not ready in receive for rank " << source;
     else {
         dtkDistributedMessage *msg = d->socket->parseRequest();
+
         if (msg->size() > 0) {
             QByteArray array = msg->content();
-            if(!data) {
+
+            if (!data) {
                 data = dtkAbstractDataFactory::instance()->create(msg->type());
             }
+
             if (!data->deserialize(array)) {
                 dtkError() << "Deserialization failed";
             }
@@ -181,30 +185,31 @@ void dtkDistributedCommunicatorTcp::receive(dtkAbstractData *&data, qint16 sourc
             dtkWarn() << "warning: no content in receive";
         }
     }
+
     d->socket->blockSignals(false);
 }
 
-void dtkDistributedCommunicatorTcp::send(const QString &s, qint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(const QString& s, qint16 target, int tag)
 {
-    d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA,QString::number(tag),target, s.count(), "text"));
+    d->socket->sendRequest(new dtkDistributedMessage(dtkDistributedMessage::DATA, QString::number(tag), target, s.count(), "text"));
     d->socket->write(s.toUtf8());
 }
 
-void dtkDistributedCommunicatorTcp::send(QByteArray &a, qint16 target, int tag)
+void dtkDistributedCommunicatorTcp::send(QByteArray& a, qint16 target, int tag)
 {
 
     QVariant v_jobid = this->property("jobid");
     QString jobid = (v_jobid.isValid()) ? v_jobid.toString() : "unknown";
 
     dtkDistributedMessage *msg = new dtkDistributedMessage(dtkDistributedMessage::DATA, jobid, target, a.size(), "qvariant", a);
-    msg->addHeader("Tag",QString::number(tag));
+    msg->addHeader("Tag", QString::number(tag));
     d->socket->sendRequest(msg);
     this->flush();
 
     delete msg;
 }
 
-void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(QString& data, qint16 source, int tag)
 {
     DTK_UNUSED(tag);
 
@@ -214,6 +219,7 @@ void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int ta
         dtkWarn() << "Data not ready in receive for rank " << source;
     else {
         dtkDistributedMessage *msg = d->socket->parseRequest();
+
         if (msg->size() > 0) {
             QByteArray array = msg->content();
             data = QString(array);
@@ -221,10 +227,11 @@ void dtkDistributedCommunicatorTcp::receive(QString &data, qint16 source, int ta
             dtkWarn() << "warning: no content in receive";
         }
     }
+
     d->socket->blockSignals(false);
 }
 
-void dtkDistributedCommunicatorTcp::receive(QByteArray &array, qint16 source, int tag)
+void dtkDistributedCommunicatorTcp::receive(QByteArray& array, qint16 source, int tag)
 {
     DTK_DEFAULT_IMPLEMENTATION;
 }
@@ -235,7 +242,7 @@ void dtkDistributedCommunicatorTcp::send(void *data, qint64 size, DataType dataT
     DTK_UNUSED(tag);
     DTK_UNUSED(target);
     // TODO: handle target and tag, and check return value of write
-    d->socket->write((char *)data,size);
+    d->socket->write((char *)data, size);
 
 }
 

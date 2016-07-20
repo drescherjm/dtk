@@ -1,16 +1,16 @@
-/* dtkComposerNodeReal.h --- 
- * 
+/* dtkComposerNodeReal.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:40:45 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -24,7 +24,7 @@ class dtkComposerNodeRealPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeReal : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeReal(void);
+    dtkComposerNodeReal(void);
     ~dtkComposerNodeReal(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkSwitch.cpp --- 
- * 
+/* dtkSwitch.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:54:03 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 62
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkSwitch.h"

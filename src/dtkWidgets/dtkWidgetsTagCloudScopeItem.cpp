@@ -1,15 +1,15 @@
 /* dtkWidgetsTagCloudScopeItem.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 12:35:27 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Mon Apr 15 15:44:01 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 10
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkWidgetsTagCloudScopeItem.h"
@@ -101,8 +101,8 @@ void dtkWidgetsTagCloudScopeItem::setText(const QString& text)
     static int v_border = 3;
 
     QFontMetrics metrics(this->font());
-    d->width = metrics.width(text) + 2*margin + 2*h_border;
-    d->height = metrics.height() + 2*v_border;
+    d->width = metrics.width(text) + 2 * margin + 2 * h_border;
+    d->height = metrics.height() + 2 * v_border;
 
     d->fg->setFixedHeight(d->height);
     d->fg->setFixedWidth(d->width);
@@ -118,7 +118,7 @@ void dtkWidgetsTagCloudScopeItem::setCount(int count)
 
 void dtkWidgetsTagCloudScopeItem::enterEvent(QEvent *event)
 {
-    if(d->bg->text().isEmpty())
+    if (d->bg->text().isEmpty())
         return;
 
     Q_UNUSED(event);
@@ -132,7 +132,7 @@ void dtkWidgetsTagCloudScopeItem::enterEvent(QEvent *event)
 
 void dtkWidgetsTagCloudScopeItem::leaveEvent(QEvent *event)
 {
-    if(d->bg->text().isEmpty())
+    if (d->bg->text().isEmpty())
         return;
 
     Q_UNUSED(event);

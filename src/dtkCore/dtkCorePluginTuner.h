@@ -23,7 +23,7 @@
 template < typename T > class dtkCorePluginTuner
 {
 public:
-             dtkCorePluginTuner(void);
+    dtkCorePluginTuner(void);
     virtual ~dtkCorePluginTuner(void);
 
     void setObject(T *object);

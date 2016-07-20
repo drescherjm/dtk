@@ -78,15 +78,21 @@ int main(int argc, char **argv)
 
     if (parser->isSet(slaveOption)) {
         dtkComposerEvaluatorSlave *slave = new dtkComposerEvaluatorSlave;
+
         if (!parser->isSet(serverOption)) {
             qCritical() << "Error: no server set when running as slave! Use --server <url> " ;
             return 1;
         }
+
         slave->setServer(parser->value(serverOption));
         slave->setFactory(factory);
 
         application->spawn();
-        do  { application->exec(slave); } while (slave->status()  == 0);
+
+        do  {
+            application->exec(slave);
+        } while (slave->status()  == 0);
+
         application->unspawn();
 
     } else {
@@ -103,15 +109,17 @@ int main(int argc, char **argv)
         if (parser->isSet(pgOption)) {
             evaluator->setProfiling(true);
         }
+
         if (!reader->read(args.first())) {
             dtkError() << "read failure for " << args.first();
             return 1;
         }
+
         if (no_gui) {
             evaluator->run_static();
             return 0;
         } else {
-            QObject::connect(evaluator,SIGNAL(evaluationStopped()),qApp, SLOT(quit()));
+            QObject::connect(evaluator, SIGNAL(evaluationStopped()), qApp, SLOT(quit()));
             QtConcurrent::run(evaluator, &dtkComposerEvaluator::run_static, false);
             return qApp->exec();
         }

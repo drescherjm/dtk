@@ -1,15 +1,15 @@
-/* dtkComposerTransmitterEmitter.h --- 
- * 
+/* dtkComposerTransmitterEmitter.h ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 10:33:49 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERTRANSMITTEREMITTER_H
@@ -21,7 +21,7 @@
 #include <dtkCoreSupport/dtkGlobal>
 #include <dtkContainerSupport/dtkContainerVector.h>
 
-namespace dtkDeprecated{
+namespace dtkDeprecated {
     template <typename T> class dtkMatrix;
 }
 
@@ -32,7 +32,7 @@ namespace dtkDeprecated{
 template <typename T> class dtkComposerTransmitterEmitter : public dtkComposerTransmitterAbstractEmitter
 {
 public:
-     dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterEmitter(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitter(void);
 
 public:
@@ -76,7 +76,7 @@ private:
 template <typename T> class dtkComposerTransmitterEmitterVector : public dtkComposerTransmitterAbstractEmitter
 {
 public:
-     dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
+    dtkComposerTransmitterEmitterVector(dtkComposerNode *parent = 0);
     ~dtkComposerTransmitterEmitterVector(void);
 
 public:
@@ -84,7 +84,7 @@ public:
 
 public:
     inline void setData(dtkContainerVector<T> *vector);
-    
+
     inline void setData(const dtkContainerVector<T> *vector);
 
 public:

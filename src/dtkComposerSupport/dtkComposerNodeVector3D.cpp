@@ -9,7 +9,7 @@
  *     Update #: 98
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -24,7 +24,7 @@
 #include <dtkMathSupport/dtkVector.h>
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeVector3DPrivate
@@ -51,7 +51,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerNodeVector3D::dtkComposerNodeVector3D(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DPrivate)
@@ -92,25 +92,29 @@ dtkComposerNodeVector3D::~dtkComposerNodeVector3D(void)
     d->vector = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
-QString dtkComposerNodeVector3D::inputLabelHint(int port) 
+QString dtkComposerNodeVector3D::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "x";
         break;
+
     case 2:
         return "y";
         break;
+
     case 3:
         return "z";
         break;
+
     default:
         break;
     }
@@ -119,20 +123,24 @@ QString dtkComposerNodeVector3D::inputLabelHint(int port)
 }
 
 QString dtkComposerNodeVector3D::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "x";
         break;
+
     case 2:
         return "y";
         break;
+
     case 3:
         return "z";
         break;
+
     default:
         break;
     }
@@ -154,24 +162,24 @@ void dtkComposerNodeVector3D::run(void)
 
     } else {
 
-        if(!d->vector)
+        if (!d->vector)
             d->vector = new dtkVector3DReal();
 
-        if(!d->receiver_x.isEmpty())
+        if (!d->receiver_x.isEmpty())
             d->x = *d->receiver_x.data<qreal>();
         else
             d->x = 0.;
 
-        if(!d->receiver_y.isEmpty())
+        if (!d->receiver_y.isEmpty())
             d->y = *d->receiver_y.data<qreal>();
         else
             d->y = 0.;
 
-        if(!d->receiver_z.isEmpty())
+        if (!d->receiver_z.isEmpty())
             d->z = *d->receiver_z.data<qreal>();
         else
             d->z = 0.;
-        
+
         (*d->vector)[0] = d->x;
         (*d->vector)[1] = d->y;
         (*d->vector)[2] = d->z;

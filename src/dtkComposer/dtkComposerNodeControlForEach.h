@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -27,7 +27,7 @@ class dtkComposerNodeControlForEachPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeControlForEach : public dtkComposerNodeControl
 {
 public:
-             dtkComposerNodeControlForEach(void);
+    dtkComposerNodeControlForEach(void);
     virtual ~dtkComposerNodeControlForEach(void);
 
 public:
@@ -40,7 +40,7 @@ public:
     void setInputs(void);
     void setOutputs(void);
     void setVariables(void);
-     int selectBranch(void);
+    int selectBranch(void);
     void begin(void);
     void end(void);
 
@@ -48,5 +48,5 @@ private:
     dtkComposerNodeControlForEachPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeControlForEach.h ends here

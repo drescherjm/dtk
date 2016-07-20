@@ -1,5 +1,5 @@
-/* dtkComposerGraphView.h --- 
- * 
+/* dtkComposerGraphView.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 14:42:13 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 20
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERGRAPHVIEW_H
@@ -31,7 +31,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposerGraphView : public QGraphicsView
     Q_OBJECT
 
 public:
-     dtkComposerGraphView(QWidget *parent = 0);
+    dtkComposerGraphView(QWidget *parent = 0);
     ~dtkComposerGraphView(void);
 
 private:

@@ -1,5 +1,5 @@
-/* dtkAbstractDataConverter.h --- 
- * 
+/* dtkAbstractDataConverter.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 24 21:58:48 2009 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 49
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABSTRACTDATACONVERTER_H
@@ -34,35 +34,35 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataConverter : public dtkAbstractObject
     Q_OBJECT
 
 public:
-             dtkAbstractDataConverter(void);
-             dtkAbstractDataConverter(const dtkAbstractDataConverter& other);
+    dtkAbstractDataConverter(void);
+    dtkAbstractDataConverter(const dtkAbstractDataConverter& other);
     virtual ~dtkAbstractDataConverter(void);
-    
+
 public:
     virtual QString  description (void) const = 0;
     virtual QStringList fromTypes(void) const = 0;
     virtual QString       toType (void) const = 0;
-    
+
     bool enabled(void) const;
     void  enable(void);
     void disable(void);
-    
+
     dtkAbstractData *data(void) const;
-    
+
     virtual void setData(dtkAbstractData *data);
 
 signals:
     void started(const QString& message);
     void progressed(int step);
     void finished(void);
-    
+
 public slots:
     virtual bool canConvert(const QString& toType);
-    
+
     virtual dtkAbstractData *convert(void);
-    
+
     virtual void setProgress(int value);
-    
+
 private:
     DTK_DECLARE_PRIVATE(dtkAbstractDataConverter);
 };

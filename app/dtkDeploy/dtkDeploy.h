@@ -42,12 +42,12 @@ public:
     QString destinationDirectory;
 };
 
-  bool operator==(const FrameworkInfo &a, const FrameworkInfo &b);
-QDebug operator<<(QDebug debug, const FrameworkInfo &info);
+bool operator==(const FrameworkInfo& a, const FrameworkInfo& b);
+QDebug operator<<(QDebug debug, const FrameworkInfo& info);
 
 class ApplicationBundleInfo
 {
-    public:
+public:
     QString path;
     QString binaryPath;
 };
@@ -60,29 +60,29 @@ public:
     QStringList deployedFrameworks;
 };
 
-inline QDebug operator<<(QDebug debug, const ApplicationBundleInfo &info);
+inline QDebug operator<<(QDebug debug, const ApplicationBundleInfo& info);
 
-void changeQtFrameworks(const QString appPath, const QString &qtPath, bool useDebugLibs);
-void changeQtFrameworks(const QList<FrameworkInfo> frameworks, const QString &appBinaryPath, const QString &qtPath);
+void changeQtFrameworks(const QString appPath, const QString& qtPath, bool useDebugLibs);
+void changeQtFrameworks(const QList<FrameworkInfo> frameworks, const QString& appBinaryPath, const QString& qtPath);
 
-FrameworkInfo parseOtoolLibraryLine(const QString &line, bool useDebugLibs);
-QString findAppBinary(const QString &appBundlePath);
-QList<FrameworkInfo> getQtFrameworks(const QString &path, bool useDebugLibs);
-QList<FrameworkInfo> getQtFrameworks(const QStringList &otoolLines, bool useDebugLibs);
-QString copyFramework(const FrameworkInfo &framework, const QString path);
-DeploymentInfo deployQtFrameworks(const QString &appBundlePath, bool useDebugLibs);
-DeploymentInfo deployQtFrameworks(QList<FrameworkInfo> frameworks, const QString &bundlePath, const QString &binaryPath);
-void createQtConf(const QString &appBundlePath);
-void deployPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, bool useDebugLibs);
-void changeIdentification(const QString &id, const QString &binaryPath);
-void changeInstallName(const QString &oldName, const QString &newName, const QString &binaryPath);
-QString findAppBinary(const QString &appBundlePath);
+FrameworkInfo parseOtoolLibraryLine(const QString& line, bool useDebugLibs);
+QString findAppBinary(const QString& appBundlePath);
+QList<FrameworkInfo> getQtFrameworks(const QString& path, bool useDebugLibs);
+QList<FrameworkInfo> getQtFrameworks(const QStringList& otoolLines, bool useDebugLibs);
+QString copyFramework(const FrameworkInfo& framework, const QString path);
+DeploymentInfo deployQtFrameworks(const QString& appBundlePath, bool useDebugLibs);
+DeploymentInfo deployQtFrameworks(QList<FrameworkInfo> frameworks, const QString& bundlePath, const QString& binaryPath);
+void createQtConf(const QString& appBundlePath);
+void deployPlugins(const QString& appBundlePath, DeploymentInfo deploymentInfo, bool useDebugLibs);
+void changeIdentification(const QString& id, const QString& binaryPath);
+void changeInstallName(const QString& oldName, const QString& newName, const QString& binaryPath);
+QString findAppBinary(const QString& appBundlePath);
 
 // /////////////////////////////////////////////////////////////////
 // dtk specific deployment
 // /////////////////////////////////////////////////////////////////
 
-void deployDtkPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo, const QString& pluginsPath);
+void deployDtkPlugins(const QString& appBundlePath, DeploymentInfo deploymentInfo, const QString& pluginsPath);
 
 /* **************************************************************
  * Credits

@@ -1,5 +1,5 @@
-/* dtkColorButton.cpp --- 
- * 
+/* dtkColorButton.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 14:45:33 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 46
  */
 
-/* Commentary: 
+/* Commentary:
  * See credits at EOF
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkColorButton.h"
@@ -76,7 +76,7 @@ const dtkColorButton::PickMode& dtkColorButton::pickModeRight(void) const
     return d->modeRight;
 }
 
-dtkColorList* dtkColorButton::scheme(void) const
+dtkColorList *dtkColorButton::scheme(void) const
 {
     return d->colors;
 }
@@ -86,19 +86,19 @@ void dtkColorButton::setColor(const QColor& color)
     d->color = color;
 
     int w = qMax(size().width(), size().height());
-    QPixmap pm(w,w);
+    QPixmap pm(w, w);
     drawColorItem(pm, color);
     setIcon(QIcon(pm));
 
     setText(color.name());
 }
 
-void dtkColorButton::drawColorItem(QPixmap &pm, const QColor& color)
+void dtkColorButton::drawColorItem(QPixmap& pm, const QColor& color)
 {
     QPainter p(&pm);
     p.setBrush(color);
     p.setPen(palette().color(QPalette::Shadow));
-    p.drawRect(pm.rect().adjusted(0,0,-1,-1));
+    p.drawRect(pm.rect().adjusted(0, 0, -1, -1));
 }
 
 void dtkColorButton::setPickModeLeft(const PickMode& mode)
@@ -128,48 +128,48 @@ void dtkColorButton::mousePressEvent(QMouseEvent *event)
     int mod;
 
     switch (event->button()) {
-        case Qt::LeftButton:
-            mod = d->modeLeft;
-            break;
-        case Qt::RightButton:
-            mod = d->modeRight;
-            break;
-        default:
-            return;
+    case Qt::LeftButton:
+        mod = d->modeLeft;
+        break;
+
+    case Qt::RightButton:
+        mod = d->modeRight;
+        break;
+
+    default:
+        return;
     }
 
-    switch (mod)
-    {
-        case PM_COLORDIALOG:
-        {
-            QColor c = QColorDialog::getColor(d->color, this);
-            if (c.isValid()) {
-                setColor(c);
-                emit colorChanged(c);
-            }
+    switch (mod) {
+    case PM_COLORDIALOG: {
+        QColor c = QColorDialog::getColor(d->color, this);
+
+        if (c.isValid()) {
+            setColor(c);
+            emit colorChanged(c);
         }
-        break;
+    }
+    break;
 
-        case PM_COLORGRID:
-        {
-            dtkColorGrid *grid = new dtkColorGrid;
-            grid->setPickByDrag(false);
-            grid->setClickMode(dtkColorGrid::CM_RELEASE);
-            grid->setAutoSize(true);
-            grid->setScheme(d->colors);
-            grid->setCellSize(d->cellSize);
-            connect(grid, SIGNAL(picked(const QColor &)), this, SLOT(setColor(const QColor&)));
-            connect(grid, SIGNAL(picked(const QColor &)), this, SIGNAL(colorChanged(const QColor&)));
+    case PM_COLORGRID: {
+        dtkColorGrid *grid = new dtkColorGrid;
+        grid->setPickByDrag(false);
+        grid->setClickMode(dtkColorGrid::CM_RELEASE);
+        grid->setAutoSize(true);
+        grid->setScheme(d->colors);
+        grid->setCellSize(d->cellSize);
+        connect(grid, SIGNAL(picked(const QColor&)), this, SLOT(setColor(const QColor&)));
+        connect(grid, SIGNAL(picked(const QColor&)), this, SIGNAL(colorChanged(const QColor&)));
 
-            dtkPopup *popup = new dtkPopup;
-            popup->setWidget(grid);
-            popup->show(mapToGlobal(rect().bottomLeft()));
+        dtkPopup *popup = new dtkPopup;
+        popup->setWidget(grid);
+        popup->show(mapToGlobal(rect().bottomLeft()));
 
-            connect(grid, SIGNAL(accepted()), popup, SLOT(close()));
-        }
-        break;
+        connect(grid, SIGNAL(accepted()), popup, SLOT(close()));
+    }
+    break;
 
-        default:;
+    default:;
     }
 }
 

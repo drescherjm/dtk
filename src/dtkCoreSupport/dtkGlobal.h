@@ -159,7 +159,7 @@ public:
 
 // Specialize to avoid sizeof(void) warning
 
-template<> class dtkTypeInfo<void*>
+template<> class dtkTypeInfo<void *>
 {
 public:
     enum {
@@ -174,30 +174,30 @@ public:
 class dtkAbstractObject;
 template <typename T> class dtkMatrix;
 
-template <typename T> class dtkTypeInfo<T*>
+template <typename T> class dtkTypeInfo<T *>
 {
 public:
     typedef int  yes_type;
     typedef char  no_type;
 
 public:
-    static yes_type checkObject(dtkAbstractObject*);
-    static yes_type checkObject(dtkMatrix<qreal>*);
+    static yes_type checkObject(dtkAbstractObject *);
+    static yes_type checkObject(dtkMatrix<qreal> *);
     static no_type  checkObject(...);
 
 public:
-    static yes_type checkAbstractObject(dtkAbstractObject*);
+    static yes_type checkAbstractObject(dtkAbstractObject *);
     static no_type  checkAbstractObject(...);
 
 public:
-    static yes_type checkAbstractMatrix(dtkMatrix<qreal>*);
+    static yes_type checkAbstractMatrix(dtkMatrix<qreal> *);
     static no_type  checkAbstractMatrix(...);
 
 public:
     enum {
-        dtkObjectPointer         = (sizeof(checkObject(static_cast<T*>(0))) == sizeof(yes_type)),
-        dtkAbstractObjectPointer = (sizeof(checkAbstractObject(static_cast<T*>(0))) == sizeof(yes_type)),
-        dtkMatrixRealPointer     = (sizeof(checkAbstractMatrix(static_cast<T*>(0))) == sizeof(yes_type))
+        dtkObjectPointer         = (sizeof(checkObject(static_cast<T *>(0))) == sizeof(yes_type)),
+        dtkAbstractObjectPointer = (sizeof(checkAbstractObject(static_cast<T *>(0))) == sizeof(yes_type)),
+        dtkMatrixRealPointer     = (sizeof(checkAbstractMatrix(static_cast<T *>(0))) == sizeof(yes_type))
     };
 };
 
@@ -220,7 +220,9 @@ inline bool dtkIsBinary(const QString& path)
 {
     int c; std::ifstream a(path.toUtf8().constData());
 
-    while(((c = a.get()) != EOF) && (c <= 127)) { ; }
+    while (((c = a.get()) != EOF) && (c <= 127)) {
+        ;
+    }
 
     return (c != EOF);
 }
@@ -229,7 +231,7 @@ inline QString dtkReadFile(const QString& path)
 {
     QFile file(path);
 
-    if(!file.open(QFile::ReadOnly))
+    if (!file.open(QFile::ReadOnly))
         qDebug() << "Unable to read file" << path;
 
     QString contents = file.readAll();
@@ -241,8 +243,8 @@ inline QString dtkReadFile(const QString& path)
 
 inline bool dtkApplicationArgumentsContain(int argc, char **argv, QString value)
 {
-    for(int i = 1; i < argc; i++)
-        if(QString(argv[i]) == value)
+    for (int i = 1; i < argc; i++)
+        if (QString(argv[i]) == value)
             return true;
 
     return false;
@@ -255,10 +257,10 @@ inline bool dtkApplicationArgumentsContain(QCoreApplication *application, QStrin
 
 inline QString dtkApplicationArgumentsValue(int argc, char **argv, QString key)
 {
-    for(int i = 1; i < argc; i++) {
-        if(QString(argv[i]) == key) {
-            if(i+1 < argc)
-                return QString(argv[i+1]);
+    for (int i = 1; i < argc; i++) {
+        if (QString(argv[i]) == key) {
+            if (i + 1 < argc)
+                return QString(argv[i + 1]);
             else
                 return QString();
         }
@@ -271,8 +273,9 @@ inline QString dtkApplicationArgumentsValue(QCoreApplication *application, QStri
 {
     QStringList args = application->arguments();
     int i = args.indexOf(key);
-    if ( i > -1 && ( (i+1) < args.count()) ) {
-        return args.at(i+1);
+
+    if ( i > -1 && ( (i + 1) < args.count()) ) {
+        return args.at(i + 1);
     } else {
         return QString();
     }
@@ -282,10 +285,12 @@ inline QString dtkApplicationArgumentsValue(QCoreApplication *application, QStri
 // Hash functions
 // /////////////////////////////////////////////////////////////////
 
-inline uint qHash(const QStringList &key)
+inline uint qHash(const QStringList& key)
 {
     uint hash = 0;
-    foreach(QString string, key)
-	hash = hash ^ qHash(string);
+
+    foreach (QString string, key)
+        hash = hash ^qHash(string);
+
     return hash;
 }

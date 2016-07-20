@@ -25,7 +25,7 @@ class DTKCOMPOSER_EXPORT dtkComposerViewLayout : public QFrame
     Q_OBJECT
 
 public:
-     dtkComposerViewLayout(QWidget *parent = 0);
+    dtkComposerViewLayout(QWidget *parent = 0);
     ~dtkComposerViewLayout(void);
 
 public:

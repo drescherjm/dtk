@@ -31,10 +31,10 @@ class dtkComposerNodeLeafActorPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeLeafActor :  public QObject, public dtkComposerNodeLeaf
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-             dtkComposerNodeLeafActor(QObject *parent = 0);
+    dtkComposerNodeLeafActor(QObject *parent = 0);
     virtual ~dtkComposerNodeLeafActor(void);
 
 };

@@ -63,31 +63,36 @@ void dtkApplicationPrivate::initialize(void)
     QCommandLineOption loglevelOption("loglevel", "log level used by dtkLog (default is info), available: trace|debug|info|warn|error|fatal", "level", verbosity);
     parser->addOption(loglevelOption);
 
-    QCommandLineOption logfileOption("logfile", qPrintable(QString("log file used by dtkLog; default is: ").append(dtkLogPath(app))),"filename | console",dtkLogPath(app));
+    QCommandLineOption logfileOption("logfile", qPrintable(QString("log file used by dtkLog; default is: ").append(dtkLogPath(app))), "filename | console", dtkLogPath(app));
     parser->addOption(logfileOption);
 
-    QCommandLineOption logfileMaxSizeOption("logfilemax", "log file max size  (in MB); default is: 3072 (3GB)","size");
+    QCommandLineOption logfileMaxSizeOption("logfilemax", "log file max size  (in MB); default is: 3072 (3GB)", "size");
     parser->addOption(logfileMaxSizeOption);
 
     parser->process(*app);
 
-    if(parser->isSet(settingsOption)) {
+    if (parser->isSet(settingsOption)) {
         settings = new QSettings(parser->value(settingsOption), QSettings::IniFormat);
     } else {
         settings = new QSettings(app->organizationName(), app->applicationName());
     }
+
     if (settings->contains("log_level")) {
         dtkLogger::instance().setLevel(settings->value("log_level").toString());
     } else {
         if (parser->isSet(loglevelOption)) {
-            verbosity= parser->value(loglevelOption);
+            verbosity = parser->value(loglevelOption);
         }
+
         dtkLogger::instance().setLevel(verbosity);
     }
-    qlonglong max_size = 1024L*1024L*1024L;
+
+    qlonglong max_size = 1024L * 1024L * 1024L;
+
     if (parser->isSet(logfileMaxSizeOption)) {
         max_size = parser->value(logfileMaxSizeOption).toLongLong() * 1024 * 1024;
     }
+
     if (parser->isSet(logfileOption)) {
         if (parser->value(logfileOption) == "console") {
             dtkLogger::instance().attachConsole();

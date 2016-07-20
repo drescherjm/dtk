@@ -32,7 +32,7 @@ class DTKSCRIPT_EXPORT dtkScriptInterpreterTcl : public dtkScriptInterpreter
     Q_OBJECT
 
 public:
-     dtkScriptInterpreterTcl(QObject *parent = 0);
+    dtkScriptInterpreterTcl(QObject *parent = 0);
     ~dtkScriptInterpreterTcl(void);
 
 public slots:

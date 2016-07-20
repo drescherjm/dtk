@@ -21,7 +21,7 @@ class dtkHelperFunctionTestCase : public QObject
     Q_OBJECT
 
 public:
-     dtkHelperFunctionTestCase(void);
+    dtkHelperFunctionTestCase(void);
     ~dtkHelperFunctionTestCase(void);
 
 private slots:

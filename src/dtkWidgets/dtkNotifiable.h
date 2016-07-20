@@ -1,5 +1,5 @@
-/* dtkNotifiable.h --- 
- * 
+/* dtkNotifiable.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Apr 23 11:49:55 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 17
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKNOTIFIABLE_H

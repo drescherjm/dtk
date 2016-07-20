@@ -26,7 +26,7 @@ class dtkComposerNodeLeafPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeLeaf : public dtkComposerNode
 {
 public:
-             dtkComposerNodeLeaf(void);
+    dtkComposerNodeLeaf(void);
     virtual ~dtkComposerNodeLeaf(void);
 
 public:
@@ -52,14 +52,16 @@ private:
 class DTKCOMPOSER_EXPORT dtkComposerNodeLeafObject : public dtkComposerNodeLeaf
 {
 public:
-             dtkComposerNodeLeafObject(void) {}
+    dtkComposerNodeLeafObject(void) {}
     virtual ~dtkComposerNodeLeafObject(void) {}
 
 public:
     virtual bool createObject(const QString& implementation) = 0;
 
 public:
-    virtual QVariant variant(void) const { return QVariant(); }
+    virtual QVariant variant(void) const {
+        return QVariant();
+    }
 
 public:
     virtual QStringList implementations(void) const = 0;

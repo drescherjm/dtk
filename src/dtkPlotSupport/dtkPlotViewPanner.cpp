@@ -1,5 +1,5 @@
-/* dtkPlotViewPanner.cpp --- 
- * 
+/* dtkPlotViewPanner.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 34
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkPlotView.h"
@@ -27,7 +27,7 @@
 class dtkPlotViewPannerPrivate : public QwtPlotPanner
 {
 public:
-     dtkPlotViewPannerPrivate(QwtPlotCanvas *canvas);
+    dtkPlotViewPannerPrivate(QwtPlotCanvas *canvas);
     ~dtkPlotViewPannerPrivate(void);
 };
 
@@ -42,7 +42,7 @@ dtkPlotViewPannerPrivate::~dtkPlotViewPannerPrivate(void)
 }
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkPlotViewPanner::dtkPlotViewPanner(dtkPlotView *parent) : QObject(parent)

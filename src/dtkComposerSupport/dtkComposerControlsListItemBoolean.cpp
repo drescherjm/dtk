@@ -36,14 +36,14 @@ public:
     QRadioButton *t_b;
 };
 
-dtkComposerControlsListItemBoolean::dtkComposerControlsListItemBoolean(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemBooleanPrivate)
+dtkComposerControlsListItemBoolean::dtkComposerControlsListItemBoolean(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemBooleanPrivate)
 {
     d->node = node;
 
     if (dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(d->node->wrapee()))
         d->b_node = b_node;
     else
-        qDebug() << DTK_PRETTY_FUNCTION <<"Not a boolean node, error";
+        qDebug() << DTK_PRETTY_FUNCTION << "Not a boolean node, error";
 
     d->parent = parent;
 }
@@ -52,7 +52,7 @@ dtkComposerControlsListItemBoolean::dtkComposerControlsListItemBoolean(QListWidg
 dtkComposerControlsListItemBoolean::~dtkComposerControlsListItemBoolean(void )
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 QWidget *dtkComposerControlsListItemBoolean::widget(void)

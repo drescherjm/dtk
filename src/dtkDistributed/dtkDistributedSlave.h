@@ -27,8 +27,8 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedSlave : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedSlave(void);
-     dtkDistributedSlave(QTcpSocket *socket);
+    dtkDistributedSlave(void);
+    dtkDistributedSlave(QTcpSocket *socket);
     ~dtkDistributedSlave(void);
 
 public:

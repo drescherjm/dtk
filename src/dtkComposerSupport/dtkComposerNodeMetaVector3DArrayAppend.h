@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaVector3DArrayAppend.h --- 
- * 
+/* dtkComposerNodeMetaVector3DArrayAppend.h ---
+ *
  * Author: Jeremie Labroquere
  * Copyright (C) 2011 - Jeremie Labroquere, Inria.
  * Created: Mon Aug  6 15:25:59 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEMETAVECTOR3DARRAYAPPEND_H
@@ -34,9 +34,9 @@ class dtkComposerNodeMetaVector3DArrayAppendPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaVector3DArrayAppend : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaVector3DArrayAppend(void);
+    dtkComposerNodeMetaVector3DArrayAppend(void);
     ~dtkComposerNodeMetaVector3DArrayAppend(void);
-    
+
 public:
     void run(void);
 
@@ -52,10 +52,10 @@ public:
 public:
     inline QString inputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "arrays";
 
-        if(port == 1)
+        if (port == 1)
             return "array";
 
         return "input";
@@ -63,7 +63,7 @@ public:
 
     inline QString outputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "arrays";
 
         return "output";

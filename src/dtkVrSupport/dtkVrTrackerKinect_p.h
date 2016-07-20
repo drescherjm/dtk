@@ -1,5 +1,5 @@
-/* dtkVrTrackerKinect_p.h --- 
- * 
+/* dtkVrTrackerKinect_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 25 17:12:02 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKVRTRACKERKINECT_P_H
@@ -32,7 +32,7 @@ class dtkVrTrackerKinectPrivate : public QObject
     Q_OBJECT
 
 public:
-     dtkVrTrackerKinectPrivate(void);
+    dtkVrTrackerKinectPrivate(void);
     ~dtkVrTrackerKinectPrivate(void);
 
 public:

@@ -1,5 +1,5 @@
-/* dtkComposer.h --- 
- * 
+/* dtkComposer.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Mon Jan 30 10:34:34 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 77
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSER_H
@@ -45,7 +45,7 @@ class DTKCOMPOSERSUPPORT_EXPORT dtkComposer : public QWidget
     Q_OBJECT
 
 public:
-             dtkComposer(QWidget *parent = 0);
+    dtkComposer(QWidget *parent = 0);
     virtual ~dtkComposer(void);
 
 public:
@@ -86,7 +86,7 @@ public:
     dtkComposerReader *reader(void);
 
 public:
-    void updateRemotes(dtkComposerSceneNodeComposite * composite);
+    void updateRemotes(dtkComposerSceneNodeComposite *composite);
 
 private:
     dtkComposerPrivate *d;

@@ -6,17 +6,16 @@
 template <class T> class dtkSingleton
 {
 public:
-    static T& instance(void)
-    {
+    static T& instance(void) {
         static QMutex mutex;
-        
-        if(!s_instance) {
-            
+
+        if (!s_instance) {
+
             mutex.lock();
-            
-            if(!s_instance)
+
+            if (!s_instance)
                 s_instance = new T;
-            
+
             mutex.unlock();
         }
 
@@ -24,12 +23,12 @@ public:
     }
 
 private:
-     dtkSingleton(void) {};
+    dtkSingleton(void) {};
     ~dtkSingleton(void) {};
-    
+
 private:
     Q_DISABLE_COPY(dtkSingleton)
-    
+
 private:
     static T *s_instance;
 };

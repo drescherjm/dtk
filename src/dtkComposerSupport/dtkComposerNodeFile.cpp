@@ -30,8 +30,9 @@ void dtkComposerNodeFilePrivate::download(const QUrl& url)
 {
     QFileInfo file_template_info = QFileInfo(url.path());
 
-    if(!file_template_info.completeSuffix().isEmpty())
+    if (!file_template_info.completeSuffix().isEmpty())
         this->file.setFileTemplate(file.fileTemplate() + "." + file_template_info.completeSuffix());
+
     this->file.setAutoRemove(false);
 
     if (!file.open()) {
@@ -47,7 +48,7 @@ void dtkComposerNodeFilePrivate::download(const QUrl& url)
 
     http.get(QNetworkRequest(url));
 
-    while(!this->dwnl_ok)
+    while (!this->dwnl_ok)
         qApp->processEvents();
 
     this->file.close();
@@ -107,9 +108,10 @@ void dtkComposerNodeFile::run(void)
         d->fileName = path;
 
     }
+
     if (!QFile(d->fileName).exists()) {
         QString msg = QString("File %1 does not exist! ").arg(d->fileName);
-        dtkNotify(msg,30000);
+        dtkNotify(msg, 30000);
     }
 }
 
@@ -125,7 +127,7 @@ QString dtkComposerNodeFile::titleHint(void)
 
 QString dtkComposerNodeFile::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "name";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -133,7 +135,7 @@ QString dtkComposerNodeFile::inputLabelHint(int port)
 
 QString dtkComposerNodeFile::outputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "file";
 
     return dtkComposerNode::outputLabelHint(port);
@@ -146,7 +148,7 @@ QString dtkComposerNodeFile::value(void)
 
 void dtkComposerNodeFile::setValue(QString value)
 {
-    value.replace("~",QDir::homePath());
+    value.replace("~", QDir::homePath());
     d->fileName = value;
 }
 
@@ -194,7 +196,7 @@ QString dtkComposerNodeFileExists::titleHint(void)
 
 QString dtkComposerNodeFileExists::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "file";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -202,7 +204,7 @@ QString dtkComposerNodeFileExists::inputLabelHint(int port)
 
 QString dtkComposerNodeFileExists::outputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "exists";
 
     return dtkComposerNode::outputLabelHint(port);
@@ -240,33 +242,33 @@ void dtkComposerNodeFileList::run(void)
 
         d->files.clear();
 
-	if (d->receiver_dir.data()) {
+        if (d->receiver_dir.data()) {
 
             QString dirname = *(d->receiver_dir.data());
             QDir dir(dirname);
 
             if (!d->receiver_filters.isEmpty()) {
 
-                switch(d->receiver_filters.dataType()) {
+                switch (d->receiver_filters.dataType()) {
 
-		case QMetaType::QString: {
+                case QMetaType::QString: {
                     dir.setNameFilters(QStringList(*(d->receiver_filters.data<QString>())));
                     break;
                 }
 
-		case QMetaType::QStringList: {
+                case QMetaType::QStringList: {
                     dir.setNameFilters(*(d->receiver_filters.data<QStringList>()));
                     break;
                 }
 
-		default:
+                default:
                     dtkWarn() << "Type" << d->receiver_filters.dataType() << "is not handled by the node. Only QString and QString List are supported";
                     break;
                 }
             }
 
             foreach (QFileInfo file, dir.entryInfoList()) {
-	      d->files << file.absoluteFilePath();
+                d->files << file.absoluteFilePath();
             }
 
         }
@@ -285,9 +287,10 @@ QString dtkComposerNodeFileList::titleHint(void)
 
 QString dtkComposerNodeFileList::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "directory";
-    if(port == 1)
+
+    if (port == 1)
         return "pattern";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -295,7 +298,7 @@ QString dtkComposerNodeFileList::inputLabelHint(int port)
 
 QString dtkComposerNodeFileList::outputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "files";
 
     return dtkComposerNode::outputLabelHint(port);
@@ -329,12 +332,14 @@ void dtkComposerNodeFileRead::run(void)
 {
     QString filename;
 
-    if(!d->receiver_file.isEmpty()) {
+    if (!d->receiver_file.isEmpty()) {
         filename = *(d->receiver_file.data());
 
         if (!filename.isEmpty()) {
             QFile file(filename);
+
             if (!file.open(QIODevice::ReadOnly)) return;
+
             d->data = file.readAll();
         }
     }
@@ -352,7 +357,7 @@ QString dtkComposerNodeFileRead::titleHint(void)
 
 QString dtkComposerNodeFileRead::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "file";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -360,7 +365,7 @@ QString dtkComposerNodeFileRead::inputLabelHint(int port)
 
 QString dtkComposerNodeFileRead::outputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "bytes";
 
     return dtkComposerNode::outputLabelHint(port);
@@ -394,22 +399,25 @@ dtkComposerNodeFileWrite::~dtkComposerNodeFileWrite(void)
 void dtkComposerNodeFileWrite::run(void)
 {
     d->success = false;
-    if(!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
-         d->filename = *(d->receiver_file.data());
+
+    if (!d->receiver_file.isEmpty() && !d->receiver_data.isEmpty()) {
+        d->filename = *(d->receiver_file.data());
 
         if (!d->filename.isEmpty()) {
             QFile file(d->filename);
 
-            if(!file.open(QIODevice::WriteOnly)) {
-                dtkError() << "Can't open file for writing"<< d->filename;
+            if (!file.open(QIODevice::WriteOnly)) {
+                dtkError() << "Can't open file for writing" << d->filename;
                 return;
             }
 
             qlonglong size = file.write(*(d->receiver_data.data()));
+
             if (size < 0) {
                 dtkWarn() << "error while writing to file" << d->filename << file.errorString();
                 return;
             }
+
             d->success = file.flush();
             file.close();
             //we should use QSaveFile, but only available in Qt 5.1.
@@ -434,9 +442,10 @@ QString dtkComposerNodeFileWrite::titleHint(void)
 
 QString dtkComposerNodeFileWrite::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "bytes";
-    if(port == 1)
+
+    if (port == 1)
         return "file";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -444,9 +453,10 @@ QString dtkComposerNodeFileWrite::inputLabelHint(int port)
 
 QString dtkComposerNodeFileWrite::outputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "success";
-    if(port == 1)
+
+    if (port == 1)
         return "file";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -473,10 +483,10 @@ dtkComposerNodeDirectory::~dtkComposerNodeDirectory(void)
 void dtkComposerNodeDirectory::run(void)
 {
     QString directory;
+
     if (!d->receiver_directory.isEmpty()) {
         directory = *d->receiver_directory.data();
-    }
-    else {
+    } else {
         directory = d->directory;
     }
 
@@ -484,7 +494,7 @@ void dtkComposerNodeDirectory::run(void)
 
     if (!QDir(d->directory).exists()) {
         QString msg = QString("Directory %1 does not exist! ").arg(d->directory);
-        dtkNotify(msg,30000);
+        dtkNotify(msg, 30000);
     }
 }
 
@@ -500,7 +510,7 @@ QString dtkComposerNodeDirectory::titleHint(void)
 
 QString dtkComposerNodeDirectory::inputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "dir";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -508,7 +518,7 @@ QString dtkComposerNodeDirectory::inputLabelHint(int port)
 
 QString dtkComposerNodeDirectory::outputLabelHint(int port)
 {
-    if(port == 0)
+    if (port == 0)
         return "dir";
 
     return dtkComposerNode::inputLabelHint(port);
@@ -521,6 +531,6 @@ QString dtkComposerNodeDirectory::value(void)
 
 void dtkComposerNodeDirectory::setValue(QString value)
 {
-    value.replace("~",QDir::homePath());
+    value.replace("~", QDir::homePath());
     d->directory = value;
 }

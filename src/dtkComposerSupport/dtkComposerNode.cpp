@@ -1,5 +1,5 @@
-/* dtkComposerNode.cpp --- 
- * 
+/* dtkComposerNode.cpp ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Tue Feb 14 14:25:11 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 73
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNode.h"
@@ -74,7 +74,7 @@ dtkComposerTransmitter *dtkComposerNode::removeEmitter(int index)
 }
 
 void dtkComposerNode::appendReceiver(dtkComposerTransmitter *receiver)
-{ 
+{
     if (!d->receivers.contains(receiver)) {
         d->receivers << receiver;
         receiver->setParentNode(this);
@@ -113,7 +113,7 @@ QString dtkComposerNode::titleHint(void)
 
 QString dtkComposerNode::inputLabelHint(int port)
 {
-    if(d->input_label_hint.contains(port))
+    if (d->input_label_hint.contains(port))
         return d->input_label_hint[port];
 
     return "port";
@@ -121,7 +121,7 @@ QString dtkComposerNode::inputLabelHint(int port)
 
 QString dtkComposerNode::outputLabelHint(int port)
 {
-    if(d->output_label_hint.contains(port))
+    if (d->output_label_hint.contains(port))
         return d->output_label_hint[port];
 
     return "port";

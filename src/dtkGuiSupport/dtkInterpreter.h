@@ -1,5 +1,5 @@
-/* dtkInterpreter.h --- 
- * 
+/* dtkInterpreter.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Apr 10 15:29:01 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 92
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKINTERPRETER_H
@@ -32,7 +32,7 @@ class DTKGUISUPPORT_EXPORT dtkInterpreter : public QPlainTextEdit
     Q_OBJECT
 
 public:
-     dtkInterpreter(QWidget *parent = 0);
+    dtkInterpreter(QWidget *parent = 0);
     ~dtkInterpreter(void);
 
 #pragma mark -

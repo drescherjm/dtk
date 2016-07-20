@@ -205,13 +205,13 @@ void dtkAbstractView::setData(dtkAbstractData *data)
 
     DTK_D(dtkAbstractView);
 
-    foreach(dtkAbstractViewAnimator *animator, d->animators)
+    foreach (dtkAbstractViewAnimator *animator, d->animators)
         if (animator->enabled())
             animator->setData(data);
 
-    foreach(dtkAbstractViewInteractor *interactor, d->interactors)
-      if (interactor->enabled())
-	interactor->setData(data);
+    foreach (dtkAbstractViewInteractor *interactor, d->interactors)
+        if (interactor->enabled())
+            interactor->setData(data);
 }
 
 void dtkAbstractView::setData(dtkAbstractData *data, int channel)
@@ -295,43 +295,43 @@ void dtkAbstractView::close(void)
 
 void dtkAbstractView::showFullScreen(void)
 {
-    if(QWidget *widget = this->widget())
+    if (QWidget *widget = this->widget())
         widget->showFullScreen();
 }
 
 void dtkAbstractView::showMinimized(void)
 {
-    if(QWidget *widget = this->widget())
+    if (QWidget *widget = this->widget())
         widget->showMinimized();
 }
 
 void dtkAbstractView::showMaximized(void)
 {
-    if(QWidget *widget = this->widget())
+    if (QWidget *widget = this->widget())
         widget->showMaximized();
 }
 
 void dtkAbstractView::showNormal(void)
 {
-    if(QWidget *widget = this->widget())
+    if (QWidget *widget = this->widget())
         widget->showNormal();
 }
 
 void dtkAbstractView::show(void)
 {
-    if(QWidget *widget = this->widget())
+    if (QWidget *widget = this->widget())
         widget->show();
 }
 
 void dtkAbstractView::resize(int width, int height)
 {
-    if(QWidget *widget = this->widget())
+    if (QWidget *widget = this->widget())
         widget->resize(width, height);
 }
 
 void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 {
-    if(animator->identifier().isEmpty()) {
+    if (animator->identifier().isEmpty()) {
         dtkDebug() << "No identifier specified for animator. Not add to" << this->identifier();
         return;
     }
@@ -343,7 +343,7 @@ void dtkAbstractView::addAnimator(dtkAbstractViewAnimator *animator)
 
 void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 {
-    if(navigator->identifier().isEmpty()) {
+    if (navigator->identifier().isEmpty()) {
         dtkDebug() << "No identifier specified for navigator. Not add to" << this->identifier();
         return;
     }
@@ -355,12 +355,12 @@ void dtkAbstractView::addNavigator(dtkAbstractViewNavigator *navigator)
 
 void dtkAbstractView::addInteractor(dtkAbstractViewInteractor *interactor)
 {
-    if(interactor->identifier().isEmpty()) {
+    if (interactor->identifier().isEmpty()) {
         dtkDebug() << "No identifier specified for interactor. Not add to" << this->identifier();
         return;
     }
 
-    if(interactor) {
+    if (interactor) {
         DTK_D(dtkAbstractView);
 
         d->interactors.insert(interactor->identifier(), interactor);
@@ -462,8 +462,10 @@ QList<dtkAbstractViewAnimator *> dtkAbstractView::animators(void) const
 #if QT_VERSION > 0x0406FF
     ret.reserve(d->animators.size());
 #endif
-    foreach( dtkSmartPointer<dtkAbstractViewAnimator> value, d->animators )
+
+    foreach ( dtkSmartPointer<dtkAbstractViewAnimator> value, d->animators )
         ret.push_back(value.data());
+
     return ret;
 }
 
@@ -475,8 +477,10 @@ QList<dtkAbstractViewNavigator *> dtkAbstractView::navigators(void) const
 #if QT_VERSION > 0x0406FF
     ret.reserve(d->navigators.size());
 #endif
-    foreach( dtkSmartPointer<dtkAbstractViewNavigator> value, d->navigators )
+
+    foreach ( dtkSmartPointer<dtkAbstractViewNavigator> value, d->navigators )
         ret.push_back(value.data());
+
     return ret;
 }
 
@@ -488,8 +492,10 @@ QList<dtkAbstractViewInteractor *> dtkAbstractView::interactors(void) const
 #if QT_VERSION > 0x0406FF
     ret.reserve(d->interactors.size());
 #endif
-    foreach( dtkSmartPointer<dtkAbstractViewInteractor> value, d->interactors )
+
+    foreach ( dtkSmartPointer<dtkAbstractViewInteractor> value, d->interactors )
         ret.push_back(value.data());
+
     return ret;
 }
 

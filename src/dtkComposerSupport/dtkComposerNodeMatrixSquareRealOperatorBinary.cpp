@@ -162,7 +162,7 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySum::run(void)
         const dtkMatrixSquareReal *m_rhs = d->receiver_rhs.constData();
 
         if (m_lhs->size() != m_rhs->size()) {
-            dtkWarn()<< "Input matrices do not have the same size. Nothing is done";
+            dtkWarn() << "Input matrices do not have the same size. Nothing is done";
             d->matrix->deallocate();
         } else {
             *(d->matrix) = (*m_lhs + *m_rhs);
@@ -193,7 +193,7 @@ void dtkComposerNodeMatrixSquareRealOperatorBinarySubstract::run(void)
         const dtkMatrixSquareReal *m_rhs = d->receiver_rhs.constData();
 
         if (m_lhs->size() != m_rhs->size()) {
-            dtkWarn()<< "Input matrices do not have the same size. Nothing is done";
+            dtkWarn() << "Input matrices do not have the same size. Nothing is done";
             d->matrix->deallocate();
         } else {
             *(d->matrix) = (*m_lhs - *m_rhs);
@@ -224,7 +224,7 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryMult::run(void)
         const dtkMatrixSquareReal *m_rhs = d->receiver_rhs.constData();
 
         if (m_lhs->size() != m_rhs->size()) {
-            dtkWarn()<< "Input matrices do not have the same size. Nothing is done";
+            dtkWarn() << "Input matrices do not have the same size. Nothing is done";
             d->matrix->deallocate();
         } else {
             *(d->matrix) = (*m_lhs * *m_rhs);
@@ -292,8 +292,8 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryLeftProductVM::run(void)
         } else {
             d->vector->allocate(vector->size());
 
-            for(qlonglong i = 0; i < matrix->size(); ++i) {
-                for(qlonglong j = 0; j < vector->size(); ++j) {
+            for (qlonglong i = 0; i < matrix->size(); ++i) {
+                for (qlonglong j = 0; j < vector->size(); ++j) {
                     (*d->vector)[i] += (*vector)[j] * (*matrix)[j][i] ;
                 }
             }
@@ -326,7 +326,7 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceRowMatrixByVector::run(
 
             const dtkVectorReal *vector = d->receiver_vector.constData();
 
-            for(qlonglong j = 0; j < matrix->size(); ++j)
+            for (qlonglong j = 0; j < matrix->size(); ++j)
                 (*matrix)[row_index][j] = (*vector)[j];
 
             d->emitter_matrix.setData(matrix);
@@ -359,7 +359,7 @@ void dtkComposerNodeMatrixSquareRealOperatorBinaryReplaceColMatrixByVector::run(
 
             const dtkVectorReal *vector = d->receiver_vector.constData();
 
-            for(qlonglong i = 0; i < matrix->size(); ++i)
+            for (qlonglong i = 0; i < matrix->size(); ++i)
                 (*matrix)[i][col_index] = (*vector)[i];
 
             d->emitter_matrix.setData(matrix);

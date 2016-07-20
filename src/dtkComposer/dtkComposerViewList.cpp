@@ -46,14 +46,14 @@ void dtkComposerViewList::update(void)
 {
     this->clear();
 
-    foreach(QString objectName, dtkComposerViewController::instance()->viewNames()) {
+    foreach (QString objectName, dtkComposerViewController::instance()->viewNames()) {
         QWidget *view = dtkComposerViewController::instance()->view(objectName);
         QListWidgetItem *item = new QListWidgetItem;
         QString text = objectName;
         item->setText(text);
         this->addItem(item);
 
-        if(!d->connected_views.contains(view)) {
+        if (!d->connected_views.contains(view)) {
             d->connected_views.append(view);
         }
     }

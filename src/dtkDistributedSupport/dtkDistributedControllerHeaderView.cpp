@@ -1,5 +1,5 @@
-/* dtkDistributedControllerHeaderView.cpp --- 
- * 
+/* dtkDistributedControllerHeaderView.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr  4 12:23:14 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 258
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkDistributedController.h"
@@ -106,27 +106,30 @@ void dtkDistributedControllerHeaderView::onDisconnected(const QUrl& cluster)
 void dtkDistributedControllerHeaderView::update(void)
 {
     d->server->setText(QUrl(d->cluster).host());
-    int nfree   =0;
-    int nbusy   =0;
-    int ndown   =0;
-    int nstandby=0;
-    int nabsent =0;
-    int total   =0;
-    int cores_free =0;
-    int cores_busy =0;
-    int cores_down =0;
+    int nfree   = 0;
+    int nbusy   = 0;
+    int ndown   = 0;
+    int nstandby = 0;
+    int nabsent = 0;
+    int total   = 0;
+    int cores_free = 0;
+    int cores_busy = 0;
+    int cores_down = 0;
+
     foreach (dtkDistributedNode *node, d->controller->nodes(d->cluster)) {
         foreach (dtkDistributedCpu *cpu, node->cpus()) {
             foreach (dtkDistributedCore *core, cpu->cores()) {
-                if (node->state() == dtkDistributedNode::Down ||node->state() == dtkDistributedNode::Absent)
+                if (node->state() == dtkDistributedNode::Down || node->state() == dtkDistributedNode::Absent)
                     cores_down += 1;
-                else if(core->job())
+                else if (core->job())
                     cores_busy += 1;
                 else
                     cores_free += 1;
             }
         }
+
         total++;
+
         if (node->state() == dtkDistributedNode::Free)
             nfree++;
         else if (node->state() == dtkDistributedNode::Busy)
@@ -138,7 +141,8 @@ void dtkDistributedControllerHeaderView::update(void)
         else if (node->state() == dtkDistributedNode::Absent)
             nabsent++;
     }
-    int ncores = cores_free+cores_busy+cores_down;
+
+    int ncores = cores_free + cores_busy + cores_down;
     d->stats->setText(QString("Nodes: \t%1\nCores: \t%2\nJobs: \t%3")
                       .arg(total)
                       .arg(ncores)
@@ -147,17 +151,18 @@ void dtkDistributedControllerHeaderView::update(void)
     if (total > 0) {
         d->pie_jobs->clear();
         d->pie_cores->clear();
-        d->pie_jobs->addPiece(QString::number(nfree),   100*nfree/total,   Qt::darkGreen);
-        d->pie_jobs->addPiece(QString::number(ndown),   100*ndown/total,   Qt::red);
-        d->pie_jobs->addPiece(QString::number(nstandby),100*nstandby/total,Qt::blue);
-        d->pie_jobs->addPiece(QString::number(nbusy),   100*nbusy/total,   QColor("#FF7722"));
-        d->pie_jobs->addPiece(QString::number(nabsent), 100*nabsent/total, Qt::black);
-        d->pie_cores->addPiece(QString::number(cores_free), 100*cores_free/ncores, Qt::darkGreen);
-        d->pie_cores->addPiece(QString::number(cores_busy), 100*cores_busy/ncores, QColor("#FF7722"));
-        d->pie_cores->addPiece(QString::number(cores_down), 100*cores_down/ncores, Qt::red);
+        d->pie_jobs->addPiece(QString::number(nfree),   100 * nfree / total,   Qt::darkGreen);
+        d->pie_jobs->addPiece(QString::number(ndown),   100 * ndown / total,   Qt::red);
+        d->pie_jobs->addPiece(QString::number(nstandby), 100 * nstandby / total, Qt::blue);
+        d->pie_jobs->addPiece(QString::number(nbusy),   100 * nbusy / total,   QColor("#FF7722"));
+        d->pie_jobs->addPiece(QString::number(nabsent), 100 * nabsent / total, Qt::black);
+        d->pie_cores->addPiece(QString::number(cores_free), 100 * cores_free / ncores, Qt::darkGreen);
+        d->pie_cores->addPiece(QString::number(cores_busy), 100 * cores_busy / ncores, QColor("#FF7722"));
+        d->pie_cores->addPiece(QString::number(cores_down), 100 * cores_down / ncores, Qt::red);
 
         d->pie_jobs->setToolTip("free nodes: " + QString::number(nfree));
         d->pie_cores->setToolTip("free cores: " + QString::number(cores_free));
     }
+
     QFrame::update();
 }

@@ -1,5 +1,5 @@
-/* dtkComposerScene_p.h --- 
- * 
+/* dtkComposerScene_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Jan 30 15:32:14 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 274
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENE_P_H

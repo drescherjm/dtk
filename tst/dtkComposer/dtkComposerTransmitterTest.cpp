@@ -27,27 +27,47 @@
 class NoCopyableData
 {
 public:
-             NoCopyableData(void) {;}
-             NoCopyableData(const int& id, const QString& name) : m_id(id), m_name(name) {;}
-    virtual ~NoCopyableData(void) {;}
+    NoCopyableData(void) {
+        ;
+    }
+    NoCopyableData(const int& id, const QString& name) : m_id(id), m_name(name) {
+        ;
+    }
+    virtual ~NoCopyableData(void) {
+        ;
+    }
 
 public:
-    bool operator == (const NoCopyableData& o) const { if (m_id != o.m_id || m_name != o.m_name) return false; return true; }
+    bool operator == (const NoCopyableData& o) const {
+        if (m_id != o.m_id || m_name != o.m_name) return false;
+
+        return true;
+    }
 
 public:
-    void   setId(const int& id)       { m_id   = id; }
-    void setName(const QString& name) { m_name = name; }
+    void   setId(const int& id)       {
+        m_id   = id;
+    }
+    void setName(const QString& name) {
+        m_name = name;
+    }
 
 public:
-    int       id(void) const { return m_id; }
-    QString name(void) const { return m_name; }
+    int       id(void) const {
+        return m_id;
+    }
+    QString name(void) const {
+        return m_name;
+    }
 
 private:
     int m_id;
     QString m_name;
 
     NoCopyableData(const NoCopyableData&) {}
-    NoCopyableData& operator=(const NoCopyableData&) { return *this; }
+    NoCopyableData& operator=(const NoCopyableData&) {
+        return *this;
+    }
 };
 
 Q_DECLARE_METATYPE(NoCopyableData *);
@@ -60,27 +80,41 @@ QDebug operator << (QDebug dbg, NoCopyableData *data)
 class DeriveNoCopyableData : public NoCopyableData
 {
 public:
-    DeriveNoCopyableData(void) : NoCopyableData(), m_value(0) {;}
-    DeriveNoCopyableData(const int& id, const QString& name, double value = 0) : NoCopyableData(id, name), m_value(value) {;}
+    DeriveNoCopyableData(void) : NoCopyableData(), m_value(0) {
+        ;
+    }
+    DeriveNoCopyableData(const int& id, const QString& name, double value = 0) : NoCopyableData(id, name), m_value(value) {
+        ;
+    }
 
 private:
     DeriveNoCopyableData(const DeriveNoCopyableData& o) {};
-    DeriveNoCopyableData& operator=(const DeriveNoCopyableData&) { return *this; }
+    DeriveNoCopyableData& operator=(const DeriveNoCopyableData&) {
+        return *this;
+    }
 
 public:
-    bool operator == (const DeriveNoCopyableData& o) const { if (m_value != o.m_value) return false; return (static_cast<const NoCopyableData&>(*this) == static_cast<const NoCopyableData &>(o)); }
+    bool operator == (const DeriveNoCopyableData& o) const {
+        if (m_value != o.m_value) return false;
+
+        return (static_cast<const NoCopyableData&>(*this) == static_cast<const NoCopyableData&>(o));
+    }
 
 public:
-    void setValue(double value) { m_value = value; }
+    void setValue(double value) {
+        m_value = value;
+    }
 
 public:
-    double value(void) const { return m_value; }
+    double value(void) const {
+        return m_value;
+    }
 
 private:
     double m_value;
 };
 
-Q_DECLARE_METATYPE(DeriveNoCopyableData*);
+Q_DECLARE_METATYPE(DeriveNoCopyableData *);
 #endif
 
 // ///////////////////////////////////////////////////////////////////
@@ -90,38 +124,62 @@ Q_DECLARE_METATYPE(DeriveNoCopyableData*);
 class Data
 {
 public:
-             Data(void) {;}
-             Data(const int& id, const QString& name) : m_id(id), m_name(name) {;}
-             Data(const Data& o) : m_id(o.m_id), m_name(o.m_name) {;}
-    virtual ~Data(void) {;}
+    Data(void) {
+        ;
+    }
+    Data(const int& id, const QString& name) : m_id(id), m_name(name) {
+        ;
+    }
+    Data(const Data& o) : m_id(o.m_id), m_name(o.m_name) {
+        ;
+    }
+    virtual ~Data(void) {
+        ;
+    }
 
 public:
-    Data& operator = (const Data& o) { m_id = o.m_id; m_name = o.m_name; return (*this); }
+    Data& operator = (const Data& o) {
+        m_id = o.m_id;
+        m_name = o.m_name;
+        return (*this);
+    }
 
 public:
-    bool operator == (const Data& o) const { if (m_id != o.m_id || m_name != o.m_name) return false; return true; }
+    bool operator == (const Data& o) const {
+        if (m_id != o.m_id || m_name != o.m_name) return false;
+
+        return true;
+    }
 
 public:
-    void   setId(const int& id)       { m_id   = id; }
-    void setName(const QString& name) { m_name = name; }
+    void   setId(const int& id)       {
+        m_id   = id;
+    }
+    void setName(const QString& name) {
+        m_name = name;
+    }
 
 public:
-    int       id(void) { return m_id; }
-    QString name(void) { return m_name; }
+    int       id(void) {
+        return m_id;
+    }
+    QString name(void) {
+        return m_name;
+    }
 
 private:
     int m_id;
     QString m_name;
 
 private:
-    friend QDebug operator << (QDebug dbg, const Data &data);
+    friend QDebug operator << (QDebug dbg, const Data& data);
     friend QDebug operator << (QDebug dbg,       Data *data);
 };
 
 Q_DECLARE_METATYPE(Data);
 Q_DECLARE_METATYPE(Data *);
 
-QDebug operator << (QDebug dbg, const Data &data)
+QDebug operator << (QDebug dbg, const Data& data)
 {
     dbg.nospace() << "Data(" << data.m_id << ", " << data.m_name << ")";
 
@@ -149,38 +207,62 @@ class ObjectData : public QObject
     Q_OBJECT
 
 public:
-             ObjectData(void) : QObject(), m_id(-1), m_name("noname") {;}
-             ObjectData(const int& id, const QString& name) : m_id(id), m_name(name) {;}
-             ObjectData(const ObjectData& o) : m_id(o.m_id), m_name(o.m_name) {;}
-    virtual ~ObjectData(void) {;}
+    ObjectData(void) : QObject(), m_id(-1), m_name("noname") {
+        ;
+    }
+    ObjectData(const int& id, const QString& name) : m_id(id), m_name(name) {
+        ;
+    }
+    ObjectData(const ObjectData& o) : m_id(o.m_id), m_name(o.m_name) {
+        ;
+    }
+    virtual ~ObjectData(void) {
+        ;
+    }
 
 public:
-    ObjectData& operator = (const ObjectData& o) { m_id = o.m_id; m_name = o.m_name; return (*this); }
+    ObjectData& operator = (const ObjectData& o) {
+        m_id = o.m_id;
+        m_name = o.m_name;
+        return (*this);
+    }
 
 public:
-    bool operator == (const ObjectData& o) const { if (m_id != o.m_id || m_name != o.m_name) return false; return true; }
+    bool operator == (const ObjectData& o) const {
+        if (m_id != o.m_id || m_name != o.m_name) return false;
+
+        return true;
+    }
 
 public:
-    void   setId(const int& id)       { m_id   = id; }
-    void setName(const QString& name) { m_name = name; }
+    void   setId(const int& id)       {
+        m_id   = id;
+    }
+    void setName(const QString& name) {
+        m_name = name;
+    }
 
 public:
-    int       id(void) { return m_id; }
-    QString name(void) { return m_name; }
+    int       id(void) {
+        return m_id;
+    }
+    QString name(void) {
+        return m_name;
+    }
 
 private:
     int m_id;
     QString m_name;
 
 private:
-    friend QDebug operator << (QDebug dbg, const ObjectData &data);
+    friend QDebug operator << (QDebug dbg, const ObjectData& data);
     friend QDebug operator << (QDebug dbg,       ObjectData *data);
 };
 
 Q_DECLARE_METATYPE(ObjectData);
-Q_DECLARE_METATYPE(ObjectData*);
+Q_DECLARE_METATYPE(ObjectData *);
 
-QDebug operator << (QDebug dbg, const ObjectData &data)
+QDebug operator << (QDebug dbg, const ObjectData& data)
 {
     dbg.nospace() << "ObjectData(" << data.m_id << ", " << data.m_name << ")";
 
@@ -199,7 +281,9 @@ class DeriveObjectData : public ObjectData
     Q_OBJECT
 
 public:
-    DeriveObjectData() : ObjectData() {;}
+    DeriveObjectData() : ObjectData() {
+        ;
+    }
 };
 
 // ///////////////////////////////////////////////////////////////////
@@ -211,14 +295,26 @@ class VirtualObject : public QObject
     Q_OBJECT
 
 public:
-             VirtualObject(void) {;}
-    virtual ~VirtualObject(void) {;}
+    VirtualObject(void) {
+        ;
+    }
+    virtual ~VirtualObject(void) {
+        ;
+    }
 
 public:
-    VirtualObject& operator = (const VirtualObject& o) { setId(o.id()); setName(o.name()); return (*this); }
+    VirtualObject& operator = (const VirtualObject& o) {
+        setId(o.id());
+        setName(o.name());
+        return (*this);
+    }
 
 public:
-    bool operator == (const VirtualObject& o) const { if (id() != o.id() || name() != o.name()) return false; return true; }
+    bool operator == (const VirtualObject& o) const {
+        if (id() != o.id() || name() != o.name()) return false;
+
+        return true;
+    }
 
 public:
     virtual void   setId(const int& id) = 0;
@@ -229,11 +325,11 @@ public:
     virtual QString name(void) const = 0;
 
 private:
-    friend QDebug operator << (QDebug dbg, const VirtualObject &o);
+    friend QDebug operator << (QDebug dbg, const VirtualObject& o);
     friend QDebug operator << (QDebug dbg,       VirtualObject *o);
 };
 
-QDebug operator << (QDebug dbg, const VirtualObject &o)
+QDebug operator << (QDebug dbg, const VirtualObject& o)
 {
     dbg.nospace() << "VirtualObject(" << o.id() << ", " << o.name() << ")";
 
@@ -256,17 +352,31 @@ class DeriveVirtualObject : public VirtualObject
     Q_OBJECT
 
 public:
-     DeriveVirtualObject(void) : VirtualObject(), m_id(-1), m_name(QString()) {;}
-     DeriveVirtualObject(const DeriveVirtualObject& other) : VirtualObject(), m_id(other.m_id), m_name(other.m_name) {;}
-    ~DeriveVirtualObject(void) {;}
+    DeriveVirtualObject(void) : VirtualObject(), m_id(-1), m_name(QString()) {
+        ;
+    }
+    DeriveVirtualObject(const DeriveVirtualObject& other) : VirtualObject(), m_id(other.m_id), m_name(other.m_name) {
+        ;
+    }
+    ~DeriveVirtualObject(void) {
+        ;
+    }
 
 public:
-    void setId(const int& id) { m_id = id; }
-    void setName(const QString& name) { m_name = name; }
+    void setId(const int& id) {
+        m_id = id;
+    }
+    void setName(const QString& name) {
+        m_name = name;
+    }
 
 public:
-    int       id(void) const { return m_id; }
-    QString name(void) const { return m_name; }
+    int       id(void) const {
+        return m_id;
+    }
+    QString name(void) const {
+        return m_name;
+    }
 
 private:
     int m_id;
@@ -348,8 +458,8 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
 
     // -- Check for multiple types
     r_var.setTypeList(dtkComposerTransmitter::TypeList()
-		      << QMetaType::LongLong
-		      << QMetaType::Double);
+                      << QMetaType::LongLong
+                      << QMetaType::Double);
     QVERIFY(r_var.connect(&e_str));
     QVERIFY(r_var.connect(&e_int));
     QVERIFY(r_var.connect(&e_var));
@@ -374,7 +484,7 @@ void dtkComposerTransmitterTestCase::testAtomicType(void)
     r_var.disconnect(&e_str);
 
     r_var.setTypeList(dtkComposerTransmitter::TypeList()
-		      << QMetaType::QString);
+                      << QMetaType::QString);
     r_var.connect(&e_str);
     QCOMPARE(str, r_var.data<QString>());
     r_var.disconnect(&e_str);
@@ -401,8 +511,8 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         dtkComposerTransmitterReceiverVariant r_var;
         QVERIFY(r_var.connect(&e_data));
 
-        QCOMPARE(*data_e, *(r_var.constData<NoCopyableData*>()));
-        QCOMPARE(*data_e, *(r_var.data<NoCopyableData*>()));
+        QCOMPARE(*data_e, *(r_var.constData<NoCopyableData *>()));
+        QCOMPARE(*data_e, *(r_var.data<NoCopyableData *>()));
         QVERIFY(r_var.disconnect(&e_data));
 
         // -- Derived NoCopyableData pointer
@@ -451,8 +561,8 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         dtkComposerTransmitterReceiverVariant r_var;
         QVERIFY(r_var.connect(&e_data));
 
-        QCOMPARE(*data_e, *(r_var.constData<Data*>()));
-        QCOMPARE(*data_e, *(r_var.data<Data*>()));
+        QCOMPARE(*data_e, *(r_var.constData<Data *>()));
+        QCOMPARE(*data_e, *(r_var.data<Data *>()));
         QVERIFY(r_var.disconnect(&e_data));
 
         // -- Derived Data pointer
@@ -478,8 +588,8 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
         dtkComposerTransmitterReceiverVariant r_var;
         QVERIFY(r_var.connect(&e_data));
 
-        QCOMPARE(*data_e, *(r_var.constData<ObjectData*>()));
-        QCOMPARE(*data_e, *(r_var.data<ObjectData*>()));
+        QCOMPARE(*data_e, *(r_var.constData<ObjectData *>()));
+        QCOMPARE(*data_e, *(r_var.data<ObjectData *>()));
         QVERIFY(r_var.disconnect(&e_data));
 
         delete data_e;
@@ -499,8 +609,8 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
 
         QVERIFY(r_var.connect(&e_ddata));
 
-        QCOMPARE(*data_ed, *(r_var.constData<DeriveObjectData*>()));
-        QCOMPARE(*data_ed, *(r_var.data<DeriveObjectData*>()));
+        QCOMPARE(*data_ed, *(r_var.constData<DeriveObjectData *>()));
+        QCOMPARE(*data_ed, *(r_var.data<DeriveObjectData *>()));
         QVERIFY(r_var.disconnect(&e_ddata));
 
         delete data_ed;
@@ -536,8 +646,8 @@ void dtkComposerTransmitterTestCase::testComplexType(void)
 
         QVERIFY(r_var.connect(&e_ddata));
 
-        QCOMPARE(*data_ed, *(r_var.constData<DeriveVirtualObject*>()));
-        QCOMPARE(*data_ed, *(r_var.data<DeriveVirtualObject*>()));
+        QCOMPARE(*data_ed, *(r_var.constData<DeriveVirtualObject *>()));
+        QCOMPARE(*data_ed, *(r_var.data<DeriveVirtualObject *>()));
 
         dtkComposerTransmitterReceiver<VirtualObject *> r_copy;
         QVERIFY(r_copy.connect(&e_ddata));
@@ -633,14 +743,17 @@ void dtkComposerTransmitterTestCase::testProxyLoop(void)
     e_0.setData(i);
 
     p_0.disableLoopMode();
-    while(i < 10012) {
-	qlonglong value = r_0.data();
-	value += 1;
-	e_1.setData(value);
+
+    while (i < 10012) {
+        qlonglong value = r_0.data();
+        value += 1;
+        e_1.setData(value);
+
         if (i == 0)
             p_0.enableLoopMode();
+
         p_0.setVariant(p_1.variant());
-	++i;
+        ++i;
     }
 
     QCOMPARE(i, r_1.data());
@@ -696,8 +809,8 @@ void dtkComposerTransmitterTestCase::testSwapPointer(void)
         QVERIFY(res_0);
         QVERIFY(res_1);
 
-        QCOMPARE(*res_0, *(static_cast<VirtualObject*>(data_ed)));
-        QCOMPARE(*res_1, *(static_cast<VirtualObject*>(data_ed)));
+        QCOMPARE(*res_0, *(static_cast<VirtualObject *>(data_ed)));
+        QCOMPARE(*res_1, *(static_cast<VirtualObject *>(data_ed)));
 
         // Enforce swaping in receiver r_0;
         e_data.setData(res_0);

@@ -23,7 +23,7 @@ class dtkDistributedLocalMessage
 {
 public:
     dtkDistributedLocalMessage(void);
-    dtkDistributedLocalMessage(QVariant &v, qint32 source, qint32 tag);
+    dtkDistributedLocalMessage(QVariant& v, qint32 source, qint32 tag);
     virtual ~dtkDistributedLocalMessage(void);
 
 public:

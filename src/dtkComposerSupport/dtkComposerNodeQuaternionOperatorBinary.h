@@ -1,5 +1,5 @@
-/* dtkComposerNodeQuaternionOperatorBinary.h --- 
- * 
+/* dtkComposerNodeQuaternionOperatorBinary.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:24:47 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 11
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEQUATERNIONOPERATORBINARY_H
@@ -32,7 +32,7 @@ class dtkComposerNodeQuaternionOperatorBinaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeQuaternionOperatorBinary(void);
+    dtkComposerNodeQuaternionOperatorBinary(void);
     ~dtkComposerNodeQuaternionOperatorBinary(void);
 
     inline QString inputLabelHint(int port) {
@@ -59,7 +59,7 @@ class dtkComposerNodeQuaternionOperatorHomotheticPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorHomothetic : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeQuaternionOperatorHomothetic(void);
+    dtkComposerNodeQuaternionOperatorHomothetic(void);
     ~dtkComposerNodeQuaternionOperatorHomothetic(void);
 
     inline QString inputLabelHint(int port) {
@@ -78,7 +78,7 @@ protected:
 };
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeQuaternionOperatorBinary - SUM 
+// dtkComposerNodeQuaternionOperatorBinary - SUM
 // /////////////////////////////////////////////////////////////////
 
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeQuaternionOperatorBinarySum : public dtkComposerNodeQuaternionOperatorBinary

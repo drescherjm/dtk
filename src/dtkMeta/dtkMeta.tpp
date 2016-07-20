@@ -25,7 +25,7 @@ template<typename T, bool B> inline bool dtkMetaTypeHandler<T, B>::canConvert(co
     bool can_convert = true;
     QVariant var = QVariant(qMetaTypeId<T>(reinterpret_cast<T *>(0)), 0);
 
-    foreach(int i, types) {
+    foreach (int i, types) {
         if (!var.canConvert(i)) {
             can_convert = false;
             break;
@@ -39,7 +39,7 @@ template<typename T, bool B> inline bool dtkMetaTypeHandler<T, B>::canConvert(co
 
 template<typename T> inline bool dtkMetaTypeHandler<T *, false>::canConvert(const QList<int>& types)
 {
-    return dtkMetaTypeHandlerHelper<T *, std::is_constructible<T>::value && !std::is_abstract<T>::value>::canConvert(types);
+    return dtkMetaTypeHandlerHelper < T *, std::is_constructible<T>::value && !std::is_abstract<T>::value >::canConvert(types);
 }
 
 template<typename T> inline QVariant dtkMetaTypeHandler<T *, false>::variantFromValue(T *t)
@@ -49,7 +49,7 @@ template<typename T> inline QVariant dtkMetaTypeHandler<T *, false>::variantFrom
 
 template<typename T> inline T *dtkMetaTypeHandler<T *, false>::clone(T *t)
 {
-    return dtkMetaTypeHandlerHelper<T *, std::is_copy_constructible<T>::value && !std::is_abstract<T>::value>::clone(t);
+    return dtkMetaTypeHandlerHelper < T *, std::is_copy_constructible<T>::value && !std::is_abstract<T>::value >::clone(t);
 }
 
 template<typename T> inline void dtkMetaTypeHandler<T *, false>::copy(T *s, T *t)
@@ -61,7 +61,7 @@ template<typename T> inline void dtkMetaTypeHandler<T *, false>::copy(T *s, T *t
 
 template<typename T> inline bool dtkMetaTypeHandler<T *, true>::canConvert(const QList<int>& types)
 {
-    return dtkMetaTypeHandlerHelper<T *, std::is_constructible<T>::value && !std::is_abstract<T>::value>::canConvert(types);
+    return dtkMetaTypeHandlerHelper < T *, std::is_constructible<T>::value && !std::is_abstract<T>::value >::canConvert(types);
 }
 
 template<typename T> inline QVariant dtkMetaTypeHandler<T *, true>::variantFromValue(T *t)
@@ -81,7 +81,7 @@ template<typename T> inline T *dtkMetaTypeHandler<T *, true>::clone(T *t)
     int class_type = QMetaType::type(qPrintable(class_name));
 
     if (class_type == QMetaType::UnknownType) {
-        return dtkMetaTypeHandlerHelper<T *, std::is_copy_constructible<T>::value && !std::is_abstract<T>::value>::clone(t);
+        return dtkMetaTypeHandlerHelper < T *, std::is_copy_constructible<T>::value && !std::is_abstract<T>::value >::clone(t);
     }
 
     return static_cast<T *>(QMetaType::create(class_type, t));
@@ -96,7 +96,7 @@ template<typename T> inline void dtkMetaTypeHandler<T *, true>::copy(T *s, T *t)
     int s_class_type = QMetaType::type(qPrintable(s_class_name));
 
     if (t_class_type == QMetaType::UnknownType || (t_class_type != s_class_type)) {
-        return dtkMetaTypeHandlerHelper<T *, std::is_copy_assignable<T>::value && !std::is_abstract<T>::value>::copy(s, t);
+        return dtkMetaTypeHandlerHelper < T *, std::is_copy_assignable<T>::value && !std::is_abstract<T>::value >::copy(s, t);
     }
 
     QMetaType::construct(t_class_type, t, s);
@@ -117,7 +117,7 @@ template<typename T> inline bool dtkMetaTypeHandlerHelper<T *, true>::canConvert
     T *ptr = new T();
     QVariant var = QVariant::fromValue(ptr);
 
-    foreach(int to, types) {
+    foreach (int to, types) {
         if (!(var.canConvert(to) || QMetaType::hasRegisteredConverterFunction(from, to))) {
             can_convert = false;
             break;
@@ -148,10 +148,11 @@ template<typename T> inline bool dtkMetaTypeHandlerHelper<T *, false>::canConver
     if ((types.size() == 1 && types.first() == from) || types.isEmpty())
         return true;
 
-    foreach(int to, types) {
+    foreach (int to, types) {
         if (!QMetaType::hasRegisteredConverterFunction(from, to))
             return false;
     }
+
     return true;
 }
 
@@ -213,7 +214,7 @@ template <typename T> inline QDataStream& operator << (QDataStream& s, T *t)
     return s;
 }
 
-template <typename T> inline QDataStream& operator >> (QDataStream& s, T *& t)
+template <typename T> inline QDataStream& operator >> (QDataStream& s, T *&t)
 {
     if (!t) {
         t = new T();
@@ -226,8 +227,10 @@ template <typename T> inline QDataStream& operator >> (QDataStream& s, T *& t)
 template<typename T> inline QDataStream& operator << (QDataStream& s, const QList<T *>& l)
 {
     s << quint32(l.size());
+
     for (int i = 0; i < l.size(); ++i)
         s << dtkMetaType::variantFromValue(l.at(i));
+
     return s;
 }
 
@@ -235,21 +238,26 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, QList<T *>
 {
     l.clear();
     quint32 c; s >> c;
-    for(quint32 i = 0; i < c; ++i) {
+
+    for (quint32 i = 0; i < c; ++i) {
         QVariant var;
         s >> var;
         l << var.value<T *>();
+
         if (s.atEnd())
             break;
     }
+
     return s;
 }
 
 template<typename T> inline QDataStream& operator << (QDataStream& s, const QVector<T *>& v)
 {
     s << quint32(v.size());
+
     for (typename QVector<T *>::const_iterator it = v.begin(); it != v.end(); ++it)
         s << dtkMetaType::variantFromValue(*it);
+
     return s;
 }
 
@@ -258,19 +266,23 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, QVector<T 
     v.clear();
     quint32 c; s >> c;
     v.resize(c);
-    for(quint32 i = 0; i < c; ++i) {
+
+    for (quint32 i = 0; i < c; ++i) {
         QVariant var;
         s >> var;
         v[i] = var.value<T *>();
     }
+
     return s;
 }
 
 template<typename T> inline QDataStream& operator << (QDataStream& s, const std::list<T *>& l)
 {
     s << quint32(l.size());
+
     for (typename std::list<T *>::const_iterator it = l.begin(); it != l.end(); ++it)
         s << dtkMetaType::variantFromValue(*it);
+
     return s;
 }
 
@@ -278,21 +290,26 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, std::list<
 {
     l.clear();
     quint32 c; s >> c;
-    for(quint32 i = 0; i < c; ++i) {
+
+    for (quint32 i = 0; i < c; ++i) {
         QVariant var;
         s >> var;
         l.push_back(var.value<T *>());
+
         if (s.atEnd())
             break;
     }
+
     return s;
 }
 
 template<typename T> inline QDataStream& operator << (QDataStream& s, const std::vector<T *>& v)
 {
     s << quint32(v.size());
+
     for (typename std::vector<T *>::const_iterator it = v.begin(); it != v.end(); ++it)
         s << dtkMetaType::variantFromValue(*it);
+
     return s;
 }
 
@@ -301,11 +318,13 @@ template<typename T> inline QDataStream& operator >> (QDataStream& s, std::vecto
     v.clear();
     quint32 c; s >> c;
     v.resize(c);
-    for(quint32 i = 0; i < c; ++i) {
+
+    for (quint32 i = 0; i < c; ++i) {
         QVariant var; // Very important to instantiate a void QVariant at each step, otherwise, it keeps the same pointer T* to store the stream.
         s >> var;
         v[i] = var.value<T *>();
     }
+
     return s;
 }
 

@@ -1,5 +1,5 @@
-/* dtkComposerNodeLeafData.h --- 
- * 
+/* dtkComposerNodeLeafData.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 09:56:37 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 41
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODELEAFDATA_H
@@ -35,7 +35,7 @@ class dtkComposerNodeLeafDataPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeLeafData : public dtkComposerNodeLeaf
 {
 public:
-             dtkComposerNodeLeafData(void);
+    dtkComposerNodeLeafData(void);
     virtual ~dtkComposerNodeLeafData(void);
 
 public:

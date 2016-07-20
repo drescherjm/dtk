@@ -1,5 +1,5 @@
-/* dtkDistributedNode.h --- 
- * 
+/* dtkDistributedNode.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 13:22:24 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 75
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDNODE_H
@@ -33,14 +33,14 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedNode : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedNode(void);
+    dtkDistributedNode(void);
     ~dtkDistributedNode(void);
 
     enum Network {
-           Ethernet1G = 0x01,
-          Ethernet10G = 0x02,
-            Myrinet2G = 0x04,
-           Myrinet10G = 0x08,
+        Ethernet1G = 0x01,
+        Ethernet10G = 0x02,
+        Myrinet2G = 0x04,
+        Myrinet10G = 0x08,
         Infiniband10G = 0x10,
         Infiniband20G = 0x20,
         Infiniband40G = 0x40
@@ -59,12 +59,12 @@ public:
     Q_DECLARE_FLAGS(States, State)
 
     enum Brand {
-          Hp = 0x1,
-         Ibm = 0x2,
+        Hp = 0x1,
+        Ibm = 0x2,
         Dell = 0x4,
-       Carri = 0x8,
-         Sun = 0x16,
-       Apple = 0x32
+        Carri = 0x8,
+        Sun = 0x16,
+        Apple = 0x32
     };
 
     Q_DECLARE_FLAGS(Brands, Brand)

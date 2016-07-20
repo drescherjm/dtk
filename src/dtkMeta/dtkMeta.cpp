@@ -24,6 +24,7 @@ QString dtkMetaType::description(const QVariant& v)
     QString str;
     QDebug dbg(&str);
     dbg.setAutoInsertSpaces(false);
+
     if (v.canConvert<dtkMetaContainerSequential>()) {
         dtkMetaContainerSequential mc = v.value<dtkMetaContainerSequential>();
         dbg << mc;
@@ -31,6 +32,7 @@ QString dtkMetaType::description(const QVariant& v)
         const uint typeId = v.userType();
         bool userStream = false;
         bool canConvertToString = false;
+
         if (typeId >= QMetaType::User) {
             userStream = QMetaType::debugStream(dbg, v.constData(), typeId);
             canConvertToString = v.canConvert<QString>();
@@ -39,10 +41,11 @@ QString dtkMetaType::description(const QVariant& v)
         if (!userStream && canConvertToString) {
             dbg << v.toString();
 
-        } else if(typeId == QMetaType::QVariantMap || typeId == QMetaType::QVariantHash) {
+        } else if (typeId == QMetaType::QVariantMap || typeId == QMetaType::QVariantHash) {
             QAssociativeIterable iterable = v.value<QAssociativeIterable>();
             QAssociativeIterable::const_iterator it = iterable.begin();
             const QAssociativeIterable::const_iterator end = iterable.end();
+
             for ( ; it != end; ++it) {
                 dbg << dtkMetaType::description(it.key()) << ": " << dtkMetaType::description(it.value());
                 dbg << '\n' ;
@@ -57,6 +60,7 @@ QString dtkMetaType::description(const QVariant& v)
             str = cleanStr.remove(0, count);
         }
     }
+
     return str;
 }
 
@@ -65,12 +69,15 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
     if (v.canConvert<dtkMetaContainerSequential>()) {
 
         QString type_name = v.typeName();
+
         if (type_name.endsWith("*")) {
             type_name.chop(1);
         }
+
         int c_id = QMetaType::type(qPrintable(type_name));
+
         if (c_id != QMetaType::UnknownType) {
-            const void *c = *static_cast<const void * const *>(v.data());
+            const void *c = *static_cast<const void *const *>(v.data());
             void *ptr = QMetaType::create(c_id, c);
 
             c_id = QMetaType::type(qPrintable(type_name + "*"));
@@ -86,7 +93,8 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
 
         if (int(flags & QMetaType::PointerToQObject)) {
 
-            const QObject *o = *static_cast<const QObject * const *>(v.data());
+            const QObject *o = *static_cast<const QObject *const *>(v.data());
+
             if (o) {
                 const QMetaObject *mo = o->metaObject();
                 QString class_name(mo->className());
@@ -94,8 +102,10 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
 
                 while (class_type == QMetaType::UnknownType) {
                     mo = mo->superClass();
+
                     if (!mo)
                         break;
+
                     class_name = mo->className();
                     class_type = QMetaType::type(qPrintable(class_name));
                 }
@@ -123,10 +133,12 @@ QVariant dtkMetaType::cloneContent(const QVariant& v)
             if (!type_name.endsWith("*")) { // Not a pointer
                 return v;
             }
+
             type_name.chop(1);
             int type_id = QMetaType::type(qPrintable(type_name));
+
             if (type_id != QMetaType::UnknownType) {
-                const void *data = *static_cast<const void * const *>(v.data());
+                const void *data = *static_cast<const void *const *>(v.data());
                 void *ptr = QMetaType::create(type_id, data);
 
                 type_id = QMetaType::type(qPrintable(type_name + "*"));
@@ -153,10 +165,13 @@ QVariant dtkMetaType::createEmptyContainer(const QVariant& v)
     if (v.canConvert<dtkMetaContainerSequential>()) {
 
         QString type_name = v.typeName();
+
         if (type_name.endsWith("*")) {
             type_name.chop(1);
         }
+
         int c_id = QMetaType::type(qPrintable(type_name));
+
         if (c_id != QMetaType::UnknownType) {
             void *ptr = QMetaType::create(c_id);
             c_id = QMetaType::type(qPrintable(type_name + "*"));
@@ -183,6 +198,7 @@ bool dtkMetaType::destroyPointer(QVariant& v)
 
     if (type_name.endsWith("*")) {
         void *ptr = *static_cast<void **>(v.data());
+
         if (ptr) {
             type_name.chop(1);
             int type_id = QMetaType::type(qPrintable(type_name));

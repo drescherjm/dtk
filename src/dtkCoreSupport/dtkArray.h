@@ -1,20 +1,20 @@
 /* dtkArray.h ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: Mon Jul  1 11:58:29 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: mer. sept. 17 14:53:19 2014 (+0200)
  *           By: Thibaud Kloczko
  *     Update #: 148
  */
 
-/* Commentary: 
+/* Commentary:
  *
  *  Credits see EOF
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once
@@ -35,57 +35,48 @@
 #if defined(Q_DECL_ALIGN) && defined(Q_ALIGNOF)
 
 #if defined(Q_CC_GNU) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 3))
-    typedef char __attribute__((__may_alias__)) dtkArrayAlignedChar;
+typedef char __attribute__((__may_alias__)) dtkArrayAlignedChar;
 #else
-    typedef char dtkArrayAlignedChar;
+typedef char dtkArrayAlignedChar;
 #endif
 
 template <typename T, int PreallocSize, size_t AlignT> struct dtkArrayAlignedPrealloc;
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 1>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 1> {
     dtkArrayAlignedChar Q_DECL_ALIGN(1) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 2>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 2> {
     dtkArrayAlignedChar Q_DECL_ALIGN(2) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 4>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 4> {
     dtkArrayAlignedChar Q_DECL_ALIGN(4) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 8>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 8> {
     dtkArrayAlignedChar Q_DECL_ALIGN(8) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 16>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 16> {
     dtkArrayAlignedChar Q_DECL_ALIGN(16) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 32>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 32> {
     dtkArrayAlignedChar Q_DECL_ALIGN(32) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 64>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 64> {
     dtkArrayAlignedChar Q_DECL_ALIGN(64) data[sizeof(T) * PreallocSize];
 };
 
-template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 128>
-{
+template <typename T, int PreallocSize> struct dtkArrayAlignedPrealloc<T, PreallocSize, 128> {
     dtkArrayAlignedChar Q_DECL_ALIGN(128) data[sizeof(T) * PreallocSize];
 };
 
 #else
 
-template <typename T, int PreallocSize, size_t AlignT> union dtkArrayAlignedPrealloc
-{
+template <typename T, int PreallocSize, size_t AlignT> union dtkArrayAlignedPrealloc {
     char data[sizeof(T) * PreallocSize];
     qint64 q_for_alignment_1;
     double q_for_alignment_2;
@@ -106,24 +97,23 @@ public:
     dtkArrayAlignedPrealloc<T, PreallocSize, sizeof(T)> m_prealloc;
 #endif
 
-    inline T *prealloc(void) 
-    { 
-	return reinterpret_cast<T *>(m_prealloc.data); 
+    inline T *prealloc(void) {
+        return reinterpret_cast<T *>(m_prealloc.data);
     }
 
-    inline bool isPrealloc(const T *start) const 
-    { 
-	return start == reinterpret_cast<const T *>(m_prealloc.data); 
+    inline bool isPrealloc(const T *start) const {
+        return start == reinterpret_cast<const T *>(m_prealloc.data);
     }
 };
 
 template <typename T> class dtkArrayDataOld<T, 0>
 {
 public:
-    inline T *prealloc(void) { return 0; }
+    inline T *prealloc(void) {
+        return 0;
+    }
 
-    inline bool isPrealloc(const T *start) const
-    {
+    inline bool isPrealloc(const T *start) const {
         Q_UNUSED(start);
         return false;
     }
@@ -137,16 +127,16 @@ template <typename T, int PreallocSize = 8> class dtkArray : private dtkArrayDat
 {
 public:
     enum RawDataType {
-	ReadOnly = 0x001,
-	Writable = 0x002
+        ReadOnly = 0x001,
+        Writable = 0x002
     };
 
 public:
-             dtkArray(void);
+    dtkArray(void);
     explicit dtkArray(int arraySize);
-             dtkArray(int size, const T& value);
-             dtkArray(const T *values, int size);
-             dtkArray(const dtkArray<T, PreallocSize>& other);
+    dtkArray(int size, const T& value);
+    dtkArray(const T *values, int size);
+    dtkArray(const dtkArray<T, PreallocSize>& other);
 
 public:
     ~dtkArray(void);
@@ -171,7 +161,7 @@ public:
 
     const T&         at(int index) const;
     const T& operator[](int index) const;
-          T& operator[](int index);
+    T& operator[](int index);
 
     T value(int index) const;
     T value(int index, const T& defaultValue) const;
@@ -197,8 +187,12 @@ public:
 
     void remove(int index);
     void remove(int index, int countToRemove);
-    void removeFirst() { remove(0); }
-    void removeLast() { remove(size() - 1); }
+    void removeFirst() {
+        remove(0);
+    }
+    void removeLast() {
+        remove(size() - 1);
+    }
 
     iterator erase(iterator begin, iterator end);
     iterator erase(iterator pos);
@@ -223,7 +217,7 @@ public:
 
     void setRawData(const T *raw_data, int size, RawDataType data_type = ReadOnly);
 
-          T *rawData(void);
+    T *rawData(void);
     const T *rawData(void) const;
     const T *constRawData(void) const;
 
@@ -248,33 +242,80 @@ public:
     typedef ptrdiff_t difference_type;
     typedef int size_type;
 
-    inline iterator begin(void) { return rawData(); }
-    inline const_iterator begin(void) const { return constRawData(); }
-    inline const_iterator constBegin(void) const { return constRawData(); }
-    inline iterator end(void) { return rawData() + size(); }
-    inline const_iterator end(void) const { return constRawData() + size(); }
-    inline const_iterator constEnd(void) const { return constRawData() + size(); }
+    inline iterator begin(void) {
+        return rawData();
+    }
+    inline const_iterator begin(void) const {
+        return constRawData();
+    }
+    inline const_iterator constBegin(void) const {
+        return constRawData();
+    }
+    inline iterator end(void) {
+        return rawData() + size();
+    }
+    inline const_iterator end(void) const {
+        return constRawData() + size();
+    }
+    inline const_iterator constEnd(void) const {
+        return constRawData() + size();
+    }
 
-    inline T& first(void) { Q_ASSERT(!isEmpty()); return *begin(); }
-    inline const T& first(void) const { Q_ASSERT(!isEmpty()); return *begin(); }
-    inline T& last(void) { Q_ASSERT(!isEmpty()); return *(end()-1); }
-    inline const T& last(void) const { Q_ASSERT(!isEmpty()); return *(end()-1); }
-    inline bool startsWith(const T& t) const { return !isEmpty() && first() == t; }
-    inline bool endsWith(const T& t) const { return !isEmpty() && last() == t; }
+    inline T& first(void) {
+        Q_ASSERT(!isEmpty());
+        return *begin();
+    }
+    inline const T& first(void) const {
+        Q_ASSERT(!isEmpty());
+        return *begin();
+    }
+    inline T& last(void) {
+        Q_ASSERT(!isEmpty());
+        return *(end() - 1);
+    }
+    inline const T& last(void) const {
+        Q_ASSERT(!isEmpty());
+        return *(end() - 1);
+    }
+    inline bool startsWith(const T& t) const {
+        return !isEmpty() && first() == t;
+    }
+    inline bool endsWith(const T& t) const {
+        return !isEmpty() && last() == t;
+    }
 
-    inline void push_back(const T& newValue) { append(newValue); }
-    inline void push_front(const T& newValue) { prepend(newValue); }
-    inline void pop_back(void) { Q_ASSERT(!isEmpty()); removeLast(); }
-    inline void pop_front(void) { Q_ASSERT(!isEmpty()); removeFirst(); }
-    inline bool empty(void) const { return isEmpty(); }
-    inline reference front(void) { return first(); }
-    inline const_reference front(void) const { return first(); }
-    inline reference back(void) { return last(); }
-    inline const_reference back(void) const { return last(); }
+    inline void push_back(const T& newValue) {
+        append(newValue);
+    }
+    inline void push_front(const T& newValue) {
+        prepend(newValue);
+    }
+    inline void pop_back(void) {
+        Q_ASSERT(!isEmpty());
+        removeLast();
+    }
+    inline void pop_front(void) {
+        Q_ASSERT(!isEmpty());
+        removeFirst();
+    }
+    inline bool empty(void) const {
+        return isEmpty();
+    }
+    inline reference front(void) {
+        return first();
+    }
+    inline const_reference front(void) const {
+        return first();
+    }
+    inline reference back(void) {
+        return last();
+    }
+    inline const_reference back(void) const {
+        return last();
+    }
 
 private:
-    struct Data
-    {
+    struct Data {
         QBasicAtomicInt ref;
         int capacity;
         T array[1];
@@ -301,8 +342,7 @@ private:
     mutable T *m_limit;
     Data *m_data;
 
-    inline void initPrealloc(void)
-    {
+    inline void initPrealloc(void) {
         m_end = m_start = dtkArrayDataOld<T, PreallocSize>::prealloc();
         m_limit = m_start + PreallocSize;
     }

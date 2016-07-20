@@ -76,6 +76,7 @@ dtkComposerNodeVectorReal::~dtkComposerNodeVectorReal(void)
 {
     if (d->vector)
         delete d->vector;
+
     d->vector = NULL;
 
     delete d;
@@ -85,16 +86,19 @@ dtkComposerNodeVectorReal::~dtkComposerNodeVectorReal(void)
 
 QString dtkComposerNodeVectorReal::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "size";
         break;
+
     case 2:
         return "value";
         break;
+
     default:
         break;
     }
@@ -104,13 +108,15 @@ QString dtkComposerNodeVectorReal::inputLabelHint(int port)
 
 QString dtkComposerNodeVectorReal::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "size";
         break;
+
     default:
         break;
     }
@@ -125,8 +131,8 @@ void dtkComposerNodeVectorReal::run(void)
         d->vector = d->receiver_vector.data();
         d->size = d->vector->size();
 
-        if (!d->receiver_value.isEmpty()){
-            qreal value = *d->receiver_value.data<qreal>();   
+        if (!d->receiver_value.isEmpty()) {
+            qreal value = *d->receiver_value.data<qreal>();
             d->vector->fill(value);
         }
 
@@ -149,7 +155,7 @@ void dtkComposerNodeVectorReal::run(void)
             dtkWarn() << "The size of the matrix is zero.";
 
         } else {
-            
+
             if (d->size != d->vector->size())
                 d->vector->allocate(d->size);
 

@@ -1,5 +1,5 @@
-/* dtkComposerMachine.cpp --- 
- * 
+/* dtkComposerMachine.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:10:33 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 32
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerMachine.h"
@@ -33,6 +33,6 @@ dtkComposerMachine::dtkComposerMachine(QObject *parent) : QStateMachine(parent),
 dtkComposerMachine::~dtkComposerMachine(void)
 {
     delete d;
-    
+
     d = NULL;
 }

@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -21,12 +21,12 @@
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSupportFactoryExtension : public dtkComposerNodeFactoryExtension
 {
 public:
-     dtkComposerSupportFactoryExtension(void);
+    dtkComposerSupportFactoryExtension(void);
     ~dtkComposerSupportFactoryExtension(void);
 
 public:
     void extend(dtkComposerNodeFactory *factory);
 };
 
-// 
+//
 // dtkComposerSupportFactoryExtension.h ends here

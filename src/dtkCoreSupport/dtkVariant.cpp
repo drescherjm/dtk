@@ -1,15 +1,15 @@
-/* dtkVariant.cpp --- 
- * 
+/* dtkVariant.cpp ---
+ *
  * Author: Thibaud Kloczko, Inria.
  * Created: 2012 Fri Oct 26 09:16:21 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkVariant.h"
@@ -28,12 +28,12 @@
 
 dtkVariant::dtkVariant(const dtkVariant& other) : QVariant(other), m_object(other.m_object), m_matrix(other.m_matrix), m_container(other.m_container), m_value_b(other.m_value_b), m_value_i(other.m_value_i), m_value_r(other.m_value_r), m_value_s(other.m_value_s)
 {
-    
+
 }
 
 dtkVariant::~dtkVariant(void)
 {
-    
+
 }
 
 QString dtkVariant::identifier(void) const
@@ -69,5 +69,5 @@ void dtkVariant::clear(void)
 
 template<> qlonglong *dtkVariant::value(void) const
 {
-    
+
 }

@@ -1,16 +1,16 @@
-/* dtkComposerNodeConstants.h --- 
- * 
+/* dtkComposerNodeConstants.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Mon Feb 27 12:58:13 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODECONSTANTS_H
@@ -31,7 +31,7 @@ class dtkComposerNodePiPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodePi : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodePi(void);
+    dtkComposerNodePi(void);
     ~dtkComposerNodePi(void);
 
 public:
@@ -63,7 +63,7 @@ class dtkComposerNodeEPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeE : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeE(void);
+    dtkComposerNodeE(void);
     ~dtkComposerNodeE(void);
 
 public:
@@ -97,7 +97,7 @@ class dtkComposerNodeControllerRunRankPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeControllerRunRank : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeControllerRunRank(void);
+    dtkComposerNodeControllerRunRank(void);
     ~dtkComposerNodeControllerRunRank(void);
 
 public:
@@ -133,7 +133,7 @@ class dtkComposerNodeAnyTagPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeAnyTag : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeAnyTag(void);
+    dtkComposerNodeAnyTag(void);
     ~dtkComposerNodeAnyTag(void);
 
 public:
@@ -165,7 +165,7 @@ class dtkComposerNodeAnySourcePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeAnySource : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeAnySource(void);
+    dtkComposerNodeAnySource(void);
     ~dtkComposerNodeAnySource(void);
 
 public:

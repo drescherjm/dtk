@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -37,5 +37,5 @@ private slots:
     void cleanup(void);
 };
 
-// 
+//
 // dtkComposerTransmitterTest.h ends here

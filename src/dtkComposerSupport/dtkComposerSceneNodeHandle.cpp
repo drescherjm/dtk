@@ -1,5 +1,5 @@
-/* dtkComposerSceneNodeHandle.cpp --- 
- * 
+/* dtkComposerSceneNodeHandle.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Sep 18 14:05:45 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 84
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerSceneNodeComposite.h"
@@ -22,7 +22,7 @@
 #include "dtkComposerSceneNodeHandle.h"
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerSceneNodeHandlePrivate
@@ -39,7 +39,7 @@ public:
 };
 
 // /////////////////////////////////////////////////////////////////
-// 
+//
 // /////////////////////////////////////////////////////////////////
 
 dtkComposerSceneNodeHandle::dtkComposerSceneNodeHandle(dtkComposerSceneNodeControl *parent) : QGraphicsItem(parent), d(new dtkComposerSceneNodeHandlePrivate)
@@ -77,13 +77,13 @@ void dtkComposerSceneNodeHandle::setBotBlock(dtkComposerSceneNodeComposite *bloc
 
 void dtkComposerSceneNodeHandle::layout(void)
 {
-    if(!d->top)
+    if (!d->top)
         return;
 
-    if(!d->bot)
+    if (!d->bot)
         return;
 
-    this->setPos(d->top->boundingRect().width()/2, d->top->pos().y() + d->top->boundingRect().bottom() - 2);
+    this->setPos(d->top->boundingRect().width() / 2, d->top->pos().y() + d->top->boundingRect().bottom() - 2);
 }
 
 QRectF dtkComposerSceneNodeHandle::boundingRect(void) const

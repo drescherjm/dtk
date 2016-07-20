@@ -1,5 +1,5 @@
-/* dtkComposerNodeMetaScalarArrayReplace.h --- 
- * 
+/* dtkComposerNodeMetaScalarArrayReplace.h ---
+ *
  * Author: Régis Duvigneau
  * Copyright (C) 2008 - Regis Duvigneau, Inria.
  * Created: Thu Jul 19 10:27:53 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -33,9 +33,9 @@ class dtkComposerNodeMetaScalarArrayReplacePrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMetaScalarArrayReplace : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMetaScalarArrayReplace(void);
+    dtkComposerNodeMetaScalarArrayReplace(void);
     ~dtkComposerNodeMetaScalarArrayReplace(void);
-    
+
 public:
     void run(void);
 
@@ -51,13 +51,13 @@ public:
 public:
     inline QString inputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "arrays";
 
-        if(port == 1)
+        if (port == 1)
             return "vector";
 
-        if(port == 2)
+        if (port == 2)
             return "index";
 
         return "input";
@@ -65,7 +65,7 @@ public:
 
     inline QString outputLabelHint(int port) {
 
-        if(port == 0)
+        if (port == 0)
             return "arrays";
 
         return "output";

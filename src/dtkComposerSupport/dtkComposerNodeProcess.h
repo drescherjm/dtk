@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -26,7 +26,7 @@ class dtkComposerNodeProcessPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeProcess : public dtkComposerNodeLeafProcess
 {
 public:
-     dtkComposerNodeProcess(void);
+    dtkComposerNodeProcess(void);
     ~dtkComposerNodeProcess(void);
 
 public:
@@ -34,7 +34,7 @@ public:
 
     QString abstractProcessType(void) const;
 
- public:
+public:
     void setProcess(dtkAbstractProcess *process);
 
     dtkAbstractProcess *process(void) const;
@@ -54,5 +54,5 @@ private:
     dtkComposerNodeProcessPrivate *d;
 };
 
-// 
+//
 // dtkComposerNodeProcess.h ends here

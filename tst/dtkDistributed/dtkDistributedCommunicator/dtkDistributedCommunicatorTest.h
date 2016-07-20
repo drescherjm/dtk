@@ -1,15 +1,15 @@
-/* dtkDistributedCommunicatorTest.h --- 
- * 
+/* dtkDistributedCommunicatorTest.h ---
+ *
  * Author: Julien Wintz
  * Created: Mon Feb  4 13:58:16 2013 (+0100)
- * Version: 
+ * Version:
  * Last-Updated: jeu. févr.  5 16:01:10 2015 (+0100)
  *           By: Thibaud Kloczko
  *     Update #: 34
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #pragma once

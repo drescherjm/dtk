@@ -24,13 +24,13 @@ inline dtkMetaContainerSequential::item::item(HandlerIterator *iterator) : it(it
 }
 
 inline dtkMetaContainerSequential::item::item(item&& o) : it(NULL)
-{ 
+{
     std::swap(it, o.it);
 }
 
 inline dtkMetaContainerSequential::item::~item()
-{ 
-    if(it) 
+{
+    if (it)
         delete it;
 
     it = NULL;
@@ -41,15 +41,16 @@ inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::opera
     if (this != &o) {
         it->copy(*(o.it));
     }
+
     return *this;
 }
-inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (item&& o) 
-{ 
-    std::swap(it, o.it); 
+inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::item::operator = (item&& o)
+{
+    std::swap(it, o.it);
     return *this;
 }
-        
-inline bool dtkMetaContainerSequential::item::operator == (const item& o) const 
+
+inline bool dtkMetaContainerSequential::item::operator == (const item& o) const
 {
     return  it->equal(*(o.it));
 }
@@ -59,7 +60,7 @@ inline bool dtkMetaContainerSequential::item::operator != (const item& o) const
     return !it->equal(*(o.it));
 }
 
-inline const QVariant dtkMetaContainerSequential::item::value(void) const 
+inline const QVariant dtkMetaContainerSequential::item::value(void) const
 {
     return it->variant();
 }
@@ -116,7 +117,7 @@ inline QDebug& operator << (QDebug debug, const dtkMetaContainerSequential::item
     const bool oldSetting = debug.autoInsertSpaces();
     debug.nospace() << item.value();
     debug.setAutoInsertSpaces(oldSetting);
-    return debug.maybeSpace();    
+    return debug.maybeSpace();
 }
 
 // /////////////////////////////////////////////////////////////////
@@ -128,11 +129,11 @@ inline dtkMetaContainerSequential::iterator::iterator(HandlerIterator *iterator)
 }
 
 inline dtkMetaContainerSequential::iterator::iterator(const iterator& o) : proxy(o.proxy.it)
-{ 
+{
 }
-         
-inline dtkMetaContainerSequential::iterator::iterator(iterator&& o) : proxy(o.proxy.it) 
-{ 
+
+inline dtkMetaContainerSequential::iterator::iterator(iterator&& o) : proxy(o.proxy.it)
+{
     o.proxy.it = NULL;
 }
 
@@ -147,7 +148,7 @@ inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterato
 }
 
 inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator = (iterator&& o)
-{ 
+{
     std::swap(proxy.it, o.proxy.it);
     return *this;
 }
@@ -173,7 +174,7 @@ inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::iterator::o
 }
 
 template <typename T> inline T& dtkMetaContainerSequential::iterator::value(void)
-{ 
+{
     return *static_cast<T *>(proxy.it->value());
 }
 
@@ -185,21 +186,21 @@ inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterato
 
 inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator ++ (int)
 {
-    iterator o(*this); 
-    proxy.it->advance(); 
+    iterator o(*this);
+    proxy.it->advance();
     return o;
 }
 
 inline dtkMetaContainerSequential::iterator& dtkMetaContainerSequential::iterator::operator -- (void)
 {
-    proxy.it->moveBackward(static_cast<qlonglong>(1)); 
+    proxy.it->moveBackward(static_cast<qlonglong>(1));
     return *this;
 }
 
 inline dtkMetaContainerSequential::iterator dtkMetaContainerSequential::iterator::operator -- (int)
 {
-    iterator o(*this); 
-    proxy.it->moveBackward(static_cast<qlonglong>(1)); 
+    iterator o(*this);
+    proxy.it->moveBackward(static_cast<qlonglong>(1));
     return o;
 }
 
@@ -250,6 +251,7 @@ inline dtkMetaContainerSequential::const_iterator::~const_iterator(void)
 {
     if (it)
         delete it;
+
     it = NULL;
 }
 
@@ -257,6 +259,7 @@ inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::c
 {
     if (this != &o)
         it->copy(*(o.it));
+
     return *this;
 }
 
@@ -307,7 +310,7 @@ inline dtkMetaContainerSequential::const_iterator& dtkMetaContainerSequential::c
 
 inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::const_iterator::operator -- (int)
 {
-    const_iterator o(*this); 
+    const_iterator o(*this);
     it->moveBackward(static_cast<qlonglong>(1));
     return o;
 }
@@ -343,23 +346,24 @@ inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::co
 // /////////////////////////////////////////////////////////////////
 
 inline dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSequentialHandler *handler) : h(handler), proxy(new item(NULL))
-{ 
-    if (handler) { 
+{
+    if (handler) {
         proxy->it = handler->begin();
     }
 }
 
 inline dtkMetaContainerSequential::dtkMetaContainerSequential(const dtkMetaContainerSequential& o) : h(o.h), proxy(new item(NULL))
-{ 
-    if (h) { 
+{
+    if (h) {
         proxy->it = h->begin();
     }
 }
 
 inline dtkMetaContainerSequential::~dtkMetaContainerSequential(void)
-{ 
+{
     if (h)
         delete h;
+
     h = NULL;
 }
 
@@ -393,22 +397,22 @@ inline dtkMetaContainerSequential::const_iterator dtkMetaContainerSequential::ce
     return const_iterator(h->cend());
 }
 
-inline bool dtkMetaContainerSequential::hasBiDirectionalIterator(void) const 
+inline bool dtkMetaContainerSequential::hasBiDirectionalIterator(void) const
 {
     return h->hasBiDirectionalIterator();
 }
 
-inline bool dtkMetaContainerSequential::hasRandomAccessIterator(void) const 
+inline bool dtkMetaContainerSequential::hasRandomAccessIterator(void) const
 {
     return h->hasRandomAccessIterator();
 }
 
-inline bool dtkMetaContainerSequential::empty(void) const 
+inline bool dtkMetaContainerSequential::empty(void) const
 {
     return h->empty();
 }
 
-inline qlonglong dtkMetaContainerSequential::size(void) const 
+inline qlonglong dtkMetaContainerSequential::size(void) const
 {
     return h->size();
 }
@@ -429,7 +433,7 @@ inline void dtkMetaContainerSequential::resize(qlonglong size)
 }
 
 template <typename T> inline void dtkMetaContainerSequential::append(const T& t)
-{ 
+{
     h->append(&t);
 }
 
@@ -473,7 +477,7 @@ inline void dtkMetaContainerSequential::removeAt(qlonglong idx)
     h->removeAt(idx);
 }
 
-inline const QVariant& dtkMetaContainerSequential::first(void) const 
+inline const QVariant& dtkMetaContainerSequential::first(void) const
 {
     return h->variantAt(0, var);
 }
@@ -484,14 +488,14 @@ inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::first(void)
     return *proxy;
 }
 
-inline const QVariant& dtkMetaContainerSequential::last(void) const 
+inline const QVariant& dtkMetaContainerSequential::last(void) const
 {
     return h->variantAt(h->size() - 1, var);
 }
 
 inline dtkMetaContainerSequential::item& dtkMetaContainerSequential::last(void)
 {
-    h->iteratorAt(h->size()-1, proxy->it); 
+    h->iteratorAt(h->size() - 1, proxy->it);
     return *proxy;
 }
 
@@ -520,12 +524,9 @@ inline QDebug& operator << (QDebug debug, const dtkMetaContainerSequential& cont
 // Specialization of Qt internal struct to build QVariant of dtkMetaContainerSequential
 // /////////////////////////////////////////////////////////////////
 
-namespace QtPrivate
-{
-    template <> struct QVariantValueHelperInterface<dtkMetaContainerSequential>
-    {
-        static dtkMetaContainerSequential invoke(const QVariant& v)
-        {
+namespace QtPrivate {
+    template <> struct QVariantValueHelperInterface<dtkMetaContainerSequential> {
+        static dtkMetaContainerSequential invoke(const QVariant& v) {
             return dtkMetaContainerSequential(v.value<dtkMetaContainerSequentialHandler *>());
         }
     };
@@ -535,16 +536,16 @@ namespace QtPrivate
 // Specialization of dtkMetaTypeHandler for dtkMetaContainerSequential
 // /////////////////////////////////////////////////////////////////
 
-template <> struct dtkMetaTypeHandler <dtkMetaContainerSequential>
-{
-    static bool canConvert(const QList<int>& types) 
-    {
+template <> struct dtkMetaTypeHandler <dtkMetaContainerSequential> {
+    static bool canConvert(const QList<int>& types) {
         int to = qMetaTypeId<dtkMetaContainerSequentialHandler *>();
-        for(int from : types) {
+
+        for (int from : types) {
             if (!QMetaType::hasRegisteredConverterFunction(from, to)) {
                 return false;
             }
         }
+
         return true;
     }
 };

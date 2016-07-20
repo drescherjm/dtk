@@ -38,7 +38,7 @@ class DTKCOMPOSER_EXPORT dtkComposerWidget : public QWidget
     Q_OBJECT
 
 public:
-             dtkComposerWidget(QWidget *parent = 0);
+    dtkComposerWidget(QWidget *parent = 0);
     virtual ~dtkComposerWidget(void);
 
 public:
@@ -78,7 +78,7 @@ public:
     dtkComposerReader *reader(void);
 
 public:
-    void updateRemotes(dtkComposerSceneNodeComposite * composite);
+    void updateRemotes(dtkComposerSceneNodeComposite *composite);
 
 private:
     dtkComposerWidgetPrivate *d;

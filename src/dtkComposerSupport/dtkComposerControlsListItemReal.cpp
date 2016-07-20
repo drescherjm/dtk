@@ -35,7 +35,7 @@ public:
     QDoubleSpinBox *spin_d;
 };
 
-dtkComposerControlsListItemReal::dtkComposerControlsListItemReal(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemRealPrivate)
+dtkComposerControlsListItemReal::dtkComposerControlsListItemReal(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemRealPrivate)
 {
     d->node = node;
 

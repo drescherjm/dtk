@@ -1,5 +1,5 @@
-/* dtkDistributedCore.h --- 
- * 
+/* dtkDistributedCore.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Tue Feb 16 16:24:27 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 47
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCORE_H
@@ -33,7 +33,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedCore : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedCore(dtkDistributedCpu *parent, qint64 id);
+    dtkDistributedCore(dtkDistributedCpu *parent, qint64 id);
     ~dtkDistributedCore(void);
 
 public:
@@ -42,7 +42,7 @@ public:
 public:
     void setJob(dtkDistributedJob *job);
     void delJob(void);
-    
+
 private:
     dtkDistributedCorePrivate *d;
 };

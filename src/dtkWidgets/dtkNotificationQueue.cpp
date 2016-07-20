@@ -1,5 +1,5 @@
-/* dtkNotificationQueue.cpp --- 
- * 
+/* dtkNotificationQueue.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sun Apr 22 15:13:24 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 181
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkNotifiable.h"
@@ -40,7 +40,7 @@ public:
 
 dtkNotificationQueue *dtkNotificationQueue::instance(void)
 {
-    if(!s_instance)
+    if (!s_instance)
         s_instance = new dtkNotificationQueue;
 
     return s_instance;
@@ -71,7 +71,7 @@ void dtkNotificationQueue::previous(void)
 {
     d->persistent_timer.stop();
 
-    for(int i = 0; i < d->persistent.count()-2; i++)
+    for (int i = 0; i < d->persistent.count() - 2; i++)
         d->persistent.enqueue(d->persistent.dequeue());
 
     this->idle();
@@ -90,11 +90,12 @@ void dtkNotificationQueue::push(dtkNotificationEvent *event)
 {
     dtkNotificationEvent e = (*event);
 
-    switch(event->type()) {
+    switch (event->type()) {
     case dtkNotificationEvent::Persistent:
         d->persistent.enqueue(dtkNotificationEvent(e));
         this->idle();
         break;
+
     case dtkNotificationEvent::NonPersistent:
         d->non_persistent.enqueue(dtkNotificationEvent(e));
         d->persistent_timer.stop();
@@ -105,24 +106,24 @@ void dtkNotificationQueue::push(dtkNotificationEvent *event)
 
 void dtkNotificationQueue::idle(void)
 {
-   foreach(dtkNotifiable *notifiable, d->notifiables) {
-       notifiable->setPersistentCount(d->persistent.count());
-       notifiable->setNonPersistentCount(d->non_persistent.count());
-   }
+    foreach (dtkNotifiable *notifiable, d->notifiables) {
+        notifiable->setPersistentCount(d->persistent.count());
+        notifiable->setNonPersistentCount(d->non_persistent.count());
+    }
 
-    if(d->non_persistent_timer.isActive())
+    if (d->non_persistent_timer.isActive())
         return;
-    
-    if(!d->non_persistent.isEmpty()) {
 
-        foreach(dtkNotifiable *notifiable, d->notifiables) {
+    if (!d->non_persistent.isEmpty()) {
+
+        foreach (dtkNotifiable *notifiable, d->notifiables) {
             notifiable->clear();
             notifiable->dismissible(false);
         }
-        
+
         dtkNotificationEvent event = d->non_persistent.dequeue();
-        
-        foreach(dtkNotifiable *notifiable, d->notifiables) {
+
+        foreach (dtkNotifiable *notifiable, d->notifiables) {
             notifiable->display(event.message());
             notifiable->setNonPersistentCount(d->non_persistent.count());
             notifiable->dismissible(true);
@@ -133,19 +134,19 @@ void dtkNotificationQueue::idle(void)
         return;
     }
 
-    if(d->persistent_timer.isActive())
+    if (d->persistent_timer.isActive())
         return;
 
-    if(!d->persistent.isEmpty()) {
+    if (!d->persistent.isEmpty()) {
 
-        foreach(dtkNotifiable *notifiable, d->notifiables) {
+        foreach (dtkNotifiable *notifiable, d->notifiables) {
             notifiable->clear();
             notifiable->dismissible(false);
         }
 
         dtkNotificationEvent event = d->persistent.dequeue();
 
-        foreach(dtkNotifiable *notifiable, d->notifiables)
+        foreach (dtkNotifiable *notifiable, d->notifiables)
             notifiable->display(event.message());
 
         d->persistent.enqueue(event);
@@ -155,9 +156,9 @@ void dtkNotificationQueue::idle(void)
         return;
     }
 
-    if(d->persistent.isEmpty() && d->non_persistent.isEmpty()) {
+    if (d->persistent.isEmpty() && d->non_persistent.isEmpty()) {
 
-        foreach(dtkNotifiable *notifiable, d->notifiables) {
+        foreach (dtkNotifiable *notifiable, d->notifiables) {
             notifiable->clear();
             notifiable->dismissible(false);
         }
@@ -168,7 +169,7 @@ void dtkNotificationQueue::idle(void)
 
 bool dtkNotificationQueue::event(QEvent *event)
 {
-    if(event->type() != dtkNotificationEventType)
+    if (event->type() != dtkNotificationEventType)
         return QObject::event(event);
 
     this->push(static_cast<dtkNotificationEvent *>(event));
@@ -178,7 +179,7 @@ bool dtkNotificationQueue::event(QEvent *event)
 
 dtkNotificationQueue::dtkNotificationQueue(QObject *parent) : QObject(parent), d(new dtkNotificationQueuePrivate)
 {
-        d->persistent_timer.setSingleShot(true);
+    d->persistent_timer.setSingleShot(true);
     d->non_persistent_timer.setSingleShot(true);
 
     connect(    &(d->persistent_timer), SIGNAL(timeout()), this, SLOT(idle()));
@@ -187,7 +188,7 @@ dtkNotificationQueue::dtkNotificationQueue(QObject *parent) : QObject(parent), d
 
 dtkNotificationQueue::~dtkNotificationQueue(void)
 {
-        d->persistent.clear();
+    d->persistent.clear();
     d->non_persistent.clear();
 
     delete d;

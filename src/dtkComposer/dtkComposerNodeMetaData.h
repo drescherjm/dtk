@@ -23,7 +23,7 @@ class dtkComposerNodeMetaDataPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeMetaData
 {
 public:
-             dtkComposerNodeMetaData(void);
+    dtkComposerNodeMetaData(void);
     virtual ~dtkComposerNodeMetaData(void);
 
 public:

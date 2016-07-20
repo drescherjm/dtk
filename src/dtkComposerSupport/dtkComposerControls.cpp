@@ -1,16 +1,16 @@
-/* dtkComposerControls.cpp --- 
- * 
+/* dtkComposerControls.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Nov 20 16:21:59 2012 (+0100)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerControls.h"
@@ -100,12 +100,12 @@ dtkComposerControls::~dtkComposerControls(void)
 
 void dtkComposerControls::setScene(dtkComposerScene *scene)
 {
-    if(d->scene)
+    if (d->scene)
         disconnect(d->scene, SIGNAL(flagged()), this, SLOT(setup()));
 
     d->scene = scene;
 
-    if(d->scene)
+    if (d->scene)
         connect(d->scene, SIGNAL(flagged()), this, SLOT(setup()));
 
     this->setup();
@@ -118,33 +118,40 @@ void dtkComposerControls::setup(void)
 
 void dtkComposerControls::setup(int index)
 {
-    if(!d->scene)
+    if (!d->scene)
         return;
 
     QList<dtkComposerSceneNodeLeaf *> nodes;
 
-    switch(index) {
+    switch (index) {
     case 0:
         nodes = d->scene->flagged(Qt::blue);
         break;
+
     case 1:
         nodes = d->scene->flagged(Qt::gray);
         break;
+
     case 2:
         nodes = d->scene->flagged(Qt::green);
         break;
+
     case 3:
         nodes = d->scene->flagged(Qt::darkYellow);
         break;
+
     case 4:
         nodes = d->scene->flagged(Qt::magenta);
         break;
+
     case 5:
         nodes = d->scene->flagged(Qt::red);
         break;
+
     case 6:
         nodes = d->scene->flagged(Qt::yellow);
         break;
+
     default:
         break;
     };
@@ -152,7 +159,7 @@ void dtkComposerControls::setup(int index)
     //d->list->clear();
     d->box->clear();
 
-    foreach(dtkComposerSceneNodeLeaf *node, nodes) {
+    foreach (dtkComposerSceneNodeLeaf *node, nodes) {
         //dtkComposerControlsListItem *item = dtkComposerControlsListItemFactory::instance()->create(d->list, node);
         //item->setFlags(Qt::ItemIsEnabled);
         // d->list->addItem(item);

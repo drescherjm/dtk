@@ -23,7 +23,7 @@ class dtkComposerNodeFilePrivate;
 class  DTKCOMPOSER_EXPORT dtkComposerNodeFile : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFile(void);
+    dtkComposerNodeFile(void);
     ~dtkComposerNodeFile(void);
 
 public:
@@ -45,7 +45,7 @@ class dtkComposerNodeFileExistsPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeFileExists : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileExists(void);
+    dtkComposerNodeFileExists(void);
     ~dtkComposerNodeFileExists(void);
 
 public:
@@ -66,7 +66,7 @@ class dtkComposerNodeFileListPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeFileList : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileList(void);
+    dtkComposerNodeFileList(void);
     ~dtkComposerNodeFileList(void);
 
 public:
@@ -85,7 +85,7 @@ class dtkComposerNodeFileReadPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeFileRead : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileRead(void);
+    dtkComposerNodeFileRead(void);
     ~dtkComposerNodeFileRead(void);
 
 public:
@@ -104,7 +104,7 @@ class dtkComposerNodeFileWritePrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeFileWrite : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeFileWrite(void);
+    dtkComposerNodeFileWrite(void);
     ~dtkComposerNodeFileWrite(void);
 
 public:
@@ -123,20 +123,20 @@ class dtkComposerNodeDirectoryPrivate;
 
 class DTKCOMPOSER_EXPORT dtkComposerNodeDirectory : public dtkComposerNodeLeaf
 {
- public:
+public:
     dtkComposerNodeDirectory(void);
     ~dtkComposerNodeDirectory(void);
 
- public:
+public:
     void run(void);
 
- public:
+public:
     QString value(void);
 
- public:
+public:
     void setValue(QString value);
 
- private:
+private:
     dtkComposerNodeDirectoryPrivate *d;
 };
 

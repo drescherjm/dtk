@@ -1,5 +1,5 @@
-/* dtkDistributedControllerStatusModelFilter.h --- 
- * 
+/* dtkDistributedControllerStatusModelFilter.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Apr  6 15:20:56 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 24
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDCONTROLLERSTATUSMODELFILTER_H
@@ -32,7 +32,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedControllerStatusModelFilter : p
     Q_OBJECT
 
 public:
-     dtkDistributedControllerStatusModelFilter(QObject *parent = 0);
+    dtkDistributedControllerStatusModelFilter(QObject *parent = 0);
     ~dtkDistributedControllerStatusModelFilter(void);
 
 public:
@@ -43,7 +43,7 @@ public:
     void setModelFlags(QFlags<dtkDistributedCpu::Model> flags);
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
 private:
     dtkDistributedControllerStatusModelFilterPrivate *d;

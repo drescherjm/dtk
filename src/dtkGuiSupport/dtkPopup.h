@@ -1,5 +1,5 @@
-/* dtkPopup.h --- 
- * 
+/* dtkPopup.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Fri Mar 18 15:38:29 2011 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPOPUP_H

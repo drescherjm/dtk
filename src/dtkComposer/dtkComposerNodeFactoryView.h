@@ -32,7 +32,7 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeFactoryView : public QWidget
     Q_OBJECT
 
 public:
-     dtkComposerNodeFactoryView(QWidget *parent = 0);
+    dtkComposerNodeFactoryView(QWidget *parent = 0);
     ~dtkComposerNodeFactoryView(void);
 
 public slots:

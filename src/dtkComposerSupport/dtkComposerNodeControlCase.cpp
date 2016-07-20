@@ -109,19 +109,19 @@ void dtkComposerNodeControlCase::addBlock(void)
 {
     dtkComposerNodeComposite *c = new dtkComposerNodeComposite;
     QString id = QString::number(d->blocks.count());
-    c->setTitleHint("Case#"+id);
+    c->setTitleHint("Case#" + id);
     d->blocks << c;
 
     dtkComposerTransmitterVariant *v = new dtkComposerTransmitterVariant;
     d->blocks_input << v;
     c->appendReceiver(v);
-    c->setInputLabelHint("case#"+id,0);
+    c->setInputLabelHint("case#" + id, 0);
 }
 
 void dtkComposerNodeControlCase::addBlock(dtkComposerNodeComposite *c)
 {
     d->blocks << c;
-    d->blocks_input << dynamic_cast<dtkComposerTransmitterVariant*>(c->receivers().at(0));
+    d->blocks_input << dynamic_cast<dtkComposerTransmitterVariant *>(c->receivers().at(0));
 }
 
 void dtkComposerNodeControlCase::removeBlock(int id)
@@ -130,10 +130,10 @@ void dtkComposerNodeControlCase::removeBlock(int id)
         return;
 
     d->blocks.removeAt(id);
-    d->blocks_input.removeAt(id-1);
+    d->blocks_input.removeAt(id - 1);
 
-    for (int i=1; i< d->blocks.count(); ++i)
-        d->blocks.at(i)->setTitleHint("Case#"+QString::number(i));
+    for (int i = 1; i < d->blocks.count(); ++i)
+        d->blocks.at(i)->setTitleHint("Case#" + QString::number(i));
 }
 
 void dtkComposerNodeControlCase::setInputs(void)
@@ -165,7 +165,8 @@ int dtkComposerNodeControlCase::selectBranch(void)
     bool is_case = false;
 
     for (int i = 1; i < d->blocks.count(); ++i) {
-        dtkComposerTransmitterVariant *v =  d->blocks_input[i-1] ;
+        dtkComposerTransmitterVariant *v =  d->blocks_input[i - 1] ;
+
         if (value > 0) //already found the good block, no need to check again.
             is_case = false;
         else {
@@ -191,41 +192,45 @@ int dtkComposerNodeControlCase::selectBranch(void)
         if (is_case) {
 
             value = i;
-            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
+
+            foreach (dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(true);
             }
-	    foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
-		t->setReady(true);
-	    }
+
+            foreach (dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
+                t->setReady(true);
+            }
 
         } else {
 
-            foreach(dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
+            foreach (dtkComposerTransmitter *t, d->blocks[i]->emitters()) {
                 t->setActive(false);
-	    }
+            }
 
-	    foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
-		t->setReady(false);
-	    }
+            foreach (dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
+                t->setReady(false);
+            }
         }
     }
 
     if (value == 0) {
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters()) {
+        foreach (dtkComposerTransmitter *t, d->blocks[0]->emitters()) {
             t->setActive(true);
-	}
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->receivers()) {
+        }
+
+        foreach (dtkComposerTransmitter *t, d->blocks[0]->receivers()) {
             t->setReady(true);
-	}
+        }
 
 
     } else {
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->emitters()) {
+        foreach (dtkComposerTransmitter *t, d->blocks[0]->emitters()) {
             t->setActive(false);
-	}
-        foreach(dtkComposerTransmitter *t, d->blocks[0]->receivers()) {
+        }
+
+        foreach (dtkComposerTransmitter *t, d->blocks[0]->receivers()) {
             t->setReady(false);
-	}
+        }
     }
 
     return value;
@@ -239,9 +244,9 @@ void dtkComposerNodeControlCase::begin(void)
 void dtkComposerNodeControlCase::end(void)
 {
     for (int i = 0; i < d->blocks.count(); ++i) {
-	foreach(dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
+        foreach (dtkComposerTransmitter *t, d->blocks[i]->receivers()) {
             t->setReady(true);
-	}
+        }
     }
 }
 

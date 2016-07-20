@@ -310,7 +310,7 @@
 */
 
 /*! \typedef dtkMetaContainerSequential::HandlerConstIterator
-    \internal    
+    \internal
     Synonym for dtkMetaContainerSequentialHandler::const_iterator
 */
 
@@ -578,10 +578,10 @@ void dtkMetaContainerSequential::setAt(qlonglong idx, const QVariant& v)
 */
 
 /*! \fn dtkMetaContainerSequential::dtkMetaContainerSequential(const dtkMetaContainerSequential& o)
-  
+
     Constructs a copy of dtkMetaContainerSequential \a o.
  */
- 
+
 /*! \fn dtkMetaContainerSequential::~dtkMetaContainerSequential(void)
 
     Destructor.

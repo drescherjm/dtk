@@ -50,12 +50,13 @@ bool dtkComposerNodeMetaData::setFromFile(const QString& file_path)
 {
     QFile file(file_path);
 
-    if(!file.open(QFile::ReadOnly)) {
+    if (!file.open(QFile::ReadOnly)) {
         qDebug() << Q_FUNC_INFO << "Unable to read file" << file_path;
         return false;
     }
 
     QJsonDocument json_doc = QJsonDocument::fromJson(file.readAll());
+
     if (json_doc.isEmpty()) {
         qDebug() << Q_FUNC_INFO << "Json document" << file_path << "is empty. Unable to create json object.";
         return false;
@@ -68,20 +69,23 @@ bool dtkComposerNodeMetaData::setFromFile(const QString& file_path)
     d->type = json.value(QString("type")).toString();
 
     QVariantList tag_list = json.value(QString("tags")).toArray().toVariantList();
-    for(const QVariant& v : tag_list)
+
+    for (const QVariant& v : tag_list)
         d->tags << v.toString();
 
     d->description = json.value(QString("description")).toString();
 
     QVariantList input_list = json.value(QString("inputs")).toArray().toVariantList();
-    for(const QVariant& v : input_list)
+
+    for (const QVariant& v : input_list)
         d->input_labels << v.toString();
 
     QVariantList output_list = json.value(QString("outputs")).toArray().toVariantList();
-    for(const QVariant& v : output_list)
+
+    for (const QVariant& v : output_list)
         d->output_labels << v.toString();
 
-    if(json.keys().contains("color"))
+    if (json.keys().contains("color"))
         this->setColor(json.value("color").toString());
 
     file.close();
@@ -106,25 +110,25 @@ void dtkComposerNodeMetaData::setKind(const QString& kind)
     if (kind_lower == QString("atomic")) {
         d->kind = dtkComposerNode::Atomic;
 
-    } else if(kind_lower == QString("composite")) {
+    } else if (kind_lower == QString("composite")) {
         d->kind = dtkComposerNode::Composite;
 
-    } else if(kind_lower == QString("control")) {
+    } else if (kind_lower == QString("control")) {
         d->kind = dtkComposerNode::Control;
 
-    } else if(kind_lower == QString("proxy")) {
+    } else if (kind_lower == QString("proxy")) {
         d->kind = dtkComposerNode::Proxy;
 
-    } else if(kind_lower == QString("data")) {
+    } else if (kind_lower == QString("data")) {
         d->kind = dtkComposerNode::Data;
 
-    } else if(kind_lower == QString("process")) {
+    } else if (kind_lower == QString("process")) {
         d->kind = dtkComposerNode::Process;
 
-    } else if(kind_lower == QString("view")) {
+    } else if (kind_lower == QString("view")) {
         d->kind = dtkComposerNode::View;
 
-    } else if(kind_lower == QString("actor")) {
+    } else if (kind_lower == QString("actor")) {
         d->kind = dtkComposerNode::Actor;
 
     } else {

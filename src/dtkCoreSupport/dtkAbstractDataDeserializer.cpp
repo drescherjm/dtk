@@ -77,7 +77,7 @@ void dtkAbstractDataDeserializer::setData(dtkAbstractData *data)
     d->data = data;
 }
 
-dtkAbstractData *dtkAbstractDataDeserializer::deserialize(const QByteArray &array)
+dtkAbstractData *dtkAbstractDataDeserializer::deserialize(const QByteArray& array)
 {
     DTK_UNUSED(array);
     return NULL ;

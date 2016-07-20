@@ -1,5 +1,5 @@
-/* dtkComposerNodeArrayDataOperatorModifier.h --- 
- * 
+/* dtkComposerNodeArrayDataOperatorModifier.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jul  5 09:00:34 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEARRAYDATAOPERATORMODIFIER_H

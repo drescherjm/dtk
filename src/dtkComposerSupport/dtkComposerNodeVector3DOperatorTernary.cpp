@@ -1,4 +1,4 @@
-/* dtkComposerNodeVector3DOperatorTernary.cpp --- 
+/* dtkComposerNodeVector3DOperatorTernary.cpp ---
  *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
@@ -9,7 +9,7 @@
  *     Update #: 19
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -27,7 +27,7 @@
 #include <dtkMathSupport/dtkMath.tpp>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeVector3DOperatorTernary 
+// dtkComposerNodeVector3DOperatorTernary
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeVector3DOperatorTernaryPrivate
@@ -62,7 +62,7 @@ dtkComposerNodeVector3DOperatorTernary::~dtkComposerNodeVector3DOperatorTernary(
     d->vector = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
@@ -98,7 +98,7 @@ dtkComposerNodeVector3DOperatorTernaryScalar::dtkComposerNodeVector3DOperatorTer
 dtkComposerNodeVector3DOperatorTernaryScalar::~dtkComposerNodeVector3DOperatorTernaryScalar(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -108,7 +108,7 @@ dtkComposerNodeVector3DOperatorTernaryScalar::~dtkComposerNodeVector3DOperatorTe
 
 void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 {
-    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()) {
         dtkWarn() << "Inputs not specified. Nothing is done";
 
     } else {
@@ -130,7 +130,7 @@ void dtkComposerNodeVector3DOperatorTernaryTripleProd::run(void)
 
 void dtkComposerNodeVector3DOperatorTernaryScalarMixedProd::run(void)
 {
-    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()){
+    if (d->receiver_0.isEmpty() || d->receiver_1.isEmpty() || d->receiver_2.isEmpty()) {
         dtkWarn() << "Inputs not specified. Nothing is done";
 
     }   else {

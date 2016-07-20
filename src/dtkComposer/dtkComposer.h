@@ -23,8 +23,7 @@ class dtkComposerExtensionPlugin;
 class dtkComposerExtensionPluginManager;
 class dtkComposerExtensionPluginFactory;
 
-namespace dtkComposer
-{
+namespace dtkComposer {
     namespace node {
         DTKCOMPOSER_EXPORT dtkComposerNodeFactory& factory(void);
         DTKCOMPOSER_EXPORT void initialize(void);

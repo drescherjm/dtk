@@ -32,13 +32,13 @@ class DTKGUISUPPORT_EXPORT dtkAboutPlugin : public QWidget
     Q_OBJECT
 
 public:
-     dtkAboutPlugin(dtkPlugin *plugin, QWidget *parent = 0);
-     dtkAboutPlugin(const QString& plugin, QWidget *parent = 0);
+    dtkAboutPlugin(dtkPlugin *plugin, QWidget *parent = 0);
+    dtkAboutPlugin(const QString& plugin, QWidget *parent = 0);
     ~dtkAboutPlugin(void);
 
-     bool openExternalLinks(void);
+    bool openExternalLinks(void);
 
-     void setOpenExternalLinks(bool open);
+    void setOpenExternalLinks(bool open);
 
 protected:
     void setup(dtkPlugin *plugin);

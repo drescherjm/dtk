@@ -94,18 +94,18 @@ dtkViewLayoutItemProxy::dtkViewLayoutItemProxy(QWidget *parent) : QFrame(parent)
 
 dtkViewLayoutItemProxy::~dtkViewLayoutItemProxy(void)
 {
-    if(!d->view)
+    if (!d->view)
         goto finalize;
 
-    if(!d->view->widget())
+    if (!d->view->widget())
         goto finalize;
 
-    if(!d->view->widget()->parentWidget())
+    if (!d->view->widget()->parentWidget())
         goto finalize;
 
-    if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
+    if (dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(d->view->widget()->parentWidget())) {
 
-        if(proxy == this) {
+        if (proxy == this) {
 
             layout()->removeWidget(d->view->widget());
 
@@ -131,17 +131,17 @@ dtkAbstractView *dtkViewLayoutItemProxy::view(void)
 
 void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
 {
-    if(!view)
+    if (!view)
         return;
 
-    if(!view->widget())
+    if (!view->widget())
         return;
 
-    if(dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(view->widget()->parentWidget())) {
+    if (dtkViewLayoutItemProxy *proxy = dynamic_cast<dtkViewLayoutItemProxy *>(view->widget()->parentWidget())) {
         proxy->layout()->removeWidget(view->widget());
         proxy->d->view = NULL;
 
-        if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
+        if (dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(proxy->parentWidget()->parentWidget())) {
             item->d->label->clear();
         }
 
@@ -155,7 +155,7 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
     connect(view, SIGNAL(focused()), this, SIGNAL(focusedIn()));
     connect(view, SIGNAL(nameChanged()), this, SLOT(updateLabel()));
 
-    if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
+    if (dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
 
         this->updateLabel();
 
@@ -170,7 +170,7 @@ void dtkViewLayoutItemProxy::setView(dtkAbstractView *view)
 
 void dtkViewLayoutItemProxy::updateLabel(void)
 {
-    if(dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
+    if (dtkViewLayoutItem *item = dynamic_cast<dtkViewLayoutItem *>(this->parentWidget()->parentWidget())) {
         QString text = d->view->objectName();
 
         if (!d->view->name().isEmpty())
@@ -200,13 +200,13 @@ void dtkViewLayoutItemProxy::focusOutEvent(QFocusEvent *event)
 
 dtkViewLayoutItemProxy *dtkViewLayoutItemPrivate::firstViewChild(dtkViewLayoutItem *item)
 {
-    if(item->d->proxy)
+    if (item->d->proxy)
         return item->d->proxy;
 
-    if(item->d->a)
+    if (item->d->a)
         return firstViewChild(item->d->a);
 
-    if(item->d->b)
+    if (item->d->b)
         return firstViewChild(item->d->b);
 
     return NULL;
@@ -224,7 +224,7 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
 
     d->layout = NULL;
 
-    if((d->parent = parent)) {
+    if ((d->parent = parent)) {
         d->root = d->parent->d->root;
         d->layout = d->parent->d->layout;
     } else {
@@ -274,7 +274,7 @@ dtkViewLayoutItem::dtkViewLayoutItem(dtkViewLayoutItem *parent) : QFrame(parent)
 
     d->proxy->setFocus(Qt::OtherFocusReason);
 
-    d->close->setEnabled(d->parent!=NULL);
+    d->close->setEnabled(d->parent != NULL);
     d->vertc->setEnabled(false);
     d->horzt->setEnabled(false);
     d->maxmz->setEnabled(false);
@@ -289,10 +289,10 @@ dtkViewLayoutItem::~dtkViewLayoutItem(void)
 
 dtkAbstractView *dtkViewLayoutItem::view(void)
 {
-  if(this->proxy())
-    return proxy()->view();
-  else
-    return NULL;
+    if (this->proxy())
+        return proxy()->view();
+    else
+        return NULL;
 }
 
 dtkViewLayoutItem *dtkViewLayoutItem::parent(void)
@@ -357,10 +357,11 @@ void dtkViewLayoutItem::setLayout(dtkViewLayout *layout)
 
 void dtkViewLayoutItem::clear(void)
 {
-    if (d->proxy && d->proxy->view()){
+    if (d->proxy && d->proxy->view()) {
         d->proxy->view()->widget()->hide();
         emit unfocused(d->proxy->view());
     }
+
     delete d->proxy;
 
     d->proxy = new dtkViewLayoutItemProxy(d->root);
@@ -394,7 +395,7 @@ void dtkViewLayoutItem::clear(void)
 
 void dtkViewLayoutItem::split(void)
 {
-    if(!d->proxy->view())
+    if (!d->proxy->view())
         return;
 
     QSize size = this->size();
@@ -422,18 +423,18 @@ void dtkViewLayoutItem::split(void)
 
 void dtkViewLayoutItem::unsplit(void)
 {
-    if(!d->a && !d->b)
+    if (!d->a && !d->b)
         return;
 
     d->root->setUpdatesEnabled(false);
 
-    if(d->layout->current() == d->a) {
+    if (d->layout->current() == d->a) {
 
         d->a->deleteLater();
 
         d->a = NULL;
 
-        if(d->b->d->a && d->b->d->b) {
+        if (d->b->d->a && d->b->d->b) {
 
             dtkViewLayoutItem *a = d->b->d->a; a->d->parent = this;
             dtkViewLayoutItem *b = d->b->d->b; b->d->parent = this;
@@ -455,8 +456,8 @@ void dtkViewLayoutItem::unsplit(void)
 
             dtkViewLayoutItemProxy *child = NULL;
 
-            if(!(child = dtkViewLayoutItemPrivate::firstViewChild(d->a)))
-                 child = dtkViewLayoutItemPrivate::firstViewChild(d->b);
+            if (!(child = dtkViewLayoutItemPrivate::firstViewChild(d->a)))
+                child = dtkViewLayoutItemPrivate::firstViewChild(d->b);
 
             if (child)
                 child->setFocus(Qt::OtherFocusReason);
@@ -482,13 +483,13 @@ void dtkViewLayoutItem::unsplit(void)
         }
     }
 
-    else if(d->layout->current() == d->b) {
+    else if (d->layout->current() == d->b) {
 
         d->b->deleteLater();
 
         d->b = NULL;
 
-        if(d->a->d->a && d->a->d->b) {
+        if (d->a->d->a && d->a->d->b) {
 
             dtkViewLayoutItem *a = d->a->d->a; a->d->parent = this;
             dtkViewLayoutItem *b = d->a->d->b; b->d->parent = this;
@@ -510,8 +511,8 @@ void dtkViewLayoutItem::unsplit(void)
 
             dtkViewLayoutItemProxy *child = NULL;
 
-            if(!(child = dtkViewLayoutItemPrivate::firstViewChild(d->a)))
-                 child = dtkViewLayoutItemPrivate::firstViewChild(d->b);
+            if (!(child = dtkViewLayoutItemPrivate::firstViewChild(d->a)))
+                child = dtkViewLayoutItemPrivate::firstViewChild(d->b);
 
             if (child)
                 child->setFocus(Qt::OtherFocusReason);
@@ -546,10 +547,10 @@ void dtkViewLayoutItem::unsplit(void)
 
 void dtkViewLayoutItem::maximize(void)
 {
-    if(d->a && d->b)
+    if (d->a && d->b)
         return;
 
-    if(this == d->root)
+    if (this == d->root)
         return;
 
     d->root->setUpdatesEnabled(false);
@@ -587,7 +588,7 @@ void dtkViewLayoutItem::onFocusedIn(void)
     d->footer->style()->polish(d->footer);
     d->footer->update();
 
-    if(d->proxy->view())
+    if (d->proxy->view())
         d->root->notify(d->proxy->view());
 }
 
@@ -653,10 +654,10 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
 {
     Q_UNUSED(event);
 
-    if(d->a && d->b)
+    if (d->a && d->b)
         return;
 
-    if(d->proxy->view())
+    if (d->proxy->view())
         return;
 
     dtkAbstractView *view = dtkAbstractViewFactory::instance()->view(event->mimeData()->text());
@@ -666,6 +667,6 @@ void dtkViewLayoutItem::dropEvent(QDropEvent *event)
 
 void dtkViewLayoutItem::notify(dtkAbstractView *view)
 {
-    if(d->root == this)
+    if (d->root == this)
         emit focused(view);
 }

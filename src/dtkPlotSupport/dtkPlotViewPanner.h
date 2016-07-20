@@ -1,5 +1,5 @@
-/* dtkPlotViewPanner.h --- 
- * 
+/* dtkPlotViewPanner.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 22
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTVIEWPANNER_H
@@ -32,7 +32,7 @@ class DTKPLOTSUPPORT_EXPORT dtkPlotViewPanner : public QObject
     Q_OBJECT
 
 public:
-     dtkPlotViewPanner(dtkPlotView *parent);
+    dtkPlotViewPanner(dtkPlotView *parent);
     ~dtkPlotViewPanner(void);
 
 public:

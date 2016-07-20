@@ -36,9 +36,9 @@ dtkCorePluginManagerBase::dtkCorePluginManagerBase(void) : d(new dtkCorePluginMa
 
 }
 
-dtkCorePluginManagerBase* dtkCorePluginManagerBase::instance(void)
+dtkCorePluginManagerBase *dtkCorePluginManagerBase::instance(void)
 {
-    if(!s_instance) {
+    if (!s_instance) {
         s_instance = new dtkCorePluginManagerBase;
     }
 
@@ -87,6 +87,7 @@ bool dtkCorePluginManagerBase::hasName(const QString& name) const
             return true;
         }
     }
+
     return false;
 }
 
@@ -97,6 +98,7 @@ bool dtkCorePluginManagerBase::hasVersion(const QString& version) const
             return true;
         }
     }
+
     return false;
 }
 
@@ -107,6 +109,7 @@ bool dtkCorePluginManagerBase::hasConcept(const QString& concept) const
             return true;
         }
     }
+
     return false;
 }
 

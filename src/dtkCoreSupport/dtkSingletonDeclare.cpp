@@ -10,7 +10,7 @@
  * \brief    Declares a method instance() returning a pointer to the current class.
  *
  * Adds friend classes to allow the constructor and destructor to be called even if they are private.
- * 
+ *
  * Code example :
  * { mySingleton.h }
  *

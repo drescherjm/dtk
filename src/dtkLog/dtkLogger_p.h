@@ -36,7 +36,7 @@ class dtkLogViewList;
 class redirectStream : public std::basic_streambuf<char>
 {
 public:
-    redirectStream(std::ostream &stream, dtkLog::Level level) : m_stream(stream), m_level (level) {
+    redirectStream(std::ostream& stream, dtkLog::Level level) : m_stream(stream), m_level (level) {
         m_old_buf = stream.rdbuf();
         stream.rdbuf(this);
     }
@@ -47,23 +47,22 @@ public:
 
 protected:
     //This is called when a std::endl has been inserted into the stream
-    virtual int_type overflow(int_type v)
-    {
+    virtual int_type overflow(int_type v) {
         if (v == '\n') {
             dtkLog(m_level) << "";
         }
+
         return v;
     }
 
-    virtual std::streamsize xsputn(const char *p, std::streamsize n)
-    {
+    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
         QString str(p);
         dtkLog(m_level) << str;
         return n;
     }
 
 private:
-    std::ostream &m_stream;
+    std::ostream& m_stream;
     std::streambuf *m_old_buf;
     dtkLog::Level m_level;
 };
@@ -73,11 +72,11 @@ private:
 class dtkLoggerPrivate
 {
 public:
-                                    dtkLog::Level  level;
+    dtkLog::Level  level;
     QHash<dtkLogDestinationPointer, dtkLog::Level> levels;
 
 public:
-                         dtkLogDestinationPointer  console;
+    dtkLogDestinationPointer  console;
     QHash<QString,       dtkLogDestinationPointer> files;
     QHash<dtkLogModel *, dtkLogDestinationPointer> models;
 

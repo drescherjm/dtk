@@ -25,7 +25,7 @@ class DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorStatus
 {
 
 public:
-             dtkDistributedCommunicatorStatus(void);
+    dtkDistributedCommunicatorStatus(void);
     virtual ~dtkDistributedCommunicatorStatus(void);
 
 public:

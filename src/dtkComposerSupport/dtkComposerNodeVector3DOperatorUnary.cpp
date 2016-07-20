@@ -9,7 +9,7 @@
  *     Update #: 44
  */
 
-/* Commentary: 
+/* Commentary:
  *
  */
 
@@ -27,7 +27,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeVector3DOperatorUnary 
+// dtkComposerNodeVector3DOperatorUnary
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeVector3DOperatorUnaryPrivate
@@ -48,7 +48,7 @@ dtkComposerNodeVector3DOperatorUnary::dtkComposerNodeVector3DOperatorUnary(void)
 dtkComposerNodeVector3DOperatorUnary::~dtkComposerNodeVector3DOperatorUnary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -70,7 +70,7 @@ public:
 
 dtkComposerNodeVector3DOperatorUnaryScalar::dtkComposerNodeVector3DOperatorUnaryScalar(void) : dtkComposerNodeLeaf(), d(new dtkComposerNodeVector3DOperatorUnaryScalarPrivate)
 {
-    this->appendReceiver(&d->receiver_vec);    
+    this->appendReceiver(&d->receiver_vec);
 
     d->value = 0.;
     d->emitter_val.setData(&d->value);
@@ -80,7 +80,7 @@ dtkComposerNodeVector3DOperatorUnaryScalar::dtkComposerNodeVector3DOperatorUnary
 dtkComposerNodeVector3DOperatorUnaryScalar::~dtkComposerNodeVector3DOperatorUnaryScalar(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -91,7 +91,7 @@ dtkComposerNodeVector3DOperatorUnaryScalar::~dtkComposerNodeVector3DOperatorUnar
 void dtkComposerNodeVector3DOperatorUnaryUnitary::run(void)
 {
     if (d->receiver_vec.isEmpty()) {
-        
+
         dtkWarn() << "Input not specified. Nothing is done";
         d->emitter_vec.clearData();
 
@@ -116,7 +116,7 @@ void dtkComposerNodeVector3DOperatorUnaryScalarNorm::run(void)
         d->value = -1.;
 
     }  else {
-        
+
         d->value = d->receiver_vec.data()->norm();
 
     }

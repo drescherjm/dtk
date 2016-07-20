@@ -24,8 +24,8 @@
 // dtkMetaTypeIsCopyable
 // /////////////////////////////////////////////////////////////////
 
-template< typename T > struct dtkMetaTypeIsClonable : std::integral_constant<bool, (!std::is_abstract<T>::value &&
-                                                                                    std::is_copy_constructible<T>::value)> {};
+template< typename T > struct dtkMetaTypeIsClonable : std::integral_constant < bool, (!std::is_abstract<T>::value&&
+        std::is_copy_constructible<T>::value) > {};
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaTypeIsNumeric definition
@@ -44,7 +44,7 @@ template< typename T > struct dtkMetaTypeIsNumeric< const volatile std::complex<
 // dtkMetaTypeIsAssignable definition
 // /////////////////////////////////////////////////////////////////
 
-template< typename T > struct dtkMetaTypeIsAssignable : std::integral_constant<bool, dtkMetaTypeIsNumeric<T>::value || std::is_copy_assignable<T>::value> {};
+template< typename T > struct dtkMetaTypeIsAssignable : std::integral_constant < bool, dtkMetaTypeIsNumeric<T>::value || std::is_copy_assignable<T>::value > {};
 
 // /////////////////////////////////////////////////////////////////
 // dtkMetaTypeIsAddAssignable definition

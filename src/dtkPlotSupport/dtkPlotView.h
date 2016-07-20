@@ -42,7 +42,7 @@ public:
         Logarithmic
     };
 
-   enum LegendPosition {
+    enum LegendPosition {
         LeftLegend,
         RightLegend,
         BottomLegend,
@@ -50,14 +50,14 @@ public:
     };
 
 public:
-     dtkPlotView(void);
+    dtkPlotView(void);
     ~dtkPlotView(void);
 
 public:
     void clear(void);
 
 public:
-     QList<dtkPlotCurve *> curves(void);
+    QList<dtkPlotCurve *> curves(void);
 
 public:
     void   activatePanning(void);

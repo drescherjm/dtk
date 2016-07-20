@@ -1,5 +1,5 @@
-/* dtkAboutBox.h --- 
- * 
+/* dtkAboutBox.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Apr 19 12:51:22 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKABOUTBOX_H
@@ -31,7 +31,7 @@ class DTKGUISUPPORT_EXPORT dtkAboutBox : public QMessageBox
     Q_OBJECT
 
 public:
-     dtkAboutBox(QWidget *parent = 0);
+    dtkAboutBox(QWidget *parent = 0);
     ~dtkAboutBox(void);
 
 private:

@@ -1,5 +1,5 @@
-/* dtkSwitch.h --- 
- * 
+/* dtkSwitch.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb 29 23:53:52 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 14
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKSWITCH_H
@@ -30,33 +30,33 @@ class dtkSwitch : public QQuickView
     Q_OBJECT
 
 public:
-     dtkSwitch(QWindow *parent = 0);
+    dtkSwitch(QWindow *parent = 0);
     ~dtkSwitch(void);
 
 signals:
-     void toggled(bool);
+    void toggled(bool);
 
 public:
-     Q_INVOKABLE QString foreground(void);
-     Q_INVOKABLE QString background(void);
+    Q_INVOKABLE QString foreground(void);
+    Q_INVOKABLE QString background(void);
 
 public:
-     Q_INVOKABLE QString leftLabel(void);
-     Q_INVOKABLE QString rightLabel(void);
+    Q_INVOKABLE QString leftLabel(void);
+    Q_INVOKABLE QString rightLabel(void);
 
 public slots:
-     void toggle(void);
+    void toggle(void);
 
 public slots:
-     void setForeground(const QString& pixmap);
-     void setBackground(const QString& pixmap);
+    void setForeground(const QString& pixmap);
+    void setBackground(const QString& pixmap);
 
 public slots:
-     void setLeftLabel(const QString& label);
-     void setRightLabel(const QString& label);
+    void setLeftLabel(const QString& label);
+    void setRightLabel(const QString& label);
 
 private:
-     dtkSwitchPrivate *d;
+    dtkSwitchPrivate *d;
 };
 
 #endif // DTKSWITCH_H

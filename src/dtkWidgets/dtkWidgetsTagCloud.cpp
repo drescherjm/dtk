@@ -19,19 +19,23 @@
 // Helper functions
 // /////////////////////////////////////////////////////////////////
 
-bool dtkWidgetsTagAlphaLessThan(const dtkWidgetsTag &t1, const dtkWidgetsTag &t2) {
+bool dtkWidgetsTagAlphaLessThan(const dtkWidgetsTag& t1, const dtkWidgetsTag& t2)
+{
     return t1.text() < t2.text();
 }
 
-bool dtkWidgetsTagNumLessThan(const dtkWidgetsTag &t1, const dtkWidgetsTag &t2) {
+bool dtkWidgetsTagNumLessThan(const dtkWidgetsTag& t1, const dtkWidgetsTag& t2)
+{
     return t1.count() < t2.count();
 }
 
-bool dtkWidgetsTagAlphaMoreThan(const dtkWidgetsTag &t1, const dtkWidgetsTag &t2) {
+bool dtkWidgetsTagAlphaMoreThan(const dtkWidgetsTag& t1, const dtkWidgetsTag& t2)
+{
     return t1.text() >= t2.text();
 }
 
-bool dtkWidgetsTagNumMoreThan(const dtkWidgetsTag &t1, const dtkWidgetsTag &t2) {
+bool dtkWidgetsTagNumMoreThan(const dtkWidgetsTag& t1, const dtkWidgetsTag& t2)
+{
     return t1.count() >= t2.count();
 }
 
@@ -48,13 +52,13 @@ public:
 
         this->buckets = buckets;
         this->min = min;
-        this->max = max+1;
+        this->max = max + 1;
 
-        this->width = ((double)(this->max-this->min))/((double)(this->buckets));
+        this->width = ((double)(this->max - this->min)) / ((double)(this->buckets));
     }
 
     int bucket(dtkWidgetsTag tag) {
-        return ((float)(tag.count()-this->min))/((float)(this->width));
+        return ((float)(tag.count() - this->min)) / ((float)(this->width));
     }
 
 private:
@@ -147,7 +151,7 @@ void dtkWidgetsTagCloud::setFontSize(int size)
 
 void dtkWidgetsTagCloud::setFontRange(int range)
 {
-    d->fontSizeRange = (range > 0) ? range: 0;
+    d->fontSizeRange = (range > 0) ? range : 0;
 }
 
 void dtkWidgetsTagCloud::setSortingType(SortingType type)
@@ -162,16 +166,16 @@ void dtkWidgetsTagCloud::setSortingOrder(SortingOrder order)
 
 void dtkWidgetsTagCloud::sort(void)
 {
-    if(d->sortingType == Alpha && d->sortingOrder == Asc)
+    if (d->sortingType == Alpha && d->sortingOrder == Asc)
         qSort(d->tags.begin(), d->tags.end(), dtkWidgetsTagAlphaLessThan);
 
-    if(d->sortingType == Alpha && d->sortingOrder == Desc)
+    if (d->sortingType == Alpha && d->sortingOrder == Desc)
         qSort(d->tags.begin(), d->tags.end(), dtkWidgetsTagAlphaMoreThan);
 
-    if(d->sortingType == Num && d->sortingOrder == Asc)
+    if (d->sortingType == Num && d->sortingOrder == Asc)
         qSort(d->tags.begin(), d->tags.end(), dtkWidgetsTagNumLessThan);
 
-    if(d->sortingType == Num && d->sortingOrder == Desc)
+    if (d->sortingType == Num && d->sortingOrder == Desc)
         qSort(d->tags.begin(), d->tags.end(), dtkWidgetsTagNumMoreThan);
 }
 
@@ -210,7 +214,7 @@ void dtkWidgetsTagCloud::render(void)
 
     dtkWidgetsTagCloudHasher hasher(d->fontSizeRange, d->mincount, d->maxcount);
 
-    int baseFontSize = d->averageFontSize - ((double)(d->fontSizeRange-1)/2);
+    int baseFontSize = d->averageFontSize - ((double)(d->fontSizeRange - 1) / 2);
 
     QString cloud; cloud.append(QString("<div align=\"justify\">\n"));
 

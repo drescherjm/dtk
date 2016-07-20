@@ -1,5 +1,5 @@
-/* dtkNotificationEvent.h --- 
- * 
+/* dtkNotificationEvent.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 19 20:33:27 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 37
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKNOTIFICATIONEVENT_H
@@ -30,13 +30,13 @@ class DTKWIDGETS_EXPORT dtkNotificationEvent : public QEvent
 {
 public:
     enum Type {
-           Persistent,
+        Persistent,
         NonPersistent
     };
 
 public:
-     dtkNotificationEvent(void);
-     dtkNotificationEvent(const dtkNotificationEvent& other);
+    dtkNotificationEvent(void);
+    dtkNotificationEvent(const dtkNotificationEvent& other);
     ~dtkNotificationEvent(void);
 
 public:

@@ -32,19 +32,19 @@ class DTKGUISUPPORT_EXPORT dtkPieChart : public QWidget
 
 public:
     dtkPieChart(QWidget *parent = 0, int width = 0, int height = 0);
-   ~dtkPieChart(void);
+    ~dtkPieChart(void);
 
 public:
-   QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
 public:
-   void addPiece(const QString& key, int val, QColor color);
+    void addPiece(const QString& key, int val, QColor color);
 
 public:
-   void paintEvent(QPaintEvent *ev);
+    void paintEvent(QPaintEvent *ev);
 
 public:
-   void clear(void);
+    void clear(void);
 
 private:
     dtkPieChartPrivate *d;

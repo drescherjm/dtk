@@ -109,7 +109,7 @@ public slots:
     dtkSmartPointer<dtkAbstractDataDeserializer> deserializerSmartPointer(const QString& type);
 
 protected:
-     dtkAbstractDataFactory(void);
+    dtkAbstractDataFactory(void);
     ~dtkAbstractDataFactory(void);
 
 private:

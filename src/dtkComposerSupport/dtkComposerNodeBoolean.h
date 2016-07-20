@@ -1,5 +1,5 @@
-/* dtkComposerNodeBoolean.h --- 
- * 
+/* dtkComposerNodeBoolean.h ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Tue Feb 14 16:46:54 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 19
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODEBOOLEAN_H
@@ -28,7 +28,7 @@ class dtkComposerNodeBooleanPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeBoolean : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeBoolean(void);
+    dtkComposerNodeBoolean(void);
     ~dtkComposerNodeBoolean(void);
 
 public:

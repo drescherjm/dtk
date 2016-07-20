@@ -76,6 +76,7 @@ dtkComposerNodeVectorInteger::~dtkComposerNodeVectorInteger(void)
 {
     if (d->vector)
         delete d->vector;
+
     d->vector = NULL;
 
     delete d;
@@ -85,16 +86,19 @@ dtkComposerNodeVectorInteger::~dtkComposerNodeVectorInteger(void)
 
 QString dtkComposerNodeVectorInteger::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "size";
         break;
+
     case 2:
         return "value";
         break;
+
     default:
         break;
     }
@@ -104,13 +108,15 @@ QString dtkComposerNodeVectorInteger::inputLabelHint(int port)
 
 QString dtkComposerNodeVectorInteger::outputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "vector";
         break;
+
     case 1:
         return "size";
         break;
+
     default:
         break;
     }
@@ -144,7 +150,7 @@ void dtkComposerNodeVectorInteger::run(void)
             dtkWarn() << "The size of the matrix is zero.";
 
         } else {
-            
+
             if (d->size != d->vector->size())
                 d->vector->allocate(d->size);
 

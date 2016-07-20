@@ -29,9 +29,9 @@
 class dtkComposerNodeMetaVector3DArrayPrivate
 {
 public:
-    dtkComposerTransmitterEmitterVector< dtkContainerVector<dtkVector3DReal*> *> emitter_arrays;
+    dtkComposerTransmitterEmitterVector< dtkContainerVector<dtkVector3DReal *> *> emitter_arrays;
 
-    dtkContainerVector< dtkContainerVector<dtkVector3DReal*> *> arrays;
+    dtkContainerVector< dtkContainerVector<dtkVector3DReal *> *> arrays;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -48,16 +48,17 @@ dtkComposerNodeMetaVector3DArray::dtkComposerNodeMetaVector3DArray(void) : dtkCo
 dtkComposerNodeMetaVector3DArray::~dtkComposerNodeMetaVector3DArray(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
 QString dtkComposerNodeMetaVector3DArray::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "arrays";
         break;
+
     default:
         break;
     }

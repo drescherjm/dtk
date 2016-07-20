@@ -34,18 +34,18 @@ class DTKCORESUPPORT_EXPORT dtkAbstractDataComposite : public dtkAbstractData
 
 public:
     enum Type {
-               None = 0,
+        None = 0,
         ConstVector = 1,
-             Vector = 2,
-          ConstList = 3,
-               List = 4
+        Vector = 2,
+        ConstList = 3,
+        List = 4
     };
 
 public:
-             dtkAbstractDataComposite(      QVector<dtkAbstractData *>& vector, dtkAbstractData *parent = 0);
-             dtkAbstractDataComposite(const QVector<dtkAbstractData *>& vector, dtkAbstractData *parent = 0);
-             dtkAbstractDataComposite(        QList<dtkAbstractData *>&   list, dtkAbstractData *parent = 0);
-             dtkAbstractDataComposite(const   QList<dtkAbstractData *>&   list, dtkAbstractData *parent = 0);
+    dtkAbstractDataComposite(      QVector<dtkAbstractData *>& vector, dtkAbstractData *parent = 0);
+    dtkAbstractDataComposite(const QVector<dtkAbstractData *>& vector, dtkAbstractData *parent = 0);
+    dtkAbstractDataComposite(        QList<dtkAbstractData *>&   list, dtkAbstractData *parent = 0);
+    dtkAbstractDataComposite(const   QList<dtkAbstractData *>&   list, dtkAbstractData *parent = 0);
     virtual ~dtkAbstractDataComposite(void);
 
 public:
@@ -61,13 +61,13 @@ public:
     Type type(void);
 
     const dtkAbstractData *at(qlonglong index) const;
-          dtkAbstractData *at(qlonglong index);
+    dtkAbstractData *at(qlonglong index);
 
     const QVector<dtkAbstractData *>& vector(void) const;
-          QVector<dtkAbstractData *>& vector(void);
+    QVector<dtkAbstractData *>& vector(void);
 
     const QList<dtkAbstractData *>& list(void) const;
-          QList<dtkAbstractData *>& list(void);
+    QList<dtkAbstractData *>& list(void);
 
 private:
     dtkAbstractDataCompositePrivate *d;

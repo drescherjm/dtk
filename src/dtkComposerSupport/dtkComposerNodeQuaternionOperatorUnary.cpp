@@ -1,5 +1,5 @@
-/* dtkComposerNodeQuaternionOperatorUnary.cpp --- 
- * 
+/* dtkComposerNodeQuaternionOperatorUnary.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Fri Apr 27 14:22:58 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 12
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeQuaternion.h"
@@ -27,7 +27,7 @@
 #include <dtkLog/dtkLog>
 
 // /////////////////////////////////////////////////////////////////
-// dtkComposerNodeQuaternionOperatorUnary 
+// dtkComposerNodeQuaternionOperatorUnary
 // /////////////////////////////////////////////////////////////////
 
 class dtkComposerNodeQuaternionOperatorUnaryPrivate
@@ -48,7 +48,7 @@ dtkComposerNodeQuaternionOperatorUnary::dtkComposerNodeQuaternionOperatorUnary(v
 dtkComposerNodeQuaternionOperatorUnary::~dtkComposerNodeQuaternionOperatorUnary(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -80,7 +80,7 @@ dtkComposerNodeQuaternionOperatorUnaryScalar::dtkComposerNodeQuaternionOperatorU
 dtkComposerNodeQuaternionOperatorUnaryScalar::~dtkComposerNodeQuaternionOperatorUnaryScalar(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 
@@ -91,7 +91,7 @@ dtkComposerNodeQuaternionOperatorUnaryScalar::~dtkComposerNodeQuaternionOperator
 void dtkComposerNodeQuaternionOperatorUnaryUnitary::run(void)
 {
     if (d->receiver_quat.isEmpty()) {
-        
+
         dtkWarn() << "Input not specified. Nothing is done";
 
     }  else {
@@ -114,7 +114,7 @@ void dtkComposerNodeQuaternionOperatorUnaryScalarNorm::run(void)
         dtkWarn() << "Input not specified. Nothing is done";
 
     }  else {
-        
+
         d->value = d->receiver_quat.data()->norm();
 
     }

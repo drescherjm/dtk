@@ -1,5 +1,5 @@
-/* dtkDistributedMimeData.h --- 
- * 
+/* dtkDistributedMimeData.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Apr 12 11:26:14 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 16
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDMIMEDATA_H
@@ -32,7 +32,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedMimeData : public QMimeData
     Q_OBJECT
 
 public:
-     dtkDistributedMimeData(void);
+    dtkDistributedMimeData(void);
     ~dtkDistributedMimeData(void);
 
 public:

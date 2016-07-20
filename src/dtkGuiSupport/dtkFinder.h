@@ -1,5 +1,5 @@
-/* dtkFinder.h --- 
- * 
+/* dtkFinder.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Sat Jun 12 15:45:12 2010 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 37
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKFINDER_H
@@ -36,10 +36,10 @@ class DTKGUISUPPORT_EXPORT dtkFinderToolBar : public QToolBar
     Q_OBJECT
 
 public:
-     dtkFinderToolBar(QWidget *parent = 0);
+    dtkFinderToolBar(QWidget *parent = 0);
     ~dtkFinderToolBar(void);
 
-     QSize sizeHint (void) const;
+    QSize sizeHint (void) const;
 
 signals:
     void changed(const QString& path);
@@ -76,7 +76,7 @@ class DTKGUISUPPORT_EXPORT dtkFinderSideView : public QTreeWidget
                WRITE setHeaderFontSize)
 
 public:
-     dtkFinderSideView(QWidget *parent = 0);
+    dtkFinderSideView(QWidget *parent = 0);
     ~dtkFinderSideView(void);
 
     void populate(void);
@@ -123,16 +123,16 @@ class DTKGUISUPPORT_EXPORT dtkFinderPathBar : public QFrame
     Q_OBJECT
 
 public:
-     dtkFinderPathBar(QWidget *parent = 0);
+    dtkFinderPathBar(QWidget *parent = 0);
     ~dtkFinderPathBar(void);
 
-     QSize sizeHint (void) const;
+    QSize sizeHint (void) const;
 
 signals:
     void changed(const QString& path);
 
 public slots:
-    void setPath(const QString &path);
+    void setPath(const QString& path);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -153,7 +153,7 @@ class DTKGUISUPPORT_EXPORT dtkFinderListView : public QListView
     Q_OBJECT
 
 public:
-     dtkFinderListView(QWidget *parent = 0);
+    dtkFinderListView(QWidget *parent = 0);
     ~dtkFinderListView(void);
 
     void addContextMenuAction(QAction *action);
@@ -177,12 +177,12 @@ protected slots:
     void updateContextMenu(const QPoint&);
 
 protected:
-     void keyPressEvent(QKeyEvent *event);
-     void mouseDoubleClickEvent(QMouseEvent *event);
-     void startDrag(Qt::DropActions supportedActions);
+    void keyPressEvent(QKeyEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
+    void startDrag(Qt::DropActions supportedActions);
 
 private:
-     dtkFinderListViewPrivate *d;
+    dtkFinderListViewPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -196,10 +196,10 @@ class DTKGUISUPPORT_EXPORT dtkFinderTreeView : public QTreeView
     Q_OBJECT
 
 public:
-     dtkFinderTreeView(QWidget *parent = 0);
+    dtkFinderTreeView(QWidget *parent = 0);
     ~dtkFinderTreeView(void);
 
-    int	sizeHintForColumn(int column) const;
+    int sizeHintForColumn(int column) const;
 
     void addContextMenuAction(QAction *action);
 
@@ -222,13 +222,13 @@ protected slots:
     void updateContextMenu(const QPoint&);
 
 protected:
-     void keyPressEvent(QKeyEvent *event);
-     void mouseDoubleClickEvent(QMouseEvent *event);
-     void startDrag(Qt::DropActions supportedActions);
-     void resizeEvent(QResizeEvent * event);
+    void keyPressEvent(QKeyEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
+    void startDrag(Qt::DropActions supportedActions);
+    void resizeEvent(QResizeEvent *event);
 
 private:
-     dtkFinderTreeViewPrivate *d;
+    dtkFinderTreeViewPrivate *d;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -242,7 +242,7 @@ class DTKGUISUPPORT_EXPORT dtkFinder : public QWidget
     Q_OBJECT
 
 public:
-     dtkFinder(QWidget *parent = 0);
+    dtkFinder(QWidget *parent = 0);
     ~dtkFinder(void);
 
     void addContextMenuAction(QAction *action);
@@ -258,8 +258,8 @@ public:
 signals:
     void changed(const QString& path);
     void bookmarked(const QString& path);
-    void fileDoubleClicked(const QString &filename);
-    void fileClicked(const QFileInfo &info);
+    void fileDoubleClicked(const QString& filename);
+    void fileClicked(const QFileInfo& info);
     void selectionChanged(const QStringList& paths);
     void nothingSelected();
     void listView (void);

@@ -1,5 +1,5 @@
-/* dtkSignalBlocker.h --- 
- * 
+/* dtkSignalBlocker.h ---
+ *
  * Author: John Stark
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun 24 16:19:07 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 16
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKSIGNALBLOCKER_H
@@ -41,8 +41,8 @@ private:
     QObject *m_object;
 
 private:
-    dtkSignalBlocker(const dtkSignalBlocker &);
-    dtkSignalBlocker& operator=(const dtkSignalBlocker &);
+    dtkSignalBlocker(const dtkSignalBlocker&);
+    dtkSignalBlocker& operator=(const dtkSignalBlocker&);
 };
 
 #endif

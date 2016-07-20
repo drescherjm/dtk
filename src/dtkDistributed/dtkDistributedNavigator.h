@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -125,5 +125,5 @@ template<typename Container> inline typename dtkDistributedNavigator<Container>:
     return iterator(*c, m_start_id + m_size);
 }
 
-// 
+//
 // dtkDistributedNavigator.h ends here

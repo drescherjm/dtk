@@ -48,6 +48,7 @@ QStringList dtkPluginManagerPathSplitter(QString path)
 
         pos += pathFilterRx.matchedLength();
     }
+
 #else
     QStringList pathList = paths.split(":", QString::SkipEmptyParts);
 #endif
@@ -76,7 +77,7 @@ public:
 
     bool verboseLoading;
     int argc;
-    char * argv;
+    char *argv;
 };
 
 #include "dtkAbstractData.h"
@@ -87,13 +88,13 @@ public:
 
 dtkPluginManager *dtkPluginManager::instance(void)
 {
-    if(!s_instance) {
+    if (!s_instance) {
         s_instance = new dtkPluginManager;
 
         qRegisterMetaType<dtkAbstractObject>("dtkAbstractObject");
-        qRegisterMetaType<dtkAbstractObject*>("dtkAbstractObject*");
+        qRegisterMetaType<dtkAbstractObject *>("dtkAbstractObject*");
         qRegisterMetaType<dtkAbstractData>("dtkAbstractData");
-        qRegisterMetaType<dtkAbstractData*>("dtkAbstractData*");
+        qRegisterMetaType<dtkAbstractData *>("dtkAbstractData*");
         // qRegisterMetaType<dtkVectorReal>("dtkVectorReal");
         // qRegisterMetaType<dtkVectorReal*>("dtkVectorReal*");
         // qRegisterMetaType<dtkVector3DReal>("dtkVector3DReal");
@@ -109,14 +110,14 @@ bool dtkPluginManagerPrivate::check(const QString& path)
 {
     bool status = true;
 
-    foreach(QVariant item, this->dependencies.value(path)) {
+    foreach (QVariant item, this->dependencies.value(path)) {
 
         QVariantMap mitem = item.toMap();
         QVariant na_mitem = mitem.value("name");
         QVariant ve_mitem = mitem.value("version");
         QString key = this->names.key(na_mitem);
 
-        if(!this->names.values().contains(na_mitem)) {
+        if (!this->names.values().contains(na_mitem)) {
             dtkWarn() << "  Missing dependency:" << na_mitem.toString() << "for plugin" << path;
             status = false;
             continue;
@@ -128,7 +129,7 @@ bool dtkPluginManagerPrivate::check(const QString& path)
             continue;
         }
 
-        if(!check(key)) {
+        if (!check(key)) {
             dtkWarn() << "Corrupted dependency:" << na_mitem.toString() << "for plugin" << path;
             status = false;
             continue;
@@ -153,14 +154,14 @@ void dtkPluginManager::initializeApplication(void)
 
 void dtkPluginManager::initialize(void)
 {
-    if(d->path.isNull())
+    if (d->path.isNull())
         this->readSettings();
 
     QStringList pathList = dtkPluginManagerPathSplitter(d->path);
 
     const QString appDir = qApp->applicationDirPath();
 
-    foreach(QString path, pathList) {
+    foreach (QString path, pathList) {
 
         QDir dir(appDir);
 
@@ -182,7 +183,7 @@ void dtkPluginManager::uninitialize(void)
 {
     this->writeSettings();
 
-    foreach(QString path, d->loaders.keys())
+    foreach (QString path, d->loaders.keys())
         unloadPlugin(path);
 }
 
@@ -194,13 +195,13 @@ void dtkPluginManager::uninitializeApplication(void)
 
 void dtkPluginManager::scan(const QString& path)
 {
-    if(!QLibrary::isLibrary(path))
+    if (!QLibrary::isLibrary(path))
         return;
 
     QPluginLoader *loader = new QPluginLoader(path);
 
-           d->names.insert(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
-        d->versions.insert(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
+    d->names.insert(path, loader->metaData().value("MetaData").toObject().value("name").toVariant());
+    d->versions.insert(path, loader->metaData().value("MetaData").toObject().value("version").toVariant());
     d->dependencies.insert(path, loader->metaData().value("MetaData").toObject().value("dependencies").toArray().toVariantList());
 
     delete loader;
@@ -214,14 +215,14 @@ void dtkPluginManager::scan(const QString& path)
 
 void dtkPluginManager::load(const QString& name)
 {
-    if(d->path.isNull())
+    if (d->path.isNull())
         this->readSettings();
 
     QStringList pathList = dtkPluginManagerPathSplitter(d->path);
 
     const QString appDir = qApp->applicationDirPath();
 
-    foreach(QString path, pathList) {
+    foreach (QString path, pathList) {
 
         QDir dir(appDir);
 
@@ -229,7 +230,7 @@ void dtkPluginManager::load(const QString& name)
             dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
 
             foreach (QFileInfo entry, dir.entryInfoList())
-                if(entry.fileName().contains(name))
+                if (entry.fileName().contains(name))
                     loadPlugin(entry.absoluteFilePath());
         } else {
             dtkWarn() << "Failed to load plugins from path " << path << ". Could not cd to directory.";
@@ -245,14 +246,14 @@ void dtkPluginManager::load(const QString& name)
 
 void dtkPluginManager::unload(const QString& name)
 {
-    if(d->path.isNull())
+    if (d->path.isNull())
         this->readSettings();
 
     QStringList pathList = dtkPluginManagerPathSplitter(d->path);
 
     const QString appDir = qApp->applicationDirPath();
 
-    foreach(QString path, pathList) {
+    foreach (QString path, pathList) {
 
         QDir dir(appDir);
 
@@ -260,7 +261,7 @@ void dtkPluginManager::unload(const QString& name)
             dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
 
             foreach (QFileInfo entry, dir.entryInfoList())
-                if(entry.fileName().contains(name))
+                if (entry.fileName().contains(name))
                     if (this->plugin(name))
                         this->unloadPlugin(entry.absoluteFilePath());
         } else {
@@ -292,7 +293,7 @@ void dtkPluginManager::readSettings(void)
 
     settings.endGroup();
 
-    if(d->path.isEmpty()) {
+    if (d->path.isEmpty()) {
         dtkWarn() << "Your dtk config does not seem to be set correctly.";
         dtkWarn() << "Please set plugins.path.";
     }
@@ -308,7 +309,7 @@ void dtkPluginManager::writeSettings(void)
 
 void dtkPluginManager::printPlugins(void)
 {
-    foreach(QString path, d->loaders.keys())
+    foreach (QString path, d->loaders.keys())
         qDebug() << path;
 }
 
@@ -324,10 +325,10 @@ bool dtkPluginManager::verboseLoading(void) const
 
 dtkPlugin *dtkPluginManager::plugin(const QString& name)
 {
-    foreach(QPluginLoader *loader, d->loaders) {
+    foreach (QPluginLoader *loader, d->loaders) {
         dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
-        if(plugin->name() == name)
+        if (plugin->name() == name)
             return plugin;
     }
 
@@ -338,7 +339,7 @@ QList<dtkPlugin *> dtkPluginManager::plugins(void)
 {
     QList<dtkPlugin *> list;
 
-    foreach(QPluginLoader *loader, d->loaders)
+    foreach (QPluginLoader *loader, d->loaders)
         list << qobject_cast<dtkPlugin *>(loader->instance());
 
     return list;
@@ -365,6 +366,7 @@ dtkPluginManager::~dtkPluginManager(void)
     if (d->argv) {
         delete d->argv;
     }
+
     delete d;
 
     d = NULL;
@@ -380,9 +382,13 @@ dtkPluginManager::~dtkPluginManager(void)
 
 void dtkPluginManager::loadPlugin(const QString& path)
 {
-    if(!d->check(path)) {
+    if (!d->check(path)) {
         QString error = "check failure for plugin file " + path;
-        if(d->verboseLoading) { dtkWarn() << error; }
+
+        if (d->verboseLoading) {
+            dtkWarn() << error;
+        }
+
         return;
     }
 
@@ -390,12 +396,16 @@ void dtkPluginManager::loadPlugin(const QString& path)
 
     loader->setLoadHints (QLibrary::ExportExternalSymbolsHint);
 
-    if(!loader->load()) {
+    if (!loader->load()) {
         QString error = "Unable to load ";
         error += path;
         error += " - ";
         error += loader->errorString();
-        if(d->verboseLoading) { dtkWarn() << error; }
+
+        if (d->verboseLoading) {
+            dtkWarn() << error;
+        }
+
         emit loadError(error);
         delete loader;
         return;
@@ -403,26 +413,36 @@ void dtkPluginManager::loadPlugin(const QString& path)
 
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(loader->instance());
 
-    if(!plugin) {
+    if (!plugin) {
         QString error = "Unable to retrieve ";
         error += path;
-        if(d->verboseLoading) { dtkWarn() << error; }
+
+        if (d->verboseLoading) {
+            dtkWarn() << error;
+        }
+
         emit loadError(error);
         return;
     }
 
-    if(!plugin->initialize()) {
+    if (!plugin->initialize()) {
         QString error = "Unable to initialize ";
         error += plugin->name();
         error += " plugin";
-        if(d->verboseLoading) { dtkWarn() << error; }
+
+        if (d->verboseLoading) {
+            dtkWarn() << error;
+        }
+
         emit loadError(error);
         return;
     }
 
     d->loaders.insert(path, loader);
 
-    if(d->verboseLoading) { dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path; }
+    if (d->verboseLoading) {
+        dtkTrace() << "Loaded plugin " << plugin->name() << " from " << path;
+    }
 
     emit loaded(plugin->name());
 }
@@ -439,20 +459,29 @@ void dtkPluginManager::unloadPlugin(const QString& path)
 {
     dtkPlugin *plugin = qobject_cast<dtkPlugin *>(d->loaders.value(path)->instance());
 
-    if(!plugin) {
-        if(d->verboseLoading) { dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin"; }
+    if (!plugin) {
+        if (d->verboseLoading) {
+            dtkDebug() << "dtkPluginManager - Unable to retrieve " << plugin->name() << " plugin";
+        }
+
         return;
     }
 
-    if(!plugin->uninitialize()) {
-        if(d->verboseLoading) { dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin"; }
+    if (!plugin->uninitialize()) {
+        if (d->verboseLoading) {
+            dtkTrace() << "Unable to uninitialize " << plugin->name() << " plugin";
+        }
+
         return;
     }
 
     QPluginLoader *loader = d->loaders.value(path);
 
-    if(!loader->unload()) {
-        if(d->verboseLoading) { dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString(); }
+    if (!loader->unload()) {
+        if (d->verboseLoading) {
+            dtkDebug() << "dtkPluginManager - Unable to unload plugin: " << loader->errorString();
+        }
+
         return;
     }
 

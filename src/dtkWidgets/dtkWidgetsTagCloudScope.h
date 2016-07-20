@@ -26,7 +26,7 @@ class DTKWIDGETS_EXPORT dtkWidgetsTagCloudScope : public QFrame
     Q_OBJECT
 
 public:
-     dtkWidgetsTagCloudScope(QWidget *parent = 0);
+    dtkWidgetsTagCloudScope(QWidget *parent = 0);
     ~dtkWidgetsTagCloudScope(void);
 
     QSize sizeHint(void) const;

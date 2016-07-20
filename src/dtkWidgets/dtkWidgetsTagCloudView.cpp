@@ -1,15 +1,15 @@
 /* dtkWidgetsTagCloudView.cpp ---
- * 
+ *
  * Author: Julien Wintz
  * Created: Mon Apr 15 14:39:34 2013 (+0200)
- * Version: 
+ * Version:
  * Last-Updated: Mon Apr 15 14:44:56 2013 (+0200)
  *           By: Julien Wintz
  *     Update #: 7
  */
 
 /* Change Log:
- * 
+ *
  */
 
 #include "dtkWidgetsTagCloudDesc.h"
@@ -21,7 +21,7 @@ class dtkWidgetsTagCloudViewPrivate
 public:
     QWidget *parent;
 
-public:    
+public:
     QEasingCurve::Type type;
 
 public:
@@ -58,7 +58,7 @@ dtkWidgetsTagCloudView::dtkWidgetsTagCloudView(QWidget *parent) : QStackedWidget
     d->now = 0;
     d->next = 0;
     d->wrap = false;
-    d->pnow = QPoint(0,0);
+    d->pnow = QPoint(0, 0);
     d->active = false;
 
     this->addWidget(d->list);
@@ -120,27 +120,30 @@ void dtkWidgetsTagCloudView::setWrap(bool wrap)
 void dtkWidgetsTagCloudView::slideInNext(void)
 {
     int now = currentIndex();
-    if (d->wrap||(now<count()-1))
-        slideInIdx(now+1);
+
+    if (d->wrap || (now < count() - 1))
+        slideInIdx(now + 1);
 }
 
 void dtkWidgetsTagCloudView::slideInPrev(void)
 {
     int now = currentIndex();
-    if (d->wrap||(now>0))
-        slideInIdx(now-1);
+
+    if (d->wrap || (now > 0))
+        slideInIdx(now - 1);
 }
 
 void dtkWidgetsTagCloudView::slideInIdx(int idx, Direction direction)
 {
-    if (idx>count()-1) {
+    if (idx > count() - 1) {
         direction = d->vertical ? Top2Bottom : Right2Left;
-        idx = (idx)%count();
-    } else if (idx<0) {
-        direction =  d->vertical ? Bottom2Top: Left2Right;
-        idx = (idx+count())%count();
+        idx = (idx) % count();
+    } else if (idx < 0) {
+        direction =  d->vertical ? Bottom2Top : Left2Right;
+        idx = (idx + count()) % count();
     }
-    slideInWgt(widget ( idx ),direction);
+
+    slideInWgt(widget ( idx ), direction);
 }
 
 void dtkWidgetsTagCloudView::slideInWgt(QWidget *newwidget, Direction direction)
@@ -153,65 +156,62 @@ void dtkWidgetsTagCloudView::slideInWgt(QWidget *newwidget, Direction direction)
     Direction directionhint;
     int now = currentIndex();
     int next = indexOf(newwidget);
-    if (now==next) {
+
+    if (now == next) {
         d->active = false;
         return;
-    }
-    else if (now<next){
+    } else if (now < next) {
         directionhint = d->vertical ? Top2Bottom : Right2Left;
-    }
-    else {
+    } else {
         directionhint = d->vertical ? Bottom2Top : Left2Right;
     }
+
     if (direction == Automatic) {
         direction = directionhint;
     }
-    
+
     int offsetx = frameRect().width();
     int offsety = frameRect().height();
-    
+
     widget(next)->setGeometry ( 0,  0, offsetx, offsety );
-    
-    if (direction==Bottom2Top)  {
+
+    if (direction == Bottom2Top)  {
         offsetx = 0;
         offsety = -offsety;
-    }
-    else if (direction==Top2Bottom) {
+    } else if (direction == Top2Bottom) {
         offsetx = 0;
-    }
-    else if (direction==Right2Left) {
+    } else if (direction == Right2Left) {
         offsetx = -offsetx;
         offsety = 0;
-    }
-    else if (direction==Left2Right) {
+    } else if (direction == Left2Right) {
         offsety = 0;
     }
 
     QPoint pnext = widget(next)->pos();
     QPoint pnow = widget(now)->pos();
     d->pnow = pnow;
-    
-    widget(next)->move(pnext.x()-offsetx,pnext.y()-offsety);
+
+    widget(next)->move(pnext.x() - offsetx, pnext.y() - offsety);
     widget(next)->show();
     widget(next)->raise();
-    
-    QPropertyAnimation *animnow = new QPropertyAnimation(widget(now), "pos");    
+
+    QPropertyAnimation *animnow = new QPropertyAnimation(widget(now), "pos");
     animnow->setDuration(d->speed);
     animnow->setEasingCurve(d->type);
     animnow->setStartValue(QPoint(pnow.x(), pnow.y()));
-    animnow->setEndValue(QPoint(offsetx+pnow.x(), offsety+pnow.y()));
+    animnow->setEndValue(QPoint(offsetx + pnow.x(), offsety + pnow.y()));
 
     QPropertyAnimation *animnext = new QPropertyAnimation(widget(next), "pos");
     animnext->setDuration(d->speed);
     animnext->setEasingCurve(d->type);
-    animnext->setStartValue(QPoint(-offsetx+pnext.x(), offsety+pnext.y()));
+    animnext->setStartValue(QPoint(-offsetx + pnext.x(), offsety + pnext.y()));
     animnext->setEndValue(QPoint(pnext.x(), pnext.y()));
-    
+
     QParallelAnimationGroup *animgroup = new QParallelAnimationGroup;
     animgroup->addAnimation(animnow);
     animgroup->addAnimation(animnext);
-    
-    QObject::connect(animgroup, SIGNAL(finished()),this,SLOT(animationDoneSlot()));
+
+    QObject::connect(animgroup, SIGNAL(finished()), this, SLOT(animationDoneSlot()));
 
     d->next = next;
     d->now = now;

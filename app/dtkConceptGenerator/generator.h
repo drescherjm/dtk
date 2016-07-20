@@ -17,9 +17,9 @@
 #include <QtCore>
 #include <QtDebug>
 
-void generate(QString target,QMap<QString, QString> pairs,QString path);
+void generate(QString target, QMap<QString, QString> pairs, QString path);
 
-QString readAndReplace(QString filePath, QMap<QString,QString> pairs);
+QString readAndReplace(QString filePath, QMap<QString, QString> pairs);
 
 //
 // generator.h ends here

@@ -1,12 +1,12 @@
-/* dtkPlotViewLegend.cpp --- 
- * 
+/* dtkPlotViewLegend.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:55:56 2012 (+0200)
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 #include "dtkPlotViewLegend.h"
@@ -55,8 +55,10 @@ void dtkPlotViewLegendPrivate::legendChecked(const QVariant& itemInfo, bool valu
 {
 #if QWT_VERSION >= 0x060100
     QwtPlotItem *item = plot->infoToItem(itemInfo);
+
     if (item)
         showCurve(item, value);
+
 #endif
 }
 
@@ -75,24 +77,30 @@ dtkPlotViewLegend::dtkPlotViewLegend(dtkPlotView *parent) : d(new dtkPlotViewLeg
     d->plotView = parent;
 
     QwtPlotItemList items = d->plot->itemList();
+
     for ( int i = 0; i < items.size(); i++ ) {
 #if QWT_VERSION >= 0x060100
         QList<QWidget *> legendWidgets = d->legend->legendWidgets(d->plot->itemToInfo(items[i]));
+
         if (legendWidgets.size() == 1 ) {
             QwtLegendLabel *legendLabel = qobject_cast<QwtLegendLabel *>(legendWidgets[0]);
+
             if (legendLabel) {
                 legendLabel->setChecked(true);
             }
         }
+
 #else
         QwtLegendItem *legendItem = (QwtLegendItem *)d->legend->find(items[i]);
+
         if (legendItem) {
             if (items[i]->isVisible()) {
                 legendItem->setChecked(true);
             }
         }
+
 #endif
-     }
+    }
 }
 
 dtkPlotViewLegend::~dtkPlotViewLegend(void)
@@ -120,12 +128,15 @@ void dtkPlotViewLegend::setPosition(int position)
     case 0:
         pos = QwtPlot::LeftLegend;
         break;
+
     case 1:
         pos = QwtPlot::RightLegend;
         break;
+
     case 2:
         pos = QwtPlot::BottomLegend;
         break;
+
     default:
         pos = QwtPlot::TopLegend;
         break;

@@ -48,7 +48,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerBaseExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerBaseExtension(void) {};
+    dtkComposerBaseExtension(void) {};
     ~dtkComposerBaseExtension(void) {};
 
 public:
@@ -60,7 +60,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerFileExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerFileExtension(void) {};
+    dtkComposerFileExtension(void) {};
     ~dtkComposerFileExtension(void) {};
 
 public:
@@ -72,7 +72,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerDistributedExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerDistributedExtension(void) {};
+    dtkComposerDistributedExtension(void) {};
     ~dtkComposerDistributedExtension(void) {};
 
 public:
@@ -84,7 +84,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerConstantsExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerConstantsExtension(void) {};
+    dtkComposerConstantsExtension(void) {};
     ~dtkComposerConstantsExtension(void) {};
 
 public:
@@ -96,7 +96,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerControlExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerControlExtension(void) {};
+    dtkComposerControlExtension(void) {};
     ~dtkComposerControlExtension(void) {};
 
 public:
@@ -108,7 +108,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerBooleanExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerBooleanExtension(void) {};
+    dtkComposerBooleanExtension(void) {};
     ~dtkComposerBooleanExtension(void) {};
 
 public:
@@ -120,7 +120,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerNumberExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerNumberExtension(void) {};
+    dtkComposerNumberExtension(void) {};
     ~dtkComposerNumberExtension(void) {};
 
 public:
@@ -132,7 +132,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerStringExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerStringExtension(void) {};
+    dtkComposerStringExtension(void) {};
     ~dtkComposerStringExtension(void) {};
 
 public:
@@ -144,7 +144,7 @@ public:
 class DTKCOMPOSER_EXPORT dtkComposerContainerExtension : public dtkComposerExtension
 {
 public:
-     dtkComposerContainerExtension(void) {};
+    dtkComposerContainerExtension(void) {};
     ~dtkComposerContainerExtension(void) {};
 
 public:

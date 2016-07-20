@@ -1,5 +1,5 @@
-// dtkComposerNodeMetaVector3DArrayAppend.cpp --- 
-// 
+// dtkComposerNodeMetaVector3DArrayAppend.cpp ---
+//
 // Author: Jeremie Labroquere
 // Copyright (C) 2011 - Jeremie Labroquere, Inria.
 // Created: Mon Aug  6 15:26:10 2012 (+0200)
@@ -7,15 +7,15 @@
 // Last-Updated: mar. févr.  4 17:42:20 2014 (+0100)
 //           By: Nicolas Niclausse
 //     Update #: 13
-// 
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change log:
-// 
-// 
+//
+//
 
 #include "dtkComposerNodeMetaVector3DArrayAppend.h"
 
@@ -37,12 +37,12 @@
 class dtkComposerNodeMetaVector3DArrayAppendPrivate
 {
 public:
-    dtkComposerTransmitterReceiverVector<dtkContainerVector<dtkVector3DReal*> *> receiver_arrays;
-    dtkComposerTransmitterReceiverVector<dtkVector3DReal*> receiver_array;
+    dtkComposerTransmitterReceiverVector<dtkContainerVector<dtkVector3DReal *> *> receiver_arrays;
+    dtkComposerTransmitterReceiverVector<dtkVector3DReal *> receiver_array;
 
-    dtkComposerTransmitterEmitterVector<dtkContainerVector<dtkVector3DReal*> *> emitter_arrays;
+    dtkComposerTransmitterEmitterVector<dtkContainerVector<dtkVector3DReal *> *> emitter_arrays;
 
-    dtkContainerVector<dtkContainerVector<dtkVector3DReal*> *> *arrays;
+    dtkContainerVector<dtkContainerVector<dtkVector3DReal *> *> *arrays;
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ dtkComposerNodeMetaVector3DArrayAppend::dtkComposerNodeMetaVector3DArrayAppend(v
 dtkComposerNodeMetaVector3DArrayAppend::~dtkComposerNodeMetaVector3DArrayAppend(void)
 {
     delete d;
-    
+
     d = NULL;
 }
 

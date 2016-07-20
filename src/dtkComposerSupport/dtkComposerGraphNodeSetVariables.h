@@ -32,7 +32,7 @@ class dtkComposerGraphNodeSetVariablesPrivate;
 class dtkComposerGraphNodeSetVariables : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeSetVariables(dtkComposerNode *node, const QString& title = "Set Variables");
+    dtkComposerGraphNodeSetVariables(dtkComposerNode *node, const QString& title = "Set Variables");
 
 public:
     dtkComposerGraphNode::Kind kind(void);

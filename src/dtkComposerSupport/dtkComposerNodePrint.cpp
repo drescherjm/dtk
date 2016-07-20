@@ -45,6 +45,7 @@ void dtkComposerNodePrint::run(void)
     foreach (QString s, d->receiver_stdout.allDataDescription()) {
         std::cout << s.toUtf8().constData() <<  std::endl ;
     }
+
     foreach (QString s, d->receiver_stderr.allDataDescription()) {
         std::cerr << s.toUtf8().constData() <<  std::endl ;
     }

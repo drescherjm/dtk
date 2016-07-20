@@ -23,7 +23,7 @@ class dtkComposerNodeBooleanPrivate;
 class DTKCOMPOSER_EXPORT dtkComposerNodeBoolean : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeBoolean(void);
+    dtkComposerNodeBoolean(void);
     ~dtkComposerNodeBoolean(void);
 
 public:

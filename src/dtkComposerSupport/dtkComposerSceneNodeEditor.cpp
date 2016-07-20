@@ -106,21 +106,23 @@ void dtkComposerSceneNodeEditorList::onItemClicked(QListWidgetItem *item)
 
         dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(i->port()->node()->parent());
 
-        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+        foreach (dtkComposerSceneNodeComposite *block, control->blocks()) {
 
-            foreach(dtkComposerScenePort *port, block->inputPorts()) {
+            foreach (dtkComposerScenePort *port, block->inputPorts()) {
                 if (port->loop() == loop) {
                     if (i->checkState() == Qt::Checked)
                         port->show();
+
                     if (i->checkState() == Qt::Unchecked)
                         port->hide();
                 }
             }
 
-            foreach(dtkComposerScenePort *port, block->outputPorts()) {
+            foreach (dtkComposerScenePort *port, block->outputPorts()) {
                 if (port->loop() == loop) {
                     if (i->checkState() == Qt::Checked)
                         port->show();
+
                     if (i->checkState() == Qt::Unchecked)
                         port->hide();
                 }
@@ -150,16 +152,16 @@ void dtkComposerSceneNodeEditorList::onItemChanged(QListWidgetItem *item)
 
         dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(i->port()->node()->parent());
 
-        foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+        foreach (dtkComposerSceneNodeComposite *block, control->blocks()) {
 
-            foreach(dtkComposerScenePort *port, block->inputPorts()) {
+            foreach (dtkComposerScenePort *port, block->inputPorts()) {
                 if (port->loop() == loop) {
                     port->setLabel(item->text());
                     port->update();
                 }
             }
 
-            foreach(dtkComposerScenePort *port, block->outputPorts()) {
+            foreach (dtkComposerScenePort *port, block->outputPorts()) {
                 if (port->loop() == loop) {
                     port->setLabel(item->text());
                     port->update();
@@ -173,7 +175,7 @@ void dtkComposerSceneNodeEditorList::onItemChanged(QListWidgetItem *item)
 // dtkComposerSceneNodeEditorListItem
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerSceneNodeEditorListItem::dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent) : QListWidgetItem(parent, QListWidgetItem::UserType+1)
+dtkComposerSceneNodeEditorListItem::dtkComposerSceneNodeEditorListItem(dtkComposerScenePort *port, dtkComposerSceneNodeEditorList *parent) : QListWidgetItem(parent, QListWidgetItem::UserType + 1)
 {
     this->m_port = port;
 
@@ -188,7 +190,7 @@ dtkComposerSceneNodeEditorListItem::~dtkComposerSceneNodeEditorListItem(void)
 
 int dtkComposerSceneNodeEditorListItem::type(void) const
 {
-    return QListWidgetItem::UserType+1;
+    return QListWidgetItem::UserType + 1;
 }
 
 dtkComposerScenePort *dtkComposerSceneNodeEditorListItem::port(void)
@@ -454,7 +456,7 @@ dtkComposerSceneNodeEditor::dtkComposerSceneNodeEditor(QWidget *parent) : QWidge
 
     connect(d->spin_d, SIGNAL(valueChanged(int)), this, SLOT(onValueChanged(int)));
     connect(d->spin_f, SIGNAL(valueChanged(double)), this, SLOT(onValueChanged(double)));
-    connect(d->edit_s, SIGNAL(textChanged(const QString&)), this, SLOT(onValueChanged(const QString &)));
+    connect(d->edit_s, SIGNAL(textChanged(const QString&)), this, SLOT(onValueChanged(const QString&)));
     connect(d->butn_f, SIGNAL(clicked()), this, SLOT(onBrowse()));
     connect(d->butn_d, SIGNAL(clicked()), this, SLOT(onBrowseDirectory()));
 
@@ -481,10 +483,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
     if (dynamic_cast<dtkComposerSceneNodeComposite *>(node)) {
 
-        foreach(dtkComposerScenePort *port, node->inputPorts())
+        foreach (dtkComposerScenePort *port, node->inputPorts())
             d->input_ports->addInputPort(port);
 
-        foreach(dtkComposerScenePort *port, node->outputPorts())
+        foreach (dtkComposerScenePort *port, node->outputPorts())
             d->output_ports->addOutputPort(port);
 
         d->add_input_port->setEnabled(true);
@@ -501,16 +503,16 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
         QList<int> loop_ports;
 
-        foreach(dtkComposerSceneNodeComposite *block, c->blocks()) {
+        foreach (dtkComposerSceneNodeComposite *block, c->blocks()) {
 
-            foreach(dtkComposerScenePort *port, block->inputPorts()) {
+            foreach (dtkComposerScenePort *port, block->inputPorts()) {
                 if (port->loop() && !loop_ports.contains(port->loop())) {
                     d->loop_ports->addInputPort(port);
                     loop_ports << port->loop();
                 }
             }
 
-            foreach(dtkComposerScenePort *port, block->outputPorts()) {
+            foreach (dtkComposerScenePort *port, block->outputPorts()) {
                 if (port->loop() && !loop_ports.contains(port->loop())) {
                     d->loop_ports->addOutputPort(port);
                     loop_ports << port->loop();
@@ -546,7 +548,7 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
         d->rem_output_port->setEnabled(true);
         d->rem_output_port->setVisible(true);
 
-        foreach(dtkComposerSceneNodeComposite *block, c->blocks())
+        foreach (dtkComposerSceneNodeComposite *block, c->blocks())
             d->selector->addItem(block->title());
 
         d->selector->blockSignals(false);
@@ -556,10 +558,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
 
     } else {
 
-        foreach(dtkComposerScenePort *port, node->inputPorts())
+        foreach (dtkComposerScenePort *port, node->inputPorts())
             d->input_ports->addInputPort(port);
 
-        foreach(dtkComposerScenePort *port, node->outputPorts())
+        foreach (dtkComposerScenePort *port, node->outputPorts())
             d->output_ports->addOutputPort(port);
 
         if (dtkComposerNodeBoolean *b_node = dynamic_cast<dtkComposerNodeBoolean *>(node->wrapee())) {
@@ -635,9 +637,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                     int current_index = 0;
                     d->select_implementation->addItem("Choose implementation");
 
-                    for(int i = 0; i < data_node->implementations().count(); ++i) {
+                    for (int i = 0; i < data_node->implementations().count(); ++i) {
                         if (data_node->implementations().at(i) == data_node->currentImplementation())
-                            current_index = i+1;
+                            current_index = i + 1;
+
                         d->select_implementation->addItem(data_node->implementations().at(i));
                     }
 
@@ -659,9 +662,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                     int current_index = 0;
                     d->select_implementation->addItem("Choose implementation");
 
-                    for(int i = 0; i < process_node->implementations().count(); ++i) {
+                    for (int i = 0; i < process_node->implementations().count(); ++i) {
                         if (process_node->implementations().at(i) == process_node->currentImplementation())
-                            current_index = i+1;
+                            current_index = i + 1;
+
                         d->select_implementation->addItem(process_node->implementations().at(i));
                     }
 
@@ -683,9 +687,10 @@ void dtkComposerSceneNodeEditor::setNode(dtkComposerSceneNode *node)
                     int current_index = 0;
                     d->select_implementation->addItem("Choose implementation");
 
-                    for(int i = 0; i < view_node->implementations().count(); ++i) {
+                    for (int i = 0; i < view_node->implementations().count(); ++i) {
                         if (view_node->implementations().at(i) == view_node->currentImplementation())
-                            current_index = i+1;
+                            current_index = i + 1;
+
                         d->select_implementation->addItem(view_node->implementations().at(i));
                     }
 
@@ -857,7 +862,7 @@ void dtkComposerSceneNodeEditor::removeBlock(void)
 
     this->setNode(d->node);
 
-    d->selector->setCurrentIndex(i-1);
+    d->selector->setCurrentIndex(i - 1);
 }
 
 void dtkComposerSceneNodeEditor::addLoopPort(void)
@@ -925,8 +930,10 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
 
     if (!loop_ids.contains(control)) {
         int loop_count = 0;
+
         foreach (dtkComposerScenePort *port, control->block("Body")->inputPorts() )
             loop_count = qMax(port->loop(), loop_count);
+
         loop_ids[control] = loop_count;
     }
 
@@ -958,6 +965,7 @@ void dtkComposerSceneNodeEditor::addLoopPort(void)
     dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last())->setTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
 
     dynamic_cast<dtkComposerNodeControl *>(control->wrapee())->appendInputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->receivers().last()));
+
     dynamic_cast<dtkComposerNodeControl *>(control->wrapee())->appendOutputTwin(dynamic_cast<dtkComposerTransmitterVariant *>(control->block("Body")->wrapee()->emitters().last()));
 
 // /////////////////////////////////////////////////////////////////
@@ -986,9 +994,9 @@ void dtkComposerSceneNodeEditor::removeLoopPort(void)
 
     dtkComposerSceneNodeControl *control = dynamic_cast<dtkComposerSceneNodeControl *>(d->node);
 
-    foreach(dtkComposerSceneNodeComposite *block, control->blocks()) {
+    foreach (dtkComposerSceneNodeComposite *block, control->blocks()) {
 
-        foreach(dtkComposerScenePort *port, block->inputPorts()) {
+        foreach (dtkComposerScenePort *port, block->inputPorts()) {
             if (port->loop() == loop) {
                 dtkComposerStackCommandDestroyPort *command = new dtkComposerStackCommandDestroyPort;
                 command->setScene(d->scene);
@@ -999,7 +1007,7 @@ void dtkComposerSceneNodeEditor::removeLoopPort(void)
             }
         }
 
-        foreach(dtkComposerScenePort *port, block->outputPorts()) {
+        foreach (dtkComposerScenePort *port, block->outputPorts()) {
             if (port->loop() == loop) {
                 dtkComposerStackCommandDestroyPort *command = new dtkComposerStackCommandDestroyPort;
                 command->setScene(d->scene);
@@ -1041,8 +1049,10 @@ void dtkComposerSceneNodeEditor::addInputPort(void)
         command->setType(dtkComposerScenePort::Input);
 
 #if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+
         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
-             command->setKind(dtkComposerTransmitter::Variant);
+            command->setKind(dtkComposerTransmitter::Variant);
+
 #endif
     }
 
@@ -1117,8 +1127,10 @@ void dtkComposerSceneNodeEditor::addOutputPort(void)
         command->setType(dtkComposerScenePort::Output);
 
 #if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+
         if (dynamic_cast<dtkComposerNodeRemote *>(d->node->wrapee()))
             command->setKind(dtkComposerTransmitter::Variant);
+
 #endif
     }
 
@@ -1186,13 +1198,13 @@ void dtkComposerSceneNodeEditor::onBlockChanged(int index)
 
     d->input_ports->clear();
 
-    foreach(dtkComposerScenePort *port, c->blocks().at(index)->inputPorts())
+    foreach (dtkComposerScenePort *port, c->blocks().at(index)->inputPorts())
         if (!port->loop())
             d->input_ports->addInputPort(port);
 
     d->output_ports->clear();
 
-    foreach(dtkComposerScenePort *port, c->blocks().at(index)->outputPorts())
+    foreach (dtkComposerScenePort *port, c->blocks().at(index)->outputPorts())
         if (!port->loop())
             d->output_ports->addOutputPort(port);
 }
@@ -1213,9 +1225,9 @@ void dtkComposerSceneNodeEditor::onBrowse(void)
     settings.endGroup();
 
     QString file = QFileDialog::getOpenFileName(0, "Select file");
-    dtkDebug()<<file;
+    dtkDebug() << file;
 
-    if(file.isEmpty())
+    if (file.isEmpty())
         return;
 
     QFileInfo info(file);
@@ -1235,9 +1247,9 @@ void dtkComposerSceneNodeEditor::onBrowseDirectory(void)
     settings.endGroup();
 
     QString directory = QFileDialog::getExistingDirectory(0, "Select directory");
-    dtkDebug()<<directory;
+    dtkDebug() << directory;
 
-    if(directory.isEmpty())
+    if (directory.isEmpty())
         return;
 
     QFileInfo info(directory);

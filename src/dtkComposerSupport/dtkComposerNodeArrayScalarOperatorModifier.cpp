@@ -161,6 +161,7 @@ void dtkComposerNodeArrayScalarOperatorSet::run(void)
             array->replace(index, value);
 
         }
+
         d->emitter_array.setData(array);
 
     } else {
@@ -201,7 +202,7 @@ void dtkComposerNodeArrayScalarOperatorAppend::run(void)
 // /////////////////////////////////////////////////////////////////
 
 void dtkComposerNodeArrayScalarOperatorPrepend::run(void)
-{ 
+{
     if (!d->receiver_array.isEmpty() && !d->receiver_value.isEmpty() ) {
 
         dtkContainerVectorReal *array = d->receiver_array.data();
@@ -241,7 +242,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllAdd::run(void)
 
         qreal value = *d->receiver_value.data<qreal>();
 
-        for(qlonglong i = 0 ; i < array->count(); ++i)
+        for (qlonglong i = 0 ; i < array->count(); ++i)
             (*array)[i] += value ;
 
         d->emitter_array.setData(array);
@@ -270,7 +271,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllSubstract::run(void)
 
         qreal value = *d->receiver_value.data<qreal>();
 
-        for(qlonglong i = 0 ; i < array->count(); ++i)
+        for (qlonglong i = 0 ; i < array->count(); ++i)
             (*array)[i] -= value ;
 
         d->emitter_array.setData(array);
@@ -299,7 +300,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllMult::run(void)
 
         qreal value = *d->receiver_value.data<qreal>();
 
-        for(qlonglong i = 0 ; i < array->count(); ++i)
+        for (qlonglong i = 0 ; i < array->count(); ++i)
             (*array)[i] *= value ;
 
         d->emitter_array.setData(array);
@@ -332,7 +333,7 @@ void dtkComposerNodeArrayScalarOperatorModifierAllDivide::run(void)
             dtkWarn() << "Value is zero. Same array is returned." ;
 
         } else {
-            for(qlonglong i = 0 ; i < array->count(); ++i)
+            for (qlonglong i = 0 ; i < array->count(); ++i)
                 (*array)[i] /= value ;
 
         }

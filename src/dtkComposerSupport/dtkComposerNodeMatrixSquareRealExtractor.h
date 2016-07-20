@@ -28,7 +28,7 @@ class dtkComposerNodeMatrixSquareRealExtractorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeMatrixSquareRealExtractor : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeMatrixSquareRealExtractor(void);
+    dtkComposerNodeMatrixSquareRealExtractor(void);
     ~dtkComposerNodeMatrixSquareRealExtractor(void);
 
 public:

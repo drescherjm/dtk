@@ -25,14 +25,14 @@ class dtkGraphEdgePrivate;
 class DTKMATH_EXPORT dtkGraphEdge
 {
 public:
-             dtkGraphEdge(void);
-             dtkGraphEdge(QObject *source, QObject *destination);
-             dtkGraphEdge(const dtkGraphEdge &other);
+    dtkGraphEdge(void);
+    dtkGraphEdge(QObject *source, QObject *destination);
+    dtkGraphEdge(const dtkGraphEdge& other);
     virtual ~dtkGraphEdge(void);
 
 public:
-    dtkGraphEdge& operator=(const dtkGraphEdge &other);
-    bool operator==(const dtkGraphEdge &other) const;
+    dtkGraphEdge& operator=(const dtkGraphEdge& other);
+    bool operator==(const dtkGraphEdge& other) const;
 
 public:
     virtual QObject *source(void) const;

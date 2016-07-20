@@ -32,7 +32,7 @@ class dtkComposerGraphNodeSetOutputsPrivate;
 class dtkComposerGraphNodeSetOutputs : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeSetOutputs(dtkComposerNode *node, const QString &title = "Set Outputs");
+    dtkComposerGraphNodeSetOutputs(dtkComposerNode *node, const QString& title = "Set Outputs");
 
 public:
     void eval(void);

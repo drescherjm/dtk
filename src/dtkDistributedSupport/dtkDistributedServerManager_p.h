@@ -1,5 +1,5 @@
-/* dtkDistributedServerManager_p.h --- 
- * 
+/* dtkDistributedServerManager_p.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue May 31 23:38:18 2011 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDSERVERMANAGER_P_H

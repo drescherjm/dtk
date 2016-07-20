@@ -36,7 +36,7 @@ public:
     QToolButton *butn_f;
 };
 
-dtkComposerControlsListItemFile::dtkComposerControlsListItemFile(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent,node), d(new dtkComposerControlsListItemFilePrivate)
+dtkComposerControlsListItemFile::dtkComposerControlsListItemFile(QListWidget *parent, dtkComposerSceneNode *node) : dtkComposerControlsListItem(parent, node), d(new dtkComposerControlsListItemFilePrivate)
 {
     d->node = node;
 
@@ -51,7 +51,7 @@ dtkComposerControlsListItemFile::dtkComposerControlsListItemFile(QListWidget *pa
 dtkComposerControlsListItemFile::~dtkComposerControlsListItemFile(void )
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 QWidget *dtkComposerControlsListItemFile::widget(void)

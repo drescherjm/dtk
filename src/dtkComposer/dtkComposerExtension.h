@@ -23,7 +23,7 @@ class dtkComposerNodeFactory;
 class DTKCOMPOSER_EXPORT dtkComposerExtension
 {
 public:
-             dtkComposerExtension(void) {}
+    dtkComposerExtension(void) {}
     virtual ~dtkComposerExtension(void) {}
 
 public:

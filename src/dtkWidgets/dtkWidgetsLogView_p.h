@@ -35,7 +35,7 @@ class dtkWidgetsLogViewBar : public QFrame
     Q_OBJECT
 
 public:
-     dtkWidgetsLogViewBar(QWidget *parent = 0);
+    dtkWidgetsLogViewBar(QWidget *parent = 0);
     ~dtkWidgetsLogViewBar(void);
 
 signals:
@@ -56,7 +56,7 @@ class dtkWidgetsLogViewTree : public QTreeWidget
     Q_OBJECT
 
 public:
-     dtkWidgetsLogViewTree(QWidget *parent = 0);
+    dtkWidgetsLogViewTree(QWidget *parent = 0);
     ~dtkWidgetsLogViewTree(void);
 
 signals:
@@ -80,7 +80,7 @@ class dtkWidgetsLogViewList : public QListView
     Q_OBJECT
 
 public:
-     dtkWidgetsLogViewList(QWidget *parent = 0);
+    dtkWidgetsLogViewList(QWidget *parent = 0);
     ~dtkWidgetsLogViewList(void);
 
 public slots:
@@ -118,7 +118,7 @@ public:
 public:
     QStringList exclude;
 
- public:
+public:
     QCheckBox *checkbox_auto_scroll;
 };
 

@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlWhile.cpp --- 
- * 
+/* dtkComposerNodeControlWhile.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 90
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerMetatype.h"
@@ -91,10 +91,10 @@ dtkComposerNodeLeaf *dtkComposerNodeControlWhile::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->cond_block);
 
-    if(id == 1)
+    if (id == 1)
         return &(d->body_block);
 
     return NULL;
@@ -102,7 +102,7 @@ dtkComposerNodeComposite *dtkComposerNodeControlWhile::block(int id)
 
 void dtkComposerNodeControlWhile::setInputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->inputTwins()) {
+    foreach (dtkComposerTransmitterVariant *v, this->inputTwins()) {
         v->setTwinned(false);
         v->setDataFrom(v);
         v->setTwinned(true);
@@ -115,9 +115,9 @@ void dtkComposerNodeControlWhile::setConditions(void)
 
 void dtkComposerNodeControlWhile::setOutputs(void)
 {
-    foreach(dtkComposerTransmitterVariant *v, this->outputTwins()) {
+    foreach (dtkComposerTransmitterVariant *v, this->outputTwins()) {
         v->twin()->setDataFrom(v);
-    }    
+    }
 }
 
 void dtkComposerNodeControlWhile::setVariables(void)

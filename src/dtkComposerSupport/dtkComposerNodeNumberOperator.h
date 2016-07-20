@@ -1,5 +1,5 @@
-/* dtkComposerNodeOperator.h --- 
- * 
+/* dtkComposerNodeOperator.h ---
+ *
  * Author: David Rey
  * Copyright (C) 2008-2011 - David Rey, Inria.
  * Created: Mon Feb 27 14:19:28 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 76
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERNODENUMBEROPERATOR_H
@@ -32,7 +32,7 @@ class dtkComposerNodeNumberOperatorUnaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorUnary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberOperatorUnary(void);
+    dtkComposerNodeNumberOperatorUnary(void);
     ~dtkComposerNodeNumberOperatorUnary(void);
 
     inline QString inputLabelHint(int) {
@@ -56,13 +56,13 @@ class dtkComposerNodeNumberOperatorBinaryPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberOperatorBinary : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberOperatorBinary(void);
+    dtkComposerNodeNumberOperatorBinary(void);
     ~dtkComposerNodeNumberOperatorBinary(void);
 
     inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
-        else if (port == 1) 
+        else if (port == 1)
             return "rhs";
         else
             return "value";
@@ -85,13 +85,13 @@ class dtkComposerNodeNumberComparatorPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberComparator : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberComparator(void);
+    dtkComposerNodeNumberComparator(void);
     ~dtkComposerNodeNumberComparator(void);
 
     inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
-        else if (port == 1) 
+        else if (port == 1)
             return "rhs";
         else
             return "value";
@@ -114,19 +114,19 @@ class dtkComposerNodeNumberAlmosteqPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberAlmosteq : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberAlmosteq(void);
+    dtkComposerNodeNumberAlmosteq(void);
     ~dtkComposerNodeNumberAlmosteq(void);
 
 public:
     void run(void);
-    
+
 public:
     inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
-        else if (port == 1) 
+        else if (port == 1)
             return "rhs";
-        else if (port == 2) 
+        else if (port == 2)
             return "eps";
         else
             return "value";
@@ -157,19 +157,19 @@ class dtkComposerNodeNumberNotalmosteqPrivate;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerNodeNumberNotalmosteq : public dtkComposerNodeLeaf
 {
 public:
-     dtkComposerNodeNumberNotalmosteq(void);
+    dtkComposerNodeNumberNotalmosteq(void);
     ~dtkComposerNodeNumberNotalmosteq(void);
 
 public:
     void run(void);
-    
+
 public:
     inline QString inputLabelHint(int port) {
         if (port == 0)
             return "lhs";
-        else if (port == 1) 
+        else if (port == 1)
             return "rhs";
-        else if (port == 2) 
+        else if (port == 2)
             return "eps";
         else
             return "value";

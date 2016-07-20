@@ -70,7 +70,7 @@ dtkComposerControlsListItemFile::dtkComposerControlsListItemFile(QWidget *parent
 dtkComposerControlsListItemFile::~dtkComposerControlsListItemFile(void )
 {
     delete d;
-    d= NULL;
+    d = NULL;
 }
 
 void dtkComposerControlsListItemFile::onBrowse(void)

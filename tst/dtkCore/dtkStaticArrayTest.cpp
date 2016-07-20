@@ -79,7 +79,8 @@ void dtkStaticArrayTestCase::testCreate(void)
 
         int i = 0;
         double *data = array.data();
-        for(auto val : l) {
+
+        for (auto val : l) {
             QCOMPARE(data[i++], val);
         }
     }
@@ -93,7 +94,8 @@ void dtkStaticArrayTestCase::testCreate(void)
 
         const double *a_data = array.data();
         double *c_data = copy.data();
-        for(int i = 0; i < 11; ++i) {
+
+        for (int i = 0; i < 11; ++i) {
             QCOMPARE(c_data[i], a_data[i]);
         }
     }
@@ -120,7 +122,8 @@ void dtkStaticArrayTestCase::testFill(void)
         double pi = 3.14159;
         array.fill(pi);
         const double *data = array.constData();
-        for(int i = 0; i < 101; ++i) {
+
+        for (int i = 0; i < 101; ++i) {
             QCOMPARE(data[i], pi);
         }
     }
@@ -137,7 +140,8 @@ void dtkStaticArrayTestCase::testAssignement(void)
 
         double *a_data = array.data();
         double *c_data = copy.data();
-        for(int i = 0; i < 11; ++i) {
+
+        for (int i = 0; i < 11; ++i) {
             QCOMPARE(c_data[i], a_data[i]);
         }
     }
@@ -150,12 +154,13 @@ void dtkStaticArrayTestCase::testSetAt(void)
         dtkStaticArray<double, 101> array;
         double pi = 3.14159;
 
-        for(int i = 0; i < 101; ++i) {
+        for (int i = 0; i < 101; ++i) {
             array.setAt(i, pi * i);
         }
 
         double *data = array.data();
-        for(int i = 0; i < 101; ++i) {
+
+        for (int i = 0; i < 101; ++i) {
             QCOMPARE(data[i], pi * i);
         }
     }
@@ -164,12 +169,13 @@ void dtkStaticArrayTestCase::testSetAt(void)
         dtkStaticArray<double, 101> array;
         double pi = 3.14159;
 
-        for(int i = 0; i < 101; ++i) {
+        for (int i = 0; i < 101; ++i) {
             array[i] = pi * i;
         }
 
         double *data = array.data();
-        for(int i = 0; i < 101; ++i) {
+
+        for (int i = 0; i < 101; ++i) {
             QCOMPARE(data[i], pi * i);
         }
     }
@@ -182,7 +188,8 @@ void dtkStaticArrayTestCase::testAt(void)
         dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         int i = 0;
-        for(auto val : l) {
+
+        for (auto val : l) {
             QCOMPARE(array.at(i++), val);
         }
     }
@@ -192,7 +199,8 @@ void dtkStaticArrayTestCase::testAt(void)
         dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         int i = 0;
-        for(auto val : l) {
+
+        for (auto val : l) {
             QCOMPARE(array[i++], val);
         }
 
@@ -209,7 +217,8 @@ void dtkStaticArrayTestCase::testAt(void)
         const dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         int i = 0;
-        for(auto val : l) {
+
+        for (auto val : l) {
             QCOMPARE(array[i++], val);
         }
 
@@ -229,6 +238,7 @@ void dtkStaticArrayTestCase::testIterate(void)
         dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         auto it = l.begin();
+
         for (auto val : array) {
             QCOMPARE(val, *it);
             ++it;
@@ -240,6 +250,7 @@ void dtkStaticArrayTestCase::testIterate(void)
         dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         auto it = l.begin();
+
         for (const double& val : array) {
             QCOMPARE(val, *it);
             ++it;
@@ -251,6 +262,7 @@ void dtkStaticArrayTestCase::testIterate(void)
         const dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         auto it = l.begin();
+
         for (auto val : array) {
             QCOMPARE(val, *it);
             ++it;
@@ -262,6 +274,7 @@ void dtkStaticArrayTestCase::testIterate(void)
         dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         auto it = l.begin();
+
         for (auto a_it = array.rbegin(); a_it != array.rend(); ++a_it, ++it) {
             QCOMPARE(*a_it, *it);
         }
@@ -272,6 +285,7 @@ void dtkStaticArrayTestCase::testIterate(void)
         dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         auto it = l.begin();
+
         for (auto a_it = array.crbegin(); a_it != array.crend(); ++a_it, ++it) {
             QCOMPARE(*a_it, *it);
         }
@@ -282,6 +296,7 @@ void dtkStaticArrayTestCase::testIterate(void)
         const dtkStaticArray<double, 11> array = { 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1 };
 
         auto it = l.begin();
+
         for (auto a_it = array.rbegin(); a_it != array.rend(); ++a_it, ++it) {
             QCOMPARE(*a_it, *it);
         }

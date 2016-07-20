@@ -20,7 +20,8 @@
 #include "dtkComposerScene.h"
 #include "dtkComposerWidget.h"
 
-class dtkComposerEvaluatorToolBarPrivate {
+class dtkComposerEvaluatorToolBarPrivate
+{
 
 public:
     QAction *run_action;
@@ -76,7 +77,7 @@ void dtkComposerEvaluatorToolBarPrivate::init(void)
 
 // -------------------------------- dtkComposerEvaluatorToolBar ---------------------
 
-dtkComposerEvaluatorToolBar::dtkComposerEvaluatorToolBar(const QString & title, QWidget *parent) : QToolBar(title, parent), d(new dtkComposerEvaluatorToolBarPrivate)
+dtkComposerEvaluatorToolBar::dtkComposerEvaluatorToolBar(const QString& title, QWidget *parent) : QToolBar(title, parent), d(new dtkComposerEvaluatorToolBarPrivate)
 {
     d->q = this;
     d->init();
@@ -116,7 +117,7 @@ void dtkComposerEvaluatorToolBar::setComposerWidget(dtkComposerWidget *composer)
     connect(d->run_action, SIGNAL(triggered()), this, SLOT(onEvaluatorStarted()));
     connect(d->composer->evaluator(), SIGNAL(evaluationStopped()), this, SLOT(onEvaluatorFinished()));
     connect(d->composer, SIGNAL(evaluationStopped()), this, SLOT(onEvaluatorFinished()));
-    connect(d->composer->evaluator(), SIGNAL(evaluationPaused(dtkComposerGraphNode*)), this, SLOT(onEvaluatorPaused(dtkComposerGraphNode*)));
+    connect(d->composer->evaluator(), SIGNAL(evaluationPaused(dtkComposerGraphNode *)), this, SLOT(onEvaluatorPaused(dtkComposerGraphNode *)));
 
     connect(d->step_action, SIGNAL(triggered()), d->composer, SLOT(step()));
     connect(d->continue_action, SIGNAL(triggered()), d->composer, SLOT(cont()));

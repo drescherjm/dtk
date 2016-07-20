@@ -1,5 +1,5 @@
-/* dtkPlotViewToolBar.h --- 
- * 
+/* dtkPlotViewToolBar.h ---
+ *
  * Author: Selim Kraria
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Fri Jun  8 12:52:22 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 81
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKPLOTVIEWTOOLBAR_H
@@ -32,7 +32,7 @@ class DTKPLOTSUPPORT_EXPORT dtkPlotViewToolBar : public QFrame
     Q_OBJECT
 
 public:
-     dtkPlotViewToolBar(dtkPlotView *parent);
+    dtkPlotViewToolBar(dtkPlotView *parent);
     ~dtkPlotViewToolBar(void);
 
 protected:

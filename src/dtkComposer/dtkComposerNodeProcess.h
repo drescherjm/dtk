@@ -32,7 +32,7 @@ class dtkComposerNodeProcessPrivate;
 class  dtkComposerNodeProcess : public dtkComposerNodeLeafProcess
 {
 public:
-     dtkComposerNodeProcess(void);
+    dtkComposerNodeProcess(void);
     ~dtkComposerNodeProcess(void);
 
 public:
@@ -40,7 +40,7 @@ public:
 
     QString abstractProcessType(void) const;
 
- public:
+public:
     void setProcess(dtkAbstractProcess *process);
 
     dtkAbstractProcess *process(void) const;

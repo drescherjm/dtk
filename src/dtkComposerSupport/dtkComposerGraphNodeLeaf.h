@@ -32,7 +32,7 @@ class dtkComposerGraphNodeLeafPrivate;
 class dtkComposerGraphNodeLeaf : public dtkComposerGraphNode
 {
 public:
-     dtkComposerGraphNodeLeaf(dtkComposerNode *node, const QString& title = "Leaf");
+    dtkComposerGraphNodeLeaf(dtkComposerNode *node, const QString& title = "Leaf");
 
 public slots:
     void eval(void);

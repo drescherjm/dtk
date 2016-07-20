@@ -1,5 +1,5 @@
-/* dtkVrTrackerKinect.h --- 
- * 
+/* dtkVrTrackerKinect.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Apr 25 16:58:36 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 6
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #pragma once
@@ -29,7 +29,7 @@ class DTKVRSUPPORT_EXPORT dtkVrTrackerKinect : public dtkVrTracker
     Q_OBJECT
 
 public:
-     dtkVrTrackerKinect(void);
+    dtkVrTrackerKinect(void);
     ~dtkVrTrackerKinect(void);
 
 public:

@@ -1,5 +1,5 @@
 /* dtkCorePluginFactory.cpp ---
- * 
+ *
  * Author: Thibaud Kloczko
  * Created: jeu. avril  3 08:44:47 2014 (+0200)
  */

@@ -30,14 +30,21 @@
 
 MPI::Datatype data_type(dtkDistributedCommunicator::DataType type)
 {
-    switch(type) {
+    switch (type) {
     case dtkDistributedCommunicator::dtkDistributedCommunicatorBool:   return MPI::BOOL;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorChar:   return MPI::CHAR;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorInt:    return MPI::INT;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLong:   return MPI::LONG;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorInt64:  return MPI::LONG_LONG;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorFloat:  return MPI::FLOAT;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorDouble: return MPI::DOUBLE;
+
     default:
         dtkInfo() << "dtkCommunicatorMpi: data type not handled.";
         return MPI::BYTE;
@@ -46,17 +53,27 @@ MPI::Datatype data_type(dtkDistributedCommunicator::DataType type)
 
 MPI::Op operation_type(dtkDistributedCommunicator::OperationType type)
 {
-    switch(type) {
+    switch (type) {
     case dtkDistributedCommunicator::dtkDistributedCommunicatorMin:        return MPI::MIN;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorMax:        return MPI::MAX;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorSum:        return MPI::SUM;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorProduct:    return MPI::PROD;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorBitwiseAnd: return MPI::BAND;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorBitwiseOr:  return MPI::BOR;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorBitwiseXor: return MPI::BXOR;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalAnd: return MPI::LAND;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalOr:  return MPI::LOR;
+
     case dtkDistributedCommunicator::dtkDistributedCommunicatorLogicalXor: return MPI::LXOR;
+
     default:
         dtkInfo() << "dtkCommunicatorMpi: operation type not handled.";
         return MPI::MIN;
@@ -128,10 +145,12 @@ dtkDistributedCommunicatorMpi::~dtkDistributedCommunicatorMpi(void)
 {
     if (d->argv) {
         int i = 0;
+
         while (d->argv[i]) {
             delete d->argv[i];
             i++;
         }
+
         delete d->argv;
     }
 
@@ -172,11 +191,13 @@ void dtkDistributedCommunicatorMpi::initialize(void)
     QStringList args = qApp->arguments();
     int    argc = args.size();
 
-    d->argv = new char*[argc + 1];
+    d->argv = new char *[argc + 1];
+
     for (int i = 0; i < argc; i++) {
-        d->argv[i] = new char[strlen(args.at(i).toStdString().c_str())+1];
-        memcpy(d->argv[i], args.at(i).toStdString().c_str(), strlen(args.at(i).toStdString().c_str())+1);
+        d->argv[i] = new char[strlen(args.at(i).toStdString().c_str()) + 1];
+        memcpy(d->argv[i], args.at(i).toStdString().c_str(), strlen(args.at(i).toStdString().c_str()) + 1);
     }
+
     d->argv[argc] = NULL;
 
     MPI::Init(argc, d->argv);
@@ -220,9 +241,9 @@ dtkDistributedCommunicator *dtkDistributedCommunicatorMpi::spawn(QString cmd, ql
 
     if (d->comm == MPI_COMM_NULL) {
         qDebug() << "I'm the parent";
-        char **argv=(char**)malloc(sizeof(char*)*(2));
+        char **argv = (char **)malloc(sizeof(char *) * (2));
 
-        argv[0] = const_cast<char*>("--spawn");
+        argv[0] = const_cast<char *>("--spawn");
         argv[1] = NULL;
         int errs[np];
         MPI_Info info;
@@ -230,20 +251,21 @@ dtkDistributedCommunicator *dtkDistributedCommunicatorMpi::spawn(QString cmd, ql
 
         QByteArray host = QString("localhost").toLocal8Bit();
 
-        for (qlonglong i =0; i < np; ++i) {
-            MPI_Info_set(info, const_cast<char*>("add-host"),host.data());
+        for (qlonglong i = 0; i < np; ++i) {
+            MPI_Info_set(info, const_cast<char *>("add-host"), host.data());
         }
 
         QByteArray wdir = qApp->applicationDirPath().toLocal8Bit();
-        MPI_Info_set(info, const_cast<char*>("wdir"), wdir.data());
+        MPI_Info_set(info, const_cast<char *>("wdir"), wdir.data());
 
         QByteArray appname = cmd.toLocal8Bit();
 
-        MPI_Comm_spawn( appname.data(), argv ,np, info, 0, MPI_COMM_WORLD, &(d->comm), errs );
+        MPI_Comm_spawn( appname.data(), argv , np, info, 0, MPI_COMM_WORLD, &(d->comm), errs );
         MPI_Barrier(d->comm);
     } else {
         MPI_Barrier(d->comm);
     }
+
     // create another communicator for COMM_WORLD
     return new dtkDistributedCommunicatorMpi;
 
@@ -313,9 +335,9 @@ QString dtkDistributedCommunicatorMpi::name(void) const
 {
     int len; char name[MPI_MAX_PROCESSOR_NAME];
 
-    memset(name,0,MPI_MAX_PROCESSOR_NAME);
-    MPI::Get_processor_name(name,len);
-    memset(name+len,0,MPI_MAX_PROCESSOR_NAME-len);
+    memset(name, 0, MPI_MAX_PROCESSOR_NAME);
+    MPI::Get_processor_name(name, len);
+    memset(name + len, 0, MPI_MAX_PROCESSOR_NAME - len);
 
     return QString(name);
 }
@@ -351,11 +373,12 @@ void dtkDistributedCommunicatorMpi::isend(dtkAbstractData *data, qint16 target, 
     stream << data->identifier();
     // FIXME: handle container
     QByteArray *array_tmp = data->serialize();
+
     if (array_tmp->count() > 0 ) {
         array.append(*array_tmp);
         dtkDistributedCommunicatorMpi::isend(array, target, tag, req);
     } else {
-        dtkError() <<"serialization failed";
+        dtkError() << "serialization failed";
     }
 };
 
@@ -425,11 +448,12 @@ void dtkDistributedCommunicatorMpi::send(dtkAbstractData *data, qint16 target, i
     stream << data->identifier();
     // FIXME: handle container
     QByteArray *array_tmp = data->serialize();
+
     if (array_tmp->count() > 0 ) {
         array.append(*array_tmp);
-        dtkDistributedCommunicatorMpi::send(array,target,tag);
+        dtkDistributedCommunicatorMpi::send(array, target, tag);
     } else {
-        dtkError() <<"serialization failed";
+        dtkError() << "serialization failed";
     }
 }
 
@@ -439,20 +463,21 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
 
     dtkDistributedCommunicatorMpi::receive(array, source, tag);
 
-    if( array.count() > 0) {
+    if ( array.count() > 0) {
         QDataStream stream(&array, QIODevice::ReadOnly);
         QString typeName ;
         stream >> typeName;
 
-        qlonglong  header_length=sizeof(int)+2*typeName.size();
+        qlonglong  header_length = sizeof(int) + 2 * typeName.size();
 
         data = dtkAbstractDataFactory::instance()->create(typeName);
+
         if (!data) {
             dtkWarn() << "Can't instantiate object of type" << QString(typeName);
             return;
         }
 
-        if (!data->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
+        if (!data->deserialize(QByteArray::fromRawData(array.data() + header_length, array.size() - header_length))) {
             dtkError() << "Warning: deserialization failed";
         } else {
             dtkDebug() << "deserialization succesful";
@@ -463,33 +488,38 @@ void dtkDistributedCommunicatorMpi::receive(dtkAbstractData *&data, qint16 sourc
 void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 source)
 {
     QByteArray array;
+
     if (d->rank == source) {
         QDataStream stream(&array, QIODevice::WriteOnly);
         stream << data->identifier();
         // FIXME: handle container
         QByteArray *array_tmp = data->serialize();
+
         if (array_tmp->count() > 0 ) {
             array.append(*array_tmp);
         } else {
-            dtkError() <<"serialization failed" ;
+            dtkError() << "serialization failed" ;
         }
     }
+
     this->broadcast(array, source);
+
     if (d->rank != source) {
-        if( array.count() > 0) {
+        if ( array.count() > 0) {
             QDataStream stream(&array, QIODevice::ReadOnly);
             QString typeName ;
             stream >> typeName;
 
-            qlonglong  header_length=sizeof(int)+2*typeName.size();
+            qlonglong  header_length = sizeof(int) + 2 * typeName.size();
 
             data = dtkAbstractDataFactory::instance()->create(typeName);
+
             if (!data) {
                 dtkWarn() << "Can't instantiate object of type" << QString(typeName);
                 return;
             }
 
-            if (!data->deserialize(QByteArray::fromRawData(array.data()+header_length,array.size()-header_length))) {
+            if (!data->deserialize(QByteArray::fromRawData(array.data() + header_length, array.size() - header_length))) {
                 dtkError() << "Warning: deserialization failed";
             } else {
                 dtkDebug() << "deserialization succesful";
@@ -503,61 +533,68 @@ void dtkDistributedCommunicatorMpi::broadcast(dtkAbstractData *&data, qint16 sou
  *  send a QString
  */
 
-void dtkDistributedCommunicatorMpi::send(const QString &s, qint16 target, int tag)
+void dtkDistributedCommunicatorMpi::send(const QString& s, qint16 target, int tag)
 {
     QByteArray Array = s.toUtf8();
     dtkDistributedCommunicatorMpi::send(Array, target, tag);
 }
 
-void dtkDistributedCommunicatorMpi::receive(QString &s, qint16 source, int tag)
+void dtkDistributedCommunicatorMpi::receive(QString& s, qint16 source, int tag)
 {
     QByteArray array;
     this->receive(array, source, tag);
     s = QString(array);
 }
 
-void dtkDistributedCommunicatorMpi::broadcast(QString &s, qint16 source)
+void dtkDistributedCommunicatorMpi::broadcast(QString& s, qint16 source)
 {
     QByteArray array;
+
     if (d->rank == source) {
         array = s.toUtf8();
     }
+
     this->broadcast(array, source);
+
     if (d->rank != source) {
         s = QString(array);
     }
 }
 
 
-void dtkDistributedCommunicatorMpi::send(QByteArray &array, qint16 target, int tag)
+void dtkDistributedCommunicatorMpi::send(QByteArray& array, qint16 target, int tag)
 {
     qint64   arrayLength = array.length();
     dtkDistributedCommunicator::send(array.data(), arrayLength, target, tag);
 
 }
 
-void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag)
+void dtkDistributedCommunicatorMpi::receive(QByteArray& array, qint16 source, int tag)
 {
     dtkDistributedCommunicatorStatus status;
     this->receive(array, source, tag, status);
 }
 
-void dtkDistributedCommunicatorMpi::broadcast(QByteArray &array, qint16 source)
+void dtkDistributedCommunicatorMpi::broadcast(QByteArray& array, qint16 source)
 {
     MPI_Comm mpi_comm = d->comm;
 
     int size;
+
     if (source == ROOT ) {
         size = array.size();
     }
+
     MPI_Bcast(&size, 1, data_type(dtkDistributedCommunicatorInt), source, mpi_comm);
+
     if (source != ROOT ) {
         array.resize(size);
     }
+
     MPI_Bcast(array.data(), size, data_type(dtkDistributedCommunicatorChar), source, mpi_comm);
 }
 
-void dtkDistributedCommunicatorMpi::receive(QByteArray &array, qint16 source, int tag, dtkDistributedCommunicatorStatus& status )
+void dtkDistributedCommunicatorMpi::receive(QByteArray& array, qint16 source, int tag, dtkDistributedCommunicatorStatus& status )
 {
     MPI_Status mpi_status;
     MPI_Probe(source, tag, d->comm, &mpi_status);
@@ -610,7 +647,7 @@ void dtkDistributedCommunicatorMpi::broadcast(void *data, qint64 size, DataType 
 
 void dtkDistributedCommunicatorMpi::gather(void *send, void *recv, qint64 size, DataType dataType, qint16 target, bool all)
 {
-    if(all)
+    if (all)
         MPI_Allgather(send, size, data_type(dataType), recv, size, data_type(dataType), d->comm);
     else
         MPI_Gather(send, size, data_type(dataType), recv, size, data_type(dataType), target, d->comm);
@@ -640,7 +677,7 @@ void dtkDistributedCommunicatorMpi::scatter(void *send, void *recv, qint64 size,
 
 void dtkDistributedCommunicatorMpi::reduce(void *send, void *recv, qint64 size, DataType dataType, OperationType operationType, qint16 target, bool all)
 {
-    if(all)
+    if (all)
         MPI_Allreduce(send, recv, size, data_type(dataType), operation_type(operationType), d->comm);
     else
         MPI_Reduce(send, recv, size, data_type(dataType), operation_type(operationType), target, d->comm);

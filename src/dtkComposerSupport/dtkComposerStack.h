@@ -1,5 +1,5 @@
-/* dtkComposerStack.h --- 
- * 
+/* dtkComposerStack.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Tue Jan 31 11:48:45 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 16
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSTACK_H
@@ -27,7 +27,7 @@ class dtkComposerStackCommand;
 class dtkComposerStack : public QUndoStack
 {
 public:
-    void push(dtkComposerStackCommand* command);
+    void push(dtkComposerStackCommand *command);
 };
 
 #endif

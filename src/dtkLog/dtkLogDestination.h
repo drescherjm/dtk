@@ -58,7 +58,7 @@ class dtkLogDestinationFilePrivate;
 class DTKLOG_EXPORT dtkLogDestinationFile : public dtkLogDestination
 {
 public:
-     dtkLogDestinationFile(const QString& path, qlonglong max_file_size);
+    dtkLogDestinationFile(const QString& path, qlonglong max_file_size);
     ~dtkLogDestinationFile(void);
 
 public:
@@ -77,14 +77,14 @@ class dtkLogDestinationModelPrivate;
 
 class DTKLOG_EXPORT dtkLogDestinationModel : public dtkLogDestination
 {
- public:
-     dtkLogDestinationModel(dtkLogModel *model);
+public:
+    dtkLogDestinationModel(dtkLogModel *model);
     ~dtkLogDestinationModel(void);
 
- public:
+public:
     void write(const QString& message);
 
- private:
+private:
     dtkLogDestinationModelPrivate *d;
 };
 

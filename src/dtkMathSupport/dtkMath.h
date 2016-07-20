@@ -36,9 +36,9 @@ DTKMATHSUPPORT_EXPORT void dtkBubbleSort(qint64 *indices, qint64 size);
 // Minimum and maximum value of an array
 // /////////////////////////////////////////////////////////////////
 
-DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qint32* array, const qint32& size, qint32* minValue, qint32* maxValue);
-DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qint64* array, const qint64& size, qint64* minValue, qint64* maxValue);
-DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qreal* array, const qlonglong& size, qreal* minValue, qreal* maxValue);
+DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qint32 *array, const qint32& size, qint32 *minValue, qint32 *maxValue);
+DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qint64 *array, const qint64& size, qint64 *minValue, qint64 *maxValue);
+DTKMATHSUPPORT_EXPORT void dtkMinMaxValueOfArray(const qreal *array, const qlonglong& size, qreal *minValue, qreal *maxValue);
 
 // /////////////////////////////////////////////////////////////////
 // Some bit constants

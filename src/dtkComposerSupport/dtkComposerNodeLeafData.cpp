@@ -1,5 +1,5 @@
-/* dtkComposerNodeLeafData.cpp --- 
- * 
+/* dtkComposerNodeLeafData.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Thu Jun 28 10:13:10 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 69
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeLeafData.h"
@@ -77,8 +77,10 @@ QString dtkComposerNodeLeafData::currentImplementation(void)
 QStringList dtkComposerNodeLeafData::implementations(void)
 {
     QStringList implementations;
+
     if (this->enableDefaultImplementation())
         implementations << "default";
+
     QStringList all_implementations = dtkAbstractDataFactory::instance()->implementations(this->abstractDataType());
 
     for (int i = 0; i < all_implementations.count(); ++i)
@@ -93,10 +95,10 @@ dtkAbstractData *dtkComposerNodeLeafData::createData(const QString& implementati
 
     if (implementation.isEmpty() || implementation == "Choose implementation")
         return NULL;
-    
+
     if (implementation == "default")
         const_cast<QString&>(implementation) = this->abstractDataType();
-    
+
     if (!d->data) {
 
         d->data = dtkAbstractDataFactory::instance()->create(implementation);
@@ -111,7 +113,7 @@ dtkAbstractData *dtkComposerNodeLeafData::createData(const QString& implementati
 
         d->implementation_has_changed = true;
 
-    }        
+    }
 
     return d->data;
 }

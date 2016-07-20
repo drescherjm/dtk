@@ -18,11 +18,11 @@
 dtkConceptDefinitionPage::dtkConceptDefinitionPage(QWidget *parent) : QWizardPage(parent), ui(new Ui::dtkConceptDefinitionPage)
 {
     this->ui->setupUi(this);
-    this->registerField("def.runnable",ui->m_runnable);
-    this->registerField("def.qObject",ui->m_qObject);
-    this->registerField("def.custom",ui->m_custom);
-    this->registerField("def.customName",ui->m_customName);
-    this->registerField("def.pluginSystem",ui->m_pluginSystem);
+    this->registerField("def.runnable", ui->m_runnable);
+    this->registerField("def.qObject", ui->m_qObject);
+    this->registerField("def.custom", ui->m_custom);
+    this->registerField("def.customName", ui->m_customName);
+    this->registerField("def.pluginSystem", ui->m_pluginSystem);
 }
 
 dtkConceptDefinitionPage::~dtkConceptDefinitionPage(void)

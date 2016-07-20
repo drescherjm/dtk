@@ -27,8 +27,8 @@ class DTKMATH_EXPORT dtkGraph : public QObject
     Q_OBJECT
 
 public:
-             dtkGraph(void);
-             dtkGraph(const dtkGraph& g);
+    dtkGraph(void);
+    dtkGraph(const dtkGraph& g);
     virtual ~dtkGraph(void);
 
 public:

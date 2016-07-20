@@ -1,5 +1,5 @@
-/* dtkComposerNodeContainerData.cpp --- 
- * 
+/* dtkComposerNodeContainerData.cpp ---
+ *
  * Author: tkloczko
  * Copyright (C) 2011 - Thibaud Kloczko, Inria.
  * Created: Wed May  9 12:14:10 2012 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 62
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeContainerData.h"
@@ -36,7 +36,7 @@ public:
     dtkComposerTransmitterReceiver<QString>   receiver_str;
     dtkComposerTransmitterReceiver<qlonglong> receiver_int;
 
-public:    
+public:
     dtkComposerTransmitterVariant emitter;
 
 public:
@@ -65,19 +65,21 @@ dtkComposerNodeContainerData::~dtkComposerNodeContainerData(void)
     d->container = NULL;
 
     delete d;
-    
+
     d = NULL;
 }
 
-QString dtkComposerNodeContainerData::inputLabelHint(int port) 
+QString dtkComposerNodeContainerData::inputLabelHint(int port)
 {
-    switch(port) {
+    switch (port) {
     case 0:
         return "type";
         break;
+
     case 1:
         return "size";
         break;
+
     default:
         break;
     }
@@ -86,11 +88,12 @@ QString dtkComposerNodeContainerData::inputLabelHint(int port)
 }
 
 QString dtkComposerNodeContainerData::outputLabelHint(int port)
-{    
-    switch(port) {
+{
+    switch (port) {
     case 0:
         return "container";
         break;
+
     default:
         break;
     }

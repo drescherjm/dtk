@@ -1,5 +1,5 @@
-/* dtkComposerNodeControlIf.cpp --- 
- * 
+/* dtkComposerNodeControlIf.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Sat Feb 25 00:02:50 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 99
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerNodeControlIf.h"
@@ -32,8 +32,8 @@
 
 class dtkComposerNodeControlIfPrivate
 {
-public:   
-    dtkComposerNodeMetaData header_md; 
+public:
+    dtkComposerNodeMetaData header_md;
     dtkComposerNodeProxy header;
 
     dtkComposerNodeMetaData footer_md;
@@ -116,10 +116,10 @@ dtkComposerNodeLeaf *dtkComposerNodeControlIf::footer(void)
 
 dtkComposerNodeComposite *dtkComposerNodeControlIf::block(int id)
 {
-    if(id == 0)
+    if (id == 0)
         return &(d->then_block);
 
-    if(id == 1)
+    if (id == 1)
         return &(d->else_block);
 
     return NULL;
@@ -161,9 +161,9 @@ void dtkComposerNodeControlIf::end(void)
 {
     bool value = d->cond.data();
 
-    foreach(dtkComposerTransmitter *t, d->then_block.emitters())
+    foreach (dtkComposerTransmitter *t, d->then_block.emitters())
         t->setActive(value);
 
-    foreach(dtkComposerTransmitter *t, d->else_block.emitters())
+    foreach (dtkComposerTransmitter *t, d->else_block.emitters())
         t->setActive(!value);
 }

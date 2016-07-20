@@ -1,5 +1,5 @@
-/* dtkUpdater.h --- 
- * 
+/* dtkUpdater.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008 - Julien Wintz, Inria.
  * Created: Mon Jul 20 11:15:03 2009 (+0200)
@@ -9,12 +9,12 @@
  *     Update #: 3
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKUPDATER_H
@@ -27,9 +27,9 @@
 class dtkUpdaterPrivate;
 
 class DTKCORESUPPORT_EXPORT dtkUpdater
-{   
+{
 public:
-     dtkUpdater(const QUrl& url);
+    dtkUpdater(const QUrl& url);
     ~dtkUpdater(void);
 
 private:

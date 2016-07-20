@@ -1,5 +1,5 @@
-/* dtkDistributedJob.h --- 
- * 
+/* dtkDistributedJob.h ---
+ *
  * Author: Nicolas Niclausse
  * Copyright (C) 2011 - Nicolas Niclausse, Inria.
  * Created: Tue Feb 16 16:24:27 2010 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 75
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKDISTRIBUTEDJOB_H
@@ -32,7 +32,7 @@ class DTKDISTRIBUTEDSUPPORT_EXPORT dtkDistributedJob : public QObject
     Q_OBJECT
 
 public:
-     dtkDistributedJob(void);
+    dtkDistributedJob(void);
     ~dtkDistributedJob(void);
 
     enum State {

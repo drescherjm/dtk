@@ -1,14 +1,14 @@
 // Version: $Id$
-// 
-// 
+//
+//
 
-// Commentary: 
-// 
-// 
+// Commentary:
+//
+//
 
 // Change Log:
-// 
-// 
+//
+//
 
 // Code:
 
@@ -42,5 +42,5 @@ private slots:
 
 };
 
-// 
+//
 // dtkDistributedArrayTest.h ends here

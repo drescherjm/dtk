@@ -1,5 +1,5 @@
-/* dtkComposerGraphEdge.cpp --- 
- * 
+/* dtkComposerGraphEdge.cpp ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Thu Feb  9 15:09:22 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 167
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #include "dtkComposerGraphEdge.h"
@@ -63,7 +63,7 @@ void dtkComposerGraphEdge::setId(int id)
 
 QRectF dtkComposerGraphEdge::boundingRect(void) const
 {
-    if(!source() || !destination())
+    if (!source() || !destination())
         return QRectF();
 
     QPointF s = source()->sceneBoundingRect().center();
@@ -76,8 +76,8 @@ QRectF dtkComposerGraphEdge::boundingRect(void) const
 
     qreal x = xmin;
     qreal y = ymin;
-    qreal w = xmax-xmin;
-    qreal h = ymax-ymin;
+    qreal w = xmax - xmin;
+    qreal h = ymax - ymin;
 
     return QRectF(x, y, w, h);
 }
@@ -99,23 +99,24 @@ void dtkComposerGraphEdge::paint(QPainter *painter, const QStyleOptionGraphicsIt
         // different levels of blue depending on id value.
         painter->setPen(QColor (50, 50, c));
     }
+
     this->drawArrow(painter, s, e);
 }
 
 void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qreal size, qreal end_margin)
 {
     QPointF points[3];
-    float a = atan2(from.y()-to.y(), from.x()-to.x());
-    to.setX(to.x()+4*end_margin*cos(a));
-    to.setY(to.y()+end_margin*sin(a));
+    float a = atan2(from.y() - to.y(), from.x() - to.x());
+    to.setX(to.x() + 4 * end_margin * cos(a));
+    to.setY(to.y() + end_margin * sin(a));
     end_margin += size;
-    a = atan2(from.y()-to.y(), from.x()-to.x());
+    a = atan2(from.y() - to.y(), from.x() - to.x());
 
-    QPointF k(to.x()+size*cos(a), to.y()+size*sin(a));
-    a += M_PI/2;
+    QPointF k(to.x() + size * cos(a), to.y() + size * sin(a));
+    a += M_PI / 2;
     size /= 2;
-    QPointF i(k.x()+size*cos(a), k.y()+size*sin(a));
-    QPointF j(k.x()-size*cos(a), k.y()-size*sin(a));
+    QPointF i(k.x() + size * cos(a), k.y() + size * sin(a));
+    QPointF j(k.x() - size * cos(a), k.y() - size * sin(a));
 
     p->save();
     p->setRenderHint(QPainter::Antialiasing, true);
@@ -134,12 +135,12 @@ void dtkComposerGraphEdge::drawArrow(QPainter *p, QPointF from, QPointF to, qrea
 // dtkComposerGraphEdgeList
 // /////////////////////////////////////////////////////////////////
 
-dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(void) : QList<dtkComposerGraphEdge *>()
+dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(void) : QList<dtkComposerGraphEdge * >()
 {
 
 }
 
-dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other) : QList<dtkComposerGraphEdge *>(other)
+dtkComposerGraphEdgeList::dtkComposerGraphEdgeList(const QList<dtkComposerGraphEdge *>& other) : QList<dtkComposerGraphEdge * >(other)
 {
 
 }

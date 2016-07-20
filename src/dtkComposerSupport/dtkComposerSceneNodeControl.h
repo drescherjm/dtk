@@ -1,5 +1,5 @@
-/* dtkComposerSceneNodeControl.h --- 
- * 
+/* dtkComposerSceneNodeControl.h ---
+ *
  * Author: Julien Wintz
  * Copyright (C) 2008-2011 - Julien Wintz, Inria.
  * Created: Wed Feb  8 15:43:44 2012 (+0100)
@@ -9,12 +9,12 @@
  *     Update #: 63
  */
 
-/* Commentary: 
- * 
+/* Commentary:
+ *
  */
 
 /* Change log:
- * 
+ *
  */
 
 #ifndef DTKCOMPOSERSCENENODECONTROL_H
@@ -32,7 +32,7 @@ class dtkComposerSceneNodeLeaf;
 class DTKCOMPOSERSUPPORT_EXPORT dtkComposerSceneNodeControl : public dtkComposerSceneNode
 {
 public:
-     dtkComposerSceneNodeControl(void);
+    dtkComposerSceneNodeControl(void);
     ~dtkComposerSceneNodeControl(void);
 
 public:

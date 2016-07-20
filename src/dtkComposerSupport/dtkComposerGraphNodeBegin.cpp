@@ -55,17 +55,20 @@ public:
 };
 
 
-dtkComposerGraphNodeBegin::dtkComposerGraphNodeBegin(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(),d(new dtkComposerGraphNodeBeginPrivate)
+dtkComposerGraphNodeBegin::dtkComposerGraphNodeBegin(dtkComposerNode *cnode, const QString& title) : dtkComposerGraphNode(), d(new dtkComposerGraphNodeBeginPrivate)
 {
     d->is_remote = false;
     d->kind = dtkComposerGraphNode::Begin;
+
     if (!dynamic_cast<dtkComposerNodeControl *>(cnode)) {
 #if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+
         if (dtkComposerNodeRemote *remote = dynamic_cast<dtkComposerNodeRemote *>(cnode)) {
             d->is_remote = true;
             d->remote = remote ;
             //We can't call isSlave() now
         }
+
 #endif
         d->composite = dynamic_cast<dtkComposerNodeComposite *>(cnode);
         d->control_node = NULL;
@@ -123,11 +126,13 @@ dtkComposerGraphNodeList dtkComposerGraphNodeBegin::evaluableChilds(void)
 {
     if (d->allchilds.isEmpty()) {
         dtkGraph sg = this->graph()->subgraph(this, d->end);
-        QList<QObject*> L = (d->kind ==  dtkComposerGraphNode::BeginIf) ? sg.nodes(): sg.topologicalSort();
-        foreach (QObject * o,L) {
+        QList<QObject *> L = (d->kind ==  dtkComposerGraphNode::BeginIf) ? sg.nodes() : sg.topologicalSort();
+
+        foreach (QObject *o, L) {
             d->allchilds << static_cast<dtkComposerGraphNode *>(o);
         }
     }
+
     return d->allchilds;
 }
 
@@ -139,6 +144,7 @@ dtkComposerGraphNode *dtkComposerGraphNodeBegin::end(void)
 dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
 {
 #if defined(DTK_BUILD_SUPPORT_DISTRIBUTED)
+
     if (d->is_remote && !d->remote->isSlave()) {
         dtkDebug() << "we are running the begin statement of a remote node on a controller, successor is only the end statement";
         dtkComposerGraphNodeList list;
@@ -147,6 +153,7 @@ dtkComposerGraphNodeList dtkComposerGraphNodeBegin::successors(void)
     } else {
         return dtkComposerGraphNode::successors();
     }
+
 #else
     return dtkComposerGraphNode::successors();
 #endif

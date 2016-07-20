@@ -21,7 +21,7 @@
 class DTKCOMPOSER_EXPORT dtkComposerSettings : public QSettings
 {
 public:
-     dtkComposerSettings(void);
+    dtkComposerSettings(void);
     ~dtkComposerSettings(void);
 };
 

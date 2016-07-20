@@ -37,7 +37,7 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeRemote : public QObject, public dtkCompo
     Q_OBJECT
 
 public:
-             dtkComposerNodeRemote(void);
+    dtkComposerNodeRemote(void);
     virtual ~dtkComposerNodeRemote(void);
 
 public slots:
@@ -77,7 +77,7 @@ class DTKCOMPOSER_EXPORT dtkComposerNodeRemoteSubmit : public QObject, public dt
     Q_OBJECT
 
 public:
-     dtkComposerNodeRemoteSubmit(void);
+    dtkComposerNodeRemoteSubmit(void);
     ~dtkComposerNodeRemoteSubmit(void);
 
 public:

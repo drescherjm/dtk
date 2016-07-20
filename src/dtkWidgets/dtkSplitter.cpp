@@ -27,7 +27,7 @@ public:
     QSize sizeHint(void) const;
 
 protected:
-    void paintEvent(QPaintEvent * event);
+    void paintEvent(QPaintEvent *event);
 
 private:
     bool m_slim;
@@ -53,16 +53,16 @@ void dtkSplitterHandle::paintEvent(QPaintEvent *event)
         painter.setPen(topColor);
         painter.drawLine(0, 0, width(), 0);
 
-        if(m_slim)
+        if (m_slim)
             return;
 
         painter.setPen(bottomColor);
-        painter.drawLine(0, height()-1, width(), height()-1);
+        painter.drawLine(0, height() - 1, width(), height() - 1);
 
-        QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()-3));
+        QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height() - 3));
         linearGrad.setColorAt(0, gradientStart);
         linearGrad.setColorAt(1, gradientStop);
-        painter.fillRect(QRect(QPoint(0,1), size() - QSize(0, 2)), QBrush(linearGrad));
+        painter.fillRect(QRect(QPoint(0, 1), size() - QSize(0, 2)), QBrush(linearGrad));
 
     } else {
 

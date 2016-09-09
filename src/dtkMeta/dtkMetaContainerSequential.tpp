@@ -352,11 +352,12 @@ inline dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSe
     }
 }
 
-inline dtkMetaContainerSequential::dtkMetaContainerSequential(const dtkMetaContainerSequential& o) : h(o.h), proxy(new item(NULL))
+inline dtkMetaContainerSequential::dtkMetaContainerSequential(dtkMetaContainerSequential&& o) : h(o.h), proxy(new item(NULL))
 {
     if (h) {
         proxy->it = h->begin();
     }
+    o.h = nullptr;
 }
 
 inline dtkMetaContainerSequential::~dtkMetaContainerSequential(void)
@@ -563,4 +564,3 @@ template <> inline bool QVariant::canConvert<dtkMetaContainerSequential>(void) c
 
 //
 // dtkMetaContainerSequential.tpp ends here
-

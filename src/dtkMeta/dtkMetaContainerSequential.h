@@ -148,7 +148,7 @@ public:
 
 public:
     dtkMetaContainerSequential(dtkMetaContainerSequentialHandler *handler);
-    dtkMetaContainerSequential(const dtkMetaContainerSequential& o);
+    dtkMetaContainerSequential(dtkMetaContainerSequential&& o);
 
 public:
     ~dtkMetaContainerSequential(void);

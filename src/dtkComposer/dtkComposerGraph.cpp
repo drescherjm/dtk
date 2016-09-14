@@ -612,6 +612,9 @@ void dtkComposerGraph::removeEdge(dtkComposerNode *source, dtkComposerNode *dest
         dst = d->begin(destination);
     }
 
+    src->removeSuccessor(dst);
+    dst->removePredecessor(src);
+
     d->edges.remove(pair);
     d->edges_count.remove(pair);
 

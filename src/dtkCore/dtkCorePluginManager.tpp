@@ -201,7 +201,9 @@ template <typename T> void dtkCorePluginManager<T>::initialize(const QString& pa
 
         if (d->autoLoading) {
             foreach (QFileInfo info, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
-                dtkInfo() << "load" << info.absoluteFilePath();
+                if (d->verboseLoading) {
+                    dtkInfo() << "load" << info.absoluteFilePath();
+                }
                 this->load(info.absoluteFilePath());
             }
         } else {

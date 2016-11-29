@@ -106,6 +106,12 @@ namespace dtkDistributed {
         {
             return _private::manager;
         }
+
+        void setVerboseLoading(bool verbose)
+        {
+            _private::manager.setVerboseLoading(verbose);
+        }
+
         void initialize(const QString& path)
         {
             QString real_path = path;

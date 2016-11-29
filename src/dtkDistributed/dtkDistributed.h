@@ -85,6 +85,7 @@ namespace dtkDistributed {
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginFactory& pluginFactory(void);
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicatorPluginManager& pluginManager(void);
         DTKDISTRIBUTED_EXPORT void                                     initialize(const QString& path = QString());
+        DTKDISTRIBUTED_EXPORT void                                     setVerboseLoading(bool verbose);
         DTKDISTRIBUTED_EXPORT dtkDistributedCommunicator              *instance(void);
     }
 }

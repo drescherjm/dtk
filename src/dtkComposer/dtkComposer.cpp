@@ -17,6 +17,10 @@
 #include "dtkComposerSettings.h"
 #include "dtkComposerDefaultExtensions.h"
 
+#if defined(DTK_BUILD_DISTRIBUTED)
+#include <dtkDistributed/dtkDistributed.h>
+#endif
+
 namespace dtkComposer {
     namespace node {
         namespace _private {
@@ -38,8 +42,13 @@ namespace dtkComposer {
             controlExt.extend(&(_private::factory));
             dtkComposerConstantsExtension constantsExt;
             constantsExt.extend(&(_private::factory));
+#if defined(DTK_BUILD_DISTRIBUTED)
+            bool verbose = dtkComposer::extension::pluginManager().verboseLoading();
+            dtkDistributed::communicator::setVerboseLoading(verbose);
+            dtkDistributed::communicator::initialize();
             dtkComposerDistributedExtension distributedExt;
             distributedExt.extend(&(_private::factory));
+#endif
             dtkComposerFileExtension fileExt;
             fileExt.extend(&(_private::factory));
             dtkComposerNumberExtension numberExt;
